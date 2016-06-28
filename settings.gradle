@@ -1,1 +1,5 @@
 include 'desktop', 'android', 'ios', 'core'
+
+project(':desktop').projectDir = new File('./launcher/desktop')
+project(':android').projectDir = new File('./launcher/android')
+project(':ios').projectDir = new File('./launcher/ios')
