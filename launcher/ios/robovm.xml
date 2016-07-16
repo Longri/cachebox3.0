@@ -35,7 +35,11 @@
   <libs>
       <lib>z</lib>   
   </libs>
+  <frameworkPaths>
+    <path>libs</path>
+  </frameworkPaths>
   <frameworks>
+    <framework>SVGgh</framework>
     <framework>UIKit</framework>
     <framework>OpenGLES</framework>
     <framework>QuartzCore</framework>

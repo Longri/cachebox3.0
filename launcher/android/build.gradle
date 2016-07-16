@@ -18,6 +18,7 @@ android {
         applicationId "de.longri.cachebox3"
         minSdkVersion 8
         targetSdkVersion 23
+        multiDexEnabled true
     }
 }
 
