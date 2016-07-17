@@ -16,12 +16,12 @@
 package de.longri.cachebox3.gui.stages;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import de.longri.cachebox3.PlatformConnector;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.LoggerFactory;
@@ -65,17 +65,11 @@ public class Splash extends Stage {
 
         // create SVG image from Cachbox Logo
         try {
-
-
-
             InputStream stream = Gdx.files.internal("cb_logo.svg").read();
 
-            int logoWidth = (int) (Gdx.graphics.getWidth() * 0.9);
-            int logoHeight = (int) (logoWidth * 0.26);
-
-            Bitmap svgBitmap = CanvasAdapter.decodeSvg(stream, 1, logoWidth, logoHeight, 100, 0);
-            CB_Logo = new Image(new Texture(svgBitmap.getPixmap()));
-            CB_Logo.setPosition((Gdx.graphics.getWidth() - logoWidth) / 2, logoHeight * 2);
+            Bitmap svgBitmap = CanvasAdapter.decodeSvgBitmap(stream);
+            CB_Logo = new Image(new Texture(PlatformConnector.getPixmapFromBitmap(svgBitmap)));
+            CB_Logo.setPosition((Gdx.graphics.getWidth() - svgBitmap.getWidth()) / 2, svgBitmap.getHeight() * 2);
             this.addActor(CB_Logo);
         } catch (Exception e) {
             e.printStackTrace();

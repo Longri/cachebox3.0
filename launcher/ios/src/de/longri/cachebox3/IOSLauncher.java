@@ -19,6 +19,9 @@ public class IOSLauncher extends IOSApplication.Delegate {
         //initialize platform bitmap factory
         IosGraphics.init();
 
+        //initialize platform connector
+        PlatformConnector.init(new IosPlatformConnector());
+
 
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
         return new IOSApplication(new CacheboxMain(), config);

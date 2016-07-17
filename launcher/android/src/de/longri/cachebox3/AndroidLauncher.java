@@ -14,6 +14,9 @@ public class AndroidLauncher extends AndroidApplication {
         //initialize platform bitmap factory
         org.oscim.android.canvas.AndroidGraphics.init();
 
+        //initialize platform connector
+        PlatformConnector.init(new AndroidPlatformConnector());
+
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         CanvasAdapter.dpi = (int) Math.max(metrics.xdpi, metrics.ydpi);
 
