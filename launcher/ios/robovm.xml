@@ -33,13 +33,14 @@
     <pattern>org.apache.harmony.security.provider.crypto.CryptoProvider</pattern>
   </forceLinkClasses>
   <libs>
-      <lib>z</lib>   
+      <lib>z</lib>
+      <lib>build/native/libvtm-jni.a</lib>  <!--vtm native -->
   </libs>
   <frameworkPaths>
-    <path>libs</path>
+    <path>build/native</path>  <!--SVGgh framework path -->
   </frameworkPaths>
   <frameworks>
-    <framework>SVGgh</framework>
+    <framework>SVGgh</framework> <!--SVGgh framework name -->
     <framework>UIKit</framework>
     <framework>OpenGLES</framework>
     <framework>QuartzCore</framework>

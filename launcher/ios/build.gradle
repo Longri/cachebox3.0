@@ -7,6 +7,16 @@ ext {
 	mainClassName = "de.longri.cachebox3.IOSLauncher"
 }
 
+task copyFrameWorks(type: Copy) {
+    from(zipTree("./libs/vtm-ios-0.6.0-SNAPSHOT-natives.jar"))
+    into("${buildDir}/native")
+}
+
+
+tasks.withType(org.gradle.api.tasks.compile.JavaCompile) {
+    compileTask -> compileTask.dependsOn copyFrameWorks
+}
+
 launchIPhoneSimulator.dependsOn build
 launchIPadSimulator.dependsOn build
 launchIOSDevice.dependsOn build
