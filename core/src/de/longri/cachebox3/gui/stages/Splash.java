@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import de.longri.cachebox3.PlatformConnector;
-import org.oscim.backend.CanvasAdapter;
+import de.longri.cachebox3.Utils;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.LoggerFactory;
 
@@ -67,8 +67,9 @@ public class Splash extends Stage {
         try {
             InputStream stream = Gdx.files.internal("cb_logo.svg").read();
 
-            Bitmap svgBitmap = CanvasAdapter.decodeSvgBitmap(stream);
-            CB_Logo = new Image(new Texture(PlatformConnector.getPixmapFromBitmap(svgBitmap)));
+            Bitmap svgBitmap = PlatformConnector.getSvg(stream);
+
+            CB_Logo = new Image(new Texture(Utils.getPixmapFromBitmap(svgBitmap)));
             CB_Logo.setPosition((Gdx.graphics.getWidth() - svgBitmap.getWidth()) / 2, svgBitmap.getHeight() * 2);
             this.addActor(CB_Logo);
         } catch (Exception e) {

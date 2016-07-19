@@ -1,7 +1,9 @@
 package de.longri.cachebox3;
 
-import com.badlogic.gdx.graphics.Pixmap;
 import org.oscim.backend.canvas.Bitmap;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by Longri on 17.07.16.
@@ -14,12 +16,11 @@ public abstract class PlatformConnector {
         platformConnector = connector;
     }
 
-
-    protected abstract Pixmap pixmapFromBitmap(Bitmap bitmap);
-
-
-    public static Pixmap getPixmapFromBitmap(Bitmap bitmap) {
-        return platformConnector.pixmapFromBitmap(bitmap);
+    public static Bitmap getSvg(InputStream stream)throws IOException {
+        return platformConnector.getRealScaledSVG(stream);
     }
+
+    public abstract Bitmap getRealScaledSVG(InputStream stream) throws IOException;
+
 
 }
