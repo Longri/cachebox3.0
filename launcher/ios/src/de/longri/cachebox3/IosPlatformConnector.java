@@ -12,7 +12,7 @@ import java.io.InputStream;
 public class IosPlatformConnector extends PlatformConnector {
 
     @Override
-    public Bitmap getRealScaledSVG(InputStream stream) throws IOException {
-        return new RealIosSvgBitmap(stream);
+    public Bitmap getRealScaledSVG(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
+        return new RealIosSvgBitmap(inputStream,scaleType,scaleValue);
     }
 }

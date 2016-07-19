@@ -67,7 +67,10 @@ public class Splash extends Stage {
         try {
             InputStream stream = Gdx.files.internal("cb_logo.svg").read();
 
-            Bitmap svgBitmap = PlatformConnector.getSvg(stream);
+
+            float targetWidth = Gdx.graphics.getWidth() * 0.8f;
+
+            Bitmap svgBitmap = PlatformConnector.getSvg(stream, PlatformConnector.SvgScaleType.SCALED_TO_WIDTH,targetWidth);
 
             CB_Logo = new Image(new Texture(Utils.getPixmapFromBitmap(svgBitmap)));
             CB_Logo.setPosition((Gdx.graphics.getWidth() - svgBitmap.getWidth()) / 2, svgBitmap.getHeight() * 2);

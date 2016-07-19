@@ -13,7 +13,7 @@ import java.io.InputStream;
 public class AndroidPlatformConnector extends PlatformConnector {
 
     @Override
-    public Bitmap getRealScaledSVG(InputStream stream) throws IOException {
-        return new RealAndroidSvgBitmap(stream);
+    public Bitmap getRealScaledSVG(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
+        return new RealAndroidSvgBitmap(inputStream, scaleType, scaleValue);
     }
 }

@@ -1,6 +1,5 @@
 package de.longri.cachebox3;
 
-import com.badlogic.gdx.graphics.Pixmap;
 import org.oscim.awt.RealAwtSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
 
@@ -12,8 +11,11 @@ import java.io.InputStream;
  */
 public class AwtPlatformConnector extends PlatformConnector {
 
+
+
+
     @Override
-    public Bitmap getRealScaledSVG(InputStream stream) throws IOException {
-        return new RealAwtSvgBitmap(stream);
+    public Bitmap getRealScaledSVG(InputStream stream,SvgScaleType scaleType, float scaleValue) throws IOException {
+        return new RealAwtSvgBitmap(stream, scaleType,scaleValue);
     }
 }

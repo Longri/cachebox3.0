@@ -3,7 +3,7 @@ package org.oscim.awt;
 import com.kitfox.svg.SVGCache;
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.app.beans.SVGIcon;
-import org.oscim.awt.AwtSvgBitmap;
+import de.longri.cachebox3.PlatformConnector;
 import org.oscim.backend.CanvasAdapter;
 
 import java.awt.*;
@@ -17,15 +17,30 @@ import java.net.URI;
  */
 public class RealAwtSvgBitmap extends AwtBitmap {
 
-    private static BufferedImage getBufferdImage(InputStream inputStream) throws IOException {
+    private static BufferedImage getBufferdImage(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
         synchronized (SVGCache.getSVGUniverse()) {
             try {
                 URI uri = SVGCache.getSVGUniverse().loadSVG(inputStream, Integer.toString(inputStream.hashCode()));
                 SVGDiagram diagram = SVGCache.getSVGUniverse().getDiagram(uri);
 
-                float scale = CanvasAdapter.dpi / 240;
-                float bitmapWidth = (float) (diagram.getWidth() * scale);
-                float bitmapHeight = (float) (diagram.getHeight() * scale);
+                float scale = 1;
+
+                switch (scaleType) {
+
+                    case SCALED_TO_WIDTH:
+                        scale = scaleValue / diagram.getWidth();
+                        break;
+                    case SCALED_TO_HEIGHT:
+                        scale = scaleValue / diagram.getHeight();
+                        break;
+                    case DPI_SCALED:
+                        scale = (CanvasAdapter.dpi / 240) * scaleValue;
+                        break;
+                }
+
+
+                float bitmapWidth = diagram.getWidth() * scale;
+                float bitmapHeight = diagram.getHeight() * scale;
 
                 SVGIcon icon = new SVGIcon();
                 icon.setAntiAlias(true);
@@ -43,8 +58,8 @@ public class RealAwtSvgBitmap extends AwtBitmap {
     }
 
 
-    public RealAwtSvgBitmap(InputStream inputStream) throws IOException {
-        super(getBufferdImage(inputStream));
+    public RealAwtSvgBitmap(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
+        super(getBufferdImage(inputStream, scaleType, scaleValue));
     }
 
 }

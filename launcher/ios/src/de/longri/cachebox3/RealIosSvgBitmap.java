@@ -16,15 +16,29 @@ import java.io.InputStreamReader;
  */
 public class RealIosSvgBitmap extends org.oscim.ios.backend.IosBitmap {
 
-    private static UIImage getUIImage(InputStream stream) {
-        String svg = getStringFromInputStream(stream);
+    private static UIImage getUIImage(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) {
+        String svg = getStringFromInputStream(inputStream);
         SVGRenderer renderer = new SVGRenderer(svg);
         CGRect viewRect = renderer.getViewRect();
 
-        float scale = CanvasAdapter.dpi / 240;
 
-        float bitmapWidth = (float) (viewRect.getWidth() * scale);
-        float bitmapHeight = (float) (viewRect.getHeight() * scale);
+        double scale = 1;
+
+        switch (scaleType) {
+
+            case SCALED_TO_WIDTH:
+                scale = scaleValue / viewRect.getWidth();
+                break;
+            case SCALED_TO_HEIGHT:
+                scale = scaleValue / viewRect.getHeight();
+                break;
+            case DPI_SCALED:
+                scale = (CanvasAdapter.dpi / 240) * scaleValue;
+                break;
+        }
+
+        double bitmapWidth = viewRect.getWidth() * scale;
+        double bitmapHeight = viewRect.getHeight() * scale;
 
         return renderer.asImageWithSize(new CGSize(bitmapWidth, bitmapHeight), 1);
     }
@@ -57,8 +71,8 @@ public class RealIosSvgBitmap extends org.oscim.ios.backend.IosBitmap {
         return sb.toString();
     }
 
-    public RealIosSvgBitmap(InputStream stream) {
-        super(getUIImage(stream));
+    public RealIosSvgBitmap(InputStream stream, PlatformConnector.SvgScaleType scaleType, float scaleValue) {
+        super(getUIImage(stream, scaleType, scaleValue));
     }
 
 
