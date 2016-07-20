@@ -27,12 +27,14 @@ import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * The Splash Stage is the first Stage to show on screen
  * and load all relevant things!
  * <p>
- * Like Skin, Config ...
+ * Like Skin, Config, Translations ...
  * <p>
  * <p>
  *
@@ -41,6 +43,14 @@ import java.io.InputStream;
  */
 public class Splash extends Stage {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(Splash.class);
+
+
+    public interface LoadReady {
+        void ready();
+    }
+
+    final LoadReady loadReadyHandler;
+
 
     ProgressBar progress;
     Image CB_Logo, OSM_Logo, Route_Logo, Mapsforge_Logo, LibGdx_Logo, GC_Logo;
@@ -52,7 +62,8 @@ public class Splash extends Stage {
     boolean breakForWait = false;
 
 
-    public Splash() {
+    public Splash(LoadReady loadReadyHandler) {
+        this.loadReadyHandler = loadReadyHandler;
         Texture backgroundTexture = new Texture("splash-back.jpg");
         Image background = new Image(backgroundTexture);
         background.setWidth(Gdx.graphics.getWidth());
@@ -70,7 +81,7 @@ public class Splash extends Stage {
 
             float targetWidth = Gdx.graphics.getWidth() * 0.8f;
 
-            Bitmap svgBitmap = PlatformConnector.getSvg(stream, PlatformConnector.SvgScaleType.SCALED_TO_WIDTH,targetWidth);
+            Bitmap svgBitmap = PlatformConnector.getSvg(stream, PlatformConnector.SvgScaleType.SCALED_TO_WIDTH, targetWidth);
 
             CB_Logo = new Image(new Texture(Utils.getPixmapFromBitmap(svgBitmap)));
             CB_Logo.setPosition((Gdx.graphics.getWidth() - svgBitmap.getWidth()) / 2, svgBitmap.getHeight() * 2);
@@ -79,6 +90,15 @@ public class Splash extends Stage {
             e.printStackTrace();
         }
 
+//test
+        Timer t = new Timer();
+        TimerTask tt = new TimerTask() {
+            @Override
+            public void run() {
+                loadReadyHandler.ready();
+            }
+        };
+        t.schedule(tt, 2000);
 
     }
 

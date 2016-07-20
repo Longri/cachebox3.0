@@ -17,16 +17,17 @@ public abstract class PlatformConnector {
     }
 
 
+    // SVG implementations #############################################################################################
     public enum SvgScaleType {
         SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED
     }
-
 
     public static Bitmap getSvg(InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {
         return platformConnector.getRealScaledSVG(stream, scaleType, scaleValue);
     }
 
-    public abstract Bitmap getRealScaledSVG(InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException;
+    public abstract Bitmap getRealScaledSVG(InputStream stream,
+                                            SvgScaleType scaleType, float scaleValue) throws IOException;
 
 
 }
