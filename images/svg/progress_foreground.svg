@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="100" height="25" viewBox="0 0 100.00 25.00" enable-background="new 0 0 100.00 25.00" xml:space="preserve">
+	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.5" y1="1.30374" x2="2.10748" y2="1.30374" gradientTransform="rotate(-90.000000 0.500000 1.303739)">
+		<stop offset="0" stop-color="#FF6800" stop-opacity="1"/>
+		<stop offset="0.451163" stop-color="#F19454" stop-opacity="1"/>
+		<stop offset="0.742174" stop-color="#F8C9A9" stop-opacity="1"/>
+		<stop offset="1" stop-color="#FFFFFF" stop-opacity="1"/>
+	</linearGradient>
+	<path fill="url(#SVGID_Fill1_)" stroke-width="2" stroke-linejoin="round" d="M 12.5,2L 87.5,2C 93.299,2 98,6.70102 98,12.5L 98,12.5C 98,18.299 93.299,23 87.5,23L 12.5,23C 6.70104,23 2.00003,18.299 2.00003,12.5L 2.00003,12.5C 2.00003,6.70102 6.70104,2 12.5,2 Z "/>
+</svg>

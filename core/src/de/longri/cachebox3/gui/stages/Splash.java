@@ -16,17 +16,20 @@
 package de.longri.cachebox3.gui.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.kotcrab.vis.ui.widget.VisProgressBar;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -52,7 +55,7 @@ public class Splash extends Stage {
     final LoadReady loadReadyHandler;
 
 
-    ProgressBar progress;
+    VisProgressBar progress;
     Image CB_Logo, OSM_Logo, Route_Logo, Mapsforge_Logo, LibGdx_Logo, GC_Logo;
 
     Label descTextView;
@@ -77,12 +80,8 @@ public class Splash extends Stage {
         // create SVG image from Cachbox Logo
         try {
             InputStream stream = Gdx.files.internal("cb_logo.svg").read();
-
-
             float targetWidth = Gdx.graphics.getWidth() * 0.8f;
-
             Bitmap svgBitmap = PlatformConnector.getSvg(stream, PlatformConnector.SvgScaleType.SCALED_TO_WIDTH, targetWidth);
-
             CB_Logo = new Image(new Texture(Utils.getPixmapFromBitmap(svgBitmap)));
             CB_Logo.setPosition((Gdx.graphics.getWidth() - svgBitmap.getWidth()) / 2, svgBitmap.getHeight() * 2);
             this.addActor(CB_Logo);
@@ -90,7 +89,54 @@ public class Splash extends Stage {
             e.printStackTrace();
         }
 
-//test
+
+        Skin skin = new Skin();
+        ProgressBar.ProgressBarStyle style = new ProgressBar.ProgressBarStyle();
+
+
+        style.background = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(), 12, 12, 12, 12);
+        style.knob = Utils.get9PatchFromSvg(Gdx.files.internal("progress_foreground.svg").read(), 12, 12, 12, 12);
+        style.knobBefore = Utils.get9PatchFromSvg(Gdx.files.internal("progress_foreground.svg").read(), 12, 12, 12, 12);
+        style.background.setLeftWidth(0);
+        style.background.setRightWidth(0);
+        style.background.setTopHeight(0);
+        style.background.setBottomHeight(0);
+
+        style.knob.setLeftWidth(0);
+        style.knob.setRightWidth(0);
+        style.knob.setTopHeight(0);
+        style.knob.setBottomHeight(0);
+
+        style.knobBefore.setLeftWidth(0);
+        style.knobBefore.setRightWidth(0);
+        style.knobBefore.setTopHeight(0);
+        style.knobBefore.setBottomHeight(0);
+
+        progress = new VisProgressBar(0f, 100f, 1f, false, style);
+        float margin = 40 * (CanvasAdapter.dpi / 240);
+        float progressWidth = Gdx.graphics.getWidth() - (margin * 2);
+
+        progress.setBounds(margin, margin, progressWidth, margin);
+        this.addActor(progress);
+
+
+        progress.setValue(0);
+
+        // Init loader tasks
+        ArrayList<InitTask> initTaskList = new ArrayList<InitTask>();
+        initTaskList.add(new SkinLoaderTask("Load UI", 30));
+        initTaskList.add(new TranslationLoaderTask("Load Translations", 10));
+
+
+        //Run Loader Tasks
+        for (InitTask task : initTaskList) {
+            task.RUNABLE();
+            progress.setValue(progress.getValue() + task.percent);
+        }
+
+        //loadReadyHandler.ready();
+
+        //test
         Timer t = new Timer();
         TimerTask tt = new TimerTask() {
             @Override
@@ -98,9 +144,52 @@ public class Splash extends Stage {
                 loadReadyHandler.ready();
             }
         };
-        t.schedule(tt, 2000);
+        t.schedule(tt, 10000);
+    }
+
+
+    abstract class InitTask {
+
+        final String name;
+        final int percent;
+
+        InitTask(String name, int percent) {
+            this.name = name;
+            this.percent = percent;
+        }
+
+        abstract void RUNABLE();
 
     }
+
+
+    final class SkinLoaderTask extends InitTask {
+
+        SkinLoaderTask(String name, int percent) {
+            super(name, percent);
+        }
+
+        @Override
+        void RUNABLE() {
+            FileHandle svgFolder = Gdx.files.internal("skins/day/svg");
+            FileHandle skinJson = Gdx.files.internal("skins/day/skin.json");
+            CB.actSkin = new SvgSkin(svgFolder, skinJson);
+        }
+    }
+
+
+    final class TranslationLoaderTask extends InitTask {
+
+        TranslationLoaderTask(String name, int percent) {
+            super(name, percent);
+        }
+
+        @Override
+        void RUNABLE() {
+
+        }
+    }
+
 
 //
 //    protected void Initial() {

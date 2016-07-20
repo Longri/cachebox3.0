@@ -11,9 +11,6 @@ import java.io.InputStream;
  */
 public class AwtPlatformConnector extends PlatformConnector {
 
-
-
-
     @Override
     public Bitmap getRealScaledSVG(InputStream stream,SvgScaleType scaleType, float scaleValue) throws IOException {
         return new RealAwtSvgBitmap(stream, scaleType,scaleValue);
