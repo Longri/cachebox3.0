@@ -123,16 +123,23 @@ public class Splash extends Stage {
         progress.setValue(0);
 
         // Init loader tasks
-        ArrayList<InitTask> initTaskList = new ArrayList<InitTask>();
+        final ArrayList<InitTask> initTaskList = new ArrayList<InitTask>();
         initTaskList.add(new SkinLoaderTask("Load UI", 30));
         initTaskList.add(new TranslationLoaderTask("Load Translations", 10));
 
 
-        //Run Loader Tasks
-        for (InitTask task : initTaskList) {
-            task.RUNABLE();
-            progress.setValue(progress.getValue() + task.percent);
-        }
+        //Run Loader Tasks at separate threads
+        Thread runThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (InitTask task : initTaskList) {
+                    task.RUNABLE();
+                    progress.setValue(progress.getValue() + task.percent);
+                }
+            }
+        });
+
+        runThread.start();
 
         //loadReadyHandler.ready();
 
@@ -174,6 +181,7 @@ public class Splash extends Stage {
             FileHandle svgFolder = Gdx.files.internal("skins/day/svg");
             FileHandle skinJson = Gdx.files.internal("skins/day/skin.json");
             CB.actSkin = new SvgSkin(svgFolder, skinJson);
+            CB.backgroundColor = CB.actSkin.getColor("background");
         }
     }
 
