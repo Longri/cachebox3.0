@@ -4,7 +4,17 @@ sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext {
-	mainClassName = "de.longri.cachebox3.IOSLauncher"
+	mainClassName = "de.longri.cachebox3.IOS_Launcher"
+}
+
+task copyFrameWorks(type: Copy) {
+    from(zipTree("./libs/vtm-ios-0.6.0-SNAPSHOT-natives.jar"))
+    into("${buildDir}/native")
+}
+
+
+tasks.withType(org.gradle.api.tasks.compile.JavaCompile) {
+    compileTask -> compileTask.dependsOn copyFrameWorks
 }
 
 launchIPhoneSimulator.dependsOn build

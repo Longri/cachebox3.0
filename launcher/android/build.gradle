@@ -16,8 +16,9 @@ android {
     }
     defaultConfig {
         applicationId "de.longri.cachebox3"
-        minSdkVersion 8
+        minSdkVersion 11
         targetSdkVersion 23
+        multiDexEnabled true
     }
 }
 
