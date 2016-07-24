@@ -28,6 +28,7 @@ import com.kotcrab.vis.ui.VisUI;
 public class CB {
 
     final static float PPI_DEFAULT = 163;
+    private static float globalScale = 1;
 
 
     private CB() {
@@ -38,7 +39,7 @@ public class CB {
 
 
     public static void setActSkin(Skin skin) {
-        if (actSkin!=null){
+        if (actSkin != null) {
             VisUI.dispose();
         }
         actSkin = skin;
@@ -60,13 +61,25 @@ public class CB {
 
     public static float getScaledFloat(float i) {
         if (scalefactor == 0)
-            scalefactor = Gdx.graphics.getPpiX() / PPI_DEFAULT;
+            calcScaleFactor();
         return (i * scalefactor);
     }
 
     public static int getScaledInt(int i) {
         if (scalefactor == 0)
-            scalefactor = Gdx.graphics.getPpiX() / PPI_DEFAULT;
+            calcScaleFactor();
         return (int) (i * scalefactor);
+    }
+
+    private static void calcScaleFactor() {
+        scalefactor = (Gdx.graphics.getPpiX() / PPI_DEFAULT) * globalScale;
+    }
+
+    public static void setGlobalScale(float scale) {
+        globalScale = scale;
+    }
+
+    public float getGlobalScaleFactor() {
+        return globalScale;
     }
 }
