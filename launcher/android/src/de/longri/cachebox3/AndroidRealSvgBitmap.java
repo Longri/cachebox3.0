@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.oscim.android.canvas;
+package de.longri.cachebox3;
 
 
 import android.graphics.Bitmap;
@@ -23,6 +23,7 @@ import android.graphics.RectF;
 import com.caverock.androidsvg.SVG;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import org.oscim.android.canvas.AndroidBitmap;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +32,7 @@ import java.io.InputStream;
 /**
  * Created by Longri on 19.07.16.
  */
-public class RealAndroidSvgBitmap extends AndroidBitmap {
+public class AndroidRealSvgBitmap extends AndroidBitmap {
 
     private static android.graphics.Bitmap getAndroidBitmap(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
         synchronized (SVG.getVersion()) {
@@ -69,7 +70,7 @@ public class RealAndroidSvgBitmap extends AndroidBitmap {
         }
     }
 
-    public RealAndroidSvgBitmap(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
+    public AndroidRealSvgBitmap(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
         super(getAndroidBitmap(inputStream, scaleType, scaleValue));
     }
 

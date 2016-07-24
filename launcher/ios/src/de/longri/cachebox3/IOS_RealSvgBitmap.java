@@ -28,7 +28,7 @@ import java.io.InputStreamReader;
 /**
  * Created by Longri on 19.07.16.
  */
-public class RealIosSvgBitmap extends org.oscim.ios.backend.IosBitmap {
+public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap {
 
     private static UIImage getUIImage(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) {
         String svg = getStringFromInputStream(inputStream);
@@ -85,7 +85,7 @@ public class RealIosSvgBitmap extends org.oscim.ios.backend.IosBitmap {
         return sb.toString();
     }
 
-    public RealIosSvgBitmap(InputStream stream, PlatformConnector.SvgScaleType scaleType, float scaleValue) {
+    public IOS_RealSvgBitmap(InputStream stream, PlatformConnector.SvgScaleType scaleType, float scaleValue) {
         super(getUIImage(stream, scaleType, scaleValue));
     }
 

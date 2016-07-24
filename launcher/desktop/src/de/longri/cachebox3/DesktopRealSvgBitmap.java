@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.oscim.awt;
+package de.longri.cachebox3;
 
 import com.kitfox.svg.SVGCache;
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.app.beans.SVGIcon;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import org.oscim.awt.AwtBitmap;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -30,7 +31,7 @@ import java.net.URI;
 /**
  * Created by Longri on 19.07.16.
  */
-public class RealAwtSvgBitmap extends AwtBitmap {
+public class DesktopRealSvgBitmap extends AwtBitmap {
 
     private static BufferedImage getBufferdImage(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
         synchronized (SVGCache.getSVGUniverse()) {
@@ -73,7 +74,7 @@ public class RealAwtSvgBitmap extends AwtBitmap {
     }
 
 
-    public RealAwtSvgBitmap(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
+    public DesktopRealSvgBitmap(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
         super(getBufferdImage(inputStream, scaleType, scaleValue));
     }
 

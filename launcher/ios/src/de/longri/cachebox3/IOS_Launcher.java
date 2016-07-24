@@ -24,7 +24,7 @@ import org.robovm.apple.uikit.UIApplication;
 import org.robovm.apple.uikit.UIDevice;
 import org.robovm.apple.uikit.UIScreen;
 
-public class IOSLauncher extends IOSApplication.Delegate {
+public class IOS_Launcher extends IOSApplication.Delegate {
     @Override
     protected IOSApplication createApplication() {
 
@@ -36,7 +36,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
         IosGraphics.init();
 
         //initialize platform connector
-        PlatformConnector.init(new IosPlatformConnector());
+        PlatformConnector.init(new IOS_PlatformConnector());
 
 
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
@@ -50,7 +50,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
 
     public static void main(String[] argv) {
         NSAutoreleasePool pool = new NSAutoreleasePool();
-        UIApplication.main(argv, null, IOSLauncher.class);
+        UIApplication.main(argv, null, IOS_Launcher.class);
         pool.close();
     }
 }

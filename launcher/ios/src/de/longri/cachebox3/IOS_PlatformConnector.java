@@ -23,10 +23,10 @@ import java.io.InputStream;
 /**
  * Created by Longri on 17.07.16.
  */
-public class IosPlatformConnector extends PlatformConnector {
+public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     public Bitmap getRealScaledSVG(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
-        return new RealIosSvgBitmap(inputStream,scaleType,scaleValue);
+        return new IOS_RealSvgBitmap(inputStream,scaleType,scaleValue);
     }
 }

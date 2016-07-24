@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.desktop;
+package de.longri.cachebox3;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import de.longri.cachebox3.AwtPlatformConnector;
-import de.longri.cachebox3.CacheboxMain;
-import de.longri.cachebox3.PlatformConnector;
 import org.oscim.awt.AwtGraphics;
 
 public class DesktopLauncher {
@@ -29,7 +26,7 @@ public class DesktopLauncher {
         AwtGraphics.init();
 
         //initialize platform connector
-        PlatformConnector.init(new AwtPlatformConnector());
+        PlatformConnector.init(new DesktopPlatformConnector());
 
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.width = 223;

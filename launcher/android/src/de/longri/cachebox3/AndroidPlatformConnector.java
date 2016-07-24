@@ -16,7 +16,6 @@
 package de.longri.cachebox3;
 
 
-import org.oscim.android.canvas.RealAndroidSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
 
 import java.io.IOException;
@@ -29,6 +28,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
 
     @Override
     public Bitmap getRealScaledSVG(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
-        return new RealAndroidSvgBitmap(inputStream, scaleType, scaleValue);
+        return new AndroidRealSvgBitmap(inputStream, scaleType, scaleValue);
     }
 }

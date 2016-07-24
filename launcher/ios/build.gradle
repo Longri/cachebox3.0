@@ -4,7 +4,7 @@ sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext {
-	mainClassName = "de.longri.cachebox3.IOSLauncher"
+	mainClassName = "de.longri.cachebox3.IOS_Launcher"
 }
 
 task copyFrameWorks(type: Copy) {
