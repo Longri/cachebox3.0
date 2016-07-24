@@ -36,17 +36,7 @@
 		<stop offset="1" stop-color="#878787" stop-opacity="1"/>
 	</linearGradient>
 	<path fill="url(#SVGID_Fill5_)" stroke-width="0.2" stroke-linejoin="round" d="M 28.8894,21.0422C 29.3273,25.1069 32.0557,28.5867 33.584,29.0334L 32.6753,30.2595C 31.1265,29.2835 29.1762,26.5898 28.6876,22.8297L 28.6876,22.8297C 28.6484,21.931 28.8369,21.0149 28.8813,21.0205L 28.8894,21.0422 Z "/>
-	<g>
-		<defs>
-			<path id="SVG_CLIPPER1_" d="M 78.4375,15.8329L 27.7154,9.3868L 21.0985,61.0925L 71.8206,67.5386L 78.4375,15.8329 Z "/>
-		</defs>
-		<clipPath id="SVG_CLIPPER2_">
-			<use xlink:href="#SVG_CLIPPER1_" overflow="visible"/>
-		</clipPath>
-		<g clip-path="url(#SVG_CLIPPER2_)">
-			<path fill="#888A85" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 28.8895,21.042L 33.6529,24.0116L 37.324,21.7206C 37.6271,22.3257 36.3771,30.4634 34.5872,30.1255C 31.3111,29.506 29.4327,25.6649 28.8895,21.042 Z "/>
-		</g>
-	</g>
+	<path fill="#888A85" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 28.8895,21.042L 33.6529,24.0116L 37.324,21.7206C 37.6271,22.3257 36.3771,30.4634 34.5872,30.1255C 31.3111,29.506 29.4327,25.6649 28.8895,21.042 Z "/>
 	<linearGradient id="SVGID_Fill6_" gradientUnits="objectBoundingBox" x1="0.963585" y1="0.350584" x2="2.07221" y2="0.350584" gradientTransform="rotate(142.708527 0.963585 0.350584)">
 		<stop offset="0" stop-color="#FFFFFF" stop-opacity="1"/>
 		<stop offset="0.639099" stop-color="#878787" stop-opacity="1"/>

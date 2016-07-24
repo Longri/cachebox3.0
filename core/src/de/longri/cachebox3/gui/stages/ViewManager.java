@@ -52,27 +52,27 @@ public class ViewManager extends Stage {
 
         Gdx.app.log("PPI", Float.toString(Gdx.graphics.getPpiX()));
 
-        Button testButton = new Button(VisUI.getSkin(), "default");
-        testButton.setSize(bottonsize, bottonsize);
-        mainButtonBar.addButton(testButton);
+        GestureButton db_button = new GestureButton("db");
+        db_button.setSize(bottonsize, bottonsize);
+        mainButtonBar.addButton(db_button);
 
-        Button testButton1 = new Button(VisUI.getSkin(), "default");
-        testButton1.setSize(bottonsize, bottonsize);
-        mainButtonBar.addButton(testButton1);
+        GestureButton cache_button = new GestureButton("cache");
+        cache_button.setSize(bottonsize, bottonsize);
+        mainButtonBar.addButton(cache_button);
 
 
-        GestureButton navButton=new GestureButton("nav");
+        GestureButton navButton = new GestureButton("nav");
         navButton.setSize(bottonsize, bottonsize);
         mainButtonBar.addButton(navButton);
 
 
-        Button testButton3 = new Button(VisUI.getSkin(), "default");
-        testButton3.setSize(bottonsize, bottonsize);
-        mainButtonBar.addButton(testButton3);
+        GestureButton tool_button = new GestureButton("tool");
+        tool_button.setSize(bottonsize, bottonsize);
+        mainButtonBar.addButton(tool_button);
 
-        Button testButton4 = new Button(VisUI.getSkin(), "default");
-        testButton4.setSize(bottonsize, bottonsize);
-        mainButtonBar.addButton(testButton4);
+        GestureButton misc_button = new GestureButton("misc");
+        misc_button.setSize(bottonsize, bottonsize);
+        mainButtonBar.addButton(misc_button);
 
         mainButtonBar.layout();
         showView(new AboutView());

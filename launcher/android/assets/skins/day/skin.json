@@ -52,7 +52,91 @@
         right: 0,
         top: 0,
         bottom: 0
-      }
+      },
+      drawable_db_pressed:{
+        name: db_pressed,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      },
+      drawable_db_selected:{
+        name: db_selected,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      },
+      drawable_db:{
+        name: db,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      },
+      drawable_cache_pressed:{
+        name: cache_pressed,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      },
+      drawable_cache_selected:{
+        name: cache_selected,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      },
+      drawable_cache:{
+        name: cache,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      },
+      drawable_tool_pressed:{
+        name: tool_pressed,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      },
+      drawable_tool_selected:{
+        name: tool_selected,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      },
+      drawable_tool:{
+        name: tool,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      },
+      drawable_misc_pressed:{
+       name: misc_pressed,
+        left: 0,
+       right: 0,
+       top: 0,
+       bottom: 0
+      },
+     drawable_misc_selected:{
+       name: misc_selected,
+       left: 0,
+       right: 0,
+       top: 0,
+       bottom: 0
+     },
+      drawable_misc:{
+        name: misc,
+       left: 0,
+        right: 0,
+       top: 0,
+       bottom: 0
+     }
     }
 
 
@@ -83,8 +167,27 @@
       up: drawable_nav,
       down: drawable_nav_pressed,
       select: drawable_nav_selected
-
-  }
+      },
+      db: {
+        up: drawable_db,
+        down: drawable_db_pressed,
+        select: drawable_db_selected
+      },
+      cache: {
+        up: drawable_cache,
+        down: drawable_cache_pressed,
+        select: drawable_cache_selected
+      },
+      tool: {
+        up: drawable_tool,
+        down: drawable_tool_pressed,
+        select: drawable_tool_selected
+      },
+      misc: {
+       up: drawable_misc,
+       down: drawable_misc_pressed,
+       select: drawable_misc_selected
+      }
 }
 
 }
