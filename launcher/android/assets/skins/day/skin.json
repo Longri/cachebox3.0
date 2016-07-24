@@ -31,6 +31,27 @@
       right: 0,
       top: 0,
       bottom: 0
+      },
+      drawable_nav_pressed:{
+        name: nav_pressed,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      },
+      drawable_nav_selected:{
+        name: nav_selected,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      },
+      drawable_nav:{
+        name: nav,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
       }
     }
 
@@ -55,4 +76,15 @@
     de.longri.cachebox3.gui.widgets.ButtonBar$ButtonBarStyle: {
       main_button_bar: {background: drawable_main_button_bar_back}
     }
+
+
+    de.longri.cachebox3.gui.widgets.GestureButton$GestureButtonStyle: {
+      nav: {
+      up: drawable_nav,
+      down: drawable_nav_pressed,
+      select: drawable_nav_selected
+
+  }
+}
+
 }

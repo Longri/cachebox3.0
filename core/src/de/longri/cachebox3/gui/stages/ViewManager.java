@@ -24,6 +24,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
+import de.longri.cachebox3.gui.widgets.GestureButton;
 
 /**
  * Created by Longri on 20.07.2016.
@@ -60,9 +61,10 @@ public class ViewManager extends Stage {
         mainButtonBar.addButton(testButton1);
 
 
-        Button testButton2 = new Button(VisUI.getSkin(), "default");
-        testButton2.setSize(bottonsize, bottonsize);
-        mainButtonBar.addButton(testButton2);
+        GestureButton navButton=new GestureButton("nav");
+        navButton.setSize(bottonsize, bottonsize);
+        mainButtonBar.addButton(navButton);
+
 
         Button testButton3 = new Button(VisUI.getSkin(), "default");
         testButton3.setSize(bottonsize, bottonsize);
