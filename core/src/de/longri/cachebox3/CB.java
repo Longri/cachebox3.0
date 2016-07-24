@@ -20,6 +20,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.gui.stages.ViewManager;
 
 /**
  * Static class
@@ -29,6 +30,7 @@ public class CB {
 
     final static float PPI_DEFAULT = 163;
     private static float globalScale = 1;
+    public static ViewManager viewmanager;
 
 
     private CB() {
