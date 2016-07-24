@@ -38,6 +38,9 @@ public class CB {
 
 
     public static void setActSkin(Skin skin) {
+        if (actSkin!=null){
+            VisUI.dispose();
+        }
         actSkin = skin;
         VisUI.load(actSkin);
     }
