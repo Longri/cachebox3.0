@@ -21,7 +21,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +52,7 @@ public class Utils {
             Bitmap svgBitmap = PlatformConnector.getSvg(inputStream, PlatformConnector.SvgScaleType.DPI_SCALED, 1f);
 
             //scale nine patch regions
-            float scale = (CanvasAdapter.dpi / 240);
+            float scale = CB.getScaledFloat(1);
             left *= scale;
             right *= scale;
             top *= scale;
@@ -71,6 +70,7 @@ public class Utils {
 
     /**
      * List all Files inside a FileHandle (Directory)
+     *
      * @param begin
      * @param handles
      */

@@ -90,10 +90,8 @@ public class Splash extends Stage {
         }
 
 
-        Skin skin = new Skin();
         ProgressBar.ProgressBarStyle style = new ProgressBar.ProgressBarStyle();
-
-        int patch = CB.getScaledInt(12);
+        int patch = 12;
 
         style.background = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(),
                 patch, patch, patch, patch);
@@ -147,17 +145,6 @@ public class Splash extends Stage {
 
         runThread.start();
 
-//        //
-//
-//        //test
-//        Timer t = new Timer();
-//        TimerTask tt = new TimerTask() {
-//            @Override
-//            public void run() {
-//                loadReadyHandler.ready();
-//            }
-//        };
-//        t.schedule(tt, 10000);
     }
 
 
