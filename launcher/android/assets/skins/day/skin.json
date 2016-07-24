@@ -1,7 +1,47 @@
 {
     com.badlogic.gdx.graphics.Color: {
       background: { r: 1, g: 1, b: 1, a: 1 },
-      red: { r: 1, g: 0, b: 0, a: 1 },
-      yellow: { r: 0.5, g: 0.5, b: 0, a: 1 }
+      abstract_background: { r: 1, g: 0, b: 0, a: 1 },
+      font_color: { r: 0, g: 0, b: 0, a: 1 }
+    }
+
+    com.badlogic.gdx.graphics.g2d.BitmapFont: {
+      normal_font: {font: "fonts/DroidSans", size: 26}
+    }
+
+
+    com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable:{
+      drawable_default_button:{
+        name: default_button,
+        left: 30,
+        right: 30,
+        top: 30,
+        bottom: 30
+      },
+      drawable_default_button_pressed:{
+        name: default_button_pressed,
+        left: 30,
+        right: 30,
+        top: 30,
+        bottom: 30
+      }
+    }
+
+
+
+    com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+      default: {
+        up: drawable_default_button,
+        down: drawable_default_button_pressed,
+
+
+      },
+      nav: {
+        down: default_button_pressed, up: default_button
+      }
+    }
+
+    com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+      default: {font: normal_font, fontColor: font_color}
     }
 }

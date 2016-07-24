@@ -13,22 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3;
-
-
-import org.oscim.android.canvas.RealAndroidSvgBitmap;
-import org.oscim.backend.canvas.Bitmap;
-
-import java.io.IOException;
-import java.io.InputStream;
+package de.longri.cachebox3.gui.views;
 
 /**
- * Created by Longri on 17.07.16.
+ * Created by Longri on 23.07.16.
  */
-public class AndroidPlatformConnector extends PlatformConnector {
+public class AboutView extends AbstractView {
+
+    public AboutView() {
+        super("AboutView");
+    }
+
+//    @Override
+//    protected void create() {
+//
+//    }
 
     @Override
-    public Bitmap getRealScaledSVG(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
-        return new RealAndroidSvgBitmap(inputStream, scaleType, scaleValue);
+    public void reloadState() {
+
     }
+
+    @Override
+    public void saveState() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
+
+//    @Override
+//    protected void boundsChanged(float x, float y, float width, float height) {
+//
+//    }
 }

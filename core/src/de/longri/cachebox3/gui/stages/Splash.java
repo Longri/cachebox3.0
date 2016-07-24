@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -30,8 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The Splash Stage is the first Stage to show on screen
@@ -93,10 +93,14 @@ public class Splash extends Stage {
         Skin skin = new Skin();
         ProgressBar.ProgressBarStyle style = new ProgressBar.ProgressBarStyle();
 
+        int patch = CB.getScaledInt(12);
 
-        style.background = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(), 12, 12, 12, 12);
-        style.knob = Utils.get9PatchFromSvg(Gdx.files.internal("progress_foreground.svg").read(), 12, 12, 12, 12);
-        style.knobBefore = Utils.get9PatchFromSvg(Gdx.files.internal("progress_foreground.svg").read(), 12, 12, 12, 12);
+        style.background = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(),
+                patch, patch, patch, patch);
+        style.knob = Utils.get9PatchFromSvg(Gdx.files.internal("progress_foreground.svg").read(),
+                patch, patch, patch, patch);
+        style.knobBefore = Utils.get9PatchFromSvg(Gdx.files.internal("progress_foreground.svg").read(),
+                patch, patch, patch, patch);
         style.background.setLeftWidth(0);
         style.background.setRightWidth(0);
         style.background.setTopHeight(0);
@@ -126,6 +130,7 @@ public class Splash extends Stage {
         final ArrayList<InitTask> initTaskList = new ArrayList<InitTask>();
         initTaskList.add(new SkinLoaderTask("Load UI", 30));
         initTaskList.add(new TranslationLoaderTask("Load Translations", 10));
+        initTaskList.add(new GdxInitialTask("Initial GDX", 2));
 
 
         //Run Loader Tasks at separate threads
@@ -136,22 +141,23 @@ public class Splash extends Stage {
                     task.RUNABLE();
                     progress.setValue(progress.getValue() + task.percent);
                 }
+                loadReadyHandler.ready();
             }
         });
 
         runThread.start();
 
-        //loadReadyHandler.ready();
-
-        //test
-        Timer t = new Timer();
-        TimerTask tt = new TimerTask() {
-            @Override
-            public void run() {
-                loadReadyHandler.ready();
-            }
-        };
-        t.schedule(tt, 10000);
+//        //
+//
+//        //test
+//        Timer t = new Timer();
+//        TimerTask tt = new TimerTask() {
+//            @Override
+//            public void run() {
+//                loadReadyHandler.ready();
+//            }
+//        };
+//        t.schedule(tt, 10000);
     }
 
 
@@ -169,6 +175,19 @@ public class Splash extends Stage {
 
     }
 
+    final class GdxInitialTask extends InitTask {
+
+        GdxInitialTask(String name, int percent) {
+            super(name, percent);
+        }
+
+        @Override
+        void RUNABLE() {
+            CB.inputMultiplexer = new InputMultiplexer();
+            Gdx.input.setInputProcessor(CB.inputMultiplexer);
+        }
+    }
+
 
     final class SkinLoaderTask extends InitTask {
 
@@ -178,10 +197,26 @@ public class Splash extends Stage {
 
         @Override
         void RUNABLE() {
-            FileHandle svgFolder = Gdx.files.internal("skins/day/svg");
-            FileHandle skinJson = Gdx.files.internal("skins/day/skin.json");
-            CB.actSkin = new SvgSkin(svgFolder, skinJson);
-            CB.backgroundColor = CB.actSkin.getColor("background");
+            // the SvgSkin must create in a OpenGL context. so we post a runnable and wait!
+
+            final AtomicBoolean wait = new AtomicBoolean(true);
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    FileHandle svgFolder = Gdx.files.internal("skins/day/svg");
+                    FileHandle skinJson = Gdx.files.internal("skins/day/skin.json");
+                    CB.setActSkin(new SvgSkin(svgFolder, skinJson));
+                    CB.backgroundColor = CB.getColor("background");
+                    wait.set(false);
+                }
+            });
+
+            while (wait.get()) {
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                }
+            }
         }
     }
 

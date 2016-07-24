@@ -1,6 +1,20 @@
+/*
+ * Copyright (C) 2016 team-cachebox.de
+ *
+ * Licensed under the : GNU General Public License (GPL);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.gnu.org/licenses/gpl.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.longri.cachebox3;
 
-import org.oscim.backend.CanvasAdapter;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.coregraphics.CGSize;
 import org.robovm.apple.uikit.UIImage;
@@ -33,7 +47,7 @@ public class RealIosSvgBitmap extends org.oscim.ios.backend.IosBitmap {
                 scale = scaleValue / viewRect.getHeight();
                 break;
             case DPI_SCALED:
-                scale = (CanvasAdapter.dpi / 240) * scaleValue;
+                scale = CB.getScaledFloat(scaleValue);
                 break;
         }
 
