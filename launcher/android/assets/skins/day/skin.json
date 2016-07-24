@@ -24,6 +24,13 @@
         right: 30,
         top: 30,
         bottom: 30
+      },
+      drawable_main_button_bar_back:{
+      name: button_bar_back,
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0
       }
     }
 
@@ -43,5 +50,9 @@
 
     com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
       default: {font: normal_font, fontColor: font_color}
+    }
+
+    de.longri.cachebox3.gui.widgets.ButtonBar$ButtonBarStyle: {
+      main_button_bar: {background: drawable_main_button_bar_back}
     }
 }

@@ -23,6 +23,7 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.gui.widgets.ButtonBar;
 
 /**
  * Created by Longri on 20.07.2016.
@@ -31,13 +32,18 @@ public class ViewManager extends Stage {
 
     private AbstractView actView;
     private final float bottonsize, width, height;
-
+    private final ButtonBar mainButtonBar;
 
     public ViewManager() {
 
         bottonsize = CB.getScaledFloat(64);
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
+
+        mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class),
+                ButtonBar.Type.DISTRIBUTED);
+        mainButtonBar.setBounds(0, 0, width, bottonsize);
+        this.addActor(mainButtonBar);
 
         Gdx.app.log("ScaleFactor", Float.toString(CB.getScaledFloat(1)));
         Gdx.app.log("Width", Float.toString(Gdx.graphics.getWidth()));
@@ -47,28 +53,26 @@ public class ViewManager extends Stage {
 
         Button testButton = new Button(VisUI.getSkin(), "default");
         testButton.setSize(bottonsize, bottonsize);
-        this.addActor(testButton);
+        mainButtonBar.addButton(testButton);
 
         Button testButton1 = new Button(VisUI.getSkin(), "default");
         testButton1.setSize(bottonsize, bottonsize);
-        testButton1.setX(bottonsize);
-        this.addActor(testButton1);
+        mainButtonBar.addButton(testButton1);
+
 
         Button testButton2 = new Button(VisUI.getSkin(), "default");
         testButton2.setSize(bottonsize, bottonsize);
-        testButton2.setX(bottonsize * 2);
-        this.addActor(testButton2);
+        mainButtonBar.addButton(testButton2);
 
         Button testButton3 = new Button(VisUI.getSkin(), "default");
         testButton3.setSize(bottonsize, bottonsize);
-        testButton3.setX(bottonsize * 3);
-        this.addActor(testButton3);
+        mainButtonBar.addButton(testButton3);
 
         Button testButton4 = new Button(VisUI.getSkin(), "default");
         testButton4.setSize(bottonsize, bottonsize);
-        testButton4.setX(bottonsize * 4);
-        this.addActor(testButton4);
+        mainButtonBar.addButton(testButton4);
 
+        mainButtonBar.layout();
         showView(new AboutView());
     }
 
