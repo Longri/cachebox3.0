@@ -18,8 +18,6 @@ package de.longri.cachebox3;
 import com.kitfox.svg.SVGCache;
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.app.beans.SVGIcon;
-import de.longri.cachebox3.CB;
-import de.longri.cachebox3.PlatformConnector;
 import org.oscim.awt.AwtBitmap;
 
 import java.awt.*;
@@ -64,11 +62,17 @@ public class DesktopRealSvgBitmap extends AwtBitmap {
                 icon.setScaleToFit(true);
                 icon.setSvgURI(uri);
                 BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-                icon.paintIcon(null, bufferedImage.createGraphics(), 0, 0);
+                try {
+                    icon.paintIcon(null, bufferedImage.createGraphics(), 0, 0);
+                } catch (Exception e) {
+                    //return empty image
+                    bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+                }
 
                 return bufferedImage;
             } catch (Exception e) {
-                throw new IOException(e);
+                e.printStackTrace();
+                throw new IOException();
             }
         }
     }
