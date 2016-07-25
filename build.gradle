@@ -78,6 +78,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
         compile 'com.caverock:androidsvg:1.2.2-beta-1'
+        compile 'com.android.support:support-v4:23.3.0'
         //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])
     }

@@ -15,19 +15,34 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.locator.events.PositionChangedEvent;
+import de.longri.cachebox3.locator.events.PositionChangedEventList;
+
 /**
  * Created by Longri on 23.07.16.
  */
-public class AboutView extends AbstractView {
+public class AboutView extends AbstractView implements PositionChangedEvent {
+
+    VisLabel coordinateLabel;
 
     public AboutView() {
         super("AboutView");
     }
 
-//    @Override
-//    protected void create() {
-//
-//    }
+    @Override
+    protected void create() {
+        coordinateLabel = new VisLabel(this.name);
+        coordinateLabel.setAlignment(Align.center);
+        coordinateLabel.setPosition(10, 10);
+        this.addActor(coordinateLabel);
+
+        //register as Location receiver
+        PositionChangedEventList.Add(this);
+    }
 
     @Override
     public void reloadState() {
@@ -44,8 +59,33 @@ public class AboutView extends AbstractView {
 
     }
 
-//    @Override
-//    protected void boundsChanged(float x, float y, float width, float height) {
-//
-//    }
+    @Override
+    public void PositionChanged() {
+        Coordinate coordinate = Locator.getCoordinate();
+        coordinateLabel.setText(coordinate.formatCoordinateLineBreak());
+    }
+
+    @Override
+    public void OrientationChanged() {
+
+    }
+
+    @Override
+    public void SpeedChanged() {
+
+    }
+
+    @Override
+    public String getReceiverName() {
+        return "AboutView";
+    }
+
+    @Override
+    public Priority getPriority() {
+        return Priority.Normal;
+    }
+
+    protected void boundsChanged(float x, float y, float width, float height) {
+        coordinateLabel.setBounds(0, 0, this.getWidth(), this.getHeight());
+    }
 }

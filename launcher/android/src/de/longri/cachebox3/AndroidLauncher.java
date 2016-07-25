@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3;
 
+import android.content.Context;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -22,6 +24,10 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import org.oscim.backend.CanvasAdapter;
 
 public class AndroidLauncher extends AndroidApplication {
+
+    private final AndroidLocationListener locationListener = new AndroidLocationListener();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,13 +36,28 @@ public class AndroidLauncher extends AndroidApplication {
         org.oscim.android.canvas.AndroidGraphics.init();
 
         //initialize platform connector
-        PlatformConnector.init(new AndroidPlatformConnector());
+        PlatformConnector.init(new AndroidPlatformConnector(this));
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         CanvasAdapter.dpi = (int) Math.max(metrics.xdpi, metrics.ydpi);
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-
         initialize(new CacheboxMain(), config);
+    }
+
+    protected void onStart() {
+        super.onStart();
+
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            AndroidPermissionCheck.checkNeededPermissions(this);
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+
+            }
+        });
     }
 }

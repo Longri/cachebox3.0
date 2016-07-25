@@ -20,14 +20,20 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.locator.Locator;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -129,6 +135,7 @@ public class Splash extends Stage {
         initTaskList.add(new SkinLoaderTask("Load UI", 30));
         initTaskList.add(new TranslationLoaderTask("Load Translations", 10));
         initTaskList.add(new GdxInitialTask("Initial GDX", 2));
+        initTaskList.add(new InitialLocationListenerTask("Initial Loacation Reciver", 1));
 
 
         //Run Loader Tasks at separate threads
@@ -204,6 +211,22 @@ public class Splash extends Stage {
                 } catch (InterruptedException e) {
                 }
             }
+        }
+    }
+
+    final class InitialLocationListenerTask extends InitTask {
+
+        InitialLocationListenerTask(String name, int percent) {
+            super(name, percent);
+        }
+
+        @Override
+        void RUNABLE() {
+
+            //TODO initial with last saved location from settings
+            new Locator(null);
+
+            PlatformConnector.initLocationListener();
         }
     }
 

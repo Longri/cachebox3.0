@@ -16,7 +16,14 @@
 package de.longri.cachebox3;
 
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
+import com.badlogic.gdx.backends.android.AndroidApplication;
 import org.oscim.backend.canvas.Bitmap;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,9 +32,73 @@ import java.io.InputStream;
  * Created by Longri on 17.07.16.
  */
 public class AndroidPlatformConnector extends PlatformConnector {
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(AndroidPlatformConnector.class);
+    private final AndroidApplication application;
+
+    public AndroidPlatformConnector(AndroidApplication app) {
+        this.application = app;
+    }
+
 
     @Override
     public Bitmap getRealScaledSVG(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
         return new AndroidRealSvgBitmap(inputStream, scaleType, scaleValue);
     }
+
+
+    LocationManager locationManager;
+    AndroidLocationListener locationListener;
+
+    @Override
+    public void initialLocationReciver() {
+
+
+        if (locationManager != null) {
+            return;
+        }
+
+        locationListener = new AndroidLocationListener();
+
+        // GPS
+        // Get the location manager
+        locationManager = (LocationManager) this.application.getSystemService(Context.LOCATION_SERVICE);
+
+        final int updateTime = 500; //500ms
+
+        //TODO get gps updateTime from settings
+//            int updateTime = Config.gpsUpdateTime.getValue();
+//
+//            Config.gpsUpdateTime.addChangedEventListener(new IChanged() {
+//
+//                @Override
+//                public void isChanged() {
+//                    int updateTime = Config.gpsUpdateTime.getValue();
+//                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 1, this);
+//                }
+//            });
+
+        application.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 1, locationListener);
+                    if (ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application, Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application, Manifest.permission.ACCESS_COARSE_LOCATION)
+                                    != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 300, locationListener);
+
+                    locationManager.addNmeaListener(locationListener);
+                    locationManager.addGpsStatusListener(locationListener);
+                } catch (Exception e) {
+                    log.error("main.initialLocationManager()", "", e);
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
 }
