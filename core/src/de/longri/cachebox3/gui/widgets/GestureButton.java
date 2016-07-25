@@ -15,15 +15,8 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.kotcrab.vis.ui.VisUI;
 
 import java.util.ArrayList;
@@ -33,8 +26,11 @@ import java.util.ArrayList;
  */
 public class GestureButton extends Button {
 
+    private static int idCounter = 0;
+
     private GestureButtonStyle style;
-    private final ArrayList<ActionButton> mButtonActions;
+    private final ArrayList<ActionButton> buttonActions;
+    private final int ID;
 
 
     static public class GestureButtonStyle extends ButtonStyle {
@@ -45,52 +41,36 @@ public class GestureButton extends Button {
         style = VisUI.getSkin().get(styleName, GestureButtonStyle.class);
         style.checked = style.select;
         this.setStyle(style);
-        this.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (event.getType() == InputEvent.Type.touchUp) {
-                    Gdx.app.log("", "Toggle checked");
-                    GestureButton.this.setChecked(GestureButton.this.isChecked());
-                }
-            }
-        });
-        mButtonActions = new ArrayList<ActionButton>();
+        this.ID = idCounter++;
+        buttonActions = new ArrayList<ActionButton>();
     }
 
-    public void addAction(ActionButton Action) {
-        mButtonActions.add(Action);
+    public boolean equals(Object other) {
+        if (other instanceof GestureButton) {
+            return ((GestureButton) other).ID == ID;
+        }
+        return false;
+    }
 
-//        // disable Gesture ?
-//        if (!CB_UI_Base_Settings.GestureOn.getValue())
-//            Action.setGestureDirection(ActionButton.GestureDirection.None);
-//
-//        ActionButton.GestureDirection gestureDirection = Action.getGestureDirection();
-//        if (gestureDirection != ActionButton.GestureDirection.None) {
-//            if (help == null) {
-//                float h = GL_UISizes.BottomButtonHeight * 2;
-//                help = new GestureHelp(new SizeF(h, h), "help");
-//            }
-//
-//            NinePatch ninePatch = null;
-//            if (this.drawableNormal instanceof NinePatchDrawable) {
-//                ninePatch = ((NinePatchDrawable) this.drawableNormal).getPatch();
-//            } else if (this.drawableNormal instanceof SpriteDrawable) {
-//                int p = Sprites.patch;
-//                Sprite s = ((SpriteDrawable) this.drawableNormal).getSprite();
-//                ninePatch = new NinePatch(s, p, p, p, p);
-//            }
-//
-//            help.addBtnIcon(ninePatch);
-//
-//            if (gestureDirection == ActionButton.GestureDirection.Up) {
-//                help.addUp(Action.getIcon());
-//            } else if (gestureDirection == ActionButton.GestureDirection.Down) {
-//                help.addDown(Action.getIcon());
-//            } else if (gestureDirection == ActionButton.GestureDirection.Left) {
-//                help.addLeft(Action.getIcon());
-//            } else if (gestureDirection == ActionButton.GestureDirection.Right) {
-//                help.addRight(Action.getIcon());
-//            }
-//        }
+    public void addAction(ActionButton action) {
+        buttonActions.add(action);
+    }
+
+    public void executeDefaultAction() {
+        for (ActionButton action : buttonActions) {
+            if (action.isDefaultAction()) {
+                action.getAction().CallExecute();
+                return;
+            }
+        }
+    }
+
+    public void executeAction(ActionButton.GestureDirection direction) {
+        for (ActionButton action : buttonActions) {
+            if (action.getGestureDirection() == direction) {
+                action.getAction().CallExecute();
+                return;
+            }
+        }
     }
 }

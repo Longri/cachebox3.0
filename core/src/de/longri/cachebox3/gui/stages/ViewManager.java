@@ -17,8 +17,13 @@ package de.longri.cachebox3.gui.stages;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.actions.Action_Show_AboutView;
 import de.longri.cachebox3.gui.actions.Action_Show_CacheList;
 import de.longri.cachebox3.gui.actions.Action_Show_TrackListView;
 import de.longri.cachebox3.gui.actions.Action_Show_TrackableListView;
@@ -60,28 +65,34 @@ public class ViewManager extends Stage {
 
         db_button = new GestureButton("db");
         db_button.setSize(bottonsize, bottonsize);
+        db_button.addListener(gestureListener);
         mainButtonBar.addButton(db_button);
 
         cache_button = new GestureButton("cache");
         cache_button.setSize(bottonsize, bottonsize);
+        cache_button.addListener(gestureListener);
         mainButtonBar.addButton(cache_button);
 
 
         navButton = new GestureButton("nav");
         navButton.setSize(bottonsize, bottonsize);
+        navButton.addListener(gestureListener);
         mainButtonBar.addButton(navButton);
 
 
         tool_button = new GestureButton("tool");
         tool_button.setSize(bottonsize, bottonsize);
+        tool_button.addListener(gestureListener);
         mainButtonBar.addButton(tool_button);
 
         misc_button = new GestureButton("misc");
         misc_button.setSize(bottonsize, bottonsize);
+        misc_button.addListener(gestureListener);
         mainButtonBar.addButton(misc_button);
 
         mainButtonBar.layout();
-        showView(new AboutView());
+        initialActionButtons();
+//        showView(new AboutView());
     }
 
     public void showView(AbstractView view) {
@@ -96,6 +107,49 @@ public class ViewManager extends Stage {
         setActViewBounds();
         this.actView.reloadState();
     }
+
+    //TODO inital with longPressDuration from settings
+    //    ActorGestureListener(float halfTapSquareSize, float tapCountInterval, float longPressDuration, float maxFlingDelay)
+    ActorGestureListener gestureListener = new ActorGestureListener() {
+
+        @Override
+        public void fling(InputEvent event, float velocityX, float velocityY, int button) {
+            //TODO add gesture detection
+        }
+
+        /**
+         * If true is returned, additional gestures will not be triggered.
+         * @param actor
+         * @param x
+         * @param y
+         * @return
+         */
+        @Override
+        public boolean longPress(Actor actor, float x, float y) {
+            Gdx.app.log("", "Longpress");
+            return true;
+        }
+
+        @Override
+        public void tap(InputEvent event, float x, float y, int count, int button) {
+            if (event.getType() == InputEvent.Type.touchUp) {
+
+                GestureButton target = (GestureButton) event.getTarget();
+
+                for (Button b : mainButtonBar.getButtons()) {
+                    GestureButton gb = (GestureButton) b;
+                    if (gb.equals(target)) {
+                        gb.setChecked(true);
+                        gb.executeDefaultAction();
+                    } else {
+                        gb.setChecked(false);
+                    }
+                }
+
+            }
+        }
+
+    };
 
 
     private void initialActionButtons() {
@@ -131,7 +185,7 @@ public class ViewManager extends Stage {
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowJokerView, false));
 //
-//        mAboutButtonOnLeftTab.addAction(new CB_ActionButton(actionShowAboutView, true, GestureDirection.Up));
+        misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, ActionButton.GestureDirection.Up));
 //        mAboutButtonOnLeftTab.addAction(new CB_ActionButton(actionShowCreditsView, false));
 //        mAboutButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSettings, false, GestureDirection.Left));
 //        mAboutButtonOnLeftTab.addAction(new CB_ActionButton(actionDayNight, false));

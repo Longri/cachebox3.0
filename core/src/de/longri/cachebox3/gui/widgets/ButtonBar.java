@@ -27,6 +27,8 @@ import java.util.ArrayList;
  */
 public class ButtonBar extends WidgetGroup {
 
+
+
     public static class ButtonBarStyle {
         Drawable background;
 
@@ -55,6 +57,10 @@ public class ButtonBar extends WidgetGroup {
 
     public void addButton(Button button) {
         buttonList.add(button);
+    }
+
+    public ArrayList<Button> getButtons() {
+        return buttonList;
     }
 
     public void layout() {
