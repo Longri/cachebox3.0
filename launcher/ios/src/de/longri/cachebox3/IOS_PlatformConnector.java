@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.Gdx;
 import org.oscim.backend.canvas.Bitmap;
 
 import java.io.IOException;
@@ -27,6 +28,16 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     public Bitmap getRealScaledSVG(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
-        return new IOS_RealSvgBitmap(inputStream,scaleType,scaleValue);
+        return new IOS_RealSvgBitmap(inputStream, scaleType, scaleValue);
+    }
+
+
+    IOS_LocationListener locationManager;
+
+    @Override
+    public void initialLocationReciver() {
+        Gdx.app.log("step", "1");
+        locationManager = new IOS_LocationListener();
+        locationManager.createLocationManager();
     }
 }

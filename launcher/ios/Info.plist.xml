@@ -43,9 +43,11 @@
     <key>UISupportedInterfaceOrientations</key>
     <array>
         <string>UIInterfaceOrientationPortrait</string>
-        <string>UIInterfaceOrientationLandscapeLeft</string>
-        <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This will be used to obtain or track your location.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This will be used to obtain or track your location.</string>
     <key>CFBundleIcons</key>
     <dict>
         <key>CFBundlePrimaryIcon</key>
@@ -57,5 +59,6 @@
             </array>
         </dict>
     </dict>
+
 </dict>
 </plist>
