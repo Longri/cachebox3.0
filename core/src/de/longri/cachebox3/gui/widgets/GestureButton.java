@@ -32,7 +32,6 @@ public class GestureButton extends Button {
     private final ArrayList<ActionButton> buttonActions;
     private final int ID;
 
-
     static public class GestureButtonStyle extends ButtonStyle {
         Drawable select;
     }

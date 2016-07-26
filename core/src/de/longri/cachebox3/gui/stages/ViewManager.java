@@ -92,7 +92,7 @@ public class ViewManager extends Stage {
 
         mainButtonBar.layout();
         initialActionButtons();
-//        showView(new AboutView());
+        showView(new AboutView());
     }
 
     public void showView(AbstractView view) {
