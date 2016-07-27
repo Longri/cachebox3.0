@@ -13,25 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3;
+package de.longri.cachebox3.sqlite;
 
-import org.oscim.backend.canvas.Bitmap;
-
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.HashMap;
 
 /**
- * Created by Longri on 17.07.16.
+ * Created by Longri on 27.07.16.
  */
-public class DesktopPlatformConnector extends PlatformConnector {
+public class Parameters extends HashMap<String, Object> {
 
-    @Override
-    public Bitmap getRealScaledSVG(InputStream stream,SvgScaleType scaleType, float scaleValue) throws IOException {
-        return new DesktopRealSvgBitmap(stream, scaleType,scaleValue);
-    }
-
-    @Override
-    public void initialLocationReciver() {
-
-    }
+    /**
+     *
+     */
+    private static final long serialVersionUID = 6506158947781669528L;
 }

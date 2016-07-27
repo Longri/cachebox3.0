@@ -18,6 +18,8 @@
     </resource>
   </resources>
   <forceLinkClasses>
+    <pattern>SQLite.JDBCDriver</pattern>
+    <pattern>SQLite.JDBC2z.JDBCConnection</pattern>
     <pattern>com.badlogic.gdx.scenes.scene2d.ui.*</pattern>
     <pattern>com.badlogic.gdx.graphics.g3d.particles.**</pattern>
     <pattern>com.android.okhttp.HttpHandler</pattern>

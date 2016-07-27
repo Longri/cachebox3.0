@@ -58,16 +58,20 @@ public class GestureButton extends Button {
     public void executeDefaultAction() {
         for (ActionButton action : buttonActions) {
             if (action.isDefaultAction()) {
-                action.getAction().CallExecute();
+                action.getAction().callExecute();
                 return;
             }
         }
+
+        //if no default button so take the first
+        ActionButton action =buttonActions.get(0);
+        if(action!=null)action.getAction().callExecute();
     }
 
     public void executeAction(ActionButton.GestureDirection direction) {
         for (ActionButton action : buttonActions) {
             if (action.getGestureDirection() == direction) {
-                action.getAction().CallExecute();
+                action.getAction().callExecute();
                 return;
             }
         }

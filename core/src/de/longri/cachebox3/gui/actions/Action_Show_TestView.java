@@ -13,25 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3;
+package de.longri.cachebox3.gui.actions;
 
-import org.oscim.backend.canvas.Bitmap;
-
-import java.io.IOException;
-import java.io.InputStream;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.gui.views.AboutView;
+import de.longri.cachebox3.gui.views.TestView;
 
 /**
- * Created by Longri on 17.07.16.
+ * Created by Longri on 24.07.16.
  */
-public class DesktopPlatformConnector extends PlatformConnector {
+public class Action_Show_TestView extends Action {
 
-    @Override
-    public Bitmap getRealScaledSVG(InputStream stream,SvgScaleType scaleType, float scaleValue) throws IOException {
-        return new DesktopRealSvgBitmap(stream, scaleType,scaleValue);
+    public Action_Show_TestView() {
+        super("TestView", MenuID.AID_TEST_VIEW);
     }
 
-    @Override
-    public void initialLocationReciver() {
 
+    @Override
+    protected void Execute() {
+        if (CB.viewmanager.getActView() instanceof TestView) return;
+
+        TestView view = new TestView();
+        CB.viewmanager.showView(view);
+
+        view.reloadState();
     }
 }
