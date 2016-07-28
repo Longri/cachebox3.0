@@ -39,6 +39,7 @@ public class DesktopLauncher {
         config.height = 397;
         config.title = "Cachebox 3.0";
 
+
         if (cmd.hasOption("note")) {
             //force note 4 layout
             config.width = 323;
@@ -54,8 +55,10 @@ public class DesktopLauncher {
             config.height *= scale;
         }
 
-
-        new LwjglApplication(new CacheboxMain(), config);
+        // Don't change this LogLevel
+        // Cachebox use the slf4j implematation for LibGdx as Log engine.
+        // so set LogLevel on CB.class if you wont (USED_LOG_LEVEL)
+        new LwjglApplication(new CacheboxMain(), config).setLogLevel(LwjglApplication.LOG_DEBUG);
     }
 
     private static CommandLine getCommandLine(String[] args) {

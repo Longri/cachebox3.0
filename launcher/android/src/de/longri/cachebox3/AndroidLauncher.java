@@ -40,6 +40,11 @@ public class AndroidLauncher extends AndroidApplication {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Don't change this LogLevel
+        // Cachebox use the slf4j implematation for LibGdx as Log engine.
+        // so set LogLevel on CB.class if you wont (USED_LOG_LEVEL)
+        this.setLogLevel(LOG_DEBUG);
+
         //initialize platform bitmap factory
         org.oscim.android.canvas.AndroidGraphics.init();
 
