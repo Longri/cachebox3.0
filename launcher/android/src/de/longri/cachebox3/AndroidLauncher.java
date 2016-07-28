@@ -15,8 +15,6 @@
  */
 package de.longri.cachebox3;
 
-import android.content.Context;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -31,6 +29,11 @@ public class AndroidLauncher extends AndroidApplication {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Don't change this LogLevel
+        // Cachebox use the slf4j implematation for LibGdx as Log engine.
+        // so set LogLevel on CB.class if you wont (USED_LOG_LEVEL)
+        this.setLogLevel(LOG_DEBUG);
 
         //initialize platform bitmap factory
         org.oscim.android.canvas.AndroidGraphics.init();

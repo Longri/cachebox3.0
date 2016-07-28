@@ -28,6 +28,17 @@ import de.longri.cachebox3.gui.stages.ViewManager;
  */
 public class CB {
 
+
+    //LogLevels
+    public static final String LOG_LEVEL_TRACE = "trace";
+    public static final String LOG_LEVEL_DEBUG = "debug";
+    public static final String LOG_LEVEL_INFO = "info";
+    public static final String LOG_LEVEL_WARN = "warn";
+    public static final String LOG_LEVEL_ERROR = "error";
+
+    public static final String USED_LOG_LEVEL = LOG_LEVEL_TRACE;
+
+
     final static float PPI_DEFAULT = 163;
     private static float globalScale = 1;
     public static ViewManager viewmanager;

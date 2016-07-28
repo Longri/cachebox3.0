@@ -32,11 +32,15 @@ import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 20.07.2016.
  */
 public class ViewManager extends Stage {
+
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(ViewManager.class);
+
 
     private AbstractView actView;
     private final float bottonsize, width, height;
@@ -96,7 +100,11 @@ public class ViewManager extends Stage {
     }
 
     public void showView(AbstractView view) {
+
+        log.debug("show view:", view.getName());
+
         if (actView != null) {
+            log.debug("remove and dispose actView", actView.getName());
             this.getRoot().removeActor(actView);
             actView.saveState();
             actView.dispose();
@@ -105,6 +113,7 @@ public class ViewManager extends Stage {
         this.actView = view;
         this.addActor(view);
         setActViewBounds();
+        log.debug("reload view state:", view.getName());
         this.actView.reloadState();
     }
 
