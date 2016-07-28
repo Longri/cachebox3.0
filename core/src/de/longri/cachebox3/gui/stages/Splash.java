@@ -31,13 +31,13 @@ import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.locator.Locator;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
 
 /**
  * The Splash Stage is the first Stage to show on screen
@@ -80,6 +80,9 @@ public class Splash extends Stage {
         this.addActor(background);
         InitialView();
     }
+
+
+
 
     private void InitialView() {
 

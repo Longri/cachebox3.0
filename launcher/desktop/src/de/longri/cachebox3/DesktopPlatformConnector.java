@@ -29,4 +29,9 @@ public class DesktopPlatformConnector extends PlatformConnector {
     public Bitmap getRealScaledSVG(InputStream stream,SvgScaleType scaleType, float scaleValue) throws IOException {
         return new DesktopRealSvgBitmap(stream, scaleType,scaleValue);
     }
+
+    @Override
+    public void initialLocationReciver() {
+
+    }
 }

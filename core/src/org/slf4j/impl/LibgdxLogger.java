@@ -146,7 +146,7 @@ public class LibgdxLogger extends MarkerIgnoringBase {
 	private static long START_TIME = System.currentTimeMillis();
 	private static final Properties SIMPLE_LOGGER_PROPS = new Properties();
 
-	private static final int LOG_LEVEL_TRACE = LocationAwareLogger.TRACE_INT;
+	public static final int LOG_LEVEL_TRACE = LocationAwareLogger.TRACE_INT;
 	private static final int LOG_LEVEL_DEBUG = LocationAwareLogger.DEBUG_INT;
 	private static final int LOG_LEVEL_INFO = LocationAwareLogger.INFO_INT;
 	private static final int LOG_LEVEL_WARN = LocationAwareLogger.WARN_INT;
@@ -214,7 +214,7 @@ public class LibgdxLogger extends MarkerIgnoringBase {
 	// Initialize class attributes.
 	// Load properties file, if found.
 	// Override with system properties.
-	static void init() {
+	public static void init() {
 		INITIALIZED = true;
 		loadProperties();
 

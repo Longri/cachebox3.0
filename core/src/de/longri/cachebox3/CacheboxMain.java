@@ -22,8 +22,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import org.slf4j.impl.LibgdxLogger;
+
+import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
 
 public class CacheboxMain extends ApplicationAdapter {
+
+    static {
+
+        System.setProperty(DEFAULT_LOG_LEVEL_KEY, CB.USED_LOG_LEVEL);
+        LibgdxLogger.init();
+
+    }
 
     SpriteBatch batch;
     Stage stage;
