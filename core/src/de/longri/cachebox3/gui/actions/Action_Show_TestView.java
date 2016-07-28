@@ -37,6 +37,5 @@ public class Action_Show_TestView extends Action {
         TestView view = new TestView();
         CB.viewmanager.showView(view);
 
-        view.reloadState();
     }
 }

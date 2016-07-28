@@ -99,10 +99,10 @@ public class ViewManager extends Stage {
 
     public void showView(AbstractView view) {
 
-        log.debug("show view:", view.getName());
+        log.debug("show view:"+view.getName());
 
         if (actView != null) {
-            log.debug("remove and dispose actView", actView.getName());
+            log.debug("remove and dispose actView"+ actView.getName());
             this.getRoot().removeActor(actView);
             actView.saveState();
             actView.dispose();
@@ -111,7 +111,7 @@ public class ViewManager extends Stage {
         this.actView = view;
         this.addActor(view);
         setActViewBounds();
-        log.debug("reload view state:", view.getName());
+        log.debug("reload view state:"+ view.getName());
         this.actView.reloadState();
     }
 

@@ -22,8 +22,6 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-import static de.longri.cachebox3.sqlite.Database.DatabaseType.*;
-
 /**
  * @author ging-buh
  * @author arbor95
@@ -32,19 +30,15 @@ import static de.longri.cachebox3.sqlite.Database.DatabaseType.*;
 public class AlterDatabase {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(AlterDatabase.class);
 
-    public static void alter(Database db, int lastDatabaseSchemeVersion)
-    {
-        
+    public static void alter(Database db, int lastDatabaseSchemeVersion) {
+        log.debug("Alter Database");
 
-        switch (db.databaseType)
-        {
+        switch (db.databaseType) {
             case CacheBox:
 
                 db.beginTransaction();
-                try
-                {
-                    if (lastDatabaseSchemeVersion <= 0)
-                    {
+                try {
+                    if (lastDatabaseSchemeVersion <= 0) {
                         // First Initialization of the Database
                         db.execSQL("CREATE TABLE [Caches] ([Id] bigint NOT NULL primary key,[GcCode] nvarchar (12) NULL,[GcId] nvarchar (255) NULL,[Latitude] float NULL,[Longitude] float NULL,[Name] nchar (255) NULL,[Size] int NULL,[Difficulty] smallint NULL,[Terrain] smallint NULL,[Archived] bit NULL,[Available] bit NULL,[Found] bit NULL,[Type] smallint NULL,[PlacedBy] nvarchar (255) NULL,[Owner] nvarchar (255) NULL,[DateHidden] datetime NULL,[Hint] ntext NULL,[Description] ntext NULL,[Url] nchar (255) NULL,[NumTravelbugs] smallint NULL,[Rating] smallint NULL,[Vote] smallint NULL,[VotePending] bit NULL,[Notes] ntext NULL,[Solver] ntext NULL,[Favorit] bit NULL,[AttributesPositive] bigint NULL,[AttributesNegative] bigint NULL,[TourName] nchar (255) NULL,[GPXFilename_Id] bigint NULL,[HasUserData] bit NULL,[ListingCheckSum] int NULL DEFAULT 0,[ListingChanged] bit NULL,[ImagesUpdated] bit NULL,[DescriptionImagesUpdated] bit NULL,[CorrectedCoordinates] bit NULL);");
                         db.execSQL("CREATE INDEX [archived_idx] ON [Caches] ([Archived] ASC);");
@@ -85,8 +79,7 @@ public class AlterDatabase {
                         db.execSQL("CREATE INDEX [ReplicationCache_idx] ON [Replication] ([CacheId] ASC);");
                     }
 
-                    if (lastDatabaseSchemeVersion < 1003)
-                    {
+                    if (lastDatabaseSchemeVersion < 1003) {
                         db.execSQL("CREATE TABLE [Locations] ([Id] integer not null primary key autoincrement, [Name] nvarchar (255) NULL, [Latitude] float NULL, [Longitude] float NULL);");
                         db.execSQL("CREATE INDEX [Locatioins_idx] ON [Locations] ([Id] ASC);");
 
@@ -103,8 +96,7 @@ public class AlterDatabase {
                         db.execSQL("ALTER TABLE [Caches] add [state] nvarchar(50) NULL;");
                         db.execSQL("ALTER TABLE [Caches] add [country] nvarchar(50) NULL;");
                     }
-                    if (lastDatabaseSchemeVersion < 1015)
-                    {
+                    if (lastDatabaseSchemeVersion < 1015) {
                         // GpxFilenames mit Kategorien verkn�pfen
 
                         // alte Category Tabelle l�schen
@@ -114,60 +106,49 @@ public class AlterDatabase {
 
                         Cursor reader = db.rawQuery("select ID, GPXFilename from GPXFilenames", null);
                         reader.moveToFirst();
-                        while (reader.isAfterLast() == false)
-                        {
+                        while (reader.isAfterLast() == false) {
                             long id = reader.getLong(0);
                             String gpxFilename = reader.getString(1);
                             gpxFilenames.put(id, gpxFilename);
                             reader.moveToNext();
                         }
                         reader.close();
-                        for (Map.Entry<Long, String> entry : gpxFilenames.entrySet())
-                        {
-                            if (!categories.containsKey(entry.getValue()))
-                            {
+                        for (Map.Entry<Long, String> entry : gpxFilenames.entrySet()) {
+                            if (!categories.containsKey(entry.getValue())) {
                                 // add new Category
                                 CategoryDAO categoryDAO = new CategoryDAO();
                                 Category category = categoryDAO.CreateNewCategory(entry.getValue());
                                 // and store
                                 categories.put(entry.getValue(), category.Id);
                             }
-                            if (categories.containsKey(entry.getValue()))
-                            {
+                            if (categories.containsKey(entry.getValue())) {
                                 // and store CategoryId in GPXFilenames
                                 Parameters args = new Parameters();
                                 args.put("CategoryId", categories.get(entry.getValue()));
-                                try
-                                {
+                                try {
                                     Database.Data.update("GpxFilenames", args, "Id=" + entry.getKey(), null);
-                                }
-                                catch (Exception exc)
-                                {
+                                } catch (Exception exc) {
                                     log.error("Database", "Update_CategoryId", exc);
                                 }
                             }
                         }
 
                     }
-                    if (lastDatabaseSchemeVersion < 1016)
-                    {
+                    if (lastDatabaseSchemeVersion < 1016) {
                         db.execSQL("ALTER TABLE [CACHES] ADD [ApiStatus] smallint NULL default 0;");
                     }
-                    if (lastDatabaseSchemeVersion < 1017)
-                    {
+                    if (lastDatabaseSchemeVersion < 1017) {
                         db.execSQL("CREATE TABLE [Trackable] ([Id] integer not null primary key autoincrement, [Archived] bit NULL, [GcCode] nvarchar (12) NULL, [CacheId] bigint NULL, [CurrentGoal] ntext, [CurrentOwnerName] nvarchar (255) NULL, [DateCreated] datetime NULL, [Description] ntext, [IconUrl] nvarchar (255) NULL, [ImageUrl] nvarchar (255) NULL, [name] nvarchar (255) NULL, [OwnerName] nvarchar (255), [Url] nvarchar (255) NULL);");
                         db.execSQL("CREATE INDEX [cacheid_idx] ON [Trackable] ([CacheId] ASC);");
                         db.execSQL("CREATE TABLE [TbLogs] ([Id] integer not null primary key autoincrement, [TrackableId] integer not NULL, [CacheID] bigint NULL, [GcCode] nvarchar (12) NULL, [LogIsEncoded] bit NULL DEFAULT 0, [LogText] ntext, [LogTypeId] bigint NULL, [LoggedByName] nvarchar (255) NULL, [Visited] datetime NULL);");
                         db.execSQL("CREATE INDEX [trackableid_idx] ON [TbLogs] ([TrackableId] ASC);");
                         db.execSQL("CREATE INDEX [trackablecacheid_idx] ON [TBLOGS] ([CacheId] ASC);");
                     }
-                    if (lastDatabaseSchemeVersion < 1018)
-                    {
+                    if (lastDatabaseSchemeVersion < 1018) {
                         db.execSQL("ALTER TABLE [SdfExport] ADD [MapPacks] nvarchar(512) NULL;");
 
                     }
-                    if (lastDatabaseSchemeVersion < 1019)
-                    {
+                    if (lastDatabaseSchemeVersion < 1019) {
                         // neue Felder f�r die erweiterten Attribute einf�gen
                         db.execSQL("ALTER TABLE [CACHES] ADD [AttributesPositiveHigh] bigint NULL default 0");
                         db.execSQL("ALTER TABLE [CACHES] ADD [AttributesNegativeHigh] bigint NULL default 0");
@@ -175,10 +156,9 @@ public class AlterDatabase {
                         // Die Nummerierung der Attribute stimmte nicht mit der von
                         // Groundspeak �berein. Bei 16 und 45 wurde jeweils eine
                         // Nummber �bersprungen
-                        Cursor reader = db.rawQuery("select Id, AttributesPositive, AttributesNegative from Caches", new String[] {});
+                        Cursor reader = db.rawQuery("select Id, AttributesPositive, AttributesNegative from Caches", new String[]{});
                         reader.moveToFirst();
-                        while (reader.isAfterLast() == false)
-                        {
+                        while (reader.isAfterLast() == false) {
                             long id = reader.getLong(0);
                             long attributesPositive = (long) reader.getLong(1);
                             long attributesNegative = (long) reader.getLong(2);
@@ -196,14 +176,12 @@ public class AlterDatabase {
                         reader.close();
 
                     }
-                    if (lastDatabaseSchemeVersion < 1020)
-                    {
+                    if (lastDatabaseSchemeVersion < 1020) {
                         // for long Settings
                         db.execSQL("ALTER TABLE [Config] ADD [LongString] ntext NULL;");
 
                     }
-                    if (lastDatabaseSchemeVersion < 1021)
-                    {
+                    if (lastDatabaseSchemeVersion < 1021) {
                         // Image Table
                         db.execSQL("CREATE TABLE [Images] ([Id] integer not null primary key autoincrement, [CacheId] bigint NULL, [GcCode] nvarchar (12) NULL, [Description] ntext, [Name] nvarchar (255) NULL, [ImageUrl] nvarchar (255) NULL, [IsCacheImage] bit NULL);");
                         db.execSQL("CREATE INDEX [images_cacheid_idx] ON [Images] ([CacheId] ASC);");
@@ -211,8 +189,7 @@ public class AlterDatabase {
                         db.execSQL("CREATE INDEX [images_iscacheimage_idx] ON [Images] ([IsCacheImage] ASC);");
                         db.execSQL("CREATE UNIQUE INDEX [images_imageurl_idx] ON [Images] ([ImageUrl] ASC);");
                     }
-                    if (lastDatabaseSchemeVersion < 1022)
-                    {
+                    if (lastDatabaseSchemeVersion < 1022) {
                         db.execSQL("ALTER TABLE [Caches] ALTER COLUMN [GcCode] nvarchar(15) NOT NULL; ");
 
                         db.execSQL("ALTER TABLE [Waypoint] DROP CONSTRAINT Waypoint_PK ");
@@ -224,41 +201,32 @@ public class AlterDatabase {
                         db.execSQL("ALTER TABLE [TbLogs] ALTER COLUMN [GcCode] nvarchar(15) NOT NULL; ");
                         db.execSQL("ALTER TABLE [Images] ALTER COLUMN [GcCode] nvarchar(15) NOT NULL; ");
                     }
-                    if (lastDatabaseSchemeVersion < 1024)
-                    {
+                    if (lastDatabaseSchemeVersion < 1024) {
                         db.execSQL("ALTER TABLE [Waypoint] ADD COLUMN [IsStart] BOOLEAN DEFAULT 'false' NULL");
                     }
-                    if (lastDatabaseSchemeVersion < 1025)
-                    {
+                    if (lastDatabaseSchemeVersion < 1025) {
                         // nicht mehr ben�tigt db.execSQL("ALTER TABLE [Waypoint] ADD COLUMN [UserNote] ntext NULL");
                     }
 
-                    if (lastDatabaseSchemeVersion < 1026)
-                    {
+                    if (lastDatabaseSchemeVersion < 1026) {
                         // add one column for short description
                         // [ShortDescription] ntext NULL
                         db.execSQL("ALTER TABLE [Caches] ADD [ShortDescription] ntext NULL;");
                     }
 
                     db.setTransactionSuccessful();
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     log.error("AlterDatabase", "", exc);
-                }
-                finally
-                {
+                } finally {
                     db.endTransaction();
                 }
 
                 break;
             case FieldNotes:
                 db.beginTransaction();
-                try
-                {
+                try {
 
-                    if (lastDatabaseSchemeVersion <= 0)
-                    {
+                    if (lastDatabaseSchemeVersion <= 0) {
                         // First Initialization of the Database
                         // FieldNotes Table
                         db.execSQL("CREATE TABLE [FieldNotes] ([Id] integer not null primary key autoincrement, [CacheId] bigint NULL, [GcCode] nvarchar (12) NULL, [GcId] nvarchar (255) NULL, [Name] nchar (255) NULL, [CacheType] smallint NULL, [Url] nchar (255) NULL, [Timestamp] datetime NULL, [Type] smallint NULL, [FoundNumber] int NULL, [Comment] ntext NULL);");
@@ -267,83 +235,65 @@ public class AlterDatabase {
                         db.execSQL("CREATE TABLE [Config] ([Key] nvarchar (30) NOT NULL, [Value] nvarchar (255) NULL);");
                         db.execSQL("CREATE INDEX [Key_idx] ON [Config] ([Key] ASC);");
                     }
-                    if (lastDatabaseSchemeVersion < 1002)
-                    {
+                    if (lastDatabaseSchemeVersion < 1002) {
                         db.execSQL("ALTER TABLE [FieldNotes] ADD COLUMN [Uploaded] BOOLEAN DEFAULT 'false' NULL");
                     }
-                    if (lastDatabaseSchemeVersion < 1003)
-                    {
+                    if (lastDatabaseSchemeVersion < 1003) {
                         db.execSQL("ALTER TABLE [FieldNotes] ADD COLUMN [GC_Vote] integer default 0");
                     }
-                    if (lastDatabaseSchemeVersion < 1004)
-                    {
+                    if (lastDatabaseSchemeVersion < 1004) {
                         db.execSQL("CREATE TABLE [Trackable] ([Id] integer not null primary key autoincrement, [Archived] bit NULL, [GcCode] nvarchar (15) NULL, [CacheId] bigint NULL, [CurrentGoal] ntext, [CurrentOwnerName] nvarchar (255) NULL, [DateCreated] datetime NULL, [Description] ntext, [IconUrl] nvarchar (255) NULL, [ImageUrl] nvarchar (255) NULL, [name] nvarchar (255) NULL, [OwnerName] nvarchar (255), [Url] nvarchar (255) NULL);");
                         db.execSQL("CREATE INDEX [cacheid_idx] ON [Trackable] ([CacheId] ASC);");
                         db.execSQL("CREATE TABLE [TbLogs] ([Id] integer not null primary key autoincrement, [TrackableId] integer not NULL, [CacheID] bigint NULL, [GcCode] nvarchar (15) NULL, [LogIsEncoded] bit NULL DEFAULT 0, [LogText] ntext, [LogTypeId] bigint NULL, [LoggedByName] nvarchar (255) NULL, [Visited] datetime NULL);");
                         db.execSQL("CREATE INDEX [trackableid_idx] ON [TbLogs] ([TrackableId] ASC);");
                         db.execSQL("CREATE INDEX [trackablecacheid_idx] ON [TBLOGS] ([CacheId] ASC);");
                     }
-                    if (lastDatabaseSchemeVersion < 1005)
-                    {
+                    if (lastDatabaseSchemeVersion < 1005) {
                         db.execSQL("ALTER TABLE [Trackable] ADD COLUMN [TypeName] ntext NULL");
                         db.execSQL("ALTER TABLE [Trackable] ADD COLUMN [LastVisit] datetime NULL");
                         db.execSQL("ALTER TABLE [Trackable] ADD COLUMN [Home] ntext NULL");
                         db.execSQL("ALTER TABLE [Trackable] ADD COLUMN [TravelDistance] integer default 0");
                     }
-                    if (lastDatabaseSchemeVersion < 1006)
-                    {
+                    if (lastDatabaseSchemeVersion < 1006) {
                         db.execSQL("ALTER TABLE [FieldNotes] ADD COLUMN [TbFieldNote] BOOLEAN DEFAULT 'false' NULL");
                         db.execSQL("ALTER TABLE [FieldNotes] ADD COLUMN [TbName] nvarchar (255)  NULL");
                         db.execSQL("ALTER TABLE [FieldNotes] ADD COLUMN [TbIconUrl] nvarchar (255)  NULL");
                         db.execSQL("ALTER TABLE [FieldNotes] ADD COLUMN [TravelBugCode] nvarchar (15)  NULL");
                         db.execSQL("ALTER TABLE [FieldNotes] ADD COLUMN [TrackingNumber] nvarchar (15)  NULL");
                     }
-                    if (lastDatabaseSchemeVersion < 1007)
-                    {
+                    if (lastDatabaseSchemeVersion < 1007) {
                         db.execSQL("ALTER TABLE [FieldNotes] ADD COLUMN [directLog] BOOLEAN DEFAULT 'false' NULL");
                     }
                     db.setTransactionSuccessful();
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     log.error("AlterDatabase", "", exc);
-                }
-                finally
-                {
+                } finally {
                     db.endTransaction();
                 }
                 break;
             case Settings:
                 db.beginTransaction();
-                try
-                {
-                    if (lastDatabaseSchemeVersion <= 0)
-                    {
+                try {
+                    if (lastDatabaseSchemeVersion <= 0) {
                         // First Initialization of the Database
                         db.execSQL("CREATE TABLE [Config] ([Key] nvarchar (30) NOT NULL, [Value] nvarchar (255) NULL);");
                         db.execSQL("CREATE INDEX [Key_idx] ON [Config] ([Key] ASC);");
                     }
-                    if (lastDatabaseSchemeVersion < 1002)
-                    {
+                    if (lastDatabaseSchemeVersion < 1002) {
                         // Long Text Field for long Strings
                         db.execSQL("ALTER TABLE [Config] ADD [LongString] ntext NULL;");
                     }
                     db.setTransactionSuccessful();
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     log.error("AlterDatabase", "", exc);
-                }
-                finally
-                {
+                } finally {
                     db.endTransaction();
                 }
                 break;
         }
     }
 
-    private static long convertAttribute(long att)
-    {
+    private static long convertAttribute(long att) {
         // Die Nummerierung der Attribute stimmte nicht mit der von Groundspeak
         // �berein. Bei 16 und 45 wurde jeweils eine Nummber �bersprungen
         long result = 0;

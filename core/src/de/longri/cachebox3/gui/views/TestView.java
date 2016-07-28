@@ -39,6 +39,7 @@ public class TestView extends AbstractView {
         nameLabel = new VisLabel(this.name);
         nameLabel.setAlignment(Align.center);
         nameLabel.setPosition(10, 10);
+        nameLabel.setWrap(true);
 
         colorWidget = new ColorWidget(CB.getSkin().getColor("abstract_background"));
         colorWidget.setBounds(0, 0, this.getWidth(), this.getHeight());
@@ -52,27 +53,27 @@ public class TestView extends AbstractView {
     public void reloadState() {
         try {
             Database db = new Database(Database.DatabaseType.CacheBox);
-            FileHandle dbFile= Gdx.files.local("Cachebox/localtest.db");
-
-            String localStoragePath=Gdx.files.getLocalStoragePath();
+            FileHandle dbFile = Gdx.files.local("Cachebox/localtest.db");
 
             db.startUp(dbFile);
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("Create DB on:");
+            sb.append(GlobalCore.br);
+            sb.append(dbFile.file().getAbsolutePath());
+            sb.append(GlobalCore.br);
+
+            sb.append("File exist: ");
+            sb.append(dbFile.file().exists() ? "yes" : "no");
+
+            nameLabel.setText(sb.toString());
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             return;
         }
 
-        StringBuilder sb = new StringBuilder();
 
-        sb.append("Create DB on:");
-        sb.append(GlobalCore.br);
-
-        FileHandle dbfile = Gdx.files.local("Cachebox/test.db");
-
-        sb.append(dbfile.file().getAbsolutePath());
-
-        nameLabel.setText(sb.toString());
     }
 
     @Override

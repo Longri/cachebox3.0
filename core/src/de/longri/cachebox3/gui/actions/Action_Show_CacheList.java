@@ -22,6 +22,5 @@ public class Action_Show_CacheList extends Action {
         CacheListView view = new CacheListView();
         CB.viewmanager.showView(view);
 
-        view.reloadState();
     }
 }

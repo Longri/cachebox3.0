@@ -16,11 +16,9 @@
 package de.longri.cachebox3.sqlite;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.Map.Entry;
 
@@ -102,6 +100,7 @@ public class Database {
         Initialize();
 
         int databaseSchemeVersion = GetDatabaseSchemeVersion();
+        log.debug("databaseSchemeVersion: "+ Integer.toString(databaseSchemeVersion));
         if (databaseSchemeVersion < latestDatabaseChange) {
             AlterDatabase.alter(this, databaseSchemeVersion);
             SetDatabaseSchemeVersion();
