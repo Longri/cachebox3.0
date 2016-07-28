@@ -15,9 +15,13 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
 import de.longri.cachebox3.sqlite.Database;
 
@@ -48,11 +52,27 @@ public class TestView extends AbstractView {
     public void reloadState() {
         try {
             Database db = new Database(Database.DatabaseType.CacheBox);
-            db.startUp("Cachebox/test.db");
+            FileHandle dbFile= Gdx.files.local("Cachebox/localtest.db");
+
+            String localStoragePath=Gdx.files.getLocalStoragePath();
+
+            db.startUp(dbFile);
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            return;
         }
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Create DB on:");
+        sb.append(GlobalCore.br);
+
+        FileHandle dbfile = Gdx.files.local("Cachebox/test.db");
+
+        sb.append(dbfile.file().getAbsolutePath());
+
+        nameLabel.setText(sb.toString());
     }
 
     @Override

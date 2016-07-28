@@ -20,8 +20,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.sql.*;
-import java.util.HashMap;
 import java.util.Map.Entry;
 
 
@@ -37,7 +37,7 @@ public class Database {
 
     private Connection myDB = null;
 
-    private String databasePath;
+    private FileHandle databaseFileHandle;
 
     protected boolean newDB = false;
 
@@ -61,16 +61,16 @@ public class Database {
         return newDB;
     }
 
-    public String getDatabasePath() {
-        return databasePath;
-    }
-
     protected DatabaseType databaseType;
 
     public Database(DatabaseType databaseType) throws ClassNotFoundException {
 
-        System.setProperty("sqlite.purejava", "true");
-        Class.forName("org.sqlite.JDBC");
+        try {
+            System.setProperty("sqlite.purejava", "true");
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         this.databaseType = databaseType;
 
@@ -89,21 +89,21 @@ public class Database {
     }
 
 
-    public boolean startUp(String databasePath) {
+    public boolean startUp(FileHandle fileHandle) {
         try {
-            log.debug("DB Startup : " + databasePath);
+            log.debug("DB Startup : " + fileHandle.file().getAbsolutePath());
         } catch (Exception e) {
             // gibt beim splash - Start: NPE in Translation.readMissingStringsFile
             // Nachfolgende Starts sollten aber protokolliert werden
         }
 
-        this.databasePath = databasePath;
+        this.databaseFileHandle = fileHandle;
 
         Initialize();
 
         int databaseSchemeVersion = GetDatabaseSchemeVersion();
         if (databaseSchemeVersion < latestDatabaseChange) {
-            AlterDatabase.alter(this,databaseSchemeVersion);
+            AlterDatabase.alter(this, databaseSchemeVersion);
             SetDatabaseSchemeVersion();
         }
         SetDatabaseSchemeVersion();
@@ -247,7 +247,7 @@ public class Database {
 
     public void Close() {
         try {
-            log.debug("close DB:" + databasePath);
+            log.debug("close DB:" + databaseFileHandle);
             myDB.close();
             myDB = null;
         } catch (Exception e) {
@@ -257,21 +257,19 @@ public class Database {
 
     public void Initialize() {
         if (myDB == null) {
-            if (!Gdx.files.absolute(databasePath).exists())
+            if (!databaseFileHandle.exists())
                 Reset();
 
             //check folder
-            FileHandle file = Gdx.files.local(databasePath);
-
-            FileHandle dir = file.parent();
+            FileHandle dir = databaseFileHandle.parent();
             if (!dir.exists()) {
                 dir.mkdirs();
             }
 
 
             try {
-                log.debug("open data base: " + databasePath);
-                myDB = DriverManager.getConnection("jdbc:sqlite:" + databasePath);
+                log.debug("open data base: " + databaseFileHandle.file().getAbsolutePath());
+                myDB = DriverManager.getConnection("jdbc:sqlite:" + databaseFileHandle.file().getAbsolutePath());
             } catch (Exception exc) {
                 return;
             }
@@ -280,14 +278,13 @@ public class Database {
 
     public void Reset() {
         // if exists, delete old database file
-        FileHandle file = Gdx.files.absolute(databasePath);
-        if (Gdx.files.absolute(databasePath).exists()) {
-            log.debug("RESET DB, delete file: " + databasePath);
-            file.delete();
+        if (databaseFileHandle.exists()) {
+            log.debug("RESET DB, delete file: " + databaseFileHandle.file().getAbsolutePath());
+            databaseFileHandle.delete();
 
             try {
-                log.debug("create data base: " + databasePath);
-                myDB = DriverManager.getConnection("jdbc:sqlite:" + databasePath);
+                log.debug("create data base: " + databaseFileHandle.file().getAbsolutePath());
+                myDB = DriverManager.getConnection("jdbc:sqlite:" + databaseFileHandle.file().getAbsolutePath());
                 myDB.commit();
                 myDB.close();
 

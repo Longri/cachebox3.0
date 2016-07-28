@@ -99,6 +99,7 @@ project(":ios") {
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
+        compile "org.xerial:sqlite-jdbc:3.7.2"
         //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])
     }
