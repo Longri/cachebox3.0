@@ -65,6 +65,10 @@ public class TestView extends AbstractView {
 
             sb.append("File exist: ");
             sb.append(dbFile.file().exists() ? "yes" : "no");
+            if (dbFile.exists()) {
+                sb.append(GlobalCore.br);
+                sb.append("DB version;" + db.getDatabaseSchemeVersion());
+            }
 
             nameLabel.setText(sb.toString());
 
