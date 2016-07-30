@@ -73,6 +73,7 @@ public class TestView extends AbstractView {
         CacheboxDatabase cbdb = new CacheboxDatabase(CacheboxDatabase.DatabaseType.CacheBox);
 
         cbdb.StartUp("CB.DB");
+        cbdb.Close();
 
         StringBuilder sb = new StringBuilder();
         sb.append("Create DB on:");

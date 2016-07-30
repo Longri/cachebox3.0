@@ -144,7 +144,7 @@ public class RobovmCursor implements DatabaseCursor {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     public void setNativeCursor(ResultSet resultSet) {
