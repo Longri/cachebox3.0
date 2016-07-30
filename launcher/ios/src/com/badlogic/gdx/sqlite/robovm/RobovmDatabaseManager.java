@@ -1,5 +1,6 @@
 package com.badlogic.gdx.sqlite.robovm;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.Database;
 import com.badlogic.gdx.sql.DatabaseCursor;
 import com.badlogic.gdx.sql.DatabaseManager;
@@ -13,9 +14,9 @@ import java.sql.ResultSet;
 public class RobovmDatabaseManager implements DatabaseManager {
 
     @Override
-    public Database getNewDatabase(String dbName, int dbVersion,
+    public Database getNewDatabase(FileHandle dbFileHandle, int dbVersion,
                                    String dbOnCreateQuery, String dbOnUpgradeQuery) {
-        return new RobovmDatabase(dbName, dbVersion, dbOnCreateQuery,
+        return new RobovmDatabase(dbFileHandle, dbVersion, dbOnCreateQuery,
                 dbOnUpgradeQuery);
     }
 

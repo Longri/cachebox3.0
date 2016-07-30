@@ -2,6 +2,7 @@
 package com.badlogic.gdx.sqlite.desktop;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.*;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
@@ -16,7 +17,7 @@ public class DesktopDatabaseManager implements DatabaseManager {
 
         private SQLiteDatabaseHelper helper = null;
 
-        private final String dbName;
+        private final FileHandle dbFileHandle;
         private final int dbVersion;
         private final String dbOnCreateQuery;
         private final String dbOnUpgradeQuery;
@@ -24,8 +25,8 @@ public class DesktopDatabaseManager implements DatabaseManager {
         private Connection connection = null;
         private Statement stmt = null;
 
-        private DesktopDatabase(String dbName, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
-            this.dbName = dbName;
+        private DesktopDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
+            this.dbFileHandle = dbFileHandle;
             this.dbVersion = dbVersion;
             this.dbOnCreateQuery = dbOnCreateQuery;
             this.dbOnUpgradeQuery = dbOnUpgradeQuery;
@@ -44,10 +45,12 @@ public class DesktopDatabaseManager implements DatabaseManager {
 
         @Override
         public void openOrCreateDatabase() throws SQLiteGdxException {
-            if (helper == null) helper = new SQLiteDatabaseHelper(dbName, dbVersion, dbOnCreateQuery, dbOnUpgradeQuery);
+            String DB_URL = this.dbFileHandle.file().getAbsolutePath();
+
+            if (helper == null) helper = new SQLiteDatabaseHelper(DB_URL, dbVersion, dbOnCreateQuery, dbOnUpgradeQuery);
 
             try {
-                connection = DriverManager.getConnection("jdbc:sqlite:" + dbName);
+                connection = DriverManager.getConnection("jdbc:sqlite:" + DB_URL);
                 stmt = connection.createStatement();
                 helper.onCreate(stmt);
             } catch (SQLException e) {
@@ -147,8 +150,8 @@ public class DesktopDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public Database getNewDatabase(String dbName, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
-        return new DesktopDatabase(dbName, dbVersion, dbOnCreateQuery, dbOnUpgradeQuery);
+    public Database getNewDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
+        return new DesktopDatabase(dbFileHandle, dbVersion, dbOnCreateQuery, dbOnUpgradeQuery);
     }
 
     @Override

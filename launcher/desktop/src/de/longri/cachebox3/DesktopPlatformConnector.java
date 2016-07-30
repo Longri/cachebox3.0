@@ -39,8 +39,6 @@ public class DesktopPlatformConnector extends PlatformConnector {
 
     @Override
     public FileHandle _getSandBoxFileHandle(String fileName) {
-        String path = Gdx.files.getLocalStoragePath();
-
-        return Gdx.files.local(path + fileName);
+        return Gdx.files.local(fileName);
     }
 }

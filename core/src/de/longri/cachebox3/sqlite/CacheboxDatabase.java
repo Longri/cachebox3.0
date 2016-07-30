@@ -68,7 +68,7 @@ public class CacheboxDatabase {
     }
 
 
-    protected String databasePath;
+    protected FileHandle databasePath;
 
     protected boolean newDB = false;
 
@@ -81,16 +81,13 @@ public class CacheboxDatabase {
         return newDB;
     }
 
-    public String getDatabasePath() {
-        return databasePath;
-    }
 
     public long DatabaseId = 0; // for CacheboxDatabase replication with WinCachebox
     public long MasterDatabaseId = 0;
     protected int latestDatabaseChange = 0;
 
 
-    public boolean StartUp(String databasePath) {
+    public boolean StartUp(FileHandle databasePath) {
         this.databasePath = databasePath;
 
         Initialize();
@@ -922,8 +919,7 @@ public class CacheboxDatabase {
 
     public void Initialize() {
         if (myDB == null) {
-            FileHandle dbfile = Gdx.files.local(Gdx.files.getLocalStoragePath() + databasePath);
-            if (!dbfile.exists())
+            if (!databasePath.exists())
                 Reset();
 
             try {
@@ -938,10 +934,9 @@ public class CacheboxDatabase {
 
     public void Reset() {
         // if exists, delete old database file
-        FileHandle dbfile = Gdx.files.local(Gdx.files.getLocalStoragePath() + databasePath);
-        if (dbfile.exists()) {
+        if (databasePath.exists()) {
             log.debug("RESET DB, delete file: " + databasePath);
-            dbfile.delete();
+            databasePath.delete();
         }
 
         try {

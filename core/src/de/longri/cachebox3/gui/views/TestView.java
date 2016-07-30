@@ -59,20 +59,11 @@ public class TestView extends AbstractView {
 
 
         FileHandle dbFile = PlatformConnector.getSandboxFileHandle("CacheBox/testDB.db");
-
         dbFile.parent().mkdirs();
-
-        Database db = DatabaseFactory.getNewDatabase("CacheBox/testDB.db", 1, null, null);
-
-        try {
-            db.openOrCreateDatabase();
-        } catch (SQLiteGdxException e) {
-            log.error("Create new File", e);
-        }
 
         CacheboxDatabase cbdb = new CacheboxDatabase(CacheboxDatabase.DatabaseType.CacheBox);
 
-        cbdb.StartUp("CB.DB");
+        cbdb.StartUp(dbFile);
         cbdb.Close();
 
         StringBuilder sb = new StringBuilder();

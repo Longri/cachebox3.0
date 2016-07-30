@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 
 /**
  * This public interface contains the necessary methods to setup and execute queries on a database. The factory method
- * {@link DatabaseFactory#getNewDatabase(String, int, String, String)} will return a database object that implements this
+ * {@link DatabaseFactory#getNewDatabase(com.badlogic.gdx.files.FileHandle, int, String, String)} will return a database object that implements this
  * interface. The typical sequence of method calls should be as follows:
  * <ul>
  * <li>{@link Database#setupDatabase()}</li>

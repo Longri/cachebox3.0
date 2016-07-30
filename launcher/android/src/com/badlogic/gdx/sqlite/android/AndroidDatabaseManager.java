@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.Database;
 import com.badlogic.gdx.sql.DatabaseCursor;
 import com.badlogic.gdx.sql.DatabaseManager;
@@ -140,7 +141,7 @@ public class AndroidDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public Database getNewDatabase(String databaseName, int databaseVersion, String databaseCreateQuery, String dbOnUpgradeQuery) {
+    public Database getNewDatabase(FileHandle databaseName, int databaseVersion, String databaseCreateQuery, String dbOnUpgradeQuery) {
         return new AndroidDatabase(this.context, databaseName, databaseVersion, databaseCreateQuery, dbOnUpgradeQuery);
     }
 

@@ -1,7 +1,8 @@
 
 package com.badlogic.gdx.sql;
 
-import java.sql.PreparedStatement;
+import com.badlogic.gdx.files.FileHandle;
+
 import java.sql.ResultSet;
 
 /** @author M Rafay Aleem */
@@ -13,14 +14,14 @@ public interface DatabaseManager {
 	 * number. First, dbOnUpgradeQuery will be executed (Where you will generally perform activities such as dropping the tables,
 	 * etc.). Then dbOnCreateQuery will be executed. However, dbOnUpgradeQuery won't be executed on downgrading the database
 	 * version.
-	 * @param dbName The name of the database.
+	 * @param dbFileHandle The name of the database.
 	 * @param dbVersion number of the database (starting at 1); if the database is older, dbOnUpgradeQuery will be used to upgrade
 	 *           the database (on Android only)
 	 * @param dbOnCreateQuery The query that should be executed on the creation of the database. This query would usually create
 	 *           the necessary tables in the database.
 	 * @param dbOnUpgradeQuery The query that should be executed on upgrading the database from an old version to a new one.
 	 * @return Returns a {@link Database} object pointing to an existing or not-yet-created database. */
-	public Database getNewDatabase (String dbName, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery);
+	public Database getNewDatabase (FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery);
 
 	DatabaseCursor getNewDatabaseCursor(ResultSet rs, int rowcount);
 

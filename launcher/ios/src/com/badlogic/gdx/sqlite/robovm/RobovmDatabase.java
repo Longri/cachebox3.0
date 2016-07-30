@@ -1,11 +1,11 @@
 package com.badlogic.gdx.sqlite.robovm;
 
 import SQLite.JDBCDriver;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.Database;
 import com.badlogic.gdx.sql.DatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 
-import java.io.File;
 import java.sql.*;
 
 /**
@@ -15,7 +15,7 @@ public class RobovmDatabase implements Database {
     static final String TAG = "RobovmDatabase";
 
 
-    private final String dbName;
+    private final FileHandle dbFileHandle;
     private final int dbVersion;
     private final String dbOnCreateQuery;
     private final String dbOnUpgradeQuery;
@@ -23,9 +23,9 @@ public class RobovmDatabase implements Database {
     Connection connection;
     Statement statement;
 
-    public RobovmDatabase(String dbName, int dbVersion, String dbOnCreateQuery,
+    public RobovmDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery,
                           String dbOnUpgradeQuery) {
-        this.dbName = dbName;
+        this.dbFileHandle = dbFileHandle;
         this.dbVersion = dbVersion;
         this.dbOnCreateQuery = dbOnCreateQuery;
         this.dbOnUpgradeQuery = dbOnUpgradeQuery;
@@ -40,9 +40,7 @@ public class RobovmDatabase implements Database {
     public void openOrCreateDatabase() throws SQLiteGdxException {
         JDBCDriver jdbcDriver = new JDBCDriver();
         try {
-            String DB_URL = "sqlite:/"
-                    + (new File(System.getenv("HOME"), "Library/local/" + dbName))
-                    .getAbsolutePath();
+            String DB_URL = "sqlite:/" + this.dbFileHandle.file().getAbsolutePath();
             connection = jdbcDriver.connect(DB_URL, null);
             statement = connection.createStatement();
         } catch (Exception e) {
