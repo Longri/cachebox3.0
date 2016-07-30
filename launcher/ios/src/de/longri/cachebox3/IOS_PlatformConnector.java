@@ -16,8 +16,10 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import org.oscim.backend.canvas.Bitmap;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -39,5 +41,10 @@ public class IOS_PlatformConnector extends PlatformConnector {
         Gdx.app.log("step", "1");
         locationManager = new IOS_LocationListener();
         locationManager.createLocationManager();
+    }
+
+    @Override
+    public FileHandle _getSandBoxFileHandle(String fileName) {
+        return new FileHandle(new File(System.getenv("HOME"), "Library/local/" + fileName).getAbsolutePath());
     }
 }

@@ -398,7 +398,7 @@ public class Splash extends Stage {
 //     */
 //    private void ini_Config() {
 //        // Log.debug(log, "ini_Config");
-//        // Database.Settings.StartUp(Config.WorkPath + "/User/Config.db3");
+//        // CacheboxDatabase.Settings.StartUp(Config.WorkPath + "/User/Config.db3");
 //        // Config.settings.ReadFromDB();
 //        // // now must reinitial UiSizes with reading settings values
 //        // GL_UISizes.initial(UI_Size_Base.that.getWindowWidth(), UI_Size_Base.that.getWindowHeight());
@@ -546,7 +546,7 @@ public class Splash extends Stage {
 //            Config.AcceptChanges();
 //        }
 //
-//        Database.Data.StartUp(Config.DatabasePath.getValue());
+//        CacheboxDatabase.Data.StartUp(Config.DatabasePath.getValue());
 //
 //        Config.settings.ReadFromDB();
 //
@@ -554,17 +554,17 @@ public class Splash extends Stage {
 //        String sqlWhere = FilterInstances.getLastFilter().getSqlWhere(Config.GcLogin.getValue());
 //
 //        CoreSettingsForward.Categories = new Categories();
-//        Database.Data.GPXFilenameUpdateCacheCount();
+//        CacheboxDatabase.Data.GPXFilenameUpdateCacheCount();
 //
-//        synchronized (Database.Data.Query) {
+//        synchronized (CacheboxDatabase.Data.Query) {
 //            CacheListDAO cacheListDAO = new CacheListDAO();
-//            cacheListDAO.ReadCacheList(Database.Data.Query, sqlWhere, false, Config.ShowAllWaypoints.getValue());
+//            cacheListDAO.ReadCacheList(CacheboxDatabase.Data.Query, sqlWhere, false, Config.ShowAllWaypoints.getValue());
 //            cacheListDAO = null;
 //        }
 //
 //        CacheListChangedEventList.Call();
 //
-//        Database.FieldNotes.StartUp(Config.mWorkPath + "/User/FieldNotes.db3");
+//        CacheboxDatabase.FieldNotes.StartUp(Config.mWorkPath + "/User/FieldNotes.db3");
 //
 //    }
 //
@@ -607,8 +607,8 @@ public class Splash extends Stage {
 //        GL.that.switchToMainView();
 //
 //        if (GlobalCore.restartCache != null) {
-//            synchronized (Database.Data.Query) {
-//                Cache c = Database.Data.Query.GetCacheByGcCode(GlobalCore.restartCache);
+//            synchronized (CacheboxDatabase.Data.Query) {
+//                Cache c = CacheboxDatabase.Data.Query.GetCacheByGcCode(GlobalCore.restartCache);
 //                if (c != null) {
 //                    if (GlobalCore.restartWaypoint != null) {
 //                        WaypointDAO dao = new WaypointDAO();

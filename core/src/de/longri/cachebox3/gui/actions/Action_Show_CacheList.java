@@ -10,7 +10,7 @@ import de.longri.cachebox3.gui.views.CacheListView;
 public class Action_Show_CacheList extends Action {
 
     public Action_Show_CacheList() {
-        //TODO add db size to name super("cacheList", "  (" + String.valueOf(Database.Data.Query.size()) + ")", MenuID.AID_SHOW_CACHELIST);
+        //TODO add db size to name super("cacheList", "  (" + String.valueOf(CacheboxDatabase.Data.Query.size()) + ")", MenuID.AID_SHOW_CACHELIST);
         super("cacheList", "  (" + String.valueOf("xxx") + ")", MenuID.AID_SHOW_CACHELIST);
     }
 

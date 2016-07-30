@@ -15,20 +15,25 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.sql.Database;
+import com.badlogic.gdx.sql.DatabaseFactory;
+import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
+import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
-import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.CacheboxDatabase;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 27.07.16.
  */
 public class TestView extends AbstractView {
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(TestView.class);
 
     public TestView() {
         super("TestView");
@@ -51,31 +56,38 @@ public class TestView extends AbstractView {
 
     @Override
     public void reloadState() {
+
+
+        FileHandle dbFile = PlatformConnector.getSandboxFileHandle("CacheBox/testDB.db");
+
+        dbFile.parent().mkdirs();
+
+        Database db = DatabaseFactory.getNewDatabase("CacheBox/testDB.db", 1, null, null);
+
         try {
-            Database db = new Database(Database.DatabaseType.CacheBox);
-            FileHandle dbFile = Gdx.files.local("Cachebox/localtest.db");
-
-            db.startUp(dbFile);
-
-            StringBuilder sb = new StringBuilder();
-            sb.append("Create DB on:");
-            sb.append(GlobalCore.br);
-            sb.append(dbFile.file().getAbsolutePath());
-            sb.append(GlobalCore.br);
-
-            sb.append("File exist: ");
-            sb.append(dbFile.file().exists() ? "yes" : "no");
-            if (dbFile.exists()) {
-                sb.append(GlobalCore.br);
-                sb.append("DB version;" + db.getDatabaseSchemeVersion());
-            }
-
-            nameLabel.setText(sb.toString());
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return;
+            db.openOrCreateDatabase();
+        } catch (SQLiteGdxException e) {
+            log.error("Create new File", e);
         }
+
+        CacheboxDatabase cbdb = new CacheboxDatabase(CacheboxDatabase.DatabaseType.CacheBox);
+
+        cbdb.StartUp("CB.DB");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Create DB on:");
+        sb.append(GlobalCore.br);
+        sb.append(dbFile.file().getAbsolutePath());
+        sb.append(GlobalCore.br);
+
+        sb.append("File exist: ");
+        sb.append(dbFile.exists() ? "yes" : "no");
+//            if (dbFile.exists()) {
+//                sb.append(GlobalCore.br);
+//                sb.append("DB version;" + db.getDatabaseSchemeVersion());
+//            }
+
+        nameLabel.setText(sb.toString());
 
 
     }

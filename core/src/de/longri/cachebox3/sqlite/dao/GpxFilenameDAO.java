@@ -15,9 +15,7 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
-import de.longri.cachebox3.sqlite.Cursor;
-import de.longri.cachebox3.sqlite.GlobalData;
-import de.longri.cachebox3.sqlite.Parameters;
+import com.badlogic.gdx.sql.DatabaseCursor;
 import de.longri.cachebox3.types.GpxFilename;
 
 import java.text.DateFormat;
@@ -28,7 +26,7 @@ import java.util.Date;
 
 public class GpxFilenameDAO
 {
-	public GpxFilename ReadFromCursor(Cursor reader)
+	public GpxFilename ReadFromCursor(DatabaseCursor reader)
 	{
 		long id;
 		String gpxFileName;
@@ -61,31 +59,31 @@ public class GpxFilenameDAO
 		return result;
 	}
 
-	public void GPXFilenameUpdateCacheCount()
-	{
-		// welche GPXFilenamen sind in der DB erfasst
-
-		Cursor reader = GlobalData.Data.rawQuery(
-				"select GPXFilename_ID, Count(*) as CacheCount from Caches where GPXFilename_ID is not null Group by GPXFilename_ID", null);
-
-		reader.moveToFirst();
-		while (reader.isAfterLast() == false)
-		{
-			Integer GPXFilename_ID = reader.getInt(0);
-			Integer CacheCount = reader.getInt(1);
-
-			Parameters args = new Parameters();
-			args.put("CacheCount", CacheCount);
-
-			GlobalData.Data.update("GPXFilenames", args, "ID=?", new String[]
-				{ String.valueOf(GPXFilename_ID) });
-			reader.moveToNext();
-		}
-
-		reader.close();
-
-		GlobalData.Data.delete("GPXFilenames", "Cachecount is NULL or CacheCount = 0", null);
-		GlobalData.Data.delete("GPXFilenames", "ID not in (Select GPXFilename_ID From Caches)", null);
-	}
+//	public void GPXFilenameUpdateCacheCount()
+//	{
+//		// welche GPXFilenamen sind in der DB erfasst
+//
+//		DatabaseCiursor reader = GlobalData.Data.rawQuery(
+//				"select GPXFilename_ID, Count(*) as CacheCount from Caches where GPXFilename_ID is not null Group by GPXFilename_ID", null);
+//
+//		reader.moveToFirst();
+//		while (reader.isAfterLast() == false)
+//		{
+//			Integer GPXFilename_ID = reader.getInt(0);
+//			Integer CacheCount = reader.getInt(1);
+//
+//			Parameters args = new Parameters();
+//			args.put("CacheCount", CacheCount);
+//
+//			GlobalData.Data.update("GPXFilenames", args, "ID=?", new String[]
+//				{ String.valueOf(GPXFilename_ID) });
+//			reader.moveToNext();
+//		}
+//
+//		reader.close();
+//
+//		GlobalData.Data.delete("GPXFilenames", "Cachecount is NULL or CacheCount = 0", null);
+//		GlobalData.Data.delete("GPXFilenames", "ID not in (Select GPXFilename_ID From Caches)", null);
+//	}
 
 }
