@@ -43,6 +43,7 @@ public class CB {
     final static float PPI_DEFAULT = 163;
     private static float globalScale = 1;
     public static ViewManager viewmanager;
+    public static String WorkPath;
 
 
     private CB() {
