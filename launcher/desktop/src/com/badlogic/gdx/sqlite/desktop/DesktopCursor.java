@@ -1,4 +1,18 @@
-
+/*
+ * Copyright (C) 2016 team-cachebox.de
+ *
+ * Licensed under the : GNU General Public License (GPL);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.gnu.org/licenses/gpl.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.badlogic.gdx.sqlite.desktop;
 
 import com.badlogic.gdx.Gdx;
@@ -15,7 +29,8 @@ import java.sql.SQLException;
  * This is a Desktop implementation of the public interface {@link DatabaseCursor}. Note that columns in JDBC are not zero-based
  * and hence +1 has been added to accomodate for this difference.
  *
- * @author M Rafay Aleem
+ * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
+ * @author Longri (2016)
  */
 public class DesktopCursor implements DatabaseCursor {
 
@@ -24,24 +39,6 @@ public class DesktopCursor implements DatabaseCursor {
      * sqlite does not support other than forward traversing
      */
     private CachedRowSetImpl resultSet = null;
-
-//    public DesktopCursor(ResultSet rs, int rowcount) {
-//        setNativeCursor(rs);
-//        try {
-//            this.resultSet.setFetchSize(rowcount);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public DesktopCursor(ResultSet rs) {
-//        setNativeCursor(resultSet);
-//    }
-
-    public DesktopCursor() {
-
-    }
-
 
     @Override
     public byte[] getBlob(int columnIndex) {
@@ -171,7 +168,7 @@ public class DesktopCursor implements DatabaseCursor {
     @Override
     public boolean isNull(int i) {
         try {
-            return resultSet.getObject(i)==null;
+            return resultSet.getObject(i) == null;
         } catch (SQLException e) {
             e.printStackTrace();
         }
