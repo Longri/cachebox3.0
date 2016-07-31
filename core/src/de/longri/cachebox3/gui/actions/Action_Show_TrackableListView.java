@@ -19,6 +19,5 @@ public class Action_Show_TrackableListView extends Action {
         TrackableListView view = new TrackableListView();
         CB.viewmanager.showView(view);
 
-        view.reloadState();
     }
 }

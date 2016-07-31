@@ -30,11 +30,12 @@ public class CB {
 
 
     //LogLevels
-    public static final String LOG_LEVEL_TRACE = "trace";
-    public static final String LOG_LEVEL_DEBUG = "debug";
+
     public static final String LOG_LEVEL_INFO = "info";
+    public static final String LOG_LEVEL_DEBUG = "debug";
     public static final String LOG_LEVEL_WARN = "warn";
     public static final String LOG_LEVEL_ERROR = "error";
+    public static final String LOG_LEVEL_TRACE = "trace";
 
     public static final String USED_LOG_LEVEL = LOG_LEVEL_TRACE;
 
@@ -94,5 +95,20 @@ public class CB {
 
     public float getGlobalScaleFactor() {
         return globalScale;
+    }
+
+    public static boolean isLogLevel(String logLevel) {
+
+        if (logLevelToInt(USED_LOG_LEVEL) >= logLevelToInt(logLevel)) return true;
+        return false;
+    }
+
+    private static int logLevelToInt(String logLevel) {
+        if (LOG_LEVEL_TRACE.equals(logLevel)) return 10;
+        if (LOG_LEVEL_ERROR.equals(logLevel)) return 8;
+        if (LOG_LEVEL_WARN.equals(logLevel)) return 6;
+        if (LOG_LEVEL_DEBUG.equals(logLevel)) return 4;
+        if (LOG_LEVEL_INFO.equals(logLevel)) return 2;
+        return 0;
     }
 }

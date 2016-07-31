@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.files.FileHandle;
 import org.oscim.backend.canvas.Bitmap;
 
 import java.io.IOException;
@@ -50,5 +51,12 @@ public abstract class PlatformConnector {
     public static void initLocationListener() {
         platformConnector.initialLocationReciver();
     }
+
+
+    public static FileHandle getSandboxFileHandle(String fileName) {
+        return platformConnector._getSandBoxFileHandle(fileName);
+    }
+
+    public abstract FileHandle _getSandBoxFileHandle(String fileName);
 
 }

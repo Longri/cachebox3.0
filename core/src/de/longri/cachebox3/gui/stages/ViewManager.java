@@ -23,10 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.actions.Action_Show_AboutView;
-import de.longri.cachebox3.gui.actions.Action_Show_CacheList;
-import de.longri.cachebox3.gui.actions.Action_Show_TrackListView;
-import de.longri.cachebox3.gui.actions.Action_Show_TrackableListView;
+import de.longri.cachebox3.GlobalCore;
+import de.longri.cachebox3.gui.actions.*;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.ActionButton;
@@ -101,10 +99,10 @@ public class ViewManager extends Stage {
 
     public void showView(AbstractView view) {
 
-        log.debug("show view:", view.getName());
+        log.debug("show view:"+view.getName());
 
         if (actView != null) {
-            log.debug("remove and dispose actView", actView.getName());
+            log.debug("remove and dispose actView"+ actView.getName());
             this.getRoot().removeActor(actView);
             actView.saveState();
             actView.dispose();
@@ -113,7 +111,7 @@ public class ViewManager extends Stage {
         this.actView = view;
         this.addActor(view);
         setActViewBounds();
-        log.debug("reload view state:", view.getName());
+        log.debug("reload view state:"+ view.getName());
         this.actView.reloadState();
     }
 
@@ -180,8 +178,8 @@ public class ViewManager extends Stage {
 //        mMapButtonOnLeftTab.addAction(new CB_ActionButton(actionShowCompassView, false, GestureDirection.Right));
 //        mMapButtonOnLeftTab.addAction(new CB_ActionButton(actionNavigateTo1, false, GestureDirection.Down));
 //        mMapButtonOnLeftTab.addAction(new CB_ActionButton(actionGenerateRoute, false, GestureDirection.Left));
-//        if (GlobalCore.isTestVersion())
-//            mMapButtonOnLeftTab.addAction(new CB_ActionButton(actionTestView, false));
+        if (GlobalCore.isTestVersion())
+            navButton.addAction(new ActionButton(new Action_Show_TestView(), false));
 //
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickFieldNote, false, GestureDirection.Up));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowFieldNotesView, Config.ShowFieldnotesAsDefaultView.getValue()));

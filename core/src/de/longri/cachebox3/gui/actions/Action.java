@@ -48,7 +48,7 @@ public abstract class Action {
         this.nameExtention = nameExtention;
     }
 
-    public void CallExecute() {
+    public void callExecute() {
         log.debug("ACTION => " + name + " execute");
         Execute();
     }

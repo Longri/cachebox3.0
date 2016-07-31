@@ -20,8 +20,18 @@ import android.util.DisplayMetrics;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import org.oscim.backend.CanvasAdapter;
+import org.sqldroid.SQLDroidDriver;
 
 public class AndroidLauncher extends AndroidApplication {
+
+    static {
+        try {
+            java.sql.DriverManager.registerDriver(new SQLDroidDriver());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private final AndroidLocationListener locationListener = new AndroidLocationListener();
 

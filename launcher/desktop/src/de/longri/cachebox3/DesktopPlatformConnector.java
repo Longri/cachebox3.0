@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import org.oscim.backend.canvas.Bitmap;
 
 import java.io.IOException;
@@ -26,12 +28,17 @@ import java.io.InputStream;
 public class DesktopPlatformConnector extends PlatformConnector {
 
     @Override
-    public Bitmap getRealScaledSVG(InputStream stream,SvgScaleType scaleType, float scaleValue) throws IOException {
-        return new DesktopRealSvgBitmap(stream, scaleType,scaleValue);
+    public Bitmap getRealScaledSVG(InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {
+        return new DesktopRealSvgBitmap(stream, scaleType, scaleValue);
     }
 
     @Override
     public void initialLocationReciver() {
 
+    }
+
+    @Override
+    public FileHandle _getSandBoxFileHandle(String fileName) {
+        return Gdx.files.local(fileName);
     }
 }

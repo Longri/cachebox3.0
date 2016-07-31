@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -63,5 +62,9 @@ public abstract class AbstractView extends WidgetGroup {
     protected void boundsChanged(float x, float y, float width, float height) {
         colorWidget.setBounds(0, 0, this.getWidth(), this.getHeight());
         nameLabel.setBounds(0, 0, this.getWidth(), this.getHeight());
+    }
+
+    public String getName() {
+        return this.name;
     }
 }
