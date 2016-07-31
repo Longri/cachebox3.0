@@ -21,7 +21,7 @@ package com.badlogic.gdx.sql;
  * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
  * @author Longri (2016)
  */
-public class SQLiteResultCodes {
+public class SQLiteGdxResultCodes {
 
     public final static int SQLITE_OK = 0; /* Successful result */
     public final static int SQLITE_ERROR = 1; /* SQL error or missing database */
@@ -38,8 +38,8 @@ public class SQLiteResultCodes {
     public final static int SQLITE_NOTFOUND = 12; /* Unknown opcode in sqlite3_file_control() */
     public final static int SQLITE_FULL = 13; /* Insertion failed because database is full */
     public final static int SQLITE_CANTOPEN = 14; /* Unable to open the database file */
-    public final static int SQLITE_PROTOCOL = 15; /* CacheboxDatabase lock protocol error */
-    public final static int SQLITE_EMPTY = 16; /* CacheboxDatabase is empty */
+    public final static int SQLITE_PROTOCOL = 15; /* Database lock protocol error */
+    public final static int SQLITE_EMPTY = 16; /* Database is empty */
     public final static int SQLITE_SCHEMA = 17; /* The database schema changed */
     public final static int SQLITE_TOOBIG = 18; /* String or BLOB exceeds size limit */
     public final static int SQLITE_CONSTRAINT = 19; /* Abort due to constraint violation */

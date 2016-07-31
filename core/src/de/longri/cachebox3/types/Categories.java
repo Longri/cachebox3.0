@@ -2,10 +2,10 @@ package de.longri.cachebox3.types;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.sql.DatabaseCursor;
-import de.longri.cachebox3.sqlite.CacheboxDatabase;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MoveableList;
-import de.longri.cachebox3.sqlite.CacheboxDatabase.Parameters;
+import de.longri.cachebox3.sqlite.Database.Parameters;
 
 public class Categories extends MoveableList<Category> {
 	/**
@@ -49,14 +49,14 @@ public class Categories extends MoveableList<Category> {
 		Parameters args = new Parameters();
 		args.put("GPXFilename", filename);
 		try {
-			CacheboxDatabase.Data.insert("Category", args);
+			Database.Data.insert("Category", args);
 		} catch (Exception exc) {
 			//Log.err(log, "CreateNewCategory", filename, exc);
 		}
 
 		long Category_ID = 0;
 
-		DatabaseCursor reader = CacheboxDatabase.Data.rawQuery("Select max(ID) from Category", null);
+		SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("Select max(ID) from Category", null);
 		reader.moveToFirst();
 		if (!reader.isAfterLast()) {
 			Category_ID = reader.getLong(0);

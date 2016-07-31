@@ -17,13 +17,13 @@ package com.badlogic.gdx.sqlite.desktop;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.Database;
-import com.badlogic.gdx.sql.DatabaseCursor;
-import com.badlogic.gdx.sql.DatabaseFactory;
+import com.badlogic.gdx.sql.SQLiteGdxDatabase;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.sqlite.CacheboxDatabase;
+import de.longri.cachebox3.sqlite.Database;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
@@ -33,7 +33,7 @@ import java.util.Map;
  * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
  * @author Longri (2016)
  */
-public class DesktopDatabase implements Database {
+public class DesktopDatabase implements SQLiteGdxDatabase {
 
     final static org.slf4j.Logger log = LoggerFactory.getLogger(DesktopDatabase.class);
 
@@ -59,7 +59,7 @@ public class DesktopDatabase implements Database {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
-            Gdx.app.log(DatabaseFactory.ERROR_TAG,
+            Gdx.app.log(SQLiteGdxDatabaseFactory.ERROR_TAG,
                     "Unable to load the SQLite JDBC driver. Their might be a problem with your build path or project setup.", e);
             throw new GdxRuntimeException(e);
         }
@@ -100,7 +100,7 @@ public class DesktopDatabase implements Database {
     }
 
     @Override
-    public DatabaseCursor rawQuery(String sql) throws SQLiteGdxException {
+    public SQLiteGdxDatabaseCursor rawQuery(String sql) throws SQLiteGdxException {
         DesktopCursor lCursor = new DesktopCursor();
         try {
             ResultSet resultSetRef = stmt.executeQuery(sql);
@@ -112,7 +112,7 @@ public class DesktopDatabase implements Database {
     }
 
     @Override
-    public DatabaseCursor rawQuery(DatabaseCursor cursor, String sql) throws SQLiteGdxException {
+    public SQLiteGdxDatabaseCursor rawQuery(SQLiteGdxDatabaseCursor cursor, String sql) throws SQLiteGdxException {
         DesktopCursor lCursor = (DesktopCursor) cursor;
         try {
             ResultSet resultSetRef = stmt.executeQuery(sql);
@@ -170,7 +170,7 @@ public class DesktopDatabase implements Database {
     }
 
     @Override
-    public long insert(String tablename, CacheboxDatabase.Parameters val) {
+    public long insert(String tablename, Database.Parameters val) {
         if (connection == null)
             return 0;
 
@@ -225,7 +225,7 @@ public class DesktopDatabase implements Database {
     }
 
     @Override
-    public long update(String tablename, CacheboxDatabase.Parameters val, String whereClause, String[] whereArgs) {
+    public long update(String tablename, Database.Parameters val, String whereClause, String[] whereArgs) {
         if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
             StringBuilder sb = new StringBuilder("Update Table:" + tablename);
             sb.append("Parameters:" + val.toString());
@@ -344,7 +344,7 @@ public class DesktopDatabase implements Database {
     }
 
     @Override
-    public long insertWithConflictReplace(String tablename, CacheboxDatabase.Parameters val) {
+    public long insertWithConflictReplace(String tablename, Database.Parameters val) {
         if (connection == null)
             return 0;
 
@@ -401,7 +401,7 @@ public class DesktopDatabase implements Database {
     }
 
     @Override
-    public long insertWithConflictIgnore(String tablename, CacheboxDatabase.Parameters val) {
+    public long insertWithConflictIgnore(String tablename, Database.Parameters val) {
         if (connection == null)
             return 0;
 

@@ -21,11 +21,11 @@ import com.badlogic.gdx.files.FileHandle;
  * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
  * @author Longri (2016)
  */
-public interface DatabaseManager {
+public interface SQLiteGdxDatabaseManager {
 
     /**
      * This method will return a reference to an existing or a not-yet-created database. You will need to manually call methods on
-     * the {@link Database} object to setup, open/create or close the database. See {@link Database} for more details. <b> Note:
+     * the {@link SQLiteGdxDatabase} object to setup, open/create or close the database. See {@link SQLiteGdxDatabase} for more details. <b> Note:
      * </b> dbOnUpgradeQuery will only work on an Android device. It will be executed when you increment your database version
      * number. First, dbOnUpgradeQuery will be executed (Where you will generally perform activities such as dropping the tables,
      * etc.). Then dbOnCreateQuery will be executed. However, dbOnUpgradeQuery won't be executed on downgrading the database
@@ -37,11 +37,11 @@ public interface DatabaseManager {
      * @param dbOnCreateQuery  The query that should be executed on the creation of the database. This query would usually create
      *                         the necessary tables in the database.
      * @param dbOnUpgradeQuery The query that should be executed on upgrading the database from an old version to a new one.
-     * @return Returns a {@link Database} object pointing to an existing or not-yet-created database.
+     * @return Returns a {@link SQLiteGdxDatabase} object pointing to an existing or not-yet-created database.
      */
-    public Database getNewDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery);
+    public SQLiteGdxDatabase getNewDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery);
 
-//	DatabaseCursor getNewDatabaseCursor(ResultSet rs, int rowcount);
+//	SQLiteGdxDatabaseCursor getNewDatabaseCursor(ResultSet rs, int rowcount);
 //
-//	DatabaseCursor getNewDatabaseCursor(ResultSet rs);
+//	SQLiteGdxDatabaseCursor getNewDatabaseCursor(ResultSet rs);
 }

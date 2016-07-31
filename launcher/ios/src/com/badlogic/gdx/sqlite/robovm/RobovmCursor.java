@@ -15,7 +15,7 @@
  */
 package com.badlogic.gdx.sqlite.robovm;
 
-import com.badlogic.gdx.sql.DatabaseCursor;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +24,7 @@ import java.sql.SQLException;
  * @author truongps (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
  * @author Longri (2016)
  */
-public class RobovmCursor implements DatabaseCursor {
+public class RobovmCursor implements SQLiteGdxDatabaseCursor {
 
     ResultSet nativeCursor;
 

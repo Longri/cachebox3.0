@@ -19,14 +19,14 @@ import android.content.Context;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.Database;
-import com.badlogic.gdx.sql.DatabaseManager;
+import com.badlogic.gdx.sql.SQLiteGdxDatabase;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseManager;
 
 /**
  * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
  * @author Longri (2016)
  */
-public class AndroidDatabaseManager implements DatabaseManager {
+public class AndroidDatabaseManager implements SQLiteGdxDatabaseManager {
 
     private Context context;
 
@@ -36,7 +36,7 @@ public class AndroidDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public Database getNewDatabase(FileHandle dbfileHandle, int databaseVersion, String databaseCreateQuery, String dbOnUpgradeQuery) {
+    public SQLiteGdxDatabase getNewDatabase(FileHandle dbfileHandle, int databaseVersion, String databaseCreateQuery, String dbOnUpgradeQuery) {
         return new AndroidDatabase(this.context, dbfileHandle, databaseVersion, databaseCreateQuery, dbOnUpgradeQuery);
     }
 

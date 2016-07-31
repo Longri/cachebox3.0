@@ -21,7 +21,7 @@ package com.badlogic.gdx.sql;
  * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
  * @author Longri (2016)
  */
-public interface DatabaseCursor {
+public interface SQLiteGdxDatabaseCursor {
 
     /**
      * Returns the value of the requested column as a byte array.

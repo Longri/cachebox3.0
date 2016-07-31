@@ -15,9 +15,9 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
-import com.badlogic.gdx.sql.DatabaseCursor;
-import de.longri.cachebox3.sqlite.CacheboxDatabase;
-import de.longri.cachebox3.sqlite.CacheboxDatabase.Parameters;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.Database.Parameters;
 import de.longri.cachebox3.types.Category;
 import de.longri.cachebox3.types.GpxFilename;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ import java.util.Date;
 public class CategoryDAO {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(CategoryDAO.class);
 
-    public Category ReadFromCursor(DatabaseCursor reader) {
+    public Category ReadFromCursor(SQLiteGdxDatabaseCursor reader) {
         Category result = new Category();
 
         result.Id = reader.getLong(0);
@@ -39,7 +39,7 @@ public class CategoryDAO {
         result.pinned = reader.getInt(2) != 0;
 
         // alle GpxFilenames einlesen
-        DatabaseCursor reader2 = CacheboxDatabase.Data.rawQuery("select ID, GPXFilename, Imported, CacheCount from GpxFilenames where CategoryId=?", new String[]
+        SQLiteGdxDatabaseCursor reader2 = Database.Data.rawQuery("select ID, GPXFilename, Imported, CacheCount from GpxFilenames where CategoryId=?", new String[]
                 {String.valueOf(result.Id)});
         reader2.moveToFirst();
         while (reader2.isAfterLast() == false) {
@@ -62,14 +62,14 @@ public class CategoryDAO {
         Parameters args = new Parameters();
         args.put("GPXFilename", filename);
         try {
-            CacheboxDatabase.Data.insert("Category", args);
+            Database.Data.insert("Category", args);
         } catch (Exception exc) {
             log.error("CreateNewCategory", filename, exc);
         }
 
         long Category_ID = 0;
 
-        DatabaseCursor reader = CacheboxDatabase.Data.rawQuery("Select max(ID) from Category", null);
+        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("Select max(ID) from Category", null);
         reader.moveToFirst();
         if (reader.isAfterLast() == false) {
             Category_ID = reader.getLong(0);
@@ -93,14 +93,14 @@ public class CategoryDAO {
         String stimestamp = iso8601Format.format(new Date());
         args.put("Imported", stimestamp);
         try {
-            CacheboxDatabase.Data.insert("GpxFilenames", args);
+            Database.Data.insert("GpxFilenames", args);
         } catch (Exception exc) {
             log.error("CreateNewGpxFilename", filename, exc);
         }
 
         long GPXFilename_ID = 0;
 
-        DatabaseCursor reader = CacheboxDatabase.Data.rawQuery("Select max(ID) from GpxFilenames", null);
+        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("Select max(ID) from GpxFilenames", null);
         reader.moveToFirst();
         if (reader.isAfterLast() == false) {
             GPXFilename_ID = reader.getLong(0);
@@ -118,7 +118,7 @@ public class CategoryDAO {
         Parameters args = new Parameters();
         args.put("pinned", pinned);
         try {
-            CacheboxDatabase.Data.update("Category", args, "Id=" + String.valueOf(category.Id), null);
+            Database.Data.update("Category", args, "Id=" + String.valueOf(category.Id), null);
         } catch (Exception exc) {
             log.error("SetPinned", "CategoryDAO", exc);
         }
@@ -132,7 +132,7 @@ public class CategoryDAO {
 //		CoreSettingsForward.Categories.beginnTransaction();
 //		CoreSettingsForward.Categories.clear();
 //
-//		DatabaseCursor reader = CacheboxDatabase.Data.rawQuery("select ID, GPXFilename, Pinned from Category", null);
+//		SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select ID, GPXFilename, Pinned from Category", null);
 //		if (reader != null)
 //		{
 //			reader.moveToFirst();
@@ -175,7 +175,7 @@ public class CategoryDAO {
 //			Category cat = CoreSettingsForward.Categories.get(i);
 //			if (cat.CacheCount() == 0)
 //			{
-//				CacheboxDatabase.Data.delete("Category", "Id=?", new String[]
+//				Database.Data.delete("Category", "Id=?", new String[]
 //					{ String.valueOf(cat.Id) });
 //				delete.add(cat);
 //			}

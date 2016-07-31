@@ -21,23 +21,23 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
  * A factory class that creates new database objects and returns references to them. See
- * {@link DatabaseFactory#getNewDatabase(FileHandle, int, String, String)} for more details.
+ * {@link SQLiteGdxDatabaseFactory#getNewDatabase(FileHandle, int, String, String)} for more details.
  *
  * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
  * @author Longri (2016)
  */
-public class DatabaseFactory {
+public class SQLiteGdxDatabaseFactory {
 
     public static final String ERROR_TAG = "DATABASE";
     private static final String androidClassname = "com.badlogic.gdx.sqlite.android.AndroidDatabaseManager";
     private static final String desktopClassname = "com.badlogic.gdx.sqlite.desktop.DesktopDatabaseManager";
     private static final String robovmClassname = "com.badlogic.gdx.sqlite.robovm.RobovmDatabaseManager";
 
-    private static DatabaseManager databaseManager = null;
+    private static SQLiteGdxDatabaseManager databaseManager = null;
 
     /**
      * This is a factory method that will return a reference to an existing or a not-yet-created database. You will need to
-     * manually call methods on the {@link Database} object to setup, open/create or close the database. See {@link Database} for
+     * manually call methods on the {@link SQLiteGdxDatabase} object to setup, open/create or close the database. See {@link SQLiteGdxDatabase} for
      * more details. <b> Note: </b> dbOnUpgradeQuery will only work on an Android device. It will be executed when you increment
      * your database version number. First, dbOnUpgradeQuery will be executed (Where you will generally perform activities such as
      * dropping the tables, etc.). Then dbOnCreateQuery will be executed. However, dbOnUpgradeQuery won't be executed on
@@ -49,9 +49,9 @@ public class DatabaseFactory {
      * @param dbOnCreateQuery  The query that should be executed on the creation of the database. This query would usually create
      *                         the necessary tables in the database.
      * @param dbOnUpgradeQuery The query that should be executed on upgrading the database from an old version to a new one.
-     * @return Returns a {@link Database} object pointing to an existing or not-yet-created database.
+     * @return Returns a {@link SQLiteGdxDatabase} object pointing to an existing or not-yet-created database.
      */
-    public static Database getNewDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
+    public static SQLiteGdxDatabase getNewDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
         chkDatabaseManager();
         return databaseManager.getNewDatabase(dbFileHandle, dbVersion, dbOnCreateQuery, dbOnUpgradeQuery);
     }
@@ -61,14 +61,14 @@ public class DatabaseFactory {
             switch (Gdx.app.getType()) {
                 case Android:
                     try {
-                        databaseManager = (DatabaseManager) Class.forName(androidClassname).newInstance();
+                        databaseManager = (SQLiteGdxDatabaseManager) Class.forName(androidClassname).newInstance();
                     } catch (Throwable ex) {
                         throw new GdxRuntimeException("Error getting database: " + androidClassname, ex);
                     }
                     break;
                 case Desktop:
                     try {
-                        databaseManager = (DatabaseManager) Class.forName(desktopClassname).newInstance();
+                        databaseManager = (SQLiteGdxDatabaseManager) Class.forName(desktopClassname).newInstance();
                     } catch (Throwable ex) {
                         throw new GdxRuntimeException("Error getting database: " + desktopClassname, ex);
                     }
@@ -79,7 +79,7 @@ public class DatabaseFactory {
                     throw new GdxRuntimeException("SQLite is currently not supported in WebGL by this libgdx extension.");
                 case iOS:
                     try {
-                        databaseManager = (DatabaseManager) Class.forName(robovmClassname).newInstance();
+                        databaseManager = (SQLiteGdxDatabaseManager) Class.forName(robovmClassname).newInstance();
                     } catch (Throwable ex) {
                         throw new GdxRuntimeException("Error getting database: " + robovmClassname, ex);
                     }
@@ -89,14 +89,14 @@ public class DatabaseFactory {
     }
 
 
-    private DatabaseFactory() {
+    private SQLiteGdxDatabaseFactory() {
     }
 
-//	public static DatabaseCursor getNewDatabaseCursor(ResultSet rs, int rowcount) {
+//	public static SQLiteGdxDatabaseCursor getNewDatabaseCursor(ResultSet rs, int rowcount) {
 //		return databaseManager.getNewDatabaseCursor(rs, rowcount) ;
 //	}
 //
-//	public static DatabaseCursor getNewDatabaseCursor(ResultSet rs) {
+//	public static SQLiteGdxDatabaseCursor getNewDatabaseCursor(ResultSet rs) {
 //		return databaseManager.getNewDatabaseCursor(rs) ;
 //	}
 }

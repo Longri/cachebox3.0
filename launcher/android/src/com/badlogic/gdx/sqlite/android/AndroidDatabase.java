@@ -23,11 +23,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteStatement;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.Database;
-import com.badlogic.gdx.sql.DatabaseCursor;
+import com.badlogic.gdx.sql.SQLiteGdxDatabase;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.sqlite.CacheboxDatabase;
+import de.longri.cachebox3.sqlite.Database;
 import org.slf4j.LoggerFactory;
 
 import java.sql.PreparedStatement;
@@ -37,7 +37,7 @@ import java.util.Map;
  * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
  * @author Longri (2016)
  */
-public class AndroidDatabase implements Database {
+public class AndroidDatabase implements SQLiteGdxDatabase {
 
     final org.slf4j.Logger log = LoggerFactory.getLogger(AndroidDatabase.class);
     private SQLiteDatabaseHelper helper;
@@ -92,7 +92,7 @@ public class AndroidDatabase implements Database {
     }
 
     @Override
-    public DatabaseCursor rawQuery(String sql) throws SQLiteGdxException {
+    public SQLiteGdxDatabaseCursor rawQuery(String sql) throws SQLiteGdxException {
         AndroidCursor aCursor = new AndroidCursor();
         try {
             Cursor tmp = database.rawQuery(sql, null);
@@ -104,7 +104,7 @@ public class AndroidDatabase implements Database {
     }
 
     @Override
-    public DatabaseCursor rawQuery(DatabaseCursor cursor, String sql) throws SQLiteGdxException {
+    public SQLiteGdxDatabaseCursor rawQuery(SQLiteGdxDatabaseCursor cursor, String sql) throws SQLiteGdxException {
         AndroidCursor aCursor = (AndroidCursor) cursor;
         try {
             Cursor tmp = database.rawQuery(sql, null);
@@ -149,7 +149,7 @@ public class AndroidDatabase implements Database {
     }
 
     @Override
-    public long insert(String tablename, CacheboxDatabase.Parameters val) {
+    public long insert(String tablename, Database.Parameters val) {
         ContentValues values = getContentValues(val);
 
         long ret = -1;
@@ -164,7 +164,7 @@ public class AndroidDatabase implements Database {
     }
 
     @Override
-    public long update(String tablename, CacheboxDatabase.Parameters val, String whereClause, String[] whereArgs) {
+    public long update(String tablename, Database.Parameters val, String whereClause, String[] whereArgs) {
 
         if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
             StringBuilder sb = new StringBuilder("Update Table:" + tablename);
@@ -207,20 +207,20 @@ public class AndroidDatabase implements Database {
     }
 
     @Override
-    public long insertWithConflictReplace(String tablename, CacheboxDatabase.Parameters val) {
+    public long insertWithConflictReplace(String tablename, Database.Parameters val) {
         log.debug( "insertWithConflictReplace @Table:" + tablename + "Parameters: " + val.toString());
         ContentValues values = getContentValues(val);
         return database.insertWithOnConflict(tablename, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     @Override
-    public long insertWithConflictIgnore(String tablename, CacheboxDatabase.Parameters val) {
+    public long insertWithConflictIgnore(String tablename, Database.Parameters val) {
         log.debug("insertWithConflictIgnore @Table:" + tablename + "Parameters: " + val.toString());
         ContentValues values = getContentValues(val);
         return database.insertWithOnConflict(tablename, null, values, SQLiteDatabase.CONFLICT_IGNORE);
     }
 
-    private ContentValues getContentValues(CacheboxDatabase.Parameters val) {
+    private ContentValues getContentValues(Database.Parameters val) {
         ContentValues values = new ContentValues();
         for (Map.Entry<String, Object> entry : val.entrySet()) {
             Object o = entry.getValue();

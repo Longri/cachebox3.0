@@ -16,19 +16,19 @@
 package com.badlogic.gdx.sqlite.robovm;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.Database;
-import com.badlogic.gdx.sql.DatabaseManager;
+import com.badlogic.gdx.sql.SQLiteGdxDatabase;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseManager;
 
 
 /**
  * @author truongps (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
  * @author Longri (2016)
  */
-public class RobovmDatabaseManager implements DatabaseManager {
+public class RobovmDatabaseManager implements SQLiteGdxDatabaseManager {
 
     @Override
-    public Database getNewDatabase(FileHandle dbFileHandle, int dbVersion,
-                                   String dbOnCreateQuery, String dbOnUpgradeQuery) {
+    public SQLiteGdxDatabase getNewDatabase(FileHandle dbFileHandle, int dbVersion,
+                                            String dbOnCreateQuery, String dbOnUpgradeQuery) {
         return new RobovmDatabase(dbFileHandle, dbVersion, dbOnCreateQuery,
                 dbOnUpgradeQuery);
     }

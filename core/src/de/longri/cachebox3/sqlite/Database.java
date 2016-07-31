@@ -16,8 +16,9 @@
 package de.longri.cachebox3.sqlite;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.DatabaseCursor;
-import com.badlogic.gdx.sql.DatabaseFactory;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
+import com.badlogic.gdx.sql.SQLiteGdxDatabase;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Category;
@@ -30,12 +31,12 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 
-public class CacheboxDatabase {
+public class Database {
     protected final org.slf4j.Logger log;
-    public static CacheboxDatabase Data;
-    public static CacheboxDatabase FieldNotes;
-    public static CacheboxDatabase Settings;
-    private com.badlogic.gdx.sql.Database myDB;
+    public static Database Data;
+    public static Database FieldNotes;
+    public static Database Settings;
+    private SQLiteGdxDatabase myDB;
 //	public CacheList Query;
 
     public enum DatabaseType {
@@ -44,11 +45,11 @@ public class CacheboxDatabase {
 
     protected DatabaseType databaseType;
 
-    public CacheboxDatabase(DatabaseType databaseType) {
+    public Database(DatabaseType databaseType) {
         super();
         this.databaseType = databaseType;
 
-        log = LoggerFactory.getLogger("CacheboxDatabase." + databaseType);
+        log = LoggerFactory.getLogger("Database." + databaseType);
 
         switch (databaseType) {
             case CacheBox:
@@ -78,7 +79,7 @@ public class CacheboxDatabase {
     }
 
 
-    public long DatabaseId = 0; // for CacheboxDatabase replication with WinCachebox
+    public long DatabaseId = 0; // for Database replication with WinCachebox
     public long MasterDatabaseId = 0;
     protected int latestDatabaseChange = 0;
 
@@ -113,7 +114,7 @@ public class CacheboxDatabase {
 
     private int GetDatabaseSchemeVersion() {
         int result = -1;
-        DatabaseCursor c = null;
+        SQLiteGdxDatabaseCursor c = null;
         try {
             c = rawQuery("select Value from Config where [Key] like ?", new String[]{"DatabaseSchemeVersionWin"});
         } catch (Exception exc) {
@@ -179,7 +180,7 @@ public class CacheboxDatabase {
 
     public String ReadConfigString(String key) throws Exception {
         String result = "";
-        DatabaseCursor c = null;
+        SQLiteGdxDatabaseCursor c = null;
         boolean found = false;
         try {
             c = rawQuery("select Value from Config where [Key] like ?", new String[]{key});
@@ -207,7 +208,7 @@ public class CacheboxDatabase {
 
     public String ReadConfigLongString(String key) throws Exception {
         String result = "";
-        DatabaseCursor c = null;
+        SQLiteGdxDatabaseCursor c = null;
         boolean found = false;
         try {
             c = rawQuery("select LongString from Config where [Key] like ?", new String[]{key});
@@ -264,7 +265,7 @@ public class CacheboxDatabase {
                 beginTransaction();
                 try {
                     if (lastDatabaseSchemeVersion <= 0) {
-                        // First Initialization of the CacheboxDatabase
+                        // First Initialization of the Database
                         execSQL("CREATE TABLE [Caches] ([Id] bigint NOT NULL primary key,[GcCode] nvarchar (12) NULL,[GcId] nvarchar (255) NULL,[Latitude] float NULL,[Longitude] float NULL,[Name] nchar (255) NULL,[Size] int NULL,[Difficulty] smallint NULL,[Terrain] smallint NULL,[Archived] bit NULL,[Available] bit NULL,[Found] bit NULL,[Type] smallint NULL,[PlacedBy] nvarchar (255) NULL,[Owner] nvarchar (255) NULL,[DateHidden] datetime NULL,[Hint] ntext NULL,[Description] ntext NULL,[Url] nchar (255) NULL,[NumTravelbugs] smallint NULL,[Rating] smallint NULL,[Vote] smallint NULL,[VotePending] bit NULL,[Notes] ntext NULL,[Solver] ntext NULL,[Favorit] bit NULL,[AttributesPositive] bigint NULL,[AttributesNegative] bigint NULL,[TourName] nchar (255) NULL,[GPXFilename_Id] bigint NULL,[HasUserData] bit NULL,[ListingCheckSum] int NULL DEFAULT 0,[ListingChanged] bit NULL,[ImagesUpdated] bit NULL,[DescriptionImagesUpdated] bit NULL,[CorrectedCoordinates] bit NULL);");
                         execSQL("CREATE INDEX [archived_idx] ON [Caches] ([Archived] ASC);");
                         execSQL("CREATE INDEX [AttributesNegative_idx] ON [Caches] ([AttributesNegative] ASC);");
@@ -329,7 +330,7 @@ public class CacheboxDatabase {
                         HashMap<Long, String> gpxFilenames = new HashMap<Long, String>();
                         HashMap<String, Long> categories = new HashMap<String, Long>();
 
-                        DatabaseCursor reader = rawQuery("select ID, GPXFilename from GPXFilenames", null);
+                        SQLiteGdxDatabaseCursor reader = rawQuery("select ID, GPXFilename from GPXFilenames", null);
                         reader.moveToFirst();
                         while (!reader.isAfterLast()) {
                             long id = reader.getLong(0);
@@ -351,9 +352,9 @@ public class CacheboxDatabase {
                                 Parameters args = new Parameters();
                                 args.put("CategoryId", categories.get(entry.getValue()));
                                 try {
-                                    CacheboxDatabase.Data.update("GpxFilenames", args, "Id=" + entry.getKey(), null);
+                                    Database.Data.update("GpxFilenames", args, "Id=" + entry.getKey(), null);
                                 } catch (Exception exc) {
-                                    log.error("CacheboxDatabase", "Update_CategoryId", exc);
+                                    log.error("Database", "Update_CategoryId", exc);
                                 }
                             }
                         }
@@ -381,7 +382,7 @@ public class CacheboxDatabase {
                         // Die Nummerierung der Attribute stimmte nicht mit der von
                         // Groundspeak überein. Bei 16 und 45 wurde jeweils eine
                         // Nummber übersprungen
-                        DatabaseCursor reader = rawQuery("select Id, AttributesPositive, AttributesNegative from Caches", new String[]{});
+                        SQLiteGdxDatabaseCursor reader = rawQuery("select Id, AttributesPositive, AttributesNegative from Caches", new String[]{});
                         reader.moveToFirst();
                         while (!reader.isAfterLast()) {
                             long id = reader.getLong(0);
@@ -452,7 +453,7 @@ public class CacheboxDatabase {
                 try {
 
                     if (lastDatabaseSchemeVersion <= 0) {
-                        // First Initialization of the CacheboxDatabase
+                        // First Initialization of the Database
                         // FieldNotes Table
                         execSQL("CREATE TABLE [FieldNotes] ([Id] integer not null primary key autoincrement, [CacheId] bigint NULL, [GcCode] nvarchar (12) NULL, [GcId] nvarchar (255) NULL, [Name] nchar (255) NULL, [CacheType] smallint NULL, [Url] nchar (255) NULL, [Timestamp] datetime NULL, [Type] smallint NULL, [FoundNumber] int NULL, [Comment] ntext NULL);");
 
@@ -500,7 +501,7 @@ public class CacheboxDatabase {
                 beginTransaction();
                 try {
                     if (lastDatabaseSchemeVersion <= 0) {
-                        // First Initialization of the CacheboxDatabase
+                        // First Initialization of the Database
                         execSQL("CREATE TABLE [Config] ([Key] nvarchar (30) NOT NULL, [Value] nvarchar (255) NULL);");
                         execSQL("CREATE INDEX [Key_idx] ON [Config] ([Key] ASC);");
                     }
@@ -551,7 +552,7 @@ public class CacheboxDatabase {
     }
 
     public static boolean WaypointExists(String gcCode) {
-        DatabaseCursor c = CacheboxDatabase.Data.rawQuery("select GcCode from Waypoint where GcCode=@gccode", new String[]{gcCode});
+        SQLiteGdxDatabaseCursor c = Database.Data.rawQuery("select GcCode from Waypoint where GcCode=@gccode", new String[]{gcCode});
         {
             c.moveToFirst();
             while (!c.isAfterLast()) {
@@ -586,7 +587,7 @@ public class CacheboxDatabase {
 
     public static String GetNote(long cacheId) {
         String resultString = "";
-        DatabaseCursor c = CacheboxDatabase.Data.rawQuery("select Notes from Caches where Id=?", new String[]{String.valueOf(cacheId)});
+        SQLiteGdxDatabaseCursor c = Database.Data.rawQuery("select Notes from Caches where Id=?", new String[]{String.valueOf(cacheId)});
         c.moveToFirst();
         while (!c.isAfterLast()) {
             resultString = c.getString(0);
@@ -606,19 +607,19 @@ public class CacheboxDatabase {
         args.put("Notes", value);
         args.put("HasUserData", true);
 
-        CacheboxDatabase.Data.update("Caches", args, "id=" + cacheId, null);
+        Database.Data.update("Caches", args, "id=" + cacheId, null);
     }
 
     public static void SetFound(long cacheId, boolean value) {
         Parameters args = new Parameters();
         args.put("found", value);
-        CacheboxDatabase.Data.update("Caches", args, "id=" + cacheId, null);
+        Database.Data.update("Caches", args, "id=" + cacheId, null);
     }
 
     public static String GetSolver(long cacheId) {
         try {
             String resultString = "";
-            DatabaseCursor c = CacheboxDatabase.Data.rawQuery("select Solver from Caches where Id=?", new String[]{String.valueOf(cacheId)});
+            SQLiteGdxDatabaseCursor c = Database.Data.rawQuery("select Solver from Caches where Id=?", new String[]{String.valueOf(cacheId)});
             c.moveToFirst();
             while (!c.isAfterLast()) {
                 resultString = c.getString(0);
@@ -641,7 +642,7 @@ public class CacheboxDatabase {
         args.put("Solver", value);
         args.put("HasUserData", true);
 
-        CacheboxDatabase.Data.update("Caches", args, "id=" + cacheId, null);
+        Database.Data.update("Caches", args, "id=" + cacheId, null);
     }
 
     /**
@@ -672,7 +673,7 @@ public class CacheboxDatabase {
             try {
                 String command = "SELECT cacheid FROM logs WHERE Timestamp < '" + TimeStamp + "' GROUP BY CacheId HAVING COUNT(Id) > " + String.valueOf(minToKeep);
                 log.debug(command);
-                DatabaseCursor reader = CacheboxDatabase.Data.rawQuery(command, null);
+                SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(command, null);
                 reader.moveToFirst();
                 while (!reader.isAfterLast()) {
                     long tmp = reader.getLong(0);
@@ -697,7 +698,7 @@ public class CacheboxDatabase {
                     String command = "select id from logs where cacheid = " + String.valueOf(oldLogCache) + " order by Timestamp desc";
                     log.debug(command);
                     int count = 0;
-                    DatabaseCursor reader = CacheboxDatabase.Data.rawQuery(command, null);
+                    SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(command, null);
                     reader.moveToFirst();
                     while (!reader.isAfterLast()) {
                         if (count == minToKeep)
@@ -716,7 +717,7 @@ public class CacheboxDatabase {
                     else
                         delCommand = "DELETE FROM Logs WHERE Timestamp<'" + TimeStamp + "' AND cacheid = " + String.valueOf(oldLogCache);
                     log.debug(delCommand);
-                    CacheboxDatabase.Data.execSQL(delCommand);
+                    Database.Data.execSQL(delCommand);
                 }
                 setTransactionSuccessful();
             } catch (Exception ex) {
@@ -737,7 +738,7 @@ public class CacheboxDatabase {
 
             try {
                 log.debug("open data base: " + databasePath);
-                myDB = DatabaseFactory.getNewDatabase(databasePath, 1, null, null);
+                myDB = SQLiteGdxDatabaseFactory.getNewDatabase(databasePath, 1, null, null);
                 myDB.openOrCreateDatabase();
             } catch (Exception exc) {
                 return;
@@ -754,7 +755,7 @@ public class CacheboxDatabase {
 
         try {
             log.debug("create data base: " + databasePath);
-            myDB = DatabaseFactory.getNewDatabase(databasePath, 0, null, null);
+            myDB = SQLiteGdxDatabaseFactory.getNewDatabase(databasePath, 0, null, null);
             myDB.openOrCreateDatabase();
             myDB.setTransactionSuccessful();
             myDB.closeDatabase();
@@ -765,7 +766,7 @@ public class CacheboxDatabase {
     }
 
 
-    public DatabaseCursor rawQuery(String sql, String[] args) {
+    public SQLiteGdxDatabaseCursor rawQuery(String sql, String[] args) {
         try {
             return myDB.rawQuery(sql);
         } catch (SQLiteGdxException e) {

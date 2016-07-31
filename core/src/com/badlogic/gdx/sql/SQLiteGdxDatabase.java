@@ -15,32 +15,32 @@
  */
 package com.badlogic.gdx.sql;
 
-import de.longri.cachebox3.sqlite.CacheboxDatabase;
+import de.longri.cachebox3.sqlite.Database;
 
 import java.sql.PreparedStatement;
 
 /**
  * This public interface contains the necessary methods to setup and execute queries on a database. The factory method
- * {@link DatabaseFactory#getNewDatabase(com.badlogic.gdx.files.FileHandle, int, String, String)} will return a database object that implements this
+ * {@link SQLiteGdxDatabaseFactory#getNewDatabase(com.badlogic.gdx.files.FileHandle, int, String, String)} will return a database object that implements this
  * interface. The typical sequence of method calls should be as follows:
  * <ul>
- * <li>{@link Database#setupDatabase()}</li>
- * <li>{@link Database#openOrCreateDatabase()}</li>
- * <li>{@link Database#execSQL(String)} OR</li>
- * <li>{@link Database#rawQuery(String)} OR</li>
- * <li>{@link Database#rawQuery(DatabaseCursor, String)}</li>
- * <li>{@link Database#closeDatabase()}</li>
+ * <li>{@link SQLiteGdxDatabase#setupDatabase()}</li>
+ * <li>{@link SQLiteGdxDatabase#openOrCreateDatabase()}</li>
+ * <li>{@link SQLiteGdxDatabase#execSQL(String)} OR</li>
+ * <li>{@link SQLiteGdxDatabase#rawQuery(String)} OR</li>
+ * <li>{@link SQLiteGdxDatabase#rawQuery(SQLiteGdxDatabaseCursor, String)}</li>
+ * <li>{@link SQLiteGdxDatabase#closeDatabase()}</li>
  * </ul>
  *
  * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
  * @author Longri (2016)
  */
-public interface Database {
+public interface SQLiteGdxDatabase {
 
     /**
      * This method is needed to be called only once before any database related activity can be performed. The method performs the
      * necessary procedures for the database. However, a database will not be opened/created until
-     * {@link Database#openOrCreateDatabase()} is called.
+     * {@link SQLiteGdxDatabase#openOrCreateDatabase()} is called.
      */
     public void setupDatabase();
 
@@ -67,26 +67,26 @@ public interface Database {
     public void execSQL(String sql) throws SQLiteGdxException;
 
     /**
-     * Runs the provided SQL and returns a {@link DatabaseCursor} over the result set.
+     * Runs the provided SQL and returns a {@link SQLiteGdxDatabaseCursor} over the result set.
      *
      * @param sql the SQL query. The SQL string must not be ; terminated
-     * @return {@link DatabaseCursor}
+     * @return {@link SQLiteGdxDatabaseCursor}
      * @throws SQLiteGdxException
      */
-    public DatabaseCursor rawQuery(String sql) throws SQLiteGdxException;
+    public SQLiteGdxDatabaseCursor rawQuery(String sql) throws SQLiteGdxException;
 
     /**
-     * Runs the provided SQL and returns the same {@link DatabaseCursor} that was passed to this method. Use this method when you
-     * want to avoid reallocation of {@link DatabaseCursor} object. Note that you shall only pass the {@link DatabaseCursor} object
-     * that was previously returned by a rawQuery method. Creating your own {@link DatabaseCursor} and then passing it as an object
+     * Runs the provided SQL and returns the same {@link SQLiteGdxDatabaseCursor} that was passed to this method. Use this method when you
+     * want to avoid reallocation of {@link SQLiteGdxDatabaseCursor} object. Note that you shall only pass the {@link SQLiteGdxDatabaseCursor} object
+     * that was previously returned by a rawQuery method. Creating your own {@link SQLiteGdxDatabaseCursor} and then passing it as an object
      * will not work.
      *
-     * @param cursor existing {@link DatabaseCursor} object
+     * @param cursor existing {@link SQLiteGdxDatabaseCursor} object
      * @param sql    the SQL query. The SQL string must not be ; terminated
-     * @return the passed {@link DatabaseCursor}.
+     * @return the passed {@link SQLiteGdxDatabaseCursor}.
      * @throws SQLiteGdxException
      */
-    public DatabaseCursor rawQuery(DatabaseCursor cursor, String sql) throws SQLiteGdxException;
+    public SQLiteGdxDatabaseCursor rawQuery(SQLiteGdxDatabaseCursor cursor, String sql) throws SQLiteGdxException;
 
     public void commit();
 
@@ -98,13 +98,13 @@ public interface Database {
 
     public void setTransactionSuccessful();
 
-    public long insert(String tablename, CacheboxDatabase.Parameters val);
+    public long insert(String tablename, Database.Parameters val);
 
-    public long update(String tablename, CacheboxDatabase.Parameters val, String whereClause, String[] whereArgs);
+    public long update(String tablename, Database.Parameters val, String whereClause, String[] whereArgs);
 
     public long delete(String tablename, String whereClause, String[] whereArgs);
 
-    public long insertWithConflictReplace(String tablename, CacheboxDatabase.Parameters val);
+    public long insertWithConflictReplace(String tablename, Database.Parameters val);
 
-    public long insertWithConflictIgnore(String tablename, CacheboxDatabase.Parameters val);
+    public long insertWithConflictIgnore(String tablename, Database.Parameters val);
 }

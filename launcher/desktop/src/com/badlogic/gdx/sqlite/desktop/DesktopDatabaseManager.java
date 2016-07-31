@@ -16,18 +16,18 @@
 package com.badlogic.gdx.sqlite.desktop;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.Database;
-import com.badlogic.gdx.sql.DatabaseManager;
+import com.badlogic.gdx.sql.SQLiteGdxDatabase;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseManager;
 
 /**
  * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
  * @author Longri (2016)
  */
-public class DesktopDatabaseManager implements DatabaseManager {
+public class DesktopDatabaseManager implements SQLiteGdxDatabaseManager {
 
 
     @Override
-    public Database getNewDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
+    public SQLiteGdxDatabase getNewDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
         return new DesktopDatabase(dbFileHandle, dbVersion, dbOnCreateQuery, dbOnUpgradeQuery);
     }
 

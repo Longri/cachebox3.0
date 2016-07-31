@@ -17,11 +17,11 @@ package com.badlogic.gdx.sqlite.robovm;
 
 import SQLite.JDBCDriver;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.Database;
-import com.badlogic.gdx.sql.DatabaseCursor;
+import com.badlogic.gdx.sql.SQLiteGdxDatabase;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.sqlite.CacheboxDatabase;
+import de.longri.cachebox3.sqlite.Database;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
@@ -31,7 +31,7 @@ import java.util.Map;
  * @author truongps (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
  * @author Longri (2016)
  */
-public class RobovmDatabase implements Database {
+public class RobovmDatabase implements SQLiteGdxDatabase {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(RobovmDatabase.class);
 
     private final FileHandle dbFileHandle;
@@ -88,7 +88,7 @@ public class RobovmDatabase implements Database {
     }
 
     @Override
-    public DatabaseCursor rawQuery(String sql) throws SQLiteGdxException {
+    public SQLiteGdxDatabaseCursor rawQuery(String sql) throws SQLiteGdxException {
         try {
             ResultSet resultSet = statement.executeQuery(sql);
             RobovmCursor databaseCursor = new RobovmCursor(resultSet);
@@ -99,7 +99,7 @@ public class RobovmDatabase implements Database {
     }
 
     @Override
-    public DatabaseCursor rawQuery(DatabaseCursor cursor, String sql)
+    public SQLiteGdxDatabaseCursor rawQuery(SQLiteGdxDatabaseCursor cursor, String sql)
             throws SQLiteGdxException {
         try {
             ResultSet resultSet = statement.executeQuery(sql);
@@ -158,7 +158,7 @@ public class RobovmDatabase implements Database {
     }
 
     @Override
-    public long insert(String tablename, CacheboxDatabase.Parameters val) {
+    public long insert(String tablename, Database.Parameters val) {
         if (connection == null)
             return 0;
 
@@ -213,7 +213,7 @@ public class RobovmDatabase implements Database {
     }
 
     @Override
-    public long update(String tablename, CacheboxDatabase.Parameters val, String whereClause, String[] whereArgs) {
+    public long update(String tablename, Database.Parameters val, String whereClause, String[] whereArgs) {
         if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
             StringBuilder sb = new StringBuilder("Update Table:" + tablename);
             sb.append("Parameters:" + val.toString());
@@ -332,7 +332,7 @@ public class RobovmDatabase implements Database {
     }
 
     @Override
-    public long insertWithConflictReplace(String tablename, CacheboxDatabase.Parameters val) {
+    public long insertWithConflictReplace(String tablename, Database.Parameters val) {
         if (connection == null)
             return 0;
 
@@ -389,7 +389,7 @@ public class RobovmDatabase implements Database {
     }
 
     @Override
-    public long insertWithConflictIgnore(String tablename, CacheboxDatabase.Parameters val) {
+    public long insertWithConflictIgnore(String tablename, Database.Parameters val) {
         if (connection == null)
             return 0;
 

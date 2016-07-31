@@ -16,9 +16,6 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.Database;
-import com.badlogic.gdx.sql.DatabaseFactory;
-import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -26,7 +23,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
-import de.longri.cachebox3.sqlite.CacheboxDatabase;
+import de.longri.cachebox3.sqlite.Database;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -61,7 +58,7 @@ public class TestView extends AbstractView {
         FileHandle dbFile = PlatformConnector.getSandboxFileHandle("CacheBox/testDB.db");
         dbFile.parent().mkdirs();
 
-        CacheboxDatabase cbdb = new CacheboxDatabase(CacheboxDatabase.DatabaseType.CacheBox);
+        Database cbdb = new Database(Database.DatabaseType.CacheBox);
 
         cbdb.StartUp(dbFile);
         cbdb.Close();
