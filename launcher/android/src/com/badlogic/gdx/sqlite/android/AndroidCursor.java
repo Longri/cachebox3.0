@@ -2,6 +2,7 @@
 package com.badlogic.gdx.sqlite.android;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteException;
 
 import com.badlogic.gdx.Gdx;
@@ -9,12 +10,25 @@ import com.badlogic.gdx.sql.DatabaseCursor;
 import com.badlogic.gdx.sql.DatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxRuntimeException;
 
+import java.sql.ResultSet;
+
 /** @author M Rafay Aleem */
 public class AndroidCursor implements DatabaseCursor {
 
 	private Cursor cursor = null;
 
-	@Override
+//    public AndroidCursor(ResultSet rs) {
+//        new SQLiteCursor(rs);
+//    }
+//
+//    public AndroidCursor(ResultSet rs, int rowcount) {
+//    }
+
+    public AndroidCursor() {
+
+    }
+
+    @Override
 	public byte[] getBlob (int columnIndex) {
 		try {
 			return cursor.getBlob(columnIndex);

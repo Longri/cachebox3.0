@@ -15,18 +15,14 @@
  */
 package de.longri.cachebox3.sqlite;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.DatabaseCursor;
 import com.badlogic.gdx.sql.DatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Category;
 import org.slf4j.LoggerFactory;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -554,16 +550,6 @@ public class CacheboxDatabase {
         return result;
     }
 
-//	// Methoden für Waypoint
-//	public static void DeleteFromDatabase(Waypoint WP) {
-//		Replication.WaypointDelete(WP.CacheId, 0, 1, WP.getGcCode());
-//		try {
-//			Data.delete("Waypoint", "GcCode='" + WP.getGcCode() + "'", null);
-//		} catch (Exception exc) {
-//			Log.err(CacheboxDatabase.Data.log, "Waypoint.DeleteFromDataBase()", "", exc);
-//		}
-//	}
-
     public static boolean WaypointExists(String gcCode) {
         DatabaseCursor c = CacheboxDatabase.Data.rawQuery("select GcCode from Waypoint where GcCode=@gccode", new String[]{gcCode});
         {
@@ -597,12 +583,6 @@ public class CacheboxDatabase {
         throw new Exception("Alle GcCodes sind bereits vergeben! Dies sollte eigentlich nie vorkommen!");
     }
 
-//	// Methodes für Cache
-//	public static String GetNote(Cache cache) {
-//		String resultString = GetNote(cache.Id);
-//		cache.setNoteChecksum((int) SDBM_Hash.sdbm(resultString));
-//		return resultString;
-//	}
 
     public static String GetNote(long cacheId) {
         String resultString = "";
@@ -629,27 +609,11 @@ public class CacheboxDatabase {
         CacheboxDatabase.Data.update("Caches", args, "id=" + cacheId, null);
     }
 
-//	public static void SetNote(Cache cache, String value) {
-//		int newNoteCheckSum = (int) SDBM_Hash.sdbm(value);
-//
-//		Replication.NoteChanged(cache.Id, cache.getNoteChecksum(), newNoteCheckSum);
-//		if (newNoteCheckSum != cache.getNoteChecksum()) {
-//			SetNote(cache.Id, value);
-//			cache.setNoteChecksum(newNoteCheckSum);
-//		}
-//	}
-
     public static void SetFound(long cacheId, boolean value) {
         Parameters args = new Parameters();
         args.put("found", value);
         CacheboxDatabase.Data.update("Caches", args, "id=" + cacheId, null);
     }
-
-//	public static String GetSolver(Cache cache) {
-//		String resultString = GetSolver(cache.Id);
-//		cache.setSolverChecksum((int) SDBM_Hash.sdbm(resultString));
-//		return resultString;
-//	}
 
     public static String GetSolver(long cacheId) {
         try {
@@ -679,157 +643,6 @@ public class CacheboxDatabase {
 
         CacheboxDatabase.Data.update("Caches", args, "id=" + cacheId, null);
     }
-
-//	public static void SetSolver(Cache cache, String value) {
-//		int newSolverCheckSum = (int) SDBM_Hash.sdbm(value);
-//
-//		Replication.SolverChanged(cache.Id, cache.getSolverChecksum(), newSolverCheckSum);
-//		if (newSolverCheckSum != cache.getSolverChecksum()) {
-//			SetSolver(cache.Id, value);
-//			cache.setSolverChecksum(newSolverCheckSum);
-//		}
-//	}
-//
-//	public static CB_List<LogEntry> Logs(Cache cache) {
-//		CB_List<LogEntry> result = new CB_List<LogEntry>();
-//		if (cache == null) // if no cache is selected!
-//			return result;
-//		DatabaseCursor reader = CacheboxDatabase.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId=@cacheid order by Timestamp desc", new String[] { Long.toString(cache.Id) });
-//
-//		reader.moveToFirst();
-//		while (!reader.isAfterLast()) {
-//			LogEntry logent = getLogEntry(cache, reader, true);
-//			if (logent != null)
-//				result.add(logent);
-//			reader.moveToNext();
-//		}
-//		reader.close();
-//
-//		return result;
-//	}
-
-//	private static LogEntry getLogEntry(Cache cache, DatabaseCursor reader, boolean filterBbCode) {
-//		int intLogType = reader.getInt(3);
-//		if (intLogType < 0 || intLogType > 13)
-//			return null;
-//
-//		LogEntry retLogEntry = new LogEntry();
-//
-//		retLogEntry.CacheId = reader.getLong(0);
-//
-//		String sDate = reader.getString(1);
-//		DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//		try {
-//			retLogEntry.Timestamp = iso8601Format.parse(sDate);
-//		} catch (ParseException e) {
-//		}
-//		retLogEntry.Finder = reader.getString(2);
-//		retLogEntry.Type = CB_Core.LogTypes.values()[reader.getInt(3)];
-//		// retLogEntry.TypeIcon = reader.getInt(3);
-//		retLogEntry.Comment = reader.getString(4);
-//		retLogEntry.Id = reader.getLong(5);
-//
-//		if (filterBbCode) {
-//			int lIndex;
-//
-//			while ((lIndex = retLogEntry.Comment.indexOf('[')) >= 0) {
-//				int rIndex = retLogEntry.Comment.indexOf(']', lIndex);
-//
-//				if (rIndex == -1)
-//					break;
-//
-//				retLogEntry.Comment = retLogEntry.Comment.substring(0, lIndex) + retLogEntry.Comment.substring(rIndex + 1);
-//			}
-//		}
-//
-//		return retLogEntry;
-//	}
-//
-//	public static String GetDescription(Cache cache) {
-//		String description = "";
-//		DatabaseCursor reader = CacheboxDatabase.Data.rawQuery("select Description from Caches where Id=?", new String[] { Long.toString(cache.Id) });
-//		if (reader == null)
-//			return "";
-//		reader.moveToFirst();
-//		while (!reader.isAfterLast()) {
-//			if (reader.getString(0) != null)
-//				description = reader.getString(0);
-//			reader.moveToNext();
-//		}
-//		reader.close();
-//
-//		return description;
-//	}
-//
-//	public static String GetShortDescription(Cache cache) {
-//		String description = "";
-//		DatabaseCursor reader = CacheboxDatabase.Data.rawQuery("select ShortDescription from Caches where Id=?", new String[] { Long.toString(cache.Id) });
-//		if (reader == null)
-//			return "";
-//		reader.moveToFirst();
-//		while (!reader.isAfterLast()) {
-//			if (reader.getString(0) != null)
-//				description = reader.getString(0);
-//			reader.moveToNext();
-//		}
-//		reader.close();
-//
-//		return description;
-//	}
-//
-//	/**
-//	 * @return Set To GlobalCore.Categories
-//	 */
-//	public Categories GPXFilenameUpdateCacheCount() {
-//		// welche GPXFilenamen sind in der DB erfasst
-//		beginTransaction();
-//		try {
-//			DatabaseCursor reader = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from Caches where GPXFilename_ID is not null Group by GPXFilename_ID", null);
-//			reader.moveToFirst();
-//
-//			while (!reader.isAfterLast()) {
-//				long GPXFilename_ID = reader.getLong(0);
-//				long CacheCount = reader.getLong(1);
-//
-//				Parameters val = new Parameters();
-//				val.put("CacheCount", CacheCount);
-//				update("GPXFilenames", val, "ID = " + GPXFilename_ID, null);
-//
-//				reader.moveToNext();
-//			}
-//
-//			delete("GPXFilenames", "Cachecount is NULL or CacheCount = 0", null);
-//			delete("GPXFilenames", "ID not in (Select GPXFilename_ID From Caches)", null);
-//			reader.close();
-//			setTransactionSuccessful();
-//		} catch (Exception e) {
-//
-//		} finally {
-//			endTransaction();
-//		}
-//
-//		CategoryDAO categoryDAO = new CategoryDAO();
-//		Categories categories = new Categories();
-//		categoryDAO.LoadCategoriesFromDatabase();
-//		return categories;
-//	}
-//
-//	public int getCacheCountInDB() {
-//		DatabaseCursor reader = null;
-//		int count = 0;
-//		try {
-//			reader = CacheboxDatabase.Data.rawQuery("select count(*) from caches", null);
-//			reader.moveToFirst();
-//			count = reader.getInt(0);
-//		} catch (Exception e) {
-//
-//			e.printStackTrace();
-//		}
-//		if (reader != null)
-//			reader.close();
-//
-//		return count;
-//	}
 
     /**
      * @param minToKeep      Config.settings.LogMinCount.getValue()
@@ -924,7 +737,7 @@ public class CacheboxDatabase {
 
             try {
                 log.debug("open data base: " + databasePath);
-                myDB = DatabaseFactory.getNewDatabase(databasePath, 0, null, null);
+                myDB = DatabaseFactory.getNewDatabase(databasePath, 1, null, null);
                 myDB.openOrCreateDatabase();
             } catch (Exception exc) {
                 return;
@@ -953,16 +766,12 @@ public class CacheboxDatabase {
 
 
     public DatabaseCursor rawQuery(String sql, String[] args) {
-
-
         try {
             return myDB.rawQuery(sql);
         } catch (SQLiteGdxException e) {
             e.printStackTrace();
         }
-
         return null;
-//        return DatabaseFactory.getNewDatabaseCursor(rs);
     }
 
     public void execSQL(String sql) {
@@ -973,177 +782,17 @@ public class CacheboxDatabase {
         }
     }
 
+
     public long update(String tablename, Parameters val, String whereClause, String[] whereArgs) {
-        if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
-            StringBuilder sb = new StringBuilder("Update Table:" + tablename);
-            sb.append("Parameters:" + val.toString());
-            sb.append("WHERECLAUSE:" + whereClause);
-
-            if (whereArgs != null) {
-                for (String arg : whereArgs) {
-                    sb.append(arg + ", ");
-                }
-            }
-
-            log.debug(sb.toString());
-        }
-
-        if (myDB == null)
-            return 0;
-
-        StringBuilder sql = new StringBuilder();
-
-        sql.append("update ");
-        sql.append(tablename);
-        sql.append(" set");
-
-        int i = 0;
-        for (Entry<String, Object> entry : val.entrySet()) {
-            i++;
-            sql.append(" ");
-            sql.append(entry.getKey());
-            sql.append("=?");
-            if (i != val.size()) {
-                sql.append(",");
-            }
-        }
-
-        if (!whereClause.isEmpty()) {
-            sql.append(" where ");
-            sql.append(whereClause);
-        }
-        PreparedStatement st = null;
-        try {
-            st = myDB.prepareStatement(sql.toString());
-
-            int j = 0;
-            for (Entry<String, Object> entry : val.entrySet()) {
-                j++;
-                st.setObject(j, entry.getValue());
-            }
-
-            if (whereArgs != null) {
-                for (int k = 0; k < whereArgs.length; k++) {
-                    st.setString(j + k + 1, whereArgs[k]);
-                }
-            }
-
-            return st.executeUpdate();
-
-        } catch (SQLException e) {
-            return 0;
-        } finally {
-            try {
-                st.close();
-            } catch (SQLException e) {
-
-                e.printStackTrace();
-            }
-        }
-
+        return myDB.update(tablename, val, whereClause, whereArgs);
     }
 
     public long insert(String tablename, Parameters val) {
-        if (myDB == null)
-            return 0;
-        StringBuilder sql = new StringBuilder();
-
-        sql.append("insert into ");
-        sql.append(tablename);
-        sql.append(" (");
-
-        int i = 0;
-        for (Entry<String, Object> entry : val.entrySet()) {
-            i++;
-            sql.append(" ");
-            sql.append(entry.getKey());
-            if (i != val.size()) {
-                sql.append(",");
-            }
-        }
-
-        sql.append(" ) Values(");
-
-        for (int k = 1; k <= val.size(); k++) {
-            sql.append(" ");
-            sql.append("?");
-            if (k < val.size()) {
-                sql.append(",");
-            }
-        }
-
-        sql.append(" )");
-        PreparedStatement st = null;
-        try {
-            st = myDB.prepareStatement(sql.toString());
-
-            int j = 0;
-            for (Entry<String, Object> entry : val.entrySet()) {
-                j++;
-                st.setObject(j, entry.getValue());
-            }
-
-            log.debug("INSERT: " + sql);
-            return st.execute() ? 0 : 1;
-
-        } catch (SQLException e) {
-            return 0;
-        } finally {
-            try {
-                st.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        return myDB.insert(tablename, val);
     }
 
     public long delete(String tablename, String whereClause, String[] whereArgs) {
-        if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
-            StringBuilder sb = new StringBuilder("Delete@ Table:" + tablename);
-            sb.append("WHERECLAUSE:" + whereClause);
-
-            if (whereArgs != null) {
-                for (String arg : whereArgs) {
-                    sb.append(arg + ", ");
-                }
-            }
-
-            log.debug(sb.toString());
-        }
-
-        if (myDB == null)
-            return 0;
-        StringBuilder sql = new StringBuilder();
-
-        sql.append("delete from ");
-        sql.append(tablename);
-
-        if (!whereClause.isEmpty()) {
-            sql.append(" where ");
-            sql.append(whereClause);
-        }
-        PreparedStatement st = null;
-        try {
-            st = myDB.prepareStatement(sql.toString());
-
-            if (whereArgs != null) {
-                for (int i = 0; i < whereArgs.length; i++) {
-                    st.setString(i + 1, whereArgs[i]);
-                }
-            }
-
-            return st.executeUpdate();
-
-        } catch (SQLException e) {
-            return 0;
-        } finally {
-            try {
-                st.close();
-            } catch (SQLException e) {
-
-                e.printStackTrace();
-            }
-        }
+        return myDB.delete(tablename, whereClause, whereArgs);
     }
 
     public void beginTransaction() {
@@ -1165,116 +814,11 @@ public class CacheboxDatabase {
     }
 
     public long insertWithConflictReplace(String tablename, Parameters val) {
-        if (myDB == null)
-            return 0;
-
-        log.debug("insertWithConflictReplace @Table:" + tablename + "Parameters: " + val.toString());
-        StringBuilder sql = new StringBuilder();
-
-        sql.append("insert OR REPLACE into ");
-        sql.append(tablename);
-        sql.append(" (");
-
-        int i = 0;
-        for (Entry<String, Object> entry : val.entrySet()) {
-            i++;
-            sql.append(" ");
-            sql.append(entry.getKey());
-            if (i != val.size()) {
-                sql.append(",");
-            }
-        }
-
-        sql.append(" ) Values(");
-
-        for (int k = 1; k <= val.size(); k++) {
-            sql.append(" ");
-            sql.append("?");
-            if (k < val.size()) {
-                sql.append(",");
-            }
-        }
-
-        sql.append(" )");
-        PreparedStatement st = null;
-        try {
-            st = myDB.prepareStatement(sql.toString());
-
-            int j = 0;
-            for (Entry<String, Object> entry : val.entrySet()) {
-                j++;
-                st.setObject(j, entry.getValue());
-            }
-
-            return st.executeUpdate();
-
-        } catch (SQLException e) {
-            return 0;
-        } finally {
-            try {
-                st.close();
-            } catch (SQLException e) {
-
-                e.printStackTrace();
-            }
-        }
+        return myDB.insertWithConflictReplace(tablename, val);
     }
 
     public long insertWithConflictIgnore(String tablename, Parameters val) {
-        if (myDB == null)
-            return 0;
-
-        log.debug("insertWithConflictIgnore @Table:" + tablename + "Parameters: " + val.toString());
-
-        StringBuilder sql = new StringBuilder();
-
-        sql.append("insert OR IGNORE into ");
-        sql.append(tablename);
-        sql.append(" (");
-
-        int i = 0;
-        for (Entry<String, Object> entry : val.entrySet()) {
-            i++;
-            sql.append(" ");
-            sql.append(entry.getKey());
-            if (i != val.size()) {
-                sql.append(",");
-            }
-        }
-
-        sql.append(" ) Values(");
-
-        for (int k = 1; k <= val.size(); k++) {
-            sql.append(" ");
-            sql.append("?");
-            if (k < val.size()) {
-                sql.append(",");
-            }
-        }
-
-        sql.append(" )");
-        PreparedStatement st = null;
-        try {
-            st = myDB.prepareStatement(sql.toString());
-
-            int j = 0;
-            for (Entry<String, Object> entry : val.entrySet()) {
-                j++;
-                st.setObject(j, entry.getValue());
-            }
-
-            return st.executeUpdate();
-
-        } catch (SQLException e) {
-            return 0;
-        } finally {
-            try {
-                st.close();
-            } catch (SQLException e) {
-
-                e.printStackTrace();
-            }
-        }
+        return myDB.insertWithConflictIgnore(tablename, val);
     }
 
     public void Close() {

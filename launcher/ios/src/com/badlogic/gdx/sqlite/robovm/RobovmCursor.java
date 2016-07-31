@@ -2,7 +2,6 @@ package com.badlogic.gdx.sqlite.robovm;
 
 import com.badlogic.gdx.sql.DatabaseCursor;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -17,14 +16,6 @@ public class RobovmCursor implements DatabaseCursor {
         setNativeCursor(resultSet);
     }
 
-    public RobovmCursor(ResultSet rs, int rowcount) {
-        setNativeCursor(rs);
-        try {
-            this.nativeCursor.setFetchSize(rowcount);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public byte[] getBlob(int columnIndex) {
@@ -140,7 +131,7 @@ public class RobovmCursor implements DatabaseCursor {
     @Override
     public boolean isNull(int i) {
         try {
-            return nativeCursor.getObject(i)==null;
+            return nativeCursor.getObject(i) == null;
         } catch (SQLException e) {
             e.printStackTrace();
         }

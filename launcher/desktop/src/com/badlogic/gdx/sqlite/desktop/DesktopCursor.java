@@ -25,18 +25,18 @@ public class DesktopCursor implements DatabaseCursor {
      */
     private CachedRowSetImpl resultSet = null;
 
-    public DesktopCursor(ResultSet rs, int rowcount) {
-        setNativeCursor(rs);
-        try {
-            this.resultSet.setFetchSize(rowcount);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public DesktopCursor(ResultSet rs) {
-        setNativeCursor(resultSet);
-    }
+//    public DesktopCursor(ResultSet rs, int rowcount) {
+//        setNativeCursor(rs);
+//        try {
+//            this.resultSet.setFetchSize(rowcount);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public DesktopCursor(ResultSet rs) {
+//        setNativeCursor(resultSet);
+//    }
 
     public DesktopCursor() {
 

@@ -23,7 +23,7 @@ public interface DatabaseManager {
 	 * @return Returns a {@link Database} object pointing to an existing or not-yet-created database. */
 	public Database getNewDatabase (FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery);
 
-	DatabaseCursor getNewDatabaseCursor(ResultSet rs, int rowcount);
-
-	DatabaseCursor getNewDatabaseCursor(ResultSet rs);
+//	DatabaseCursor getNewDatabaseCursor(ResultSet rs, int rowcount);
+//
+//	DatabaseCursor getNewDatabaseCursor(ResultSet rs);
 }

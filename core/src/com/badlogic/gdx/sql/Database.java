@@ -1,6 +1,8 @@
 
 package com.badlogic.gdx.sql;
 
+import de.longri.cachebox3.sqlite.CacheboxDatabase;
+
 import java.sql.PreparedStatement;
 
 /**
@@ -80,4 +82,14 @@ public interface Database {
     public void endTransaction();
 
     public void setTransactionSuccessful();
+
+    public long insert(String tablename, CacheboxDatabase.Parameters val);
+
+    public long update(String tablename, CacheboxDatabase.Parameters val, String whereClause, String[] whereArgs);
+
+    public long delete(String tablename, String whereClause, String[] whereArgs);
+
+    public long insertWithConflictReplace(String tablename, CacheboxDatabase.Parameters val);
+
+    public long insertWithConflictIgnore(String tablename, CacheboxDatabase.Parameters val);
 }

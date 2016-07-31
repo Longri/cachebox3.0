@@ -1,10 +1,12 @@
-package com.badlogic.gdx.sqlite.robovm;
+package com.badlogic.gdx.sqlite.desktop;
 
-import SQLite.JDBCDriver;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.Database;
 import com.badlogic.gdx.sql.DatabaseCursor;
+import com.badlogic.gdx.sql.DatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.sqlite.CacheboxDatabase;
 import org.slf4j.LoggerFactory;
@@ -13,21 +15,23 @@ import java.sql.*;
 import java.util.Map;
 
 /**
- * @author truongps
+ * Created by Longri on 31.07.16.
  */
-public class RobovmDatabase implements Database {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(RobovmDatabase.class);
+public class DesktopDatabase implements Database {
+
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(DesktopDatabase.class);
+
+    private SQLiteDatabaseHelper helper = null;
 
     private final FileHandle dbFileHandle;
     private final int dbVersion;
     private final String dbOnCreateQuery;
     private final String dbOnUpgradeQuery;
 
-    Connection connection;
-    Statement statement;
+    private Connection connection = null;
+    private Statement stmt = null;
 
-    public RobovmDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery,
-                          String dbOnUpgradeQuery) {
+    public DesktopDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
         this.dbFileHandle = dbFileHandle;
         this.dbVersion = dbVersion;
         this.dbOnCreateQuery = dbOnCreateQuery;
@@ -36,59 +40,68 @@ public class RobovmDatabase implements Database {
 
     @Override
     public void setupDatabase() {
-
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            Gdx.app.log(DatabaseFactory.ERROR_TAG,
+                    "Unable to load the SQLite JDBC driver. Their might be a problem with your build path or project setup.", e);
+            throw new GdxRuntimeException(e);
+        }
     }
 
     @Override
     public void openOrCreateDatabase() throws SQLiteGdxException {
-        JDBCDriver jdbcDriver = new JDBCDriver();
-        try {
-            String DB_URL = "sqlite:/" + this.dbFileHandle.file().getAbsolutePath();
-            connection = jdbcDriver.connect(DB_URL, null);
-            statement = connection.createStatement();
-        } catch (Exception e) {
-            throw new SQLiteGdxException(e.getMessage(), e.getCause());
-        }
-    }
+        String DB_URL = this.dbFileHandle.file().getAbsolutePath();
 
-    @Override
-    public void closeDatabase() throws SQLiteGdxException {
-        try {
-            if (!connection.isClosed()) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            throw new SQLiteGdxException(e.getMessage(), e.getCause());
-        }
-    }
+        if (helper == null) helper = new SQLiteDatabaseHelper(DB_URL, dbVersion, dbOnCreateQuery, dbOnUpgradeQuery);
 
-    @Override
-    public void execSQL(String sql) throws SQLiteGdxException {
         try {
-            statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            throw new SQLiteGdxException(e.getMessage(), e.getCause());
-        }
-    }
-
-    @Override
-    public DatabaseCursor rawQuery(String sql) throws SQLiteGdxException {
-        try {
-            ResultSet resultSet = statement.executeQuery(sql);
-            RobovmCursor databaseCursor = new RobovmCursor(resultSet);
-            return databaseCursor;
+            connection = DriverManager.getConnection("jdbc:sqlite:" + DB_URL);
+            stmt = connection.createStatement();
+            helper.onCreate(stmt);
         } catch (SQLException e) {
             throw new SQLiteGdxException(e);
         }
     }
 
     @Override
-    public DatabaseCursor rawQuery(DatabaseCursor cursor, String sql)
-            throws SQLiteGdxException {
+    public void closeDatabase() throws SQLiteGdxException {
         try {
-            ResultSet resultSet = statement.executeQuery(sql);
-            ((RobovmCursor) cursor).setNativeCursor(resultSet);
-            return cursor;
+            stmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new SQLiteGdxException(e);
+        }
+    }
+
+    @Override
+    public void execSQL(String sql) throws SQLiteGdxException {
+        try {
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new SQLiteGdxException(e);
+        }
+    }
+
+    @Override
+    public DatabaseCursor rawQuery(String sql) throws SQLiteGdxException {
+        DesktopCursor lCursor = new DesktopCursor();
+        try {
+            ResultSet resultSetRef = stmt.executeQuery(sql);
+            lCursor.setNativeCursor(resultSetRef);
+            return lCursor;
+        } catch (SQLException e) {
+            throw new SQLiteGdxException(e);
+        }
+    }
+
+    @Override
+    public DatabaseCursor rawQuery(DatabaseCursor cursor, String sql) throws SQLiteGdxException {
+        DesktopCursor lCursor = (DesktopCursor) cursor;
+        try {
+            ResultSet resultSetRef = stmt.executeQuery(sql);
+            lCursor.setNativeCursor(resultSetRef);
+            return lCursor;
         } catch (SQLException e) {
             throw new SQLiteGdxException(e);
         }
@@ -107,7 +120,6 @@ public class RobovmDatabase implements Database {
     public PreparedStatement prepareStatement(String sql) {
         try {
             return connection.prepareStatement(sql);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -429,5 +441,4 @@ public class RobovmDatabase implements Database {
             }
         }
     }
-
 }

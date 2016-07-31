@@ -73,11 +73,11 @@ public class DatabaseFactory {
 	private DatabaseFactory () {
 	}
 
-	public static DatabaseCursor getNewDatabaseCursor(ResultSet rs, int rowcount) {
-		return databaseManager.getNewDatabaseCursor(rs, rowcount) ;
-	}
-
-	public static DatabaseCursor getNewDatabaseCursor(ResultSet rs) {
-		return databaseManager.getNewDatabaseCursor(rs) ;
-	}
+//	public static DatabaseCursor getNewDatabaseCursor(ResultSet rs, int rowcount) {
+//		return databaseManager.getNewDatabaseCursor(rs, rowcount) ;
+//	}
+//
+//	public static DatabaseCursor getNewDatabaseCursor(ResultSet rs) {
+//		return databaseManager.getNewDatabaseCursor(rs) ;
+//	}
 }

@@ -21,10 +21,13 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
+import com.badlogic.gdx.files.FileHandle;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -99,6 +102,13 @@ public class AndroidPlatformConnector extends PlatformConnector {
             }
         });
 
+    }
+
+    @Override
+    public FileHandle _getSandBoxFileHandle(String fileName) {
+        File dir = this.application.getFilesDir();
+        File file = new File(dir, fileName);
+        return Gdx.files.absolute(file.getAbsolutePath());
     }
 
 }
