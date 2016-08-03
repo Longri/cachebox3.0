@@ -100,7 +100,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
     }
 
     @Override
-    public SQLiteGdxDatabaseCursor rawQuery(String sql) throws SQLiteGdxException {
+    public SQLiteGdxDatabaseCursor rawQuery(String sql, String[] args) throws SQLiteGdxException {
         DesktopCursor lCursor = new DesktopCursor();
         try {
             ResultSet resultSetRef = stmt.executeQuery(sql);

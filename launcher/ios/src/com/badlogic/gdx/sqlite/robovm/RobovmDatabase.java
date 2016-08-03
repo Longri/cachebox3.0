@@ -88,7 +88,7 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
     }
 
     @Override
-    public SQLiteGdxDatabaseCursor rawQuery(String sql) throws SQLiteGdxException {
+    public SQLiteGdxDatabaseCursor rawQuery(String sql, String[] args) throws SQLiteGdxException {
         try {
             ResultSet resultSet = statement.executeQuery(sql);
             RobovmCursor databaseCursor = new RobovmCursor(resultSet);

@@ -28,6 +28,7 @@ import com.kotcrab.vis.ui.widget.VisProgressBar;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.gui.stages.initial_tasks.*;
 import de.longri.cachebox3.locator.Locator;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
@@ -36,8 +37,6 @@ import org.slf4j.LoggerFactory;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
 
 /**
  * The Splash Stage is the first Stage to show on screen
@@ -80,8 +79,6 @@ public class Splash extends Stage {
         this.addActor(background);
         InitialView();
     }
-
-
 
 
     private void InitialView() {
@@ -134,7 +131,8 @@ public class Splash extends Stage {
         progress.setValue(0);
 
         // Init loader tasks
-        final ArrayList<InitTask> initTaskList = new ArrayList<InitTask>();
+        final ArrayList<AbstractInitTask> initTaskList = new ArrayList<AbstractInitTask>();
+        initTaskList.add(new InitialWorkPathTask("InitialWorkPAth", 5));
         initTaskList.add(new SkinLoaderTask("Load UI", 30));
         initTaskList.add(new TranslationLoaderTask("Load Translations", 10));
         initTaskList.add(new GdxInitialTask("Initial GDX", 2));
@@ -145,7 +143,7 @@ public class Splash extends Stage {
         Thread runThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (InitTask task : initTaskList) {
+                for (AbstractInitTask task : initTaskList) {
                     task.RUNABLE();
                     progress.setValue(progress.getValue() + task.percent);
                 }
@@ -158,93 +156,19 @@ public class Splash extends Stage {
     }
 
 
-    abstract class InitTask {
-
-        final String name;
-        final int percent;
-
-        InitTask(String name, int percent) {
-            this.name = name;
-            this.percent = percent;
-        }
-
-        abstract void RUNABLE();
-
-    }
-
-    final class GdxInitialTask extends InitTask {
-
-        GdxInitialTask(String name, int percent) {
-            super(name, percent);
-        }
-
-        @Override
-        void RUNABLE() {
-            CB.inputMultiplexer = new InputMultiplexer();
-            Gdx.input.setInputProcessor(CB.inputMultiplexer);
-        }
-    }
+    
 
 
-    final class SkinLoaderTask extends InitTask {
-
-        SkinLoaderTask(String name, int percent) {
-            super(name, percent);
-        }
-
-        @Override
-        void RUNABLE() {
-            // the SvgSkin must create in a OpenGL context. so we post a runnable and wait!
-
-            final AtomicBoolean wait = new AtomicBoolean(true);
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    FileHandle svgFolder = Gdx.files.internal("skins/day/svg");
-                    FileHandle skinJson = Gdx.files.internal("skins/day/skin.json");
-                    CB.setActSkin(new SvgSkin(svgFolder, skinJson));
-                    CB.backgroundColor = CB.getColor("background");
-                    wait.set(false);
-                }
-            });
-
-            while (wait.get()) {
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                }
-            }
-        }
-    }
-
-    final class InitialLocationListenerTask extends InitTask {
-
-        InitialLocationListenerTask(String name, int percent) {
-            super(name, percent);
-        }
-
-        @Override
-        void RUNABLE() {
-
-            //TODO initial with last saved location from settings
-            new Locator(null);
-
-            PlatformConnector.initLocationListener();
-        }
-    }
 
 
-    final class TranslationLoaderTask extends InitTask {
 
-        TranslationLoaderTask(String name, int percent) {
-            super(name, percent);
-        }
 
-        @Override
-        void RUNABLE() {
 
-        }
-    }
+
+
+
+
+
 
 
 //
@@ -456,36 +380,7 @@ public class Splash extends Stage {
 //     * Step 5 <br>
 //     * chk directories
 //     */
-//    private void ini_Dirs() {
-//        Log.debug(log, "ini_Dirs");
-//        ini_Dir(Config.PocketQueryFolder.getValue());
-//        ini_Dir(Config.TileCacheFolder.getValue());
-//        ini_Dir(Config.mWorkPath + "/User");
-//        ini_Dir(Config.TrackFolder.getValue());
-//        ini_Dir(Config.UserImageFolder.getValue());
-//        ini_Dir(Config.mWorkPath + "/repository");
-//        ini_Dir(Config.DescriptionImageFolder.getValue());
-//        ini_Dir(Config.MapPackFolder.getValue());
-//        ini_Dir(Config.SpoilerFolder.getValue());
-//
-//        // prevent mediascanner to parse all the images in the cachebox folder
-//        File nomedia = FileFactory.createFile(Config.mWorkPath, ".nomedia");
-//        if (!nomedia.exists()) {
-//            try {
-//                nomedia.createNewFile();
-//            } catch (IOException e) {
-//
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-//
-//    private void ini_Dir(String Folder) {
-//        File ff = FileFactory.createFile(Folder);
-//        if (!ff.exists()) {
-//            ff.mkdir();
-//        }
-//    }
+
 //
 //    /**
 //     * Step 5 <br>

@@ -41,4 +41,9 @@ public class DesktopPlatformConnector extends PlatformConnector {
     public FileHandle _getSandBoxFileHandle(String fileName) {
         return Gdx.files.local(fileName);
     }
+
+    @Override
+    protected String _getWorkPath() {
+        return _getSandBoxFileHandle("Cachebox3").file().getAbsolutePath();
+    }
 }

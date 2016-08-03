@@ -22,6 +22,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.sqlite.Database;
+import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLogger;
 
 import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
@@ -34,6 +36,8 @@ public class CacheboxMain extends ApplicationAdapter {
         LibgdxLogger.init();
 
     }
+
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheboxMain.class);
 
     SpriteBatch batch;
     Stage stage;
@@ -76,5 +80,23 @@ public class CacheboxMain extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
+    }
+
+    @Override
+    public void pause() {
+        log.debug("on pause", "close databases");
+        //close databases
+//        if (Database.Data != null) Database.Data.Close();
+//        if (Database.Settings != null) Database.Settings.Close();
+//        if (Database.FieldNotes != null) Database.FieldNotes.Close();
+    }
+
+    @Override
+    public void resume() {
+//        log.debug("on resume", "reopen databases");
+//        //open databases
+//        if (Database.Data != null) Database.Data.Open();
+//        if (Database.Settings != null) Database.Settings.Open();
+//        if (Database.FieldNotes != null) Database.FieldNotes.Open();
     }
 }

@@ -15,15 +15,12 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.GlobalCore;
-import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
-import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.settings.Config;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -55,29 +52,13 @@ public class TestView extends AbstractView {
     public void reloadState() {
 
 
-        FileHandle dbFile = PlatformConnector.getSandboxFileHandle("CacheBox/testDB.db");
-        dbFile.parent().mkdirs();
-
-        Database cbdb = new Database(Database.DatabaseType.CacheBox);
-
-        cbdb.StartUp(dbFile);
-        cbdb.Close();
-
         StringBuilder sb = new StringBuilder();
-        sb.append("Create DB on:");
-        sb.append(GlobalCore.br);
-        sb.append(dbFile.file().getAbsolutePath());
-        sb.append(GlobalCore.br);
 
-        sb.append("File exist: ");
-        sb.append(dbFile.exists() ? "yes" : "no");
-//            if (dbFile.exists()) {
-//                sb.append(GlobalCore.br);
-//                sb.append("DB version;" + db.getDatabaseSchemeVersion());
-//            }
+        sb.append("LaunchCount:" + Config.AppRaterlaunchCount.getValue());
 
         nameLabel.setText(sb.toString());
-
+        Config.AppRaterlaunchCount.setValue(Config.AppRaterlaunchCount.getValue() + 1);
+        Config.AcceptChanges();
 
     }
 

@@ -768,7 +768,7 @@ public class Database {
 
     public SQLiteGdxDatabaseCursor rawQuery(String sql, String[] args) {
         try {
-            return myDB.rawQuery(sql);
+            return myDB.rawQuery(sql,args);
         } catch (SQLiteGdxException e) {
             e.printStackTrace();
         }

@@ -45,16 +45,16 @@ import java.util.Properties;
  * for all defined loggers, to the console ({@code System.err}). The following
  * system properties are supported to configure the behavior of this logger:
  * </p>
- *
+ * <p>
  * <ul>
  * <li><code>org.slf4j.simpleLogger.logFile</code> - The output target which can
  * be the <em>path</em> to a file, or the special values "System.out" and
  * "System.err". Default is "System.err".
- *
+ * <p>
  * <li><code>org.slf4j.simpleLogger.defaultLogLevel</code> - Default log level
  * for all instances of SimpleLogger. Must be one of ("trace", "debug", "info",
  * "warn", or "error"). If not specified, defaults to "info".</li>
- *
+ * <p>
  * <li><code>org.slf4j.simpleLogger.log.<em>a.b.c</em></code> - Logging detail
  * level for a SimpleLogger instance named "a.b.c". Right-side value must be one
  * of "trace", "debug", "info", "warn", or "error". When a SimpleLogger named
@@ -62,45 +62,45 @@ import java.util.Properties;
  * unspecified, the level of nearest parent logger will be used, and if none is
  * set, then the value specified by
  * <code>org.slf4j.simpleLogger.defaultLogLevel</code> will be used.</li>
- *
+ * <p>
  * <li><code>org.slf4j.simpleLogger.showDateTime</code> - Set to
  * <code>true</code> if you want the current date and time to be included in
  * output messages. Default is <code>false</code></li>
- *
+ * <p>
  * <li><code>org.slf4j.simpleLogger.dateTimeFormat</code> - The date and time
  * format to be used in the output messages. The pattern describing the date and
  * time format is defined by <a href=
  * "http://docs.oracle.com/javase/1.5.0/docs/api/java/text/SimpleDateFormat.html"
  * ><code>SimpleDateFormat</code></a>. If the format is not specified or is
  * invalid, the number of milliseconds since start up will be output.</li>
- *
+ * <p>
  * <li><code>org.slf4j.simpleLogger.showThreadName</code> -Set to
  * <code>true</code> if you want to output the current thread name. Defaults to
  * <code>true</code>.</li>
- *
+ * <p>
  * <li><code>org.slf4j.simpleLogger.showLogName</code> - Set to
  * <code>true</code> if you want the Logger instance name to be included in
  * output messages. Defaults to <code>true</code>.</li>
- *
+ * <p>
  * <li><code>org.slf4j.simpleLogger.showShortLogName</code> - Set to
  * <code>true</code> if you want the last component of the name to be included
  * in output messages. Defaults to <code>false</code>.</li>
- *
+ * <p>
  * <li><code>org.slf4j.simpleLogger.levelInBrackets</code> - Should the level
  * string be output in brackets? Defaults to <code>false</code>.</li>
- *
+ * <p>
  * <li><code>org.slf4j.simpleLogger.warnLevelString</code> - The string value
  * output for the warn level. Defaults to <code>WARN</code>.</li>
- *
+ * <p>
  * </ul>
- *
+ * <p>
  * <p>
  * In addition to looking for system properties with the names specified above,
  * this implementation also checks for a class loader resource named
  * <code>"simplelogger.properties"</code>, and includes any matching definitions
  * from this resource (if it exists).
  * </p>
- *
+ * <p>
  * <p>
  * With no configuration, the default output includes the relative time in
  * milliseconds, thread name, the level, logger name, and the message followed
@@ -110,7 +110,7 @@ import java.util.Properties;
  * <p>
  * Sample output follows.
  * </p>
- *
+ * <p>
  * <pre>
  * 176 [main] INFO examples.Sort - Populating an array of 2 elements in reverse order.
  * 225 [main] INFO examples.SortAlgo - Entered the sort method.
@@ -123,7 +123,7 @@ import java.util.Properties;
  *   at org.log4j.examples.Sort.main(Sort.java:64)
  * 467 [main] INFO  examples.Sort - Exiting main method.
  * </pre>
- *
+ * <p>
  * <p>
  * This implementation is heavily inspired by <a
  * href="http://commons.apache.org/logging/">Apache Commons Logging</a>'s
@@ -272,9 +272,13 @@ public class LibgdxLogger extends MarkerIgnoringBase {
         }
     }
 
-    /** The current log level */
+    /**
+     * The current log level
+     */
     protected int currentLogLevel = LOG_LEVEL_INFO;
-    /** The short name of this simple log instance */
+    /**
+     * The short name of this simple log instance
+     */
     private transient String shortLogName = null;
 
     /**
@@ -327,15 +331,12 @@ public class LibgdxLogger extends MarkerIgnoringBase {
      * This is our internal implementation for logging regular
      * (non-parameterized) log messages.
      *
-     * @param level
-     *            One of the LOG_LEVEL_XXX constants defining the log level
-     * @param message
-     *            The message itself
-     * @param t
-     *            The exception whose stack trace should be logged
+     * @param level   One of the LOG_LEVEL_XXX constants defining the log level
+     * @param message The message itself
+     * @param t       The exception whose stack trace should be logged
      */
     private void log(int level, String message, Throwable t) {
-        if (!isLevelEnabled(level)) {
+        if (!isLevelEnabled(level) || Gdx.app == null) {
             return;
         }
 
@@ -446,8 +447,7 @@ public class LibgdxLogger extends MarkerIgnoringBase {
      *
      * @param level
      * @param format
-     * @param arguments
-     *            a list of 3 ore more arguments
+     * @param arguments a list of 3 ore more arguments
      */
     private void formatAndLog(int level, String format, Object... arguments) {
         if (!isLevelEnabled(level)) {
@@ -460,8 +460,7 @@ public class LibgdxLogger extends MarkerIgnoringBase {
     /**
      * Is the given log level currently enabled?
      *
-     * @param logLevel
-     *            is this level enabled?
+     * @param logLevel is this level enabled?
      */
     protected boolean isLevelEnabled(int logLevel) {
         // log level are numerically ordered so can use simple numeric
@@ -469,7 +468,9 @@ public class LibgdxLogger extends MarkerIgnoringBase {
         return (logLevel >= currentLogLevel);
     }
 
-    /** Are {@code trace} messages currently enabled? */
+    /**
+     * Are {@code trace} messages currently enabled?
+     */
     public boolean isTraceEnabled() {
         return isLevelEnabled(LOG_LEVEL_TRACE);
     }
@@ -506,12 +507,16 @@ public class LibgdxLogger extends MarkerIgnoringBase {
         formatAndLog(LOG_LEVEL_TRACE, format, argArray);
     }
 
-    /** Log a message of level TRACE, including an exception. */
+    /**
+     * Log a message of level TRACE, including an exception.
+     */
     public void trace(String msg, Throwable t) {
         log(LOG_LEVEL_TRACE, msg, t);
     }
 
-    /** Are {@code debug} messages currently enabled? */
+    /**
+     * Are {@code debug} messages currently enabled?
+     */
     public boolean isDebugEnabled() {
         return isLevelEnabled(LOG_LEVEL_DEBUG);
     }
@@ -548,12 +553,16 @@ public class LibgdxLogger extends MarkerIgnoringBase {
         formatAndLog(LOG_LEVEL_DEBUG, format, argArray);
     }
 
-    /** Log a message of level DEBUG, including an exception. */
+    /**
+     * Log a message of level DEBUG, including an exception.
+     */
     public void debug(String msg, Throwable t) {
         log(LOG_LEVEL_DEBUG, msg, t);
     }
 
-    /** Are {@code info} messages currently enabled? */
+    /**
+     * Are {@code info} messages currently enabled?
+     */
     public boolean isInfoEnabled() {
         return isLevelEnabled(LOG_LEVEL_INFO);
     }
@@ -590,12 +599,16 @@ public class LibgdxLogger extends MarkerIgnoringBase {
         formatAndLog(LOG_LEVEL_INFO, format, argArray);
     }
 
-    /** Log a message of level INFO, including an exception. */
+    /**
+     * Log a message of level INFO, including an exception.
+     */
     public void info(String msg, Throwable t) {
         log(LOG_LEVEL_INFO, msg, t);
     }
 
-    /** Are {@code warn} messages currently enabled? */
+    /**
+     * Are {@code warn} messages currently enabled?
+     */
     public boolean isWarnEnabled() {
         return isLevelEnabled(LOG_LEVEL_WARN);
     }
@@ -632,12 +645,16 @@ public class LibgdxLogger extends MarkerIgnoringBase {
         formatAndLog(LOG_LEVEL_WARN, format, argArray);
     }
 
-    /** Log a message of level WARN, including an exception. */
+    /**
+     * Log a message of level WARN, including an exception.
+     */
     public void warn(String msg, Throwable t) {
         log(LOG_LEVEL_WARN, msg, t);
     }
 
-    /** Are {@code error} messages currently enabled? */
+    /**
+     * Are {@code error} messages currently enabled?
+     */
     public boolean isErrorEnabled() {
         return isLevelEnabled(LOG_LEVEL_ERROR);
     }
@@ -674,7 +691,9 @@ public class LibgdxLogger extends MarkerIgnoringBase {
         formatAndLog(LOG_LEVEL_ERROR, format, argArray);
     }
 
-    /** Log a message of level ERROR, including an exception. */
+    /**
+     * Log a message of level ERROR, including an exception.
+     */
     public void error(String msg, Throwable t) {
         log(LOG_LEVEL_ERROR, msg, t);
     }
