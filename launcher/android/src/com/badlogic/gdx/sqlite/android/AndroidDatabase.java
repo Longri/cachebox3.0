@@ -95,7 +95,7 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
             throw new SQLiteGdxException(e);
         }
     }
-    
+
     @Override
     public void setAutoCommit(boolean autoCommit) {
         if (autoCommit) {
