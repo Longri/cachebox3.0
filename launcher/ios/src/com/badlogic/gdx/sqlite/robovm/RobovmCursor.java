@@ -17,145 +17,183 @@ package com.badlogic.gdx.sqlite.robovm;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 /**
- * @author truongps (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
- * @author Longri (2016)
+ * Created by Longri on 03.08.16.
  */
 public class RobovmCursor implements SQLiteGdxDatabaseCursor {
 
-    ResultSet nativeCursor;
+    private ResultSet rs;
+    private PreparedStatement ps;
+    private int rowcount;
 
-    public RobovmCursor(ResultSet resultSet) {
-        setNativeCursor(resultSet);
+    public RobovmCursor(ResultSet rs, PreparedStatement ps) {
+        this.rs = rs;
+        this.ps = ps;
     }
 
-
-    @Override
-    public byte[] getBlob(int columnIndex) {
-        // return nativeCursor.getBlob(columnName);
-        return null;
+    public RobovmCursor(ResultSet rs, int rowcount, PreparedStatement ps) {
+        this.rs = rs;
+        this.rowcount = rowcount;
+        this.ps = ps;
     }
 
     @Override
-    public double getDouble(int columnIndex) {
+    public void moveToFirst() {
         try {
-            return nativeCursor.getDouble(columnIndex + 1);
-        } catch (SQLException e) {
-            return -1;
+            if (rs.isBeforeFirst()) {
+                rs.next();
+            }
+            if (rs.isFirst())
+                return ;
+             rs.first();
+        } catch (Exception e) {
+
         }
     }
 
     @Override
-    public float getFloat(int columnIndex) {
+    public boolean isAfterLast() {
+
         try {
-            return nativeCursor.getFloat(columnIndex + 1);
-        } catch (SQLException e) {
-            return -1;
+            return rs.isAfterLast();
+        } catch (Exception e) {
+            return true;
         }
+
     }
 
     @Override
-    public int getInt(int columnIndex) {
+    public void moveToNext() {
         try {
-            return nativeCursor.getInt(columnIndex + 1);
+            rs.next();
         } catch (SQLException e) {
-            return -1;
-        }
-    }
 
-    @Override
-    public long getLong(int columnIndex) {
-        try {
-            return nativeCursor.getLong(columnIndex + 1);
-        } catch (SQLException e) {
-            return -1;
-        }
-    }
-
-    @Override
-    public short getShort(int columnIndex) {
-        try {
-            return nativeCursor.getShort(columnIndex + 1);
-        } catch (SQLException e) {
-            return -1;
-        }
-    }
-
-    @Override
-    public String getString(int columnIndex) {
-        try {
-            return nativeCursor.getString(columnIndex + 1);
-        } catch (SQLException e) {
-            return "";
-        }
-    }
-
-    @Override
-    public boolean next() {
-        try {
-            return nativeCursor.next();
-        } catch (SQLException e) {
-            return false;
-        }
-    }
-
-    @Override
-    public int getCount() {
-        try {
-            return nativeCursor.getRow();
-        } catch (SQLException e) {
-            return 0;
         }
     }
 
     @Override
     public void close() {
         try {
-            nativeCursor.close();
+            if (rs != null)
+                rs.close();
+            if (ps != null)
+                ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        rs = null;
+        ps = null;
     }
 
     @Override
-    public void moveToFirst() {
+    public String getString(int columnIndex) {
+
         try {
-            nativeCursor.first();
+            return rs.getString(columnIndex + 1);
         } catch (SQLException e) {
-            e.printStackTrace();
+            return null;
         }
+
     }
 
     @Override
-    public boolean isAfterLast() {
-        try {
-            return nativeCursor.isAfterLast();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    @Override
-    public void moveToNext() {
-        next();
-    }
-
-    @Override
-    public boolean isNull(int i) {
-        try {
-            return nativeCursor.getObject(i) == null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public boolean next() {
         return false;
     }
 
-    public void setNativeCursor(ResultSet resultSet) {
-        this.nativeCursor = resultSet;
+
+    @Override
+    public long getLong(int columnIndex) {
+
+        try {
+            return rs.getLong(columnIndex + 1);
+        } catch (SQLException e) {
+            return 0;
+        }
+
     }
 
+
+
+    @Override
+    public int getInt(int columnIndex) {
+        try {
+            return rs.getInt(columnIndex + 1);
+        } catch (SQLException e) {
+            return 0;
+        }
+    }
+
+
+
+    @Override
+    public boolean isNull(int columnIndex) {
+
+        try {
+            if (rs.getObject(columnIndex + 1) == null || rs.getObject(columnIndex + 1).toString().length() == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            return false;
+        }
+
+    }
+
+//    @Override
+//    public boolean isNull(String column) {
+//
+//        try {
+//            if (rs.getObject(column) == null || rs.getObject(column).toString().length() == 0) {
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        } catch (SQLException e) {
+//            return false;
+//        }
+//
+//    }
+
+    @Override
+    public byte[] getBlob(int columnIndex) {
+        return new byte[0];
+    }
+
+    @Override
+    public double getDouble(int columnIndex) {
+        try {
+            return rs.getDouble(columnIndex + 1);
+        } catch (SQLException e) {
+            return 0;
+        }
+    }
+
+    @Override
+    public float getFloat(int columnIndex) {
+        return 0;
+    }
+
+
+    @Override
+    public short getShort(int columnIndex) {
+        try {
+            return rs.getShort(columnIndex + 1);
+        } catch (SQLException e) {
+            return 0;
+        }
+    }
+
+
+
+    @Override
+    public int getCount() {
+        return rowcount;
+    }
 }

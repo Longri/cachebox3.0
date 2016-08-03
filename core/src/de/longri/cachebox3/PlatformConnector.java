@@ -59,4 +59,10 @@ public abstract class PlatformConnector {
 
     public abstract FileHandle _getSandBoxFileHandle(String fileName);
 
+    public static String getWorkPath(){
+        return platformConnector._getWorkPath();
+    }
+
+    protected abstract String _getWorkPath();
+
 }

@@ -44,6 +44,11 @@ public class IOS_PlatformConnector extends PlatformConnector {
     }
 
     @Override
+    protected String _getWorkPath() {
+        return _getSandBoxFileHandle("Cachebox3").file().getAbsolutePath();
+    }
+
+    @Override
     public FileHandle _getSandBoxFileHandle(String fileName) {
         return new FileHandle(new File(System.getenv("HOME"), "Library/local/" + fileName).getAbsolutePath());
     }

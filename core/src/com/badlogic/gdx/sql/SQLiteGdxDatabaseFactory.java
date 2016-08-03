@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
  * A factory class that creates new database objects and returns references to them. See
- * {@link SQLiteGdxDatabaseFactory#getNewDatabase(FileHandle, int, String, String)} for more details.
+ * {@link SQLiteGdxDatabaseFactory#getNewDatabase(FileHandle)} for more details.
  *
  * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
  * @author Longri (2016)
@@ -43,17 +43,12 @@ public class SQLiteGdxDatabaseFactory {
      * dropping the tables, etc.). Then dbOnCreateQuery will be executed. However, dbOnUpgradeQuery won't be executed on
      * downgrading the database version.
      *
-     * @param dbFileHandle     The FileHandle of the database.
-     * @param dbVersion        number of the database (starting at 1); if the database is older, dbOnUpgradeQuery will be used to upgrade
-     *                         the database (on Android only)
-     * @param dbOnCreateQuery  The query that should be executed on the creation of the database. This query would usually create
-     *                         the necessary tables in the database.
-     * @param dbOnUpgradeQuery The query that should be executed on upgrading the database from an old version to a new one.
+     * @param dbFileHandle The FileHandle of the database.
      * @return Returns a {@link SQLiteGdxDatabase} object pointing to an existing or not-yet-created database.
      */
-    public static SQLiteGdxDatabase getNewDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
+    public static SQLiteGdxDatabase getNewDatabase(FileHandle dbFileHandle) {
         chkDatabaseManager();
-        return databaseManager.getNewDatabase(dbFileHandle, dbVersion, dbOnCreateQuery, dbOnUpgradeQuery);
+        return databaseManager.getNewDatabase(dbFileHandle);
     }
 
     private static void chkDatabaseManager() {

@@ -45,6 +45,17 @@ public class CB {
     public static ViewManager viewmanager;
 
 
+    /**
+     * WorkPath is a String to the used work path.<br>
+     * This Path is a absolute path.<br>
+     * <br>
+     * On iOS this is the path to the "SandBox". <br>
+     * On Android this can a path to internal SD "/Cachebox3" <br>
+     * or to the "SandBox" on the external SD
+     */
+    public static String WorkPath;
+
+
     private CB() {
     }
 
@@ -97,6 +108,12 @@ public class CB {
         return globalScale;
     }
 
+    public static float getScalefactor() {
+        if (scalefactor == 0)
+            calcScaleFactor();
+        return scalefactor;
+    }
+
     public static boolean isLogLevel(String logLevel) {
 
         if (logLevelToInt(USED_LOG_LEVEL) >= logLevelToInt(logLevel)) return true;
@@ -111,4 +128,10 @@ public class CB {
         if (LOG_LEVEL_INFO.equals(logLevel)) return 2;
         return 0;
     }
+
+    public enum Platform {
+        ANDROID, IOS, DESKTOP
+    }
+
+    public static Platform platform;
 }

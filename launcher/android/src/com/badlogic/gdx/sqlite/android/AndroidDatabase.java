@@ -21,7 +21,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteStatement;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabase;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
@@ -30,7 +29,6 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.sqlite.Database;
 import org.slf4j.LoggerFactory;
 
-import java.sql.PreparedStatement;
 import java.util.Map;
 
 /**
@@ -45,21 +43,16 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
     private Context context;
 
     private final FileHandle dbFileHandle;
-    private final int dbVersion;
-    private final String dbOnCreateQuery;
-    private final String dbOnUpgradeQuery;
 
-    public AndroidDatabase(Context context, FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
+
+    public AndroidDatabase(Context context, FileHandle dbFileHandle) {
         this.context = context;
         this.dbFileHandle = dbFileHandle;
-        this.dbVersion = dbVersion;
-        this.dbOnCreateQuery = dbOnCreateQuery;
-        this.dbOnUpgradeQuery = dbOnUpgradeQuery;
     }
 
     @Override
     public void setupDatabase() {
-        helper = new SQLiteDatabaseHelper(this.context, dbFileHandle, null, dbVersion, dbOnCreateQuery, dbOnUpgradeQuery);
+        helper = new SQLiteDatabaseHelper(this.context, dbFileHandle, null);
     }
 
     @Override
@@ -92,40 +85,15 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
     }
 
     @Override
-    public SQLiteGdxDatabaseCursor rawQuery(String sql) throws SQLiteGdxException {
+    public SQLiteGdxDatabaseCursor rawQuery(String sql, String[] args) throws SQLiteGdxException {
         AndroidCursor aCursor = new AndroidCursor();
         try {
-            Cursor tmp = database.rawQuery(sql, null);
+            Cursor tmp = database.rawQuery(sql, args);
             aCursor.setNativeCursor(tmp);
             return aCursor;
         } catch (SQLiteException e) {
             throw new SQLiteGdxException(e);
         }
-    }
-
-    @Override
-    public SQLiteGdxDatabaseCursor rawQuery(SQLiteGdxDatabaseCursor cursor, String sql) throws SQLiteGdxException {
-        AndroidCursor aCursor = (AndroidCursor) cursor;
-        try {
-            Cursor tmp = database.rawQuery(sql, null);
-            aCursor.setNativeCursor(tmp);
-            return aCursor;
-        } catch (SQLiteException e) {
-            throw new SQLiteGdxException(e);
-        }
-    }
-
-    @Override
-    public void commit() {
-        database.setTransactionSuccessful();
-    }
-
-    @Override
-    public PreparedStatement prepareStatement(String sql) {
-
-        SQLiteStatement statement = database.compileStatement(sql);
-
-        return null;
     }
 
     @Override
@@ -140,12 +108,20 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
 
     @Override
     public void endTransaction() {
-        database.endTransaction();
+        try {
+            database.endTransaction();
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
     }
 
     @Override
     public void setTransactionSuccessful() {
-        database.setTransactionSuccessful();
+        try {
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
     }
 
     @Override
@@ -200,7 +176,7 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
                 }
             }
 
-            log.debug( sb.toString());
+            log.debug(sb.toString());
         }
 
         return database.delete(tablename, whereClause, whereArgs);
@@ -208,7 +184,7 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
 
     @Override
     public long insertWithConflictReplace(String tablename, Database.Parameters val) {
-        log.debug( "insertWithConflictReplace @Table:" + tablename + "Parameters: " + val.toString());
+        log.debug("insertWithConflictReplace @Table:" + tablename + "Parameters: " + val.toString());
         ContentValues values = getContentValues(val);
         return database.insertWithOnConflict(tablename, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }

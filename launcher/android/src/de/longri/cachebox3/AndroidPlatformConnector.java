@@ -20,6 +20,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -109,6 +110,12 @@ public class AndroidPlatformConnector extends PlatformConnector {
         File dir = this.application.getFilesDir();
         File file = new File(dir, fileName);
         return Gdx.files.absolute(file.getAbsolutePath());
+    }
+
+    @Override
+    protected String _getWorkPath() {
+        // Internal SD Card
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/Cachebox3";
     }
 
 }

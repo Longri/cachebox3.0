@@ -15,10 +15,11 @@
  */
 package de.longri.cachebox3.sqlite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.sql.SQLiteGdxDatabase;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
-import com.badlogic.gdx.sql.SQLiteGdxDatabase;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Category;
@@ -90,11 +91,13 @@ public class Database {
         Initialize();
 
         int databaseSchemeVersion = GetDatabaseSchemeVersion();
+        log.debug("DatabaseSchemeVersion: " + databaseSchemeVersion);
         if (databaseSchemeVersion < latestDatabaseChange) {
+            log.debug("Alter Database to SchemeVersion: " + latestDatabaseChange);
             AlterDatabase(databaseSchemeVersion);
             SetDatabaseSchemeVersion();
         }
-        SetDatabaseSchemeVersion();
+
 
         if (databaseType == DatabaseType.CacheBox) { // create or load DatabaseId for each
             DatabaseId = ReadConfigLong("DatabaseId");
@@ -330,15 +333,19 @@ public class Database {
                         HashMap<Long, String> gpxFilenames = new HashMap<Long, String>();
                         HashMap<String, Long> categories = new HashMap<String, Long>();
 
-                        SQLiteGdxDatabaseCursor reader = rawQuery("select ID, GPXFilename from GPXFilenames", null);
-                        reader.moveToFirst();
-                        while (!reader.isAfterLast()) {
-                            long id = reader.getLong(0);
-                            String gpxFilename = reader.getString(1);
-                            gpxFilenames.put(id, gpxFilename);
-                            reader.moveToNext();
+                        try {
+                            SQLiteGdxDatabaseCursor reader = rawQuery("select ID, GPXFilename from GPXFilenames", null);
+                            reader.moveToFirst();
+                            while (!reader.isAfterLast()) {
+                                long id = reader.getLong(0);
+                                String gpxFilename = reader.getString(1);
+                                gpxFilenames.put(id, gpxFilename);
+                                reader.moveToNext();
+                            }
+                            reader.close();
+                        } catch (Exception e) {
+                            //no GPXFilenames stored
                         }
-                        reader.close();
                         for (Entry<Long, String> entry : gpxFilenames.entrySet()) {
                             if (!categories.containsKey(entry.getValue())) {
                                 // add new Category
@@ -382,24 +389,28 @@ public class Database {
                         // Die Nummerierung der Attribute stimmte nicht mit der von
                         // Groundspeak überein. Bei 16 und 45 wurde jeweils eine
                         // Nummber übersprungen
-                        SQLiteGdxDatabaseCursor reader = rawQuery("select Id, AttributesPositive, AttributesNegative from Caches", new String[]{});
-                        reader.moveToFirst();
-                        while (!reader.isAfterLast()) {
-                            long id = reader.getLong(0);
-                            long attributesPositive = reader.getLong(1);
-                            long attributesNegative = reader.getLong(2);
+                        try {
+                            SQLiteGdxDatabaseCursor reader = rawQuery("select Id, AttributesPositive, AttributesNegative from Caches", new String[]{});
+                            reader.moveToFirst();
+                            while (!reader.isAfterLast()) {
+                                long id = reader.getLong(0);
+                                long attributesPositive = reader.getLong(1);
+                                long attributesNegative = reader.getLong(2);
 
-                            attributesPositive = convertAttribute(attributesPositive);
-                            attributesNegative = convertAttribute(attributesNegative);
+                                attributesPositive = convertAttribute(attributesPositive);
+                                attributesNegative = convertAttribute(attributesNegative);
 
-                            Parameters val = new Parameters();
-                            val.put("AttributesPositive", attributesPositive);
-                            val.put("AttributesNegative", attributesNegative);
-                            String whereClause = "[Id]=" + id;
-                            update("Caches", val, whereClause, null);
-                            reader.moveToNext();
+                                Parameters val = new Parameters();
+                                val.put("AttributesPositive", attributesPositive);
+                                val.put("AttributesNegative", attributesNegative);
+                                String whereClause = "[Id]=" + id;
+                                update("Caches", val, whereClause, null);
+                                reader.moveToNext();
+                            }
+                            reader.close();
+                        } catch (Exception e) {
+                            // no attributes stored
                         }
-                        reader.close();
 
                     }
                     if (lastDatabaseSchemeVersion < 1020) {
@@ -738,7 +749,7 @@ public class Database {
 
             try {
                 log.debug("open data base: " + databasePath);
-                myDB = SQLiteGdxDatabaseFactory.getNewDatabase(databasePath, 1, null, null);
+                myDB = SQLiteGdxDatabaseFactory.getNewDatabase(databasePath);
                 myDB.openOrCreateDatabase();
             } catch (Exception exc) {
                 return;
@@ -755,7 +766,7 @@ public class Database {
 
         try {
             log.debug("create data base: " + databasePath);
-            myDB = SQLiteGdxDatabaseFactory.getNewDatabase(databasePath, 0, null, null);
+            myDB = SQLiteGdxDatabaseFactory.getNewDatabase(databasePath);
             myDB.openOrCreateDatabase();
             myDB.setTransactionSuccessful();
             myDB.closeDatabase();
@@ -768,7 +779,7 @@ public class Database {
 
     public SQLiteGdxDatabaseCursor rawQuery(String sql, String[] args) {
         try {
-            return myDB.rawQuery(sql);
+            return myDB.rawQuery(sql, args);
         } catch (SQLiteGdxException e) {
             e.printStackTrace();
         }

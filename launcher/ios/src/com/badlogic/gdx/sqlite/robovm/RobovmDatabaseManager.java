@@ -27,10 +27,13 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabaseManager;
 public class RobovmDatabaseManager implements SQLiteGdxDatabaseManager {
 
     @Override
-    public SQLiteGdxDatabase getNewDatabase(FileHandle dbFileHandle, int dbVersion,
-                                            String dbOnCreateQuery, String dbOnUpgradeQuery) {
-        return new RobovmDatabase(dbFileHandle, dbVersion, dbOnCreateQuery,
-                dbOnUpgradeQuery);
+    public SQLiteGdxDatabase getNewDatabase(FileHandle dbFileHandle) {
+        try {
+            return new RobovmDatabase(dbFileHandle);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

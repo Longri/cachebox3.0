@@ -36,8 +36,8 @@ public class AndroidDatabaseManager implements SQLiteGdxDatabaseManager {
     }
 
     @Override
-    public SQLiteGdxDatabase getNewDatabase(FileHandle dbfileHandle, int databaseVersion, String databaseCreateQuery, String dbOnUpgradeQuery) {
-        return new AndroidDatabase(this.context, dbfileHandle, databaseVersion, databaseCreateQuery, dbOnUpgradeQuery);
+    public SQLiteGdxDatabase getNewDatabase(FileHandle dbfileHandle) {
+        return new AndroidDatabase(this.context, dbfileHandle);
     }
 
 

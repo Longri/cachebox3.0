@@ -27,7 +27,7 @@ import java.sql.PreparedStatement;
  * <li>{@link SQLiteGdxDatabase#setupDatabase()}</li>
  * <li>{@link SQLiteGdxDatabase#openOrCreateDatabase()}</li>
  * <li>{@link SQLiteGdxDatabase#execSQL(String)} OR</li>
- * <li>{@link SQLiteGdxDatabase#rawQuery(String)} OR</li>
+ * <li>{@link SQLiteGdxDatabase#rawQuery(String, String[])} OR</li>
  * <li>{@link SQLiteGdxDatabase#rawQuery(SQLiteGdxDatabaseCursor, String)}</li>
  * <li>{@link SQLiteGdxDatabase#closeDatabase()}</li>
  * </ul>
@@ -70,27 +70,11 @@ public interface SQLiteGdxDatabase {
      * Runs the provided SQL and returns a {@link SQLiteGdxDatabaseCursor} over the result set.
      *
      * @param sql the SQL query. The SQL string must not be ; terminated
+     * @param args
      * @return {@link SQLiteGdxDatabaseCursor}
      * @throws SQLiteGdxException
      */
-    public SQLiteGdxDatabaseCursor rawQuery(String sql) throws SQLiteGdxException;
-
-    /**
-     * Runs the provided SQL and returns the same {@link SQLiteGdxDatabaseCursor} that was passed to this method. Use this method when you
-     * want to avoid reallocation of {@link SQLiteGdxDatabaseCursor} object. Note that you shall only pass the {@link SQLiteGdxDatabaseCursor} object
-     * that was previously returned by a rawQuery method. Creating your own {@link SQLiteGdxDatabaseCursor} and then passing it as an object
-     * will not work.
-     *
-     * @param cursor existing {@link SQLiteGdxDatabaseCursor} object
-     * @param sql    the SQL query. The SQL string must not be ; terminated
-     * @return the passed {@link SQLiteGdxDatabaseCursor}.
-     * @throws SQLiteGdxException
-     */
-    public SQLiteGdxDatabaseCursor rawQuery(SQLiteGdxDatabaseCursor cursor, String sql) throws SQLiteGdxException;
-
-    public void commit();
-
-    public PreparedStatement prepareStatement(String sql);
+    public SQLiteGdxDatabaseCursor rawQuery(String sql, String[] args) throws SQLiteGdxException;
 
     public void setAutoCommit(boolean autoCommit);
 
@@ -107,4 +91,5 @@ public interface SQLiteGdxDatabase {
     public long insertWithConflictReplace(String tablename, Database.Parameters val);
 
     public long insertWithConflictIgnore(String tablename, Database.Parameters val);
+
 }

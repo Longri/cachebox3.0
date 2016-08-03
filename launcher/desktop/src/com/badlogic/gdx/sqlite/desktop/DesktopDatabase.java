@@ -23,35 +23,27 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.Database.Parameters ;
+import de.longri.cachebox3.utils.exceptions.NotImplementedException;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.Map;
+import java.util.Map.Entry;
 
 /**
- * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
- * @author Longri (2016)
+ * Created by Longri on 03.08.16.
  */
 public class DesktopDatabase implements SQLiteGdxDatabase {
-
     final static org.slf4j.Logger log = LoggerFactory.getLogger(DesktopDatabase.class);
-
-    private SQLiteDatabaseHelper helper = null;
-
     private final FileHandle dbFileHandle;
-    private final int dbVersion;
-    private final String dbOnCreateQuery;
-    private final String dbOnUpgradeQuery;
 
-    private Connection connection = null;
-    private Statement stmt = null;
+    Connection myDB = null;
 
-    public DesktopDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
+
+    public DesktopDatabase(FileHandle dbFileHandle) throws ClassNotFoundException{
         this.dbFileHandle = dbFileHandle;
-        this.dbVersion = dbVersion;
-        this.dbOnCreateQuery = dbOnCreateQuery;
-        this.dbOnUpgradeQuery = dbOnUpgradeQuery;
+        System.setProperty("sqlite.purejava", "true");
+        Class.forName("org.sqlite.JDBC");
     }
 
     @Override
@@ -68,112 +60,205 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
     @Override
     public void openOrCreateDatabase() throws SQLiteGdxException {
         String DB_URL = this.dbFileHandle.file().getAbsolutePath();
-
-        if (helper == null) helper = new SQLiteDatabaseHelper(DB_URL, dbVersion, dbOnCreateQuery, dbOnUpgradeQuery);
-
-        try {
-            connection = DriverManager.getConnection("jdbc:sqlite:" + DB_URL);
-            stmt = connection.createStatement();
-            helper.onCreate(stmt);
-        } catch (SQLException e) {
-            throw new SQLiteGdxException(e);
+        if (myDB == null) {
+            try {
+                log.debug( "open data base: " + DB_URL);
+                myDB = DriverManager.getConnection("jdbc:sqlite:" + DB_URL);
+            } catch (Exception exc) {
+                return;
+            }
         }
     }
 
     @Override
-    public void closeDatabase() throws SQLiteGdxException {
+    public void closeDatabase() {
         try {
-            stmt.close();
-            connection.close();
-        } catch (SQLException e) {
-            throw new SQLiteGdxException(e);
-        }
-    }
-
-    @Override
-    public void execSQL(String sql) throws SQLiteGdxException {
-        try {
-            stmt.executeUpdate(sql);
-        } catch (SQLException e) {
-            throw new SQLiteGdxException(e);
-        }
-    }
-
-    @Override
-    public SQLiteGdxDatabaseCursor rawQuery(String sql) throws SQLiteGdxException {
-        DesktopCursor lCursor = new DesktopCursor();
-        try {
-            ResultSet resultSetRef = stmt.executeQuery(sql);
-            lCursor.setNativeCursor(resultSetRef);
-            return lCursor;
-        } catch (SQLException e) {
-            throw new SQLiteGdxException(e);
-        }
-    }
-
-    @Override
-    public SQLiteGdxDatabaseCursor rawQuery(SQLiteGdxDatabaseCursor cursor, String sql) throws SQLiteGdxException {
-        DesktopCursor lCursor = (DesktopCursor) cursor;
-        try {
-            ResultSet resultSetRef = stmt.executeQuery(sql);
-            lCursor.setNativeCursor(resultSetRef);
-            return lCursor;
-        } catch (SQLException e) {
-            throw new SQLiteGdxException(e);
-        }
-    }
-
-    @Override
-    public void commit() {
-        try {
-            connection.commit();
-        } catch (SQLException e) {
+            myDB.close();
+            myDB = null;
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+
+
     @Override
-    public PreparedStatement prepareStatement(String sql) {
+    public DesktopCursor rawQuery(String sql, String[] args) {
+        if (myDB == null)
+            return null;
+
+        if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
+            StringBuilder sb = new StringBuilder("RAW_QUERY :" + sql + " ARGs= ");
+            if (args != null) {
+                for (String arg : args)
+                    sb.append(arg + ", ");
+            } else
+                sb.append("NULL");
+            log.debug(sb.toString());
+        }
+
+        ResultSet rs = null;
+        PreparedStatement statement = null;
         try {
-            return connection.prepareStatement(sql);
+
+            statement = myDB.prepareStatement(sql);
+
+            if (args != null) {
+                for (int i = 0; i < args.length; i++) {
+                    statement.setString(i + 1, args[i]);
+                }
+            }
+            rs = statement.executeQuery();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+
+        // TODO Hack to get Rowcount
+        ResultSet rs2 = null;
+        int rowcount = 0;
+        PreparedStatement statement2 = null;
+        try {
+
+            statement2 = myDB.prepareStatement("select count(*) from (" + sql + ")");
+
+            if (args != null) {
+                for (int i = 0; i < args.length; i++) {
+                    statement2.setString(i + 1, args[i]);
+                }
+            }
+            rs2 = statement2.executeQuery();
+
+            rs2.next();
+
+            rowcount = Integer.parseInt(rs2.getString(1));
+            statement2.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                statement2.close();
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+            }
+        }
+
+        return new DesktopCursor(rs, rowcount, statement);
     }
+
+
 
     @Override
     public void setAutoCommit(boolean autoCommit) {
         try {
-            connection.setAutoCommit(autoCommit);
+            myDB.setAutoCommit(autoCommit);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void endTransaction() {
+    public void execSQL(String sql) {
+        if (myDB == null)
+            return;
+
+        log.debug("execSQL : " + sql);
+
+        Statement statement = null;
         try {
-            connection.commit();
+            statement = myDB.createStatement();
+            statement.execute(sql);
         } catch (SQLException e) {
+
             e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+            }
         }
+
     }
 
     @Override
-    public void setTransactionSuccessful() {
-        try {
-            connection.setAutoCommit(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    public long update(String tablename, Parameters val, String whereClause, String[] whereArgs) {
 
-    @Override
-    public long insert(String tablename, Database.Parameters val) {
-        if (connection == null)
+        if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
+            StringBuilder sb = new StringBuilder("Update @ Table:" + tablename);
+            sb.append("Parameters:" + val.toString());
+            sb.append("WHERECLAUSE:" + whereClause);
+
+            if (whereArgs != null) {
+                for (String arg : whereArgs) {
+                    sb.append(arg + ", ");
+                }
+            }
+
+            log.debug(sb.toString());
+        }
+
+        if (myDB == null)
             return 0;
 
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("update ");
+        sql.append(tablename);
+        sql.append(" set");
+
+        int i = 0;
+        for (Entry<String, Object> entry : val.entrySet()) {
+            i++;
+            sql.append(" ");
+            sql.append(entry.getKey());
+            sql.append("=?");
+            if (i != val.size()) {
+                sql.append(",");
+            }
+        }
+
+        if (!whereClause.isEmpty()) {
+            sql.append(" where ");
+            sql.append(whereClause);
+        }
+        PreparedStatement st = null;
+        try {
+            st = myDB.prepareStatement(sql.toString());
+
+            int j = 0;
+            for (Entry<String, Object> entry : val.entrySet()) {
+                j++;
+                st.setObject(j, entry.getValue());
+            }
+
+            if (whereArgs != null) {
+                for (int k = 0; k < whereArgs.length; k++) {
+                    st.setString(j + k + 1, whereArgs[k]);
+                }
+            }
+
+            return st.executeUpdate();
+
+        } catch (SQLException e) {
+            return 0;
+        } finally {
+            try {
+                st.close();
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    @Override
+    public long insert(String tablename, Parameters val) {
+        if (myDB == null)
+            return 0;
         StringBuilder sql = new StringBuilder();
 
         sql.append("insert into ");
@@ -181,7 +266,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         sql.append(" (");
 
         int i = 0;
-        for (Map.Entry<String, Object> entry : val.entrySet()) {
+        for (Entry<String, Object> entry : val.entrySet()) {
             i++;
             sql.append(" ");
             sql.append(entry.getKey());
@@ -203,14 +288,15 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         sql.append(" )");
         PreparedStatement st = null;
         try {
-            st = connection.prepareStatement(sql.toString());
+            st = myDB.prepareStatement(sql.toString());
 
             int j = 0;
-            for (Map.Entry<String, Object> entry : val.entrySet()) {
+            for (Entry<String, Object> entry : val.entrySet()) {
                 j++;
                 st.setObject(j, entry.getValue());
             }
 
+            log.debug("INSERT: " + sql);
             return st.execute() ? 0 : 1;
 
         } catch (SQLException e) {
@@ -219,75 +305,6 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             try {
                 st.close();
             } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public long update(String tablename, Database.Parameters val, String whereClause, String[] whereArgs) {
-        if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
-            StringBuilder sb = new StringBuilder("Update Table:" + tablename);
-            sb.append("Parameters:" + val.toString());
-            sb.append("WHERECLAUSE:" + whereClause);
-
-            if (whereArgs != null) {
-                for (String arg : whereArgs) {
-                    sb.append(arg + ", ");
-                }
-            }
-
-            log.debug(sb.toString());
-        }
-
-        if (connection == null)
-            return 0;
-
-        StringBuilder sql = new StringBuilder();
-
-        sql.append("update ");
-        sql.append(tablename);
-        sql.append(" set");
-
-        int i = 0;
-        for (Map.Entry<String, Object> entry : val.entrySet()) {
-            i++;
-            sql.append(" ");
-            sql.append(entry.getKey());
-            sql.append("=?");
-            if (i != val.size()) {
-                sql.append(",");
-            }
-        }
-
-        if (!whereClause.isEmpty()) {
-            sql.append(" where ");
-            sql.append(whereClause);
-        }
-        PreparedStatement st = null;
-        try {
-            st = connection.prepareStatement(sql.toString());
-
-            int j = 0;
-            for (Map.Entry<String, Object> entry : val.entrySet()) {
-                j++;
-                st.setObject(j, entry.getValue());
-            }
-
-            if (whereArgs != null) {
-                for (int k = 0; k < whereArgs.length; k++) {
-                    st.setString(j + k + 1, whereArgs[k]);
-                }
-            }
-            return st.executeUpdate();
-
-        } catch (SQLException e) {
-            return 0;
-        } finally {
-            try {
-                st.close();
-            } catch (SQLException e) {
-
                 e.printStackTrace();
             }
         }
@@ -308,7 +325,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             log.debug(sb.toString());
         }
 
-        if (connection == null)
+        if (myDB == null)
             return 0;
         StringBuilder sql = new StringBuilder();
 
@@ -321,7 +338,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         }
         PreparedStatement st = null;
         try {
-            st = connection.prepareStatement(sql.toString());
+            st = myDB.prepareStatement(sql.toString());
 
             if (whereArgs != null) {
                 for (int i = 0; i < whereArgs.length; i++) {
@@ -341,11 +358,47 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
                 e.printStackTrace();
             }
         }
+
+    }
+
+//    @Override
+//    public void beginTransaction() {
+//        try {
+//            log.trace("begin transaction");
+//            if (myDB != null)
+//                myDB.setAutoCommit(false);
+//        } catch (SQLException e) {
+//
+//            e.printStackTrace();
+//        }
+//    }
+
+    @Override
+    public void setTransactionSuccessful() {
+        try {
+            log.trace("set Transaction Successful");
+            if (myDB != null)
+                myDB.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public long insertWithConflictReplace(String tablename, Database.Parameters val) {
-        if (connection == null)
+    public void endTransaction() {
+        try {
+            log.trace("endTransaction");
+            if (myDB != null)
+                myDB.setAutoCommit(true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public long insertWithConflictReplace(String tablename, Parameters val) {
+        if (myDB == null)
             return 0;
 
         log.debug("insertWithConflictReplace @Table:" + tablename + "Parameters: " + val.toString());
@@ -356,7 +409,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         sql.append(" (");
 
         int i = 0;
-        for (Map.Entry<String, Object> entry : val.entrySet()) {
+        for (Entry<String, Object> entry : val.entrySet()) {
             i++;
             sql.append(" ");
             sql.append(entry.getKey());
@@ -378,10 +431,10 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         sql.append(" )");
         PreparedStatement st = null;
         try {
-            st = connection.prepareStatement(sql.toString());
+            st = myDB.prepareStatement(sql.toString());
 
             int j = 0;
-            for (Map.Entry<String, Object> entry : val.entrySet()) {
+            for (Entry<String, Object> entry : val.entrySet()) {
                 j++;
                 st.setObject(j, entry.getValue());
             }
@@ -398,11 +451,12 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
                 e.printStackTrace();
             }
         }
+
     }
 
     @Override
-    public long insertWithConflictIgnore(String tablename, Database.Parameters val) {
-        if (connection == null)
+    public long insertWithConflictIgnore(String tablename, Parameters val) {
+        if (myDB == null)
             return 0;
 
         log.debug("insertWithConflictIgnore @Table:" + tablename + "Parameters: " + val.toString());
@@ -414,7 +468,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         sql.append(" (");
 
         int i = 0;
-        for (Map.Entry<String, Object> entry : val.entrySet()) {
+        for (Entry<String, Object> entry : val.entrySet()) {
             i++;
             sql.append(" ");
             sql.append(entry.getKey());
@@ -436,10 +490,10 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         sql.append(" )");
         PreparedStatement st = null;
         try {
-            st = connection.prepareStatement(sql.toString());
+            st = myDB.prepareStatement(sql.toString());
 
             int j = 0;
-            for (Map.Entry<String, Object> entry : val.entrySet()) {
+            for (Entry<String, Object> entry : val.entrySet()) {
                 j++;
                 st.setObject(j, entry.getValue());
             }
@@ -457,4 +511,6 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             }
         }
     }
+
+
 }
