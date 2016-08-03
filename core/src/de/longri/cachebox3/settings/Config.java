@@ -35,6 +35,8 @@ public class Config extends Settings {
             Data = null;
         }
 
+        SettingsDB.beginTransaction();
+
         boolean needRestart = false;
 
         try {

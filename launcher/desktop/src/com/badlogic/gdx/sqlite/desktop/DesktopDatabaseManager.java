@@ -28,7 +28,12 @@ public class DesktopDatabaseManager implements SQLiteGdxDatabaseManager {
 
     @Override
     public SQLiteGdxDatabase getNewDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
-        return new DesktopDatabase(dbFileHandle, dbVersion, dbOnCreateQuery, dbOnUpgradeQuery);
+        try {
+            return new TestDatabase(dbFileHandle, dbVersion, dbOnCreateQuery, dbOnUpgradeQuery);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
