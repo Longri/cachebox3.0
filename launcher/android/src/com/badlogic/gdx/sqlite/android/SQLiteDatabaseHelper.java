@@ -28,30 +28,21 @@ import com.badlogic.gdx.files.FileHandle;
 public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
 
     private final String dbName;
-    private final int dbVersion;
-    private final String dbOnCreateQuery;
-    private final String dbOnUpgradeQuery;
 
-    public SQLiteDatabaseHelper(Context context, FileHandle dbFileHandle, CursorFactory factory, int version, String dbOnCreateQuery,
-                                String dbOnUpgradeQuery) {
-        super(context, dbFileHandle.file().getAbsolutePath(), factory, version);
+
+    public SQLiteDatabaseHelper(Context context, FileHandle dbFileHandle, CursorFactory factory) {
+        super(context, dbFileHandle.file().getAbsolutePath(), factory,1);
         this.dbName = dbFileHandle.file().getAbsolutePath();
-        this.dbVersion = version;
-        this.dbOnCreateQuery = dbOnCreateQuery;
-        this.dbOnUpgradeQuery = dbOnUpgradeQuery;
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        if (dbOnCreateQuery != null) database.execSQL(dbOnCreateQuery);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        if (dbOnUpgradeQuery != null) {
-            database.execSQL(dbOnUpgradeQuery);
-            onCreate(database);
-        }
+
     }
 
 }

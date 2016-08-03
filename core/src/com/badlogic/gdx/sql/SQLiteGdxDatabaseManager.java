@@ -32,16 +32,8 @@ public interface SQLiteGdxDatabaseManager {
      * version.
      *
      * @param dbFileHandle     The name of the database.
-     * @param dbVersion        number of the database (starting at 1); if the database is older, dbOnUpgradeQuery will be used to upgrade
-     *                         the database (on Android only)
-     * @param dbOnCreateQuery  The query that should be executed on the creation of the database. This query would usually create
-     *                         the necessary tables in the database.
-     * @param dbOnUpgradeQuery The query that should be executed on upgrading the database from an old version to a new one.
      * @return Returns a {@link SQLiteGdxDatabase} object pointing to an existing or not-yet-created database.
      */
-    public SQLiteGdxDatabase getNewDatabase(FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery);
+    public SQLiteGdxDatabase getNewDatabase(FileHandle dbFileHandle);
 
-//	SQLiteGdxDatabaseCursor getNewDatabaseCursor(ResultSet rs, int rowcount);
-//
-//	SQLiteGdxDatabaseCursor getNewDatabaseCursor(ResultSet rs);
 }

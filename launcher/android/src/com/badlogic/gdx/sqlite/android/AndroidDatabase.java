@@ -45,21 +45,16 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
     private Context context;
 
     private final FileHandle dbFileHandle;
-    private final int dbVersion;
-    private final String dbOnCreateQuery;
-    private final String dbOnUpgradeQuery;
 
-    public AndroidDatabase(Context context, FileHandle dbFileHandle, int dbVersion, String dbOnCreateQuery, String dbOnUpgradeQuery) {
+
+    public AndroidDatabase(Context context, FileHandle dbFileHandle) {
         this.context = context;
         this.dbFileHandle = dbFileHandle;
-        this.dbVersion = dbVersion;
-        this.dbOnCreateQuery = dbOnCreateQuery;
-        this.dbOnUpgradeQuery = dbOnUpgradeQuery;
     }
 
     @Override
     public void setupDatabase() {
-        helper = new SQLiteDatabaseHelper(this.context, dbFileHandle, null, dbVersion, dbOnCreateQuery, dbOnUpgradeQuery);
+        helper = new SQLiteDatabaseHelper(this.context, dbFileHandle, null);
     }
 
     @Override

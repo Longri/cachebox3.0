@@ -40,8 +40,8 @@ public class InitialWorkPathTask extends AbstractInitTask {
         Database.Data.StartUp(dataFileHandle);
 
         FileHandle fieldNotesFileHandle = Gdx.files.absolute(CB.WorkPath + "/user/fieldNotes.db3");
-        Database.Data = new Database(Database.DatabaseType.FieldNotes);
-        Database.Data.StartUp(fieldNotesFileHandle);
+        Database.FieldNotes = new Database(Database.DatabaseType.FieldNotes);
+        Database.FieldNotes.StartUp(fieldNotesFileHandle);
 
 
         //load settings
