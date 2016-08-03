@@ -21,7 +21,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteStatement;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabase;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
@@ -30,7 +29,6 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.sqlite.Database;
 import org.slf4j.LoggerFactory;
 
-import java.sql.PreparedStatement;
 import java.util.Map;
 
 /**
@@ -97,32 +95,7 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
             throw new SQLiteGdxException(e);
         }
     }
-
-    @Override
-    public SQLiteGdxDatabaseCursor rawQuery(SQLiteGdxDatabaseCursor cursor, String sql) throws SQLiteGdxException {
-        AndroidCursor aCursor = (AndroidCursor) cursor;
-        try {
-            Cursor tmp = database.rawQuery(sql, null);
-            aCursor.setNativeCursor(tmp);
-            return aCursor;
-        } catch (SQLiteException e) {
-            throw new SQLiteGdxException(e);
-        }
-    }
-
-    @Override
-    public void commit() {
-        database.setTransactionSuccessful();
-    }
-
-    @Override
-    public PreparedStatement prepareStatement(String sql) {
-
-        SQLiteStatement statement = database.compileStatement(sql);
-
-        return null;
-    }
-
+    
     @Override
     public void setAutoCommit(boolean autoCommit) {
         if (autoCommit) {

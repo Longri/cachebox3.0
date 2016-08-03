@@ -147,20 +147,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         return new DesktopCursor(rs, rowcount, statement);
     }
 
-    @Override
-    public SQLiteGdxDatabaseCursor rawQuery(SQLiteGdxDatabaseCursor cursor, String sql) throws SQLiteGdxException {
-       throw new NotImplementedException("rawQuery");
-    }
 
-    @Override
-    public void commit() {
-        throw new NotImplementedException("commit");
-    }
-
-    @Override
-    public PreparedStatement prepareStatement(String sql) {
-        throw new NotImplementedException("prepareStatement");
-    }
 
     @Override
     public void setAutoCommit(boolean autoCommit) {
