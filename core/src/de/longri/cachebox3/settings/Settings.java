@@ -191,7 +191,7 @@ public class Settings {
     public static final SettingBool LiveMapEnabeld = (SettingBool) SettingsList.addSetting(new SettingBool("LiveMapEnabeld", SettingCategory.LiveMap, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
 
     public static final SettingBool AppRaterDontShowAgain = (SettingBool) SettingsList.addSetting(new SettingBool("AppRaterDontShowAgain", SettingCategory.RememberAsk, NORMAL, false, SettingStoreType.Platform, SettingUsage.ACB));
-    public static final SettingInt AppRaterlaunchCount = (SettingInt) SettingsList.addSetting(new SettingInt("AppRaterlaunchCount", SettingCategory.Internal, NEVER, 0, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingInt AppRaterlaunchCount = (SettingInt) SettingsList.addSetting(new SettingInt("AppRaterlaunchCount", SettingCategory.Internal, NEVER, 0, SettingStoreType.Platform, SettingUsage.ACB));
     public static final SettingString AppRaterFirstLunch = (SettingString) SettingsList.addSetting(new SettingString("AppRaterFirstLunch", SettingCategory.Internal, NEVER, "0", SettingStoreType.Platform, SettingUsage.ACB));
 
     public static final SettingBool nightMode = (SettingBool) SettingsList.addSetting(new SettingBool("nightMode", SettingCategory.Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));

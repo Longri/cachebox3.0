@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLogger;
@@ -48,6 +49,11 @@ public class CacheboxMain extends ApplicationAdapter {
         stage = new Splash(new Splash.LoadReady() {
             @Override
             public void ready() {
+
+                Config.AppRaterlaunchCount.setValue(Config.AppRaterlaunchCount.getValue() + 1);
+                Config.AcceptChanges();
+
+
                 // Splash is ready with initialisation
                 // now switch Stage to ViewManager
                 synchronized (stage) {

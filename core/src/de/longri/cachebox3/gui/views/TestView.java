@@ -57,8 +57,7 @@ public class TestView extends AbstractView {
         sb.append("LaunchCount:" + Config.AppRaterlaunchCount.getValue());
 
         nameLabel.setText(sb.toString());
-        Config.AppRaterlaunchCount.setValue(Config.AppRaterlaunchCount.getValue() + 1);
-        Config.AcceptChanges();
+
 
     }
 
