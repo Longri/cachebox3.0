@@ -60,6 +60,7 @@ public class TestView extends AbstractView {
                     public void result(Object obj) {
                         System.out.println("result " + obj);
                         this.hide();
+                        this.remove();
                     }
                 };
 
