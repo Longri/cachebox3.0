@@ -226,8 +226,8 @@ public class Settings {
     public static final SettingColor SolvedMysteryColor = (SettingColor) SettingsList.addSetting(new SettingColor("SolvedMysteryColor", SettingCategory.Skin, EXPERT, new HSV_Color(0.2f, 1f, 0.2f, 1f), SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool SettingsShowExpert = (SettingBool) SettingsList.addSetting(new SettingBool("SettingsShowExpert", SettingCategory.Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool SettingsShowAll = (SettingBool) SettingsList.addSetting(new SettingBool("SettingsShowAll", SettingCategory.Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingFile Sel_LanguagePath = (SettingFile) SettingsList.addSetting(new SettingFile("Sel_LanguagePath", SettingCategory.Folder, NEVER, "data/lang/en-GB/strings.ini", SettingStoreType.Platform, SettingUsage.ALL, "lan"));
-    public static final SettingFolder LanguagePath = (SettingFolder) SettingsList.addSetting(new SettingFolder("LanguagePath", SettingCategory.Folder, NEVER, "data/lang", SettingStoreType.Global, SettingUsage.ALL, true));
+    public static final SettingFile Sel_LanguagePath = (SettingFile) SettingsList.addSetting(new SettingFile("Sel_LanguagePath", SettingCategory.Folder, NEVER, "lang/en-GB/strings.ini", SettingStoreType.Platform, SettingUsage.ALL, "lan"));
+    public static final SettingFolder LanguagePath = (SettingFolder) SettingsList.addSetting(new SettingFolder("LanguagePath", SettingCategory.Folder, NEVER, "lang", SettingStoreType.Global, SettingUsage.ALL, true));
 
 
     public static final SettingFolder TileCacheFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("TileCacheFolder", SettingCategory.Folder, NEVER, CB.WorkPath + "/repository/cache", SettingStoreType.Global, SettingUsage.ALL, true));

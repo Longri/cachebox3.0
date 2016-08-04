@@ -184,4 +184,40 @@ public class Utils {
         }
     }
 
+    public static String GetFileExtension(String filename) {
+        int dotposition = filename.lastIndexOf(".");
+        String ext = "";
+        if (dotposition > -1) {
+            ext = filename.substring(dotposition + 1, filename.length());
+        }
+
+        return ext;
+    }
+
+    public static String GetFileNameWithoutExtension(String filename) {
+        int dotposition = filename.lastIndexOf(".");
+        if (dotposition >= 0)
+            filename = filename.substring(0, dotposition);
+        int slashposition = Math.max(filename.lastIndexOf("/"), filename.lastIndexOf("\\"));
+        if (slashposition >= 0)
+            filename = filename.substring(slashposition + 1, filename.length());
+        return filename;
+
+    }
+
+    public static String GetFileName(String filename) {
+        int slashposition = Math.max(filename.lastIndexOf("/"), filename.lastIndexOf("\\"));
+        if (slashposition >= 0)
+            filename = filename.substring(slashposition + 1, filename.length());
+        return filename;
+
+    }
+
+    public static String GetDirectoryName(String filename) {
+        int slashposition = Math.max(filename.lastIndexOf("/"), filename.lastIndexOf("\\"));
+        if (slashposition >= 0)
+            filename = filename.substring(0, slashposition);
+        return filename;
+    }
+
 }

@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.kotcrab.vis.ui.widget.VisWindow;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.gui.actions.*;
@@ -210,4 +211,5 @@ public class ViewManager extends Stage {
     public AbstractView getActView() {
         return actView;
     }
+
 }
