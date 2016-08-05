@@ -25,10 +25,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import org.oscim.backend.CanvasAdapter;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ import java.util.ArrayList;
  * Created by Longri on 20.07.2016.
  */
 public class SvgSkin extends Skin {
-
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(SvgSkin.class);
 
     /**
      * Create a Skin from given Jason-file!
@@ -82,6 +84,8 @@ public class SvgSkin extends Skin {
                 pixmap = Utils.getPixmapFromBitmap(CanvasAdapter.decodeBitmap(fileHandle.read()));
                 name = fileHandle.nameWithoutExtension();
             }
+
+            log.debug("Pack Svg: " + name + " Size:" + pixmap.getWidth() + "/" + pixmap.getHeight());
 
             if (pixmap != null) packer.pack(name, pixmap);
 
@@ -209,11 +213,38 @@ public class SvgSkin extends Skin {
             public ColorDrawable read(Json json, JsonValue jsonData, Class type) {
                 Color color = json.readValue("color", Color.class, jsonData);
                 ColorDrawable drawable = new ColorDrawable(color);
-//                if (drawable instanceof BaseDrawable) {
-//                    BaseDrawable named = (BaseDrawable)drawable;
-//                    named.setName(jsonData.name + " (" + color + ")");
-//                }
                 return drawable;
+            }
+        });
+
+        json.setSerializer(SvgNinePatchDrawable.class, new Json.ReadOnlySerializer<SvgNinePatchDrawable>() {
+            public SvgNinePatchDrawable read(Json json, JsonValue jsonData, Class type) {
+
+                String name = json.readValue("name", String.class, jsonData);
+                int left = json.readValue("left", int.class, 0, jsonData);
+                int right = json.readValue("right", int.class, 0, jsonData);
+                int top = json.readValue("top", int.class, 0, jsonData);
+                int bottom = json.readValue("bottom", int.class, 0, jsonData);
+                int leftWidth = json.readValue("leftWidth", int.class, 0, jsonData);
+                int rightWidth = json.readValue("rightWidth", int.class, 0, jsonData);
+                int topHeight = json.readValue("topHeight", int.class, 0, jsonData);
+                int bottomHeight = json.readValue("bottomHeight", int.class, 0, jsonData);
+
+                // get texture region
+                TextureRegion textureRegion = getRegion(name);
+
+                //scale nine patch regions
+                left = CB.getScaledInt(left);
+                right = CB.getScaledInt(right);
+                top = CB.getScaledInt(top);
+                bottom = CB.getScaledInt(bottom);
+                leftWidth = CB.getScaledInt(leftWidth);
+                rightWidth = CB.getScaledInt(rightWidth);
+                topHeight = CB.getScaledInt(topHeight);
+                bottomHeight = CB.getScaledInt(bottomHeight);
+
+                return new SvgNinePatchDrawable(new NinePatch(textureRegion, left, right, top, bottom),
+                        leftWidth, rightWidth, topHeight, bottomHeight);
             }
         });
 

@@ -16,19 +16,21 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.actions.Action_Show_Quit;
-import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.translation.Lang;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.utils.HSV_Color;
+import de.longri.cachebox3.utils.UI_Size_Base;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Longri on 27.07.16.
@@ -53,18 +55,37 @@ public class TestView extends AbstractView {
         this.addActor(colorWidget);
         this.addActor(nameLabel);
 
-        Button testButton = new Button(CB.getSkin());
+
+        final VisTextButton testButton = new VisTextButton(Translation.getLangId());
+        testButton.setSize(UI_Size_Base.that.getButtonWidthWide(), UI_Size_Base.that.getButtonHeight());
+
         testButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                //set next Translation
 
+                ArrayList<Lang> langs = Translation.GetLangs("lang");
+                String actLangId = Translation.getLangId();
+                int idx = 0;
+                for (Lang lang : langs) {
+                    if (lang.Name.equals(actLangId)) {
+                        break;
+                    }
+                    idx++;
+                }
 
-                new Action_Show_Quit().Execute();
+                if (idx == langs.size()-1) idx = 0;
+                else idx++;
 
-
+                Lang nextLang=langs.get(idx);
+                try {
+                    Translation.LoadTranslation(nextLang.Path);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                testButton.setText(Translation.getLangId());
             }
         });
         this.addActor(testButton);
-
     }
 
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import de.longri.cachebox3.CB;
 
 public class ColorDrawable extends EmptyDrawable {
 
@@ -35,8 +36,13 @@ public class ColorDrawable extends EmptyDrawable {
 
     @Override
     public void draw(Batch batch, float x, float y, float width, float height) {
+
+
         if (pixelSprite == null) {
-            setSpriteFromPixMap();
+            pixelSprite = CB.getSprite("color");
+            if (pixelSprite == null) {
+                setSpriteFromPixMap();
+            }
         }
 
         if (pixelSprite != null) {

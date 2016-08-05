@@ -55,7 +55,7 @@ public class UI_Size_Base {
 
         margin = (int) (10 * scale);
 
-        float NormalTextSize = Settings.FONT_SIZE_NORMAL.getValue() * 3.2f;
+        float NormalTextSize = Settings.FONT_SIZE_NORMAL.getValue() * 5f;
 
         int b = (int) (NormalTextSize * scale);
         Button = new SizeF(b, b);

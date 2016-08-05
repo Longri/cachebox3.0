@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.kotcrab.vis.ui.widget.VisDialog;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.*;
@@ -28,6 +29,8 @@ public class ButtonDialog extends VisDialog {
         CB_RectF rec = calcMsgBoxSize(msg, true, (buttons != MessageBoxButtons.NOTHING), (icon != MessageBoxIcon.None), false).getBounds();
 
         this.setBounds(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight());
+
+        this.setDebug(true, true);
 
         //TODO add Icon to ButtonDialog
 //        SizeF contentSize = getContentSize();
@@ -85,10 +88,13 @@ public class ButtonDialog extends VisDialog {
         return ret;
     }
 
+    @Override
+    public void pack() {
+        //TODO remove ContentTable and set own
+
+    }
 
     public void setButtonCaptions(MessageBoxButtons buttons) {
-
-        this.button(Translation.Get("yes"), 1);
 
         if (buttons == MessageBoxButtons.YesNoRetry) {
             this.button(Translation.Get("yes"), BUTTON_POSITIVE);
@@ -116,6 +122,7 @@ public class ButtonDialog extends VisDialog {
         } else if (buttons == MessageBoxButtons.Cancel) {
             this.button(Translation.Get("cancel"), BUTTON_NEGATIVE);
         }
+
     }
 
     private static Sprite getIcon(MessageBoxIcon msgIcon) {
@@ -182,16 +189,33 @@ public class ButtonDialog extends VisDialog {
 
     /**
      * Called when a button is clicked. The dialog will be hidden after this method returns unless {@link #cancel()} is called.
+     *
      * @param object The object specified when the button was added.
      */
-    protected void result (Object object) {
+    protected void result(Object object) {
 
-        if(msgBoxClickListener!=null){
-            msgBoxClickListener.onClick((Integer)object,null);
+        if (msgBoxClickListener != null) {
+            msgBoxClickListener.onClick((Integer) object, null);
             this.hide();
             this.remove();
         }
 
+    }
+
+    /**
+     * Adds a text button to the button table.
+     *
+     * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null.
+     */
+    public VisDialog button(String text, Object object, VisTextButton.VisTextButtonStyle buttonStyle) {
+        VisTextButton button = new VisTextButton(text, buttonStyle);
+
+
+        button.getPrefWidth();
+
+        button.setWidth(UI_Size_Base.that.getButtonWidth());
+        button.setHeight(UI_Size_Base.that.getButtonHeight());
+        return button(button, object);
     }
 
 

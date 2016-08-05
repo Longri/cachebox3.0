@@ -17,7 +17,11 @@
         left: 30,
         right: 30,
         top: 30,
-        bottom: 30
+        bottom: 30,
+        leftWidth: 10,
+        rightWidth: 10,
+        topHeight: 10,
+        bottomHeight: 10
       },
       drawable_default_button_pressed:{
         name: default_button_pressed,
@@ -150,7 +154,8 @@
 
       },
       nav: {
-        down: default_button_pressed, up: default_button
+        down: default_button_pressed,
+        up: default_button
       }
     }
 
@@ -165,9 +170,9 @@
 
     de.longri.cachebox3.gui.widgets.GestureButton$GestureButtonStyle: {
       nav: {
-      up: drawable_nav,
-      down: drawable_nav_pressed,
-      select: drawable_nav_selected
+        up: drawable_nav,
+        down: drawable_nav_pressed,
+        select: drawable_nav_selected
       },
       db: {
         up: drawable_db,
@@ -192,10 +197,10 @@
     }
 
   de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle: {
-  dialog_stage_background:{
-    color: dialog_background
+    dialog_stage_background:{
+      color: dialog_background
+    }
   }
-}
 
 
     com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
