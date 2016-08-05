@@ -19,25 +19,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.widgets.CB_View_Base;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
 
 /**
  * Created by Longri on 23.07.16.
  */
-public abstract class AbstractView extends WidgetGroup {
+public abstract class AbstractView extends CB_View_Base {
 
-    protected final String name;
     ColorWidget colorWidget;
     VisLabel nameLabel;
 
     public AbstractView(String name) {
-        this.name = name;
+        super(name);
         create();
     }
 
     protected void create() {
         // create a Label with name for default
-        nameLabel = new VisLabel(this.name);
+        nameLabel = new VisLabel(this.NAME);
         nameLabel.setAlignment(Align.center);
         nameLabel.setPosition(10, 10);
 
@@ -57,14 +57,12 @@ public abstract class AbstractView extends WidgetGroup {
 
     public abstract void saveState();
 
-    public abstract void dispose();
-
     protected void boundsChanged(float x, float y, float width, float height) {
         colorWidget.setBounds(0, 0, this.getWidth(), this.getHeight());
         nameLabel.setBounds(0, 0, this.getWidth(), this.getHeight());
     }
 
     public String getName() {
-        return this.name;
+        return this.NAME;
     }
 }

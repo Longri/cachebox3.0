@@ -35,7 +35,7 @@ public class AboutView extends AbstractView implements PositionChangedEvent {
 
     @Override
     protected void create() {
-        coordinateLabel = new VisLabel(this.name);
+        coordinateLabel = new VisLabel(this.NAME);
         coordinateLabel.setAlignment(Align.center);
         coordinateLabel.setPosition(10, 10);
         this.addActor(coordinateLabel);

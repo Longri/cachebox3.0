@@ -384,7 +384,7 @@ public class Splash extends Stage {
 //
 //    /**
 //     * Step 5 <br>
-//     * show select DB Dialog
+//     * show select DB ButtonDialog
 //     */
 //    private void ini_SelectDB() {
 //        Log.debug(log, "ini_SelectDB");

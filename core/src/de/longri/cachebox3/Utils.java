@@ -26,6 +26,7 @@ import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -220,4 +221,19 @@ public class Utils {
         return filename;
     }
 
+    /**
+     * überprüft ob ein File existiert! Und nicht leer ist (0 Bytes)
+     *
+     * @param filename
+     * @return true, wenn das File existiert, ansonsten false.
+     */
+    public static boolean FileExistsNotEmpty(String filename) {
+        File file = new File(filename);
+        if (!file.exists())
+            return false;
+        if (file.length() <= 0)
+            return false;
+
+        return true;
+    }
 }

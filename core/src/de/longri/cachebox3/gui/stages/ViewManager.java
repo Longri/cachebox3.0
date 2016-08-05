@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
-import com.kotcrab.vis.ui.widget.VisWindow;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.gui.actions.*;
@@ -100,10 +99,10 @@ public class ViewManager extends Stage {
 
     public void showView(AbstractView view) {
 
-        log.debug("show view:"+view.getName());
+        log.debug("show view:" + view.getName());
 
         if (actView != null) {
-            log.debug("remove and dispose actView"+ actView.getName());
+            log.debug("remove and dispose actView" + actView.getName());
             this.getRoot().removeActor(actView);
             actView.saveState();
             actView.dispose();
@@ -112,7 +111,7 @@ public class ViewManager extends Stage {
         this.actView = view;
         this.addActor(view);
         setActViewBounds();
-        log.debug("reload view state:"+ view.getName());
+        log.debug("reload view state:" + view.getName());
         this.actView.reloadState();
     }
 
@@ -191,7 +190,7 @@ public class ViewManager extends Stage {
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionParking, false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView, false, GestureDirection.Left));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
-//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowJokerView, false));
+        tool_button.addAction(new ActionButton(new Action_Show_Quit(), true));
 //
         misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, ActionButton.GestureDirection.Up));
 //        mAboutButtonOnLeftTab.addAction(new CB_ActionButton(actionShowCreditsView, false));

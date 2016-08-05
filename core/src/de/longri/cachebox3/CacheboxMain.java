@@ -23,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.sqlite.Database;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLogger;
 
@@ -42,6 +41,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     SpriteBatch batch;
     Stage stage;
+    public static float stateTime;
 
     @Override
     public void create() {
@@ -74,6 +74,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void render() {
+        stateTime += Gdx.graphics.getDeltaTime();
         Gdx.gl.glClearColor(CB.backgroundColor.r, CB.backgroundColor.g, CB.backgroundColor.b, CB.backgroundColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
