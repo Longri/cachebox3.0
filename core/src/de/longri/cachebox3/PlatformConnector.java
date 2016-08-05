@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import org.oscim.backend.canvas.Bitmap;
 
@@ -31,7 +32,6 @@ public abstract class PlatformConnector {
     public static void init(PlatformConnector connector) {
         platformConnector = connector;
     }
-
 
     // SVG implementations #############################################################################################
     public enum SvgScaleType {

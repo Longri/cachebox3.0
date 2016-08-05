@@ -18,6 +18,7 @@ package de.longri.cachebox3;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -127,6 +128,24 @@ public class CB {
         if (LOG_LEVEL_DEBUG.equals(logLevel)) return 4;
         if (LOG_LEVEL_INFO.equals(logLevel)) return 2;
         return 0;
+    }
+
+    public static Sprite getSprite(String name) {
+        return actSkin.getSprite(name);
+    }
+
+    public static void callQuit() {
+        //TODO save last selected cache
+//        if (GlobalCore.isSetSelectedCache()) {
+//            // speichere selektierten Cache, da nicht alles über die SelectedCacheEventList läuft
+//            Config.LastSelectedCache.setValue(GlobalCore.getSelectedCache().getGcCode());
+//            Config.AcceptChanges();
+//            Log.debug(log, "LastSelectedCache = " + GlobalCore.getSelectedCache().getGcCode());
+//        }
+
+       // do Platform spezific
+
+        Gdx.app.exit();
     }
 
     public enum Platform {

@@ -26,6 +26,7 @@ import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -184,4 +185,55 @@ public class Utils {
         }
     }
 
+    public static String GetFileExtension(String filename) {
+        int dotposition = filename.lastIndexOf(".");
+        String ext = "";
+        if (dotposition > -1) {
+            ext = filename.substring(dotposition + 1, filename.length());
+        }
+
+        return ext;
+    }
+
+    public static String GetFileNameWithoutExtension(String filename) {
+        int dotposition = filename.lastIndexOf(".");
+        if (dotposition >= 0)
+            filename = filename.substring(0, dotposition);
+        int slashposition = Math.max(filename.lastIndexOf("/"), filename.lastIndexOf("\\"));
+        if (slashposition >= 0)
+            filename = filename.substring(slashposition + 1, filename.length());
+        return filename;
+
+    }
+
+    public static String GetFileName(String filename) {
+        int slashposition = Math.max(filename.lastIndexOf("/"), filename.lastIndexOf("\\"));
+        if (slashposition >= 0)
+            filename = filename.substring(slashposition + 1, filename.length());
+        return filename;
+
+    }
+
+    public static String GetDirectoryName(String filename) {
+        int slashposition = Math.max(filename.lastIndexOf("/"), filename.lastIndexOf("\\"));
+        if (slashposition >= 0)
+            filename = filename.substring(0, slashposition);
+        return filename;
+    }
+
+    /**
+     * überprüft ob ein File existiert! Und nicht leer ist (0 Bytes)
+     *
+     * @param filename
+     * @return true, wenn das File existiert, ansonsten false.
+     */
+    public static boolean FileExistsNotEmpty(String filename) {
+        File file = new File(filename);
+        if (!file.exists())
+            return false;
+        if (file.length() <= 0)
+            return false;
+
+        return true;
+    }
 }

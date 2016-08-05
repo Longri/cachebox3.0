@@ -2,7 +2,8 @@
     com.badlogic.gdx.graphics.Color: {
       background: { r: 1, g: 1, b: 1, a: 1 },
       abstract_background: { r: 1, g: 0, b: 0, a: 1 },
-      font_color: { r: 0, g: 0, b: 0, a: 1 }
+      font_color: { r: 0, g: 0, b: 0, a: 1 },
+      dialog_background: { r: 0, g: 0, b: 0, a: 0.8 },
     }
 
     com.badlogic.gdx.graphics.g2d.BitmapFont: {
@@ -16,7 +17,11 @@
         left: 30,
         right: 30,
         top: 30,
-        bottom: 30
+        bottom: 30,
+        leftWidth: 10,
+        rightWidth: 10,
+        topHeight: 10,
+        bottomHeight: 10
       },
       drawable_default_button_pressed:{
         name: default_button_pressed,
@@ -149,7 +154,8 @@
 
       },
       nav: {
-        down: default_button_pressed, up: default_button
+        down: default_button_pressed,
+        up: default_button
       }
     }
 
@@ -164,9 +170,9 @@
 
     de.longri.cachebox3.gui.widgets.GestureButton$GestureButtonStyle: {
       nav: {
-      up: drawable_nav,
-      down: drawable_nav_pressed,
-      select: drawable_nav_selected
+        up: drawable_nav,
+        down: drawable_nav_pressed,
+        select: drawable_nav_selected
       },
       db: {
         up: drawable_db,
@@ -188,6 +194,30 @@
        down: drawable_misc_pressed,
        select: drawable_misc_selected
       }
-}
+    }
+
+  de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle: {
+    dialog_stage_background:{
+      color: dialog_background
+    }
+  }
+
+
+    com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+      dialog: {
+        background: drawable_default_button,
+        titleFont: normal_font,
+        stageBackground: dialog_stage_background
+      }
+    }
+
+    com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle: {
+      default: {
+        font: normal_font, fontColor: font_color,
+        up: drawable_default_button,
+        down: drawable_default_button_pressed,
+      }
+    }
+
 
 }

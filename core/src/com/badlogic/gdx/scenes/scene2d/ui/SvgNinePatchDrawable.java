@@ -15,54 +15,46 @@
  */
 package com.badlogic.gdx.scenes.scene2d.ui;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
-import com.kotcrab.vis.ui.VisUI;
-import de.longri.cachebox3.CB;
 
 /**
  * Created by Longri on 23.07.16.
  */
 public class SvgNinePatchDrawable extends BaseDrawable {
 
-    private NinePatch patch;
+    NinePatch patch;
 
     String name;
     int left, right, top, bottom;
+    int leftWidth, rightWidth, topHeight, bottomHeight;
 
     public SvgNinePatchDrawable() {
     }
 
     public SvgNinePatchDrawable(SvgNinePatchDrawable drawable) {
         super(drawable);
-        setPatch(drawable.patch);
+        setPatch(drawable.patch, drawable.leftWidth, drawable.rightWidth, drawable.topHeight, drawable.bottomHeight);
+    }
+
+    public SvgNinePatchDrawable(NinePatch ninePatch, int leftWidth, int rightWidth, int topHeight, int bottomHeight) {
+        setPatch(ninePatch, leftWidth, rightWidth, topHeight, bottomHeight);
     }
 
 
     public void draw(Batch batch, float x, float y, float width, float height) {
-        if (this.patch == null) {
-            // get texture region
-            TextureRegion textureRegion = VisUI.getSkin().getRegion(this.name);
-
-            //scale nine patch regions
-            left= CB.getScaledInt(left);
-
-            setPatch(new NinePatch(textureRegion, left, right, top, bottom));
-        }
-        patch.draw(batch, x, y, width, height);
+        if (patch != null) patch.draw(batch, x, y, width, height);
     }
 
-    public void setPatch(NinePatch patch) {
+    public void setPatch(NinePatch patch, int leftWidth, int rightWidth, int topHeight, int bottomHeight) {
         this.patch = patch;
         setMinWidth(patch.getTotalWidth());
         setMinHeight(patch.getTotalHeight());
-        setTopHeight(patch.getPadTop());
-        setRightWidth(patch.getPadRight());
-        setBottomHeight(patch.getPadBottom());
-        setLeftWidth(patch.getPadLeft());
+        setTopHeight(topHeight);
+        setRightWidth(rightWidth);
+        setBottomHeight(bottomHeight);
+        setLeftWidth(leftWidth);
     }
 
     public NinePatch getPatch() {
@@ -107,16 +99,6 @@ public class SvgNinePatchDrawable extends BaseDrawable {
 
     public float getMinHeight() {
         return top + bottom;
-    }
-
-
-    /**
-     * Creates a new drawable that renders the same as this drawable tinted the specified color.
-     */
-    public SvgNinePatchDrawable tint(Color tint) {
-        SvgNinePatchDrawable drawable = new SvgNinePatchDrawable(this);
-        drawable.setPatch(new NinePatch(drawable.getPatch(), tint));
-        return drawable;
     }
 
 }
