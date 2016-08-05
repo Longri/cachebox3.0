@@ -60,9 +60,7 @@ public class UI_Size_Base {
         int b = (int) (NormalTextSize * scale);
         Button = new SizeF(b, b);
 
-
         RefWidth = windowWidth;
-
 
         scaledFontSize_normal = (int) (10 * scale);
         scaledFontSize_big = (int) (scaledFontSize_normal * 1.1);
@@ -71,9 +69,7 @@ public class UI_Size_Base {
         scaledFontSize_btn = (int) (11 * scale);
 
         iconSize = (int) (10 * scale);
-
         IconContextMenuHeight = (int) (calcBase / 11.1);
-
         return new SizeF(windowWidth, windowHeight);
 
     }

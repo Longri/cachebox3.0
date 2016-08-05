@@ -142,9 +142,7 @@ public class CB {
 //            Config.AcceptChanges();
 //            Log.debug(log, "LastSelectedCache = " + GlobalCore.getSelectedCache().getGcCode());
 //        }
-
-       // do Platform spezific
-
+        
         Gdx.app.exit();
     }
 
