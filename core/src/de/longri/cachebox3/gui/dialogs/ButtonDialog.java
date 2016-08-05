@@ -3,34 +3,60 @@ package de.longri.cachebox3.gui.dialogs;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.kotcrab.vis.ui.widget.VisDialog;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisWindow;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.*;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+
 /**
  * Created by Longri on 03.08.16.
  */
-public class ButtonDialog extends VisDialog {
+public class ButtonDialog extends VisWindow {   //VisWindow
 
+    public static float FADE_TIME = 1.3f;
     public static final int BUTTON_POSITIVE = 1;
     public static final int BUTTON_NEUTRAL = 2;
     public static final int BUTTON_NEGATIVE = 3;
+
+
+    Table contentTable, buttonTable;
+    private Skin skin;
+    ObjectMap<Actor, Object> values = new ObjectMap();
 
     private static float margin;
     private final OnMsgBoxClickListener msgBoxClickListener;
 
     public ButtonDialog(String Name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
-
         super(title, "dialog"); // Title, WindowStyleName
-        this.text(msg);
-        setButtonCaptions(buttons);
-        CB_RectF rec = calcMsgBoxSize(msg, true, (buttons != MessageBoxButtons.NOTHING), (icon != MessageBoxIcon.None), false).getBounds();
-
-        this.setBounds(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight());
 
         this.setDebug(true, true);
+
+        // this.text(msg);
+
+
+        this.skin = VisUI.getSkin();
+        initialize();
+        setButtonCaptions(buttons);
+        CB_RectF rec = calcMsgBoxSize(msg, true, (buttons != MessageBoxButtons.NOTHING), (icon != MessageBoxIcon.None), false).getBounds();
+        this.setBounds(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight());
+
+
+        setSkin(skin);
+
 
         //TODO add Icon to ButtonDialog
 //        SizeF contentSize = getContentSize();
@@ -44,10 +70,60 @@ public class ButtonDialog extends VisDialog {
 //        }
 
         msgBoxClickListener = Listener;
+
+
+    }
+
+
+    private void initialize() {
+        setModal(true);
+        getTitleLabel().setAlignment(VisUI.getDefaultTitleAlign());
+
+        defaults().space(6);
+        add(contentTable = new Table(skin)).expand().fill();
+        row();
+        add(buttonTable = new Table(skin));
+
+        contentTable.defaults().space(2).padLeft(3).padRight(3);
+        buttonTable.defaults().space(6).padBottom(3);
+
+        buttonTable.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!values.containsKey(actor)) return;
+                while (actor.getParent() != buttonTable)
+                    actor = actor.getParent();
+                result(values.get(actor));
+            }
+        });
+
+        buttonTable.setBackground("drawable_dialog_footer");
     }
 
     public void show() {
         this.show(CB.viewmanager);
+    }
+
+    /**
+     * {@link #pack() Packs} the dialog and adds it to the stage, centered with default fadeIn action
+     */
+    private void show(Stage stage) {
+        show(stage, sequence(Actions.alpha(0), Actions.fadeIn(0.4f, Interpolation.fade)));
+        setPosition(Math.round((stage.getWidth() - getWidth()) / 2), Math.round((stage.getHeight() - getHeight()) / 2));
+    }
+
+    /**
+     * {@link #pack() Packs} the dialog and adds it to the stage with custom action which can be null for instant show
+     */
+    private void show(Stage stage, Action action) {
+        clearActions();
+
+        pack();
+        stage.addActor(this);
+        stage.setKeyboardFocus(this);
+        stage.setScrollFocus(this);
+        if (action != null) addAction(action);
+
     }
 
 
@@ -92,6 +168,7 @@ public class ButtonDialog extends VisDialog {
     public void pack() {
         //TODO remove ContentTable and set own
 
+
     }
 
     public void setButtonCaptions(MessageBoxButtons buttons) {
@@ -122,8 +199,59 @@ public class ButtonDialog extends VisDialog {
         } else if (buttons == MessageBoxButtons.Cancel) {
             this.button(Translation.Get("cancel"), BUTTON_NEGATIVE);
         }
-
     }
+
+
+    /**
+     * Adds a text button to the button table. Null will be passed to {@link #result(Object)} if this button is clicked. The dialog
+     * must have been constructed with a skin to use this method.
+     */
+    public ButtonDialog button(String text) {
+        return button(text, null);
+    }
+
+    /**
+     * Adds a text button to the button table. The dialog must have been constructed with a skin to use this method.
+     *
+     * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null.
+     */
+    public ButtonDialog button(String text, Object object) {
+        if (skin == null)
+            throw new IllegalStateException("This method may only be used if the dialog was constructed with a Skin.");
+        return button(text, object, skin.get(VisTextButton.VisTextButtonStyle.class));
+    }
+
+    /**
+     * Adds a text button to the button table.
+     *
+     * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null.
+     */
+    public ButtonDialog button(String text, Object object, VisTextButton.VisTextButtonStyle buttonStyle) {
+        return button(new VisTextButton(text, buttonStyle), object);
+    }
+
+    /**
+     * Adds the given button to the button table.
+     */
+    public ButtonDialog button(Button button) {
+        return button(button, null);
+    }
+
+    /**
+     * Adds the given button to the button table.
+     *
+     * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null.
+     */
+    public ButtonDialog button(Button button, Object object) {
+        buttonTable.add(button);
+        setObject(button, object);
+        return this;
+    }
+
+    public void setObject(Actor actor, Object object) {
+        values.put(actor, object);
+    }
+
 
     private static Sprite getIcon(MessageBoxIcon msgIcon) {
         if (msgIcon == null)
@@ -187,36 +315,27 @@ public class ButtonDialog extends VisDialog {
         return hasButtons ? UI_Size_Base.that.getButtonHeight() + margin : calcHeaderHeight(font);
     }
 
-    /**
-     * Called when a button is clicked. The dialog will be hidden after this method returns unless {@link #cancel()} is called.
-     *
-     * @param object The object specified when the button was added.
-     */
     protected void result(Object object) {
-
         if (msgBoxClickListener != null) {
             msgBoxClickListener.onClick((Integer) object, null);
             this.hide();
             this.remove();
         }
-
     }
 
     /**
-     * Adds a text button to the button table.
-     *
-     * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null.
+     * Hides the dialog with the given action and then removes it from the stage.
      */
-    public VisDialog button(String text, Object object, VisTextButton.VisTextButtonStyle buttonStyle) {
-        VisTextButton button = new VisTextButton(text, buttonStyle);
-
-
-        button.getPrefWidth();
-
-        button.setWidth(UI_Size_Base.that.getButtonWidth());
-        button.setHeight(UI_Size_Base.that.getButtonHeight());
-        return button(button, object);
+    public void hide(Action action) {
+        remove();
     }
 
+    /**
+     * Hides the dialog. Called automatically when a button is clicked. The default implementation fades out the dialog over 400
+     * milliseconds and then removes it from the stage.
+     */
+    public void hide() {
+        hide(sequence(Actions.fadeOut(FADE_TIME, Interpolation.fade), Actions.removeActor()));
+    }
 
 }
