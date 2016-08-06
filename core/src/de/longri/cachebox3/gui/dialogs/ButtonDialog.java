@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -27,7 +27,6 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
  */
 public class ButtonDialog extends VisWindow {   //VisWindow
 
-    public static float FADE_TIME = 1.3f;
     public static final int BUTTON_POSITIVE = 1;
     public static final int BUTTON_NEUTRAL = 2;
     public static final int BUTTON_NEGATIVE = 3;
@@ -74,7 +73,6 @@ public class ButtonDialog extends VisWindow {   //VisWindow
 
     }
 
-
     private void initialize() {
         setModal(true);
         getTitleLabel().setAlignment(VisUI.getDefaultTitleAlign());
@@ -99,33 +97,6 @@ public class ButtonDialog extends VisWindow {   //VisWindow
 
         buttonTable.setBackground("drawable_dialog_footer");
     }
-
-    public void show() {
-        this.show(CB.viewmanager);
-    }
-
-    /**
-     * {@link #pack() Packs} the dialog and adds it to the stage, centered with default fadeIn action
-     */
-    private void show(Stage stage) {
-        show(stage, sequence(Actions.alpha(0), Actions.fadeIn(0.4f, Interpolation.fade)));
-        setPosition(Math.round((stage.getWidth() - getWidth()) / 2), Math.round((stage.getHeight() - getHeight()) / 2));
-    }
-
-    /**
-     * {@link #pack() Packs} the dialog and adds it to the stage with custom action which can be null for instant show
-     */
-    private void show(Stage stage, Action action) {
-        clearActions();
-
-        pack();
-        stage.addActor(this);
-        stage.setKeyboardFocus(this);
-        stage.setScrollFocus(this);
-        if (action != null) addAction(action);
-
-    }
-
 
     private SizeF calcMsgBoxSize(String Text, boolean hasTitle, boolean hasButtons, boolean hasIcon, boolean hasRemember) {
         if (margin <= 0)
@@ -319,23 +290,31 @@ public class ButtonDialog extends VisWindow {   //VisWindow
         if (msgBoxClickListener != null) {
             msgBoxClickListener.onClick((Integer) object, null);
             this.hide();
-            this.remove();
         }
     }
 
-    /**
-     * Hides the dialog with the given action and then removes it from the stage.
-     */
-    public void hide(Action action) {
-        remove();
+    public void show() {
+        clearActions();
+        pack();
+        CB.viewmanager.addActor(this);
+        CB.viewmanager.setKeyboardFocus(this);
+        CB.viewmanager.setScrollFocus(this);
+        addAction(sequence(Actions.alpha(0), Actions.fadeIn(FADE_TIME, Interpolation.fade)));
+        setPosition(Math.round((CB.viewmanager.getWidth() - getWidth()) / 2), Math.round((CB.viewmanager.getHeight() - getHeight()) / 2));
+    }
+    
+    public void hide() {
+        clearActions();
+        addCaptureListener(ignoreTouchDown);
+        addAction(sequence(Actions.fadeOut(FADE_TIME, Interpolation.fade), Actions.removeActor()));
     }
 
-    /**
-     * Hides the dialog. Called automatically when a button is clicked. The default implementation fades out the dialog over 400
-     * milliseconds and then removes it from the stage.
-     */
-    public void hide() {
-        hide(sequence(Actions.fadeOut(FADE_TIME, Interpolation.fade), Actions.removeActor()));
-    }
+    protected InputListener ignoreTouchDown = new InputListener() {
+        @Override
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            event.cancel();
+            return false;
+        }
+    };
 
 }

@@ -80,6 +80,7 @@ public class CacheboxMain extends ApplicationAdapter {
         batch.begin();
         synchronized (stage) {
             stage.draw();
+            stage.act();
         }
         batch.end();
     }
