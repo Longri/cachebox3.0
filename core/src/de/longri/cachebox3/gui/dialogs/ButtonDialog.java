@@ -302,7 +302,7 @@ public class ButtonDialog extends VisWindow {   //VisWindow
         addAction(sequence(Actions.alpha(0), Actions.fadeIn(FADE_TIME, Interpolation.fade)));
         setPosition(Math.round((CB.viewmanager.getWidth() - getWidth()) / 2), Math.round((CB.viewmanager.getHeight() - getHeight()) / 2));
     }
-    
+
     public void hide() {
         clearActions();
         addCaptureListener(ignoreTouchDown);

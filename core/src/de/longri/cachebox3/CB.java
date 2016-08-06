@@ -29,6 +29,10 @@ import de.longri.cachebox3.gui.stages.ViewManager;
  */
 public class CB {
 
+    public static final int CurrentRevision = 20160806;
+    public static final String CurrentVersion = "0.1.";
+    public static final String VersionPrefix = "Test";
+
 
     //LogLevels
 
@@ -55,14 +59,24 @@ public class CB {
      * or to the "SandBox" on the external SD
      */
     public static String WorkPath;
-
+    private static Skin actSkin;
+    public static Color backgroundColor = new Color(0, 1, 0, 1);
 
     private CB() {
     }
 
-    private static Skin actSkin;
-    public static Color backgroundColor = new Color(0, 1, 0, 1);
 
+    private static boolean isTestVersionCheked = false;
+    private static boolean isTestVersion = false;
+
+    public static boolean isTestVersion() {
+        if (isTestVersionCheked)
+            return isTestVersion;
+
+        isTestVersion = VersionPrefix.toLowerCase().contains("test");
+        isTestVersionCheked = true;
+        return isTestVersion;
+    }
 
     public static void setActSkin(Skin skin) {
         if (actSkin != null) {
@@ -131,7 +145,7 @@ public class CB {
     }
 
     public static Sprite getSprite(String name) {
-        return actSkin.getSprite(name);
+        return actSkin != null ? actSkin.getSprite(name) : null;
     }
 
     public static void callQuit() {
