@@ -29,6 +29,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
+import de.longri.cachebox3.utils.ScaledSizes;
 import org.oscim.backend.CanvasAdapter;
 import org.slf4j.LoggerFactory;
 
@@ -297,11 +298,25 @@ public class SvgSkin extends Skin {
             public ColorDrawable read(Json json, JsonValue jsonData, Class type) {
                 Color color = json.readValue("color", Color.class, jsonData);
                 ColorDrawable drawable = new ColorDrawable(color);
-//                if (drawable instanceof BaseDrawable) {
-//                    BaseDrawable named = (BaseDrawable)drawable;
-//                    named.setName(jsonData.name + " (" + color + ")");
-//                }
                 return drawable;
+            }
+        });
+
+        json.setSerializer(ScaledSizes.class, new Json.ReadOnlySerializer<ScaledSizes>() {
+            public ScaledSizes read(Json json, JsonValue jsonData, Class type) {
+                float button_width = CB.getScaledFloat(json.readValue("button_width", float.class, jsonData));
+                float button_height = CB.getScaledFloat(json.readValue("button_height", float.class, jsonData));
+                float button_width_wide = CB.getScaledFloat(json.readValue("button_width_wide", float.class, jsonData));
+                float margin = CB.getScaledFloat(json.readValue("margin", float.class, jsonData));
+                float check_box_height = CB.getScaledFloat(json.readValue("check_box_height", float.class, jsonData));
+                float window_margin = CB.getScaledFloat(json.readValue("check_box_height", float.class, jsonData));
+                ScaledSizes scaledSizes = new ScaledSizes(button_width, button_height, button_width_wide, margin,
+                        check_box_height, window_margin);
+
+                //set also to static access on CB
+                CB.scaledSizes = scaledSizes;
+
+                return scaledSizes;
             }
         });
 

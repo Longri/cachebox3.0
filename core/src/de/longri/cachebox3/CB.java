@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.utils.ScaledSizes;
 
 /**
  * Static class
@@ -61,6 +62,7 @@ public class CB {
     public static String WorkPath;
     private static Skin actSkin;
     public static Color backgroundColor = new Color(0, 1, 0, 1);
+    public static ScaledSizes scaledSizes;
 
     private CB() {
     }
@@ -165,4 +167,8 @@ public class CB {
     }
 
     public static Platform platform;
+
+    public static void requestRendering() {
+        Gdx.graphics.requestRendering();
+    }
 }

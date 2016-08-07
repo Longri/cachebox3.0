@@ -354,8 +354,8 @@ public class ImageLoader {
 
 		if (this.resizeListener != null) {
 			float proportionWidth = resizeWidth / spriteWidth;
-			if (proportionWidth > UI_Size_Base.that.getScale()) {
-				proportionWidth = UI_Size_Base.that.getScale();
+			if (proportionWidth > CB.getScalefactor()) {
+				proportionWidth = CB.getScalefactor();
 			}
 
 			float newWidth = spriteWidth * proportionWidth;//* UI_Size_Base.that.getScale();
@@ -482,8 +482,8 @@ public class ImageLoader {
 
 				if (this.resizeListener != null) {
 					float proportionWidth = resizeWidth / spriteWidth;
-					if (proportionWidth > UI_Size_Base.that.getScale()) {
-						proportionWidth = UI_Size_Base.that.getScale();
+					if (proportionWidth > CB.getScalefactor()) {
+						proportionWidth = CB.getScalefactor();
 					}
 
 					float newWidth = spriteWidth * proportionWidth;

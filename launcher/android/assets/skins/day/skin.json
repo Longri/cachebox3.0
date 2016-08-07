@@ -1,4 +1,15 @@
 {
+  de.longri.cachebox3.utils.ScaledSizes: {
+  default: {
+    button_width: 63,
+    button_height: 63,
+    button_width_wide: 120,
+    margin: 10,
+    check_box_height: 12,
+  }
+  }
+
+
     com.badlogic.gdx.graphics.Color: {
       background: { r: 1, g: 1, b: 1, a: 1 },
       abstract_background: { r: 1, g: 0, b: 0, a: 1 },
@@ -29,7 +40,11 @@
         left: 30,
         right: 30,
         top: 30,
-        bottom: 30
+        bottom: 30,
+        leftWidth: 10,
+        rightWidth: 10,
+        topHeight: 10,
+        bottomHeight: 10
       },
       drawable_main_button_bar_back:{
       name: button_bar_back,

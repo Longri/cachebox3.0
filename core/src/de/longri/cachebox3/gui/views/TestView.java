@@ -26,7 +26,6 @@ import de.longri.cachebox3.gui.widgets.ColorWidget;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Lang;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.utils.UI_Size_Base;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -57,7 +56,7 @@ public class TestView extends AbstractView {
 
 
         final VisTextButton testButton = new VisTextButton(Translation.getLangId());
-        testButton.setSize(UI_Size_Base.that.getButtonWidthWide(), UI_Size_Base.that.getButtonHeight());
+        testButton.setSize(CB.scaledSizes.BUTTON_WIDTH_WIDE, CB.scaledSizes.BUTTON_HEIGHT);
 
         testButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {

@@ -1,5 +1,6 @@
 package de.longri.cachebox3.gui.dialogs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -100,20 +101,20 @@ public class ButtonDialog extends VisWindow {   //VisWindow
 
     private SizeF calcMsgBoxSize(String Text, boolean hasTitle, boolean hasButtons, boolean hasIcon, boolean hasRemember) {
         if (margin <= 0)
-            margin = UI_Size_Base.that.getMargin();
+            margin = CB.scaledSizes.MARGIN;
 
-        float Width = (((UI_Size_Base.that.getButtonWidthWide() + margin) * 3) + margin);
-        if (Width * 1.2 < UI_Size_Base.that.getWindowWidth())
+        float Width = (((CB.scaledSizes.BUTTON_WIDTH_WIDE + margin) * 3) + margin);
+        if (Width * 1.2 < CB.scaledSizes.WINDOW_WIDTH)
             Width *= 1.2f;
 
 
         BitmapFont font = this.getStyle().titleFont;
 
-        float MsgWidth = (Width * 0.95f) - 5 - UI_Size_Base.that.getButtonHeight();
+        float MsgWidth = (Width * 0.95f) - 5 - CB.scaledSizes.BUTTON_HEIGHT;
 
         float MeasuredTextHeight = MesureFontUtil.MeasureWrapped(font, Text, MsgWidth).height + (margin * 4);
 
-        int Height = (int) (hasIcon ? Math.max(MeasuredTextHeight, UI_Size_Base.that.getButtonHeight() + (margin * 5)) : (int) MeasuredTextHeight);
+        int Height = (int) (hasIcon ? Math.max(MeasuredTextHeight, CB.scaledSizes.BUTTON_HEIGHT + (margin * 5)) : (int) MeasuredTextHeight);
 
         if (hasTitle) {
             GlyphLayout titleBounds = MesureFontUtil.Measure(font, "T");
@@ -122,14 +123,14 @@ public class ButtonDialog extends VisWindow {   //VisWindow
         }
         Height += calcFooterHeight(font, hasButtons);
         if (hasRemember)
-            Height += UI_Size_Base.that.getChkBoxSize().height;
+            Height += CB.scaledSizes.CHECK_BOX_HEIGHT;
         Height += calcHeaderHeight(font);
 
         // min Height festlegen
-        Height = (int) Math.max(Height, UI_Size_Base.that.getButtonHeight() * 2.5f);
+        Height = (int) Math.max(Height, CB.scaledSizes.BUTTON_HEIGHT * 2.5f);
 
         // max Height festlegen
-        Height = (int) Math.min(Height, UI_Size_Base.that.getWindowHeight() * 0.95f);
+        Height = (int) Math.min(Height, Gdx.graphics.getHeight() * 0.95f);
 
         SizeF ret = new SizeF(Width, Height);
         return ret;
@@ -281,9 +282,9 @@ public class ButtonDialog extends VisWindow {   //VisWindow
     public static float calcFooterHeight(BitmapFont font, boolean hasButtons) {
 
         if (margin <= 0)
-            margin = UI_Size_Base.that.getMargin();
+            margin = CB.scaledSizes.MARGIN;
 
-        return hasButtons ? UI_Size_Base.that.getButtonHeight() + margin : calcHeaderHeight(font);
+        return hasButtons ? CB.scaledSizes.BUTTON_HEIGHT + margin : calcHeaderHeight(font);
     }
 
     protected void result(Object object) {
