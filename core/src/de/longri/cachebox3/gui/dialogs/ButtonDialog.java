@@ -1,47 +1,67 @@
 package de.longri.cachebox3.gui.dialogs;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisWindow;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.utils.*;
+import de.longri.cachebox3.utils.CB_RectF;
+import de.longri.cachebox3.utils.IconNames;
+import de.longri.cachebox3.utils.MesureFontUtil;
+import de.longri.cachebox3.utils.SizeF;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 /**
  * Created by Longri on 03.08.16.
  */
-public class ButtonDialog extends VisWindow {   //VisWindow
+public class ButtonDialog extends Table {   //VisWindow
 
     public static final int BUTTON_POSITIVE = 1;
     public static final int BUTTON_NEUTRAL = 2;
     public static final int BUTTON_NEGATIVE = 3;
-
-
-    Table contentTable, buttonTable;
-    private Skin skin;
-    ObjectMap<Actor, Object> values = new ObjectMap();
-
     private static float margin;
+    public static float FADE_TIME = 0.3f;
+    static private final Vector2 tmpPosition = new Vector2();
+    static private final Vector2 tmpSize = new Vector2();
+
+    private Table contentTable, buttonTable;
+    private Skin skin;
+    private ObjectMap<Actor, Object> values = new ObjectMap();
     private final OnMsgBoxClickListener msgBoxClickListener;
+    private final ButtonDialogStyle style;
+
+    protected boolean dontRenderDialogBackground = false;
+    protected Object data;
+    protected boolean mHasTitle = false;
+    protected float mTitleHeight = 0;
+    protected float mTitleWidth = CB.getScaledFloat(100);
+    protected float mHeaderHeight = CB.getScaledFloat(10f);
+    protected float mFooterHeight = CB.getScaledFloat(10f);
+    protected float mTitleVersatz = CB.getScaledFloat(6);
+
 
     public ButtonDialog(String Name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
-        super(title, "dialog"); // Title, WindowStyleName
+        super();
 
         this.setDebug(true, true);
 
@@ -49,6 +69,7 @@ public class ButtonDialog extends VisWindow {   //VisWindow
 
 
         this.skin = VisUI.getSkin();
+        style = skin.get("default", ButtonDialogStyle.class);
         initialize();
         setButtonCaptions(buttons);
         CB_RectF rec = calcMsgBoxSize(msg, true, (buttons != MessageBoxButtons.NOTHING), (icon != MessageBoxIcon.None), false).getBounds();
@@ -75,8 +96,6 @@ public class ButtonDialog extends VisWindow {   //VisWindow
     }
 
     private void initialize() {
-        setModal(true);
-        getTitleLabel().setAlignment(VisUI.getDefaultTitleAlign());
 
         defaults().space(6);
         add(contentTable = new Table(skin)).expand().fill();
@@ -96,21 +115,18 @@ public class ButtonDialog extends VisWindow {   //VisWindow
             }
         });
 
-        buttonTable.setBackground("drawable_dialog_footer");
     }
 
     private SizeF calcMsgBoxSize(String Text, boolean hasTitle, boolean hasButtons, boolean hasIcon, boolean hasRemember) {
         if (margin <= 0)
             margin = CB.scaledSizes.MARGIN;
 
-        float Width = (((CB.scaledSizes.BUTTON_WIDTH_WIDE + margin) * 3) + margin);
-        if (Width * 1.2 < CB.scaledSizes.WINDOW_WIDTH)
-            Width *= 1.2f;
 
 
-        BitmapFont font = this.getStyle().titleFont;
 
-        float MsgWidth = (Width * 0.95f) - 5 - CB.scaledSizes.BUTTON_HEIGHT;
+        BitmapFont font = this.style.titleFont;
+
+        float MsgWidth = (CB.scaledSizes.WINDOW_WIDTH * 0.95f) - 5 - CB.scaledSizes.BUTTON_HEIGHT;
 
         float MeasuredTextHeight = MesureFontUtil.MeasureWrapped(font, Text, MsgWidth).height + (margin * 4);
 
@@ -132,7 +148,7 @@ public class ButtonDialog extends VisWindow {   //VisWindow
         // max Height festlegen
         Height = (int) Math.min(Height, Gdx.graphics.getHeight() * 0.95f);
 
-        SizeF ret = new SizeF(Width, Height);
+        SizeF ret = new SizeF(CB.scaledSizes.WINDOW_WIDTH, Height);
         return ret;
     }
 
@@ -317,5 +333,52 @@ public class ButtonDialog extends VisWindow {   //VisWindow
             return false;
         }
     };
+
+    public void draw(Batch batch, float parentAlpha) {
+
+        if (style.stageBackground != null) drawStageBackground(batch, parentAlpha);
+
+
+        if (style.header != null && !dontRenderDialogBackground) {
+            style.header.draw(batch, this.getX(), this.getHeight() - mTitleHeight - mHeaderHeight+this.getY(), this.getWidth(), mHeaderHeight);
+        }
+        if (style.footer != null && !dontRenderDialogBackground) {
+            style.footer.draw(batch, this.getX(), this.getY(), this.getWidth(), mFooterHeight + 2);
+        }
+        if (style.center != null && !dontRenderDialogBackground) {
+            style.center.draw(batch, this.getX(), mFooterHeight+this.getY(), this.getWidth(), (this.getHeight() - mFooterHeight - mHeaderHeight - mTitleHeight) + 3.5f);
+        }
+
+        if (mHasTitle) {
+            if (mTitleWidth < this.getWidth()) {
+                if (style.title != null && !dontRenderDialogBackground) {
+                    style.title.draw(batch, this.getX(), this.getHeight() - mTitleHeight - mTitleVersatz+this.getY(), mTitleWidth, mTitleHeight);
+                }
+            } else {
+                if (style.header != null && !dontRenderDialogBackground) {
+                    style.header.draw(batch, this.getX(), this.getHeight() - mTitleHeight - mTitleVersatz+this.getY(), mTitleWidth, mTitleHeight);
+                }
+            }
+        }
+        super.draw(batch, parentAlpha);
+    }
+
+    private void drawStageBackground(Batch batch, float parentAlpha) {
+        Stage stage = getStage();
+        if (stage.getKeyboardFocus() == null) stage.setKeyboardFocus(this);
+
+        stageToLocalCoordinates(tmpPosition.set(0, 0));
+        stageToLocalCoordinates(tmpSize.set(stage.getWidth(), stage.getHeight()));
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        style.stageBackground.draw(batch, getX() + tmpPosition.x, getY() + tmpPosition.y, getX() + tmpSize.x,
+                getY() + tmpSize.y);
+    }
+
+    public static class ButtonDialogStyle {
+        SvgNinePatchDrawable title, header, center, footer;
+        Drawable stageBackground;
+        BitmapFont titleFont;
+    }
 
 }

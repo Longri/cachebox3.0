@@ -158,6 +158,28 @@
        top: 0,
        bottom: 0
      },
+  drawable_dialog_header:{
+    name: dialog_header,
+    left: 10,
+    right: 10,
+    top: 10,
+    bottom: 0,
+    leftWidth: 10,
+    rightWidth: 10,
+    topHeight: 10,
+    bottomHeight: 10
+  },
+  drawable_dialog_center:{
+    name: dialog_center,
+    left: 10,
+    right: 10,
+    top: 10,
+    bottom: 0,
+    leftWidth: 10,
+    rightWidth: 10,
+    topHeight: 10,
+    bottomHeight: 10
+  },
       drawable_dialog_footer:{
         name: dialog_footer,
         left: 10,
@@ -234,7 +256,7 @@
 
 
     com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
-      dialog: {
+      transparent: {
         background: transparent_drawable,
         titleFont: normal_font,
         stageBackground: dialog_stage_background
@@ -249,5 +271,14 @@
       }
     }
 
+  de.longri.cachebox3.gui.dialogs.ButtonDialog$ButtonDialogStyle: {
+    default: {
+      header: drawable_dialog_header,
+      center: drawable_dialog_center,
+      footer: drawable_dialog_footer,
+      stageBackground: dialog_stage_background,
+      titleFont: normal_font
+    }
+  }
 
 }
