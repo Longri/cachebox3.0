@@ -39,17 +39,12 @@ public class ButtonDialog extends Table {   //VisWindow
     public static final int BUTTON_POSITIVE = 1;
     public static final int BUTTON_NEUTRAL = 2;
     public static final int BUTTON_NEGATIVE = 3;
-    private static float margin;
-    public static float FADE_TIME = 0.3f;
     static private final Vector2 tmpPosition = new Vector2();
     static private final Vector2 tmpSize = new Vector2();
-
-    private Table contentTable, buttonTable;
-    private Skin skin;
-    private ObjectMap<Actor, Object> values = new ObjectMap();
+    public static float FADE_TIME = 0.3f;
+    private static float margin, pad;
     private final OnMsgBoxClickListener msgBoxClickListener;
     private final ButtonDialogStyle style;
-
     protected boolean dontRenderDialogBackground = false;
     protected Object data;
     protected boolean mHasTitle = false;
@@ -58,7 +53,16 @@ public class ButtonDialog extends Table {   //VisWindow
     protected float mHeaderHeight = CB.getScaledFloat(10f);
     protected float mFooterHeight = CB.getScaledFloat(10f);
     protected float mTitleVersatz = CB.getScaledFloat(6);
-
+    protected InputListener ignoreTouchDown = new InputListener() {
+        @Override
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            event.cancel();
+            return false;
+        }
+    };
+    private Table contentTable, buttonTable;
+    private Skin skin;
+    private ObjectMap<Actor, Object> values = new ObjectMap();
 
     public ButtonDialog(String Name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
         super();
@@ -70,11 +74,12 @@ public class ButtonDialog extends Table {   //VisWindow
 
         this.skin = VisUI.getSkin();
         style = skin.get("default", ButtonDialogStyle.class);
-        initialize();
-        setButtonCaptions(buttons);
+
+
         CB_RectF rec = calcMsgBoxSize(msg, true, (buttons != MessageBoxButtons.NOTHING), (icon != MessageBoxIcon.None), false).getBounds();
         this.setBounds(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight());
-
+        initialize();
+        setButtonCaptions(buttons);
 
         setSkin(skin);
 
@@ -94,152 +99,6 @@ public class ButtonDialog extends Table {   //VisWindow
 
 
     }
-
-    private void initialize() {
-
-        defaults().space(6);
-        add(contentTable = new Table(skin)).expand().fill();
-        row();
-        add(buttonTable = new Table(skin));
-
-        contentTable.defaults().space(2).padLeft(3).padRight(3);
-        buttonTable.defaults().space(6).padBottom(3);
-
-        buttonTable.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (!values.containsKey(actor)) return;
-                while (actor.getParent() != buttonTable)
-                    actor = actor.getParent();
-                result(values.get(actor));
-            }
-        });
-
-    }
-
-    private SizeF calcMsgBoxSize(String Text, boolean hasTitle, boolean hasButtons, boolean hasIcon, boolean hasRemember) {
-        if (margin <= 0)
-            margin = CB.scaledSizes.MARGIN;
-
-
-
-
-        BitmapFont font = this.style.titleFont;
-
-        float MsgWidth = (CB.scaledSizes.WINDOW_WIDTH * 0.95f) - 5 - CB.scaledSizes.BUTTON_HEIGHT;
-
-        float MeasuredTextHeight = MesureFontUtil.MeasureWrapped(font, Text, MsgWidth).height + (margin * 4);
-
-        int Height = (int) (hasIcon ? Math.max(MeasuredTextHeight, CB.scaledSizes.BUTTON_HEIGHT + (margin * 5)) : (int) MeasuredTextHeight);
-
-        if (hasTitle) {
-            GlyphLayout titleBounds = MesureFontUtil.Measure(font, "T");
-            Height += (titleBounds.height * 3);
-            Height += margin * 2;
-        }
-        Height += calcFooterHeight(font, hasButtons);
-        if (hasRemember)
-            Height += CB.scaledSizes.CHECK_BOX_HEIGHT;
-        Height += calcHeaderHeight(font);
-
-        // min Height festlegen
-        Height = (int) Math.max(Height, CB.scaledSizes.BUTTON_HEIGHT * 2.5f);
-
-        // max Height festlegen
-        Height = (int) Math.min(Height, Gdx.graphics.getHeight() * 0.95f);
-
-        SizeF ret = new SizeF(CB.scaledSizes.WINDOW_WIDTH, Height);
-        return ret;
-    }
-
-    @Override
-    public void pack() {
-        //TODO remove ContentTable and set own
-
-
-    }
-
-    public void setButtonCaptions(MessageBoxButtons buttons) {
-
-        if (buttons == MessageBoxButtons.YesNoRetry) {
-            this.button(Translation.Get("yes"), BUTTON_POSITIVE);
-            this.button(Translation.Get("no"), BUTTON_NEGATIVE);
-            this.button(Translation.Get("retry"), BUTTON_NEUTRAL);
-        } else if (buttons == MessageBoxButtons.AbortRetryIgnore) {
-            this.button(Translation.Get("abort"), BUTTON_POSITIVE);
-            this.button(Translation.Get("retry"), BUTTON_NEUTRAL);
-            this.button(Translation.Get("ignore"), BUTTON_NEGATIVE);
-        } else if (buttons == MessageBoxButtons.OK) {
-            this.button(Translation.Get("ok"), BUTTON_POSITIVE);
-        } else if (buttons == MessageBoxButtons.OKCancel) {
-            this.button(Translation.Get("ok"), BUTTON_POSITIVE);
-            this.button(Translation.Get("cancel"), BUTTON_NEGATIVE);
-        } else if (buttons == MessageBoxButtons.RetryCancel) {
-            this.button(Translation.Get("retry"), BUTTON_POSITIVE);
-            this.button(Translation.Get("cancel"), BUTTON_NEGATIVE);
-        } else if (buttons == MessageBoxButtons.YesNo) {
-            this.button(Translation.Get("yes"), BUTTON_POSITIVE);
-            this.button(Translation.Get("no"), BUTTON_NEGATIVE);
-        } else if (buttons == MessageBoxButtons.YesNoCancel) {
-            this.button(Translation.Get("yes"), BUTTON_POSITIVE);
-            this.button(Translation.Get("no"), BUTTON_NEGATIVE);
-            this.button(Translation.Get("cancel"), BUTTON_NEUTRAL);
-        } else if (buttons == MessageBoxButtons.Cancel) {
-            this.button(Translation.Get("cancel"), BUTTON_NEGATIVE);
-        }
-    }
-
-
-    /**
-     * Adds a text button to the button table. Null will be passed to {@link #result(Object)} if this button is clicked. The dialog
-     * must have been constructed with a skin to use this method.
-     */
-    public ButtonDialog button(String text) {
-        return button(text, null);
-    }
-
-    /**
-     * Adds a text button to the button table. The dialog must have been constructed with a skin to use this method.
-     *
-     * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null.
-     */
-    public ButtonDialog button(String text, Object object) {
-        if (skin == null)
-            throw new IllegalStateException("This method may only be used if the dialog was constructed with a Skin.");
-        return button(text, object, skin.get(VisTextButton.VisTextButtonStyle.class));
-    }
-
-    /**
-     * Adds a text button to the button table.
-     *
-     * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null.
-     */
-    public ButtonDialog button(String text, Object object, VisTextButton.VisTextButtonStyle buttonStyle) {
-        return button(new VisTextButton(text, buttonStyle), object);
-    }
-
-    /**
-     * Adds the given button to the button table.
-     */
-    public ButtonDialog button(Button button) {
-        return button(button, null);
-    }
-
-    /**
-     * Adds the given button to the button table.
-     *
-     * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null.
-     */
-    public ButtonDialog button(Button button, Object object) {
-        buttonTable.add(button);
-        setObject(button, object);
-        return this;
-    }
-
-    public void setObject(Actor actor, Object object) {
-        values.put(actor, object);
-    }
-
 
     private static Sprite getIcon(MessageBoxIcon msgIcon) {
         if (msgIcon == null)
@@ -290,10 +149,17 @@ public class ButtonDialog extends Table {   //VisWindow
         return icon;
     }
 
-
     public static float calcHeaderHeight(BitmapFont font) {
         return (MesureFontUtil.Measure(font, "T").height) / 2;
     }
+
+//    /**
+//     * Adds a text button to the button table. Null will be passed to {@link #result(Object)} if this button is clicked. The dialog
+//     * must have been constructed with a skin to use this method.
+//     */
+//    public ButtonDialog button(String text) {
+//        return button(text, null);
+//    }
 
     public static float calcFooterHeight(BitmapFont font, boolean hasButtons) {
 
@@ -301,6 +167,151 @@ public class ButtonDialog extends Table {   //VisWindow
             margin = CB.scaledSizes.MARGIN;
 
         return hasButtons ? CB.scaledSizes.BUTTON_HEIGHT + margin : calcHeaderHeight(font);
+    }
+
+    private void initialize() {
+
+        defaults().space(6);
+        add(contentTable = new Table(skin)).expand().fill();
+        row();
+        add(buttonTable = new Table(skin));
+
+//        contentTable.defaults().space(2).padLeft(3).padRight(3);
+        buttonTable.defaults().space(pad).padBottom(pad);
+
+        buttonTable.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!values.containsKey(actor)) return;
+                while (actor.getParent() != buttonTable)
+                    actor = actor.getParent();
+                result(values.get(actor));
+            }
+        });
+
+    }
+
+    private SizeF calcMsgBoxSize(String Text, boolean hasTitle, boolean hasButtons, boolean hasIcon, boolean hasRemember) {
+        if (margin <= 0) {
+            margin = CB.scaledSizes.MARGIN;
+            pad = margin / 2;
+        }
+
+
+        BitmapFont font = this.style.titleFont;
+
+        float MsgWidth = (CB.scaledSizes.WINDOW_WIDTH * 0.95f) - 5 - CB.scaledSizes.BUTTON_HEIGHT;
+
+        float MeasuredTextHeight = MesureFontUtil.MeasureWrapped(font, Text, MsgWidth).height + (margin * 4);
+
+        int Height = (int) (hasIcon ? Math.max(MeasuredTextHeight, CB.scaledSizes.BUTTON_HEIGHT + (margin * 5)) : (int) MeasuredTextHeight);
+
+        if (hasTitle) {
+            GlyphLayout titleBounds = MesureFontUtil.Measure(font, "T");
+            Height += (titleBounds.height * 3);
+            Height += margin * 2;
+        }
+        Height += calcFooterHeight(font, hasButtons);
+        if (hasRemember)
+            Height += CB.scaledSizes.CHECK_BOX_HEIGHT;
+        Height += calcHeaderHeight(font);
+
+        // min Height festlegen
+        Height = (int) Math.max(Height, CB.scaledSizes.BUTTON_HEIGHT * 2.5f);
+
+        // max Height festlegen
+        Height = (int) Math.min(Height, Gdx.graphics.getHeight() * 0.95f);
+
+        SizeF ret = new SizeF(CB.scaledSizes.WINDOW_WIDTH, Height);
+        return ret;
+    }
+
+    @Override
+    public void pack() {
+
+        // see https://github.com/libgdx/libgdx/wiki/Table
+
+    }
+
+    public void setButtonCaptions(MessageBoxButtons buttons) {
+        float buttonWidth = 0;
+
+        if (buttons == MessageBoxButtons.YesNoRetry) {
+            buttonWidth = (this.getWidth() / 3) - margin;
+            this.button(Translation.Get("yes"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.Get("no"), buttonWidth, BUTTON_NEGATIVE);
+            this.button(Translation.Get("retry"), buttonWidth, BUTTON_NEUTRAL);
+        } else if (buttons == MessageBoxButtons.AbortRetryIgnore) {
+            buttonWidth = (this.getWidth() / 3) - margin;
+            this.button(Translation.Get("abort"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.Get("retry"), buttonWidth, BUTTON_NEUTRAL);
+            this.button(Translation.Get("ignore"), buttonWidth, BUTTON_NEGATIVE);
+        } else if (buttons == MessageBoxButtons.OK) {
+            buttonWidth = (this.getWidth() / 1) - margin;
+            this.button(Translation.Get("ok"), buttonWidth, BUTTON_POSITIVE);
+        } else if (buttons == MessageBoxButtons.OKCancel) {
+            buttonWidth = (this.getWidth() / 2) - margin;
+            this.button(Translation.Get("ok"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEGATIVE);
+        } else if (buttons == MessageBoxButtons.RetryCancel) {
+            buttonWidth = (this.getWidth() / 2) - margin;
+            this.button(Translation.Get("retry"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEGATIVE);
+        } else if (buttons == MessageBoxButtons.YesNo) {
+            buttonWidth = (this.getWidth() / 2) - margin;
+            this.button(Translation.Get("yes"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.Get("no"), buttonWidth, BUTTON_NEGATIVE);
+        } else if (buttons == MessageBoxButtons.YesNoCancel) {
+            buttonWidth = (this.getWidth() / 3) - margin;
+            this.button(Translation.Get("yes"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.Get("no"), buttonWidth, BUTTON_NEGATIVE);
+            this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEUTRAL);
+        } else if (buttons == MessageBoxButtons.Cancel) {
+            buttonWidth = (this.getWidth() / 1) - margin;
+            this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEGATIVE);
+        }
+    }
+
+    /**
+     * Adds a text button to the button table. The dialog must have been constructed with a skin to use this method.
+     *
+     * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null.
+     */
+    public ButtonDialog button(String text, float buttonWidth, Object object) {
+        if (skin == null)
+            throw new IllegalStateException("This method may only be used if the dialog was constructed with a Skin.");
+        return button(text, buttonWidth, object, skin.get(VisTextButton.VisTextButtonStyle.class));
+    }
+
+    /**
+     * Adds a text button to the button table.
+     *
+     * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null.
+     */
+    public ButtonDialog button(String text, float buttonWidth, Object object, VisTextButton.VisTextButtonStyle buttonStyle) {
+        return button(new VisTextButton(text, buttonStyle), buttonWidth, object);
+    }
+
+    /**
+     * Adds the given button to the button table.
+     */
+    public ButtonDialog button(Button button, float buttonWidth) {
+        return button(button, buttonWidth, null);
+    }
+
+    /**
+     * Adds the given button to the button table.
+     *
+     * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null.
+     */
+    public ButtonDialog button(Button button, float buttonWidth, Object object) {
+        buttonTable.add(button).width(buttonWidth).expandX();
+        setObject(button, object);
+        return this;
+    }
+
+    public void setObject(Actor actor, Object object) {
+        values.put(actor, object);
     }
 
     protected void result(Object object) {
@@ -326,37 +337,28 @@ public class ButtonDialog extends Table {   //VisWindow
         addAction(sequence(Actions.fadeOut(FADE_TIME, Interpolation.fade), Actions.removeActor()));
     }
 
-    protected InputListener ignoreTouchDown = new InputListener() {
-        @Override
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            event.cancel();
-            return false;
-        }
-    };
-
     public void draw(Batch batch, float parentAlpha) {
 
         if (style.stageBackground != null) drawStageBackground(batch, parentAlpha);
 
-
         if (style.header != null && !dontRenderDialogBackground) {
-            style.header.draw(batch, this.getX(), this.getHeight() - mTitleHeight - mHeaderHeight+this.getY(), this.getWidth(), mHeaderHeight);
+            style.header.draw(batch, this.getX(), this.getHeight() - mTitleHeight - mHeaderHeight + this.getY(), this.getWidth(), mHeaderHeight);
         }
         if (style.footer != null && !dontRenderDialogBackground) {
             style.footer.draw(batch, this.getX(), this.getY(), this.getWidth(), mFooterHeight + 2);
         }
         if (style.center != null && !dontRenderDialogBackground) {
-            style.center.draw(batch, this.getX(), mFooterHeight+this.getY(), this.getWidth(), (this.getHeight() - mFooterHeight - mHeaderHeight - mTitleHeight) + 3.5f);
+            style.center.draw(batch, this.getX(), mFooterHeight + this.getY(), this.getWidth(), (this.getHeight() - mFooterHeight - mHeaderHeight - mTitleHeight) + 3.5f);
         }
 
         if (mHasTitle) {
             if (mTitleWidth < this.getWidth()) {
                 if (style.title != null && !dontRenderDialogBackground) {
-                    style.title.draw(batch, this.getX(), this.getHeight() - mTitleHeight - mTitleVersatz+this.getY(), mTitleWidth, mTitleHeight);
+                    style.title.draw(batch, this.getX(), this.getHeight() - mTitleHeight - mTitleVersatz + this.getY(), mTitleWidth, mTitleHeight);
                 }
             } else {
                 if (style.header != null && !dontRenderDialogBackground) {
-                    style.header.draw(batch, this.getX(), this.getHeight() - mTitleHeight - mTitleVersatz+this.getY(), mTitleWidth, mTitleHeight);
+                    style.header.draw(batch, this.getX(), this.getHeight() - mTitleHeight - mTitleVersatz + this.getY(), mTitleWidth, mTitleHeight);
                 }
             }
         }
