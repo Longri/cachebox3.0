@@ -160,10 +160,10 @@
      },
   drawable_dialog_header:{
     name: dialog_header,
-    left: 10,
-    right: 10,
-    top: 10,
-    bottom: 0,
+    left: 8,
+    right: 8,
+    top: 8,
+    bottom: 8,
     leftWidth: 10,
     rightWidth: 10,
     topHeight: 10,
@@ -171,9 +171,9 @@
   },
   drawable_dialog_center:{
     name: dialog_center,
-    left: 10,
-    right: 10,
-    top: 10,
+    left: 8,
+    right: 8,
+    top: 8,
     bottom: 0,
     leftWidth: 10,
     rightWidth: 10,
@@ -182,15 +182,27 @@
   },
       drawable_dialog_footer:{
         name: dialog_footer,
-        left: 10,
-        right: 10,
+        left: 8,
+        right: 8,
         top: 0,
-        bottom: 10,
+        bottom: 8,
         leftWidth: 10,
         rightWidth: 10,
         topHeight: 10,
         bottomHeight: 10
       },
+
+  drawable_dialog_title:{
+    name: dialog_title,
+    left: 8,
+    right: 31,
+    top: 8,
+    bottom: 15,
+    leftWidth: 10,
+    rightWidth: 10,
+    topHeight: 10,
+    bottomHeight: 10
+  },
     }
 
 
@@ -273,7 +285,7 @@
 
   de.longri.cachebox3.gui.dialogs.ButtonDialog$ButtonDialogStyle: {
     default: {
-      title: drawable_dialog_header,
+      title: drawable_dialog_title,
       header: drawable_dialog_header,
       center: drawable_dialog_center,
       footer: drawable_dialog_footer,

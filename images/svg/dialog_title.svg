@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="123.249" height="29.1752" viewBox="0 0 123.25 29.18" enable-background="new 0 0 123.25 29.18" xml:space="preserve">
+	<path fill="#FFFFFF" fill-opacity="1" stroke-width="4" stroke-linejoin="round" stroke="#96B66E" stroke-opacity="1" d="M 96,102.605L 7.99999,102.605C 4.68629,102.605 1.99999,99.9188 1.99999,96.6051L 1.99999,26.605L 1.99999,8.60514C 1.99999,5.29136 4.68629,2.60502 7.99999,2.60502L 96,2.60502C 99.3137,2.60502 102,5.29136 102,8.60514L 102,26.605L 102,96.6051C 102,99.9188 99.3137,102.605 96,102.605 Z "/>
+	<path fill="none" stroke-linejoin="round" stroke="#394629" stroke-opacity="1" d="M 95.4923,103.782L 7.86757,103.803C 4.53424,103.762 1.11758,99.6366 1.11758,96.8033L 1.09676,26.3043L 1.09676,7.9445C 1.13842,5.1995 4.13841,1.8245 7.21674,1.82432L 96.3672,1.84531C 99.7472,1.84531 103.076,4.88688 103.159,9.22031L 103.096,26.3043L 103.117,96.595C 103.117,100.282 98.8722,103.782 95.4923,103.782 Z "/>
+	<rect x="100.218" y="25.9252" fill="#FFFFFF" fill-opacity="1" fill-rule="evenodd" stroke-width="0.2" stroke-linejoin="round" width="13.4375" height="3.46875"/>
+	<rect x="5.48846" y="13.1154" fill="#FFFFFF" fill-opacity="1" fill-rule="evenodd" stroke-width="0.2" stroke-linejoin="round" width="98.511" height="16.25"/>
+	<path fill="#FFFFFF" fill-opacity="1" fill-rule="evenodd" stroke-width="4" stroke-linejoin="round" stroke="#96B66E" stroke-opacity="1" d="M 1.99999,14.959L 1.99999,8.60514C 1.99999,5.29136 4.68629,2.60502 7.99999,2.60502L 96,2.60502C 99.3137,2.60502 102,5.29136 102,8.60514L 102,15.0528"/>
+	<path fill="none" stroke-linejoin="round" stroke="#394629" stroke-opacity="1" d="M 1.09676,15.0318L 1.09676,7.9445C 1.13842,5.1995 4.13841,1.8245 7.21674,1.82432L 96.3672,1.84531C 99.7472,1.84531 103.076,4.88688 103.159,9.22031L 103.138,14.9175"/>
+	<path fill="none" fill-rule="evenodd" stroke-width="4" stroke-linejoin="round" stroke="#96B66E" stroke-opacity="1" d="M 124.116,27.4474L 108.018,27.4474C 104.705,27.4474 102.018,24.7611 102.018,21.4473L 102.018,14.9997"/>
+	<path fill="none" stroke-linejoin="round" stroke="#394629" stroke-opacity="1" d="M 124.24,26.2508L 109.252,26.2474C 105.428,26.2946 103.053,25.0008 103.115,19.6481L 103.134,14.5504"/>
+</svg>

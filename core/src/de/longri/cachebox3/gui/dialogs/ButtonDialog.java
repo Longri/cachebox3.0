@@ -49,7 +49,7 @@ public class ButtonDialog extends Table {   //VisWindow
     protected float mTitleWidth = CB.getScaledFloat(100);
     protected float mHeaderHeight = CB.getScaledFloat(10f);
     protected float mFooterHeight = CB.getScaledFloat(10f);
-    protected float mTitleVersatz = CB.getScaledFloat(6);
+    protected float mTitleVersatz = CB.getScaledFloat(5f);
     protected InputListener ignoreTouchDown = new InputListener() {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -66,7 +66,7 @@ public class ButtonDialog extends Table {   //VisWindow
     public ButtonDialog(String Name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
         super();
 
-        //this.setDebug(true, true);
+        this.setDebug(true, true);
         if (title != null) {
             setTitle(title);
         }
@@ -188,7 +188,7 @@ public class ButtonDialog extends Table {   //VisWindow
         add(buttonTable = new Table(skin));
 
 //        contentTable.defaults().space(2).padLeft(3).padRight(3);
-        buttonTable.defaults().space(pad).padBottom(margin);
+        buttonTable.defaults().space(pad).padBottom(margin).padTop(margin);
 
         buttonTable.addListener(new ChangeListener() {
             @Override
@@ -206,7 +206,7 @@ public class ButtonDialog extends Table {   //VisWindow
             titleTable.add(titleLabel).expandX().fillX();
 
             mTitleHeight = titleLabel.getHeight() + margin;
-            mTitleWidth = titleLabel.getWidth() + (2 * margin);
+            mTitleWidth = titleLabel.getWidth() + (4 * margin);
 
         }
 
@@ -371,7 +371,7 @@ public class ButtonDialog extends Table {   //VisWindow
         if (style.stageBackground != null) drawStageBackground(batch, parentAlpha);
 
         if (style.header != null && !dontRenderDialogBackground) {
-            style.header.draw(batch, this.getX(), this.getHeight() - mTitleHeight + this.getY(), this.getWidth(), mHeaderHeight);
+            style.header.draw(batch, this.getX(), this.getHeight() - (mTitleHeight + mTitleVersatz) + this.getY(), this.getWidth(), mHeaderHeight);
         }
         if (style.footer != null && !dontRenderDialogBackground) {
             style.footer.draw(batch, this.getX(), this.getY(), this.getWidth(), mFooterHeight + 2);
@@ -379,7 +379,7 @@ public class ButtonDialog extends Table {   //VisWindow
         if (style.center != null && !dontRenderDialogBackground) {
             style.center.draw(batch, this.getX(), mFooterHeight + this.getY(), this.getWidth(),
                     (buttonTable.getHeight()
-                            + contentTable.getHeight() - (mFooterHeight)));
+                            + contentTable.getHeight() - (mFooterHeight + mTitleVersatz)));
         }
 
         if (mHasTitle) {
