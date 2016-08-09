@@ -23,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.utils.ScaledSizes;
+import org.slf4j.LoggerFactory;
+import org.slf4j.impl.LibgdxLoggerFactory;
 
 /**
  * Static class
@@ -44,6 +46,16 @@ public class CB {
     public static final String LOG_LEVEL_TRACE = "trace";
 
     public static final String USED_LOG_LEVEL = LOG_LEVEL_TRACE;
+
+    static {
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.CacheBox");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.Settings");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+
+
+        ((LibgdxLoggerFactory) LoggerFactory.getILoggerFactory()).reset();
+    }
 
 
     final static float PPI_DEFAULT = 163;
