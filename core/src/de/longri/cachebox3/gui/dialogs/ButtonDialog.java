@@ -205,7 +205,7 @@ public class ButtonDialog extends Table {   //VisWindow
             titleLabel = new Label(titleText, new Label.LabelStyle(style.titleFont, style.titleFontColor));
             titleTable.add(titleLabel).expandX().fillX();
 
-            mTitleHeight = titleLabel.getHeight() + margin + style.title.getBottomHeight() + style.title.getTopHeight();
+            mTitleHeight = titleLabel.getHeight() + margin;
             mTitleWidth = titleLabel.getWidth() + (2 * margin);
 
         }
