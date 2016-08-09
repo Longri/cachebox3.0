@@ -13,10 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -60,14 +57,19 @@ public class ButtonDialog extends Table {   //VisWindow
             return false;
         }
     };
-    private Table contentTable, buttonTable;
+    private Table titleTable, contentTable, buttonTable;
     private Skin skin;
     private ObjectMap<Actor, Object> values = new ObjectMap();
+    private String titleText;
+    private Label titleLabel;
 
     public ButtonDialog(String Name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
         super();
 
-        this.setDebug(true, true);
+        //this.setDebug(true, true);
+        if (title != null) {
+            setTitle(title);
+        }
 
         // this.text(msg);
 
@@ -98,6 +100,11 @@ public class ButtonDialog extends Table {   //VisWindow
         msgBoxClickListener = Listener;
 
 
+    }
+
+    private void setTitle(String title) {
+        this.mHasTitle = true;
+        this.titleText = title;
     }
 
     private static Sprite getIcon(MessageBoxIcon msgIcon) {
@@ -153,14 +160,6 @@ public class ButtonDialog extends Table {   //VisWindow
         return (MesureFontUtil.Measure(font, "T").height) / 2;
     }
 
-//    /**
-//     * Adds a text button to the button table. Null will be passed to {@link #result(Object)} if this button is clicked. The dialog
-//     * must have been constructed with a skin to use this method.
-//     */
-//    public ButtonDialog button(String text) {
-//        return button(text, null);
-//    }
-
     public static float calcFooterHeight(BitmapFont font, boolean hasButtons) {
 
         if (margin <= 0)
@@ -171,13 +170,25 @@ public class ButtonDialog extends Table {   //VisWindow
 
     private void initialize() {
 
-        defaults().space(6);
+        if (margin <= 0) {
+            margin = CB.scaledSizes.MARGIN;
+            pad = margin / 2;
+        }
+
+
+//        defaults().space(6);
+        if (mHasTitle) {
+            add(titleTable = new Table(skin)).expandX().fill();
+            // float pad = CB.getScaledFloat(3);
+            titleTable.defaults().space(pad).padLeft(pad * 2).padRight(pad).padTop(pad).padBottom(pad);
+            row();
+        }
         add(contentTable = new Table(skin)).expand().fill();
         row();
         add(buttonTable = new Table(skin));
 
 //        contentTable.defaults().space(2).padLeft(3).padRight(3);
-        buttonTable.defaults().space(pad).padBottom(pad);
+        buttonTable.defaults().space(pad).padBottom(margin);
 
         buttonTable.addListener(new ChangeListener() {
             @Override
@@ -188,6 +199,17 @@ public class ButtonDialog extends Table {   //VisWindow
                 result(values.get(actor));
             }
         });
+
+        if (mHasTitle) {
+            mTitleHeight = 0;
+            titleLabel = new Label(titleText, new Label.LabelStyle(style.titleFont, style.titleFontColor));
+            titleTable.add(titleLabel).expandX().fillX();
+
+            mTitleHeight = titleLabel.getHeight() + margin + style.title.getBottomHeight() + style.title.getTopHeight();
+            mTitleWidth = titleLabel.getWidth() + (2 * margin);
+
+        }
+
 
     }
 
@@ -228,9 +250,16 @@ public class ButtonDialog extends Table {   //VisWindow
 
     @Override
     public void pack() {
+        // don't pack
+
 
         // see https://github.com/libgdx/libgdx/wiki/Table
 
+    }
+
+    @Override
+    public void layout() {
+        super.layout();
     }
 
     public void setButtonCaptions(MessageBoxButtons buttons) {
@@ -342,19 +371,21 @@ public class ButtonDialog extends Table {   //VisWindow
         if (style.stageBackground != null) drawStageBackground(batch, parentAlpha);
 
         if (style.header != null && !dontRenderDialogBackground) {
-            style.header.draw(batch, this.getX(), this.getHeight() - mTitleHeight - mHeaderHeight + this.getY(), this.getWidth(), mHeaderHeight);
+            style.header.draw(batch, this.getX(), this.getHeight() - mTitleHeight + this.getY(), this.getWidth(), mHeaderHeight);
         }
         if (style.footer != null && !dontRenderDialogBackground) {
             style.footer.draw(batch, this.getX(), this.getY(), this.getWidth(), mFooterHeight + 2);
         }
         if (style.center != null && !dontRenderDialogBackground) {
-            style.center.draw(batch, this.getX(), mFooterHeight + this.getY(), this.getWidth(), (this.getHeight() - mFooterHeight - mHeaderHeight - mTitleHeight) + 3.5f);
+            style.center.draw(batch, this.getX(), mFooterHeight + this.getY(), this.getWidth(),
+                    (buttonTable.getHeight()
+                            + contentTable.getHeight() - (mFooterHeight)));
         }
 
         if (mHasTitle) {
             if (mTitleWidth < this.getWidth()) {
                 if (style.title != null && !dontRenderDialogBackground) {
-                    style.title.draw(batch, this.getX(), this.getHeight() - mTitleHeight - mTitleVersatz + this.getY(), mTitleWidth, mTitleHeight);
+                    style.title.draw(batch, this.getX(), this.getY() + titleTable.getY(), mTitleWidth, mTitleHeight);
                 }
             } else {
                 if (style.header != null && !dontRenderDialogBackground) {
@@ -381,6 +412,7 @@ public class ButtonDialog extends Table {   //VisWindow
         SvgNinePatchDrawable title, header, center, footer;
         Drawable stageBackground;
         BitmapFont titleFont;
+        Color titleFontColor;
     }
 
 }

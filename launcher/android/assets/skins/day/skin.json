@@ -273,11 +273,13 @@
 
   de.longri.cachebox3.gui.dialogs.ButtonDialog$ButtonDialogStyle: {
     default: {
+      title: drawable_dialog_header,
       header: drawable_dialog_header,
       center: drawable_dialog_center,
       footer: drawable_dialog_footer,
       stageBackground: dialog_stage_background,
-      titleFont: normal_font
+      titleFont: normal_font,
+      titleFontColor: font_color,
     }
   }
 
