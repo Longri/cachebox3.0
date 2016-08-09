@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.translation.Translation;
@@ -33,6 +34,9 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
  */
 public class ButtonDialog extends Table {   //VisWindow
 
+    // see for layout help ==> https://github.com/libgdx/libgdx/wiki/Table
+
+
     public static final int BUTTON_POSITIVE = 1;
     public static final int BUTTON_NEUTRAL = 2;
     public static final int BUTTON_NEGATIVE = 3;
@@ -42,6 +46,7 @@ public class ButtonDialog extends Table {   //VisWindow
     private static float margin, pad;
     private final OnMsgBoxClickListener msgBoxClickListener;
     private final ButtonDialogStyle style;
+    private final Label msgLabel;
     protected boolean dontRenderDialogBackground = false;
     protected Object data;
     protected boolean mHasTitle = false;
@@ -66,13 +71,10 @@ public class ButtonDialog extends Table {   //VisWindow
     public ButtonDialog(String Name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
         super();
 
-        this.setDebug(true, true);
+       // this.setDebug(true, true);
         if (title != null) {
             setTitle(title);
         }
-
-        // this.text(msg);
-
 
         this.skin = VisUI.getSkin();
         style = skin.get("default", ButtonDialogStyle.class);
@@ -84,18 +86,16 @@ public class ButtonDialog extends Table {   //VisWindow
         setButtonCaptions(buttons);
 
         setSkin(skin);
+     //   contentTable.setDebug(true, true);
 
+        if (icon != MessageBoxIcon.None && icon != null) {
+            Image iconImage = new Image(getIcon(icon));
+            contentTable.add(iconImage).width(iconImage.getWidth()).top().pad(margin);
+        }
 
-        //TODO add Icon to ButtonDialog
-//        SizeF contentSize = getContentSize();
-//
-//        CB_RectF imageRec = new CB_RectF(0, contentSize.height - margin - UI_Size_Base.that.getButtonHeight(), UI_Size_Base.that.getButtonHeight(), UI_Size_Base.that.getButtonHeight());
-//
-//        if (icon != MessageBoxIcon.None && icon != null) {
-//            Image iconImage = new Image(imageRec, "MsgBoxIcon", false);
-//            iconImage.setDrawable(new SpriteDrawable(getIcon(icon)));
-//            addChild(iconImage);
-//        }
+        msgLabel = new Label(msg, new Label.LabelStyle(style.titleFont, style.titleFontColor));
+        msgLabel.setWrap(true);
+        contentTable.add(msgLabel).expandX().fillX();
 
         msgBoxClickListener = Listener;
 
@@ -142,10 +142,10 @@ public class ButtonDialog extends Table {   //VisWindow
                 icon = CB.getSprite(IconNames.warningIcon.name());
                 break;
             case 9:
-                icon = CB.getSprite(IconNames.dayGcLiveIcon.name());
+                icon = CB.getSprite(IconNames.gc_liveIcon.name());
                 break;
             case 10:
-                icon = CB.getSprite(IconNames.dayGcLiveIcon.name());
+                icon = CB.getSprite(IconNames.gc_liveIcon.name());
                 break;
 
             default:
@@ -187,8 +187,8 @@ public class ButtonDialog extends Table {   //VisWindow
         row();
         add(buttonTable = new Table(skin));
 
-//        contentTable.defaults().space(2).padLeft(3).padRight(3);
-        buttonTable.defaults().space(pad).padBottom(margin).padTop(margin);
+        contentTable.defaults().space(2).padLeft(3).padRight(3);
+        buttonTable.defaults().pad(pad);
 
         buttonTable.addListener(new ChangeListener() {
             @Override
@@ -250,10 +250,8 @@ public class ButtonDialog extends Table {   //VisWindow
 
     @Override
     public void pack() {
-        // don't pack
+        super.pack();
 
-
-        // see https://github.com/libgdx/libgdx/wiki/Table
 
     }
 
