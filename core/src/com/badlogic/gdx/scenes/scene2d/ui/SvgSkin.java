@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
@@ -60,8 +61,8 @@ public class SvgSkin extends Skin {
         // max texture size are 2048x2048
         int pageWidth = 2048;
         int pageHeight = 2048;
-        int padding = 0;
-        boolean duplicateBorder = true;
+        int padding = 2;
+        boolean duplicateBorder = false;
 
         PixmapPacker packer = new PixmapPacker(pageWidth, pageHeight, Pixmap.Format.RGBA8888, padding, duplicateBorder);
 
@@ -99,7 +100,13 @@ public class SvgSkin extends Skin {
         packer.pack("color", pixmap);
 
 
-        TextureAtlas atlas = packer.generateTextureAtlas(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear, false);
+        TextureAtlas atlas = packer.generateTextureAtlas(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.MipMapNearestNearest, true);
+
+        Array<PixmapPacker.Page> pages = packer.getPages();
+
+        FileHandle tmp = Gdx.files.absolute(CB.WorkPath + "/tmp.png");
+        PixmapIO.writePNG(tmp, pages.get(0).getPixmap());
+
         packer.dispose();
         pixmap.dispose();
         return atlas;
@@ -239,10 +246,10 @@ public class SvgSkin extends Skin {
                 right = CB.getScaledInt(right);
                 top = CB.getScaledInt(top);
                 bottom = CB.getScaledInt(bottom);
-                leftWidth = CB.getScaledInt(leftWidth);
-                rightWidth = CB.getScaledInt(rightWidth);
-                topHeight = CB.getScaledInt(topHeight);
-                bottomHeight = CB.getScaledInt(bottomHeight);
+                leftWidth = leftWidth == 0 ? left : CB.getScaledInt(leftWidth);
+                rightWidth = rightWidth == 0 ? right : CB.getScaledInt(rightWidth);
+                topHeight = topHeight == 0 ? top : CB.getScaledInt(topHeight);
+                bottomHeight = bottomHeight == 0 ? bottom : CB.getScaledInt(bottomHeight);
 
                 return new SvgNinePatchDrawable(new NinePatch(textureRegion, left, right, top, bottom),
                         leftWidth, rightWidth, topHeight, bottomHeight);

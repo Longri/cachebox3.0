@@ -48,133 +48,129 @@
       },
       drawable_main_button_bar_back:{
       name: button_bar_back,
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0
+      left: 1,
+      right: 1,
+      top: 1,
+      bottom: 1
       },
       drawable_nav_pressed:{
         name: nav_pressed,
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
       },
       drawable_nav_selected:{
         name: nav_selected,
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
       },
       drawable_nav:{
         name: nav,
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
       },
       drawable_db_pressed:{
         name: db_pressed,
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
       },
       drawable_db_selected:{
         name: db_selected,
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
       },
       drawable_db:{
         name: db,
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
       },
       drawable_cache_pressed:{
         name: cache_pressed,
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
       },
       drawable_cache_selected:{
         name: cache_selected,
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
       },
       drawable_cache:{
         name: cache,
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
       },
       drawable_tool_pressed:{
         name: tool_pressed,
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
       },
       drawable_tool_selected:{
         name: tool_selected,
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
       },
       drawable_tool:{
         name: tool,
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
       },
       drawable_misc_pressed:{
        name: misc_pressed,
-        left: 0,
-       right: 0,
-       top: 0,
-       bottom: 0
+        left: 1,
+       right: 1,
+       top: 1,
+       bottom: 1
       },
      drawable_misc_selected:{
        name: misc_selected,
-       left: 0,
-       right: 0,
-       top: 0,
-       bottom: 0
+       left: 1,
+       right: 1,
+       top: 1,
+       bottom: 1
      },
       drawable_misc:{
         name: misc,
-       left: 0,
-        right: 0,
-       top: 0,
-       bottom: 0
+       left: 1,
+        right: 1,
+       top: 1,
+       bottom: 1
      },
   drawable_dialog_header:{
     name: dialog_header,
-    left: 8,
-    right: 8,
-    top: 8,
-    bottom: 8,
-    leftWidth: 10,
-    rightWidth: 10,
-    topHeight: 10,
-    bottomHeight: 10
+    left: 16,
+    right: 16,
+    top: 16,
+    bottom: 1
   },
   drawable_dialog_center:{
     name: dialog_center,
-    left: 8,
-    right: 8,
-    top: 8,
-    bottom: 0,
+    left: 16,
+    right: 16,
+    top: 16,
+    bottom: 1,
     leftWidth: 10,
     rightWidth: 10,
     topHeight: 10,
@@ -182,10 +178,10 @@
   },
       drawable_dialog_footer:{
         name: dialog_footer,
-        left: 8,
-        right: 8,
-        top: 0,
-        bottom: 8,
+        left: 16,
+        right: 16,
+        top: 1,
+        bottom: 16,
         leftWidth: 10,
         rightWidth: 10,
         topHeight: 10,
@@ -194,14 +190,14 @@
 
   drawable_dialog_title:{
     name: dialog_title,
-    left: 8,
-    right: 31,
-    top: 8,
-    bottom: 15,
-    leftWidth: 10,
-    rightWidth: 10,
-    topHeight: 10,
-    bottomHeight: 10
+    left: 16,
+    right: 39,
+    top: 18,
+    bottom: 33,
+    leftWidth: 15,
+    rightWidth: 36,
+    topHeight: 8,
+    bottomHeight: 9
   },
     }
 
