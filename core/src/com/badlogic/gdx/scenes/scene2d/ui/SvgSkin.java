@@ -43,6 +43,8 @@ import java.util.ArrayList;
 public class SvgSkin extends Skin {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(SvgSkin.class);
 
+    final static String TMP_UI_ATLAS = "/ui_tmp.atlas";
+
     /**
      * Create a Skin from given Jason-file!
      * The drawable resources are created from Svg-Folder and putted into a Atlas
@@ -57,6 +59,13 @@ public class SvgSkin extends Skin {
 
 
     public static TextureAtlas createTextureAtlasFromImages(FileHandle folder) {
+
+        FileHandle cachedTexturatlasFileHandle = Gdx.files.absolute(CB.WorkPath + TMP_UI_ATLAS);
+        if (cachedTexturatlasFileHandle.exists()) {
+            //Todo test for hash before load (if not equals generate new)
+            return new TextureAtlas(cachedTexturatlasFileHandle);
+        }
+
 
         // max texture size are 2048x2048
         int pageWidth = 2048;
@@ -74,9 +83,16 @@ public class SvgSkin extends Skin {
             Pixmap pixmap = null;
             String name = null;
 
+
+            final int prime = 31;
+            int resultHashCode = 1;
+            // resultHashCode is the hashcode.
+
+
             //check for svg or png
             if (fileHandle.extension().equalsIgnoreCase("svg")) {
                 try {
+                    resultHashCode = resultHashCode * prime + fileHandle.file().hashCode();
                     pixmap = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, 1));
                     name = fileHandle.nameWithoutExtension();
                 } catch (IOException e) {
@@ -99,13 +115,14 @@ public class SvgSkin extends Skin {
         pixmap.fill();
         packer.pack("color", pixmap);
 
-
         TextureAtlas atlas = packer.generateTextureAtlas(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.MipMapNearestNearest, true);
+        PixmapPackerIO pixmapPackerIO = new PixmapPackerIO();
+        try {
+            pixmapPackerIO.save(cachedTexturatlasFileHandle, packer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        Array<PixmapPacker.Page> pages = packer.getPages();
-
-        FileHandle tmp = Gdx.files.absolute(CB.WorkPath + "/tmp.png");
-        PixmapIO.writePNG(tmp, pages.get(0).getPixmap());
 
         packer.dispose();
         pixmap.dispose();
