@@ -43,6 +43,8 @@ import java.util.ArrayList;
 public class SvgSkin extends Skin {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(SvgSkin.class);
 
+    public final static String TMP_UI_ATLAS = "/user/temp/ui_tmp.atlas";
+
     /**
      * Create a Skin from given Jason-file!
      * The drawable resources are created from Svg-Folder and putted into a Atlas
@@ -58,6 +60,16 @@ public class SvgSkin extends Skin {
 
     public static TextureAtlas createTextureAtlasFromImages(FileHandle folder) {
 
+        FileHandle cachedTexturatlasFileHandle = Gdx.files.absolute(CB.WorkPath + TMP_UI_ATLAS);
+        if (cachedTexturatlasFileHandle.exists()) {
+            if (HashAtlasWriter.hashEquals(folder)) {
+                log.debug("Load cached TextureAtlas");
+                return new TextureAtlas(cachedTexturatlasFileHandle);
+            }
+        }
+
+        log.debug("Create new TextureAtlas");
+
         // max texture size are 2048x2048
         int pageWidth = 2048;
         int pageHeight = 2048;
@@ -68,26 +80,31 @@ public class SvgSkin extends Skin {
 
         ArrayList<FileHandle> fileHandleArrayList = new ArrayList<FileHandle>();
         Utils.listFileHandels(folder, fileHandleArrayList);
-
+        final int prime = 31;
+        int resultHashCode = 1;
+        // resultHashCode is the hashcode.
         for (FileHandle fileHandle : fileHandleArrayList) {
 
             Pixmap pixmap = null;
             String name = null;
 
+
             //check for svg or png
             if (fileHandle.extension().equalsIgnoreCase("svg")) {
                 try {
+                    resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
                     pixmap = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, 1));
                     name = fileHandle.nameWithoutExtension();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else if (fileHandle.extension().equalsIgnoreCase("png")) {
+                resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
                 pixmap = Utils.getPixmapFromBitmap(CanvasAdapter.decodeBitmap(fileHandle.read()));
                 name = fileHandle.nameWithoutExtension();
             }
 
-            log.debug("Pack Svg: " + name + " Size:" + pixmap.getWidth() + "/" + pixmap.getHeight());
+            log.trace("Pack Svg: " + name + " Size:" + pixmap.getWidth() + "/" + pixmap.getHeight());
 
             if (pixmap != null) packer.pack(name, pixmap);
 
@@ -99,13 +116,19 @@ public class SvgSkin extends Skin {
         pixmap.fill();
         packer.pack("color", pixmap);
 
-
         TextureAtlas atlas = packer.generateTextureAtlas(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.MipMapNearestNearest, true);
+        PixmapPackerIO pixmapPackerIO = new PixmapPackerIO();
 
-        Array<PixmapPacker.Page> pages = packer.getPages();
+        PixmapPackerIO.SaveParameters parameters = new PixmapPackerIO.SaveParameters();
+        parameters.magFilter = Texture.TextureFilter.MipMapNearestNearest;
+        parameters.minFilter = Texture.TextureFilter.MipMapNearestNearest;
 
-        FileHandle tmp = Gdx.files.absolute(CB.WorkPath + "/tmp.png");
-        PixmapIO.writePNG(tmp, pages.get(0).getPixmap());
+        try {
+            HashAtlasWriter.save(resultHashCode, cachedTexturatlasFileHandle, packer, parameters);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         packer.dispose();
         pixmap.dispose();
