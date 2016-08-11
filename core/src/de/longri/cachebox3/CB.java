@@ -45,14 +45,14 @@ public class CB {
     public static final String LOG_LEVEL_ERROR = "error";
     public static final String LOG_LEVEL_TRACE = "trace";
 
-    public static final String USED_LOG_LEVEL = LOG_LEVEL_TRACE;
+    public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
 
     static {
         LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.CacheBox");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.Settings");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
+        //   LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
 
         ((LibgdxLoggerFactory) LoggerFactory.getILoggerFactory()).reset();
     }
