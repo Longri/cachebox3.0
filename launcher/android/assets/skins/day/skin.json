@@ -1,294 +1,323 @@
 {
-  de.longri.cachebox3.utils.ScaledSizes: {
-  default: {
-    button_width: 63,
-    button_height: 63,
-    button_width_wide: 120,
-    margin: 10,
-    check_box_height: 12,
-  }
-  }
-
-
-    com.badlogic.gdx.graphics.Color: {
-      background: { r: 1, g: 1, b: 1, a: 1 },
-      abstract_background: { r: 1, g: 0, b: 0, a: 1 },
-      font_color: { r: 0, g: 0, b: 0, a: 1 },
-      dialog_background: { r: 0, g: 0, b: 0, a: 0.8 },
-      transparent_color: { r: 0, g: 0, b: 0, a: 0 },
+  "de.longri.cachebox3.utils.ScaledSizes": {
+    "default": {
+      "button_width": 63,
+      "button_height": 63,
+      "button_width_wide": 120,
+      "margin": 10,
+      "check_box_height": 12
     }
-
-    com.badlogic.gdx.graphics.g2d.BitmapFont: {
-      normal_font: {font: "fonts/DroidSans", size: 26}
-    }
-
-
-    com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable:{
-      drawable_default_button:{
-        name: default_button,
-        left: 30,
-        right: 30,
-        top: 30,
-        bottom: 30,
-        leftWidth: 10,
-        rightWidth: 10,
-        topHeight: 10,
-        bottomHeight: 10
-      },
-      drawable_default_button_pressed:{
-        name: default_button_pressed,
-        left: 30,
-        right: 30,
-        top: 30,
-        bottom: 30,
-        leftWidth: 10,
-        rightWidth: 10,
-        topHeight: 10,
-        bottomHeight: 10
-      },
-      drawable_main_button_bar_back:{
-      name: button_bar_back,
-      left: 1,
-      right: 1,
-      top: 1,
-      bottom: 1
-      },
-      drawable_nav_pressed:{
-        name: nav_pressed,
-        left: 1,
-        right: 1,
-        top: 1,
-        bottom: 1
-      },
-      drawable_nav_selected:{
-        name: nav_selected,
-        left: 1,
-        right: 1,
-        top: 1,
-        bottom: 1
-      },
-      drawable_nav:{
-        name: nav,
-        left: 1,
-        right: 1,
-        top: 1,
-        bottom: 1
-      },
-      drawable_db_pressed:{
-        name: db_pressed,
-        left: 1,
-        right: 1,
-        top: 1,
-        bottom: 1
-      },
-      drawable_db_selected:{
-        name: db_selected,
-        left: 1,
-        right: 1,
-        top: 1,
-        bottom: 1
-      },
-      drawable_db:{
-        name: db,
-        left: 1,
-        right: 1,
-        top: 1,
-        bottom: 1
-      },
-      drawable_cache_pressed:{
-        name: cache_pressed,
-        left: 1,
-        right: 1,
-        top: 1,
-        bottom: 1
-      },
-      drawable_cache_selected:{
-        name: cache_selected,
-        left: 1,
-        right: 1,
-        top: 1,
-        bottom: 1
-      },
-      drawable_cache:{
-        name: cache,
-        left: 1,
-        right: 1,
-        top: 1,
-        bottom: 1
-      },
-      drawable_tool_pressed:{
-        name: tool_pressed,
-        left: 1,
-        right: 1,
-        top: 1,
-        bottom: 1
-      },
-      drawable_tool_selected:{
-        name: tool_selected,
-        left: 1,
-        right: 1,
-        top: 1,
-        bottom: 1
-      },
-      drawable_tool:{
-        name: tool,
-        left: 1,
-        right: 1,
-        top: 1,
-        bottom: 1
-      },
-      drawable_misc_pressed:{
-       name: misc_pressed,
-        left: 1,
-       right: 1,
-       top: 1,
-       bottom: 1
-      },
-     drawable_misc_selected:{
-       name: misc_selected,
-       left: 1,
-       right: 1,
-       top: 1,
-       bottom: 1
-     },
-      drawable_misc:{
-        name: misc,
-       left: 1,
-        right: 1,
-       top: 1,
-       bottom: 1
-     },
-  drawable_dialog_header:{
-    name: dialog_header,
-    left: 16,
-    right: 16,
-    top: 16,
-    bottom: 1
   },
-  drawable_dialog_center:{
-    name: dialog_center,
-    left: 16,
-    right: 16,
-    top: 16,
-    bottom: 1,
-    leftWidth: 10,
-    rightWidth: 10,
-    topHeight: 10,
-    bottomHeight: 10
-  },
-      drawable_dialog_footer:{
-        name: dialog_footer,
-        left: 16,
-        right: 16,
-        top: 1,
-        bottom: 16,
-        leftWidth: 10,
-        rightWidth: 10,
-        topHeight: 10,
-        bottomHeight: 10
-      },
-
-  drawable_dialog_title:{
-    name: dialog_title,
-    left: 16,
-    right: 39,
-    top: 18,
-    bottom: 33,
-    leftWidth: 15,
-    rightWidth: 36,
-    topHeight: 8,
-    bottomHeight: 9
-  },
-    }
-
-
-
-    com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
-      default: {
-        up: drawable_default_button,
-        down: drawable_default_button_pressed,
-
-
-      },
-      nav: {
-        down: default_button_pressed,
-        up: default_button
-      }
-    }
-
-    com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
-      default: {font: normal_font, fontColor: font_color}
-    }
-
-    de.longri.cachebox3.gui.widgets.ButtonBar$ButtonBarStyle: {
-      main_button_bar: {background: drawable_main_button_bar_back}
-    }
-
-
-    de.longri.cachebox3.gui.widgets.GestureButton$GestureButtonStyle: {
-      nav: {
-        up: drawable_nav,
-        down: drawable_nav_pressed,
-        select: drawable_nav_selected
-      },
-      db: {
-        up: drawable_db,
-        down: drawable_db_pressed,
-        select: drawable_db_selected
-      },
-      cache: {
-        up: drawable_cache,
-        down: drawable_cache_pressed,
-        select: drawable_cache_selected
-      },
-      tool: {
-        up: drawable_tool,
-        down: drawable_tool_pressed,
-        select: drawable_tool_selected
-      },
-      misc: {
-       up: drawable_misc,
-       down: drawable_misc_pressed,
-       select: drawable_misc_selected
-      }
-    }
-
-  de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle: {
-    dialog_stage_background:{
-      color: dialog_background
+  "com.badlogic.gdx.graphics.Color": {
+    "background": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 1
     },
-    transparent_drawable: {
-      color: transparent_color
+    "abstract_background": {
+      "r": 1,
+      "g": 0,
+      "b": 0,
+      "a": 1
+    },
+    "font_color": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 1
+    },
+    "dialog_background": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0.8
+    },
+    "transparent_color": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    }
+  },
+  "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "normal_font": {
+      "font": "fonts/DroidSans",
+      "size": 26
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable": {
+    "drawable_default_button": {
+      "name": "default_button",
+      "left": 30,
+      "right": 30,
+      "top": 30,
+      "bottom": 30,
+      "leftWidth": 10,
+      "rightWidth": 10,
+      "topHeight": 10,
+      "bottomHeight": 10
+    },
+    "drawable_default_button_pressed": {
+      "name": "default_button_pressed",
+      "left": 30,
+      "right": 30,
+      "top": 30,
+      "bottom": 30,
+      "leftWidth": 10,
+      "rightWidth": 10,
+      "topHeight": 10,
+      "bottomHeight": 10
+    },
+    "drawable_main_button_bar_back": {
+      "name": "button_bar_back",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_nav_pressed": {
+      "name": "nav_pressed",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_nav_selected": {
+      "name": "nav_selected",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_nav": {
+      "name": "nav",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_db_pressed": {
+      "name": "db_pressed",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_db_selected": {
+      "name": "db_selected",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_db": {
+      "name": "db",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_cache_pressed": {
+      "name": "cache_pressed",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_cache_selected": {
+      "name": "cache_selected",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_cache": {
+      "name": "cache",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_tool_pressed": {
+      "name": "tool_pressed",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_tool_selected": {
+      "name": "tool_selected",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_tool": {
+      "name": "tool",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_misc_pressed": {
+      "name": "misc_pressed",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_misc_selected": {
+      "name": "misc_selected",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_misc": {
+      "name": "misc",
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    },
+    "drawable_dialog_header": {
+      "name": "dialog_header",
+      "left": 16,
+      "right": 16,
+      "top": 16,
+      "bottom": 1
+    },
+    "drawable_dialog_center": {
+      "name": "dialog_center",
+      "left": 16,
+      "right": 16,
+      "top": 16,
+      "bottom": 1,
+      "leftWidth": 10,
+      "rightWidth": 10,
+      "topHeight": 10,
+      "bottomHeight": 10
+    },
+    "drawable_dialog_footer": {
+      "name": "dialog_footer",
+      "left": 16,
+      "right": 16,
+      "top": 1,
+      "bottom": 16,
+      "leftWidth": 10,
+      "rightWidth": 10,
+      "topHeight": 10,
+      "bottomHeight": 10
+    },
+    "drawable_dialog_title": {
+      "name": "dialog_title",
+      "left": 16,
+      "right": 39,
+      "top": 18,
+      "bottom": 33,
+      "leftWidth": 15,
+      "rightWidth": 36,
+      "topHeight": 8,
+      "bottomHeight": 9
+    },
+    "listrec_first_drawable": {
+      "name": "listrec_first",
+      "left": 10,
+      "right": 10,
+      "top": 10,
+      "bottom": 10,
+      "leftWidth": 5,
+      "rightWidth": 5,
+      "topHeight": 5,
+      "bottomHeight": 5
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
+    "default": {
+      "up": "drawable_default_button",
+      "down": "drawable_default_button_pressed"
+    },
+    "nav": {
+      "down": "default_button_pressed",
+      "up": "default_button"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+    "default": {
+      "font": "normal_font",
+      "fontColor": "font_color"
+    }
+  },
+  "de.longri.cachebox3.gui.widgets.ButtonBar$ButtonBarStyle": {
+    "main_button_bar": {
+      "background": "drawable_main_button_bar_back"
+    }
+  },
+  "de.longri.cachebox3.gui.widgets.GestureButton$GestureButtonStyle": {
+    "nav": {
+      "up": "drawable_nav",
+      "down": "drawable_nav_pressed",
+      "select": "drawable_nav_selected"
+    },
+    "db": {
+      "up": "drawable_db",
+      "down": "drawable_db_pressed",
+      "select": "drawable_db_selected"
+    },
+    "cache": {
+      "up": "drawable_cache",
+      "down": "drawable_cache_pressed",
+      "select": "drawable_cache_selected"
+    },
+    "tool": {
+      "up": "drawable_tool",
+      "down": "drawable_tool_pressed",
+      "select": "drawable_tool_selected"
+    },
+    "misc": {
+      "up": "drawable_misc",
+      "down": "drawable_misc_pressed",
+      "select": "drawable_misc_selected"
+    }
+  },
+  "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
+    "dialog_stage_background": {
+      "color": "dialog_background"
+    },
+    "transparent_drawable": {
+      "color": "transparent_color"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
+    "transparent": {
+      "background": "transparent_drawable",
+      "titleFont": "normal_font",
+      "stageBackground": "dialog_stage_background"
+    }
+  },
+  "com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle": {
+    "default": {
+      "font": "normal_font",
+      "fontColor": "font_color",
+      "up": "drawable_default_button",
+      "down": "drawable_default_button_pressed"
+    }
+  },
+  "de.longri.cachebox3.gui.dialogs.ButtonDialog$ButtonDialogStyle": {
+    "default": {
+      "title": "drawable_dialog_title",
+      "header": "drawable_dialog_header",
+      "center": "drawable_dialog_center",
+      "footer": "drawable_dialog_footer",
+      "stageBackground": "dialog_stage_background",
+      "titleFont": "normal_font",
+      "titleFontColor": "font_color"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
+    "list": {
+      "background": "dialog_stage_background"
     }
   }
-
-
-    com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
-      transparent: {
-        background: transparent_drawable,
-        titleFont: normal_font,
-        stageBackground: dialog_stage_background
-      }
-    }
-
-    com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle: {
-      default: {
-        font: normal_font, fontColor: font_color,
-        up: drawable_default_button,
-        down: drawable_default_button_pressed,
-      }
-    }
-
-  de.longri.cachebox3.gui.dialogs.ButtonDialog$ButtonDialogStyle: {
-    default: {
-      title: drawable_dialog_title,
-      header: drawable_dialog_header,
-      center: drawable_dialog_center,
-      footer: drawable_dialog_footer,
-      stageBackground: dialog_stage_background,
-      titleFont: normal_font,
-      titleFontColor: font_color,
-    }
-  }
-
 }
