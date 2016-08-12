@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.adapter.ArrayAdapter;
-import com.kotcrab.vis.ui.util.adapter.ListAdapter;
 import com.kotcrab.vis.ui.widget.VisTable;
 
 /**
@@ -105,6 +104,7 @@ public abstract class ListView extends com.kotcrab.vis.ui.widget.ListView<Intege
 
         this.rebuildView();
         this.getMainTable().setBackground(style.background);
+        this.getScrollPane().setFlickScroll(true);
     }
 
     public abstract VisTable createView(Integer index);
@@ -112,8 +112,8 @@ public abstract class ListView extends com.kotcrab.vis.ui.widget.ListView<Intege
 
     public static class ListViewStyle {
 
-       public Drawable background, firstItem, secondItem, selectedItem;
-       public float pad, padLeft, padRight, padTop, padBottom;
+        public Drawable background, firstItem, secondItem, selectedItem;
+        public float pad, padLeft, padRight, padTop, padBottom;
 
         public ListViewStyle() {
         }
