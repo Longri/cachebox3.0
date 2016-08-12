@@ -231,6 +231,28 @@
       "rightWidth": 5,
       "topHeight": 5,
       "bottomHeight": 5
+    },
+    "listrec_second_drawable": {
+      "name": "listrec_second",
+      "left": 10,
+      "right": 10,
+      "top": 10,
+      "bottom": 10,
+      "leftWidth": 5,
+      "rightWidth": 5,
+      "topHeight": 5,
+      "bottomHeight": 5
+    },
+    "listrec_selected_drawable": {
+      "name": "listrec_selected",
+      "left": 10,
+      "right": 10,
+      "top": 10,
+      "bottom": 10,
+      "leftWidth": 5,
+      "rightWidth": 5,
+      "topHeight": 5,
+      "bottomHeight": 5
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
@@ -317,7 +339,16 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
     "list": {
-      "background": "dialog_stage_background"
+      "background": "transparent_drawable"
+    }
+  },
+  "de.longri.cachebox3.gui.views.ListView$ListViewStyle": {
+    "default": {
+      "background": "dialog_stage_background",
+      "firstItem": "listrec_first_drawable",
+      "secondItem": "listrec_second_drawable",
+      "selectedItem": "listrec_selected_drawable",
+      "pad": 1
     }
   }
 }

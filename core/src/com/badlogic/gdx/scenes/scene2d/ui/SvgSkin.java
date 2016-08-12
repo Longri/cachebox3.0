@@ -29,6 +29,7 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.gui.views.ListView;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.utils.ScaledSizes;
 import org.oscim.backend.CanvasAdapter;
@@ -245,6 +246,39 @@ public class SvgSkin extends Skin {
                 Color color = json.readValue("color", Color.class, jsonData);
                 ColorDrawable drawable = new ColorDrawable(color);
                 return drawable;
+            }
+        });
+
+        json.setSerializer(ListView.ListViewStyle.class, new Json.ReadOnlySerializer<ListView.ListViewStyle>() {
+            public ListView.ListViewStyle read(Json json, JsonValue jsonData, Class type) {
+                ListView.ListViewStyle style = new ListView.ListViewStyle();
+
+                String background, firstItem, secondItem, selectedItem;
+
+                background = json.readValue("background", String.class, jsonData);
+                firstItem = json.readValue("firstItem", String.class, jsonData);
+                secondItem = json.readValue("secondItem", String.class, jsonData);
+                selectedItem = json.readValue("selectedItem", String.class, jsonData);
+
+                style.background = getDrawable(background);
+                style.firstItem = getDrawable(firstItem);
+                style.secondItem = getDrawable(secondItem);
+                style.selectedItem = getDrawable(selectedItem);
+
+                float pad, padLeft, padRight, padTop, padBottom;
+                pad = json.readValue("pad", float.class, 0f, jsonData);
+                padLeft = json.readValue("padLeft", float.class, 0f, jsonData);
+                padRight = json.readValue("padRight", float.class, 0f, jsonData);
+                padTop = json.readValue("padTop", float.class, 0f, jsonData);
+                padBottom = json.readValue("padBottom", float.class, 0f, jsonData);
+
+                //scale values
+                style.pad = CB.getScaledFloat(pad);
+                style.padLeft = CB.getScaledFloat(padLeft);
+                style.padRight = CB.getScaledFloat(padRight);
+                style.padTop = CB.getScaledFloat(padTop);
+                style.padBottom = CB.getScaledFloat(padBottom);
+                return style;
             }
         });
 
