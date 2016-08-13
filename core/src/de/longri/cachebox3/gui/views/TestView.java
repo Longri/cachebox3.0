@@ -16,27 +16,21 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
-import com.kotcrab.vis.ui.util.adapter.ArrayAdapter;
-import com.kotcrab.vis.ui.util.adapter.ListAdapter;
-import com.kotcrab.vis.ui.widget.ListView;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.translation.Lang;
-import de.longri.cachebox3.translation.Translation;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 /**
  * Created by Longri on 27.07.16.
@@ -82,7 +76,23 @@ public class TestView extends AbstractView {
 
         testButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                Menu icm = new Menu("Test Menu");
 
+                icm.addItem(MenuID.MI_LAYER, "Layer");
+                MenuItem mi = icm.addItem(MenuID.MI_RENDERTHEMES, "Renderthemes");
+
+                icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
+                icm.addCheckableItem(MenuID.MI_ALIGN_TO_COMPSS, "AlignToCompass", true);
+                icm.addItem(MenuID.MI_CENTER_WP, "CenterWP");
+                // icm.addItem(MenuID.MI_SETTINGS, "settings", Sprites.getSprite(IconName.settings.name()));
+                // icm.addItem(MenuID.MI_SEARCH, "search", SpriteCache.Icons.get(27));
+                icm.addItem(MenuID.MI_MAPVIEW_VIEW, "view");
+                //icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
+                icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
+
+                // icm.addOnClickListener(onItemClickListener);
+
+                icm.show();
             }
         });
 
@@ -92,7 +102,7 @@ public class TestView extends AbstractView {
 
 
         final ArrayList<String> itemList = new ArrayList<String>();
-        for (int i = 0; i < 20; i++) itemList.add(Integer.toString(i));
+        for (int i = 0; i < 500; i++) itemList.add(Integer.toString(i));
 
         de.longri.cachebox3.gui.views.ListView listView = new de.longri.cachebox3.gui.views.ListView(itemList.size()) {
             @Override
@@ -107,7 +117,8 @@ public class TestView extends AbstractView {
         };
 
 
-        listView.getMainTable().setBounds(20, 20, 200, 400);
+        listView.getMainTable().setBounds(200, 50, 200, 400);
+
         this.addActor(listView.getMainTable());
 
     }

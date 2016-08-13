@@ -350,5 +350,19 @@
       "selectedItem": "listrec_selected_drawable",
       "pad": 1
     }
+  },
+  "de.longri.cachebox3.gui.menu.Menu$MenuStyle": {
+    "default": {
+      "background": "listrec_first_drawable",
+      "font": "normal_font",
+      "fontColor": "font_color",
+      "stageBackground": "dialog_stage_background"
+    }
+  },
+  "de.longri.cachebox3.gui.menu.MenuItem$MenuItemStyle": {
+    "default": {
+      "font": "normal_font",
+      "fontColor": "font_color"
+    }
   }
 }

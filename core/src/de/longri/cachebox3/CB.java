@@ -46,8 +46,10 @@ public class CB {
     public static final String LOG_LEVEL_TRACE = "trace";
 
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
+    public static final float WINDOW_FADE_TIME = 0.3f;
 
     static {
+
         LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.CacheBox");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.Settings");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");

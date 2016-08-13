@@ -27,6 +27,9 @@ import com.kotcrab.vis.ui.widget.VisTable;
 public abstract class ListView extends com.kotcrab.vis.ui.widget.ListView<Integer> {
 
 
+    //TODO use extended CachedItemListner and dispose Items that draw state to old (10 sec)
+
+
     private static class IndexListAdapter extends ArrayAdapter<Integer, VisTable> {
 
         interface CreateViewListner {

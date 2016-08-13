@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2016 team-cachebox.de
+ *
+ * Licensed under the : GNU General Public License (GPL);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.gnu.org/licenses/gpl.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.longri.cachebox3.gui.dialogs;
 
 import com.badlogic.gdx.graphics.Color;
@@ -18,6 +33,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.utils.IgnoreTouchInputListener;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.IconNames;
 
@@ -35,7 +51,6 @@ public class ButtonDialog extends Table {
     static public final int BUTTON_NEUTRAL = 2;
     static public final int BUTTON_NEGATIVE = 3;
 
-    static private final float FADE_TIME = 0.3f;
     static private final Vector2 tmpPosition = new Vector2();
     static private final Vector2 tmpSize = new Vector2();
 
@@ -54,13 +69,6 @@ public class ButtonDialog extends Table {
     private String titleText;
 
 
-    private InputListener ignoreTouchDown = new InputListener() {
-        @Override
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            event.cancel();
-            return false;
-        }
-    };
 
     public ButtonDialog(String Name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
         super();
@@ -223,14 +231,14 @@ public class ButtonDialog extends Table {
         CB.viewmanager.addActor(this);
         CB.viewmanager.setKeyboardFocus(this);
         CB.viewmanager.setScrollFocus(this);
-        addAction(sequence(Actions.alpha(0), Actions.fadeIn(FADE_TIME, Interpolation.fade)));
+        addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
         setPosition(Math.round((CB.viewmanager.getWidth() - getWidth()) / 2), Math.round((CB.viewmanager.getHeight() - getHeight()) / 2));
     }
 
     public void hide() {
         clearActions();
-        addCaptureListener(ignoreTouchDown);
-        addAction(sequence(Actions.fadeOut(FADE_TIME, Interpolation.fade), Actions.removeActor()));
+        addCaptureListener(IgnoreTouchInputListener.INSTANCE);
+        addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
     }
 
     public void draw(Batch batch, float parentAlpha) {
