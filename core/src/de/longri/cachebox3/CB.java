@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -47,6 +48,7 @@ public class CB {
 
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
     public static final float WINDOW_FADE_TIME = 0.3f;
+    public static Stage windowStage,mainStage;
 
     static {
 

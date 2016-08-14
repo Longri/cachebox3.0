@@ -19,13 +19,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -33,16 +27,14 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.utils.IgnoreTouchInputListener;
+import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.IconNames;
-
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 /**
  * Created by Longri on 03.08.16.
  */
-public class ButtonDialog extends Table {
+public class ButtonDialog extends Window {
 
     // see for layout help ==> https://github.com/libgdx/libgdx/wiki/Table
 
@@ -50,9 +42,6 @@ public class ButtonDialog extends Table {
     static public final int BUTTON_POSITIVE = 1;
     static public final int BUTTON_NEUTRAL = 2;
     static public final int BUTTON_NEGATIVE = 3;
-
-    static private final Vector2 tmpPosition = new Vector2();
-    static private final Vector2 tmpSize = new Vector2();
 
     private final OnMsgBoxClickListener msgBoxClickListener;
     private final ButtonDialogStyle style;
@@ -64,17 +53,19 @@ public class ButtonDialog extends Table {
 
 
     private Table titleTable, contentTable, buttonTable;
+
     private Skin skin;
     private ObjectMap<Actor, Object> values = new ObjectMap();
     private String titleText;
 
 
-
     public ButtonDialog(String Name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
         super();
+        
         this.skin = VisUI.getSkin();
         setSkin(this.skin);
         style = skin.get("default", ButtonDialogStyle.class);
+        this.setStageBackground(style.stageBackground);
         if (title != null) {
             this.mHasTitle = true;
             this.titleText = title;
@@ -118,8 +109,41 @@ public class ButtonDialog extends Table {
         msgLabel.setWrap(true);
         contentTable.add(msgLabel).expandX().fillX();
         msgBoxClickListener = Listener;
+
     }
 
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+
+        float versatz = !mHasTitle ? 0 : style.title.getBottomHeight();
+        if (style.header != null && !dontRenderDialogBackground) {
+            style.header.draw(batch, this.getX(), (contentTable.getY() + versatz + contentTable.getHeight() - style.header.getMinHeight()) + this.getY(),
+                    this.getWidth(), style.header.getMinHeight() + versatz);
+        }
+        if (style.footer != null && !dontRenderDialogBackground) {
+            style.footer.draw(batch, this.getX(), this.getY(), this.getWidth(), buttonTable.getHeight() + (2 * CB.scaledSizes.MARGIN));
+        }
+        if (style.center != null && !dontRenderDialogBackground) {
+            style.center.draw(batch, this.getX(), contentTable.getY() + this.getY(), this.getWidth(),
+                    contentTable.getHeight());
+        }
+
+        if (mHasTitle) {
+            // TODO handle drawing if Title width to long for window
+            if (style.title != null && !dontRenderDialogBackground) {
+                style.title.draw(batch, this.getX(), this.getY() + titleTable.getY(), titleTable.getWidth() + style.title.getRightWidth(), titleTable.getHeight());
+            }
+        }
+        super.drawChildren(batch, parentAlpha);
+    }
+
+
+    @Override
+    public void pack() {
+        super.pack();
+        setPosition(((CB.windowStage.getWidth() - getWidth()) / 2f),
+                ((CB.windowStage.getHeight() - getHeight()) / 2));
+    }
 
     private static Sprite getIcon(MessageBoxIcon msgIcon) {
         if (msgIcon == null)
@@ -223,59 +247,6 @@ public class ButtonDialog extends Table {
             msgBoxClickListener.onClick((Integer) object, null);
             this.hide();
         }
-    }
-
-    public void show() {
-        clearActions();
-        pack();
-        CB.viewmanager.addActor(this);
-        CB.viewmanager.setKeyboardFocus(this);
-        CB.viewmanager.setScrollFocus(this);
-        addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
-        setPosition(Math.round((CB.viewmanager.getWidth() - getWidth()) / 2), Math.round((CB.viewmanager.getHeight() - getHeight()) / 2));
-    }
-
-    public void hide() {
-        clearActions();
-        addCaptureListener(IgnoreTouchInputListener.INSTANCE);
-        addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
-    }
-
-    public void draw(Batch batch, float parentAlpha) {
-        if (style.stageBackground != null) drawStageBackground(batch, parentAlpha);
-
-        float versatz = !mHasTitle ? 0 : style.title.getBottomHeight();
-        if (style.header != null && !dontRenderDialogBackground) {
-            style.header.draw(batch, this.getX(), (contentTable.getY() + versatz + contentTable.getHeight() - style.header.getMinHeight()) + this.getY(),
-                    this.getWidth(), style.header.getMinHeight() + versatz);
-        }
-        if (style.footer != null && !dontRenderDialogBackground) {
-            style.footer.draw(batch, this.getX(), this.getY(), this.getWidth(), buttonTable.getHeight() + (2 * CB.scaledSizes.MARGIN));
-        }
-        if (style.center != null && !dontRenderDialogBackground) {
-            style.center.draw(batch, this.getX(), contentTable.getY() + this.getY(), this.getWidth(),
-                    contentTable.getHeight());
-        }
-
-        if (mHasTitle) {
-            // TODO handle drawing if Title width to long for window
-            if (style.title != null && !dontRenderDialogBackground) {
-                style.title.draw(batch, this.getX(), this.getY() + titleTable.getY(), titleTable.getWidth() + style.title.getRightWidth(), titleTable.getHeight());
-            }
-        }
-        super.draw(batch, parentAlpha);
-    }
-
-    private void drawStageBackground(Batch batch, float parentAlpha) {
-        Stage stage = getStage();
-        if (stage.getKeyboardFocus() == null) stage.setKeyboardFocus(this);
-
-        stageToLocalCoordinates(tmpPosition.set(0, 0));
-        stageToLocalCoordinates(tmpSize.set(stage.getWidth(), stage.getHeight()));
-        Color color = getColor();
-        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        style.stageBackground.draw(batch, getX() + tmpPosition.x, getY() + tmpPosition.y, getX() + tmpSize.x,
-                getY() + tmpSize.y);
     }
 
     public static class ButtonDialogStyle {

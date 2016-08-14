@@ -43,7 +43,6 @@ public class CacheboxMain extends ApplicationAdapter {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheboxMain.class);
 
     Batch batch;
-    Stage stage;
     protected int FpsInfoPos = 0;
     public static float stateTime;
     private Sprite FpsInfoSprite;
@@ -56,7 +55,7 @@ public class CacheboxMain extends ApplicationAdapter {
         Gdx.graphics.requestRendering();
 
 
-        stage = new Splash(new Splash.LoadReady() {
+        CB.mainStage = new Splash(new Splash.LoadReady() {
             @Override
             public void ready() {
 
@@ -66,19 +65,21 @@ public class CacheboxMain extends ApplicationAdapter {
 
                 // Splash is ready with initialisation
                 // now switch Stage to ViewManager
-                synchronized (stage) {
+                synchronized (CB.mainStage) {
                     Gdx.app.postRunnable(new Runnable() {
                         @Override
                         public void run() {
-                            stage = new ViewManager();
+                            CB.mainStage = new ViewManager();
 
-                            // add stage to input prozessor
-                            CB.inputMultiplexer.addProcessor(stage);
+                            // add mainStage to input prozessor
+                            CB.inputMultiplexer.addProcessor(CB.mainStage);
                         }
                     });
                 }
             }
         });
+
+        CB.windowStage = new Stage();
 
     }
 
@@ -88,9 +89,14 @@ public class CacheboxMain extends ApplicationAdapter {
         Gdx.gl.glClearColor(CB.backgroundColor.r, CB.backgroundColor.g, CB.backgroundColor.b, CB.backgroundColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        synchronized (stage) {
-            stage.draw();
-            stage.act();
+        synchronized (CB.mainStage) {
+            CB.mainStage.act();
+            CB.mainStage.draw();
+        }
+
+        if(CB.windowStage!=null&&CB.windowStage.getActors().size>0){
+            CB.windowStage.act();
+            CB.windowStage.draw();
         }
 
 
@@ -98,7 +104,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
             float FpsInfoSize = CB.getScaledFloat(4f);
             if (FpsInfoSprite != null) {
-                batch = stage.getBatch();
+                batch = CB.mainStage.getBatch();
                 batch.begin();
                 Color lastColor = batch.getColor();
                 batch.setColor(1.0f, 0.0f, 0.0f, 1.0f);

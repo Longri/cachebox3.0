@@ -18,7 +18,7 @@ package de.longri.cachebox3.gui.actions;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
@@ -43,7 +43,7 @@ public class Action_Show_Quit extends Action {
 		String Title = Translation.Get("Quit?");
 
         //Name, msg, title, buttons, icon, OnMsgBoxClickListener
-		ButtonDialog dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.OKCancel, MessageBoxIcon.Stop, new OnMsgBoxClickListener() {
+		Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.OKCancel, MessageBoxIcon.Stop, new OnMsgBoxClickListener() {
             @Override
             public boolean onClick(int which, Object data) {
                 if (which == ButtonDialog.BUTTON_POSITIVE) {

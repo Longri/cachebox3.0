@@ -41,7 +41,7 @@ public class ViewManager extends Stage {
 
 
     private AbstractView actView;
-    private final float bottonsize, width, height;
+    private final float buttonsize, width, height;
     private final ButtonBar mainButtonBar;
 
     GestureButton db_button, cache_button, navButton, tool_button, misc_button;
@@ -51,13 +51,13 @@ public class ViewManager extends Stage {
         //set this to static CB for global access
         CB.viewmanager = this;
 
-        bottonsize = CB.getScaledFloat(64);
+        buttonsize = CB.getScaledFloat(64);
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
         mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class),
                 ButtonBar.Type.DISTRIBUTED);
-        mainButtonBar.setBounds(0, 0, width, bottonsize);
+        mainButtonBar.setBounds(0, 0, width, buttonsize);
         this.addActor(mainButtonBar);
 
         Gdx.app.log("ScaleFactor", Float.toString(CB.getScaledFloat(1)));
@@ -66,29 +66,29 @@ public class ViewManager extends Stage {
         Gdx.app.log("PPI", Float.toString(Gdx.graphics.getPpiX()));
 
         db_button = new GestureButton("db");
-        db_button.setSize(bottonsize, bottonsize);
+        db_button.setSize(buttonsize, buttonsize);
         db_button.addListener(gestureListener);
         mainButtonBar.addButton(db_button);
 
         cache_button = new GestureButton("cache");
-        cache_button.setSize(bottonsize, bottonsize);
+        cache_button.setSize(buttonsize, buttonsize);
         cache_button.addListener(gestureListener);
         mainButtonBar.addButton(cache_button);
 
 
         navButton = new GestureButton("nav");
-        navButton.setSize(bottonsize, bottonsize);
+        navButton.setSize(buttonsize, buttonsize);
         navButton.addListener(gestureListener);
         mainButtonBar.addButton(navButton);
 
 
         tool_button = new GestureButton("tool");
-        tool_button.setSize(bottonsize, bottonsize);
+        tool_button.setSize(buttonsize, buttonsize);
         tool_button.addListener(gestureListener);
         mainButtonBar.addButton(tool_button);
 
         misc_button = new GestureButton("misc");
-        misc_button.setSize(bottonsize, bottonsize);
+        misc_button.setSize(buttonsize, buttonsize);
         misc_button.addListener(gestureListener);
         mainButtonBar.addButton(misc_button);
 
@@ -204,7 +204,7 @@ public class ViewManager extends Stage {
 
 
     private void setActViewBounds() {
-        this.actView.setBounds(0, bottonsize, width, height);
+        this.actView.setBounds(0, buttonsize, width, height);
     }
 
     public AbstractView getActView() {
