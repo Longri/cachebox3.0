@@ -16,9 +16,13 @@
 package de.longri.cachebox3.gui.menu;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.kotcrab.vis.ui.VisUI;
@@ -27,6 +31,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.views.ListView;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +47,24 @@ public class Menu extends Window {
     MenuStyle style;
     final String name;
     ListView listView;
+
+
+    InputListener clickListener = new InputListener() {
+
+        private final CB_RectF listViewRec = new CB_RectF();
+
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            // close menu if outside of listView
+            listViewRec.set(listView.getMainTable().getX(), listView.getMainTable().getY(),
+                    listView.getMainTable().getWidth(), listView.getMainTable().getHeight());
+            if (!listViewRec.contains(x, y)) {
+                hide();
+                return true;
+            }
+            return false;
+        }
+    };
+
 
     public Menu(String name) {
         this.style = VisUI.getSkin().get("default", MenuStyle.class);
@@ -121,15 +144,21 @@ public class Menu extends Window {
         return item;
     }
 
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+    }
 
     public void show() {
         initialLayout();
         super.show();
+        this.setTouchable(Touchable.enabled);
+        CB.windowStage.addListener(clickListener);
         log.debug("Show menu: " + this.name);
     }
 
     public void hide() {
         super.hide();
+        CB.windowStage.removeListener(clickListener);
         log.debug("Hide menu: " + this.name);
     }
 
