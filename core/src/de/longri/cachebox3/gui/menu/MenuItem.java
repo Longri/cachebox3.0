@@ -96,6 +96,9 @@ public class MenuItem extends VisTable {
 
     protected void initial() {
         this.reset();
+        this.removeListener(clickListener);
+
+
         boolean hasIcon = (mIcon != null);
         if (hasIcon) {
             Image iconImage = new Image(mIcon);
@@ -129,15 +132,16 @@ public class MenuItem extends VisTable {
         }
 
 
-        this.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (MenuItem.this.onItemClickListener != null) {
-                    MenuItem.this.onItemClickListener.onItemClick(MenuItem.this);
-                }
-            }
-        });
-
+        this.addListener(clickListener);
     }
+
+    ClickListener clickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            if (MenuItem.this.onItemClickListener != null && event.getType() == InputEvent.Type.touchUp) {
+                MenuItem.this.onItemClickListener.onItemClick(MenuItem.this);
+            }
+        }
+    };
 
 
     /**
