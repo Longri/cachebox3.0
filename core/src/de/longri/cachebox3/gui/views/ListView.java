@@ -110,6 +110,10 @@ public abstract class ListView extends com.kotcrab.vis.ui.widget.ListView<Intege
         this.getScrollPane().setFlickScroll(true);
     }
 
+    public void rebuildView () {
+        super.rebuildView();
+    }
+
     public abstract VisTable createView(Integer index);
 
 

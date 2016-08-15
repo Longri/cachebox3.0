@@ -17,11 +17,14 @@ package de.longri.cachebox3.gui.menu;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
@@ -38,6 +41,8 @@ public class MenuItem extends VisTable {
     private Label mLabel;
     private Image checkImage;
     private Drawable mIcon;
+    private float imageScaleValue = 1;
+    ;
 
     private String mTitle;
     private boolean mIsEnabled = true;
@@ -77,29 +82,26 @@ public class MenuItem extends VisTable {
     public void toggleCheck() {
         if (isCheckable()) {
             mIsChecked = !mIsChecked;
-
-//			Drawable drawable = null;
-//			if (mIsChecked) {
-//				drawable = new SpriteDrawable(Sprites.ChkIcons.get(1));
-//			} else {
-//				drawable = new SpriteDrawable(Sprites.ChkIcons.get(0));
-//			}
-//
-//			checkImage.setDrawableDrawable(drawable);
+            //  initial();
         }
+    }
+
+    @Override
+    public void pack() {
+        super.pack();
+        initial();
+
     }
 
 
     protected void initial() {
-
         this.reset();
-
-
         boolean hasIcon = (mIcon != null);
         if (hasIcon) {
-
             Image iconImage = new Image(mIcon);
-            this.add(iconImage).width(iconImage.getWidth()).top().pad(CB.scaledSizes.MARGIN);
+            iconImage.setWidth(iconImage.getWidth() * imageScaleValue);
+            iconImage.setHeight(iconImage.getHeight() * imageScaleValue);
+            this.add(iconImage).width(iconImage.getWidth()).height(iconImage.getHeight()).center().padRight(CB.scaledSizes.MARGIN_HALF);
             if (!mIsEnabled) {
                 // TODO iconImage.setColor(COLOR.getDisableFontColor());
             }
@@ -107,29 +109,19 @@ public class MenuItem extends VisTable {
 
         mLabel = new Label(mTitle, new Label.LabelStyle(style.font, style.fontColor));
         mLabel.setWrap(true);
-        this.add(mLabel).expandX().fillX();
-//        if (mIsCheckable) {
-//            CB_RectF rec;
-//            if (hasIcon) {
-//                rec = new CB_RectF(this.getWidth() - 2 * this.getHeight(), 0, this.getHeight(), this.getHeight()).ScaleCenter(0.75f);
-//            } else {
-//                rec = new CB_RectF(this.getWidth() - this.getHeight(), 0, this.getHeight(), this.getHeight()); // .ScaleCenter(0.75f);
-//            }
-//
-//            rec.setHeight(rec.getWidth());
-//
-//            checkImage = new Image(rec, "MenuItemCheckImage", false);
-//
-//            Drawable drawable = null;
-//            if (mIsChecked) {
-//                drawable = new SpriteDrawable(Sprites.ChkIcons.get(1));
-//            } else {
-//                drawable = new SpriteDrawable(Sprites.ChkIcons.get(0));
-//            }
-//
-//            checkImage.setDrawable(drawable);
-//            this.addChild(checkImage);
-//        }
+        this.add(mLabel).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
+        if (mIsCheckable) {
+            if (mIsChecked) {
+                if (mIsEnabled) {
+                    checkImage = new Image(CB.getSprite("check_on"));
+                } else {
+                    checkImage = new Image(CB.getSprite("check_disabled"));
+                }
+            } else {
+                checkImage = new Image(CB.getSprite("check_off"));
+            }
+            this.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+        }
 
 
         if (!mIsEnabled) {
@@ -139,7 +131,7 @@ public class MenuItem extends VisTable {
 
         this.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                if(MenuItem.this.onItemClickListener!=null){
+                if (MenuItem.this.onItemClickListener != null) {
                     MenuItem.this.onItemClickListener.onItemClick(MenuItem.this);
                 }
             }
@@ -156,7 +148,7 @@ public class MenuItem extends VisTable {
      */
     public MenuItem setTitle(String title) {
         mTitle = title;
-        initial();
+        //  initial();
         return this;
     }
 
@@ -177,14 +169,21 @@ public class MenuItem extends VisTable {
      * @return This Item so additional setters can be called.
      */
     public MenuItem setIcon(Drawable icon) {
+        CB.scaledSizes.checkMaxIconSize();
+        if (icon.getMinWidth() > CB.scaledSizes.ICON_HEIGHT) {
+            // set scaled icon size!
+            imageScaleValue = Math.min(CB.scaledSizes.ICON_WIDTH / icon.getMinWidth(), CB.scaledSizes.ICON_HEIGHT / icon.getMinHeight());
+        } else {
+            imageScaleValue = 1f;
+        }
         mIcon = icon;
-
         return this;
     }
 
 
     public void setEnabled(boolean enabled) {
         mIsEnabled = enabled;
+
     }
 
 
@@ -230,7 +229,7 @@ public class MenuItem extends VisTable {
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener=onItemClickListener;
+        this.onItemClickListener = onItemClickListener;
     }
 
 
@@ -238,7 +237,6 @@ public class MenuItem extends VisTable {
         public BitmapFont font;
         public Color fontColor;
     }
-
 
 
 }

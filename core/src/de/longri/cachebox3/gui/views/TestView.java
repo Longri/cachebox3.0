@@ -15,8 +15,11 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -82,12 +85,19 @@ public class TestView extends AbstractView {
                 icm.addItem(MenuID.MI_LAYER, "Layer");
                 MenuItem mi = icm.addItem(MenuID.MI_RENDERTHEMES, "Renderthemes");
 
-                icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
-                icm.addCheckableItem(MenuID.MI_ALIGN_TO_COMPSS, "AlignToCompass", true);
+
+                MenuItem item = icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
+                item.setIcon(new SpriteDrawable(CB.getSprite("closeIcon")));
+                item = icm.addCheckableItem(MenuID.MI_ALIGN_TO_COMPSS, "AlignToCompass", true);
+                item.setIcon(new SpriteDrawable(CB.getSprite("closeIcon")));
+
                 icm.addItem(MenuID.MI_CENTER_WP, "CenterWP");
                 // icm.addItem(MenuID.MI_SETTINGS, "settings", Sprites.getSprite(IconName.settings.name()));
                 // icm.addItem(MenuID.MI_SEARCH, "search", SpriteCache.Icons.get(27));
-                icm.addItem(MenuID.MI_MAPVIEW_VIEW, "view");
+                item = icm.addItem(MenuID.MI_MAPVIEW_VIEW, "view");
+                item.setIcon(new SpriteDrawable(CB.getSprite("cache")));
+
+
                 //icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
                 icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
 
@@ -114,7 +124,6 @@ public class TestView extends AbstractView {
             @Override
             public VisTable createView(Integer index) {
                 VisLabel label = new VisLabel(itemList.get(index));
-
                 VisTable table = new VisTable();
                 table.left();
                 table.add(label);
@@ -125,7 +134,7 @@ public class TestView extends AbstractView {
 
         listView.getMainTable().setBounds(200, 50, 200, 400);
 
-        this.addActor(listView.getMainTable());
+        //    this.addActor(listView.getMainTable());
 
     }
 

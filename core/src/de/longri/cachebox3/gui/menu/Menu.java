@@ -200,10 +200,21 @@ public class Menu extends Window {
 
     @Override
     public void pack() {
+        float height = 0;
+        float itemPad = 0;
+        for (MenuItem item : mItems) {
+            item.initial();
+            item.pack();
+            itemPad = item.getPadTop();
+            height += item.getHeight();
+        }
+        height += listView.getMainTable().getBackground().getMinHeight() + CB.scaledSizes.MARGIN + itemPad;
+        if (height > CB.scaledSizes.WINDOW_HEIGHT) height = CB.scaledSizes.WINDOW_HEIGHT;
+        listView.rebuildView();
         super.pack();
         listView.getMainTable().setBounds(((CB.windowStage.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f),
-                ((CB.windowStage.getHeight() - listView.getMainTable().getHeight()) / 2),
-                CB.scaledSizes.WINDOW_WIDTH, listView.getMainTable().getHeight());
+                ((CB.windowStage.getHeight() - height) / 2),
+                CB.scaledSizes.WINDOW_WIDTH, height);
     }
 
     public void addOnItemClickListener(OnItemClickListener onItemClickListener) {
