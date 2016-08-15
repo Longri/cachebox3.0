@@ -17,20 +17,24 @@ package de.longri.cachebox3.gui.menu;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.utils.HSV_Color;
 import de.longri.cachebox3.utils.SizeF;
+import org.slf4j.LoggerFactory;
 
 public class MenuItem extends VisTable {
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(MenuItem.class);
 
     private MenuItemStyle style;
 
-    private String name;
+    private final String name;
     private Label mLabel;
     private Image checkImage;
     private Drawable mIcon;
@@ -47,19 +51,22 @@ public class MenuItem extends VisTable {
     protected boolean isPressed = false;
     private Image iconImage;
     private Object data;
+    private OnItemClickListener onItemClickListener;
 
-    public MenuItem(SizeF size, int Index, int ID, String Name) {
+    public MenuItem(SizeF size, int Index, int ID, String name) {
+        this.name = name;
         mID = ID;
         setDefaultStyle();
     }
 
-    public MenuItem(int Index, int ID, String Name) {
+    public MenuItem(int Index, int ID, String name) {
+        this.name = name;
         mID = ID;
         setDefaultStyle();
     }
 
 
-    private void setDefaultStyle(){
+    private void setDefaultStyle() {
         this.style = VisUI.getSkin().get("default", MenuItemStyle.class);
     }
 
@@ -88,9 +95,6 @@ public class MenuItem extends VisTable {
         this.reset();
 
 
-
-
-
         boolean hasIcon = (mIcon != null);
         if (hasIcon) {
 
@@ -101,7 +105,7 @@ public class MenuItem extends VisTable {
             }
         }
 
-        mLabel = new Label( mTitle ,new Label.LabelStyle(style.font, style.fontColor));
+        mLabel = new Label(mTitle, new Label.LabelStyle(style.font, style.fontColor));
         mLabel.setWrap(true);
         this.add(mLabel).expandX().fillX();
 //        if (mIsCheckable) {
@@ -132,9 +136,16 @@ public class MenuItem extends VisTable {
             //TODO
         }
 
+
+        this.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if(MenuItem.this.onItemClickListener!=null){
+                    MenuItem.this.onItemClickListener.onItemClick(MenuItem.this);
+                }
+            }
+        });
+
     }
-
-
 
 
     /**
@@ -204,6 +215,10 @@ public class MenuItem extends VisTable {
 
     }
 
+    @Override
+    public String toString() {
+        return "MenuItem " + name;
+    }
 
     public void setData(Object data) {
         this.data = data;
@@ -214,11 +229,16 @@ public class MenuItem extends VisTable {
         return this.data;
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener=onItemClickListener;
+    }
+
 
     public static class MenuItemStyle {
         public BitmapFont font;
         public Color fontColor;
     }
+
 
 
 }

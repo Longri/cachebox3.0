@@ -47,6 +47,7 @@ public class Menu extends Window {
     MenuStyle style;
     final String name;
     ListView listView;
+    OnItemClickListener onItemClickListener;
 
 
     InputListener clickListener = new InputListener() {
@@ -163,10 +164,34 @@ public class Menu extends Window {
     }
 
     private void initialLayout() {
+
+        final OnItemClickListener clickListener = new OnItemClickListener() {
+            @Override
+            public void onItemClick(final MenuItem item) {
+
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        onItemClickListener.onItemClick(item);
+                    }
+                });
+
+                //close Menu
+                hide();
+                thread.start();
+
+            }
+        };
+
         listView = new ListView(mItems.size()) {
+
             @Override
             public VisTable createView(Integer index) {
-                return mItems.get(index);
+                MenuItem item = mItems.get(index);
+
+                item.setOnItemClickListener(clickListener);
+
+                return item;
             }
         };
         listView.getMainTable().setBackground(this.style.background);
@@ -179,6 +204,10 @@ public class Menu extends Window {
         listView.getMainTable().setBounds(((CB.windowStage.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f),
                 ((CB.windowStage.getHeight() - listView.getMainTable().getHeight()) / 2),
                 CB.scaledSizes.WINDOW_WIDTH, listView.getMainTable().getHeight());
+    }
+
+    public void addOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
 

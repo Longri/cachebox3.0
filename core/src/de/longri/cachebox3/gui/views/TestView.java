@@ -26,6 +26,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
+import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
 import de.longri.cachebox3.settings.Config;
 import org.slf4j.LoggerFactory;
@@ -90,7 +91,12 @@ public class TestView extends AbstractView {
                 //icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
                 icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
 
-                // icm.addOnClickListener(onItemClickListener);
+                icm.addOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(MenuItem item) {
+                        log.debug(item.toString() + " clicked");
+                    }
+                });
 
                 icm.show();
             }
