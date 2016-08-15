@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.PositionChangedEvent;
@@ -63,6 +64,7 @@ public class AboutView extends AbstractView implements PositionChangedEvent {
     public void PositionChanged() {
         Coordinate coordinate = Locator.getCoordinate();
         coordinateLabel.setText(coordinate.formatCoordinateLineBreak());
+        CB.requestRendering();
     }
 
     @Override

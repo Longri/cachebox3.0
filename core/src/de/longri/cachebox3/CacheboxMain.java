@@ -17,8 +17,11 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -39,14 +42,20 @@ public class CacheboxMain extends ApplicationAdapter {
 
     final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheboxMain.class);
 
-    SpriteBatch batch;
-    Stage stage;
+    Batch batch;
+    protected int FpsInfoPos = 0;
     public static float stateTime;
+    private Sprite FpsInfoSprite;
+    private final Matrix4 NORMAL_MATRIX = new Matrix4().toNormalMatrix();
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        stage = new Splash(new Splash.LoadReady() {
+
+        Gdx.graphics.setContinuousRendering(false);
+        Gdx.graphics.requestRendering();
+
+
+        CB.mainStage = new Splash(new Splash.LoadReady() {
             @Override
             public void ready() {
 
@@ -56,19 +65,21 @@ public class CacheboxMain extends ApplicationAdapter {
 
                 // Splash is ready with initialisation
                 // now switch Stage to ViewManager
-                synchronized (stage) {
+                synchronized (CB.mainStage) {
                     Gdx.app.postRunnable(new Runnable() {
                         @Override
                         public void run() {
-                            stage = new ViewManager();
+                            CB.mainStage = new ViewManager();
 
-                            // add stage to input prozessor
-                            CB.inputMultiplexer.addProcessor(stage);
+                            // add mainStage to input prozessor
+                            CB.inputMultiplexer.addProcessor(CB.mainStage);
                         }
                     });
                 }
             }
         });
+
+        CB.windowStage = new Stage();
 
     }
 
@@ -77,11 +88,44 @@ public class CacheboxMain extends ApplicationAdapter {
         stateTime += Gdx.graphics.getDeltaTime();
         Gdx.gl.glClearColor(CB.backgroundColor.r, CB.backgroundColor.g, CB.backgroundColor.b, CB.backgroundColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        synchronized (stage) {
-            stage.draw();
+
+        synchronized (CB.mainStage) {
+            CB.mainStage.act();
+            CB.mainStage.draw();
         }
-        batch.end();
+
+        if(CB.windowStage!=null&&CB.windowStage.getActors().size>0){
+            CB.windowStage.act();
+            CB.windowStage.draw();
+        }
+
+
+        if (CB.isTestVersion()) {
+
+            float FpsInfoSize = CB.getScaledFloat(4f);
+            if (FpsInfoSprite != null) {
+                batch = CB.mainStage.getBatch();
+                batch.begin();
+                Color lastColor = batch.getColor();
+                batch.setColor(1.0f, 0.0f, 0.0f, 1.0f);
+                batch.draw(FpsInfoSprite, FpsInfoPos, 2, FpsInfoSize, FpsInfoSize);
+                batch.setColor(lastColor);
+                batch.end();
+            } else {
+                Sprite sprite = CB.getSprite("color");
+                if (sprite != null) {
+                    FpsInfoSprite = new Sprite(sprite);
+                    FpsInfoSprite.setColor(1.0f, 0.0f, 0.0f, 1.0f);
+                    FpsInfoSprite.setSize(FpsInfoSize, FpsInfoSize);
+                }
+            }
+
+            FpsInfoPos += FpsInfoSize;
+            if (FpsInfoPos > 60 * FpsInfoSize) {
+                FpsInfoPos = 0;
+            }
+        }
+
     }
 
     @Override

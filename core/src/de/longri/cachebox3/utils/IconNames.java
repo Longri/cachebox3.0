@@ -48,7 +48,7 @@ public enum IconNames {
     infoIcon, // 32
     warningIcon, // 33
     helpIcon, // 34
-    dayGcLiveIcon, // 35
+    gc_liveIcon, // 35
     tb, // 36
     cmIcon, // 37
     tbListIcon, // 38

@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import de.longri.cachebox3.utils.converter.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 /**
@@ -87,7 +90,7 @@ public class Utils {
         }
     }
 
-    static final int[] Key = { 128, 56, 20, 78, 33, 225 };
+    static final int[] Key = {128, 56, 20, 78, 33, 225};
 
     public static String decrypt(String value) {
         int[] b = null;
@@ -235,5 +238,31 @@ public class Utils {
             return false;
 
         return true;
+    }
+
+
+    /**
+     * Returns the MD5 hash from given fileHandle, or an empty String with any Exception
+     * @param fileHandle
+     * @return
+     */
+    public static String getMd5(FileHandle fileHandle) {
+
+        try {
+            final MessageDigest md = MessageDigest.getInstance("MD5");
+            final byte[] bytes = new byte[2048];
+            int numBytes;
+            InputStream inputStream = fileHandle.read();
+            while ((numBytes = inputStream.read(bytes)) != -1) {
+                md.update(bytes, 0, numBytes);
+            }
+            inputStream.close();
+            return new String(Hex.encodeHex(md.digest()));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

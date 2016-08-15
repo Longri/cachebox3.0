@@ -15,21 +15,25 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.gui.menu.MenuItem;
+import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.translation.Lang;
-import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.utils.UI_Size_Base;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -42,6 +46,24 @@ public class TestView extends AbstractView {
         super("TestView");
     }
 
+
+    static class StringListItem extends VisTable {
+        public StringListItem(String s) {
+            VisLabel label = new VisLabel(s);
+            VisTable table = new VisTable();
+            table.left();
+            table.add(label);
+            this.add(table);
+            this.setBackground("listrec_first_drawable");
+        }
+
+        @Override
+        public void finalize() {
+            log.debug("finalize Item");
+        }
+    }
+
+
     protected void create() {
         // create a Label with name for default
         nameLabel = new VisLabel(this.NAME);
@@ -52,40 +74,68 @@ public class TestView extends AbstractView {
         colorWidget = new ColorWidget(CB.getSkin().getColor("abstract_background"));
         colorWidget.setBounds(0, 0, this.getWidth(), this.getHeight());
 
-        this.addActor(colorWidget);
-        this.addActor(nameLabel);
 
-
-        final VisTextButton testButton = new VisTextButton(Translation.getLangId());
-        testButton.setSize(UI_Size_Base.that.getButtonWidthWide(), UI_Size_Base.that.getButtonHeight());
+        final VisTextButton testButton = new VisTextButton("MenuTest");
+        testButton.setSize(CB.scaledSizes.BUTTON_WIDTH_WIDE, CB.scaledSizes.BUTTON_HEIGHT);
 
         testButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                //set next Translation
+                Menu icm = new Menu("Test Menu");
 
-                ArrayList<Lang> langs = Translation.GetLangs("lang");
-                String actLangId = Translation.getLangId();
-                int idx = 0;
-                for (Lang lang : langs) {
-                    if (lang.Name.equals(actLangId)) {
-                        break;
+                icm.addItem(MenuID.MI_LAYER, "Layer");
+                MenuItem mi = icm.addItem(MenuID.MI_RENDERTHEMES, "Renderthemes");
+
+
+                MenuItem item = icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
+                item.setIcon(new SpriteDrawable(CB.getSprite("closeIcon")));
+                item = icm.addCheckableItem(MenuID.MI_ALIGN_TO_COMPSS, "AlignToCompass", true);
+                item.setIcon(new SpriteDrawable(CB.getSprite("closeIcon")));
+
+                icm.addItem(MenuID.MI_CENTER_WP, "CenterWP");
+                // icm.addItem(MenuID.MI_SETTINGS, "settings", Sprites.getSprite(IconName.settings.name()));
+                // icm.addItem(MenuID.MI_SEARCH, "search", SpriteCache.Icons.get(27));
+                item = icm.addItem(MenuID.MI_MAPVIEW_VIEW, "view");
+                item.setIcon(new SpriteDrawable(CB.getSprite("cache")));
+
+
+                //icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
+                icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
+
+                icm.addOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(MenuItem item) {
+                        log.debug(item.toString() + " clicked");
                     }
-                    idx++;
-                }
+                });
 
-                if (idx == langs.size()-1) idx = 0;
-                else idx++;
-
-                Lang nextLang=langs.get(idx);
-                try {
-                    Translation.LoadTranslation(nextLang.Path);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                testButton.setText(Translation.getLangId());
+                icm.show();
             }
         });
+
+        //  this.addActor(colorWidget);
+        this.addActor(nameLabel);
         this.addActor(testButton);
+
+
+        final ArrayList<String> itemList = new ArrayList<String>();
+        for (int i = 0; i < 500; i++) itemList.add(Integer.toString(i));
+
+        de.longri.cachebox3.gui.views.ListView listView = new de.longri.cachebox3.gui.views.ListView(itemList.size()) {
+            @Override
+            public VisTable createView(Integer index) {
+                VisLabel label = new VisLabel(itemList.get(index));
+                VisTable table = new VisTable();
+                table.left();
+                table.add(label);
+                return table;
+            }
+        };
+
+
+        listView.getMainTable().setBounds(200, 50, 200, 400);
+
+        //    this.addActor(listView.getMainTable());
+
     }
 
 

@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.stages.initial_tasks;
+package de.longri.cachebox3.gui.utils;
+
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 /**
- * Created by Longri on 02.08.16.
+ * Created by Longri on 13.08.16.
  */
-public abstract class AbstractInitTask {
+public class IgnoreTouchInputListener extends InputListener {
 
-    public final String name;
-    public final int percent;
+    public static IgnoreTouchInputListener INSTANCE=new IgnoreTouchInputListener();
 
-    public AbstractInitTask(String name, int percent) {
-        this.name = name;
-        this.percent = percent;
+
+    private IgnoreTouchInputListener(){}
+
+
+    @Override
+    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+        event.cancel();
+        return false;
     }
-
-    public abstract void RUNABLE();
-
 }
-

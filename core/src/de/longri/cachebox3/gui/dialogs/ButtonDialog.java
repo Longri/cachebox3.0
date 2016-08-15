@@ -1,128 +1,148 @@
+/*
+ * Copyright (C) 2016 team-cachebox.de
+ *
+ * Licensed under the : GNU General Public License (GPL);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.gnu.org/licenses/gpl.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.longri.cachebox3.gui.dialogs;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.kotcrab.vis.ui.widget.VisDialog;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.utils.*;
+import de.longri.cachebox3.utils.IconNames;
 
 /**
  * Created by Longri on 03.08.16.
  */
-public class ButtonDialog extends VisDialog {
+public class ButtonDialog extends Window {
 
-    public static final int BUTTON_POSITIVE = 1;
-    public static final int BUTTON_NEUTRAL = 2;
-    public static final int BUTTON_NEGATIVE = 3;
+    // see for layout help ==> https://github.com/libgdx/libgdx/wiki/Table
 
-    private static float margin;
+
+    static public final int BUTTON_POSITIVE = 1;
+    static public final int BUTTON_NEUTRAL = 2;
+    static public final int BUTTON_NEGATIVE = 3;
+
     private final OnMsgBoxClickListener msgBoxClickListener;
+    private final ButtonDialogStyle style;
+    private final Label msgLabel;
+    private final Label titleLabel;
+    private boolean dontRenderDialogBackground = false;
+    private Object data;
+    private boolean mHasTitle = false;
+
+
+    private Table titleTable, contentTable, buttonTable;
+
+    private Skin skin;
+    private ObjectMap<Actor, Object> values = new ObjectMap();
+    private String titleText;
+
 
     public ButtonDialog(String Name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
-
-        super(title, "dialog"); // Title, WindowStyleName
-        this.text(msg);
-        setButtonCaptions(buttons);
-        CB_RectF rec = calcMsgBoxSize(msg, true, (buttons != MessageBoxButtons.NOTHING), (icon != MessageBoxIcon.None), false).getBounds();
-
-        this.setBounds(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight());
-
-        this.setDebug(true, true);
-
-        //TODO add Icon to ButtonDialog
-//        SizeF contentSize = getContentSize();
-//
-//        CB_RectF imageRec = new CB_RectF(0, contentSize.height - margin - UI_Size_Base.that.getButtonHeight(), UI_Size_Base.that.getButtonHeight(), UI_Size_Base.that.getButtonHeight());
-//
-//        if (icon != MessageBoxIcon.None && icon != null) {
-//            Image iconImage = new Image(imageRec, "MsgBoxIcon", false);
-//            iconImage.setDrawable(new SpriteDrawable(getIcon(icon)));
-//            addChild(iconImage);
-//        }
-
-        msgBoxClickListener = Listener;
-    }
-
-    public void show() {
-        this.show(CB.viewmanager);
-    }
-
-
-    private SizeF calcMsgBoxSize(String Text, boolean hasTitle, boolean hasButtons, boolean hasIcon, boolean hasRemember) {
-        if (margin <= 0)
-            margin = UI_Size_Base.that.getMargin();
-
-        float Width = (((UI_Size_Base.that.getButtonWidthWide() + margin) * 3) + margin);
-        if (Width * 1.2 < UI_Size_Base.that.getWindowWidth())
-            Width *= 1.2f;
-
-
-        BitmapFont font = this.getStyle().titleFont;
-
-        float MsgWidth = (Width * 0.95f) - 5 - UI_Size_Base.that.getButtonHeight();
-
-        float MeasuredTextHeight = MesureFontUtil.MeasureWrapped(font, Text, MsgWidth).height + (margin * 4);
-
-        int Height = (int) (hasIcon ? Math.max(MeasuredTextHeight, UI_Size_Base.that.getButtonHeight() + (margin * 5)) : (int) MeasuredTextHeight);
-
-        if (hasTitle) {
-            GlyphLayout titleBounds = MesureFontUtil.Measure(font, "T");
-            Height += (titleBounds.height * 3);
-            Height += margin * 2;
+        super();
+        
+        this.skin = VisUI.getSkin();
+        setSkin(this.skin);
+        style = skin.get("default", ButtonDialogStyle.class);
+        this.setStageBackground(style.stageBackground);
+        if (title != null) {
+            this.mHasTitle = true;
+            this.titleText = title;
+            add(titleTable = new Table(skin)).left();
+            titleTable.defaults().padLeft(style.title.getLeftWidth()).padRight(style.title.getLeftWidth())
+                    .padTop(style.title.getTopHeight()).padBottom(style.title.getBottomHeight());
+            row();
+            titleLabel = new Label(titleText, new Label.LabelStyle(style.titleFont, style.titleFontColor));
+            titleTable.add(titleLabel).left();
+        } else {
+            titleLabel = null;
         }
-        Height += calcFooterHeight(font, hasButtons);
-        if (hasRemember)
-            Height += UI_Size_Base.that.getChkBoxSize().height;
-        Height += calcHeaderHeight(font);
 
-        // min Height festlegen
-        Height = (int) Math.max(Height, UI_Size_Base.that.getButtonHeight() * 2.5f);
+        add(contentTable = new Table(skin)).expand().fill().padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN);
+        row();
 
-        // max Height festlegen
-        Height = (int) Math.min(Height, UI_Size_Base.that.getWindowHeight() * 0.95f);
+        add(buttonTable = new Table(skin)).expand().fill().padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN)
+                .padBottom(CB.scaledSizes.MARGIN / 2).padTop(CB.scaledSizes.MARGIN);
 
-        SizeF ret = new SizeF(Width, Height);
-        return ret;
+        contentTable.defaults().space(2).padLeft(3).padRight(3);
+        buttonTable.defaults().padLeft(style.footer.getLeftWidth()).padRight(style.footer.getRightWidth()).padBottom(CB.scaledSizes.MARGIN);
+
+        buttonTable.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!values.containsKey(actor)) return;
+                while (actor.getParent() != buttonTable)
+                    actor = actor.getParent();
+                result(values.get(actor));
+            }
+        });
+
+        setButtonCaptions(buttons);
+
+        if (icon != MessageBoxIcon.None && icon != null) {
+            Image iconImage = new Image(getIcon(icon));
+            contentTable.add(iconImage).width(iconImage.getWidth()).top().pad(CB.scaledSizes.MARGIN);
+        }
+
+        msgLabel = new Label(msg, new Label.LabelStyle(style.titleFont, style.titleFontColor));
+        msgLabel.setWrap(true);
+        contentTable.add(msgLabel).expandX().fillX();
+        msgBoxClickListener = Listener;
+
     }
+
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+
+        float versatz = !mHasTitle ? 0 : style.title.getBottomHeight();
+        if (style.header != null && !dontRenderDialogBackground) {
+            style.header.draw(batch, this.getX(), (contentTable.getY() + versatz + contentTable.getHeight() - style.header.getMinHeight()) + this.getY(),
+                    this.getWidth(), style.header.getMinHeight() + versatz);
+        }
+        if (style.footer != null && !dontRenderDialogBackground) {
+            style.footer.draw(batch, this.getX(), this.getY(), this.getWidth(), buttonTable.getHeight() + (2 * CB.scaledSizes.MARGIN));
+        }
+        if (style.center != null && !dontRenderDialogBackground) {
+            style.center.draw(batch, this.getX(), contentTable.getY() + this.getY(), this.getWidth(),
+                    contentTable.getHeight());
+        }
+
+        if (mHasTitle) {
+            // TODO handle drawing if Title width to long for window
+            if (style.title != null && !dontRenderDialogBackground) {
+                style.title.draw(batch, this.getX(), this.getY() + titleTable.getY(), titleTable.getWidth() + style.title.getRightWidth(), titleTable.getHeight());
+            }
+        }
+        super.drawChildren(batch, parentAlpha);
+    }
+
 
     @Override
     public void pack() {
-        //TODO remove ContentTable and set own
-
-    }
-
-    public void setButtonCaptions(MessageBoxButtons buttons) {
-
-        if (buttons == MessageBoxButtons.YesNoRetry) {
-            this.button(Translation.Get("yes"), BUTTON_POSITIVE);
-            this.button(Translation.Get("no"), BUTTON_NEGATIVE);
-            this.button(Translation.Get("retry"), BUTTON_NEUTRAL);
-        } else if (buttons == MessageBoxButtons.AbortRetryIgnore) {
-            this.button(Translation.Get("abort"), BUTTON_POSITIVE);
-            this.button(Translation.Get("retry"), BUTTON_NEUTRAL);
-            this.button(Translation.Get("ignore"), BUTTON_NEGATIVE);
-        } else if (buttons == MessageBoxButtons.OK) {
-            this.button(Translation.Get("ok"), BUTTON_POSITIVE);
-        } else if (buttons == MessageBoxButtons.OKCancel) {
-            this.button(Translation.Get("ok"), BUTTON_POSITIVE);
-            this.button(Translation.Get("cancel"), BUTTON_NEGATIVE);
-        } else if (buttons == MessageBoxButtons.RetryCancel) {
-            this.button(Translation.Get("retry"), BUTTON_POSITIVE);
-            this.button(Translation.Get("cancel"), BUTTON_NEGATIVE);
-        } else if (buttons == MessageBoxButtons.YesNo) {
-            this.button(Translation.Get("yes"), BUTTON_POSITIVE);
-            this.button(Translation.Get("no"), BUTTON_NEGATIVE);
-        } else if (buttons == MessageBoxButtons.YesNoCancel) {
-            this.button(Translation.Get("yes"), BUTTON_POSITIVE);
-            this.button(Translation.Get("no"), BUTTON_NEGATIVE);
-            this.button(Translation.Get("cancel"), BUTTON_NEUTRAL);
-        } else if (buttons == MessageBoxButtons.Cancel) {
-            this.button(Translation.Get("cancel"), BUTTON_NEGATIVE);
-        }
-
+        super.pack();
+        setPosition(((CB.windowStage.getWidth() - getWidth()) / 2f),
+                ((CB.windowStage.getHeight() - getHeight()) / 2));
     }
 
     private static Sprite getIcon(MessageBoxIcon msgIcon) {
@@ -160,10 +180,10 @@ public class ButtonDialog extends VisDialog {
                 icon = CB.getSprite(IconNames.warningIcon.name());
                 break;
             case 9:
-                icon = CB.getSprite(IconNames.dayGcLiveIcon.name());
+                icon = CB.getSprite(IconNames.gc_liveIcon.name());
                 break;
             case 10:
-                icon = CB.getSprite(IconNames.dayGcLiveIcon.name());
+                icon = CB.getSprite(IconNames.gc_liveIcon.name());
                 break;
 
             default:
@@ -174,49 +194,66 @@ public class ButtonDialog extends VisDialog {
         return icon;
     }
 
+    private void setButtonCaptions(MessageBoxButtons buttons) {
+        float buttonWidth = 0;
 
-    public static float calcHeaderHeight(BitmapFont font) {
-        return (MesureFontUtil.Measure(font, "T").height) / 2;
+        float maxWindowWidth = CB.scaledSizes.WINDOW_WIDTH;
+
+        if (buttons == MessageBoxButtons.YesNoRetry) {
+            buttonWidth = (maxWindowWidth / 3) - (4 * CB.scaledSizes.MARGIN);
+            this.button(Translation.Get("yes"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.Get("no"), buttonWidth, BUTTON_NEGATIVE);
+            this.button(Translation.Get("retry"), buttonWidth, BUTTON_NEUTRAL);
+        } else if (buttons == MessageBoxButtons.AbortRetryIgnore) {
+            buttonWidth = (maxWindowWidth / 3) - (4 * CB.scaledSizes.MARGIN);
+            this.button(Translation.Get("abort"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.Get("retry"), buttonWidth, BUTTON_NEUTRAL);
+            this.button(Translation.Get("ignore"), buttonWidth, BUTTON_NEGATIVE);
+        } else if (buttons == MessageBoxButtons.OK) {
+            buttonWidth = (maxWindowWidth / 1) - (2 * CB.scaledSizes.MARGIN);
+            this.button(Translation.Get("ok"), buttonWidth, BUTTON_POSITIVE);
+        } else if (buttons == MessageBoxButtons.OKCancel) {
+            buttonWidth = (maxWindowWidth / 2) - (3 * CB.scaledSizes.MARGIN);
+            this.button(Translation.Get("ok"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEGATIVE);
+        } else if (buttons == MessageBoxButtons.RetryCancel) {
+            buttonWidth = (maxWindowWidth / 2) - (3 * CB.scaledSizes.MARGIN);
+            this.button(Translation.Get("retry"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEGATIVE);
+        } else if (buttons == MessageBoxButtons.YesNo) {
+            buttonWidth = (maxWindowWidth / 2) - (3 * CB.scaledSizes.MARGIN);
+            this.button(Translation.Get("yes"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.Get("no"), buttonWidth, BUTTON_NEGATIVE);
+        } else if (buttons == MessageBoxButtons.YesNoCancel) {
+            buttonWidth = (maxWindowWidth / 3) - (4 * CB.scaledSizes.MARGIN);
+            this.button(Translation.Get("yes"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.Get("no"), buttonWidth, BUTTON_NEGATIVE);
+            this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEUTRAL);
+        } else if (buttons == MessageBoxButtons.Cancel) {
+            buttonWidth = (maxWindowWidth / 1) - (2 * CB.scaledSizes.MARGIN);
+            this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEGATIVE);
+        }
     }
 
-    public static float calcFooterHeight(BitmapFont font, boolean hasButtons) {
-
-        if (margin <= 0)
-            margin = UI_Size_Base.that.getMargin();
-
-        return hasButtons ? UI_Size_Base.that.getButtonHeight() + margin : calcHeaderHeight(font);
+    private void button(String text, float buttonWidth, Object object) {
+        VisTextButton.VisTextButtonStyle buttonStyle = skin.get(VisTextButton.VisTextButtonStyle.class);
+        VisTextButton button = new VisTextButton(text, buttonStyle);
+        buttonTable.add(button).width(buttonWidth);
+        values.put(button, object);
     }
 
-    /**
-     * Called when a button is clicked. The dialog will be hidden after this method returns unless {@link #cancel()} is called.
-     *
-     * @param object The object specified when the button was added.
-     */
-    protected void result(Object object) {
-
+    private void result(Object object) {
         if (msgBoxClickListener != null) {
             msgBoxClickListener.onClick((Integer) object, null);
             this.hide();
-            this.remove();
         }
-
     }
 
-    /**
-     * Adds a text button to the button table.
-     *
-     * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null.
-     */
-    public VisDialog button(String text, Object object, VisTextButton.VisTextButtonStyle buttonStyle) {
-        VisTextButton button = new VisTextButton(text, buttonStyle);
-
-
-        button.getPrefWidth();
-
-        button.setWidth(UI_Size_Base.that.getButtonWidth());
-        button.setHeight(UI_Size_Base.that.getButtonHeight());
-        return button(button, object);
+    public static class ButtonDialogStyle {
+        SvgNinePatchDrawable title, header, center, footer;
+        Drawable stageBackground;
+        BitmapFont titleFont;
+        Color titleFontColor;
     }
-
 
 }

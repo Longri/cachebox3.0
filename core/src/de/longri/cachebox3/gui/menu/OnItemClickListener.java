@@ -13,22 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.stages.initial_tasks;
+package de.longri.cachebox3.gui.menu;
 
 /**
- * Created by Longri on 02.08.16.
+ * Created by Longri on 15.08.2016.
  */
-public abstract class AbstractInitTask {
+public interface OnItemClickListener {
 
-    public final String name;
-    public final int percent;
-
-    public AbstractInitTask(String name, int percent) {
-        this.name = name;
-        this.percent = percent;
-    }
-
-    public abstract void RUNABLE();
+    public void onItemClick(MenuItem item);
 
 }
-

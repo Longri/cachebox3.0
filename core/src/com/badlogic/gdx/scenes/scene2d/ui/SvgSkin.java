@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
@@ -28,7 +29,9 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.gui.views.ListView;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
+import de.longri.cachebox3.utils.ScaledSizes;
 import org.oscim.backend.CanvasAdapter;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +43,8 @@ import java.util.ArrayList;
  */
 public class SvgSkin extends Skin {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(SvgSkin.class);
+
+    public final static String TMP_UI_ATLAS = "/user/temp/ui_tmp.atlas";
 
     /**
      * Create a Skin from given Jason-file!
@@ -56,36 +61,51 @@ public class SvgSkin extends Skin {
 
     public static TextureAtlas createTextureAtlasFromImages(FileHandle folder) {
 
+        FileHandle cachedTexturatlasFileHandle = Gdx.files.absolute(CB.WorkPath + TMP_UI_ATLAS);
+        if (cachedTexturatlasFileHandle.exists()) {
+            if (HashAtlasWriter.hashEquals(folder)) {
+                log.debug("Load cached TextureAtlas");
+                return new TextureAtlas(cachedTexturatlasFileHandle);
+            }
+        }
+
+        log.debug("Create new TextureAtlas");
+
         // max texture size are 2048x2048
         int pageWidth = 2048;
         int pageHeight = 2048;
-        int padding = 0;
-        boolean duplicateBorder = true;
+        int padding = 2;
+        boolean duplicateBorder = false;
 
         PixmapPacker packer = new PixmapPacker(pageWidth, pageHeight, Pixmap.Format.RGBA8888, padding, duplicateBorder);
 
         ArrayList<FileHandle> fileHandleArrayList = new ArrayList<FileHandle>();
         Utils.listFileHandels(folder, fileHandleArrayList);
-
+        final int prime = 31;
+        int resultHashCode = 1;
+        // resultHashCode is the hashcode.
         for (FileHandle fileHandle : fileHandleArrayList) {
 
             Pixmap pixmap = null;
             String name = null;
 
+
             //check for svg or png
             if (fileHandle.extension().equalsIgnoreCase("svg")) {
                 try {
+                    resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
                     pixmap = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, 1));
                     name = fileHandle.nameWithoutExtension();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else if (fileHandle.extension().equalsIgnoreCase("png")) {
+                resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
                 pixmap = Utils.getPixmapFromBitmap(CanvasAdapter.decodeBitmap(fileHandle.read()));
                 name = fileHandle.nameWithoutExtension();
             }
 
-            log.debug("Pack Svg: " + name + " Size:" + pixmap.getWidth() + "/" + pixmap.getHeight());
+            log.trace("Pack Svg: " + name + " Size:" + pixmap.getWidth() + "/" + pixmap.getHeight());
 
             if (pixmap != null) packer.pack(name, pixmap);
 
@@ -97,8 +117,20 @@ public class SvgSkin extends Skin {
         pixmap.fill();
         packer.pack("color", pixmap);
 
+        TextureAtlas atlas = packer.generateTextureAtlas(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.MipMapNearestNearest, true);
+        PixmapPackerIO pixmapPackerIO = new PixmapPackerIO();
 
-        TextureAtlas atlas = packer.generateTextureAtlas(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear, false);
+        PixmapPackerIO.SaveParameters parameters = new PixmapPackerIO.SaveParameters();
+        parameters.magFilter = Texture.TextureFilter.MipMapNearestNearest;
+        parameters.minFilter = Texture.TextureFilter.MipMapNearestNearest;
+
+        try {
+            HashAtlasWriter.save(resultHashCode, cachedTexturatlasFileHandle, packer, parameters);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         packer.dispose();
         pixmap.dispose();
         return atlas;
@@ -217,6 +249,39 @@ public class SvgSkin extends Skin {
             }
         });
 
+        json.setSerializer(ListView.ListViewStyle.class, new Json.ReadOnlySerializer<ListView.ListViewStyle>() {
+            public ListView.ListViewStyle read(Json json, JsonValue jsonData, Class type) {
+                ListView.ListViewStyle style = new ListView.ListViewStyle();
+
+                String background, firstItem, secondItem, selectedItem;
+
+                background = json.readValue("background", String.class, jsonData);
+                firstItem = json.readValue("firstItem", String.class, jsonData);
+                secondItem = json.readValue("secondItem", String.class, jsonData);
+                selectedItem = json.readValue("selectedItem", String.class, jsonData);
+
+                style.background = getDrawable(background);
+                style.firstItem = getDrawable(firstItem);
+                style.secondItem = getDrawable(secondItem);
+                style.selectedItem = getDrawable(selectedItem);
+
+                float pad, padLeft, padRight, padTop, padBottom;
+                pad = json.readValue("pad", float.class, 0f, jsonData);
+                padLeft = json.readValue("padLeft", float.class, 0f, jsonData);
+                padRight = json.readValue("padRight", float.class, 0f, jsonData);
+                padTop = json.readValue("padTop", float.class, 0f, jsonData);
+                padBottom = json.readValue("padBottom", float.class, 0f, jsonData);
+
+                //scale values
+                style.pad = CB.getScaledFloat(pad);
+                style.padLeft = CB.getScaledFloat(padLeft);
+                style.padRight = CB.getScaledFloat(padRight);
+                style.padTop = CB.getScaledFloat(padTop);
+                style.padBottom = CB.getScaledFloat(padBottom);
+                return style;
+            }
+        });
+
         json.setSerializer(SvgNinePatchDrawable.class, new Json.ReadOnlySerializer<SvgNinePatchDrawable>() {
             public SvgNinePatchDrawable read(Json json, JsonValue jsonData, Class type) {
 
@@ -238,10 +303,10 @@ public class SvgSkin extends Skin {
                 right = CB.getScaledInt(right);
                 top = CB.getScaledInt(top);
                 bottom = CB.getScaledInt(bottom);
-                leftWidth = CB.getScaledInt(leftWidth);
-                rightWidth = CB.getScaledInt(rightWidth);
-                topHeight = CB.getScaledInt(topHeight);
-                bottomHeight = CB.getScaledInt(bottomHeight);
+                leftWidth = leftWidth == 0 ? left : CB.getScaledInt(leftWidth);
+                rightWidth = rightWidth == 0 ? right : CB.getScaledInt(rightWidth);
+                topHeight = topHeight == 0 ? top : CB.getScaledInt(topHeight);
+                bottomHeight = bottomHeight == 0 ? bottom : CB.getScaledInt(bottomHeight);
 
                 return new SvgNinePatchDrawable(new NinePatch(textureRegion, left, right, top, bottom),
                         leftWidth, rightWidth, topHeight, bottomHeight);
@@ -297,11 +362,25 @@ public class SvgSkin extends Skin {
             public ColorDrawable read(Json json, JsonValue jsonData, Class type) {
                 Color color = json.readValue("color", Color.class, jsonData);
                 ColorDrawable drawable = new ColorDrawable(color);
-//                if (drawable instanceof BaseDrawable) {
-//                    BaseDrawable named = (BaseDrawable)drawable;
-//                    named.setName(jsonData.name + " (" + color + ")");
-//                }
                 return drawable;
+            }
+        });
+
+        json.setSerializer(ScaledSizes.class, new Json.ReadOnlySerializer<ScaledSizes>() {
+            public ScaledSizes read(Json json, JsonValue jsonData, Class type) {
+                float button_width = CB.getScaledFloat(json.readValue("button_width", float.class, jsonData));
+                float button_height = CB.getScaledFloat(json.readValue("button_height", float.class, jsonData));
+                float button_width_wide = CB.getScaledFloat(json.readValue("button_width_wide", float.class, jsonData));
+                float margin = CB.getScaledFloat(json.readValue("margin", float.class, jsonData));
+                float check_box_height = CB.getScaledFloat(json.readValue("check_box_height", float.class, jsonData));
+                float window_margin = CB.getScaledFloat(json.readValue("check_box_height", float.class, jsonData));
+                ScaledSizes scaledSizes = new ScaledSizes(button_width, button_height, button_width_wide, margin,
+                        check_box_height, window_margin);
+
+                //set also to static access on CB
+                CB.scaledSizes = scaledSizes;
+
+                return scaledSizes;
             }
         });
 

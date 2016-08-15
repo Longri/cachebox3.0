@@ -115,6 +115,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.kotcrab.vis:vis-ui:$visUiVersion"
+        compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
         //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])
     }

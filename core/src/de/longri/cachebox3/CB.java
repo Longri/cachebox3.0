@@ -19,15 +19,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.utils.ScaledSizes;
+import org.slf4j.LoggerFactory;
+import org.slf4j.impl.LibgdxLoggerFactory;
 
 /**
  * Static class
  * Created by Longri on 20.07.2016.
  */
 public class CB {
+
+    public static final int CurrentRevision = 20160806;
+    public static final String CurrentVersion = "0.1.";
+    public static final String VersionPrefix = "Test";
 
 
     //LogLevels
@@ -38,7 +46,20 @@ public class CB {
     public static final String LOG_LEVEL_ERROR = "error";
     public static final String LOG_LEVEL_TRACE = "trace";
 
-    public static final String USED_LOG_LEVEL = LOG_LEVEL_TRACE;
+    public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
+    public static final float WINDOW_FADE_TIME = 0.3f;
+    public static Stage windowStage,mainStage;
+
+    static {
+
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.CacheBox");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.Settings");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+        //   LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
+
+        ((LibgdxLoggerFactory) LoggerFactory.getILoggerFactory()).reset();
+    }
 
 
     final static float PPI_DEFAULT = 163;
@@ -55,14 +76,25 @@ public class CB {
      * or to the "SandBox" on the external SD
      */
     public static String WorkPath;
-
+    private static Skin actSkin;
+    public static Color backgroundColor = new Color(0, 1, 0, 1);
+    public static ScaledSizes scaledSizes;
 
     private CB() {
     }
 
-    private static Skin actSkin;
-    public static Color backgroundColor = new Color(0, 1, 0, 1);
 
+    private static boolean isTestVersionCheked = false;
+    private static boolean isTestVersion = false;
+
+    public static boolean isTestVersion() {
+        if (isTestVersionCheked)
+            return isTestVersion;
+
+        isTestVersion = VersionPrefix.toLowerCase().contains("test");
+        isTestVersionCheked = true;
+        return isTestVersion;
+    }
 
     public static void setActSkin(Skin skin) {
         if (actSkin != null) {
@@ -131,7 +163,7 @@ public class CB {
     }
 
     public static Sprite getSprite(String name) {
-        return actSkin.getSprite(name);
+        return actSkin != null ? actSkin.getSprite(name) : null;
     }
 
     public static void callQuit() {
@@ -142,7 +174,7 @@ public class CB {
 //            Config.AcceptChanges();
 //            Log.debug(log, "LastSelectedCache = " + GlobalCore.getSelectedCache().getGcCode());
 //        }
-        
+
         Gdx.app.exit();
     }
 
@@ -151,4 +183,8 @@ public class CB {
     }
 
     public static Platform platform;
+
+    public static void requestRendering() {
+        Gdx.graphics.requestRendering();
+    }
 }
