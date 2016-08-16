@@ -13,29 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions;
+package de.longri.cachebox3.gui.actions.show_vies;
 
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.actions.AbstractAction;
+import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.gui.views.AboutView;
-import de.longri.cachebox3.gui.views.TestView;
+import de.longri.cachebox3.gui.views.TrackableListView;
 
 /**
  * Created by Longri on 24.07.16.
  */
-public class Action_Show_TestView extends Action {
-
-    public Action_Show_TestView() {
-        super("TestView", MenuID.AID_TEST_VIEW);
+public class Action_Show_TrackableListView extends Abstract_Action_ShowView {
+    public Action_Show_TrackableListView() {
+        super("TBList", MenuID.AID_SHOW_TRACKABLELIST);
     }
-
 
     @Override
     protected void Execute() {
-        if (CB.viewmanager.getActView() instanceof TestView) return;
+        if (isActVisible()) return;
 
-        TestView view = new TestView();
+        TrackableListView view = new TrackableListView();
         CB.viewmanager.showView(view);
 
+    }
+
+    @Override
+    public boolean hasContextMenu() {
+        return false;
+    }
+
+    @Override
+    public Menu getContextMenu() {
+        return null;
+    }
+
+    @Override
+    public boolean isActVisible() {
+        return CB.viewmanager.getActView() instanceof TrackableListView;
     }
 }

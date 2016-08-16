@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions;
+package de.longri.cachebox3.gui.actions.show_vies;
 
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.actions.AbstractAction;
+import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.utils.IconNames;
 import org.slf4j.LoggerFactory;
@@ -25,7 +27,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 16.08.16.
  */
-public class Action_Show_Credits extends Action {
+public class Action_Show_Credits extends Abstract_Action_ShowView {
 	final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Show_Credits.class);
 
 	public Action_Show_Credits() {
@@ -46,5 +48,20 @@ public class Action_Show_Credits extends Action {
 	@Override
 	public Sprite getIcon() {
 		return CB.getSprite(IconNames.cb.name());
+	}
+
+	@Override
+	public boolean hasContextMenu() {
+		return false;
+	}
+
+	@Override
+	public Menu getContextMenu() {
+		return null;
+	}
+
+	@Override
+	public boolean isActVisible() {
+		return false;
 	}
 }

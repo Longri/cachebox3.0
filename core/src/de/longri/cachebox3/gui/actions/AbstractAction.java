@@ -21,9 +21,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 24.07.16.
  */
-public abstract class Action {
+public abstract class AbstractAction {
 
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Action.class);
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(AbstractAction.class);
 
     protected String name;
     protected int id;
@@ -33,15 +33,15 @@ public abstract class Action {
      * Constructor
      *
      * @param name = Translation ID
-     * @param id   = Action ID ( AID_xxxx )
+     * @param id   = AbstractAction ID ( AID_xxxx )
      */
-    public Action(String name, int id) {
+    public AbstractAction(String name, int id) {
         //super();
         this.name = name;
         this.id = id;
     }
 
-    public Action(String name, String nameExtention, int id) {
+    public AbstractAction(String name, String nameExtention, int id) {
         //super();
         this.name = name;
         this.id = id;

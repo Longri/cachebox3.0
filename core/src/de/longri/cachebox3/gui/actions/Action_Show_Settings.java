@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 16.08.16.
  */
-public class Action_Show_Settings extends Action {
+public class Action_Show_Settings extends AbstractAction {
 	final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Show_Settings.class);
 
 	public Action_Show_Settings() {

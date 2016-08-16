@@ -18,21 +18,14 @@ package de.longri.cachebox3.gui.actions;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.gui.Window;
-import de.longri.cachebox3.gui.dialogs.ButtonDialog;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
-import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.IconNames;
 import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 16.08.16.
  */
-public class Action_Show_Help extends Action {
+public class Action_Show_Help extends AbstractAction {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Show_Help.class);
 
     public Action_Show_Help() {

@@ -13,29 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions;
+package de.longri.cachebox3.gui.actions.show_vies;
 
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.gui.views.AboutView;
+import de.longri.cachebox3.gui.actions.AbstractAction;
+import de.longri.cachebox3.gui.menu.Menu;
 
 /**
- * Created by Longri on 24.07.16.
+ * Created by Longri on 16.08.2016.
  */
-public class Action_Show_AboutView extends Action {
-
-    public Action_Show_AboutView() {
-        super("AboutView", MenuID.AID_SHOW_CACHELIST);
+public abstract class Abstract_Action_ShowView extends AbstractAction {
+    public Abstract_Action_ShowView(String name, int id) {
+        super(name, id);
     }
 
-
-    @Override
-    protected void Execute() {
-        if (CB.viewmanager.getActView() instanceof AboutView) return;
-
-        AboutView view = new AboutView();
-        CB.viewmanager.showView(view);
-
-        view.reloadState();
+    public Abstract_Action_ShowView(String name, String nameExtention, int id) {
+        super(name, nameExtention, id);
     }
+
+    public abstract boolean hasContextMenu();
+
+    public abstract Menu getContextMenu();
+
+    public abstract boolean isActVisible() ;
 }
