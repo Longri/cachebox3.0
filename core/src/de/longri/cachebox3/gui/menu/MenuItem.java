@@ -227,7 +227,6 @@ public class MenuItem extends VisTable {
         this.data = data;
     }
 
-
     public Object getData() {
         return this.data;
     }
@@ -235,7 +234,6 @@ public class MenuItem extends VisTable {
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
-
 
     public static class MenuItemStyle {
         public BitmapFont font;

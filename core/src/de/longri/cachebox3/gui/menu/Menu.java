@@ -221,6 +221,21 @@ public class Menu extends Window {
         this.onItemClickListener = onItemClickListener;
     }
 
+    public OnItemClickListener getOnItemClickListeners() {
+        return this.onItemClickListener;
+    }
+
+    public CB_List<MenuItem> getItems() {
+        return mItems;
+    }
+
+    public void addItems(CB_List<MenuItem> items) {
+        mItems.addAll(items);
+    }
+
+    public void addDivider() {
+        //TODO add divider item
+    }
 
     public static class MenuStyle {
         public Drawable background;

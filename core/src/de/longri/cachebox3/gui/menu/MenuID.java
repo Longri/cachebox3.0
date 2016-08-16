@@ -129,7 +129,7 @@ public class MenuID {
 
 	public static final int MI_SHOW_ALL_WAYPOINTS = 81;
 
-	// Action ID�s
+	// AbstractAction ID�s
 
 	public static final int AID_TEST_VIEW = -1;
 	public static final int AID_TEST2 = -2;

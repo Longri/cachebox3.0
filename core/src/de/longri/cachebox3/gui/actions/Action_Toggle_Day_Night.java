@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 16.08.16.
  */
-public class Action_Toggle_Day_Night extends Action {
+public class Action_Toggle_Day_Night extends AbstractAction {
 	final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Toggle_Day_Night.class);
 
 	public Action_Toggle_Day_Night() {

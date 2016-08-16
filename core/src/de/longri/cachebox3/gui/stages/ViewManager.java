@@ -67,29 +67,28 @@ public class ViewManager extends Stage {
 
         db_button = new GestureButton("db");
         db_button.setSize(buttonsize, buttonsize);
-        db_button.addListener(gestureListener);
-        mainButtonBar.addButton(db_button);
+               mainButtonBar.addButton(db_button);
 
         cache_button = new GestureButton("cache");
         cache_button.setSize(buttonsize, buttonsize);
-        cache_button.addListener(gestureListener);
+
         mainButtonBar.addButton(cache_button);
 
 
         navButton = new GestureButton("nav");
         navButton.setSize(buttonsize, buttonsize);
-        navButton.addListener(gestureListener);
+
         mainButtonBar.addButton(navButton);
 
 
         tool_button = new GestureButton("tool");
         tool_button.setSize(buttonsize, buttonsize);
-        tool_button.addListener(gestureListener);
+
         mainButtonBar.addButton(tool_button);
 
         misc_button = new GestureButton("misc");
         misc_button.setSize(buttonsize, buttonsize);
-        misc_button.addListener(gestureListener);
+
         mainButtonBar.addButton(misc_button);
 
         mainButtonBar.layout();
@@ -113,58 +112,17 @@ public class ViewManager extends Stage {
         setActViewBounds();
         log.debug("reload view state:" + view.getName());
         this.actView.reloadState();
+
+        //select main button
+
     }
-
-    //TODO inital with longPressDuration from settings
-    //    ActorGestureListener(float halfTapSquareSize, float tapCountInterval, float longPressDuration, float maxFlingDelay)
-    ActorGestureListener gestureListener = new ActorGestureListener() {
-
-        @Override
-        public void fling(InputEvent event, float velocityX, float velocityY, int button) {
-            //TODO add gesture detection
-        }
-
-        /**
-         * If true is returned, additional gestures will not be triggered.
-         * @param actor
-         * @param x
-         * @param y
-         * @return
-         */
-        @Override
-        public boolean longPress(Actor actor, float x, float y) {
-            Gdx.app.log("", "Longpress");
-            return true;
-        }
-
-        @Override
-        public void tap(InputEvent event, float x, float y, int count, int button) {
-            if (event.getType() == InputEvent.Type.touchUp) {
-
-                GestureButton target = (GestureButton) event.getTarget();
-
-                for (Button b : mainButtonBar.getButtons()) {
-                    GestureButton gb = (GestureButton) b;
-                    if (gb.equals(target)) {
-                        gb.setChecked(true);
-                        gb.executeDefaultAction();
-                    } else {
-                        gb.setChecked(false);
-                    }
-                }
-
-            }
-        }
-
-    };
-
 
     private void initialActionButtons() {
         // assign the actions to the buttons
 
-        db_button.addAction(new ActionButton(new Action_Show_CacheList(), true, ActionButton.GestureDirection.Up));
-        db_button.addAction(new ActionButton(new Action_Show_TrackableListView(), false, ActionButton.GestureDirection.Right));
-        db_button.addAction(new ActionButton(new Action_Show_TrackListView(), false, ActionButton.GestureDirection.Down));
+        db_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_CacheList(), true, ActionButton.GestureDirection.Up));
+        db_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_TrackableListView(), false, ActionButton.GestureDirection.Right));
+        db_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_TrackListView(), false, ActionButton.GestureDirection.Down));
 
 //        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowDescriptionView, true, GestureDirection.Up));
 //        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowWaypointView, false, GestureDirection.Right));
@@ -179,7 +137,7 @@ public class ViewManager extends Stage {
 //        mMapButtonOnLeftTab.addAction(new CB_ActionButton(actionNavigateTo1, false, GestureDirection.Down));
 //        mMapButtonOnLeftTab.addAction(new CB_ActionButton(actionGenerateRoute, false, GestureDirection.Left));
         if (GlobalCore.isTestVersion())
-            navButton.addAction(new ActionButton(new Action_Show_TestView(), false));
+            navButton.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_TestView(), false));
 //
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickFieldNote, false, GestureDirection.Up));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowFieldNotesView, Config.ShowFieldnotesAsDefaultView.getValue()));
@@ -192,8 +150,8 @@ public class ViewManager extends Stage {
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
         tool_button.addAction(new ActionButton(new Action_Show_Quit(), true));
 //
-        misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, ActionButton.GestureDirection.Up));
-        misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));
+        misc_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_AboutView(), true, ActionButton.GestureDirection.Up));
+        misc_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_Credits(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Settings(), false, ActionButton.GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Help(), false));
