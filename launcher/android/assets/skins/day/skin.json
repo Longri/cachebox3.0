@@ -14,7 +14,7 @@
     },
     "cb": {
       "name": "skins/day/svg/cb.svg",
-      "scale": 0.19
+      "scale": 0.15
     },
     "check_disabled": {
       "name": "skins/day/svg/check_disabled.svg"

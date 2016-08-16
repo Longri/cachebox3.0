@@ -111,6 +111,7 @@ public class HashAtlasWriter {
         for (ScaledSvg svg : svgs) {
             FileHandle fileHandle = Gdx.files.internal(svg.name);
             resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
+            resultHashCode = (resultHashCode * (int) (prime * svg.scale));
         }
         return resultHashCode == hash;
     }

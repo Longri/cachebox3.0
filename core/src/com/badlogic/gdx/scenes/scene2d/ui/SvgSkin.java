@@ -92,6 +92,7 @@ public class SvgSkin extends Skin {
 
             try {
                 resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
+                resultHashCode = (resultHashCode * (int) (prime * scaledSvg.scale));
                 pixmap = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale));
                 name = fileHandle.nameWithoutExtension();
             } catch (IOException e) {
