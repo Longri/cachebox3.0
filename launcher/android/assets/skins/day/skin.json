@@ -1,4 +1,121 @@
 {
+  "com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg": {
+    "button_bar_back": {
+      "name": "skins/day/svg/button_bar_back.svg"
+    },
+    "cache": {
+      "name": "skins/day/svg/cache.svg"
+    },
+    "cache_pressed": {
+      "name": "skins/day/svg/cache_pressed.svg"
+    },
+    "cache_selected": {
+      "name": "skins/day/svg/cache_selected.svg"
+    },
+    "cb": {
+      "name": "skins/day/svg/cb.svg",
+      "scale": 0.19
+    },
+    "check_disabled": {
+      "name": "skins/day/svg/check_disabled.svg"
+    },
+    "check_off": {
+      "name": "skins/day/svg/check_off.svg"
+    },
+    "check_on": {
+      "name": "skins/day/svg/check_on.svg"
+    },
+    "closeIcon": {
+      "name": "skins/day/svg/closeIcon.svg"
+    },
+    "cm_icon": {
+      "name": "skins/day/svg/cm_icon.svg"
+    },
+    "cm_icon_filterd": {
+      "name": "skins/day/svg/cm_icon_filterd.svg"
+    },
+    "db": {
+      "name": "skins/day/svg/db.svg"
+    },
+    "db_filter_active": {
+      "name": "skins/day/svg/db_filter_active.svg"
+    },
+    "db_pressed": {
+      "name": "skins/day/svg/db_pressed.svg"
+    },
+    "db_pressed_filter_active": {
+      "name": "skins/day/svg/db_pressed_filter_active.svg"
+    },
+    "db_selected": {
+      "name": "skins/day/svg/db_selected.svg"
+    },
+    "db_selected_filter_active": {
+      "name": "skins/day/svg/db_selected_filter_active.svg"
+    },
+    "default_button": {
+      "name": "skins/day/svg/default_button.svg"
+    },
+    "default_button_pressed": {
+      "name": "skins/day/svg/default_button_pressed.svg"
+    },
+    "dialog_center": {
+      "name": "skins/day/svg/dialog_center.svg"
+    },
+    "dialog_footer": {
+      "name": "skins/day/svg/dialog_footer.svg"
+    },
+    "dialog_header": {
+      "name": "skins/day/svg/dialog_header.svg"
+    },
+    "dialog_title": {
+      "name": "skins/day/svg/dialog_title.svg"
+    },
+    "gc_liveIcon": {
+      "name": "skins/day/svg/gc_liveIcon.svg"
+    },
+    "helpIcon": {
+      "name": "skins/day/svg/helpIcon.svg"
+    },
+    "infoIcon": {
+      "name": "skins/day/svg/infoIcon.svg"
+    },
+    "listrec_first": {
+      "name": "skins/day/svg/listrec_first.svg"
+    },
+    "listrec_second": {
+      "name": "skins/day/svg/listrec_second.svg"
+    },
+    "listrec_selected": {
+      "name": "skins/day/svg/listrec_selected.svg"
+    },
+    "misc": {
+      "name": "skins/day/svg/misc.svg"
+    },
+    "misc_pressed": {
+      "name": "skins/day/svg/misc_pressed.svg"
+    },
+    "misc_selected": {
+      "name": "skins/day/svg/misc_selected.svg"
+    },
+    "nav": {
+      "name": "skins/day/svg/nav.svg"
+    },
+    "nav_pressed": {
+      "name": "skins/day/svg/nav_pressed.svg"
+    },
+    "nav_selected": {
+      "name": "skins/day/svg/nav_selected.svg"
+    },
+    "tool": {
+      "name": "skins/day/svg/tool.svg"
+    },
+    "tool_pressed": {
+      "name": "skins/day/svg/tool_pressed.svg"
+    },
+    "tool_selected": {
+      "name": "skins/day/svg/tool_selected.svg"
+    }
+  },
   "de.longri.cachebox3.utils.ScaledSizes": {
     "default": {
       "button_width": 63,

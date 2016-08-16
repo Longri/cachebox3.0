@@ -26,25 +26,25 @@ import org.slf4j.LoggerFactory;
  * Created by Longri on 16.08.16.
  */
 public class Action_Toggle_Day_Night extends AbstractAction {
-	final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Toggle_Day_Night.class);
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Toggle_Day_Night.class);
 
-	public Action_Toggle_Day_Night() {
-		super("DayNight", MenuID.AID_DAY_NIGHT);
-	}
+    public Action_Toggle_Day_Night() {
+        super("DayNight", MenuID.AID_DAY_NIGHT);
+    }
 
-	@Override
-	public void Execute() {
+    @Override
+    public void Execute() {
 
 
-	}
+    }
 
-	@Override
-	public boolean getEnabled() {
-		return true;
-	}
+    @Override
+    public boolean getEnabled() {
+        return true;
+    }
 
-	@Override
-	public Sprite getIcon() {
-		return CB.getSprite(IconNames.DayNight.name());
-	}
+    @Override
+    public Sprite getIcon() {
+        return null; //TODO CB.getSprite(IconNames.DayNight.name());
+    }
 }

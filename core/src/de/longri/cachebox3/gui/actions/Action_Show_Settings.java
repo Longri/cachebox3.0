@@ -45,6 +45,6 @@ public class Action_Show_Settings extends AbstractAction {
 
 	@Override
 	public Sprite getIcon() {
-		return CB.getSprite(IconNames.settings.name());
+		return null;//TODO CB.getSprite(IconNames.settings.name());
 	}
 }
