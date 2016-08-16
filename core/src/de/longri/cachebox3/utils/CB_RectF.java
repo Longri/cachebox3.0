@@ -243,7 +243,7 @@ public class CB_RectF {
 
 	private CB_List<SizeChangedEvent> list = new CB_List<SizeChangedEvent>(1);
 
-	public void Add(SizeChangedEvent event) {
+	public void add(SizeChangedEvent event) {
 		synchronized (list) {
 			if (list == null)
 				return; // is disposed

@@ -16,7 +16,7 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import de.longri.cachebox3.gui.actions.Action;
+import de.longri.cachebox3.gui.actions.AbstractAction;
 
 /**
  * Created by Longri on 24.07.16.
@@ -26,21 +26,21 @@ public class ActionButton {
         None, Right, Up, Left, Down
     };
 
-    private final Action action;
+    private final AbstractAction action;
     private final boolean defaultAction;
     private GestureDirection gestureDirection = GestureDirection.None;
 
-    public ActionButton(Action action, boolean defaultAction, GestureDirection gestureDirection) {
+    public ActionButton(AbstractAction action, boolean defaultAction, GestureDirection gestureDirection) {
         this.action = action;
         this.defaultAction = defaultAction;
         this.gestureDirection = gestureDirection;
     }
 
-    public ActionButton(Action action, boolean defaultAction) {
+    public ActionButton(AbstractAction action, boolean defaultAction) {
         this(action, defaultAction, GestureDirection.None);
     }
 
-    public Action getAction() {
+    public AbstractAction getAction() {
         return action;
     }
 

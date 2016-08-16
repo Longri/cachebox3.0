@@ -29,7 +29,7 @@ import de.longri.cachebox3.utils.IconNames;
 import org.slf4j.LoggerFactory;
 
 
-public class Action_Show_Quit extends Action {
+public class Action_Show_Quit extends AbstractAction {
 	final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Show_Quit.class);
 
 	public Action_Show_Quit() {

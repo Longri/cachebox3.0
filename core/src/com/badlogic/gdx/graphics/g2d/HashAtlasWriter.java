@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
@@ -30,7 +31,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 
 /**
- * Created by Hoepfner on 11.08.2016.
+ * Created by Longri on 11.08.2016.
  */
 public class HashAtlasWriter {
 
@@ -88,7 +89,7 @@ public class HashAtlasWriter {
     }
 
 
-    public static boolean hashEquals(FileHandle folder) {
+    public static boolean hashEquals(ArrayList<ScaledSvg> svgs) {
 
         FileHandle file = Gdx.files.absolute(CB.WorkPath + SvgSkin.TMP_UI_ATLAS);
 
@@ -104,20 +105,13 @@ public class HashAtlasWriter {
             e.printStackTrace();
         }
 
-        ArrayList<FileHandle> fileHandleArrayList = new ArrayList<FileHandle>();
-        Utils.listFileHandels(folder, fileHandleArrayList);
+
         final int prime = 31;
         int resultHashCode = 1;
-        // resultHashCode is the hashcode.
-        for (FileHandle fileHandle : fileHandleArrayList) {
-
-            //check for svg or png
-            if (fileHandle.extension().equalsIgnoreCase("svg")) {
-                resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
-
-            } else if (fileHandle.extension().equalsIgnoreCase("png")) {
-                resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
-            }
+        for (ScaledSvg svg : svgs) {
+            FileHandle fileHandle = Gdx.files.internal(svg.name);
+            resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
+            resultHashCode = (resultHashCode * (int) (prime * svg.scale));
         }
         return resultHashCode == hash;
     }

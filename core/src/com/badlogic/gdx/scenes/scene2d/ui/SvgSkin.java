@@ -54,16 +54,16 @@ public class SvgSkin extends Skin {
      * @param json
      */
     public SvgSkin(FileHandle svgFolder, FileHandle json) {
-        this.addRegions(createTextureAtlasFromImages(svgFolder));
+        //  this.addRegions(createTextureAtlasFromImages(svgFolder));
         this.load(json);
     }
 
 
-    public static TextureAtlas createTextureAtlasFromImages(FileHandle folder) {
+    public static TextureAtlas createTextureAtlasFromImages(ArrayList<ScaledSvg> scaledSvgList) {
 
         FileHandle cachedTexturatlasFileHandle = Gdx.files.absolute(CB.WorkPath + TMP_UI_ATLAS);
         if (cachedTexturatlasFileHandle.exists()) {
-            if (HashAtlasWriter.hashEquals(folder)) {
+            if (HashAtlasWriter.hashEquals(scaledSvgList)) {
                 log.debug("Load cached TextureAtlas");
                 return new TextureAtlas(cachedTexturatlasFileHandle);
             }
@@ -79,30 +79,24 @@ public class SvgSkin extends Skin {
 
         PixmapPacker packer = new PixmapPacker(pageWidth, pageHeight, Pixmap.Format.RGBA8888, padding, duplicateBorder);
 
-        ArrayList<FileHandle> fileHandleArrayList = new ArrayList<FileHandle>();
-        Utils.listFileHandels(folder, fileHandleArrayList);
+
         final int prime = 31;
         int resultHashCode = 1;
         // resultHashCode is the hashcode.
-        for (FileHandle fileHandle : fileHandleArrayList) {
+        for (ScaledSvg scaledSvg : scaledSvgList) {
 
             Pixmap pixmap = null;
             String name = null;
 
+            FileHandle fileHandle = Gdx.files.internal(scaledSvg.name);
 
-            //check for svg or png
-            if (fileHandle.extension().equalsIgnoreCase("svg")) {
-                try {
-                    resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
-                    pixmap = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, 1));
-                    name = fileHandle.nameWithoutExtension();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (fileHandle.extension().equalsIgnoreCase("png")) {
+            try {
                 resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
-                pixmap = Utils.getPixmapFromBitmap(CanvasAdapter.decodeBitmap(fileHandle.read()));
+                resultHashCode = (resultHashCode * (int) (prime * scaledSvg.scale));
+                pixmap = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale));
                 name = fileHandle.nameWithoutExtension();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
             log.trace("Pack Svg: " + name + " Size:" + pixmap.getWidth() + "/" + pixmap.getHeight());
@@ -215,12 +209,29 @@ public class SvgSkin extends Skin {
             public Skin read(Json json, JsonValue typeToValueMap, Class ignored) {
                 for (JsonValue valueMap = typeToValueMap.child; valueMap != null; valueMap = valueMap.next) {
                     try {
-                        readNamedObjects(json, ClassReflection.forName(valueMap.name()), valueMap);
+
+                        if (valueMap.name().equals(ScaledSvg.class.getName())) {
+                            log.debug("read scaled SVG'S");
+                            readScaledSvgs(json, ClassReflection.forName(valueMap.name()), valueMap);
+                        } else {
+                            readNamedObjects(json, ClassReflection.forName(valueMap.name()), valueMap);
+                        }
                     } catch (ReflectionException ex) {
                         throw new SerializationException(ex);
                     }
                 }
                 return skin;
+            }
+
+            private void readScaledSvgs(Json json, Class type, JsonValue valueMap) {
+                ArrayList<ScaledSvg> resistedSvgs = new ArrayList<ScaledSvg>();
+                for (JsonValue valueEntry = valueMap.child; valueEntry != null; valueEntry = valueEntry.next) {
+                    ScaledSvg object = (ScaledSvg) json.readValue(type, valueEntry);
+                    resistedSvgs.add(object);
+                }
+
+                //create and register atlas
+                SvgSkin.this.addRegions(createTextureAtlasFromImages(resistedSvgs));
             }
 
 

@@ -50,7 +50,7 @@ public enum IconNames {
     helpIcon, // 34
     gc_liveIcon, // 35
     tb, // 36
-    cmIcon, // 37
+    cm_icon, // 37
     tbListIcon, // 38
     sortIcon, // 39
     importIcon, // 40
@@ -75,7 +75,7 @@ public enum IconNames {
     TBVISIT, // 62
     TBNOTE, // 63
     UPLOADFIELDNOTE, // 64
-    MENUFILTERED, // 65
+    cm_icon_filterd, // 65
     save, // 66
     TORCHON, // 67
     TORCHOFF, // 68

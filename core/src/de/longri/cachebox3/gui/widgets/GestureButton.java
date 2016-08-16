@@ -15,9 +15,27 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.actions.AbstractAction;
+import de.longri.cachebox3.gui.actions.show_vies.Abstract_Action_ShowView;
+import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.menu.MenuItem;
+import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.utils.CB_RectF;
+import de.longri.cachebox3.utils.IconNames;
+import de.longri.cachebox3.utils.SizeChangedEvent;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
@@ -26,11 +44,25 @@ import java.util.ArrayList;
  */
 public class GestureButton extends Button {
 
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(GestureButton.class);
+
     private static int idCounter = 0;
+    protected static Sprite menuSprite;
+    protected static Sprite menuSpriteFiltered;
 
     private GestureButtonStyle style;
     private final ArrayList<ActionButton> buttonActions;
     private final int ID;
+    private Abstract_Action_ShowView aktActionView;
+    private boolean hasContextMenu;
+
+    public ArrayList<ActionButton> getButtonActions() {
+        return buttonActions;
+    }
+
+    public void setHasContextMenu(boolean hasContextMenu) {
+        this.hasContextMenu = hasContextMenu;
+    }
 
     static public class GestureButtonStyle extends ButtonStyle {
         Drawable select;
@@ -42,6 +74,13 @@ public class GestureButton extends Button {
         this.setStyle(style);
         this.ID = idCounter++;
         buttonActions = new ArrayList<ActionButton>();
+
+        //remove all Listeners
+        Array<EventListener> listeners = this.getListeners();
+        for (EventListener listener : listeners) {
+            this.removeListener(listener);
+        }
+        this.addListener(gestureListener);
     }
 
     public boolean equals(Object other) {
@@ -64,7 +103,7 @@ public class GestureButton extends Button {
         }
 
         //if no default button so take the first or do nothing if no buttonAction set
-        if(!buttonActions.isEmpty()) {
+        if (!buttonActions.isEmpty()) {
             ActionButton action = buttonActions.get(0);
             if (action != null) action.getAction().callExecute();
         }
@@ -76,6 +115,181 @@ public class GestureButton extends Button {
                 action.getAction().callExecute();
                 return;
             }
+        }
+    }
+
+
+    //TODO inital with longPressDuration from settings
+    //    ActorGestureListener(float halfTapSquareSize, float tapCountInterval, float longPressDuration, float maxFlingDelay)
+    ActorGestureListener gestureListener = new ActorGestureListener() {
+
+        @Override
+        public void tap(InputEvent event, float x, float y, int count, int button) {
+            log.debug("on click");
+
+
+            // Einfacher Click -> alle Actions durchsuchen, ob die aktActionView darin enthalten ist und diese sichtbar ist
+            if ((aktActionView != null) && (aktActionView.hasContextMenu())) {
+                for (ActionButton ba : buttonActions) {
+                    if (ba.getAction() == aktActionView) {
+                        if (aktActionView.isActVisible()) {
+                            // Dieses View ist aktuell das Sichtbare
+                            // -> ein Click auf den Menü-Button zeigt das Contextmenü
+                            // if (aktActionView.ShowContextMenu()) return true;
+
+                            if (aktActionView.hasContextMenu()) {
+                                // das View Context Menü mit dem LongKlick Menü zusammen führen!
+
+                                // Menu zusammen stellen!
+                                // zuerst das View Context Menu
+                                Menu compoundMenu = new Menu("compoundMenu");
+
+                                Menu viewContextMenu = aktActionView.getContextMenu();
+                                if (viewContextMenu != null) {
+                                    compoundMenu.addItems(viewContextMenu.getItems());
+                                    compoundMenu.addOnItemClickListener(viewContextMenu.getOnItemClickListeners());
+
+                                    // add divider
+                                    compoundMenu.addDivider();
+                                }
+
+                                Menu longClickMenu = getLongClickMenu();
+                                if (longClickMenu != null) {
+                                    compoundMenu.addItems(longClickMenu.getItems());
+                                    compoundMenu.addOnItemClickListener(longClickMenu.getOnItemClickListeners());
+
+                                }
+                                compoundMenu.show();
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // execute default action
+            boolean actionExecuted = false;
+            for (ActionButton ba : buttonActions) {
+                if (ba.isDefaultAction()) {
+                    AbstractAction action = ba.getAction();
+                    if (action != null) {
+                        action.callExecute();
+                        if (action instanceof Abstract_Action_ShowView)
+                            aktActionView = (Abstract_Action_ShowView) action;
+                        actionExecuted = true;
+                        break;
+                    }
+                }
+            }
+
+            // if no default action seted, show context-menu from view (like long click)
+            if (!actionExecuted) {
+                longPress(event.getTarget(), x, y);
+            }
+        }
+
+        @Override
+        public boolean longPress(Actor actor, float x, float y) {
+            log.debug("onLongClick");
+            // GL_MsgBox.Show("Button " + Me.getName() + " recivet a LongClick Event");
+            // Wenn diesem Button mehrere Actions zugeordnet sind dann wird nach einem Lang-Click ein Menü angezeigt aus dem eine dieser
+            // Actions gewählt werden kann
+
+            if (buttonActions.size() > 1) {
+                getLongClickMenu().show();
+            } else if (buttonActions.size() == 1) {
+                // nur eine Action dem Button zugeordnet -> diese Action gleich ausführen
+                ActionButton ba = buttonActions.get(0);
+                AbstractAction action = ba.getAction();
+                if (action != null) {
+                    action.callExecute();
+                    if (action instanceof Abstract_Action_ShowView)
+                        aktActionView = (Abstract_Action_ShowView) action;
+                }
+            }
+
+
+//         TODO   // Show Gester Help
+//            if (help != null) {
+//                CB_RectF rec = CB_Button.this.thisWorldRec;
+//                if (rec != null) {
+//                    help.setPos(rec.getX(), rec.getMaxY());
+//                    GL.that.Toast(help, 2000);
+//                }
+//            }
+            return true;
+        }
+    };
+
+
+    private Menu getLongClickMenu() {
+        Menu cm = new Menu("Name");
+
+        cm.addOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(MenuItem item) {
+                int mId = item.getMenuItemId();
+
+                for (ActionButton ba : buttonActions) {
+                    if (ba.getAction().getId() == mId) {
+                        AbstractAction action = ba.getAction();
+
+                        action.callExecute();
+                        if (action instanceof Abstract_Action_ShowView)
+                            aktActionView = (Abstract_Action_ShowView) action;
+                        break;
+                    }
+                }
+            }
+        });
+
+        for (ActionButton ba : buttonActions) {
+            AbstractAction action = ba.getAction();
+            if (action == null)
+                continue;
+            MenuItem mi = cm.addItem(action.getId(), action.getName(), action.getNameExtention());
+            mi.setEnabled(action.getEnabled());
+            mi.setCheckable(action.getIsCheckable());
+            mi.setChecked(action.getIsChecked());
+            Sprite icon = action.getIcon();
+            if (icon != null)
+                mi.setIcon(new SpriteDrawable(action.getIcon()));
+            else
+                icon = null;
+        }
+        return cm;
+    }
+
+
+    private CB_RectF menuSpriteDrawRec;
+
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+
+        if (hasContextMenu && isChecked()) {
+
+            // draw Menu Sprite
+            if (menuSprite == null || menuSpriteFiltered == null) {
+                menuSprite = new Sprite(CB.getSprite(IconNames.cm_icon.name()));
+                menuSpriteFiltered = new Sprite(CB.getSprite(IconNames.cm_icon_filterd.name()));
+                menuSpriteDrawRec = new CB_RectF();
+                menuSpriteDrawRec.add(new SizeChangedEvent() {
+                    @Override
+                    public void sizeChanged() {
+                        menuSprite.setPosition(menuSpriteDrawRec.getX(), menuSpriteDrawRec.getY());
+                        // menuSprite.setSize(GestureButton.this.getWidth(),GestureButton.this.getY());
+                    }
+                });
+            }
+
+            menuSpriteDrawRec.setPos(this.getX(), this.getY());
+
+            boolean isFiltered = false; //TODO set filtered!
+
+            if (!isFiltered && menuSprite != null)
+                menuSprite.draw(batch);
+            if (isFiltered && menuSpriteFiltered != null)
+                menuSpriteFiltered.draw(batch);
         }
     }
 }
