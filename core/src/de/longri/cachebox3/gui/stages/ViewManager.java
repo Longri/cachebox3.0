@@ -193,12 +193,12 @@ public class ViewManager extends Stage {
         tool_button.addAction(new ActionButton(new Action_Show_Quit(), true));
 //
         misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, ActionButton.GestureDirection.Up));
-//        mAboutButtonOnLeftTab.addAction(new CB_ActionButton(actionShowCreditsView, false));
-//        mAboutButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSettings, false, GestureDirection.Left));
-//        mAboutButtonOnLeftTab.addAction(new CB_ActionButton(actionDayNight, false));
-//        mAboutButtonOnLeftTab.addAction(new CB_ActionButton(actionHelp, false));
-//        mAboutButtonOnLeftTab.addAction(new CB_ActionButton(actionClose, false, GestureDirection.Down));
-//
+        misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));
+        misc_button.addAction(new ActionButton(new Action_Show_Settings(), false, ActionButton.GestureDirection.Left));
+        misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
+        misc_button.addAction(new ActionButton(new Action_Show_Help(), false));
+        misc_button.addAction(new ActionButton(new Action_Show_Quit(), false, ActionButton.GestureDirection.Down));
+
 //        actionShowAboutView.Execute();
     }
 

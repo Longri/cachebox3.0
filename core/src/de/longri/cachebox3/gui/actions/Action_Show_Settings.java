@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright (C) 2016 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -15,27 +15,36 @@
  */
 package de.longri.cachebox3.gui.actions;
 
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.gui.views.AboutView;
+import de.longri.cachebox3.utils.IconNames;
+import org.slf4j.LoggerFactory;
 
 /**
- * Created by Longri on 24.07.16.
+ * Created by Longri on 16.08.16.
  */
-public class Action_Show_AboutView extends Action {
+public class Action_Show_Settings extends Action {
+	final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Show_Settings.class);
 
-    public Action_Show_AboutView() {
-        super("AboutView", MenuID.AID_SHOW_CACHELIST);
-    }
+	public Action_Show_Settings() {
+		super("settings", MenuID.AID_SHOW_SETTINGS);
+	}
+
+	@Override
+	public void Execute() {
 
 
-    @Override
-    protected void Execute() {
-        if (CB.viewmanager.getActView() instanceof AboutView) return;
+	}
 
-        AboutView view = new AboutView();
-        CB.viewmanager.showView(view);
+	@Override
+	public boolean getEnabled() {
+		return true;
+	}
 
-        view.reloadState();
-    }
+	@Override
+	public Sprite getIcon() {
+		return CB.getSprite(IconNames.settings.name());
+	}
 }
