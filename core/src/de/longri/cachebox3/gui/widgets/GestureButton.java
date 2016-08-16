@@ -17,11 +17,13 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.show_vies.Abstract_Action_ShowView;
@@ -46,6 +48,10 @@ public class GestureButton extends Button {
     private final int ID;
     private Abstract_Action_ShowView aktActionView;
 
+    public ArrayList<ActionButton> getButtonActions() {
+        return buttonActions;
+    }
+
     static public class GestureButtonStyle extends ButtonStyle {
         Drawable select;
     }
@@ -56,6 +62,12 @@ public class GestureButton extends Button {
         this.setStyle(style);
         this.ID = idCounter++;
         buttonActions = new ArrayList<ActionButton>();
+
+        //remove all Listeners
+        Array<EventListener> listeners = this.getListeners();
+        for (EventListener listener : listeners) {
+            this.removeListener(listener);
+        }
         this.addListener(gestureListener);
     }
 

@@ -20,6 +20,7 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AboutView;
+import de.longri.cachebox3.gui.views.AbstractView;
 
 /**
  * Created by Longri on 24.07.16.
@@ -54,5 +55,10 @@ public class Action_Show_AboutView extends Abstract_Action_ShowView {
     @Override
     public boolean isActVisible() {
         return CB.viewmanager.getActView() instanceof AboutView;
+    }
+
+    @Override
+    public boolean viewTypeEquals(AbstractView actView) {
+        return actView.getClass().getName().equals(AboutView.class.getName());
     }
 }

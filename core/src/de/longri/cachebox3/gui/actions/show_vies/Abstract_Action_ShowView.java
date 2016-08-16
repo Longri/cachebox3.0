@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.actions.show_vies;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.views.AbstractView;
 
 /**
  * Created by Longri on 16.08.2016.
@@ -35,5 +36,7 @@ public abstract class Abstract_Action_ShowView extends AbstractAction {
 
     public abstract Menu getContextMenu();
 
-    public abstract boolean isActVisible() ;
+    public abstract boolean isActVisible();
+
+    public abstract boolean viewTypeEquals(AbstractView actView);
 }

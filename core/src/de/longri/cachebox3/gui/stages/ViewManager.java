@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.stages;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -25,11 +26,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.gui.actions.*;
+import de.longri.cachebox3.gui.actions.show_vies.Abstract_Action_ShowView;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
+import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -67,7 +70,7 @@ public class ViewManager extends Stage {
 
         db_button = new GestureButton("db");
         db_button.setSize(buttonsize, buttonsize);
-               mainButtonBar.addButton(db_button);
+        mainButtonBar.addButton(db_button);
 
         cache_button = new GestureButton("cache");
         cache_button.setSize(buttonsize, buttonsize);
@@ -114,7 +117,24 @@ public class ViewManager extends Stage {
         this.actView.reloadState();
 
         //select main button
+        boolean buttonFound = false;
+        for (Button button : mainButtonBar.getButtons()) {
+            GestureButton gestureButton = (GestureButton) button;
+            gestureButton.setChecked(false);
 
+            if (!buttonFound) {
+                for (ActionButton actionButton : gestureButton.getButtonActions()) {
+                    if (actionButton.getAction() instanceof Abstract_Action_ShowView) {
+                        Abstract_Action_ShowView viewAction = (Abstract_Action_ShowView) actionButton.getAction();
+                        if (viewAction.viewTypeEquals(this.actView)) {
+                            gestureButton.setChecked(true);
+                            buttonFound = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void initialActionButtons() {

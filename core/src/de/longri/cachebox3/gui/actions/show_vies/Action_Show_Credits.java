@@ -21,6 +21,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.utils.IconNames;
 import org.slf4j.LoggerFactory;
 
@@ -28,40 +29,47 @@ import org.slf4j.LoggerFactory;
  * Created by Longri on 16.08.16.
  */
 public class Action_Show_Credits extends Abstract_Action_ShowView {
-	final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Show_Credits.class);
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Show_Credits.class);
 
-	public Action_Show_Credits() {
-		super("Credits", MenuID.AID_SHOW_CREDITS);
-	}
+    public Action_Show_Credits() {
+        super("Credits", MenuID.AID_SHOW_CREDITS);
+    }
 
-	@Override
-	public void Execute() {
+    @Override
+    public void Execute() {
 
 
-	}
+    }
 
-	@Override
-	public boolean getEnabled() {
-		return true;
-	}
+    @Override
+    public boolean getEnabled() {
+        return true;
+    }
 
-	@Override
-	public Sprite getIcon() {
-		return CB.getSprite(IconNames.cb.name());
-	}
+    @Override
+    public Sprite getIcon() {
+        return CB.getSprite(IconNames.cb.name());
+    }
 
-	@Override
-	public boolean hasContextMenu() {
-		return false;
-	}
+    @Override
+    public boolean hasContextMenu() {
+        return false;
+    }
 
-	@Override
-	public Menu getContextMenu() {
-		return null;
-	}
+    @Override
+    public Menu getContextMenu() {
+        return null;
+    }
 
-	@Override
-	public boolean isActVisible() {
-		return false;
-	}
+    @Override
+    public boolean isActVisible() {
+        return false;
+    }
+
+    @Override
+    public boolean viewTypeEquals(AbstractView actView) {
+
+        return false;
+        // TODO	return actView.getClass().getName().equals(?.class.getName());
+    }
 }

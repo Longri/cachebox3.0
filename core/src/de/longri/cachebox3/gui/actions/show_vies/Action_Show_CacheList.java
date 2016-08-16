@@ -19,6 +19,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.CacheListView;
 
 /**
@@ -54,5 +55,10 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
     @Override
     public boolean isActVisible() {
         return CB.viewmanager.getActView() instanceof CacheListView;
+    }
+
+    @Override
+    public boolean viewTypeEquals(AbstractView actView) {
+        return actView.getClass().getName().equals(CacheListView.class.getName());
     }
 }
