@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -25,11 +26,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.show_vies.Abstract_Action_ShowView;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.utils.CB_RectF;
+import de.longri.cachebox3.utils.IconNames;
+import de.longri.cachebox3.utils.SizeChangedEvent;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
@@ -42,14 +47,21 @@ public class GestureButton extends Button {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(GestureButton.class);
 
     private static int idCounter = 0;
+    protected static Sprite menuSprite;
+    protected static Sprite menuSpriteFiltered;
 
     private GestureButtonStyle style;
     private final ArrayList<ActionButton> buttonActions;
     private final int ID;
     private Abstract_Action_ShowView aktActionView;
+    private boolean hasContextMenu;
 
     public ArrayList<ActionButton> getButtonActions() {
         return buttonActions;
+    }
+
+    public void setHasContextMenu(boolean hasContextMenu) {
+        this.hasContextMenu = hasContextMenu;
     }
 
     static public class GestureButtonStyle extends ButtonStyle {
@@ -246,5 +258,38 @@ public class GestureButton extends Button {
                 icon = null;
         }
         return cm;
+    }
+
+
+    private CB_RectF menuSpriteDrawRec;
+
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+
+        if (hasContextMenu && isChecked()) {
+
+            // draw Menu Sprite
+            if (menuSprite == null || menuSpriteFiltered == null) {
+                menuSprite = new Sprite(CB.getSprite(IconNames.cm_icon.name()));
+                menuSpriteFiltered = new Sprite(CB.getSprite(IconNames.cm_icon_filterd.name()));
+                menuSpriteDrawRec = new CB_RectF();
+                menuSpriteDrawRec.add(new SizeChangedEvent() {
+                    @Override
+                    public void sizeChanged() {
+                        menuSprite.setPosition(menuSpriteDrawRec.getX(), menuSpriteDrawRec.getY());
+                        // menuSprite.setSize(GestureButton.this.getWidth(),GestureButton.this.getY());
+                    }
+                });
+            }
+
+            menuSpriteDrawRec.setPos(this.getX(), this.getY());
+
+            boolean isFiltered = false; //TODO set filtered!
+
+            if (!isFiltered && menuSprite != null)
+                menuSprite.draw(batch);
+            if (isFiltered && menuSpriteFiltered != null)
+                menuSpriteFiltered.draw(batch);
+        }
     }
 }

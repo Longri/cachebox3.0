@@ -44,7 +44,7 @@ public class Action_Show_AboutView extends Abstract_Action_ShowView {
 
     @Override
     public boolean hasContextMenu() {
-        return false;
+        return true;
     }
 
     @Override

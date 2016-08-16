@@ -128,6 +128,8 @@ public class ViewManager extends Stage {
                         Abstract_Action_ShowView viewAction = (Abstract_Action_ShowView) actionButton.getAction();
                         if (viewAction.viewTypeEquals(this.actView)) {
                             gestureButton.setChecked(true);
+                            gestureButton.setHasContextMenu(viewAction.hasContextMenu());
+
                             buttonFound = true;
                             break;
                         }
