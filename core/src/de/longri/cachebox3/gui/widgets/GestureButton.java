@@ -45,6 +45,8 @@ import java.util.ArrayList;
 public class GestureButton extends Button {
 
     final static org.slf4j.Logger log = LoggerFactory.getLogger(GestureButton.class);
+    final static float MIN_GESTURE_VELOCITY = 100;
+
 
     private static int idCounter = 0;
     protected static Sprite menuSprite;
@@ -219,6 +221,36 @@ public class GestureButton extends Button {
 //            }
             return true;
         }
+
+        public void fling(InputEvent event, float velocityX, float velocityY, int button) {
+
+            float maxVelocity = Math.max(Math.abs(velocityX), Math.abs(velocityY));
+
+            if (maxVelocity < MIN_GESTURE_VELOCITY) {
+                // not really a gesture
+                return;
+            }
+
+
+            ActionButton.GestureDirection direction = ActionButton.GestureDirection.Up;
+            if (Math.abs(velocityX) >= Math.abs(velocityY)) {
+                // left or right
+                if (velocityX > 0) {
+                    direction = ActionButton.GestureDirection.Right;
+                } else {
+                    direction = ActionButton.GestureDirection.Left;
+                }
+            } else {
+                // up or down
+                if (velocityY > 0) {
+                    direction = ActionButton.GestureDirection.Up;
+                } else {
+                    direction = ActionButton.GestureDirection.Down;
+                }
+            }
+            executeAction(direction);
+        }
+
     };
 
 
