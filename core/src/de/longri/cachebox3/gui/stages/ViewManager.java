@@ -221,7 +221,7 @@ public class ViewManager extends Stage {
     public void toast(String massage, ToastLength length) {
         if (toastLabel == null) {
             //initial ToastLabel
-            toastLabel = new VisLabel();
+            toastLabel = new VisLabel(massage, "toast");
         }
         toastLabel.setAlignment(Align.center, Align.center);
         toastLabel.setWrap(true);

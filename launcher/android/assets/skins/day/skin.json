@@ -90,6 +90,9 @@
     "infoIcon": {
       "name": "skins/day/svg/infoIcon.svg"
     },
+    "list_background": {
+      "name": "skins/day/svg/list_background.svg"
+    },
     "listrec_first": {
       "name": "skins/day/svg/listrec_first.svg"
     },
@@ -122,6 +125,9 @@
     "nav_selected": {
       "name": "skins/day/svg/nav_selected.svg",
       "scale": 0.72
+    },
+    "toast_background": {
+      "name": "skins/day/svg/toast_background.svg"
     },
     "tool": {
       "name": "skins/day/svg/tool.svg",
@@ -358,6 +364,17 @@
       "topHeight": 8,
       "bottomHeight": 9
     },
+    "list_background_drawable": {
+      "name": "list_background",
+      "left": 10,
+      "right": 10,
+      "top": 10,
+      "bottom": 10,
+      "leftWidth": 5,
+      "rightWidth": 5,
+      "topHeight": 5,
+      "bottomHeight": 5
+    },
     "listrec_first_drawable": {
       "name": "listrec_first",
       "left": 10,
@@ -390,6 +407,17 @@
       "rightWidth": 5,
       "topHeight": 5,
       "bottomHeight": 5
+    },
+    "toast_background_drawable": {
+      "name": "toast_background",
+      "left": 10,
+      "right": 10,
+      "top": 10,
+      "bottom": 10,
+      "leftWidth": 5,
+      "rightWidth": 5,
+      "topHeight": 5,
+      "bottomHeight": 5
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
@@ -406,6 +434,11 @@
     "default": {
       "font": "normal_font",
       "fontColor": "font_color"
+    },
+    "toast": {
+      "font": "normal_font",
+      "fontColor": "font_color",
+      "background": "toast_background_drawable"
     }
   },
   "de.longri.cachebox3.gui.widgets.ButtonBar$ButtonBarStyle": {
@@ -481,7 +514,7 @@
   },
   "de.longri.cachebox3.gui.views.ListView$ListViewStyle": {
     "default": {
-      "background": "dialog_stage_background",
+      "background": "list_background",
       "firstItem": "listrec_first_drawable",
       "secondItem": "listrec_second_drawable",
       "selectedItem": "listrec_selected_drawable",
@@ -490,7 +523,7 @@
   },
   "de.longri.cachebox3.gui.menu.Menu$MenuStyle": {
     "default": {
-      "background": "listrec_first_drawable",
+      "background": "list_background_drawable",
       "font": "normal_font",
       "fontColor": "font_color",
       "stageBackground": "dialog_stage_background"

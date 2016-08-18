@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="88" height="76" viewBox="0 0 88.00 76.00" enable-background="new 0 0 88.00 76.00" xml:space="preserve">
-	<path fill="#8C9E64" fill-opacity="1" stroke-width="2" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" d="M 13.4792,2.43747L 74.4792,2.43747C 80.5543,2.43747 85.4792,7.36234 85.4792,13.4375L 85.4792,63.1042C 85.4792,69.1793 80.5543,74.1042 74.4792,74.1042L 13.4792,74.1042C 7.40403,74.1042 2.47916,69.1793 2.47916,63.1042L 2.47916,13.4375C 2.47916,7.36234 7.40403,2.43747 13.4792,2.43747 Z "/>
+	<path fill="#8C9E64" fill-opacity="1" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" d="M 13.4792,2.43747L 74.4792,2.43747C 80.5543,2.43747 85.4792,7.36234 85.4792,13.4375L 85.4792,63.1042C 85.4792,69.1793 80.5543,74.1042 74.4792,74.1042L 13.4792,74.1042C 7.40403,74.1042 2.47916,69.1793 2.47916,63.1042L 2.47916,13.4375C 2.47916,7.36234 7.40403,2.43747 13.4792,2.43747 Z "/>
 	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.503869" y1="-0.274908" x2="2.05368" y2="-0.274908" gradientTransform="rotate(90.000000 0.503869 -0.274908)">
 		<stop offset="0.316279" stop-color="#F0F1EC" stop-opacity="0.592157"/>
 		<stop offset="0.800003" stop-color="#FFFFFF" stop-opacity="0"/>
