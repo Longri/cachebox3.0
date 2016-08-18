@@ -43,7 +43,7 @@ public class HelpWindow extends Window {
             "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" +
             "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\" baseProfile=\"full\" width=\"#WIDTH#\" height=\"#HEIGHT#\"   xml:space=\"preserve\">\n" +
             "\n" +
-            "<g fill-rule=\"evenodd\" fill=\"#FILLCOLOR#\" stroke=\"white\" stroke-width=\"3\">\n" +
+            "<g fill-rule=\"evenodd\" fill=\"#FILLCOLOR#\" fill-opacity=\"#OPACITY#\" stroke=\"white\" stroke-width=\"3\">\n" +
             " <path d=\"M 0,0 L 0,#HEIGHT# #WIDTH#,#HEIGHT# #WIDTH#,0 0,0 z\n" +
             "\t     M centerX,posY \n" +
             "\t     A radiusX radiusY 0 0 0 centerX,maxY \n" +
@@ -73,18 +73,20 @@ public class HelpWindow extends Window {
                 String radiusX = Float.toString(ellipseRectangle.getHalfWidth());
                 String radiusY = Float.toString(ellipseRectangle.getHalfHeight());
 
+
                 Color color = VisUI.getSkin().getColor("dialog_background");
                 String value = Integer
-                        .toHexString(((int) (255 * color.a) << 24) | ((int) (255 * color.r) << 16) | ((int) (255 * color.g) << 8) | ((int) (255 * color.b)));
-                while (value.length() < 8)
+                        .toHexString(((int) (255 * color.r) << 16) | ((int) (255 * color.g) << 8) | ((int) (255 * color.b)));
+                while (value.length() < 6)
                     value = "0" + value;
                 String fillColor = "#" + value;
+                String opacity = Float.toString(color.a);
 
 
                 String svgString = SVG_TEMPLATE.replaceAll("#WIDTH#", width);
                 svgString = svgString.replaceAll("#HEIGHT#", height);
                 svgString = svgString.replaceAll("#FILLCOLOR#", fillColor);
-
+                svgString = svgString.replaceAll("#OPACITY#", opacity);
                 svgString = svgString.replaceAll("centerX", centerX);
                 svgString = svgString.replaceAll("posY", posY);
                 svgString = svgString.replaceAll("radiusX", radiusX);
