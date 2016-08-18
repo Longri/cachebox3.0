@@ -9,6 +9,7 @@ import de.longri.cachebox3.CB;
  */
 public class ScaledSizes {
 
+
     public static float ICON_HEIGHT = -1;
     public static float ICON_WIDTH = -1;
     public final float BUTTON_HEIGHT;
