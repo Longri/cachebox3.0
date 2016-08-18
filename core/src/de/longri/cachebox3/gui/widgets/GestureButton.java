@@ -315,6 +315,8 @@ public class GestureButton extends Button {
                 });
             }
 
+            if (menuSpriteDrawRec == null) return;
+
             menuSpriteDrawRec.setPos(this.getX(), this.getY());
 
             boolean isFiltered = false; //TODO set filtered!
