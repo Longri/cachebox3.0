@@ -55,7 +55,7 @@ public class ViewManager extends Stage {
 
 
     private AbstractView actView;
-    private final float buttonsize, width, height;
+    private final float width, height;
     private final ButtonBar mainButtonBar;
     private GestureButton db_button, cache_button, navButton, tool_button, misc_button;
     private VisLabel toastLabel;
@@ -66,14 +66,9 @@ public class ViewManager extends Stage {
         //set this to static CB for global access
         CB.viewmanager = this;
 
-        buttonsize = CB.getScaledFloat(64);
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
-        mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class),
-                ButtonBar.Type.DISTRIBUTED);
-        mainButtonBar.setBounds(0, 0, width, buttonsize);
-        this.addActor(mainButtonBar);
 
         Gdx.app.log("ScaleFactor", Float.toString(CB.getScaledFloat(1)));
         Gdx.app.log("Width", Float.toString(Gdx.graphics.getWidth()));
@@ -81,31 +76,20 @@ public class ViewManager extends Stage {
         Gdx.app.log("PPI", Float.toString(Gdx.graphics.getPpiX()));
 
         db_button = new GestureButton("db");
-        db_button.setSize(buttonsize, buttonsize);
-        mainButtonBar.addButton(db_button);
-
         cache_button = new GestureButton("cache");
-        cache_button.setSize(buttonsize, buttonsize);
-
-        mainButtonBar.addButton(cache_button);
-
-
         navButton = new GestureButton("nav");
-        navButton.setSize(buttonsize, buttonsize);
-
-        mainButtonBar.addButton(navButton);
-
-
         tool_button = new GestureButton("tool");
-        tool_button.setSize(buttonsize, buttonsize);
-
-        mainButtonBar.addButton(tool_button);
-
         misc_button = new GestureButton("misc");
-        misc_button.setSize(buttonsize, buttonsize);
 
+        mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class),
+                ButtonBar.Type.DISTRIBUTED);
+        mainButtonBar.setBounds(0, 0, width, db_button.getPrefHeight());
+        mainButtonBar.addButton(db_button);
+        mainButtonBar.addButton(cache_button);
+        mainButtonBar.addButton(navButton);
+        mainButtonBar.addButton(tool_button);
         mainButtonBar.addButton(misc_button);
-
+        this.addActor(mainButtonBar);
         mainButtonBar.layout();
         initialActionButtons();
         showView(new AboutView());
@@ -195,7 +179,7 @@ public class ViewManager extends Stage {
     }
 
     private void setActViewBounds() {
-        this.actView.setBounds(0, buttonsize, width, height);
+        this.actView.setBounds(0, mainButtonBar.getTop(), width, height);
     }
 
     public AbstractView getActView() {
@@ -239,12 +223,11 @@ public class ViewManager extends Stage {
 
         toastLabel.setWidth(bounds.width + border);
         toastLabel.setHeight(bounds.height + border);
-        toastLabel.setPosition((Gdx.graphics.getWidth() / 2) - (toastLabel.getWidth() / 2), buttonsize + CB.scaledSizes.MARGINx2);
+        toastLabel.setPosition((Gdx.graphics.getWidth() / 2) - (toastLabel.getWidth() / 2), mainButtonBar.getTop() + CB.scaledSizes.MARGINx2);
         toast(toastLabel, length);
     }
 
     public void toast(final Actor actor, ToastLength length) {
-
         CB.windowStage.addActor(actor);
         actor.addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
 
@@ -257,7 +240,5 @@ public class ViewManager extends Stage {
 
         Timer timer = new Timer();
         timer.schedule(task, length.value);
-
-
     }
 }

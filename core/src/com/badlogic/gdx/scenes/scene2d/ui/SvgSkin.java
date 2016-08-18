@@ -99,7 +99,7 @@ public class SvgSkin extends Skin {
                 e.printStackTrace();
             }
 
-            log.trace("Pack Svg: " + name + " Size:" + pixmap.getWidth() + "/" + pixmap.getHeight());
+            log.debug("Pack Svg: " + name + " Size:" + pixmap.getWidth() + "/" + pixmap.getHeight());
 
             if (pixmap != null) packer.pack(name, pixmap);
 

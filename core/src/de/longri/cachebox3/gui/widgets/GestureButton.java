@@ -83,6 +83,7 @@ public class GestureButton extends Button {
             this.removeListener(listener);
         }
         this.addListener(gestureListener);
+        this.pack();
     }
 
     public boolean equals(Object other) {
