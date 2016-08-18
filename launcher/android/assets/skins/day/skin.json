@@ -186,16 +186,16 @@
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "normal_font": {
       "font": "fonts/DroidSans",
-      "size": 26
+      "size": 21
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable": {
     "drawable_default_button": {
       "name": "default_button",
-      "left": 20,
-      "right": 20,
-      "top": 20,
-      "bottom": 20,
+      "left": 15,
+      "right": 15,
+      "top": 15,
+      "bottom": 15,
       "leftWidth": 10,
       "rightWidth": 10,
       "topHeight": 10,
@@ -203,10 +203,10 @@
     },
     "drawable_default_button_pressed": {
       "name": "default_button_pressed",
-      "left": 20,
-      "right": 20,
-      "top": 20,
-      "bottom": 20,
+      "left": 15,
+      "right": 15,
+      "top": 15,
+      "bottom": 15,
       "leftWidth": 10,
       "rightWidth": 10,
       "topHeight": 10,
