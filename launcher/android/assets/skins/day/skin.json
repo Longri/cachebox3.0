@@ -90,6 +90,9 @@
     "infoIcon": {
       "name": "skins/day/svg/infoIcon.svg"
     },
+    "list_background": {
+      "name": "skins/day/svg/list_background.svg"
+    },
     "listrec_first": {
       "name": "skins/day/svg/listrec_first.svg"
     },
@@ -122,6 +125,9 @@
     "nav_selected": {
       "name": "skins/day/svg/nav_selected.svg",
       "scale": 0.72
+    },
+    "toast_background": {
+      "name": "skins/day/svg/toast_background.svg"
     },
     "tool": {
       "name": "skins/day/svg/tool.svg",
@@ -180,16 +186,16 @@
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "normal_font": {
       "font": "fonts/DroidSans",
-      "size": 26
+      "size": 21
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable": {
     "drawable_default_button": {
       "name": "default_button",
-      "left": 30,
-      "right": 30,
-      "top": 30,
-      "bottom": 30,
+      "left": 15,
+      "right": 15,
+      "top": 15,
+      "bottom": 15,
       "leftWidth": 10,
       "rightWidth": 10,
       "topHeight": 10,
@@ -197,128 +203,16 @@
     },
     "drawable_default_button_pressed": {
       "name": "default_button_pressed",
-      "left": 30,
-      "right": 30,
-      "top": 30,
-      "bottom": 30,
+      "left": 15,
+      "right": 15,
+      "top": 15,
+      "bottom": 15,
       "leftWidth": 10,
       "rightWidth": 10,
       "topHeight": 10,
       "bottomHeight": 10
     },
-    "drawable_main_button_bar_back": {
-      "name": "button_bar_back",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_nav_pressed": {
-      "name": "nav_pressed",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_nav_selected": {
-      "name": "nav_selected",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_nav": {
-      "name": "nav",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_db_pressed": {
-      "name": "db_pressed",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_db_selected": {
-      "name": "db_selected",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_db": {
-      "name": "db",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_cache_pressed": {
-      "name": "cache_pressed",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_cache_selected": {
-      "name": "cache_selected",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_cache": {
-      "name": "cache",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_tool_pressed": {
-      "name": "tool_pressed",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_tool_selected": {
-      "name": "tool_selected",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_tool": {
-      "name": "tool",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_misc_pressed": {
-      "name": "misc_pressed",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_misc_selected": {
-      "name": "misc_selected",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_misc": {
-      "name": "misc",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_dialog_header": {
+     "drawable_dialog_header": {
       "name": "dialog_header",
       "left": 16,
       "right": 16,
@@ -358,6 +252,17 @@
       "topHeight": 8,
       "bottomHeight": 9
     },
+    "list_background_drawable": {
+      "name": "list_background",
+      "left": 10,
+      "right": 10,
+      "top": 10,
+      "bottom": 10,
+      "leftWidth": 5,
+      "rightWidth": 5,
+      "topHeight": 5,
+      "bottomHeight": 5
+    },
     "listrec_first_drawable": {
       "name": "listrec_first",
       "left": 10,
@@ -390,54 +295,66 @@
       "rightWidth": 5,
       "topHeight": 5,
       "bottomHeight": 5
+    },
+    "toast_background_drawable": {
+      "name": "toast_background",
+      "left": 10,
+      "right": 10,
+      "top": 10,
+      "bottom": 10,
+      "leftWidth": 5,
+      "rightWidth": 5,
+      "topHeight": 5,
+      "bottomHeight": 5
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
     "default": {
       "up": "drawable_default_button",
       "down": "drawable_default_button_pressed"
-    },
-    "nav": {
-      "down": "default_button_pressed",
-      "up": "default_button"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
     "default": {
       "font": "normal_font",
       "fontColor": "font_color"
+    },
+    "toast": {
+      "font": "normal_font",
+      "fontColor": "font_color",
+      "background": "toast_background_drawable"
     }
   },
   "de.longri.cachebox3.gui.widgets.ButtonBar$ButtonBarStyle": {
     "main_button_bar": {
-      "background": "drawable_main_button_bar_back"
+      "background": "button_bar_back"
     }
   },
   "de.longri.cachebox3.gui.widgets.GestureButton$GestureButtonStyle": {
     "nav": {
-      "up": "drawable_nav",
-      "down": "drawable_nav_pressed",
-      "select": "drawable_nav_selected"
+      "up": "nav",
+      "down": "nav_pressed",
+      "select": "nav_selected"
     },
     "db": {
-      "up": "drawable_db",
-      "down": "drawable_db_pressed",
-      "select": "drawable_db_selected"
+      "up": "db",
+      "down": "db_pressed",
+      "select": "db_selected"
     },
     "cache": {
-      "up": "drawable_cache",
-      "down": "drawable_cache_pressed",
-      "select": "drawable_cache_selected"
+      "up": "cache",
+      "down": "cache_pressed",
+      "select": "cache_selected"
     },
     "tool": {
-      "up": "drawable_tool",
-      "down": "drawable_tool_pressed",
-      "select": "drawable_tool_selected"
+      "up": "tool",
+      "down": "tool_pressed",
+      "select": "tool_selected"
     },
     "misc": {
-      "up": "drawable_misc",
-      "down": "drawable_misc_pressed",
-      "select": "drawable_misc_selected"
+      "up": "misc",
+      "down": "misc_pressed",
+      "select": "misc_selected"
     }
   },
   "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
@@ -481,7 +398,7 @@
   },
   "de.longri.cachebox3.gui.views.ListView$ListViewStyle": {
     "default": {
-      "background": "dialog_stage_background",
+      "background": "list_background",
       "firstItem": "listrec_first_drawable",
       "secondItem": "listrec_second_drawable",
       "selectedItem": "listrec_selected_drawable",
@@ -490,7 +407,7 @@
   },
   "de.longri.cachebox3.gui.menu.Menu$MenuStyle": {
     "default": {
-      "background": "listrec_first_drawable",
+      "background": "list_background_drawable",
       "font": "normal_font",
       "fontColor": "font_color",
       "stageBackground": "dialog_stage_background"

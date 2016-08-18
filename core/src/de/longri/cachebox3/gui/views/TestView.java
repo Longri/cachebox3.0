@@ -116,6 +116,23 @@ public class TestView extends AbstractView {
         this.addActor(nameLabel);
         this.addActor(testButton);
 
+        VisTable table = new VisTable();
+        table.setSize(200, 200);
+        table.add(testButton);
+        table.row();
+
+
+        VisTextButton test2Button = new VisTextButton("Toast");
+        table.add(test2Button);
+
+        test2Button.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                CB.viewmanager.toast("Test langer Text der dann selbst umgebrochen werden sollte");
+            }
+        });
+
+        this.addActor(table);
+
 
         final ArrayList<String> itemList = new ArrayList<String>();
         for (int i = 0; i < 500; i++) itemList.add(Integer.toString(i));
