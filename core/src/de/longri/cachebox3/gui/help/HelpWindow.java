@@ -44,7 +44,7 @@ public class HelpWindow extends Window {
             "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\" baseProfile=\"full\" width=\"#WIDTH#\" height=\"#HEIGHT#\"   xml:space=\"preserve\">\n" +
             "\n" +
             "<g fill-rule=\"evenodd\" fill=\"#FILLCOLOR#\" fill-opacity=\"#OPACITY#\" stroke=\"white\" stroke-width=\"3\">\n" +
-            " <path d=\"M 0,0 L 0,#HEIGHT# #WIDTH#,#HEIGHT# #WIDTH#,0 0,0 z\n" +
+            " <path d=\"M 0,0 L #WIDTH#,0 #WIDTH#,#HEIGHT# 0,#HEIGHT# 0,0 z\n" +
             "\t     M centerX,posY \n" +
             "\t     A radiusX radiusY 0 0 0 centerX,maxY \n" +
             "\t     A radiusX radiusY 0 0 0 centerX,posY \n" +
