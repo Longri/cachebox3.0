@@ -44,7 +44,7 @@ public class SkinFont extends BitmapFont {
         parameter.size = CB.getScaledInt(size);
         parameter.characters = DEFAULT_CHARACTER;
         parameter.genMipMaps = true;
-        parameter.minFilter = Texture.TextureFilter.MipMapLinearLinear;
+        parameter.minFilter = Texture.TextureFilter.MipMapNearestNearest;
         BitmapFont bitmapFont = generator.generateFont(parameter);
 
         return bitmapFont;

@@ -239,7 +239,7 @@ public class ViewManager extends Stage {
 
         toastLabel.setWidth(bounds.width + border);
         toastLabel.setHeight(bounds.height + border);
-        toastLabel.setPosition((Gdx.graphics.getWidth() / 2) - (bounds.width / 2), buttonsize + CB.scaledSizes.MARGINx2);
+        toastLabel.setPosition((Gdx.graphics.getWidth() / 2) - (toastLabel.getWidth() / 2), buttonsize + CB.scaledSizes.MARGINx2);
         toast(toastLabel, length);
     }
 

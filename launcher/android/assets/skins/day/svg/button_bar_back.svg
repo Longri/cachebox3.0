@@ -7,6 +7,6 @@
 		<stop offset="0.722595" stop-color="#75A114" stop-opacity="1"/>
 		<stop offset="0.975392" stop-color="#A9DC02" stop-opacity="1"/>
 	</linearGradient>
-	<rect x="0" y="0" fill="url(#SVGID_Fill1_)" stroke-linejoin="round" width="480" height="88"/>
-	<path fill="#4F7006" fill-opacity="0.133333" stroke-linejoin="round" d="M 227.184,42.5504C 131.81,48.1154 48.3239,61.7646 -2.45339e-007,77.9013L 0,88L 480,88L 480,57.355C 436.591,42.4858 339.41,36.0021 227.184,42.5504 Z "/>
+	<rect x="0" y="0" fill="url(#SVGID_Fill1_)" stroke-width="0.2" stroke-linejoin="round" width="480" height="88"/>
+	<path fill="#4F7006" fill-opacity="0.133333" stroke-width="0.2" stroke-linejoin="round" d="M 227.184,42.5504C 131.81,48.1154 48.3239,61.7646 0,77.9013L 0,88L 480,88L 480,57.355C 436.591,42.4858 339.41,36.0021 227.184,42.5504 Z "/>
 </svg>
