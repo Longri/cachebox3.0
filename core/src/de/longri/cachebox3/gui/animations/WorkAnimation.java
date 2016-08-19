@@ -21,44 +21,44 @@ import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.IconNames;
 
 public class WorkAnimation extends RotateAnimation {
-	protected static WorkAnimation mINSTANCE = new WorkAnimation();
+    protected static WorkAnimation mINSTANCE = new WorkAnimation();
 
-	public static AnimationBase GetINSTANCE() {
-		return mINSTANCE;
-	}
+    public static AnimationBase GetINSTANCE() {
+        return mINSTANCE;
+    }
 
-	public static AnimationBase GetINSTANCE(CB_RectF rec) {
-		mINSTANCE.setRec(rec);
-		return mINSTANCE;
-	}
+    public static AnimationBase GetINSTANCE(CB_RectF rec) {
+        mINSTANCE.setRec(rec);
+        return mINSTANCE;
+    }
 
-	@Override
-	public AnimationBase INSTANCE() {
-		return mINSTANCE;
-	}
+    @Override
+    public AnimationBase INSTANCE() {
+        return mINSTANCE;
+    }
 
-	@Override
-	public AnimationBase INSTANCE(CB_RectF rec) {
-		mINSTANCE.setRec(rec);
-		return mINSTANCE;
-	}
+    @Override
+    public AnimationBase INSTANCE(CB_RectF rec) {
+        mINSTANCE.setRec(rec);
+        return mINSTANCE;
+    }
 
-	public WorkAnimation() {
-		super(new CB_RectF(0, 0, 50, 50), "DownloadAnimation");
+    public WorkAnimation() {
+        super(new CB_RectF(0, 0, 50, 50), "DownloadAnimation");
 
-		setSprite(CB.getSprite(IconNames.settings.name()));
-		setOrigin(this.getWidth()/2, this.getHeight()/2);
-		play(ANIMATION_DURATION);
-	}
+        setSprite(CB.getSprite(IconNames.settings_icon.name()));
+        setOrigin(this.getWidth() / 2, this.getHeight() / 2);
+        play(ANIMATION_DURATION);
+    }
 
 
-	@Override
-	public void play() {
-		play(ANIMATION_DURATION);
-	}
+    @Override
+    public void play() {
+        play(ANIMATION_DURATION);
+    }
 
-	@Override
-	public void dispose() {
+    @Override
+    public void dispose() {
 
-	}
+    }
 }

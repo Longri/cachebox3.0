@@ -19,8 +19,6 @@ package com.badlogic.gdx.scenes.scene2d.ui;
  * Created by Longri on 16.08.2016.
  */
 public class ScaledSvg {
-
     public String name;
-
     public float scale = 1;
 }

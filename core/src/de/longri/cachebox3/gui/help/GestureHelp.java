@@ -18,17 +18,19 @@ package de.longri.cachebox3.gui.help;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CB_RectF;
+import org.slf4j.LoggerFactory;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,6 +39,7 @@ import java.util.TimerTask;
  * Created by Longri on 18.08.2016.
  */
 public class GestureHelp extends HelpWindow {
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(GestureHelp.class);
 
     final Drawable buttonDrawable;
     final Sprite gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
@@ -66,6 +69,7 @@ public class GestureHelp extends HelpWindow {
         final Table table = new Table();
 
         int cellCount = 0;
+        float m = CB.scaledSizes.MARGIN;
         for (int row = 0; row < rowNum; row++) {
             for (int col = 0; col < colNum; col++) {
                 cellCount++;
@@ -73,33 +77,57 @@ public class GestureHelp extends HelpWindow {
                 switch (cellCount) {
                     case 3:
                         if (gestureUpIcon != null)
-                            table.add(new Image(gestureUpIcon)).size(gestureUpIcon.getWidth(), gestureUpIcon.getHeight());
+                            table.add(new Image(gestureUpIcon));
                         else
-                            table.add(new Label("", VisUI.getSkin())).size(30, 30);
+                            table.add(new Label("", VisUI.getSkin()));
+                        break;
+                    case 8:
+                        if (gestureUpIcon != null)
+                            table.add(getArrowImageRotated(0));
+                        else
+                            table.add(new Label("", VisUI.getSkin()));
                         break;
                     case 11:
                         if (gestureLeftIcon != null)
-                            table.add(new Image(gestureLeftIcon)).size(gestureLeftIcon.getWidth(), gestureLeftIcon.getHeight());
+                            table.add(new Image(gestureLeftIcon));
                         else
-                            table.add(new Label("", VisUI.getSkin())).size(30, 30);
+                            table.add(new Label("", VisUI.getSkin()));
+                        break;
+                    case 12:
+                        if (gestureLeftIcon != null)
+                            table.add(getArrowImageRotated(90));
+                        else
+                            table.add(new Label("", VisUI.getSkin()));
                         break;
                     case 13:
-                        table.add(new Image(buttonDrawable)).size(buttonDrawable.getMinWidth(), buttonDrawable.getMinHeight());
+                        table.add(new Image(buttonDrawable));
+                        break;
+                    case 14:
+                        if (gestureRightIcon != null)
+                            table.add(getArrowImageRotated(-90));
+                        else
+                            table.add(new Label("", VisUI.getSkin()));
                         break;
                     case 15:
                         if (gestureRightIcon != null)
-                            table.add(new Image(gestureRightIcon)).size(gestureRightIcon.getWidth(), gestureRightIcon.getHeight());
+                            table.add(new Image(gestureRightIcon));
                         else
-                            table.add(new Label("", VisUI.getSkin())).size(30, 30);
+                            table.add(new Label("", VisUI.getSkin()));
+                        break;
+                    case 18:
+                        if (gestureUpIcon != null)
+                            table.add(getArrowImageRotated(180));
+                        else
+                            table.add(new Label("", VisUI.getSkin()));
                         break;
                     case 23:
                         if (gestureDownIcon != null)
-                            table.add(new Image(gestureDownIcon)).size(gestureDownIcon.getWidth(), gestureDownIcon.getHeight());
+                            table.add(new Image(gestureDownIcon));
                         else
-                            table.add(new Label("", VisUI.getSkin())).size(30, 30);
+                            table.add(new Label("", VisUI.getSkin()));
                         break;
                     default:
-                        table.add(new Label("", VisUI.getSkin())).size(30, 30);
+                        table.add(new Label("", VisUI.getSkin()));
                 }
             }
             table.row();
@@ -126,6 +154,30 @@ public class GestureHelp extends HelpWindow {
         label.setText(GESTURE_MSG);
         label.setPosition(CB.scaledSizes.MARGIN, Gdx.graphics.getHeight() - (bounds.height + CB.scaledSizes.MARGINx2));
         this.addActor(label);
+
+
+        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
+        buttonStyle.font = this.style.font;
+        buttonStyle.fontColor = this.style.fontColor;
+        buttonStyle.up = new ColorDrawable(this.style.backgroundColor);
+
+        TextButton button = new TextButton(DONT_SHOW_AGAIN_MSG, buttonStyle);
+        button.setPosition(CB.scaledSizes.MARGIN, this.ellipseRectangle.getMaxY() + CB.scaledSizes.MARGINx2);
+        button.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                // todo Handle don't show help again
+                log.debug("click on don't show again, but not handled now!");
+            }
+        });
+        this.addActor(button);
+    }
+
+    private Image getArrowImageRotated(int angle) {
+        Image image = new Image(style.arrowDrawable);
+        image.pack();
+        image.setOrigin(image.getWidth() / 2, image.getHeight() / 2);
+        image.rotateBy(angle);
+        return image;
     }
 
     public void show() {
@@ -140,12 +192,12 @@ public class GestureHelp extends HelpWindow {
         };
 
         Timer timer = new Timer();
-        timer.schedule(task, ViewManager.ToastLength.NORMAL.value);
+        timer.schedule(task, ViewManager.ToastLength.LONG.value);
     }
 
 
     public static class GestureHelpStyle extends HelpWindowStyle {
-        public Drawable arrowUp, arrowRight, arrowDown, arrowLeft;
+        public Drawable arrowDrawable;
     }
 
 }

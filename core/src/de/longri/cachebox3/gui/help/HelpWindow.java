@@ -60,7 +60,7 @@ public class HelpWindow extends Window {
 
 
     private HelpWindowStyle style;
-    private final CB_RectF ellipseRectangle;
+    protected final CB_RectF ellipseRectangle;
 
     public HelpWindow(final CB_RectF ellipseRectangle) {
         this.ellipseRectangle = ellipseRectangle;

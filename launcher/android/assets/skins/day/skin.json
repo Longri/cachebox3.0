@@ -140,6 +140,14 @@
     "tool_selected": {
       "name": "skins/day/svg/tool_selected.svg",
       "scale": 0.72
+    },
+    "arrow_help": {
+      "name": "skins/day/svg/arrow_help.svg",
+      "scale": 0.27
+    },
+    "settings_icon": {
+      "name": "skins/day/svg/settings_icon.svg",
+      "scale": 0.27
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
@@ -440,7 +448,8 @@
       "borderColor": "help_window_font",
       "fontColor": "help_window_font",
       "font": "normal_font",
-      "borderSize": 3
+      "borderSize": 3,
+      "arrowDrawable": "arrow_help"
     }
   }
 }

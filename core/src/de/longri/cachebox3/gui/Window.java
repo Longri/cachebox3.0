@@ -82,7 +82,7 @@ public class Window extends Table {
 
     public void hide() {
         clearActions();
-        addCaptureListener(IgnoreTouchInputListener.INSTANCE);
+        // addCaptureListener(IgnoreTouchInputListener.INSTANCE);
         addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
 
         //switch input processor to main stage
