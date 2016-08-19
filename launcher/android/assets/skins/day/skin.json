@@ -181,6 +181,12 @@
       "g": 0,
       "b": 0,
       "a": 0
+    },
+    "help_window_font": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 1
     }
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
@@ -212,7 +218,7 @@
       "topHeight": 10,
       "bottomHeight": 10
     },
-     "drawable_dialog_header": {
+    "drawable_dialog_header": {
       "name": "dialog_header",
       "left": 16,
       "right": 16,
@@ -417,6 +423,24 @@
     "default": {
       "font": "normal_font",
       "fontColor": "font_color"
+    }
+  },
+  "de.longri.cachebox3.gui.help.HelpWindow$HelpWindowStyle": {
+    "default": {
+      "backgroundColor": "dialog_background",
+      "borderColor": "help_window_font",
+      "fontColor": "help_window_font",
+      "font": "normal_font",
+      "borderSize": 3
+    }
+  },
+  "de.longri.cachebox3.gui.help.GestureHelp$GestureHelpStyle": {
+    "default": {
+      "backgroundColor": "dialog_background",
+      "borderColor": "help_window_font",
+      "fontColor": "help_window_font",
+      "font": "normal_font",
+      "borderSize": 3
     }
   }
 }

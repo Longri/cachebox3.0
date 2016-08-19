@@ -27,6 +27,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.help.GestureHelp;
 import de.longri.cachebox3.gui.help.HelpWindow;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
@@ -140,15 +141,8 @@ public class TestView extends AbstractView {
 
         test3Button.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-
-                Vector2 stagePos = test3Button.localToStageCoordinates(new Vector2(0, 0));
-
-                CB_RectF ellipse = new CB_RectF(stagePos.x - CB.scaledSizes.MARGIN, stagePos.y - CB.scaledSizes.MARGIN, test3Button.getWidth() + CB.scaledSizes.MARGINx2,
-                        test3Button.getHeight() + CB.scaledSizes.MARGINx2);
-
-                HelpWindow helpWindow = new HelpWindow(ellipse);
+                HelpWindow helpWindow = new HelpWindow(GestureHelp.getHelpEllipseFromActor(test3Button));
                 helpWindow.show();
-
             }
         });
 
