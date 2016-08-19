@@ -16,13 +16,18 @@
 package de.longri.cachebox3.gui.help;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CB_RectF;
 
 import java.util.Timer;
@@ -36,6 +41,8 @@ public class GestureHelp extends HelpWindow {
     final Drawable buttonDrawable;
     final Sprite gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
     final GestureHelpStyle style;
+    final String GESTURE_MSG = Translation.Get("gestureHelp"); // "You can also use this gesture to call this function"
+    final String DONT_SHOW_AGAIN_MSG = Translation.Get("DontShowHelp"); // "Don't show help Msg again!"
 
 
     public GestureHelp(CB_RectF ellipseRectangle, Drawable buttonDrawable, Sprite gestureRightIcon, Sprite gestureUpIcon, Sprite gestureLeftIcon, Sprite gestureDownIcon) {
@@ -101,6 +108,24 @@ public class GestureHelp extends HelpWindow {
         table.pack();
         table.setPosition((Gdx.graphics.getWidth() - table.getWidth()) / 2, (Gdx.graphics.getHeight() - table.getHeight()) / 2);
         this.addActor(table);
+
+        // add label
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = this.style.font;
+        labelStyle.fontColor = this.style.fontColor;
+        Label label = new Label("", labelStyle);
+
+        label.setWrap(true);
+        label.setAlignment(Align.center, Align.center);
+        float width = Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2;
+        label.setWidth(width);
+
+        GlyphLayout bounds = label.getStyle().font.newFontCache().setText(GESTURE_MSG, 0, 0, width, 0, true);
+
+        label.setText(GESTURE_MSG);
+        label.setPosition(CB.scaledSizes.MARGIN, Gdx.graphics.getHeight() - (bounds.height + CB.scaledSizes.MARGINx2));
+        this.addActor(label);
     }
 
     public void show() {
