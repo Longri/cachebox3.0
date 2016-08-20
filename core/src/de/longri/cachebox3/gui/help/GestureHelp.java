@@ -18,15 +18,20 @@ package de.longri.cachebox3.gui.help;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.animations.Blink;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CB_RectF;
@@ -47,6 +52,7 @@ public class GestureHelp extends HelpWindow {
     final String GESTURE_MSG = Translation.Get("gestureHelp"); // "You can also use this gesture to call this function"
     final String DONT_SHOW_AGAIN_MSG = Translation.Get("DontShowHelp"); // "Don't show help Msg again!"
 
+    private Actor arrowRight, arrowDown, arrowLeft, arrowUp;
 
     public GestureHelp(CB_RectF ellipseRectangle, Drawable buttonDrawable, Sprite gestureRightIcon, Sprite gestureUpIcon, Sprite gestureLeftIcon, Sprite gestureDownIcon) {
         super(ellipseRectangle);
@@ -61,6 +67,8 @@ public class GestureHelp extends HelpWindow {
 
     @Override
     public void pack() {
+
+
         super.pack();
 
         if (this.hasChildren()) return; // table is created
@@ -69,7 +77,7 @@ public class GestureHelp extends HelpWindow {
         final Table table = new Table();
 
         int cellCount = 0;
-        float m = CB.scaledSizes.MARGIN;
+
         for (int row = 0; row < rowNum; row++) {
             for (int col = 0; col < colNum; col++) {
                 cellCount++;
@@ -82,9 +90,10 @@ public class GestureHelp extends HelpWindow {
                             table.add(new Label("", VisUI.getSkin()));
                         break;
                     case 8:
-                        if (gestureUpIcon != null)
-                            table.add(getArrowImageRotated(0));
-                        else
+                        if (gestureUpIcon != null) {
+                            arrowUp = getArrowImageRotated(0);
+                            table.add(arrowUp);
+                        } else
                             table.add(new Label("", VisUI.getSkin()));
                         break;
                     case 11:
@@ -94,18 +103,20 @@ public class GestureHelp extends HelpWindow {
                             table.add(new Label("", VisUI.getSkin()));
                         break;
                     case 12:
-                        if (gestureLeftIcon != null)
-                            table.add(getArrowImageRotated(90));
-                        else
+                        if (gestureLeftIcon != null) {
+                            arrowLeft = getArrowImageRotated(90);
+                            table.add(arrowLeft);
+                        } else
                             table.add(new Label("", VisUI.getSkin()));
                         break;
                     case 13:
                         table.add(new Image(buttonDrawable));
                         break;
                     case 14:
-                        if (gestureRightIcon != null)
-                            table.add(getArrowImageRotated(-90));
-                        else
+                        if (gestureRightIcon != null) {
+                            arrowRight = getArrowImageRotated(-90);
+                            table.add(arrowRight);
+                        } else
                             table.add(new Label("", VisUI.getSkin()));
                         break;
                     case 15:
@@ -115,9 +126,10 @@ public class GestureHelp extends HelpWindow {
                             table.add(new Label("", VisUI.getSkin()));
                         break;
                     case 18:
-                        if (gestureUpIcon != null)
-                            table.add(getArrowImageRotated(180));
-                        else
+                        if (gestureUpIcon != null) {
+                            arrowDown = getArrowImageRotated(180);
+                            table.add(arrowDown);
+                        } else
                             table.add(new Label("", VisUI.getSkin()));
                         break;
                     case 23:
@@ -174,9 +186,16 @@ public class GestureHelp extends HelpWindow {
 
     private Image getArrowImageRotated(int angle) {
         Image image = new Image(style.arrowDrawable);
+
+        if (angle == 90 || angle == -90) {
+            image = new Image(style.arrowDrawable90);
+            angle += 90;
+        }
+
         image.pack();
         image.setOrigin(image.getWidth() / 2, image.getHeight() / 2);
         image.rotateBy(angle);
+        image.pack();
         return image;
     }
 
@@ -195,9 +214,40 @@ public class GestureHelp extends HelpWindow {
         timer.schedule(task, ViewManager.ToastLength.LONG.value);
     }
 
+    public void hide() {
+        super.hide();
+
+        // remove Blink action
+        if (arrowRight != null) arrowRight.clearActions();
+        if (arrowDown != null) arrowDown.clearActions();
+        if (arrowLeft != null) arrowLeft.clearActions();
+        if (arrowUp != null) arrowUp.clearActions();
+    }
+
+    public void show(ActionButton.GestureDirection gestureDirection) {
+        this.show();
+
+        switch (gestureDirection) {
+
+            case Right:
+                if (arrowRight != null) arrowRight.addAction(new Blink());
+                break;
+            case Up:
+                if (arrowUp != null) arrowUp.addAction(new Blink());
+                break;
+            case Left:
+                if (arrowLeft != null) arrowLeft.addAction(new Blink());
+                break;
+            case Down:
+                if (arrowDown != null) arrowDown.addAction(new Blink());
+                break;
+        }
+    }
+
 
     public static class GestureHelpStyle extends HelpWindowStyle {
         public Drawable arrowDrawable;
+        public Drawable arrowDrawable90;
     }
 
 }

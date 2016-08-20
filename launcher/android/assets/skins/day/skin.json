@@ -145,6 +145,10 @@
       "name": "skins/day/svg/arrow_help.svg",
       "scale": 0.27
     },
+    "arrow_help_90": {
+      "name": "skins/day/svg/arrow_help_90.svg",
+      "scale": 0.28
+    },
     "settings_icon": {
       "name": "skins/day/svg/settings_icon.svg",
       "scale": 0.27
@@ -449,7 +453,8 @@
       "fontColor": "help_window_font",
       "font": "normal_font",
       "borderSize": 3,
-      "arrowDrawable": "arrow_help"
+      "arrowDrawable": "arrow_help",
+      "arrowDrawable90": "arrow_help_90"
     }
   }
 }

@@ -304,7 +304,7 @@ public class GestureButton extends Button {
                                         aktActionView = (Abstract_Action_ShowView) action;
                                 }
                             });
-                            gestureHelper.show();
+                            gestureHelper.show(ba.getGestureDirection());
                         } else {
                             // no gesture, call direct
                             action.callExecute();
