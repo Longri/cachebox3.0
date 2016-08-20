@@ -89,7 +89,7 @@ public class HashAtlasWriter {
     }
 
 
-    public static boolean hashEquals(ArrayList<ScaledSvg> svgs) {
+    public static boolean hashEquals(ArrayList<ScaledSvg> svgs, FileHandle skinFile) {
 
         FileHandle file = Gdx.files.absolute(CB.WorkPath + SvgSkin.TMP_UI_ATLAS);
 
@@ -108,6 +108,7 @@ public class HashAtlasWriter {
 
         final int prime = 31;
         int resultHashCode = 1;
+        resultHashCode = resultHashCode * prime + Utils.getMd5(skinFile).hashCode();
         for (ScaledSvg svg : svgs) {
             FileHandle fileHandle = Gdx.files.internal(svg.name);
             resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();

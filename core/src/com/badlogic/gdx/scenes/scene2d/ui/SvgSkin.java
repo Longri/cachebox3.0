@@ -59,11 +59,11 @@ public class SvgSkin extends Skin {
     }
 
 
-    public static TextureAtlas createTextureAtlasFromImages(ArrayList<ScaledSvg> scaledSvgList) {
+    public static TextureAtlas createTextureAtlasFromImages(ArrayList<ScaledSvg> scaledSvgList, FileHandle skinFile) {
 
         FileHandle cachedTexturatlasFileHandle = Gdx.files.absolute(CB.WorkPath + TMP_UI_ATLAS);
         if (cachedTexturatlasFileHandle.exists()) {
-            if (HashAtlasWriter.hashEquals(scaledSvgList)) {
+            if (HashAtlasWriter.hashEquals(scaledSvgList,skinFile)) {
                 log.debug("Load cached TextureAtlas");
                 return new TextureAtlas(cachedTexturatlasFileHandle);
             }
@@ -82,7 +82,7 @@ public class SvgSkin extends Skin {
 
         final int prime = 31;
         int resultHashCode = 1;
-        // resultHashCode is the hashcode.
+        resultHashCode = resultHashCode * prime + Utils.getMd5(skinFile).hashCode();
         for (ScaledSvg scaledSvg : scaledSvgList) {
 
             Pixmap pixmap = null;
@@ -234,7 +234,8 @@ public class SvgSkin extends Skin {
                 }
 
                 //create and register atlas
-                SvgSkin.this.addRegions(createTextureAtlasFromImages(resistedSvgs));
+
+                SvgSkin.this.addRegions(createTextureAtlasFromImages(resistedSvgs,skinFile));
             }
 
 
