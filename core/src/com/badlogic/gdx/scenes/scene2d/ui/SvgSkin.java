@@ -19,7 +19,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
@@ -32,7 +31,6 @@ import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.views.ListView;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.utils.ScaledSizes;
-import org.oscim.backend.CanvasAdapter;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -59,11 +57,11 @@ public class SvgSkin extends Skin {
     }
 
 
-    public static TextureAtlas createTextureAtlasFromImages(ArrayList<ScaledSvg> scaledSvgList) {
+    public static TextureAtlas createTextureAtlasFromImages(ArrayList<ScaledSvg> scaledSvgList, FileHandle skinFile) {
 
         FileHandle cachedTexturatlasFileHandle = Gdx.files.absolute(CB.WorkPath + TMP_UI_ATLAS);
         if (cachedTexturatlasFileHandle.exists()) {
-            if (HashAtlasWriter.hashEquals(scaledSvgList)) {
+            if (HashAtlasWriter.hashEquals(scaledSvgList, skinFile)) {
                 log.debug("Load cached TextureAtlas");
                 return new TextureAtlas(cachedTexturatlasFileHandle);
             }
@@ -82,26 +80,29 @@ public class SvgSkin extends Skin {
 
         final int prime = 31;
         int resultHashCode = 1;
-        // resultHashCode is the hashcode.
+        resultHashCode = resultHashCode * prime + Utils.getMd5(skinFile).hashCode();
         for (ScaledSvg scaledSvg : scaledSvgList) {
 
             Pixmap pixmap = null;
             String name = null;
 
-            FileHandle fileHandle = Gdx.files.internal(scaledSvg.name);
+            FileHandle fileHandle = Gdx.files.internal(scaledSvg.path);
 
             try {
                 resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
                 resultHashCode = (resultHashCode * (int) (prime * scaledSvg.scale));
                 pixmap = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale));
-                name = fileHandle.nameWithoutExtension();
+                name = scaledSvg.getRegisterName();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            log.trace("Pack Svg: " + name + " Size:" + pixmap.getWidth() + "/" + pixmap.getHeight());
+            log.debug("Pack Svg: " + name + " Size:" + pixmap.getWidth() + "/" + pixmap.getHeight());
 
-            if (pixmap != null) packer.pack(name, pixmap);
+            if (pixmap != null) {
+
+                packer.pack(name, pixmap);
+            }
 
         }
 
@@ -132,7 +133,7 @@ public class SvgSkin extends Skin {
 
     @Override
     public void add(String name, Object resource, Class type) {
-        if (name == null) throw new IllegalArgumentException("name cannot be null.");
+        if (name == null) throw new IllegalArgumentException("path cannot be null.");
         if (resource == null) throw new IllegalArgumentException("resource cannot be null.");
         ObjectMap<String, Object> typeResources = resources.get(type);
         if (typeResources == null) {
@@ -143,7 +144,7 @@ public class SvgSkin extends Skin {
     }
 
     /**
-     * Returns a registered drawable. If no drawable is found but a region, ninepatch, or sprite exists with the name, then the
+     * Returns a registered drawable. If no drawable is found but a region, ninepatch, or sprite exists with the path, then the
      * appropriate drawable is created and stored in the skin.
      */
     @Override
@@ -180,7 +181,7 @@ public class SvgSkin extends Skin {
                         drawable = new ColorDrawable(colorDrawableStyle);
                     } else
                         throw new GdxRuntimeException(
-                                "No Drawable, NinePatch, TextureRegion, Texture, or Sprite registered with name: " + name);
+                                "No Drawable, NinePatch, TextureRegion, Texture, or Sprite registered with path: " + name);
                 }
             }
         }
@@ -196,7 +197,7 @@ public class SvgSkin extends Skin {
 
         final Json json = new Json() {
             public <T> T readValue(Class<T> type, Class elementType, JsonValue jsonData) {
-                // If the JSON is a string but the type is not, look up the actual value by name.
+                // If the JSON is a string but the type is not, look up the actual value by path.
                 if (jsonData.isString() && !ClassReflection.isAssignableFrom(CharSequence.class, type))
                     return get(jsonData.asString(), type);
                 return super.readValue(type, elementType, jsonData);
@@ -224,14 +225,16 @@ public class SvgSkin extends Skin {
             }
 
             private void readScaledSvgs(Json json, Class type, JsonValue valueMap) {
-                ArrayList<ScaledSvg> resistedSvgs = new ArrayList<ScaledSvg>();
+                ArrayList<ScaledSvg> registerdSvgs = new ArrayList<ScaledSvg>();
                 for (JsonValue valueEntry = valueMap.child; valueEntry != null; valueEntry = valueEntry.next) {
                     ScaledSvg object = (ScaledSvg) json.readValue(type, valueEntry);
-                    resistedSvgs.add(object);
+                    object.setRegisterName(valueEntry.name);
+                    registerdSvgs.add(object);
                 }
 
                 //create and register atlas
-                SvgSkin.this.addRegions(createTextureAtlasFromImages(resistedSvgs));
+
+                SvgSkin.this.addRegions(createTextureAtlasFromImages(registerdSvgs, skinFile));
             }
 
 
@@ -358,7 +361,7 @@ public class SvgSkin extends Skin {
 
         json.setSerializer(TintedDrawable.class, new Json.ReadOnlySerializer() {
             public Object read(Json json, JsonValue jsonData, Class type) {
-                String name = json.readValue("name", String.class, jsonData);
+                String name = json.readValue("path", String.class, jsonData);
                 Color color = json.readValue("color", Color.class, jsonData);
                 Drawable drawable = newDrawable(name, color);
                 if (drawable instanceof BaseDrawable) {

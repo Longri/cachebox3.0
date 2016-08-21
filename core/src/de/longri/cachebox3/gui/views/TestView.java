@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -26,12 +27,15 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.help.GestureHelp;
+import de.longri.cachebox3.gui.help.HelpWindow;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.utils.CB_RectF;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
@@ -115,6 +119,34 @@ public class TestView extends AbstractView {
         //  this.addActor(colorWidget);
         this.addActor(nameLabel);
         this.addActor(testButton);
+
+        VisTable table = new VisTable();
+        table.setSize(200, 200);
+        table.add(testButton);
+        table.row();
+
+
+        VisTextButton test2Button = new VisTextButton("Toast");
+        table.add(test2Button);
+
+        test2Button.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                CB.viewmanager.toast("Test langer Text der dann selbst umgebrochen werden sollte");
+            }
+        });
+        table.row();
+
+        final VisTextButton test3Button = new VisTextButton("HelpWindow");
+        table.add(test3Button);
+
+        test3Button.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                HelpWindow helpWindow = new HelpWindow(GestureHelp.getHelpEllipseFromActor(test3Button));
+                helpWindow.show();
+            }
+        });
+
+        this.addActor(table);
 
 
         final ArrayList<String> itemList = new ArrayList<String>();

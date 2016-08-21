@@ -78,7 +78,7 @@ public class ButtonBar extends WidgetGroup {
         }
 
         float remaind = this.getWidth() - completeWidth;
-        float margin = remaind / (buttonList.size() + 2);
+        float margin = remaind / (buttonList.size() + 1);
 
         this.clear();
         float xPos = margin;

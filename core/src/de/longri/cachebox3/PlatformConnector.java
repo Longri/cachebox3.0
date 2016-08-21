@@ -35,12 +35,13 @@ public abstract class PlatformConnector {
 
     // SVG implementations #############################################################################################
     public enum SvgScaleType {
-        SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED
+        SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED, NONE
     }
 
     public static Bitmap getSvg(InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {
         return platformConnector.getRealScaledSVG(stream, scaleType, scaleValue);
     }
+
 
     public abstract Bitmap getRealScaledSVG(InputStream stream,
                                             SvgScaleType scaleType, float scaleValue) throws IOException;
@@ -59,7 +60,7 @@ public abstract class PlatformConnector {
 
     public abstract FileHandle _getSandBoxFileHandle(String fileName);
 
-    public static String getWorkPath(){
+    public static String getWorkPath() {
         return platformConnector._getWorkPath();
     }
 

@@ -87,14 +87,17 @@ public class CacheboxMain extends ApplicationAdapter {
     public void render() {
         stateTime += Gdx.graphics.getDeltaTime();
         Gdx.gl.glClearColor(CB.backgroundColor.r, CB.backgroundColor.g, CB.backgroundColor.b, CB.backgroundColor.a);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ?
+                GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
 
         synchronized (CB.mainStage) {
             CB.mainStage.act();
             CB.mainStage.draw();
         }
 
-        if(CB.windowStage!=null&&CB.windowStage.getActors().size>0){
+        if (CB.windowStage != null && CB.windowStage.getActors().size > 0) {
             CB.windowStage.act();
             CB.windowStage.draw();
         }

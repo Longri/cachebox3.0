@@ -27,8 +27,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.show_vies.Abstract_Action_ShowView;
+import de.longri.cachebox3.gui.help.GestureHelp;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
@@ -57,6 +59,8 @@ public class GestureButton extends Button {
     private final int ID;
     private Abstract_Action_ShowView aktActionView;
     private boolean hasContextMenu;
+    private GestureHelp gestureHelper;
+    private Sprite gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
 
     public ArrayList<ActionButton> getButtonActions() {
         return buttonActions;
@@ -83,6 +87,7 @@ public class GestureButton extends Button {
             this.removeListener(listener);
         }
         this.addListener(gestureListener);
+        this.pack();
     }
 
     public boolean equals(Object other) {
@@ -94,6 +99,25 @@ public class GestureButton extends Button {
 
     public void addAction(ActionButton action) {
         buttonActions.add(action);
+
+        //check if this a gesture
+        if (action.getGestureDirection() != ActionButton.GestureDirection.None) {
+            switch (action.getGestureDirection()) {
+                case Right:
+                    gestureRightIcon = action.getIcon();
+                    break;
+                case Up:
+                    gestureUpIcon = action.getIcon();
+                    break;
+                case Left:
+                    gestureLeftIcon = action.getIcon();
+                    break;
+                case Down:
+                    gestureDownIcon = action.getIcon();
+                    break;
+            }
+        }
+
     }
 
     public void executeDefaultAction() {
@@ -250,7 +274,6 @@ public class GestureButton extends Button {
             }
             executeAction(direction);
         }
-
     };
 
 
@@ -264,11 +287,30 @@ public class GestureButton extends Button {
 
                 for (ActionButton ba : buttonActions) {
                     if (ba.getAction().getId() == mId) {
-                        AbstractAction action = ba.getAction();
+                        final AbstractAction action = ba.getAction();
 
-                        action.callExecute();
-                        if (action instanceof Abstract_Action_ShowView)
-                            aktActionView = (Abstract_Action_ShowView) action;
+                        //have the calling action a gesture, then show gesture helper
+                        if (ba.getGestureDirection() != ActionButton.GestureDirection.None) {
+                            if (gestureHelper == null) {
+                                gestureHelper = new GestureHelp(GestureHelp.getHelpEllipseFromActor(GestureButton.this),
+                                       style.up, gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon);
+                            }
+                            gestureHelper.setWindowCloseListener(new Window.WindowCloseListener() {
+                                @Override
+                                public void windowClosed() {
+                                    gestureHelper.clearWindowCloseListener();
+                                    action.callExecute();
+                                    if (action instanceof Abstract_Action_ShowView)
+                                        aktActionView = (Abstract_Action_ShowView) action;
+                                }
+                            });
+                            gestureHelper.show(ba.getGestureDirection());
+                        } else {
+                            // no gesture, call direct
+                            action.callExecute();
+                            if (action instanceof Abstract_Action_ShowView)
+                                aktActionView = (Abstract_Action_ShowView) action;
+                        }
                         break;
                     }
                 }
@@ -309,10 +351,12 @@ public class GestureButton extends Button {
                     @Override
                     public void sizeChanged() {
                         menuSprite.setPosition(menuSpriteDrawRec.getX(), menuSpriteDrawRec.getY());
-                        // menuSprite.setSize(GestureButton.this.getWidth(),GestureButton.this.getY());
+                        // menuSprite.setSize(getWidth(),getY());
                     }
                 });
             }
+
+            if (menuSpriteDrawRec == null) return;
 
             menuSpriteDrawRec.setPos(this.getX(), this.getY());
 

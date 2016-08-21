@@ -17,16 +17,24 @@ package de.longri.cachebox3.gui.stages;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.gui.actions.*;
 import de.longri.cachebox3.gui.actions.show_vies.Abstract_Action_ShowView;
+import de.longri.cachebox3.gui.actions.show_vies.Action_Show_AboutView;
+import de.longri.cachebox3.gui.actions.show_vies.Action_Show_Credits;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.ActionButton;
@@ -34,6 +42,11 @@ import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.LoggerFactory;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 /**
  * Created by Longri on 20.07.2016.
@@ -44,24 +57,20 @@ public class ViewManager extends Stage {
 
 
     private AbstractView actView;
-    private final float buttonsize, width, height;
+    private final float width, height;
     private final ButtonBar mainButtonBar;
+    private GestureButton db_button, cache_button, navButton, tool_button, misc_button;
+    private VisLabel toastLabel;
 
-    GestureButton db_button, cache_button, navButton, tool_button, misc_button;
 
     public ViewManager() {
 
         //set this to static CB for global access
         CB.viewmanager = this;
 
-        buttonsize = CB.getScaledFloat(64);
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
-        mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class),
-                ButtonBar.Type.DISTRIBUTED);
-        mainButtonBar.setBounds(0, 0, width, buttonsize);
-        this.addActor(mainButtonBar);
 
         Gdx.app.log("ScaleFactor", Float.toString(CB.getScaledFloat(1)));
         Gdx.app.log("Width", Float.toString(Gdx.graphics.getWidth()));
@@ -69,31 +78,20 @@ public class ViewManager extends Stage {
         Gdx.app.log("PPI", Float.toString(Gdx.graphics.getPpiX()));
 
         db_button = new GestureButton("db");
-        db_button.setSize(buttonsize, buttonsize);
-        mainButtonBar.addButton(db_button);
-
         cache_button = new GestureButton("cache");
-        cache_button.setSize(buttonsize, buttonsize);
-
-        mainButtonBar.addButton(cache_button);
-
-
         navButton = new GestureButton("nav");
-        navButton.setSize(buttonsize, buttonsize);
-
-        mainButtonBar.addButton(navButton);
-
-
         tool_button = new GestureButton("tool");
-        tool_button.setSize(buttonsize, buttonsize);
-
-        mainButtonBar.addButton(tool_button);
-
         misc_button = new GestureButton("misc");
-        misc_button.setSize(buttonsize, buttonsize);
 
+        mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class),
+                ButtonBar.Type.DISTRIBUTED);
+        mainButtonBar.setBounds(0, 0, width, db_button.getPrefHeight());
+        mainButtonBar.addButton(db_button);
+        mainButtonBar.addButton(cache_button);
+        mainButtonBar.addButton(navButton);
+        mainButtonBar.addButton(tool_button);
         mainButtonBar.addButton(misc_button);
-
+        this.addActor(mainButtonBar);
         mainButtonBar.layout();
         initialActionButtons();
         showView(new AboutView());
@@ -172,8 +170,8 @@ public class ViewManager extends Stage {
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
         tool_button.addAction(new ActionButton(new Action_Show_Quit(), true));
 //
-        misc_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_AboutView(), true, ActionButton.GestureDirection.Up));
-        misc_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_Credits(), false));
+        misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, ActionButton.GestureDirection.Up));
+        misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Settings(), false, ActionButton.GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Help(), false));
@@ -182,13 +180,67 @@ public class ViewManager extends Stage {
 //        actionShowAboutView.Execute();
     }
 
-
     private void setActViewBounds() {
-        this.actView.setBounds(0, buttonsize, width, height);
+        this.actView.setBounds(0, mainButtonBar.getTop(), width, height);
     }
 
     public AbstractView getActView() {
         return actView;
     }
 
+
+    // Toast pop up
+    public enum ToastLength {
+        SHORT(1000), NORMAL(1500), LONG(3500);
+
+        public final int value;
+
+        ToastLength(int value) {
+            this.value = value;
+        }
+    }
+
+    public void toast(String massage) {
+        toast(massage, ToastLength.NORMAL);
+    }
+
+    public void toast(String massage, ToastLength length) {
+        if (toastLabel == null) {
+            //initial ToastLabel
+            toastLabel = new VisLabel(massage, "toast");
+        }
+        toastLabel.setAlignment(Align.center, Align.center);
+        toastLabel.setWrap(true);
+        toastLabel.setText(massage);
+
+
+        Drawable labelBackground = toastLabel.getStyle().background;
+        float border = 0;
+        if (labelBackground != null) {
+            border = labelBackground.getLeftWidth()
+                    + toastLabel.getStyle().background.getRightWidth() + CB.scaledSizes.MARGINx2;
+        }
+
+        GlyphLayout bounds = toastLabel.getStyle().font.newFontCache().setText(massage, 0, 0, CB.scaledSizes.WINDOW_WIDTH - border, 0, true);
+
+        toastLabel.setWidth(bounds.width + border);
+        toastLabel.setHeight(bounds.height + border);
+        toastLabel.setPosition((Gdx.graphics.getWidth() / 2) - (toastLabel.getWidth() / 2), mainButtonBar.getTop() + CB.scaledSizes.MARGINx2);
+        toast(toastLabel, length);
+    }
+
+    public void toast(final Actor actor, ToastLength length) {
+        CB.windowStage.addActor(actor);
+        actor.addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                actor.addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
+            }
+        };
+
+        Timer timer = new Timer();
+        timer.schedule(task, length.value);
+    }
 }

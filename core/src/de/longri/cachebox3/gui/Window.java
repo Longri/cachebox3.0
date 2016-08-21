@@ -38,12 +38,32 @@ public class Window extends Table {
 
     private Drawable stageBackground;
 
+
+    public interface WindowCloseListener {
+        public void windowClosed();
+    }
+
+    private WindowCloseListener windowCloseListener;
+
+    public void setWindowCloseListener(WindowCloseListener listener) {
+        this.windowCloseListener = listener;
+    }
+
+    public void clearWindowCloseListener() {
+        this.windowCloseListener = null;
+    }
+
+
     public Window() {
         super();
     }
 
     protected void setStageBackground(Drawable drawable) {
         this.stageBackground = drawable;
+    }
+
+    protected Drawable getStageBackground() {
+        return this.stageBackground;
     }
 
     public void show() {
@@ -62,12 +82,16 @@ public class Window extends Table {
 
     public void hide() {
         clearActions();
-        addCaptureListener(IgnoreTouchInputListener.INSTANCE);
+        // addCaptureListener(IgnoreTouchInputListener.INSTANCE);
         addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
 
         //switch input processor to main stage
         CB.inputMultiplexer.removeProcessor(CB.windowStage);
         CB.inputMultiplexer.addProcessor(CB.mainStage);
+
+        if (this.windowCloseListener != null) {
+            this.windowCloseListener.windowClosed();
+        }
     }
 
     public void draw(Batch batch, float parentAlpha) {

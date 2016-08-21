@@ -1,139 +1,165 @@
 {
   "com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg": {
     "button_bar_back": {
-      "name": "skins/day/svg/button_bar_back.svg"
+      "path": "skins/day/svg/button_bar_back.svg"
     },
     "cache": {
-      "name": "skins/day/svg/cache.svg",
+      "path": "skins/day/svg/cache.svg",
       "scale": 0.72
     },
     "cache_pressed": {
-      "name": "skins/day/svg/cache_pressed.svg",
+      "path": "skins/day/svg/cache_pressed.svg",
       "scale": 0.72
     },
     "cache_selected": {
-      "name": "skins/day/svg/cache_selected.svg",
+      "path": "skins/day/svg/cache_selected.svg",
       "scale": 0.72
     },
     "cb": {
-      "name": "skins/day/svg/cb.svg",
+      "path": "skins/day/svg/cb.svg",
       "scale": 0.15
     },
     "check_disabled": {
-      "name": "skins/day/svg/check_disabled.svg"
+      "path": "skins/day/svg/check_disabled.svg"
     },
     "check_off": {
-      "name": "skins/day/svg/check_off.svg"
+      "path": "skins/day/svg/check_off.svg"
     },
     "check_on": {
-      "name": "skins/day/svg/check_on.svg"
+      "path": "skins/day/svg/check_on.svg"
     },
     "closeIcon": {
-      "name": "skins/day/svg/closeIcon.svg"
+      "path": "skins/day/svg/closeIcon.svg"
     },
     "cm_icon": {
-      "name": "skins/day/svg/cm_icon.svg",
+      "path": "skins/day/svg/cm_icon.svg",
       "scale": 0.72
     },
     "cm_icon_filterd": {
-      "name": "skins/day/svg/cm_icon_filterd.svg",
+      "path": "skins/day/svg/cm_icon_filterd.svg",
       "scale": 0.72
     },
     "db": {
-      "name": "skins/day/svg/db.svg",
+      "path": "skins/day/svg/db.svg",
       "scale": 0.72
     },
     "db_filter_active": {
-      "name": "skins/day/svg/db_filter_active.svg",
+      "path": "skins/day/svg/db_filter_active.svg",
       "scale": 0.72
     },
     "db_pressed": {
-      "name": "skins/day/svg/db_pressed.svg",
+      "path": "skins/day/svg/db_pressed.svg",
       "scale": 0.72
     },
     "db_pressed_filter_active": {
-      "name": "skins/day/svg/db_pressed_filter_active.svg",
+      "path": "skins/day/svg/db_pressed_filter_active.svg",
       "scale": 0.72
     },
     "db_selected": {
-      "name": "skins/day/svg/db_selected.svg",
+      "path": "skins/day/svg/db_selected.svg",
       "scale": 0.72
     },
     "db_selected_filter_active": {
-      "name": "skins/day/svg/db_selected_filter_active.svg",
+      "path": "skins/day/svg/db_selected_filter_active.svg",
       "scale": 0.72
     },
     "default_button": {
-      "name": "skins/day/svg/default_button.svg"
+      "path": "skins/day/svg/default_button.svg"
     },
     "default_button_pressed": {
-      "name": "skins/day/svg/default_button_pressed.svg"
+      "path": "skins/day/svg/default_button_pressed.svg"
     },
     "dialog_center": {
-      "name": "skins/day/svg/dialog_center.svg"
+      "path": "skins/day/svg/dialog_center.svg"
     },
     "dialog_footer": {
-      "name": "skins/day/svg/dialog_footer.svg"
+      "path": "skins/day/svg/dialog_footer.svg"
     },
     "dialog_header": {
-      "name": "skins/day/svg/dialog_header.svg"
+      "path": "skins/day/svg/dialog_header.svg"
     },
     "dialog_title": {
-      "name": "skins/day/svg/dialog_title.svg"
+      "path": "skins/day/svg/dialog_title.svg"
     },
     "gc_liveIcon": {
-      "name": "skins/day/svg/gc_liveIcon.svg"
+      "path": "skins/day/svg/gc_liveIcon.svg"
     },
     "helpIcon": {
-      "name": "skins/day/svg/helpIcon.svg"
+      "path": "skins/day/svg/helpIcon.svg"
     },
     "infoIcon": {
-      "name": "skins/day/svg/infoIcon.svg"
+      "path": "skins/day/svg/infoIcon.svg"
+    },
+    "list_background": {
+      "path": "skins/day/svg/list_background.svg"
     },
     "listrec_first": {
-      "name": "skins/day/svg/listrec_first.svg"
+      "path": "skins/day/svg/listrec_first.svg"
     },
     "listrec_second": {
-      "name": "skins/day/svg/listrec_second.svg"
+      "path": "skins/day/svg/listrec_second.svg"
     },
     "listrec_selected": {
-      "name": "skins/day/svg/listrec_selected.svg"
+      "path": "skins/day/svg/listrec_selected.svg"
     },
     "misc": {
-      "name": "skins/day/svg/misc.svg",
+      "path": "skins/day/svg/misc.svg",
       "scale": 0.72
     },
     "misc_pressed": {
-      "name": "skins/day/svg/misc_pressed.svg",
+      "path": "skins/day/svg/misc_pressed.svg",
       "scale": 0.72
     },
     "misc_selected": {
-      "name": "skins/day/svg/misc_selected.svg",
+      "path": "skins/day/svg/misc_selected.svg",
       "scale": 0.72
     },
     "nav": {
-      "name": "skins/day/svg/nav.svg",
+      "path": "skins/day/svg/nav.svg",
       "scale": 0.72
     },
     "nav_pressed": {
-      "name": "skins/day/svg/nav_pressed.svg",
+      "path": "skins/day/svg/nav_pressed.svg",
       "scale": 0.72
     },
     "nav_selected": {
-      "name": "skins/day/svg/nav_selected.svg",
+      "path": "skins/day/svg/nav_selected.svg",
       "scale": 0.72
     },
+    "toast_background": {
+      "path": "skins/day/svg/toast_background.svg"
+    },
     "tool": {
-      "name": "skins/day/svg/tool.svg",
+      "path": "skins/day/svg/tool.svg",
       "scale": 0.72
     },
     "tool_pressed": {
-      "name": "skins/day/svg/tool_pressed.svg",
+      "path": "skins/day/svg/tool_pressed.svg",
       "scale": 0.72
     },
     "tool_selected": {
-      "name": "skins/day/svg/tool_selected.svg",
+      "path": "skins/day/svg/tool_selected.svg",
       "scale": 0.72
+    },
+    "arrow_help": {
+      "path": "skins/day/svg/arrow_help.svg",
+      "scale": 0.27
+    },
+    "arrow_help_90": {
+      "path": "skins/day/svg/arrow_help_90.svg",
+      "scale": 0.28
+    },
+    "settings_icon": {
+      "path": "skins/day/svg/settings_icon.svg",
+      "scale": 0.27
+    },
+    "finger": {
+      "path": "skins/day/svg/finger.svg",
+      "scale": 1.0
+    },
+    "finger_click": {
+      "path": "skins/day/svg/finger_click.svg",
+      "scale": 1.0
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
@@ -175,21 +201,27 @@
       "g": 0,
       "b": 0,
       "a": 0
+    },
+    "help_window_font": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 1
     }
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "normal_font": {
       "font": "fonts/DroidSans",
-      "size": 26
+      "size": 21
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable": {
     "drawable_default_button": {
       "name": "default_button",
-      "left": 30,
-      "right": 30,
-      "top": 30,
-      "bottom": 30,
+      "left": 15,
+      "right": 15,
+      "top": 15,
+      "bottom": 15,
       "leftWidth": 10,
       "rightWidth": 10,
       "topHeight": 10,
@@ -197,126 +229,14 @@
     },
     "drawable_default_button_pressed": {
       "name": "default_button_pressed",
-      "left": 30,
-      "right": 30,
-      "top": 30,
-      "bottom": 30,
+      "left": 15,
+      "right": 15,
+      "top": 15,
+      "bottom": 15,
       "leftWidth": 10,
       "rightWidth": 10,
       "topHeight": 10,
       "bottomHeight": 10
-    },
-    "drawable_main_button_bar_back": {
-      "name": "button_bar_back",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_nav_pressed": {
-      "name": "nav_pressed",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_nav_selected": {
-      "name": "nav_selected",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_nav": {
-      "name": "nav",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_db_pressed": {
-      "name": "db_pressed",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_db_selected": {
-      "name": "db_selected",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_db": {
-      "name": "db",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_cache_pressed": {
-      "name": "cache_pressed",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_cache_selected": {
-      "name": "cache_selected",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_cache": {
-      "name": "cache",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_tool_pressed": {
-      "name": "tool_pressed",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_tool_selected": {
-      "name": "tool_selected",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_tool": {
-      "name": "tool",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_misc_pressed": {
-      "name": "misc_pressed",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_misc_selected": {
-      "name": "misc_selected",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
-    },
-    "drawable_misc": {
-      "name": "misc",
-      "left": 1,
-      "right": 1,
-      "top": 1,
-      "bottom": 1
     },
     "drawable_dialog_header": {
       "name": "dialog_header",
@@ -358,6 +278,17 @@
       "topHeight": 8,
       "bottomHeight": 9
     },
+    "list_background_drawable": {
+      "name": "list_background",
+      "left": 10,
+      "right": 10,
+      "top": 10,
+      "bottom": 10,
+      "leftWidth": 5,
+      "rightWidth": 5,
+      "topHeight": 5,
+      "bottomHeight": 5
+    },
     "listrec_first_drawable": {
       "name": "listrec_first",
       "left": 10,
@@ -390,54 +321,66 @@
       "rightWidth": 5,
       "topHeight": 5,
       "bottomHeight": 5
+    },
+    "toast_background_drawable": {
+      "name": "toast_background",
+      "left": 10,
+      "right": 10,
+      "top": 10,
+      "bottom": 10,
+      "leftWidth": 5,
+      "rightWidth": 5,
+      "topHeight": 5,
+      "bottomHeight": 5
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
     "default": {
       "up": "drawable_default_button",
       "down": "drawable_default_button_pressed"
-    },
-    "nav": {
-      "down": "default_button_pressed",
-      "up": "default_button"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
     "default": {
       "font": "normal_font",
       "fontColor": "font_color"
+    },
+    "toast": {
+      "font": "normal_font",
+      "fontColor": "font_color",
+      "background": "toast_background_drawable"
     }
   },
   "de.longri.cachebox3.gui.widgets.ButtonBar$ButtonBarStyle": {
     "main_button_bar": {
-      "background": "drawable_main_button_bar_back"
+      "background": "button_bar_back"
     }
   },
   "de.longri.cachebox3.gui.widgets.GestureButton$GestureButtonStyle": {
     "nav": {
-      "up": "drawable_nav",
-      "down": "drawable_nav_pressed",
-      "select": "drawable_nav_selected"
+      "up": "nav",
+      "down": "nav_pressed",
+      "select": "nav_selected"
     },
     "db": {
-      "up": "drawable_db",
-      "down": "drawable_db_pressed",
-      "select": "drawable_db_selected"
+      "up": "db",
+      "down": "db_pressed",
+      "select": "db_selected"
     },
     "cache": {
-      "up": "drawable_cache",
-      "down": "drawable_cache_pressed",
-      "select": "drawable_cache_selected"
+      "up": "cache",
+      "down": "cache_pressed",
+      "select": "cache_selected"
     },
     "tool": {
-      "up": "drawable_tool",
-      "down": "drawable_tool_pressed",
-      "select": "drawable_tool_selected"
+      "up": "tool",
+      "down": "tool_pressed",
+      "select": "tool_selected"
     },
     "misc": {
-      "up": "drawable_misc",
-      "down": "drawable_misc_pressed",
-      "select": "drawable_misc_selected"
+      "up": "misc",
+      "down": "misc_pressed",
+      "select": "misc_selected"
     }
   },
   "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
@@ -481,7 +424,7 @@
   },
   "de.longri.cachebox3.gui.views.ListView$ListViewStyle": {
     "default": {
-      "background": "dialog_stage_background",
+      "background": "list_background",
       "firstItem": "listrec_first_drawable",
       "secondItem": "listrec_second_drawable",
       "selectedItem": "listrec_selected_drawable",
@@ -490,7 +433,7 @@
   },
   "de.longri.cachebox3.gui.menu.Menu$MenuStyle": {
     "default": {
-      "background": "listrec_first_drawable",
+      "background": "list_background_drawable",
       "font": "normal_font",
       "fontColor": "font_color",
       "stageBackground": "dialog_stage_background"
@@ -500,6 +443,26 @@
     "default": {
       "font": "normal_font",
       "fontColor": "font_color"
+    }
+  },
+  "de.longri.cachebox3.gui.help.HelpWindow$HelpWindowStyle": {
+    "default": {
+      "backgroundColor": "dialog_background",
+      "borderColor": "help_window_font",
+      "fontColor": "help_window_font",
+      "font": "normal_font",
+      "borderSize": 3
+    }
+  },
+  "de.longri.cachebox3.gui.help.GestureHelp$GestureHelpStyle": {
+    "default": {
+      "backgroundColor": "dialog_background",
+      "borderColor": "help_window_font",
+      "fontColor": "help_window_font",
+      "font": "normal_font",
+      "borderSize": 3,
+      "arrowDrawable": "arrow_help",
+      "arrowDrawable90": "arrow_help_90"
     }
   }
 }
