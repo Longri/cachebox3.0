@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.help;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -29,7 +30,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.animations.Blink;
+import de.longri.cachebox3.gui.animations.actor_animations.Blink;
+import de.longri.cachebox3.gui.animations.actor_animations.GestureHelpAnimation;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
@@ -51,6 +53,7 @@ public class GestureHelp extends HelpWindow {
     final GestureHelpStyle style;
     final String GESTURE_MSG = Translation.Get("gestureHelp"); // "You can also use this gesture to call this function"
     final String DONT_SHOW_AGAIN_MSG = Translation.Get("DontShowHelp"); // "Don't show help Msg again!"
+    final Table table = new Table();
 
     private Actor arrowRight, arrowDown, arrowLeft, arrowUp;
 
@@ -74,7 +77,7 @@ public class GestureHelp extends HelpWindow {
         if (this.hasChildren()) return; // table is created
 
         int colNum = 5, rowNum = 5;
-        final Table table = new Table();
+
 
         int cellCount = 0;
 
@@ -126,7 +129,7 @@ public class GestureHelp extends HelpWindow {
                             table.add(new Label("", VisUI.getSkin()));
                         break;
                     case 18:
-                        if (gestureUpIcon != null) {
+                        if (gestureDownIcon != null) {
                             arrowDown = getArrowImageRotated(180);
                             table.add(arrowDown);
                         } else
@@ -202,6 +205,7 @@ public class GestureHelp extends HelpWindow {
     public void show() {
         super.show();
 
+
         // close
         TimerTask task = new TimerTask() {
             @Override
@@ -227,21 +231,37 @@ public class GestureHelp extends HelpWindow {
     public void show(ActionButton.GestureDirection gestureDirection) {
         this.show();
 
+        Vector2 start = new Vector2();
+
+        table.getCells().get(12).getActor().localToStageCoordinates(start);
+
+        Vector2 end = new Vector2();
+
+
         switch (gestureDirection) {
 
             case Right:
                 if (arrowRight != null) arrowRight.addAction(new Blink());
+                table.getCells().get(14).getActor().localToStageCoordinates(end);
                 break;
             case Up:
                 if (arrowUp != null) arrowUp.addAction(new Blink());
+                table.getCells().get(2).getActor().localToStageCoordinates(end);
                 break;
             case Left:
                 if (arrowLeft != null) arrowLeft.addAction(new Blink());
+                table.getCells().get(10).getActor().localToStageCoordinates(end);
                 break;
             case Down:
                 if (arrowDown != null) arrowDown.addAction(new Blink());
+                table.getCells().get(22).getActor().localToStageCoordinates(end);
                 break;
         }
+
+
+
+
+        this.addAction(new GestureHelpAnimation(start, end));
     }
 
 

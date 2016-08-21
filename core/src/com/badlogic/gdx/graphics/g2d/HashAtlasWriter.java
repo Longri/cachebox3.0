@@ -110,7 +110,7 @@ public class HashAtlasWriter {
         int resultHashCode = 1;
         resultHashCode = resultHashCode * prime + Utils.getMd5(skinFile).hashCode();
         for (ScaledSvg svg : svgs) {
-            FileHandle fileHandle = Gdx.files.internal(svg.name);
+            FileHandle fileHandle = Gdx.files.internal(svg.path);
             resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
             resultHashCode = (resultHashCode * (int) (prime * svg.scale));
         }
