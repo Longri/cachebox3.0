@@ -19,12 +19,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -131,7 +133,7 @@ public class Menu extends Window {
                 trans = Translation.Get(StringId) + appendix;
         }
 
-        MenuItem item = new MenuItem(0, ID, "Menu Item@" + ID);
+        MenuItem item = new MenuItem(0, ID, "Menu Item@" + ID, this);
         item.setTitle(trans);
         addItem(item);
 
@@ -150,11 +152,25 @@ public class Menu extends Window {
     }
 
     public void show() {
+
+        if (this.parentMenu != null) {
+            showAsChild();
+            return;
+        }
+
         initialLayout();
         super.show();
         this.setTouchable(Touchable.enabled);
         CB.windowStage.addListener(clickListener);
         log.debug("Show menu: " + this.name);
+    }
+
+    private void showAsChild() {
+        initialLayout();
+        super.show();
+        this.setTouchable(Touchable.enabled);
+        CB.windowStage.addListener(clickListener);
+        log.debug("Show child menu: " + this.name);
     }
 
     public void hide() {
@@ -170,19 +186,34 @@ public class Menu extends Window {
 
         // add the titleLabel on top
 
-        if(parentMenu!=null){
-            parentTitleLabel= new VisLabel(parentMenu.name, "menu_title_parent");
-            this.add(parentTitleLabel);
+        Table titleTable = new Table();
+        titleTable.setDebug(true, true);
+        if (style.menu_back != null) {
+            Image backImage = new Image(style.menu_back);
+            this.add(backImage).width(backImage.getWidth()).align(Align.left).padRight(CB.scaledSizes.MARGIN);
+        }
+
+        if (parentMenu != null) {
+            parentTitleLabel = new VisLabel(parentMenu.name, "menu_title_parent");
+            //   titleTable.add(parentTitleLabel);
         }
 
         titleLabel = new VisLabel(this.name, "menu_title_act");
-        this.add(titleLabel);
+        this.add(titleLabel).align(Align.center);
+
+        // this.add(titleTable).width(new Value.Fixed(Gdx.graphics.getWidth()));
         this.row();
 
 
         final OnItemClickListener clickListener = new OnItemClickListener() {
             @Override
             public void onItemClick(final MenuItem item) {
+
+                // have the clicked item a moreMenu, just show it
+                if (item.hasMoreMenu()) {
+                    item.getMoreMenu().show();
+                    return;
+                }
 
                 Thread thread = new Thread(new Runnable() {
                     @Override
@@ -219,13 +250,14 @@ public class Menu extends Window {
             itemPad = item.getPadTop();
             height += item.getHeight();
         }
-        height += listView.getMainTable().getBackground().getMinHeight() + CB.scaledSizes.MARGIN + itemPad;
-        if (height > CB.scaledSizes.WINDOW_HEIGHT) height = CB.scaledSizes.WINDOW_HEIGHT;
+
         listView.rebuildView();
         super.pack();
-        listView.getMainTable().setBounds(((CB.windowStage.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f),
-                ((CB.windowStage.getHeight() - height) / 2),
-                CB.scaledSizes.WINDOW_WIDTH, height);
+
+        float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (this.getCells().get(0).getActorHeight() + CB.scaledSizes.MARGINx2);
+        listView.getMainTable().setBounds(((CB.windowStage.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
+                CB.scaledSizes.WINDOW_WIDTH, maxListViewHeight);
+
     }
 
     public void addOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -249,10 +281,10 @@ public class Menu extends Window {
     }
 
     public static class MenuStyle {
-        public Drawable background;
         public BitmapFont font;
         public Color fontColor;
-        public Drawable stageBackground;
+        public Drawable background, stageBackground, menu_back, menu_for;
+
     }
 
 

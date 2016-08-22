@@ -86,8 +86,12 @@ public class TestView extends AbstractView {
             public void clicked(InputEvent event, float x, float y) {
                 Menu icm = new Menu("Test Menu");
 
-                icm.addItem(MenuID.MI_LAYER, "Layer");
-                MenuItem mi = icm.addItem(MenuID.MI_RENDERTHEMES, "Renderthemes");
+                MenuItem mi = icm.addItem(MenuID.MI_LAYER, "Layer");
+
+                mi.setMoreMenu(getMoreMenu1());
+
+
+                mi = icm.addItem(MenuID.MI_RENDERTHEMES, "Renderthemes");
 
 
                 MenuItem item = icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
@@ -167,6 +171,55 @@ public class TestView extends AbstractView {
         listView.getMainTable().setBounds(200, 50, 200, 400);
 
         //    this.addActor(listView.getMainTable());
+
+    }
+
+    private Menu getMoreMenu1() {
+
+        Menu menu = new Menu("More1");
+
+        MenuItem item = menu.addItem(1, "item1");
+        item = menu.addItem(1, "item2");
+        item.setMoreMenu(getMoreMenu2());
+        item = menu.addItem(1, "item3");
+        item = menu.addItem(1, "item4");
+        item = menu.addItem(1, "item5");
+        item = menu.addItem(1, "item6");
+        item = menu.addItem(1, "item7");
+        item = menu.addItem(1, "item8");
+        item = menu.addItem(1, "item9");
+        item = menu.addItem(1, "item10");
+        item = menu.addItem(1, "item11");
+        item = menu.addItem(1, "item12");
+        item = menu.addItem(1, "item13");
+        item = menu.addItem(1, "item14");
+        item = menu.addItem(1, "item15");
+
+        return menu;
+
+    }
+
+    private Menu getMoreMenu2() {
+
+        Menu menu = new Menu("More2");
+
+        MenuItem item = menu.addItem(1, "item1");
+        item = menu.addItem(1, "item2");
+        item = menu.addItem(1, "item3");
+        item = menu.addItem(1, "item4");
+        item = menu.addItem(1, "item5");
+        item = menu.addItem(1, "item6");
+        item = menu.addItem(1, "item7");
+        item = menu.addItem(1, "item8");
+        item = menu.addItem(1, "item9");
+        item = menu.addItem(1, "item10");
+        item = menu.addItem(1, "item11");
+        item = menu.addItem(1, "item12");
+        item = menu.addItem(1, "item13");
+        item = menu.addItem(1, "item14");
+        item = menu.addItem(1, "item15");
+
+        return menu;
 
     }
 
