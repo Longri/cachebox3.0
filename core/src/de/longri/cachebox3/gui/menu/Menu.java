@@ -41,8 +41,6 @@ import org.slf4j.LoggerFactory;
  */
 public class Menu extends Window {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(Menu.class);
-    static private final Vector2 tmpPosition = new Vector2();
-    static private final Vector2 tmpSize = new Vector2();
 
     CB_List<MenuItem> mItems = new CB_List();
     MenuStyle style;

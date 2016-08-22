@@ -15,12 +15,20 @@
  */
 package com.badlogic.gdx.scenes.scene2d.ui;
 
+
 /**
  * Created by Longri on 16.08.2016.
  */
 public class ScaledSvg {
-
-    public String name;
-
+    public String path;
     public float scale = 1;
+    private String registerName;
+
+    public void setRegisterName(String registerName) {
+        this.registerName = registerName;
+    }
+
+    public String getRegisterName() {
+        return registerName;
+    }
 }

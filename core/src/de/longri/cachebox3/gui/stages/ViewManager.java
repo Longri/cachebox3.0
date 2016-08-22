@@ -33,6 +33,8 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.gui.actions.*;
 import de.longri.cachebox3.gui.actions.show_vies.Abstract_Action_ShowView;
+import de.longri.cachebox3.gui.actions.show_vies.Action_Show_AboutView;
+import de.longri.cachebox3.gui.actions.show_vies.Action_Show_Credits;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.ActionButton;
@@ -168,8 +170,8 @@ public class ViewManager extends Stage {
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
         tool_button.addAction(new ActionButton(new Action_Show_Quit(), true));
 //
-        misc_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_AboutView(), true, ActionButton.GestureDirection.Up));
-        misc_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_Credits(), false));
+        misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, ActionButton.GestureDirection.Up));
+        misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Settings(), false, ActionButton.GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Help(), false));
@@ -189,9 +191,9 @@ public class ViewManager extends Stage {
 
     // Toast pop up
     public enum ToastLength {
-        SHORT(1000), NORMAL(2000), LONG(3500);
+        SHORT(1000), NORMAL(1500), LONG(3500);
 
-        private final int value;
+        public final int value;
 
         ToastLength(int value) {
             this.value = value;
