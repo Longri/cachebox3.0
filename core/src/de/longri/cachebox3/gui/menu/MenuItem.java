@@ -247,7 +247,8 @@ public class MenuItem extends VisTable {
         return this.moreMenu != null;
     }
 
-    public Menu getMoreMenu() {
+    public Menu getMoreMenu(Menu menu) {
+        this.moreMenu.parentMenu = menu;
         return this.moreMenu;
     }
 

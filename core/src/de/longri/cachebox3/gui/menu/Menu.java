@@ -15,15 +15,20 @@
  */
 package de.longri.cachebox3.gui.menu;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -38,6 +43,8 @@ import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.LoggerFactory;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+
 /**
  * Created by Longri on 13.08.16.
  */
@@ -50,7 +57,7 @@ public class Menu extends Window {
     ListView listView;
     OnItemClickListener onItemClickListener;
     private VisLabel titleLabel, parentTitleLabel;
-    private Menu parentMenu;
+    protected Menu parentMenu;
 
     InputListener clickListener = new InputListener() {
 
@@ -152,24 +159,52 @@ public class Menu extends Window {
     }
 
     public void show() {
+        initialLayout();
+        showWidgetGroup();
 
         if (this.parentMenu != null) {
             showAsChild();
-            return;
         }
 
-        initialLayout();
-        super.show();
+
         this.setTouchable(Touchable.enabled);
         CB.windowStage.addListener(clickListener);
         log.debug("Show menu: " + this.name);
     }
 
+
+    protected WidgetGroup mainMenuWidgetGroup;
+
+    private void showWidgetGroup() {
+        clearActions();
+        pack();
+
+        mainMenuWidgetGroup = new WidgetGroup();
+        mainMenuWidgetGroup.setBounds(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        mainMenuWidgetGroup.addActor(this);
+        CB.windowStage.addActor(mainMenuWidgetGroup);
+        CB.windowStage.setKeyboardFocus(this);
+        CB.windowStage.setScrollFocus(this);
+        addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
+
+        //switch input processor to window stage
+        CB.inputMultiplexer.removeProcessor(CB.mainStage);
+        CB.inputMultiplexer.addProcessor(CB.windowStage);
+
+    }
+
+
+    private final float MORE_MENU_ANIMATION_TIME = 0.25f;
+
     private void showAsChild() {
-        initialLayout();
-        super.show();
-        this.setTouchable(Touchable.enabled);
-        CB.windowStage.addListener(clickListener);
+        float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
+        parentMenu.mainMenuWidgetGroup.addAction(Actions.moveTo(0 - nextXPos, 0, MORE_MENU_ANIMATION_TIME));
+
+        // remove stageBackground
+        this.setStageBackground(null);
+
+        mainMenuWidgetGroup.setPosition(nextXPos, 0);
+        mainMenuWidgetGroup.addAction(Actions.moveTo(0, 0, MORE_MENU_ANIMATION_TIME));
         log.debug("Show child menu: " + this.name);
     }
 
@@ -179,7 +214,9 @@ public class Menu extends Window {
         log.debug("Hide menu: " + this.name);
     }
 
+
     private void initialLayout() {
+
 
         //remove all childs
         this.clear();
@@ -211,7 +248,7 @@ public class Menu extends Window {
 
                 // have the clicked item a moreMenu, just show it
                 if (item.hasMoreMenu()) {
-                    item.getMoreMenu().show();
+                    item.getMoreMenu(Menu.this).show();
                     return;
                 }
 
