@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
@@ -48,7 +49,8 @@ public class Menu extends Window {
     final String name;
     ListView listView;
     OnItemClickListener onItemClickListener;
-
+    private VisLabel titleLabel, parentTitleLabel;
+    private Menu parentMenu;
 
     InputListener clickListener = new InputListener() {
 
@@ -165,6 +167,21 @@ public class Menu extends Window {
 
     private void initialLayout() {
 
+        //remove all childs
+        this.clear();
+
+        // add the titleLabel on top
+
+        if(parentMenu!=null){
+            parentTitleLabel= new VisLabel(parentMenu.name, "menu_title_parent");
+            this.add(parentTitleLabel);
+        }
+
+        titleLabel = new VisLabel(this.name, "menu_title_act");
+        this.add(titleLabel);
+        this.row();
+
+
         final OnItemClickListener clickListener = new OnItemClickListener() {
             @Override
             public void onItemClick(final MenuItem item) {
@@ -179,18 +196,14 @@ public class Menu extends Window {
                 //close Menu
                 hide();
                 thread.start();
-
             }
         };
 
         listView = new ListView(mItems.size()) {
-
             @Override
             public VisTable createView(Integer index) {
                 MenuItem item = mItems.get(index);
-
                 item.setOnItemClickListener(clickListener);
-
                 return item;
             }
         };

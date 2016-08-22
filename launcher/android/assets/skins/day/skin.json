@@ -170,6 +170,12 @@
       "b": 0,
       "a": 1
     },
+    "parent_font_color": {
+      "r": 0,
+      "g": 0,
+      "b": 1,
+      "a": 1
+    },
     "dialog_background": {
       "r": 0,
       "g": 0,
@@ -323,6 +329,14 @@
       "font": "normal_font",
       "fontColor": "font_color",
       "background": "toast_background_drawable"
+    },
+    "menu_title_act": {
+      "font": "normal_font",
+      "fontColor": "font_color"
+    },
+    "menu_title_parent": {
+      "font": "normal_font",
+      "fontColor": "parent_font_color"
     }
   },
   "de.longri.cachebox3.gui.widgets.ButtonBar$ButtonBarStyle": {
