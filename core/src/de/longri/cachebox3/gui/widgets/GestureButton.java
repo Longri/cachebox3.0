@@ -293,7 +293,7 @@ public class GestureButton extends Button {
                         if (ba.getGestureDirection() != ActionButton.GestureDirection.None) {
                             if (gestureHelper == null) {
                                 gestureHelper = new GestureHelp(GestureHelp.getHelpEllipseFromActor(GestureButton.this),
-                                       style.up, gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon);
+                                        style.up, gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon);
                             }
                             gestureHelper.setWindowCloseListener(new Window.WindowCloseListener() {
                                 @Override
@@ -346,17 +346,17 @@ public class GestureButton extends Button {
             if (menuSprite == null || menuSpriteFiltered == null) {
                 menuSprite = new Sprite(CB.getSprite(IconNames.cm_icon.name()));
                 menuSpriteFiltered = new Sprite(CB.getSprite(IconNames.cm_icon_filterd.name()));
+            }
+
+            if (menuSpriteDrawRec == null) {
                 menuSpriteDrawRec = new CB_RectF();
                 menuSpriteDrawRec.add(new SizeChangedEvent() {
                     @Override
                     public void sizeChanged() {
                         menuSprite.setPosition(menuSpriteDrawRec.getX(), menuSpriteDrawRec.getY());
-                        // menuSprite.setSize(getWidth(),getY());
                     }
                 });
             }
-
-            if (menuSpriteDrawRec == null) return;
 
             menuSpriteDrawRec.setPos(this.getX(), this.getY());
 
