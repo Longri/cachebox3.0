@@ -187,11 +187,11 @@ public class ViewManager extends Stage {
 
     // Toast pop up
     public enum ToastLength {
-        SHORT(1000), NORMAL(1500), LONG(3500);
+        SHORT(1.0f), NORMAL(1.5f), LONG(3.5f);
 
-        public final int value;
+        public final float value;
 
-        ToastLength(int value) {
+        ToastLength(float value) {
             this.value = value;
         }
     }
