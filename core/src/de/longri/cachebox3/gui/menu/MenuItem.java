@@ -257,5 +257,8 @@ public class MenuItem extends VisTable {
         public Color fontColor;
     }
 
-
+    @Override
+    public String getName() {
+        return name;
+    }
 }

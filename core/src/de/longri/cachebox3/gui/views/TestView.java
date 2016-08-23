@@ -177,21 +177,30 @@ public class TestView extends AbstractView {
         Menu menu = new Menu("More1");
 
         MenuItem item = menu.addItem(1, "item1");
-        item = menu.addItem(1, "item2");
+        item = menu.addItem(2, "item2");
         item.setMoreMenu(getMoreMenu2());
-        item = menu.addItem(1, "item3");
-        item = menu.addItem(1, "item4");
-        item = menu.addItem(1, "item5");
-        item = menu.addItem(1, "item6");
-        item = menu.addItem(1, "item7");
-        item = menu.addItem(1, "item8");
-        item = menu.addItem(1, "item9");
-        item = menu.addItem(1, "item10");
-        item = menu.addItem(1, "item11");
-        item = menu.addItem(1, "item12");
-        item = menu.addItem(1, "item13");
-        item = menu.addItem(1, "item14");
-        item = menu.addItem(1, "item15");
+        item = menu.addItem(3, "item3");
+        item = menu.addItem(4, "item4");
+        item = menu.addItem(5, "item5");
+        item = menu.addItem(6, "item6");
+        item = menu.addItem(7, "item7");
+        item = menu.addItem(8, "item8");
+        item = menu.addItem(9, "item9");
+        item = menu.addItem(10, "item10");
+        item = menu.addItem(11, "item11");
+        item = menu.addItem(12, "item12");
+        item = menu.addItem(13, "item13");
+        item = menu.addItem(14, "item14");
+        item = menu.addItem(15, "item15");
+
+
+        menu.addOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(MenuItem item) {
+                log.debug("item: More1/" + item.getName() + " clicked");
+            }
+        });
+
 
         return menu;
 
@@ -202,20 +211,29 @@ public class TestView extends AbstractView {
         Menu menu = new Menu("More2");
 
         MenuItem item = menu.addItem(1, "item1");
-        item = menu.addItem(1, "item2");
-        item = menu.addItem(1, "item3");
-        item = menu.addItem(1, "item4");
-        item = menu.addItem(1, "item5");
-        item = menu.addItem(1, "item6");
-        item = menu.addItem(1, "item7");
-        item = menu.addItem(1, "item8");
-        item = menu.addItem(1, "item9");
-        item = menu.addItem(1, "item10");
-        item = menu.addItem(1, "item11");
-        item = menu.addItem(1, "item12");
-        item = menu.addItem(1, "item13");
-        item = menu.addItem(1, "item14");
-        item = menu.addItem(1, "item15");
+        item = menu.addItem(2, "item2");
+        item = menu.addItem(3, "item3");
+        item = menu.addItem(4, "item4");
+        item = menu.addItem(5, "item5");
+        item = menu.addItem(6, "item6");
+        item = menu.addItem(7, "item7");
+        item = menu.addItem(8, "item8");
+        item = menu.addItem(9, "item9");
+        item = menu.addItem(10, "item10");
+        item = menu.addItem(11, "item11");
+        item = menu.addItem(12, "item12");
+        item = menu.addItem(13, "item13");
+        item = menu.addItem(14, "item14");
+        item = menu.addItem(15, "item15");
+
+
+        menu.addOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(MenuItem item) {
+                log.debug("item: More2/" + item.getName() + " clicked");
+            }
+        });
+
 
         return menu;
 

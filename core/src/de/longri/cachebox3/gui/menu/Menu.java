@@ -26,12 +26,9 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -50,6 +47,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
  */
 public class Menu extends Window {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(Menu.class);
+    final static boolean ALL = true;
 
     CB_List<MenuItem> mItems = new CB_List();
     MenuStyle style;
@@ -61,14 +59,14 @@ public class Menu extends Window {
 
     InputListener clickListener = new InputListener() {
 
-        private final CB_RectF listViewRec = new CB_RectF();
+        private final CB_RectF backClickReckArea = new CB_RectF();
 
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             // close menu if outside of listView
-            listViewRec.set(listView.getX(), listView.getY(),
-                    listView.getWidth(), listView.getHeight());
-            if (!listViewRec.contains(x, y)) {
-                hide();
+            backClickReckArea.set(Menu.this.mainMenuWidgetGroup.getX(), Menu.this.titleLabel.getY(),
+                    Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - Menu.this.titleLabel.getY());
+            if (backClickReckArea.contains(x, y)) {
+                hide(ALL);
                 return true;
             }
             return false;
@@ -192,7 +190,7 @@ public class Menu extends Window {
     }
 
 
-    private final float MORE_MENU_ANIMATION_TIME = 0.25f;
+    private final float MORE_MENU_ANIMATION_TIME = 0.3f;
 
     private void showAsChild() {
         float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
@@ -207,14 +205,30 @@ public class Menu extends Window {
     }
 
     public void hide() {
-        super.hide();
+        hide(false);
+    }
+
+    public void hide(boolean all) {
+        if (this.parentMenu != null) {
+
+            if (all) {
+                super.hide();
+                parentMenu.hide(ALL);
+            } else {
+                float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
+                mainMenuWidgetGroup.addAction(Actions.sequence(Actions.moveTo(0 + nextXPos, 0, MORE_MENU_ANIMATION_TIME), Actions.removeActor()));
+                parentMenu.mainMenuWidgetGroup.addAction(Actions.moveTo(0, 0, MORE_MENU_ANIMATION_TIME));
+            }
+        } else {
+            super.hide();
+        }
+
         CB.windowStage.removeListener(clickListener);
         log.debug("Hide menu: " + this.name);
     }
 
 
     private void initialLayout() {
-
 
         //remove all childs
         this.clear();
@@ -244,7 +258,6 @@ public class Menu extends Window {
         }
 
         titleLabel.setPosition(xPos, topY - titleLabel.getHeight());
-        xPos += titleLabel.getWidth() + CB.scaledSizes.MARGIN;
         this.addActor(titleLabel);
 
         final OnItemClickListener clickListener = new OnItemClickListener() {
@@ -257,16 +270,21 @@ public class Menu extends Window {
                     return;
                 }
 
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        onItemClickListener.onItemClick(item);
-                    }
-                });
 
-                //close Menu
-                hide();
-                thread.start();
+                if (onItemClickListener != null) {
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onItemClickListener.onItemClick(item);
+                        }
+                    });
+                    thread.start();
+                }
+
+
+                //close Menu with sub menu's
+                hide(ALL);
+
             }
         };
 
