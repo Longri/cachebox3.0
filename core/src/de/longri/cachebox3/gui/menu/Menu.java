@@ -161,12 +161,9 @@ public class Menu extends Window {
     public void show() {
         initialLayout();
         showWidgetGroup();
-
         if (this.parentMenu != null) {
             showAsChild();
         }
-
-
         this.setTouchable(Touchable.enabled);
         CB.windowStage.addListener(clickListener);
         log.debug("Show menu: " + this.name);
@@ -185,7 +182,8 @@ public class Menu extends Window {
         CB.windowStage.addActor(mainMenuWidgetGroup);
         CB.windowStage.setKeyboardFocus(this);
         CB.windowStage.setScrollFocus(this);
-        addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
+        if (this.parentMenu == null)
+            addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
 
         //switch input processor to window stage
         CB.inputMultiplexer.removeProcessor(CB.mainStage);
@@ -221,26 +219,33 @@ public class Menu extends Window {
         //remove all childs
         this.clear();
 
-        // add the titleLabel on top
+        float topY = Gdx.graphics.getHeight() - CB.scaledSizes.MARGIN_HALF;
+        float xPos = CB.scaledSizes.MARGIN_HALF;
 
-        Table titleTable = new Table();
-        titleTable.setDebug(true, true);
+
+        // add the titleLabel on top
         if (style.menu_back != null) {
             Image backImage = new Image(style.menu_back);
-            this.add(backImage).width(backImage.getWidth()).align(Align.left).padRight(CB.scaledSizes.MARGIN);
-        }
-
-        if (parentMenu != null) {
-            parentTitleLabel = new VisLabel(parentMenu.name, "menu_title_parent");
-            //   titleTable.add(parentTitleLabel);
+            backImage.setPosition(xPos, topY - backImage.getHeight());
+            xPos += backImage.getWidth() + CB.scaledSizes.MARGIN;
+            this.addActor(backImage);
         }
 
         titleLabel = new VisLabel(this.name, "menu_title_act");
-        this.add(titleLabel).align(Align.center);
 
-        // this.add(titleTable).width(new Value.Fixed(Gdx.graphics.getWidth()));
-        this.row();
+        if (parentMenu != null) {
+            parentTitleLabel = new VisLabel(parentMenu.name, "menu_title_parent");
+            parentTitleLabel.setPosition(xPos, topY - parentTitleLabel.getHeight());
+            xPos += parentTitleLabel.getWidth() + CB.scaledSizes.MARGINx2;
+            this.addActor(parentTitleLabel);
+        } else {
+            //center titleLable
+            xPos = (Gdx.graphics.getWidth() - titleLabel.getWidth()) / 2;
+        }
 
+        titleLabel.setPosition(xPos, topY - titleLabel.getHeight());
+        xPos += titleLabel.getWidth() + CB.scaledSizes.MARGIN;
+        this.addActor(titleLabel);
 
         final OnItemClickListener clickListener = new OnItemClickListener() {
             @Override
@@ -274,27 +279,22 @@ public class Menu extends Window {
             }
         };
         listView.setBackground(this.style.background);
-        this.add(listView);
+        this.addActor(listView);
     }
 
     @Override
     public void pack() {
-        float height = 0;
-        float itemPad = 0;
         for (MenuItem item : mItems) {
             item.initial();
             item.pack();
-            itemPad = item.getPadTop();
-            height += item.getHeight();
         }
 
         listView.rebuildView();
         super.pack();
 
-        float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (this.getCells().get(0).getActorHeight() + CB.scaledSizes.MARGINx2);
+        float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (listView.getHeight() + CB.scaledSizes.MARGINx2);
         listView.setBounds(((CB.windowStage.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
                 CB.scaledSizes.WINDOW_WIDTH, maxListViewHeight);
-
     }
 
     public void addOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -323,6 +323,5 @@ public class Menu extends Window {
         public Drawable background, stageBackground, menu_back, menu_for;
 
     }
-
 
 }

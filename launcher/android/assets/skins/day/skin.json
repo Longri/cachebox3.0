@@ -205,9 +205,9 @@
       "a": 1
     },
     "menu_parent_font_color": {
-      "r": 0,
-      "g": 0,
-      "b": 1,
+      "r": 0.76,
+      "g": 0.9,
+      "b": 0.55,
       "a": 1
     },
     "menu_font_color": {
