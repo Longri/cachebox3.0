@@ -88,8 +88,8 @@ public class Window extends Table {
         //switch input processor to main stage
         CB.inputMultiplexer.removeProcessor(CB.windowStage);
 
-        Timer t = new Timer();
-        t.scheduleTask(new Timer.Task() {
+
+        new Timer().scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 CB.inputMultiplexer.addProcessor(CB.mainStage);

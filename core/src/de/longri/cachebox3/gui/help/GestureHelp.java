@@ -39,9 +39,6 @@ import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CB_RectF;
 import org.slf4j.LoggerFactory;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 /**
  * Created by Longri on 18.08.2016.
  */
@@ -205,17 +202,13 @@ public class GestureHelp extends HelpWindow {
     public void show() {
         super.show();
 
-
         // close
-        TimerTask task = new TimerTask() {
+        new com.badlogic.gdx.utils.Timer().scheduleTask(new com.badlogic.gdx.utils.Timer.Task() {
             @Override
             public void run() {
                 hide();
             }
-        };
-
-        Timer timer = new Timer();
-        timer.schedule(task, ViewManager.ToastLength.LONG.value);
+        }, ViewManager.ToastLength.LONG.value);
     }
 
     public void hide() {
@@ -257,8 +250,6 @@ public class GestureHelp extends HelpWindow {
                 table.getCells().get(22).getActor().localToStageCoordinates(end);
                 break;
         }
-
-
 
 
         this.addAction(new GestureHelpAnimation(start, end));
