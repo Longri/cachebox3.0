@@ -38,6 +38,8 @@ public class Database {
     public static Database FieldNotes;
     public static Database Settings;
     private SQLiteGdxDatabase myDB;
+
+
 //	public CacheList Query;
 
     public enum DatabaseType {
@@ -112,6 +114,11 @@ public class Database {
             MasterDatabaseId = ReadConfigLong("MasterDatabaseId");
         }
         return true;
+    }
+
+
+    public String getPath() {
+        return this.databasePath.file().getAbsolutePath();
     }
 
 

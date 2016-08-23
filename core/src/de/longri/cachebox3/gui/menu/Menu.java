@@ -90,6 +90,13 @@ public class Menu extends Window {
         this(name, VisUI.getSkin().get(styleName, MenuStyle.class));
     }
 
+    public MenuItem addItem(int ID, String StringId, Sprite icon) {
+        MenuItem item = addItem(ID, StringId);
+        if (icon != null)
+            item.setIcon(new SpriteDrawable(icon));
+        return item;
+    }
+
     public void addItem(MenuItem menuItem) {
         mItems.add(menuItem);
     }
