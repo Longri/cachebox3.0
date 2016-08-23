@@ -17,18 +17,14 @@ package de.longri.cachebox3.gui.menu;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.utils.HSV_Color;
 import de.longri.cachebox3.utils.SizeF;
 import org.slf4j.LoggerFactory;
 
@@ -57,16 +53,20 @@ public class MenuItem extends VisTable {
     private Image iconImage;
     private Object data;
     private OnItemClickListener onItemClickListener;
+    private Menu moreMenu;
+    private final Menu parentMenu;
 
-    public MenuItem(SizeF size, int Index, int ID, String name) {
+    public MenuItem(SizeF size, int Index, int ID, String name, Menu parentMenu) {
         this.name = name;
         mID = ID;
+        this.parentMenu = parentMenu;
         setDefaultStyle();
     }
 
-    public MenuItem(int Index, int ID, String name) {
+    public MenuItem(int Index, int ID, String name, Menu parentMenu) {
         this.name = name;
         mID = ID;
+        this.parentMenu = parentMenu;
         setDefaultStyle();
     }
 
@@ -113,7 +113,11 @@ public class MenuItem extends VisTable {
         mLabel = new Label(mTitle, new Label.LabelStyle(style.font, style.fontColor));
         mLabel.setWrap(true);
         this.add(mLabel).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
-        if (mIsCheckable) {
+
+        if (moreMenu != null && parentMenu.style.menu_for != null) {
+            checkImage = new Image(parentMenu.style.menu_for);
+            this.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+        } else if (mIsCheckable) { // ignore checkable hav this item a moreMenu
             if (mIsChecked) {
                 if (mIsEnabled) {
                     checkImage = new Image(CB.getSprite("check_on"));
@@ -235,10 +239,26 @@ public class MenuItem extends VisTable {
         this.onItemClickListener = onItemClickListener;
     }
 
+    public void setMoreMenu(Menu moreMenu) {
+        this.moreMenu = moreMenu;
+    }
+
+    public boolean hasMoreMenu() {
+        return this.moreMenu != null;
+    }
+
+    public Menu getMoreMenu(Menu menu) {
+        this.moreMenu.parentMenu = menu;
+        return this.moreMenu;
+    }
+
     public static class MenuItemStyle {
         public BitmapFont font;
         public Color fontColor;
     }
 
-
+    @Override
+    public String getName() {
+        return name;
+    }
 }

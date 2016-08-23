@@ -86,8 +86,12 @@ public class TestView extends AbstractView {
             public void clicked(InputEvent event, float x, float y) {
                 Menu icm = new Menu("Test Menu");
 
-                icm.addItem(MenuID.MI_LAYER, "Layer");
-                MenuItem mi = icm.addItem(MenuID.MI_RENDERTHEMES, "Renderthemes");
+                MenuItem mi = icm.addItem(MenuID.MI_LAYER, "Layer");
+
+                mi.setMoreMenu(getMoreMenu1());
+
+
+                mi = icm.addItem(MenuID.MI_RENDERTHEMES, "Renderthemes");
 
 
                 MenuItem item = icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
@@ -103,7 +107,7 @@ public class TestView extends AbstractView {
 
 
                 //icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
-                icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
+                //   icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
 
                 icm.addOnItemClickListener(new OnItemClickListener() {
                     @Override
@@ -164,9 +168,74 @@ public class TestView extends AbstractView {
         };
 
 
-        listView.getMainTable().setBounds(200, 50, 200, 400);
+        listView.setBounds(200, 50, 90, 400);
+        this.addActor(listView);
+    }
 
-        //    this.addActor(listView.getMainTable());
+    private Menu getMoreMenu1() {
+
+        Menu menu = new Menu("More1");
+
+        MenuItem item = menu.addItem(1, "item1");
+        item = menu.addItem(2, "item2");
+        item.setMoreMenu(getMoreMenu2());
+        item = menu.addItem(3, "item3");
+        item = menu.addItem(4, "item4");
+        item = menu.addItem(5, "item5");
+        item = menu.addItem(6, "item6");
+        item = menu.addItem(7, "item7");
+        item = menu.addItem(8, "item8");
+        item = menu.addItem(9, "item9");
+        item = menu.addItem(10, "item10");
+        item = menu.addItem(11, "item11");
+        item = menu.addItem(12, "item12");
+        item = menu.addItem(13, "item13");
+        item = menu.addItem(14, "item14");
+        item = menu.addItem(15, "item15");
+
+
+        menu.addOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(MenuItem item) {
+                log.debug("item: More1/" + item.getName() + " clicked");
+            }
+        });
+
+
+        return menu;
+
+    }
+
+    private Menu getMoreMenu2() {
+
+        Menu menu = new Menu("More2");
+
+        MenuItem item = menu.addItem(1, "item1");
+        item = menu.addItem(2, "item2");
+        item = menu.addItem(3, "item3");
+        item = menu.addItem(4, "item4");
+        item = menu.addItem(5, "item5");
+        item = menu.addItem(6, "item6");
+        item = menu.addItem(7, "item7");
+        item = menu.addItem(8, "item8");
+        item = menu.addItem(9, "item9");
+        item = menu.addItem(10, "item10");
+        item = menu.addItem(11, "item11");
+        item = menu.addItem(12, "item12");
+        item = menu.addItem(13, "item13");
+        item = menu.addItem(14, "item14");
+        item = menu.addItem(15, "item15");
+
+
+        menu.addOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(MenuItem item) {
+                log.debug("item: More2/" + item.getName() + " clicked");
+            }
+        });
+
+
+        return menu;
 
     }
 

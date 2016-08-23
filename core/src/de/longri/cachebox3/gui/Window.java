@@ -23,8 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.utils.IgnoreTouchInputListener;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
@@ -87,7 +87,14 @@ public class Window extends Table {
 
         //switch input processor to main stage
         CB.inputMultiplexer.removeProcessor(CB.windowStage);
-        CB.inputMultiplexer.addProcessor(CB.mainStage);
+
+
+        new Timer().scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                CB.inputMultiplexer.addProcessor(CB.mainStage);
+            }
+        }, 0.3f);
 
         if (this.windowCloseListener != null) {
             this.windowCloseListener.windowClosed();

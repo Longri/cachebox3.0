@@ -15,17 +15,22 @@
  */
 package de.longri.cachebox3.gui.menu;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
@@ -35,29 +40,33 @@ import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.LoggerFactory;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+
 /**
  * Created by Longri on 13.08.16.
  */
 public class Menu extends Window {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(Menu.class);
+    final static boolean ALL = true;
 
     CB_List<MenuItem> mItems = new CB_List();
     MenuStyle style;
     final String name;
     ListView listView;
     OnItemClickListener onItemClickListener;
-
+    private VisLabel titleLabel, parentTitleLabel;
+    protected Menu parentMenu;
 
     InputListener clickListener = new InputListener() {
 
-        private final CB_RectF listViewRec = new CB_RectF();
+        private final CB_RectF backClickReckArea = new CB_RectF();
 
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             // close menu if outside of listView
-            listViewRec.set(listView.getMainTable().getX(), listView.getMainTable().getY(),
-                    listView.getMainTable().getWidth(), listView.getMainTable().getHeight());
-            if (!listViewRec.contains(x, y)) {
-                hide();
+            backClickReckArea.set(Menu.this.mainMenuWidgetGroup.getX(), Menu.this.titleLabel.getY(),
+                    Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - Menu.this.titleLabel.getY());
+            if (backClickReckArea.contains(x, y)) {
+                hide(ALL);
                 return true;
             }
             return false;
@@ -129,7 +138,7 @@ public class Menu extends Window {
                 trans = Translation.Get(StringId) + appendix;
         }
 
-        MenuItem item = new MenuItem(0, ID, "Menu Item@" + ID);
+        MenuItem item = new MenuItem(0, ID, "Menu Item@" + ID, this);
         item.setTitle(trans);
         addItem(item);
 
@@ -149,70 +158,161 @@ public class Menu extends Window {
 
     public void show() {
         initialLayout();
-        super.show();
+        showWidgetGroup();
+        if (this.parentMenu != null) {
+            showAsChild();
+        }
         this.setTouchable(Touchable.enabled);
         CB.windowStage.addListener(clickListener);
         log.debug("Show menu: " + this.name);
     }
 
+
+    protected WidgetGroup mainMenuWidgetGroup;
+
+    private void showWidgetGroup() {
+        clearActions();
+        pack();
+
+        mainMenuWidgetGroup = new WidgetGroup();
+        mainMenuWidgetGroup.setBounds(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        mainMenuWidgetGroup.addActor(this);
+        CB.windowStage.addActor(mainMenuWidgetGroup);
+        CB.windowStage.setKeyboardFocus(this);
+        CB.windowStage.setScrollFocus(this);
+        if (this.parentMenu == null)
+            addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
+
+        //switch input processor to window stage
+        CB.inputMultiplexer.removeProcessor(CB.mainStage);
+        CB.inputMultiplexer.addProcessor(CB.windowStage);
+
+    }
+
+
+    private final float MORE_MENU_ANIMATION_TIME = 0.3f;
+
+    private void showAsChild() {
+        float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
+        parentMenu.mainMenuWidgetGroup.addAction(Actions.moveTo(0 - nextXPos, 0, MORE_MENU_ANIMATION_TIME));
+
+        // remove stageBackground
+        this.setStageBackground(null);
+
+        mainMenuWidgetGroup.setPosition(nextXPos, 0);
+        mainMenuWidgetGroup.addAction(Actions.moveTo(0, 0, MORE_MENU_ANIMATION_TIME));
+        log.debug("Show child menu: " + this.name);
+    }
+
     public void hide() {
-        super.hide();
+        hide(false);
+    }
+
+    public void hide(boolean all) {
+        if (this.parentMenu != null) {
+
+            if (all) {
+                super.hide();
+                parentMenu.hide(ALL);
+            } else {
+                float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
+                mainMenuWidgetGroup.addAction(Actions.sequence(Actions.moveTo(0 + nextXPos, 0, MORE_MENU_ANIMATION_TIME), Actions.removeActor()));
+                parentMenu.mainMenuWidgetGroup.addAction(Actions.moveTo(0, 0, MORE_MENU_ANIMATION_TIME));
+            }
+        } else {
+            super.hide();
+        }
+
         CB.windowStage.removeListener(clickListener);
         log.debug("Hide menu: " + this.name);
     }
 
+
     private void initialLayout() {
+
+        //remove all childs
+        this.clear();
+
+        float topY = Gdx.graphics.getHeight() - CB.scaledSizes.MARGIN_HALF;
+        float xPos = CB.scaledSizes.MARGIN_HALF;
+
+
+        // add the titleLabel on top
+        if (style.menu_back != null) {
+            Image backImage = new Image(style.menu_back);
+            backImage.setPosition(xPos, topY - backImage.getHeight());
+            xPos += backImage.getWidth() + CB.scaledSizes.MARGIN;
+            this.addActor(backImage);
+        }
+
+        titleLabel = new VisLabel(this.name, "menu_title_act");
+
+        if (parentMenu != null) {
+            parentTitleLabel = new VisLabel(parentMenu.name, "menu_title_parent");
+            parentTitleLabel.setPosition(xPos, topY - parentTitleLabel.getHeight());
+            xPos += parentTitleLabel.getWidth() + CB.scaledSizes.MARGINx2;
+            this.addActor(parentTitleLabel);
+        } else {
+            //center titleLable
+            xPos = (Gdx.graphics.getWidth() - titleLabel.getWidth()) / 2;
+        }
+
+        titleLabel.setPosition(xPos, topY - titleLabel.getHeight());
+        this.addActor(titleLabel);
 
         final OnItemClickListener clickListener = new OnItemClickListener() {
             @Override
             public void onItemClick(final MenuItem item) {
 
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        onItemClickListener.onItemClick(item);
-                    }
-                });
+                // have the clicked item a moreMenu, just show it
+                if (item.hasMoreMenu()) {
+                    item.getMoreMenu(Menu.this).show();
+                    return;
+                }
 
-                //close Menu
-                hide();
-                thread.start();
+
+                if (onItemClickListener != null) {
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onItemClickListener.onItemClick(item);
+                        }
+                    });
+                    thread.start();
+                }
+
+
+                //close Menu with sub menu's
+                hide(ALL);
 
             }
         };
 
         listView = new ListView(mItems.size()) {
-
             @Override
             public VisTable createView(Integer index) {
                 MenuItem item = mItems.get(index);
-
                 item.setOnItemClickListener(clickListener);
-
                 return item;
             }
         };
-        listView.getMainTable().setBackground(this.style.background);
-        this.add(listView.getMainTable());
+        listView.setBackground(this.style.background);
+        this.addActor(listView);
     }
 
     @Override
     public void pack() {
-        float height = 0;
-        float itemPad = 0;
         for (MenuItem item : mItems) {
             item.initial();
             item.pack();
-            itemPad = item.getPadTop();
-            height += item.getHeight();
         }
-        height += listView.getMainTable().getBackground().getMinHeight() + CB.scaledSizes.MARGIN + itemPad;
-        if (height > CB.scaledSizes.WINDOW_HEIGHT) height = CB.scaledSizes.WINDOW_HEIGHT;
+
         listView.rebuildView();
         super.pack();
-        listView.getMainTable().setBounds(((CB.windowStage.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f),
-                ((CB.windowStage.getHeight() - height) / 2),
-                CB.scaledSizes.WINDOW_WIDTH, height);
+
+        float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (listView.getHeight() + CB.scaledSizes.MARGINx2);
+        listView.setBounds(((CB.windowStage.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
+                CB.scaledSizes.WINDOW_WIDTH, maxListViewHeight);
     }
 
     public void addOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -236,11 +336,10 @@ public class Menu extends Window {
     }
 
     public static class MenuStyle {
-        public Drawable background;
         public BitmapFont font;
         public Color fontColor;
-        public Drawable stageBackground;
-    }
+        public Drawable background, stageBackground, menu_back, menu_for;
 
+    }
 
 }

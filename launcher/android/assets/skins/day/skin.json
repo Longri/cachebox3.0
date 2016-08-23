@@ -160,6 +160,14 @@
     "finger_click": {
       "path": "skins/day/svg/finger_click.svg",
       "scale": 1.0
+    },
+    "menu_for": {
+      "path": "skins/day/svg/menu_for.svg",
+      "scale": 0.3
+    },
+    "menu_back": {
+      "path": "skins/day/svg/menu_back.svg",
+      "scale": 0.3
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
@@ -190,6 +198,24 @@
       "b": 0,
       "a": 1
     },
+    "menu_title_back_color": {
+      "r": 0.9,
+      "g": 1,
+      "b": 0.9,
+      "a": 1
+    },
+    "menu_parent_font_color": {
+      "r": 0.76,
+      "g": 0.9,
+      "b": 0.55,
+      "a": 1
+    },
+    "menu_font_color": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 1
+    },
     "dialog_background": {
       "r": 0,
       "g": 0,
@@ -209,10 +235,22 @@
       "a": 1
     }
   },
+  "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
+    "dialog_stage_background": {
+      "color": "dialog_background"
+    },
+    "transparent_drawable": {
+      "color": "transparent_color"
+    }
+  },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "normal_font": {
       "font": "fonts/DroidSans",
       "size": 21
+    },
+    "normal_bold_font": {
+      "font": "fonts/DroidSans-Bold",
+      "size": 20
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable": {
@@ -349,6 +387,14 @@
       "font": "normal_font",
       "fontColor": "font_color",
       "background": "toast_background_drawable"
+    },
+    "menu_title_act": {
+      "font": "normal_bold_font",
+      "fontColor": "menu_font_color"
+    },
+    "menu_title_parent": {
+      "font": "normal_bold_font",
+      "fontColor": "menu_parent_font_color"
     }
   },
   "de.longri.cachebox3.gui.widgets.ButtonBar$ButtonBarStyle": {
@@ -381,14 +427,6 @@
       "up": "misc",
       "down": "misc_pressed",
       "select": "misc_selected"
-    }
-  },
-  "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
-    "dialog_stage_background": {
-      "color": "dialog_background"
-    },
-    "transparent_drawable": {
-      "color": "transparent_color"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
@@ -424,7 +462,7 @@
   },
   "de.longri.cachebox3.gui.views.ListView$ListViewStyle": {
     "default": {
-      "background": "list_background",
+      "background": "list_background_drawable",
       "firstItem": "listrec_first_drawable",
       "secondItem": "listrec_second_drawable",
       "selectedItem": "listrec_selected_drawable",
@@ -436,7 +474,9 @@
       "background": "list_background_drawable",
       "font": "normal_font",
       "fontColor": "font_color",
-      "stageBackground": "dialog_stage_background"
+      "stageBackground": "dialog_stage_background",
+      "menu_back": "menu_back",
+      "menu_for": "menu_for"
     }
   },
   "de.longri.cachebox3.gui.menu.MenuItem$MenuItemStyle": {

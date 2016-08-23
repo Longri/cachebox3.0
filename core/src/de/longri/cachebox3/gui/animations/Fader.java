@@ -15,9 +15,6 @@
  */
 package de.longri.cachebox3.gui.animations;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.CacheboxMain;
 import org.slf4j.LoggerFactory;
@@ -42,7 +39,7 @@ public class Fader {
 
 	private float mFadeValue = 1f;
 	private int mTimeToFadeOut = DEFAULT_TIME_TO_FADE_OUT;
-	private Timer mTimer;
+	private com.badlogic.gdx.utils.Timer.Task mTimer;
 	private boolean mFadeOut = false;
 	private boolean mFadeIn = false;
 	private boolean mVirtualVisible = true;
@@ -207,16 +204,14 @@ public class Fader {
 
 		if (this.alwaysOn)
 			return;
-		//	Log.debug(log, "Start Timer to fade out =>" + Integer.toString(mTimeToFadeOut) + name);
 
-		mTimer = new Timer();
-		TimerTask task = new TimerTask() {
+		mTimer = new com.badlogic.gdx.utils.Timer().scheduleTask(new com.badlogic.gdx.utils.Timer.Task() {
 			@Override
 			public void run() {
 				beginnFadeout();
 			}
-		};
-		mTimer.schedule(task, mTimeToFadeOut);
+		}, mTimeToFadeOut);
+
 	}
 
 	private void cancelTimerToFadeOut() {

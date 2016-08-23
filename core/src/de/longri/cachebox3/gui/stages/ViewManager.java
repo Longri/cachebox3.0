@@ -19,19 +19,19 @@ package de.longri.cachebox3.gui.stages;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
-import de.longri.cachebox3.gui.actions.*;
+import de.longri.cachebox3.gui.actions.Action_Show_Help;
+import de.longri.cachebox3.gui.actions.Action_Show_Quit;
+import de.longri.cachebox3.gui.actions.Action_Show_Settings;
+import de.longri.cachebox3.gui.actions.Action_Toggle_Day_Night;
 import de.longri.cachebox3.gui.actions.show_vies.Abstract_Action_ShowView;
 import de.longri.cachebox3.gui.actions.show_vies.Action_Show_AboutView;
 import de.longri.cachebox3.gui.actions.show_vies.Action_Show_Credits;
@@ -40,11 +40,7 @@ import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
-import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.LoggerFactory;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
@@ -233,14 +229,11 @@ public class ViewManager extends Stage {
         CB.windowStage.addActor(actor);
         actor.addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
 
-        TimerTask task = new TimerTask() {
+        new com.badlogic.gdx.utils.Timer().scheduleTask(new com.badlogic.gdx.utils.Timer.Task() {
             @Override
             public void run() {
                 actor.addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
             }
-        };
-
-        Timer timer = new Timer();
-        timer.schedule(task, length.value);
+        }, length.value);
     }
 }
