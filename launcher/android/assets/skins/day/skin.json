@@ -462,7 +462,7 @@
   },
   "de.longri.cachebox3.gui.views.ListView$ListViewStyle": {
     "default": {
-      "background": "list_background",
+      "background": "list_background_drawable",
       "firstItem": "listrec_first_drawable",
       "secondItem": "listrec_second_drawable",
       "selectedItem": "listrec_selected_drawable",

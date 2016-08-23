@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
@@ -24,7 +25,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 /**
  * Created by Longri on 12.08.2016.
  */
-public abstract class ListView extends com.kotcrab.vis.ui.widget.ListView<Integer> {
+public abstract class ListView extends WidgetGroup {
 
 
     //TODO use extended CachedItemListner and dispose Items that draw state to old (10 sec)
@@ -75,6 +76,8 @@ public abstract class ListView extends com.kotcrab.vis.ui.widget.ListView<Intege
     }
 
     private final ListViewStyle style;
+    private final com.kotcrab.vis.ui.widget.ListView<Integer> listView;
+    private boolean needsLayout;
 
 
     public ListView(int size) {
@@ -82,9 +85,9 @@ public abstract class ListView extends com.kotcrab.vis.ui.widget.ListView<Intege
     }
 
     public ListView(int size, ListViewStyle style) {
-        super(new IndexListAdapter(size));
+        this.listView = new com.kotcrab.vis.ui.widget.ListView<Integer>(new IndexListAdapter(size));
         this.style = style;
-        IndexListAdapter adapter = ((IndexListAdapter) this.getAdapter());
+        IndexListAdapter adapter = ((IndexListAdapter) this.listView.getAdapter());
         adapter.pad = style.pad;
         adapter.padLeft = style.padLeft > 0 ? style.padLeft : style.pad;
         adapter.padRight = style.padRight > 0 ? style.padRight : style.pad;
@@ -106,25 +109,37 @@ public abstract class ListView extends com.kotcrab.vis.ui.widget.ListView<Intege
         });
 
         this.rebuildView();
-        this.getMainTable().setBackground(style.background);
-        this.getScrollPane().setFlickScroll(true);
+        this.listView.getMainTable().setBackground(style.background);
+        this.listView.getScrollPane().setFlickScroll(true);
     }
 
-    public void rebuildView () {
-        super.rebuildView();
+    public void rebuildView() {
+        this.listView.rebuildView();
     }
 
     public abstract VisTable createView(Integer index);
 
-
-    public static class ListViewStyle {
-
-        public Drawable background, firstItem, secondItem, selectedItem;
-        public float pad, padLeft, padRight, padTop, padBottom;
-
-        public ListViewStyle() {
-        }
+    public void layout() {
+        if (!needsLayout) return;
+        this.clear();
+        this.addActor(this.listView.getMainTable());
+        this.listView.getMainTable().setBounds(0, 0, this.getWidth(), this.getHeight());
+        needsLayout = false;
     }
 
+
+    public void setBackground(Drawable background) {
+        this.listView.getMainTable().setBackground(background);
+    }
+
+    protected void sizeChanged() {
+        needsLayout = true;
+        invalidate();
+    }
+
+    public static class ListViewStyle {
+        public Drawable background, firstItem, secondItem, selectedItem;
+        public float pad, padLeft, padRight, padTop, padBottom;
+    }
 
 }

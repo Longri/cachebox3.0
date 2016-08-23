@@ -65,8 +65,8 @@ public class Menu extends Window {
 
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             // close menu if outside of listView
-            listViewRec.set(listView.getMainTable().getX(), listView.getMainTable().getY(),
-                    listView.getMainTable().getWidth(), listView.getMainTable().getHeight());
+            listViewRec.set(listView.getX(), listView.getY(),
+                    listView.getWidth(), listView.getHeight());
             if (!listViewRec.contains(x, y)) {
                 hide();
                 return true;
@@ -273,8 +273,8 @@ public class Menu extends Window {
                 return item;
             }
         };
-        listView.getMainTable().setBackground(this.style.background);
-        this.add(listView.getMainTable());
+        listView.setBackground(this.style.background);
+        this.add(listView);
     }
 
     @Override
@@ -292,7 +292,7 @@ public class Menu extends Window {
         super.pack();
 
         float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (this.getCells().get(0).getActorHeight() + CB.scaledSizes.MARGINx2);
-        listView.getMainTable().setBounds(((CB.windowStage.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
+        listView.setBounds(((CB.windowStage.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
                 CB.scaledSizes.WINDOW_WIDTH, maxListViewHeight);
 
     }

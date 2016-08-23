@@ -107,7 +107,7 @@ public class TestView extends AbstractView {
 
 
                 //icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
-                icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
+                //   icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
 
                 icm.addOnItemClickListener(new OnItemClickListener() {
                     @Override
@@ -168,10 +168,8 @@ public class TestView extends AbstractView {
         };
 
 
-        listView.getMainTable().setBounds(200, 50, 200, 400);
-
-        //    this.addActor(listView.getMainTable());
-
+        listView.setBounds(200, 50, 90, 400);
+        this.addActor(listView);
     }
 
     private Menu getMoreMenu1() {
