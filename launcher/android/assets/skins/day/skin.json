@@ -205,6 +205,10 @@
       "path": "skins/day/svg/trackListIcon.svg",
       "scale": 0.19455253
     },
+    "menu_divider": {
+      "path": "skins/day/svg/menuDivider.svg",
+      "scale": 5
+    }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
     "default": {
@@ -406,6 +410,13 @@
       "rightWidth": 5,
       "topHeight": 5,
       "bottomHeight": 5
+    },
+    "menu_divider_drawable": {
+      "name": "menu_divider",
+      "left": 20,
+      "right": 20,
+      "top": 5,
+      "bottom": 5
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
@@ -512,7 +523,8 @@
       "fontColor": "font_color",
       "stageBackground": "dialog_stage_background",
       "menu_back": "menu_back",
-      "menu_for": "menu_for"
+      "menu_for": "menu_for",
+      "divider": "menu_divider_drawable"
     }
   },
   "de.longri.cachebox3.gui.menu.MenuItem$MenuItemStyle": {

@@ -339,13 +339,21 @@ public class Menu extends Window {
     }
 
     public void addDivider() {
+
+        if(this.style.divider!=null){
+            MenuItem item = new MenuItem(this);
+            item.overrideBackground(this.style.divider);
+            addItem(item);
+        }
+
+        log.debug("add Divider");
         //TODO add divider item
     }
 
     public static class MenuStyle {
         public BitmapFont font;
         public Color fontColor;
-        public Drawable background, stageBackground, menu_back, menu_for;
+        public Drawable background, stageBackground, menu_back, menu_for, divider;
 
     }
 
