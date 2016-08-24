@@ -41,7 +41,7 @@ public enum IconNames {
     hintIcon, // CB_Action_ShowHint, QuickButtonItem, showBtnCacheContextMenu
     noteIcon, // 23 not used
     jokerPhone, // 25 CB_Action_ShowJokerView, CB_Action_ShowTestView, showBtnCacheContextMenu
-    DELETE, //
+    deleteIcon, //
     satellite, //
     closeIcon, // 31
     infoIcon, // 32

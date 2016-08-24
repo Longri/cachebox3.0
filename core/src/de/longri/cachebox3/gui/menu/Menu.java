@@ -90,6 +90,13 @@ public class Menu extends Window {
         this(name, VisUI.getSkin().get(styleName, MenuStyle.class));
     }
 
+    public MenuItem addItem(int ID, String StringId, Sprite icon) {
+        MenuItem item = addItem(ID, StringId);
+        if (icon != null)
+            item.setIcon(new SpriteDrawable(icon));
+        return item;
+    }
+
     public void addItem(MenuItem menuItem) {
         mItems.add(menuItem);
     }
@@ -230,7 +237,7 @@ public class Menu extends Window {
 
     private void initialLayout() {
 
-        //remove all childs
+        //remove all child's
         this.clear();
 
         float topY = Gdx.graphics.getHeight() - CB.scaledSizes.MARGIN_HALF;
@@ -253,7 +260,7 @@ public class Menu extends Window {
             xPos += parentTitleLabel.getWidth() + CB.scaledSizes.MARGINx2;
             this.addActor(parentTitleLabel);
         } else {
-            //center titleLable
+            //center titleLabel
             xPos = (Gdx.graphics.getWidth() - titleLabel.getWidth()) / 2;
         }
 
@@ -262,29 +269,16 @@ public class Menu extends Window {
 
         final OnItemClickListener clickListener = new OnItemClickListener() {
             @Override
-            public void onItemClick(final MenuItem item) {
+            public boolean onItemClick(final MenuItem item) {
 
                 // have the clicked item a moreMenu, just show it
                 if (item.hasMoreMenu()) {
                     item.getMoreMenu(Menu.this).show();
-                    return;
+                    return true;
                 }
-
-
-                if (onItemClickListener != null) {
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            onItemClickListener.onItemClick(item);
-                        }
-                    });
-                    thread.start();
-                }
-
-
-                //close Menu with sub menu's
+               //close Menu with sub menu's
                 hide(ALL);
-
+                return onItemClickListener.onItemClick(item);
             }
         };
 
@@ -315,7 +309,7 @@ public class Menu extends Window {
                 CB.scaledSizes.WINDOW_WIDTH, maxListViewHeight);
     }
 
-    public void addOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -332,13 +326,21 @@ public class Menu extends Window {
     }
 
     public void addDivider() {
+
+        if (this.style.divider != null) {
+            MenuItem item = new MenuItem(this);
+            item.overrideBackground(this.style.divider);
+            addItem(item);
+        }
+
+        log.debug("add Divider");
         //TODO add divider item
     }
 
     public static class MenuStyle {
         public BitmapFont font;
         public Color fontColor;
-        public Drawable background, stageBackground, menu_back, menu_for;
+        public Drawable background, stageBackground, menu_back, menu_for, divider;
 
     }
 

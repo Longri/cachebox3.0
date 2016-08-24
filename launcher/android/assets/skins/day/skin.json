@@ -168,7 +168,57 @@
     "menu_back": {
       "path": "skins/day/svg/menu_back.svg",
       "scale": 0.3
-    }
+    },
+    "sortIcon": {
+      "path": "skins/day/svg/sortIcon.svg",
+      "scale": 0.19455253
+    },
+    "filter": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "lupe": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "importIcon": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "manageDb": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "addCacheIcon": {
+      "path": "skins/day/svg/addCacheIcon.svg",
+      "scale": 0.19455253
+    },
+    "deleteIcon": {
+      "path": "skins/day/svg/deleteIcon.svg",
+      "scale": 0.19455253
+    },
+    "cacheListIcon": {
+      "path": "skins/day/svg/cacheListIcon.svg",
+      "scale": 0.19455253
+    },
+    "tbListIcon": {
+      "path": "skins/day/svg/tbListIcon.svg",
+      "scale": 0.19455253
+    },
+    "trackListIcon": {
+      "path": "skins/day/svg/trackListIcon.svg",
+      "scale": 0.19455253
+    },
+    "menu_divider": {
+      "path": "skins/day/svg/menuDivider.svg",
+      "scale": 5
+    },
+    "map": {
+      "path": "skins/day/svg/map.svg",
+      "scale": 0.19455253
+    },
+    "compass": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "navigate": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
     "default": {
@@ -370,6 +420,13 @@
       "rightWidth": 5,
       "topHeight": 5,
       "bottomHeight": 5
+    },
+    "menu_divider_drawable": {
+      "name": "menu_divider",
+      "left": 20,
+      "right": 20,
+      "top": 5,
+      "bottom": 5
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
@@ -476,7 +533,8 @@
       "fontColor": "font_color",
       "stageBackground": "dialog_stage_background",
       "menu_back": "menu_back",
-      "menu_for": "menu_for"
+      "menu_for": "menu_for",
+      "divider": "menu_divider_drawable"
     }
   },
   "de.longri.cachebox3.gui.menu.MenuItem$MenuItemStyle": {

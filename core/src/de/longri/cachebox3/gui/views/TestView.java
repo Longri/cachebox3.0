@@ -15,11 +15,8 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -35,7 +32,6 @@ import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.utils.CB_RectF;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
@@ -109,10 +105,11 @@ public class TestView extends AbstractView {
                 //icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
                 //   icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
 
-                icm.addOnItemClickListener(new OnItemClickListener() {
+                icm.setOnItemClickListener(new OnItemClickListener() {
                     @Override
-                    public void onItemClick(MenuItem item) {
+                    public boolean onItemClick(MenuItem item) {
                         log.debug(item.toString() + " clicked");
+                        return true;
                     }
                 });
 
@@ -194,10 +191,11 @@ public class TestView extends AbstractView {
         item = menu.addItem(15, "item15");
 
 
-        menu.addOnItemClickListener(new OnItemClickListener() {
+        menu.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(MenuItem item) {
+            public boolean onItemClick(MenuItem item) {
                 log.debug("item: More1/" + item.getName() + " clicked");
+                return true;
             }
         });
 
@@ -227,10 +225,11 @@ public class TestView extends AbstractView {
         item = menu.addItem(15, "item15");
 
 
-        menu.addOnItemClickListener(new OnItemClickListener() {
+        menu.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(MenuItem item) {
+            public boolean onItemClick(MenuItem item) {
                 log.debug("item: More2/" + item.getName() + " clicked");
+                return true;
             }
         });
 
