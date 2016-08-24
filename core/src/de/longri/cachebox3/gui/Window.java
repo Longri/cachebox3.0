@@ -82,7 +82,6 @@ public class Window extends Table {
         if (this instanceof Showable) {
             ((Showable) this).onShow();
         }
-
     }
 
     public void hide() {
