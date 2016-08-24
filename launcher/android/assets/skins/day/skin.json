@@ -208,7 +208,17 @@
     "menu_divider": {
       "path": "skins/day/svg/menuDivider.svg",
       "scale": 5
-    }
+    },
+    "map": {
+      "path": "skins/day/svg/map.svg",
+      "scale": 0.19455253
+    },
+    "compass": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "navigate": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
     "default": {
