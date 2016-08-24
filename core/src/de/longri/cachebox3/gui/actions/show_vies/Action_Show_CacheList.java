@@ -15,11 +15,10 @@
  */
 package de.longri.cachebox3.gui.actions.show_vies;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings;
 import de.longri.cachebox3.gui.activities.EditCache;
-import de.longri.cachebox3.gui.activities.EditFilterSettings;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -28,9 +27,6 @@ import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.CacheListView;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.IconNames;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by Longri on 24.07.16.
@@ -50,6 +46,10 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
         CacheListView view = new CacheListView();
         CB.viewmanager.showView(view);
 
+    }
+
+    public Sprite getIcon() {
+        return CB.getSprite(IconNames.cacheListIcon.name());
     }
 
     @Override
@@ -152,7 +152,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
                         return;
 
                     case MenuID.AID_SHOW_DELETE_DIALOG:
-                        CB.viewmanager.toast("DELETE NOT IMPLEMENTED NOW");
+                        CB.viewmanager.toast("deleteIcon NOT IMPLEMENTED NOW");
                         //   TabMainView.actionDelCaches.Execute();
                         return;
                 }
@@ -184,7 +184,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
         //    mi.setChecked(GlobalCore.getAutoResort());
         cm.addItem(MenuID.MI_CHK_STATE_API, "chkState", CB.getSprite(IconNames.gc_liveIcon.name()));
         cm.addItem(MenuID.MI_NEW_CACHE, "MI_NEW_CACHE", CB.getSprite(IconNames.addCacheIcon.name()));
-        cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSprite(IconNames.DELETE.name()));
+        cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSprite(IconNames.deleteIcon.name()));
 
         return cm;
     }

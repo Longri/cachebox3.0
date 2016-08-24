@@ -181,6 +181,7 @@ public class MenuItem extends VisTable {
         if (icon.getMinWidth() > CB.scaledSizes.ICON_HEIGHT) {
             // set scaled icon size!
             imageScaleValue = Math.min(CB.scaledSizes.ICON_WIDTH / icon.getMinWidth(), CB.scaledSizes.ICON_HEIGHT / icon.getMinHeight());
+            log.debug("Menu Icon size not otimal for item: " + this.getName() + "! Maby use scalefactor = " + imageScaleValue);
         } else {
             imageScaleValue = 1f;
         }

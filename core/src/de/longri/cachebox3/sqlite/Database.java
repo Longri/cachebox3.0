@@ -731,9 +731,9 @@ public class Database {
                     // now delete all Logs out of Date but keep the ones in minLogIds
                     String delCommand;
                     if (sb.length() > 0)
-                        delCommand = "DELETE FROM Logs WHERE Timestamp<'" + TimeStamp + "' AND cacheid = " + String.valueOf(oldLogCache) + " AND id NOT IN (" + sb.toString().substring(0, sb.length() - 1) + ")";
+                        delCommand = "deleteIcon FROM Logs WHERE Timestamp<'" + TimeStamp + "' AND cacheid = " + String.valueOf(oldLogCache) + " AND id NOT IN (" + sb.toString().substring(0, sb.length() - 1) + ")";
                     else
-                        delCommand = "DELETE FROM Logs WHERE Timestamp<'" + TimeStamp + "' AND cacheid = " + String.valueOf(oldLogCache);
+                        delCommand = "deleteIcon FROM Logs WHERE Timestamp<'" + TimeStamp + "' AND cacheid = " + String.valueOf(oldLogCache);
                     log.debug(delCommand);
                     Database.Data.execSQL(delCommand);
                 }

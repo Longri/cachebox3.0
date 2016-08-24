@@ -168,7 +168,43 @@
     "menu_back": {
       "path": "skins/day/svg/menu_back.svg",
       "scale": 0.3
-    }
+    },
+    "sortIcon": {
+      "path": "skins/day/svg/sortIcon.svg",
+      "scale": 0.19455253
+    },
+    "filter": {
+      "path": "skins/day/svg/infoIcon.svg"
+    },
+    "lupe": {
+      "path": "skins/day/svg/infoIcon.svg"
+    },
+    "importIcon": {
+      "path": "skins/day/svg/infoIcon.svg"
+    },
+    "manageDb": {
+      "path": "skins/day/svg/infoIcon.svg"
+    },
+    "addCacheIcon": {
+      "path": "skins/day/svg/addCacheIcon.svg",
+      "scale": 0.19455253
+    },
+    "deleteIcon": {
+      "path": "skins/day/svg/deleteIcon.svg",
+      "scale": 0.19455253
+    },
+    "cacheListIcon": {
+      "path": "skins/day/svg/cacheListIcon.svg",
+      "scale": 0.19455253
+    },
+    "tbListIcon": {
+      "path": "skins/day/svg/tbListIcon.svg",
+      "scale": 0.19455253
+    },
+    "trackListIcon": {
+      "path": "skins/day/svg/trackListIcon.svg",
+      "scale": 0.19455253
+    },
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
     "default": {
