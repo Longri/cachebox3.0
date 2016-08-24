@@ -66,6 +66,6 @@ public class ActivityBase extends Window implements Disposable, Showable {
     }
 
     public static class ActivityBaseStyle {
-        Drawable background;
+        public Drawable background;
     }
 }
