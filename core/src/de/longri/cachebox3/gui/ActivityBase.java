@@ -15,7 +15,10 @@
  */
 package de.longri.cachebox3.gui;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
+import com.kotcrab.vis.ui.VisUI;
 
 /**
  * A wrapper class to bring the CB2 Activities to CB3
@@ -24,14 +27,21 @@ import com.badlogic.gdx.utils.Disposable;
 public class ActivityBase extends Window implements Disposable {
 
     public final String name;
+    protected final ActivityBaseStyle style;
 
     public ActivityBase(String name) {
+        this(name, VisUI.getSkin().get("default", ActivityBaseStyle.class));
+    }
+
+    public ActivityBase(String name, ActivityBaseStyle style) {
         this.name = name;
+        this.style = style;
+        this.setStageBackground(style.background);
     }
 
 
-    protected void finish() {
-
+    public void finish() {
+        super.hide();
     }
 
     public void onShow() {
@@ -43,11 +53,18 @@ public class ActivityBase extends Window implements Disposable {
     }
 
     public void show() {
+        super.show();
 
+        //set to full screen
+        this.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override
     public void dispose() {
 
+    }
+
+    public static class ActivityBaseStyle {
+        Drawable background;
     }
 }

@@ -219,6 +219,9 @@
     "navigate": {
       "path": "skins/day/svg/missingIcon.svg"
     },
+    "activityBack": {
+      "path": "skins/day/svg/activityBack.svg"
+    },
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
     "default": {
@@ -427,6 +430,17 @@
       "right": 20,
       "top": 5,
       "bottom": 5
+    },
+    "activityBack_drawable": {
+      "name": "activityBack",
+      "left": 11,
+      "right": 11,
+      "top": 11,
+      "bottom": 11,
+      "leftWidth": 6,
+      "rightWidth": 6,
+      "topHeight": 6,
+      "bottomHeight": 6
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
@@ -561,6 +575,11 @@
       "borderSize": 3,
       "arrowDrawable": "arrow_help",
       "arrowDrawable90": "arrow_help_90"
+    }
+  },
+  "de.longri.cachebox3.gui.ActivityBase$ActivityBaseStyle": {
+    "default": {
+      "background": "activityBack_drawable"
     }
   }
 }
