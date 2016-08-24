@@ -96,7 +96,7 @@ public class ViewManager extends Stage {
         if (actView != null) {
             log.debug("remove and dispose actView" + actView.getName());
             this.getRoot().removeActor(actView);
-            actView.saveState();
+            actView.onHide();
             actView.dispose();
         }
 
@@ -104,7 +104,7 @@ public class ViewManager extends Stage {
         this.addActor(view);
         setActViewBounds();
         log.debug("reload view state:" + view.getName());
-        this.actView.reloadState();
+        this.actView.onShow();
 
         //select main button
         boolean buttonFound = false;

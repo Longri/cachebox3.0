@@ -24,15 +24,6 @@ public class CompassView extends AbstractView {
         super("CompassView");
     }
 
-    @Override
-    public void reloadState() {
-
-    }
-
-    @Override
-    public void saveState() {
-
-    }
 
     @Override
     public void dispose() {

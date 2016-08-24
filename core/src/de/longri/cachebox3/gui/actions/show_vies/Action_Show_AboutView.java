@@ -37,11 +37,8 @@ public class Action_Show_AboutView extends Abstract_Action_ShowView {
     @Override
     protected void Execute() {
         if (isActVisible()) return;
-
         AboutView view = new AboutView();
         CB.viewmanager.showView(view);
-
-        view.reloadState();
     }
 
     @Override

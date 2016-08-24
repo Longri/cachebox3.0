@@ -17,14 +17,16 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.utils.CB_RectF;
+import de.longri.cachebox3.utils.Showable;
 import de.longri.cachebox3.utils.SizeF;
 
 /**
  * Created by Longri on 05.08.16.
  */
-public abstract class CB_View_Base extends WidgetGroup {
+public abstract class CB_View_Base extends WidgetGroup implements Disposable, Showable {
 
     public final String NAME;
 
@@ -42,7 +44,7 @@ public abstract class CB_View_Base extends WidgetGroup {
         this.setBounds(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight());
     }
 
-    public CB_View_Base(SizeF size, String name){
+    public CB_View_Base(SizeF size, String name) {
         this.NAME = name;
         this.setBounds(0, 0, size.width, size.height);
     }
@@ -60,9 +62,6 @@ public abstract class CB_View_Base extends WidgetGroup {
     public void setRec(CB_RectF rec) {
         this.setBounds(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight());
     }
-
-
-    //TODO catch onShow and onHide and call
 
     public void onShow() {
         SnapshotArray<Actor> childs = this.getChildren();

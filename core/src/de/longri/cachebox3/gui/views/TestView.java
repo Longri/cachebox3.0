@@ -240,22 +240,12 @@ public class TestView extends AbstractView {
 
 
     @Override
-    public void reloadState() {
-
-
+    public void onShow() {
         StringBuilder sb = new StringBuilder();
-
         sb.append("LaunchCount:" + Config.AppRaterlaunchCount.getValue());
-
         nameLabel.setText(sb.toString());
-
-
     }
 
-    @Override
-    public void saveState() {
-
-    }
 
     @Override
     public void dispose() {

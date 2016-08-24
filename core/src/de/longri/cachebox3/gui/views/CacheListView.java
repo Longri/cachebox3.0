@@ -11,15 +11,6 @@ public class CacheListView extends AbstractView {
         super("CacheListView");
     }
 
-    @Override
-    public void reloadState() {
-
-    }
-
-    @Override
-    public void saveState() {
-
-    }
 
     @Override
     public void dispose() {

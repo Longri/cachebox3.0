@@ -24,15 +24,6 @@ public class MapView extends AbstractView {
         super("MapView");
     }
 
-    @Override
-    public void reloadState() {
-
-    }
-
-    @Override
-    public void saveState() {
-
-    }
 
     @Override
     public void dispose() {
