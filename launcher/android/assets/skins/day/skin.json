@@ -174,16 +174,16 @@
       "scale": 0.19455253
     },
     "filter": {
-      "path": "skins/day/svg/infoIcon.svg"
+      "path": "skins/day/svg/missingIcon.svg"
     },
     "lupe": {
-      "path": "skins/day/svg/infoIcon.svg"
+      "path": "skins/day/svg/missingIcon.svg"
     },
     "importIcon": {
-      "path": "skins/day/svg/infoIcon.svg"
+      "path": "skins/day/svg/missingIcon.svg"
     },
     "manageDb": {
-      "path": "skins/day/svg/infoIcon.svg"
+      "path": "skins/day/svg/missingIcon.svg"
     },
     "addCacheIcon": {
       "path": "skins/day/svg/addCacheIcon.svg",
