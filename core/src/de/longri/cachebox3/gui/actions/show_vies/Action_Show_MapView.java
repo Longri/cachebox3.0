@@ -56,7 +56,7 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof TrackListView;
+        return CB.viewmanager.getActView() instanceof MapView;
     }
 
     @Override

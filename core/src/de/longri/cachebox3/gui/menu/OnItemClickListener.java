@@ -20,6 +20,6 @@ package de.longri.cachebox3.gui.menu;
  */
 public interface OnItemClickListener {
 
-    public void onItemClick(MenuItem item);
+    public boolean onItemClick(MenuItem item);
 
 }

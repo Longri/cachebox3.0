@@ -67,23 +67,23 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 
         final CacheListView cacheListView = (CacheListView) CB.viewmanager.getActView();
 
-        cm.addOnItemClickListener(new OnItemClickListener() {
+        cm.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
-            public void onItemClick(MenuItem item) {
+            public boolean onItemClick(MenuItem item) {
                 EditCache editCache = null;
                 switch (item.getMenuItemId()) {
                     case MenuID.MI_RESORT:
                         cacheListView.resort();
-                        return;
+                        return true;
                     case MenuID.MI_FilterSet:
                         new Action_ShowFilterSettings().Execute();
-                        return;
+                        return true;
                     case MenuID.MI_RESET_FILTER:
                         CB.viewmanager.toast("RESET FILTER NOT IMPLEMENTED NOW");
 //                        FilterInstances.setLastFilter(new FilterProperties());
 //                        EditFilterSettings.ApplyFilter(FilterInstances.getLastFilter());
-                        return;
+                        return true;
                     case MenuID.MI_SEARCH_LIST:
                         CB.viewmanager.toast("Search NOT IMPLEMENTED NOW");
 //                        if (SearchDialog.that == null) {
@@ -92,20 +92,20 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 //
 //                        SearchDialog.that.showNotCloseAutomaticly();
 
-                        return;
+                        return true;
                     case MenuID.MI_IMPORT:
                         CB.viewmanager.toast("Show Import NOT IMPLEMENTED NOW");
                         // TabMainView.actionShowImportMenu.CallExecute();
-                        return;
+                        return true;
                     case MenuID.MI_SYNC:
                         CB.viewmanager.toast("Sync NOT IMPLEMENTED NOW");
 //                        SyncActivity sync = new SyncActivity();
 //                        sync.show();
-                        return;
+                        return true;
                     case MenuID.MI_MANAGE_DB:
                         CB.viewmanager.toast("Manage DB NOT IMPLEMENTED NOW");
                         //  TabMainView.actionShowSelectDbDialog.Execute();
-                        return;
+                        return true;
                     case MenuID.MI_AUTO_RESORT:
                         CB.viewmanager.toast("Toggle Autoresort NOT IMPLEMENTED NOW");
 
@@ -115,7 +115,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 //                                Database.Data.Query.Resort(GlobalCore.getSelectedCoord(), new CacheWithWP(GlobalCore.getSelectedCache(), GlobalCore.getSelectedWaypoint()));
 //                            }
 //                        }
-                        return;
+                        return true;
                     case MenuID.MI_CHK_STATE_API:
 
                         CB.viewmanager.toast("Check state NOT IMPLEMENTED NOW");
@@ -143,19 +143,20 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 //                            }
 //                        });
 
-                        return;
+                        return true;
 
                     case MenuID.MI_NEW_CACHE:
                         if (editCache == null)
                             editCache = new EditCache("editCache");
                         editCache.create();
-                        return;
+                        return true;
 
                     case MenuID.AID_SHOW_DELETE_DIALOG:
                         CB.viewmanager.toast("deleteIcon NOT IMPLEMENTED NOW");
                         //   TabMainView.actionDelCaches.Execute();
-                        return;
+                        return true;
                 }
+                return false;
             }
 
         });
