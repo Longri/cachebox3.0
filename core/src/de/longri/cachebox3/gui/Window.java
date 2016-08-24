@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.utils.Showable;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
@@ -78,6 +79,10 @@ public class Window extends Table {
         CB.inputMultiplexer.removeProcessor(CB.mainStage);
         CB.inputMultiplexer.addProcessor(CB.windowStage);
 
+        if (this instanceof Showable) {
+            ((Showable) this).onShow();
+        }
+
     }
 
     public void hide() {
@@ -98,6 +103,10 @@ public class Window extends Table {
 
         if (this.windowCloseListener != null) {
             this.windowCloseListener.windowClosed();
+        }
+
+        if (this instanceof Showable) {
+            ((Showable) this).onHide();
         }
     }
 

@@ -164,7 +164,7 @@ public class ViewManager extends Stage {
 //
         misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, GestureDirection.Up));
         misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));
-        misc_button.addAction(new ActionButton(new Action_Show_Settings(), false, GestureDirection.Left));
+        misc_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_activities.Action_Show_Settings(), false, GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Help(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Quit(), false, GestureDirection.Down));

@@ -19,12 +19,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.utils.Showable;
 
 /**
  * A wrapper class to bring the CB2 Activities to CB3
  * Created by Longri on 23.08.2016.
  */
-public class ActivityBase extends Window implements Disposable {
+public class ActivityBase extends Window implements Disposable, Showable {
 
     public final String name;
     protected final ActivityBaseStyle style;
