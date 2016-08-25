@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
@@ -151,8 +152,8 @@ public class Settings_Activity extends ActivityBase {
 
     }
 
-    private Array<ListView> listViews = new Array<ListView>();
-    private int listLevel = 0;
+    private Array<WidgetGroup> listViews = new Array<WidgetGroup>();
+    private Array<String> listViewsNames = new Array<String>();
 
     private void fillContent() {
 
@@ -170,25 +171,81 @@ public class Settings_Activity extends ActivityBase {
                 final SettingCategory category = settingCategories.get(index);
                 return getCategoryItem(category);
             }
-        });
+        }, Translation.Get("setting"));
     }
 
-    private void showListView(ListView listView) {
+    private void showListView(ListView listView, String name) {
 
         float y = btnOk.getY() + btnOk.getHeight() + CB.scaledSizes.MARGIN;
-        listView.setBounds(CB.scaledSizes.MARGIN, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGIN));
+
+
+        WidgetGroup widgetGroup = new WidgetGroup();
+        widgetGroup.setBounds(CB.scaledSizes.MARGIN, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGIN));
+
+        // title
+        float topY = widgetGroup.getHeight() - CB.scaledSizes.MARGIN_HALF;
+        float xPos = 0;
+
+        ClickListener backClickListener = new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                backClick();
+            }
+        };
+
+        // add the titleLabel on top
+        if (style.backIcon != null && listViewsNames.size > 0) {
+            Image backImage = new Image(style.backIcon);
+            backImage.setPosition(xPos, topY - backImage.getHeight());
+            xPos += backImage.getWidth() + CB.scaledSizes.MARGIN;
+            backImage.addListener(backClickListener);
+            widgetGroup.addActor(backImage);
+        }
+
+        VisLabel titleLabel = new VisLabel(name, "menu_title_act");
+
+        if (listViewsNames.size > 0) {
+            VisLabel parentTitleLabel = new VisLabel(listViewsNames.get(listViewsNames.size - 1), "menu_title_parent");
+            parentTitleLabel.setPosition(xPos, topY - parentTitleLabel.getHeight());
+            xPos += parentTitleLabel.getWidth() + CB.scaledSizes.MARGINx2;
+            parentTitleLabel.addListener(backClickListener);
+            widgetGroup.addActor(parentTitleLabel);
+        } else {
+            //center titleLabel
+            xPos = (Gdx.graphics.getWidth() - titleLabel.getWidth()) / 2;
+        }
+
+        titleLabel.setPosition(xPos, topY - titleLabel.getHeight());
+        widgetGroup.addActor(titleLabel);
+
+
+        listView.setBounds(0, 0, widgetGroup.getWidth(), titleLabel.getY() - CB.scaledSizes.MARGIN);
         listView.layout();
+        listView.setBackground(null); // remove default background
+        widgetGroup.addActor(listView);
+
 
         if (listViews.size > 0) {
             // animate
             float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
             listViews.get(listViews.size - 1).addAction(Actions.moveTo(0 - nextXPos, y, Menu.MORE_MENU_ANIMATION_TIME));
-            listView.setPosition(nextXPos, y);
-            listView.addAction(Actions.moveTo(CB.scaledSizes.MARGIN, y, Menu.MORE_MENU_ANIMATION_TIME));
+            widgetGroup.setPosition(nextXPos, y);
+            widgetGroup.addAction(Actions.moveTo(CB.scaledSizes.MARGIN, y, Menu.MORE_MENU_ANIMATION_TIME));
         }
-        listViews.add(listView);
-        listView.setBackground(null); // remove default background
-        this.addActor(listView);
+        listViews.add(widgetGroup);
+        listViewsNames.add(name);
+        this.addActor(widgetGroup);
+    }
+
+    private void backClick() {
+        float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
+
+        listViewsNames.pop();
+        WidgetGroup actWidgetGroup = listViews.pop();
+        WidgetGroup showingWidgetGroup = listViews.get(listViews.size - 1);
+
+        float y = actWidgetGroup.getY();
+        actWidgetGroup.addAction(Actions.sequence(Actions.moveTo(nextXPos, y, Menu.MORE_MENU_ANIMATION_TIME), Actions.removeActor()));
+        showingWidgetGroup.addAction(Actions.moveTo(CB.scaledSizes.MARGIN, y, Menu.MORE_MENU_ANIMATION_TIME));
     }
 
 
@@ -261,7 +318,7 @@ public class Settings_Activity extends ActivityBase {
                 final SettingBase<?> setting = categorySettingsList.get(index);
                 return getSettingItem(setting);
             }
-        });
+        }, category.name());
     }
 
     private VisTable getSettingItem(SettingBase<?> setting) {
@@ -386,6 +443,7 @@ public class Settings_Activity extends ActivityBase {
 
     public static class SettingsActivityStyle extends ActivityBaseStyle {
         public Drawable nextIcon;
+        public Drawable backIcon;
     }
 
 

@@ -585,7 +585,8 @@
   "de.longri.cachebox3.gui.activities.Settings_Activity$SettingsActivityStyle": {
     "default": {
       "background": "activityBack_drawable",
-      "nextIcon": "menu_for"
+      "nextIcon": "menu_for",
+      "backIcon": "menu_back"
     }
   }
 }
