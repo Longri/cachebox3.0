@@ -34,6 +34,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.views.ListView;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CB_RectF;
@@ -66,7 +67,7 @@ public class Menu extends Window {
             backClickReckArea.set(Menu.this.mainMenuWidgetGroup.getX(), Menu.this.titleLabel.getY(),
                     Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - Menu.this.titleLabel.getY());
             if (backClickReckArea.contains(x, y)) {
-                hide(ALL);
+                hide(false);
                 return true;
             }
             return false;
@@ -170,7 +171,6 @@ public class Menu extends Window {
             showAsChild();
         }
         this.setTouchable(Touchable.enabled);
-        CB.windowStage.addListener(clickListener);
         log.debug("Show menu: " + this.name);
     }
 
@@ -184,16 +184,15 @@ public class Menu extends Window {
         mainMenuWidgetGroup = new WidgetGroup();
         mainMenuWidgetGroup.setBounds(this.getX(), this.getY(), this.getWidth(), this.getHeight());
         mainMenuWidgetGroup.addActor(this);
-        CB.windowStage.addActor(mainMenuWidgetGroup);
-        CB.windowStage.setKeyboardFocus(this);
-        CB.windowStage.setScrollFocus(this);
+
+        if (this.parentMenu == null){
+            StageManager.showOnNewStage(mainMenuWidgetGroup);
+        }else{
+            StageManager.showOnActStage(mainMenuWidgetGroup);
+        }
+        mainMenuWidgetGroup.addListener(clickListener);
         if (this.parentMenu == null)
             addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
-
-        //switch input processor to window stage
-        CB.inputMultiplexer.removeProcessor(CB.mainStage);
-        CB.inputMultiplexer.addProcessor(CB.windowStage);
-
     }
 
 
@@ -217,10 +216,8 @@ public class Menu extends Window {
 
     public void hide(boolean all) {
         if (this.parentMenu != null) {
-
             if (all) {
-                super.hide();
-                parentMenu.hide(ALL);
+                StageManager.removeAllWithActStage();
             } else {
                 float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
                 mainMenuWidgetGroup.addAction(Actions.sequence(Actions.moveTo(0 + nextXPos, 0, MORE_MENU_ANIMATION_TIME), Actions.removeActor()));
@@ -230,7 +227,7 @@ public class Menu extends Window {
             super.hide();
         }
 
-        CB.windowStage.removeListener(clickListener);
+        mainMenuWidgetGroup.removeListener(clickListener);
         log.debug("Hide menu: " + this.name);
     }
 
@@ -276,7 +273,7 @@ public class Menu extends Window {
                     item.getMoreMenu(Menu.this).show();
                     return true;
                 }
-               //close Menu with sub menu's
+                //close Menu with sub menu's
                 hide(ALL);
                 return onItemClickListener.onItemClick(item);
             }
@@ -305,7 +302,7 @@ public class Menu extends Window {
         super.pack();
 
         float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (listView.getHeight() + CB.scaledSizes.MARGINx2);
-        listView.setBounds(((CB.windowStage.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
+        listView.setBounds(((Gdx.graphics.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
                 CB.scaledSizes.WINDOW_WIDTH, maxListViewHeight);
     }
 

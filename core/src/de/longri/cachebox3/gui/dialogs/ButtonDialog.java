@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.dialogs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -141,8 +142,8 @@ public class ButtonDialog extends Window {
     @Override
     public void pack() {
         super.pack();
-        setPosition(((CB.windowStage.getWidth() - getWidth()) / 2f),
-                ((CB.windowStage.getHeight() - getHeight()) / 2));
+        setPosition(((Gdx.graphics.getWidth() - getWidth()) / 2f),
+                ((Gdx.graphics.getHeight() - getHeight()) / 2));
     }
 
     private static Sprite getIcon(MessageBoxIcon msgIcon) {
