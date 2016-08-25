@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
@@ -420,20 +421,24 @@ public class Settings_Activity extends ActivityBase {
         table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
         // add check icon
-        Image checkImage;
+        final Image[] checkImage = new Image[1];
         if (setting.getValue()) {
-            checkImage = new Image(CB.getSprite("check_on"));
+            checkImage[0] = new Image(CB.getSprite("check_on"));
         } else {
-            checkImage = new Image(CB.getSprite("check_off"));
+            checkImage[0] = new Image(CB.getSprite("check_off"));
         }
-        table.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+        table.add(checkImage[0]).width(checkImage[0].getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
         // add clicklistener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (event.getType() == InputEvent.Type.touchUp) {
                     setting.setValue(!setting.getValue());
-                    resortList();
+                    if (setting.getValue()) {
+                        checkImage[0].setDrawable(new SpriteDrawable(CB.getSprite("check_on")));
+                    } else {
+                        checkImage[0].setDrawable(new SpriteDrawable(CB.getSprite("check_off")));
+                    }
                 }
             }
         });
