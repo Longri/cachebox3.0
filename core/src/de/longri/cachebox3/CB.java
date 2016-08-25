@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.utils.ScaledSizes;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,6 @@ public class CB {
 
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
     public static final float WINDOW_FADE_TIME = 0.3f;
-    public static Stage windowStage,mainStage;
 
     static {
 
@@ -57,6 +57,9 @@ public class CB {
         LibgdxLoggerFactory.EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
         //   LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
+
+
+        LibgdxLoggerFactory.INCLUDE_LIST.add(StageManager.class.getName());
 
         ((LibgdxLoggerFactory) LoggerFactory.getILoggerFactory()).reset();
     }
@@ -112,8 +115,6 @@ public class CB {
         return actSkin;
     }
 
-
-    public static InputMultiplexer inputMultiplexer;
 
     private static float scalefactor = 0;
 

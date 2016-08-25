@@ -222,7 +222,7 @@ public class ViewManager extends Stage {
     }
 
     public void toast(final Actor actor, ToastLength length) {
-        CB.windowStage.addActor(actor);
+        StageManager.addToastActor(actor);
         actor.addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
 
         new com.badlogic.gdx.utils.Timer().scheduleTask(new com.badlogic.gdx.utils.Timer.Task() {
