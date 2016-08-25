@@ -12,10 +12,10 @@ public class Settings {
         new SettingsList();
     }
 
-    public static final SettingModus DEVELOPER = SettingModus.DEVELOPER;
-    public static final SettingModus NORMAL = SettingModus.Normal;
-    public static final SettingModus EXPERT = SettingModus.Expert;
-    public static final SettingModus NEVER = SettingModus.Never;
+    public static final SettingMode DEVELOPER = SettingMode.DEVELOPER;
+    public static final SettingMode NORMAL = SettingMode.Normal;
+    public static final SettingMode EXPERT = SettingMode.Expert;
+    public static final SettingMode NEVER = SettingMode.Never;
 
     public static final Integer Level[] = new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
     public static final Integer CrossLevel[] = new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};

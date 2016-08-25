@@ -2,6 +2,7 @@ package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -18,8 +19,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.views.ListView;
-import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.settings.SettingCategory;
+import de.longri.cachebox3.settings.*;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.LoggerFactory;
 
@@ -164,48 +164,223 @@ public class Settings_Activity extends ActivityBase {
                 settingCategories.add(item);
             }
         }
-        ListView categorieListView = new ListView(settingCategories.size) {
+        showListView(new ListView(settingCategories.size) {
             @Override
             public VisTable createView(Integer index) {
-                VisTable table = new VisTable();
-
                 final SettingCategory category = settingCategories.get(index);
-
-                // add label with category name, align left
-                table.left();
-                VisLabel label = new VisLabel(category.name());
-                label.setAlignment(Align.left);
-                table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-
-                // add next icon
-                Image next = new Image(style.nextIcon);
-                table.add(next).width(next.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
-
-                // add clicklistener
-                table.addListener(new ClickListener() {
-                    public void clicked(InputEvent event, float x, float y) {
-                        if (event.getType() == InputEvent.Type.touchUp) {
-                            showCategory(category);
-                        }
-                    }
-                });
-
-
-                return table;
+                return getCategoryItem(category);
             }
-        };
+        });
+    }
 
-        listViews.add(categorieListView);
+    private void showListView(ListView listView) {
 
         float y = btnOk.getY() + btnOk.getHeight() + CB.scaledSizes.MARGIN;
-        categorieListView.setBounds(CB.scaledSizes.MARGIN, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGIN));
-        categorieListView.setBackground(null); // remove default background
-        categorieListView.layout();
-        this.addActor(categorieListView);
+        listView.setBounds(CB.scaledSizes.MARGIN, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGIN));
+        listView.layout();
+
+        if (listViews.size > 0) {
+            // animate
+            float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
+            listViews.get(listViews.size - 1).addAction(Actions.moveTo(0 - nextXPos, y, Menu.MORE_MENU_ANIMATION_TIME));
+            listView.setPosition(nextXPos, y);
+            listView.addAction(Actions.moveTo(CB.scaledSizes.MARGIN, y, Menu.MORE_MENU_ANIMATION_TIME));
+        }
+        listViews.add(listView);
+        listView.setBackground(null); // remove default background
+        this.addActor(listView);
+    }
+
+
+    private VisTable getCategoryItem(final SettingCategory category) {
+        VisTable table = new VisTable();
+
+        // add label with category name, align left
+        table.left();
+        VisLabel label = new VisLabel(category.name());
+        label.setAlignment(Align.left);
+        table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        // add next icon
+        Image next = new Image(style.nextIcon);
+        table.add(next).width(next.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+
+        // add clicklistener
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.getType() == InputEvent.Type.touchUp) {
+                    showCategory(category);
+                }
+            }
+        });
+        return table;
     }
 
     private void showCategory(SettingCategory category) {
         log.debug("Show settings categoriy: " + category.name());
+
+
+        //get all settings items of this category if the category mode correct
+
+        final Array<SettingBase<?>> categorySettingsList = new Array<SettingBase<?>>();
+
+        boolean expert = Config.SettingsShowAll.getValue() || Config.SettingsShowExpert.getValue();
+        boolean developer = Config.SettingsShowAll.getValue();
+
+        for (SettingBase<?> setting : SettingsList.that) {
+            if (setting.getCategory() == category) {
+                boolean show = false;
+
+                switch (setting.getMode()) {
+
+                    case DEVELOPER:
+                        show = developer;
+                        break;
+                    case Normal:
+                        show = true;
+                        break;
+                    case Expert:
+                        show = expert;
+                        break;
+                    case Never:
+                        show = developer;
+                        break;
+                }
+
+                if (show) {
+                    categorySettingsList.add(setting);
+                    log.debug("    with setting for: " + setting.getName());
+                }
+            }
+        }
+
+        // show new ListView for this category
+        showListView(new ListView(categorySettingsList.size) {
+            @Override
+            public VisTable createView(Integer index) {
+                final SettingBase<?> setting = categorySettingsList.get(index);
+                return getSettingItem(setting);
+            }
+        });
+    }
+
+    private VisTable getSettingItem(SettingBase<?> setting) {
+        if (setting instanceof SettingBool) {
+            return getBoolView((SettingBool) setting);
+        } else if (setting instanceof SettingIntArray) {
+            return getIntArrayView((SettingIntArray) setting);
+        } else if (setting instanceof SettingStringArray) {
+            return getStringArrayView((SettingStringArray) setting);
+        } else if (setting instanceof SettingTime) {
+            return getTimeView((SettingTime) setting);
+        } else if (setting instanceof SettingInt) {
+            return getIntView((SettingInt) setting);
+        } else if (setting instanceof SettingDouble) {
+            return getDblView((SettingDouble) setting);
+        } else if (setting instanceof SettingFloat) {
+            return getFloatView((SettingFloat) setting);
+        } else if (setting instanceof SettingFolder) {
+            return getFolderView((SettingFolder) setting);
+        } else if (setting instanceof SettingFile) {
+            return getFileView((SettingFile) setting);
+        } else if (setting instanceof SettingEnum) {
+            return getEnumView((SettingEnum<?>) setting);
+        } else if (setting instanceof SettingString) {
+            return getStringView((SettingString) setting);
+//        } else if (setting instanceof SettingsListCategoryButton) {
+//            return getButtonView((SettingsListCategoryButton<?>) setting);
+//        } else if (setting instanceof SettingsListGetApiButton) {
+//            return getApiKeyButtonView((SettingsListGetApiButton<?>) setting);
+//        } else if (setting instanceof SettingsListButtonLangSpinner) {
+//            return getLangSpinnerView((SettingsListButtonLangSpinner<?>) setting);
+//        } else if (setting instanceof SettingsListButtonSkinSpinner) {
+//            return getSkinSpinnerView((SettingsListButtonSkinSpinner<?>) setting);
+        } else if (setting instanceof SettingsAudio) {
+            return getAudioView((SettingsAudio) setting);
+        } else if (setting instanceof SettingColor) {
+            return getColorView((SettingColor) setting);
+        }
+
+        return null;
+    }
+
+    private VisTable getColorView(SettingColor setting) {
+        return null;
+    }
+
+    private VisTable getAudioView(SettingsAudio setting) {
+        return null;
+    }
+
+    private VisTable getStringView(SettingString setting) {
+        return null;
+    }
+
+    private VisTable getEnumView(SettingEnum<?> setting) {
+        return null;
+    }
+
+    private VisTable getFileView(SettingFile setting) {
+        return null;
+    }
+
+    private VisTable getFolderView(SettingFolder setting) {
+        return null;
+    }
+
+    private VisTable getFloatView(SettingFloat setting) {
+        return null;
+    }
+
+    private VisTable getDblView(SettingDouble setting) {
+        return null;
+    }
+
+    private VisTable getIntView(SettingInt setting) {
+        return null;
+    }
+
+    private VisTable getTimeView(SettingTime setting) {
+        return null;
+    }
+
+    private VisTable getStringArrayView(SettingStringArray setting) {
+        return null;
+    }
+
+    private VisTable getIntArrayView(SettingIntArray setting) {
+        return null;
+    }
+
+    private VisTable getBoolView(final SettingBool setting) {
+        VisTable table = new VisTable();
+
+        // add label with category name, align left
+        table.left();
+        VisLabel label = new VisLabel(Translation.Get(setting.getName()));
+        label.setWrap(true);
+        label.setAlignment(Align.left);
+        table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        // add check icon
+        Image checkImage;
+        if (setting.getValue()) {
+            checkImage = new Image(CB.getSprite("check_on"));
+        } else {
+            checkImage = new Image(CB.getSprite("check_off"));
+        }
+        table.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+
+        // add clicklistener
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.getType() == InputEvent.Type.touchUp) {
+                    setting.setValue(!setting.getValue());
+                    resortList();
+                }
+            }
+        });
+        return table;
     }
 
 

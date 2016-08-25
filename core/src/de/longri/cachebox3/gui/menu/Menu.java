@@ -49,6 +49,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 public class Menu extends Window {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(Menu.class);
     final static boolean ALL = true;
+    public final static float MORE_MENU_ANIMATION_TIME = 0.3f;
 
     CB_List<MenuItem> mItems = new CB_List();
     MenuStyle style;
@@ -185,9 +186,9 @@ public class Menu extends Window {
         mainMenuWidgetGroup.setBounds(this.getX(), this.getY(), this.getWidth(), this.getHeight());
         mainMenuWidgetGroup.addActor(this);
 
-        if (this.parentMenu == null){
+        if (this.parentMenu == null) {
             StageManager.showOnNewStage(mainMenuWidgetGroup);
-        }else{
+        } else {
             StageManager.showOnActStage(mainMenuWidgetGroup);
         }
         mainMenuWidgetGroup.addListener(clickListener);
@@ -195,8 +196,6 @@ public class Menu extends Window {
             addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
     }
 
-
-    private final float MORE_MENU_ANIMATION_TIME = 0.3f;
 
     private void showAsChild() {
         float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;

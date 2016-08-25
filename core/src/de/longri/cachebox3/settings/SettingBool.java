@@ -17,7 +17,7 @@ package de.longri.cachebox3.settings;
 
 public class SettingBool extends SettingBase<Boolean> {
 
-	public SettingBool(String name, SettingCategory category, SettingModus modus, boolean defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+	public SettingBool(String name, SettingCategory category, SettingMode modus, boolean defaultValue, SettingStoreType StoreType, SettingUsage usage) {
 		super(name, category, modus, StoreType, usage);
 		this.defaultValue = defaultValue;
 		this.value = defaultValue;
@@ -41,7 +41,7 @@ public class SettingBool extends SettingBase<Boolean> {
 
 	@Override
 	public SettingBase<Boolean> copy() {
-		SettingBase<Boolean> ret = new SettingBool(this.name, this.category, this.modus, this.defaultValue, this.storeType, this.usage);
+		SettingBase<Boolean> ret = new SettingBool(this.name, this.category, this.mode, this.defaultValue, this.storeType, this.usage);
 
 		ret.value = this.value;
 		ret.lastValue = this.lastValue;

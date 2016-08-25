@@ -24,7 +24,7 @@ import de.longri.cachebox3.Utils;
  */
 public class SettingEncryptedString extends SettingLongString {
 
-	public SettingEncryptedString(String name, SettingCategory category, SettingModus modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+	public SettingEncryptedString(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
 		super(name, category, modus, defaultValue, StoreType, usage);
 	}
 

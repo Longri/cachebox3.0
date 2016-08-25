@@ -59,7 +59,7 @@ public class CB {
         //   LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
 
 
-        LibgdxLoggerFactory.INCLUDE_LIST.add(StageManager.class.getName());
+        // LibgdxLoggerFactory.INCLUDE_LIST.add(StageManager.class.getName());
 
         ((LibgdxLoggerFactory) LoggerFactory.getILoggerFactory()).reset();
     }

@@ -97,6 +97,7 @@ public abstract class ListView extends WidgetGroup {
             @Override
             public VisTable createView(Integer index) {
                 VisTable table = ListView.this.createView(index);
+                if (table == null) return new VisTable(); //return a empty table
                 ListViewStyle style = ListView.this.style;
                 boolean backGroundChanger = ((index % 2) == 1);
                 if (backGroundChanger) {
