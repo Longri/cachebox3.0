@@ -158,7 +158,7 @@ public class Settings_Activity extends ActivityBase {
 
     private Array<WidgetGroup> listViews = new Array<WidgetGroup>();
     private Array<String> listViewsNames = new Array<String>();
-    Label.LabelStyle nameStyle, descStyle, defaultValuStyle;
+    Label.LabelStyle nameStyle, descStyle, defaultValuStyle, valueStyle;
 
 
     private void fillContent() {
@@ -175,6 +175,10 @@ public class Settings_Activity extends ActivityBase {
         defaultValuStyle = new Label.LabelStyle();
         defaultValuStyle.font = style.defaultValueFont;
         defaultValuStyle.fontColor = style.defaultValueFontColor;
+
+        valueStyle = new Label.LabelStyle();
+        valueStyle.font = style.valueFont;
+        valueStyle.fontColor = style.valueFontColor;
 
 
         final Array<SettingCategory> settingCategories = new Array<SettingCategory>();
@@ -410,15 +414,51 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private VisTable getFloatView(SettingFloat setting) {
-        return null;
+        VisLabel valueLabel = new VisLabel(Float.toString(setting.getValue()), valueStyle);
+        VisTable table = getNumericItemTable(valueLabel, setting);
+
+        // add clicklistener
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.getType() == InputEvent.Type.touchUp) {
+
+                }
+            }
+        });
+
+        return table;
     }
 
     private VisTable getDblView(SettingDouble setting) {
-        return null;
+        VisLabel valueLabel = new VisLabel(Double.toString(setting.getValue()), valueStyle);
+        VisTable table = getNumericItemTable(valueLabel, setting);
+
+        // add clicklistener
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.getType() == InputEvent.Type.touchUp) {
+
+                }
+            }
+        });
+
+        return table;
     }
 
     private VisTable getIntView(SettingInt setting) {
-        return null;
+        VisLabel valueLabel = new VisLabel(Integer.toString(setting.getValue()), valueStyle);
+        VisTable table = getNumericItemTable(valueLabel, setting);
+
+        // add clicklistener
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.getType() == InputEvent.Type.touchUp) {
+
+                }
+            }
+        });
+
+        return table;
     }
 
     private VisTable getTimeView(SettingTime setting) {
@@ -488,11 +528,45 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
+    private VisTable getNumericItemTable(VisLabel valueLabel, SettingBase<?> setting) {
+        VisTable table = new VisTable();
+
+        // add label with category name, align left
+        table.left();
+        VisLabel label = new VisLabel(Translation.Get(setting.getName()), nameStyle);
+        label.setWrap(true);
+        label.setAlignment(Align.left);
+        table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        // add value lable
+        table.add(valueLabel).width(valueLabel.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+
+        // add description line if description exist
+        String description = Translation.Get("Desc_" + setting.getName());
+        if (!description.contains("$ID:")) {
+            table.row();
+            VisLabel desclabel = new VisLabel(description, descStyle);
+            desclabel.setWrap(true);
+            desclabel.setAlignment(Align.left);
+            table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        }
+
+        // add defaultValue line
+
+        table.row();
+        VisLabel desclabel = new VisLabel("default: " + String.valueOf(setting.getDefaultValue()), defaultValuStyle);
+        desclabel.setWrap(true);
+        desclabel.setAlignment(Align.left);
+        table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        return table;
+    }
+
 
     public static class SettingsActivityStyle extends ActivityBaseStyle {
         public Drawable nextIcon, backIcon;
-        public BitmapFont nameFont, descFont, defaultValueFont;
-        public Color nameFontColor, descFontColor, defaultValueFontColor;
+        public BitmapFont nameFont, descFont, defaultValueFont, valueFont;
+        public Color nameFontColor, descFontColor, defaultValueFontColor, valueFontColor;
 
     }
 

@@ -318,6 +318,10 @@
     "settings_default_value_font": {
       "font": "fonts/DroidSerif-Bold",
       "size": 14
+    },
+    "settings_value_font": {
+      "font": "fonts/DroidSans-BoldItalic",
+      "size": 20
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable": {
@@ -606,7 +610,9 @@
       "defaultValueFont": "settings_default_value_font",
       "nameFontColor": "font_color",
       "descFontColor": "font_color",
-      "defaultValueFontColor": "settings_default_value_font_color"
+      "defaultValueFontColor": "settings_default_value_font_color",
+      "valueFont": "settings_value_font",
+      "valueFontColor": "font_color"
     }
   }
 }
