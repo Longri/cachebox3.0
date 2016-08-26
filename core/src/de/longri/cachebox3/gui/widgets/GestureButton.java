@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -348,7 +349,12 @@ public class GestureButton extends Button {
     }
 
 
-    private CB_RectF menuSpriteDrawRec;
+    private static final CB_RectF menuSpriteDrawRec = new CB_RectF().add(new SizeChangedEvent() {
+        @Override
+        public void sizeChanged() {
+            menuSprite.setPosition(menuSpriteDrawRec.getX(), menuSpriteDrawRec.getY());
+        }
+    });
 
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
@@ -361,17 +367,10 @@ public class GestureButton extends Button {
                 menuSpriteFiltered = new Sprite(CB.getSprite(IconNames.cm_icon_filterd.name()));
             }
 
-            if (menuSpriteDrawRec == null) {
-                menuSpriteDrawRec = new CB_RectF();
-                menuSpriteDrawRec.add(new SizeChangedEvent() {
-                    @Override
-                    public void sizeChanged() {
-                        menuSprite.setPosition(menuSpriteDrawRec.getX(), menuSpriteDrawRec.getY());
-                    }
-                });
-            }
-
-            menuSpriteDrawRec.setPos(this.getX(), this.getY());
+            Vector2 stagePos = new Vector2();
+            this.localToStageCoordinates(stagePos);
+            menuSpriteDrawRec.setPos(stagePos.x, stagePos.y);
+            // menuSpriteDrawRec.setPos(this.getX(), this.getY());
 
             boolean isFiltered = false; //TODO set filtered!
 
