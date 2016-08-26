@@ -34,6 +34,7 @@ import de.longri.cachebox3.gui.help.GestureHelp;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.IconNames;
 import de.longri.cachebox3.utils.SizeChangedEvent;
@@ -300,7 +301,7 @@ public class GestureButton extends Button {
                         final AbstractAction action = ba.getAction();
 
                         //have the calling action a gesture, then show gesture helper
-                        if (ba.getGestureDirection() != ActionButton.GestureDirection.None) {
+                        if (Config.showGestureHelp.getValue() && ba.getGestureDirection() != ActionButton.GestureDirection.None) {
                             if (gestureHelper == null) {
                                 gestureHelper = new GestureHelp(GestureHelp.getHelpEllipseFromActor(GestureButton.this),
                                         style.up, gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon);

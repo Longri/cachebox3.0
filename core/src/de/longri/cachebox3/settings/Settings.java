@@ -65,6 +65,7 @@ public class Settings {
 
     public static final SettingBool DirectOnlineLog = (SettingBool) SettingsList.addSetting(new SettingBool("DirectOnlineLog", SettingCategory.Fieldnotes, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool showSandbox = (SettingBool) SettingsList.addSetting(new SettingBool("showSandbox", SettingCategory.RememberAsk, NORMAL, false, SettingStoreType.Platform, SettingUsage.ACB));
+    public static final SettingBool showGestureHelp = (SettingBool) SettingsList.addSetting(new SettingBool("showGestureHelp", SettingCategory.RememberAsk, NORMAL, true, SettingStoreType.Platform, SettingUsage.ACB));
 
 
     // Settings Compass
