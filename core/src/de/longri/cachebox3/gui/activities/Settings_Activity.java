@@ -184,6 +184,8 @@ public class Settings_Activity extends ActivityBase {
         widgetGroup.setBounds(CB.scaledSizes.MARGIN, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGIN));
 
         // title
+        WidgetGroup titleGroup = new WidgetGroup();
+
         float topY = widgetGroup.getHeight() - CB.scaledSizes.MARGIN_HALF;
         float xPos = 0;
 
@@ -196,30 +198,33 @@ public class Settings_Activity extends ActivityBase {
         // add the titleLabel on top
         if (style.backIcon != null && listViewsNames.size > 0) {
             Image backImage = new Image(style.backIcon);
-            backImage.setPosition(xPos, topY - backImage.getHeight());
+            backImage.setPosition(xPos, 0);
             xPos += backImage.getWidth() + CB.scaledSizes.MARGIN;
-            backImage.addListener(backClickListener);
-            widgetGroup.addActor(backImage);
+            titleGroup.addActor(backImage);
         }
 
         VisLabel titleLabel = new VisLabel(name, "menu_title_act");
 
         if (listViewsNames.size > 0) {
             VisLabel parentTitleLabel = new VisLabel(listViewsNames.get(listViewsNames.size - 1), "menu_title_parent");
-            parentTitleLabel.setPosition(xPos, topY - parentTitleLabel.getHeight());
+            parentTitleLabel.setPosition(xPos, 0);
             xPos += parentTitleLabel.getWidth() + CB.scaledSizes.MARGINx2;
-            parentTitleLabel.addListener(backClickListener);
-            widgetGroup.addActor(parentTitleLabel);
+            titleGroup.addActor(parentTitleLabel);
         } else {
             //center titleLabel
             xPos = (Gdx.graphics.getWidth() - titleLabel.getWidth()) / 2;
         }
 
-        titleLabel.setPosition(xPos, topY - titleLabel.getHeight());
-        widgetGroup.addActor(titleLabel);
+        titleLabel.setPosition(xPos, 0);
+        titleGroup.addActor(titleLabel);
+
+        float titleHeight = titleLabel.getHeight() + CB.scaledSizes.MARGIN;
+        titleGroup.setBounds(0, Gdx.graphics.getHeight() - (y + titleHeight), Gdx.graphics.getWidth(), titleHeight);
+        titleGroup.addListener(backClickListener);
+        widgetGroup.addActor(titleGroup);
 
 
-        listView.setBounds(0, 0, widgetGroup.getWidth(), titleLabel.getY() - CB.scaledSizes.MARGIN);
+        listView.setBounds(0, 0, widgetGroup.getWidth(), titleGroup.getY() - CB.scaledSizes.MARGIN);
         listView.layout();
         listView.setBackground(null); // remove default background
         widgetGroup.addActor(listView);

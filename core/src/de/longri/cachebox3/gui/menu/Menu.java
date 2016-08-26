@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.kotcrab.vis.ui.VisUI;
@@ -58,23 +59,7 @@ public class Menu extends Window {
     OnItemClickListener onItemClickListener;
     private VisLabel titleLabel, parentTitleLabel;
     protected Menu parentMenu;
-
-    InputListener clickListener = new InputListener() {
-
-        private final CB_RectF backClickReckArea = new CB_RectF();
-
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            // close menu if outside of listView
-            backClickReckArea.set(Menu.this.mainMenuWidgetGroup.getX(), Menu.this.titleLabel.getY(),
-                    Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - Menu.this.titleLabel.getY());
-            if (backClickReckArea.contains(x, y)) {
-                hide(false);
-                return true;
-            }
-            return false;
-        }
-    };
-
+    private  WidgetGroup titleGroup;
 
     public Menu(String name) {
         this.style = VisUI.getSkin().get("default", MenuStyle.class);
@@ -191,7 +176,7 @@ public class Menu extends Window {
         } else {
             StageManager.showOnActStage(mainMenuWidgetGroup);
         }
-        mainMenuWidgetGroup.addListener(clickListener);
+
         if (this.parentMenu == null)
             addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
     }
@@ -225,8 +210,6 @@ public class Menu extends Window {
         } else {
             super.hide();
         }
-
-        mainMenuWidgetGroup.removeListener(clickListener);
         log.debug("Hide menu: " + this.name);
     }
 
@@ -239,29 +222,42 @@ public class Menu extends Window {
         float topY = Gdx.graphics.getHeight() - CB.scaledSizes.MARGIN_HALF;
         float xPos = CB.scaledSizes.MARGIN_HALF;
 
-
         // add the titleLabel on top
+        titleGroup = new WidgetGroup();
+        ClickListener backClickListener = new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                hide(false);
+            }
+        };
+
         if (style.menu_back != null) {
             Image backImage = new Image(style.menu_back);
-            backImage.setPosition(xPos, topY - backImage.getHeight());
+            backImage.setPosition(xPos, 0);
             xPos += backImage.getWidth() + CB.scaledSizes.MARGIN;
-            this.addActor(backImage);
+            titleGroup.addActor(backImage);
         }
 
         titleLabel = new VisLabel(this.name, "menu_title_act");
 
         if (parentMenu != null) {
             parentTitleLabel = new VisLabel(parentMenu.name, "menu_title_parent");
-            parentTitleLabel.setPosition(xPos, topY - parentTitleLabel.getHeight());
+            parentTitleLabel.setPosition(xPos, 0);
             xPos += parentTitleLabel.getWidth() + CB.scaledSizes.MARGINx2;
-            this.addActor(parentTitleLabel);
+            titleGroup.addActor(parentTitleLabel);
         } else {
             //center titleLabel
             xPos = (Gdx.graphics.getWidth() - titleLabel.getWidth()) / 2;
         }
 
-        titleLabel.setPosition(xPos, topY - titleLabel.getHeight());
-        this.addActor(titleLabel);
+        titleLabel.setPosition(xPos, 0);
+        titleGroup.addActor(titleLabel);
+
+
+        float titleHeight = titleLabel.getHeight() + CB.scaledSizes.MARGIN;
+        titleGroup.setBounds(0, Gdx.graphics.getHeight() - (titleHeight), Gdx.graphics.getWidth(), titleHeight);
+        titleGroup.addListener(backClickListener);
+
+        this.addActor(titleGroup);
 
         final OnItemClickListener clickListener = new OnItemClickListener() {
             @Override
@@ -300,7 +296,7 @@ public class Menu extends Window {
         listView.rebuildView();
         super.pack();
 
-        float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (listView.getHeight() + CB.scaledSizes.MARGINx2);
+        float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (titleGroup.getHeight() );
         listView.setBounds(((Gdx.graphics.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
                 CB.scaledSizes.WINDOW_WIDTH, maxListViewHeight);
     }
