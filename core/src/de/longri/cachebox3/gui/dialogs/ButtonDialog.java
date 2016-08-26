@@ -62,7 +62,7 @@ public class ButtonDialog extends Window {
 
     public ButtonDialog(String Name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
         super();
-        
+
         this.skin = VisUI.getSkin();
         setSkin(this.skin);
         style = skin.get("default", ButtonDialogStyle.class);
@@ -237,8 +237,7 @@ public class ButtonDialog extends Window {
     }
 
     private void button(String text, float buttonWidth, Object object) {
-        VisTextButton.VisTextButtonStyle buttonStyle = skin.get(VisTextButton.VisTextButtonStyle.class);
-        VisTextButton button = new VisTextButton(text, buttonStyle);
+        VisTextButton button = new VisTextButton(text);
         buttonTable.add(button).width(buttonWidth);
         values.put(button, object);
     }

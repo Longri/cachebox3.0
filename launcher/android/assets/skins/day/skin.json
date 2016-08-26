@@ -313,10 +313,10 @@
       "right": 15,
       "top": 15,
       "bottom": 15,
-      "leftWidth": 10,
-      "rightWidth": 10,
-      "topHeight": 10,
-      "bottomHeight": 10
+      "leftWidth": 13,
+      "rightWidth": 13,
+      "topHeight": 11,
+      "bottomHeight": 11
     },
     "drawable_default_button_pressed": {
       "name": "default_button_pressed",
@@ -324,10 +324,10 @@
       "right": 15,
       "top": 15,
       "bottom": 15,
-      "leftWidth": 10,
-      "rightWidth": 10,
-      "topHeight": 10,
-      "bottomHeight": 10
+      "leftWidth": 13,
+      "rightWidth": 13,
+      "topHeight": 11,
+      "bottomHeight": 11
     },
     "drawable_dialog_header": {
       "name": "dialog_header",
