@@ -31,6 +31,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
+import de.longri.cachebox3.gui.widgets.NumPad;
 import de.longri.cachebox3.settings.Config;
 import org.slf4j.LoggerFactory;
 
@@ -117,29 +118,15 @@ public class TestView extends AbstractView {
             }
         });
 
-        //  this.addActor(colorWidget);
-        this.addActor(nameLabel);
-        this.addActor(testButton);
-
-        VisTable table = new VisTable();
-        table.setSize(200, 200);
-        table.add(testButton);
-        table.row();
-
-
         VisTextButton test2Button = new VisTextButton("Toast");
-        table.add(test2Button);
-
         test2Button.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 CB.viewmanager.toast("Test langer Text der dann selbst umgebrochen werden sollte");
             }
         });
-        table.row();
+
 
         final VisTextButton test3Button = new VisTextButton("HelpWindow");
-        table.add(test3Button);
-
         test3Button.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 HelpWindow helpWindow = new HelpWindow(GestureHelp.getHelpEllipseFromActor(test3Button));
@@ -147,26 +134,81 @@ public class TestView extends AbstractView {
             }
         });
 
+
+        VisTextButton numPadOkCancel = new VisTextButton("o/c");
+        numPadOkCancel.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (numPad != null) {
+                    TestView.this.removeChild(numPad);
+                }
+                numPad = new NumPad(NumPad.OptionalButton.OK, NumPad.OptionalButton.CANCEL);
+                numPad.pack();
+                numPad.setPosition(0, 150);
+                TestView.this.addActor(numPad);
+            }
+        });
+
+        VisTextButton numDotPadOkCancel = new VisTextButton("d/o/c");
+        numDotPadOkCancel.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (numPad != null) {
+                    TestView.this.removeChild(numPad);
+                }
+                numPad = new NumPad(NumPad.OptionalButton.OK, NumPad.OptionalButton.CANCEL, NumPad.OptionalButton.DOT);
+                numPad.pack();
+                numPad.setPosition(0, 150);
+                TestView.this.addActor(numPad);
+            }
+        });
+
+        VisTextButton numDot = new VisTextButton("dot");
+        numDot.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (numPad != null) {
+                    TestView.this.removeChild(numPad);
+                }
+                numPad = new NumPad(NumPad.OptionalButton.DOT);
+                numPad.pack();
+                numPad.setPosition(0, 150);
+                TestView.this.addActor(numPad);
+            }
+        });
+
+        VisTextButton num = new VisTextButton("none");
+        num.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (numPad != null) {
+                    TestView.this.removeChild(numPad);
+                }
+                numPad = new NumPad(CB.scaledSizes.WINDOW_WIDTH);
+                numPad.pack();
+                numPad.setPosition(0, 150);
+                TestView.this.addActor(numPad);
+            }
+        });
+
+
+        VisTable table = new VisTable();
+        table.add(numPadOkCancel);
+        table.add(numDotPadOkCancel);
+        table.add(numDot);
+        table.add(num);
+
+
+        table.row();
+        table.add(testButton);
+        table.add(test2Button);
+        table.add(test3Button);
+        table.setPosition(0, 0);
+        table.pack();
         this.addActor(table);
 
+    }
 
-        final ArrayList<String> itemList = new ArrayList<String>();
-        for (int i = 0; i < 500; i++) itemList.add(Integer.toString(i));
+    NumPad numPad;
 
-        de.longri.cachebox3.gui.views.ListView listView = new de.longri.cachebox3.gui.views.ListView(itemList.size()) {
-            @Override
-            public VisTable createView(Integer index) {
-                VisLabel label = new VisLabel(itemList.get(index));
-                VisTable table = new VisTable();
-                table.left();
-                table.add(label);
-                return table;
-            }
-        };
+    private void addNumpad() {
 
-
-        listView.setBounds(200, 50, 90, 400);
-        this.addActor(listView);
     }
 
     private Menu getMoreMenu1() {

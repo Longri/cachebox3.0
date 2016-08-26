@@ -77,7 +77,7 @@ public class ViewManager extends Stage {
 
         mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class),
                 ButtonBar.Type.DISTRIBUTED);
-                mainButtonBar.addButton(db_button);
+        mainButtonBar.addButton(db_button);
         mainButtonBar.addButton(cache_button);
         mainButtonBar.addButton(navButton);
         mainButtonBar.addButton(tool_button);
@@ -173,7 +173,7 @@ public class ViewManager extends Stage {
     }
 
     private void setActViewBounds() {
-        this.actView.setBounds(0, mainButtonBar.getTop(), width, height);
+        this.actView.setBounds(0, mainButtonBar.getHeight(), width, height);
     }
 
     public AbstractView getActView() {
