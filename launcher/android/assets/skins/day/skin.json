@@ -286,6 +286,12 @@
       "g": 1,
       "b": 1,
       "a": 1
+    },
+    "settings_default_value_font_color": {
+      "r": 0.6,
+      "g": 0.6,
+      "b": 0.6,
+      "a": 1
     }
   },
   "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
@@ -304,6 +310,14 @@
     "normal_bold_font": {
       "font": "fonts/DroidSans-Bold",
       "size": 20
+    },
+    "settings_desc_font": {
+      "font": "fonts/DroidSerif-Italic",
+      "size": 16
+    },
+    "settings_default_value_font": {
+      "font": "fonts/DroidSerif-Bold",
+      "size": 14
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable": {
@@ -586,7 +600,13 @@
     "default": {
       "background": "activityBack_drawable",
       "nextIcon": "menu_for",
-      "backIcon": "menu_back"
+      "backIcon": "menu_back",
+      "nameFont": "normal_font",
+      "descFont": "settings_desc_font",
+      "defaultValueFont": "settings_default_value_font",
+      "nameFontColor": "font_color",
+      "descFontColor": "font_color",
+      "defaultValueFontColor": "settings_default_value_font_color"
     }
   }
 }

@@ -1,9 +1,12 @@
 package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -155,8 +158,23 @@ public class Settings_Activity extends ActivityBase {
 
     private Array<WidgetGroup> listViews = new Array<WidgetGroup>();
     private Array<String> listViewsNames = new Array<String>();
+    Label.LabelStyle nameStyle, descStyle, defaultValuStyle;
+
 
     private void fillContent() {
+
+        //set LabelStyles
+        nameStyle = new Label.LabelStyle();
+        nameStyle.font = style.nameFont;
+        nameStyle.fontColor = style.nameFontColor;
+
+        descStyle = new Label.LabelStyle();
+        descStyle.font = style.descFont;
+        descStyle.fontColor = style.descFontColor;
+
+        defaultValuStyle = new Label.LabelStyle();
+        defaultValuStyle.font = style.defaultValueFont;
+        defaultValuStyle.fontColor = style.defaultValueFontColor;
 
 
         final Array<SettingCategory> settingCategories = new Array<SettingCategory>();
@@ -420,7 +438,7 @@ public class Settings_Activity extends ActivityBase {
 
         // add label with category name, align left
         table.left();
-        VisLabel label = new VisLabel(Translation.Get(setting.getName()));
+        VisLabel label = new VisLabel(Translation.Get(setting.getName()), nameStyle);
         label.setWrap(true);
         label.setAlignment(Align.left);
         table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -447,13 +465,35 @@ public class Settings_Activity extends ActivityBase {
                 }
             }
         });
+
+
+        // add description line if description exist
+        String description = Translation.Get("Desc_" + setting.getName());
+        if (!description.contains("$ID:")) {
+            table.row();
+            VisLabel desclabel = new VisLabel(description, descStyle);
+            desclabel.setWrap(true);
+            desclabel.setAlignment(Align.left);
+            table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        }
+
+        // add defaultValue line
+
+        table.row();
+        VisLabel desclabel = new VisLabel("default: " + String.valueOf(setting.getDefaultValue()), defaultValuStyle);
+        desclabel.setWrap(true);
+        desclabel.setAlignment(Align.left);
+        table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
         return table;
     }
 
 
     public static class SettingsActivityStyle extends ActivityBaseStyle {
-        public Drawable nextIcon;
-        public Drawable backIcon;
+        public Drawable nextIcon, backIcon;
+        public BitmapFont nameFont, descFont, defaultValueFont;
+        public Color nameFontColor, descFontColor, defaultValueFontColor;
+
     }
 
 
