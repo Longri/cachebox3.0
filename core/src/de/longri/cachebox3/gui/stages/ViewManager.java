@@ -77,12 +77,12 @@ public class ViewManager extends Stage {
 
         mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class),
                 ButtonBar.Type.DISTRIBUTED);
-        mainButtonBar.setBounds(0, 0, width, db_button.getPrefHeight());
-        mainButtonBar.addButton(db_button);
+                mainButtonBar.addButton(db_button);
         mainButtonBar.addButton(cache_button);
         mainButtonBar.addButton(navButton);
         mainButtonBar.addButton(tool_button);
         mainButtonBar.addButton(misc_button);
+        mainButtonBar.setBounds(0, 0, width, mainButtonBar.getPrefHeight());
         this.addActor(mainButtonBar);
         mainButtonBar.layout();
         initialActionButtons();

@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import de.longri.cachebox3.CB;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,6 @@ import java.util.ArrayList;
  * Created by Longri on 24.07.16.
  */
 public class ButtonBar extends WidgetGroup {
-
 
 
     public static class ButtonBarStyle {
@@ -83,10 +83,14 @@ public class ButtonBar extends WidgetGroup {
         this.clear();
         float xPos = margin;
         for (Button button : buttonList) {
-            button.setPosition(xPos, 0);
+            button.setPosition(xPos, CB.scaledSizes.MARGIN_HALF);
             this.addActor(button);
             xPos += button.getWidth() + margin;
         }
+    }
+
+    public float getPrefHeight() {
+        return buttonList.get(0).getHeight() + CB.scaledSizes.MARGIN;
     }
 
     private void scrolledLayout() {
