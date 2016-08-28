@@ -1,8 +1,25 @@
+/*
+ * Copyright (C) 2016 team-cachebox.de
+ *
+ * Licensed under the : GNU General Public License (GPL);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.gnu.org/licenses/gpl.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -90,18 +107,18 @@ public class Settings_Activity extends ActivityBase {
                             case MenuID.MI_SHOW_EXPERT:
                                 Config.SettingsShowExpert.setValue(!Config.SettingsShowExpert.getValue());
                                 Config.SettingsShowAll.setValue(false);
-                                resortList();
+                                layoutActListView(true);
                                 return true;
 
                             case MenuID.MI_SHOW_ALL:
                                 Config.SettingsShowAll.setValue(!Config.SettingsShowAll.getValue());
                                 Config.SettingsShowExpert.setValue(false);
-                                resortList();
+                                layoutActListView(true);
                                 return true;
                             case MenuID.MI_SHOW_Normal:
                                 Config.SettingsShowAll.setValue(false);
                                 Config.SettingsShowExpert.setValue(false);
-                                resortList();
+                                layoutActListView(true);
                                 return true;
                         }
                         return false;
@@ -152,9 +169,6 @@ public class Settings_Activity extends ActivityBase {
         });
     }
 
-    private void resortList() {
-
-    }
 
     private Array<WidgetGroup> listViews = new Array<WidgetGroup>();
     private Array<String> listViewsNames = new Array<String>();
@@ -194,10 +208,10 @@ public class Settings_Activity extends ActivityBase {
                 final SettingCategory category = settingCategories.get(index);
                 return getCategoryItem(category);
             }
-        }, Translation.Get("setting"));
+        }, Translation.Get("setting"), true);
     }
 
-    private void showListView(ListView listView, String name) {
+    private void showListView(ListView listView, String name, boolean animate) {
 
         float y = btnOk.getY() + btnOk.getHeight() + CB.scaledSizes.MARGIN;
 
@@ -255,9 +269,13 @@ public class Settings_Activity extends ActivityBase {
         if (listViews.size > 0) {
             // animate
             float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
-            listViews.get(listViews.size - 1).addAction(Actions.moveTo(0 - nextXPos, y, Menu.MORE_MENU_ANIMATION_TIME));
-            widgetGroup.setPosition(nextXPos, y);
-            widgetGroup.addAction(Actions.moveTo(CB.scaledSizes.MARGIN, y, Menu.MORE_MENU_ANIMATION_TIME));
+            if (animate) {
+                listViews.get(listViews.size - 1).addAction(Actions.moveTo(0 - nextXPos, y, Menu.MORE_MENU_ANIMATION_TIME));
+                widgetGroup.setPosition(nextXPos, y);
+                widgetGroup.addAction(Actions.moveTo(CB.scaledSizes.MARGIN, y, Menu.MORE_MENU_ANIMATION_TIME));
+            } else {
+                widgetGroup.setPosition(CB.scaledSizes.MARGIN, y);
+            }
         }
         listViews.add(widgetGroup);
         listViewsNames.add(name);
@@ -266,6 +284,8 @@ public class Settings_Activity extends ActivityBase {
 
     private void backClick() {
         float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
+
+        if (listViews.size == 1) return;
 
         listViewsNames.pop();
         WidgetGroup actWidgetGroup = listViews.pop();
@@ -276,6 +296,37 @@ public class Settings_Activity extends ActivityBase {
         showingWidgetGroup.addAction(Actions.moveTo(CB.scaledSizes.MARGIN, y, Menu.MORE_MENU_ANIMATION_TIME));
     }
 
+    private void layoutActListView(boolean itemCountChanged) {
+        //get act listView
+        WidgetGroup widgetGroup = listViews.get(listViews.size - 1);
+        ListView actListView = null;
+        for (Actor actor : widgetGroup.getChildren()) {
+            if (actor instanceof ListView) {
+                actListView = (ListView) actor;
+                break;
+            }
+        }
+
+        if (itemCountChanged) {
+            Object object = actListView.getUserObject();
+            if (object instanceof SettingCategory) {
+                WidgetGroup group = listViews.pop();
+                listViewsNames.pop();
+
+                //remove all Listener
+                for (Actor actor : group.getChildren())
+                    for (EventListener listener : actor.getListeners())
+                        actor.removeListener(listener);
+
+                this.removeActor(group);
+                showCategory((SettingCategory) object, false);
+            }
+        } else {
+            actListView.reLayout();
+        }
+
+
+    }
 
     private VisTable getCategoryItem(final SettingCategory category) {
         VisTable table = new VisTable();
@@ -294,14 +345,14 @@ public class Settings_Activity extends ActivityBase {
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (event.getType() == InputEvent.Type.touchUp) {
-                    showCategory(category);
+                    showCategory(category, true);
                 }
             }
         });
         return table;
     }
 
-    private void showCategory(SettingCategory category) {
+    private void showCategory(SettingCategory category, boolean animate) {
         log.debug("Show settings categoriy: " + category.name());
 
 
@@ -340,13 +391,16 @@ public class Settings_Activity extends ActivityBase {
         }
 
         // show new ListView for this category
-        showListView(new ListView(categorySettingsList.size) {
+
+        ListView newListView = new ListView(categorySettingsList.size) {
             @Override
             public VisTable createView(Integer index) {
                 final SettingBase<?> setting = categorySettingsList.get(index);
                 return getSettingItem(setting);
             }
-        }, category.name());
+        };
+        newListView.setUserObject(category);
+        showListView(newListView, category.name(), animate);
     }
 
     private VisTable getSettingItem(SettingBase<?> setting) {
@@ -413,15 +467,22 @@ public class Settings_Activity extends ActivityBase {
         return null;
     }
 
-    private VisTable getFloatView(SettingFloat setting) {
-        VisLabel valueLabel = new VisLabel(Float.toString(setting.getValue()), valueStyle);
+    private VisTable getFloatView(final SettingFloat setting) {
+        final VisLabel valueLabel = new VisLabel(Float.toString(setting.getValue()), valueStyle);
         VisTable table = getNumericItemTable(valueLabel, setting);
 
-        // add clicklistener
+        // add clickListener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (event.getType() == InputEvent.Type.touchUp) {
-
+                    new NumericInput_Activity<Float>(setting.getValue()) {
+                        public void returnValue(Float value) {
+                            setting.setValue(value);
+                            valueLabel.setText(value.toString());
+                            valueLabel.pack();
+                            layoutActListView(false);
+                        }
+                    }.show();
                 }
             }
         });
@@ -429,15 +490,22 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private VisTable getDblView(SettingDouble setting) {
-        VisLabel valueLabel = new VisLabel(Double.toString(setting.getValue()), valueStyle);
+    private VisTable getDblView(final SettingDouble setting) {
+        final VisLabel valueLabel = new VisLabel(Double.toString(setting.getValue()), valueStyle);
         VisTable table = getNumericItemTable(valueLabel, setting);
 
-        // add clicklistener
+        // add clickListener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (event.getType() == InputEvent.Type.touchUp) {
-
+                    new NumericInput_Activity<Double>(setting.getValue()) {
+                        public void returnValue(Double value) {
+                            setting.setValue(value);
+                            valueLabel.setText(value.toString());
+                            valueLabel.pack();
+                            layoutActListView(false);
+                        }
+                    }.show();
                 }
             }
         });
@@ -445,19 +513,37 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private VisTable getIntView(SettingInt setting) {
-        VisLabel valueLabel = new VisLabel(Integer.toString(setting.getValue()), valueStyle);
-        VisTable table = getNumericItemTable(valueLabel, setting);
+    private VisTable getIntView(final SettingInt setting) {
+        final VisLabel valueLabel = new VisLabel(Integer.toString(setting.getValue()), valueStyle);
+        final VisTable table = getNumericItemTable(valueLabel, setting);
 
-        // add clicklistener
+        // add clickListener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (event.getType() == InputEvent.Type.touchUp) {
+                    new NumericInput_Activity<Integer>(setting.getValue()) {
+                        public void returnValue(Integer value) {
+                            setting.setValue(value);
+                            WidgetGroup group = listViews.peek();
+                            for (Actor actor : group.getChildren()) {
+                                if (actor instanceof ListView) {
+                                   final ListView listView = (ListView) actor;
+                                   final float scrollPos = listView.getScrollPos();
+                                    listView.rebuildView();
+                                    Gdx.app.postRunnable(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            listView.setScrollPos(scrollPos);
+                                        }
+                                    });
 
+                                }
+                            }
+                        }
+                    }.show();
                 }
             }
         });
-
         return table;
     }
 

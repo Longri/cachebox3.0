@@ -19,7 +19,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.translation.Translation;
@@ -28,26 +30,53 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 26.08.2016.
  */
-public class NumPad extends Table {
+public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposable {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(NumPad.class);
+
+    @Override
+    public void show(boolean visible) {
+        // do nothing
+    }
 
     public enum OptionalButton {
         OK, CANCEL, DOT
     }
+
+    public interface IKeyEventListener {
+        /**
+         * Value is 0-9 or "." <br>
+         * or <br>
+         * "D" for Delete Button<br>
+         * "B" for Back Button<br>
+         * "O" for Ok Button<br>
+         * "C" for Cancel Button<br>
+         * "<" for Left Button<br>
+         * ">" for Right Button<br>
+         *
+         * @param value
+         */
+        public void KeyPressed(String value);
+    }
+
+    private final IKeyEventListener keyEventListener;
+
 
     private final boolean hasOk, hasCancel, hasDot;
     private final VisTextButton btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnOk, btnCancel, btnDel, btnBack, btnDot, btnLeft, btnRight;
     private float targetWidth;
 
 
-    public NumPad(float targetWidth, OptionalButton... options) {
-        this(options);
+    public NumPad(IKeyEventListener keyEventListener, float targetWidth, OptionalButton... options) {
+        this(keyEventListener, options);
         this.targetWidth = targetWidth;
     }
 
-    public NumPad(OptionalButton... options) {
+    public NumPad(IKeyEventListener keyEventListener, OptionalButton... options) {
         this.targetWidth = Gdx.graphics.getWidth();
+        this.keyEventListener = keyEventListener;
+
         boolean ok = false, cancel = false, dot = false;
+
 
         for (OptionalButton option : options) {
             switch (option) {
@@ -111,8 +140,13 @@ public class NumPad extends Table {
     private ClickListener clickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             VisTextButton btn = (VisTextButton) event.getListenerActor();
-
-            log.debug("Button [" + btn.getText() + "] clicked");
+            String keyValue = String.valueOf(btn.getText());
+            keyValue = keyValue.replace("Del", "D");
+            keyValue = keyValue.replace("Back", "B");
+            keyValue = keyValue.replace(Translation.Get("ok"), "O");
+            keyValue = keyValue.replace(Translation.Get("cancel"), "C");
+            NumPad.this.keyEventListener.KeyPressed(keyValue);
+            log.debug("Button [" + keyValue + "] clicked");
         }
     };
 
@@ -172,5 +206,27 @@ public class NumPad extends Table {
         super.layout();
         layoutInvalid = false;
     }
+
+    public void dispose() {
+        btn0.removeListener(clickListener);
+        btn1.removeListener(clickListener);
+        btn2.removeListener(clickListener);
+        btn3.removeListener(clickListener);
+        btn4.removeListener(clickListener);
+        btn5.removeListener(clickListener);
+        btn6.removeListener(clickListener);
+        btn7.removeListener(clickListener);
+        btn8.removeListener(clickListener);
+        btn9.removeListener(clickListener);
+        btnBack.removeListener(clickListener);
+        btnDel.removeListener(clickListener);
+        btnOk.removeListener(clickListener);
+        btnCancel.removeListener(clickListener);
+        btnDot.removeListener(clickListener);
+        btnLeft.removeListener(clickListener);
+        btnRight.removeListener(clickListener);
+        this.clear();
+    }
+
 
 }

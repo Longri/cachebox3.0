@@ -69,15 +69,19 @@ public abstract class ListView extends WidgetGroup {
             }
         }
 
+
         @Override
         protected VisTable createView(Integer index) {
             return this.createViewListner == null ? null : this.createViewListner.createView(index);
         }
+
+
     }
 
     private final ListViewStyle style;
     private final com.kotcrab.vis.ui.widget.ListView<Integer> listView;
     private boolean needsLayout;
+    IndexListAdapter adapter;
 
 
     public ListView(int size) {
@@ -87,12 +91,13 @@ public abstract class ListView extends WidgetGroup {
     public ListView(int size, ListViewStyle style) {
         this.listView = new com.kotcrab.vis.ui.widget.ListView<Integer>(new IndexListAdapter(size));
         this.style = style;
-        IndexListAdapter adapter = ((IndexListAdapter) this.listView.getAdapter());
+        adapter = ((IndexListAdapter) this.listView.getAdapter());
         adapter.pad = style.pad;
         adapter.padLeft = style.padLeft > 0 ? style.padLeft : style.pad;
         adapter.padRight = style.padRight > 0 ? style.padRight : style.pad;
         adapter.padTop = style.padTop > 0 ? style.padTop : style.pad;
         adapter.padBottom = style.padBottom > 0 ? style.padBottom : style.pad;
+
         adapter.setCreateViewListner(new IndexListAdapter.CreateViewListner() {
             @Override
             public VisTable createView(Integer index) {
@@ -115,10 +120,22 @@ public abstract class ListView extends WidgetGroup {
     }
 
     public void rebuildView() {
+        adapter.itemsChanged();
+        reLayout();
+    }
+
+    public void reLayout() {
+        adapter.itemsDataChanged();
         this.listView.rebuildView();
     }
 
     public abstract VisTable createView(Integer index);
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        needsLayout = true;
+    }
 
     public void layout() {
         if (!needsLayout) return;
@@ -138,9 +155,20 @@ public abstract class ListView extends WidgetGroup {
         invalidate();
     }
 
+
+    public float getScrollPos() {
+        return listView.getScrollPane().getScrollY();
+    }
+
+    public void setScrollPos(float pos) {
+        listView.getScrollPane().setScrollY(pos);
+    }
+
+
     public static class ListViewStyle {
         public Drawable background, firstItem, secondItem, selectedItem;
         public float pad, padLeft, padRight, padTop, padBottom;
     }
+
 
 }

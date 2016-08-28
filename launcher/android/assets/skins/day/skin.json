@@ -222,6 +222,9 @@
     "activityBack": {
       "path": "skins/day/svg/activityBack.svg"
     },
+    "cursor": {
+      "path": "skins/day/svg/cursor.svg"
+    }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
     "default": {
@@ -292,6 +295,12 @@
       "g": 0.6,
       "b": 0.6,
       "a": 1
+    },
+    "text_selection_color": {
+      "r": 0.5,
+      "g": 1,
+      "b": 0.5,
+      "a": 0.7
     }
   },
   "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
@@ -300,6 +309,9 @@
     },
     "transparent_drawable": {
       "color": "transparent_color"
+    },
+    "text_selection_drawable": {
+      "color": "text_selection_color"
     }
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
@@ -321,7 +333,7 @@
     },
     "settings_value_font": {
       "font": "fonts/DroidSans-BoldItalic",
-      "size": 20
+      "size": 21
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable": {
@@ -613,6 +625,21 @@
       "defaultValueFontColor": "settings_default_value_font_color",
       "valueFont": "settings_value_font",
       "valueFontColor": "font_color"
+    }
+  },
+  "com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle": {
+    "default": {
+      "font": "normal_font",
+      "fontColor": "font_color",
+      "focusedFontColor": "font_color",
+      "disabledFontColor": "font_color",
+      "background": "listrec_second_drawable",
+      "focusedBackground": "listrec_second_drawable",
+      "disabledBackground": "listrec_second_drawable",
+      "selection": "text_selection_drawable",
+      "cursor": "cursor",
+      "messageFont": "normal_font",
+      "messageFontColor": "font_color"
     }
   }
 }

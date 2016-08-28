@@ -134,6 +134,13 @@ public class TestView extends AbstractView {
             }
         });
 
+       final NumPad.IKeyEventListener numPadKeyListener = new NumPad.IKeyEventListener() {
+            @Override
+            public void KeyPressed(String keyValue) {
+
+            }
+        };
+
 
         VisTextButton numPadOkCancel = new VisTextButton("o/c");
         numPadOkCancel.addListener(new ClickListener() {
@@ -141,7 +148,7 @@ public class TestView extends AbstractView {
                 if (numPad != null) {
                     TestView.this.removeChild(numPad);
                 }
-                numPad = new NumPad(NumPad.OptionalButton.OK, NumPad.OptionalButton.CANCEL);
+                numPad = new NumPad(numPadKeyListener,NumPad.OptionalButton.OK, NumPad.OptionalButton.CANCEL);
                 numPad.pack();
                 numPad.setPosition(0, 150);
                 TestView.this.addActor(numPad);
@@ -154,7 +161,7 @@ public class TestView extends AbstractView {
                 if (numPad != null) {
                     TestView.this.removeChild(numPad);
                 }
-                numPad = new NumPad(NumPad.OptionalButton.OK, NumPad.OptionalButton.CANCEL, NumPad.OptionalButton.DOT);
+                numPad = new NumPad(numPadKeyListener,NumPad.OptionalButton.OK, NumPad.OptionalButton.CANCEL, NumPad.OptionalButton.DOT);
                 numPad.pack();
                 numPad.setPosition(0, 150);
                 TestView.this.addActor(numPad);
@@ -167,7 +174,7 @@ public class TestView extends AbstractView {
                 if (numPad != null) {
                     TestView.this.removeChild(numPad);
                 }
-                numPad = new NumPad(NumPad.OptionalButton.DOT);
+                numPad = new NumPad(numPadKeyListener,NumPad.OptionalButton.DOT);
                 numPad.pack();
                 numPad.setPosition(0, 150);
                 TestView.this.addActor(numPad);
@@ -180,7 +187,7 @@ public class TestView extends AbstractView {
                 if (numPad != null) {
                     TestView.this.removeChild(numPad);
                 }
-                numPad = new NumPad(CB.scaledSizes.WINDOW_WIDTH);
+                numPad = new NumPad(numPadKeyListener,CB.scaledSizes.WINDOW_WIDTH);
                 numPad.pack();
                 numPad.setPosition(0, 150);
                 TestView.this.addActor(numPad);

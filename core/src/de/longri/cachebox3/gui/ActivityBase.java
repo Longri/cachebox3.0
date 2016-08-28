@@ -29,6 +29,7 @@ public class ActivityBase extends Window implements Disposable, Showable {
 
     public final String name;
     protected final ActivityBaseStyle style;
+    protected boolean needsLayout = true;
 
     public ActivityBase(String name) {
         this(name, VisUI.getSkin().get("default", ActivityBaseStyle.class));
