@@ -478,9 +478,21 @@ public class Settings_Activity extends ActivityBase {
                     new NumericInput_Activity<Float>(setting.getValue()) {
                         public void returnValue(Float value) {
                             setting.setValue(value);
-                            valueLabel.setText(value.toString());
-                            valueLabel.pack();
-                            layoutActListView(false);
+                            WidgetGroup group = listViews.peek();
+                            for (Actor actor : group.getChildren()) {
+                                if (actor instanceof ListView) {
+                                    final ListView listView = (ListView) actor;
+                                    final float scrollPos = listView.getScrollPos();
+                                    listView.rebuildView();
+                                    Gdx.app.postRunnable(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            listView.setScrollPos(scrollPos);
+                                        }
+                                    });
+
+                                }
+                            }
                         }
                     }.show();
                 }
@@ -501,9 +513,21 @@ public class Settings_Activity extends ActivityBase {
                     new NumericInput_Activity<Double>(setting.getValue()) {
                         public void returnValue(Double value) {
                             setting.setValue(value);
-                            valueLabel.setText(value.toString());
-                            valueLabel.pack();
-                            layoutActListView(false);
+                            WidgetGroup group = listViews.peek();
+                            for (Actor actor : group.getChildren()) {
+                                if (actor instanceof ListView) {
+                                    final ListView listView = (ListView) actor;
+                                    final float scrollPos = listView.getScrollPos();
+                                    listView.rebuildView();
+                                    Gdx.app.postRunnable(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            listView.setScrollPos(scrollPos);
+                                        }
+                                    });
+
+                                }
+                            }
                         }
                     }.show();
                 }
