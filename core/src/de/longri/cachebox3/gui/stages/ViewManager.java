@@ -28,16 +28,12 @@ import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
-import de.longri.cachebox3.gui.actions.Action_Show_Help;
-import de.longri.cachebox3.gui.actions.Action_Show_Quit;
-import de.longri.cachebox3.gui.actions.Action_Show_Settings;
-import de.longri.cachebox3.gui.actions.Action_Toggle_Day_Night;
-import de.longri.cachebox3.gui.actions.show_vies.Abstract_Action_ShowView;
-import de.longri.cachebox3.gui.actions.show_vies.Action_Show_AboutView;
-import de.longri.cachebox3.gui.actions.show_vies.Action_Show_Credits;
+import de.longri.cachebox3.gui.actions.*;
+import de.longri.cachebox3.gui.actions.show_vies.*;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.ActionButton;
+import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
 import org.slf4j.LoggerFactory;
@@ -81,12 +77,12 @@ public class ViewManager extends Stage {
 
         mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class),
                 ButtonBar.Type.DISTRIBUTED);
-        mainButtonBar.setBounds(0, 0, width, db_button.getPrefHeight());
         mainButtonBar.addButton(db_button);
         mainButtonBar.addButton(cache_button);
         mainButtonBar.addButton(navButton);
         mainButtonBar.addButton(tool_button);
         mainButtonBar.addButton(misc_button);
+        mainButtonBar.setBounds(0, 0, width, mainButtonBar.getPrefHeight());
         this.addActor(mainButtonBar);
         mainButtonBar.layout();
         initialActionButtons();
@@ -100,7 +96,7 @@ public class ViewManager extends Stage {
         if (actView != null) {
             log.debug("remove and dispose actView" + actView.getName());
             this.getRoot().removeActor(actView);
-            actView.saveState();
+            actView.onHide();
             actView.dispose();
         }
 
@@ -108,7 +104,7 @@ public class ViewManager extends Stage {
         this.addActor(view);
         setActViewBounds();
         log.debug("reload view state:" + view.getName());
-        this.actView.reloadState();
+        this.actView.onShow();
 
         //select main button
         boolean buttonFound = false;
@@ -136,9 +132,9 @@ public class ViewManager extends Stage {
     private void initialActionButtons() {
         // assign the actions to the buttons
 
-        db_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_CacheList(), true, ActionButton.GestureDirection.Up));
-        db_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_TrackableListView(), false, ActionButton.GestureDirection.Right));
-        db_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_TrackListView(), false, ActionButton.GestureDirection.Down));
+        db_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_CacheList(), true, GestureDirection.Up));
+        db_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_TrackableListView(), false, GestureDirection.Right));
+        db_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_TrackListView(), false, GestureDirection.Down));
 
 //        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowDescriptionView, true, GestureDirection.Up));
 //        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowWaypointView, false, GestureDirection.Right));
@@ -147,13 +143,13 @@ public class ViewManager extends Stage {
 //        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowDescExt, false));
 //        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSpoilerView, false));
 //        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowNotesView, false));
-//
-//        mMapButtonOnLeftTab.addAction(new CB_ActionButton(actionShowMap, true, GestureDirection.Up));
-//        mMapButtonOnLeftTab.addAction(new CB_ActionButton(actionShowCompassView, false, GestureDirection.Right));
-//        mMapButtonOnLeftTab.addAction(new CB_ActionButton(actionNavigateTo1, false, GestureDirection.Down));
-//        mMapButtonOnLeftTab.addAction(new CB_ActionButton(actionGenerateRoute, false, GestureDirection.Left));
+
+        navButton.addAction(new ActionButton(new Action_Show_MapView(), true, GestureDirection.Up));
+        navButton.addAction(new ActionButton(new Action_Show_CompassView(), false, GestureDirection.Right));
+        navButton.addAction(new ActionButton(new Action_NavigateExt(), false, GestureDirection.Down));
+        navButton.addAction(new ActionButton(new Action_NavigateInt(), false, GestureDirection.Left));
         if (GlobalCore.isTestVersion())
-            navButton.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_TestView(), false));
+            navButton.addAction(new ActionButton(new Action_Show_TestView(), false));
 //
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickFieldNote, false, GestureDirection.Up));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowFieldNotesView, Config.ShowFieldnotesAsDefaultView.getValue()));
@@ -166,18 +162,18 @@ public class ViewManager extends Stage {
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
         tool_button.addAction(new ActionButton(new Action_Show_Quit(), true));
 //
-        misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, ActionButton.GestureDirection.Up));
+        misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, GestureDirection.Up));
         misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));
-        misc_button.addAction(new ActionButton(new Action_Show_Settings(), false, ActionButton.GestureDirection.Left));
+        misc_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_activities.Action_Show_Settings(), false, GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Help(), false));
-        misc_button.addAction(new ActionButton(new Action_Show_Quit(), false, ActionButton.GestureDirection.Down));
+        misc_button.addAction(new ActionButton(new Action_Show_Quit(), false, GestureDirection.Down));
 
 //        actionShowAboutView.Execute();
     }
 
     private void setActViewBounds() {
-        this.actView.setBounds(0, mainButtonBar.getTop(), width, height);
+        this.actView.setBounds(0, mainButtonBar.getHeight(), width, height);
     }
 
     public AbstractView getActView() {
@@ -226,7 +222,7 @@ public class ViewManager extends Stage {
     }
 
     public void toast(final Actor actor, ToastLength length) {
-        CB.windowStage.addActor(actor);
+        StageManager.addToastActor(actor);
         actor.addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
 
         new com.badlogic.gdx.utils.Timer().scheduleTask(new com.badlogic.gdx.utils.Timer.Task() {

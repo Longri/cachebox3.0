@@ -29,7 +29,7 @@ package de.longri.cachebox3.settings;
  */
 public class SettingsAudio extends SettingBase<Audio> {
 
-	public SettingsAudio(String name, SettingCategory category, SettingModus modus, Audio defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+	public SettingsAudio(String name, SettingCategory category, SettingMode modus, Audio defaultValue, SettingStoreType StoreType, SettingUsage usage) {
 		super(name, category, modus, StoreType, usage);
 		this.defaultValue = defaultValue;
 		this.value = new Audio(defaultValue);
@@ -63,7 +63,7 @@ public class SettingsAudio extends SettingBase<Audio> {
 
 	@Override
 	public SettingBase<Audio> copy() {
-		SettingBase<Audio> ret = new SettingsAudio(this.name, this.category, this.modus, this.defaultValue, this.storeType, this.usage);
+		SettingBase<Audio> ret = new SettingsAudio(this.name, this.category, this.mode, this.defaultValue, this.storeType, this.usage);
 		ret.value = this.value;
 		ret.lastValue = this.lastValue;
 		return ret;

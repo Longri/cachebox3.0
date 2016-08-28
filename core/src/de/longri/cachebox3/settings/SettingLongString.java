@@ -17,7 +17,7 @@ package de.longri.cachebox3.settings;
 
 public class SettingLongString extends SettingString {
 
-	public SettingLongString(String name, SettingCategory category, SettingModus modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+	public SettingLongString(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
 		super(name, category, modus, defaultValue, StoreType, usage);
 	}
 }

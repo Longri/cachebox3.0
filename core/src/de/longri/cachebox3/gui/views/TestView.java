@@ -15,11 +15,8 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -34,8 +31,8 @@ import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
+import de.longri.cachebox3.gui.widgets.NumPad;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.utils.CB_RectF;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
@@ -109,10 +106,11 @@ public class TestView extends AbstractView {
                 //icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
                 //   icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
 
-                icm.addOnItemClickListener(new OnItemClickListener() {
+                icm.setOnItemClickListener(new OnItemClickListener() {
                     @Override
-                    public void onItemClick(MenuItem item) {
+                    public boolean onItemClick(MenuItem item) {
                         log.debug(item.toString() + " clicked");
+                        return true;
                     }
                 });
 
@@ -120,29 +118,15 @@ public class TestView extends AbstractView {
             }
         });
 
-        //  this.addActor(colorWidget);
-        this.addActor(nameLabel);
-        this.addActor(testButton);
-
-        VisTable table = new VisTable();
-        table.setSize(200, 200);
-        table.add(testButton);
-        table.row();
-
-
         VisTextButton test2Button = new VisTextButton("Toast");
-        table.add(test2Button);
-
         test2Button.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 CB.viewmanager.toast("Test langer Text der dann selbst umgebrochen werden sollte");
             }
         });
-        table.row();
+
 
         final VisTextButton test3Button = new VisTextButton("HelpWindow");
-        table.add(test3Button);
-
         test3Button.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 HelpWindow helpWindow = new HelpWindow(GestureHelp.getHelpEllipseFromActor(test3Button));
@@ -150,26 +134,88 @@ public class TestView extends AbstractView {
             }
         });
 
-        this.addActor(table);
-
-
-        final ArrayList<String> itemList = new ArrayList<String>();
-        for (int i = 0; i < 500; i++) itemList.add(Integer.toString(i));
-
-        de.longri.cachebox3.gui.views.ListView listView = new de.longri.cachebox3.gui.views.ListView(itemList.size()) {
+       final NumPad.IKeyEventListener numPadKeyListener = new NumPad.IKeyEventListener() {
             @Override
-            public VisTable createView(Integer index) {
-                VisLabel label = new VisLabel(itemList.get(index));
-                VisTable table = new VisTable();
-                table.left();
-                table.add(label);
-                return table;
+            public void KeyPressed(String keyValue) {
+
             }
         };
 
 
-        listView.setBounds(200, 50, 90, 400);
-        this.addActor(listView);
+        VisTextButton numPadOkCancel = new VisTextButton("o/c");
+        numPadOkCancel.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (numPad != null) {
+                    TestView.this.removeChild(numPad);
+                }
+                numPad = new NumPad(numPadKeyListener,NumPad.OptionalButton.OK, NumPad.OptionalButton.CANCEL);
+                numPad.pack();
+                numPad.setPosition(0, 150);
+                TestView.this.addActor(numPad);
+            }
+        });
+
+        VisTextButton numDotPadOkCancel = new VisTextButton("d/o/c");
+        numDotPadOkCancel.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (numPad != null) {
+                    TestView.this.removeChild(numPad);
+                }
+                numPad = new NumPad(numPadKeyListener,NumPad.OptionalButton.OK, NumPad.OptionalButton.CANCEL, NumPad.OptionalButton.DOT);
+                numPad.pack();
+                numPad.setPosition(0, 150);
+                TestView.this.addActor(numPad);
+            }
+        });
+
+        VisTextButton numDot = new VisTextButton("dot");
+        numDot.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (numPad != null) {
+                    TestView.this.removeChild(numPad);
+                }
+                numPad = new NumPad(numPadKeyListener,NumPad.OptionalButton.DOT);
+                numPad.pack();
+                numPad.setPosition(0, 150);
+                TestView.this.addActor(numPad);
+            }
+        });
+
+        VisTextButton num = new VisTextButton("none");
+        num.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (numPad != null) {
+                    TestView.this.removeChild(numPad);
+                }
+                numPad = new NumPad(numPadKeyListener,CB.scaledSizes.WINDOW_WIDTH);
+                numPad.pack();
+                numPad.setPosition(0, 150);
+                TestView.this.addActor(numPad);
+            }
+        });
+
+
+        VisTable table = new VisTable();
+        table.add(numPadOkCancel);
+        table.add(numDotPadOkCancel);
+        table.add(numDot);
+        table.add(num);
+
+
+        table.row();
+        table.add(testButton);
+        table.add(test2Button);
+        table.add(test3Button);
+        table.setPosition(0, 0);
+        table.pack();
+        this.addActor(table);
+
+    }
+
+    NumPad numPad;
+
+    private void addNumpad() {
+
     }
 
     private Menu getMoreMenu1() {
@@ -194,10 +240,11 @@ public class TestView extends AbstractView {
         item = menu.addItem(15, "item15");
 
 
-        menu.addOnItemClickListener(new OnItemClickListener() {
+        menu.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(MenuItem item) {
+            public boolean onItemClick(MenuItem item) {
                 log.debug("item: More1/" + item.getName() + " clicked");
+                return true;
             }
         });
 
@@ -227,10 +274,11 @@ public class TestView extends AbstractView {
         item = menu.addItem(15, "item15");
 
 
-        menu.addOnItemClickListener(new OnItemClickListener() {
+        menu.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(MenuItem item) {
+            public boolean onItemClick(MenuItem item) {
                 log.debug("item: More2/" + item.getName() + " clicked");
+                return true;
             }
         });
 
@@ -241,22 +289,12 @@ public class TestView extends AbstractView {
 
 
     @Override
-    public void reloadState() {
-
-
+    public void onShow() {
         StringBuilder sb = new StringBuilder();
-
         sb.append("LaunchCount:" + Config.AppRaterlaunchCount.getValue());
-
         nameLabel.setText(sb.toString());
-
-
     }
 
-    @Override
-    public void saveState() {
-
-    }
 
     @Override
     public void dispose() {

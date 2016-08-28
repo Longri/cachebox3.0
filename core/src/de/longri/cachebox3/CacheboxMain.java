@@ -24,6 +24,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import de.longri.cachebox3.gui.stages.Splash;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import org.slf4j.LoggerFactory;
@@ -55,32 +56,22 @@ public class CacheboxMain extends ApplicationAdapter {
         Gdx.graphics.requestRendering();
 
 
-        CB.mainStage = new Splash(new Splash.LoadReady() {
+        StageManager.setMainStage(new Splash(new Splash.LoadReady() {
             @Override
             public void ready() {
-
                 Config.AppRaterlaunchCount.setValue(Config.AppRaterlaunchCount.getValue() + 1);
                 Config.AcceptChanges();
 
-
                 // Splash is ready with initialisation
                 // now switch Stage to ViewManager
-                synchronized (CB.mainStage) {
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            CB.mainStage = new ViewManager();
-
-                            // add mainStage to input prozessor
-                            CB.inputMultiplexer.addProcessor(CB.mainStage);
-                        }
-                    });
-                }
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        StageManager.setMainStage(new ViewManager());
+                    }
+                });
             }
-        });
-
-        CB.windowStage = new Stage();
-
+        }));
     }
 
     @Override
@@ -92,22 +83,14 @@ public class CacheboxMain extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ?
                 GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
 
-        synchronized (CB.mainStage) {
-            CB.mainStage.act();
-            CB.mainStage.draw();
-        }
 
-        if (CB.windowStage != null && CB.windowStage.getActors().size > 0) {
-            CB.windowStage.act();
-            CB.windowStage.draw();
-        }
+        StageManager.draw();
 
 
         if (CB.isTestVersion()) {
-
             float FpsInfoSize = CB.getScaledFloat(4f);
             if (FpsInfoSprite != null) {
-                batch = CB.mainStage.getBatch();
+                batch = StageManager.getBatch();
                 batch.begin();
                 Color lastColor = batch.getColor();
                 batch.setColor(1.0f, 0.0f, 0.0f, 1.0f);

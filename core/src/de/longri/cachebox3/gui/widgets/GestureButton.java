@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -34,6 +35,7 @@ import de.longri.cachebox3.gui.help.GestureHelp;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.IconNames;
 import de.longri.cachebox3.utils.SizeChangedEvent;
@@ -170,10 +172,30 @@ public class GestureButton extends Button {
                                 // zuerst das View Context Menu
                                 Menu compoundMenu = new Menu("compoundMenu");
 
+                                final OnItemClickListener bothListener[] = new OnItemClickListener[2];
+                                final OnItemClickListener bothItemClickListener = new OnItemClickListener() {
+
+
+                                    @Override
+                                    public boolean onItemClick(MenuItem item) {
+
+                                        boolean handeld = false;
+
+                                        if (bothListener[0] != null)
+                                            handeld = bothListener[0].onItemClick(item);
+
+                                        if (!handeld && bothListener[1] != null)
+                                            handeld = bothListener[1].onItemClick(item);
+
+                                        return handeld;
+                                    }
+                                };
+
+
                                 Menu viewContextMenu = aktActionView.getContextMenu();
                                 if (viewContextMenu != null) {
                                     compoundMenu.addItems(viewContextMenu.getItems());
-                                    compoundMenu.addOnItemClickListener(viewContextMenu.getOnItemClickListeners());
+                                    bothListener[0] = viewContextMenu.getOnItemClickListeners();
 
                                     // add divider
                                     compoundMenu.addDivider();
@@ -182,9 +204,9 @@ public class GestureButton extends Button {
                                 Menu longClickMenu = getLongClickMenu();
                                 if (longClickMenu != null) {
                                     compoundMenu.addItems(longClickMenu.getItems());
-                                    compoundMenu.addOnItemClickListener(longClickMenu.getOnItemClickListeners());
-
+                                    bothListener[1] = longClickMenu.getOnItemClickListeners();
                                 }
+                                compoundMenu.setOnItemClickListener(bothItemClickListener);
                                 compoundMenu.show();
                                 return;
                             }
@@ -233,16 +255,6 @@ public class GestureButton extends Button {
                         aktActionView = (Abstract_Action_ShowView) action;
                 }
             }
-
-
-//         TODO   // Show Gester Help
-//            if (help != null) {
-//                CB_RectF rec = CB_Button.this.thisWorldRec;
-//                if (rec != null) {
-//                    help.setPos(rec.getX(), rec.getMaxY());
-//                    GL.that.Toast(help, 2000);
-//                }
-//            }
             return true;
         }
 
@@ -280,9 +292,9 @@ public class GestureButton extends Button {
     private Menu getLongClickMenu() {
         Menu cm = new Menu("Name");
 
-        cm.addOnItemClickListener(new OnItemClickListener() {
+        cm.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(MenuItem item) {
+            public boolean onItemClick(MenuItem item) {
                 int mId = item.getMenuItemId();
 
                 for (ActionButton ba : buttonActions) {
@@ -290,10 +302,10 @@ public class GestureButton extends Button {
                         final AbstractAction action = ba.getAction();
 
                         //have the calling action a gesture, then show gesture helper
-                        if (ba.getGestureDirection() != ActionButton.GestureDirection.None) {
+                        if (Config.showGestureHelp.getValue() && ba.getGestureDirection() != ActionButton.GestureDirection.None) {
                             if (gestureHelper == null) {
                                 gestureHelper = new GestureHelp(GestureHelp.getHelpEllipseFromActor(GestureButton.this),
-                                       style.up, gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon);
+                                        style.up, gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon);
                             }
                             gestureHelper.setWindowCloseListener(new Window.WindowCloseListener() {
                                 @Override
@@ -305,15 +317,17 @@ public class GestureButton extends Button {
                                 }
                             });
                             gestureHelper.show(ba.getGestureDirection());
+                            return true;
                         } else {
                             // no gesture, call direct
                             action.callExecute();
                             if (action instanceof Abstract_Action_ShowView)
                                 aktActionView = (Abstract_Action_ShowView) action;
+                            return true;
                         }
-                        break;
                     }
                 }
+                return false;
             }
         });
 
@@ -335,7 +349,12 @@ public class GestureButton extends Button {
     }
 
 
-    private CB_RectF menuSpriteDrawRec;
+    private static final CB_RectF menuSpriteDrawRec = new CB_RectF().add(new SizeChangedEvent() {
+        @Override
+        public void sizeChanged() {
+            menuSprite.setPosition(menuSpriteDrawRec.getX(), menuSpriteDrawRec.getY());
+        }
+    });
 
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
@@ -346,19 +365,12 @@ public class GestureButton extends Button {
             if (menuSprite == null || menuSpriteFiltered == null) {
                 menuSprite = new Sprite(CB.getSprite(IconNames.cm_icon.name()));
                 menuSpriteFiltered = new Sprite(CB.getSprite(IconNames.cm_icon_filterd.name()));
-                menuSpriteDrawRec = new CB_RectF();
-                menuSpriteDrawRec.add(new SizeChangedEvent() {
-                    @Override
-                    public void sizeChanged() {
-                        menuSprite.setPosition(menuSpriteDrawRec.getX(), menuSpriteDrawRec.getY());
-                        // menuSprite.setSize(getWidth(),getY());
-                    }
-                });
             }
 
-            if (menuSpriteDrawRec == null) return;
-
-            menuSpriteDrawRec.setPos(this.getX(), this.getY());
+            Vector2 stagePos = new Vector2();
+            this.localToStageCoordinates(stagePos);
+            menuSpriteDrawRec.setPos(stagePos.x, stagePos.y);
+            // menuSpriteDrawRec.setPos(this.getX(), this.getY());
 
             boolean isFiltered = false; //TODO set filtered!
 

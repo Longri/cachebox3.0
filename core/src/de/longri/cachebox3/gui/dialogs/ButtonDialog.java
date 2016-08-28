@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.dialogs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -61,7 +62,7 @@ public class ButtonDialog extends Window {
 
     public ButtonDialog(String Name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
         super();
-        
+
         this.skin = VisUI.getSkin();
         setSkin(this.skin);
         style = skin.get("default", ButtonDialogStyle.class);
@@ -141,8 +142,8 @@ public class ButtonDialog extends Window {
     @Override
     public void pack() {
         super.pack();
-        setPosition(((CB.windowStage.getWidth() - getWidth()) / 2f),
-                ((CB.windowStage.getHeight() - getHeight()) / 2));
+        setPosition(((Gdx.graphics.getWidth() - getWidth()) / 2f),
+                ((Gdx.graphics.getHeight() - getHeight()) / 2));
     }
 
     private static Sprite getIcon(MessageBoxIcon msgIcon) {
@@ -236,8 +237,7 @@ public class ButtonDialog extends Window {
     }
 
     private void button(String text, float buttonWidth, Object object) {
-        VisTextButton.VisTextButtonStyle buttonStyle = skin.get(VisTextButton.VisTextButtonStyle.class);
-        VisTextButton button = new VisTextButton(text, buttonStyle);
+        VisTextButton button = new VisTextButton(text);
         buttonTable.add(button).width(buttonWidth);
         values.put(button, object);
     }

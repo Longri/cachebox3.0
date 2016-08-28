@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.kotcrab.vis.ui.VisUI;
@@ -34,6 +35,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.views.ListView;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CB_RectF;
@@ -48,6 +50,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 public class Menu extends Window {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(Menu.class);
     final static boolean ALL = true;
+    public final static float MORE_MENU_ANIMATION_TIME = 0.3f;
 
     CB_List<MenuItem> mItems = new CB_List();
     MenuStyle style;
@@ -56,23 +59,7 @@ public class Menu extends Window {
     OnItemClickListener onItemClickListener;
     private VisLabel titleLabel, parentTitleLabel;
     protected Menu parentMenu;
-
-    InputListener clickListener = new InputListener() {
-
-        private final CB_RectF backClickReckArea = new CB_RectF();
-
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            // close menu if outside of listView
-            backClickReckArea.set(Menu.this.mainMenuWidgetGroup.getX(), Menu.this.titleLabel.getY(),
-                    Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - Menu.this.titleLabel.getY());
-            if (backClickReckArea.contains(x, y)) {
-                hide(ALL);
-                return true;
-            }
-            return false;
-        }
-    };
-
+    private  WidgetGroup titleGroup;
 
     public Menu(String name) {
         this.style = VisUI.getSkin().get("default", MenuStyle.class);
@@ -88,6 +75,13 @@ public class Menu extends Window {
 
     public Menu(String name, String styleName) {
         this(name, VisUI.getSkin().get(styleName, MenuStyle.class));
+    }
+
+    public MenuItem addItem(int ID, String StringId, Sprite icon) {
+        MenuItem item = addItem(ID, StringId);
+        if (icon != null)
+            item.setIcon(new SpriteDrawable(icon));
+        return item;
     }
 
     public void addItem(MenuItem menuItem) {
@@ -163,7 +157,6 @@ public class Menu extends Window {
             showAsChild();
         }
         this.setTouchable(Touchable.enabled);
-        CB.windowStage.addListener(clickListener);
         log.debug("Show menu: " + this.name);
     }
 
@@ -177,20 +170,17 @@ public class Menu extends Window {
         mainMenuWidgetGroup = new WidgetGroup();
         mainMenuWidgetGroup.setBounds(this.getX(), this.getY(), this.getWidth(), this.getHeight());
         mainMenuWidgetGroup.addActor(this);
-        CB.windowStage.addActor(mainMenuWidgetGroup);
-        CB.windowStage.setKeyboardFocus(this);
-        CB.windowStage.setScrollFocus(this);
+
+        if (this.parentMenu == null) {
+            StageManager.showOnNewStage(mainMenuWidgetGroup);
+        } else {
+            StageManager.showOnActStage(mainMenuWidgetGroup);
+        }
+
         if (this.parentMenu == null)
             addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
-
-        //switch input processor to window stage
-        CB.inputMultiplexer.removeProcessor(CB.mainStage);
-        CB.inputMultiplexer.addProcessor(CB.windowStage);
-
     }
 
-
-    private final float MORE_MENU_ANIMATION_TIME = 0.3f;
 
     private void showAsChild() {
         float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
@@ -210,10 +200,8 @@ public class Menu extends Window {
 
     public void hide(boolean all) {
         if (this.parentMenu != null) {
-
             if (all) {
-                super.hide();
-                parentMenu.hide(ALL);
+                StageManager.removeAllWithActStage();
             } else {
                 float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
                 mainMenuWidgetGroup.addAction(Actions.sequence(Actions.moveTo(0 + nextXPos, 0, MORE_MENU_ANIMATION_TIME), Actions.removeActor()));
@@ -222,69 +210,67 @@ public class Menu extends Window {
         } else {
             super.hide();
         }
-
-        CB.windowStage.removeListener(clickListener);
         log.debug("Hide menu: " + this.name);
     }
 
 
     private void initialLayout() {
 
-        //remove all childs
+        //remove all child's
         this.clear();
 
         float topY = Gdx.graphics.getHeight() - CB.scaledSizes.MARGIN_HALF;
         float xPos = CB.scaledSizes.MARGIN_HALF;
 
-
         // add the titleLabel on top
+        titleGroup = new WidgetGroup();
+        ClickListener backClickListener = new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                hide(false);
+            }
+        };
+
         if (style.menu_back != null) {
             Image backImage = new Image(style.menu_back);
-            backImage.setPosition(xPos, topY - backImage.getHeight());
+            backImage.setPosition(xPos, 0);
             xPos += backImage.getWidth() + CB.scaledSizes.MARGIN;
-            this.addActor(backImage);
+            titleGroup.addActor(backImage);
         }
 
         titleLabel = new VisLabel(this.name, "menu_title_act");
 
         if (parentMenu != null) {
             parentTitleLabel = new VisLabel(parentMenu.name, "menu_title_parent");
-            parentTitleLabel.setPosition(xPos, topY - parentTitleLabel.getHeight());
+            parentTitleLabel.setPosition(xPos, 0);
             xPos += parentTitleLabel.getWidth() + CB.scaledSizes.MARGINx2;
-            this.addActor(parentTitleLabel);
+            titleGroup.addActor(parentTitleLabel);
         } else {
-            //center titleLable
+            //center titleLabel
             xPos = (Gdx.graphics.getWidth() - titleLabel.getWidth()) / 2;
         }
 
-        titleLabel.setPosition(xPos, topY - titleLabel.getHeight());
-        this.addActor(titleLabel);
+        titleLabel.setPosition(xPos, 0);
+        titleGroup.addActor(titleLabel);
+
+
+        float titleHeight = titleLabel.getHeight() + CB.scaledSizes.MARGIN;
+        titleGroup.setBounds(0, Gdx.graphics.getHeight() - (titleHeight), Gdx.graphics.getWidth(), titleHeight);
+        titleGroup.addListener(backClickListener);
+
+        this.addActor(titleGroup);
 
         final OnItemClickListener clickListener = new OnItemClickListener() {
             @Override
-            public void onItemClick(final MenuItem item) {
+            public boolean onItemClick(final MenuItem item) {
 
                 // have the clicked item a moreMenu, just show it
                 if (item.hasMoreMenu()) {
                     item.getMoreMenu(Menu.this).show();
-                    return;
+                    return true;
                 }
-
-
-                if (onItemClickListener != null) {
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            onItemClickListener.onItemClick(item);
-                        }
-                    });
-                    thread.start();
-                }
-
-
                 //close Menu with sub menu's
                 hide(ALL);
-
+                return onItemClickListener.onItemClick(item);
             }
         };
 
@@ -310,12 +296,12 @@ public class Menu extends Window {
         listView.rebuildView();
         super.pack();
 
-        float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (listView.getHeight() + CB.scaledSizes.MARGINx2);
-        listView.setBounds(((CB.windowStage.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
+        float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (titleGroup.getHeight() );
+        listView.setBounds(((Gdx.graphics.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
                 CB.scaledSizes.WINDOW_WIDTH, maxListViewHeight);
     }
 
-    public void addOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -332,13 +318,21 @@ public class Menu extends Window {
     }
 
     public void addDivider() {
+
+        if (this.style.divider != null) {
+            MenuItem item = new MenuItem(this);
+            item.overrideBackground(this.style.divider);
+            addItem(item);
+        }
+
+        log.debug("add Divider");
         //TODO add divider item
     }
 
     public static class MenuStyle {
         public BitmapFont font;
         public Color fontColor;
-        public Drawable background, stageBackground, menu_back, menu_for;
+        public Drawable background, stageBackground, menu_back, menu_for, divider;
 
     }
 

@@ -29,7 +29,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     protected CB_List<IChanged> ChangedEventList = new CB_List<IChanged>();
     protected SettingCategory category;
     protected String name;
-    protected SettingModus modus;
+    protected SettingMode mode;
     protected SettingStoreType storeType;
     protected SettingUsage usage;
 
@@ -46,10 +46,10 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     private static int indexCount = 0;
     private int index = -1;
 
-    public SettingBase(String name, SettingCategory category, SettingModus modus, SettingStoreType StoreType, SettingUsage usage) {
+    public SettingBase(String name, SettingCategory category, SettingMode modus, SettingStoreType StoreType, SettingUsage usage) {
 	this.name = name;
 	this.category = category;
-	this.modus = modus;
+	this.mode = modus;
 	this.storeType = StoreType;
 	this.usage = usage;
 	this.dirty = false;
@@ -95,12 +95,12 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
 	return storeType;
     }
 
-    public SettingModus getModus() {
-	return modus;
+    public SettingMode getMode() {
+	return mode;
     }
 
-    public void changeSettingsModus(SettingModus Modus) {
-	this.modus = Modus;
+    public void changeSettingsModus(SettingMode mode) {
+	this.mode = mode;
     }
 
     public abstract String toDBString();

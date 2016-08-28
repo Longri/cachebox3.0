@@ -70,6 +70,12 @@ public class MenuItem extends VisTable {
         setDefaultStyle();
     }
 
+    public MenuItem(Menu parentMenu) {
+        mID = -1;
+        name = "";
+        this.parentMenu = parentMenu;
+    }
+
 
     private void setDefaultStyle() {
         this.style = VisUI.getSkin().get("default", MenuItemStyle.class);
@@ -110,9 +116,11 @@ public class MenuItem extends VisTable {
             }
         }
 
-        mLabel = new Label(mTitle, new Label.LabelStyle(style.font, style.fontColor));
-        mLabel.setWrap(true);
-        this.add(mLabel).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
+        if (mTitle != null) {
+            mLabel = new Label(mTitle, new Label.LabelStyle(style.font, style.fontColor));
+            mLabel.setWrap(true);
+            this.add(mLabel).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
+        }
 
         if (moreMenu != null && parentMenu.style.menu_for != null) {
             checkImage = new Image(parentMenu.style.menu_for);
@@ -181,6 +189,7 @@ public class MenuItem extends VisTable {
         if (icon.getMinWidth() > CB.scaledSizes.ICON_HEIGHT) {
             // set scaled icon size!
             imageScaleValue = Math.min(CB.scaledSizes.ICON_WIDTH / icon.getMinWidth(), CB.scaledSizes.ICON_HEIGHT / icon.getMinHeight());
+            log.debug("Menu Icon size not otimal for item: " + this.getName() + "! Maby use scalefactor = " + imageScaleValue);
         } else {
             imageScaleValue = 1f;
         }
@@ -250,6 +259,20 @@ public class MenuItem extends VisTable {
     public Menu getMoreMenu(Menu menu) {
         this.moreMenu.parentMenu = menu;
         return this.moreMenu;
+    }
+
+
+    private boolean backgroundOverrides = false;
+
+    public void overrideBackground(Drawable drawable) {
+        setBackground(drawable);
+        backgroundOverrides = drawable != null;
+    }
+
+    @Override
+    public void setBackground(Drawable drawable) {
+        if (backgroundOverrides) return;
+        super.setBackground(drawable);
     }
 
     public static class MenuItemStyle {

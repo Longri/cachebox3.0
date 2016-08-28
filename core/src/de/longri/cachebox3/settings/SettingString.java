@@ -18,7 +18,7 @@ package de.longri.cachebox3.settings;
 public class SettingString extends SettingBase<String> {
 	public static final String STRING_SPLITTER = "�";
 
-	public SettingString(String name, SettingCategory category, SettingModus modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+	public SettingString(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
 		super(name, category, modus, StoreType, usage);
 		this.defaultValue = defaultValue;
 		this.value = defaultValue;
@@ -42,7 +42,7 @@ public class SettingString extends SettingBase<String> {
 
 	@Override
 	public SettingBase<String> copy() {
-		SettingBase<String> ret = new SettingString(this.name, this.category, this.modus, this.defaultValue, this.storeType, usage);
+		SettingBase<String> ret = new SettingString(this.name, this.category, this.mode, this.defaultValue, this.storeType, usage);
 		ret.value = this.value;
 		ret.lastValue = this.lastValue;
 		return ret;

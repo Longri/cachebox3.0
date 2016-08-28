@@ -53,10 +53,6 @@ public abstract class AbstractView extends CB_View_Base {
         boundsChanged(this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
 
-    public abstract void reloadState();
-
-    public abstract void saveState();
-
     protected void boundsChanged(float x, float y, float width, float height) {
         colorWidget.setBounds(0, 0, this.getWidth(), this.getHeight());
         nameLabel.setBounds(0, 0, this.getWidth(), this.getHeight());

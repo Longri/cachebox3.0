@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.help;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -35,6 +36,7 @@ import de.longri.cachebox3.gui.animations.actor_animations.GestureHelpAnimation;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CB_RectF;
 import org.slf4j.LoggerFactory;
@@ -51,6 +53,7 @@ public class GestureHelp extends HelpWindow {
     final String GESTURE_MSG = Translation.Get("gestureHelp"); // "You can also use this gesture to call this function"
     final String DONT_SHOW_AGAIN_MSG = Translation.Get("DontShowHelp"); // "Don't show help Msg again!"
     final Table table = new Table();
+    private boolean isShowing = false;
 
     private Actor arrowRight, arrowDown, arrowLeft, arrowUp;
 
@@ -177,8 +180,13 @@ public class GestureHelp extends HelpWindow {
         button.setPosition(CB.scaledSizes.MARGIN, this.ellipseRectangle.getMaxY() + CB.scaledSizes.MARGINx2);
         button.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                // todo Handle don't show help again
-                log.debug("click on don't show again, but not handled now!");
+                log.debug("click on don't show again");
+                Config.showGestureHelp.setValue(false);
+                Config.AcceptChanges();
+
+                //close directly
+                hide();
+
             }
         });
         this.addActor(button);
@@ -202,6 +210,8 @@ public class GestureHelp extends HelpWindow {
     public void show() {
         super.show();
 
+        isShowing = true;
+
         // close
         new com.badlogic.gdx.utils.Timer().scheduleTask(new com.badlogic.gdx.utils.Timer.Task() {
             @Override
@@ -212,7 +222,10 @@ public class GestureHelp extends HelpWindow {
     }
 
     public void hide() {
+        if (!isShowing) return;
         super.hide();
+
+        isShowing = false;
 
         // remove Blink action
         if (arrowRight != null) arrowRight.clearActions();

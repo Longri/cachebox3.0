@@ -26,7 +26,7 @@ public class SettingEnum<EnumTyp extends Enum<?>> extends SettingString {
 	private EnumTyp myEnum;
 
 	@SuppressWarnings("rawtypes")
-	public SettingEnum(String name, SettingCategory category, SettingModus modus, EnumTyp defaultValue, SettingStoreType StoreType, SettingUsage usage, EnumTyp enu) {
+	public SettingEnum(String name, SettingCategory category, SettingMode modus, EnumTyp defaultValue, SettingStoreType StoreType, SettingUsage usage, EnumTyp enu) {
 		super(name, category, modus, defaultValue.name(), StoreType, usage);
 		myEnum = enu;
 

@@ -17,7 +17,7 @@ package de.longri.cachebox3.settings;
 
 public class SettingTime extends SettingBase<Integer> {
 
-	public SettingTime(String name, SettingCategory category, SettingModus modus, int defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+	public SettingTime(String name, SettingCategory category, SettingMode modus, int defaultValue, SettingStoreType StoreType, SettingUsage usage) {
 		super(name, category, modus, StoreType, usage);
 		this.defaultValue = defaultValue;
 		this.value = defaultValue;
@@ -63,7 +63,7 @@ public class SettingTime extends SettingBase<Integer> {
 
 	@Override
 	public SettingBase<Integer> copy() {
-		SettingBase<Integer> ret = new SettingTime(this.name, this.category, this.modus, this.defaultValue, this.storeType, this.usage);
+		SettingBase<Integer> ret = new SettingTime(this.name, this.category, this.mode, this.defaultValue, this.storeType, this.usage);
 		ret.value = this.value;
 		ret.lastValue = this.lastValue;
 		return ret;

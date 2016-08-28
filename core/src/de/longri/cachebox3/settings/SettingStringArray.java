@@ -19,7 +19,7 @@ public class SettingStringArray extends SettingString {
 
 	private String possibleValues[];
 
-	public SettingStringArray(String name, SettingCategory category, SettingModus modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage, String possibleValues[]) {
+	public SettingStringArray(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage, String possibleValues[]) {
 		super(name, category, modus, defaultValue, StoreType, usage);
 		this.defaultValue = defaultValue;
 		this.value = defaultValue;

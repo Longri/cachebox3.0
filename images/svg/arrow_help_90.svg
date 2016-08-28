@@ -5,5 +5,5 @@
 		<stop offset="0" stop-color="#FF4343" stop-opacity="1"/>
 		<stop offset="1" stop-color="#8C0909" stop-opacity="1"/>
 	</linearGradient>
-	<path fill="url(#SVGID_Fill1_)" stroke-linejoin="round" stroke="#FF3333" stroke-opacity="1" d="M 24.4169,0.541809L 87.0836,118.875L 25.4169,235.875L 0.583374,235.708L 0.500061,0.500061L 24.4169,0.541809 Z "/>
+	<path fill="url(#SVGID_Fill1_)" stroke-linejoin="round" stroke="#FF3333" stroke-opacity="1" d="M 24.4172,0.541809L 87.0838,118.875L 25.4172,235.875L 0.583618,235.708L 0.500305,0.500061L 24.4172,0.541809 Z "/>
 </svg>

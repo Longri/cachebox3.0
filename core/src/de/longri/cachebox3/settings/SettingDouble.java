@@ -17,7 +17,7 @@ package de.longri.cachebox3.settings;
 
 public class SettingDouble extends SettingBase<Double> {
 
-	public SettingDouble(String name, SettingCategory category, SettingModus modus, double defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+	public SettingDouble(String name, SettingCategory category, SettingMode modus, double defaultValue, SettingStoreType StoreType, SettingUsage usage) {
 		super(name, category, modus, StoreType, usage);
 		this.defaultValue = defaultValue;
 		this.value = defaultValue;
@@ -41,7 +41,7 @@ public class SettingDouble extends SettingBase<Double> {
 
 	@Override
 	public SettingBase<Double> copy() {
-		SettingBase<Double> ret = new SettingDouble(this.name, this.category, this.modus, this.defaultValue, this.storeType, this.usage);
+		SettingBase<Double> ret = new SettingDouble(this.name, this.category, this.mode, this.defaultValue, this.storeType, this.usage);
 
 		ret.value = this.value;
 		ret.lastValue = this.lastValue;

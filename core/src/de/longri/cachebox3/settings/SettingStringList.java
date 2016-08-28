@@ -23,7 +23,7 @@ package de.longri.cachebox3.settings;
 public class SettingStringList extends SettingBase<String[]> {
     final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SettingStringList.class);
 
-    public SettingStringList(String name, SettingCategory category, SettingModus modus, String[] defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+    public SettingStringList(String name, SettingCategory category, SettingMode modus, String[] defaultValue, SettingStoreType StoreType, SettingUsage usage) {
 	super(name, category, modus, StoreType, usage);
 	this.defaultValue = defaultValue;
     }
@@ -54,7 +54,7 @@ public class SettingStringList extends SettingBase<String[]> {
 
     @Override
     public SettingBase<String[]> copy() {
-	SettingBase<String[]> ret = new SettingStringList(this.name, this.category, this.modus, this.defaultValue, this.storeType, usage);
+	SettingBase<String[]> ret = new SettingStringList(this.name, this.category, this.mode, this.defaultValue, this.storeType, usage);
 	ret.value = this.value;
 	ret.lastValue = this.lastValue;
 	return ret;

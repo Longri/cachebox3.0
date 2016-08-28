@@ -371,7 +371,7 @@ public class ImageLoader {
 	private void generate() {
 		inLoad = true;
 		if (ImageLoadError) {
-			setSprite(CB.getSprite(IconNames.DELETE.name()), this.reziseHeight);
+			setSprite(CB.getSprite(IconNames.deleteIcon.name()), this.reziseHeight);
 			ImageLoadError = false;
 			return;
 		}

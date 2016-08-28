@@ -25,6 +25,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.stages.StageManager;
+import de.longri.cachebox3.utils.Showable;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
@@ -69,15 +71,13 @@ public class Window extends Table {
     public void show() {
         clearActions();
         pack();
-        CB.windowStage.addActor(this);
-        CB.windowStage.setKeyboardFocus(this);
-        CB.windowStage.setScrollFocus(this);
+
+        StageManager.showOnNewStage(this);
         addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
 
-        //switch input processor to window stage
-        CB.inputMultiplexer.removeProcessor(CB.mainStage);
-        CB.inputMultiplexer.addProcessor(CB.windowStage);
-
+        if (this instanceof Showable) {
+            ((Showable) this).onShow();
+        }
     }
 
     public void hide() {
@@ -85,19 +85,14 @@ public class Window extends Table {
         // addCaptureListener(IgnoreTouchInputListener.INSTANCE);
         addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
 
-        //switch input processor to main stage
-        CB.inputMultiplexer.removeProcessor(CB.windowStage);
-
-
-        new Timer().scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                CB.inputMultiplexer.addProcessor(CB.mainStage);
-            }
-        }, 0.3f);
+        StageManager.removeAllWithActStage();
 
         if (this.windowCloseListener != null) {
             this.windowCloseListener.windowClosed();
+        }
+
+        if (this instanceof Showable) {
+            ((Showable) this).onHide();
         }
     }
 

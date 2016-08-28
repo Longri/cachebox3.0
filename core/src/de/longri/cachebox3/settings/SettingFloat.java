@@ -17,7 +17,7 @@ package de.longri.cachebox3.settings;
 
 public class SettingFloat extends SettingBase<Float> {
 
-	public SettingFloat(String name, SettingCategory category, SettingModus modus, float defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+	public SettingFloat(String name, SettingCategory category, SettingMode modus, float defaultValue, SettingStoreType StoreType, SettingUsage usage) {
 		super(name, category, modus, StoreType, usage);
 		this.defaultValue = defaultValue;
 		this.value = defaultValue;
@@ -41,7 +41,7 @@ public class SettingFloat extends SettingBase<Float> {
 
 	@Override
 	public SettingBase<Float> copy() {
-		SettingBase<Float> ret = new SettingFloat(this.name, this.category, this.modus, this.defaultValue, this.storeType, this.usage);
+		SettingBase<Float> ret = new SettingFloat(this.name, this.category, this.mode, this.defaultValue, this.storeType, this.usage);
 		ret.value = this.value;
 		ret.lastValue = this.lastValue;
 		return ret;

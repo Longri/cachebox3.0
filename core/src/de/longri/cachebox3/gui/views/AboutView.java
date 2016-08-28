@@ -45,15 +45,6 @@ public class AboutView extends AbstractView implements PositionChangedEvent {
         PositionChangedEventList.Add(this);
     }
 
-    @Override
-    public void reloadState() {
-
-    }
-
-    @Override
-    public void saveState() {
-
-    }
 
     @Override
     public void dispose() {

@@ -22,7 +22,7 @@ public class SettingFolder extends SettingLongString {
 
 	private final boolean needWritePermission;
 
-	public SettingFolder(String name, SettingCategory category, SettingModus modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage, boolean needwritePermission) {
+	public SettingFolder(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage, boolean needwritePermission) {
 		super(name, category, modus, defaultValue, StoreType, usage);
 		this.needWritePermission = needwritePermission;
 	}

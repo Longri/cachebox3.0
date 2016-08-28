@@ -13,7 +13,7 @@ import java.util.Iterator;
 public class SettingsList extends ArrayList<SettingBase<?>> {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(SettingsList.class);
 
-    static SettingsList that;
+    public static SettingsList that;
 
     private static final long serialVersionUID = -969846843815877942L;
 

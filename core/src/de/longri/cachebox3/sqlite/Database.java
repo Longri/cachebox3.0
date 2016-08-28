@@ -38,6 +38,8 @@ public class Database {
     public static Database FieldNotes;
     public static Database Settings;
     private SQLiteGdxDatabase myDB;
+
+
 //	public CacheList Query;
 
     public enum DatabaseType {
@@ -112,6 +114,11 @@ public class Database {
             MasterDatabaseId = ReadConfigLong("MasterDatabaseId");
         }
         return true;
+    }
+
+
+    public String getPath() {
+        return this.databasePath.file().getAbsolutePath();
     }
 
 
@@ -724,9 +731,9 @@ public class Database {
                     // now delete all Logs out of Date but keep the ones in minLogIds
                     String delCommand;
                     if (sb.length() > 0)
-                        delCommand = "DELETE FROM Logs WHERE Timestamp<'" + TimeStamp + "' AND cacheid = " + String.valueOf(oldLogCache) + " AND id NOT IN (" + sb.toString().substring(0, sb.length() - 1) + ")";
+                        delCommand = "deleteIcon FROM Logs WHERE Timestamp<'" + TimeStamp + "' AND cacheid = " + String.valueOf(oldLogCache) + " AND id NOT IN (" + sb.toString().substring(0, sb.length() - 1) + ")";
                     else
-                        delCommand = "DELETE FROM Logs WHERE Timestamp<'" + TimeStamp + "' AND cacheid = " + String.valueOf(oldLogCache);
+                        delCommand = "deleteIcon FROM Logs WHERE Timestamp<'" + TimeStamp + "' AND cacheid = " + String.valueOf(oldLogCache);
                     log.debug(delCommand);
                     Database.Data.execSQL(delCommand);
                 }

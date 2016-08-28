@@ -9,15 +9,6 @@ public class TrackableListView extends AbstractView {
         super("TrackableListView");
     }
 
-    @Override
-    public void reloadState() {
-
-    }
-
-    @Override
-    public void saveState() {
-
-    }
 
     @Override
     public void dispose() {
