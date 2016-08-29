@@ -124,29 +124,8 @@ public class CategoryDAO {
         }
     }
 
-//	// Categories
-//	public void LoadCategoriesFromDatabase()
-//	{
-//		// read all Categories
-//
-//		CoreSettingsForward.Categories.beginnTransaction();
-//		CoreSettingsForward.Categories.clear();
-//
-//		SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select ID, GPXFilename, Pinned from Category", null);
-//		if (reader != null)
-//		{
-//			reader.moveToFirst();
-//			while (reader.isAfterLast() == false)
-//			{
-//				Category category = ReadFromCursor(reader);
-//				CoreSettingsForward.Categories.add(category);
-//				reader.moveToNext();
-//			}
-//			reader.close();
-//		}
-//		CoreSettingsForward.Categories.sort();
-//		CoreSettingsForward.Categories.endTransaction();
-//	}
+
+
 //
 //	public Category GetCategory(Categories categories, String filename)
 //	{

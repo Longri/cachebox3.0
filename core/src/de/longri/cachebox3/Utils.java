@@ -289,4 +289,15 @@ public class Utils {
 
         return hash;
     }
+
+    /**
+     * @param folder Path as String
+     * @return true, if folder exist! false otherwise
+     */
+    public static boolean directoryExists(String folder) {
+        FileHandle fh = new FileHandle(folder);
+        boolean exist = fh.exists();
+        fh = null;
+        return exist;
+    }
 }

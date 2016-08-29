@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.utils.ScaledSizes;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLoggerFactory;
@@ -49,6 +50,8 @@ public class CB {
 
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
     public static final float WINDOW_FADE_TIME = 0.3f;
+    private static boolean displayOff = false;
+    public static Categories Categories;
 
     static {
 
@@ -60,7 +63,7 @@ public class CB {
         //   LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
 
 
-       // LibgdxLoggerFactory.INCLUDE_LIST.add(ViewManager.class.getName());
+        // LibgdxLoggerFactory.INCLUDE_LIST.add(ViewManager.class.getName());
 
         ((LibgdxLoggerFactory) LoggerFactory.getILoggerFactory()).reset();
     }
@@ -178,6 +181,10 @@ public class CB {
 //        }
 
         Gdx.app.exit();
+    }
+
+    public static boolean isDisplayOff() {
+        return displayOff;
     }
 
     public enum Platform {

@@ -16,6 +16,7 @@
 package de.longri.cachebox3.types;
 
 
+import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.utils.MathUtils;
@@ -98,7 +99,7 @@ public class CacheList extends MoveableList<Cache> {
 			}
 			for (int i = 0, n = this.size(); i < n; i++) {
 				Cache cache = this.get(i);
-				cache.Distance(CalculationType.FAST, true, fromPos);
+				cache.Distance(MathUtils.CalculationType.FAST, true, fromPos);
 			}
 		}
 
@@ -152,7 +153,7 @@ public class CacheList extends MoveableList<Cache> {
 			retValue = new CacheWithWP(nextCache, waypoint);
 		}
 
-		CB_Core.CacheListChangedEventList.Call();
+		CacheListChangedEventList.Call();
 
 		// vorhandenen Parkplatz Cache nach oben schieben
 		Cache park = this.GetCacheByGcCode("CBPark");

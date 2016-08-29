@@ -382,30 +382,30 @@ public class DescriptionImageGrabber {
         return images;
     }
 
-    /**
-     * @param ip
-     * @param descriptionImagesUpdated
-     * @param additionalImagesUpdated
-     * @param id
-     * @param gcCode
-     * @param name
-     * @param description
-     * @param url                      Config.settings.socket_timeout.getValue()
-     * @return ErrorCode Use with<br>
-     * if (result == GroundspeakAPI.CONNECTION_TIMEOUT)<br>
-     * {<br>
-     * GL.that.Toast(ConnectionError.INSTANCE);<br>
-     * return;<br>
-     * }<br>
-     * <br>
-     * if (result == GroundspeakAPI.API_IS_UNAVAILABLE)<br>
-     * {<br>
-     * GL.that.Toast(ApiUnavailable.INSTANCE);<br>
-     * return;<br>
-     * }<br>
-     */
-    public static int GrabImagesSelectedByCache(ImporterProgress ip, boolean descriptionImagesUpdated, boolean additionalImagesUpdated, long id, String gcCode, String name, String description, String url) {
-        boolean imageLoadError = false;
+//    /**
+//     * @param ip
+//     * @param descriptionImagesUpdated
+//     * @param additionalImagesUpdated
+//     * @param id
+//     * @param gcCode
+//     * @param name
+//     * @param description
+//     * @param url                      Config.settings.socket_timeout.getValue()
+//     * @return ErrorCode Use with<br>
+//     * if (result == GroundspeakAPI.CONNECTION_TIMEOUT)<br>
+//     * {<br>
+//     * GL.that.Toast(ConnectionError.INSTANCE);<br>
+//     * return;<br>
+//     * }<br>
+//     * <br>
+//     * if (result == GroundspeakAPI.API_IS_UNAVAILABLE)<br>
+//     * {<br>
+//     * GL.that.Toast(ApiUnavailable.INSTANCE);<br>
+//     * return;<br>
+//     * }<br>
+//     */
+//    public static int GrabImagesSelectedByCache(ImporterProgress ip, boolean descriptionImagesUpdated, boolean additionalImagesUpdated, long id, String gcCode, String name, String description, String url) {
+//        boolean imageLoadError = false;
 
 //        if (!descriptionImagesUpdated) {
 //            ip.ProgressChangeMsg("importImages", "Importing Description Images for " + gcCode);
@@ -594,8 +594,8 @@ public class DescriptionImageGrabber {
 //
 //            }
 //        }
-        return 0;
-    }
+//        return 0;
+//    }
 
 //    private static String[] getFilesInDirectory(String path, final String GcCode) {
 //        String imagePath = path + "/" + GcCode.substring(0, 4);

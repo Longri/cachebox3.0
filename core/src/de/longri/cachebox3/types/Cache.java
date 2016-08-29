@@ -429,15 +429,6 @@ public class Cache implements Comparable<Cache>, Serializable {
         }
     }
 
-    public void SpoilerForceReEvaluate() {
-        detail.SpoilerForceReEvaluate(this);
-    }
-
-    public void loadSpoilerRessources() {
-        if (detail != null) {
-            detail.loadSpoilerRessources(this);
-        }
-    }
 
     /**
      * Gibt die Entfernung zur uebergebenen User Position als Float zurueck.

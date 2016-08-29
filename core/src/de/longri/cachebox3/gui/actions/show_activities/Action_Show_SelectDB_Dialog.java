@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014 team-cachebox.de
+ * Copyright (C) 2014-2016 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,22 @@
 package de.longri.cachebox3.gui.actions.show_activities;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.gui.actions.AbstractAction;
+import de.longri.cachebox3.gui.activities.SelectDB_Activity;
+import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheListDAO;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Categories;
+import de.longri.cachebox3.types.FilterInstances;
+import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.IconNames;
 import org.slf4j.LoggerFactory;
 
@@ -56,21 +62,20 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             log.debug("LastSelectedCache = " + GlobalCore.getSelectedCache().getGcCode());
         }
 
-        SelectDB selectDBDialog = new SelectDB(new CB_RectF(0, 0, GL.that.getWidth(), GL.that.getHeight()), "SelectDbDialog", false);
-        selectDBDialog.setReturnListener(new IReturnListener() {
+        SelectDB_Activity selectDBDialog = new SelectDB_Activity(new SelectDB_Activity.IReturnListener() {
             @Override
             public void back() {
                 returnFromSelectDB();
             }
         });
         selectDBDialog.show();
-        selectDBDialog = null;
+
     }
 
-    WaitDialog wd;
+    // WaitDialog wd;
 
     private void returnFromSelectDB() {
-        wd = WaitDialog.ShowWait("Load DB ...");
+        //   wd = WaitDialog.ShowWait("Load DB ...");
 
         log.debug("\r\nSwitch DB");
         Thread thread = new Thread(new Runnable() {
@@ -82,9 +87,9 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
                 GlobalCore.setAutoResort(Config.StartWithAutoSelect.getValue());
                 CacheListChangedEventList.Call();
 
-                TabMainView.that.filterSetChanged();
+                //  TabMainView.that.filterSetChanged();
 
-                wd.dismis();
+                //  wd.dismis();
             }
         });
 
@@ -95,11 +100,14 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
     public void loadSelectedDB() {
         Database.Data.Query.clear();
         Database.Data.Close();
-        Database.Data.StartUp(Config.DatabasePath.getValue());
+
+        FileHandle fileHandle = Gdx.files.absolute(Config.DatabasePath.getValue());
+
+        Database.Data.StartUp(fileHandle);
 
         Config.ReadFromDB();
 
-        CoreSettingsForward.Categories = new Categories();
+        CB.Categories = new Categories();
 
         FilterInstances.setLastFilter(new FilterProperties(Config.FilterNew.getValue()));
 

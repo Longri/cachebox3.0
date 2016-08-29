@@ -21,7 +21,6 @@ import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Database.Parameters;
-import de.longri.cachebox3.sqlite.Import.ImporterProgress;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Replication;
@@ -170,22 +169,6 @@ public class WaypointDAO {
 		if (WP.IsStart)
 			sCheckSum += "1";
 		return (int) Utils.sdbm(sCheckSum);
-	}
-
-	public void WriteImports(Iterator<Waypoint> waypointIterator, int waypointCount, ImporterProgress ip) {
-		ip.setJobMax("WriteWaypointsToDB", waypointCount);
-		while (waypointIterator.hasNext()) {
-			Waypoint waypoint = waypointIterator.next();
-			ip.ProgressInkrement("WriteWaypointsToDB", String.valueOf(waypoint.CacheId), false);
-			try {
-				WriteImportToDatabase(waypoint);
-			} catch (Exception e) {
-
-				e.printStackTrace();
-			}
-
-		}
-
 	}
 
 	public void WriteImportToDatabase(Waypoint WP) {

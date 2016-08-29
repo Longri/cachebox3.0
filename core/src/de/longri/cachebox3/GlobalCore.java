@@ -15,6 +15,13 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.gui.events.SelectedCacheEventList;
+import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.Waypoint;
 import org.slf4j.LoggerFactory;
 
 
@@ -41,6 +48,13 @@ public class GlobalCore {
     private static boolean isTestVersionCheked = false;
     private static boolean isTestVersion = false;
 
+    private static Cache selectedCache = null;
+    private static Waypoint selectedWaypoint = null;
+    private static Cache nearestCache = null;
+    private static boolean autoResort;
+    public static boolean switchToCompassCompleted = false;
+
+
     public static boolean isTestVersion() {
         if (isTestVersionCheked) return isTestVersion;
 
@@ -53,4 +67,113 @@ public class GlobalCore {
         final String ret = "Version: " + CurrentVersion + String.valueOf(CurrentRevision) + "  " + (VersionPrefix.equals("") ? "" : "(" + VersionPrefix + ")");
         return ret;
     }
+
+    public static String cacheHistory = "";
+
+    public static void setSelectedCache(Cache cache) {
+        selectedCache = cache;
+    }
+
+    public static void setSelectedWaypoint(Cache cache, Waypoint waypoint) {
+        if (cache == null)
+            return;
+
+        setSelectedWaypoint(cache, waypoint, true);
+        if (waypoint == null) {
+            cacheHistory = cache.getGcCode() + "," + cacheHistory;
+            if (cacheHistory.length() > 120) {
+                cacheHistory = cacheHistory.substring(0, cacheHistory.lastIndexOf(","));
+            }
+        }
+    }
+
+    /**
+     * if changeAutoResort == false -> do not change state of autoResort Flag
+     *
+     * @param cache
+     * @param waypoint
+     * @param changeAutoResort
+     */
+    public static void setSelectedWaypoint(Cache cache, Waypoint waypoint, boolean changeAutoResort) {
+
+        if (cache == null) {
+            log.info("[GlobalCore]setSelectedWaypoint: cache=null");
+            selectedCache = null;
+            selectedWaypoint = null;
+            return;
+        }
+
+        // remove Detail Info from old selectedCache
+        if ((selectedCache != cache) && (selectedCache != null) && (selectedCache.detail != null)) {
+            selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
+        }
+        selectedCache = cache;
+        log.info("[GlobalCore]setSelectedWaypoint: cache=" + cache.getGcCode());
+        selectedWaypoint = waypoint;
+
+        // load Detail Info if not available
+        if (selectedCache.detail == null) {
+            selectedCache.loadDetail();
+        }
+
+        SelectedCacheEventList.Call(selectedCache, selectedWaypoint);
+
+        if (changeAutoResort) {
+            // switch off auto select
+            GlobalCore.setAutoResort(false);
+        }
+    }
+
+
+    public static boolean getAutoResort() {
+        return autoResort;
+    }
+
+    public static void setAutoResort(boolean value) {
+        GlobalCore.autoResort = value;
+    }
+
+    /**
+     * Returns true, if a Cache selected and this Cache object is valid.
+     *
+     * @return
+     */
+    public static boolean isSetSelectedCache() {
+        if (selectedCache == null)
+            return false;
+
+        if (selectedCache.getGcCode().length() == 0)
+            return false;
+
+        return true;
+    }
+
+    public static Cache getSelectedCache() {
+        return selectedCache;
+    }
+
+    public static void setNearestCache(Cache Cache) {
+        nearestCache = Cache;
+    }
+
+    public static Coordinate getSelectedCoord() {
+        Coordinate ret = null;
+
+        if (selectedWaypoint != null) {
+            ret = selectedWaypoint.Pos;
+        } else if (selectedCache != null) {
+            ret = selectedCache.Pos;
+        }
+
+        return ret;
+    }
+
+    public static Cache NearestCache() {
+        return nearestCache;
+    }
+
+    public static Waypoint getSelectedWaypoint() {
+        return selectedWaypoint;
+    }
+
 }
