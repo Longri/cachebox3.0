@@ -77,6 +77,12 @@ public class Database {
         return categories;
     }
 
+    public boolean isStarted() {
+        if (myDB == null) return false;
+        if (myDB.isOpen()) return true;
+        return false;
+    }
+
     public enum DatabaseType {
         CacheBox, FieldNotes, Settings
     }
@@ -92,7 +98,7 @@ public class Database {
         switch (databaseType) {
             case CacheBox:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseChange;
-//			Query = new CacheList();
+                Query = new CacheList();
                 break;
             case FieldNotes:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseFieldNoteChange;
@@ -122,7 +128,23 @@ public class Database {
     protected int latestDatabaseChange = 0;
 
 
-    public boolean StartUp(FileHandle databasePath) {
+    public boolean StartUp(FileHandle databasePath) throws SQLiteGdxException {
+
+
+        if (myDB != null) {
+            if (this.databasePath.file().getAbsolutePath().equals(databasePath.file().getAbsolutePath())) {
+
+                if (!myDB.isOpen()) {
+                    myDB.openOrCreateDatabase();
+                }
+                // is open
+                return true;
+            }
+            if (myDB.isOpen()) myDB.closeDatabase();
+            myDB = null;
+        }
+
+
         this.databasePath = databasePath;
 
         Initialize();

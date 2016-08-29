@@ -23,7 +23,7 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.sqlite.Database.Parameters ;
+import de.longri.cachebox3.sqlite.Database.Parameters;
 import de.longri.cachebox3.utils.exceptions.NotImplementedException;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
     Connection myDB = null;
 
 
-    public DesktopDatabase(FileHandle dbFileHandle) throws ClassNotFoundException{
+    public DesktopDatabase(FileHandle dbFileHandle) throws ClassNotFoundException {
         this.dbFileHandle = dbFileHandle;
         System.setProperty("sqlite.purejava", "true");
         Class.forName("org.sqlite.JDBC");
@@ -62,7 +62,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         String DB_URL = this.dbFileHandle.file().getAbsolutePath();
         if (myDB == null) {
             try {
-                log.debug( "open data base: " + DB_URL);
+                log.debug("open data base: " + DB_URL);
                 myDB = DriverManager.getConnection("jdbc:sqlite:" + DB_URL);
             } catch (Exception exc) {
                 return;
@@ -79,7 +79,6 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             e.printStackTrace();
         }
     }
-
 
 
     @Override
@@ -146,7 +145,6 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
 
         return new DesktopCursor(rs, rowcount, statement);
     }
-
 
 
     @Override
@@ -512,5 +510,12 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         }
     }
 
-
+    @Override
+    public boolean isOpen() {
+        try {
+            return (myDB != null && !myDB.isClosed());
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 }

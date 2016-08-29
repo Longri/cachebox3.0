@@ -19,6 +19,7 @@ package de.longri.cachebox3.gui.actions.show_activities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.gui.actions.AbstractAction;
@@ -98,12 +99,19 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
     }
 
     public void loadSelectedDB() {
-        Database.Data.Query.clear();
-        Database.Data.Close();
+        if (Database.Data != null) {
+            if (Database.Data.Query != null) Database.Data.Query.clear();
+           if(Database.Data.isStarted()) Database.Data.Close();
+        }
 
         FileHandle fileHandle = Gdx.files.absolute(Config.DatabasePath.getValue());
 
-        Database.Data.StartUp(fileHandle);
+        try {
+            Database.Data.StartUp(fileHandle);
+        } catch (SQLiteGdxException e) {
+            log.error("can't open DB", e);
+            return;
+        }
 
         Config.ReadFromDB();
 

@@ -498,5 +498,12 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
         }
     }
 
-
+    @Override
+    public boolean isOpen() {
+        try {
+            return (myDB != null && !myDB.isClosed());
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 }
