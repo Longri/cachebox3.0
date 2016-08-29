@@ -137,6 +137,7 @@ public class Splash extends Stage {
         initTaskList.add(new TranslationLoaderTask("Load Translations", 10));
         initTaskList.add(new GdxInitialTask("Initial GDX", 2));
         initTaskList.add(new InitialLocationListenerTask("Initial Loacation Reciver", 1));
+        initTaskList.add(new LoadDbTask("Load Database", 10));
 
 
         //Run Loader Tasks at separate threads

@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.sqlite;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabase;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
@@ -40,7 +39,7 @@ public class Database {
     private SQLiteGdxDatabase myDB;
 
 
-//	public CacheList Query;
+	public CacheList Query;
 
     public enum DatabaseType {
         CacheBox, FieldNotes, Settings

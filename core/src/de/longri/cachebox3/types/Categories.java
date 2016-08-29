@@ -1,34 +1,49 @@
+/*
+ * Copyright (C) 2016 team-cachebox.de
+ *
+ * Licensed under the : GNU General Public License (GPL);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.gnu.org/licenses/gpl.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.longri.cachebox3.types;
 
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.utils.MoveableList;
 import de.longri.cachebox3.sqlite.Database.Parameters;
+import de.longri.cachebox3.utils.MoveableList;
 
 public class Categories extends MoveableList<Category> {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5348105269187711224L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 5348105269187711224L;
 
-	public Categories() {
-	}
+    public Categories() {
+    }
 
-	public Category getCategory(String filename) {
-        filename= Gdx.files.local(filename).file().getName();
-		for (int i = 0, n = this.size(); i < n; i++) {
-			Category category = this.get(i);
-			if (filename.toUpperCase().equals(category.GpxFilename.toUpperCase())) {
-				return category;
-			}
-		}
+    public Category getCategory(String filename) {
+        filename = Gdx.files.local(filename).file().getName();
+        for (int i = 0, n = this.size(); i < n; i++) {
+            Category category = this.get(i);
+            if (filename.toUpperCase().equals(category.GpxFilename.toUpperCase())) {
+                return category;
+            }
+        }
 
-		Category cat = createNewCategory(filename);
-		this.add(cat);
-		return cat;
-	}
+        Category cat = createNewCategory(filename);
+        this.add(cat);
+        return cat;
+    }
 
 //	public Category getCategoryByGpxFilenameId(long gpxFilenameId) {
 //		for (int i = 0, n = this.size(); i < n; i++) {
@@ -40,45 +55,45 @@ public class Categories extends MoveableList<Category> {
 //		return null;
 //	}
 
-	public Category createNewCategory(String filename) {
-        filename= Gdx.files.local(filename).file().getName();
+    public Category createNewCategory(String filename) {
+        filename = Gdx.files.local(filename).file().getName();
 
-		// neue Category in DB anlegen
-		Category result = new Category();
+        // neue Category in DB anlegen
+        Category result = new Category();
 
-		Parameters args = new Parameters();
-		args.put("GPXFilename", filename);
-		try {
-			Database.Data.insert("Category", args);
-		} catch (Exception exc) {
-			//Log.err(log, "CreateNewCategory", filename, exc);
-		}
+        Parameters args = new Parameters();
+        args.put("GPXFilename", filename);
+        try {
+            Database.Data.insert("Category", args);
+        } catch (Exception exc) {
+            //Log.err(log, "CreateNewCategory", filename, exc);
+        }
 
-		long Category_ID = 0;
+        long Category_ID = 0;
 
-		SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("Select max(ID) from Category", null);
-		reader.moveToFirst();
-		if (!reader.isAfterLast()) {
-			Category_ID = reader.getLong(0);
-		}
-		reader.close();
-		result.Id = Category_ID;
-		result.GpxFilename = filename;
-		result.Checked = true;
-		result.pinned = false;
+        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("Select max(ID) from Category", null);
+        reader.moveToFirst();
+        if (!reader.isAfterLast()) {
+            Category_ID = reader.getLong(0);
+        }
+        reader.close();
+        result.Id = Category_ID;
+        result.GpxFilename = filename;
+        result.Checked = true;
+        result.pinned = false;
 
-		return result;
-	}
+        return result;
+    }
 
-	private void checkAll() {
-		for (int i = 0, n = this.size(); i < n; i++) {
-			Category cat = this.get(i);
-			cat.Checked = false;
-			for (GpxFilename gpx : cat) {
-				gpx.Checked = true;
-			}
-		}
-	}
+    private void checkAll() {
+        for (int i = 0, n = this.size(); i < n; i++) {
+            Category cat = this.get(i);
+            cat.Checked = false;
+            for (GpxFilename gpx : cat) {
+                gpx.Checked = true;
+            }
+        }
+    }
 
 //	public void ReadFromFilter(FilterProperties filter) {
 //		checkAll();
