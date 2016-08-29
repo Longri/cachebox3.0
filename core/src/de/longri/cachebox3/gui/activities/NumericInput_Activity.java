@@ -160,7 +160,7 @@ public class NumericInput_Activity<T extends Number> extends ActivityBase {
         textField.setAlignment(Align.right);
         textField.setWidth(CB.scaledSizes.WINDOW_WIDTH);
         textField.setPosition(CB.scaledSizes.MARGIN, numPad.getY() + numPad.getHeight() + CB.scaledSizes.MARGIN);
-        textField.setCurosrAtTextEnd();
+        textField.setCursorAtTextEnd();
 
 
         needsLayout = false;
