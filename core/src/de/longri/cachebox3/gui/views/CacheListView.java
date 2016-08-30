@@ -65,7 +65,7 @@ public class CacheListView extends AbstractView {
 
         // add label with category name, align left
         table.left();
-        VisLabel label = new VisLabel(cache.getGcCode());
+        VisLabel label = new VisLabel(cache.getName());
         label.setAlignment(Align.left);
         table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 

@@ -70,6 +70,7 @@ public class CacheListDAO {
 
         // Clear List before read
         cacheList.clear();
+        boolean error = false;
 
         log.trace("ReadCacheList 1.Waypoints");
         LongMap<CB_List<Waypoint>> waypoints = new LongMap<CB_List<Waypoint>>();
@@ -125,56 +126,121 @@ public class CacheListDAO {
 
             }
 
-            sql += " FROM 'Caches' " + join + " " + ((where.length() > 0) ? "WHERE " + where : where);
+            sql += " FROM `Caches` AS `c` " + join + " " + ((where.length() > 0) ? "WHERE " + where : where);
             reader = Database.Data.rawQuery(sql, null);
 
         } catch (Exception e) {
             log.error("CacheList.LoadCaches() sql+ \n" + sql, e);
+            error = true;
         }
-        reader.moveToFirst();
 
-        CacheDAO cacheDAO = new CacheDAO();
+        if (!error) {
+            reader.moveToFirst();
 
-        while (!reader.isAfterLast()) {
-            Cache cache = cacheDAO.ReadFromCursor(reader, fullDetails, withDescription);
-            boolean doAdd = true;
-            if (FilterInstances.hasCorrectedCoordinates != 0) {
-                if (waypoints.containsKey(cache.Id)) {
-                    CB_List<Waypoint> tmpwaypoints = waypoints.get(cache.Id);
-                    for (int i = 0, n = tmpwaypoints.size(); i < n; i++) {
-                        cache.waypoints.add(tmpwaypoints.get(i));
+            CacheDAO cacheDAO = new CacheDAO();
+
+            while (!reader.isAfterLast()) {
+                Cache cache = cacheDAO.ReadFromCursor(reader, fullDetails, withDescription);
+                boolean doAdd = true;
+                if (FilterInstances.hasCorrectedCoordinates != 0) {
+                    if (waypoints.containsKey(cache.Id)) {
+                        CB_List<Waypoint> tmpwaypoints = waypoints.get(cache.Id);
+                        for (int i = 0, n = tmpwaypoints.size(); i < n; i++) {
+                            cache.waypoints.add(tmpwaypoints.get(i));
+                        }
+                    }
+                    boolean hasCorrectedCoordinates = cache.CorrectedCoordiantesOrMysterySolved();
+                    if (FilterInstances.hasCorrectedCoordinates < 0) {
+                        // show only those without corrected ones
+                        if (hasCorrectedCoordinates)
+                            doAdd = false;
+                    } else if (FilterInstances.hasCorrectedCoordinates > 0) {
+                        // only those with corrected ones
+                        if (!hasCorrectedCoordinates)
+                            doAdd = false;
                     }
                 }
-                boolean hasCorrectedCoordinates = cache.CorrectedCoordiantesOrMysterySolved();
-                if (FilterInstances.hasCorrectedCoordinates < 0) {
-                    // show only those without corrected ones
-                    if (hasCorrectedCoordinates)
-                        doAdd = false;
-                } else if (FilterInstances.hasCorrectedCoordinates > 0) {
-                    // only those with corrected ones
-                    if (!hasCorrectedCoordinates)
-                        doAdd = false;
-                }
-            }
-            if (doAdd) {
-                cacheList.add(cache);
-                cache.waypoints.clear();
-                if (waypoints.containsKey(cache.Id)) {
-                    CB_List<Waypoint> tmpwaypoints = waypoints.get(cache.Id);
+                if (doAdd) {
+                    cacheList.add(cache);
+                    cache.waypoints.clear();
+                    if (waypoints.containsKey(cache.Id)) {
+                        CB_List<Waypoint> tmpwaypoints = waypoints.get(cache.Id);
 
-                    for (int i = 0, n = tmpwaypoints.size(); i < n; i++) {
-                        cache.waypoints.add(tmpwaypoints.get(i));
+                        for (int i = 0, n = tmpwaypoints.size(); i < n; i++) {
+                            cache.waypoints.add(tmpwaypoints.get(i));
+                        }
+
+                        waypoints.remove(cache.Id);
                     }
+                }
+                // ++Global.CacheCount;
+                reader.moveToNext();
 
-                    waypoints.remove(cache.Id);
+            }
+            reader.close();
+        } else {
+            log.error("Corrupt database try cache by cache");
+
+            // get all id's
+            reader = Database.Data.rawQuery(SQL.SQL_ALL_CACHE_IDS, null);
+            reader.moveToFirst();
+            ArrayList<Long> idList = new ArrayList<Long>(reader.getCount());
+
+            while (!reader.isAfterLast()) {
+                idList.add(reader.getLong(0));
+                reader.moveToNext();
+            }
+
+            CacheDAO cacheDAO = new CacheDAO();
+
+            for (Long id : idList) {
+                Cache cache = null;
+                try {
+                    cache = cacheDAO.getFromDbByCacheId(id);
+                } catch (Exception e) {
+                    log.error("Can't read Cache (id:" + id + ") from database.");
+                    try {
+                        Database.Data.delete("Caches", "id=" + id, null);
+                    } catch (Exception e1) {
+                        log.error("Can't delete this Cache. Skip it!");
+                    }
+                    continue;
+                }
+
+                boolean doAdd = true;
+                if (FilterInstances.hasCorrectedCoordinates != 0) {
+                    if (waypoints.containsKey(cache.Id)) {
+                        CB_List<Waypoint> tmpwaypoints = waypoints.get(cache.Id);
+                        for (int i = 0, n = tmpwaypoints.size(); i < n; i++) {
+                            cache.waypoints.add(tmpwaypoints.get(i));
+                        }
+                    }
+                    boolean hasCorrectedCoordinates = cache.CorrectedCoordiantesOrMysterySolved();
+                    if (FilterInstances.hasCorrectedCoordinates < 0) {
+                        // show only those without corrected ones
+                        if (hasCorrectedCoordinates)
+                            doAdd = false;
+                    } else if (FilterInstances.hasCorrectedCoordinates > 0) {
+                        // only those with corrected ones
+                        if (!hasCorrectedCoordinates)
+                            doAdd = false;
+                    }
+                }
+                if (doAdd) {
+                    cacheList.add(cache);
+                    cache.waypoints.clear();
+                    if (waypoints.containsKey(cache.Id)) {
+                        CB_List<Waypoint> tmpwaypoints = waypoints.get(cache.Id);
+
+                        for (int i = 0, n = tmpwaypoints.size(); i < n; i++) {
+                            cache.waypoints.add(tmpwaypoints.get(i));
+                        }
+
+                        waypoints.remove(cache.Id);
+                    }
                 }
             }
-            // ++Global.CacheCount;
-            reader.moveToNext();
-
         }
-        reader.close();
-
         // clear other never used WP`s from Mem
         waypoints.clear();
         waypoints = null;
@@ -197,6 +263,7 @@ public class CacheListDAO {
 
     }
 
+
     /**
      * @param SpoilerFolder               Config.settings.SpoilerFolder.getValue()
      * @param SpoilerFolderLocal          Config.settings.SpoilerFolderLocal.getValue()
@@ -204,6 +271,7 @@ public class CacheListDAO {
      * @param DescriptionImageFolderLocal Config.settings.DescriptionImageFolderLocal.getValue()
      * @return
      */
+
     public long deleteArchived(String SpoilerFolder, String SpoilerFolderLocal, String DescriptionImageFolder, String DescriptionImageFolderLocal) {
         try {
             delCacheImages(getGcCodeList("Archived=1"), SpoilerFolder, SpoilerFolderLocal, DescriptionImageFolder, DescriptionImageFolderLocal);

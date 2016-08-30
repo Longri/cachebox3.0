@@ -33,5 +33,6 @@ public class SQL {
     static final String SQL_GET_DETAIL_FROM_ID = "SELECT " + SQL_DETAILS + SQL_BY_ID;
     static final String SQL_EXIST_CACHE = "SELECT `Id` FROM `Caches` WHERE Id = ?";
     static final String SQL_GET_CACHE = "SELECT `Id`, `GcCode`, `Latitude`, `Longitude`, `Name`, `Size`, `Difficulty`, `Terrain`, `Archived`, `Available`, `Found`, `Type`, `Owner`, `NumTravelbugs`, `GcId`, `Rating`, `Favorit`, `HasUserData`, `ListingChanged`, `CorrectedCoordinates` ";
+    static final String SQL_ALL_CACHE_IDS = "SELECT `Id` FROM `Caches`";
 
 }

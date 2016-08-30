@@ -64,8 +64,12 @@ public class CacheDAO {
         return description;
     }
 
+    static long testCount = 0;
 
     Cache ReadFromCursor(SQLiteGdxDatabaseCursor reader, boolean fullDetails, boolean withDescription) {
+
+        log.debug("Cache nummer:" + testCount++);
+
         try {
             Cache cache = new Cache(fullDetails);
 
