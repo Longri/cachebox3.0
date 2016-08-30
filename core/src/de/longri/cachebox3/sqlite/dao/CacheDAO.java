@@ -28,16 +28,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static de.longri.cachebox3.sqlite.dao.SQL.*;
+
 public class CacheDAO {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheDAO.class);
-    static final String SQL_BY_ID = "from Caches c where id = ?";
-    static final String SQL_BY_GC_CODE = "from Caches c where GCCode = ?";
-    public String[] SQL_ENUM = {"c.Id", "GcCode", "Latitude"};
-    static final String SQL_DETAILS = "PlacedBy, DateHidden, Url, TourName, GpxFilename_ID, ApiStatus, AttributesPositive, AttributesPositiveHigh, AttributesNegative, AttributesNegativeHigh, Hint ";
-    static final String SQL_GET_DETAIL_WITH_DESCRIPTION = "Description, Solver, Notes, ShortDescription ";
-    static final String SQL_GET_DETAIL_FROM_ID = "select " + SQL_DETAILS + SQL_BY_ID;
-    static final String SQL_EXIST_CACHE = "select 1 from Caches where Id = ?";
-    static final String SQL_GET_CACHE = "select c.Id, GcCode, Latitude, Longitude, c.Name, Size, Difficulty, Terrain, Archived, Available, Found, Type, Owner, NumTravelbugs, GcId, Rating, Favorit, HasUserData, ListingChanged, CorrectedCoordinates ";
+
 
     public static String GetShortDescription(Cache cache) {
         String description = "";

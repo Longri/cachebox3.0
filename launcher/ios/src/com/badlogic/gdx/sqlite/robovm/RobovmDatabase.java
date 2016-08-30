@@ -90,14 +90,12 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
         try {
 
             statement = myDB.prepareStatement(sql);
-
             if (args != null) {
                 for (int i = 0; i < args.length; i++) {
                     statement.setString(i + 1, args[i]);
                 }
             }
             rs = statement.executeQuery();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -148,8 +146,6 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
     public void execSQL(String sql) {
         if (myDB == null)
             return;
-
-        log.debug("execSQL : " + sql);
 
         Statement statement = null;
         try {

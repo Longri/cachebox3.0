@@ -96,6 +96,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             log.debug(sb.toString());
         }
 
+
         ResultSet rs = null;
         PreparedStatement statement = null;
         try {
@@ -108,6 +109,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
                 }
             }
             rs = statement.executeQuery();
+
 
         } catch (SQLException e) {
             e.printStackTrace();

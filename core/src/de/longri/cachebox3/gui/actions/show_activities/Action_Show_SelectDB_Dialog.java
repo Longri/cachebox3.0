@@ -19,6 +19,7 @@ package de.longri.cachebox3.gui.actions.show_activities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
@@ -101,7 +102,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
     public void loadSelectedDB() {
         if (Database.Data != null) {
             if (Database.Data.Query != null) Database.Data.Query.clear();
-           if(Database.Data.isStarted()) Database.Data.Close();
+            if (Database.Data.isStarted()) Database.Data.Close();
         }
 
         FileHandle fileHandle = Gdx.files.absolute(Config.DatabasePath.getValue());
@@ -123,8 +124,10 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
         Database.Data.GPXFilenameUpdateCacheCount();
 
         synchronized (Database.Data.Query) {
+            log.debug("Read CacheList");
             CacheListDAO cacheListDAO = new CacheListDAO();
             cacheListDAO.ReadCacheList(Database.Data.Query, sqlWhere, false, Config.ShowAllWaypoints.getValue());
+            log.debug("Readed " + Database.Data.Query.size() + "Caches into CacheList");
         }
 
         // set selectedCache from lastselected Cache

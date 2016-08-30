@@ -60,10 +60,10 @@ public class CacheListDAO {
         return ReadCacheList(cacheList, "", where, false, fullDetails, loadAllWaypoints);
     }
 
-    // public CacheList ReadCacheList(CacheList cacheList, String join, String where, boolean fullDetails, boolean loadAllWaypoints)
-    // {
-    // return ReadCacheList(cacheList, join, where, false, fullDetails, loadAllWaypoints);
-    // }
+     public CacheList ReadCacheList(CacheList cacheList, String join, String where, boolean fullDetails, boolean loadAllWaypoints)
+     {
+     return ReadCacheList(cacheList, join, where, false, fullDetails, loadAllWaypoints);
+     }
 
     public CacheList ReadCacheList(CacheList cacheList, String join, String where, boolean withDescription, boolean fullDetails, boolean loadAllWaypoints) {
         if (cacheList == null)
@@ -72,7 +72,7 @@ public class CacheListDAO {
         // Clear List before read
         cacheList.clear();
 
-        log.trace( "ReadCacheList 1.Waypoints");
+        log.trace("ReadCacheList 1.Waypoints");
         LongMap<CB_List<Waypoint>> waypoints = new LongMap<CB_List<Waypoint>>();
 
         // zuerst alle Waypoints einlesen
@@ -83,9 +83,9 @@ public class CacheListDAO {
         if (!((fullDetails || loadAllWaypoints))) {
             // when CacheList should be loaded without full details and without all Waypoints
             // do not load all waypoints from db!
-            sql += " where IsStart=\"true\" or Type=" + CacheTypes.Final.ordinal(); // StartWaypoint or CacheTypes.Final
+            sql += " WHERE IsStart=\"true\" or Type=" + CacheTypes.Final.ordinal(); // StartWaypoint or CacheTypes.Final
         }
-        sql += " order by CacheId";
+        sql += " ORDER BY 'CacheId'";
         SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(sql, null);
         if (reader == null)
             return cacheList;
@@ -111,25 +111,26 @@ public class CacheListDAO {
 
         }
         reader.close();
-
+        log.debug(wpList.size() + " Waypoints readed!");
+        log.debug(wpList.get(0).toString());
         log.debug("ReadCacheList 2.Caches");
         try {
             if (fullDetails) {
-                sql = CacheDAO.SQL_GET_CACHE + ", " + CacheDAO.SQL_DETAILS;
+                sql = SQL.SQL_GET_CACHE + ", " + SQL.SQL_DETAILS;
                 if (withDescription) {
                     // load Cache with Description, Solver, Notes for Transfering Data from Server to ACB
-                    sql += "," + CacheDAO.SQL_GET_DETAIL_WITH_DESCRIPTION;
+                    sql += "," + SQL.SQL_GET_DETAIL_WITH_DESCRIPTION;
                 }
             } else {
-                sql = CacheDAO.SQL_GET_CACHE;
+                sql = SQL.SQL_GET_CACHE;
 
             }
 
-            sql += " from Caches c " + join + " " + ((where.length() > 0) ? "where " + where : where);
+            sql += " FROM 'Caches' " + join + " " + ((where.length() > 0) ? "WHERE " + where : where);
             reader = Database.Data.rawQuery(sql, null);
 
         } catch (Exception e) {
-            log.error("CacheList.LoadCaches()", "reader = Database.Data.myDB.rawQuery(....", e);
+            log.error("CacheList.LoadCaches() sql+ \n" + sql, e);
         }
         reader.moveToFirst();
 

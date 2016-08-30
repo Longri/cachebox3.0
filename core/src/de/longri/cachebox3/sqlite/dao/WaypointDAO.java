@@ -16,7 +16,6 @@
 package de.longri.cachebox3.sqlite.dao;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.locator.Coordinate;
@@ -135,10 +134,8 @@ public class WaypointDAO {
         Waypoint WP = null;
 
         WP = new Waypoint(full);
-        
-        Gdx.app.log("DEBUG", "Laeuft");
-        WP.setGcCode(reader.getString(0));
 
+        WP.setGcCode(reader.getString(0));
         WP.CacheId = reader.getLong(1);
         double latitude = reader.getDouble(2);
         double longitude = reader.getDouble(3);
