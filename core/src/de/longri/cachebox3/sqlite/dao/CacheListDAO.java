@@ -60,10 +60,9 @@ public class CacheListDAO {
         return ReadCacheList(cacheList, "", where, false, fullDetails, loadAllWaypoints);
     }
 
-     public CacheList ReadCacheList(CacheList cacheList, String join, String where, boolean fullDetails, boolean loadAllWaypoints)
-     {
-     return ReadCacheList(cacheList, join, where, false, fullDetails, loadAllWaypoints);
-     }
+    public CacheList ReadCacheList(CacheList cacheList, String join, String where, boolean fullDetails, boolean loadAllWaypoints) {
+        return ReadCacheList(cacheList, join, where, false, fullDetails, loadAllWaypoints);
+    }
 
     public CacheList ReadCacheList(CacheList cacheList, String join, String where, boolean withDescription, boolean fullDetails, boolean loadAllWaypoints) {
         if (cacheList == null)

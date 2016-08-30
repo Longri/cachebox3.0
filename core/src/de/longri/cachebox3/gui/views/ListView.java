@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.adapter.ArrayAdapter;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -32,6 +33,10 @@ public abstract class ListView extends WidgetGroup {
 
 
     private static class IndexListAdapter extends ArrayAdapter<Integer, VisTable> {
+
+        public ObjectMap<Integer, VisTable> getCachedViews() {
+            return this.getViews();
+        }
 
         interface CreateViewListner {
             VisTable createView(Integer index);

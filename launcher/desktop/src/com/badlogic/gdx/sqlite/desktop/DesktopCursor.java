@@ -16,10 +16,10 @@
 package com.badlogic.gdx.sqlite.desktop;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 
 
 /**
@@ -49,8 +49,8 @@ public class DesktopCursor implements SQLiteGdxDatabaseCursor {
                 rs.next();
             }
             if (rs.isFirst())
-                return ;
-             rs.first();
+                return;
+            rs.first();
         } catch (Exception e) {
 
         }
@@ -103,7 +103,11 @@ public class DesktopCursor implements SQLiteGdxDatabaseCursor {
 
     @Override
     public boolean next() {
-        return false;
+        try {
+            return rs.next();
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
 
@@ -119,7 +123,6 @@ public class DesktopCursor implements SQLiteGdxDatabaseCursor {
     }
 
 
-
     @Override
     public int getInt(int columnIndex) {
         try {
@@ -128,7 +131,6 @@ public class DesktopCursor implements SQLiteGdxDatabaseCursor {
             return 0;
         }
     }
-
 
 
     @Override
@@ -189,7 +191,6 @@ public class DesktopCursor implements SQLiteGdxDatabaseCursor {
             return 0;
         }
     }
-
 
 
     @Override
