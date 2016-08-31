@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.views.listview;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -154,6 +155,7 @@ public class ListView extends WidgetGroup {
         }
 
         scrollPane.setBounds(0, paneYPos, this.getWidth(), paneHeight);
+        scrollPane.setCullingArea(new Rectangle(0, paneYPos, this.getWidth(), paneHeight));
         this.addActor(scrollPane);
         scrollPane.layout();
         needsLayout = false;
