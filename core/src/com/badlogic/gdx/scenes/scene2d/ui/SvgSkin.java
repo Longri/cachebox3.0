@@ -28,7 +28,7 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
-import de.longri.cachebox3.gui.views.ListView;
+import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.utils.ScaledSizes;
 import org.slf4j.LoggerFactory;

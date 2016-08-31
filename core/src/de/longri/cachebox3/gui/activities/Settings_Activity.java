@@ -40,7 +40,9 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
-import de.longri.cachebox3.gui.views.ListView;
+import de.longri.cachebox3.gui.views.listview.Adapter;
+import de.longri.cachebox3.gui.views.listview.ListView;
+import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.settings.*;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.LoggerFactory;
@@ -202,13 +204,33 @@ public class Settings_Activity extends ActivityBase {
                 settingCategories.add(item);
             }
         }
-        showListView(new ListView(settingCategories.size) {
+
+
+        Adapter listViewAdapter = new Adapter() {
             @Override
-            public VisTable createView(Integer index) {
+            public int getCount() {
+                return settingCategories.size;
+            }
+
+            @Override
+            public ListViewItem getView(int index) {
                 final SettingCategory category = settingCategories.get(index);
                 return getCategoryItem(category);
             }
-        }, Translation.Get("setting"), true);
+
+            @Override
+            public void update(ListViewItem view) {
+
+            }
+
+            @Override
+            public float getItemSize(int position) {
+                return 0;
+            }
+        };
+
+
+        showListView(new ListView(listViewAdapter), Translation.Get("setting"), true);
     }
 
     private void showListView(ListView listView, String name, boolean animate) {
@@ -321,15 +343,13 @@ public class Settings_Activity extends ActivityBase {
                 this.removeActor(group);
                 showCategory((SettingCategory) object, false);
             }
-        } else {
-            actListView.reLayout();
         }
 
 
     }
 
-    private VisTable getCategoryItem(final SettingCategory category) {
-        VisTable table = new VisTable();
+    private ListViewItem getCategoryItem(final SettingCategory category) {
+        ListViewItem table = new ListViewItem();
 
         // add label with category name, align left
         table.left();
@@ -392,18 +412,35 @@ public class Settings_Activity extends ActivityBase {
 
         // show new ListView for this category
 
-        ListView newListView = new ListView(categorySettingsList.size) {
+        Adapter listViewAdapter = new Adapter() {
             @Override
-            public VisTable createView(Integer index) {
+            public int getCount() {
+                return categorySettingsList.size;
+            }
+
+            @Override
+            public ListViewItem getView(int index) {
                 final SettingBase<?> setting = categorySettingsList.get(index);
                 return getSettingItem(setting);
             }
+
+            @Override
+            public void update(ListViewItem view) {
+
+            }
+
+            @Override
+            public float getItemSize(int index) {
+                return 0;
+            }
         };
+
+        ListView newListView = new ListView(listViewAdapter);
         newListView.setUserObject(category);
         showListView(newListView, category.name(), animate);
     }
 
-    private VisTable getSettingItem(SettingBase<?> setting) {
+    private ListViewItem getSettingItem(SettingBase<?> setting) {
         if (setting instanceof SettingBool) {
             return getBoolView((SettingBool) setting);
         } else if (setting instanceof SettingIntArray) {
@@ -443,33 +480,33 @@ public class Settings_Activity extends ActivityBase {
         return null;
     }
 
-    private VisTable getColorView(SettingColor setting) {
+    private ListViewItem getColorView(SettingColor setting) {
         return null;
     }
 
-    private VisTable getAudioView(SettingsAudio setting) {
+    private ListViewItem getAudioView(SettingsAudio setting) {
         return null;
     }
 
-    private VisTable getStringView(SettingString setting) {
+    private ListViewItem getStringView(SettingString setting) {
         return null;
     }
 
-    private VisTable getEnumView(SettingEnum<?> setting) {
+    private ListViewItem getEnumView(SettingEnum<?> setting) {
         return null;
     }
 
-    private VisTable getFileView(SettingFile setting) {
+    private ListViewItem getFileView(SettingFile setting) {
         return null;
     }
 
-    private VisTable getFolderView(SettingFolder setting) {
+    private ListViewItem getFolderView(SettingFolder setting) {
         return null;
     }
 
-    private VisTable getFloatView(final SettingFloat setting) {
+    private ListViewItem getFloatView(final SettingFloat setting) {
         final VisLabel valueLabel = new VisLabel(Float.toString(setting.getValue()), valueStyle);
-        VisTable table = getNumericItemTable(valueLabel, setting);
+        ListViewItem table = getNumericItemTable(valueLabel, setting);
 
         // add clickListener
         table.addListener(new ClickListener() {
@@ -483,7 +520,6 @@ public class Settings_Activity extends ActivityBase {
                                 if (actor instanceof ListView) {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
-                                    listView.rebuildView();
                                     Gdx.app.postRunnable(new Runnable() {
                                         @Override
                                         public void run() {
@@ -502,9 +538,9 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private VisTable getDblView(final SettingDouble setting) {
+    private ListViewItem getDblView(final SettingDouble setting) {
         final VisLabel valueLabel = new VisLabel(Double.toString(setting.getValue()), valueStyle);
-        VisTable table = getNumericItemTable(valueLabel, setting);
+        ListViewItem table = getNumericItemTable(valueLabel, setting);
 
         // add clickListener
         table.addListener(new ClickListener() {
@@ -518,7 +554,6 @@ public class Settings_Activity extends ActivityBase {
                                 if (actor instanceof ListView) {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
-                                    listView.rebuildView();
                                     Gdx.app.postRunnable(new Runnable() {
                                         @Override
                                         public void run() {
@@ -537,9 +572,9 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private VisTable getIntView(final SettingInt setting) {
+    private ListViewItem getIntView(final SettingInt setting) {
         final VisLabel valueLabel = new VisLabel(Integer.toString(setting.getValue()), valueStyle);
-        final VisTable table = getNumericItemTable(valueLabel, setting);
+        final ListViewItem table = getNumericItemTable(valueLabel, setting);
 
         // add clickListener
         table.addListener(new ClickListener() {
@@ -551,9 +586,8 @@ public class Settings_Activity extends ActivityBase {
                             WidgetGroup group = listViews.peek();
                             for (Actor actor : group.getChildren()) {
                                 if (actor instanceof ListView) {
-                                   final ListView listView = (ListView) actor;
-                                   final float scrollPos = listView.getScrollPos();
-                                    listView.rebuildView();
+                                    final ListView listView = (ListView) actor;
+                                    final float scrollPos = listView.getScrollPos();
                                     Gdx.app.postRunnable(new Runnable() {
                                         @Override
                                         public void run() {
@@ -571,20 +605,20 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private VisTable getTimeView(SettingTime setting) {
+    private ListViewItem getTimeView(SettingTime setting) {
         return null;
     }
 
-    private VisTable getStringArrayView(SettingStringArray setting) {
+    private ListViewItem getStringArrayView(SettingStringArray setting) {
         return null;
     }
 
-    private VisTable getIntArrayView(SettingIntArray setting) {
+    private ListViewItem getIntArrayView(SettingIntArray setting) {
         return null;
     }
 
-    private VisTable getBoolView(final SettingBool setting) {
-        VisTable table = new VisTable();
+    private ListViewItem getBoolView(final SettingBool setting) {
+        ListViewItem table = new ListViewItem();
 
         // add label with category name, align left
         table.left();
@@ -638,8 +672,8 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private VisTable getNumericItemTable(VisLabel valueLabel, SettingBase<?> setting) {
-        VisTable table = new VisTable();
+    private ListViewItem getNumericItemTable(VisLabel valueLabel, SettingBase<?> setting) {
+        ListViewItem table = new ListViewItem();
 
         // add label with category name, align left
         table.left();

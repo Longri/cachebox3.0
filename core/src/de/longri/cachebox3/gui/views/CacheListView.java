@@ -1,14 +1,15 @@
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
-import de.longri.cachebox3.settings.SettingCategory;
+import de.longri.cachebox3.gui.views.listview.Adapter;
+import de.longri.cachebox3.gui.views.listview.ListView;
+import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheWithWP;
@@ -48,20 +49,38 @@ public class CacheListView extends AbstractView {
     private void addNewListView() {
         this.clear();
 
-        listView = new ListView(Database.Data.Query.size()) {
+
+        Adapter listViewAdapter = new Adapter() {
             @Override
-            public VisTable createView(Integer index) {
+            public int getCount() {
+                return Database.Data.Query.size();
+            }
+
+            @Override
+            public ListViewItem getView(int index) {
                 return getCacheItem(Database.Data.Query.get(index));
+            }
+
+            @Override
+            public void update(ListViewItem view) {
+
+            }
+
+            @Override
+            public float getItemSize(int position) {
+                return 0;
             }
         };
 
+        listView = new ListView(listViewAdapter);
+
         listView.setBounds(0, 0, this.getWidth(), this.getHeight());
         this.addActor(listView);
-
+        listView.setCullingArea(new Rectangle(0, 0, this.getWidth(), this.getHeight()));
     }
 
-    private VisTable getCacheItem(final Cache cache) {
-        VisTable table = new VisTable();
+    private ListViewItem getCacheItem(final Cache cache) {
+        ListViewItem table = new ListViewItem();
 
         // add label with category name, align left
         table.left();

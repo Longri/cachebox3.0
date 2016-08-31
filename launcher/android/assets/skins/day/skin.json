@@ -561,7 +561,7 @@
       "background": "transparent_drawable"
     }
   },
-  "de.longri.cachebox3.gui.views.ListView$ListViewStyle": {
+  "de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle": {
     "default": {
       "background": "list_background_drawable",
       "firstItem": "listrec_first_drawable",
