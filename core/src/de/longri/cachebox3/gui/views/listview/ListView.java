@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.views.listview;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
@@ -145,7 +146,6 @@ public class ListView extends WidgetGroup {
         scrollPane.setFlickScroll(true);
         scrollPane.setFadeScrollBars(true);
 
-
         float paneHeight = this.getHeight();
         float paneYPos = 0;
         if (this.getHeight() > completeHeight) {
@@ -190,8 +190,8 @@ public class ListView extends WidgetGroup {
     }
 
 
-    public static class ListViewStyle {
-        public Drawable background, firstItem, secondItem, selectedItem;
+    public static class ListViewStyle extends ScrollPane.ScrollPaneStyle {
+        public Drawable firstItem, secondItem, selectedItem;
         public float pad, padLeft, padRight, padTop, padBottom;
     }
 }

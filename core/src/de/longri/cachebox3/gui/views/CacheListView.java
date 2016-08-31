@@ -47,36 +47,38 @@ public class CacheListView extends AbstractView {
 
 
     private void addNewListView() {
-        this.clear();
-
-
-        Adapter listViewAdapter = new Adapter() {
+        Thread thread=new Thread(new Runnable() {
             @Override
-            public int getCount() {
-                return Database.Data.Query.size();
+            public void run() {
+                CacheListView.this.clear();
+                Adapter listViewAdapter = new Adapter() {
+                    @Override
+                    public int getCount() {
+                        return Database.Data.Query.size();
+                    }
+
+                    @Override
+                    public ListViewItem getView(int index) {
+                        return getCacheItem(Database.Data.Query.get(index));
+                    }
+
+                    @Override
+                    public void update(ListViewItem view) {
+
+                    }
+
+                    @Override
+                    public float getItemSize(int position) {
+                        return 0;
+                    }
+                };
+                CacheListView.this.listView = new ListView(listViewAdapter);
+                CacheListView.this.listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
+                CacheListView.this.addActor(listView);
+                CacheListView.this.listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
             }
-
-            @Override
-            public ListViewItem getView(int index) {
-                return getCacheItem(Database.Data.Query.get(index));
-            }
-
-            @Override
-            public void update(ListViewItem view) {
-
-            }
-
-            @Override
-            public float getItemSize(int position) {
-                return 0;
-            }
-        };
-
-        listView = new ListView(listViewAdapter);
-
-        listView.setBounds(0, 0, this.getWidth(), this.getHeight());
-        this.addActor(listView);
-        listView.setCullingArea(new Rectangle(0, 0, this.getWidth(), this.getHeight()));
+        });
+        thread.start();
     }
 
     private ListViewItem getCacheItem(final Cache cache) {
