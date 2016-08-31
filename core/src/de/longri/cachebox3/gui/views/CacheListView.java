@@ -1,10 +1,9 @@
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.gui.views.listview.Adapter;
@@ -47,7 +46,7 @@ public class CacheListView extends AbstractView {
 
 
     private void addNewListView() {
-        Thread thread=new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 CacheListView.this.clear();
@@ -76,9 +75,11 @@ public class CacheListView extends AbstractView {
                 CacheListView.this.listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
                 CacheListView.this.addActor(listView);
                 CacheListView.this.listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
+                Gdx.graphics.requestRendering();
             }
         });
         thread.start();
+        Gdx.graphics.requestRendering();
     }
 
     private ListViewItem getCacheItem(final Cache cache) {
