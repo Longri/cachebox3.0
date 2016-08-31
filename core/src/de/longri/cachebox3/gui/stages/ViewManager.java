@@ -106,6 +106,10 @@ public class ViewManager extends Stage {
         log.debug("reload view state:" + view.getName());
         this.actView.onShow();
 
+
+        //bring ButtonBar to Front
+        mainButtonBar.toFront();
+
         //select main button
         boolean buttonFound = false;
         for (Button button : mainButtonBar.getButtons()) {

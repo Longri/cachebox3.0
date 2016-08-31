@@ -36,7 +36,7 @@ public class ListView extends WidgetGroup {
     private Adapter adapter;
     private boolean needsLayout = true;
     private final ListViewStyle style;
-    private WidgetGroup itemGroup;
+    private ScrollViewContainer itemGroup;
 
     public ListView() {
         this(VisUI.getSkin().get("default", ListViewStyle.class));
@@ -80,7 +80,7 @@ public class ListView extends WidgetGroup {
         itemYPos.clear();
         itemViews.clear();
 
-        itemGroup = new WidgetGroup();
+        itemGroup = new ScrollViewContainer();
         itemGroup.setWidth(this.getWidth());
         itemGroup.clear();
 
@@ -126,6 +126,10 @@ public class ListView extends WidgetGroup {
 
         itemGroup.setWidth(this.getWidth());
         itemGroup.setHeight(completeHeight);
+        itemGroup.setPrefWidth(this.getWidth());
+        itemGroup.setPrefHeight(completeHeight);
+
+
         float yPos = completeHeight;
 
         Actor[] actors = itemGroup.getChildren().items;
@@ -133,14 +137,13 @@ public class ListView extends WidgetGroup {
             yPos -= itemHeights.get(i);
             itemYPos.add(yPos);
             actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
-            //actors[i].setPosition(padLeft, yPos);
         }
 
-
         scrollPane = new VisScrollPane(itemGroup);
-        scrollPane.setOverscroll(true, true);
+        scrollPane.setOverscroll(false, true);
         scrollPane.setFlickScroll(true);
         scrollPane.setFadeScrollBars(true);
+
 
         float paneHeight = this.getHeight();
         float paneYPos = 0;
@@ -152,6 +155,7 @@ public class ListView extends WidgetGroup {
 
         scrollPane.setBounds(0, paneYPos, this.getWidth(), paneHeight);
         this.addActor(scrollPane);
+        scrollPane.layout();
         needsLayout = false;
     }
 

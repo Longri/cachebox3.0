@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
@@ -51,7 +52,10 @@ public class ButtonBar extends WidgetGroup {
     }
 
     public void draw(Batch batch, float parentAlpha) {
+        Color color = batch.getColor();
+        batch.setColor(1, 1, 1, 1);
         background.draw(batch, 0, 0, this.getWidth(), this.getHeight());
+        batch.setColor(color);
         super.draw(batch, parentAlpha);
     }
 
