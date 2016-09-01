@@ -68,6 +68,10 @@ public class ListView extends WidgetGroup {
     private FloatArray itemYPos = new FloatArray();
     private Array<VisTable> itemViews = new Array<VisTable>();
 
+    public void layout(boolean force) {
+        needsLayout = true;
+        layout();
+    }
 
     @Override
     public void layout() {

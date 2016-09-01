@@ -53,6 +53,7 @@ import org.slf4j.LoggerFactory;
 public class Settings_Activity extends ActivityBase {
 
     final static org.slf4j.Logger log = LoggerFactory.getLogger(Settings_Activity.class);
+    private static final boolean FORCE = true;
     private VisTextButton btnOk, btnCancel, btnMenu;
     private final SettingsActivityStyle style;
 
@@ -520,6 +521,7 @@ public class Settings_Activity extends ActivityBase {
                                 if (actor instanceof ListView) {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
+                                    listView.layout(FORCE);
                                     Gdx.app.postRunnable(new Runnable() {
                                         @Override
                                         public void run() {
@@ -554,6 +556,7 @@ public class Settings_Activity extends ActivityBase {
                                 if (actor instanceof ListView) {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
+                                    listView.layout(FORCE);
                                     Gdx.app.postRunnable(new Runnable() {
                                         @Override
                                         public void run() {
@@ -588,6 +591,7 @@ public class Settings_Activity extends ActivityBase {
                                 if (actor instanceof ListView) {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
+                                    listView.layout(FORCE);
                                     Gdx.app.postRunnable(new Runnable() {
                                         @Override
                                         public void run() {
