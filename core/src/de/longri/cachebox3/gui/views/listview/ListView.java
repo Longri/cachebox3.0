@@ -16,12 +16,15 @@
 package de.longri.cachebox3.gui.views.listview;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -114,6 +117,8 @@ public class ListView extends WidgetGroup {
                 view = new ListViewItem();
             }
 
+            //set on drawListner
+            view.setOnDrawListener(onDrawListener);
 
             view.setPrefWidth(this.getWidth() - (padLeft + padRight));
             view.pack();
@@ -187,6 +192,13 @@ public class ListView extends WidgetGroup {
     }
 
 
+    ListViewItem.OnDrawListener onDrawListener = new ListViewItem.OnDrawListener() {
+        @Override
+        public void onDraw(ListViewItem item) {
+            if (adapter != null) adapter.update(item);
+        }
+    };
+
     public void draw(Batch batch, float parentAlpha) {
         if (this.backgroundDrawable != null) {
             backgroundDrawable.draw(batch, this.getX(), this.getY(), this.getWidth(), this.getHeight());
@@ -195,6 +207,78 @@ public class ListView extends WidgetGroup {
             super.draw(batch, parentAlpha);
         }
     }
+
+    /**
+     * Draws all children. {@link #applyTransform(Batch, Matrix4)} should be called before and {@link #resetTransform(Batch)}
+     * after this method if {@link #setTransform(boolean) transform} is true. If {@link #setTransform(boolean) transform} is false
+     * these methods don't need to be called, children positions are temporarily offset by the group position when drawn. This
+     * method avoids drawing children completely outside the {@link #setCullingArea(Rectangle) culling area}, if set.
+     */
+    protected void drawChildren(Batch batch, float parentAlpha) {
+        parentAlpha *= this.getColor().a;
+        SnapshotArray<Actor> children = this.getChildren();
+        Actor[] actors = children.begin();
+        Rectangle cullingArea = this.getCullingArea();
+        if (cullingArea != null) {
+            // Draw children only if inside culling area.
+            float cullLeft = cullingArea.x;
+            float cullRight = cullLeft + cullingArea.width;
+            float cullBottom = cullingArea.y;
+            float cullTop = cullBottom + cullingArea.height;
+            if (this.isTransform()) {
+                for (int i = 0, n = children.size; i < n; i++) {
+                    Actor child = actors[i];
+                    if (!child.isVisible()) continue;
+                    float cx = child.getX(), cy = child.getY();
+                    if (cx <= cullRight && cy <= cullTop && cx + child.getWidth() >= cullLeft && cy + child.getHeight() >= cullBottom)
+                        child.draw(batch, parentAlpha);
+                }
+            } else {
+                // No transform for this group, offset each child.
+                float offsetX = getX(), offsetY = getY();
+                setPosition(0, 0);
+                for (int i = 0, n = children.size; i < n; i++) {
+                    Actor child = actors[i];
+                    if (!child.isVisible()) continue;
+                    float cx = child.getX(), cy = child.getY();
+                    if (cx <= cullRight && cy <= cullTop && cx + child.getWidth() >= cullLeft && cy + child.getHeight() >= cullBottom) {
+                        child.setX(cx + offsetX);
+                        child.setY(cy + offsetY);
+                        child.draw(batch, parentAlpha);
+                        child.setX(cx);
+                        child.setY(cy);
+                    }
+                }
+                setPosition(offsetX, offsetY);
+            }
+        } else {
+            // No culling, draw all children.
+            if (this.isTransform()) {
+                for (int i = 0, n = children.size; i < n; i++) {
+                    Actor child = actors[i];
+                    if (!child.isVisible()) continue;
+                    child.draw(batch, parentAlpha);
+                }
+            } else {
+                // No transform for this group, offset each child.
+                float offsetX = getX(), offsetY = getY();
+                setPosition(0, 0);
+                for (int i = 0, n = children.size; i < n; i++) {
+                    Actor child = actors[i];
+                    if (!child.isVisible()) continue;
+                    float cx = child.getX(), cy = child.getY();
+                    child.setX(cx + offsetX);
+                    child.setY(cy + offsetY);
+                    child.draw(batch, parentAlpha);
+                    child.setX(cx);
+                    child.setY(cy);
+                }
+                setPosition(offsetX, offsetY);
+            }
+        }
+        children.end();
+    }
+
 
     public boolean isDraggable() {
         return isDraggable;

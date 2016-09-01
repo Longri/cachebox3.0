@@ -19,9 +19,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.help.GestureHelp;
@@ -30,12 +30,12 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.gui.views.listview.Adapter;
+import de.longri.cachebox3.gui.views.listview.ListView;
+import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
-import de.longri.cachebox3.gui.widgets.NumPad;
 import de.longri.cachebox3.settings.Config;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
 
 /**
  * Created by Longri on 27.07.16.
@@ -48,24 +48,10 @@ public class TestView extends AbstractView {
     }
 
 
-    static class StringListItem extends VisTable {
-        public StringListItem(String s) {
-            VisLabel label = new VisLabel(s);
-            VisTable table = new VisTable();
-            table.left();
-            table.add(label);
-            this.add(table);
-            this.setBackground("listrec_first_drawable");
-        }
-
-        @Override
-        public void finalize() {
-            log.debug("finalize Item");
-        }
-    }
-
-
     protected void create() {
+
+        this.clear();
+
         // create a Label with name for default
         nameLabel = new VisLabel(this.NAME);
         nameLabel.setAlignment(Align.center);
@@ -134,89 +120,52 @@ public class TestView extends AbstractView {
             }
         });
 
-       final NumPad.IKeyEventListener numPadKeyListener = new NumPad.IKeyEventListener() {
-            @Override
-            public void KeyPressed(String keyValue) {
+        final Array<String> list = new Array<String>();
+        for (int i = 0; i < 200; i++) {
+            list.add("ListItem " + i + " #");
+        }
 
+
+        Adapter listViewAdapter = new Adapter() {
+            @Override
+            public int getCount() {
+                return list.size;
+            }
+
+            @Override
+            public ListViewItem getView(int index) {
+                ListViewItem item = new ListViewItem();
+
+                item.left();
+                VisLabel label = new VisLabel(list.get(index));
+                label.setAlignment(Align.left);
+                item.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+                return item;
+            }
+
+            @Override
+            public void update(ListViewItem view) {
+                VisLabel label = (VisLabel) view.getChildren().get(0);
+                StringBuilder text = label.getText();
+                label.setText(text.reverse());
+                label.layout();
+                log.debug("update " + label.getText());
+            }
+
+            @Override
+            public float getItemSize(int index) {
+                return 0;
             }
         };
 
+        ListView listView = new ListView(listViewAdapter);
+        listView.setBounds(0, 0, getWidth(), getHeight());
+        listView.layout();
+        this.addActor(listView);
 
-        VisTextButton numPadOkCancel = new VisTextButton("o/c");
-        numPadOkCancel.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (numPad != null) {
-                    TestView.this.removeChild(numPad);
-                }
-                numPad = new NumPad(numPadKeyListener,NumPad.OptionalButton.OK, NumPad.OptionalButton.CANCEL);
-                numPad.pack();
-                numPad.setPosition(0, 150);
-                TestView.this.addActor(numPad);
-            }
-        });
-
-        VisTextButton numDotPadOkCancel = new VisTextButton("d/o/c");
-        numDotPadOkCancel.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (numPad != null) {
-                    TestView.this.removeChild(numPad);
-                }
-                numPad = new NumPad(numPadKeyListener,NumPad.OptionalButton.OK, NumPad.OptionalButton.CANCEL, NumPad.OptionalButton.DOT);
-                numPad.pack();
-                numPad.setPosition(0, 150);
-                TestView.this.addActor(numPad);
-            }
-        });
-
-        VisTextButton numDot = new VisTextButton("dot");
-        numDot.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (numPad != null) {
-                    TestView.this.removeChild(numPad);
-                }
-                numPad = new NumPad(numPadKeyListener,NumPad.OptionalButton.DOT);
-                numPad.pack();
-                numPad.setPosition(0, 150);
-                TestView.this.addActor(numPad);
-            }
-        });
-
-        VisTextButton num = new VisTextButton("none");
-        num.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (numPad != null) {
-                    TestView.this.removeChild(numPad);
-                }
-                numPad = new NumPad(numPadKeyListener,CB.scaledSizes.WINDOW_WIDTH);
-                numPad.pack();
-                numPad.setPosition(0, 150);
-                TestView.this.addActor(numPad);
-            }
-        });
-
-
-        VisTable table = new VisTable();
-        table.add(numPadOkCancel);
-        table.add(numDotPadOkCancel);
-        table.add(numDot);
-        table.add(num);
-
-
-        table.row();
-        table.add(testButton);
-        table.add(test2Button);
-        table.add(test3Button);
-        table.setPosition(0, 0);
-        table.pack();
-        this.addActor(table);
 
     }
 
-    NumPad numPad;
-
-    private void addNumpad() {
-
-    }
 
     private Menu getMoreMenu1() {
 
@@ -299,5 +248,10 @@ public class TestView extends AbstractView {
     @Override
     public void dispose() {
 
+    }
+
+    @Override
+    protected void sizeChanged() {
+        create();
     }
 }

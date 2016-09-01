@@ -15,12 +15,24 @@
  */
 package de.longri.cachebox3.gui.views.listview;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.kotcrab.vis.ui.widget.VisTable;
 
 /**
  * Created by Longri on 31.08.2016.
  */
 public class ListViewItem extends VisTable {
+
+
+    public interface OnDrawListener {
+        public void onDraw(ListViewItem item);
+    }
+
+    private OnDrawListener onDrawListener;
+
+    void setOnDrawListener(OnDrawListener listener) {
+        onDrawListener = listener;
+    }
 
     private float prefWidth = -1, prefHeight = -1;
 
@@ -42,5 +54,12 @@ public class ListViewItem extends VisTable {
 
     public void setPrefHeight(float height) {
         this.prefHeight = height;
+    }
+
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        if (onDrawListener != null){
+            onDrawListener.onDraw(this);
+        }
     }
 }
