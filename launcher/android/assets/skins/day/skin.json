@@ -227,11 +227,11 @@
     },
     "slider": {
       "path": "skins/day/svg/slider.svg",
-      "scale": 0.5
+      "scale": 0.3
     },
     "sliderKnob": {
       "path": "skins/day/svg/sliderKnob.svg",
-      "scale": 0.5
+      "scale": 0.3
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {

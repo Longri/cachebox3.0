@@ -112,7 +112,6 @@ public class CacheListDAO {
         }
         reader.close();
         log.debug(wpList.size() + " Waypoints readed!");
-        log.debug(wpList.get(0).toString());
         log.debug("ReadCacheList 2.Caches");
         try {
             if (fullDetails) {
