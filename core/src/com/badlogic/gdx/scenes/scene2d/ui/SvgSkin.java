@@ -267,7 +267,7 @@ public class SvgSkin extends Skin {
             public ListView.ListViewStyle read(Json json, JsonValue jsonData, Class type) {
                 ListView.ListViewStyle style = new ListView.ListViewStyle();
 
-                String background, firstItem, secondItem, selectedItem;
+                String background, firstItem, secondItem, selectedItem, vScroll = null, vScrollKnob = null, hScroll = null, hScrollKnob = null;
 
                 background = json.readValue("background", String.class, jsonData);
                 firstItem = json.readValue("firstItem", String.class, jsonData);
@@ -292,6 +292,33 @@ public class SvgSkin extends Skin {
                 style.padRight = CB.getScaledFloat(padRight);
                 style.padTop = CB.getScaledFloat(padTop);
                 style.padBottom = CB.getScaledFloat(padBottom);
+
+
+                try {
+                    vScroll = json.readValue("vScroll", String.class, jsonData);
+                } catch (Exception e) {
+                }
+                try {
+                    vScrollKnob = json.readValue("vScrollKnob", String.class, jsonData);
+                } catch (Exception e) {
+                }
+
+                if (vScroll != null) style.vScroll = getDrawable(vScroll);
+                if (vScrollKnob != null) style.vScrollKnob = getDrawable(vScrollKnob);
+
+
+                try {
+                    hScroll = json.readValue("hScroll", String.class, jsonData);
+                } catch (Exception e) {
+                }
+                try {
+                    hScrollKnob = json.readValue("hScrollKnob", String.class, jsonData);
+                } catch (Exception e) {
+                }
+
+                if (hScroll != null) style.hScroll = getDrawable(hScroll);
+                if (hScrollKnob != null) style.hScrollKnob = getDrawable(hScrollKnob);
+
                 return style;
             }
         });
@@ -300,30 +327,42 @@ public class SvgSkin extends Skin {
             public SvgNinePatchDrawable read(Json json, JsonValue jsonData, Class type) {
 
                 String name = json.readValue("name", String.class, jsonData);
-                int left = json.readValue("left", int.class, 0, jsonData);
-                int right = json.readValue("right", int.class, 0, jsonData);
-                int top = json.readValue("top", int.class, 0, jsonData);
-                int bottom = json.readValue("bottom", int.class, 0, jsonData);
-                int leftWidth = json.readValue("leftWidth", int.class, 0, jsonData);
-                int rightWidth = json.readValue("rightWidth", int.class, 0, jsonData);
-                int topHeight = json.readValue("topHeight", int.class, 0, jsonData);
-                int bottomHeight = json.readValue("bottomHeight", int.class, 0, jsonData);
+                float left = json.readValue("left", float.class, 0f, jsonData);
+                float right = json.readValue("right", float.class, 0f, jsonData);
+                float top = json.readValue("top", float.class, 0f, jsonData);
+                float bottom = json.readValue("bottom", float.class, 0f, jsonData);
+                float leftWidth = json.readValue("leftWidth", float.class, 0f, jsonData);
+                float rightWidth = json.readValue("rightWidth", float.class, 0f, jsonData);
+                float topHeight = json.readValue("topHeight", float.class, 0f, jsonData);
+                float bottomHeight = json.readValue("bottomHeight", float.class, 0f, jsonData);
 
                 // get texture region
                 TextureRegion textureRegion = getRegion(name);
 
                 //scale nine patch regions
-                left = CB.getScaledInt(left);
-                right = CB.getScaledInt(right);
-                top = CB.getScaledInt(top);
-                bottom = CB.getScaledInt(bottom);
-                leftWidth = leftWidth == 0 ? left : CB.getScaledInt(leftWidth);
-                rightWidth = rightWidth == 0 ? right : CB.getScaledInt(rightWidth);
-                topHeight = topHeight == 0 ? top : CB.getScaledInt(topHeight);
-                bottomHeight = bottomHeight == 0 ? bottom : CB.getScaledInt(bottomHeight);
+                left = CB.getScaledFloat(left);
+                right = CB.getScaledFloat(right);
+                top = CB.getScaledFloat(top);
+                bottom = CB.getScaledFloat(bottom);
+                leftWidth = leftWidth == 0 ? left : CB.getScaledFloat(leftWidth);
+                rightWidth = rightWidth == 0 ? right : CB.getScaledFloat(rightWidth);
+                topHeight = topHeight == 0 ? top : CB.getScaledFloat(topHeight);
+                bottomHeight = bottomHeight == 0 ? bottom : CB.getScaledFloat(bottomHeight);
 
-                return new SvgNinePatchDrawable(new NinePatch(textureRegion, left, right, top, bottom),
-                        leftWidth, rightWidth, topHeight, bottomHeight);
+
+                // if any value < 0 set to half width or height!
+                if (left < 0) left = textureRegion.getRegionWidth() / 2;
+                if (right < 0) right = textureRegion.getRegionWidth() / 2;
+                if (top < 0) top = textureRegion.getRegionHeight() / 2;
+                if (bottom < 0) bottom = textureRegion.getRegionHeight() / 2;
+                if (leftWidth < 0) leftWidth = textureRegion.getRegionWidth() / 2;
+                if (rightWidth < 0) rightWidth = textureRegion.getRegionWidth() / 2;
+                if (topHeight < 0) topHeight = textureRegion.getRegionHeight() / 2;
+                if (bottomHeight < 0) bottomHeight = textureRegion.getRegionHeight() / 2;
+
+
+                return new SvgNinePatchDrawable(new NinePatch(textureRegion, (int) left, (int) right, (int) top, (int) bottom),
+                        (int) leftWidth, (int) rightWidth, (int) topHeight, (int) bottomHeight);
             }
         });
 

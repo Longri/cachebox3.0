@@ -45,7 +45,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     Batch batch;
     protected int FpsInfoPos = 0;
-    public static float stateTime;
+
     private Sprite FpsInfoSprite;
     private final Matrix4 NORMAL_MATRIX = new Matrix4().toNormalMatrix();
 
@@ -76,7 +76,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void render() {
-        stateTime += Gdx.graphics.getDeltaTime();
+        CB.stateTime += Gdx.graphics.getDeltaTime();
         Gdx.gl.glClearColor(CB.backgroundColor.r, CB.backgroundColor.g, CB.backgroundColor.b, CB.backgroundColor.a);
         //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

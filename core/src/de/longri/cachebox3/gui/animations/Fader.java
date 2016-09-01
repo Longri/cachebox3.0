@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.animations;
 
 import com.badlogic.gdx.Gdx;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import org.slf4j.LoggerFactory;
 
@@ -98,7 +99,7 @@ public class Fader {
 		if (this.alwaysOn)
 			return;
 		cancelTimerToFadeOut();
-		mFadeoutBeginntime = ((CacheboxMain)Gdx.app).stateTime * 1000;
+		mFadeoutBeginntime = CB.stateTime * 1000;
 		mFadeOut = true;
 	}
 
@@ -164,7 +165,7 @@ public class Fader {
 
 	private void calcFade() {
 		float calcedFadeValue = 0;
-		float statetime = (((CacheboxMain)Gdx.app).stateTime * 1000) - mFadeoutBeginntime;
+		float statetime = (CB.stateTime * 1000) - mFadeoutBeginntime;
 
 		if (mFadeIn) {
 			calcedFadeValue = (1 + ((statetime) % this.mFadeInTime) / (this.mFadeInTime / 1000)) / 1000;

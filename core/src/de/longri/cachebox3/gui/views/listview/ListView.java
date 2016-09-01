@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.views.listview;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -39,6 +40,8 @@ public class ListView extends WidgetGroup {
     private boolean needsLayout = true;
     private final ListViewStyle style;
     private ScrollViewContainer itemGroup;
+    float completeHeight = 0;
+    boolean isDraggable = false;
 
     public ListView() {
         this(VisUI.getSkin().get("default", ListViewStyle.class));
@@ -120,7 +123,6 @@ public class ListView extends WidgetGroup {
 
         //layout itemGroup
 
-        float completeHeight = 0;
 
         for (int i = 0; i < itemHeights.size; i++) { //calculate complete hight of all Items
             completeHeight += itemHeights.items[i];
@@ -141,21 +143,25 @@ public class ListView extends WidgetGroup {
             actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
         }
 
-        scrollPane = new VisScrollPane(itemGroup);
+        scrollPane = new VisScrollPane(itemGroup, style);
         scrollPane.setOverscroll(false, true);
         scrollPane.setFlickScroll(true);
-        scrollPane.setFadeScrollBars(true);
+        //  scrollPane.setFadeScrollBars(true);
+        //  scrollPane.setScrollBarPositions(false, true);
 
         float paneHeight = this.getHeight();
         float paneYPos = 0;
+        isDraggable = true;
         if (this.getHeight() > completeHeight) {
             //set on Top
             paneHeight = completeHeight;
             paneYPos = this.getHeight() - completeHeight;
+            isDraggable = false;
         }
 
         scrollPane.setBounds(0, paneYPos, this.getWidth(), paneHeight);
         scrollPane.setCullingArea(new Rectangle(0, paneYPos, this.getWidth(), paneHeight));
+        scrollPane.setVariableSizeKnobs(false);
         this.addActor(scrollPane);
         scrollPane.layout();
         needsLayout = false;
@@ -178,7 +184,13 @@ public class ListView extends WidgetGroup {
         if (this.backgroundDrawable != null) {
             backgroundDrawable.draw(batch, this.getX(), this.getY(), this.getWidth(), this.getHeight());
         }
-        super.draw(batch, parentAlpha);
+        synchronized (this) {
+            super.draw(batch, parentAlpha);
+        }
+    }
+
+    public boolean isDraggable() {
+        return isDraggable;
     }
 
     public float getScrollPos() {

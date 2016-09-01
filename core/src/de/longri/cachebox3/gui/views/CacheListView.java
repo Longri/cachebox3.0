@@ -72,10 +72,12 @@ public class CacheListView extends AbstractView {
                     }
                 };
                 CacheListView.this.listView = new ListView(listViewAdapter);
-                CacheListView.this.listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
-                CacheListView.this.addActor(listView);
-                CacheListView.this.listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
-                Gdx.graphics.requestRendering();
+                synchronized (CacheListView.this.listView) {
+                    CacheListView.this.listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
+                    CacheListView.this.addActor(listView);
+                    CacheListView.this.listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
+                    Gdx.graphics.requestRendering();
+                }
             }
         });
         thread.start();

@@ -53,6 +53,7 @@ public class CB {
     public static final float WINDOW_FADE_TIME = 0.3f;
     private static boolean displayOff = false;
     public static Categories Categories;
+    public static float stateTime;
 
     static {
 

@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.utils.CB_RectF;
 
@@ -42,7 +43,7 @@ public abstract class FrameAnimation extends AnimationBase {
 	int getFrameIndex(int Duration, int Frames) {
 		// Duration != 0
 		// Frames != 0
-		return (1 + ((int) (((CacheboxMain) Gdx.app).stateTime * 1000) % Duration) / (Duration / Frames));
+		return (1 + ((int) (CB.stateTime * 1000) % Duration) / (Duration / Frames));
 	}
 
 	public void addFrame(Sprite frame) {

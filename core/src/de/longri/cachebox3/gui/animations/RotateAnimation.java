@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.animations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.utils.CB_RectF;
 
@@ -26,95 +27,95 @@ import de.longri.cachebox3.utils.CB_RectF;
  * @author Longri
  */
 public abstract class RotateAnimation extends AnimationBase {
-	private float mOriginX;
-	private float mOriginY;
-	private float mScale = 1f;
-	private float animateRotateValue = 0;
-	private Sprite mDrawable;
+    private float mOriginX;
+    private float mOriginY;
+    private float mScale = 1f;
+    private float animateRotateValue = 0;
+    private Sprite mDrawable;
 
-	protected static final int ANIMATION_DURATION = 2000;
+    protected static final int ANIMATION_DURATION = 2000;
 
-	public RotateAnimation(float X, float Y, float Width, float Height, String Name) {
-		super(X, Y, Width, Height, Name);
-	}
+    public RotateAnimation(float X, float Y, float Width, float Height, String Name) {
+        super(X, Y, Width, Height, Name);
+    }
 
-	public RotateAnimation(CB_RectF rec, String Name) {
-		super(rec, Name);
-	}
+    public RotateAnimation(CB_RectF rec, String Name) {
+        super(rec, Name);
+    }
 
-	/**
-	 * Time for 360°
-	 */
-	protected void play(int duration) {
-		this.mDuration = duration;
-		mPlaying = true;
-		mPause = false;
-	}
+    /**
+     * Time for 360°
+     */
+    protected void play(int duration) {
+        this.mDuration = duration;
+        mPlaying = true;
+        mPause = false;
+    }
 
-	@Override
-	public void stop() {
-		mPlaying = false;
-		mPause = false;
-	}
+    @Override
+    public void stop() {
+        mPlaying = false;
+        mPause = false;
+    }
 
-	@Override
-	public void pause() {
-		mPause = true;
-	}
+    @Override
+    public void pause() {
+        mPause = true;
+    }
 
 
-	@Override
-	public void setOrigin(float x, float y) {
-		mOriginX = x;
-		mOriginY = y;
-	}
+    @Override
+    public void setOrigin(float x, float y) {
+        mOriginX = x;
+        mOriginY = y;
+    }
 
-	@Override
-	public void setScale(float scale) {
-		mScale = scale;
-	}
+    @Override
+    public void setScale(float scale) {
+        mScale = scale;
+    }
 
-	public void setSprite(Sprite sprite) {
-		mSpriteWidth = sprite.getWidth();
-		mSpriteHeight = sprite.getHeight();
-		mDrawable = sprite;// new SpriteDrawable(sprite);
-	}
+    public void setSprite(Sprite sprite) {
+        mSpriteWidth = sprite.getWidth();
+        mSpriteHeight = sprite.getHeight();
+        mDrawable = sprite;// new SpriteDrawable(sprite);
+    }
 
-	@Override
-	protected void render(Batch batch) {
+    @Override
+    protected void render(Batch batch) {
 
-		if (mDrawable == null)
-			return;
+        if (mDrawable == null)
+            return;
 
-		// ####################################################################
-		// calc Rotation
-		// ####################################################################
+        // ####################################################################
+        // calc Rotation
+        // ####################################################################
 
-		animateRotateValue = (1 + ((int) (((CacheboxMain)Gdx.app).stateTime * 1000) % this.mDuration) / (this.mDuration / 360));
+        animateRotateValue = (1 + ((int) (CB.stateTime * 1000) % this.mDuration) / (this.mDuration / 360));
 
-		// ####################################################################
-		// Draw
-		// ####################################################################
+        // ####################################################################
+        // Draw
+        // ####################################################################
 
-		float drawwidth = getWidth();
-		float drawHeight = getHeight();
-		float drawX = 0;
-		float drawY = 0;
+        float drawwidth = getWidth();
+        float drawHeight = getHeight();
+        float drawX = 0;
+        float drawY = 0;
 
-		if (mSpriteWidth > 0 && mSpriteHeight > 0) {
-			float proportionWidth = getWidth() / mSpriteWidth;
-			float proportionHeight = getHeight() / mSpriteHeight;
+        if (mSpriteWidth > 0 && mSpriteHeight > 0) {
+            float proportionWidth = getWidth() / mSpriteWidth;
+            float proportionHeight = getHeight() / mSpriteHeight;
 
-			float proportion = Math.min(proportionWidth, proportionHeight);
+            float proportion = Math.min(proportionWidth, proportionHeight);
 
-			drawwidth = mSpriteWidth * proportion;
-			drawHeight = mSpriteHeight * proportion;
-			drawX = (getWidth() - drawwidth) / 2;
-			drawY = (getHeight() - drawHeight) / 2;
-		}
+            drawwidth = mSpriteWidth * proportion;
+            drawHeight = mSpriteHeight * proportion;
+            drawX = (getWidth() - drawwidth) / 2;
+            drawY = (getHeight() - drawHeight) / 2;
+        }
 
-		batch.draw(mDrawable, drawX, drawY, mOriginX, mOriginY, drawwidth, drawHeight, mScale, mScale, animateRotateValue);
+        batch.draw(mDrawable, drawX, drawY, mOriginX, mOriginY, drawwidth, drawHeight, mScale, mScale, animateRotateValue);
 
-	}
+    }
 
 }
