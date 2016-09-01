@@ -15,12 +15,13 @@
  */
 package de.longri.cachebox3.sqlite;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabase;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
+import de.longri.cachebox3.sqlite.dao.CategoryDAO;
+import de.longri.cachebox3.types.CacheList;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Category;
 import org.slf4j.LoggerFactory;
@@ -38,9 +39,49 @@ public class Database {
     public static Database FieldNotes;
     public static Database Settings;
     private SQLiteGdxDatabase myDB;
+    public CacheList Query;
 
+    /**
+     * @return Set To CB.Categories
+     */
+    public Categories GPXFilenameUpdateCacheCount() {
+        // welche GPXFilenamen sind in der DB erfasst
+        beginTransaction();
+        try {
+            SQLiteGdxDatabaseCursor reader = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from Caches where GPXFilename_ID is not null Group by GPXFilename_ID", null);
+            reader.moveToFirst();
 
-//	public CacheList Query;
+            while (reader.isAfterLast() == false) {
+                long GPXFilename_ID = reader.getLong(0);
+                long CacheCount = reader.getLong(1);
+
+                Parameters val = new Parameters();
+                val.put("CacheCount", CacheCount);
+                update("GPXFilenames", val, "ID = " + GPXFilename_ID, null);
+
+                reader.moveToNext();
+            }
+
+            delete("GPXFilenames", "Cachecount is NULL or CacheCount = 0", null);
+            delete("GPXFilenames", "ID not in (Select GPXFilename_ID From Caches)", null);
+            reader.close();
+            setTransactionSuccessful();
+        } catch (Exception e) {
+
+        } finally {
+            endTransaction();
+        }
+
+        //TODO ???
+        Categories categories = new Categories();
+        return categories;
+    }
+
+    public boolean isStarted() {
+        if (myDB == null) return false;
+        if (myDB.isOpen()) return true;
+        return false;
+    }
 
     public enum DatabaseType {
         CacheBox, FieldNotes, Settings
@@ -57,7 +98,7 @@ public class Database {
         switch (databaseType) {
             case CacheBox:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseChange;
-//			Query = new CacheList();
+                Query = new CacheList();
                 break;
             case FieldNotes:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseFieldNoteChange;
@@ -87,7 +128,23 @@ public class Database {
     protected int latestDatabaseChange = 0;
 
 
-    public boolean StartUp(FileHandle databasePath) {
+    public boolean StartUp(FileHandle databasePath) throws SQLiteGdxException {
+
+
+        if (myDB != null) {
+            if (this.databasePath.file().getAbsolutePath().equals(databasePath.file().getAbsolutePath())) {
+
+                if (!myDB.isOpen()) {
+                    myDB.openOrCreateDatabase();
+                }
+                // is open
+                return true;
+            }
+            if (myDB.isOpen()) myDB.closeDatabase();
+            myDB = null;
+        }
+
+
         this.databasePath = databasePath;
 
         Initialize();

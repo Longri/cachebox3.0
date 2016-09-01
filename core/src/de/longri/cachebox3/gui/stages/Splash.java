@@ -137,6 +137,7 @@ public class Splash extends Stage {
         initTaskList.add(new TranslationLoaderTask("Load Translations", 10));
         initTaskList.add(new GdxInitialTask("Initial GDX", 2));
         initTaskList.add(new InitialLocationListenerTask("Initial Loacation Reciver", 1));
+        initTaskList.add(new LoadDbTask("Load Database", 10));
 
 
         //Run Loader Tasks at separate threads
@@ -246,8 +247,8 @@ public class Splash extends Stage {
 //        this.addNext(CB_Logo, FIXED);
 //        this.addLast(dummy);
 //
-//        String VersionString = GlobalCore.getVersionString();
-//        descTextView = new Label(VersionString + GlobalCore.br + GlobalCore.br + GlobalCore.splashMsg, null, null, WrapType.MULTILINE).setHAlignment(HAlignment.CENTER);
+//        String VersionString = CB.getVersionString();
+//        descTextView = new Label(VersionString + CB.br + CB.br + CB.splashMsg, null, null, WrapType.MULTILINE).setHAlignment(HAlignment.CENTER);
 //        descTextView.setHeight(descTextView.getTextHeight());
 //        this.addLast(descTextView);
 //
@@ -395,7 +396,7 @@ public class Splash extends Stage {
 //        } catch (Exception ex) {
 //            Log.err(log, "slpash.Initial()", "search number of DB3 files", ex);
 //        }
-//        if ((fileList.size() > 1) && Config.MultiDBAsk.getValue() && !GlobalCore.restartAfterKill) {
+//        if ((fileList.size() > 1) && Config.MultiDBAsk.getValue() && !CB.restartAfterKill) {
 //            breakForWait = true;
 //            SelectDB selectDBDialog = new SelectDB(this, "SelectDbDialog", true);
 //            selectDBDialog.setReturnListener(new IReturnListener() {
@@ -501,11 +502,11 @@ public class Splash extends Stage {
 //        GL.that.removeRenderView(this);
 //        GL.that.switchToMainView();
 //
-//        if (GlobalCore.restartCache != null) {
+//        if (CB.restartCache != null) {
 //            synchronized (Database.Data.Query) {
-//                Cache c = Database.Data.Query.GetCacheByGcCode(GlobalCore.restartCache);
+//                Cache c = Database.Data.Query.GetCacheByGcCode(CB.restartCache);
 //                if (c != null) {
-//                    if (GlobalCore.restartWaypoint != null) {
+//                    if (CB.restartWaypoint != null) {
 //                        WaypointDAO dao = new WaypointDAO();
 //                        CB_List<Waypoint> waypoints = dao.getWaypointsFromCacheID(c.Id, true);
 //                        if (waypoints != null) {
@@ -513,15 +514,15 @@ public class Splash extends Stage {
 //
 //                            for (int i = 0, n = waypoints.size(); i < n; i++) {
 //                                Waypoint wp = waypoints.get(i);
-//                                if (wp.getGcCode().equalsIgnoreCase(GlobalCore.restartWaypoint)) {
+//                                if (wp.getGcCode().equalsIgnoreCase(CB.restartWaypoint)) {
 //                                    w = wp;
 //                                }
 //                            }
 //                            Log.debug(log, "ini_TabMainView: Set selectedCache to" + c.getGcCode() + " from restartCache + WP.");
-//                            GlobalCore.setSelectedWaypoint(c, w);
+//                            CB.setSelectedWaypoint(c, w);
 //                        } else {
 //                            Log.debug(log, "ini_TabMainView: Set selectedCache to" + c.getGcCode() + " from restartCache.");
-//                            GlobalCore.setSelectedCache(c);
+//                            CB.setSelectedCache(c);
 //                        }
 //                    }
 //                }

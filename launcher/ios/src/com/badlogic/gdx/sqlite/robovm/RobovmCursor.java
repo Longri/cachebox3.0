@@ -49,10 +49,10 @@ public class RobovmCursor implements SQLiteGdxDatabaseCursor {
                 rs.next();
             }
             if (rs.isFirst())
-                return ;
-             rs.first();
+                return;
+            rs.first();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -60,6 +60,7 @@ public class RobovmCursor implements SQLiteGdxDatabaseCursor {
     public boolean isAfterLast() {
 
         try {
+            if (this.rowcount == 0) return true;
             return rs.isAfterLast();
         } catch (Exception e) {
             return true;
@@ -119,7 +120,6 @@ public class RobovmCursor implements SQLiteGdxDatabaseCursor {
     }
 
 
-
     @Override
     public int getInt(int columnIndex) {
         try {
@@ -128,7 +128,6 @@ public class RobovmCursor implements SQLiteGdxDatabaseCursor {
             return 0;
         }
     }
-
 
 
     @Override
@@ -189,7 +188,6 @@ public class RobovmCursor implements SQLiteGdxDatabaseCursor {
             return 0;
         }
     }
-
 
 
     @Override

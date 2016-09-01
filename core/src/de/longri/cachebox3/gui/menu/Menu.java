@@ -22,7 +22,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -36,9 +35,10 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.stages.StageManager;
-import de.longri.cachebox3.gui.views.ListView;
+import de.longri.cachebox3.gui.views.listview.Adapter;
+import de.longri.cachebox3.gui.views.listview.ListView;
+import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.LoggerFactory;
 
@@ -52,14 +52,14 @@ public class Menu extends Window {
     final static boolean ALL = true;
     public final static float MORE_MENU_ANIMATION_TIME = 0.3f;
 
-    CB_List<MenuItem> mItems = new CB_List();
+    CB_List<ListViewItem> mItems = new CB_List();
     MenuStyle style;
     final String name;
     ListView listView;
     OnItemClickListener onItemClickListener;
     private VisLabel titleLabel, parentTitleLabel;
     protected Menu parentMenu;
-    private  WidgetGroup titleGroup;
+    private WidgetGroup titleGroup;
 
     public Menu(String name) {
         this.style = VisUI.getSkin().get("default", MenuStyle.class);
@@ -274,31 +274,49 @@ public class Menu extends Window {
             }
         };
 
-        listView = new ListView(mItems.size()) {
+
+        Adapter listViewAdapter = new Adapter() {
             @Override
-            public VisTable createView(Integer index) {
-                MenuItem item = mItems.get(index);
+            public int getCount() {
+                return mItems.size();
+            }
+
+            @Override
+            public ListViewItem getView(int index) {
+                MenuItem item = (MenuItem) mItems.get(index);
                 item.setOnItemClickListener(clickListener);
                 return item;
             }
+
+            @Override
+            public void update(ListViewItem view) {
+
+            }
+
+            @Override
+            public float getItemSize(int index) {
+                return mItems.get(index).getHeight();
+            }
         };
+        listView = new ListView(listViewAdapter);
         listView.setBackground(this.style.background);
         this.addActor(listView);
     }
 
     @Override
     public void pack() {
-        for (MenuItem item : mItems) {
-            item.initial();
+        for (ListViewItem item : mItems) {
+            ((MenuItem)item).initial();
             item.pack();
         }
 
-        listView.rebuildView();
+
         super.pack();
 
-        float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (titleGroup.getHeight() );
+        float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (titleGroup.getHeight());
         listView.setBounds(((Gdx.graphics.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
                 CB.scaledSizes.WINDOW_WIDTH, maxListViewHeight);
+        listView.pack();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -309,11 +327,11 @@ public class Menu extends Window {
         return this.onItemClickListener;
     }
 
-    public CB_List<MenuItem> getItems() {
+    public CB_List<ListViewItem> getItems() {
         return mItems;
     }
 
-    public void addItems(CB_List<MenuItem> items) {
+    public void addItems(CB_List<ListViewItem> items) {
         mItems.addAll(items);
     }
 

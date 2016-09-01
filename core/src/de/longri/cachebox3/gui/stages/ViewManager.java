@@ -27,7 +27,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.gui.actions.*;
 import de.longri.cachebox3.gui.actions.show_vies.*;
 import de.longri.cachebox3.gui.views.AboutView;
@@ -106,6 +105,10 @@ public class ViewManager extends Stage {
         log.debug("reload view state:" + view.getName());
         this.actView.onShow();
 
+
+        //bring ButtonBar to Front
+        mainButtonBar.toFront();
+
         //select main button
         boolean buttonFound = false;
         for (Button button : mainButtonBar.getButtons()) {
@@ -148,7 +151,7 @@ public class ViewManager extends Stage {
         navButton.addAction(new ActionButton(new Action_Show_CompassView(), false, GestureDirection.Right));
         navButton.addAction(new ActionButton(new Action_NavigateExt(), false, GestureDirection.Down));
         navButton.addAction(new ActionButton(new Action_NavigateInt(), false, GestureDirection.Left));
-        if (GlobalCore.isTestVersion())
+        if (CB.isTestVersion())
             navButton.addAction(new ActionButton(new Action_Show_TestView(), false));
 //
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickFieldNote, false, GestureDirection.Up));
@@ -173,7 +176,7 @@ public class ViewManager extends Stage {
     }
 
     private void setActViewBounds() {
-        this.actView.setBounds(0, mainButtonBar.getHeight(), width, height);
+        this.actView.setBounds(0, mainButtonBar.getHeight(), width, height - mainButtonBar.getHeight());
     }
 
     public AbstractView getActView() {

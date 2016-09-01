@@ -69,13 +69,8 @@ public class IOS_LocationListener {
         @Override
         public void didUpdateLocations(CLLocationManager manager, NSArray<CLLocation> locations) {
 
-
             CLLocation newLocation = locations.last();
             CLLocationCoordinate2D coord = newLocation.getCoordinate();
-
-            Gdx.app.log("Recive location", newLocation.description());
-            Gdx.app.log("Recive location", getLocalizedCoordinateString(newLocation));
-
 
             de.longri.cachebox3.locator.Location.ProviderType provider = de.longri.cachebox3.locator.Location.ProviderType.NULL;
 

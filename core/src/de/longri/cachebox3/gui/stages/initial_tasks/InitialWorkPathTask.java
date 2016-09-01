@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.stages.initial_tasks;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.settings.Config;
@@ -46,17 +47,23 @@ public class InitialWorkPathTask extends AbstractInitTask {
         // initial Database on user path
         ini_Dir(CB.WorkPath + "/user", false);
 
-        FileHandle configFileHandle = Gdx.files.absolute(CB.WorkPath + "/user/config.db3");
-        Database.Settings = new Database(Database.DatabaseType.Settings);
-        Database.Settings.StartUp(configFileHandle);
+        try {
+            FileHandle configFileHandle = Gdx.files.absolute(CB.WorkPath + "/user/config.db3");
+            Database.Settings = new Database(Database.DatabaseType.Settings);
+            Database.Settings.StartUp(configFileHandle);
+        } catch (SQLiteGdxException e) {
+            log.error("can't open config.db3", e);
+        }
 
-        FileHandle dataFileHandle = Gdx.files.absolute(CB.WorkPath + "/cachebox.db3");
-        Database.Data = new Database(Database.DatabaseType.CacheBox);
-        Database.Data.StartUp(dataFileHandle);
 
-        FileHandle fieldNotesFileHandle = Gdx.files.absolute(CB.WorkPath + "/user/fieldNotes.db3");
-        Database.FieldNotes = new Database(Database.DatabaseType.FieldNotes);
-        Database.FieldNotes.StartUp(fieldNotesFileHandle);
+
+        try {
+            FileHandle fieldNotesFileHandle = Gdx.files.absolute(CB.WorkPath + "/user/fieldNotes.db3");
+            Database.FieldNotes = new Database(Database.DatabaseType.FieldNotes);
+            Database.FieldNotes.StartUp(fieldNotesFileHandle);
+        } catch (SQLiteGdxException e) {
+            log.error("can't open fieldNotes.db3", e);
+        }
 
 
         //load settings

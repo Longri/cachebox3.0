@@ -224,4 +224,9 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
         return values;
     }
 
+
+    @Override
+    public boolean isOpen() {
+        return (database != null && database.isOpen());
+    }
 }

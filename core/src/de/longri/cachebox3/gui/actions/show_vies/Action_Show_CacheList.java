@@ -109,10 +109,10 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
                     case MenuID.MI_AUTO_RESORT:
                         CB.viewmanager.toast("Toggle Autoresort NOT IMPLEMENTED NOW");
 
-//                        GlobalCore.setAutoResort(!(GlobalCore.getAutoResort()));
-//                        if (GlobalCore.getAutoResort()) {
+//                        CB.setAutoResort(!(CB.getAutoResort()));
+//                        if (CB.getAutoResort()) {
 //                            synchronized (Database.Data.Query) {
-//                                Database.Data.Query.Resort(GlobalCore.getSelectedCoord(), new CacheWithWP(GlobalCore.getSelectedCache(), GlobalCore.getSelectedWaypoint()));
+//                                Database.Data.Query.Resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
 //                            }
 //                        }
                         return true;
@@ -122,12 +122,12 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 
 //
 //                        if (GroundspeakAPI.ApiLimit()) {
-//                            GlobalCore.MsgDownloadLimit();
+//                            CB.MsgDownloadLimit();
 //                            return;
 //                        }
 //
 //                        // First check API-Key with visual Feedback
-//                        GlobalCore.chkAPiLogInWithWaitDialog(new IChkRedyHandler() {
+//                        CB.chkAPiLogInWithWaitDialog(new IChkRedyHandler() {
 //
 //                            @Override
 //                            public void checkReady(int MemberType) {
@@ -182,7 +182,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
         mi = cm.addItem(MenuID.MI_MANAGE_DB, "manage", "  (" + DBName + ")", CB.getSprite(IconNames.manageDb.name()));
         mi = cm.addItem(MenuID.MI_AUTO_RESORT, "AutoResort");
         mi.setCheckable(true);
-        //    mi.setChecked(GlobalCore.getAutoResort());
+        //    mi.setChecked(CB.getAutoResort());
         cm.addItem(MenuID.MI_CHK_STATE_API, "chkState", CB.getSprite(IconNames.gc_liveIcon.name()));
         cm.addItem(MenuID.MI_NEW_CACHE, "MI_NEW_CACHE", CB.getSprite(IconNames.addCacheIcon.name()));
         cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSprite(IconNames.deleteIcon.name()));

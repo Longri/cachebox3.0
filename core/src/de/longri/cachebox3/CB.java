@@ -16,14 +16,21 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
+import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.dao.CacheListDAO;
+import de.longri.cachebox3.sqlite.dao.WaypointDAO;
+import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.Categories;
+import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.ScaledSizes;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLoggerFactory;
@@ -33,6 +40,7 @@ import org.slf4j.impl.LibgdxLoggerFactory;
  * Created by Longri on 20.07.2016.
  */
 public class CB {
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(CB.class);
 
     public static final int CurrentRevision = 20160806;
     public static final String CurrentVersion = "0.1.";
@@ -40,7 +48,6 @@ public class CB {
 
 
     //LogLevels
-
     public static final String LOG_LEVEL_INFO = "info";
     public static final String LOG_LEVEL_DEBUG = "debug";
     public static final String LOG_LEVEL_WARN = "warn";
@@ -49,18 +56,30 @@ public class CB {
 
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
     public static final float WINDOW_FADE_TIME = 0.3f;
+    private static boolean displayOff = false;
+    public static Categories Categories;
+    public static float stateTime;
 
     static {
 
         LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.CacheBox");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.Settings");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+//        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
         LibgdxLoggerFactory.EXCLUDE_LIST.add(StageManager.class.getName());
         //   LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
 
 
-       // LibgdxLoggerFactory.INCLUDE_LIST.add(ViewManager.class.getName());
+        LibgdxLoggerFactory.INCLUDE_LIST.add(CacheListDAO.class.getName());
+        LibgdxLoggerFactory.INCLUDE_LIST.add(WaypointDAO.class.getName());
+        LibgdxLoggerFactory.INCLUDE_LIST.add(Action_Show_SelectDB_Dialog.class.getName());
+
+        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
+        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmCursor");
+
+        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopCursor");
+
 
         ((LibgdxLoggerFactory) LoggerFactory.getILoggerFactory()).reset();
     }
@@ -69,6 +88,18 @@ public class CB {
     final static float PPI_DEFAULT = 163;
     private static float globalScale = 1;
     public static ViewManager viewmanager;
+    public static final String br = System.getProperty("line.separator");
+    public static final String fs = System.getProperty("file.separator");
+
+    public static final String AboutMsg = "Team Cachebox (2011-2016)" + br + "www.team-cachebox.de" + br + "Cache Icons Copyright 2009," + br + "Groundspeak Inc. Used with permission";
+    public static final String splashMsg = AboutMsg + br + br + "POWERED BY:";
+
+    private static Cache selectedCache = null;
+    private static Waypoint selectedWaypoint = null;
+    private static Cache nearestCache = null;
+    private static boolean autoResort;
+    public static boolean switchToCompassCompleted = false;
+    public static String cacheHistory = "";
 
 
     /**
@@ -170,14 +201,18 @@ public class CB {
 
     public static void callQuit() {
         //TODO save last selected cache
-//        if (GlobalCore.isSetSelectedCache()) {
+//        if (CB.isSetSelectedCache()) {
 //            // speichere selektierten Cache, da nicht alles über die SelectedCacheEventList läuft
-//            Config.LastSelectedCache.setValue(GlobalCore.getSelectedCache().getGcCode());
+//            Config.LastSelectedCache.setValue(CB.getSelectedCache().getGcCode());
 //            Config.AcceptChanges();
-//            Log.debug(log, "LastSelectedCache = " + GlobalCore.getSelectedCache().getGcCode());
+//            Log.debug(log, "LastSelectedCache = " + CB.getSelectedCache().getGcCode());
 //        }
 
         Gdx.app.exit();
+    }
+
+    public static boolean isDisplayOff() {
+        return displayOff;
     }
 
     public enum Platform {
@@ -189,4 +224,111 @@ public class CB {
     public static void requestRendering() {
         Gdx.graphics.requestRendering();
     }
+
+    public static void setSelectedCache(Cache cache) {
+        selectedCache = cache;
+    }
+
+    public static void setSelectedWaypoint(Cache cache, Waypoint waypoint) {
+        if (cache == null)
+            return;
+
+        setSelectedWaypoint(cache, waypoint, true);
+        if (waypoint == null) {
+            cacheHistory = cache.getGcCode() + "," + cacheHistory;
+            if (cacheHistory.length() > 120) {
+                cacheHistory = cacheHistory.substring(0, cacheHistory.lastIndexOf(","));
+            }
+        }
+    }
+
+    /**
+     * if changeAutoResort == false -> do not change state of autoResort Flag
+     *
+     * @param cache
+     * @param waypoint
+     * @param changeAutoResort
+     */
+    public static void setSelectedWaypoint(Cache cache, Waypoint waypoint, boolean changeAutoResort) {
+
+        if (cache == null) {
+            log.info("[CB]setSelectedWaypoint: cache=null");
+            selectedCache = null;
+            selectedWaypoint = null;
+            return;
+        }
+
+        // remove Detail Info from old selectedCache
+        if ((selectedCache != cache) && (selectedCache != null) && (selectedCache.detail != null)) {
+            selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
+        }
+        selectedCache = cache;
+        log.info("[CB]setSelectedWaypoint: cache=" + cache.getGcCode());
+        selectedWaypoint = waypoint;
+
+        // load Detail Info if not available
+        if (selectedCache.detail == null) {
+            selectedCache.loadDetail();
+        }
+
+        SelectedCacheEventList.Call(selectedCache, selectedWaypoint);
+
+        if (changeAutoResort) {
+            // switch off auto select
+            setAutoResort(false);
+        }
+    }
+
+
+    public static boolean getAutoResort() {
+        return autoResort;
+    }
+
+    public static void setAutoResort(boolean value) {
+        autoResort = value;
+    }
+
+    /**
+     * Returns true, if a Cache selected and this Cache object is valid.
+     *
+     * @return
+     */
+    public static boolean isSetSelectedCache() {
+        if (selectedCache == null)
+            return false;
+
+        if (selectedCache.getGcCode().length() == 0)
+            return false;
+
+        return true;
+    }
+
+    public static Cache getSelectedCache() {
+        return selectedCache;
+    }
+
+    public static void setNearestCache(Cache Cache) {
+        nearestCache = Cache;
+    }
+
+    public static Coordinate getSelectedCoord() {
+        Coordinate ret = null;
+
+        if (selectedWaypoint != null) {
+            ret = selectedWaypoint.Pos;
+        } else if (selectedCache != null) {
+            ret = selectedCache.Pos;
+        }
+
+        return ret;
+    }
+
+    public static Cache NearestCache() {
+        return nearestCache;
+    }
+
+    public static Waypoint getSelectedWaypoint() {
+        return selectedWaypoint;
+    }
+
 }

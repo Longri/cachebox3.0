@@ -224,6 +224,14 @@
     },
     "cursor": {
       "path": "skins/day/svg/cursor.svg"
+    },
+    "slider": {
+      "path": "skins/day/svg/slider.svg",
+      "scale": 0.3
+    },
+    "sliderKnob": {
+      "path": "skins/day/svg/sliderKnob.svg",
+      "scale": 0.3
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
@@ -471,6 +479,13 @@
       "rightWidth": 6,
       "topHeight": 6,
       "bottomHeight": 6
+    },
+    "slider_drawable": {
+      "name": "slider",
+      "left": -1,
+      "right": -1,
+      "top": 5,
+      "bottom": 5
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
@@ -561,12 +576,14 @@
       "background": "transparent_drawable"
     }
   },
-  "de.longri.cachebox3.gui.views.ListView$ListViewStyle": {
+  "de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle": {
     "default": {
-      "background": "list_background_drawable",
+      "background": "transparent_drawable",
       "firstItem": "listrec_first_drawable",
       "secondItem": "listrec_second_drawable",
       "selectedItem": "listrec_selected_drawable",
+      "vScroll": "slider_drawable",
+      "vScrollKnob": "sliderKnob",
       "pad": 1
     }
   },

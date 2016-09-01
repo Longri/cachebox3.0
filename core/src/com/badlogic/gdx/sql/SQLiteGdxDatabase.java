@@ -69,7 +69,7 @@ public interface SQLiteGdxDatabase {
     /**
      * Runs the provided SQL and returns a {@link SQLiteGdxDatabaseCursor} over the result set.
      *
-     * @param sql the SQL query. The SQL string must not be ; terminated
+     * @param sql  the SQL query. The SQL string must not be ; terminated
      * @param args
      * @return {@link SQLiteGdxDatabaseCursor}
      * @throws SQLiteGdxException
@@ -92,4 +92,5 @@ public interface SQLiteGdxDatabase {
 
     public long insertWithConflictIgnore(String tablename, Database.Parameters val);
 
+    public boolean isOpen();
 }
