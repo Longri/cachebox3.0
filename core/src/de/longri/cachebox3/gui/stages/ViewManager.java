@@ -177,7 +177,7 @@ public class ViewManager extends Stage {
     }
 
     private void setActViewBounds() {
-        this.actView.setBounds(0, mainButtonBar.getHeight(), width, height);
+        this.actView.setBounds(0, mainButtonBar.getHeight(), width, height - mainButtonBar.getHeight());
     }
 
     public AbstractView getActView() {

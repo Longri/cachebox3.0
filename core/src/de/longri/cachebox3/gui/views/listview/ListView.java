@@ -16,9 +16,7 @@
 package de.longri.cachebox3.gui.views.listview;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -96,6 +94,7 @@ public class ListView extends WidgetGroup {
 
 
         int length = adapter.getCount();
+
         for (int i = 0; i < length; i++) {
             // set Item background
             ListViewItem view = adapter.getView(i);
@@ -146,9 +145,24 @@ public class ListView extends WidgetGroup {
         scrollPane = new VisScrollPane(itemGroup, style);
         scrollPane.setOverscroll(false, true);
         scrollPane.setFlickScroll(true);
-        //  scrollPane.setFadeScrollBars(true);
-        //  scrollPane.setScrollBarPositions(false, true);
+        scrollPane.setVariableSizeKnobs(false);
+        setScrollPaneBounds();
+        this.addActor(scrollPane);
+        scrollPane.layout();
+        needsLayout = false;
+    }
 
+    @Override
+    protected void sizeChanged() {
+        if (scrollPane != null) {
+            setScrollPaneBounds();
+        } else {
+            needsLayout = true;
+            layout();
+        }
+    }
+
+    private void setScrollPaneBounds() {
         float paneHeight = this.getHeight();
         float paneYPos = 0;
         isDraggable = true;
@@ -160,17 +174,6 @@ public class ListView extends WidgetGroup {
         }
 
         scrollPane.setBounds(0, paneYPos, this.getWidth(), paneHeight);
-        scrollPane.setCullingArea(new Rectangle(0, paneYPos, this.getWidth(), paneHeight));
-        scrollPane.setVariableSizeKnobs(false);
-        this.addActor(scrollPane);
-        scrollPane.layout();
-        needsLayout = false;
-    }
-
-    @Override
-    protected void sizeChanged() {
-        needsLayout = true;
-        layout();
     }
 
     @Override

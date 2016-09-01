@@ -22,7 +22,6 @@ public class CacheListView extends AbstractView {
 
     public CacheListView() {
         super("CacheListView CacheCount: " + Database.Data.Query.size());
-
     }
 
     public void layout() {
@@ -111,5 +110,14 @@ public class CacheListView extends AbstractView {
     @Override
     public void dispose() {
 
+    }
+
+    /**
+     * Called when the actor's size has been changed.
+     */
+    protected void sizeChanged() {
+        if (listView != null) {
+            listView.setSize(this.getWidth(), this.getHeight());
+        }
     }
 }
