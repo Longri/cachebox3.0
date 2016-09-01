@@ -19,7 +19,6 @@ package de.longri.cachebox3.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
-import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.SettingsAudio;
 import org.slf4j.LoggerFactory;

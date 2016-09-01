@@ -52,9 +52,9 @@ public class CacheList extends MoveableList<Cache> {
 
 	/**
 	 * @param selectedCoord
-	 *            GlobalCore.getSelectedCoord()
+	 *            CB.getSelectedCoord()
 	 * @param selected
-	 *            new CacheWithWp(GlobalCore.getSelectedCache(),GlobalCore.getSelectedWP())
+	 *            new CacheWithWp(CB.getSelectedCache(),CB.getSelectedWP())
 	 * @param userName
 	 *            Config.settings.GcLogin.getValue()
 	 * @param ParkingLatitude
@@ -64,8 +64,8 @@ public class CacheList extends MoveableList<Cache> {
 	 * @param DisplayOff
 	 *            Energy.DisplayOff()
 	 * @return CacheWithWP [null posible] set To<br>
-	 *         GlobalCore.setSelectedWaypoint(nextCache, waypoint, false);<br>
-	 *         GlobalCore.NearestCache(nextCache);
+	 *         CB.setSelectedWaypoint(nextCache, waypoint, false);<br>
+	 *         CB.NearestCache(nextCache);
 	 */
 
 	/**

@@ -19,10 +19,8 @@ package de.longri.cachebox3.gui.actions.show_activities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.SelectDB_Activity;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
@@ -57,11 +55,11 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
     @Override
     public void Execute() {
 
-        if (GlobalCore.isSetSelectedCache()) {
+        if (CB.isSetSelectedCache()) {
             // speichere selektierten Cache, da nicht alles über die SelectedCacheEventList läuft
-            Config.LastSelectedCache.setValue(GlobalCore.getSelectedCache().getGcCode());
+            Config.LastSelectedCache.setValue(CB.getSelectedCache().getGcCode());
             Config.AcceptChanges();
-            log.debug("LastSelectedCache = " + GlobalCore.getSelectedCache().getGcCode());
+            log.debug("LastSelectedCache = " + CB.getSelectedCache().getGcCode());
         }
 
         SelectDB_Activity selectDBDialog = new SelectDB_Activity(new SelectDB_Activity.IReturnListener() {
@@ -86,7 +84,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             public void run() {
                 loadSelectedDB();
 
-                GlobalCore.setAutoResort(Config.StartWithAutoSelect.getValue());
+                CB.setAutoResort(Config.StartWithAutoSelect.getValue());
                 CacheListChangedEventList.Call();
 
                 //  TabMainView.that.filterSetChanged();
@@ -131,7 +129,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
         }
 
         // set selectedCache from lastselected Cache
-        GlobalCore.setSelectedCache(null);
+        CB.setSelectedCache(null);
         String sGc = Config.LastSelectedCache.getValue();
         if (sGc != null && !sGc.equals("")) {
             for (int i = 0, n = Database.Data.Query.size(); i < n; i++) {
@@ -141,7 +139,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
                     try {
                         log.debug("returnFromSelectDB:Set selectedCache to " + c.getGcCode() + " from lastSaved.");
                         c.loadDetail();
-                        GlobalCore.setSelectedCache(c);
+                        CB.setSelectedCache(c);
                     } catch (Exception e) {
                         log.error("set last selected Cache", e);
                     }
@@ -150,9 +148,9 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             }
         }
         // Wenn noch kein Cache Selected ist dann einfach den ersten der Liste aktivieren
-        if ((GlobalCore.getSelectedCache() == null) && (Database.Data.Query.size() > 0)) {
+        if ((CB.getSelectedCache() == null) && (Database.Data.Query.size() > 0)) {
             log.debug("Set selectedCache to " + Database.Data.Query.get(0).getGcCode() + " from firstInDB");
-            GlobalCore.setSelectedCache(Database.Data.Query.get(0));
+            CB.setSelectedCache(Database.Data.Query.get(0));
         }
     }
 }

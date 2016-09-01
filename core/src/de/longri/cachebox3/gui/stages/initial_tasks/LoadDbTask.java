@@ -1,10 +1,6 @@
 package de.longri.cachebox3.gui.stages.initial_tasks;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;

@@ -16,7 +16,6 @@
 package de.longri.cachebox3.locator.events;
 
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.GlobalCore;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.locator.GPS;
 import de.longri.cachebox3.locator.Location;
@@ -80,10 +79,10 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
 
                     try {
                         if (PlaySounds && !approachSoundCompleted) {
-                            if (GlobalCore.isSetSelectedCache()) {
-                                float distance = GlobalCore.getSelectedCache().Distance(MathUtils.CalculationType.FAST, false);
-                                if (GlobalCore.getSelectedWaypoint() != null) {
-                                    distance = GlobalCore.getSelectedWaypoint().Distance();
+                            if (CB.isSetSelectedCache()) {
+                                float distance = CB.getSelectedCache().Distance(MathUtils.CalculationType.FAST, false);
+                                if (CB.getSelectedWaypoint() != null) {
+                                    distance = CB.getSelectedWaypoint().Distance();
                                 }
 
                                 if (!approachSoundCompleted && (distance < Config.SoundApproachDistance.getValue())) {
@@ -100,13 +99,13 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
 
                     try {
                         if (!initialResortAfterFirstFixCompleted && Locator.getProvider() != Location.ProviderType.NULL) {
-                            if (GlobalCore.getSelectedCache() == null) {
+                            if (CB.getSelectedCache() == null) {
                                 synchronized (Database.Data.Query) {
-                                    CacheWithWP ret = Database.Data.Query.Resort(GlobalCore.getSelectedCoord(), new CacheWithWP(GlobalCore.getSelectedCache(), GlobalCore.getSelectedWaypoint()));
+                                    CacheWithWP ret = Database.Data.Query.Resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
 
                                     if (ret != null && ret.getCache() != null) {
-                                        GlobalCore.setSelectedWaypoint(ret.getCache(), ret.getWaypoint(), false);
-                                        GlobalCore.setNearestCache(ret.getCache());
+                                        CB.setSelectedWaypoint(ret.getCache(), ret.getWaypoint(), false);
+                                        CB.setNearestCache(ret.getCache());
                                         ret.dispose();
                                         ret = null;
                                     }
@@ -116,7 +115,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
                             initialResortAfterFirstFixCompleted = true;
                         }
                     } catch (Exception e) {
-                        log.error("GlobalLocationReceiver", "if (!initialResortAfterFirstFixCompleted && GlobalCore.LastValidPosition.Valid)", e);
+                        log.error("GlobalLocationReceiver", "if (!initialResortAfterFirstFixCompleted && CB.LastValidPosition.Valid)", e);
                         e.printStackTrace();
                     }
 
@@ -125,20 +124,20 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
                         // als der aktuell nächste -> umsortieren und raus
                         // only when showing Map or cacheList
                         if (!Database.Data.Query.ResortAtWork) {
-                            if (GlobalCore.getAutoResort()) {
-                                if ((GlobalCore.NearestCache() == null)) {
-                                    GlobalCore.setNearestCache(GlobalCore.getSelectedCache());
+                            if (CB.getAutoResort()) {
+                                if ((CB.NearestCache() == null)) {
+                                    CB.setNearestCache(CB.getSelectedCache());
                                 }
                                 int z = 0;
-                                if (!(GlobalCore.NearestCache() == null)) {
+                                if (!(CB.NearestCache() == null)) {
                                     boolean resort = false;
-                                    if (GlobalCore.NearestCache().isFound()) {
+                                    if (CB.NearestCache().isFound()) {
                                         resort = true;
                                     } else {
-                                        if (GlobalCore.getSelectedCache() != GlobalCore.NearestCache()) {
-                                            GlobalCore.setSelectedWaypoint(GlobalCore.NearestCache(), null, false);
+                                        if (CB.getSelectedCache() != CB.NearestCache()) {
+                                            CB.setSelectedWaypoint(CB.NearestCache(), null, false);
                                         }
-                                        float nearestDistance = GlobalCore.NearestCache().Distance(MathUtils.CalculationType.FAST, true);
+                                        float nearestDistance = CB.NearestCache().Distance(MathUtils.CalculationType.FAST, true);
 
                                         for (int i = 0, n = Database.Data.Query.size(); i < n; i++) {
                                             Cache cache = Database.Data.Query.get(i);
@@ -164,10 +163,10 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
                                         }
                                     }
                                     if (resort || z == 0) {
-                                        CacheWithWP ret = Database.Data.Query.Resort(GlobalCore.getSelectedCoord(), new CacheWithWP(GlobalCore.getSelectedCache(), GlobalCore.getSelectedWaypoint()));
+                                        CacheWithWP ret = Database.Data.Query.Resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
 
-                                        GlobalCore.setSelectedWaypoint(ret.getCache(), ret.getWaypoint(), false);
-                                        GlobalCore.setNearestCache(ret.getCache());
+                                        CB.setSelectedWaypoint(ret.getCache(), ret.getWaypoint(), false);
+                                        CB.setNearestCache(ret.getCache());
                                         ret.dispose();
 
                                         SoundCache.play(SoundCache.Sounds.AutoResortSound);
@@ -199,14 +198,14 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
 
         // set approach sound if the distance low
 
-        if (GlobalCore.isSetSelectedCache()) {
-            float distance = GlobalCore.getSelectedCache().Distance(MathUtils.CalculationType.FAST, false);
+        if (CB.isSetSelectedCache()) {
+            float distance = CB.getSelectedCache().Distance(MathUtils.CalculationType.FAST, false);
             boolean value = distance < Config.SoundApproachDistance.getValue();
             approachSoundCompleted = value;
-            GlobalCore.switchToCompassCompleted = value;
+            CB.switchToCompassCompleted = value;
         } else {
             approachSoundCompleted = true;
-            GlobalCore.switchToCompassCompleted = true;
+            CB.switchToCompassCompleted = true;
         }
 
     }

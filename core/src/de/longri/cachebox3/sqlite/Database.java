@@ -42,7 +42,7 @@ public class Database {
     public CacheList Query;
 
     /**
-     * @return Set To GlobalCore.Categories
+     * @return Set To CB.Categories
      */
     public Categories GPXFilenameUpdateCacheCount() {
         // welche GPXFilenamen sind in der DB erfasst

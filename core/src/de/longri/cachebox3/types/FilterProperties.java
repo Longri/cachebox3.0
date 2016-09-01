@@ -15,7 +15,7 @@
  */
 package de.longri.cachebox3.types;
 
-import de.longri.cachebox3.GlobalCore;
+import de.longri.cachebox3.CB;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -394,7 +394,7 @@ public class FilterProperties {
     public String getSqlWhere(String userName) {
         if (isHistory) {
             ArrayList<String> orParts = new ArrayList<String>();
-            String[] gcCodes = GlobalCore.cacheHistory.split(",");
+            String[] gcCodes = CB.cacheHistory.split(",");
             for (int i = 0; i < gcCodes.length; i++) {
                 String gcCode = gcCodes[i];
                 if (gcCode.length() > 0) {
