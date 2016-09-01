@@ -123,7 +123,7 @@ public class ListView extends WidgetGroup {
 
         //layout itemGroup
 
-
+        completeHeight = 0;
         for (int i = 0; i < itemHeights.size; i++) { //calculate complete hight of all Items
             completeHeight += itemHeights.items[i];
         }
