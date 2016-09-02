@@ -59,7 +59,7 @@ public interface SQLiteGdxDatabase {
     public void closeDatabase() throws SQLiteGdxException;
 
     /**
-     * Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
+     * execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
      *
      * @param sql the SQL statement to be executed. Multiple statements separated by semicolons are not supported.
      * @throws SQLiteGdxException

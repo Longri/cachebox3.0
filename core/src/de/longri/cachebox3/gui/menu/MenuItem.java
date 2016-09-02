@@ -52,11 +52,25 @@ public class MenuItem extends ListViewItem {
     protected boolean isPressed = false;
     private Image iconImage;
     private Object data;
-    private OnItemClickListener onItemClickListener;
+
     private Menu moreMenu;
     private final Menu parentMenu;
 
+    private OnItemClickListener onItemClickListener;
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    ClickListener clickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            if (MenuItem.this.onItemClickListener != null && event.getType() == InputEvent.Type.touchUp) {
+                MenuItem.this.onItemClickListener.onItemClick(MenuItem.this);
+            }
+        }
+    };
+
     public MenuItem(SizeF size, int Index, int ID, String name, Menu parentMenu) {
+        super(Index);
         this.name = name;
         mID = ID;
         this.parentMenu = parentMenu;
@@ -64,13 +78,15 @@ public class MenuItem extends ListViewItem {
     }
 
     public MenuItem(int Index, int ID, String name, Menu parentMenu) {
+        super(Index);
         this.name = name;
         mID = ID;
         this.parentMenu = parentMenu;
         setDefaultStyle();
     }
 
-    public MenuItem(Menu parentMenu) {
+    public MenuItem(int Index,Menu parentMenu) {
+        super(Index);
         mID = -1;
         name = "";
         this.parentMenu = parentMenu;
@@ -147,13 +163,7 @@ public class MenuItem extends ListViewItem {
         this.addListener(clickListener);
     }
 
-    ClickListener clickListener = new ClickListener() {
-        public void clicked(InputEvent event, float x, float y) {
-            if (MenuItem.this.onItemClickListener != null && event.getType() == InputEvent.Type.touchUp) {
-                MenuItem.this.onItemClickListener.onItemClick(MenuItem.this);
-            }
-        }
-    };
+
 
 
     /**
@@ -244,9 +254,7 @@ public class MenuItem extends ListViewItem {
         return this.data;
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
+
 
     public void setMoreMenu(Menu moreMenu) {
         this.moreMenu = moreMenu;

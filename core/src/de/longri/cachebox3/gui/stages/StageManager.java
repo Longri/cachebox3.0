@@ -1,6 +1,8 @@
 package de.longri.cachebox3.gui.stages;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -72,8 +74,7 @@ public class StageManager {
         if (debug) writeDrawSequence = true;
     }
 
-    public static void showOnNewStage(Actor actor) {
-
+    public static void showOnNewStage(final Actor actor) {
         Stage newStage = new Stage();
         newStage.addActor(actor);
         newStage.setKeyboardFocus(actor);
@@ -90,7 +91,7 @@ public class StageManager {
         }
 
 
-        inputMultiplexer.addProcessor(newStage);
+        addNonDoubleInputProzessor(newStage);
 
         log.debug("InputProzessors:" + inputMultiplexer.getProcessors().toString());
 
@@ -110,9 +111,9 @@ public class StageManager {
         //switch input processor to main stage
         inputMultiplexer.removeProcessor(stage);
         if (stageList.size > 0) {
-            inputMultiplexer.addProcessor(stageList.get(stageList.size - 1));
+            addNonDoubleInputProzessor(stageList.get(stageList.size - 1));
         } else {
-            inputMultiplexer.addProcessor(mainStage);
+            addNonDoubleInputProzessor(mainStage);
         }
         log.debug("InputProzessors:" + inputMultiplexer.getProcessors().toString());
         if (debug) writeDrawSequence = true;
@@ -122,7 +123,12 @@ public class StageManager {
         mainStage = stage;
 
         // add mainStage to input processor
-        if (inputMultiplexer != null) inputMultiplexer.addProcessor(mainStage);
+        if (inputMultiplexer != null) addNonDoubleInputProzessor(mainStage);
+    }
+
+    private static void addNonDoubleInputProzessor(InputProcessor processor) {
+        if (inputMultiplexer.getProcessors().contains(processor, true)) return;
+        inputMultiplexer.addProcessor(processor);
     }
 
     public static void setInputMultiplexer(InputMultiplexer newInputMultiplexer) {

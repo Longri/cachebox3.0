@@ -172,7 +172,7 @@ public class ViewManager extends Stage {
         misc_button.addAction(new ActionButton(new Action_Show_Help(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Quit(), false, GestureDirection.Down));
 
-//        actionShowAboutView.Execute();
+//        actionShowAboutView.execute();
     }
 
     private void setActViewBounds() {

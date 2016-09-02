@@ -56,7 +56,7 @@ public class CacheListView extends AbstractView {
 
                     @Override
                     public ListViewItem getView(int index) {
-                        return getCacheItem(Database.Data.Query.get(index));
+                        return getCacheItem(index,Database.Data.Query.get(index));
                     }
 
                     @Override
@@ -82,8 +82,8 @@ public class CacheListView extends AbstractView {
         Gdx.graphics.requestRendering();
     }
 
-    private ListViewItem getCacheItem(final Cache cache) {
-        ListViewItem table = new ListViewItem();
+    private ListViewItem getCacheItem(int listIndex,final Cache cache) {
+        ListViewItem table = new ListViewItem(listIndex);
 
         // add label with category name, align left
         table.left();

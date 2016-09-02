@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.gui.menu;
 
+import de.longri.cachebox3.gui.views.listview.ListViewItem;
+
 /**
  * Created by Longri on 15.08.2016.
  */

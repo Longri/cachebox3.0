@@ -134,7 +134,7 @@ public class TestView extends AbstractView {
 
             @Override
             public ListViewItem getView(int index) {
-                ListViewItem item = new ListViewItem();
+                ListViewItem item = new ListViewItem(index);
 
                 item.left();
                 VisLabel label = new VisLabel(list.get(index));
@@ -230,7 +230,6 @@ public class TestView extends AbstractView {
                 return true;
             }
         });
-
 
         return menu;
 

@@ -18,7 +18,7 @@ public class Action_Show_TrackListView extends Abstract_Action_ShowView {
     }
 
     @Override
-    protected void Execute() {
+    public void execute() {
         if (isActVisible()) return;
 
         TrackListView view = new TrackListView();

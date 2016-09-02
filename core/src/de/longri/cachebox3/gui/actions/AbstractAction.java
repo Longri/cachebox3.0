@@ -48,12 +48,8 @@ public abstract class AbstractAction {
         this.nameExtention = nameExtention;
     }
 
-    public void callExecute() {
-        log.debug("ACTION => " + name + " execute");
-        Execute();
-    }
 
-    protected abstract void Execute();
+    public abstract void execute();
 
     public String getName() {
         return name;

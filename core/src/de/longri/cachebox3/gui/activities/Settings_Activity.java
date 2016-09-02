@@ -32,7 +32,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
@@ -216,7 +215,7 @@ public class Settings_Activity extends ActivityBase {
             @Override
             public ListViewItem getView(int index) {
                 final SettingCategory category = settingCategories.get(index);
-                return getCategoryItem(category);
+                return getCategoryItem(index, category);
             }
 
             @Override
@@ -349,8 +348,8 @@ public class Settings_Activity extends ActivityBase {
 
     }
 
-    private ListViewItem getCategoryItem(final SettingCategory category) {
-        ListViewItem table = new ListViewItem();
+    private ListViewItem getCategoryItem(int listIndex, final SettingCategory category) {
+        ListViewItem table = new ListViewItem(listIndex);
 
         // add label with category name, align left
         table.left();
@@ -422,7 +421,7 @@ public class Settings_Activity extends ActivityBase {
             @Override
             public ListViewItem getView(int index) {
                 final SettingBase<?> setting = categorySettingsList.get(index);
-                return getSettingItem(setting);
+                return getSettingItem(index, setting);
             }
 
             @Override
@@ -441,9 +440,9 @@ public class Settings_Activity extends ActivityBase {
         showListView(newListView, category.name(), animate);
     }
 
-    private ListViewItem getSettingItem(SettingBase<?> setting) {
+    private ListViewItem getSettingItem(int listIndex, SettingBase<?> setting) {
         if (setting instanceof SettingBool) {
-            return getBoolView((SettingBool) setting);
+            return getBoolView(listIndex, (SettingBool) setting);
         } else if (setting instanceof SettingIntArray) {
             return getIntArrayView((SettingIntArray) setting);
         } else if (setting instanceof SettingStringArray) {
@@ -451,11 +450,11 @@ public class Settings_Activity extends ActivityBase {
         } else if (setting instanceof SettingTime) {
             return getTimeView((SettingTime) setting);
         } else if (setting instanceof SettingInt) {
-            return getIntView((SettingInt) setting);
+            return getIntView(listIndex,(SettingInt) setting);
         } else if (setting instanceof SettingDouble) {
-            return getDblView((SettingDouble) setting);
+            return getDblView(listIndex,(SettingDouble) setting);
         } else if (setting instanceof SettingFloat) {
-            return getFloatView((SettingFloat) setting);
+            return getFloatView(listIndex,(SettingFloat) setting);
         } else if (setting instanceof SettingFolder) {
             return getFolderView((SettingFolder) setting);
         } else if (setting instanceof SettingFile) {
@@ -505,9 +504,9 @@ public class Settings_Activity extends ActivityBase {
         return null;
     }
 
-    private ListViewItem getFloatView(final SettingFloat setting) {
+    private ListViewItem getFloatView(int listIndex,final SettingFloat setting) {
         final VisLabel valueLabel = new VisLabel(Float.toString(setting.getValue()), valueStyle);
-        ListViewItem table = getNumericItemTable(valueLabel, setting);
+        ListViewItem table = getNumericItemTable(listIndex,valueLabel, setting);
 
         // add clickListener
         table.addListener(new ClickListener() {
@@ -540,9 +539,9 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getDblView(final SettingDouble setting) {
+    private ListViewItem getDblView(int listIndex,final SettingDouble setting) {
         final VisLabel valueLabel = new VisLabel(Double.toString(setting.getValue()), valueStyle);
-        ListViewItem table = getNumericItemTable(valueLabel, setting);
+        ListViewItem table = getNumericItemTable(listIndex,valueLabel, setting);
 
         // add clickListener
         table.addListener(new ClickListener() {
@@ -575,9 +574,9 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getIntView(final SettingInt setting) {
+    private ListViewItem getIntView(int listIndex,final SettingInt setting) {
         final VisLabel valueLabel = new VisLabel(Integer.toString(setting.getValue()), valueStyle);
-        final ListViewItem table = getNumericItemTable(valueLabel, setting);
+        final ListViewItem table = getNumericItemTable(listIndex,valueLabel, setting);
 
         // add clickListener
         table.addListener(new ClickListener() {
@@ -621,8 +620,8 @@ public class Settings_Activity extends ActivityBase {
         return null;
     }
 
-    private ListViewItem getBoolView(final SettingBool setting) {
-        ListViewItem table = new ListViewItem();
+    private ListViewItem getBoolView(int listIndex, final SettingBool setting) {
+        ListViewItem table = new ListViewItem(listIndex);
 
         // add label with category name, align left
         table.left();
@@ -676,8 +675,8 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getNumericItemTable(VisLabel valueLabel, SettingBase<?> setting) {
-        ListViewItem table = new ListViewItem();
+    private ListViewItem getNumericItemTable(int listIndex,VisLabel valueLabel, SettingBase<?> setting) {
+        ListViewItem table = new ListViewItem(listIndex);
 
         // add label with category name, align left
         table.left();

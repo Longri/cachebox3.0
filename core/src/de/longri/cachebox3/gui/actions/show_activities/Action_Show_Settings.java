@@ -35,7 +35,7 @@ public class Action_Show_Settings extends AbstractAction {
     }
 
     @Override
-    public void Execute() {
+    public void execute() {
         new Settings_Activity().show();
     }
 

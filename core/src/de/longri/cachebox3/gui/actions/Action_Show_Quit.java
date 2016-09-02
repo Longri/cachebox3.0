@@ -37,7 +37,7 @@ public class Action_Show_Quit extends AbstractAction {
 	}
 
 	@Override
-	public void Execute() {
+	public void execute() {
 
 		String Msg = Translation.Get("QuitReally");
 		String Title = Translation.Get("Quit?");

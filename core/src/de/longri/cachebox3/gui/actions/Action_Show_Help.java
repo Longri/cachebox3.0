@@ -33,7 +33,7 @@ public class Action_Show_Help extends AbstractAction {
     }
 
     @Override
-    public void Execute() {
+    public void execute() {
         //PlatformConnector.callUrl("http://www.team-cachebox.de/index.php/de/kurzanleitung");
     }
 

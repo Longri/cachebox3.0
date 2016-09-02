@@ -16,13 +16,28 @@
 package de.longri.cachebox3.gui.views.listview;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisTable;
+import de.longri.cachebox3.gui.menu.MenuItem;
+import de.longri.cachebox3.gui.menu.OnItemClickListener;
 
 /**
  * Created by Longri on 31.08.2016.
  */
 public class ListViewItem extends VisTable {
 
+    private int listIndex;
+
+
+    public ListViewItem(int listIndex) {
+        this.listIndex = listIndex;
+    }
+
+
+    public void setNewIndex(int index) {
+        listIndex = index;
+    }
 
     public interface OnDrawListener {
         public void onDraw(ListViewItem item);
@@ -35,6 +50,10 @@ public class ListViewItem extends VisTable {
     }
 
     private float prefWidth = -1, prefHeight = -1;
+
+    public int getListIndex() {
+        return this.listIndex;
+    }
 
     @Override
     public float getPrefWidth() {
@@ -58,7 +77,7 @@ public class ListViewItem extends VisTable {
 
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        if (onDrawListener != null){
+        if (onDrawListener != null) {
             onDrawListener.onDraw(this);
         }
     }

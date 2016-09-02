@@ -33,7 +33,7 @@ public class Action_NavigateExt extends AbstractAction {
     }
 
     @Override
-    public void Execute() {
+    public void execute() {
 
 
     }
