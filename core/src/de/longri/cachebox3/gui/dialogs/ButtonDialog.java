@@ -44,25 +44,48 @@ public class ButtonDialog extends Window {
     static public final int BUTTON_NEUTRAL = 2;
     static public final int BUTTON_NEGATIVE = 3;
 
-    private final OnMsgBoxClickListener msgBoxClickListener;
-    private final ButtonDialogStyle style;
-    private final Label msgLabel;
-    private final Label titleLabel;
+
+    protected final OnMsgBoxClickListener msgBoxClickListener;
+    private ButtonDialogStyle style;
+    private Label msgLabel;
+    private Label titleLabel;
     private boolean dontRenderDialogBackground = false;
     private Object data;
     private boolean mHasTitle = false;
 
 
-    private Table titleTable, contentTable, buttonTable;
+    protected Table titleTable, contentBox, buttonTable;
 
     private Skin skin;
     private ObjectMap<Actor, Object> values = new ObjectMap();
     private String titleText;
 
-
     public ButtonDialog(String name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
-        super(name);
+        this(name, getMsgContentTable(msg, icon), title, buttons, icon, Listener);
 
+    }
+
+    private static Table getMsgContentTable(String msg, MessageBoxIcon icon) {
+        Skin skin = VisUI.getSkin();
+
+        ButtonDialogStyle style = skin.get("default", ButtonDialogStyle.class);
+        Table contentTable = new Table(skin);
+        if (icon != MessageBoxIcon.None && icon != null) {
+            Image iconImage = new Image(getIcon(icon));
+            contentTable.add(iconImage).width(iconImage.getWidth()).top().pad(CB.scaledSizes.MARGIN);
+        }
+        contentTable.defaults().space(2).padLeft(3).padRight(3);
+
+        Label msgLabel = new Label(msg, new Label.LabelStyle(style.titleFont, style.titleFontColor));
+        msgLabel.setWrap(true);
+        contentTable.add(msgLabel).expandX().fillX();
+        return contentTable;
+    }
+
+
+    public ButtonDialog(String name, Table contentTable, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
+        super(name);
+        this.contentBox = contentTable;
         this.skin = VisUI.getSkin();
         setSkin(this.skin);
         style = skin.get("default", ButtonDialogStyle.class);
@@ -80,13 +103,13 @@ public class ButtonDialog extends Window {
             titleLabel = null;
         }
 
-        add(contentTable = new Table(skin)).expand().fill().padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN);
+        add(this.contentBox).expand().fill().padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN);
         row();
 
         add(buttonTable = new Table(skin)).expand().fill().padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN)
                 .padBottom(CB.scaledSizes.MARGIN / 2).padTop(CB.scaledSizes.MARGIN);
 
-        contentTable.defaults().space(2).padLeft(3).padRight(3);
+
         buttonTable.defaults().padLeft(style.footer.getLeftWidth()).padRight(style.footer.getRightWidth()).padBottom(CB.scaledSizes.MARGIN);
 
         buttonTable.addListener(new ChangeListener() {
@@ -99,18 +122,10 @@ public class ButtonDialog extends Window {
             }
         });
 
+        this.layout();
+
         setButtonCaptions(buttons);
-
-        if (icon != MessageBoxIcon.None && icon != null) {
-            Image iconImage = new Image(getIcon(icon));
-            contentTable.add(iconImage).width(iconImage.getWidth()).top().pad(CB.scaledSizes.MARGIN);
-        }
-
-        msgLabel = new Label(msg, new Label.LabelStyle(style.titleFont, style.titleFontColor));
-        msgLabel.setWrap(true);
-        contentTable.add(msgLabel).expandX().fillX();
         msgBoxClickListener = Listener;
-
     }
 
     public void draw(Batch batch, float parentAlpha) {
@@ -118,15 +133,15 @@ public class ButtonDialog extends Window {
 
         float versatz = !mHasTitle ? 0 : style.title.getBottomHeight();
         if (style.header != null && !dontRenderDialogBackground) {
-            style.header.draw(batch, this.getX(), (contentTable.getY() + versatz + contentTable.getHeight() - style.header.getMinHeight()) + this.getY(),
+            style.header.draw(batch, this.getX(), (contentBox.getY() + versatz + contentBox.getHeight() - style.header.getMinHeight()) + this.getY(),
                     this.getWidth(), style.header.getMinHeight() + versatz);
         }
         if (style.footer != null && !dontRenderDialogBackground) {
             style.footer.draw(batch, this.getX(), this.getY(), this.getWidth(), buttonTable.getHeight() + (2 * CB.scaledSizes.MARGIN));
         }
         if (style.center != null && !dontRenderDialogBackground) {
-            style.center.draw(batch, this.getX(), contentTable.getY() + this.getY(), this.getWidth(),
-                    contentTable.getHeight());
+            style.center.draw(batch, this.getX(), contentBox.getY() + this.getY(), this.getWidth(),
+                    contentBox.getHeight());
         }
 
         if (mHasTitle) {
@@ -242,7 +257,7 @@ public class ButtonDialog extends Window {
         values.put(button, object);
     }
 
-    private void result(Object object) {
+    protected void result(Object object) {
         if (msgBoxClickListener != null) {
             msgBoxClickListener.onClick((Integer) object, null);
             this.hide();

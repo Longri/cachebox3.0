@@ -20,14 +20,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
-import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
 import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.sqlite.dao.CacheListDAO;
-import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Waypoint;
@@ -65,12 +62,12 @@ public class CB {
         LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.CacheBox");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.Settings");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");
-//        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-//        LibgdxLoggerFactory.EXCLUDE_LIST.add(StageManager.class.getName());
-        //   LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add(StageManager.class.getName());
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
 
 
-        LibgdxLoggerFactory.INCLUDE_LIST.add(StageManager.class.getName());
+//        LibgdxLoggerFactory.INCLUDE_LIST.add(StageManager.class.getName());
 //        LibgdxLoggerFactory.INCLUDE_LIST.add(CacheListDAO.class.getName());
 //        LibgdxLoggerFactory.INCLUDE_LIST.add(WaypointDAO.class.getName());
 //        LibgdxLoggerFactory.INCLUDE_LIST.add(Action_Show_SelectDB_Dialog.class.getName());

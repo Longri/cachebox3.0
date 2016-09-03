@@ -27,6 +27,9 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.actions.Action_Show_Quit;
+import de.longri.cachebox3.gui.dialogs.ButtonDialog;
+import de.longri.cachebox3.gui.dialogs.NewDB_InputBox;
+import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -38,6 +41,8 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.FilterInstances;
+import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.FileList;
 import org.slf4j.LoggerFactory;
 
@@ -118,6 +123,79 @@ public class SelectDB_Activity extends ActivityBase {
         bNew.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 stopTimer();
+
+                NewDB_InputBox inputBox = new NewDB_InputBox(new OnMsgBoxClickListener() {
+                    @Override
+                    public boolean onClick(int which, Object data) {
+
+
+                        // Behandle das Ergebnis
+                        switch (which) {
+                            case ButtonDialog.BUTTON_POSITIVE: // ok clicked
+                                Object[] dataObjects = (Object[]) data;
+
+                                Boolean ownRepository = !(Boolean) dataObjects[0];
+                                String NewDB_Name = (String) dataObjects[1];
+
+                                FilterInstances.setLastFilter(new FilterProperties(Config.FilterNew.getValue()));
+
+                                String database = CB.WorkPath + CB.fs + NewDB_Name + ".db3";
+                                Config.DatabasePath.setValue(database);
+
+                                // OwnRepository?
+                                if (ownRepository) {
+                                    String folder = "?/" + NewDB_Name + "/";
+
+                                    Config.DescriptionImageFolderLocal.setValue(folder + "Images");
+                                    Config.MapPackFolderLocal.setValue(folder + "Maps");
+                                    Config.SpoilerFolderLocal.setValue(folder + "Spoilers");
+                                    Config.TileCacheFolderLocal.setValue(folder + "Cache");
+                                    Config.AcceptChanges();
+                                    log.debug(
+                                            NewDB_Name + " has own Repository:\n" + //
+                                                    Config.DescriptionImageFolderLocal.getValue() + ", \n" + //
+                                                    Config.MapPackFolderLocal.getValue() + ", \n" + //
+                                                    Config.SpoilerFolderLocal.getValue() + ", \n" + //
+                                                    Config.TileCacheFolderLocal.getValue()//
+                                    );
+
+                                    // Create Folder?
+                                    boolean creationOK = Utils.createDirectory(Config.DescriptionImageFolderLocal.getValue());
+                                    creationOK = creationOK && Utils.createDirectory(Config.MapPackFolderLocal.getValue());
+                                    creationOK = creationOK && Utils.createDirectory(Config.SpoilerFolderLocal.getValue());
+                                    creationOK = creationOK && Utils.createDirectory(Config.TileCacheFolderLocal.getValue());
+                                    if (!creationOK)
+                                        log.debug(
+                                                "Problem with creation of one of the Directories:" + //
+                                                        Config.DescriptionImageFolderLocal.getValue() + ", " + //
+                                                        Config.MapPackFolderLocal.getValue() + ", " + //
+                                                        Config.SpoilerFolderLocal.getValue() + ", " + //
+                                                        Config.TileCacheFolderLocal.getValue()//
+                                        );
+                                }
+
+                                Config.AcceptChanges();
+
+                                if (!Utils.createDirectory(CB.WorkPath + "/User"))
+                                    return true;
+
+                                Config.AcceptChanges();
+                                selectDB(true);
+
+                                break;
+                            case ButtonDialog.BUTTON_NEUTRAL: // cancel clicked
+
+                                break;
+                            case ButtonDialog.BUTTON_NEGATIVE:
+
+                                break;
+                        }
+
+                        return true;
+                    }
+                });
+                inputBox.show();
+
                 //TODO  NewDB_InputBox.Show(WrapType.SINGLELINE, Translation.Get("NewDB"), Translation.Get("InsNewDBName"), "NewDB", mDialogListenerNewDB);
             }
         });
@@ -130,7 +208,7 @@ public class SelectDB_Activity extends ActivityBase {
                     CB.viewmanager.toast("Please select Database!", ViewManager.ToastLength.NORMAL);
                     return;
                 }
-                selectDB();
+                selectDB(false);
             }
         });
 
@@ -179,7 +257,7 @@ public class SelectDB_Activity extends ActivityBase {
         public void run() {
             if (autoStartCounter == 0) {
                 stopTimer();
-                selectDB();
+                selectDB(false);
             } else {
                 try {
                     autoStartCounter--;
@@ -187,7 +265,7 @@ public class SelectDB_Activity extends ActivityBase {
                 } catch (Exception e) {
                     autoStartCounter = 0;
                     stopTimer();
-                    selectDB();
+                    selectDB(false);
                 }
             }
         }
@@ -255,7 +333,7 @@ public class SelectDB_Activity extends ActivityBase {
         lvFiles.setSelectedItemVisible();
     }
 
-    protected void selectDB() {
+    protected void selectDB(boolean useConfigPath) {
         if (lvFiles.getSelectedItem() == null) {
             CB.viewmanager.toast("no DB selected", ViewManager.ToastLength.SHORT);
             return;
@@ -264,28 +342,24 @@ public class SelectDB_Activity extends ActivityBase {
         Config.MultiDBAutoStartTime.setValue(autoStartTime);
         Config.MultiDBAsk.setValue(autoStartTime >= 0);
 
-        String name = ((SelectDBItem) lvFiles.getSelectedItem()).getFileName();
-        // Toast.makeText(getApplicationContext(), name,
-        // Toast.LENGTH_SHORT).show();
+        String name = useConfigPath ? "" : ((SelectDBItem) lvFiles.getSelectedItem()).getFileName();
+        String path = useConfigPath ? Config.DatabasePath.getValue() : DBPath + "/" + name;
 
-        String path = DBPath + "/" + name;
-        // Toast.makeText(getApplicationContext(), path,
-        // Toast.LENGTH_SHORT).show();
-
-        Config.DatabasePath.setValue(path);
-        Config.AcceptChanges();
+        if (!useConfigPath) {
+            Config.DatabasePath.setValue(path);
+            Config.AcceptChanges();
+        }
 
         //TODO ManagerBase.Manager.initMapPacks();
-
         finish();
-        if (returnListener != null)
-            returnListener.back();
-
     }
 
     @Override
     public void finish() {
-        if (!MustSelect) super.finish(); // don't close, user must select
+        super.finish();
+        if (returnListener != null)
+            returnListener.back();
+
     }
 
     private void setAutoStartText() {
