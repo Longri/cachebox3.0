@@ -5,22 +5,28 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.events.CacheListChangedEventList;
+import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheWithWP;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 24.07.16.
  */
-public class CacheListView extends AbstractView {
-
+public class CacheListView extends AbstractView implements CacheListChangedEventListener {
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheListView.class);
     private ListView listView;
 
     public CacheListView() {
         super("CacheListView CacheCount: " + Database.Data.Query.size());
+
+        //register as cacheListChanged eventListener
+        CacheListChangedEventList.Add(this);
     }
 
     public void layout() {
@@ -56,7 +62,7 @@ public class CacheListView extends AbstractView {
 
                     @Override
                     public ListViewItem getView(int index) {
-                        return getCacheItem(index,Database.Data.Query.get(index));
+                        return getCacheItem(index, Database.Data.Query.get(index));
                     }
 
                     @Override
@@ -83,7 +89,7 @@ public class CacheListView extends AbstractView {
         Gdx.graphics.requestRendering();
     }
 
-    private ListViewItem getCacheItem(int listIndex,final Cache cache) {
+    private ListViewItem getCacheItem(int listIndex, final Cache cache) {
         ListViewItem table = new ListViewItem(listIndex);
 
         // add label with category name, align left
@@ -119,5 +125,11 @@ public class CacheListView extends AbstractView {
         if (listView != null) {
             listView.setSize(this.getWidth(), this.getHeight());
         }
+    }
+
+    @Override
+    public void CacheListChangedEvent() {
+        log.debug("Cachelist changed, reload listView");
+        listView.dataSetChanged();
     }
 }

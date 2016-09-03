@@ -53,9 +53,6 @@ public class ListView extends WidgetGroup {
     private FloatArray itemYPos = new FloatArray();
     private Array<ListViewItem> itemViews = new Array<ListViewItem>();
 
-
-
-
     public enum SelectableType {
         NONE, SINGLE, MULTI
     }
@@ -267,85 +264,12 @@ public class ListView extends WidgetGroup {
                             log.debug("select item:" + item.toString());
                         }
                     }
-
-
                     Gdx.graphics.requestRendering();
                 }
             }
         }
     };
 
-
-//    /**
-//     * Draws all children. {@link #applyTransform(Batch, Matrix4)} should be called before and {@link #resetTransform(Batch)}
-//     * after this method if {@link #setTransform(boolean) transform} is true. If {@link #setTransform(boolean) transform} is false
-//     * these methods don't need to be called, children positions are temporarily offset by the group position when drawn. This
-//     * method avoids drawing children completely outside the {@link #setCullingArea(Rectangle) culling area}, if set.
-//     */
-//    protected void drawChildren(Batch batch, float parentAlpha) {
-//        parentAlpha *= this.getColor().a;
-//        SnapshotArray<Actor> children = this.getChildren();
-//        Actor[] actors = children.begin();
-//        Rectangle cullingArea = this.getCullingArea();
-//        if (cullingArea != null) {
-//            // Draw children only if inside culling area.
-//            float cullLeft = cullingArea.x;
-//            float cullRight = cullLeft + cullingArea.width;
-//            float cullBottom = cullingArea.y;
-//            float cullTop = cullBottom + cullingArea.height;
-//            if (this.isTransform()) {
-//                for (int i = 0, n = children.size; i < n; i++) {
-//                    Actor child = actors[i];
-//                    if (!child.isVisible()) continue;
-//                    float cx = child.getX(), cy = child.getY();
-//                    if (cx <= cullRight && cy <= cullTop && cx + child.getWidth() >= cullLeft && cy + child.getHeight() >= cullBottom)
-//                        child.draw(batch, parentAlpha);
-//                }
-//            } else {
-//                // No transform for this group, offset each child.
-//                float offsetX = getX(), offsetY = getY();
-//                setPosition(0, 0);
-//                for (int i = 0, n = children.size; i < n; i++) {
-//                    Actor child = actors[i];
-//                    if (!child.isVisible()) continue;
-//                    float cx = child.getX(), cy = child.getY();
-//                    if (cx <= cullRight && cy <= cullTop && cx + child.getWidth() >= cullLeft && cy + child.getHeight() >= cullBottom) {
-//                        child.setX(cx + offsetX);
-//                        child.setY(cy + offsetY);
-//                        child.draw(batch, parentAlpha);
-//                        child.setX(cx);
-//                        child.setY(cy);
-//                    }
-//                }
-//                setPosition(offsetX, offsetY);
-//            }
-//        } else {
-//            // No culling, draw all children.
-//            if (this.isTransform()) {
-//                for (int i = 0, n = children.size; i < n; i++) {
-//                    Actor child = actors[i];
-//                    if (!child.isVisible()) continue;
-//                    child.draw(batch, parentAlpha);
-//                }
-//            } else {
-//                // No transform for this group, offset each child.
-//                float offsetX = getX(), offsetY = getY();
-//                setPosition(0, 0);
-//                for (int i = 0, n = children.size; i < n; i++) {
-//                    Actor child = actors[i];
-//                    if (!child.isVisible()) continue;
-//                    float cx = child.getX(), cy = child.getY();
-//                    child.setX(cx + offsetX);
-//                    child.setY(cy + offsetY);
-//                    child.draw(batch, parentAlpha);
-//                    child.setX(cx);
-//                    child.setY(cy);
-//                }
-//                setPosition(offsetX, offsetY);
-//            }
-//        }
-//        children.end();
-//    }
 
     public float getScrollPos() {
         return scrollPane.getScrollY();
@@ -377,6 +301,11 @@ public class ListView extends WidgetGroup {
     public ListViewItem getSelectedItem() {
         if(this.selectedItemList.size==0)return null;
         return this.selectedItemList.first();
+    }
+
+    public void dataSetChanged() {
+        layout(true);
+        Gdx.graphics.requestRendering();
     }
 
 

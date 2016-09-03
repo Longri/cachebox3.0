@@ -343,27 +343,23 @@ public class SelectDB_Activity extends ActivityBase {
         Config.MultiDBAsk.setValue(autoStartTime >= 0);
 
         String name = useConfigPath ? "" : ((SelectDBItem) lvFiles.getSelectedItem()).getFileName();
-        // Toast.makeText(getApplicationContext(), name,
-        // Toast.LENGTH_SHORT).show();
-
         String path = useConfigPath ? Config.DatabasePath.getValue() : DBPath + "/" + name;
-        // Toast.makeText(getApplicationContext(), path,
-        // Toast.LENGTH_SHORT).show();
 
-        Config.DatabasePath.setValue(path);
-        Config.AcceptChanges();
+        if (!useConfigPath) {
+            Config.DatabasePath.setValue(path);
+            Config.AcceptChanges();
+        }
 
         //TODO ManagerBase.Manager.initMapPacks();
-
         finish();
-        if (returnListener != null)
-            returnListener.back();
-
     }
 
     @Override
     public void finish() {
-        if (!MustSelect) super.finish(); // don't close, user must select
+        super.finish();
+        if (returnListener != null)
+            returnListener.back();
+
     }
 
     private void setAutoStartText() {
