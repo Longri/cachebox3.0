@@ -27,6 +27,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.actions.Action_Show_Quit;
+import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.NewDB_InputBox;
 import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.menu.Menu;
@@ -127,13 +128,14 @@ public class SelectDB_Activity extends ActivityBase {
                     @Override
                     public boolean onClick(int which, Object data) {
 
-                        Object[] dataObjects = (Object[]) data;
 
-                        Boolean ownRepository = (Boolean) dataObjects[0];
-                        String NewDB_Name = (String) dataObjects[1];
                         // Behandle das Ergebnis
                         switch (which) {
-                            case 1: // ok clicked
+                            case ButtonDialog.BUTTON_POSITIVE: // ok clicked
+                                Object[] dataObjects = (Object[]) data;
+
+                                Boolean ownRepository = !(Boolean) dataObjects[0];
+                                String NewDB_Name = (String) dataObjects[1];
 
                                 FilterInstances.setLastFilter(new FilterProperties(Config.FilterNew.getValue()));
 
@@ -178,13 +180,13 @@ public class SelectDB_Activity extends ActivityBase {
                                     return true;
 
                                 Config.AcceptChanges();
-                                selectDB();
+                                selectDB(true);
 
                                 break;
-                            case 2: // cancel clicked
+                            case ButtonDialog.BUTTON_NEUTRAL: // cancel clicked
 
                                 break;
-                            case 3:
+                            case ButtonDialog.BUTTON_NEGATIVE:
 
                                 break;
                         }
@@ -206,7 +208,7 @@ public class SelectDB_Activity extends ActivityBase {
                     CB.viewmanager.toast("Please select Database!", ViewManager.ToastLength.NORMAL);
                     return;
                 }
-                selectDB();
+                selectDB(false);
             }
         });
 
@@ -255,7 +257,7 @@ public class SelectDB_Activity extends ActivityBase {
         public void run() {
             if (autoStartCounter == 0) {
                 stopTimer();
-                selectDB();
+                selectDB(false);
             } else {
                 try {
                     autoStartCounter--;
@@ -263,7 +265,7 @@ public class SelectDB_Activity extends ActivityBase {
                 } catch (Exception e) {
                     autoStartCounter = 0;
                     stopTimer();
-                    selectDB();
+                    selectDB(false);
                 }
             }
         }
@@ -331,7 +333,7 @@ public class SelectDB_Activity extends ActivityBase {
         lvFiles.setSelectedItemVisible();
     }
 
-    protected void selectDB() {
+    protected void selectDB(boolean useConfigPath) {
         if (lvFiles.getSelectedItem() == null) {
             CB.viewmanager.toast("no DB selected", ViewManager.ToastLength.SHORT);
             return;
@@ -340,11 +342,11 @@ public class SelectDB_Activity extends ActivityBase {
         Config.MultiDBAutoStartTime.setValue(autoStartTime);
         Config.MultiDBAsk.setValue(autoStartTime >= 0);
 
-        String name = ((SelectDBItem) lvFiles.getSelectedItem()).getFileName();
+        String name = useConfigPath ? "" : ((SelectDBItem) lvFiles.getSelectedItem()).getFileName();
         // Toast.makeText(getApplicationContext(), name,
         // Toast.LENGTH_SHORT).show();
 
-        String path = DBPath + "/" + name;
+        String path = useConfigPath ? Config.DatabasePath.getValue() : DBPath + "/" + name;
         // Toast.makeText(getApplicationContext(), path,
         // Toast.LENGTH_SHORT).show();
 
