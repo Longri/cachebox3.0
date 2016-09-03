@@ -36,10 +36,6 @@ import static com.badlogic.gdx.Input.Keys.*;
 public class NumericInput_Activity<T extends Number> extends ActivityBase {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(NumericInput_Activity.class);
 
-    private boolean SomeClass(Object o, Class<T> type) {
-        return (type.isInstance(o));
-    }
-
     private T value;
     private NumPad numPad;
     private VisTextField textField;
@@ -143,7 +139,7 @@ public class NumericInput_Activity<T extends Number> extends ActivityBase {
     public void hide() {
         super.hide();
         // disable continues rendering
-        Gdx.graphics.setContinuousRendering(true);
+        Gdx.graphics.setContinuousRendering(false);
     }
 
     @Override

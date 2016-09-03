@@ -57,6 +57,7 @@ public class MenuItem extends ListViewItem {
     private final Menu parentMenu;
 
     private OnItemClickListener onItemClickListener;
+
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
@@ -85,7 +86,7 @@ public class MenuItem extends ListViewItem {
         setDefaultStyle();
     }
 
-    public MenuItem(int Index,Menu parentMenu) {
+    public MenuItem(int Index, Menu parentMenu) {
         super(Index);
         mID = -1;
         name = "";
@@ -116,7 +117,7 @@ public class MenuItem extends ListViewItem {
     }
 
 
-    protected void initial() {
+    protected synchronized void initial() {
         this.reset();
         this.removeListener(clickListener);
 
@@ -162,8 +163,6 @@ public class MenuItem extends ListViewItem {
 
         this.addListener(clickListener);
     }
-
-
 
 
     /**
@@ -253,7 +252,6 @@ public class MenuItem extends ListViewItem {
     public Object getData() {
         return this.data;
     }
-
 
 
     public void setMoreMenu(Menu moreMenu) {

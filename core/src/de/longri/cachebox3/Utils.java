@@ -300,4 +300,67 @@ public class Utils {
         fh = null;
         return exist;
     }
+
+    /**
+     * überprüft ob ein Ordner existiert und legt ihn an, wenn er nicht existiert.
+     *
+     * @param folder Pfad des Ordners
+     * @return true, wenn er existiert oder angelegt wurde. false, wenn das Anlegen nicht funktioniert hat.
+     */
+    public static boolean createDirectory(String folder) {
+
+        // remove extention
+        int extPos = folder.lastIndexOf("/");
+        String ext = "";
+        if (extPos > -1)
+            ext = folder.substring(extPos);
+
+        if (ext.length() > 0 && ext.contains(".")) {
+            folder = folder.replace(ext, "");
+        }
+
+        if (!checkWritePermission(folder)) {
+            return false;
+        }
+
+        File f = new File(folder);
+
+        if (f.isDirectory())
+            return true;
+        else {
+            // have the object build the directory structure, if needed.
+            return f.mkdirs();
+        }
+    }
+
+    /**
+     * Returns TRUE has the given PATH write permission!
+     *
+     * @param Path
+     * @return
+     */
+    public static boolean checkWritePermission(String Path) {
+        boolean result = true;
+        try {
+            String testFolderName = Path + "/Test/";
+
+            File testFolder = new File(testFolderName);
+            if (testFolder.mkdirs()) {
+                File test = new File(testFolderName + "Test.txt");
+                test.createNewFile();
+                if (!test.exists()) {
+                    result = false;
+                } else {
+                    test.delete();
+                    testFolder.delete();
+                }
+            } else {
+                result = false;
+            }
+        } catch (IOException e) {
+            result = false;
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

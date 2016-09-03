@@ -45,7 +45,7 @@ public class ButtonDialog extends Window {
     static public final int BUTTON_NEGATIVE = 3;
 
 
-    private final OnMsgBoxClickListener msgBoxClickListener;
+    protected final OnMsgBoxClickListener msgBoxClickListener;
     private ButtonDialogStyle style;
     private Label msgLabel;
     private Label titleLabel;
@@ -54,7 +54,7 @@ public class ButtonDialog extends Window {
     private boolean mHasTitle = false;
 
 
-    private Table titleTable, contentTable, buttonTable;
+    protected Table titleTable, contentBox, buttonTable;
 
     private Skin skin;
     private ObjectMap<Actor, Object> values = new ObjectMap();
@@ -85,7 +85,7 @@ public class ButtonDialog extends Window {
 
     public ButtonDialog(String name, Table contentTable, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
         super(name);
-        this.contentTable = contentTable;
+        this.contentBox = contentTable;
         this.skin = VisUI.getSkin();
         setSkin(this.skin);
         style = skin.get("default", ButtonDialogStyle.class);
@@ -103,7 +103,7 @@ public class ButtonDialog extends Window {
             titleLabel = null;
         }
 
-        add(this.contentTable).expand().fill().padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN);
+        add(this.contentBox).expand().fill().padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN);
         row();
 
         add(buttonTable = new Table(skin)).expand().fill().padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN)
@@ -122,6 +122,8 @@ public class ButtonDialog extends Window {
             }
         });
 
+        this.layout();
+
         setButtonCaptions(buttons);
         msgBoxClickListener = Listener;
     }
@@ -131,15 +133,15 @@ public class ButtonDialog extends Window {
 
         float versatz = !mHasTitle ? 0 : style.title.getBottomHeight();
         if (style.header != null && !dontRenderDialogBackground) {
-            style.header.draw(batch, this.getX(), (contentTable.getY() + versatz + contentTable.getHeight() - style.header.getMinHeight()) + this.getY(),
+            style.header.draw(batch, this.getX(), (contentBox.getY() + versatz + contentBox.getHeight() - style.header.getMinHeight()) + this.getY(),
                     this.getWidth(), style.header.getMinHeight() + versatz);
         }
         if (style.footer != null && !dontRenderDialogBackground) {
             style.footer.draw(batch, this.getX(), this.getY(), this.getWidth(), buttonTable.getHeight() + (2 * CB.scaledSizes.MARGIN));
         }
         if (style.center != null && !dontRenderDialogBackground) {
-            style.center.draw(batch, this.getX(), contentTable.getY() + this.getY(), this.getWidth(),
-                    contentTable.getHeight());
+            style.center.draw(batch, this.getX(), contentBox.getY() + this.getY(), this.getWidth(),
+                    contentBox.getHeight());
         }
 
         if (mHasTitle) {
@@ -255,7 +257,7 @@ public class ButtonDialog extends Window {
         values.put(button, object);
     }
 
-    private void result(Object object) {
+    protected void result(Object object) {
         if (msgBoxClickListener != null) {
             msgBoxClickListener.onClick((Integer) object, null);
             this.hide();

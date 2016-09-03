@@ -666,5 +666,15 @@
       "nameColor": "font_color",
       "infoColor": "settings_default_value_font_color"
     }
+  },
+  "com.kotcrab.vis.ui.widget.VisCheckBox$VisCheckBoxStyle": {
+    "default": {
+      "font": "normal_font",
+      "fontColor": "font_color",
+      "checkBackground": "check_off",
+      "checkBackgroundOver": "check_off",
+      "checkBackgroundDown": "check_off",
+      "tick": "check_on"
+    }
   }
 }
