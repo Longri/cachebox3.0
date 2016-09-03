@@ -66,10 +66,11 @@ public class CB {
         LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.Settings");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");
 //        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-        LibgdxLoggerFactory.EXCLUDE_LIST.add(StageManager.class.getName());
+//        LibgdxLoggerFactory.EXCLUDE_LIST.add(StageManager.class.getName());
         //   LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
 
 
+        LibgdxLoggerFactory.INCLUDE_LIST.add(StageManager.class.getName());
 //        LibgdxLoggerFactory.INCLUDE_LIST.add(CacheListDAO.class.getName());
 //        LibgdxLoggerFactory.INCLUDE_LIST.add(WaypointDAO.class.getName());
 //        LibgdxLoggerFactory.INCLUDE_LIST.add(Action_Show_SelectDB_Dialog.class.getName());

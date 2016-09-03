@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.actions.show_vies;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings;
+import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
@@ -25,13 +26,16 @@ import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.CacheListView;
+import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.IconNames;
 
 /**
  * Created by Longri on 24.07.16.
  */
 public class Action_Show_CacheList extends Abstract_Action_ShowView {
+
 
     public Action_Show_CacheList() {
         //TODO add db size to name super("cacheList", "  (" + String.valueOf(Database.Data.Query.size()) + ")", MenuID.AID_SHOW_CACHELIST);
@@ -40,7 +44,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 
 
     @Override
-    protected void Execute() {
+    public void execute() {
         if (isActVisible()) return;
 
         CacheListView view = new CacheListView();
@@ -77,7 +81,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
                         cacheListView.resort();
                         return true;
                     case MenuID.MI_FilterSet:
-                        new Action_ShowFilterSettings().Execute();
+                        new Action_ShowFilterSettings().execute();
                         return true;
                     case MenuID.MI_RESET_FILTER:
                         CB.viewmanager.toast("RESET FILTER NOT IMPLEMENTED NOW");
@@ -103,8 +107,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 //                        sync.show();
                         return true;
                     case MenuID.MI_MANAGE_DB:
-                        CB.viewmanager.toast("Manage DB NOT IMPLEMENTED NOW");
-                        //  TabMainView.actionShowSelectDbDialog.Execute();
+                        new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.ASK).execute();
                         return true;
                     case MenuID.MI_AUTO_RESORT:
                         CB.viewmanager.toast("Toggle Autoresort NOT IMPLEMENTED NOW");
@@ -135,7 +138,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 //
 //                                    @Override
 //                                    public void run() {
-//                                        new CB_Action_chkState().Execute();
+//                                        new CB_Action_chkState().execute();
 //                                    }
 //                                };
 //                                Timer t = new Timer();
@@ -153,7 +156,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 
                     case MenuID.AID_SHOW_DELETE_DIALOG:
                         CB.viewmanager.toast("deleteIcon NOT IMPLEMENTED NOW");
-                        //   TabMainView.actionDelCaches.Execute();
+                        //   TabMainView.actionDelCaches.execute();
                         return true;
                 }
                 return false;
@@ -161,7 +164,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 
         });
 
-        String DBName = Database.Data.getPath();
+        String DBName = Database.Data == null || !Database.Data.isStarted() ? Translation.Get("noDB") : Database.Data.getPath();
         try {
             int Pos = DBName.lastIndexOf("/");
             DBName = DBName.substring(Pos + 1);

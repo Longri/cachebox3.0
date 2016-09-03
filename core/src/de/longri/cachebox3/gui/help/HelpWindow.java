@@ -24,16 +24,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.utils.CB_RectF;
-import de.longri.cachebox3.utils.HSV_Color;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -63,6 +60,7 @@ public class HelpWindow extends Window {
     protected final CB_RectF ellipseRectangle;
 
     public HelpWindow(final CB_RectF ellipseRectangle) {
+        super("helpWindow");
         this.ellipseRectangle = ellipseRectangle;
     }
 

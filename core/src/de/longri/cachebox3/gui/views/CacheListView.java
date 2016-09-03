@@ -56,7 +56,7 @@ public class CacheListView extends AbstractView {
 
                     @Override
                     public ListViewItem getView(int index) {
-                        return getCacheItem(Database.Data.Query.get(index));
+                        return getCacheItem(index,Database.Data.Query.get(index));
                     }
 
                     @Override
@@ -71,9 +71,10 @@ public class CacheListView extends AbstractView {
                 };
                 CacheListView.this.listView = new ListView(listViewAdapter);
                 synchronized (CacheListView.this.listView) {
-                    CacheListView.this.listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
-                    CacheListView.this.addActor(listView);
-                    CacheListView.this.listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
+                    listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
+                    addActor(listView);
+                    listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
+                    listView.setSelectable(ListView.SelectableType.SINGLE);
                     Gdx.graphics.requestRendering();
                 }
             }
@@ -82,8 +83,8 @@ public class CacheListView extends AbstractView {
         Gdx.graphics.requestRendering();
     }
 
-    private ListViewItem getCacheItem(final Cache cache) {
-        ListViewItem table = new ListViewItem();
+    private ListViewItem getCacheItem(int listIndex,final Cache cache) {
+        ListViewItem table = new ListViewItem(listIndex);
 
         // add label with category name, align left
         table.left();

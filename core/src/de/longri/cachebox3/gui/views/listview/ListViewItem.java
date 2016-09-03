@@ -23,6 +23,17 @@ import com.kotcrab.vis.ui.widget.VisTable;
  */
 public class ListViewItem extends VisTable {
 
+    private int listIndex;
+
+
+    public ListViewItem(int listIndex) {
+        this.listIndex = listIndex;
+    }
+
+
+    public void setNewIndex(int index) {
+        listIndex = index;
+    }
 
     public interface OnDrawListener {
         public void onDraw(ListViewItem item);
@@ -35,6 +46,10 @@ public class ListViewItem extends VisTable {
     }
 
     private float prefWidth = -1, prefHeight = -1;
+
+    public int getListIndex() {
+        return this.listIndex;
+    }
 
     @Override
     public float getPrefWidth() {
@@ -58,8 +73,15 @@ public class ListViewItem extends VisTable {
 
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        if (onDrawListener != null){
+        if (onDrawListener != null) {
             onDrawListener.onDraw(this);
         }
+    }
+
+    public boolean equals(Object other) {
+        if (other instanceof ListViewItem) {
+            if (this.listIndex == ((ListViewItem) other).listIndex) return true;
+        }
+        return false;
     }
 }

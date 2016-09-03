@@ -15,51 +15,73 @@
  */
 package de.longri.cachebox3.gui.views.listview;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
-import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
+import de.longri.cachebox3.gui.menu.MenuItem;
+import org.slf4j.LoggerFactory;
+
+import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.NONE;
+import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.SINGLE;
 
 
 /**
  * Created by Longri on 12.08.2016.
  */
 public class ListView extends WidgetGroup {
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(ListView.class);
 
     private VisScrollPane scrollPane;
     private Drawable backgroundDrawable;
     private Adapter adapter;
     private boolean needsLayout = true;
-    private final ListViewStyle style;
-    private ScrollViewContainer itemGroup;
-    float completeHeight = 0;
-    boolean isDraggable = false;
+    private final ListView.ListViewStyle style;
+    private float completeHeight = 0;
+    final private Array<ListViewItem> selectedItemList = new Array<ListViewItem>();
+    SelectableType selectionType = NONE;
+    private FloatArray itemHeights = new FloatArray();
+    private FloatArray itemYPos = new FloatArray();
+    private Array<ListViewItem> itemViews = new Array<ListViewItem>();
 
-    public ListView() {
-        this(VisUI.getSkin().get("default", ListViewStyle.class));
+
+
+
+    public enum SelectableType {
+        NONE, SINGLE, MULTI
     }
 
-    public ListView(ListViewStyle style) {
+
+    public ListView() {
+        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class));
+    }
+
+    private ListView(ListView.ListViewStyle style) {
         this.style = style;
         setLayoutEnabled(true);
     }
 
     public ListView(Adapter listViewAdapter) {
-        this(VisUI.getSkin().get("default", ListViewStyle.class));
+        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class));
         this.adapter = listViewAdapter;
     }
 
     public void setAdapter(Adapter listViewAdapter) {
         this.adapter = listViewAdapter;
+        layout(true);
+    }
+
+    public void setSelectable(SelectableType selectionType) {
+        this.selectionType = selectionType;
     }
 
     public void setBackground(Drawable background) {
@@ -67,17 +89,13 @@ public class ListView extends WidgetGroup {
     }
 
 
-    private FloatArray itemHeights = new FloatArray();
-    private FloatArray itemYPos = new FloatArray();
-    private Array<VisTable> itemViews = new Array<VisTable>();
-
-    public void layout(boolean force) {
-        needsLayout = true;
+    public synchronized void layout(boolean force) {
+        if (force) needsLayout = true;
         layout();
     }
 
     @Override
-    public void layout() {
+    public synchronized void layout() {
         if (!this.needsLayout) {
             super.layout();
             return;
@@ -90,7 +108,7 @@ public class ListView extends WidgetGroup {
         itemYPos.clear();
         itemViews.clear();
 
-        itemGroup = new ScrollViewContainer();
+        ScrollViewContainer itemGroup = new ScrollViewContainer();
         itemGroup.setWidth(this.getWidth());
         itemGroup.clear();
 
@@ -114,18 +132,19 @@ public class ListView extends WidgetGroup {
                 }
             } else {
                 // add a empty table
-                view = new ListViewItem();
+                view = new ListViewItem(i);
             }
 
             //set on drawListner
             view.setOnDrawListener(onDrawListener);
-
+            view.addListener(onListItemClickListener);
             view.setPrefWidth(this.getWidth() - (padLeft + padRight));
             view.pack();
             view.layout();
             itemViews.add(view);
             itemHeights.add(view.getHeight() + padBottom + padTop);
             itemGroup.addActor(view);
+
         }
 
 
@@ -174,12 +193,10 @@ public class ListView extends WidgetGroup {
     private void setScrollPaneBounds() {
         float paneHeight = this.getHeight();
         float paneYPos = 0;
-        isDraggable = true;
         if (this.getHeight() > completeHeight) {
             //set on Top
             paneHeight = completeHeight;
             paneYPos = this.getHeight() - completeHeight;
-            isDraggable = false;
         }
 
         scrollPane.setBounds(0, paneYPos, this.getWidth(), paneHeight);
@@ -192,10 +209,30 @@ public class ListView extends WidgetGroup {
     }
 
 
-    ListViewItem.OnDrawListener onDrawListener = new ListViewItem.OnDrawListener() {
+    private ListViewItem.OnDrawListener onDrawListener = new ListViewItem.OnDrawListener() {
         @Override
         public void onDraw(ListViewItem item) {
-            if (adapter != null) adapter.update(item);
+            if (adapter != null) {
+                if (selectionType != NONE) {
+                    boolean isSelected = false;
+                    if (selectionType == SINGLE) {
+                        isSelected = selectedItemList.size == 1 && selectedItemList.contains(item, false);
+                    } else {
+                        isSelected = selectedItemList.contains(item, false);
+                    }
+
+                    if (isSelected) {
+                        item.setBackground(style.selectedItem);
+                    } else {
+                        if (style.secondItem != null && item.getListIndex() % 2 == 1) {
+                            item.setBackground(style.secondItem);
+                        } else {
+                            item.setBackground(style.firstItem);
+                        }
+                    }
+                }
+                adapter.update(item);
+            }
         }
     };
 
@@ -208,81 +245,107 @@ public class ListView extends WidgetGroup {
         }
     }
 
-    /**
-     * Draws all children. {@link #applyTransform(Batch, Matrix4)} should be called before and {@link #resetTransform(Batch)}
-     * after this method if {@link #setTransform(boolean) transform} is true. If {@link #setTransform(boolean) transform} is false
-     * these methods don't need to be called, children positions are temporarily offset by the group position when drawn. This
-     * method avoids drawing children completely outside the {@link #setCullingArea(Rectangle) culling area}, if set.
-     */
-    protected void drawChildren(Batch batch, float parentAlpha) {
-        parentAlpha *= this.getColor().a;
-        SnapshotArray<Actor> children = this.getChildren();
-        Actor[] actors = children.begin();
-        Rectangle cullingArea = this.getCullingArea();
-        if (cullingArea != null) {
-            // Draw children only if inside culling area.
-            float cullLeft = cullingArea.x;
-            float cullRight = cullLeft + cullingArea.width;
-            float cullBottom = cullingArea.y;
-            float cullTop = cullBottom + cullingArea.height;
-            if (this.isTransform()) {
-                for (int i = 0, n = children.size; i < n; i++) {
-                    Actor child = actors[i];
-                    if (!child.isVisible()) continue;
-                    float cx = child.getX(), cy = child.getY();
-                    if (cx <= cullRight && cy <= cullTop && cx + child.getWidth() >= cullLeft && cy + child.getHeight() >= cullBottom)
-                        child.draw(batch, parentAlpha);
-                }
-            } else {
-                // No transform for this group, offset each child.
-                float offsetX = getX(), offsetY = getY();
-                setPosition(0, 0);
-                for (int i = 0, n = children.size; i < n; i++) {
-                    Actor child = actors[i];
-                    if (!child.isVisible()) continue;
-                    float cx = child.getX(), cy = child.getY();
-                    if (cx <= cullRight && cy <= cullTop && cx + child.getWidth() >= cullLeft && cy + child.getHeight() >= cullBottom) {
-                        child.setX(cx + offsetX);
-                        child.setY(cy + offsetY);
-                        child.draw(batch, parentAlpha);
-                        child.setX(cx);
-                        child.setY(cy);
+
+    ClickListener onListItemClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            if (event.getType() == InputEvent.Type.touchUp) {
+                if (selectionType != NONE) {
+                    ListViewItem item = ((ListViewItem) event.getListenerActor());
+
+                    if (selectionType == SINGLE) {
+                        if (!selectedItemList.contains(item, false)) {
+                            selectedItemList.clear();
+                            selectedItemList.add(item);
+                            log.debug("select item:" + item.toString());
+                        }
+                    } else {
+                        if (selectedItemList.contains(item, false)) {
+                            selectedItemList.removeValue(item, true);
+                            log.debug("unselect item:" + item.toString());
+                        } else {
+                            selectedItemList.add(item);
+                            log.debug("select item:" + item.toString());
+                        }
                     }
+
+
+                    Gdx.graphics.requestRendering();
                 }
-                setPosition(offsetX, offsetY);
-            }
-        } else {
-            // No culling, draw all children.
-            if (this.isTransform()) {
-                for (int i = 0, n = children.size; i < n; i++) {
-                    Actor child = actors[i];
-                    if (!child.isVisible()) continue;
-                    child.draw(batch, parentAlpha);
-                }
-            } else {
-                // No transform for this group, offset each child.
-                float offsetX = getX(), offsetY = getY();
-                setPosition(0, 0);
-                for (int i = 0, n = children.size; i < n; i++) {
-                    Actor child = actors[i];
-                    if (!child.isVisible()) continue;
-                    float cx = child.getX(), cy = child.getY();
-                    child.setX(cx + offsetX);
-                    child.setY(cy + offsetY);
-                    child.draw(batch, parentAlpha);
-                    child.setX(cx);
-                    child.setY(cy);
-                }
-                setPosition(offsetX, offsetY);
             }
         }
-        children.end();
-    }
+    };
 
 
-    public boolean isDraggable() {
-        return isDraggable;
-    }
+//    /**
+//     * Draws all children. {@link #applyTransform(Batch, Matrix4)} should be called before and {@link #resetTransform(Batch)}
+//     * after this method if {@link #setTransform(boolean) transform} is true. If {@link #setTransform(boolean) transform} is false
+//     * these methods don't need to be called, children positions are temporarily offset by the group position when drawn. This
+//     * method avoids drawing children completely outside the {@link #setCullingArea(Rectangle) culling area}, if set.
+//     */
+//    protected void drawChildren(Batch batch, float parentAlpha) {
+//        parentAlpha *= this.getColor().a;
+//        SnapshotArray<Actor> children = this.getChildren();
+//        Actor[] actors = children.begin();
+//        Rectangle cullingArea = this.getCullingArea();
+//        if (cullingArea != null) {
+//            // Draw children only if inside culling area.
+//            float cullLeft = cullingArea.x;
+//            float cullRight = cullLeft + cullingArea.width;
+//            float cullBottom = cullingArea.y;
+//            float cullTop = cullBottom + cullingArea.height;
+//            if (this.isTransform()) {
+//                for (int i = 0, n = children.size; i < n; i++) {
+//                    Actor child = actors[i];
+//                    if (!child.isVisible()) continue;
+//                    float cx = child.getX(), cy = child.getY();
+//                    if (cx <= cullRight && cy <= cullTop && cx + child.getWidth() >= cullLeft && cy + child.getHeight() >= cullBottom)
+//                        child.draw(batch, parentAlpha);
+//                }
+//            } else {
+//                // No transform for this group, offset each child.
+//                float offsetX = getX(), offsetY = getY();
+//                setPosition(0, 0);
+//                for (int i = 0, n = children.size; i < n; i++) {
+//                    Actor child = actors[i];
+//                    if (!child.isVisible()) continue;
+//                    float cx = child.getX(), cy = child.getY();
+//                    if (cx <= cullRight && cy <= cullTop && cx + child.getWidth() >= cullLeft && cy + child.getHeight() >= cullBottom) {
+//                        child.setX(cx + offsetX);
+//                        child.setY(cy + offsetY);
+//                        child.draw(batch, parentAlpha);
+//                        child.setX(cx);
+//                        child.setY(cy);
+//                    }
+//                }
+//                setPosition(offsetX, offsetY);
+//            }
+//        } else {
+//            // No culling, draw all children.
+//            if (this.isTransform()) {
+//                for (int i = 0, n = children.size; i < n; i++) {
+//                    Actor child = actors[i];
+//                    if (!child.isVisible()) continue;
+//                    child.draw(batch, parentAlpha);
+//                }
+//            } else {
+//                // No transform for this group, offset each child.
+//                float offsetX = getX(), offsetY = getY();
+//                setPosition(0, 0);
+//                for (int i = 0, n = children.size; i < n; i++) {
+//                    Actor child = actors[i];
+//                    if (!child.isVisible()) continue;
+//                    float cx = child.getX(), cy = child.getY();
+//                    child.setX(cx + offsetX);
+//                    child.setY(cy + offsetY);
+//                    child.draw(batch, parentAlpha);
+//                    child.setX(cx);
+//                    child.setY(cy);
+//                }
+//                setPosition(offsetX, offsetY);
+//            }
+//        }
+//        children.end();
+//    }
 
     public float getScrollPos() {
         return scrollPane.getScrollY();
@@ -290,6 +353,30 @@ public class ListView extends WidgetGroup {
 
     public void setScrollPos(float scrollPos) {
         scrollPane.setScrollY(scrollPos);
+    }
+
+    public void setSelectedItemVisible() {
+        //get pos of first selected
+        ListViewItem item = this.selectedItemList.size == 0 ? null : this.selectedItemList.get(0);
+        float scrollPos = 0;
+        if (item != null) {
+            int index = item.getListIndex();
+            scrollPos = itemYPos.get(index);
+        }
+        this.setScrollPos(scrollPos);
+    }
+
+    public void setSelection(int index) {
+        if (this.selectionType == NONE) return;
+        this.selectedItemList.clear();
+        ListViewItem item = itemViews.get(index);
+        this.selectedItemList.add(item);
+        Gdx.graphics.requestRendering();
+    }
+
+    public ListViewItem getSelectedItem() {
+        if(this.selectedItemList.size==0)return null;
+        return this.selectedItemList.first();
     }
 
 

@@ -13,15 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.menu;
+package de.longri.cachebox3.gui.stages;
 
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 /**
- * Created by Longri on 15.08.2016.
+ * Created by Longri on 03.09.16.
  */
-public interface OnItemClickListener {
+public class NamedStage extends Stage {
+    private String name;
 
-    public boolean onItemClick(MenuItem item);
+    public NamedStage(String name) {
+        this.name = name;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return "Stage: " + name;
+    }
 }

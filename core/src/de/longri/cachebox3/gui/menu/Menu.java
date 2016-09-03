@@ -31,7 +31,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.stages.StageManager;
@@ -62,12 +61,14 @@ public class Menu extends Window {
     private WidgetGroup titleGroup;
 
     public Menu(String name) {
+        super(name);
         this.style = VisUI.getSkin().get("default", MenuStyle.class);
         this.name = name;
         this.setStageBackground(style.stageBackground);
     }
 
     public Menu(String name, MenuStyle style) {
+        super(name);
         this.style = style;
         this.name = name;
         this.setStageBackground(style.stageBackground);
@@ -168,6 +169,7 @@ public class Menu extends Window {
         pack();
 
         mainMenuWidgetGroup = new WidgetGroup();
+        mainMenuWidgetGroup.setName(this.name);
         mainMenuWidgetGroup.setBounds(this.getX(), this.getY(), this.getWidth(), this.getHeight());
         mainMenuWidgetGroup.addActor(this);
 
@@ -306,7 +308,7 @@ public class Menu extends Window {
     @Override
     public void pack() {
         for (ListViewItem item : mItems) {
-            ((MenuItem)item).initial();
+            ((MenuItem) item).initial();
             item.pack();
         }
 
@@ -335,16 +337,22 @@ public class Menu extends Window {
         mItems.addAll(items);
     }
 
-    public void addDivider() {
+    public void addDivider(int listIndex) {
 
         if (this.style.divider != null) {
-            MenuItem item = new MenuItem(this);
+            MenuItem item = new MenuItem(listIndex, this);
             item.overrideBackground(this.style.divider);
             addItem(item);
         }
 
         log.debug("add Divider");
         //TODO add divider item
+    }
+
+    public void reorganizeListIndexes() {
+        for (int i = 0; i < mItems.size(); i++) {
+            mItems.get(i).setNewIndex(i);
+        }
     }
 
     public static class MenuStyle {

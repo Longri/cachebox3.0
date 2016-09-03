@@ -33,7 +33,7 @@ public class Action_Show_TrackableListView extends Abstract_Action_ShowView {
     }
 
     @Override
-    protected void Execute() {
+    public void execute() {
         if (isActVisible()) return;
 
         TrackableListView view = new TrackableListView();

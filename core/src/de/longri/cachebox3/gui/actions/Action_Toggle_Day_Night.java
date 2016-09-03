@@ -33,7 +33,7 @@ public class Action_Toggle_Day_Night extends AbstractAction {
     }
 
     @Override
-    public void Execute() {
+    public void execute() {
 
 
     }

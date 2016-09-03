@@ -20,7 +20,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -42,7 +41,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 /**
  * Created by Longri on 20.07.2016.
  */
-public class ViewManager extends Stage {
+public class ViewManager extends NamedStage {
 
     final static org.slf4j.Logger log = LoggerFactory.getLogger(ViewManager.class);
 
@@ -55,6 +54,7 @@ public class ViewManager extends Stage {
 
 
     public ViewManager() {
+        super("ViewManager");
 
         //set this to static CB for global access
         CB.viewmanager = this;
@@ -172,7 +172,7 @@ public class ViewManager extends Stage {
         misc_button.addAction(new ActionButton(new Action_Show_Help(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Quit(), false, GestureDirection.Down));
 
-//        actionShowAboutView.Execute();
+//        actionShowAboutView.execute();
     }
 
     private void setActViewBounds() {

@@ -36,7 +36,7 @@ public class Action_Show_Credits extends Abstract_Action_ShowView {
     }
 
     @Override
-    public void Execute() {
+    public void execute() {
 
 
     }

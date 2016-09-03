@@ -38,8 +38,15 @@ import org.slf4j.LoggerFactory;
 public class Action_Show_SelectDB_Dialog extends AbstractAction {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Show_SelectDB_Dialog.class);
 
-    public Action_Show_SelectDB_Dialog() {
+    public enum ViewMode {
+        FORCE_SHOW, ASK
+    }
+
+    private final ViewMode viewMode;
+
+    public Action_Show_SelectDB_Dialog(ViewMode viewMode) {
         super("manageDB", MenuID.AID_SHOW_SELECT_DB_DIALOG);
+        this.viewMode = viewMode;
     }
 
     @Override
@@ -53,7 +60,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
     }
 
     @Override
-    public void Execute() {
+    public void execute() {
 
         if (CB.isSetSelectedCache()) {
             // speichere selektierten Cache, da nicht alles über die SelectedCacheEventList läuft
@@ -62,13 +69,21 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             log.debug("LastSelectedCache = " + CB.getSelectedCache().getGcCode());
         }
 
-        SelectDB_Activity selectDBDialog = new SelectDB_Activity(new SelectDB_Activity.IReturnListener() {
+
+
+        Gdx.app.postRunnable(new Runnable() {
             @Override
-            public void back() {
-                returnFromSelectDB();
+            public void run() {
+                final SelectDB_Activity selectDBDialog = new SelectDB_Activity(new SelectDB_Activity.IReturnListener() {
+                    @Override
+                    public void back() {
+                        returnFromSelectDB();
+                    }
+                }, Action_Show_SelectDB_Dialog.this.viewMode == ViewMode.FORCE_SHOW);
+                selectDBDialog.show();
             }
         });
-        selectDBDialog.show();
+
 
     }
 

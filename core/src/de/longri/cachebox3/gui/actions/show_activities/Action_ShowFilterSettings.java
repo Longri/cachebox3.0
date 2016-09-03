@@ -24,7 +24,7 @@ public class Action_ShowFilterSettings extends AbstractAction {
     }
 
     @Override
-    public void Execute() {
+    public void execute() {
         EditFilterSettings edFi = new EditFilterSettings("Filter");
         edFi.show();
 

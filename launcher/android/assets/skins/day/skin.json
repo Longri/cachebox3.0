@@ -333,11 +333,11 @@
     },
     "settings_desc_font": {
       "font": "fonts/DroidSerif-Italic",
-      "size": 16
+      "size": 14
     },
     "settings_default_value_font": {
       "font": "fonts/DroidSerif-Bold",
-      "size": 14
+      "size": 12
     },
     "settings_value_font": {
       "font": "fonts/DroidSans-BoldItalic",
@@ -657,6 +657,14 @@
       "cursor": "cursor",
       "messageFont": "normal_font",
       "messageFontColor": "font_color"
+    }
+  },
+  "de.longri.cachebox3.gui.activities.SelectDB_Activity$SelectDbStyle": {
+    "default": {
+      "nameFont": "normal_bold_font",
+      "infoFont": "settings_desc_font",
+      "nameColor": "font_color",
+      "infoColor": "settings_default_value_font_color"
     }
   }
 }

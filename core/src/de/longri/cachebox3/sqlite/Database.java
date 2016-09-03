@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.sqlite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabase;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
@@ -82,6 +83,7 @@ public class Database {
         if (myDB.isOpen()) return true;
         return false;
     }
+
 
     public enum DatabaseType {
         CacheBox, FieldNotes, Settings
@@ -902,6 +904,24 @@ public class Database {
             myDB.closeDatabase();
         } catch (SQLiteGdxException e) {
             e.printStackTrace();
+        }
+    }
+
+    // Static methods ##############################################################################################
+
+
+    public static int getCacheCountInDB(String absolutePath) {
+        try {
+            SQLiteGdxDatabase tempDB = SQLiteGdxDatabaseFactory.getNewDatabase(Gdx.files.absolute(absolutePath));
+            tempDB.openOrCreateDatabase();
+            SQLiteGdxDatabaseCursor result = tempDB.rawQuery("SELECT COUNT(*) FROM caches", null);
+            result.moveToFirst();
+            int count = result.getInt(1);
+            result.close();
+            tempDB.closeDatabase();
+            return count;
+        } catch (Exception exc) {
+            return -1;
         }
     }
 }

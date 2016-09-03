@@ -35,6 +35,7 @@ import de.longri.cachebox3.gui.help.GestureHelp;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.IconNames;
@@ -125,7 +126,7 @@ public class GestureButton extends Button {
     public void executeDefaultAction() {
         for (ActionButton action : buttonActions) {
             if (action.isDefaultAction()) {
-                action.getAction().callExecute();
+                action.getAction().execute();
                 return;
             }
         }
@@ -133,14 +134,14 @@ public class GestureButton extends Button {
         //if no default button so take the first or do nothing if no buttonAction set
         if (!buttonActions.isEmpty()) {
             ActionButton action = buttonActions.get(0);
-            if (action != null) action.getAction().callExecute();
+            if (action != null) action.getAction().execute();
         }
     }
 
     public void executeAction(ActionButton.GestureDirection direction) {
         for (ActionButton action : buttonActions) {
             if (action.getGestureDirection() == direction) {
-                action.getAction().callExecute();
+                action.getAction().execute();
                 return;
             }
         }
@@ -198,7 +199,7 @@ public class GestureButton extends Button {
                                     bothListener[0] = viewContextMenu.getOnItemClickListeners();
 
                                     // add divider
-                                    compoundMenu.addDivider();
+                                    compoundMenu.addDivider(-1);
                                 }
 
                                 Menu longClickMenu = getLongClickMenu();
@@ -207,6 +208,7 @@ public class GestureButton extends Button {
                                     bothListener[1] = longClickMenu.getOnItemClickListeners();
                                 }
                                 compoundMenu.setOnItemClickListener(bothItemClickListener);
+                                compoundMenu.reorganizeListIndexes();
                                 compoundMenu.show();
                                 return;
                             }
@@ -221,7 +223,7 @@ public class GestureButton extends Button {
                 if (ba.isDefaultAction()) {
                     AbstractAction action = ba.getAction();
                     if (action != null) {
-                        action.callExecute();
+                        action.execute();
                         if (action instanceof Abstract_Action_ShowView)
                             aktActionView = (Abstract_Action_ShowView) action;
                         actionExecuted = true;
@@ -250,7 +252,7 @@ public class GestureButton extends Button {
                 ActionButton ba = buttonActions.get(0);
                 AbstractAction action = ba.getAction();
                 if (action != null) {
-                    action.callExecute();
+                    action.execute();
                     if (action instanceof Abstract_Action_ShowView)
                         aktActionView = (Abstract_Action_ShowView) action;
                 }
@@ -311,7 +313,7 @@ public class GestureButton extends Button {
                                 @Override
                                 public void windowClosed() {
                                     gestureHelper.clearWindowCloseListener();
-                                    action.callExecute();
+                                    action.execute();
                                     if (action instanceof Abstract_Action_ShowView)
                                         aktActionView = (Abstract_Action_ShowView) action;
                                 }
@@ -320,7 +322,7 @@ public class GestureButton extends Button {
                             return true;
                         } else {
                             // no gesture, call direct
-                            action.callExecute();
+                            action.execute();
                             if (action instanceof Abstract_Action_ShowView)
                                 aktActionView = (Abstract_Action_ShowView) action;
                             return true;
