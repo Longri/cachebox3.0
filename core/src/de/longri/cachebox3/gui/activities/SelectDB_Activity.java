@@ -297,12 +297,12 @@ public class SelectDB_Activity extends ActivityBase {
             bAutostart.setText(Translation.Get("AutoStartTime", String.valueOf(autoStartTime)));
     }
 
-    public class CustomAdapter implements Adapter {
+    private class CustomAdapter implements Adapter {
 
         private FileList files;
 
 
-        public CustomAdapter(FileList files) {
+        private CustomAdapter(FileList files) {
             this.files = files;
         }
 
@@ -332,7 +332,7 @@ public class SelectDB_Activity extends ActivityBase {
 
         @Override
         public void update(ListViewItem view) {
-
+            log.debug("update item");
         }
 
         @Override

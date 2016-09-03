@@ -216,9 +216,9 @@ public class ListView extends WidgetGroup {
                 if (selectionType != NONE) {
                     boolean isSelected = false;
                     if (selectionType == SINGLE) {
-                        isSelected = selectedItemList.size == 1 && selectedItemList.contains(item, true);
+                        isSelected = selectedItemList.size == 1 && selectedItemList.contains(item, false);
                     } else {
-                        isSelected = selectedItemList.contains(item, true);
+                        isSelected = selectedItemList.contains(item, false);
                     }
 
                     if (isSelected) {
@@ -253,13 +253,13 @@ public class ListView extends WidgetGroup {
                     ListViewItem item = ((ListViewItem) event.getListenerActor());
 
                     if (selectionType == SINGLE) {
-                        if (!selectedItemList.contains(item, true)) {
+                        if (!selectedItemList.contains(item, false)) {
                             selectedItemList.clear();
                             selectedItemList.add(item);
                             log.debug("select item:" + item.toString());
                         }
                     } else {
-                        if (selectedItemList.contains(item, true)) {
+                        if (selectedItemList.contains(item, false)) {
                             selectedItemList.removeValue(item, true);
                             log.debug("unselect item:" + item.toString());
                         } else {

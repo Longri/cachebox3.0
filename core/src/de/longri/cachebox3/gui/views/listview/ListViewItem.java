@@ -16,11 +16,7 @@
 package de.longri.cachebox3.gui.views.listview;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisTable;
-import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
 
 /**
  * Created by Longri on 31.08.2016.
@@ -80,5 +76,12 @@ public class ListViewItem extends VisTable {
         if (onDrawListener != null) {
             onDrawListener.onDraw(this);
         }
+    }
+
+    public boolean equals(Object other) {
+        if (other instanceof ListViewItem) {
+            if (this.listIndex == ((ListViewItem) other).listIndex) return true;
+        }
+        return false;
     }
 }
