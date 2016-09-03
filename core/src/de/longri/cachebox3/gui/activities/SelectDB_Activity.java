@@ -345,7 +345,6 @@ public class SelectDB_Activity extends ActivityBase {
     private void stopTimer() {
         if (updateTimer != null)
             updateTimer.cancel();
-        // bAutostart.setText(Translation.Get("confirm"));
     }
 
 
