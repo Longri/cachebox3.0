@@ -27,7 +27,7 @@ import de.longri.cachebox3.utils.Showable;
  */
 public class ActivityBase extends Window implements Disposable, Showable {
 
-    public final String name;
+
     protected final ActivityBaseStyle style;
     protected boolean needsLayout = true;
 
@@ -36,7 +36,7 @@ public class ActivityBase extends Window implements Disposable, Showable {
     }
 
     public ActivityBase(String name, ActivityBaseStyle style) {
-        this.name = name;
+        super(name);
         this.style = style;
         this.setStageBackground(style.background);
     }

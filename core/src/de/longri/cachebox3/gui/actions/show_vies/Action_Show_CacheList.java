@@ -107,7 +107,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 //                        sync.show();
                         return true;
                     case MenuID.MI_MANAGE_DB:
-                        new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.FORCE_SHOW).execute();
+                        new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.ASK).execute();
                         return true;
                     case MenuID.MI_AUTO_RESORT:
                         CB.viewmanager.toast("Toggle Autoresort NOT IMPLEMENTED NOW");

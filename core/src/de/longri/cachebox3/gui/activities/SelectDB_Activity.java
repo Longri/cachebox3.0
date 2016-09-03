@@ -392,9 +392,7 @@ public class SelectDB_Activity extends ActivityBase {
                         autoStartTime = 60;
                         setAutoStartText();
                         break;
-
                 }
-                SelectDB_Activity.this.show();
                 return true;
             }
         });

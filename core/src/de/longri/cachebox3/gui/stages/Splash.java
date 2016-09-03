@@ -16,27 +16,20 @@
 package de.longri.cachebox3.gui.stages;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.stages.initial_tasks.*;
-import de.longri.cachebox3.locator.Locator;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The Splash Stage is the first Stage to show on screen
@@ -49,7 +42,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author ging-buh
  * @author Longri
  */
-public class Splash extends Stage {
+public class Splash extends NamedStage {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(Splash.class);
 
 
@@ -71,6 +64,7 @@ public class Splash extends Stage {
 
 
     public Splash(LoadReady loadReadyHandler) {
+        super("splash");
         this.loadReadyHandler = loadReadyHandler;
         Texture backgroundTexture = new Texture("splash-back.jpg");
         Image background = new Image(backgroundTexture);
@@ -155,21 +149,6 @@ public class Splash extends Stage {
         runThread.start();
 
     }
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //

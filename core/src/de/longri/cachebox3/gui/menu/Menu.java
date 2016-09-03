@@ -61,12 +61,14 @@ public class Menu extends Window {
     private WidgetGroup titleGroup;
 
     public Menu(String name) {
+        super(name);
         this.style = VisUI.getSkin().get("default", MenuStyle.class);
         this.name = name;
         this.setStageBackground(style.stageBackground);
     }
 
     public Menu(String name, MenuStyle style) {
+        super(name);
         this.style = style;
         this.name = name;
         this.setStageBackground(style.stageBackground);
@@ -167,6 +169,7 @@ public class Menu extends Window {
         pack();
 
         mainMenuWidgetGroup = new WidgetGroup();
+        mainMenuWidgetGroup.setName(this.name);
         mainMenuWidgetGroup.setBounds(this.getX(), this.getY(), this.getWidth(), this.getHeight());
         mainMenuWidgetGroup.addActor(this);
 

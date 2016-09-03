@@ -1,16 +1,11 @@
 package de.longri.cachebox3.gui.stages;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Timer;
-import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.Window;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -18,13 +13,13 @@ import org.slf4j.LoggerFactory;
  */
 public class StageManager {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(StageManager.class);
-    final static Array<Stage> stageList = new Array<Stage>(5);
-    final static Stage toastStage = new Stage();
+    final static Array<NamedStage> stageList = new Array<NamedStage>(5);
+    final static NamedStage toastStage = new NamedStage("toastStage");
 
     private static boolean debug = true;
     private static boolean writeDrawSequence = debug;
 
-    private static Stage mainStage;
+    private static NamedStage mainStage;
     private static InputMultiplexer inputMultiplexer;
 
     public static void draw() {
@@ -75,12 +70,27 @@ public class StageManager {
     }
 
     public static void showOnNewStage(final Actor actor) {
-        Stage newStage = new Stage();
+
+
+        if (stageList.size > 0) {
+            String lastName = stageList.get(stageList.size - 1).getName();
+            if (lastName.equals(actor.getName())) {
+
+                // don't show double
+                return;
+            }
+        }
+
+
+        NamedStage newStage = new NamedStage(actor.getName());
         newStage.addActor(actor);
         newStage.setKeyboardFocus(actor);
         newStage.setScrollFocus(actor);
-        log.debug("Add new Stage: " + newStage.toString());
+
+
         stageList.add(newStage);
+        log.debug("Add new Stage: " + newStage.getName());
+        log.debug("Stage list: " + stageList.toString());
 
         //switch input processor to window stage
 
@@ -104,9 +114,10 @@ public class StageManager {
     }
 
     public static void removeAllWithActStage() {
-        Stage stage = stageList.pop();
+        NamedStage stage = stageList.pop();
 
-        log.debug("Remove Stage: " + stage.toString());
+        log.debug("Remove Stage: " + stage.getName());
+        log.debug("Stage list: " + stageList.toString());
 
         //switch input processor to main stage
         inputMultiplexer.removeProcessor(stage);
@@ -119,7 +130,7 @@ public class StageManager {
         if (debug) writeDrawSequence = true;
     }
 
-    public static void setMainStage(Stage stage) {
+    public static void setMainStage(NamedStage stage) {
         mainStage = stage;
 
         // add mainStage to input processor

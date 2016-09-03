@@ -60,8 +60,8 @@ public class ButtonDialog extends Window {
     private String titleText;
 
 
-    public ButtonDialog(String Name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
-        super();
+    public ButtonDialog(String name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
+        super(name);
 
         this.skin = VisUI.getSkin();
         setSkin(this.skin);

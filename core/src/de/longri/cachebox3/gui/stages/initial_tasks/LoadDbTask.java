@@ -24,7 +24,7 @@ public class LoadDbTask extends AbstractInitTask {
         // initial DB
         Database.Data = new Database(Database.DatabaseType.CacheBox);
 
-        Action_Show_SelectDB_Dialog selectDbDialog = new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.ASK);
+        Action_Show_SelectDB_Dialog selectDbDialog = new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.FORCE_SHOW);
 
         // search number of DB3 files
         FileList fileList = null;
