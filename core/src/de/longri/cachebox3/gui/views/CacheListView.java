@@ -90,27 +90,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     }
 
     private ListViewItem getCacheItem(int listIndex, final Cache cache) {
-        ListViewItem table = new ListViewItem(listIndex);
-
-        // add label with category name, align left
-        table.left();
-        VisLabel label = new VisLabel(cache.getName());
-        label.setAlignment(Align.left);
-        table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-
-//        // add next icon
-//        Image next = new Image(style.nextIcon);
-//        table.add(next).width(next.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
-//
-//        // add clicklistener
-//        table.addListener(new ClickListener() {
-//            public void clicked(InputEvent event, float x, float y) {
-//                if (event.getType() == InputEvent.Type.touchUp) {
-//                    showCategory(category, true);
-//                }
-//            }
-//        });
-        return table;
+        ListViewItem listViewItem = new CacheListItem(listIndex, cache.Type, cache.getName());
+        return listViewItem;
     }
 
     @Override

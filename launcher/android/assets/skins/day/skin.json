@@ -232,6 +232,50 @@
     "sliderKnob": {
       "path": "skins/day/svg/sliderKnob.svg",
       "scale": 0.3
+    },
+    "traddi": {
+      "path": "skins/day/svg/traddi.svg",
+      "scale": 0.3
+    },
+    "multi": {
+      "path": "skins/day/svg/multi.svg",
+      "scale": 0.3
+    },
+    "myterie": {
+      "path": "skins/day/svg/myterie.svg",
+      "scale": 0.3
+    },
+    "earth": {
+      "path": "skins/day/svg/earth.svg",
+      "scale": 0.3
+    },
+    "event": {
+      "path": "skins/day/svg/event.svg",
+      "scale": 0.3
+    },
+    "mega": {
+      "path": "skins/day/svg/mega.svg",
+      "scale": 0.3
+    },
+    "giga": {
+      "path": "skins/day/svg/giga.svg",
+      "scale": 0.3
+    },
+    "cito": {
+      "path": "skins/day/svg/cito.svg",
+      "scale": 0.3
+    },
+    "letterbox": {
+      "path": "skins/day/svg/letterbox.svg",
+      "scale": 0.3
+    },
+    "whereigo": {
+      "path": "skins/day/svg/whereigo.svg",
+      "scale": 0.3
+    },
+    "virtual": {
+      "path": "skins/day/svg/virtual.svg",
+      "scale": 0.3
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
@@ -675,6 +719,12 @@
       "checkBackgroundOver": "check_off",
       "checkBackgroundDown": "check_off",
       "tick": "check_on"
+    }
+  },
+  "de.longri.cachebox3.gui.views.CacheListItem$CacheListItemStyle": {
+    "default": {
+      "nameFont": "normal_font",
+      "nameFontColor": "font_color"
     }
   }
 }
