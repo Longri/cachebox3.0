@@ -276,6 +276,10 @@
     "virtual": {
       "path": "skins/day/svg/virtual.svg",
       "scale": 0.3
+    },
+    "arrow-compass": {
+      "path": "skins/day/svg/arrow-compass.svg",
+      "scale": 0.15
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
@@ -724,7 +728,10 @@
   "de.longri.cachebox3.gui.views.CacheListItem$CacheListItemStyle": {
     "default": {
       "nameFont": "normal_font",
-      "nameFontColor": "font_color"
+      "nameFontColor": "font_color",
+      "arrow": "arrow-compass",
+      "distanceFont": "normal_font",
+      "distanceFontColor": "font_color"
     }
   }
 }

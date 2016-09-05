@@ -2,7 +2,9 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
@@ -10,15 +12,22 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.locator.events.PositionChangedEvent;
+import de.longri.cachebox3.locator.events.PositionChangedEventList;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheWithWP;
+import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 24.07.16.
  */
-public class CacheListView extends AbstractView implements CacheListChangedEventListener {
+public class CacheListView extends AbstractView implements CacheListChangedEventListener, PositionChangedEvent {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheListView.class);
     private ListView listView;
 
@@ -27,6 +36,9 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
         //register as cacheListChanged eventListener
         CacheListChangedEventList.Add(this);
+
+        //register as positionChanged eventListener
+        PositionChangedEventList.Add(this);
     }
 
     public void layout() {
@@ -68,6 +80,28 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     @Override
                     public void update(ListViewItem view) {
 
+                        //get index from item
+                        int idx = view.getListIndex();
+
+                        // get Cache
+                        Cache cache = Database.Data.Query.get(idx);
+
+                        //get actPos and heading
+                        Coordinate position = Locator.getCoordinate();
+                        float heading = Locator.getHeading();
+
+
+                        // get coordinate from Cache or from Final Waypoint
+                        Waypoint finalWp = cache.GetFinalWaypoint();
+                        Coordinate finalCoord = finalWp != null ? finalWp.Pos : cache.Pos;
+
+                        //calculate distance and bearing
+                        float result[] = new float[4];
+                        MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, position.getLatitude(), position.getLongitude(), finalCoord.getLatitude(), finalCoord.getLongitude(), result);
+
+
+                        //update item
+                        ((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.DistanceString(result[0]));
                     }
 
                     @Override
@@ -112,5 +146,40 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     public void CacheListChangedEvent() {
         log.debug("Cachelist changed, reload listView");
         listView.dataSetChanged();
+    }
+
+    @Override
+    public void PositionChanged() {
+        setChangedFlagToAllItems();
+    }
+
+    @Override
+    public void OrientationChanged() {
+        setChangedFlagToAllItems();
+    }
+
+    private void setChangedFlagToAllItems() {
+        SnapshotArray<ListViewItem> allItems = listView.items();
+        ListViewItem[] actors = allItems.begin();
+        for (int i = 0, n = allItems.size; i < n; i++) {
+            CacheListItem item = (CacheListItem) actors[i];
+            item.posOrBearingChanged();
+        }
+        allItems.end();
+    }
+
+    @Override
+    public void SpeedChanged() {
+        //do nothing
+    }
+
+    @Override
+    public String getReceiverName() {
+        return "CacheListView";
+    }
+
+    @Override
+    public Priority getPriority() {
+        return Priority.Normal;
     }
 }
