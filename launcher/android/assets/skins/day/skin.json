@@ -280,6 +280,18 @@
     "arrow-compass": {
       "path": "skins/day/svg/arrow-compass.svg",
       "scale": 0.15
+    },
+    "star": {
+      "path": "skins/day/svg/star.svg",
+      "scale": 0.25
+    },
+    "star_half": {
+      "path": "skins/day/svg/star_half.svg",
+      "scale": 0.25
+    },
+    "star0": {
+      "path": "skins/day/svg/star0.svg",
+      "scale": 0.25
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {

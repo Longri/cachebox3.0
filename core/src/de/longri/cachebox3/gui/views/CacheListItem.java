@@ -20,11 +20,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.types.CacheTypes;
 
 /**
@@ -39,10 +41,16 @@ public class CacheListItem extends ListViewItem {
     private Image arrowImage;
     private VisLabel distanceLabel;
     private boolean distanceOrBearingChanged = true;
+    private final int difficulty;
+    private final int terrain;
+    private final int vote;
 
 
-    public CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName) {
+    public CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain, int vote) {
         super(listIndex);
+        this.difficulty = difficulty;
+        this.terrain = terrain;
+        this.vote = vote;
         this.style = VisUI.getSkin().get("default", CacheListItemStyle.class);
         this.type = type;
         this.cacheName = cacheName;
@@ -50,7 +58,7 @@ public class CacheListItem extends ListViewItem {
 
 
     public void layout() {
-//        this.setDebug(true, true);
+        this.setDebug(true, true);
         if (!needsLayout) {
             super.layout();
             return;
@@ -90,6 +98,30 @@ public class CacheListItem extends ListViewItem {
         this.add(arrowTable).right();
 
         this.row();
+
+        VisTable line1 = new VisTable();
+        VisLabel dLabel = new VisLabel("D", distanceLabelStyle);
+        line1.left();
+        line1.add(dLabel);
+        Stars difficultyStars = new Stars(this.difficulty);
+        line1.add(difficultyStars);
+
+        this.add(line1).colspan(3).align(Align.left);
+        this.row();
+
+        VisTable line2 = new VisTable();
+        VisLabel tLabel = new VisLabel("T", distanceLabelStyle);
+        line2.left();
+        line2.add(tLabel);
+        Stars terrainStars = new Stars(this.terrain);
+        line2.add(terrainStars);
+
+        VisLabel vLabel = new VisLabel("GcV", distanceLabelStyle);
+        line2.add(vLabel).padLeft(CB.scaledSizes.MARGIN);
+        Stars vStars = new Stars(this.vote);
+        line2.add(vStars);
+
+        this.add(line2).colspan(3).align(Align.left);
 
         super.layout();
         needsLayout = false;
