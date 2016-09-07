@@ -730,7 +730,7 @@
       "nameFont": "normal_font",
       "nameFontColor": "font_color",
       "arrow": "arrow-compass",
-      "distanceFont": "normal_font",
+      "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color"
     }
   }

@@ -16,6 +16,7 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
+import de.longri.cachebox3.locator.Locator;
 import org.robovm.apple.corelocation.*;
 import org.robovm.apple.dispatch.DispatchQueue;
 import org.robovm.apple.foundation.Foundation;
@@ -95,6 +96,24 @@ public class IOS_LocationListener {
 
 
         }
+
+        /**
+         * This delegate method is invoked when the location manager has
+         * heading data.
+         */
+        @Override
+        public void didUpdateHeading(CLLocationManager manager, CLHeading newHeading) {
+            double x = newHeading.getX();
+            double y = newHeading.getY();
+            double z = newHeading.getZ();
+
+            // Compute and display the magnitude (size or strength) of
+            // the vector.
+            // magnitude = sqrt(x^2 + y^2 + z^2)
+            double magnitute = Math.sqrt(x * x + y * y + z * z);
+            de.longri.cachebox3.locator.Locator.setHeading((float) magnitute, Locator.CompassType.Magnetic);
+        }
+
 
         @Override
         public void didFail(CLLocationManager manager, NSError error) {

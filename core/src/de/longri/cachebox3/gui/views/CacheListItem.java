@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.types.CacheTypes;
 
@@ -81,11 +82,11 @@ public class CacheListItem extends ListViewItem {
         Label.LabelStyle distanceLabelStyle = new Label.LabelStyle();
         distanceLabelStyle.font = this.style.distanceFont;
         distanceLabelStyle.fontColor = this.style.distanceFontColor;
-        distanceLabel = new VisLabel("---", distanceLabelStyle);
+        distanceLabel = new VisLabel("---- --", distanceLabelStyle);
 
         arrowTable.add(arrowImage);
         arrowTable.row();
-        arrowTable.add(distanceLabel);
+        arrowTable.add(distanceLabel).padTop(CB.scaledSizes.MARGIN);
         this.add(arrowTable).right();
 
         this.row();
