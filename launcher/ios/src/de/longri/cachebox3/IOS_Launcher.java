@@ -20,6 +20,7 @@ import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.ios.backend.IosGraphics;
 import org.robovm.apple.foundation.NSAutoreleasePool;
+import org.robovm.apple.glkit.GLKViewDrawableMultisample;
 import org.robovm.apple.uikit.UIApplication;
 import org.robovm.apple.uikit.UIDevice;
 import org.robovm.apple.uikit.UIScreen;
@@ -40,6 +41,7 @@ public class IOS_Launcher extends IOSApplication.Delegate {
 
 
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
+        config.multisample = GLKViewDrawableMultisample._4X;
         return new IOSApplication(new CacheboxMain(), config);
     }
 

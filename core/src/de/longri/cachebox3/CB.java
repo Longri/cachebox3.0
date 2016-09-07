@@ -59,7 +59,7 @@ public class CB {
 
     static {
 
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.CacheBox");
+//        LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.CacheBox");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.Settings");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");
         LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");

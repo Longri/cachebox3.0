@@ -23,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.types.CacheTypes;
 
@@ -38,7 +37,7 @@ public class CacheListItem extends ListViewItem {
     private boolean needsLayout = true;
     private Image arrowImage;
     private VisLabel distanceLabel;
-    private boolean distanceOrBearingChanged = false;
+    private boolean distanceOrBearingChanged = true;
 
 
     public CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName) {
@@ -50,7 +49,7 @@ public class CacheListItem extends ListViewItem {
 
 
     public void layout() {
-        this.setDebug(true, true);
+//        this.setDebug(true, true);
         if (!needsLayout) {
             super.layout();
             return;
@@ -77,6 +76,7 @@ public class CacheListItem extends ListViewItem {
 
         VisTable arrowTable = new VisTable();
         arrowImage = new Image(this.style.arrow);
+        arrowImage.setOrigin(this.style.arrow.getMinWidth() / 2, this.style.arrow.getMinHeight() / 2);
 
         Label.LabelStyle distanceLabelStyle = new Label.LabelStyle();
         distanceLabelStyle.font = this.style.distanceFont;

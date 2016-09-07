@@ -18,11 +18,9 @@ package com.badlogic.gdx.sqlite.robovm;
 import SQLite.JDBCDriver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabase;
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.sqlite.Database.Parameters;
-import de.longri.cachebox3.utils.exceptions.NotImplementedException;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
@@ -50,10 +48,12 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
     @Override
     public void openOrCreateDatabase() throws SQLiteGdxException {
         JDBCDriver jdbcDriver = new JDBCDriver();
+
         try {
             String DB_URL = "sqlite:/" + this.dbFileHandle.file().getAbsolutePath();
             myDB = jdbcDriver.connect(DB_URL, null);
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
             throw new SQLiteGdxException(e.getMessage(), e.getCause());
         }
     }
@@ -75,15 +75,15 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
         if (myDB == null)
             return null;
 
-        if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
-            StringBuilder sb = new StringBuilder("RAW_QUERY :" + sql + " ARGs= ");
-            if (args != null) {
-                for (String arg : args)
-                    sb.append(arg + ", ");
-            } else
-                sb.append("NULL");
-            log.debug(sb.toString());
-        }
+//        if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
+//            StringBuilder sb = new StringBuilder("RAW_QUERY :" + sql + " ARGs= ");
+//            if (args != null) {
+//                for (String arg : args)
+//                    sb.append(arg + ", ");
+//            } else
+//                sb.append("NULL");
+//            log.debug(sb.toString());
+//        }
 
         ResultSet rs = null;
         PreparedStatement statement = null;

@@ -18,6 +18,7 @@ package com.badlogic.gdx.sql;
 import de.longri.cachebox3.sqlite.Database;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * This public interface contains the necessary methods to setup and execute queries on a database. The factory method

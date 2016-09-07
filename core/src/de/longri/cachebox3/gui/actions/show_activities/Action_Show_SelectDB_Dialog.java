@@ -70,7 +70,6 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
         }
 
 
-
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
@@ -118,7 +117,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             if (Database.Data.isStarted()) Database.Data.Close();
         }
 
-        FileHandle fileHandle = Gdx.files.absolute(Config.DatabasePath.getValue());
+        FileHandle fileHandle = Gdx.files.absolute(CB.WorkPath + "/" + Config.DatabaseName.getValue());
 
         try {
             Database.Data.StartUp(fileHandle);

@@ -21,7 +21,7 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabase;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
-import de.longri.cachebox3.sqlite.dao.CategoryDAO;
+import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.types.CacheList;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Category;
@@ -132,23 +132,34 @@ public class Database {
 
     public boolean StartUp(FileHandle databasePath) throws SQLiteGdxException {
 
+        FileHandle parentDirectory = databasePath.parent();
 
+        if (!parentDirectory.exists()) {
+            throw new SQLiteGdxException("Directory for DB doesn't exist: " + parentDirectory.file().getAbsolutePath());
+        }
+
+
+        log.debug("StartUp Database: " + Utils.GetFileName(databasePath));
         if (myDB != null) {
+            log.debug("Database is open ");
             if (this.databasePath.file().getAbsolutePath().equals(databasePath.file().getAbsolutePath())) {
-
+                log.debug("Database is the same");
                 if (!myDB.isOpen()) {
+                    log.debug("Database was close so open now");
                     myDB.openOrCreateDatabase();
                 }
+
                 // is open
                 return true;
             }
+            log.debug("Database is changed! close " + Utils.GetFileName(this.databasePath));
             if (myDB.isOpen()) myDB.closeDatabase();
             myDB = null;
         }
 
 
         this.databasePath = databasePath;
-
+        log.debug("Initial database: " + Utils.GetFileName(databasePath));
         Initialize();
 
         int databaseSchemeVersion = GetDatabaseSchemeVersion();
