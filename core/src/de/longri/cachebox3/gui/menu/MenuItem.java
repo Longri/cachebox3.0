@@ -111,8 +111,11 @@ public class MenuItem extends ListViewItem {
 
     @Override
     public void pack() {
-        super.pack();
-        initial();
+        try {
+            super.pack();
+            initial();
+        } catch (Exception e) {
+        }
 
     }
 

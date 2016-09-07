@@ -23,12 +23,13 @@ import org.robovm.apple.foundation.Foundation;
 import org.robovm.apple.foundation.NSArray;
 import org.robovm.apple.foundation.NSError;
 import org.robovm.apple.foundation.NSString;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 26.07.2016.
  */
 public class IOS_LocationListener {
-
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(IOS_LocationListener.class);
     private static double ACCURACY = CLLocationAccuracy.Best;
     private static double DISTANCE_FILTER = 5;
 
@@ -58,6 +59,7 @@ public class IOS_LocationListener {
 
                 // Once configured, the location manager must be "started".
                 locationManager.startUpdatingLocation();
+                locationManager.startUpdatingHeading();
                 Gdx.app.log("locationManager", "startet");
             }
         });
@@ -91,7 +93,7 @@ public class IOS_LocationListener {
             cbLocation.setBearing((float) newLocation.getCourse());
             cbLocation.setAltitude(newLocation.getAltitude());
             cbLocation.setProvider(provider);
-
+            log.trace("Update location:" + cbLocation.toString());
             de.longri.cachebox3.locator.Locator.setNewLocation(cbLocation);
 
 
@@ -103,15 +105,19 @@ public class IOS_LocationListener {
          */
         @Override
         public void didUpdateHeading(CLLocationManager manager, CLHeading newHeading) {
-            double x = newHeading.getX();
-            double y = newHeading.getY();
-            double z = newHeading.getZ();
+            Locator.CompassType type = Locator.CompassType.any;
+            float heading = 0f;
 
-            // Compute and display the magnitude (size or strength) of
-            // the vector.
-            // magnitude = sqrt(x^2 + y^2 + z^2)
-            double magnitute = Math.sqrt(x * x + y * y + z * z);
-            de.longri.cachebox3.locator.Locator.setHeading((float) magnitute, Locator.CompassType.Magnetic);
+            if (newHeading.getHeadingAccuracy() > 0) {
+                type = Locator.CompassType.GPS;
+                heading = (float) newHeading.getTrueHeading();
+            } else {
+                type = Locator.CompassType.Magnetic;
+                heading = (float) newHeading.getMagneticHeading();
+            }
+
+            log.trace("Update Heading:" + type.toString() + " / " + heading);
+            de.longri.cachebox3.locator.Locator.setHeading((float) heading, type);
         }
 
 

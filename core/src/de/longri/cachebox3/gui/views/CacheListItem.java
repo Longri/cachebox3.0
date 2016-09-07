@@ -95,14 +95,15 @@ public class CacheListItem extends ListViewItem {
         needsLayout = false;
     }
 
-    public void update(float bearing, CharSequence distance) {
-        if (!distanceOrBearingChanged) return;
+    public boolean update(float bearing, CharSequence distance) {
+        if (!distanceOrBearingChanged) return false;
         arrowImage.setRotation(bearing);
         distanceLabel.setText(distance);
 
         arrowImage.layout();
         distanceLabel.layout();
         distanceOrBearingChanged = false;
+        return true;
     }
 
     public void posOrBearingChanged() {

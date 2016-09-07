@@ -2,10 +2,7 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
@@ -101,7 +98,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
 
                         //update item
-                        ((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.DistanceString(result[0]));
+                        if (((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.DistanceString(result[0])))
+                            Gdx.graphics.requestRendering();
                     }
 
                     @Override
@@ -166,6 +164,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
             item.posOrBearingChanged();
         }
         allItems.end();
+        Gdx.graphics.requestRendering();
     }
 
     @Override
