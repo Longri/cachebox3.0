@@ -26,6 +26,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.types.CacheTypes;
 
@@ -44,13 +45,15 @@ public class CacheListItem extends ListViewItem {
     private final int difficulty;
     private final int terrain;
     private final int vote;
+    private final int size;
 
 
-    public CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain, int vote) {
+    public CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain, int vote, int size) {
         super(listIndex);
         this.difficulty = difficulty;
         this.terrain = terrain;
         this.vote = vote;
+        this.size = size;
         this.style = VisUI.getSkin().get("default", CacheListItemStyle.class);
         this.type = type;
         this.cacheName = cacheName;
@@ -58,7 +61,7 @@ public class CacheListItem extends ListViewItem {
 
 
     public void layout() {
-//        this.setDebug(true, true);
+        this.setDebug(true, false);
         if (!needsLayout) {
             super.layout();
             return;
@@ -72,7 +75,7 @@ public class CacheListItem extends ListViewItem {
         iconTable.pack();
         iconTable.layout();
 
-        this.add(iconTable).left().top();
+        this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGIN);
 
 
         Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
@@ -105,6 +108,11 @@ public class CacheListItem extends ListViewItem {
         line1.add(dLabel);
         Stars difficultyStars = new Stars(this.difficulty);
         line1.add(difficultyStars);
+        VisLabel sLabel = new VisLabel("S", distanceLabelStyle);
+        line1.add(sLabel).padLeft(CB.scaledSizes.MARGIN);
+        CacheSizeWidget sizeWidget = new CacheSizeWidget(this.size);
+        line1.add(sizeWidget).padLeft(CB.scaledSizes.MARGIN_HALF);
+
 
         this.add(line1).colspan(3).align(Align.left);
         this.row();
