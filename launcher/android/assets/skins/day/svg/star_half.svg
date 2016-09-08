@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="54.0954" height="51.557" viewBox="0 0 54.10 51.56" enable-background="new 0 0 54.10 51.56" xml:space="preserve">
+	<g>
+		<radialGradient id="SVGID_Fill1_" cx="39.3898" cy="47.7161" r="44.3231" gradientUnits="userSpaceOnUse" gradientTransform="rotate(15.126597 39.389832 47.716133)">
+			<stop offset="0" stop-color="#8E1400" stop-opacity="1"/>
+			<stop offset="0.387213" stop-color="#882200" stop-opacity="1"/>
+			<stop offset="0.520927" stop-color="#823100" stop-opacity="1"/>
+			<stop offset="0.706977" stop-color="#E80000" stop-opacity="1"/>
+			<stop offset="0.916279" stop-color="#EE3100" stop-opacity="1"/>
+			<stop offset="0.986046" stop-color="#F46200" stop-opacity="1"/>
+		</radialGradient>
+		<path fill="url(#SVGID_Fill1_)" fill-rule="evenodd" stroke-width="1.5" stroke-linejoin="round" stroke="#88006A" stroke-opacity="1" d="M 26.9518,0.749992L 20.8552,19.9086L 0.75,19.9534L 17.0869,31.6719L 10.9167,50.807L 27.1101,38.8908"/>
+		<radialGradient id="SVGID_Fill2_" cx="39.4231" cy="47.7245" r="44.3225" gradientUnits="userSpaceOnUse" gradientTransform="rotate(15.087542 39.423141 47.724495)">
+			<stop offset="0" stop-color="#CCD3D3" stop-opacity="1"/>
+			<stop offset="0.387213" stop-color="#CAD1D1" stop-opacity="1"/>
+			<stop offset="0.520927" stop-color="#C9CFCF" stop-opacity="1"/>
+			<stop offset="0.706977" stop-color="#DDE8E8" stop-opacity="1"/>
+			<stop offset="0.916279" stop-color="#DFEAEA" stop-opacity="1"/>
+			<stop offset="0.986046" stop-color="#E1EDED" stop-opacity="1"/>
+		</radialGradient>
+		<path fill="url(#SVGID_Fill2_)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#C9CFCF" stroke-opacity="1" d="M 27.1434,38.8992L 43.4352,50.6804L 37.1063,31.5973L 53.3454,19.7435L 33.2406,19.8656L 26.9851,0.758339"/>
+	</g>
+</svg>

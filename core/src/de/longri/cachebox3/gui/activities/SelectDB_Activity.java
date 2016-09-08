@@ -79,15 +79,8 @@ public class SelectDB_Activity extends ActivityBase {
         this.returnListener = returnListener;
 
         MustSelect = mustSelect;
-        DBPath = Utils.GetDirectoryName(Config.DatabasePath.getValue());
 
-        if (DBPath.endsWith(".db3")) {
-            Config.DatabasePath.setValue(DBPath);
-            Config.AcceptChanges();
-            DBPath = Utils.GetDirectoryName(DBPath);
-        }
-
-        String DBFile = Utils.GetFileName(Config.DatabasePath.getValue());
+        String DBFile = Config.DatabaseName.getValue();
 
         final FileList files = new FileList(CB.WorkPath, "DB3", true);
         fileInfos = new String[files.size];
@@ -139,8 +132,7 @@ public class SelectDB_Activity extends ActivityBase {
 
                                 FilterInstances.setLastFilter(new FilterProperties(Config.FilterNew.getValue()));
 
-                                String database = CB.WorkPath + CB.fs + NewDB_Name + ".db3";
-                                Config.DatabasePath.setValue(database);
+                                Config.DatabaseName.setValue(NewDB_Name + ".db3");
 
                                 // OwnRepository?
                                 if (ownRepository) {
@@ -180,7 +172,7 @@ public class SelectDB_Activity extends ActivityBase {
                                     return true;
 
                                 Config.AcceptChanges();
-                                selectDB(true);
+                                selectDB();
 
                                 break;
                             case ButtonDialog.BUTTON_NEUTRAL: // cancel clicked
@@ -208,7 +200,7 @@ public class SelectDB_Activity extends ActivityBase {
                     CB.viewmanager.toast("Please select Database!", ViewManager.ToastLength.NORMAL);
                     return;
                 }
-                selectDB(false);
+                selectDB();
             }
         });
 
@@ -257,7 +249,7 @@ public class SelectDB_Activity extends ActivityBase {
         public void run() {
             if (autoStartCounter == 0) {
                 stopTimer();
-                selectDB(false);
+                selectDB();
             } else {
                 try {
                     autoStartCounter--;
@@ -265,7 +257,7 @@ public class SelectDB_Activity extends ActivityBase {
                 } catch (Exception e) {
                     autoStartCounter = 0;
                     stopTimer();
-                    selectDB(false);
+                    selectDB();
                 }
             }
         }
@@ -333,7 +325,7 @@ public class SelectDB_Activity extends ActivityBase {
         lvFiles.setSelectedItemVisible();
     }
 
-    protected void selectDB(boolean useConfigPath) {
+    protected void selectDB() {
         if (lvFiles.getSelectedItem() == null) {
             CB.viewmanager.toast("no DB selected", ViewManager.ToastLength.SHORT);
             return;
@@ -342,13 +334,10 @@ public class SelectDB_Activity extends ActivityBase {
         Config.MultiDBAutoStartTime.setValue(autoStartTime);
         Config.MultiDBAsk.setValue(autoStartTime >= 0);
 
-        String name = useConfigPath ? "" : ((SelectDBItem) lvFiles.getSelectedItem()).getFileName();
-        String path = useConfigPath ? Config.DatabasePath.getValue() : DBPath + "/" + name;
+        String name = ((SelectDBItem) lvFiles.getSelectedItem()).getFileName();
 
-        if (!useConfigPath) {
-            Config.DatabasePath.setValue(path);
-            Config.AcceptChanges();
-        }
+        Config.DatabaseName.setValue(name);
+        Config.AcceptChanges();
 
         //TODO ManagerBase.Manager.initMapPacks();
         finish();

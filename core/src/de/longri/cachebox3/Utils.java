@@ -243,6 +243,7 @@ public class Utils {
 
     /**
      * Returns the MD5 hash from given fileHandle, or an empty String with any Exception
+     *
      * @param fileHandle
      * @return
      */
@@ -362,5 +363,9 @@ public class Utils {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static String GetFileName(FileHandle fileHandle) {
+        return GetFileName(fileHandle.name());
     }
 }

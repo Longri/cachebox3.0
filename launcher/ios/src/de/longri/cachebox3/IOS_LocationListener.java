@@ -16,18 +16,20 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
+import de.longri.cachebox3.locator.Locator;
 import org.robovm.apple.corelocation.*;
 import org.robovm.apple.dispatch.DispatchQueue;
 import org.robovm.apple.foundation.Foundation;
 import org.robovm.apple.foundation.NSArray;
 import org.robovm.apple.foundation.NSError;
 import org.robovm.apple.foundation.NSString;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 26.07.2016.
  */
 public class IOS_LocationListener {
-
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(IOS_LocationListener.class);
     private static double ACCURACY = CLLocationAccuracy.Best;
     private static double DISTANCE_FILTER = 5;
 
@@ -57,6 +59,7 @@ public class IOS_LocationListener {
 
                 // Once configured, the location manager must be "started".
                 locationManager.startUpdatingLocation();
+                locationManager.startUpdatingHeading();
                 Gdx.app.log("locationManager", "startet");
             }
         });
@@ -90,11 +93,33 @@ public class IOS_LocationListener {
             cbLocation.setBearing((float) newLocation.getCourse());
             cbLocation.setAltitude(newLocation.getAltitude());
             cbLocation.setProvider(provider);
-
+            log.trace("Update location:" + cbLocation.toString());
             de.longri.cachebox3.locator.Locator.setNewLocation(cbLocation);
 
 
         }
+
+        /**
+         * This delegate method is invoked when the location manager has
+         * heading data.
+         */
+        @Override
+        public void didUpdateHeading(CLLocationManager manager, CLHeading newHeading) {
+            Locator.CompassType type = Locator.CompassType.any;
+            float heading = 0f;
+
+            if (newHeading.getHeadingAccuracy() > 0) {
+                type = Locator.CompassType.GPS;
+                heading = (float) newHeading.getTrueHeading();
+            } else {
+                type = Locator.CompassType.Magnetic;
+                heading = (float) newHeading.getMagneticHeading();
+            }
+
+            log.trace("Update Heading:" + type.toString() + " / " + heading);
+            de.longri.cachebox3.locator.Locator.setHeading((float) heading, type);
+        }
+
 
         @Override
         public void didFail(CLLocationManager manager, NSError error) {

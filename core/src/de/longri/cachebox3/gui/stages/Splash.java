@@ -421,7 +421,7 @@ public class Splash extends NamedStage {
 //            Config.AcceptChanges();
 //        }
 //
-//        Database.Data.StartUp(Config.DatabasePath.getValue());
+//        Database.Data.StartUp(Config.DatabaseName.getValue());
 //
 //        Config.settings.ReadFromDB();
 //

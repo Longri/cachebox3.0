@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -51,7 +52,11 @@ public class ListView extends WidgetGroup {
     SelectableType selectionType = NONE;
     private FloatArray itemHeights = new FloatArray();
     private FloatArray itemYPos = new FloatArray();
-    private Array<ListViewItem> itemViews = new Array<ListViewItem>();
+    private SnapshotArray<ListViewItem> itemViews = new SnapshotArray<ListViewItem>();
+
+    public SnapshotArray<ListViewItem> items() {
+        return itemViews;
+    }
 
     public enum SelectableType {
         NONE, SINGLE, MULTI
@@ -299,7 +304,7 @@ public class ListView extends WidgetGroup {
     }
 
     public ListViewItem getSelectedItem() {
-        if(this.selectedItemList.size==0)return null;
+        if (this.selectedItemList.size == 0) return null;
         return this.selectedItemList.first();
     }
 

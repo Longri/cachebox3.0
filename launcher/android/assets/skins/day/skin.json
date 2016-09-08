@@ -232,6 +232,86 @@
     "sliderKnob": {
       "path": "skins/day/svg/sliderKnob.svg",
       "scale": 0.3
+    },
+    "traddi": {
+      "path": "skins/day/svg/traddi.svg",
+      "scale": 0.2
+    },
+    "multi": {
+      "path": "skins/day/svg/multi.svg",
+      "scale": 0.2
+    },
+    "myterie": {
+      "path": "skins/day/svg/myterie.svg",
+      "scale": 0.2
+    },
+    "earth": {
+      "path": "skins/day/svg/earth.svg",
+      "scale": 0.2
+    },
+    "event": {
+      "path": "skins/day/svg/event.svg",
+      "scale": 0.2
+    },
+    "mega": {
+      "path": "skins/day/svg/mega.svg",
+      "scale": 0.2
+    },
+    "giga": {
+      "path": "skins/day/svg/giga.svg",
+      "scale": 0.2
+    },
+    "cito": {
+      "path": "skins/day/svg/cito.svg",
+      "scale": 0.2
+    },
+    "letterbox": {
+      "path": "skins/day/svg/letterbox.svg",
+      "scale": 0.2
+    },
+    "whereigo": {
+      "path": "skins/day/svg/whereigo.svg",
+      "scale": 0.2
+    },
+    "virtual": {
+      "path": "skins/day/svg/virtual.svg",
+      "scale": 0.2
+    },
+    "arrow-compass": {
+      "path": "skins/day/svg/arrow-compass.svg",
+      "scale": 0.15
+    },
+    "star": {
+      "path": "skins/day/svg/star.svg",
+      "scale": 0.25
+    },
+    "star_half": {
+      "path": "skins/day/svg/star_half.svg",
+      "scale": 0.25
+    },
+    "star0": {
+      "path": "skins/day/svg/star0.svg",
+      "scale": 0.25
+    },
+    "micro": {
+      "path": "skins/day/svg/micro.svg",
+      "scale": 0.25
+    },
+    "small": {
+      "path": "skins/day/svg/small.svg",
+      "scale": 0.25
+    },
+    "regular": {
+      "path": "skins/day/svg/regular.svg",
+      "scale": 0.25
+    },
+    "large": {
+      "path": "skins/day/svg/large.svg",
+      "scale": 0.25
+    },
+    "other": {
+      "path": "skins/day/svg/other.svg",
+      "scale": 0.25
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
@@ -675,6 +755,15 @@
       "checkBackgroundOver": "check_off",
       "checkBackgroundDown": "check_off",
       "tick": "check_on"
+    }
+  },
+  "de.longri.cachebox3.gui.views.CacheListItem$CacheListItemStyle": {
+    "default": {
+      "nameFont": "normal_font",
+      "nameFontColor": "font_color",
+      "arrow": "arrow-compass",
+      "distanceFont": "settings_default_value_font",
+      "distanceFontColor": "font_color"
     }
   }
 }

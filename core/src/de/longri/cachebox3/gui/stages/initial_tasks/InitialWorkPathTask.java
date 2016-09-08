@@ -42,6 +42,8 @@ public class InitialWorkPathTask extends AbstractInitTask {
 
         CB.WorkPath = PlatformConnector.getWorkPath();
 
+        log.info("WorkPath set to :" + CB.WorkPath);
+
         boolean nomedia = CB.platform == CB.Platform.ANDROID;
 
         // initial Database on user path
@@ -54,7 +56,6 @@ public class InitialWorkPathTask extends AbstractInitTask {
         } catch (SQLiteGdxException e) {
             log.error("can't open config.db3", e);
         }
-
 
 
         try {
