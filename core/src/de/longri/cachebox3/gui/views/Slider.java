@@ -34,12 +34,34 @@ public class Slider extends WidgetGroup {
     private SliderStyle style;
     private boolean needsLayout = true;
     private final NameWidget nameWidget;
+    private final WidgetGroup content;
     private float sliderPos, maxSliderPos, minSliderPos;
+    private final float nameWidgetHeight;
 
     public Slider() {
         style = VisUI.getSkin().get("default", SliderStyle.class);
         nameWidget = new NameWidget();
+        nameWidgetHeight = CB.scaledSizes.BUTTON_HEIGHT;
+        content = new WidgetGroup() {
+            @Override
+            public void draw(Batch batch, float parentAlpha) {
+                validate();
+                drawBackground(batch, parentAlpha, getX(), getY());
+                super.draw(batch, parentAlpha);
+            }
+
+            private void drawBackground(Batch batch, float parentAlpha, float x, float y) {
+                if (style.background == null) return;
+                Color color = getColor();
+                batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+                style.background.draw(batch, x, y, getWidth(), getHeight());
+            }
+
+        };
+
+
         super.addActor(nameWidget);
+        super.addActor(content);
         super.setTouchable(Touchable.childrenOnly);
         super.setLayoutEnabled(true);
     }
@@ -51,7 +73,8 @@ public class Slider extends WidgetGroup {
             super.layout();
             return;
         }
-        nameWidget.setBounds(0, sliderPos, this.getWidth(), CB.scaledSizes.BUTTON_HEIGHT);
+        nameWidget.setBounds(0, sliderPos, this.getWidth(), nameWidgetHeight);
+        content.setBounds(0, sliderPos + nameWidgetHeight, this.getWidth(), this.getHeight());
         needsLayout = false;
         super.layout();
     }
@@ -64,11 +87,11 @@ public class Slider extends WidgetGroup {
         super.invalidate();
 
 
-        maxSliderPos = getHeight() - CB.scaledSizes.BUTTON_HEIGHT;
+        maxSliderPos = getHeight() - nameWidgetHeight;
         minSliderPos = 0;
 
         //set slider pos to top
-        setSliderPos(getHeight() - CB.scaledSizes.BUTTON_HEIGHT);
+        setSliderPos(getHeight() - nameWidgetHeight);
     }
 
     private void setSliderPos(float pos) {
