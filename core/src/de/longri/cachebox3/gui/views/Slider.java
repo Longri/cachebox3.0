@@ -22,11 +22,13 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.widgets.ScrollLabel;
 import de.longri.cachebox3.settings.Config;
 
 /**
@@ -73,6 +75,8 @@ public class Slider extends WidgetGroup {
         super.addActor(content);
         super.setTouchable(Touchable.childrenOnly);
         super.setLayoutEnabled(true);
+
+
     }
 
 
@@ -86,6 +90,9 @@ public class Slider extends WidgetGroup {
         content.setBounds(0, sliderPos + nameWidgetHeight, this.getWidth(), this.getHeight());
         needsLayout = false;
         super.layout();
+
+//                nameWidget.setCacheName("AnfangTest   Test Test   Test   Test Test   Test   Test TestEnde");
+//        nameWidget.setCacheName("AnfangTest  TestEnde");
     }
 
     @Override
@@ -151,8 +158,9 @@ public class Slider extends WidgetGroup {
      */
     private class NameWidget extends WidgetGroup {
 
-        private CharSequence name;
+
         private Drawable background;
+        private final ScrollLabel nameLabel;
 
         private NameWidget() {
             background = style.slider;
@@ -166,10 +174,15 @@ public class Slider extends WidgetGroup {
                     checkSlideBack();
                 }
             });
+            Label.LabelStyle labelStyle = new Label.LabelStyle();
+            labelStyle.font = style.font;
+            labelStyle.fontColor = style.fontColor;
+            nameLabel = new ScrollLabel("", labelStyle);
+            this.addActor(nameLabel);
         }
 
-        private void setName(CharSequence name) {
-            this.name = name;
+        private void setCacheName(CharSequence name) {
+            nameLabel.setText(name);
         }
 
         @Override
@@ -195,7 +208,11 @@ public class Slider extends WidgetGroup {
         @Override
         protected void positionChanged() {
             setSliderPos(this.getY());
+        }
 
+        @Override
+        protected void sizeChanged() {
+            nameLabel.setBounds(CB.scaledSizes.MARGIN_HALF, 0, this.getWidth() - CB.scaledSizes.MARGIN, getHeight());
         }
     }
 
