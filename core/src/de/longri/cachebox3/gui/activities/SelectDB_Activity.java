@@ -99,8 +99,7 @@ public class SelectDB_Activity extends ActivityBase {
         lvFiles.setAdapter(lvAdapter);
         this.addActor(lvFiles);
 
-        lvFiles.setSelection(selectedIndex);
-
+        if (selectedIndex > -1) lvFiles.setSelection(selectedIndex);
 
         bNew = new VisTextButton(Translation.Get("selectDB.bNew"));
         bSelect = new VisTextButton(Translation.Get("selectDB.bSelect"));

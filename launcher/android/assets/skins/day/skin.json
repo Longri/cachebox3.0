@@ -765,5 +765,13 @@
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color"
     }
+  },
+  "de.longri.cachebox3.gui.views.Slider$SliderStyle": {
+    "default": {
+      "background": "dialog_stage_background",
+      "slider": "drawable_default_button",
+      "font": "normal_font",
+      "fontColor": "font_color"
+    }
   }
 }

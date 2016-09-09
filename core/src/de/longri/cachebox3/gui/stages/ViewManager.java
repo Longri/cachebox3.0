@@ -30,6 +30,7 @@ import de.longri.cachebox3.gui.actions.*;
 import de.longri.cachebox3.gui.actions.show_vies.*;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.gui.views.Slider;
 import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
@@ -51,10 +52,17 @@ public class ViewManager extends NamedStage {
     private final ButtonBar mainButtonBar;
     private GestureButton db_button, cache_button, navButton, tool_button, misc_button;
     private VisLabel toastLabel;
+    private Slider slider;
 
 
     public ViewManager() {
         super("ViewManager");
+
+        Gdx.app.log("ScaleFactor", Float.toString(CB.getScaledFloat(1)));
+        Gdx.app.log("Width", Float.toString(Gdx.graphics.getWidth()));
+        Gdx.app.log("Height", Float.toString(Gdx.graphics.getHeight()));
+        Gdx.app.log("PPI", Float.toString(Gdx.graphics.getPpiX()));
+
 
         //set this to static CB for global access
         CB.viewmanager = this;
@@ -62,11 +70,10 @@ public class ViewManager extends NamedStage {
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
+        slider = new Slider();
+        slider.setBounds(0, 0, width, height);
+        this.addActor(slider);
 
-        Gdx.app.log("ScaleFactor", Float.toString(CB.getScaledFloat(1)));
-        Gdx.app.log("Width", Float.toString(Gdx.graphics.getWidth()));
-        Gdx.app.log("Height", Float.toString(Gdx.graphics.getHeight()));
-        Gdx.app.log("PPI", Float.toString(Gdx.graphics.getPpiX()));
 
         db_button = new GestureButton("db");
         cache_button = new GestureButton("cache");
@@ -84,6 +91,8 @@ public class ViewManager extends NamedStage {
         mainButtonBar.setBounds(0, 0, width, mainButtonBar.getPrefHeight());
         this.addActor(mainButtonBar);
         mainButtonBar.layout();
+
+
         initialActionButtons();
         showView(new AboutView());
     }
@@ -108,6 +117,9 @@ public class ViewManager extends NamedStage {
 
         //bring ButtonBar to Front
         mainButtonBar.toFront();
+
+        // and over all the slider
+        slider.toFront();
 
         //select main button
         boolean buttonFound = false;
