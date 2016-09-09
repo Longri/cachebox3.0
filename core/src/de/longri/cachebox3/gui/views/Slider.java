@@ -18,18 +18,23 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.settings.Config;
 
 /**
  * Created by Longri on 09.09.16.
  */
 public class Slider extends WidgetGroup {
+
+    public final static float ANIMATION_TIME = 0.3f;
 
     private SliderStyle style;
     private boolean needsLayout = true;
@@ -37,6 +42,10 @@ public class Slider extends WidgetGroup {
     private final WidgetGroup content;
     private float sliderPos, maxSliderPos, minSliderPos;
     private final float nameWidgetHeight;
+    private boolean swipeUp;
+    private boolean swipeDown;
+    private float quickButtonHeight;
+    private float quickButtonMaxHeight;
 
     public Slider() {
         style = VisUI.getSkin().get("default", SliderStyle.class);
@@ -79,13 +88,10 @@ public class Slider extends WidgetGroup {
         super.layout();
     }
 
-    /**
-     * Called when the actor's size has been changed.
-     */
+    @Override
     protected void sizeChanged() {
+        super.sizeChanged();
         needsLayout = true;
-        super.invalidate();
-
 
         maxSliderPos = getHeight() - nameWidgetHeight;
         minSliderPos = 0;
@@ -94,12 +100,49 @@ public class Slider extends WidgetGroup {
         setSliderPos(getHeight() - nameWidgetHeight);
     }
 
+
     private void setSliderPos(float pos) {
+        if (sliderPos == pos) return;
+
         sliderPos = Math.max(Math.min(maxSliderPos, pos), minSliderPos);
-
-
         needsLayout = true;
         super.invalidate();
+    }
+
+    private void checkSlideBack() {
+        boolean QuickButtonShow = Config.quickButtonShow.getValue();
+
+        // check if QuickButtonList snap in
+        if (this.getHeight() - (nameWidgetHeight + sliderPos) >= (quickButtonMaxHeight * 0.5) && QuickButtonShow) {
+            quickButtonHeight = quickButtonMaxHeight;
+            Config.quickButtonLastShow.setValue(true);
+            Config.AcceptChanges();
+        } else {
+            quickButtonHeight = 0;
+            Config.quickButtonLastShow.setValue(false);
+            Config.AcceptChanges();
+        }
+
+        if (swipeUp || swipeDown) {
+            if (swipeUp) {
+                startAnimationTo(QuickButtonShow ? quickButtonHeight : 0);
+            } else {
+                startAnimationTo((int) (getHeight() - nameWidgetHeight));
+            }
+            swipeUp = swipeDown = false;
+
+        } else {
+            if (sliderPos > getHeight() * 0.5) {
+                startAnimationTo((int) (getHeight() - nameWidgetHeight - (QuickButtonShow ? quickButtonHeight : 0)));
+            } else {
+                startAnimationTo(0);
+
+            }
+        }
+    }
+
+    private void startAnimationTo(float targetPos) {
+        nameWidget.addAction(Actions.moveTo(0, targetPos, ANIMATION_TIME, Interpolation.exp10Out));
     }
 
 
@@ -116,6 +159,11 @@ public class Slider extends WidgetGroup {
             this.addListener(new DragListener() {
                 public void drag(InputEvent event, float x, float y, int pointer) {
                     setSliderPos(getY() + y - getTouchDownY());
+                }
+
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchUp(event, x, y, pointer, button);
+                    checkSlideBack();
                 }
             });
         }
@@ -143,6 +191,12 @@ public class Slider extends WidgetGroup {
             background.draw(batch, x, y, getWidth(), getHeight());
         }
 
+
+        @Override
+        protected void positionChanged() {
+            setSliderPos(this.getY());
+
+        }
     }
 
 
