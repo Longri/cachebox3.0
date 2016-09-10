@@ -394,7 +394,6 @@ public class SelectDB_Activity extends ActivityBase {
 
         @Override
         public void update(ListViewItem view) {
-            log.debug("update item");
         }
 
         @Override
