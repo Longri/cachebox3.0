@@ -274,15 +274,12 @@ public class ListView extends WidgetGroup {
                         if (!selectedItemList.contains(item, false)) {
                             selectedItemList.clear();
                             selectedItemList.add(item);
-                            log.debug("select item:" + item.toString());
                         }
                     } else {
                         if (selectedItemList.contains(item, false)) {
                             selectedItemList.removeValue(item, true);
-                            log.debug("unselect item:" + item.toString());
                         } else {
                             selectedItemList.add(item);
-                            log.debug("select item:" + item.toString());
                         }
                     }
                     Gdx.graphics.requestRendering();

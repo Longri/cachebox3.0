@@ -198,13 +198,13 @@ public class CB {
     }
 
     public static void callQuit() {
-        //TODO save last selected cache
-//        if (CB.isSetSelectedCache()) {
-//            // speichere selektierten Cache, da nicht alles über die SelectedCacheEventList läuft
-//            Config.LastSelectedCache.setValue(CB.getSelectedCache().getGcCode());
-//            Config.AcceptChanges();
-//            Log.debug(log, "LastSelectedCache = " + CB.getSelectedCache().getGcCode());
-//        }
+
+        if (CB.isSetSelectedCache()) {
+            // speichere selektierten Cache, da nicht alles über die SelectedCacheEventList läuft
+            Config.LastSelectedCache.setValue(CB.getSelectedCache().getGcCode());
+            Config.AcceptChanges();
+            log.debug("LastSelectedCache = " + CB.getSelectedCache().getGcCode());
+        }
 
         Gdx.app.exit();
     }

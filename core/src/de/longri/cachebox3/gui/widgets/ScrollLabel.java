@@ -39,6 +39,8 @@ public class ScrollLabel extends Label {
     private LabelStyle style;
     private final AnimationActor animationActor = new AnimationActor();
 
+    private RepeatAction animationSequens;
+
     public ScrollLabel(CharSequence text, LabelStyle style) {
         super(text, style);
         this.style = style;
@@ -79,10 +81,12 @@ public class ScrollLabel extends Label {
 
     public void setText(CharSequence newText) {
         super.setText(newText);
-
         super.layout();
-        GlyphLayout layout = super.getGlyphLayout();
 
+        //remove maybe running animations
+        animationActor.removeAction(animationSequens);
+
+        GlyphLayout layout = super.getGlyphLayout();
         if (layout.width > this.getWidth()) {
             super.getParent().addActor(animationActor);
             super.setAlignment(Align.left);
@@ -90,8 +94,7 @@ public class ScrollLabel extends Label {
             float animationWidth = layout.width - this.getWidth();
             float animationTime = CB.getScaledFloat(0.03f) * animationWidth;
 
-
-            RepeatAction animationSequens = Actions.forever(Actions.sequence(
+            animationSequens = Actions.forever(Actions.sequence(
                     Actions.moveTo(0, 0),
                     Actions.delay(1),
                     Actions.moveTo(-animationWidth, 0, animationTime),
@@ -103,7 +106,8 @@ public class ScrollLabel extends Label {
             super.setAlignment(Align.center);
         }
 
-
+        // reset last scroll position
+        scrollPosition = 0;
     }
 
     private float scrollPosition = 0;

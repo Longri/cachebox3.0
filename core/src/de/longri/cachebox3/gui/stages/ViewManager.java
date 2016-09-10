@@ -98,16 +98,19 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         this.addActor(mainButtonBar);
         mainButtonBar.layout();
 
+        initialActionButtons();
+        showView(new AboutView());
+
 
         //register SelectedCacheChangedEvent
         SelectedCacheEventList.Add(this);
 
-        initialActionButtons();
-        showView(new AboutView());
+        //set selected Cache to slider
+        selectedCacheChanged(CB.getSelectedCache(), CB.getSelectedWaypoint());
     }
 
     @Override
-    public void SelectedCacheChanged(Cache selectedCache, Waypoint waypoint) {
+    public void selectedCacheChanged(Cache selectedCache, Waypoint waypoint) {
         // set Cache name to Slider
         CharSequence text = CacheTypes.toShortString(selectedCache)
                 + terrDiffToShortString(selectedCache.getDifficulty()) + "/"

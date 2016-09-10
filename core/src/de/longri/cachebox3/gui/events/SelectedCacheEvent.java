@@ -22,5 +22,5 @@ import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
 
 public interface SelectedCacheEvent {
-	public void SelectedCacheChanged(Cache selectedCache, Waypoint waypoint);
+	public void selectedCacheChanged(Cache selectedCache, Waypoint waypoint);
 }

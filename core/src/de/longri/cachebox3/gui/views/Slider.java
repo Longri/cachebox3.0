@@ -102,6 +102,9 @@ public class Slider extends WidgetGroup {
 
         //set slider pos to top
         setSliderPos(getHeight() - nameWidgetHeight);
+
+        //call layout for set size direct
+        layout();
     }
 
     public void setCacheName(CharSequence cacheName) {
