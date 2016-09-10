@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
@@ -145,6 +144,17 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         CB.setSelectedCache(cache);
                     }
                 });
+
+                int selectedIndex = 0;
+                for (Cache cache : Database.Data.Query) {
+                    if (cache.equals(CB.getSelectedCache())) {
+                        break;
+                    }
+                    selectedIndex++;
+                }
+
+                listView.setSelectedItem(selectedIndex);
+                listView.setSelectedItemVisible();
             }
         });
         thread.start();

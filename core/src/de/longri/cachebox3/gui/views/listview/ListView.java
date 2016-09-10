@@ -56,6 +56,10 @@ public class ListView extends WidgetGroup {
         return itemViews;
     }
 
+    public void setSelectedItem(int selectedIndex) {
+        selectedItemList.add(itemViews.get(selectedIndex));
+    }
+
     public enum SelectableType {
         NONE, SINGLE, MULTI
     }
@@ -308,7 +312,7 @@ public class ListView extends WidgetGroup {
         float scrollPos = 0;
         if (item != null) {
             int index = item.getListIndex();
-            scrollPos = itemYPos.get(index);
+            scrollPos = completeHeight - (itemYPos.get(index) + item.getHeight());
         }
         this.setScrollPos(scrollPos);
     }
