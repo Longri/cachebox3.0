@@ -90,9 +90,6 @@ public class Slider extends WidgetGroup {
         content.setBounds(0, sliderPos + nameWidgetHeight, this.getWidth(), this.getHeight());
         needsLayout = false;
         super.layout();
-
-//                nameWidget.setCacheName("AnfangTest   Test Test   Test   Test Test   Test   Test TestEnde");
-//        nameWidget.setCacheName("AnfangTest  TestEnde");
     }
 
     @Override
@@ -107,6 +104,9 @@ public class Slider extends WidgetGroup {
         setSliderPos(getHeight() - nameWidgetHeight);
     }
 
+    public void setCacheName(CharSequence cacheName) {
+        nameWidget.setCacheName(cacheName);
+    }
 
     private void setSliderPos(float pos) {
         if (sliderPos == pos) return;

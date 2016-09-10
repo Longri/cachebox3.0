@@ -28,8 +28,6 @@ import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
-import com.kotcrab.vis.ui.widget.VisTable;
-import de.longri.cachebox3.gui.menu.MenuItem;
 import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.NONE;
@@ -62,6 +60,20 @@ public class ListView extends WidgetGroup {
         NONE, SINGLE, MULTI
     }
 
+    public interface SelectionChangedEvent {
+        public void selectionChanged();
+    }
+
+    private final Array<SelectionChangedEvent> changedEventListeners = new Array<SelectionChangedEvent>();
+
+    public void addSelectionChangedEventListner(SelectionChangedEvent event) {
+        if (!changedEventListeners.contains(event, true))
+            changedEventListeners.add(event);
+    }
+
+    public void removeSelectionChangedEventListner(SelectionChangedEvent event) {
+        changedEventListeners.removeValue(event, true);
+    }
 
     public ListView() {
         this(VisUI.getSkin().get("default", ListView.ListViewStyle.class));
@@ -84,6 +96,7 @@ public class ListView extends WidgetGroup {
 
     public void setSelectable(SelectableType selectionType) {
         this.selectionType = selectionType;
+        // TODO: add clicklistener
     }
 
     public void setBackground(Drawable background) {
@@ -146,7 +159,7 @@ public class ListView extends WidgetGroup {
             itemViews.add(view);
             itemHeights.add(view.getHeight() + padBottom + padTop);
             itemGroup.addActor(view);
-
+//            itemGroup.setTouchable(Touchable.enabled);
         }
 
 
@@ -232,6 +245,9 @@ public class ListView extends WidgetGroup {
                             item.setBackground(style.firstItem);
                         }
                     }
+
+                    //add ClickListener
+                    item.addListener(onListItemClickListener);
                 }
                 adapter.update(item);
             }
@@ -270,6 +286,11 @@ public class ListView extends WidgetGroup {
                         }
                     }
                     Gdx.graphics.requestRendering();
+
+                    //call selection changed event
+                    for (int i = 0, n = changedEventListeners.size; i < n; i++) {
+                        changedEventListeners.get(i).selectionChanged();
+                    }
                 }
             }
         }

@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
@@ -130,6 +131,20 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     listView.setSelectable(ListView.SelectableType.SINGLE);
                     Gdx.graphics.requestRendering();
                 }
+
+                // add selection changed event listener
+                listView.addSelectionChangedEventListner(new ListView.SelectionChangedEvent() {
+                    @Override
+                    public void selectionChanged() {
+                        CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
+                        int selectedItemListIndex = selectedItem.getListIndex();
+
+                        Cache cache = Database.Data.Query.get(selectedItemListIndex);
+                        log.debug("Cache selection changed to: " + cache.toString());
+                        //set selected Cache global
+                        CB.setSelectedCache(cache);
+                    }
+                });
             }
         });
         thread.start();

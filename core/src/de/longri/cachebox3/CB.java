@@ -225,6 +225,10 @@ public class CB {
 
     public static void setSelectedCache(Cache cache) {
         selectedCache = cache;
+
+        //call selected cache changed event
+        SelectedCacheEventList.Call(selectedCache, selectedWaypoint);
+
     }
 
     public static void setSelectedWaypoint(Cache cache, Waypoint waypoint) {

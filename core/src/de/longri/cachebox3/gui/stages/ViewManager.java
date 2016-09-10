@@ -28,6 +28,8 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.*;
 import de.longri.cachebox3.gui.actions.show_vies.*;
+import de.longri.cachebox3.gui.events.SelectedCacheEvent;
+import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.Slider;
@@ -35,6 +37,10 @@ import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
+import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.CacheSizes;
+import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.Waypoint;
 import org.slf4j.LoggerFactory;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
@@ -42,7 +48,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 /**
  * Created by Longri on 20.07.2016.
  */
-public class ViewManager extends NamedStage {
+public class ViewManager extends NamedStage implements SelectedCacheEvent {
 
     final static org.slf4j.Logger log = LoggerFactory.getLogger(ViewManager.class);
 
@@ -93,8 +99,32 @@ public class ViewManager extends NamedStage {
         mainButtonBar.layout();
 
 
+        //register SelectedCacheChangedEvent
+        SelectedCacheEventList.Add(this);
+
         initialActionButtons();
         showView(new AboutView());
+    }
+
+    @Override
+    public void SelectedCacheChanged(Cache selectedCache, Waypoint waypoint) {
+        // set Cache name to Slider
+        CharSequence text = CacheTypes.toShortString(selectedCache)
+                + terrDiffToShortString(selectedCache.getDifficulty()) + "/"
+                + terrDiffToShortString(selectedCache.getTerrain()) + CacheSizes.toShortString(selectedCache)
+                + " " + selectedCache.getName();
+        slider.setCacheName(text);
+    }
+
+    private String terrDiffToShortString(float value) {
+        int intValue = (int) value;
+        String retValue;
+        if (value == intValue) {
+            retValue = "" + intValue;
+        } else {
+            retValue = "" + value;
+        }
+        return retValue;
     }
 
     public void showView(AbstractView view) {

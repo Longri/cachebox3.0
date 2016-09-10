@@ -61,7 +61,7 @@ public class CacheListItem extends ListViewItem {
 
 
     public void layout() {
-        this.setDebug(true, false);
+//        this.setDebug(true, false);
         if (!needsLayout) {
             super.layout();
             return;
