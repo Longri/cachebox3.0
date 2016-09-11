@@ -122,6 +122,11 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         return 0;
                     }
                 };
+
+                if (CacheListView.this.listView != null) {
+                    disposeListView();
+                }
+
                 CacheListView.this.listView = new ListView(listViewAdapter);
                 synchronized (CacheListView.this.listView) {
                     listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
@@ -161,6 +166,18 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         Gdx.graphics.requestRendering();
     }
 
+    private void disposeListView() {
+        final ListView disposeListView = CacheListView.this.listView;
+
+        Thread disposeThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                disposeListView.dispose();
+            }
+        });
+        disposeThread.start();
+    }
+
     private ListViewItem getCacheItem(int listIndex, final Cache cache) {
         ListViewItem listViewItem = new CacheListItem(listIndex, cache.Type, cache.getName(),
                 (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
@@ -170,7 +187,10 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     @Override
     public void dispose() {
-
+        disposeListView();
+        CacheListChangedEventList.Remove(this);
+        PositionChangedEventList.Remove(this);
+        listView = null;
     }
 
     /**
@@ -213,6 +233,13 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     public void SpeedChanged() {
         //do nothing
     }
+
+    @Override
+    public void onHide() {
+        super.onHide();
+
+    }
+
 
     @Override
     public String getReceiverName() {
