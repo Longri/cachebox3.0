@@ -47,10 +47,8 @@ import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
 public class CacheboxMain extends ApplicationAdapter {
 
     static {
-
         System.setProperty(DEFAULT_LOG_LEVEL_KEY, CB.USED_LOG_LEVEL);
         LibgdxLogger.init();
-
     }
 
     final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheboxMain.class);
@@ -60,7 +58,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     private Sprite FpsInfoSprite;
     private final Matrix4 NORMAL_MATRIX = new Matrix4().toNormalMatrix();
-
+    public static boolean drawMap = false;
     protected CacheboxMapAdapter mMap;
     protected GestureDetector mGestureDetector;
 
@@ -152,13 +150,15 @@ public class CacheboxMain extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ?
                 GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
 
+        if (drawMap) {
+            mMapRenderer.onDrawFrame();
+
+            //release Buffers from map renderer
+            GLState.bindVertexBuffer(0);
+            GLState.bindElementBuffer(0);
+        }
+
         StageManager.draw();
-
-        mMapRenderer.onDrawFrame();
-
-        //release Buffers from map renderer
-        GLState.bindVertexBuffer(0);
-        GLState.bindElementBuffer(0);
 
         if (CB.isTestVersion()) {
             float FpsInfoSize = CB.getScaledFloat(4f);

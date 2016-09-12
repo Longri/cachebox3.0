@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import de.longri.cachebox3.CacheboxMain;
+
 /**
  * Created by Longri on 24.07.16.
  */
@@ -22,6 +24,21 @@ public class MapView extends AbstractView {
 
     public MapView() {
         super("MapView");
+    }
+
+    @Override
+    protected void create() {
+
+    }
+
+    @Override
+    public void onShow() {
+        CacheboxMain.drawMap = true;
+    }
+
+    @Override
+    public void onHide() {
+        CacheboxMain.drawMap = false;
     }
 
 
