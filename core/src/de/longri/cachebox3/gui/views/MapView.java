@@ -19,9 +19,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import de.longri.cachebox3.CacheboxMain;
-import de.longri.cachebox3.gui.MapInputHandler;
 import de.longri.cachebox3.gui.stages.StageManager;
-import org.oscim.gdx.InputHandler;
 import org.oscim.gdx.LayerHandler;
 import org.oscim.gdx.MotionHandler;
 
