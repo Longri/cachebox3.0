@@ -17,6 +17,7 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -28,7 +29,10 @@ import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
+import org.oscim.gdx.LayerHandler;
+import org.oscim.gdx.MotionHandler;
 import org.oscim.layers.TileGridLayer;
+import org.oscim.layers.tile.bitmap.BitmapTileLayer;
 import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
@@ -59,8 +63,7 @@ public class CacheboxMain extends ApplicationAdapter {
     private Sprite FpsInfoSprite;
     private final Matrix4 NORMAL_MATRIX = new Matrix4().toNormalMatrix();
     public static boolean drawMap = false;
-    protected CacheboxMapAdapter mMap;
-    protected GestureDetector mGestureDetector;
+    public static CacheboxMapAdapter mMap;
 
     private MapRenderer mMapRenderer;
 
@@ -116,7 +119,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
         //mMap.getLayers().add(new BitmapTileLayer(mMap, new ImagicoLandcover(), 20));
         //mMap.getLayers().add(new BitmapTileLayer(mMap, new OSMTileSource(), 20));
-        //mMap.getLayers().add(new BitmapTileLayer(mMap, new ArcGISWorldShaded(), 20));
+       // mMap.getLayers().add(new BitmapTileLayer(mMap, new ArcGISWorldShaded(), 20));
 
         mMap.setMapPosition(0, 0, 1 << 2);
     }
@@ -144,21 +147,24 @@ public class CacheboxMain extends ApplicationAdapter {
     @Override
     public void render() {
         CB.stateTime += Gdx.graphics.getDeltaTime();
-        Gdx.gl.glClearColor(CB.backgroundColor.r, CB.backgroundColor.g, CB.backgroundColor.b, CB.backgroundColor.a);
-        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ?
-                GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
 
         if (drawMap) {
+            GLState.enableVertexArrays(-1,-1);
             mMapRenderer.onDrawFrame();
 
             //release Buffers from map renderer
             GLState.bindVertexBuffer(0);
             GLState.bindElementBuffer(0);
+        }else{
+              Gdx.gl.glClearColor(CB.backgroundColor.r, CB.backgroundColor.g, CB.backgroundColor.b, CB.backgroundColor.a);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+              Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ?
+                    GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
+
         }
 
-        StageManager.draw();
+      StageManager.draw();
 
         if (CB.isTestVersion()) {
             float FpsInfoSize = CB.getScaledFloat(4f);
