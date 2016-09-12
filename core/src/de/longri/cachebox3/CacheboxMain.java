@@ -21,12 +21,24 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
+import org.oscim.layers.TileGridLayer;
+import org.oscim.layers.tile.buildings.BuildingLayer;
+import org.oscim.layers.tile.vector.VectorTileLayer;
+import org.oscim.layers.tile.vector.labeling.LabelLayer;
+import org.oscim.map.Layers;
+import org.oscim.map.Map;
+import org.oscim.renderer.GLState;
+import org.oscim.renderer.MapRenderer;
+import org.oscim.theme.VtmThemes;
+import org.oscim.tiling.TileSource;
+import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLogger;
 
@@ -49,12 +61,24 @@ public class CacheboxMain extends ApplicationAdapter {
     private Sprite FpsInfoSprite;
     private final Matrix4 NORMAL_MATRIX = new Matrix4().toNormalMatrix();
 
+    protected CacheboxMapAdapter mMap;
+    protected GestureDetector mGestureDetector;
+
+    private MapRenderer mMapRenderer;
+
     @Override
     public void create() {
 
-        Gdx.graphics.setContinuousRendering(false);
-        Gdx.graphics.requestRendering();
+        mMap = new CacheboxMapAdapter();
+        mMapRenderer = new MapRenderer(mMap);
 
+        Gdx.graphics.setContinuousRendering(false);
+
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+
+        mMapRenderer.onSurfaceCreated();
+        setMapSize(w, h);
 
         StageManager.setMainStage(new Splash(new Splash.LoadReady() {
             @Override
@@ -72,7 +96,52 @@ public class CacheboxMain extends ApplicationAdapter {
                 });
             }
         }));
+
+        createLayers();
+        Gdx.graphics.requestRendering();
+
     }
+
+    private void setMapSize(int width, int height) {
+        mMap.setSize(width, height);
+        mMap.viewport().setScreenSize(width, height);
+        mMapRenderer.onSurfaceChanged(width, height);
+    }
+
+    public void createLayers() {
+        TileSource tileSource = new OSciMap4TileSource();
+
+        // TileSource tileSource = new MapFileTileSource();
+        // tileSource.setOption("file", "/home/jeff/germany.map");
+
+        initDefaultLayers(tileSource, false, true, true);
+
+        //mMap.getLayers().add(new BitmapTileLayer(mMap, new ImagicoLandcover(), 20));
+        //mMap.getLayers().add(new BitmapTileLayer(mMap, new OSMTileSource(), 20));
+        //mMap.getLayers().add(new BitmapTileLayer(mMap, new ArcGISWorldShaded(), 20));
+
+        mMap.setMapPosition(0, 0, 1 << 2);
+    }
+
+    protected void initDefaultLayers(TileSource tileSource, boolean tileGrid, boolean labels,
+                                     boolean buildings) {
+        Layers layers = mMap.layers();
+
+        if (tileSource != null) {
+            VectorTileLayer mapLayer = mMap.setBaseMap(tileSource);
+            mMap.setTheme(VtmThemes.DEFAULT);
+
+            if (buildings)
+                layers.add(new BuildingLayer(mMap, mapLayer));
+
+            if (labels)
+                layers.add(new LabelLayer(mMap, mapLayer));
+        }
+
+        if (tileGrid)
+            layers.add(new TileGridLayer(mMap));
+    }
+
 
     @Override
     public void render() {
@@ -83,9 +152,13 @@ public class CacheboxMain extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ?
                 GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
 
-
         StageManager.draw();
 
+        mMapRenderer.onDrawFrame();
+
+        //release Buffers from map renderer
+        GLState.bindVertexBuffer(0);
+        GLState.bindElementBuffer(0);
 
         if (CB.isTestVersion()) {
             float FpsInfoSize = CB.getScaledFloat(4f);
@@ -111,7 +184,6 @@ public class CacheboxMain extends ApplicationAdapter {
                 FpsInfoPos = 0;
             }
         }
-
     }
 
     @Override
