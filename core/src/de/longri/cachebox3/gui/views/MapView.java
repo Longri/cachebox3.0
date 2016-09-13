@@ -24,6 +24,8 @@ import org.oscim.gdx.LayerHandler;
 import org.oscim.gdx.MotionHandler;
 
 /**
+ * The MapView has transparent background. The Map render runs at CacheboxMain.
+ * This View has only the controls for the Map!
  * Created by Longri on 24.07.16.
  */
 public class MapView extends AbstractView {

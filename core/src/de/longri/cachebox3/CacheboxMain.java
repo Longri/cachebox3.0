@@ -38,8 +38,11 @@ import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Layers;
 import org.oscim.map.Map;
+import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLState;
+import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
+import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.TileSource;
 import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
@@ -66,14 +69,14 @@ public class CacheboxMain extends ApplicationAdapter {
     public static CacheboxMapAdapter mMap;
 
     private MapRenderer mMapRenderer;
+    private MapScaleBarLayer mapScaleBarLayer;
+
 
     @Override
     public void create() {
 
         mMap = new CacheboxMapAdapter();
         mMapRenderer = new MapRenderer(mMap);
-
-        Gdx.graphics.setContinuousRendering(false);
 
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
@@ -92,7 +95,7 @@ public class CacheboxMain extends ApplicationAdapter {
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        StageManager.setMainStage(new ViewManager());
+                        StageManager.setMainStage(new ViewManager(CacheboxMain.this));
                     }
                 });
             }
@@ -114,18 +117,12 @@ public class CacheboxMain extends ApplicationAdapter {
 
         // TileSource tileSource = new MapFileTileSource();
         // tileSource.setOption("file", "/home/jeff/germany.map");
-
-        initDefaultLayers(tileSource, false, true, true);
-
-        //mMap.getLayers().add(new BitmapTileLayer(mMap, new ImagicoLandcover(), 20));
-        //mMap.getLayers().add(new BitmapTileLayer(mMap, new OSMTileSource(), 20));
-       // mMap.getLayers().add(new BitmapTileLayer(mMap, new ArcGISWorldShaded(), 20));
-
+        initDefaultLayers(tileSource, false, true, true, true);
         mMap.setMapPosition(0, 0, 1 << 2);
     }
 
     protected void initDefaultLayers(TileSource tileSource, boolean tileGrid, boolean labels,
-                                     boolean buildings) {
+                                     boolean buildings, boolean mapScalebar) {
         Layers layers = mMap.layers();
 
         if (tileSource != null) {
@@ -141,6 +138,23 @@ public class CacheboxMain extends ApplicationAdapter {
 
         if (tileGrid)
             layers.add(new TileGridLayer(mMap));
+
+        if (mapScalebar) {
+            DefaultMapScaleBar mapScaleBar = new DefaultMapScaleBar(mMap);
+            mapScaleBar.setScaleBarMode(DefaultMapScaleBar.ScaleBarMode.BOTH);
+            mapScaleBar.setDistanceUnitAdapter(MetricUnitAdapter.INSTANCE);
+            mapScaleBar.setSecondaryDistanceUnitAdapter(ImperialUnitAdapter.INSTANCE);
+            mapScaleBar.setScaleBarPosition(MapScaleBar.ScaleBarPosition.BOTTOM_LEFT);
+
+            mapScaleBarLayer = new MapScaleBarLayer(mMap, mapScaleBar);
+            layers.add(mapScaleBarLayer);
+        }
+    }
+
+    public void setMapScaleBarOffset(float xOffset, float yOffset) {
+        BitmapRenderer renderer = mapScaleBarLayer.getRenderer();
+        renderer.setPosition(GLViewport.Position.BOTTOM_LEFT);
+        renderer.setOffset(xOffset, yOffset);
     }
 
 
@@ -149,22 +163,22 @@ public class CacheboxMain extends ApplicationAdapter {
         CB.stateTime += Gdx.graphics.getDeltaTime();
 
         if (drawMap) {
-            GLState.enableVertexArrays(-1,-1);
+            GLState.enableVertexArrays(-1, -1);
             mMapRenderer.onDrawFrame();
 
             //release Buffers from map renderer
             GLState.bindVertexBuffer(0);
             GLState.bindElementBuffer(0);
-        }else{
-              Gdx.gl.glClearColor(CB.backgroundColor.r, CB.backgroundColor.g, CB.backgroundColor.b, CB.backgroundColor.a);
+        } else {
+            Gdx.gl.glClearColor(CB.backgroundColor.r, CB.backgroundColor.g, CB.backgroundColor.b, CB.backgroundColor.a);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-              Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ?
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ?
                     GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
 
         }
 
-      StageManager.draw();
+        StageManager.draw();
 
         if (CB.isTestVersion()) {
             float FpsInfoSize = CB.getScaledFloat(4f);

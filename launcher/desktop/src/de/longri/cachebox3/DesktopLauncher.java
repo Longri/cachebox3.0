@@ -44,6 +44,10 @@ public class DesktopLauncher {
         config.height = 397;
         config.title = "Cachebox 3.0";
 
+        config.stencil = 8;
+        config.foregroundFPS = 30;
+        config.backgroundFPS = 10;
+
 
         if (cmd.hasOption("note")) {
             //force note 4 layout
