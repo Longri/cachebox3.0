@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.gui.actions.*;
 import de.longri.cachebox3.gui.actions.show_vies.*;
 import de.longri.cachebox3.gui.views.AboutView;
@@ -53,7 +54,7 @@ public class ViewManager extends NamedStage {
     private VisLabel toastLabel;
 
 
-    public ViewManager() {
+    public ViewManager(CacheboxMain main) {
         super("ViewManager");
 
         //set this to static CB for global access
@@ -86,6 +87,9 @@ public class ViewManager extends NamedStage {
         mainButtonBar.layout();
         initialActionButtons();
         showView(new AboutView());
+
+        // set position of MapScaleBar
+        main.setMapScaleBarOffset(CB.scaledSizes.MARGIN, mainButtonBar.getHeight());
     }
 
     public void showView(AbstractView view) {

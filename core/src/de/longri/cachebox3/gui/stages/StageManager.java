@@ -149,4 +149,12 @@ public class StageManager {
     public static Batch getBatch() {
         return mainStage.getBatch();
     }
+
+    public static void addMapMultiplexer(InputMultiplexer mapInputHandler) {
+        inputMultiplexer.addProcessor(mapInputHandler);
+    }
+
+    public static void removeMapMultiplexer(InputMultiplexer mapInputHandler) {
+        inputMultiplexer.removeProcessor(mapInputHandler);
+    }
 }

@@ -8,7 +8,7 @@ ext {
 }
 
 task copyFrameWorks(type: Copy) {
-    from(zipTree("./libs/vtm-ios-0.6.0-SNAPSHOT-natives.jar"))
+    from(zipTree("./libs/vtm-ios-master-SNAPSHOT-natives.jar"))
     into("${buildDir}/native")
 }
 
