@@ -19,7 +19,11 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.badlogic.gdx.utils.SharedLibraryLoader;
+import org.oscim.android.gl.AndroidGL;
 import org.oscim.backend.CanvasAdapter;
+import org.oscim.backend.GLAdapter;
+import org.oscim.gdx.GdxAssets;
 import org.sqldroid.SQLDroidDriver;
 
 public class AndroidLauncher extends AndroidApplication {
@@ -54,7 +58,13 @@ public class AndroidLauncher extends AndroidApplication {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         CanvasAdapter.dpi = (int) Math.max(metrics.xdpi, metrics.ydpi);
 
+        GdxAssets.init("");
+        GLAdapter.init(new AndroidGL());
+
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+        config.stencil = 8;
+        config.numSamples = 2;
+        new SharedLibraryLoader().load("vtm-jni");
         initialize(new CacheboxMain(), config);
     }
 

@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.gui.actions.*;
 import de.longri.cachebox3.gui.actions.show_vies.*;
 import de.longri.cachebox3.gui.events.SelectedCacheEvent;
@@ -61,7 +62,7 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     private Slider slider;
 
 
-    public ViewManager() {
+    public ViewManager(CacheboxMain main) {
         super("ViewManager");
 
         Gdx.app.log("ScaleFactor", Float.toString(CB.getScaledFloat(1)));

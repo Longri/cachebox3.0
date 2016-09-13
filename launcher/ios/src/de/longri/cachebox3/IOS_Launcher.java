@@ -18,9 +18,13 @@ package de.longri.cachebox3;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 import org.oscim.backend.CanvasAdapter;
+import org.oscim.backend.GLAdapter;
+import org.oscim.gdx.GdxAssets;
+import org.oscim.ios.backend.IosGL;
 import org.oscim.ios.backend.IosGraphics;
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.glkit.GLKViewDrawableMultisample;
+import org.robovm.apple.glkit.GLKViewDrawableStencilFormat;
 import org.robovm.apple.uikit.UIApplication;
 import org.robovm.apple.uikit.UIDevice;
 import org.robovm.apple.uikit.UIScreen;
@@ -32,16 +36,19 @@ public class IOS_Launcher extends IOSApplication.Delegate {
         float scale = (float) (getIosVersion() >= 8 ? UIScreen.getMainScreen().getNativeScale() : UIScreen.getMainScreen().getScale());
         CanvasAdapter.dpi *= scale;
 
-
         //initialize platform bitmap factory
         IosGraphics.init();
 
         //initialize platform connector
         PlatformConnector.init(new IOS_PlatformConnector());
-
-
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
         config.multisample = GLKViewDrawableMultisample._4X;
+        config.orientationLandscape = false;
+        config.orientationPortrait = true;
+        config.stencilFormat = GLKViewDrawableStencilFormat._8;
+        GdxAssets.init("assets/");
+        GLAdapter.init(new IosGL());
+
         return new IOSApplication(new CacheboxMain(), config);
     }
 

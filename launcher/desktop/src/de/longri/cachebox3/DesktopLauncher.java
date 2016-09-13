@@ -17,8 +17,13 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.utils.SharedLibraryLoader;
 import org.apache.commons.cli.*;
 import org.oscim.awt.AwtGraphics;
+import org.oscim.backend.GLAdapter;
+import org.oscim.core.Tile;
+import org.oscim.gdx.GdxAssets;
+import org.oscim.gdx.LwjglGL20;
 
 public class DesktopLauncher {
     public static void main(String[] args) {
@@ -39,6 +44,10 @@ public class DesktopLauncher {
         config.height = 397;
         config.title = "Cachebox 3.0";
 
+        config.stencil = 8;
+        config.foregroundFPS = 30;
+        config.backgroundFPS = 10;
+
 
         if (cmd.hasOption("note")) {
             //force note 4 layout
@@ -55,10 +64,23 @@ public class DesktopLauncher {
             config.height *= scale;
         }
 
+        Tile.SIZE = 360;
+        initVtm();
+
         // Don't change this LogLevel
         // Cachebox use the slf4j implematation for LibGdx as Log engine.
         // so set LogLevel on CB.class if you wont (USED_LOG_LEVEL)
         new LwjglApplication(new CacheboxMain(), config).setLogLevel(LwjglApplication.LOG_DEBUG);
+    }
+
+    public static void initVtm() {
+        // load native library
+        new SharedLibraryLoader().load("vtm-jni");
+        // init globals
+        AwtGraphics.init();
+        GdxAssets.init("assets/");
+        GLAdapter.init(new LwjglGL20());
+        GLAdapter.GDX_DESKTOP_QUIRKS = true;
     }
 
     private static CommandLine getCommandLine(String[] args) {
