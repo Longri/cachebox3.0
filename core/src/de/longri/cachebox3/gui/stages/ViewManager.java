@@ -108,6 +108,9 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
 
         //set selected Cache to slider
         selectedCacheChanged(CB.getSelectedCache(), CB.getSelectedWaypoint());
+
+        // set position of MapScaleBar
+        main.setMapScaleBarOffset(CB.scaledSizes.MARGIN, mainButtonBar.getHeight());
     }
 
     @Override
