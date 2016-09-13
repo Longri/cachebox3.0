@@ -87,7 +87,10 @@ public class MapView extends AbstractView implements PositionChangedEvent {
 
     @Override
     public void OrientationChanged() {
-
+        MapPosition curentMapPosition = mMap.getMapPosition();
+        float heading = Locator.getHeading();
+        curentMapPosition.setBearing(heading);
+        mMap.setMapPosition(curentMapPosition);
     }
 
     @Override
