@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
@@ -58,6 +59,25 @@ public class ListView extends WidgetGroup {
 
     public void setSelectedItem(int selectedIndex) {
         selectedItemList.add(itemViews.get(selectedIndex));
+    }
+
+    public void dispose() {
+
+        for (ListViewItem item:itemViews){
+            if(item instanceof Disposable){
+                ((Disposable) item).dispose();
+            }
+        }
+
+        itemViews.clear();
+        selectedItemList.clear();
+        adapter=null;
+        backgroundDrawable=null;
+        scrollPane.clearActions();
+        scrollPane.clearListeners();
+        scrollPane.clearChildren();
+        scrollPane.clear();
+        scrollPane=null;
     }
 
     public enum SelectableType {
