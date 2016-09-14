@@ -22,6 +22,8 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.gui.views.CreditsView;
+import de.longri.cachebox3.gui.views.DescriptionView;
 import de.longri.cachebox3.utils.IconNames;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +39,9 @@ public class Action_Show_Credits extends Abstract_Action_ShowView {
 
     @Override
     public void execute() {
-
-
+        if (isActVisible()) return;
+        CreditsView view = new CreditsView();
+        CB.viewmanager.showView(view);
     }
 
     @Override
@@ -63,13 +66,11 @@ public class Action_Show_Credits extends Abstract_Action_ShowView {
 
     @Override
     public boolean isActVisible() {
-        return false;
+        return CB.viewmanager.getActView() instanceof CreditsView;
     }
 
     @Override
     public boolean viewTypeEquals(AbstractView actView) {
-
-        return false;
-        // TODO	return actView.getClass().getName().equals(?.class.getName());
+        return actView.getClass().getName().equals(CreditsView.class.getName());
     }
 }

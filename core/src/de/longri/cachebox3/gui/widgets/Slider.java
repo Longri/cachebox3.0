@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.views;
+package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -28,7 +28,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.widgets.ScrollLabel;
 import de.longri.cachebox3.settings.Config;
 
 /**
@@ -48,9 +47,12 @@ public class Slider extends WidgetGroup {
     private boolean swipeDown;
     private float quickButtonHeight;
     private float quickButtonMaxHeight;
+    private final QuickButtonList quickButtonList;
 
     public Slider() {
         style = VisUI.getSkin().get("default", SliderStyle.class);
+        quickButtonMaxHeight = CB.scaledSizes.BUTTON_HEIGHT;
+        quickButtonList = new QuickButtonList();
         nameWidget = new NameWidget();
         nameWidgetHeight = CB.scaledSizes.BUTTON_HEIGHT;
         content = new WidgetGroup() {
@@ -70,13 +72,11 @@ public class Slider extends WidgetGroup {
 
         };
 
-
         super.addActor(nameWidget);
         super.addActor(content);
+        super.addActor(quickButtonList);
         super.setTouchable(Touchable.childrenOnly);
         super.setLayoutEnabled(true);
-
-
     }
 
 
@@ -86,10 +86,21 @@ public class Slider extends WidgetGroup {
             super.layout();
             return;
         }
+
+        float quickButtonPos = sliderPos + nameWidgetHeight;
+        if (quickButtonPos < this.getHeight() - quickButtonMaxHeight) {
+            quickButtonPos = this.getHeight() - quickButtonMaxHeight;
+        }
+
+        quickButtonList.setBounds(0, quickButtonPos, this.getWidth(), quickButtonMaxHeight);
         nameWidget.setBounds(0, sliderPos, this.getWidth(), nameWidgetHeight);
         content.setBounds(0, sliderPos + nameWidgetHeight, this.getWidth(), this.getHeight());
         needsLayout = false;
         super.layout();
+        viewHeightChanged(quickButtonPos - nameWidgetHeight);
+    }
+
+    public void viewHeightChanged(float height) {
     }
 
     @Override
@@ -120,10 +131,12 @@ public class Slider extends WidgetGroup {
     }
 
     private void checkSlideBack() {
-        boolean QuickButtonShow = Config.quickButtonShow.getValue();
+        boolean quickButtonShow = Config.quickButtonShow.getValue();
+
+        quickButtonShow = true;
 
         // check if QuickButtonList snap in
-        if (this.getHeight() - (nameWidgetHeight + sliderPos) >= (quickButtonMaxHeight * 0.5) && QuickButtonShow) {
+        if (this.getHeight() - (nameWidgetHeight + sliderPos) >= (quickButtonMaxHeight * 0.5) && quickButtonShow) {
             quickButtonHeight = quickButtonMaxHeight;
             Config.quickButtonLastShow.setValue(true);
             Config.AcceptChanges();
@@ -135,7 +148,7 @@ public class Slider extends WidgetGroup {
 
         if (swipeUp || swipeDown) {
             if (swipeUp) {
-                startAnimationTo(QuickButtonShow ? quickButtonHeight : 0);
+                startAnimationTo(quickButtonShow ? quickButtonHeight : 0);
             } else {
                 startAnimationTo((int) (getHeight() - nameWidgetHeight));
             }
@@ -143,7 +156,7 @@ public class Slider extends WidgetGroup {
 
         } else {
             if (sliderPos > getHeight() * 0.5) {
-                startAnimationTo((int) (getHeight() - nameWidgetHeight - (QuickButtonShow ? quickButtonHeight : 0)));
+                startAnimationTo((int) (getHeight() - nameWidgetHeight - (quickButtonShow ? quickButtonHeight : 0)));
             } else {
                 startAnimationTo(0);
 

@@ -13,26 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.stages.initial_tasks;
+package de.longri.cachebox3.gui.actions;
 
-import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.locator.Locator;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.utils.IconNames;
 
 /**
- * Created by Longri on 02.08.16.
+ * Created by Longri on 14.09.2016.
  */
-public final class InitialLocationListenerTask extends AbstractInitTask {
+public class Action_Upload_Fieldnotes extends AbstractAction {
 
-    public InitialLocationListenerTask(String name, int percent) {
-        super(name, percent);
+    public Action_Upload_Fieldnotes() {
+        super("uploadFieldNotes", MenuID.AID_UPLOAD_FIELD_NOTE);
     }
 
     @Override
-    public void runable() {
+    public void execute() {
+        CB.viewmanager.toast("Upload fieldNote not implemented");
 
-        //TODO initial with last saved location from settings
-        new Locator(null);
+    }
 
-        PlatformConnector.initLocationListener();
+    @Override
+    public Sprite getIcon() {
+        return CB.getSprite(IconNames.UPLOADFIELDNOTE.name());
     }
 }

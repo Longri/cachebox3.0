@@ -33,7 +33,7 @@ import de.longri.cachebox3.gui.events.SelectedCacheEvent;
 import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.Slider;
+import de.longri.cachebox3.gui.widgets.Slider;
 import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
@@ -52,7 +52,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 public class ViewManager extends NamedStage implements SelectedCacheEvent {
 
     final static org.slf4j.Logger log = LoggerFactory.getLogger(ViewManager.class);
-
+    final static CharSequence EMPTY = "";
 
     private AbstractView actView;
     private final float width, height;
@@ -60,6 +60,7 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     private GestureButton db_button, cache_button, navButton, tool_button, misc_button;
     private VisLabel toastLabel;
     private Slider slider;
+    private float sliderPos = 0;
 
 
     public ViewManager(CacheboxMain main) {
@@ -77,7 +78,13 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
-        slider = new Slider();
+        slider = new Slider() {
+            @Override
+            public void viewHeightChanged(float newPos) {
+                sliderPos = height - newPos;
+                setActViewBounds();
+            }
+        };
         slider.setBounds(0, 0, width, height);
         this.addActor(slider);
 
@@ -116,11 +123,15 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     @Override
     public void selectedCacheChanged(Cache selectedCache, Waypoint waypoint) {
         // set Cache name to Slider
-        CharSequence text = CacheTypes.toShortString(selectedCache)
-                + terrDiffToShortString(selectedCache.getDifficulty()) + "/"
-                + terrDiffToShortString(selectedCache.getTerrain()) + CacheSizes.toShortString(selectedCache)
-                + " " + selectedCache.getName();
-        slider.setCacheName(text);
+        if (selectedCache == null) {
+            slider.setCacheName(EMPTY);
+        } else {
+            CharSequence text = CacheTypes.toShortString(selectedCache)
+                    + terrDiffToShortString(selectedCache.getDifficulty()) + "/"
+                    + terrDiffToShortString(selectedCache.getTerrain()) + CacheSizes.toShortString(selectedCache)
+                    + " " + selectedCache.getName();
+            slider.setCacheName(text);
+        }
     }
 
     private String terrDiffToShortString(float value) {
@@ -225,7 +236,8 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     }
 
     private void setActViewBounds() {
-        this.actView.setBounds(0, mainButtonBar.getHeight(), width, height - mainButtonBar.getHeight());
+        if (this.actView != null)
+            this.actView.setBounds(0, mainButtonBar.getHeight(), width, height - (mainButtonBar.getHeight() + sliderPos));
     }
 
     public AbstractView getActView() {

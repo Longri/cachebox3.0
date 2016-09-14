@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -15,36 +15,35 @@
  */
 package de.longri.cachebox3.gui.actions;
 
-
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.utils.IconNames;
-import org.slf4j.LoggerFactory;
 
 /**
- * Created by Longri on 16.08.16.
+ * Created by Longri on 14.09.2016.
  */
-public class Action_Toggle_Day_Night extends AbstractAction {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Toggle_Day_Night.class);
-
-    public Action_Toggle_Day_Night() {
-        super("DayNight", MenuID.AID_DAY_NIGHT);
+public class Action_Switch_Torch extends AbstractAction {
+    public Action_Switch_Torch() {
+        super("Torch", MenuID.AID_TORCH);
     }
-
-    @Override
-    public void execute() {
-
-
-    }
-
     @Override
     public boolean getEnabled() {
-        return true;
+        return PlatformConnector.isTorchAvailable();
     }
 
     @Override
     public Sprite getIcon() {
-       return CB.getSprite(IconNames.DayNight.name());
+        if (PlatformConnector.isTorchOn()) {
+            return CB.getSprite(IconNames.TORCHON.name());
+        } else {
+            return CB.getSprite(IconNames.TORCHOFF.name());
+        }
+    }
+
+    @Override
+    public void execute() {
+        PlatformConnector.switchTorch();
     }
 }

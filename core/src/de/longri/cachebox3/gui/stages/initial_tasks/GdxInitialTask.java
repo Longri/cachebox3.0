@@ -30,7 +30,7 @@ public final class GdxInitialTask extends AbstractInitTask {
     }
 
     @Override
-    public void RUNABLE() {
+    public void runable() {
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         StageManager.setInputMultiplexer(inputMultiplexer);
         Gdx.input.setInputProcessor(inputMultiplexer);

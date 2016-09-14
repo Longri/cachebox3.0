@@ -213,6 +213,10 @@ public class CB {
         return displayOff;
     }
 
+    public static boolean selectedCachehasSpoiler() {
+        return false; //TODO
+    }
+
     public enum Platform {
         ANDROID, IOS, DESKTOP
     }

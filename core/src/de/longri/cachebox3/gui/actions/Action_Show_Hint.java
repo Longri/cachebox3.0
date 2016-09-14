@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -15,36 +15,41 @@
  */
 package de.longri.cachebox3.gui.actions;
 
-
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.utils.IconNames;
-import org.slf4j.LoggerFactory;
 
 /**
- * Created by Longri on 16.08.16.
+ * Created by Longri on 14.09.2016.
  */
-public class Action_Toggle_Day_Night extends AbstractAction {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Toggle_Day_Night.class);
+public class Action_Show_Hint extends AbstractAction {
 
-    public Action_Toggle_Day_Night() {
-        super("DayNight", MenuID.AID_DAY_NIGHT);
+    public Action_Show_Hint() {
+        super("hint", MenuID.AID_SHOW_HINT);
     }
 
     @Override
     public void execute() {
+        CB.viewmanager.toast("Show Hint dialog not implemented");
 
-
-    }
-
-    @Override
-    public boolean getEnabled() {
-        return true;
+//        if (getEnabled())
+//            HintDialog.show();
     }
 
     @Override
     public Sprite getIcon() {
-       return CB.getSprite(IconNames.DayNight.name());
+        return CB.getSprite(IconNames.hintIcon.name());
+    }
+
+    @Override
+    public boolean getEnabled() {
+        // liefert true zurück wenn ein Cache gewählt ist und dieser einen Hint hat
+        if (CB.getSelectedCache() == null)
+            return false;
+        String hintText = CB.getSelectedCache().getHint();
+        if ((hintText == null) || (hintText.length() == 0))
+            return false;
+        return true;
     }
 }
