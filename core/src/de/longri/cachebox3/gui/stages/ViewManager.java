@@ -52,7 +52,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 public class ViewManager extends NamedStage implements SelectedCacheEvent {
 
     final static org.slf4j.Logger log = LoggerFactory.getLogger(ViewManager.class);
-
+    final static CharSequence EMPTY = "";
 
     private AbstractView actView;
     private final float width, height;
@@ -116,11 +116,15 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     @Override
     public void selectedCacheChanged(Cache selectedCache, Waypoint waypoint) {
         // set Cache name to Slider
-        CharSequence text = CacheTypes.toShortString(selectedCache)
-                + terrDiffToShortString(selectedCache.getDifficulty()) + "/"
-                + terrDiffToShortString(selectedCache.getTerrain()) + CacheSizes.toShortString(selectedCache)
-                + " " + selectedCache.getName();
-        slider.setCacheName(text);
+        if (selectedCache == null) {
+            slider.setCacheName(EMPTY);
+        } else {
+            CharSequence text = CacheTypes.toShortString(selectedCache)
+                    + terrDiffToShortString(selectedCache.getDifficulty()) + "/"
+                    + terrDiffToShortString(selectedCache.getTerrain()) + CacheSizes.toShortString(selectedCache)
+                    + " " + selectedCache.getName();
+            slider.setCacheName(text);
+        }
     }
 
     private String terrDiffToShortString(float value) {
