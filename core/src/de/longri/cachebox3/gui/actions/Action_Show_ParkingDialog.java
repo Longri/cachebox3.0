@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2014-2016 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -18,24 +18,25 @@ package de.longri.cachebox3.gui.actions;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.Window;
+import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.IconNames;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by Longri on 16.08.16.
+ * Created by Longri on 14.09.2016.
  */
-public class Action_Toggle_Day_Night extends AbstractAction {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Toggle_Day_Night.class);
-
-    public Action_Toggle_Day_Night() {
-        super("DayNight", MenuID.AID_DAY_NIGHT);
+public class Action_Show_ParkingDialog extends AbstractAction {
+    public Action_Show_ParkingDialog() {
+        super("MyParking", MenuID.AID_SHOW_PARKING_DIALOG);
     }
 
     @Override
     public void execute() {
-
-
+        ParkingDialog d = new ParkingDialog();
+        d.show();
     }
 
     @Override
@@ -45,6 +46,6 @@ public class Action_Toggle_Day_Night extends AbstractAction {
 
     @Override
     public Sprite getIcon() {
-       return CB.getSprite(IconNames.DayNight.name());
+        return CB.getSprite(IconNames.my_parking.name());
     }
 }

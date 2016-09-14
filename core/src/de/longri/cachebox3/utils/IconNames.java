@@ -82,5 +82,6 @@ public enum IconNames {
     mapsforge_logo, //
     download, //
     freizeit,
-    settings_icon;
+    settings_icon,
+    my_parking;
 }

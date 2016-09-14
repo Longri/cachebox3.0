@@ -34,7 +34,7 @@ public final class SkinLoaderTask extends AbstractInitTask {
     }
 
     @Override
-    public void RUNABLE() {
+    public void runable() {
 
         //initial sizes
         DevicesSizes ui = new DevicesSizes();

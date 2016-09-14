@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -15,62 +15,49 @@
  */
 package de.longri.cachebox3.gui.actions.show_vies;
 
-
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.CreditsView;
-import de.longri.cachebox3.gui.views.DescriptionView;
-import de.longri.cachebox3.utils.IconNames;
-import org.slf4j.LoggerFactory;
+import de.longri.cachebox3.gui.views.FieldNotesView;
+import de.longri.cachebox3.gui.views.SpoilerView;
 
 /**
- * Created by Longri on 16.08.16.
+ * Created by Longri on 14.09.2016.
  */
-public class Action_Show_Credits extends Abstract_Action_ShowView {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Show_Credits.class);
-
-    public Action_Show_Credits() {
-        super("Credits", MenuID.AID_SHOW_CREDITS);
-    }
-
-    @Override
-    public void execute() {
-        if (isActVisible()) return;
-        CreditsView view = new CreditsView();
-        CB.viewmanager.showView(view);
-    }
-
-    @Override
-    public boolean getEnabled() {
-        return true;
-    }
-
-    @Override
-    public Sprite getIcon() {
-        return CB.getSprite(IconNames.cb.name());
+public class Action_Show_FieldNotesView extends Abstract_Action_ShowView {
+    public Action_Show_FieldNotesView() {
+        super("Fieldnotes", MenuID.AID_SHOW_FIELDNOTES);
     }
 
     @Override
     public boolean hasContextMenu() {
-        return false;
+        return true;
     }
 
     @Override
     public Menu getContextMenu() {
+        if (CB.viewmanager.getActView() instanceof FieldNotesView) {
+            FieldNotesView fieldNotesView = (FieldNotesView) CB.viewmanager.getActView();
+            return fieldNotesView.getContextMenu();
+        }
         return null;
     }
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof CreditsView;
+        return CB.viewmanager.getActView() instanceof FieldNotesView;
     }
 
     @Override
     public boolean viewTypeEquals(AbstractView actView) {
-        return actView.getClass().getName().equals(CreditsView.class.getName());
+        return actView.getClass().getName().equals(FieldNotesView.class.getName());
+    }
+
+    @Override
+    public void execute() {
+        if (isActVisible()) return;
+        FieldNotesView view = new FieldNotesView();
+        CB.viewmanager.showView(view);
     }
 }

@@ -38,7 +38,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
     }
 
     @Override
-    public void RUNABLE() {
+    public void runable() {
 
         CB.WorkPath = PlatformConnector.getWorkPath();
 

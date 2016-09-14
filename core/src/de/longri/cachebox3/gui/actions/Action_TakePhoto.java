@@ -13,22 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.stages.initial_tasks;
+package de.longri.cachebox3.gui.actions;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.utils.IconNames;
 
 /**
- * Created by Longri on 02.08.16.
+ * Created by Longri on 14.09.2016.
  */
-public abstract class AbstractInitTask {
+public class Action_TakePhoto extends AbstractAction {
 
-    public final String name;
-    public final int percent;
-
-    public AbstractInitTask(String name, int percent) {
-        this.name = name;
-        this.percent = percent;
+    public Action_TakePhoto() {
+        super("uploadFieldNotes", MenuID.AID_TAKE_PHOTO);
     }
 
-    public abstract void runable();
+    @Override
+    public void execute() {
+        CB.viewmanager.toast("Take Photo not implemented");
 
+    }
+
+    @Override
+    public Sprite getIcon() {
+        return CB.getSprite(IconNames.log10icon.name());
+    }
 }
-

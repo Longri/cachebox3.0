@@ -64,12 +64,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
             if (nearstCacheWp != null)
                 CB.setSelectedWaypoint(nearstCacheWp.getCache(), nearstCacheWp.getWaypoint());
-            setSelectedCacheVisible();
         }
-    }
-
-    private void setSelectedCacheVisible() {
-        //TODO
     }
 
 

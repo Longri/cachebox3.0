@@ -1,6 +1,7 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.QuickActions;
 import de.longri.cachebox3.gui.widgets.QuickButtonItem;
 import de.longri.cachebox3.settings.Config;
@@ -17,7 +18,7 @@ public class QuickButtonList extends Widget {
         if (quickButtonList == null) {
             String ConfigActionList = Config.quickButtonList.getValue();
             String[] ConfigList = ConfigActionList.split(",");
-            quickButtonList = QuickActions.getListFromConfig(ConfigList, btnHeight);
+            quickButtonList = QuickActions.getListFromConfig(ConfigList, CB.scaledSizes.BUTTON_HEIGHT);
         }
 
     }

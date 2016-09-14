@@ -15,10 +15,7 @@
  */
 package de.longri.cachebox3.gui.actions.show_vies;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.Window;
-import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
@@ -27,28 +24,20 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
-import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.gui.views.DescriptionView;
+import de.longri.cachebox3.gui.views.WaypointView;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.IconNames;
 
 /**
- * Created by Longri on 24.07.16.
+ * Created by Longri on 14.09.2016.
  */
-public class Action_Show_AboutView extends Abstract_Action_ShowView {
-
-    public Action_Show_AboutView() {
-        super("AboutView", MenuID.AID_SHOW_CACHELIST);
-    }
-
-
-    @Override
-    public void execute() {
-        if (isActVisible()) return;
-        AboutView view = new AboutView();
-        CB.viewmanager.showView(view);
+public class Action_Show_WaypointView extends Abstract_Action_ShowView {
+    public Action_Show_WaypointView() {
+        super("WaypointView", MenuID.AID_SHOW_WAYPOINTS);
     }
 
     @Override
@@ -58,21 +47,27 @@ public class Action_Show_AboutView extends Abstract_Action_ShowView {
 
     @Override
     public Menu getContextMenu() {
-      return null;
+        if (CB.viewmanager.getActView() instanceof WaypointView) {
+            WaypointView waypointView= (WaypointView) CB.viewmanager.getActView();
+            return waypointView.getContextMenu();
+        }
+        return null;
     }
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof AboutView;
+        return CB.viewmanager.getActView() instanceof WaypointView;
     }
 
     @Override
     public boolean viewTypeEquals(AbstractView actView) {
-        return actView.getClass().getName().equals(AboutView.class.getName());
+        return actView.getClass().getName().equals(WaypointView.class.getName());
     }
 
     @Override
-    public Sprite getIcon() {
-        return CB.getSprite(IconNames.docIcon.name());
+    public void execute() {
+        if (isActVisible()) return;
+        WaypointView view = new WaypointView();
+        CB.viewmanager.showView(view);
     }
 }
