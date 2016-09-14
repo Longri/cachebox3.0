@@ -31,6 +31,7 @@ public class IOS_LocationListener {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(IOS_LocationListener.class);
     private static double ACCURACY = CLLocationAccuracy.Best;
     private static double DISTANCE_FILTER = 5;
+    private static double HEADING_FILTER = 5;
 
     private CLLocationManager locationManager;
 
@@ -55,6 +56,7 @@ public class IOS_LocationListener {
                     locationManager.requestAlwaysAuthorization();
                     locationManager.requestWhenInUseAuthorization();
                 }
+                locationManager.setHeadingFilter(HEADING_FILTER);
 
                 // Once configured, the location manager must be "started".
                 locationManager.startUpdatingLocation();
@@ -107,13 +109,8 @@ public class IOS_LocationListener {
             Locator.CompassType type = Locator.CompassType.any;
             float heading = 0f;
 
-            if (newHeading.getHeadingAccuracy() > 0) {
-                type = Locator.CompassType.GPS;
-                heading = (float) newHeading.getTrueHeading();
-            } else {
-                type = Locator.CompassType.Magnetic;
-                heading = (float) newHeading.getMagneticHeading();
-            }
+            type = Locator.CompassType.GPS;
+            heading = (float) newHeading.getTrueHeading();
 
             log.trace("Update Heading:" + type.toString() + " / " + heading);
             de.longri.cachebox3.locator.Locator.setHeading(heading, type);

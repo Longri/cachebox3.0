@@ -45,6 +45,21 @@ public class AndroidPlatformConnector extends PlatformConnector {
 
 
     @Override
+    protected boolean _isTorchAvailable() {
+        return false;
+    }
+
+    @Override
+    protected boolean _isTorchOn() {
+        return false;
+    }
+
+    @Override
+    protected void _switchTorch() {
+//TODO implement tourch
+    }
+
+    @Override
     public Bitmap getRealScaledSVG(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
         return new AndroidRealSvgBitmap(inputStream, scaleType, scaleValue);
     }

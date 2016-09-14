@@ -40,7 +40,7 @@ public class QuickButtonList extends WidgetGroup {
         if (quickButtonList == null) {
             String configActionList = Config.quickButtonList.getValue();
 
-            configActionList = "5,0,1,3,2,4,7,8,9";
+            configActionList = "25,5,0,1,3,2,4,7,8,9";
 
             String[] configList = configActionList.split(",");
             quickButtonList = QuickActions.getListFromConfig(configList, CB.scaledSizes.BUTTON_HEIGHT, style.button);

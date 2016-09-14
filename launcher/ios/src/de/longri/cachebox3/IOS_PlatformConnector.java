@@ -21,6 +21,8 @@ import org.oscim.backend.canvas.Bitmap;
 import org.robovm.apple.avfoundation.AVCaptureDevice;
 import org.robovm.apple.avfoundation.AVCaptureTorchMode;
 import org.robovm.apple.avfoundation.AVMediaType;
+import org.robovm.apple.foundation.NSErrorException;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +32,8 @@ import java.io.InputStream;
  * Created by Longri on 17.07.16.
  */
 public class IOS_PlatformConnector extends PlatformConnector {
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(IOS_PlatformConnector.class);
+
 
     @Override
     protected boolean _isTorchAvailable() {
@@ -47,11 +51,20 @@ public class IOS_PlatformConnector extends PlatformConnector {
     protected void _switchTorch() {
         AVCaptureDevice device = AVCaptureDevice.getDefaultDeviceForMediaType(AVMediaType.Video);
 
-        if (device.getTorchMode() == AVCaptureTorchMode.Off) {
-            device.setTorchMode(AVCaptureTorchMode.On);
-        } else {
-            device.setTorchMode(AVCaptureTorchMode.Off);
+        try {
+            device.lockForConfiguration();
+            if (device.getTorchMode() == AVCaptureTorchMode.Off) {
+                log.debug("Switch torch on");
+                device.setTorchMode(AVCaptureTorchMode.On);
+            } else {
+                log.debug("Switch torch off");
+                device.setTorchMode(AVCaptureTorchMode.Off);
+            }
+        } catch (NSErrorException e) {
+            e.printStackTrace();
         }
+
+
     }
 
     @Override

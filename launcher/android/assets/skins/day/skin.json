@@ -336,6 +336,12 @@
     },
     "DayNight": {
       "path": "skins/day/svg/missingIcon.svg"
+    },
+    "TORCHON": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "TORCHOFF": {
+      "path": "skins/day/svg/missingIcon.svg"
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
