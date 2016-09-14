@@ -15,12 +15,14 @@
  */
 package de.longri.cachebox3.gui.actions.show_vies;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.SolverView;
 import de.longri.cachebox3.gui.views.SolverView2;
+import de.longri.cachebox3.utils.IconNames;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -59,5 +61,10 @@ public class Action_Show_SolverView2 extends Abstract_Action_ShowView {
         if (isActVisible()) return;
         SolverView2 view = new SolverView2();
         CB.viewmanager.showView(view);
+    }
+
+    @Override
+    public Sprite getIcon() {
+        return CB.getSprite(IconNames.solverView2.name());
     }
 }

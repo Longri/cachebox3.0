@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.actions.show_vies;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
@@ -48,7 +49,7 @@ public class Action_Show_WaypointView extends Abstract_Action_ShowView {
     @Override
     public Menu getContextMenu() {
         if (CB.viewmanager.getActView() instanceof WaypointView) {
-            WaypointView waypointView= (WaypointView) CB.viewmanager.getActView();
+            WaypointView waypointView = (WaypointView) CB.viewmanager.getActView();
             return waypointView.getContextMenu();
         }
         return null;
@@ -69,5 +70,10 @@ public class Action_Show_WaypointView extends Abstract_Action_ShowView {
         if (isActVisible()) return;
         WaypointView view = new WaypointView();
         CB.viewmanager.showView(view);
+    }
+
+    @Override
+    public Sprite getIcon() {
+        return CB.getSprite(IconNames.waypointListIcon.name());
     }
 }

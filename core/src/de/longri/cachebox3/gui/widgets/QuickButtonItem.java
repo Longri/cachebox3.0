@@ -15,8 +15,15 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Align;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.QuickActions;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
@@ -25,7 +32,7 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
  * Created by Longri on 09.09.16.
  */
 public class QuickButtonItem extends ListViewItem {
-
+    final Drawable background;
     private AbstractAction mAction;
     private Image mButtonIcon;
     private String mActionDesc;
@@ -35,15 +42,56 @@ public class QuickButtonItem extends ListViewItem {
     private int spoilerState = -1;
     private int hintState = -1;
     private int torchState = -1;
+    private boolean needsLayout = true;
+    private final float imageMargin;
 
-
-    public QuickButtonItem(int listIndex, AbstractAction action, String Desc, QuickActions type) {
+    public QuickButtonItem(int listIndex, Drawable background, AbstractAction action, String Desc, QuickActions type) {
         super(listIndex);
+        this.background = background;
         quickActionsEnum = type;
         mAction = action;
-        //mButtonIcon = new Image();
-        mButtonIcon.setDrawable(new SpriteDrawable(action.getIcon()));
+        mActionDesc = Desc;
+        imageMargin = CB.scaledSizes.MARGIN_HALF;
+        SpriteDrawable spriteDrawable = null;
 
+        try {
+            spriteDrawable = new SpriteDrawable(action.getIcon());
+        } catch (Exception e) {
+            throw new IllegalStateException(action.getName() + " Action has no Icon");
+        }
+
+        mButtonIcon = new Image(spriteDrawable);
+        this.addActor(mButtonIcon);
+        this.addListener(clickListener);
+    }
+
+    ClickListener clickListener = new ClickListener() {
+
+        public void clicked(InputEvent event, float x, float y) {
+            mAction.execute();
+        }
+
+    };
+
+
+    @Override
+    public void layout() {
+        if (needsLayout || super.needsLayout()) {
+            mButtonIcon.setBounds(imageMargin, imageMargin, getWidth() - (2 * imageMargin), getHeight() - (2 * imageMargin));
+        }
+        needsLayout = false;
+    }
+
+    @Override
+    public void sizeChanged() {
+        super.sizeChanged();
+        needsLayout = true;
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        background.draw(batch, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        super.draw(batch, parentAlpha);
     }
 
     public QuickActions getAction() {

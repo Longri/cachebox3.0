@@ -58,26 +58,26 @@ public class ListView extends WidgetGroup {
     }
 
     public void setSelectedItem(int selectedIndex) {
-        selectedItemList.add(itemViews.get(selectedIndex));
+        if (itemViews != null && itemViews.size > 0) selectedItemList.add(itemViews.get(selectedIndex));
     }
 
     public void dispose() {
 
-        for (ListViewItem item:itemViews){
-            if(item instanceof Disposable){
+        for (ListViewItem item : itemViews) {
+            if (item instanceof Disposable) {
                 ((Disposable) item).dispose();
             }
         }
 
         itemViews.clear();
         selectedItemList.clear();
-        adapter=null;
-        backgroundDrawable=null;
+        adapter = null;
+        backgroundDrawable = null;
         scrollPane.clearActions();
         scrollPane.clearListeners();
         scrollPane.clearChildren();
         scrollPane.clear();
-        scrollPane=null;
+        scrollPane = null;
     }
 
     public enum SelectableType {

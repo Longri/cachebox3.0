@@ -28,6 +28,21 @@ import java.io.InputStream;
 public class DesktopPlatformConnector extends PlatformConnector {
 
     @Override
+    protected boolean _isTorchAvailable() {
+        return false;
+    }
+
+    @Override
+    protected boolean _isTorchOn() {
+        return false;
+    }
+
+    @Override
+    protected void _switchTorch() {
+        // is not implemented, do nothing
+    }
+
+    @Override
     public Bitmap getRealScaledSVG(InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {
         return new DesktopRealSvgBitmap(stream, scaleType, scaleValue);
     }

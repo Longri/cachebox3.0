@@ -16,13 +16,14 @@
 package de.longri.cachebox3.gui.actions;
 
 
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings;
 import de.longri.cachebox3.gui.actions.show_vies.*;
-import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.widgets.QuickButtonItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.MoveableList;
+import org.slf4j.LoggerFactory;
 
 /**
  * Enthält die Actions Möglichkeiten für die Quick Buttons
@@ -61,13 +62,17 @@ public enum QuickActions {
 
     empty,;
 
+
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(QuickActions.class);
+
     /**
      * Gibt eine ArrayList von Actions zurück aus einem übergebenen String Array
      *
      * @param configList
+     * @param button
      * @return ArrayList <Actions>
      */
-    public static MoveableList<QuickButtonItem> getListFromConfig(String[] configList, float height) {
+    public static MoveableList<QuickButtonItem> getListFromConfig(String[] configList, float height, Drawable button) {
         MoveableList<QuickButtonItem> retList = new MoveableList<QuickButtonItem>();
         if (configList == null || configList.length == 0) {
             return retList;
@@ -84,16 +89,14 @@ public enum QuickActions {
 
                     QuickActions type = QuickActions.values()[EnumId];
                     if (QuickActions.getActionEnumById(EnumId) != null) {
-                        QuickButtonItem tmp = new QuickButtonItem(index++, QuickActions.getActionEnumById(EnumId), QuickActions.getName(EnumId), type);
+                        QuickButtonItem tmp = new QuickButtonItem(index++, button, QuickActions.getActionEnumById(EnumId), QuickActions.getName(EnumId), type);
                         retList.add(tmp);
                     } else
                         invalidEnumId = true;
                 }
             }
-        } catch (Exception e)// wenn ein Fehler auftritt, gib die bis dorthin
-        // gelesenen Items zurück
-        {
-
+        } catch (Exception e) {// wenn ein Fehler auftritt, gib die bis dorthin gelesenen Items zurück
+            log.error("getListFromConfig", e);
         }
         if (invalidEnumId) {
             //	    write valid id's back
@@ -139,15 +142,15 @@ public enum QuickActions {
             case 5:
                 return new Action_Show_CacheList();
             case 6:
-                return  new Action_Show_TrackListView();
+                return new Action_Show_TrackListView();
             case 7:
-                return  new Action_TakePhoto();
+                return new Action_TakePhoto();
             case 8:
                 return new Action_RecVideo();
             case 9:
                 return new Action_RecVoice();
             case 10:
-                return  new Action_Show_Search();
+                return new Action_Show_Search();
             case 11:
                 return new Action_ShowFilterSettings();
             case 12:
@@ -159,11 +162,11 @@ public enum QuickActions {
             case 15:
                 return new Action_Show_Hint();
             case 16:
-                return  new Action_Show_ParkingDialog();
+                return new Action_Show_ParkingDialog();
             case 17:
                 return new Action_Toggle_Day_Night();
             case 18:
-                return  new Action_Show_FieldNotesView();
+                return new Action_Show_FieldNotesView();
             case 19:
                 return new Action_QuickFieldNote();
             case 20:

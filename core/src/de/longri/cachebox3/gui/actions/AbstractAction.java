@@ -72,9 +72,7 @@ public abstract class AbstractAction {
         return true;
     }
 
-    public Sprite getIcon() {
-        return null;
-    }
+    public abstract Sprite getIcon();
 
     public boolean getIsCheckable() {
         return false;

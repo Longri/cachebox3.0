@@ -83,5 +83,6 @@ public enum IconNames {
     download, //
     freizeit,
     settings_icon,
-    my_parking;
+    my_parking,
+    solverView2;
 }

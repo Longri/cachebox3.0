@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.actions.show_vies;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
@@ -70,5 +71,10 @@ public class Action_Show_LogView extends Abstract_Action_ShowView {
         if (isActVisible()) return;
         LogView view = new LogView();
         CB.viewmanager.showView(view);
+    }
+
+    @Override
+    public Sprite getIcon() {
+        return CB.getSprite(IconNames.listIcon.name());
     }
 }

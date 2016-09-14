@@ -26,7 +26,7 @@ import de.longri.cachebox3.utils.IconNames;
 public class Action_TakePhoto extends AbstractAction {
 
     public Action_TakePhoto() {
-        super("uploadFieldNotes", MenuID.AID_TAKE_PHOTO);
+        super("takePhoto", MenuID.AID_TAKE_PHOTO);
     }
 
     @Override
