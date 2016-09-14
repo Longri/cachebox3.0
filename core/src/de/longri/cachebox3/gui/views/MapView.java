@@ -27,6 +27,7 @@ import de.longri.cachebox3.locator.events.PositionChangedEventList;
 import org.oscim.core.MapPosition;
 import org.oscim.gdx.LayerHandler;
 import org.oscim.gdx.MotionHandler;
+import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.CacheboxMain.mMap;
 
@@ -36,6 +37,7 @@ import static de.longri.cachebox3.CacheboxMain.mMap;
  * Created by Longri on 24.07.16.
  */
 public class MapView extends AbstractView implements PositionChangedEvent {
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(MapView.class);
 
     InputMultiplexer mapInputHandler;
 
@@ -62,6 +64,7 @@ public class MapView extends AbstractView implements PositionChangedEvent {
         mapInputHandler.addProcessor(inputHandler);
         StageManager.addMapMultiplexer(mapInputHandler);
         PositionChangedEventList.Add(this);
+        testSetLocation();
     }
 
     @Override
@@ -71,6 +74,24 @@ public class MapView extends AbstractView implements PositionChangedEvent {
         PositionChangedEventList.Remove(this);
     }
 
+    private void testSetLocation() {
+
+
+        de.longri.cachebox3.locator.Location cbLocation =
+                new de.longri.cachebox3.locator.Location(52.580400947530364,
+                        13.385594096047232, 10);
+
+        cbLocation.setHasBearing(true);
+//        cbLocation.setBearing(0);
+//        cbLocation.setBearing(90);
+//        cbLocation.setBearing(180);
+        cbLocation.setBearing(360);
+
+        cbLocation.setProvider(Location.ProviderType.GPS);
+        log.trace("Update location:" + cbLocation.toString());
+        de.longri.cachebox3.locator.Locator.setNewLocation(cbLocation);
+
+    }
 
     @Override
     public void dispose() {
@@ -88,8 +109,12 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     @Override
     public void OrientationChanged() {
         MapPosition curentMapPosition = mMap.getMapPosition();
-        float heading = Locator.getHeading();
-        curentMapPosition.setBearing(heading);
+        float bearing = -Locator.getHeading() ;
+
+        // heading must between -180 and 180
+        if (bearing < -180) bearing += 360;
+        log.trace("Update Map Heading:" + bearing);
+        curentMapPosition.setBearing(bearing);
         mMap.setMapPosition(curentMapPosition);
     }
 
