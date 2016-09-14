@@ -60,6 +60,7 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     private GestureButton db_button, cache_button, navButton, tool_button, misc_button;
     private VisLabel toastLabel;
     private Slider slider;
+    private float sliderPos = 0;
 
 
     public ViewManager(CacheboxMain main) {
@@ -77,7 +78,13 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
-        slider = new Slider();
+        slider = new Slider() {
+            @Override
+            public void viewHeightChanged(float newPos) {
+                sliderPos = height - newPos;
+                setActViewBounds();
+            }
+        };
         slider.setBounds(0, 0, width, height);
         this.addActor(slider);
 
@@ -229,7 +236,8 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     }
 
     private void setActViewBounds() {
-        this.actView.setBounds(0, mainButtonBar.getHeight(), width, height - mainButtonBar.getHeight());
+        if (this.actView != null)
+            this.actView.setBounds(0, mainButtonBar.getHeight(), width, height - (mainButtonBar.getHeight() + sliderPos));
     }
 
     public AbstractView getActView() {

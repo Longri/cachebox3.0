@@ -97,6 +97,10 @@ public class Slider extends WidgetGroup {
         content.setBounds(0, sliderPos + nameWidgetHeight, this.getWidth(), this.getHeight());
         needsLayout = false;
         super.layout();
+        viewHeightChanged(quickButtonPos - nameWidgetHeight);
+    }
+
+    public void viewHeightChanged(float height) {
     }
 
     @Override
