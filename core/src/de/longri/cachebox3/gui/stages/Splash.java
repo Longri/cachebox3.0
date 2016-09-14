@@ -139,7 +139,7 @@ public class Splash extends NamedStage {
             @Override
             public void run() {
                 for (AbstractInitTask task : initTaskList) {
-                    task.RUNABLE();
+                    task.runable();
                     progress.setValue(progress.getValue() + task.percent);
                 }
                 loadReadyHandler.ready();

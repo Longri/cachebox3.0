@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.stages.initial_tasks;
+package de.longri.cachebox3.gui.views;
 
 /**
- * Created by Longri on 02.08.16.
+ * Created by Longri on 14.09.2016.
  */
-public abstract class AbstractInitTask {
-
-    public final String name;
-    public final int percent;
-
-    public AbstractInitTask(String name, int percent) {
-        this.name = name;
-        this.percent = percent;
+public class CreditsView extends AbstractView {
+    public CreditsView() {
+        super("CreditsView");
     }
 
-    public abstract void runable();
+    @Override
+    public void dispose() {
 
+    }
 }
-

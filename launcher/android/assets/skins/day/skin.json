@@ -312,6 +312,30 @@
     "other": {
       "path": "skins/day/svg/other.svg",
       "scale": 0.25
+    },
+    "docIcon": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "waypointListIcon": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "listIcon": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "UPLOADFIELDNOTE": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "log10icon": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "videoIcon": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "voiceRecIcon": {
+      "path": "skins/day/svg/missingIcon.svg"
+    },
+    "DayNight": {
+      "path": "skins/day/svg/missingIcon.svg"
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
@@ -400,6 +424,9 @@
     },
     "text_selection_drawable": {
       "color": "text_selection_color"
+    },
+    "red_color_drawable": {
+      "color": "abstract_background"
     }
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
@@ -764,6 +791,20 @@
       "arrow": "arrow-compass",
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color"
+    }
+  },
+  "de.longri.cachebox3.gui.widgets.Slider$SliderStyle": {
+    "default": {
+      "background": "dialog_stage_background",
+      "slider": "drawable_default_button",
+      "font": "normal_font",
+      "fontColor": "font_color"
+    }
+  },
+  "de.longri.cachebox3.gui.widgets.QuickButtonList$QuickButtonListStyle": {
+    "default": {
+      "background": "red_color_drawable",
+      "button": "drawable_default_button"
     }
   }
 }

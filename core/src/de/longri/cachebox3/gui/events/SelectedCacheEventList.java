@@ -74,7 +74,7 @@ public class SelectedCacheEventList {
 				public void run() {
 					synchronized (list) {
 						for (SelectedCacheEvent event : list) {
-							event.SelectedCacheChanged(selectedCache, waypoint);
+							event.selectedCacheChanged(selectedCache, waypoint);
 						}
 
 						// save last selected Cache in to DB

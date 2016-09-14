@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -33,7 +34,7 @@ import de.longri.cachebox3.types.CacheTypes;
 /**
  * Created by Longri on 05.09.2016.
  */
-public class CacheListItem extends ListViewItem {
+public class CacheListItem extends ListViewItem implements Disposable {
 
     private final CacheListItemStyle style;
     private final CacheTypes type;
@@ -61,7 +62,7 @@ public class CacheListItem extends ListViewItem {
 
 
     public void layout() {
-        this.setDebug(true, false);
+//        this.setDebug(true, false);
         if (!needsLayout) {
             super.layout();
             return;
@@ -148,6 +149,17 @@ public class CacheListItem extends ListViewItem {
 
     public void posOrBearingChanged() {
         distanceOrBearingChanged = true;
+    }
+
+    @Override
+    public void dispose() {
+        arrowImage.setDrawable(null);
+        arrowImage.clear();
+        arrowImage = null;
+
+        distanceLabel.setText(null);
+        distanceLabel.clear();
+        distanceLabel = null;
     }
 
 

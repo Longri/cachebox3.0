@@ -231,7 +231,8 @@ public class Location extends CoordinateGPS {
         sb.append(this.latitude);
         sb.append(", longitude=");
         sb.append(this.longitude);
-        sb.append("]");
+        sb.append("]  BEARING: ");
+        sb.append(this.bearing);
         return sb.toString();
     }
 

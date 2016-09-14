@@ -117,8 +117,8 @@ public class CacheboxMain extends ApplicationAdapter {
 
         // TileSource tileSource = new MapFileTileSource();
         // tileSource.setOption("file", "/home/jeff/germany.map");
-        initDefaultLayers(tileSource, false, true, true, true);
-        mMap.setMapPosition(0, 0, 1 << 2);
+        initDefaultLayers(tileSource, true, true, true, true);
+        mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
     }
 
     protected void initDefaultLayers(TileSource tileSource, boolean tileGrid, boolean labels,
@@ -170,12 +170,11 @@ public class CacheboxMain extends ApplicationAdapter {
             GLState.bindVertexBuffer(0);
             GLState.bindElementBuffer(0);
         } else {
+            // if Maprenderer not drawn, we must clear before draw stage
             Gdx.gl.glClearColor(CB.backgroundColor.r, CB.backgroundColor.g, CB.backgroundColor.b, CB.backgroundColor.a);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ?
                     GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
-
         }
 
         StageManager.draw();

@@ -22,7 +22,6 @@ import org.robovm.apple.dispatch.DispatchQueue;
 import org.robovm.apple.foundation.Foundation;
 import org.robovm.apple.foundation.NSArray;
 import org.robovm.apple.foundation.NSError;
-import org.robovm.apple.foundation.NSString;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -90,7 +89,7 @@ public class IOS_LocationListener {
             cbLocation.setHasSpeed(newLocation.getSpeed() >= 0);
             cbLocation.setSpeed((float) newLocation.getSpeed());
             cbLocation.setHasBearing(newLocation.getCourse() >= 0);
-            cbLocation.setBearing((float) newLocation.getCourse());
+            cbLocation.setBearing((float) -newLocation.getCourse());
             cbLocation.setAltitude(newLocation.getAltitude());
             cbLocation.setProvider(provider);
             log.trace("Update location:" + cbLocation.toString());
@@ -117,7 +116,7 @@ public class IOS_LocationListener {
             }
 
             log.trace("Update Heading:" + type.toString() + " / " + heading);
-            de.longri.cachebox3.locator.Locator.setHeading((float) heading, type);
+            de.longri.cachebox3.locator.Locator.setHeading(heading, type);
         }
 
 
@@ -128,16 +127,4 @@ public class IOS_LocationListener {
             }
         }
     };
-
-    public static String getLocalizedCoordinateString(CLLocation location) {
-        if (location.getHorizontalAccuracy() < 0) {
-            return NSString.getLocalizedString("DataUnavailable");
-        }
-        String latString = (location.getCoordinate().getLatitude() < 0) ? NSString.getLocalizedString("South")
-                : NSString.getLocalizedString("North");
-        String lonString = (location.getCoordinate().getLongitude() < 0) ? NSString.getLocalizedString("West")
-                : NSString.getLocalizedString("East");
-        return String.format("%.4fÂ° %s, %.4fÂ° %s", Math.abs(location.getCoordinate().getLatitude()), latString,
-                Math.abs(location.getCoordinate().getLongitude()), lonString);
-    }
 }

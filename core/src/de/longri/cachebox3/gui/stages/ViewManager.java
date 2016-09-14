@@ -29,12 +29,19 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.gui.actions.*;
 import de.longri.cachebox3.gui.actions.show_vies.*;
+import de.longri.cachebox3.gui.events.SelectedCacheEvent;
+import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.gui.widgets.Slider;
 import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
+import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.CacheSizes;
+import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.Waypoint;
 import org.slf4j.LoggerFactory;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
@@ -42,20 +49,28 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 /**
  * Created by Longri on 20.07.2016.
  */
-public class ViewManager extends NamedStage {
+public class ViewManager extends NamedStage implements SelectedCacheEvent {
 
     final static org.slf4j.Logger log = LoggerFactory.getLogger(ViewManager.class);
-
+    final static CharSequence EMPTY = "";
 
     private AbstractView actView;
     private final float width, height;
     private final ButtonBar mainButtonBar;
     private GestureButton db_button, cache_button, navButton, tool_button, misc_button;
     private VisLabel toastLabel;
+    private Slider slider;
+    private float sliderPos = 0;
 
 
     public ViewManager(CacheboxMain main) {
         super("ViewManager");
+
+        Gdx.app.log("ScaleFactor", Float.toString(CB.getScaledFloat(1)));
+        Gdx.app.log("Width", Float.toString(Gdx.graphics.getWidth()));
+        Gdx.app.log("Height", Float.toString(Gdx.graphics.getHeight()));
+        Gdx.app.log("PPI", Float.toString(Gdx.graphics.getPpiX()));
+
 
         //set this to static CB for global access
         CB.viewmanager = this;
@@ -63,11 +78,16 @@ public class ViewManager extends NamedStage {
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
+        slider = new Slider() {
+            @Override
+            public void viewHeightChanged(float newPos) {
+                sliderPos = height - newPos;
+                setActViewBounds();
+            }
+        };
+        slider.setBounds(0, 0, width, height);
+        this.addActor(slider);
 
-        Gdx.app.log("ScaleFactor", Float.toString(CB.getScaledFloat(1)));
-        Gdx.app.log("Width", Float.toString(Gdx.graphics.getWidth()));
-        Gdx.app.log("Height", Float.toString(Gdx.graphics.getHeight()));
-        Gdx.app.log("PPI", Float.toString(Gdx.graphics.getPpiX()));
 
         db_button = new GestureButton("db");
         cache_button = new GestureButton("cache");
@@ -85,11 +105,44 @@ public class ViewManager extends NamedStage {
         mainButtonBar.setBounds(0, 0, width, mainButtonBar.getPrefHeight());
         this.addActor(mainButtonBar);
         mainButtonBar.layout();
+
         initialActionButtons();
         showView(new AboutView());
 
+
+        //register SelectedCacheChangedEvent
+        SelectedCacheEventList.Add(this);
+
+        //set selected Cache to slider
+        selectedCacheChanged(CB.getSelectedCache(), CB.getSelectedWaypoint());
+
         // set position of MapScaleBar
         main.setMapScaleBarOffset(CB.scaledSizes.MARGIN, mainButtonBar.getHeight());
+    }
+
+    @Override
+    public void selectedCacheChanged(Cache selectedCache, Waypoint waypoint) {
+        // set Cache name to Slider
+        if (selectedCache == null) {
+            slider.setCacheName(EMPTY);
+        } else {
+            CharSequence text = CacheTypes.toShortString(selectedCache)
+                    + terrDiffToShortString(selectedCache.getDifficulty()) + "/"
+                    + terrDiffToShortString(selectedCache.getTerrain()) + CacheSizes.toShortString(selectedCache)
+                    + " " + selectedCache.getName();
+            slider.setCacheName(text);
+        }
+    }
+
+    private String terrDiffToShortString(float value) {
+        int intValue = (int) value;
+        String retValue;
+        if (value == intValue) {
+            retValue = "" + intValue;
+        } else {
+            retValue = "" + value;
+        }
+        return retValue;
     }
 
     public void showView(AbstractView view) {
@@ -112,6 +165,9 @@ public class ViewManager extends NamedStage {
 
         //bring ButtonBar to Front
         mainButtonBar.toFront();
+
+        // and over all the slider
+        slider.toFront();
 
         //select main button
         boolean buttonFound = false;
@@ -180,7 +236,8 @@ public class ViewManager extends NamedStage {
     }
 
     private void setActViewBounds() {
-        this.actView.setBounds(0, mainButtonBar.getHeight(), width, height - mainButtonBar.getHeight());
+        if (this.actView != null)
+            this.actView.setBounds(0, mainButtonBar.getHeight(), width, height - (mainButtonBar.getHeight() + sliderPos));
     }
 
     public AbstractView getActView() {

@@ -33,6 +33,24 @@ public abstract class PlatformConnector {
         platformConnector = connector;
     }
 
+    public static boolean isTorchAvailable() {
+        return platformConnector._isTorchAvailable();
+    }
+
+    protected abstract boolean _isTorchAvailable();
+
+    public static boolean isTorchOn() {
+        return platformConnector._isTorchOn();
+    }
+
+    protected abstract boolean _isTorchOn();
+
+    public static void switchTorch() {
+        platformConnector._switchTorch();
+    }
+
+    protected abstract void _switchTorch();
+
     // SVG implementations #############################################################################################
     public enum SvgScaleType {
         SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED, NONE
