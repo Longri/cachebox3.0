@@ -18,6 +18,9 @@ package de.longri.cachebox3;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import org.oscim.backend.canvas.Bitmap;
+import org.robovm.apple.avfoundation.AVCaptureDevice;
+import org.robovm.apple.avfoundation.AVCaptureTorchMode;
+import org.robovm.apple.avfoundation.AVMediaType;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +30,29 @@ import java.io.InputStream;
  * Created by Longri on 17.07.16.
  */
 public class IOS_PlatformConnector extends PlatformConnector {
+
+    @Override
+    protected boolean _isTorchAvailable() {
+        AVCaptureDevice device = AVCaptureDevice.getDefaultDeviceForMediaType(AVMediaType.Video);
+        return device.hasTorch();
+    }
+
+    @Override
+    protected boolean _isTorchOn() {
+        AVCaptureDevice device = AVCaptureDevice.getDefaultDeviceForMediaType(AVMediaType.Video);
+        return (device.getTorchMode() == AVCaptureTorchMode.On);
+    }
+
+    @Override
+    protected void _switchTorch() {
+        AVCaptureDevice device = AVCaptureDevice.getDefaultDeviceForMediaType(AVMediaType.Video);
+
+        if (device.getTorchMode() == AVCaptureTorchMode.Off) {
+            device.setTorchMode(AVCaptureTorchMode.On);
+        } else {
+            device.setTorchMode(AVCaptureTorchMode.Off);
+        }
+    }
 
     @Override
     public Bitmap getRealScaledSVG(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
