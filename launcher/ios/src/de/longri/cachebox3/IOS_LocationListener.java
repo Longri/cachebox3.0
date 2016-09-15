@@ -112,8 +112,8 @@ public class IOS_LocationListener {
             type = Locator.CompassType.GPS;
             heading = (float) newHeading.getTrueHeading();
 
-            log.trace("Update Heading:" + type.toString() + " / " + heading);
-            de.longri.cachebox3.locator.Locator.setHeading(heading, type);
+//            log.trace("Update Heading:" + type.toString() + " / " + heading);
+//            de.longri.cachebox3.locator.Locator.setHeading(heading, type);
         }
 
 

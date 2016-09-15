@@ -19,16 +19,20 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.settings.Config;
+import org.slf4j.impl.LibgdxLogger;
 
 /**
  * Created by Longri on 09.09.16.
@@ -40,7 +44,7 @@ public class Slider extends WidgetGroup {
     private SliderStyle style;
     private boolean needsLayout = true;
     private final NameWidget nameWidget;
-    private final WidgetGroup content;
+    private final Group content;
     private float sliderPos, maxSliderPos, minSliderPos;
     private final float nameWidgetHeight;
     private boolean swipeUp;
@@ -48,6 +52,7 @@ public class Slider extends WidgetGroup {
     private float quickButtonHeight;
     private float quickButtonMaxHeight;
     private final QuickButtonList quickButtonList;
+    private ScrollPane logTextField;
 
     public Slider() {
         style = VisUI.getSkin().get("default", SliderStyle.class);
@@ -55,7 +60,7 @@ public class Slider extends WidgetGroup {
         quickButtonList = new QuickButtonList();
         nameWidget = new NameWidget();
         nameWidgetHeight = CB.scaledSizes.BUTTON_HEIGHT;
-        content = new WidgetGroup() {
+        content = new Group() {
             @Override
             public void draw(Batch batch, float parentAlpha) {
                 validate();
@@ -77,6 +82,14 @@ public class Slider extends WidgetGroup {
         super.addActor(quickButtonList);
         super.setTouchable(Touchable.childrenOnly);
         super.setLayoutEnabled(true);
+
+        fillContent();
+    }
+
+    private void fillContent() {
+
+        logTextField = LibgdxLogger.getLogScrollPane(VisUI.getSkin().getFont("normal_font"), Color.WHITE);
+        content.addActor(logTextField);
     }
 
 
@@ -113,6 +126,9 @@ public class Slider extends WidgetGroup {
 
         //set slider pos to top
         setSliderPos(getHeight() - nameWidgetHeight);
+
+        //set size for Log text field
+        logTextField.setBounds(0, 0, getWidth(), getHeight() - (nameWidgetHeight + quickButtonMaxHeight));
 
         //call layout for set size direct
         layout();
@@ -172,7 +188,7 @@ public class Slider extends WidgetGroup {
     /**
      * the touchable slider with self scrolling selected CacheName if the name to long
      */
-    private class NameWidget extends WidgetGroup {
+    private class NameWidget extends Group {
 
 
         private Drawable background;

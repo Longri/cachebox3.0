@@ -24,6 +24,13 @@
 package org.slf4j.impl;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.CB;
 import org.slf4j.Logger;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MarkerIgnoringBase;
@@ -327,6 +334,18 @@ public class LibgdxLogger extends MarkerIgnoringBase {
         return LOG_LEVEL_INFO;
     }
 
+
+    public interface ShortLogHandler {
+        public void shortLog(String msg);
+    }
+
+    public static ShortLogHandler shortLogHandler;
+
+    public static void setShortLogHandler(ShortLogHandler handler) {
+        shortLogHandler = handler;
+    }
+
+
     /**
      * This is our internal implementation for logging regular
      * (non-parameterized) log messages.
@@ -341,6 +360,11 @@ public class LibgdxLogger extends MarkerIgnoringBase {
         }
 
         StringBuffer buf = new StringBuffer(32);
+
+        StringBuffer shortBuf = null;
+        if (shortLogHandler != null) {
+            shortBuf = new StringBuffer(16);
+        }
 
         // Append date-time if so configured
         if (SHOW_DATE_TIME) {
@@ -394,8 +418,15 @@ public class LibgdxLogger extends MarkerIgnoringBase {
             buf.append(String.valueOf(name)).append(" - ");
         }
 
+        if (shortBuf != null) {
+            if (shortLogName == null)
+                shortLogName = computeShortName();
+            shortBuf.append(String.valueOf(shortLogName)).append(" - ");
+        }
+
         // Append the message
         buf.append(message);
+        if (shortBuf != null) shortBuf.append(message);
         switch (level) {
             case LOG_LEVEL_TRACE:
             case LOG_LEVEL_DEBUG:
@@ -410,6 +441,7 @@ public class LibgdxLogger extends MarkerIgnoringBase {
                 break;
         }
 
+        if (shortBuf != null) shortLogHandler.shortLog(shortBuf.toString());
         if (t != null) t.printStackTrace();
     }
 
@@ -696,5 +728,40 @@ public class LibgdxLogger extends MarkerIgnoringBase {
      */
     public void error(String msg, Throwable t) {
         log(LOG_LEVEL_ERROR, msg, t);
+    }
+
+    public static ScrollPane getLogScrollPane(BitmapFont font, Color fontColor) {
+
+
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.fontColor = fontColor;
+        textFieldStyle.font = font;
+        final TextArea logTextField = new TextArea("", textFieldStyle);
+
+        final ScrollPane scrollPane = new ScrollPane(logTextField);
+        scrollPane.setFlickScroll(true);
+        scrollPane.setForceScroll(false, true);
+
+        //set logListener
+        LibgdxLogger.setShortLogHandler(new LibgdxLogger.ShortLogHandler() {
+            @Override
+            public void shortLog(String msg) {
+                logTextField.appendText(msg + CB.br);
+                int length = logTextField.getText().length();
+                if (length > 5000) {
+                    int posFirstLineBreak = logTextField.getText().indexOf(CB.br);
+                    String newText = logTextField.getText().substring(posFirstLineBreak + 2, length);
+                    logTextField.setText(newText);
+                    logTextField.layout();
+                }
+                logTextField.setPrefRows(logTextField.getLines());
+
+                scrollPane.setHeight(scrollPane.getHeight() + 1);
+                scrollPane.setHeight(scrollPane.getHeight() - 1);
+            }
+        });
+
+
+        return scrollPane;
     }
 }
