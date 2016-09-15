@@ -745,19 +745,25 @@ public class LibgdxLogger extends MarkerIgnoringBase {
         //set logListener
         LibgdxLogger.setShortLogHandler(new LibgdxLogger.ShortLogHandler() {
             @Override
-            public void shortLog(String msg) {
-                logTextField.appendText(msg + CB.br);
-                int length = logTextField.getText().length();
-                if (length > 5000) {
-                    int posFirstLineBreak = logTextField.getText().indexOf(CB.br);
-                    String newText = logTextField.getText().substring(posFirstLineBreak + 2, length);
-                    logTextField.setText(newText);
-                    logTextField.layout();
-                }
-                logTextField.setPrefRows(logTextField.getLines());
+            public void shortLog(final String msg) {
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        logTextField.appendText(msg + CB.br);
+                        int length = logTextField.getText().length();
+                        if (length > 5000) {
+                            int posFirstLineBreak = logTextField.getText().indexOf(CB.br);
+                            String newText = logTextField.getText().substring(posFirstLineBreak + 2, length);
+                            logTextField.setText(newText);
+                            logTextField.layout();
+                        }
+                        logTextField.setPrefRows(logTextField.getLines());
 
-                scrollPane.setHeight(scrollPane.getHeight() + 1);
-                scrollPane.setHeight(scrollPane.getHeight() - 1);
+                        scrollPane.setHeight(scrollPane.getHeight() + 1);
+                        scrollPane.setHeight(scrollPane.getHeight() - 1);
+                    }
+                });
+
             }
         });
 
