@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -31,6 +32,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.CacheboxMain;
+import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import org.slf4j.impl.LibgdxLogger;
 
@@ -90,6 +93,13 @@ public class Slider extends WidgetGroup {
 
         logTextField = LibgdxLogger.getLogScrollPane(VisUI.getSkin().getFont("normal_font"), Color.WHITE);
         content.addActor(logTextField);
+    }
+
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        nameWidget.setCacheName(CB.viewmanager.getMain().getMemory());
     }
 
 

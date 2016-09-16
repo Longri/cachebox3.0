@@ -17,27 +17,21 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Matrix4;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
-import org.oscim.gdx.LayerHandler;
-import org.oscim.gdx.MotionHandler;
 import org.oscim.layers.TileGridLayer;
-import org.oscim.layers.tile.bitmap.BitmapTileLayer;
 import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Layers;
-import org.oscim.map.Map;
 import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.GLViewport;
@@ -49,6 +43,8 @@ import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLogger;
 
+import java.text.NumberFormat;
+
 import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
 
 public class CacheboxMain extends ApplicationAdapter {
@@ -59,6 +55,11 @@ public class CacheboxMain extends ApplicationAdapter {
     }
 
     final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheboxMain.class);
+
+    Runtime runtime = Runtime.getRuntime();
+    NumberFormat format = NumberFormat.getInstance();
+    private String memoryUsage;
+
 
     Batch batch;
     protected int FpsInfoPos = 0;
@@ -160,6 +161,20 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void render() {
+
+        {// calculate Memory Usage
+            long maxMemory = runtime.maxMemory();
+            long allocatedMemory = runtime.totalMemory();
+            long freeMemory = runtime.freeMemory();
+            StringBuilder memoryStringBuilder = new StringBuilder();
+            memoryStringBuilder.append("f: " + format.format(freeMemory / 1048576));
+            memoryStringBuilder.append("  a: " + format.format(allocatedMemory / 1048576));
+            memoryStringBuilder.append("  m: " + format.format(maxMemory / 1048576));
+            memoryStringBuilder.append("  tf: " + format.format((freeMemory + (maxMemory - allocatedMemory)) / 1048576));
+            memoryUsage = memoryStringBuilder.toString();
+        }
+
+
         CB.stateTime += Gdx.graphics.getDeltaTime();
 
         if (drawMap) {
@@ -226,5 +241,9 @@ public class CacheboxMain extends ApplicationAdapter {
 //        if (Database.Data != null) Database.Data.Open();
 //        if (Database.Settings != null) Database.Settings.Open();
 //        if (Database.FieldNotes != null) Database.FieldNotes.Open();
+    }
+
+    public String getMemory() {
+        return memoryUsage;
     }
 }
