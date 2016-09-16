@@ -15,6 +15,9 @@
  */
 package de.longri.cachebox3;
 
+
+import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -32,10 +35,14 @@ import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Layers;
+import org.oscim.map.Map;
 import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
+import org.oscim.renderer.bucket.TextItem;
+import org.oscim.renderer.bucket.TextureBucket;
+import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.TileSource;
@@ -44,8 +51,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLogger;
 
 import java.text.NumberFormat;
-
-import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -67,24 +72,14 @@ public class CacheboxMain extends ApplicationAdapter {
     private Sprite FpsInfoSprite;
     private final Matrix4 NORMAL_MATRIX = new Matrix4().toNormalMatrix();
     public static boolean drawMap = false;
-    public static CacheboxMapAdapter mMap;
 
+    public CacheboxMapAdapter mMap;
     private MapRenderer mMapRenderer;
     private MapScaleBarLayer mapScaleBarLayer;
 
 
     @Override
     public void create() {
-
-        mMap = new CacheboxMapAdapter();
-        mMapRenderer = new MapRenderer(mMap);
-
-        int w = Gdx.graphics.getWidth();
-        int h = Gdx.graphics.getHeight();
-
-        mMapRenderer.onSurfaceCreated();
-        setMapSize(w, h);
-
         StageManager.setMainStage(new Splash(new Splash.LoadReady() {
             @Override
             public void ready() {
@@ -102,10 +97,49 @@ public class CacheboxMain extends ApplicationAdapter {
             }
         }));
 
-        createLayers();
+        Gdx.graphics.setContinuousRendering(false);
         Gdx.graphics.requestRendering();
 
     }
+
+    public Map createMap() {
+        Utils.logRunningTime("Create Map", new Runnable() {
+            @Override
+            public void run() {
+                drawMap = true;
+                mMap = new CacheboxMapAdapter();
+                mMapRenderer = new MapRenderer(mMap);
+
+                int w = Gdx.graphics.getWidth();
+                int h = Gdx.graphics.getHeight();
+
+                mMapRenderer.onSurfaceCreated();
+                setMapSize(w, h);
+                createLayers();
+            }
+        });
+        return mMap;
+    }
+
+    public void destroyMap() {
+        Utils.logRunningTime("Destroy Map", new Runnable() {
+            @Override
+            public void run() {
+                drawMap = true;
+                mMap.clearMap();
+                mMap.destroy();
+                mMap = null;
+
+                TextureBucket.pool.clear();
+                TextItem.pool.clear();
+                TextureItem.disposeTextures();
+                //MapRenderer.destroy();
+
+                mMapRenderer = null;
+            }
+        });
+    }
+
 
     private void setMapSize(int width, int height) {
         mMap.setSize(width, height);
@@ -153,6 +187,7 @@ public class CacheboxMain extends ApplicationAdapter {
     }
 
     public void setMapScaleBarOffset(float xOffset, float yOffset) {
+        if (mapScaleBarLayer == null) return;
         BitmapRenderer renderer = mapScaleBarLayer.getRenderer();
         renderer.setPosition(GLViewport.Position.BOTTOM_LEFT);
         renderer.setOffset(xOffset, yOffset);
@@ -177,7 +212,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
         CB.stateTime += Gdx.graphics.getDeltaTime();
 
-        if (drawMap) {
+        if (drawMap && mMapRenderer != null) {
             GLState.enableVertexArrays(-1, -1);
             mMapRenderer.onDrawFrame();
 

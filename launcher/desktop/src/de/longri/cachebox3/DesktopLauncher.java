@@ -48,7 +48,6 @@ public class DesktopLauncher {
         config.foregroundFPS = 30;
         config.backgroundFPS = 10;
 
-
         if (cmd.hasOption("note")) {
             //force note 4 layout
             config.width = 323;

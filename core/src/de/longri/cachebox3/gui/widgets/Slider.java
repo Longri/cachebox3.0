@@ -95,11 +95,16 @@ public class Slider extends WidgetGroup {
         content.addActor(logTextField);
     }
 
+    String lastMemoryString;
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        nameWidget.setCacheName(CB.viewmanager.getMain().getMemory());
+        if (!CB.viewmanager.getMain().getMemory().equals(lastMemoryString)) {
+            lastMemoryString = CB.viewmanager.getMain().getMemory();
+            nameWidget.setCacheName(lastMemoryString);
+         //   Gdx.graphics.requestRendering();
+        }
     }
 
 
