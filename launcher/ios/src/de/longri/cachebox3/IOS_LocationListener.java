@@ -76,9 +76,10 @@ public class IOS_LocationListener {
             CLLocation newLocation = locations.last();
             CLLocationCoordinate2D coord = newLocation.getCoordinate();
 
+
             de.longri.cachebox3.locator.Location.ProviderType provider = de.longri.cachebox3.locator.Location.ProviderType.NULL;
 
-            //TODO set  GPS provider
+            //FIXME set  GPS or Network provider
 //                if (location.getProvider().toLowerCase(new Locale("en")).contains("gps"))
             provider = de.longri.cachebox3.locator.Location.ProviderType.GPS;
 //                if (location.getProvider().toLowerCase(new Locale("en")).contains("network"))
@@ -91,12 +92,10 @@ public class IOS_LocationListener {
             cbLocation.setHasSpeed(newLocation.getSpeed() >= 0);
             cbLocation.setSpeed((float) newLocation.getSpeed());
             cbLocation.setHasBearing(newLocation.getCourse() >= 0);
-            cbLocation.setBearing((float) -newLocation.getCourse());
+            cbLocation.setBearing((float) newLocation.getCourse());
             cbLocation.setAltitude(newLocation.getAltitude());
             cbLocation.setProvider(provider);
-            log.trace("Update location:" + cbLocation.toString());
             de.longri.cachebox3.locator.Locator.setNewLocation(cbLocation);
-
 
         }
 
@@ -106,14 +105,8 @@ public class IOS_LocationListener {
          */
         @Override
         public void didUpdateHeading(CLLocationManager manager, CLHeading newHeading) {
-            Locator.CompassType type = Locator.CompassType.any;
-            float heading = 0f;
-
-            type = Locator.CompassType.GPS;
-            heading = (float) newHeading.getTrueHeading();
-
-            log.trace("Update Heading:" + type.toString() + " / " + heading);
-            de.longri.cachebox3.locator.Locator.setHeading(heading, type);
+            de.longri.cachebox3.locator.Locator.setHeading((float) newHeading.getTrueHeading(),
+                    Locator.CompassType.Magnetic);
         }
 
 

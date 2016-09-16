@@ -885,19 +885,19 @@ public class Database {
     }
 
     public void beginTransaction() {
-        log.trace("begin transaction");
+       // log.trace("begin transaction");
         if (myDB != null)
             myDB.setAutoCommit(false);
     }
 
     public void setTransactionSuccessful() {
-        log.trace("begin transaction");
+      //  log.trace("begin transaction");
         if (myDB != null)
             myDB.setTransactionSuccessful();
     }
 
     public void endTransaction() {
-        log.trace("begin transaction");
+       // log.trace("begin transaction");
         if (myDB != null)
             myDB.endTransaction();
     }
