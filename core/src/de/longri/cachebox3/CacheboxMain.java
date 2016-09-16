@@ -26,6 +26,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Matrix4;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
+import de.longri.cachebox3.gui.map.MyLocationLayer;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -183,6 +184,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
             mapScaleBarLayer = new MapScaleBarLayer(mMap, mapScaleBar);
             layers.add(mapScaleBarLayer);
+            layers.add(new MyLocationLayer(mMap));
         }
     }
 
@@ -225,9 +227,10 @@ public class CacheboxMain extends ApplicationAdapter {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ?
                     GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
+            StageManager.draw();
         }
 
-        StageManager.draw();
+
 
         if (CB.isTestVersion()) {
             float FpsInfoSize = CB.getScaledFloat(4f);
