@@ -153,7 +153,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
         // TileSource tileSource = new MapFileTileSource();
         // tileSource.setOption("file", "/home/jeff/germany.map");
-        initDefaultLayers(tileSource, true, true, true, true);
+        initDefaultLayers(tileSource, false, true, true, true);
         mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
     }
 
