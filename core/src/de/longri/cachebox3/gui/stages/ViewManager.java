@@ -61,7 +61,7 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     private VisLabel toastLabel;
     private Slider slider;
     private float sliderPos = 0;
-
+    private final CacheboxMain main;
 
     public ViewManager(CacheboxMain main) {
         super("ViewManager");
@@ -71,6 +71,7 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         Gdx.app.log("Height", Float.toString(Gdx.graphics.getHeight()));
         Gdx.app.log("PPI", Float.toString(Gdx.graphics.getPpiX()));
 
+        this.main = main;
 
         //set this to static CB for global access
         CB.viewmanager = this;
@@ -242,6 +243,10 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
 
     public AbstractView getActView() {
         return actView;
+    }
+
+    public CacheboxMain getMain() {
+        return this.main;
     }
 
 

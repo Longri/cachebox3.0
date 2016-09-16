@@ -368,4 +368,13 @@ public class Utils {
     public static String GetFileName(FileHandle fileHandle) {
         return GetFileName(fileHandle.name());
     }
+
+
+    public static void logRunningTime(final String name, Runnable runnable) {
+        long start = System.currentTimeMillis();
+        runnable.run();
+        long runningTime = System.currentTimeMillis() - start;
+        log.info(("Time for " + name + ": " + Long.toString(runningTime)));
+    }
+
 }

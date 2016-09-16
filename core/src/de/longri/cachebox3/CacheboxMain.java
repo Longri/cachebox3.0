@@ -15,24 +15,22 @@
  */
 package de.longri.cachebox3;
 
+
+import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Matrix4;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
-import org.oscim.gdx.LayerHandler;
-import org.oscim.gdx.MotionHandler;
 import org.oscim.layers.TileGridLayer;
-import org.oscim.layers.tile.bitmap.BitmapTileLayer;
 import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
@@ -42,6 +40,9 @@ import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
+import org.oscim.renderer.bucket.TextItem;
+import org.oscim.renderer.bucket.TextureBucket;
+import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.TileSource;
@@ -49,7 +50,7 @@ import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLogger;
 
-import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
+import java.text.NumberFormat;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -60,30 +61,25 @@ public class CacheboxMain extends ApplicationAdapter {
 
     final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheboxMain.class);
 
+    Runtime runtime = Runtime.getRuntime();
+    NumberFormat format = NumberFormat.getInstance();
+    private String memoryUsage;
+
+
     Batch batch;
     protected int FpsInfoPos = 0;
 
     private Sprite FpsInfoSprite;
     private final Matrix4 NORMAL_MATRIX = new Matrix4().toNormalMatrix();
     public static boolean drawMap = false;
-    public static CacheboxMapAdapter mMap;
 
+    public CacheboxMapAdapter mMap;
     private MapRenderer mMapRenderer;
     private MapScaleBarLayer mapScaleBarLayer;
 
 
     @Override
     public void create() {
-
-        mMap = new CacheboxMapAdapter();
-        mMapRenderer = new MapRenderer(mMap);
-
-        int w = Gdx.graphics.getWidth();
-        int h = Gdx.graphics.getHeight();
-
-        mMapRenderer.onSurfaceCreated();
-        setMapSize(w, h);
-
         StageManager.setMainStage(new Splash(new Splash.LoadReady() {
             @Override
             public void ready() {
@@ -101,10 +97,49 @@ public class CacheboxMain extends ApplicationAdapter {
             }
         }));
 
-        createLayers();
+        Gdx.graphics.setContinuousRendering(false);
         Gdx.graphics.requestRendering();
 
     }
+
+    public Map createMap() {
+        Utils.logRunningTime("Create Map", new Runnable() {
+            @Override
+            public void run() {
+                drawMap = true;
+                mMap = new CacheboxMapAdapter();
+                mMapRenderer = new MapRenderer(mMap);
+
+                int w = Gdx.graphics.getWidth();
+                int h = Gdx.graphics.getHeight();
+
+                mMapRenderer.onSurfaceCreated();
+                setMapSize(w, h);
+                createLayers();
+            }
+        });
+        return mMap;
+    }
+
+    public void destroyMap() {
+        Utils.logRunningTime("Destroy Map", new Runnable() {
+            @Override
+            public void run() {
+                drawMap = true;
+                mMap.clearMap();
+                mMap.destroy();
+                mMap = null;
+
+                TextureBucket.pool.clear();
+                TextItem.pool.clear();
+                TextureItem.disposeTextures();
+                //MapRenderer.destroy();
+
+                mMapRenderer = null;
+            }
+        });
+    }
+
 
     private void setMapSize(int width, int height) {
         mMap.setSize(width, height);
@@ -152,6 +187,7 @@ public class CacheboxMain extends ApplicationAdapter {
     }
 
     public void setMapScaleBarOffset(float xOffset, float yOffset) {
+        if (mapScaleBarLayer == null) return;
         BitmapRenderer renderer = mapScaleBarLayer.getRenderer();
         renderer.setPosition(GLViewport.Position.BOTTOM_LEFT);
         renderer.setOffset(xOffset, yOffset);
@@ -160,9 +196,23 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void render() {
+
+        {// calculate Memory Usage
+            long maxMemory = runtime.maxMemory();
+            long allocatedMemory = runtime.totalMemory();
+            long freeMemory = runtime.freeMemory();
+            StringBuilder memoryStringBuilder = new StringBuilder();
+            memoryStringBuilder.append("f: " + format.format(freeMemory / 1048576));
+            memoryStringBuilder.append("  a: " + format.format(allocatedMemory / 1048576));
+            memoryStringBuilder.append("  m: " + format.format(maxMemory / 1048576));
+            memoryStringBuilder.append("  tf: " + format.format((freeMemory + (maxMemory - allocatedMemory)) / 1048576));
+            memoryUsage = memoryStringBuilder.toString();
+        }
+
+
         CB.stateTime += Gdx.graphics.getDeltaTime();
 
-        if (drawMap) {
+        if (drawMap && mMapRenderer != null) {
             GLState.enableVertexArrays(-1, -1);
             mMapRenderer.onDrawFrame();
 
@@ -226,5 +276,9 @@ public class CacheboxMain extends ApplicationAdapter {
 //        if (Database.Data != null) Database.Data.Open();
 //        if (Database.Settings != null) Database.Settings.Open();
 //        if (Database.FieldNotes != null) Database.FieldNotes.Open();
+    }
+
+    public String getMemory() {
+        return memoryUsage;
     }
 }

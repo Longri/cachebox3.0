@@ -28,200 +28,201 @@ import java.util.GregorianCalendar;
 
 public class CacheList extends MoveableList<Cache> {
 
-	private static final long serialVersionUID = -932434844601790958L;
+    private static final long serialVersionUID = -932434844601790958L;
 
-	public boolean ResortAtWork = false;
+    public boolean ResortAtWork = false;
 
-	public Cache GetCacheByGcCode(String GcCode) {
-		for (int i = 0, n = this.size(); i < n; i++) {
-			Cache cache = this.get(i);
-			if (cache.getGcCode().equalsIgnoreCase(GcCode))
-				return cache;
-		}
-		return null;
-	}
+    public Cache GetCacheByGcCode(String GcCode) {
+        for (int i = 0, n = this.size(); i < n; i++) {
+            Cache cache = this.get(i);
+            if (cache.getGcCode().equalsIgnoreCase(GcCode))
+                return cache;
+        }
+        return null;
+    }
 
-	public Cache GetCacheById(long cacheId) {
-		for (int i = 0, n = this.size(); i < n; i++) {
-			Cache cache = this.get(i);
-			if (cache.Id == cacheId)
-				return cache;
-		}
-		return null;
-	}
+    public Cache GetCacheById(long cacheId) {
+        for (int i = 0, n = this.size(); i < n; i++) {
+            Cache cache = this.get(i);
+            if (cache.Id == cacheId)
+                return cache;
+        }
+        return null;
+    }
 
-	/**
-	 * @param selectedCoord
-	 *            CB.getSelectedCoord()
-	 * @param selected
-	 *            new CacheWithWp(CB.getSelectedCache(),CB.getSelectedWP())
-	 * @param userName
-	 *            Config.settings.GcLogin.getValue()
-	 * @param ParkingLatitude
-	 *            Config.settings.ParkingLatitude.getValue()
-	 * @param ParkingLongitude
-	 *            Config.settings.ParkingLongitude.getValue()
-	 * @param DisplayOff
-	 *            Energy.DisplayOff()
-	 * @return CacheWithWP [null posible] set To<br>
-	 *         CB.setSelectedWaypoint(nextCache, waypoint, false);<br>
-	 *         CB.NearestCache(nextCache);
-	 */
+    /**
+     * @param selectedCoord
+     *            CB.getSelectedCoord()
+     * @param selected
+     *            new CacheWithWp(CB.getSelectedCache(),CB.getSelectedWP())
+     * @param userName
+     *            Config.settings.GcLogin.getValue()
+     * @param ParkingLatitude
+     *            Config.settings.ParkingLatitude.getValue()
+     * @param ParkingLongitude
+     *            Config.settings.ParkingLongitude.getValue()
+     * @param DisplayOff
+     *            Energy.DisplayOff()
+     * @return CacheWithWP [null posible] set To<br>
+     *         CB.setSelectedWaypoint(nextCache, waypoint, false);<br>
+     *         CB.NearestCache(nextCache);
+     */
 
-	/**
-	 * 
-	 * @param selectedCoord
-	 * @param selected
-	 * @return
-	 */
-	public CacheWithWP Resort(Coordinate selectedCoord, CacheWithWP selected) {
+    /**
+     * @param selectedCoord
+     * @param selected
+     * @return
+     */
+    public CacheWithWP Resort(Coordinate selectedCoord, CacheWithWP selected) {
 
-		CacheWithWP retValue = null;
+        if (selected == null) return null;
+        CacheWithWP retValue = null;
 
-		this.ResortAtWork = true;
-		boolean LocatorValid = Locator.Valid();
-		// Alle Distanzen aktualisieren
-		if (LocatorValid) {
-			for (int i = 0, n = this.size(); i < n; i++) {
-				Cache cache = this.get(i);
-				cache.Distance(MathUtils.CalculationType.FAST, true);
-			}
-		} else {
-			// sort after Distance from selected Cache
-			Coordinate fromPos = selectedCoord;
-			// avoid "illegal waypoint"
-			if (fromPos == null || (fromPos.getLatitude() == 0 && fromPos.getLongitude() == 0)) {
-				fromPos = selected.getCache().Pos;
-			}
-			if (fromPos == null) {
-				this.ResortAtWork = false;
-				return retValue;
-			}
-			for (int i = 0, n = this.size(); i < n; i++) {
-				Cache cache = this.get(i);
-				cache.Distance(MathUtils.CalculationType.FAST, true, fromPos);
-			}
-		}
+        this.ResortAtWork = true;
+        boolean LocatorValid = Locator.Valid();
+        // Alle Distanzen aktualisieren
+        if (LocatorValid) {
+            for (int i = 0, n = this.size(); i < n; i++) {
+                Cache cache = this.get(i);
+                cache.Distance(MathUtils.CalculationType.FAST, true);
+            }
+        } else {
+            // sort after Distance from selected Cache
+            Coordinate fromPos = selectedCoord;
+            // avoid "illegal waypoint"
+            if (fromPos == null || (fromPos.getLatitude() == 0 && fromPos.getLongitude() == 0)) {
+                if (selected.getCache() == null) return null;
+                fromPos = selected.getCache().Pos;
+            }
+            if (fromPos == null) {
+                this.ResortAtWork = false;
+                return retValue;
+            }
+            for (int i = 0, n = this.size(); i < n; i++) {
+                Cache cache = this.get(i);
+                cache.Distance(MathUtils.CalculationType.FAST, true, fromPos);
+            }
+        }
 
-		this.sort();
+        this.sort();
 
-		// Nächsten Cache auswählen
-		if (this.size() > 0) {
-			Cache nextCache = this.get(0); // or null ...
-			for (int i = 0; i < this.size(); i++) {
-				nextCache = this.get(i);
-				if (!nextCache.isArchived()) {
-					if (nextCache.isAvailable()) {
-						if (!nextCache.isFound())
-						// eigentlich wenn has_fieldnote(found,DNF,Maint,SBA, aber note vielleicht nicht)
-						{
-							if (!nextCache.ImTheOwner()) {
-								if ((nextCache.Type == CacheTypes.Event) || (nextCache.Type == CacheTypes.MegaEvent) || (nextCache.Type == CacheTypes.CITO) || (nextCache.Type == CacheTypes.Giga)) {
-									Calendar dateHidden = GregorianCalendar.getInstance();
-									Calendar today = GregorianCalendar.getInstance();
-									dateHidden.setTime(nextCache.getDateHidden());
-									if (("" + today.get(Calendar.DAY_OF_MONTH) + today.get(Calendar.MONTH) + today.get(Calendar.YEAR))
-											.equals("" + dateHidden.get(Calendar.DAY_OF_MONTH) + dateHidden.get(Calendar.MONTH) + dateHidden.get(Calendar.YEAR))) {
-										break;
-									}
-								} else {
-									if (nextCache.Type != CacheTypes.Mystery) {
-										break;
-									} else {
-										if (nextCache.CorrectedCoordiantesOrMysterySolved()) {
-											break;
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			// Wenn der nachste Cache ein Mystery mit Final Waypoint ist
-			// -> gleich den Final Waypoint auswahlen!!!
-			// When the next Cache is a mystery with final waypoint
-			// -> activate the final waypoint!!!
-			Waypoint waypoint = nextCache.GetFinalWaypoint();
-			if (waypoint == null) {
-				// wenn ein Cache keinen Final Waypoint hat dann wird überprüft, ob dieser einen Startpunkt definiert hat
-				// Wenn ein Cache einen Startpunkt definiert hat dann wird beim Selektieren dieses Caches gleich dieser Startpunkt
-				// selektiert
-				waypoint = nextCache.GetStartWaypoint();
-			}
+        // Nächsten Cache auswählen
+        if (this.size() > 0) {
+            Cache nextCache = this.get(0); // or null ...
+            for (int i = 0; i < this.size(); i++) {
+                nextCache = this.get(i);
+                if (!nextCache.isArchived()) {
+                    if (nextCache.isAvailable()) {
+                        if (!nextCache.isFound())
+                        // eigentlich wenn has_fieldnote(found,DNF,Maint,SBA, aber note vielleicht nicht)
+                        {
+                            if (!nextCache.ImTheOwner()) {
+                                if ((nextCache.Type == CacheTypes.Event) || (nextCache.Type == CacheTypes.MegaEvent) || (nextCache.Type == CacheTypes.CITO) || (nextCache.Type == CacheTypes.Giga)) {
+                                    Calendar dateHidden = GregorianCalendar.getInstance();
+                                    Calendar today = GregorianCalendar.getInstance();
+                                    dateHidden.setTime(nextCache.getDateHidden());
+                                    if (("" + today.get(Calendar.DAY_OF_MONTH) + today.get(Calendar.MONTH) + today.get(Calendar.YEAR))
+                                            .equals("" + dateHidden.get(Calendar.DAY_OF_MONTH) + dateHidden.get(Calendar.MONTH) + dateHidden.get(Calendar.YEAR))) {
+                                        break;
+                                    }
+                                } else {
+                                    if (nextCache.Type != CacheTypes.Mystery) {
+                                        break;
+                                    } else {
+                                        if (nextCache.CorrectedCoordiantesOrMysterySolved()) {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // Wenn der nachste Cache ein Mystery mit Final Waypoint ist
+            // -> gleich den Final Waypoint auswahlen!!!
+            // When the next Cache is a mystery with final waypoint
+            // -> activate the final waypoint!!!
+            Waypoint waypoint = nextCache.GetFinalWaypoint();
+            if (waypoint == null) {
+                // wenn ein Cache keinen Final Waypoint hat dann wird überprüft, ob dieser einen Startpunkt definiert hat
+                // Wenn ein Cache einen Startpunkt definiert hat dann wird beim Selektieren dieses Caches gleich dieser Startpunkt
+                // selektiert
+                waypoint = nextCache.GetStartWaypoint();
+            }
 
-			retValue = new CacheWithWP(nextCache, waypoint);
-		}
+            retValue = new CacheWithWP(nextCache, waypoint);
+        }
 
-		CacheListChangedEventList.Call();
+        CacheListChangedEventList.Call();
 
-		// vorhandenen Parkplatz Cache nach oben schieben
-		Cache park = this.GetCacheByGcCode("CBPark");
-		if (park != null) {
-			this.MoveItemFirst(this.indexOf(park));
-		}
+        // vorhandenen Parkplatz Cache nach oben schieben
+        Cache park = this.GetCacheByGcCode("CBPark");
+        if (park != null) {
+            this.MoveItemFirst(this.indexOf(park));
+        }
 
-		// Cursor.Current = Cursors.Default;
-		this.ResortAtWork = false;
-		return retValue;
-	}
+        // Cursor.Current = Cursors.Default;
+        this.ResortAtWork = false;
+        return retValue;
+    }
 
-	/**
-	 * Removes all of the elements from this list. The list will be empty after this call returns.<br>
-	 * All Cache objects are disposed
-	 */
-	@Override
-	public void clear() {
-		for (int i = 0, n = this.size(); i < n; i++) {
-			Cache cache = this.get(i);
-			if (!cache.isLive())
-				cache.dispose(); // don't dispose LiveCaches
-			cache = null;
-		}
+    /**
+     * Removes all of the elements from this list. The list will be empty after this call returns.<br>
+     * All Cache objects are disposed
+     */
+    @Override
+    public void clear() {
+        for (int i = 0, n = this.size(); i < n; i++) {
+            Cache cache = this.get(i);
+            if (!cache.isLive())
+                cache.dispose(); // don't dispose LiveCaches
+            cache = null;
+        }
 
-		super.clear();
-	}
+        super.clear();
+    }
 
-	@Override
-	public void dispose() {
-		clear();
-		super.dispose();
-	}
+    @Override
+    public void dispose() {
+        clear();
+        super.dispose();
+    }
 
-	public ArrayList<String> getGcCodes() {
-		ArrayList<String> list = new ArrayList<String>();
-		for (int i = 0, n = this.size(); i < n; i++) {
-			list.add(this.get(i).getGcCode());
-		}
-		return list;
-	}
+    public ArrayList<String> getGcCodes() {
+        ArrayList<String> list = new ArrayList<String>();
+        for (int i = 0, n = this.size(); i < n; i++) {
+            list.add(this.get(i).getGcCode());
+        }
+        return list;
+    }
 
-	@Override
-	public int add(Cache ca) {
-		if (ca == null)
-			return -1;
+    @Override
+    public int add(Cache ca) {
+        if (ca == null)
+            return -1;
 
-		int index = -1;
-		for (int i = 0, n = this.size(); i < n; i++) {
+        int index = -1;
+        for (int i = 0, n = this.size(); i < n; i++) {
 
-			Cache cache = get(i);
-			if (cache.Id == ca.Id) {
-				index = i;
-			}
-		}
+            Cache cache = get(i);
+            if (cache.Id == ca.Id) {
+                index = i;
+            }
+        }
 
-		if (index > -1) {
-			// Replace LiveCache with Cache
-			if (get(index).isLive()) {
-				if (!ca.isLive()) {
-					this.replace(ca, index);
-					return index;
-				}
-			}
+        if (index > -1) {
+            // Replace LiveCache with Cache
+            if (get(index).isLive()) {
+                if (!ca.isLive()) {
+                    this.replace(ca, index);
+                    return index;
+                }
+            }
 
-		}
+        }
 
-		return super.add(ca);
-	}
+        return super.add(ca);
+    }
 
 }
