@@ -16,8 +16,6 @@
 package de.longri.cachebox3;
 
 
-import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -26,7 +24,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Matrix4;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
-import de.longri.cachebox3.gui.map.MyLocationLayer;
+import de.longri.cachebox3.gui.map.layer.Compass;
+import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -52,6 +51,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLogger;
 
 import java.text.NumberFormat;
+
+import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -149,17 +150,33 @@ public class CacheboxMain extends ApplicationAdapter {
     }
 
     public void createLayers() {
-        TileSource tileSource = new OSciMap4TileSource();
-
-        // TileSource tileSource = new MapFileTileSource();
-        // tileSource.setOption("file", "/home/jeff/germany.map");
-        initDefaultLayers(tileSource, false, true, true, true);
+        initDefaultLayers(false, true, true, true);
         mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
     }
 
-    protected void initDefaultLayers(TileSource tileSource, boolean tileGrid, boolean labels,
+    protected void initDefaultLayers(boolean tileGrid, boolean labels,
                                      boolean buildings, boolean mapScalebar) {
+
+        TileSource tileSource = new OSciMap4TileSource();
+
         Layers layers = mMap.layers();
+
+
+        //MyLocationLayer
+        LocationOverlay locationOverlay = new LocationOverlay(mMap, new Compass() {
+            @Override
+            public void setEnabled(boolean enabled) {
+
+            }
+
+            @Override
+            public float getRotation() {
+                return 0;
+            }
+        });
+
+        locationOverlay.setPosition(52.580400947530364, 13.385594096047232, 100);
+
 
         if (tileSource != null) {
             VectorTileLayer mapLayer = mMap.setBaseMap(tileSource);
@@ -184,7 +201,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
             mapScaleBarLayer = new MapScaleBarLayer(mMap, mapScaleBar);
             layers.add(mapScaleBarLayer);
-            layers.add(new MyLocationLayer(mMap));
+            layers.add(locationOverlay);
         }
     }
 
@@ -229,7 +246,6 @@ public class CacheboxMain extends ApplicationAdapter {
                     GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
             StageManager.draw();
         }
-
 
 
         if (CB.isTestVersion()) {
