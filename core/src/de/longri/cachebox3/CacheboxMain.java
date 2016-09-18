@@ -76,8 +76,8 @@ public class CacheboxMain extends ApplicationAdapter {
     private final Matrix4 NORMAL_MATRIX = new Matrix4().toNormalMatrix();
     public static boolean drawMap = false;
 
-    public CacheboxMapAdapter mMap;
-    private MapRenderer mMapRenderer;
+   // public CacheboxMapAdapter mMap;
+    public MapRenderer mMapRenderer;
 
 
 
@@ -105,53 +105,15 @@ public class CacheboxMain extends ApplicationAdapter {
 
     }
 
-    public Map createMap() {
-        Utils.logRunningTime("Create Map", new Runnable() {
-            @Override
-            public void run() {
-                drawMap = true;
-                mMap = new CacheboxMapAdapter();
-                mMapRenderer = new MapRenderer(mMap);
 
-                int w = Gdx.graphics.getWidth();
-                int h = Gdx.graphics.getHeight() - 100;
 
-                mMapRenderer.onSurfaceCreated();
-                setMapPosAndSize(0, 0, w, h);
-                mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
-            }
-        });
-        return mMap;
-    }
 
-    public void destroyMap() {
-        Utils.logRunningTime("Destroy Map", new Runnable() {
-            @Override
-            public void run() {
-                drawMap = true;
-                mMap.clearMap();
-                mMap.destroy();
-                mMap = null;
-
-                TextureBucket.pool.clear();
-                TextItem.pool.clear();
-                TextureItem.disposeTextures();
-                //MapRenderer.destroy();
-
-                mMapRenderer = null;
-            }
-        });
-    }
 
 
     int mapDrawX, mapDrawY, mapDrawWidth, mapDrawHeight;
 
 
     public void setMapPosAndSize(int x, int y, int width, int height) {
-        if (mMap == null) return;
-        mMap.setSize(width, height);
-        mMap.viewport().setScreenSize(width, height);
-        mMap.viewport().setMapScreenCenter(0.7f);
         mapDrawX = x;
         mapDrawY = y;
         mapDrawWidth = width;

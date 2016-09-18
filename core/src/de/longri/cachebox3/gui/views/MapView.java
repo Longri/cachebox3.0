@@ -15,11 +15,14 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
+import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.layer.Compass;
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.stages.StageManager;
@@ -35,9 +38,12 @@ import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Layers;
-import org.oscim.map.Map;
 import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLViewport;
+import org.oscim.renderer.MapRenderer;
+import org.oscim.renderer.bucket.TextItem;
+import org.oscim.renderer.bucket.TextureBucket;
+import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.TileSource;
@@ -54,7 +60,7 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(MapView.class);
 
     InputMultiplexer mapInputHandler;
-    private Map mMap;
+    private CacheboxMapAdapter mMap;
     private final CacheboxMain main;
     private MapScaleBarLayer mapScaleBarLayer;
     float myBearing;
@@ -63,8 +69,49 @@ public class MapView extends AbstractView implements PositionChangedEvent {
         super("MapView");
         this.setTouchable(Touchable.disabled);
         this.main = main;
-        mMap = CB.viewmanager.getMain().createMap();
+        mMap = createMap();
         initLayers(false, true, true, true);
+    }
+
+    public CacheboxMapAdapter createMap() {
+        Utils.logRunningTime("Create Map", new Runnable() {
+            @Override
+            public void run() {
+                main.drawMap = true;
+                mMap = new CacheboxMapAdapter() {
+                    public void tiltChanged(float newTilt) {
+                        MapView.this.tiltChanged(newTilt);
+                    }
+                };
+                main.mMapRenderer = new MapRenderer(mMap);
+
+                int w = Gdx.graphics.getWidth();
+                int h = Gdx.graphics.getHeight();
+
+                main.mMapRenderer.onSurfaceCreated();
+                mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
+            }
+        });
+        return mMap;
+    }
+
+    public void destroyMap() {
+        Utils.logRunningTime("Destroy Map", new Runnable() {
+            @Override
+            public void run() {
+                main.drawMap = true;
+                mMap.clearMap();
+                mMap.destroy();
+                mMap = null;
+
+                TextureBucket.pool.clear();
+                TextItem.pool.clear();
+                TextureItem.disposeTextures();
+
+
+                main.mMapRenderer = null;
+            }
+        });
     }
 
     @Override
@@ -91,7 +138,7 @@ public class MapView extends AbstractView implements PositionChangedEvent {
 
     @Override
     public void onHide() {
-        CB.viewmanager.getMain().destroyMap();
+        destroyMap();
         StageManager.removeMapMultiplexer(mapInputHandler);
         PositionChangedEventList.Remove(this);
     }
@@ -131,8 +178,8 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     @Override
     public void OrientationChanged() {
         MapPosition curentMapPosition = mMap.getMapPosition();
-        myBearing= Locator.getHeading();
-        float bearing = -myBearing ;
+        myBearing = Locator.getHeading();
+        float bearing = -myBearing;
 
         // heading must between -180 and 180
         if (bearing < -180) bearing += 360;
@@ -160,6 +207,9 @@ public class MapView extends AbstractView implements PositionChangedEvent {
 
     @Override
     public void sizeChanged() {
+        if (mMap == null) return;
+        mMap.setSize((int) this.getWidth(), (int) this.getHeight());
+        mMap.viewport().setScreenSize((int) this.getWidth(), (int) this.getHeight());
         main.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
 
         // set position of MapScaleBar
@@ -230,6 +280,12 @@ public class MapView extends AbstractView implements PositionChangedEvent {
         BitmapRenderer renderer = mapScaleBarLayer.getRenderer();
         renderer.setPosition(GLViewport.Position.BOTTOM_LEFT);
         renderer.setOffset(xOffset, yOffset);
+    }
+
+
+    private void tiltChanged(float newTilt) {
+        if (newTilt > 0)
+            mMap.viewport().setMapScreenCenter(0.7f);
     }
 
 }
