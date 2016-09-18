@@ -467,14 +467,22 @@ public class Locator {
     public static float getHeading(CompassType type) {
         synchronized (that) {
 
-            if (type == CompassType.GPS || !mUseMagneticCompass)
+            if (type == CompassType.GPS || !mUseMagneticCompass) {
+                log.debug("Return mlastGPSHeading1");
                 return that.mlastGPSHeading;
-            if (type == CompassType.Magnetic)
+            }
+
+            if (type == CompassType.Magnetic) {
+                log.debug("Return mlastGPSHeading2");
                 return that.mlastGPSHeading;
+            }
+
 
             if (UseMagneticCompass()) {
+                log.debug("Return mlastGPSHeading3");
                 return that.mlastMagneticHeading;
             } else {
+                log.debug("Return mlastMagneticHeading");
                 return that.mlastGPSHeading;
             }
         }
@@ -489,8 +497,10 @@ public class Locator {
     public static void setHeading(float heading, CompassType type) {
 
         if (type == CompassType.GPS) {
+            log.debug("Set last Gps heading:");
             that.mlastGPSHeading = heading;
         } else {
+            log.debug("Set last Magnetic heading:");
             that.mlastMagneticHeading = heading;
         }
 
@@ -501,6 +511,8 @@ public class Locator {
         } else {
             that.mLastUsedCompassType = CompassType.Magnetic;
         }
+
+        log.debug("Set last used Compass type:" + that.mLastUsedCompassType);
 
         PositionChangedEventList.OrientationChanged();
     }

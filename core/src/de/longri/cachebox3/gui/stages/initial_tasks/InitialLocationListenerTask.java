@@ -17,6 +17,8 @@ package de.longri.cachebox3.gui.stages.initial_tasks;
 
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.utils.IChanged;
 
 /**
  * Created by Longri on 02.08.16.
@@ -32,6 +34,24 @@ public final class InitialLocationListenerTask extends AbstractInitTask {
 
         //TODO initial with last saved location from settings
         new Locator(null);
+
+        //set Settings Values and change listener
+
+        Locator.setUseHardwareCompass(Config.HardwareCompass.getValue());
+        Config.HardwareCompass.addChangedEventListener(new IChanged() {
+            @Override
+            public void isChanged() {
+                Locator.setUseHardwareCompass(Config.HardwareCompass.getValue());
+            }
+        });
+
+        Locator.setHardwareCompassLevel(Config.HardwareCompassLevel.getValue());
+        Config.HardwareCompass.addChangedEventListener(new IChanged() {
+            @Override
+            public void isChanged() {
+                Locator.setHardwareCompassLevel(Config.HardwareCompassLevel.getValue());
+            }
+        });
 
         PlatformConnector.initLocationListener();
     }

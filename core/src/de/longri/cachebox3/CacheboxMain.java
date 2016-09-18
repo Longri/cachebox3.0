@@ -78,7 +78,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     public CacheboxMapAdapter mMap;
     private MapRenderer mMapRenderer;
-    private MapScaleBarLayer mapScaleBarLayer;
+
 
 
     @Override
@@ -118,7 +118,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
                 mMapRenderer.onSurfaceCreated();
                 setMapPosAndSize(0, 0, w, h);
-                createLayers();
+                mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
             }
         });
         return mMap;
@@ -144,7 +144,7 @@ public class CacheboxMain extends ApplicationAdapter {
     }
 
 
-    int mapX, mapY, mapWidth, mapHeight;
+    int mapDrawX, mapDrawY, mapDrawWidth, mapDrawHeight;
 
 
     public void setMapPosAndSize(int x, int y, int width, int height) {
@@ -152,76 +152,11 @@ public class CacheboxMain extends ApplicationAdapter {
         mMap.setSize(width, height);
         mMap.viewport().setScreenSize(width, height);
         mMap.viewport().setMapScreenCenter(0.7f);
-        mapX = x;
-        mapY = y;
-        mapWidth = width;
-        mapHeight = height;
+        mapDrawX = x;
+        mapDrawY = y;
+        mapDrawWidth = width;
+        mapDrawHeight = height;
         mMapRenderer.onSurfaceChanged(width, height);
-    }
-
-    public void createLayers() {
-        initDefaultLayers(false, true, true, true);
-        mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
-    }
-
-    protected void initDefaultLayers(boolean tileGrid, boolean labels,
-                                     boolean buildings, boolean mapScalebar) {
-
-        TileSource tileSource = new OSciMap4TileSource();
-
-        Layers layers = mMap.layers();
-
-
-        //MyLocationLayer
-        LocationOverlay locationOverlay = new LocationOverlay(mMap, new Compass() {
-            @Override
-            public void setEnabled(boolean enabled) {
-
-            }
-
-            @Override
-            public float getRotation() {
-                return 0;
-            }
-        });
-
-        locationOverlay.setPosition(52.580400947530364, 13.385594096047232, 100);
-
-
-        if (tileSource != null) {
-            VectorTileLayer mapLayer = mMap.setBaseMap(tileSource);
-            mMap.setTheme(VtmThemes.DEFAULT);
-
-            if (buildings)
-                layers.add(new BuildingLayer(mMap, mapLayer));
-
-            if (labels)
-                layers.add(new LabelLayer(mMap, mapLayer));
-        }
-
-        if (tileGrid)
-            layers.add(new TileGridLayer(mMap));
-
-        if (mapScalebar) {
-            DefaultMapScaleBar mapScaleBar = new DefaultMapScaleBar(mMap);
-            mapScaleBar.setScaleBarMode(DefaultMapScaleBar.ScaleBarMode.BOTH);
-            mapScaleBar.setDistanceUnitAdapter(MetricUnitAdapter.INSTANCE);
-            mapScaleBar.setSecondaryDistanceUnitAdapter(ImperialUnitAdapter.INSTANCE);
-            mapScaleBar.setScaleBarPosition(MapScaleBar.ScaleBarPosition.BOTTOM_LEFT);
-
-            mapScaleBarLayer = new MapScaleBarLayer(mMap, mapScaleBar);
-            layers.add(mapScaleBarLayer);
-            layers.add(locationOverlay);
-        }
-
-
-    }
-
-    public void setMapScaleBarOffset(float xOffset, float yOffset) {
-        if (mapScaleBarLayer == null) return;
-        BitmapRenderer renderer = mapScaleBarLayer.getRenderer();
-        renderer.setPosition(GLViewport.Position.BOTTOM_LEFT);
-        renderer.setOffset(xOffset, yOffset);
     }
 
 
@@ -247,7 +182,7 @@ public class CacheboxMain extends ApplicationAdapter {
             GLState.enableVertexArrays(-1, -1);
 
             // set map position and size
-            gl.viewport(mapX, mapY, mapWidth, mapHeight);
+            gl.viewport(mapDrawX, mapDrawY, mapDrawWidth, mapDrawHeight);
             mMapRenderer.onDrawFrame();
 
             //release Buffers from map renderer

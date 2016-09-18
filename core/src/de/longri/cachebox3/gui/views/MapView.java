@@ -20,6 +20,8 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
+import de.longri.cachebox3.gui.map.layer.Compass;
+import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
@@ -28,7 +30,18 @@ import de.longri.cachebox3.locator.events.PositionChangedEventList;
 import org.oscim.core.MapPosition;
 import org.oscim.gdx.LayerHandler;
 import org.oscim.gdx.MotionHandler;
+import org.oscim.layers.TileGridLayer;
+import org.oscim.layers.tile.buildings.BuildingLayer;
+import org.oscim.layers.tile.vector.VectorTileLayer;
+import org.oscim.layers.tile.vector.labeling.LabelLayer;
+import org.oscim.map.Layers;
 import org.oscim.map.Map;
+import org.oscim.renderer.BitmapRenderer;
+import org.oscim.renderer.GLViewport;
+import org.oscim.scalebar.*;
+import org.oscim.theme.VtmThemes;
+import org.oscim.tiling.TileSource;
+import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 import org.slf4j.LoggerFactory;
 
 
@@ -43,24 +56,25 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     InputMultiplexer mapInputHandler;
     private Map mMap;
     private final CacheboxMain main;
+    private MapScaleBarLayer mapScaleBarLayer;
+    float myBearing;
 
     public MapView(CacheboxMain main) {
         super("MapView");
         this.setTouchable(Touchable.disabled);
         this.main = main;
         mMap = CB.viewmanager.getMain().createMap();
+        initLayers(false, true, true, true);
     }
 
     @Override
     protected void create() {
-
+        // overide and don't call supper
+        // for non creation of default name label
     }
 
     @Override
     public void onShow() {
-
-
-
 
         // map input handler
         GestureDetector gestureDetectore = new GestureDetector(new LayerHandler(mMap));
@@ -117,12 +131,14 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     @Override
     public void OrientationChanged() {
         MapPosition curentMapPosition = mMap.getMapPosition();
-        float bearing = -Locator.getHeading();
+        myBearing= Locator.getHeading();
+        float bearing = -myBearing ;
 
         // heading must between -180 and 180
         if (bearing < -180) bearing += 360;
         log.trace("Update Map Heading:" + bearing);
         curentMapPosition.setBearing(bearing);
+
         mMap.setMapPosition(curentMapPosition);
     }
 
@@ -147,12 +163,73 @@ public class MapView extends AbstractView implements PositionChangedEvent {
         main.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
 
         // set position of MapScaleBar
-        main.setMapScaleBarOffset(CB.scaledSizes.MARGIN, CB.scaledSizes.MARGIN_HALF);
+        setMapScaleBarOffset(CB.scaledSizes.MARGIN, CB.scaledSizes.MARGIN_HALF);
     }
 
     @Override
     public void positionChanged() {
         main.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
+    }
+
+
+    protected void initLayers(boolean tileGrid, boolean labels,
+                              boolean buildings, boolean mapScalebar) {
+
+        TileSource tileSource = new OSciMap4TileSource();
+
+        Layers layers = mMap.layers();
+
+
+        //MyLocationLayer
+        LocationOverlay locationOverlay = new LocationOverlay(mMap, new Compass() {
+            @Override
+            public void setEnabled(boolean enabled) {
+
+            }
+
+            @Override
+            public float getRotation() {
+                return myBearing;
+            }
+        });
+
+        locationOverlay.setPosition(52.580400947530364, 13.385594096047232, 100);
+
+
+        if (tileSource != null) {
+            VectorTileLayer mapLayer = mMap.setBaseMap(tileSource);
+            mMap.setTheme(VtmThemes.DEFAULT);
+
+            if (buildings)
+                layers.add(new BuildingLayer(mMap, mapLayer));
+
+            if (labels)
+                layers.add(new LabelLayer(mMap, mapLayer));
+        }
+
+        if (tileGrid)
+            layers.add(new TileGridLayer(mMap));
+
+        if (mapScalebar) {
+            DefaultMapScaleBar mapScaleBar = new DefaultMapScaleBar(mMap);
+            mapScaleBar.setScaleBarMode(DefaultMapScaleBar.ScaleBarMode.BOTH);
+            mapScaleBar.setDistanceUnitAdapter(MetricUnitAdapter.INSTANCE);
+            mapScaleBar.setSecondaryDistanceUnitAdapter(ImperialUnitAdapter.INSTANCE);
+            mapScaleBar.setScaleBarPosition(MapScaleBar.ScaleBarPosition.BOTTOM_LEFT);
+
+            mapScaleBarLayer = new MapScaleBarLayer(mMap, mapScaleBar);
+            layers.add(mapScaleBarLayer);
+            layers.add(locationOverlay);
+        }
+
+
+    }
+
+    public void setMapScaleBarOffset(float xOffset, float yOffset) {
+        if (mapScaleBarLayer == null) return;
+        BitmapRenderer renderer = mapScaleBarLayer.getRenderer();
+        renderer.setPosition(GLViewport.Position.BOTTOM_LEFT);
+        renderer.setOffset(xOffset, yOffset);
     }
 
 }

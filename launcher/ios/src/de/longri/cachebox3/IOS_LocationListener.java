@@ -105,8 +105,12 @@ public class IOS_LocationListener {
          */
         @Override
         public void didUpdateHeading(CLLocationManager manager, CLHeading newHeading) {
-            de.longri.cachebox3.locator.Locator.setHeading((float) newHeading.getTrueHeading(),
-                    Locator.CompassType.Magnetic);
+            if (newHeading.getHeadingAccuracy() > 0) {
+                float value = (float) newHeading.getTrueHeading();
+                log.debug("Set True heading:"+value);
+                de.longri.cachebox3.locator.Locator.setHeading(value,
+                        Locator.CompassType.Magnetic);
+            }
         }
 
 

@@ -56,6 +56,13 @@ public class LocationOverlay extends Layer {
         super(map);
         mRenderer = locationRenderer= new LocationRenderer(map,this);
         mCompass = compass;
+        locationRenderer.setCallback(new LocationRenderer.Callback() {
+            @Override
+            public float getRotation() {
+                return mCompass.getRotation();
+            }
+        });
+
         modelBatch = new ModelBatch(new DefaultShaderProvider());
 
         lights = new Environment();
