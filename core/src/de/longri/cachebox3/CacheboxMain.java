@@ -52,6 +52,7 @@ import org.slf4j.impl.LibgdxLogger;
 
 import java.text.NumberFormat;
 
+import static org.oscim.backend.GLAdapter.gl;
 import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
 
 public class CacheboxMain extends ApplicationAdapter {
@@ -113,10 +114,10 @@ public class CacheboxMain extends ApplicationAdapter {
                 mMapRenderer = new MapRenderer(mMap);
 
                 int w = Gdx.graphics.getWidth();
-                int h = Gdx.graphics.getHeight();
+                int h = Gdx.graphics.getHeight() - 100;
 
                 mMapRenderer.onSurfaceCreated();
-                setMapSize(w, h);
+                setMapPosAndSize(0, 0, w, h);
                 createLayers();
             }
         });
@@ -143,9 +144,18 @@ public class CacheboxMain extends ApplicationAdapter {
     }
 
 
-    private void setMapSize(int width, int height) {
+    int mapX, mapY, mapWidth, mapHeight;
+
+
+    public void setMapPosAndSize(int x, int y, int width, int height) {
+        if (mMap == null) return;
         mMap.setSize(width, height);
         mMap.viewport().setScreenSize(width, height);
+        mMap.viewport().setMapScreenCenter(0.7f);
+        mapX = x;
+        mapY = y;
+        mapWidth = width;
+        mapHeight = height;
         mMapRenderer.onSurfaceChanged(width, height);
     }
 
@@ -203,6 +213,8 @@ public class CacheboxMain extends ApplicationAdapter {
             layers.add(mapScaleBarLayer);
             layers.add(locationOverlay);
         }
+
+
     }
 
     public void setMapScaleBarOffset(float xOffset, float yOffset) {
@@ -233,6 +245,9 @@ public class CacheboxMain extends ApplicationAdapter {
 
         if (drawMap && mMapRenderer != null) {
             GLState.enableVertexArrays(-1, -1);
+
+            // set map position and size
+            gl.viewport(mapX, mapY, mapWidth, mapHeight);
             mMapRenderer.onDrawFrame();
 
             //release Buffers from map renderer
@@ -244,9 +259,11 @@ public class CacheboxMain extends ApplicationAdapter {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ?
                     GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
-            StageManager.draw();
         }
 
+        gl.flush();
+        gl.viewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        StageManager.draw();
 
         if (CB.isTestVersion()) {
             float FpsInfoSize = CB.getScaledFloat(4f);
@@ -300,4 +317,5 @@ public class CacheboxMain extends ApplicationAdapter {
     public String getMemory() {
         return memoryUsage;
     }
+
 }

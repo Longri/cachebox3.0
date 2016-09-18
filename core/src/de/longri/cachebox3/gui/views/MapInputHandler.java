@@ -44,6 +44,7 @@ public class MapInputHandler implements InputProcessor {
                 mPosY = Gdx.input.getY();
                 break;
 
+            case 63:
             case Input.Keys.CONTROL_LEFT:
             case Input.Keys.CONTROL_RIGHT:
                 mActiveRotate = true;
@@ -127,6 +128,7 @@ public class MapInputHandler implements InputProcessor {
             case Input.Keys.SHIFT_RIGHT:
                 mActiveScale = false;
                 break;
+            case 63:
             case Input.Keys.CONTROL_LEFT:
             case Input.Keys.CONTROL_RIGHT:
                 mActiveRotate = false;

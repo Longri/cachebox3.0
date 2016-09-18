@@ -42,10 +42,13 @@ public class MapView extends AbstractView implements PositionChangedEvent {
 
     InputMultiplexer mapInputHandler;
     private Map mMap;
+    private final CacheboxMain main;
 
-    public MapView() {
+    public MapView(CacheboxMain main) {
         super("MapView");
         this.setTouchable(Touchable.disabled);
+        this.main = main;
+        mMap = CB.viewmanager.getMain().createMap();
     }
 
     @Override
@@ -56,7 +59,7 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     @Override
     public void onShow() {
 
-        mMap = CB.viewmanager.getMain().createMap();
+
 
 
         // map input handler
@@ -98,7 +101,6 @@ public class MapView extends AbstractView implements PositionChangedEvent {
 
     @Override
     public void dispose() {
-
         mapInputHandler.clear();
         mapInputHandler = null;
         mMap = null;
@@ -138,4 +140,19 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     public Priority getPriority() {
         return Priority.High;
     }
+
+
+    @Override
+    public void sizeChanged() {
+        main.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
+
+        // set position of MapScaleBar
+        main.setMapScaleBarOffset(CB.scaledSizes.MARGIN, CB.scaledSizes.MARGIN_HALF);
+    }
+
+    @Override
+    public void positionChanged() {
+        main.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
+    }
+
 }

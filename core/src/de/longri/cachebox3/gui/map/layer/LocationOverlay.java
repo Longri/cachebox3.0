@@ -17,8 +17,15 @@
 package de.longri.cachebox3.gui.map.layer;
 
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.*;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
+import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import de.longri.cachebox3.gui.map.MapCamera;
 import org.oscim.backend.GL;
 import org.oscim.core.Box;
 import org.oscim.core.MercatorProjection;
@@ -36,21 +43,45 @@ public class LocationOverlay extends Layer {
     private final int SHOW_ACCURACY_ZOOM = 16;
 
     private final Point mLocation = new Point();
+    private final ModelBatch modelBatch;
+    private final Environment lights;
+    private final MapCamera cam;
+    private final ModelInstance modelInstance;
     private double mRadius;
+    private LocationRenderer locationRenderer;
 
     private final Compass mCompass;
 
     public LocationOverlay(Map map, Compass compass) {
         super(map);
-        mRenderer = new LocationIndicator(map);
+        mRenderer = locationRenderer= new LocationRenderer(map,this);
         mCompass = compass;
+        modelBatch = new ModelBatch(new DefaultShaderProvider());
+
+        lights = new Environment();
+        lights.set(new ColorAttribute(ColorAttribute.AmbientLight, 1.0f, 1.0f, 1.0f, 1.f));
+        lights.add(new DirectionalLight().set(0.3f, 0.3f, 0.3f, 0, 1, -0.2f));
+
+        cam = new MapCamera(mMap);
+
+        ObjLoader loader = new ObjLoader();
+        Model model;
+
+//        model = loader.loadModel(Gdx.files.internal("skins/day/3d_model/Pfeil.obj"));
+
+        model = new ModelBuilder().createBox(0.2f, 0.2f, 0.2f,
+                new Material(ColorAttribute.createDiffuse(new Color(0, 1, 0, 0.4f)))
+                , VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+
+        modelInstance = new ModelInstance(model);
     }
 
     public void setPosition(double latitude, double longitude, double accuracy) {
         mLocation.x = MercatorProjection.longitudeToX(longitude);
         mLocation.y = MercatorProjection.latitudeToY(latitude);
         mRadius = accuracy / MercatorProjection.groundResolution(latitude, 1);
-        ((LocationIndicator) mRenderer).animate(true);
+        locationRenderer.animate(true);
+        locationRenderer.setLocation(mLocation.x,mLocation.y,mRadius);
     }
 
     @Override
@@ -61,7 +92,7 @@ public class LocationOverlay extends Layer {
         super.setEnabled(enabled);
 
         if (!enabled)
-            ((LocationIndicator) mRenderer).animate(false);
+            locationRenderer.animate(false);
 
         mCompass.setEnabled(enabled);
     }
@@ -241,6 +272,19 @@ public class LocationOverlay extends Layer {
             }
 
             gl.drawArrays(GL.TRIANGLE_STRIP, 0, 4);
+
+
+            modelInstance.transform.idt();
+//            modelInstance.transform.setTranslation((float) (x * tileScale), (float) (y * tileScale), 0);
+            modelInstance.transform.setTranslation((float) ((float) (mIndicatorPosition.x - v.pos.x) * v.pos.scale),
+                    (float) ((float) (mIndicatorPosition.y - v.pos.y) * v.pos.scale), 0);
+
+
+            modelBatch.begin(cam);
+            modelBatch.render(modelInstance);
+            modelBatch.end();
+
+
         }
 
         private boolean init() {
@@ -260,7 +304,7 @@ public class LocationOverlay extends Layer {
         }
 
         private final static String vShaderStr = ""
-                + "precision mediump float;"
+//                + "precision mediump float;"
                 + "uniform mat4 u_mvp;"
                 + "uniform float u_phase;"
                 + "uniform float u_scale;"
@@ -272,10 +316,8 @@ public class LocationOverlay extends Layer {
                 + "}";
 
 
-
-
         private final static String fShaderStr = ""
-                + "precision mediump float;"
+//                + "precision mediump float;"
                 + "varying vec2 v_tex;"
                 + "uniform float u_scale;"
                 + "uniform float u_phase;"
@@ -328,4 +370,5 @@ public class LocationOverlay extends Layer {
 //                + "}";
 
     }
+
 }

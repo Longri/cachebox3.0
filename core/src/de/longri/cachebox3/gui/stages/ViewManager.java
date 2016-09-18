@@ -33,11 +33,11 @@ import de.longri.cachebox3.gui.events.SelectedCacheEvent;
 import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.widgets.Slider;
 import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
+import de.longri.cachebox3.gui.widgets.Slider;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
@@ -63,7 +63,7 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     private float sliderPos = 0;
     private final CacheboxMain main;
 
-    public ViewManager(CacheboxMain main) {
+    public ViewManager(final CacheboxMain main) {
         super("ViewManager");
 
         Gdx.app.log("ScaleFactor", Float.toString(CB.getScaledFloat(1)));
@@ -117,8 +117,6 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         //set selected Cache to slider
         selectedCacheChanged(CB.getSelectedCache(), CB.getSelectedWaypoint());
 
-        // set position of MapScaleBar
-        main.setMapScaleBarOffset(CB.scaledSizes.MARGIN, mainButtonBar.getHeight());
     }
 
     @Override
@@ -237,8 +235,10 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     }
 
     private void setActViewBounds() {
-        if (this.actView != null)
-            this.actView.setBounds(0, mainButtonBar.getHeight(), width, height - (mainButtonBar.getHeight() + sliderPos));
+        if (this.actView != null) {
+            actView.setBounds(0, mainButtonBar.getHeight(), width, height - (mainButtonBar.getHeight() + sliderPos));
+        }
+
     }
 
     public AbstractView getActView() {

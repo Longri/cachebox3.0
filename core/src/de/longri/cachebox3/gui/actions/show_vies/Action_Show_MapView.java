@@ -21,7 +21,6 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.MapView;
-import de.longri.cachebox3.gui.views.TrackListView;
 import de.longri.cachebox3.utils.IconNames;
 
 /**
@@ -35,8 +34,7 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
     @Override
     public void execute() {
         if (isActVisible()) return;
-
-        MapView view = new MapView();
+        MapView view = new MapView(CB.viewmanager.getMain());
         CB.viewmanager.showView(view);
     }
 
