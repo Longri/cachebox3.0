@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import de.longri.cachebox3.CB;
@@ -46,8 +47,7 @@ import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
-import org.oscim.tiling.TileSource;
-import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
+import org.oscim.tiling.source.mapfile.MapFileTileSource;
 import org.slf4j.LoggerFactory;
 
 
@@ -64,6 +64,7 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     private final CacheboxMain main;
     private MapScaleBarLayer mapScaleBarLayer;
     float myBearing;
+    LocationOverlay locationOverlay;
 
     public MapView(CacheboxMain main) {
         super("MapView");
@@ -169,9 +170,12 @@ public class MapView extends AbstractView implements PositionChangedEvent {
 
     @Override
     public void PositionChanged() {
+        if (mMap == null) return;
         MapPosition curentMapPosition = mMap.getMapPosition();
         Location curentLocation = Locator.getLocation();
         curentMapPosition.setPosition(curentLocation.latitude, curentLocation.longitude);
+        if (locationOverlay != null) locationOverlay.setPosition(curentLocation.latitude,
+                curentLocation.longitude, curentLocation.getAccuracy());
         mMap.setMapPosition(curentMapPosition);
     }
 
@@ -225,13 +229,21 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     protected void initLayers(boolean tileGrid, boolean labels,
                               boolean buildings, boolean mapScalebar) {
 
-        TileSource tileSource = new OSciMap4TileSource();
+//        TileSource tileSource = new OSciMap4TileSource();
+
+        MapFileTileSource tileSource = new MapFileTileSource();
+
+        FileHandle mapFileHandle = Gdx.files.local(CB.WorkPath + "/repository/maps/germany.map");
+
+        tileSource.setMapFile(mapFileHandle.path());
+
+        tileSource.setPreferredLanguage("en");
 
         Layers layers = mMap.layers();
 
 
         //MyLocationLayer
-        LocationOverlay locationOverlay = new LocationOverlay(mMap, new Compass() {
+        locationOverlay = new LocationOverlay(mMap, new Compass() {
             @Override
             public void setEnabled(boolean enabled) {
 
