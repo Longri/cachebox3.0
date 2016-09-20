@@ -76,13 +76,15 @@ public class CacheboxMain extends ApplicationAdapter {
     private final Matrix4 NORMAL_MATRIX = new Matrix4().toNormalMatrix();
     public static boolean drawMap = false;
 
-   // public CacheboxMapAdapter mMap;
+    // public CacheboxMapAdapter mMap;
     public MapRenderer mMapRenderer;
-
 
 
     @Override
     public void create() {
+
+        Gdx.graphics.setContinuousRendering(false);
+
         StageManager.setMainStage(new Splash(new Splash.LoadReady() {
             @Override
             public void ready() {
@@ -104,10 +106,6 @@ public class CacheboxMain extends ApplicationAdapter {
         Gdx.graphics.requestRendering();
 
     }
-
-
-
-
 
 
     int mapDrawX, mapDrawY, mapDrawWidth, mapDrawHeight;

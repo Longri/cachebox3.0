@@ -87,7 +87,7 @@ public class CacheboxMapAdapter extends Map {
             if (mClearMap)
                 updateMap(false);
             else {
-                Gdx.graphics.requestRendering();
+             //   Gdx.graphics.requestRendering();
             }
         }
     }

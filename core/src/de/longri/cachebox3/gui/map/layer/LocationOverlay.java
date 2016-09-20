@@ -87,8 +87,7 @@ public class LocationOverlay extends Layer {
         mLocation.x = MercatorProjection.longitudeToX(longitude);
         mLocation.y = MercatorProjection.latitudeToY(latitude);
         mRadius = accuracy / MercatorProjection.groundResolution(latitude, 1);
-        locationRenderer.animate(true);
-        locationRenderer.setLocation(mLocation.x,mLocation.y,mRadius);
+             locationRenderer.setLocation(mLocation.x,mLocation.y,mRadius);
     }
 
     @Override
@@ -97,11 +96,7 @@ public class LocationOverlay extends Layer {
             return;
 
         super.setEnabled(enabled);
-
-        if (!enabled)
-            locationRenderer.animate(false);
-
-        mCompass.setEnabled(enabled);
+               mCompass.setEnabled(enabled);
     }
 
     public class LocationIndicator extends LayerRenderer {

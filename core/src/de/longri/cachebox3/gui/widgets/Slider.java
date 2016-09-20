@@ -102,7 +102,7 @@ public class Slider extends WidgetGroup {
         super.draw(batch, parentAlpha);
         if (!CB.viewmanager.getMain().getMemory().equals(lastMemoryString)) {
             lastMemoryString = CB.viewmanager.getMain().getMemory();
-            nameWidget.setCacheName(lastMemoryString);
+          //  nameWidget.setCacheName(lastMemoryString);
          //   Gdx.graphics.requestRendering();
         }
     }

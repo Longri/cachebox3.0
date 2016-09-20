@@ -43,14 +43,14 @@ public class LocationRenderer extends LayerRenderer {
     private static final long ANIM_RATE = 50;
     private static final long INTERVAL = 2000;
 
-    private static final float CIRCLE_SIZE = 60;
+    private static final float CIRCLE_SIZE = 30;
     private static final int SHOW_ACCURACY_ZOOM = 16;
     private ModelBatch modelBatch;
     private Environment lights;
     private MapCamera cam;
     private ModelInstance modelInstance;
 
-    public enum Shader {SHADER_1, SHADER_2}
+    public enum Shader {SHADER_1, SHADER_2,SHADER_3}
 
     private final Map mMap;
     private final Layer mLayer;
@@ -77,7 +77,7 @@ public class LocationRenderer extends LayerRenderer {
     private Callback mCallback;
     private final Point mLocation = new Point(Double.NaN, Double.NaN);
     private double mRadius;
-    private Shader mShader = Shader.SHADER_1;
+    private Shader mShader = Shader.SHADER_3;
     private int mShowAccuracyZoom = SHOW_ACCURACY_ZOOM;
 
     public LocationRenderer(Map map, Layer layer) {
@@ -130,7 +130,7 @@ public class LocationRenderer extends LayerRenderer {
         mShowAccuracyZoom = showAccuracyZoom;
     }
 
-    public void animate(boolean enable) {
+    private void animate(boolean enable) {
         if (mRunAnim == enable)
             return;
 
@@ -220,6 +220,13 @@ public class LocationRenderer extends LayerRenderer {
 
         mLocationIsVisible = (visible == 2);
 
+        if (mLocationIsVisible) {
+            animate(false);
+        } else {
+            animate(true);
+        }
+
+
         // set location indicator position
         v.fromScreenPoint(x, y, mIndicatorPosition);
     }
@@ -235,19 +242,16 @@ public class LocationRenderer extends LayerRenderer {
         GLState.enableVertexArrays(hVertexPosition, -1);
         MapRenderer.bindQuadVertexVBO(hVertexPosition/*, true*/);
 
-        float radius = CIRCLE_SIZE;
-
-        animate(true);
+        float radius = 10;
         boolean viewShed = false;
         if (!mLocationIsVisible /* || pos.zoomLevel < SHOW_ACCURACY_ZOOM */) {
-            //animate(true);
+            radius = CIRCLE_SIZE;
         } else {
             if (v.pos.zoomLevel >= mShowAccuracyZoom)
                 radius = (float) (mRadius * v.pos.scale);
-            radius = Math.max(CIRCLE_SIZE, radius);
+            radius = Math.max(10, radius);
 
             viewShed = true;
-            //animate(false);
         }
         gl.uniform1f(hScale, radius);
 
@@ -319,6 +323,9 @@ public class LocationRenderer extends LayerRenderer {
             case SHADER_2:
                 shader = GLShader.createProgram(vShaderStr, fShaderStr2);
                 break;
+            case SHADER_3:
+                shader = GLShader.createProgram(vShaderStr, fShaderStr3);
+                break;
         }
         if (shader == 0)
             return false;
@@ -358,7 +365,7 @@ public class LocationRenderer extends LayerRenderer {
             + "void main() {"
             + "  float len = 1.0 - length(v_tex);"
             + "  if (u_dir.x == 0.0 && u_dir.y == 0.0){"
-            + "  gl_FragColor = vec4(0.2, 0.2, 0.8, 1.0) * len;"
+            + "  gl_FragColor = vec4(0.8, 0.2, 0.2, 1.0) * len;"
             + "  } else {"
             ///  outer ring
             + "  float a = smoothstep(0.0, 2.0 / u_scale, len);"
@@ -402,6 +409,33 @@ public class LocationRenderer extends LayerRenderer {
             + "  a = max(d, (a - (b + c)) + c);"
             + "  gl_FragColor = vec4(0.2, 0.2, 0.8, 1.0) * a;"
             + "}").replace("precision highp float;", isMac ? "" : "precision highp float;");
+
+
+    // only circle without direction
+    private static final String fShaderStr3 = (""
+            + "precision highp float;"
+            + "varying vec2 v_tex;"
+            + "uniform float u_scale;"
+            + "uniform float u_phase;"
+            + "uniform vec2 u_dir;"
+            + "void main() {"
+            + "  float len = 1.0 - length(v_tex);"
+            ///  outer ring
+            + "  float a = smoothstep(0.0, 2.0 / u_scale, len);"
+            ///  inner ring
+            + "  float b = 0.8 * smoothstep(3.0 / u_scale, 4.0 / u_scale, len);"
+            ///  center point
+            + "  float c = 0.5 * (1.0 - smoothstep(14.0 / u_scale, 16.0 / u_scale, 1.0 - len));"
+            + "  vec2 dir = normalize(v_tex);"
+            ///  - subtract inner from outer to create the outline
+            ///  - multiply by viewshed
+            ///  - add center point
+            + "  a = (a - (b + c)) + c;"
+            + "  if (u_dir.x == 0.0 && u_dir.y == 0.0){"
+            + "  gl_FragColor = vec4(0.8, 0.2, 0.1, 0.8) * a;"
+            + "  } else {"
+            + "  gl_FragColor = vec4(0.2, 0.2, 0.8, 1.0) * a;"
+            + "}}").replace("precision highp float;", isMac ? "" : "precision highp float;");
 
 
     public interface Callback {
