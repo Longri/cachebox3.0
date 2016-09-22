@@ -17,7 +17,9 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import de.longri.cachebox3.CB;
@@ -26,6 +28,7 @@ import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.layer.Compass;
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
+import de.longri.cachebox3.gui.map.layer.MyLocationModel;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
@@ -47,7 +50,8 @@ import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
-import org.oscim.tiling.source.mapfile.MapFileTileSource;
+import org.oscim.tiling.TileSource;
+import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 import org.slf4j.LoggerFactory;
 
 
@@ -64,14 +68,15 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     private final CacheboxMain main;
     private MapScaleBarLayer mapScaleBarLayer;
     float myBearing;
-    LocationOverlay locationOverlay;
+    LocationOverlay myLocationAccuracy;
+    MyLocationModel myLocationModel;
 
     public MapView(CacheboxMain main) {
         super("MapView");
         this.setTouchable(Touchable.disabled);
         this.main = main;
         mMap = createMap();
-        initLayers(false, true, true, true);
+        initLayers(true, true, true, true);
     }
 
     public CacheboxMapAdapter createMap() {
@@ -91,6 +96,7 @@ public class MapView extends AbstractView implements PositionChangedEvent {
 
                 main.mMapRenderer.onSurfaceCreated();
                 mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
+
             }
         });
         return mMap;
@@ -174,8 +180,15 @@ public class MapView extends AbstractView implements PositionChangedEvent {
         MapPosition curentMapPosition = mMap.getMapPosition();
         Location curentLocation = Locator.getLocation();
         curentMapPosition.setPosition(curentLocation.latitude, curentLocation.longitude);
-        if (locationOverlay != null) locationOverlay.setPosition(curentLocation.latitude,
-                curentLocation.longitude, curentLocation.getAccuracy());
+        if (myLocationAccuracy != null) {
+            myLocationAccuracy.setPosition(curentLocation.latitude, curentLocation.longitude, curentLocation.getAccuracy());
+        }
+
+        if (myLocationModel != null) {
+            myLocationModel.setPosition(curentLocation.latitude, curentLocation.longitude, curentLocation.getBearing());
+        }
+
+
         mMap.setMapPosition(curentMapPosition);
     }
 
@@ -218,6 +231,14 @@ public class MapView extends AbstractView implements PositionChangedEvent {
 
         // set position of MapScaleBar
         setMapScaleBarOffset(CB.scaledSizes.MARGIN, CB.scaledSizes.MARGIN_HALF);
+
+        testTillt();
+    }
+
+    private void testTillt() {
+        MapPosition curentMapPosition = mMap.getMapPosition();
+        curentMapPosition.setTilt(65);
+        mMap.setMapPosition(curentMapPosition);
     }
 
     @Override
@@ -229,21 +250,18 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     protected void initLayers(boolean tileGrid, boolean labels,
                               boolean buildings, boolean mapScalebar) {
 
-//        TileSource tileSource = new OSciMap4TileSource();
+        TileSource tileSource = new OSciMap4TileSource();
 
-        MapFileTileSource tileSource = new MapFileTileSource();
-
-        FileHandle mapFileHandle = Gdx.files.local(CB.WorkPath + "/repository/maps/germany.map");
-
-        tileSource.setMapFile(mapFileHandle.path());
-
-        tileSource.setPreferredLanguage("en");
+//        MapFileTileSource tileSource = new MapFileTileSource();
+//        FileHandle mapFileHandle = Gdx.files.local(CB.WorkPath + "/repository/maps/germany.map");
+//        tileSource.setMapFile(mapFileHandle.path());
+//        tileSource.setPreferredLanguage("en");
 
         Layers layers = mMap.layers();
 
 
         //MyLocationLayer
-        locationOverlay = new LocationOverlay(mMap, new Compass() {
+        myLocationAccuracy = new LocationOverlay(mMap, new Compass() {
             @Override
             public void setEnabled(boolean enabled) {
 
@@ -254,9 +272,17 @@ public class MapView extends AbstractView implements PositionChangedEvent {
                 return myBearing;
             }
         });
+        myLocationAccuracy.setPosition(52.580400947530364, 13.385594096047232, 100);
 
-        locationOverlay.setPosition(52.580400947530364, 13.385594096047232, 100);
 
+        Model model = CB.getSkin().get("MyLocationModel", Model.class);
+
+        myLocationModel = new MyLocationModel(mMap, model);
+        myLocationModel.setPosition(52.580400947530364, 13.385594096047232, 100);
+
+
+
+        myLocationAccuracy.setPosition(52.580400947530364, 13.385594096047232, 100);
 
         if (tileSource != null) {
             VectorTileLayer mapLayer = mMap.setBaseMap(tileSource);
@@ -281,7 +307,8 @@ public class MapView extends AbstractView implements PositionChangedEvent {
 
             mapScaleBarLayer = new MapScaleBarLayer(mMap, mapScaleBar);
             layers.add(mapScaleBarLayer);
-            layers.add(locationOverlay);
+            layers.add(myLocationAccuracy);
+            layers.add(myLocationModel);
         }
 
 

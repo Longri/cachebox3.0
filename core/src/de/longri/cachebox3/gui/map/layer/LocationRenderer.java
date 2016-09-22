@@ -23,14 +23,18 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
 import de.longri.cachebox3.gui.map.MapCamera;
 import org.oscim.backend.GL;
 import org.oscim.core.Box;
+import org.oscim.core.MapPosition;
 import org.oscim.core.Point;
 import org.oscim.core.Tile;
 import org.oscim.layers.Layer;
 import org.oscim.map.Map;
 import org.oscim.renderer.*;
+import org.oscim.renderer.bucket.SymbolItem;
 import org.oscim.utils.FastMath;
 import org.oscim.utils.math.Interpolation;
 
@@ -50,7 +54,7 @@ public class LocationRenderer extends LayerRenderer {
     private MapCamera cam;
     private ModelInstance modelInstance;
 
-    public enum Shader {SHADER_1, SHADER_2,SHADER_3}
+    public enum Shader {SHADER_1, SHADER_2, SHADER_3}
 
     private final Map mMap;
     private final Layer mLayer;
@@ -288,31 +292,44 @@ public class LocationRenderer extends LayerRenderer {
         gl.drawArrays(GL.TRIANGLE_STRIP, 0, 4);
         gl.flush();
 
-//
-//        if (mLocationIsVisible) {
-//            modelInstance.transform.idt();
-////            modelInstance.transform.scl(0.02f);
-//            modelInstance.transform.rotate(1, 0, 0, 90);
-//            modelInstance.transform.rotate(1, 0, 0, mMap.getMapPosition().getTilt());
-//
-//            // x,y  -1 to 1  center 0,0
-//
-//
-//
-//            float xView= Math.max(v.plane[0],Math.max(v.plane[2],Math.max(v.plane[4],v.plane[6])));
-//            float yView= Math.max(v.plane[1],Math.max(v.plane[3],Math.max(v.plane[5],v.plane[7])));
-//
-//
-//            modelInstance.transform.setTranslation((float) ((mScreenPoint.x) / xView),
-//                    (float) -((mScreenPoint.y) / yView), 0f);
-//
-//
-//            modelBatch.begin(cam);
-//            modelBatch.render(modelInstance);
-//            modelBatch.end();
-//        }
+
+        //   if (mLocationIsVisible) {
+
+        cam.update(v);
+
+        MapPosition pos = mMap.getMapPosition();
+        int zoom = pos.getZoomLevel();
+
+        double tileX = (pos.x * (Tile.SIZE << zoom));
+        double tileY = (pos.y * (Tile.SIZE << zoom));
+
+        float dx = (float) (70414 * Tile.SIZE - tileX);
+        float dy = (float) (42950 * Tile.SIZE - tileY);
+
+        // scale aka tree height
+        float scale = (float) (1f / (1 << (17 - zoom))) * 8;
+        float s = scale + (-6503.2305f) % 3;
+
+        modelInstance.transform.idt();
+        float testScale = s * 100f;
+
+        modelInstance.transform.scale(testScale, testScale, testScale);
+        //   inst.transform.translate((dx + it.x) / s, (dy + it.y) / s, 0);
+
+        // modelInstance.transform.translate((dx) / s, (dy) / s, 0);
+        modelInstance.transform.translate((dx) / s, (dy) / s, 0);
+
+
+//        modelBatch.begin(cam);
+//        modelBatch.render(modelInstance);
+//        modelBatch.end();
+        //  }
 
     }
+
+    Matrix4 mRotationMatrix = new Matrix4();
+    Matrix4 mTmpMatrix = new Matrix4();
+    Matrix4 mViewMatrix = new Matrix4();
 
     private boolean init() {
         int shader = 0;

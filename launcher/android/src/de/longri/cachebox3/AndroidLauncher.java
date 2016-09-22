@@ -55,8 +55,8 @@ public class AndroidLauncher extends AndroidApplication {
         //initialize platform connector
         PlatformConnector.init(new AndroidPlatformConnector(this));
 
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        CanvasAdapter.dpi = (int) Math.max(metrics.xdpi, metrics.ydpi);
+//        DisplayMetrics metrics = getResources().getDisplayMetrics();
+//        CanvasAdapter.dpi = (int) Math.max(metrics.xdpi, metrics.ydpi);
 
         GdxAssets.init("");
         GLAdapter.init(new AndroidGL());

@@ -20,6 +20,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import org.apache.commons.cli.*;
 import org.oscim.awt.AwtGraphics;
+import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GLAdapter;
 import org.oscim.core.Tile;
 import org.oscim.gdx.GdxAssets;
@@ -63,7 +64,7 @@ public class DesktopLauncher {
             config.height *= scale;
         }
 
-        Tile.SIZE = 360;
+
         initVtm();
 
         // Don't change this LogLevel

@@ -18,7 +18,7 @@ package de.longri.cachebox3;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.stages.StageManager;
@@ -109,7 +109,7 @@ public class CB {
      * or to the "SandBox" on the external SD
      */
     public static String WorkPath;
-    private static Skin actSkin;
+    private static SvgSkin actSkin;
     public static Color backgroundColor = new Color(0, 1, 0, 1);
     public static ScaledSizes scaledSizes;
 
@@ -129,7 +129,7 @@ public class CB {
         return isTestVersion;
     }
 
-    public static void setActSkin(Skin skin) {
+    public static void setActSkin(SvgSkin skin) {
         if (actSkin != null) {
             VisUI.dispose();
         }
@@ -141,7 +141,7 @@ public class CB {
         return actSkin.getColor(name);
     }
 
-    public static Skin getSkin() {
+    public static SvgSkin getSkin() {
         return actSkin;
     }
 
