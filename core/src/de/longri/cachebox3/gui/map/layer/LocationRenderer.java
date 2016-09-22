@@ -49,10 +49,7 @@ public class LocationRenderer extends LayerRenderer {
 
     private static final float CIRCLE_SIZE = 30;
     private static final int SHOW_ACCURACY_ZOOM = 16;
-    private ModelBatch modelBatch;
-    private Environment lights;
     private MapCamera cam;
-    private ModelInstance modelInstance;
 
     public enum Shader {SHADER_1, SHADER_2, SHADER_3}
 
@@ -92,26 +89,7 @@ public class LocationRenderer extends LayerRenderer {
     }
 
     private void initial3DModel() {
-        modelBatch = new ModelBatch(new DefaultShaderProvider());
-
-        lights = new Environment();
-        lights.set(new ColorAttribute(ColorAttribute.AmbientLight, 1.0f, 1.0f, 1.0f, 1.f));
-        lights.add(new DirectionalLight().set(0.3f, 0.3f, 0.3f, 0, 1, -0.2f));
-
-        cam = new MapCamera(mMap);
-
-        ObjLoader loader = new ObjLoader();
-        Model model;
-
-        model = loader.loadModel(Gdx.files.internal("skins/day/3d_model/Pfeil.obj"));
-
-        modelInstance = new ModelInstance(model);
-        Material material = new Material(ColorAttribute.createDiffuse(new Color(0, 1, 0, 0.4f)));
-
-
-//        model = new ModelBuilder().createBox(0.2f, 0.2f, 0.2f,
-//                new Material(ColorAttribute.createDiffuse(new Color(0, 1, 0, 0.4f)))
-//                , VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+               cam = new MapCamera(mMap);
 
 
     }
@@ -293,43 +271,8 @@ public class LocationRenderer extends LayerRenderer {
         gl.flush();
 
 
-        //   if (mLocationIsVisible) {
-
-        cam.update(v);
-
-        MapPosition pos = mMap.getMapPosition();
-        int zoom = pos.getZoomLevel();
-
-        double tileX = (pos.x * (Tile.SIZE << zoom));
-        double tileY = (pos.y * (Tile.SIZE << zoom));
-
-        float dx = (float) (70414 * Tile.SIZE - tileX);
-        float dy = (float) (42950 * Tile.SIZE - tileY);
-
-        // scale aka tree height
-        float scale = (float) (1f / (1 << (17 - zoom))) * 8;
-        float s = scale + (-6503.2305f) % 3;
-
-        modelInstance.transform.idt();
-        float testScale = s * 100f;
-
-        modelInstance.transform.scale(testScale, testScale, testScale);
-        //   inst.transform.translate((dx + it.x) / s, (dy + it.y) / s, 0);
-
-        // modelInstance.transform.translate((dx) / s, (dy) / s, 0);
-        modelInstance.transform.translate((dx) / s, (dy) / s, 0);
-
-
-//        modelBatch.begin(cam);
-//        modelBatch.render(modelInstance);
-//        modelBatch.end();
-        //  }
-
     }
 
-    Matrix4 mRotationMatrix = new Matrix4();
-    Matrix4 mTmpMatrix = new Matrix4();
-    Matrix4 mViewMatrix = new Matrix4();
 
     private boolean init() {
         int shader = 0;

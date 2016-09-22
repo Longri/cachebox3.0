@@ -149,6 +149,10 @@ public class Splash extends NamedStage {
 
     @Override
     public void draw() {
+
+        Gdx.graphics.requestRendering();
+
+
         if (loading && assets.update())
             doneLoading();
         super.draw();
@@ -182,8 +186,8 @@ public class Splash extends NamedStage {
         log.info("Add 3DModels");
 
         Model model = assets.get("skins/day/3d_model/Pfeil.g3db", Model.class);
-        SkinLoaderTask.model=model;
-               loading = false;
+        SkinLoaderTask.model = model;
+        loading = false;
     }
 
 

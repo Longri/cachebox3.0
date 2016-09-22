@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
+import de.longri.cachebox3.CB;
 import org.oscim.backend.GL;
 import org.oscim.core.MapPosition;
 import org.oscim.core.Tile;
@@ -30,7 +31,7 @@ public class MyLocationModel extends Layer implements Map.UpdateListener {
 
     private double longitude = 13.397124;
     private double latitude = 52.579274;
-    private double bearing = 0;
+    private float bearing = 0;
     private float modelScale = 1;
     private SharedModel sharedModel;
 
@@ -50,7 +51,7 @@ public class MyLocationModel extends Layer implements Map.UpdateListener {
     public void setPosition(double latitude, double longitude, double bearing) {
         this.latitude = latitude;
         this.longitude = longitude;
-        this.bearing = bearing;
+        this.bearing = (float) bearing;
     }
 
     public void setModelScale(float scale) {
@@ -140,6 +141,11 @@ public class MyLocationModel extends Layer implements Map.UpdateListener {
                 mapCamera.mMapPosition.setScale(0.0172 * mMap.getMapPosition().getScale());
                 shader.begin(mapCamera, renderContext);
                 sharedModel.transform.idt();
+
+                float s = CB.getScalefactor();
+
+                sharedModel.transform.scale(s, s, s);
+                sharedModel.transform.rotate(1, 0, 0, bearing);
                 sharedModel.getRenderable(r);
                 shader.render(r);
                 shader.end();

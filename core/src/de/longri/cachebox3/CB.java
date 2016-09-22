@@ -161,7 +161,7 @@ public class CB {
     }
 
     private static void calcScaleFactor() {
-        scalefactor = (Gdx.graphics.getPpiX() / PPI_DEFAULT) * globalScale;
+        scalefactor = (Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale;
     }
 
     public static void setGlobalScale(float scale) {
