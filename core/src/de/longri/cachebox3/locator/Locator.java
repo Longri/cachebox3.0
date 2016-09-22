@@ -138,6 +138,10 @@ public class Locator {
      * @param location
      */
     public static void setNewLocation(Location location) {
+
+        if (that == null) return;
+
+
         log.trace("new Location:" + location.toString());
 
         synchronized (that) {
@@ -495,6 +499,8 @@ public class Locator {
      * @param type
      */
     public static void setHeading(float heading, CompassType type) {
+
+        if (that == null) return;
 
         if (type == CompassType.GPS) {
             log.debug("Set last Gps heading:");

@@ -51,36 +51,12 @@ public class CB {
     public static final String LOG_LEVEL_ERROR = "error";
     public static final String LOG_LEVEL_TRACE = "trace";
 
-    public static final String USED_LOG_LEVEL = LOG_LEVEL_TRACE;
+    public static final String USED_LOG_LEVEL = LOG_LEVEL_INFO;
     public static final float WINDOW_FADE_TIME = 0.3f;
     private static boolean displayOff = false;
     public static Categories Categories;
     public static float stateTime;
 
-    static {
-
-//        LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.CacheBox");
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.Settings");
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-        LibgdxLoggerFactory.EXCLUDE_LIST.add(StageManager.class.getName());
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
-
-
-//        LibgdxLoggerFactory.INCLUDE_LIST.add(StageManager.class.getName());
-//        LibgdxLoggerFactory.INCLUDE_LIST.add(CacheListDAO.class.getName());
-//        LibgdxLoggerFactory.INCLUDE_LIST.add(WaypointDAO.class.getName());
-//        LibgdxLoggerFactory.INCLUDE_LIST.add(Action_Show_SelectDB_Dialog.class.getName());
-//
-//        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
-//        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmCursor");
-//
-//        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-//        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopCursor");
-
-
-        ((LibgdxLoggerFactory) LoggerFactory.getILoggerFactory()).reset();
-    }
 
 
     final static float PPI_DEFAULT = 163;
@@ -179,7 +155,6 @@ public class CB {
     }
 
     public static boolean isLogLevel(String logLevel) {
-
         if (logLevelToInt(USED_LOG_LEVEL) >= logLevelToInt(logLevel)) return true;
         return false;
     }
