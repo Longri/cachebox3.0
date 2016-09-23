@@ -73,16 +73,11 @@ public class MyLocationModel extends Layer implements Map.UpdateListener {
 
         @Override
         public boolean setup() {
-
             lights = new Environment();
             lights.set(new ColorAttribute(ColorAttribute.AmbientLight, 1.0f, 1.0f, 1.0f, 1.f));
             lights.add(new DirectionalLight().set(0.3f, 0.3f, 0.3f, 0, 1, -0.2f));
-
             mapCamera = new MapCamera(mMap);
-
-            renderContext =
-                    new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
-
+            renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
             return true;
         }
 
@@ -139,13 +134,14 @@ public class MyLocationModel extends Layer implements Map.UpdateListener {
 
                 mapCamera.mMapPosition.setPosition(latitude, longitude);
                 mapCamera.mMapPosition.setScale(0.0172 * mMap.getMapPosition().getScale());
+
                 shader.begin(mapCamera, renderContext);
                 sharedModel.transform.idt();
 
                 float s = CB.getScalefactor();
-
                 sharedModel.transform.scale(s, s, s);
-                sharedModel.transform.rotate(1, 0, 0, bearing);
+
+                sharedModel.transform.rotate(0, 0, 1, bearing);
                 sharedModel.getRenderable(r);
                 shader.render(r);
                 shader.end();

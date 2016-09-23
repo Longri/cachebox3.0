@@ -308,7 +308,7 @@ public class MapView extends AbstractView implements PositionChangedEvent {
             mapScaleBarLayer = new MapScaleBarLayer(mMap, mapScaleBar);
             layers.add(mapScaleBarLayer);
             layers.add(myLocationAccuracy);
-            layers.add(myLocationModel);
+           // layers.add(myLocationModel);
         }
 
 

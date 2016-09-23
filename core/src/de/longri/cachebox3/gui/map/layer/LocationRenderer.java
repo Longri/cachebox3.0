@@ -156,9 +156,6 @@ public class LocationRenderer extends LayerRenderer {
             return;
         }
 
-            /*if (!v.changed() && isReady())
-                return;*/
-
         setReady(true);
 
         int width = mMap.getWidth();
