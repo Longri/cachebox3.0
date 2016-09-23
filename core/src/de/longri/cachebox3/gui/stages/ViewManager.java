@@ -76,6 +76,8 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         float scaleFactor = CB.getScaledFloat(1);
         Tile.SIZE = (int) (400 * scaleFactor);
         CanvasAdapter.dpi = 240 * scaleFactor;
+        CanvasAdapter.textScale = scaleFactor;
+
 
         Gdx.app.log("Tile.SIZE", Integer.toString(Tile.SIZE));
         Gdx.app.log("Canvas.dpi", Float.toString(CanvasAdapter.dpi));

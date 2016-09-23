@@ -15,11 +15,8 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import de.longri.cachebox3.CB;
@@ -90,9 +87,6 @@ public class MapView extends AbstractView implements PositionChangedEvent {
                     }
                 };
                 main.mMapRenderer = new MapRenderer(mMap);
-
-                int w = Gdx.graphics.getWidth();
-                int h = Gdx.graphics.getHeight();
 
                 main.mMapRenderer.onSurfaceCreated();
                 mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
