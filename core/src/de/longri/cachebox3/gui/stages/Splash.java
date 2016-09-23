@@ -17,9 +17,12 @@ package de.longri.cachebox3.gui.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -186,6 +189,10 @@ public class Splash extends NamedStage {
         log.info("Add 3DModels");
 
         Model model = assets.get("skins/day/3d_model/Pfeil.g3db", Model.class);
+
+        model.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));
+        model.nodes.get(0).parts.get(0).material.set(FloatAttribute.createAlphaTest(0.1f));
+
         SkinLoaderTask.model = model;
         loading = false;
     }

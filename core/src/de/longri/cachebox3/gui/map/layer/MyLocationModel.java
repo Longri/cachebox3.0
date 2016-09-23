@@ -1,5 +1,7 @@
 package de.longri.cachebox3.gui.map.layer;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.Renderable;
@@ -100,10 +102,9 @@ public class MyLocationModel extends Layer implements Map.UpdateListener {
             GLState.bindTex2D(-1);
             GLState.useProgram(-1);
             GLState.test(false, false);
-            GLState.blend(false);
+            GLState.blend(true);
 
             mapCamera.update(v);
-
             Viewport p = mMap.viewport();
             p.getMapExtents(mBox, 10);
             float scale = (float) (mapCamera.mMapPosition.scale / v.pos.scale);
@@ -125,12 +126,12 @@ public class MyLocationModel extends Layer implements Map.UpdateListener {
                     r = sharedModel.getRenderable(r);
                     DefaultShader.Config c = new DefaultShader.Config();
                     c.numBones = 0;
+                    c.defaultDepthFunc = 0;
                     c.numDirectionalLights = 1;
                     r.environment = lights;
                     shader = new DefaultShader(r, c);
                     shader.init();
                 }
-
 
                 mapCamera.mMapPosition.setPosition(latitude, longitude);
                 mapCamera.mMapPosition.setScale(0.0172 * mMap.getMapPosition().getScale());
@@ -146,11 +147,13 @@ public class MyLocationModel extends Layer implements Map.UpdateListener {
                 shader.render(r);
                 shader.end();
                 renderContext.end();
+
             }
 
             gl.depthMask(false);
             gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, 0);
             gl.bindBuffer(GL.ARRAY_BUFFER, 0);
+            gl.flush();
         }
     }
 
