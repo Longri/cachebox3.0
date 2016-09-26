@@ -77,6 +77,7 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         Tile.SIZE = (int) (400 * scaleFactor);
         CanvasAdapter.dpi = 240 * scaleFactor;
         CanvasAdapter.textScale = scaleFactor;
+        CanvasAdapter.scale = scaleFactor;
 
 
         Gdx.app.log("Tile.SIZE", Integer.toString(Tile.SIZE));
