@@ -44,6 +44,7 @@ import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.core.Tile;
+import org.oscim.renderer.bucket.PolygonBucket;
 import org.slf4j.LoggerFactory;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
@@ -77,8 +78,8 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         Tile.SIZE = (int) (400 * scaleFactor);
         CanvasAdapter.dpi = 240 * scaleFactor;
         CanvasAdapter.textScale = scaleFactor;
-        CanvasAdapter.scale = scaleFactor;
-
+        CanvasAdapter.scale = scaleFactor;;
+        PolygonBucket.enableTexture = CB.platform!= CB.Platform.IOS;//fixme if vtm can render polygon texture
 
         Gdx.app.log("Tile.SIZE", Integer.toString(Tile.SIZE));
         Gdx.app.log("Canvas.dpi", Float.toString(CanvasAdapter.dpi));

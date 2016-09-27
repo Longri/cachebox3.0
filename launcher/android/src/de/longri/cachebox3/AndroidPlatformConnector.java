@@ -39,6 +39,11 @@ public class AndroidPlatformConnector extends PlatformConnector {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(AndroidPlatformConnector.class);
     private final AndroidApplication application;
 
+    static {
+        CB.platform = CB.Platform.ANDROID;
+    }
+
+
     public AndroidPlatformConnector(AndroidApplication app) {
         this.application = app;
     }

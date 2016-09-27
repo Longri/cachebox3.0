@@ -73,46 +73,35 @@ public class MapView extends AbstractView implements PositionChangedEvent {
         this.setTouchable(Touchable.disabled);
         this.main = main;
         mMap = createMap();
-        initLayers(true, true, true, true);
+        initLayers(false, true, true, true);
     }
 
     public CacheboxMapAdapter createMap() {
-        Utils.logRunningTime("Create Map", new Runnable() {
-            @Override
-            public void run() {
-                main.drawMap = true;
-                mMap = new CacheboxMapAdapter() {
-                    public void tiltChanged(float newTilt) {
-                        MapView.this.tiltChanged(newTilt);
-                    }
-                };
-                main.mMapRenderer = new MapRenderer(mMap);
-
-                main.mMapRenderer.onSurfaceCreated();
-                mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
-
+        main.drawMap = true;
+        mMap = new CacheboxMapAdapter() {
+            public void tiltChanged(float newTilt) {
+                MapView.this.tiltChanged(newTilt);
             }
-        });
+        };
+        main.mMapRenderer = new MapRenderer(mMap);
+
+        main.mMapRenderer.onSurfaceCreated();
+        mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
         return mMap;
     }
 
     public void destroyMap() {
-        Utils.logRunningTime("Destroy Map", new Runnable() {
-            @Override
-            public void run() {
-                main.drawMap = true;
-                mMap.clearMap();
-                mMap.destroy();
-                mMap = null;
+        main.drawMap = true;
+        mMap.clearMap();
+        mMap.destroy();
+        mMap = null;
 
-                TextureBucket.pool.clear();
-                TextItem.pool.clear();
-                TextureItem.disposeTextures();
+        TextureBucket.pool.clear();
+        TextItem.pool.clear();
+        TextureItem.disposeTextures();
 
 
-                main.mMapRenderer = null;
-            }
-        });
+        main.mMapRenderer = null;
     }
 
     @Override
@@ -179,7 +168,9 @@ public class MapView extends AbstractView implements PositionChangedEvent {
         }
 
         if (myLocationModel != null) {
-            myLocationModel.setPosition(curentLocation.latitude, curentLocation.longitude, curentLocation.getBearing());
+
+            float myBearing= true? 0:curentLocation.getBearing();// FIXME: 24.09.16 set bearing only if map north orientated
+            myLocationModel.setPosition(curentLocation.latitude, curentLocation.longitude,myBearing );
         }
 
 
@@ -272,9 +263,6 @@ public class MapView extends AbstractView implements PositionChangedEvent {
         Model model = CB.getSkin().get("MyLocationModel", Model.class);
 
         myLocationModel = new MyLocationModel(mMap, model);
-        myLocationModel.setPosition(52.580400947530364, 13.385594096047232, 100);
-
-
 
         myLocationAccuracy.setPosition(52.580400947530364, 13.385594096047232, 100);
 

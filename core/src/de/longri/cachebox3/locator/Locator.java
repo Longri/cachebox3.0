@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.locator;
 
+import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.locator.events.GPS_FallBackEventList;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
 import de.longri.cachebox3.utils.UnitFormatter;
@@ -186,6 +187,8 @@ public class Locator {
             PositionChangedEventList.SpeedChanged();
             PositionChangedEventList.PositionChanged();
             PositionChangedEventList.OrientationChanged();
+
+            Gdx.graphics.requestRendering();
         }
     }
 
@@ -521,6 +524,8 @@ public class Locator {
         log.debug("Set last used Compass type:" + that.mLastUsedCompassType);
 
         PositionChangedEventList.OrientationChanged();
+
+        Gdx.graphics.requestRendering();
     }
 
     // member are private for synchronized access
