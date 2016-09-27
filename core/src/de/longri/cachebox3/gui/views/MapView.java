@@ -15,7 +15,9 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -42,12 +44,14 @@ import org.oscim.map.Layers;
 import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
+import org.oscim.renderer.bucket.PolygonBucket;
 import org.oscim.renderer.bucket.TextItem;
 import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.TileSource;
+import org.oscim.tiling.source.mapfile.MapFileTileSource;
 import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 import org.slf4j.LoggerFactory;
 
@@ -99,7 +103,6 @@ public class MapView extends AbstractView implements PositionChangedEvent {
         TextureBucket.pool.clear();
         TextItem.pool.clear();
         TextureItem.disposeTextures();
-
 
         main.mMapRenderer = null;
     }
@@ -235,12 +238,12 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     protected void initLayers(boolean tileGrid, boolean labels,
                               boolean buildings, boolean mapScalebar) {
 
-        TileSource tileSource = new OSciMap4TileSource();
+//        TileSource tileSource = new OSciMap4TileSource();
 
-//        MapFileTileSource tileSource = new MapFileTileSource();
-//        FileHandle mapFileHandle = Gdx.files.local(CB.WorkPath + "/repository/maps/germany.map");
-//        tileSource.setMapFile(mapFileHandle.path());
-//        tileSource.setPreferredLanguage("en");
+        MapFileTileSource tileSource = new MapFileTileSource();
+        FileHandle mapFileHandle = Gdx.files.local(CB.WorkPath + "/repository/maps/germany.map");
+        tileSource.setMapFile(mapFileHandle.path());
+        tileSource.setPreferredLanguage("en");
 
         Layers layers = mMap.layers();
 
