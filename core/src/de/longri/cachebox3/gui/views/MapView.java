@@ -25,6 +25,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
+import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.map.layer.Compass;
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
@@ -61,7 +62,7 @@ import org.slf4j.LoggerFactory;
  * This View has only the controls for the Map!
  * Created by Longri on 24.07.16.
  */
-public class MapView extends AbstractView implements PositionChangedEvent {
+public class MapView extends AbstractView {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(MapView.class);
 
     InputMultiplexer mapInputHandler;
@@ -72,25 +73,35 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     LocationOverlay myLocationAccuracy;
     MyLocationModel myLocationModel;
 
+    MapViewPositionChangedHandler positionChangedHandler;
+
     public MapView(CacheboxMain main) {
         super("MapView");
         this.setTouchable(Touchable.disabled);
         this.main = main;
         mMap = createMap();
-        initLayers(false, true, true, true);
+
     }
 
     public CacheboxMapAdapter createMap() {
         main.drawMap = true;
         mMap = new CacheboxMapAdapter() {
             public void tiltChanged(float newTilt) {
-                MapView.this.tiltChanged(newTilt);
+                if (positionChangedHandler != null) positionChangedHandler.tiltChangedFromMap(newTilt);
             }
         };
         main.mMapRenderer = new MapRenderer(mMap);
-
         main.mMapRenderer.onSurfaceCreated();
         mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
+
+        //          grid,labels,buldings,scalebar
+        initLayers(false, true, true, true);
+
+
+        //add position changed handler
+        positionChangedHandler = MapViewPositionChangedHandler.getInstance(mMap, myLocationModel, myLocationAccuracy);
+
+
         return mMap;
     }
 
@@ -125,7 +136,6 @@ public class MapView extends AbstractView implements PositionChangedEvent {
         mapInputHandler.addProcessor(gestureDetectore);
         mapInputHandler.addProcessor(inputHandler);
         StageManager.addMapMultiplexer(mapInputHandler);
-        PositionChangedEventList.Add(this);
         testSetLocation();
     }
 
@@ -133,7 +143,6 @@ public class MapView extends AbstractView implements PositionChangedEvent {
     public void onHide() {
         destroyMap();
         StageManager.removeMapMultiplexer(mapInputHandler);
-        PositionChangedEventList.Remove(this);
     }
 
     private void testSetLocation() {
@@ -160,55 +169,6 @@ public class MapView extends AbstractView implements PositionChangedEvent {
         mMap = null;
     }
 
-    @Override
-    public void PositionChanged() {
-        if (mMap == null) return;
-        MapPosition curentMapPosition = mMap.getMapPosition();
-        Location curentLocation = Locator.getLocation();
-        curentMapPosition.setPosition(curentLocation.latitude, curentLocation.longitude);
-        if (myLocationAccuracy != null) {
-            myLocationAccuracy.setPosition(curentLocation.latitude, curentLocation.longitude, curentLocation.getAccuracy());
-        }
-
-        if (myLocationModel != null) {
-
-            float myBearing= true? 0:curentLocation.getBearing();// FIXME: 24.09.16 set bearing only if map north orientated
-            myLocationModel.setPosition(curentLocation.latitude, curentLocation.longitude,myBearing );
-        }
-
-
-        mMap.setMapPosition(curentMapPosition);
-    }
-
-    @Override
-    public void OrientationChanged() {
-        MapPosition curentMapPosition = mMap.getMapPosition();
-        myBearing = Locator.getHeading();
-        float bearing = -myBearing;
-
-        // heading must between -180 and 180
-        if (bearing < -180) bearing += 360;
-        log.trace("Update Map Heading:" + bearing);
-        curentMapPosition.setBearing(bearing);
-
-        mMap.setMapPosition(curentMapPosition);
-    }
-
-    @Override
-    public void SpeedChanged() {
-
-    }
-
-    @Override
-    public String getReceiverName() {
-        return "MapView";
-    }
-
-    @Override
-    public Priority getPriority() {
-        return Priority.High;
-    }
-
 
     @Override
     public void sizeChanged() {
@@ -219,15 +179,8 @@ public class MapView extends AbstractView implements PositionChangedEvent {
 
         // set position of MapScaleBar
         setMapScaleBarOffset(CB.scaledSizes.MARGIN, CB.scaledSizes.MARGIN_HALF);
-
-        testTillt();
     }
 
-    private void testTillt() {
-        MapPosition curentMapPosition = mMap.getMapPosition();
-        curentMapPosition.setTilt(65);
-        mMap.setMapPosition(curentMapPosition);
-    }
 
     @Override
     public void positionChanged() {
@@ -306,10 +259,5 @@ public class MapView extends AbstractView implements PositionChangedEvent {
         renderer.setOffset(xOffset, yOffset);
     }
 
-
-    private void tiltChanged(float newTilt) {
-        if (newTilt > 0)
-            mMap.viewport().setMapScreenCenter(0.7f);
-    }
 
 }
