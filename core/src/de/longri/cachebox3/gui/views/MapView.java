@@ -24,11 +24,13 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
+import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.map.layer.Compass;
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
 import de.longri.cachebox3.gui.stages.StageManager;
+import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.locator.Location;
 import org.oscim.gdx.LayerHandler;
 import org.oscim.gdx.MotionHandler;
@@ -57,11 +59,13 @@ import org.slf4j.LoggerFactory;
 public class MapView extends AbstractView {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(MapView.class);
 
-    InputMultiplexer mapInputHandler;
+    private InputMultiplexer mapInputHandler;
     private CacheboxMapAdapter mMap;
     private final CacheboxMain main;
     private MapScaleBarLayer mapScaleBarLayer;
-    float myBearing;
+    private float myBearing;
+    private final MapStateButton mapStateButton;
+
     LocationOverlay myLocationAccuracy;
     MyLocationModel myLocationModel;
 
@@ -72,7 +76,31 @@ public class MapView extends AbstractView {
         this.setTouchable(Touchable.disabled);
         this.main = main;
         mMap = createMap();
+        mapStateButton = new MapStateButton(new MapStateButton.StateChangedListener() {
+            @Override
+            public void stateChanged(MapState state) {
+                positionChangedHandler.setMapState(state);
+                checkInputListener();
+            }
+        });
 
+
+        this.addActor(mapStateButton);
+
+        // set Position
+        mapStateButton.setPosition(100, 250);
+
+        this.setTouchable(Touchable.enabled);
+    }
+
+    private void checkInputListener() {
+        MapState state = mapStateButton.getState();
+        // remove input handler with map state Car and Lock
+        if (state == MapState.CAR || state == MapState.LOCK) {
+            removeInputListener();
+        } else {
+            addInputListener();
+        }
     }
 
     public CacheboxMapAdapter createMap() {
@@ -162,6 +190,9 @@ public class MapView extends AbstractView {
 
         // set position of MapScaleBar
         setMapScaleBarOffset(CB.scaledSizes.MARGIN, CB.scaledSizes.MARGIN_HALF);
+
+        mapStateButton.setPosition(getWidth() - (mapStateButton.getWidth() + CB.scaledSizes.MARGIN),
+                getHeight() - (mapStateButton.getHeight() + CB.scaledSizes.MARGIN));
     }
 
 
@@ -245,7 +276,7 @@ public class MapView extends AbstractView {
 
     public void setInputListener(boolean on) {
         if (on) {
-            addInputListener();
+            checkInputListener();
         } else {
             removeInputListener();
         }

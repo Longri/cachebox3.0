@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.map;
 
+import com.badlogic.gdx.math.MathUtils;
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
 import de.longri.cachebox3.locator.CoordinateGPS;
@@ -24,7 +25,6 @@ import de.longri.cachebox3.locator.events.PositionChangedEventList;
 import org.oscim.core.MapPosition;
 import org.oscim.map.Map;
 import org.oscim.map.Viewport;
-import com.badlogic.gdx.math.MathUtils;
 import org.oscim.utils.ThreadUtils;
 
 /**
@@ -173,5 +173,9 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
     public void tiltChangedFromMap(float newTilt) {
         this.tilt = newTilt;
+    }
+
+    public void setMapState(MapState state) {
+        mapState = state;
     }
 }

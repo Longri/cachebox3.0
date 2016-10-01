@@ -19,5 +19,11 @@ package de.longri.cachebox3.gui.map;
  * Created by Longri on 28.09.2016.
  */
 public enum MapState {
-    FREE, GPS, WP, LOCK, CAR
+    FREE, GPS, WP, LOCK, CAR;
+
+    public static MapState fromOrdinal(int ordinal) {
+        for (MapState state : MapState.values())
+            if (state.ordinal() == ordinal) return state;
+        return null;
+    }
 }

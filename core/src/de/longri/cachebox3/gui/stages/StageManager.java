@@ -73,13 +73,13 @@ public class StageManager {
                 // don't show double
                 return;
             }
-        }else{
+        } else {
             {// handle MapView on ViewManagerStage
-                    ViewManager viewManager = (ViewManager) mainStage;
-                    if (viewManager.getActView() instanceof MapView) {
-                        MapView mapView = (MapView) viewManager.getActView();
-                        mapView.setInputListener(false);
-                    }
+                ViewManager viewManager = (ViewManager) mainStage;
+                if (viewManager.getActView() instanceof MapView) {
+                    MapView mapView = (MapView) viewManager.getActView();
+                    mapView.setInputListener(false);
+                }
 
             }
         }
@@ -161,7 +161,9 @@ public class StageManager {
     }
 
     public static void addMapMultiplexer(InputMultiplexer mapInputHandler) {
-        inputMultiplexer.addProcessor(mapInputHandler);
+        if (!inputMultiplexer.getProcessors().contains(mapInputHandler, true)) {
+            inputMultiplexer.addProcessor(mapInputHandler);
+        }
     }
 
     public static void removeMapMultiplexer(InputMultiplexer mapInputHandler) {
