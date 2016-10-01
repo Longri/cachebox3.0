@@ -1,11 +1,10 @@
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
@@ -16,14 +15,12 @@ import de.longri.cachebox3.utils.MoveableList;
 /**
  * Created by Longri on 09.09.16.
  */
-public class QuickButtonList extends WidgetGroup {
+public class QuickButtonList extends Group {
 
     final QuickButtonListStyle style;
     final ScrollPane scrollPane;
     final Group scrollPaneContent = new Group();
     MoveableList<QuickButtonItem> quickButtonList;
-    private boolean needsLayout = true;
-
 
     public QuickButtonList() {
         style = VisUI.getSkin().get("default", QuickButtonListStyle.class);
@@ -58,30 +55,36 @@ public class QuickButtonList extends WidgetGroup {
         }
         float completeWidth = xPos + buttonMargin;
         scrollPaneContent.setBounds(0, 0, completeWidth, buttonSqare);
-        this.invalidate();
-        needsLayout = true;
     }
 
-    @Override
-    public void layout() {
-        if (needsLayout || super.needsLayout()) {
-            scrollPane.setBounds(0, 0, getWidth(), getHeight());
-            scrollPane.layout();
-        }
-        needsLayout = false;
-    }
 
     @Override
     public void sizeChanged() {
         super.sizeChanged();
-        needsLayout = true;
+        scrollPane.setBounds(0, 0, getWidth(), getHeight());
+        scrollPane.layout();
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        style.background.draw(batch, this.getX(), this.getY(), this.getWidth(), this.getHeight());
-        super.draw(batch, parentAlpha);
+        if (isTransform()) {
+            applyTransform(batch, computeTransform());
+            drawBackground(batch, parentAlpha, 0, 0);
+            drawChildren(batch, parentAlpha);
+            resetTransform(batch);
+        } else {
+            drawBackground(batch, parentAlpha, getX(), getY());
+            super.draw(batch, parentAlpha);
+        }
     }
+
+    protected void drawBackground(Batch batch, float parentAlpha, float x, float y) {
+        if (style.background == null) return;
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        style.background.draw(batch, x, y, getWidth(), getHeight());
+    }
+
 
     public static class QuickButtonListStyle {
         Drawable background, button;

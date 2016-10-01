@@ -78,8 +78,8 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         Tile.SIZE = (int) (400 * scaleFactor);
         CanvasAdapter.dpi = 240 * scaleFactor;
         CanvasAdapter.textScale = scaleFactor;
-        CanvasAdapter.scale = scaleFactor;;
-        PolygonBucket.enableTexture = CB.platform!= CB.Platform.IOS;//fixme if vtm can render polygon texture
+        CanvasAdapter.scale = scaleFactor;
+        PolygonBucket.enableTexture = CB.platform != CB.Platform.IOS;//fixme if vtm can render polygon texture
 
         Gdx.app.log("Tile.SIZE", Integer.toString(Tile.SIZE));
         Gdx.app.log("Canvas.dpi", Float.toString(CanvasAdapter.dpi));
@@ -110,8 +110,7 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         tool_button = new GestureButton("tool");
         misc_button = new GestureButton("misc");
 
-        mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class),
-                ButtonBar.Type.DISTRIBUTED);
+        mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class));
         mainButtonBar.addButton(db_button);
         mainButtonBar.addButton(cache_button);
         mainButtonBar.addButton(navButton);

@@ -153,7 +153,6 @@ public class MapView extends AbstractView {
     @Override
     public void onHide() {
         destroyMap();
-
     }
 
     private void testSetLocation() {
@@ -175,9 +174,11 @@ public class MapView extends AbstractView {
 
     @Override
     public void dispose() {
+        log.debug("Dispose MapView");
         mapInputHandler.clear();
         mapInputHandler = null;
         mMap = null;
+        mapStateButton.dispose();
     }
 
 

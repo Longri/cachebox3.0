@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.settings.Config;
@@ -33,7 +34,7 @@ import de.longri.cachebox3.settings.Config;
 /**
  * Created by Longri on 01.10.16.
  */
-public class MapStateButton extends Widget {
+public class MapStateButton extends Widget implements Disposable {
 
     public interface StateChangedListener {
         public void stateChanged(MapState state);
@@ -154,6 +155,15 @@ public class MapStateButton extends Widget {
 
     public MapState getState() {
         return this.state;
+    }
+
+    public void dispose() {
+        style = null;
+        state = null;
+
+        //remove the listener
+        this.removeListener(clickListener);
+        this.removeListener(gestureListener);
     }
 
 

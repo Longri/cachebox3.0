@@ -454,9 +454,6 @@
     },
     "text_selection_drawable": {
       "color": "text_selection_color"
-    },
-    "red_color_drawable": {
-      "color": "abstract_background"
     }
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
@@ -833,7 +830,7 @@
   },
   "de.longri.cachebox3.gui.widgets.QuickButtonList$QuickButtonListStyle": {
     "default": {
-      "background": "red_color_drawable",
+      "background": "button_bar_back",
       "button": "drawable_default_button"
     }
   },
