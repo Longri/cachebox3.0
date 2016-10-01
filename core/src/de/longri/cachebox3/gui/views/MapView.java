@@ -23,7 +23,6 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
-import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.map.layer.Compass;
@@ -31,10 +30,6 @@ import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.locator.Location;
-import de.longri.cachebox3.locator.Locator;
-import de.longri.cachebox3.locator.events.PositionChangedEvent;
-import de.longri.cachebox3.locator.events.PositionChangedEventList;
-import org.oscim.core.MapPosition;
 import org.oscim.gdx.LayerHandler;
 import org.oscim.gdx.MotionHandler;
 import org.oscim.layers.TileGridLayer;
@@ -45,15 +40,12 @@ import org.oscim.map.Layers;
 import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
-import org.oscim.renderer.bucket.PolygonBucket;
 import org.oscim.renderer.bucket.TextItem;
 import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
-import org.oscim.tiling.TileSource;
 import org.oscim.tiling.source.mapfile.MapFileTileSource;
-import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 import org.slf4j.LoggerFactory;
 
 
@@ -126,23 +118,14 @@ public class MapView extends AbstractView {
 
     @Override
     public void onShow() {
-
-        // map input handler
-        GestureDetector gestureDetectore = new GestureDetector(new LayerHandler(mMap));
-        MotionHandler motionHandler = new MotionHandler(mMap);
-        MapInputHandler inputHandler = new MapInputHandler(mMap);
-        mapInputHandler = new InputMultiplexer();
-        mapInputHandler.addProcessor(motionHandler);
-        mapInputHandler.addProcessor(gestureDetectore);
-        mapInputHandler.addProcessor(inputHandler);
-        StageManager.addMapMultiplexer(mapInputHandler);
+        addInputListener();
         testSetLocation();
     }
 
     @Override
     public void onHide() {
         destroyMap();
-        StageManager.removeMapMultiplexer(mapInputHandler);
+
     }
 
     private void testSetLocation() {
@@ -260,4 +243,31 @@ public class MapView extends AbstractView {
     }
 
 
+    public void setInputListener(boolean on) {
+        if (on) {
+            addInputListener();
+        } else {
+            removeInputListener();
+        }
+    }
+
+
+    private void createMapInputHandler() {
+        GestureDetector gestureDetectore = new GestureDetector(new LayerHandler(mMap));
+        MotionHandler motionHandler = new MotionHandler(mMap);
+        MapInputHandler inputHandler = new MapInputHandler(mMap);
+        mapInputHandler = new InputMultiplexer();
+        mapInputHandler.addProcessor(motionHandler);
+        mapInputHandler.addProcessor(gestureDetectore);
+        mapInputHandler.addProcessor(inputHandler);
+    }
+
+    private void addInputListener() {
+        if (mapInputHandler == null) createMapInputHandler();
+        StageManager.addMapMultiplexer(mapInputHandler);
+    }
+
+    private void removeInputListener() {
+        StageManager.removeMapMultiplexer(mapInputHandler);
+    }
 }
