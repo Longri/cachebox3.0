@@ -97,4 +97,13 @@ public class QuickButtonItem extends ListViewItem {
     public QuickActions getAction() {
         return quickActionsEnum;
     }
+
+    @Override
+    public void dispose() {
+        mAction=null;
+        mButtonIcon=null;
+        mActionDesc=null;
+        mButton=null;
+        quickActionsEnum=null;
+    }
 }

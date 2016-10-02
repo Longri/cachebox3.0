@@ -50,4 +50,9 @@ public class SelectDBItem extends ListViewItem {
     public String getFileName() {
         return fileName;
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }

@@ -29,6 +29,7 @@ import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
+import com.sun.org.apache.xalan.internal.xsltc.util.IntegerArray;
 import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.NONE;
@@ -52,6 +53,7 @@ public class ListView extends WidgetGroup {
     private FloatArray itemHeights = new FloatArray();
     private FloatArray itemYPos = new FloatArray();
     private SnapshotArray<ListViewItem> itemViews = new SnapshotArray<ListViewItem>();
+    private ScrollViewContainer itemGroup = new ScrollViewContainer();
 
     public SnapshotArray<ListViewItem> items() {
         return itemViews;
@@ -78,6 +80,16 @@ public class ListView extends WidgetGroup {
         scrollPane.clearChildren();
         scrollPane.clear();
         scrollPane = null;
+
+
+        for (Actor item : itemGroup.getChildren()) {
+            itemGroup.removeActor(item);
+            if (item instanceof Disposable) {
+                ((Disposable) item).dispose();
+            }
+        }
+
+
     }
 
     public enum SelectableType {
@@ -147,7 +159,7 @@ public class ListView extends WidgetGroup {
         itemYPos.clear();
         itemViews.clear();
 
-        ScrollViewContainer itemGroup = new ScrollViewContainer();
+
         itemGroup.setWidth(this.getWidth());
         itemGroup.clear();
 
@@ -171,7 +183,11 @@ public class ListView extends WidgetGroup {
                 }
             } else {
                 // add a empty table
-                view = new ListViewItem(i);
+                view = new ListViewItem(i){
+                    @Override
+                    public void dispose(){
+                    }
+                };
             }
 
             //set on drawListner
@@ -224,8 +240,14 @@ public class ListView extends WidgetGroup {
         if (scrollPane != null) {
             setScrollPaneBounds();
         } else {
-            needsLayout = true;
-            layout();
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    needsLayout = true;
+                    layout();
+                }
+            });
+
         }
     }
 
@@ -251,6 +273,11 @@ public class ListView extends WidgetGroup {
     private ListViewItem.OnDrawListener onDrawListener = new ListViewItem.OnDrawListener() {
         @Override
         public void onDraw(ListViewItem item) {
+
+            //register item as drawed
+            drawedIndexList.add(item.getListIndex());
+
+
             if (adapter != null) {
                 if (selectionType != NONE) {
                     boolean isSelected = false;
@@ -278,13 +305,35 @@ public class ListView extends WidgetGroup {
         }
     };
 
+    private IntegerArray drawedIndexList = new IntegerArray();
+
     public void draw(Batch batch, float parentAlpha) {
+
+        drawedIndexList.clear();
+
         if (this.backgroundDrawable != null) {
             backgroundDrawable.draw(batch, this.getX(), this.getY(), this.getWidth(), this.getHeight());
         }
         synchronized (this) {
             super.draw(batch, parentAlpha);
         }
+
+        //remove non drawed items
+
+        SnapshotArray<ListViewItem> clearList = new SnapshotArray<ListViewItem>();
+        for (ListViewItem item : itemViews) {
+            if (drawedIndexList.indexOf(item.getListIndex()) == -1) {
+                clearList.add(item);
+            }
+        }
+
+        for (ListViewItem clearItem : clearList) {
+            itemViews.removeValue(clearItem, true);
+            itemGroup.removeActor(clearItem);
+            clearItem.dispose();
+        }
+        clearList.clear();
+
     }
 
 
@@ -323,7 +372,7 @@ public class ListView extends WidgetGroup {
     }
 
     public void setScrollPos(float scrollPos) {
-        scrollPane.setScrollY(scrollPos);
+        if (scrollPane != null) scrollPane.setScrollY(scrollPos);
     }
 
     public void setSelectedItemVisible() {

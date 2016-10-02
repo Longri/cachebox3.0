@@ -61,7 +61,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
     }
 
 
-    public void layout() {
+    public synchronized void layout() {
 //        this.setDebug(true, false);
         if (!needsLayout) {
             super.layout();
