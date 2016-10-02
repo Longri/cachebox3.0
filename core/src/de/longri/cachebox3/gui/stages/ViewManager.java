@@ -33,15 +33,18 @@ import de.longri.cachebox3.gui.events.SelectedCacheEvent;
 import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.widgets.Slider;
 import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
+import de.longri.cachebox3.gui.widgets.Slider;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
+import org.oscim.backend.CanvasAdapter;
+import org.oscim.core.Tile;
+import org.oscim.renderer.bucket.PolygonBucket;
 import org.slf4j.LoggerFactory;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
@@ -63,13 +66,24 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     private float sliderPos = 0;
     private final CacheboxMain main;
 
-    public ViewManager(CacheboxMain main) {
+    public ViewManager(final CacheboxMain main) {
         super("ViewManager");
 
         Gdx.app.log("ScaleFactor", Float.toString(CB.getScaledFloat(1)));
         Gdx.app.log("Width", Float.toString(Gdx.graphics.getWidth()));
         Gdx.app.log("Height", Float.toString(Gdx.graphics.getHeight()));
         Gdx.app.log("PPI", Float.toString(Gdx.graphics.getPpiX()));
+
+        float scaleFactor = CB.getScaledFloat(1);
+        Tile.SIZE = (int) (400 * scaleFactor);
+        CanvasAdapter.dpi = 240 * scaleFactor;
+        CanvasAdapter.textScale = scaleFactor;
+        CanvasAdapter.scale = scaleFactor;
+        PolygonBucket.enableTexture = CB.platform != CB.Platform.IOS;//fixme if vtm can render polygon texture
+
+        Gdx.app.log("Tile.SIZE", Integer.toString(Tile.SIZE));
+        Gdx.app.log("Canvas.dpi", Float.toString(CanvasAdapter.dpi));
+
 
         this.main = main;
 
@@ -96,8 +110,7 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         tool_button = new GestureButton("tool");
         misc_button = new GestureButton("misc");
 
-        mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class),
-                ButtonBar.Type.DISTRIBUTED);
+        mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class));
         mainButtonBar.addButton(db_button);
         mainButtonBar.addButton(cache_button);
         mainButtonBar.addButton(navButton);
@@ -117,8 +130,6 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         //set selected Cache to slider
         selectedCacheChanged(CB.getSelectedCache(), CB.getSelectedWaypoint());
 
-        // set position of MapScaleBar
-        main.setMapScaleBarOffset(CB.scaledSizes.MARGIN, mainButtonBar.getHeight());
     }
 
     @Override
@@ -237,8 +248,10 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     }
 
     private void setActViewBounds() {
-        if (this.actView != null)
-            this.actView.setBounds(0, mainButtonBar.getHeight(), width, height - (mainButtonBar.getHeight() + sliderPos));
+        if (this.actView != null) {
+            actView.setBounds(0, mainButtonBar.getHeight(), width, height - (mainButtonBar.getHeight() + sliderPos));
+        }
+
     }
 
     public AbstractView getActView() {

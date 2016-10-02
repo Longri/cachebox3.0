@@ -17,7 +17,7 @@ allprojects {
     version = '3.0'
     ext {
         appName = "Cachebox 3.0"
-        gdxVersion = '1.9.4'
+        gdxVersion = '1.9.5-SNAPSHOT'
         roboVMVersion = '2.2.0'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'

@@ -15,11 +15,17 @@
  */
 package de.longri.cachebox3;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
+import de.longri.cachebox3.locator.Locator;
 import org.oscim.android.gl.AndroidGL;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GLAdapter;
@@ -38,7 +44,10 @@ public class AndroidLauncher extends AndroidApplication {
     }
 
     private final AndroidLocationListener locationListener = new AndroidLocationListener();
-
+    // Compass
+    private SensorManager mSensorManager;
+    private Sensor mSensor;
+    private float[] mCompassValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +64,8 @@ public class AndroidLauncher extends AndroidApplication {
         //initialize platform connector
         PlatformConnector.init(new AndroidPlatformConnector(this));
 
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        CanvasAdapter.dpi = (int) Math.max(metrics.xdpi, metrics.ydpi);
+//        DisplayMetrics metrics = getResources().getDisplayMetrics();
+//        CanvasAdapter.dpi = (int) Math.max(metrics.xdpi, metrics.ydpi);
 
         GdxAssets.init("");
         GLAdapter.init(new AndroidGL());
@@ -66,6 +75,9 @@ public class AndroidLauncher extends AndroidApplication {
         config.numSamples = 2;
         new SharedLibraryLoader().load("vtm-jni");
         initialize(new CacheboxMain(), config);
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
     }
 
     protected void onStart() {
@@ -83,4 +95,41 @@ public class AndroidLauncher extends AndroidApplication {
             }
         });
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mSensorManager != null)
+            mSensorManager.registerListener(mListener, mSensor, SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (mSensorManager != null)
+            mSensorManager.unregisterListener(mListener);
+
+    }
+
+    private float compassHeading = -1;
+
+    private final SensorEventListener mListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            try {
+                mCompassValues = event.values;
+                compassHeading = mCompassValues[0];
+                Locator.setHeading(compassHeading, Locator.CompassType.Magnetic);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
+
 }

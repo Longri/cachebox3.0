@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.stages.initial_tasks;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.utils.DevicesSizes;
@@ -28,6 +29,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by Longri on 02.08.16.
  */
 public final class SkinLoaderTask extends AbstractInitTask {
+
+    public static Model model;
 
     public SkinLoaderTask(String name, int percent) {
         super(name, percent);
@@ -62,5 +65,9 @@ public final class SkinLoaderTask extends AbstractInitTask {
             } catch (InterruptedException e) {
             }
         }
+
+        //add model to skin
+        SvgSkin skin = CB.getSkin();
+        skin.add("MyLocationModel", model, Model.class);
     }
 }

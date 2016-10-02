@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -26,14 +25,11 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.CacheboxMain;
-import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import org.slf4j.impl.LibgdxLogger;
 
@@ -62,7 +58,7 @@ public class Slider extends WidgetGroup {
         quickButtonMaxHeight = CB.scaledSizes.BUTTON_HEIGHT;
         quickButtonList = new QuickButtonList();
         nameWidget = new NameWidget();
-        nameWidgetHeight = CB.scaledSizes.BUTTON_HEIGHT;
+        nameWidgetHeight = CB.scaledSizes.BUTTON_HEIGHT / 2;
         content = new Group() {
             @Override
             public void draw(Batch batch, float parentAlpha) {
@@ -102,8 +98,8 @@ public class Slider extends WidgetGroup {
         super.draw(batch, parentAlpha);
         if (!CB.viewmanager.getMain().getMemory().equals(lastMemoryString)) {
             lastMemoryString = CB.viewmanager.getMain().getMemory();
-            nameWidget.setCacheName(lastMemoryString);
-         //   Gdx.graphics.requestRendering();
+            //  nameWidget.setCacheName(lastMemoryString);
+            //   Gdx.graphics.requestRendering();
         }
     }
 

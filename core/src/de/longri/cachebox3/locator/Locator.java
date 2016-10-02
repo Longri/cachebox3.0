@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.locator;
 
+import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.locator.events.GPS_FallBackEventList;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
 import de.longri.cachebox3.utils.UnitFormatter;
@@ -138,6 +139,10 @@ public class Locator {
      * @param location
      */
     public static void setNewLocation(Location location) {
+
+        if (that == null) return;
+
+
         log.trace("new Location:" + location.toString());
 
         synchronized (that) {
@@ -182,6 +187,8 @@ public class Locator {
             PositionChangedEventList.SpeedChanged();
             PositionChangedEventList.PositionChanged();
             PositionChangedEventList.OrientationChanged();
+
+            Gdx.graphics.requestRendering();
         }
     }
 
@@ -467,14 +474,22 @@ public class Locator {
     public static float getHeading(CompassType type) {
         synchronized (that) {
 
-            if (type == CompassType.GPS || !mUseMagneticCompass)
+            if (type == CompassType.GPS || !mUseMagneticCompass) {
+                log.debug("Return mlastGPSHeading1");
                 return that.mlastGPSHeading;
-            if (type == CompassType.Magnetic)
+            }
+
+            if (type == CompassType.Magnetic) {
+                log.debug("Return mlastGPSHeading2");
                 return that.mlastGPSHeading;
+            }
+
 
             if (UseMagneticCompass()) {
+                log.debug("Return mlastGPSHeading3");
                 return that.mlastMagneticHeading;
             } else {
+                log.debug("Return mlastMagneticHeading");
                 return that.mlastGPSHeading;
             }
         }
@@ -488,9 +503,13 @@ public class Locator {
      */
     public static void setHeading(float heading, CompassType type) {
 
+        if (that == null) return;
+
         if (type == CompassType.GPS) {
+            log.debug("Set last Gps heading:");
             that.mlastGPSHeading = heading;
         } else {
+            log.debug("Set last Magnetic heading:");
             that.mlastMagneticHeading = heading;
         }
 
@@ -502,7 +521,11 @@ public class Locator {
             that.mLastUsedCompassType = CompassType.Magnetic;
         }
 
+        log.debug("Set last used Compass type:" + that.mLastUsedCompassType);
+
         PositionChangedEventList.OrientationChanged();
+
+        Gdx.graphics.requestRendering();
     }
 
     // member are private for synchronized access

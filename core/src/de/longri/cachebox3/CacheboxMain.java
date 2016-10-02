@@ -16,8 +16,6 @@
 package de.longri.cachebox3;
 
 
-import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -26,6 +24,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Matrix4;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
+import de.longri.cachebox3.gui.map.layer.Compass;
+import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -52,6 +52,9 @@ import org.slf4j.impl.LibgdxLogger;
 
 import java.text.NumberFormat;
 
+import static org.oscim.backend.GLAdapter.gl;
+import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
+
 public class CacheboxMain extends ApplicationAdapter {
 
     static {
@@ -73,13 +76,15 @@ public class CacheboxMain extends ApplicationAdapter {
     private final Matrix4 NORMAL_MATRIX = new Matrix4().toNormalMatrix();
     public static boolean drawMap = false;
 
-    public CacheboxMapAdapter mMap;
-    private MapRenderer mMapRenderer;
-    private MapScaleBarLayer mapScaleBarLayer;
+    // public CacheboxMapAdapter mMap;
+    public MapRenderer mMapRenderer;
 
 
     @Override
     public void create() {
+
+        Gdx.graphics.setContinuousRendering(false);
+
         StageManager.setMainStage(new Splash(new Splash.LoadReady() {
             @Override
             public void ready() {
@@ -102,95 +107,16 @@ public class CacheboxMain extends ApplicationAdapter {
 
     }
 
-    public Map createMap() {
-        Utils.logRunningTime("Create Map", new Runnable() {
-            @Override
-            public void run() {
-                drawMap = true;
-                mMap = new CacheboxMapAdapter();
-                mMapRenderer = new MapRenderer(mMap);
 
-                int w = Gdx.graphics.getWidth();
-                int h = Gdx.graphics.getHeight();
-
-                mMapRenderer.onSurfaceCreated();
-                setMapSize(w, h);
-                createLayers();
-            }
-        });
-        return mMap;
-    }
-
-    public void destroyMap() {
-        Utils.logRunningTime("Destroy Map", new Runnable() {
-            @Override
-            public void run() {
-                drawMap = true;
-                mMap.clearMap();
-                mMap.destroy();
-                mMap = null;
-
-                TextureBucket.pool.clear();
-                TextItem.pool.clear();
-                TextureItem.disposeTextures();
-                //MapRenderer.destroy();
-
-                mMapRenderer = null;
-            }
-        });
-    }
+    int mapDrawX, mapDrawY, mapDrawWidth, mapDrawHeight;
 
 
-    private void setMapSize(int width, int height) {
-        mMap.setSize(width, height);
-        mMap.viewport().setScreenSize(width, height);
+    public void setMapPosAndSize(int x, int y, int width, int height) {
+        mapDrawX = x;
+        mapDrawY = y;
+        mapDrawWidth = width;
+        mapDrawHeight = height;
         mMapRenderer.onSurfaceChanged(width, height);
-    }
-
-    public void createLayers() {
-        TileSource tileSource = new OSciMap4TileSource();
-
-        // TileSource tileSource = new MapFileTileSource();
-        // tileSource.setOption("file", "/home/jeff/germany.map");
-        initDefaultLayers(tileSource, true, true, true, true);
-        mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
-    }
-
-    protected void initDefaultLayers(TileSource tileSource, boolean tileGrid, boolean labels,
-                                     boolean buildings, boolean mapScalebar) {
-        Layers layers = mMap.layers();
-
-        if (tileSource != null) {
-            VectorTileLayer mapLayer = mMap.setBaseMap(tileSource);
-            mMap.setTheme(VtmThemes.DEFAULT);
-
-            if (buildings)
-                layers.add(new BuildingLayer(mMap, mapLayer));
-
-            if (labels)
-                layers.add(new LabelLayer(mMap, mapLayer));
-        }
-
-        if (tileGrid)
-            layers.add(new TileGridLayer(mMap));
-
-        if (mapScalebar) {
-            DefaultMapScaleBar mapScaleBar = new DefaultMapScaleBar(mMap);
-            mapScaleBar.setScaleBarMode(DefaultMapScaleBar.ScaleBarMode.BOTH);
-            mapScaleBar.setDistanceUnitAdapter(MetricUnitAdapter.INSTANCE);
-            mapScaleBar.setSecondaryDistanceUnitAdapter(ImperialUnitAdapter.INSTANCE);
-            mapScaleBar.setScaleBarPosition(MapScaleBar.ScaleBarPosition.BOTTOM_LEFT);
-
-            mapScaleBarLayer = new MapScaleBarLayer(mMap, mapScaleBar);
-            layers.add(mapScaleBarLayer);
-        }
-    }
-
-    public void setMapScaleBarOffset(float xOffset, float yOffset) {
-        if (mapScaleBarLayer == null) return;
-        BitmapRenderer renderer = mapScaleBarLayer.getRenderer();
-        renderer.setPosition(GLViewport.Position.BOTTOM_LEFT);
-        renderer.setOffset(xOffset, yOffset);
     }
 
 
@@ -214,6 +140,9 @@ public class CacheboxMain extends ApplicationAdapter {
 
         if (drawMap && mMapRenderer != null) {
             GLState.enableVertexArrays(-1, -1);
+
+            // set map position and size
+            gl.viewport(mapDrawX, mapDrawY, mapDrawWidth, mapDrawHeight);
             mMapRenderer.onDrawFrame();
 
             //release Buffers from map renderer
@@ -227,6 +156,8 @@ public class CacheboxMain extends ApplicationAdapter {
                     GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
         }
 
+        gl.flush();
+        gl.viewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         StageManager.draw();
 
         if (CB.isTestVersion()) {
@@ -281,4 +212,5 @@ public class CacheboxMain extends ApplicationAdapter {
     public String getMemory() {
         return memoryUsage;
     }
+
 }

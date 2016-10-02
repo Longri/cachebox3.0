@@ -38,17 +38,11 @@ public class ButtonBar extends WidgetGroup {
     }
 
 
-    public enum Type {
-        SCROLL, DISTRIBUTED
-    }
-
     private final Drawable background;
-    private final Type type;
     private final ArrayList<Button> buttonList = new ArrayList<Button>(5);
 
-    public ButtonBar(ButtonBarStyle style, Type type) {
+    public ButtonBar(ButtonBarStyle style) {
         this.background = style.background;
-        this.type = type;
     }
 
     public void draw(Batch batch, float parentAlpha) {
@@ -68,14 +62,6 @@ public class ButtonBar extends WidgetGroup {
     }
 
     public void layout() {
-        if (this.type == Type.DISTRIBUTED) {
-            distributedLayout();
-        } else {
-            scrolledLayout();
-        }
-    }
-
-    private void distributedLayout() {
         float completeWidth = 0;
         for (Button button : buttonList) {
             completeWidth += button.getWidth();
@@ -97,7 +83,4 @@ public class ButtonBar extends WidgetGroup {
         return buttonList.get(0).getHeight() + CB.scaledSizes.MARGIN;
     }
 
-    private void scrolledLayout() {
-//TODO add Scroll layout for ButtonBar
-    }
 }

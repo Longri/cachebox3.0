@@ -342,6 +342,30 @@
     },
     "TORCHOFF": {
       "path": "skins/day/svg/missingIcon.svg"
+    },
+    "Mapstate.free": {
+      "path": "skins/day/svg/map-state-free.svg",
+      "scale": 0.5
+    },
+    "Mapstate.waypoint": {
+      "path": "skins/day/svg/map-state-wp.svg",
+      "scale": 0.5
+    },
+    "Mapstate.gps": {
+      "path": "skins/day/svg/map-state-gps.svg",
+      "scale": 0.5
+    },
+    "Mapstate.lock": {
+      "path": "skins/day/svg/map-state-lock.svg",
+      "scale": 0.5
+    },
+    "Mapstate.car": {
+      "path": "skins/day/svg/map-state-car.svg",
+      "scale": 0.5
+    },
+    "MapstateOverdraw": {
+      "path": "skins/day/svg/map-state-overdraw.svg",
+      "scale": 0.5
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
@@ -430,9 +454,6 @@
     },
     "text_selection_drawable": {
       "color": "text_selection_color"
-    },
-    "red_color_drawable": {
-      "color": "abstract_background"
     }
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
@@ -809,8 +830,18 @@
   },
   "de.longri.cachebox3.gui.widgets.QuickButtonList$QuickButtonListStyle": {
     "default": {
-      "background": "red_color_drawable",
+      "background": "button_bar_back",
       "button": "drawable_default_button"
+    }
+  },
+  "de.longri.cachebox3.gui.widgets.MapStateButton$MapStateButtonStyle": {
+    "default": {
+      "stateWaypoint": "Mapstate.waypoint",
+      "stateGps": "Mapstate.gps",
+      "stateFree": "Mapstate.free",
+      "stateLock": "Mapstate.lock",
+      "stateCar": "Mapstate.car",
+      "pressedOverdraw": "MapstateOverdraw"
     }
   }
 }

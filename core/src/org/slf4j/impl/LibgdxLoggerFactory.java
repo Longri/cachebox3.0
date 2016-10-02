@@ -29,8 +29,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.stages.StageManager;
 import org.slf4j.Logger;
 import org.slf4j.ILoggerFactory;
+import org.slf4j.LoggerFactory;
 
 /**
  * An implementation of {@link ILoggerFactory} which always returns
@@ -40,10 +43,45 @@ import org.slf4j.ILoggerFactory;
  */
 public class LibgdxLoggerFactory implements ILoggerFactory {
 
+
+
+
+
     ConcurrentMap<String, Logger> loggerMap;
     private static final EmptyLogger EMPTY_LOGGER = new EmptyLogger();
     public static final HashSet<String> EXCLUDE_LIST = new HashSet<String>();
     public static final HashSet<String> INCLUDE_LIST = new HashSet<String>();
+
+
+    static {
+
+//        LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.CacheBox");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.Settings");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add(StageManager.class.getName());
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("de.longri.cachebox3.locator.Locator");
+
+//        LibgdxLoggerFactory.INCLUDE_LIST.add(StageManager.class.getName());
+//        LibgdxLoggerFactory.INCLUDE_LIST.add(CacheListDAO.class.getName());
+//        LibgdxLoggerFactory.INCLUDE_LIST.add(WaypointDAO.class.getName());
+//        LibgdxLoggerFactory.INCLUDE_LIST.add(Action_Show_SelectDB_Dialog.class.getName());
+//
+//        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
+//        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmCursor");
+//
+//        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+//        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopCursor");
+
+
+       // ((LibgdxLoggerFactory) LoggerFactory.getILoggerFactory()).reset();
+    }
+
+
+
+
+
 
     public LibgdxLoggerFactory() {
         loggerMap = new ConcurrentHashMap<String, Logger>();

@@ -18,7 +18,7 @@ package de.longri.cachebox3;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.stages.StageManager;
@@ -51,36 +51,12 @@ public class CB {
     public static final String LOG_LEVEL_ERROR = "error";
     public static final String LOG_LEVEL_TRACE = "trace";
 
-    public static final String USED_LOG_LEVEL = LOG_LEVEL_TRACE;
+    public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
     public static final float WINDOW_FADE_TIME = 0.3f;
     private static boolean displayOff = false;
     public static Categories Categories;
     public static float stateTime;
 
-    static {
-
-//        LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.CacheBox");
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("Database.Settings");
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-        LibgdxLoggerFactory.EXCLUDE_LIST.add(StageManager.class.getName());
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
-
-
-//        LibgdxLoggerFactory.INCLUDE_LIST.add(StageManager.class.getName());
-//        LibgdxLoggerFactory.INCLUDE_LIST.add(CacheListDAO.class.getName());
-//        LibgdxLoggerFactory.INCLUDE_LIST.add(WaypointDAO.class.getName());
-//        LibgdxLoggerFactory.INCLUDE_LIST.add(Action_Show_SelectDB_Dialog.class.getName());
-//
-//        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
-//        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmCursor");
-//
-//        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-//        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopCursor");
-
-
-        ((LibgdxLoggerFactory) LoggerFactory.getILoggerFactory()).reset();
-    }
 
 
     final static float PPI_DEFAULT = 163;
@@ -109,7 +85,7 @@ public class CB {
      * or to the "SandBox" on the external SD
      */
     public static String WorkPath;
-    private static Skin actSkin;
+    private static SvgSkin actSkin;
     public static Color backgroundColor = new Color(0, 1, 0, 1);
     public static ScaledSizes scaledSizes;
 
@@ -129,7 +105,7 @@ public class CB {
         return isTestVersion;
     }
 
-    public static void setActSkin(Skin skin) {
+    public static void setActSkin(SvgSkin skin) {
         if (actSkin != null) {
             VisUI.dispose();
         }
@@ -141,7 +117,7 @@ public class CB {
         return actSkin.getColor(name);
     }
 
-    public static Skin getSkin() {
+    public static SvgSkin getSkin() {
         return actSkin;
     }
 
@@ -161,7 +137,7 @@ public class CB {
     }
 
     private static void calcScaleFactor() {
-        scalefactor = (Gdx.graphics.getPpiX() / PPI_DEFAULT) * globalScale;
+        scalefactor = (Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale;
     }
 
     public static void setGlobalScale(float scale) {
@@ -179,7 +155,6 @@ public class CB {
     }
 
     public static boolean isLogLevel(String logLevel) {
-
         if (logLevelToInt(USED_LOG_LEVEL) >= logLevelToInt(logLevel)) return true;
         return false;
     }

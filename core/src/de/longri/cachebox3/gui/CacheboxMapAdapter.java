@@ -24,6 +24,12 @@ import org.oscim.map.Map;
  */
 public class CacheboxMapAdapter extends Map {
 
+
+    public CacheboxMapAdapter() {
+        super();
+    }
+
+
     /* private */ boolean mRenderWait;
     /* private */ boolean mRenderRequest;
     /* private */ boolean mUpdateRequest;
@@ -52,6 +58,8 @@ public class CacheboxMapAdapter extends Map {
         }
     };
 
+    float lastTilt = -1;
+
     @Override
     public void updateMap(boolean forceRender) {
         synchronized (mRedrawCb) {
@@ -61,7 +69,15 @@ public class CacheboxMapAdapter extends Map {
             } else {
                 mRenderWait = true;
             }
+
+            if (lastTilt != this.getMapPosition().getTilt()) {
+                lastTilt = this.getMapPosition().getTilt();
+                tiltChanged(lastTilt);
+            }
         }
+    }
+
+    public void tiltChanged(float newTilt) {
     }
 
     @Override
@@ -71,7 +87,7 @@ public class CacheboxMapAdapter extends Map {
             if (mClearMap)
                 updateMap(false);
             else {
-                Gdx.graphics.requestRendering();
+             //   Gdx.graphics.requestRendering();
             }
         }
     }

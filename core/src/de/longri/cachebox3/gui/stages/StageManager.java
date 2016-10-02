@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.gui.views.MapView;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -29,15 +30,6 @@ public class StageManager {
             mainStage.draw();
             if (writeDrawSequence) log.debug("draw mainStage");
         }
-
-//        //draw the last two stages
-//        if (stageList.size <= 0) {
-//            if (writeDrawSequence) log.debug("END stage drawing");
-//            writeDrawSequence = false;
-//            return;
-//        }else{
-//
-//        }
 
         if (stageList.size == 1) {
             Stage stage = stageList.get(0);
@@ -73,11 +65,22 @@ public class StageManager {
 
 
         if (stageList.size > 0) {
-            String lastName = stageList.get(stageList.size - 1).getName();
+            NamedStage actStage = stageList.get(stageList.size - 1);
+
+            String lastName = actStage.getName();
             if (lastName.equals(actor.getName())) {
 
                 // don't show double
                 return;
+            }
+        } else {
+            {// handle MapView on ViewManagerStage
+                ViewManager viewManager = (ViewManager) mainStage;
+                if (viewManager.getActView() instanceof MapView) {
+                    MapView mapView = (MapView) viewManager.getActView();
+                    mapView.setInputListener(false);
+                }
+
             }
         }
 
@@ -125,6 +128,13 @@ public class StageManager {
             addNonDoubleInputProzessor(stageList.get(stageList.size - 1));
         } else {
             addNonDoubleInputProzessor(mainStage);
+            {// handle MapView on ViewManagerStage
+                ViewManager viewManager = (ViewManager) mainStage;
+                if (viewManager.getActView() instanceof MapView) {
+                    MapView mapView = (MapView) viewManager.getActView();
+                    mapView.setInputListener(true);
+                }
+            }
         }
         log.debug("InputProzessors:" + inputMultiplexer.getProcessors().toString());
         if (debug) writeDrawSequence = true;
@@ -151,7 +161,9 @@ public class StageManager {
     }
 
     public static void addMapMultiplexer(InputMultiplexer mapInputHandler) {
-        inputMultiplexer.addProcessor(mapInputHandler);
+        if (!inputMultiplexer.getProcessors().contains(mapInputHandler, true)) {
+            inputMultiplexer.addProcessor(mapInputHandler);
+        }
     }
 
     public static void removeMapMultiplexer(InputMultiplexer mapInputHandler) {

@@ -34,6 +34,9 @@ import java.io.InputStream;
 public class IOS_PlatformConnector extends PlatformConnector {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(IOS_PlatformConnector.class);
 
+    static {
+        CB.platform = CB.Platform.IOS;
+    }
 
     @Override
     protected boolean _isTorchAvailable() {

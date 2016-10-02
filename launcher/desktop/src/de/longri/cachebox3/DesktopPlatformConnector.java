@@ -27,6 +27,10 @@ import java.io.InputStream;
  */
 public class DesktopPlatformConnector extends PlatformConnector {
 
+    static {
+        CB.platform = CB.Platform.DESKTOP;
+    }
+
     @Override
     protected boolean _isTorchAvailable() {
         return false;

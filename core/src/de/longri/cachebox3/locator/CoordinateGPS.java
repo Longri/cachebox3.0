@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.locator;
 
+import org.oscim.core.MapPosition;
+
 import java.io.Serializable;
 
 /**
@@ -62,6 +64,10 @@ public class CoordinateGPS extends Coordinate implements Serializable {
         this.setElevation(parent.getElevation());
         this.Accuracy = parent.getAccuracy();
         this.valid = parent.valid;
+    }
+
+    public CoordinateGPS(MapPosition mapPosition) {
+        super(mapPosition.getLatitude(),mapPosition.getLongitude());
     }
 
     public boolean hasAccuracy() {
