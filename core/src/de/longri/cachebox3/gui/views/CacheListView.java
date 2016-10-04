@@ -214,6 +214,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     }
 
     private void setChangedFlagToAllItems() {
+        if (listView == null) return;
         SnapshotArray<ListViewItem> allItems = listView.items();
         Object[] actors = allItems.begin();
         for (int i = 0, n = allItems.size; i < n; i++) {
