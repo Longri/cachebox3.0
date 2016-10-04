@@ -23,13 +23,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.FloatArray;
-import com.badlogic.gdx.utils.SnapshotArray;
+import com.badlogic.gdx.utils.*;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
-import com.sun.org.apache.xalan.internal.xsltc.util.IntegerArray;
 import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.NONE;
@@ -42,18 +38,27 @@ import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.SIN
 public class ListView extends WidgetGroup {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(ListView.class);
 
+    private final static int OVERLOAD = 5;
+
+    private final ListView.ListViewStyle style;
+    private final Array<ListViewItem> selectedItemList = new Array<ListViewItem>();
+    private final SnapshotArray<ListViewItem> itemViews = new SnapshotArray<ListViewItem>();
+    private final SnapshotArray<ListViewItem> clearList = new SnapshotArray<ListViewItem>();
+    private final ScrollViewContainer itemGroup = new ScrollViewContainer();
+    private final IntArray drawedIndexList = new IntArray();
+    private final IntArray indexList = new IntArray();
+    private final FloatArray itemHeights = new FloatArray();
+    private final FloatArray itemYPos = new FloatArray();
+    private final boolean dontDisposeItems;
+
     private VisScrollPane scrollPane;
     private Drawable backgroundDrawable;
     private Adapter adapter;
+    private SelectableType selectionType = NONE;
+    private float completeHeight, padLeft, padRight, padTop, padBottom;
+    private int listCount, lastDrawedIndex, first, last, begin, end, idx, min, max;
+    private boolean mustAdd = false;
     private boolean needsLayout = true;
-    private final ListView.ListViewStyle style;
-    private float completeHeight = 0;
-    final private Array<ListViewItem> selectedItemList = new Array<ListViewItem>();
-    SelectableType selectionType = NONE;
-    private FloatArray itemHeights = new FloatArray();
-    private FloatArray itemYPos = new FloatArray();
-    private SnapshotArray<ListViewItem> itemViews = new SnapshotArray<ListViewItem>();
-    private ScrollViewContainer itemGroup = new ScrollViewContainer();
 
     public SnapshotArray<ListViewItem> items() {
         return itemViews;
@@ -67,12 +72,15 @@ public class ListView extends WidgetGroup {
 
         for (ListViewItem item : itemViews) {
             if (item instanceof Disposable) {
-                ((Disposable) item).dispose();
+                item.dispose();
             }
         }
 
         itemViews.clear();
+        clearList.clear();
         selectedItemList.clear();
+        indexList.clear();
+        drawedIndexList.clear();
         adapter = null;
         backgroundDrawable = null;
         scrollPane.clearActions();
@@ -88,6 +96,10 @@ public class ListView extends WidgetGroup {
                 ((Disposable) item).dispose();
             }
         }
+        itemGroup.clearChildren();
+        itemGroup.clearActions();
+        itemGroup.clearListeners();
+        itemGroup.clear();
 
 
     }
@@ -112,21 +124,37 @@ public class ListView extends WidgetGroup {
     }
 
     public ListView() {
-        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class));
+        this(false);
     }
 
-    private ListView(ListView.ListViewStyle style) {
-        this.style = style;
-        setLayoutEnabled(true);
+    public ListView(boolean dontDisposeItems) {
+        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems);
     }
 
     public ListView(Adapter listViewAdapter) {
-        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class));
-        this.adapter = listViewAdapter;
+        this(listViewAdapter, false);
     }
+
+    public ListView(Adapter listViewAdapter, boolean dontDisposeItems) {
+        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems);
+        this.adapter = listViewAdapter;
+        this.listCount = adapter.getCount();
+    }
+
+    private ListView(ListView.ListViewStyle style) {
+        this(style, false);
+    }
+
+    private ListView(ListView.ListViewStyle style, boolean dontDisposeItems) {
+        this.style = style;
+        this.dontDisposeItems = dontDisposeItems;
+        setLayoutEnabled(true);
+    }
+
 
     public void setAdapter(Adapter listViewAdapter) {
         this.adapter = listViewAdapter;
+        this.listCount = adapter.getCount();
         layout(true);
     }
 
@@ -163,48 +191,16 @@ public class ListView extends WidgetGroup {
         itemGroup.setWidth(this.getWidth());
         itemGroup.clear();
 
-        float padLeft = style.padLeft > 0 ? style.padLeft : style.pad;
-        float padRight = style.padRight > 0 ? style.padRight : style.pad;
-        float padTop = style.padTop > 0 ? style.padTop : style.pad;
-        float padBottom = style.padBottom > 0 ? style.padBottom : style.pad;
+        padLeft = style.padLeft > 0 ? style.padLeft : style.pad;
+        padRight = style.padRight > 0 ? style.padRight : style.pad;
+        padTop = style.padTop > 0 ? style.padTop : style.pad;
+        padBottom = style.padBottom > 0 ? style.padBottom : style.pad;
 
-
-        int length = adapter.getCount();
-
-        for (int i = 0; i < length; i++) {
-            // set Item background
-            ListViewItem view = adapter.getView(i);
-
-            if (view != null) {
-                if (style.secondItem != null && i % 2 == 1) {
-                    view.setBackground(style.secondItem);
-                } else {
-                    view.setBackground(style.firstItem);
-                }
-            } else {
-                // add a empty table
-                view = new ListViewItem(i){
-                    @Override
-                    public void dispose(){
-                    }
-                };
-            }
-
-            //set on drawListner
-            view.setOnDrawListener(onDrawListener);
-            view.addListener(onListItemClickListener);
-            view.setPrefWidth(this.getWidth() - (padLeft + padRight));
-            view.pack();
-            view.layout();
-            itemViews.add(view);
-            itemHeights.add(view.getHeight() + padBottom + padTop);
-            itemGroup.addActor(view);
-//            itemGroup.setTouchable(Touchable.enabled);
+        for (int i = 0; i < this.listCount; i++) {
+            addItem(i, false);
         }
 
-
         //layout itemGroup
-
         completeHeight = 0;
         for (int i = 0; i < itemHeights.size; i++) { //calculate complete hight of all Items
             completeHeight += itemHeights.items[i];
@@ -214,7 +210,6 @@ public class ListView extends WidgetGroup {
         itemGroup.setHeight(completeHeight);
         itemGroup.setPrefWidth(this.getWidth());
         itemGroup.setPrefHeight(completeHeight);
-
 
         float yPos = completeHeight;
 
@@ -233,6 +228,39 @@ public class ListView extends WidgetGroup {
         this.addActor(scrollPane);
         scrollPane.layout();
         needsLayout = false;
+    }
+
+    private ListViewItem addItem(final int i, boolean reAdd) {
+        // set Item background
+        ListViewItem view = adapter.getView(i);
+
+        if (view != null) {
+            if (style.secondItem != null && i % 2 == 1) {
+                view.setBackground(style.secondItem);
+            } else {
+                view.setBackground(style.firstItem);
+            }
+        } else {
+            // add a empty table
+            view = new ListViewItem(i) {
+                @Override
+                public void dispose() {
+                }
+            };
+        }
+
+        //set on drawListner
+        view.setOnDrawListener(onDrawListener);
+        view.addListener(onListItemClickListener);
+        view.setPrefWidth(this.getWidth() - (padLeft + padRight));
+        view.pack();
+        view.layout();
+        itemViews.add(view);
+        itemGroup.addActor(view);
+        indexList.add(i);
+
+        if (!reAdd) itemHeights.add(view.getHeight() + padBottom + padTop);
+        return view;
     }
 
     @Override
@@ -305,7 +333,6 @@ public class ListView extends WidgetGroup {
         }
     };
 
-    private IntegerArray drawedIndexList = new IntegerArray();
 
     public void draw(Batch batch, float parentAlpha) {
 
@@ -318,22 +345,89 @@ public class ListView extends WidgetGroup {
             super.draw(batch, parentAlpha);
         }
 
-        //remove non drawed items
+        if (dontDisposeItems || this.listCount <= OVERLOAD) return;
 
-        SnapshotArray<ListViewItem> clearList = new SnapshotArray<ListViewItem>();
-        for (ListViewItem item : itemViews) {
-            if (drawedIndexList.indexOf(item.getListIndex()) == -1) {
-                clearList.add(item);
+
+        first = 0;
+        last = 0;
+        begin = 0;
+        end = 0;
+        mustAdd = false;
+        if (drawedIndexList.size > 0) {
+
+            drawedIndexList.sort();
+
+            first = drawedIndexList.first();
+            last = drawedIndexList.items[drawedIndexList.size - 1];
+
+            //grow up before
+            begin = first - OVERLOAD;
+            for (int i = first - 1; i > begin; i--) {
+                if (i < 0) break;
+                drawedIndexList.add(i);
+            }
+
+            //grow up after
+            end = last + OVERLOAD;
+            for (int i = last + 1; i <= end; i++) {
+                if (i >= this.listCount) break;
+                drawedIndexList.add(i);
+            }
+
+            //remove non drawed items
+            for (ListViewItem item : itemViews) {
+                if (drawedIndexList.indexOf(item.getListIndex()) == -1) {
+                    clearList.add(item);
+                }
+            }
+
+            for (ListViewItem clearItem : clearList) {
+                itemViews.removeValue(clearItem, true);
+                itemGroup.removeActor(clearItem);
+                indexList.removeValue(clearItem.getListIndex());
+                clearItem.dispose();
+            }
+            clearList.clear();
+        } else {
+            // fill drawedIndexList over the scroll position
+
+            float pos = completeHeight - scrollPane.getScrollY();
+            idx = -1;
+            for (int i = 0, n = itemYPos.size; i < n; i++) {
+                if (pos > itemYPos.get(i)) {
+                    idx = i;
+                    break;
+                }
+            }
+
+
+            min = idx - OVERLOAD;
+            max = idx + OVERLOAD;
+
+            if (min < 0) min = 0;
+            if (max > this.listCount) max = this.listCount;
+
+            for (; min < max; min++)
+                drawedIndexList.add(min);
+
+            mustAdd = true;
+            last = idx;
+        }
+
+
+        //check for scroll changes and add any item
+        if (mustAdd || lastDrawedIndex != last) {
+            lastDrawedIndex = last;
+            for (int idx : drawedIndexList.toArray()) {
+                if (!indexList.contains(idx)) {
+                    // add the Item
+                    ListViewItem item = addItem(idx, true);
+
+                    // set the position of this item
+                    item.setPosition(0, itemYPos.items[idx]);
+                }
             }
         }
-
-        for (ListViewItem clearItem : clearList) {
-            itemViews.removeValue(clearItem, true);
-            itemGroup.removeActor(clearItem);
-            clearItem.dispose();
-        }
-        clearList.clear();
-
     }
 
 

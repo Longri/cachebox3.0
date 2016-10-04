@@ -82,7 +82,8 @@ public class CacheListItem extends ListViewItem implements Disposable {
         Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
         nameLabelStyle.font = this.style.nameFont;
         nameLabelStyle.fontColor = this.style.nameFontColor;
-        VisLabel nameLabel = new VisLabel(cacheName, nameLabelStyle);
+//        VisLabel nameLabel = new VisLabel(cacheName, nameLabelStyle);
+        VisLabel nameLabel = new VisLabel("ITEM: " + this.listIndex, nameLabelStyle);
         nameLabel.setWrap(true);
         this.add(nameLabel).top().expandX().fillX();
 

@@ -229,8 +229,7 @@ public class Settings_Activity extends ActivityBase {
             }
         };
 
-
-        showListView(new ListView(listViewAdapter), Translation.Get("setting"), true);
+        showListView(new ListView(listViewAdapter,true), Translation.Get("setting"), true);
     }
 
     private void showListView(ListView listView, String name, boolean animate) {

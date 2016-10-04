@@ -22,9 +22,9 @@ import com.kotcrab.vis.ui.widget.VisTable;
 /**
  * Created by Longri on 31.08.2016.
  */
-public abstract class ListViewItem extends VisTable implements Disposable{
+public abstract class ListViewItem extends VisTable implements Disposable {
 
-    private int listIndex;
+    protected int listIndex;
 
 
     public ListViewItem(int listIndex) {
@@ -84,5 +84,9 @@ public abstract class ListViewItem extends VisTable implements Disposable{
             if (this.listIndex == ((ListViewItem) other).listIndex) return true;
         }
         return false;
+    }
+
+    public String toString() {
+        return "ListViewitem: " + listIndex;
     }
 }
