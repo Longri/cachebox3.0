@@ -453,6 +453,7 @@ public class ListView extends WidgetGroup {
                 log.debug("ListIndexList must new");
                 indexList.clear();
                 for (Actor item : itemGroup.getChildren().begin()) {
+                    if (item == null) continue;
                     indexList.add(((ListViewItem) item).listIndex);
                 }
             }
