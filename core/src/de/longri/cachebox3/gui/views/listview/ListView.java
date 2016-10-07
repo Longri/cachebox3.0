@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.*;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
+import de.longri.cachebox3.CB;
 import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.NONE;
@@ -173,10 +174,18 @@ public class ListView extends WidgetGroup {
         layout();
     }
 
+
+    private boolean atWork = false;
+
+
     @Override
     public synchronized void layout() {
+        if (atWork) return;
+        atWork = true;
+
         if (!this.needsLayout) {
             super.layout();
+            atWork = false;
             return;
         }
 
@@ -197,7 +206,7 @@ public class ListView extends WidgetGroup {
         padBottom = style.padBottom > 0 ? style.padBottom : style.pad;
 
         for (int i = 0; i < this.listCount; i++) {
-            addItem(i, false);
+            addItem(i, false, -1);
         }
 
         //layout itemGroup
@@ -225,42 +234,65 @@ public class ListView extends WidgetGroup {
         scrollPane.setFlickScroll(true);
         scrollPane.setVariableSizeKnobs(false);
         setScrollPaneBounds();
+
+        if (this.getChildren().size > 0) throw new RuntimeException("Childs not Empty");
+
         this.addActor(scrollPane);
         scrollPane.layout();
         needsLayout = false;
+        atWork = false;
     }
 
-    private ListViewItem addItem(final int i, boolean reAdd) {
-        // set Item background
-        ListViewItem view = adapter.getView(i);
+    private void addItem(final int index, final boolean reAdd, final float yPos) {
 
-        if (view != null) {
-            if (style.secondItem != null && i % 2 == 1) {
-                view.setBackground(style.secondItem);
-            } else {
-                view.setBackground(style.firstItem);
-            }
+        if (CB.isMainThread()) {
+            addItemThreadSave(index, reAdd, yPos);
         } else {
-            // add a empty table
-            view = new ListViewItem(i) {
+            Gdx.app.postRunnable(new Runnable() {
                 @Override
-                public void dispose() {
+                public void run() {
+                    addItemThreadSave(index, reAdd, yPos);
                 }
-            };
+            });
         }
+    }
 
-        //set on drawListner
-        view.setOnDrawListener(onDrawListener);
-        view.addListener(onListItemClickListener);
-        view.setPrefWidth(this.getWidth() - (padLeft + padRight));
-        view.pack();
-        view.layout();
-        itemViews.add(view);
-        itemGroup.addActor(view);
-        indexList.add(i);
+    private void addItemThreadSave(final int index, boolean reAdd, final float yPos) {
 
-        if (!reAdd) itemHeights.add(view.getHeight() + padBottom + padTop);
-        return view;
+        synchronized (indexList) {
+
+            // set Item background
+            ListViewItem view = adapter.getView(index);
+            if (view != null) {
+                if (style.secondItem != null && index % 2 == 1) {
+                    view.setBackground(style.secondItem);
+                } else {
+                    view.setBackground(style.firstItem);
+                }
+            } else {
+                // add a empty table
+                view = new ListViewItem(index) {
+                    @Override
+                    public void dispose() {
+                    }
+                };
+            }
+
+            //set on drawListner
+            view.setOnDrawListener(onDrawListener);
+            view.addListener(onListItemClickListener);
+            view.setPrefWidth(this.getWidth() - (padLeft + padRight));
+            view.pack();
+            view.layout();
+            itemViews.add(view);
+            itemGroup.addActor(view);
+            indexList.add(index);
+
+            // set the position of this item
+            if (yPos >= 0) view.setPosition(0, yPos);
+
+            if (!reAdd) itemHeights.add(view.getHeight() + padBottom + padTop);
+        }
     }
 
     @Override
@@ -336,95 +368,104 @@ public class ListView extends WidgetGroup {
 
     public void draw(Batch batch, float parentAlpha) {
 
-        drawedIndexList.clear();
+        synchronized (indexList) {
+            drawedIndexList.clear();
 
-        if (this.backgroundDrawable != null) {
-            backgroundDrawable.draw(batch, this.getX(), this.getY(), this.getWidth(), this.getHeight());
-        }
-        synchronized (this) {
-            super.draw(batch, parentAlpha);
-        }
-
-        if (dontDisposeItems || this.listCount <= OVERLOAD) return;
-
-
-        first = 0;
-        last = 0;
-        begin = 0;
-        end = 0;
-        mustAdd = false;
-        if (drawedIndexList.size > 0) {
-
-            drawedIndexList.sort();
-
-            first = drawedIndexList.first();
-            last = drawedIndexList.items[drawedIndexList.size - 1];
-
-            //grow up before
-            begin = first - OVERLOAD;
-            for (int i = first - 1; i > begin; i--) {
-                if (i < 0) break;
-                drawedIndexList.add(i);
+            if (this.backgroundDrawable != null) {
+                backgroundDrawable.draw(batch, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+            }
+            synchronized (this) {
+                super.draw(batch, parentAlpha);
             }
 
-            //grow up after
-            end = last + OVERLOAD;
-            for (int i = last + 1; i <= end; i++) {
-                if (i >= this.listCount) break;
-                drawedIndexList.add(i);
+            if (dontDisposeItems || this.listCount <= OVERLOAD) return;
+
+
+            first = 0;
+            last = 0;
+            begin = 0;
+            end = 0;
+            mustAdd = false;
+            if (drawedIndexList.size > 0) {
+
+                drawedIndexList.sort();
+
+                first = drawedIndexList.first();
+                last = drawedIndexList.items[drawedIndexList.size - 1];
+
+                //grow up before
+                begin = first - OVERLOAD;
+                for (int i = first - 1; i > begin; i--) {
+                    if (i < 0) break;
+                    drawedIndexList.add(i);
+                }
+
+                //grow up after
+                end = last + OVERLOAD;
+                for (int i = last + 1; i <= end; i++) {
+                    if (i >= this.listCount) break;
+                    drawedIndexList.add(i);
+                }
+
+                //remove non drawed items
+                for (ListViewItem item : itemViews) {
+                    if (drawedIndexList.indexOf(item.getListIndex()) == -1) {
+                        clearList.add(item);
+                    }
+                }
+
+                for (ListViewItem clearItem : clearList) {
+                    itemViews.removeValue(clearItem, true);
+                    itemGroup.removeActor(clearItem);
+                    indexList.removeValue(clearItem.getListIndex());
+                    clearItem.dispose();
+                }
+                clearList.clear();
+            } else {
+                // fill drawedIndexList over the scroll position
+
+                float pos = completeHeight - scrollPane.getScrollY();
+                idx = -1;
+                for (int i = 0, n = itemYPos.size; i < n; i++) {
+                    if (pos > itemYPos.get(i)) {
+                        idx = i;
+                        break;
+                    }
+                }
+
+
+                min = idx - OVERLOAD;
+                max = idx + OVERLOAD;
+
+                if (min < 0) min = 0;
+                if (max > this.listCount) max = this.listCount;
+
+                for (; min < max; min++)
+                    drawedIndexList.add(min);
+
+                mustAdd = true;
+                last = idx;
             }
 
-            //remove non drawed items
-            for (ListViewItem item : itemViews) {
-                if (drawedIndexList.indexOf(item.getListIndex()) == -1) {
-                    clearList.add(item);
+
+            //sometimes indexList is not correct after fast scroll, so we check this
+            if (itemGroup.getChildren().size != indexList.size) {
+                log.debug("ListIndexList must new");
+                indexList.clear();
+                for (Actor item : itemGroup.getChildren().begin()) {
+                    indexList.add(((ListViewItem) item).listIndex);
                 }
             }
 
-            for (ListViewItem clearItem : clearList) {
-                itemViews.removeValue(clearItem, true);
-                itemGroup.removeActor(clearItem);
-                indexList.removeValue(clearItem.getListIndex());
-                clearItem.dispose();
-            }
-            clearList.clear();
-        } else {
-            // fill drawedIndexList over the scroll position
 
-            float pos = completeHeight - scrollPane.getScrollY();
-            idx = -1;
-            for (int i = 0, n = itemYPos.size; i < n; i++) {
-                if (pos > itemYPos.get(i)) {
-                    idx = i;
-                    break;
-                }
-            }
-
-
-            min = idx - OVERLOAD;
-            max = idx + OVERLOAD;
-
-            if (min < 0) min = 0;
-            if (max > this.listCount) max = this.listCount;
-
-            for (; min < max; min++)
-                drawedIndexList.add(min);
-
-            mustAdd = true;
-            last = idx;
-        }
-
-
-        //check for scroll changes and add any item
-        if (mustAdd || lastDrawedIndex != last) {
-            lastDrawedIndex = last;
-            for (int idx : drawedIndexList.toArray()) {
-                if (!indexList.contains(idx)) {
-                    // add the Item
-                    ListViewItem item = addItem(idx, true);
-
-                    // set the position of this item
-                    item.setPosition(0, itemYPos.items[idx]);
+            //check for scroll changes and add any item
+            if (mustAdd || lastDrawedIndex != last) {
+                lastDrawedIndex = last;
+                for (int idx : drawedIndexList.toArray()) {
+                    if (!indexList.contains(idx)) {
+                        // add the Item
+                        addItem(idx, true, itemYPos.items[idx]);
+                    }
                 }
             }
         }
