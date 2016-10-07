@@ -16,14 +16,15 @@
 package de.longri.cachebox3.gui.views.listview;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.widget.VisTable;
 
 /**
  * Created by Longri on 31.08.2016.
  */
-public class ListViewItem extends VisTable {
+public abstract class ListViewItem extends VisTable implements Disposable {
 
-    private int listIndex;
+    protected int listIndex;
 
 
     public ListViewItem(int listIndex) {
@@ -83,5 +84,9 @@ public class ListViewItem extends VisTable {
             if (this.listIndex == ((ListViewItem) other).listIndex) return true;
         }
         return false;
+    }
+
+    public String toString() {
+        return "ListViewitem: " + listIndex;
     }
 }

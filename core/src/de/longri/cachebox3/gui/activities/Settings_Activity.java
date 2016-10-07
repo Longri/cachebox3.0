@@ -229,8 +229,7 @@ public class Settings_Activity extends ActivityBase {
             }
         };
 
-
-        showListView(new ListView(listViewAdapter), Translation.Get("setting"), true);
+        showListView(new ListView(listViewAdapter,true), Translation.Get("setting"), true);
     }
 
     private void showListView(ListView listView, String name, boolean animate) {
@@ -349,7 +348,11 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private ListViewItem getCategoryItem(int listIndex, final SettingCategory category) {
-        ListViewItem table = new ListViewItem(listIndex);
+        ListViewItem table = new ListViewItem(listIndex) {
+            @Override
+            public void dispose() {
+            }
+        };
 
         // add label with category name, align left
         table.left();
@@ -450,11 +453,11 @@ public class Settings_Activity extends ActivityBase {
         } else if (setting instanceof SettingTime) {
             return getTimeView((SettingTime) setting);
         } else if (setting instanceof SettingInt) {
-            return getIntView(listIndex,(SettingInt) setting);
+            return getIntView(listIndex, (SettingInt) setting);
         } else if (setting instanceof SettingDouble) {
-            return getDblView(listIndex,(SettingDouble) setting);
+            return getDblView(listIndex, (SettingDouble) setting);
         } else if (setting instanceof SettingFloat) {
-            return getFloatView(listIndex,(SettingFloat) setting);
+            return getFloatView(listIndex, (SettingFloat) setting);
         } else if (setting instanceof SettingFolder) {
             return getFolderView((SettingFolder) setting);
         } else if (setting instanceof SettingFile) {
@@ -504,9 +507,9 @@ public class Settings_Activity extends ActivityBase {
         return null;
     }
 
-    private ListViewItem getFloatView(int listIndex,final SettingFloat setting) {
+    private ListViewItem getFloatView(int listIndex, final SettingFloat setting) {
         final VisLabel valueLabel = new VisLabel(Float.toString(setting.getValue()), valueStyle);
-        ListViewItem table = getNumericItemTable(listIndex,valueLabel, setting);
+        ListViewItem table = getNumericItemTable(listIndex, valueLabel, setting);
 
         // add clickListener
         table.addListener(new ClickListener() {
@@ -539,9 +542,9 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getDblView(int listIndex,final SettingDouble setting) {
+    private ListViewItem getDblView(int listIndex, final SettingDouble setting) {
         final VisLabel valueLabel = new VisLabel(Double.toString(setting.getValue()), valueStyle);
-        ListViewItem table = getNumericItemTable(listIndex,valueLabel, setting);
+        ListViewItem table = getNumericItemTable(listIndex, valueLabel, setting);
 
         // add clickListener
         table.addListener(new ClickListener() {
@@ -574,9 +577,9 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getIntView(int listIndex,final SettingInt setting) {
+    private ListViewItem getIntView(int listIndex, final SettingInt setting) {
         final VisLabel valueLabel = new VisLabel(Integer.toString(setting.getValue()), valueStyle);
-        final ListViewItem table = getNumericItemTable(listIndex,valueLabel, setting);
+        final ListViewItem table = getNumericItemTable(listIndex, valueLabel, setting);
 
         // add clickListener
         table.addListener(new ClickListener() {
@@ -621,7 +624,11 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private ListViewItem getBoolView(int listIndex, final SettingBool setting) {
-        ListViewItem table = new ListViewItem(listIndex);
+        ListViewItem table = new ListViewItem(listIndex){
+            @Override
+            public void dispose() {
+            }
+        };
 
         // add label with category name, align left
         table.left();
@@ -675,8 +682,12 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getNumericItemTable(int listIndex,VisLabel valueLabel, SettingBase<?> setting) {
-        ListViewItem table = new ListViewItem(listIndex);
+    private ListViewItem getNumericItemTable(int listIndex, VisLabel valueLabel, SettingBase<?> setting) {
+        ListViewItem table = new ListViewItem(listIndex){
+            @Override
+            public void dispose() {
+            }
+        };
 
         // add label with category name, align left
         table.left();

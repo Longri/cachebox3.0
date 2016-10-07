@@ -104,7 +104,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
         Gdx.graphics.setContinuousRendering(false);
         Gdx.graphics.requestRendering();
-
+        CB.initThreadCheck();
     }
 
 

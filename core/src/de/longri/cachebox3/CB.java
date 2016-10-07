@@ -58,7 +58,6 @@ public class CB {
     public static float stateTime;
 
 
-
     final static float PPI_DEFAULT = 163;
     private static float globalScale = 1;
     public static ViewManager viewmanager;
@@ -312,4 +311,26 @@ public class CB {
         return selectedWaypoint;
     }
 
+
+    // GL-Thread check
+    private static Thread MAIN_THREAD;
+
+    public static void assertMainThread() {
+        if (MAIN_THREAD != Thread.currentThread()) {
+            throw new RuntimeException("Access from non-GL thread!");
+        }
+    }
+
+    public static boolean isMainThread() {
+        return MAIN_THREAD == Thread.currentThread();
+    }
+
+    public static void initThreadCheck() {
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                MAIN_THREAD = Thread.currentThread();
+            }
+        });
+    }
 }

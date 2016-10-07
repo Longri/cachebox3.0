@@ -15,24 +15,22 @@
  */
 package de.longri.cachebox3.gui.views.listview;
 
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.Group;
 
 /**
  * Created by Longri on 31.08.2016.
  */
-public class ScrollViewContainer extends WidgetGroup {
+public class ScrollViewContainer extends Group {
 
     private float prefWidth = -1, prefHeight = -1;
 
-    @Override
+
     public float getPrefWidth() {
-        if (prefWidth == -1) return super.getPrefWidth();
         return prefWidth;
     }
 
-    @Override
+
     public float getPrefHeight() {
-        if (prefHeight == -1) return super.getPrefHeight();
         return prefHeight;
     }
 

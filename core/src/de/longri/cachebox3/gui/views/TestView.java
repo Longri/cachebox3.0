@@ -134,8 +134,11 @@ public class TestView extends AbstractView {
 
             @Override
             public ListViewItem getView(int index) {
-                ListViewItem item = new ListViewItem(index);
-
+                ListViewItem item = new ListViewItem(index) {
+                    @Override
+                    public void dispose() {
+                    }
+                };
                 item.left();
                 VisLabel label = new VisLabel(list.get(index));
                 label.setAlignment(Align.left);

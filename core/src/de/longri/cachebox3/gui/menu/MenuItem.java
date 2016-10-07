@@ -38,7 +38,7 @@ public class MenuItem extends ListViewItem {
     private Image checkImage;
     private Drawable mIcon;
     private float imageScaleValue = 1;
-    ;
+
 
     private String mTitle;
     private boolean mIsEnabled = true;
@@ -282,6 +282,21 @@ public class MenuItem extends ListViewItem {
     public void setBackground(Drawable drawable) {
         if (backgroundOverrides) return;
         super.setBackground(drawable);
+    }
+
+    @Override
+    public void dispose() {
+        clickListener = null;
+        style = null;
+        mLabel = null;
+        checkImage = null;
+        mIcon = null;
+        mTitle = null;
+        iconImage = null;
+        data = null;
+        moreMenu = null;
+        onItemClickListener = null;
+
     }
 
     public static class MenuItemStyle {
