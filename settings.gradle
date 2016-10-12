@@ -1,5 +1,6 @@
-include 'desktop', 'android', 'ios', 'core'
+include 'desktop', 'android', 'ios', 'core', 'gps-simulator'
 
 project(':desktop').projectDir = new File('./launcher/desktop')
 project(':android').projectDir = new File('./launcher/android')
 project(':ios').projectDir = new File('./launcher/ios')
+project(':gps-simulator').projectDir = new File('./tools/gps-simulator')

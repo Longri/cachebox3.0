@@ -41,6 +41,7 @@ project(":desktop") {
 
     dependencies {
         compile project(":core")
+        compile project(":gps-simulator")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
@@ -55,6 +56,24 @@ project(":desktop") {
         compile "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
         compile "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
         compile "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
+
+        //include libs
+        compile fileTree(dir: 'libs', include: ['*.jar'])
+    }
+}
+
+project(":gps-simulator") {
+    apply plugin: "java"
+
+
+    dependencies {
+        compile project(":core")
+        compile 'org.mapsforge:mapsforge-core:0.6.1'
+        compile 'org.mapsforge:mapsforge-map:0.6.1'
+        compile 'org.mapsforge:mapsforge-map-reader:0.6.1'
+        compile 'org.mapsforge:mapsforge-map-awt:0.6.1'
+        compile 'com.kitfox.svg:svg-salamander:1.0'
+        compile 'net.sf.kxml:kxml2:2.3.0'
 
         //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])

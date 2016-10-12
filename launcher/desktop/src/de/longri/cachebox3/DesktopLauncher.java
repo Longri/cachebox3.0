@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3;
 
+import ch.fhnw.imvs.gpssimulator.SimulatorMain;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
@@ -25,6 +26,8 @@ import org.oscim.backend.GLAdapter;
 import org.oscim.core.Tile;
 import org.oscim.gdx.GdxAssets;
 import org.oscim.gdx.LwjglGL20;
+
+import javax.swing.*;
 
 public class DesktopLauncher {
     public static void main(String[] args) {
@@ -64,6 +67,18 @@ public class DesktopLauncher {
             config.height *= scale;
         }
 
+        if (cmd.hasOption("gps")) {
+            JFrame f;
+            try {
+                f = SimulatorMain.createFrame();
+                f.pack();
+                f.setResizable(false);
+                f.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
 
         initVtm();
 
@@ -94,7 +109,7 @@ public class DesktopLauncher {
         note4.setRequired(false);
         options.addOption(note4);
 
-        Option gpsSimulator = new Option("o", "output", false, "start with GPS simulator");
+        Option gpsSimulator = new Option("g", "gps", false, "start with GPS simulator");
         gpsSimulator.setRequired(false);
         options.addOption(gpsSimulator);
 
