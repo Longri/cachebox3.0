@@ -32,6 +32,9 @@ import de.longri.cachebox3.gui.map.layer.MyLocationModel;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.locator.Location;
+import de.longri.cachebox3.locator.Locator;
+import org.oscim.core.MapPosition;
+import org.oscim.event.Event;
 import org.oscim.gdx.LayerHandler;
 import org.oscim.gdx.MotionHandler;
 import org.oscim.layers.TileGridLayer;
@@ -39,6 +42,8 @@ import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Layers;
+import org.oscim.map.Map;
+import org.oscim.map.Viewport;
 import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
@@ -81,15 +86,45 @@ public class MapView extends AbstractView {
             public void stateChanged(MapState state) {
                 positionChangedHandler.setMapState(state);
                 checkInputListener();
+
+                Location actLocation;
+                double scale;
+
+                switch (state) {
+
+                    case FREE:
+                        break;
+                    case GPS:
+                        // set to act position
+                        actLocation = Locator.getLocation();
+                        scale = mMap.getMapPosition().getScale();
+                        mMap.setMapPosition(actLocation.latitude, actLocation.longitude, scale);
+                        break;
+                    case WP:
+                        break;
+                    case LOCK:
+                        break;
+                    case CAR:
+
+                        // set to act position
+                        actLocation = Locator.getLocation();
+                        scale = mMap.getMapPosition().getScale();
+                        mMap.setMapPosition(actLocation.latitude, actLocation.longitude, scale);
+
+                        // set full tillt
+                        MapPosition mapPosition = mMap.getMapPosition();
+                        mapPosition.setTilt(Viewport.MAX_TILT);
+                        mMap.setMapPosition(mapPosition);
+
+                        break;
+                }
+
+
             }
         });
 
 
         this.addActor(mapStateButton);
-
-        // set Position
-        mapStateButton.setPosition(100, 250);
-
         this.setTouchable(Touchable.enabled);
     }
 
@@ -108,6 +143,14 @@ public class MapView extends AbstractView {
         mMap = new CacheboxMapAdapter() {
             public void tiltChanged(float newTilt) {
                 if (positionChangedHandler != null) positionChangedHandler.tiltChangedFromMap(newTilt);
+            }
+
+            @Override
+            public void onMapEvent(Event e, MapPosition mapPosition) {
+                if (e == Map.MOVE_EVENT) {
+                    // map is moved by user
+                    mapStateButton.setState(MapState.FREE);
+                }
             }
         };
         main.mMapRenderer = new MapRenderer(mMap);

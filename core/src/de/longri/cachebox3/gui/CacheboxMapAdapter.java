@@ -17,16 +17,19 @@ package de.longri.cachebox3.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
+import org.oscim.core.MapPosition;
+import org.oscim.event.Event;
 import org.oscim.map.Map;
 
 /**
  * Created by Longri on 08.09.2016.
  */
-public class CacheboxMapAdapter extends Map {
+public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
 
 
     public CacheboxMapAdapter() {
         super();
+        events.bind(this); //register Update listener
     }
 
 
@@ -87,7 +90,7 @@ public class CacheboxMapAdapter extends Map {
             if (mClearMap)
                 updateMap(false);
             else {
-             //   Gdx.graphics.requestRendering();
+                //   Gdx.graphics.requestRendering();
             }
         }
     }
@@ -122,6 +125,11 @@ public class CacheboxMapAdapter extends Map {
                 updateMap(true);
             }
         }
+    }
+
+    @Override
+    public void onMapEvent(Event e, MapPosition mapPosition) {
+       // handled at MapView
     }
 }
 

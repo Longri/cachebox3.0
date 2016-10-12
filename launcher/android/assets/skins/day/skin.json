@@ -345,27 +345,27 @@
     },
     "Mapstate.free": {
       "path": "skins/day/svg/map-state-free.svg",
-      "scale": 0.5
+      "scale": 0.75
     },
     "Mapstate.waypoint": {
       "path": "skins/day/svg/map-state-wp.svg",
-      "scale": 0.5
+      "scale": 0.75
     },
     "Mapstate.gps": {
       "path": "skins/day/svg/map-state-gps.svg",
-      "scale": 0.5
+      "scale": 0.75
     },
     "Mapstate.lock": {
       "path": "skins/day/svg/map-state-lock.svg",
-      "scale": 0.5
+      "scale": 0.75
     },
     "Mapstate.car": {
       "path": "skins/day/svg/map-state-car.svg",
-      "scale": 0.5
+      "scale": 0.75
     },
     "MapstateOverdraw": {
       "path": "skins/day/svg/map-state-overdraw.svg",
-      "scale": 0.5
+      "scale": 0.75
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
