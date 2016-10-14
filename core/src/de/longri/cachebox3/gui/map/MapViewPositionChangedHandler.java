@@ -15,15 +15,13 @@
  */
 package de.longri.cachebox3.gui.map;
 
-import com.badlogic.gdx.math.MathUtils;
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
-import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.PositionChangedEvent;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
+import de.longri.cachebox3.utils.MathUtils;
 import org.oscim.core.MapPosition;
 import org.oscim.map.Map;
 import org.oscim.map.Viewport;
@@ -63,12 +61,10 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
     @Override
     public void PositionChanged() {
-        if (mapState==MapState.CAR && !Locator.isGPSprovided())
+        if (mapState == MapState.CAR && !Locator.isGPSprovided())
             return;// at CarMode ignore Network provided positions!
 
         this.myPosition = Locator.getCoordinate();
-
-
 
 
         if (getCenterGps())
@@ -85,10 +81,10 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         float bearing = -Locator.getHeading();
 
         // at CarMode no orientation changes below 20kmh
-        if (mapState==MapState.CAR && Locator.SpeedOverGround() < 20)
+        if (mapState == MapState.CAR && Locator.SpeedOverGround() < 20)
             bearing = this.mapBearing;
 
-        if (!this.NorthOriented || mapState==MapState.CAR) {
+        if (!this.NorthOriented || mapState == MapState.CAR) {
             this.mapBearing = bearing;
             this.arrowHeading = -bearing;
         } else {
@@ -168,7 +164,8 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         {// set yOffset at dependency of tilt
             if (this.tilt > 0) {
                 float tiltAsPercent = 1 / Viewport.MAX_TILT * this.tilt;
-                float offset = MathUtils.lerp(0f, 0.7f, tiltAsPercent);
+                float offset = MathUtils.linearInterpolation
+                        (Viewport.MIN_TILT, Viewport.MAX_TILT, 0, 0.8f, this.tilt);
                 this.map.viewport().setMapScreenCenter(offset);
             } else
                 this.map.viewport().setMapScreenCenter(0);
