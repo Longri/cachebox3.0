@@ -61,7 +61,8 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         }
     };
 
-    float lastTilt = -1;
+    private float lastTilt = -1;
+    private float lastRotate = -1;
 
     @Override
     public void updateMap(boolean forceRender) {
@@ -77,7 +78,15 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
                 lastTilt = this.getMapPosition().getTilt();
                 tiltChanged(lastTilt);
             }
+
+            if (lastRotate != this.getMapPosition().getBearing()) {
+                lastRotate = this.getMapPosition().getBearing();
+                rotateChanged(lastRotate);
+            }
         }
+    }
+
+    public void rotateChanged(float lastRotate) {
     }
 
     public void tiltChanged(float newTilt) {
@@ -129,7 +138,7 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
 
     @Override
     public void onMapEvent(Event e, MapPosition mapPosition) {
-       // handled at MapView
+        // handled at MapView
     }
 }
 

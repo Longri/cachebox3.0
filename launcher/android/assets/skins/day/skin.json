@@ -626,6 +626,10 @@
     "default": {
       "up": "drawable_default_button",
       "down": "drawable_default_button_pressed"
+    },
+    "toggle": {
+      "up": "drawable_default_button",
+      "checked": "drawable_default_button_pressed"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {

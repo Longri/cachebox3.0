@@ -192,12 +192,16 @@ public class MapInputHandler implements InputProcessor {
             mViewport.tiltMap((screenY - mPosY) / 10f);
             mPosY = screenY;
             changed = true;
+            rotateByUser();
         }
 
         if (changed) {
             mMap.updateMap(true);
         }
         return true;
+    }
+
+    public void rotateByUser() {
     }
 
     @Override

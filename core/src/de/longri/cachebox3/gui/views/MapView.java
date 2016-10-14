@@ -30,6 +30,7 @@ import de.longri.cachebox3.gui.map.layer.Compass;
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
 import de.longri.cachebox3.gui.stages.StageManager;
+import de.longri.cachebox3.gui.widgets.MapOrientationButton;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
@@ -70,6 +71,7 @@ public class MapView extends AbstractView {
     private MapScaleBarLayer mapScaleBarLayer;
     private float myBearing;
     private final MapStateButton mapStateButton;
+    private final MapOrientationButton mapOrientationButton;
 
     LocationOverlay myLocationAccuracy;
     MyLocationModel myLocationModel;
@@ -80,6 +82,7 @@ public class MapView extends AbstractView {
         super("MapView");
         this.setTouchable(Touchable.disabled);
         this.main = main;
+        this.mapOrientationButton = new MapOrientationButton();
         mMap = createMap();
         mapStateButton = new MapStateButton(new MapStateButton.StateChangedListener() {
             @Override
@@ -116,6 +119,9 @@ public class MapView extends AbstractView {
                         mapPosition.setTilt(Viewport.MAX_TILT);
                         mMap.setMapPosition(mapPosition);
 
+                        // set orientation by bearing
+                        mapOrientationButton.setChecked(true);
+
                         break;
                 }
 
@@ -125,6 +131,7 @@ public class MapView extends AbstractView {
 
 
         this.addActor(mapStateButton);
+        this.addActor(mapOrientationButton);
         this.setTouchable(Touchable.enabled);
     }
 
@@ -141,6 +148,8 @@ public class MapView extends AbstractView {
     public CacheboxMapAdapter createMap() {
         main.drawMap = true;
         mMap = new CacheboxMapAdapter() {
+
+            @Override
             public void tiltChanged(float newTilt) {
                 if (positionChangedHandler != null) positionChangedHandler.tiltChangedFromMap(newTilt);
             }
@@ -162,7 +171,8 @@ public class MapView extends AbstractView {
 
 
         //add position changed handler
-        positionChangedHandler = MapViewPositionChangedHandler.getInstance(mMap, myLocationModel, myLocationAccuracy);
+        positionChangedHandler = MapViewPositionChangedHandler.getInstance
+                (mMap, myLocationModel, myLocationAccuracy, mapOrientationButton);
 
 
         return mMap;
@@ -183,14 +193,13 @@ public class MapView extends AbstractView {
 
     @Override
     protected void create() {
-        // overide and don't call supper
+        // overide and don't call super
         // for non creation of default name label
     }
 
     @Override
     public void onShow() {
         addInputListener();
-        testSetLocation();
     }
 
     @Override
@@ -198,22 +207,6 @@ public class MapView extends AbstractView {
         destroyMap();
     }
 
-    private void testSetLocation() {
-        de.longri.cachebox3.locator.Location cbLocation =
-                new de.longri.cachebox3.locator.Location(52.580400947530364,
-                        13.385594096047232, 10);
-
-        cbLocation.setHasBearing(true);
-//        cbLocation.setBearing(0);
-//        cbLocation.setBearing(90);
-//        cbLocation.setBearing(180);
-        cbLocation.setBearing(360);
-
-        cbLocation.setProvider(Location.ProviderType.GPS);
-        log.trace("Update location:" + cbLocation.toString());
-        de.longri.cachebox3.locator.Locator.setNewLocation(cbLocation);
-
-    }
 
     @Override
     public void dispose() {
@@ -236,6 +229,9 @@ public class MapView extends AbstractView {
         setMapScaleBarOffset(CB.scaledSizes.MARGIN, CB.scaledSizes.MARGIN_HALF);
 
         mapStateButton.setPosition(getWidth() - (mapStateButton.getWidth() + CB.scaledSizes.MARGIN),
+                getHeight() - (mapStateButton.getHeight() + CB.scaledSizes.MARGIN));
+
+        mapOrientationButton.setPosition(CB.scaledSizes.MARGIN,
                 getHeight() - (mapStateButton.getHeight() + CB.scaledSizes.MARGIN));
     }
 
@@ -330,7 +326,12 @@ public class MapView extends AbstractView {
     private void createMapInputHandler() {
         GestureDetector gestureDetectore = new GestureDetector(new LayerHandler(mMap));
         MotionHandler motionHandler = new MotionHandler(mMap);
-        MapInputHandler inputHandler = new MapInputHandler(mMap);
+        MapInputHandler inputHandler = new MapInputHandler(mMap) {
+            @Override
+            public void rotateByUser() {
+                mapOrientationButton.setChecked(false);
+            }
+        };
         mapInputHandler = new InputMultiplexer();
         mapInputHandler.addProcessor(motionHandler);
         mapInputHandler.addProcessor(gestureDetectore);

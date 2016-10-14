@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.map;
 
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
+import de.longri.cachebox3.gui.widgets.MapOrientationButton;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.PositionChangedEvent;
@@ -38,14 +39,15 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     private MapState mapState;
     private CoordinateGPS mapCenter;
     private CoordinateGPS myPosition;
-    private Map map;
-    private MyLocationModel myLocationModel;
-    private LocationOverlay myLocationAccuracy;
+    private final Map map;
+    private final MyLocationModel myLocationModel;
+    private final LocationOverlay myLocationAccuracy;
+    private final MapOrientationButton mapOrientationButton;
 
     public static MapViewPositionChangedHandler
-    getInstance(Map map, MyLocationModel myLocationModel, LocationOverlay myLocationAccuracy) {
+    getInstance(Map map, MyLocationModel myLocationModel, LocationOverlay myLocationAccuracy, MapOrientationButton mapOrientationButton) {
         MapViewPositionChangedHandler handler =
-                new MapViewPositionChangedHandler(map, myLocationModel, myLocationAccuracy);
+                new MapViewPositionChangedHandler(map, myLocationModel, myLocationAccuracy, mapOrientationButton);
 
         //register this handler
         PositionChangedEventList.Add(handler);
@@ -53,10 +55,11 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     }
 
 
-    private MapViewPositionChangedHandler(Map map, MyLocationModel myLocationModel, LocationOverlay myLocationAccuracy) {
+    private MapViewPositionChangedHandler(Map map, MyLocationModel myLocationModel, LocationOverlay myLocationAccuracy, MapOrientationButton mapOrientationButton) {
         this.map = map;
         this.myLocationModel = myLocationModel;
         this.myLocationAccuracy = myLocationAccuracy;
+        this.mapOrientationButton = mapOrientationButton;
     }
 
     @Override
@@ -91,6 +94,11 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
             this.mapBearing = 0;
             this.arrowHeading = bearing;
         }
+
+        //set orientation
+        this.mapOrientationButton.setOrientation(bearing);
+
+
         assumeValues();
     }
 
@@ -139,7 +147,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
             // heading for map must between -180 and 180
             if (mapBearing < -180) mapBearing += 360;
-            curentMapPosition.setBearing(mapBearing);
+            if (mapOrientationButton.isChecked()) curentMapPosition.setBearing(mapBearing);
             curentMapPosition.setTilt(this.tilt);
             this.map.setMapPosition(curentMapPosition);
         }
@@ -163,7 +171,6 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
         {// set yOffset at dependency of tilt
             if (this.tilt > 0) {
-                float tiltAsPercent = 1 / Viewport.MAX_TILT * this.tilt;
                 float offset = MathUtils.linearInterpolation
                         (Viewport.MIN_TILT, Viewport.MAX_TILT, 0, 0.8f, this.tilt);
                 this.map.viewport().setMapScreenCenter(offset);
