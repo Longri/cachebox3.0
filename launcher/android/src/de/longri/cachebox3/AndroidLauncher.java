@@ -43,7 +43,7 @@ public class AndroidLauncher extends AndroidApplication {
 
     }
 
-    private final AndroidLocationListener locationListener = new AndroidLocationListener();
+
     // Compass
     private SensorManager mSensorManager;
     private Sensor mSensor;

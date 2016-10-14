@@ -18,7 +18,9 @@ package de.longri.cachebox3.gui.map;
 import com.badlogic.gdx.math.MathUtils;
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.PositionChangedEvent;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
@@ -36,7 +38,8 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     private boolean NorthOriented;
     private float arrowHeading, accuracy, mapBearing, tilt, yOffset;
     private MapState mapState;
-    private CoordinateGPS mapCenter, myPosition;
+    private CoordinateGPS mapCenter;
+    private CoordinateGPS myPosition;
     private Map map;
     private MyLocationModel myLocationModel;
     private LocationOverlay myLocationAccuracy;
@@ -51,7 +54,6 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         return handler;
     }
 
-    private boolean CarMode = false;
 
     private MapViewPositionChangedHandler(Map map, MyLocationModel myLocationModel, LocationOverlay myLocationAccuracy) {
         this.map = map;
@@ -61,15 +63,17 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
     @Override
     public void PositionChanged() {
-        if (CarMode && !Locator.isGPSprovided())
+        if (mapState==MapState.CAR && !Locator.isGPSprovided())
             return;// at CarMode ignore Network provided positions!
 
         this.myPosition = Locator.getCoordinate();
 
+
+
+
         if (getCenterGps())
             this.mapCenter = this.myPosition;
-        else
-            this.mapCenter = new CoordinateGPS(this.map.getMapPosition());
+
 
         this.accuracy = this.myPosition.getAccuracy();
 
@@ -81,10 +85,10 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         float bearing = -Locator.getHeading();
 
         // at CarMode no orientation changes below 20kmh
-        if (this.CarMode && Locator.SpeedOverGround() < 20)
+        if (mapState==MapState.CAR && Locator.SpeedOverGround() < 20)
             bearing = this.mapBearing;
 
-        if (!this.NorthOriented || CarMode) {
+        if (!this.NorthOriented || mapState==MapState.CAR) {
             this.mapBearing = bearing;
             this.arrowHeading = -bearing;
         } else {
@@ -134,7 +138,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
         {// set map values
             MapPosition curentMapPosition = this.map.getMapPosition();
-            if (this.mapCenter != null)
+            if (this.mapCenter != null && getCenterGps())
                 curentMapPosition.setPosition(this.mapCenter.latitude, this.mapCenter.longitude);
 
             // heading for map must between -180 and 180
