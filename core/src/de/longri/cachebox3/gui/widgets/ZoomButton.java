@@ -38,8 +38,19 @@ public class ZoomButton extends Group {
     private final Button plus;
     private final Button minus;
 
+    private final ValueChangeListener valueChangeListener;
 
-    private ClickListener clickListener = new ClickListener() {
+    public interface ValueChangeListener {
+        public void valueChanged(int changeValue);
+    }
+
+    private class ZoomClickListener extends ClickListener {
+        final int value;
+
+        protected ZoomClickListener(int value) {
+            this.value = value;
+        }
+
         @Override
         public void clicked(InputEvent event, float x, float y) {
             if (fadeOutRuns) {
@@ -48,10 +59,13 @@ public class ZoomButton extends Group {
                 fadeOutRuns = false;
             }
             ZoomButton.this.addAction(Actions.alpha(style.alphaOn));
+            valueChangeListener.valueChanged(value);
         }
-    };
+    }
 
-    public ZoomButton() {
+
+    public ZoomButton(ValueChangeListener valueChangeListener) {
+        this.valueChangeListener = valueChangeListener;
         style = VisUI.getSkin().get("default", ZoomButtonStyle.class);
 
         Button.ButtonStyle btnStylePlus = new Button.ButtonStyle();
@@ -67,8 +81,8 @@ public class ZoomButton extends Group {
         minus = new Button(btnStyleMinus);
 
 
-        plus.addListener(clickListener);
-        minus.addListener(clickListener);
+        plus.addListener(new ZoomClickListener(1));
+        minus.addListener(new ZoomClickListener(-1));
 
         this.addActor(plus);
         this.addActor(minus);

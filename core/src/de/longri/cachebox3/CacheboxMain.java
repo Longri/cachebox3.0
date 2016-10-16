@@ -23,30 +23,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Matrix4;
-import de.longri.cachebox3.gui.CacheboxMapAdapter;
-import de.longri.cachebox3.gui.map.layer.Compass;
-import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
-import org.oscim.layers.TileGridLayer;
-import org.oscim.layers.tile.buildings.BuildingLayer;
-import org.oscim.layers.tile.vector.VectorTileLayer;
-import org.oscim.layers.tile.vector.labeling.LabelLayer;
-import org.oscim.map.Layers;
-import org.oscim.map.Map;
-import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLState;
-import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
-import org.oscim.renderer.bucket.TextItem;
-import org.oscim.renderer.bucket.TextureBucket;
-import org.oscim.renderer.bucket.TextureItem;
-import org.oscim.scalebar.*;
-import org.oscim.theme.VtmThemes;
-import org.oscim.tiling.TileSource;
-import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLogger;
 
@@ -143,7 +125,9 @@ public class CacheboxMain extends ApplicationAdapter {
 
             // set map position and size
             gl.viewport(mapDrawX, mapDrawY, mapDrawWidth, mapDrawHeight);
+
             mMapRenderer.onDrawFrame();
+
 
             //release Buffers from map renderer
             GLState.bindVertexBuffer(0);

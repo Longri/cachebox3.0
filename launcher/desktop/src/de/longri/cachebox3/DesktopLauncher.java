@@ -21,9 +21,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import org.apache.commons.cli.*;
 import org.oscim.awt.AwtGraphics;
-import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GLAdapter;
-import org.oscim.core.Tile;
 import org.oscim.gdx.GdxAssets;
 import org.oscim.gdx.LwjglGL20;
 
@@ -31,6 +29,10 @@ import javax.swing.*;
 
 public class DesktopLauncher {
     public static void main(String[] args) {
+
+
+        System.setProperty("org.lwjgl.util.NoChecks", "false");
+
 
         CommandLine cmd = getCommandLine(args);
 

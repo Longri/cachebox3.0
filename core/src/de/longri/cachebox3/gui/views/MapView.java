@@ -54,7 +54,9 @@ import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
+import org.oscim.tiling.TileSource;
 import org.oscim.tiling.source.mapfile.MapFileTileSource;
+import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 import org.slf4j.LoggerFactory;
 
 
@@ -74,6 +76,8 @@ public class MapView extends AbstractView {
     private final MapStateButton mapStateButton;
     private final MapOrientationButton mapOrientationButton;
     private final ZoomButton zoomButton;
+
+    private MapFileTileSource tileSource;
 
     LocationOverlay myLocationAccuracy;
     MyLocationModel myLocationModel;
@@ -136,7 +140,18 @@ public class MapView extends AbstractView {
         this.addActor(mapOrientationButton);
         this.setTouchable(Touchable.enabled);
 
-        this.zoomButton = new ZoomButton();
+        this.zoomButton = new ZoomButton(new ZoomButton.ValueChangeListener() {
+            @Override
+            public void valueChanged(int changeValue) {
+                if (changeValue > 0)
+                    MapView.this.mMap.animator().animateZoom(500, 2, 0, 0);
+                else
+                    MapView.this.mMap.animator().animateZoom(500, 0.5, 0, 0);
+
+                MapView.this.mMap.updateMap(true);
+                
+            }
+        });
         this.zoomButton.pack();
         this.addActor(zoomButton);
     }
@@ -255,7 +270,7 @@ public class MapView extends AbstractView {
 
 //        TileSource tileSource = new OSciMap4TileSource();
 
-        MapFileTileSource tileSource = new MapFileTileSource();
+         tileSource = new MapFileTileSource();
         FileHandle mapFileHandle = Gdx.files.local(CB.WorkPath + "/repository/maps/germany.map");
         tileSource.setMapFile(mapFileHandle.path());
         tileSource.setPreferredLanguage("en");
