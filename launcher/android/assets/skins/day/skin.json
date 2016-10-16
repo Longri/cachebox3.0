@@ -371,12 +371,20 @@
       "path": "skins/day/svg/plus.svg",
       "scale": 0.5
     },
+    "ZoomPlusDisabled": {
+      "path": "skins/day/svg/plus_disabled.svg",
+      "scale": 0.5
+    },
     "ZoomPlusPressed": {
       "path": "skins/day/svg/plus_pressed.svg",
       "scale": 0.5
     },
     "ZoomMinus": {
       "path": "skins/day/svg/minus.svg",
+      "scale": 0.5
+    },
+    "ZoomMinusDisabled": {
+      "path": "skins/day/svg/minus_disabled.svg",
       "scale": 0.5
     },
     "ZoomMinusPressed": {
@@ -869,7 +877,9 @@
       "plus": "ZoomPlus",
       "minus": "ZoomMinus",
       "plusDown": "ZoomPlusPressed",
-      "minusDown": "ZoomMinusPressed"
+      "minusDown": "ZoomMinusPressed",
+      "plusDisabled": "ZoomPlusDisabled",
+      "minusDisabled": "ZoomMinusDisabled"
     }
   }
 }
