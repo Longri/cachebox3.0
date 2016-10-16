@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -30,6 +31,7 @@ public class ZoomButton extends Group {
 
     private final float TIME_TO_FADE_OUT = 5;
     private float actTime;
+    private long lastTime = -1;
     private boolean fadeOutRuns = false;
 
     private final ZoomButtonStyle style;
@@ -86,11 +88,22 @@ public class ZoomButton extends Group {
     @Override
     public void act(float delta) {
         super.act(delta);
+
+        if (lastTime == -1) lastTime = System.currentTimeMillis();
+
+
+        delta = ((System.currentTimeMillis() - lastTime) / 1000f);
+        lastTime = System.currentTimeMillis();
         actTime += delta;
 
         if (!fadeOutRuns && actTime > TIME_TO_FADE_OUT) {
             this.addAction(Actions.alpha(style.alphaOff, 2f));
             this.fadeOutRuns = true;
+        }
+
+        if (!fadeOutRuns) {
+            //wait for fade out
+            Gdx.graphics.requestRendering();
         }
     }
 
