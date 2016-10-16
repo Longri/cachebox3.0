@@ -89,6 +89,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
 
 
         VisTable arrowTable = new VisTable();
+        
         arrowImage = new Image(this.style.arrow);
         arrowImage.setOrigin(this.style.arrow.getMinWidth() / 2, this.style.arrow.getMinHeight() / 2);
 

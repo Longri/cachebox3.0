@@ -366,6 +366,22 @@
     "MapstateOverdraw": {
       "path": "skins/day/svg/map-state-overdraw.svg",
       "scale": 0.75
+    },
+    "ZoomPlus": {
+      "path": "skins/day/svg/plus.svg",
+      "scale": 0.5
+    },
+    "ZoomPlusPressed": {
+      "path": "skins/day/svg/plus_pressed.svg",
+      "scale": 0.5
+    },
+    "ZoomMinus": {
+      "path": "skins/day/svg/minus.svg",
+      "scale": 0.5
+    },
+    "ZoomMinusPressed": {
+      "path": "skins/day/svg/minus_pressed.svg",
+      "scale": 0.5
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
@@ -846,6 +862,14 @@
       "stateLock": "Mapstate.lock",
       "stateCar": "Mapstate.car",
       "pressedOverdraw": "MapstateOverdraw"
+    }
+  },
+  "de.longri.cachebox3.gui.widgets.ZoomButton$ZoomButtonStyle": {
+    "default": {
+      "plus": "ZoomPlus",
+      "minus": "ZoomMinus",
+      "plusDown": "ZoomPlusPressed",
+      "minusDown": "ZoomMinusPressed"
     }
   }
 }

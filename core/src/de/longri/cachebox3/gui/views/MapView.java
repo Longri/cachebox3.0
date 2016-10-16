@@ -32,6 +32,7 @@ import de.longri.cachebox3.gui.map.layer.MyLocationModel;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.MapOrientationButton;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
+import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
 import org.oscim.core.MapPosition;
@@ -72,6 +73,7 @@ public class MapView extends AbstractView {
     private float myBearing;
     private final MapStateButton mapStateButton;
     private final MapOrientationButton mapOrientationButton;
+    private final ZoomButton zoomButton;
 
     LocationOverlay myLocationAccuracy;
     MyLocationModel myLocationModel;
@@ -133,6 +135,10 @@ public class MapView extends AbstractView {
         this.addActor(mapStateButton);
         this.addActor(mapOrientationButton);
         this.setTouchable(Touchable.enabled);
+
+        this.zoomButton = new ZoomButton();
+        this.zoomButton.pack();
+        this.addActor(zoomButton);
     }
 
     private void checkInputListener() {
@@ -233,6 +239,8 @@ public class MapView extends AbstractView {
 
         mapOrientationButton.setPosition(CB.scaledSizes.MARGIN,
                 getHeight() - (mapStateButton.getHeight() + CB.scaledSizes.MARGIN));
+
+        zoomButton.setPosition(getWidth() - (zoomButton.getWidth() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN);
     }
 
 
