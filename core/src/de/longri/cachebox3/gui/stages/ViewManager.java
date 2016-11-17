@@ -80,8 +80,7 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         CanvasAdapter.textScale = scaleFactor;
         CanvasAdapter.scale = scaleFactor;
         PolygonBucket.enableTexture = CB.platform != CB.Platform.IOS;//fixme if vtm can render polygon texture
-
-        PolygonBucket.enableTexture=false;
+//  PolygonBucket.enableTexture=false;
 
         Gdx.app.log("Tile.SIZE", Integer.toString(Tile.SIZE));
         Gdx.app.log("Canvas.dpi", Float.toString(CanvasAdapter.dpi));

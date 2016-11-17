@@ -24,8 +24,10 @@ import de.longri.cachebox3.CB;
  */
 public class MapOrientationButton extends Button {
 
+    public enum State {NORTH, COMPASS, USER}
 
     private boolean block;
+    private State state;
 
     public MapOrientationButton() {
         super(VisUI.getSkin().get("toggle", ButtonStyle.class));

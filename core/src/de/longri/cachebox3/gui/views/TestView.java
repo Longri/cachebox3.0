@@ -39,14 +39,14 @@ public class TestView extends AbstractView {
     protected void create() {
         this.clear();
 
-        Model model = CB.getSkin().get("MyLocationModel", Model.class);
+        Model model = CB.getSkin().get("compassModel", Model.class);
         actor3D = new Actor3D("TestActor3D", model);
 
         this.addActor(actor3D);
 
 
-        ColorDrawable backgroundDrawable = new ColorDrawable(Color.FOREST);
-        actor3D.setBackground(backgroundDrawable);
+       // ColorDrawable backgroundDrawable = new ColorDrawable(Color.FOREST);
+        //actor3D.setBackground(backgroundDrawable);
         actor3D.setBounds(30, 30, getWidth() / 2, getHeight() / 2);
 
 
@@ -57,8 +57,8 @@ public class TestView extends AbstractView {
     public void onShow() {
 
         actor3D.addAction(Actions.moveTo(100, 200, 5));
-        actor3D.setModelScale(0.5f);
-        actor3D.setModelRotate(1, 0, 0, 90);
+        actor3D.setModelScale(0.075f);
+      //  actor3D.setModelRotate(1, 0, 0, 90);
 
 
     }
@@ -67,7 +67,7 @@ public class TestView extends AbstractView {
     @Override
     public void draw(Batch batch, float parentColor) {
         super.draw(batch, parentColor);
-        actor3D.setModelRotate(0, 0, 1, 1);
+        actor3D.setModelRotate(0, 1, 0, 1);
     }
 
 

@@ -37,7 +37,7 @@ public class MyLocationLayer extends Layer {
 
         model = loader.loadModel(Gdx.files.internal("skins/day/3d_model/Pfeil.obj"));
 
-//                    model = new ModelBuilder().createBox(40, 40, 40,
+//                    myLocationModel = new ModelBuilder().createBox(40, 40, 40,
 //                            new Material(ColorAttribute.createDiffuse(new Color(0, 1, 0, 0.4f)))
 //                            , VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 

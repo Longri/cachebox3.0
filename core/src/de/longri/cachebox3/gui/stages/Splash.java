@@ -19,17 +19,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
-import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.stages.initial_tasks.*;
@@ -144,6 +140,7 @@ public class Splash extends NamedStage {
         initTaskList.add(new LoadDbTask("Load Database", 10));
         assets = new AssetManager();
         assets.load("skins/day/3d_model/Pfeil.g3db", Model.class);
+        assets.load("skins/day/3d_model/compass.g3db", Model.class);
         loading = true;
 
         Gdx.graphics.requestRendering();
@@ -188,12 +185,16 @@ public class Splash extends NamedStage {
 
         log.info("Add 3DModels");
 
-        Model model = assets.get("skins/day/3d_model/Pfeil.g3db", Model.class);
+        Model myLocationModel = assets.get("skins/day/3d_model/Pfeil.g3db", Model.class);
+        myLocationModel.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));
+        myLocationModel.nodes.get(0).parts.get(0).material.set(FloatAttribute.createAlphaTest(0.1f));
+        SkinLoaderTask.myLocationModel = myLocationModel;
 
-        model.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));
-        model.nodes.get(0).parts.get(0).material.set(FloatAttribute.createAlphaTest(0.1f));
+        Model compassModel = assets.get("skins/day/3d_model/compass.g3db", Model.class);
+        compassModel.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));
+        compassModel.nodes.get(0).parts.get(0).material.set(FloatAttribute.createAlphaTest(0.1f));
+        SkinLoaderTask.compassModel = compassModel;
 
-        SkinLoaderTask.model = model;
         loading = false;
     }
 

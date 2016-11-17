@@ -26,7 +26,7 @@ public class Actor3D extends Actor {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(Actor3D.class);
 
     /**
-     * model batch must set from initialisation
+     * myLocationModel batch must set from initialisation
      */
     public static ModelBatch modelBatch;
 

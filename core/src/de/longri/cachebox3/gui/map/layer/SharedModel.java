@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Pool;
 
 /**
  * An instance of a {@link Model}, allows to specify global transform and modify the materials, as it
- * has a copy of the model's materials. Multiple instances can be created from the same Model,
+ * has a copy of the myLocationModel's materials. Multiple instances can be created from the same Model,
  * all sharing the meshes and textures of the Model. The Model owns the meshes and textures, to
  * dispose of these, the Model has to be disposed. Therefor, the Model must outlive all its ModelInstances</p>
  * <p/>
@@ -23,15 +23,15 @@ import com.badlogic.gdx.utils.Pool;
  */
 public class SharedModel implements RenderableProvider {
     /**
-     * the materials of the model, used by nodes that have a graphical representation FIXME not sure if superfluous, allows modification of materials without having to traverse the nodes
+     * the materials of the myLocationModel, used by nodes that have a graphical representation FIXME not sure if superfluous, allows modification of materials without having to traverse the nodes
      **/
     public final Array<Material> materials = new Array<Material>();
     /**
-     * root nodes of the model
+     * root nodes of the myLocationModel
      **/
     public final Array<Node> nodes = new Array<Node>();
     /**
-     * animations of the model, modifying node transformations
+     * animations of the myLocationModel, modifying node transformations
      **/
     public final Array<Animation> animations = new Array<Animation>();
     /**
@@ -48,7 +48,7 @@ public class SharedModel implements RenderableProvider {
     public Object userData;
 
     /**
-     * Constructs a new ModelInstance with all nodes and materials of the given model.
+     * Constructs a new ModelInstance with all nodes and materials of the given myLocationModel.
      *
      * @param model The {@link Model} to create an instance of.
      */
@@ -138,14 +138,14 @@ public class SharedModel implements RenderableProvider {
     }
 
     /**
-     * Constructs a new ModelInstance with only the specified nodes and materials of the given model.
+     * Constructs a new ModelInstance with only the specified nodes and materials of the given myLocationModel.
      */
     public SharedModel(final Model model, final String... rootNodeIds) {
         this(model, null, rootNodeIds);
     }
 
     /**
-     * Constructs a new ModelInstance with only the specified nodes and materials of the given model.
+     * Constructs a new ModelInstance with only the specified nodes and materials of the given myLocationModel.
      */
     public SharedModel(final Model model, final Matrix4 transform, final String... rootNodeIds) {
         this.model = model;
@@ -159,14 +159,14 @@ public class SharedModel implements RenderableProvider {
     }
 
     /**
-     * Constructs a new ModelInstance with only the specified nodes and materials of the given model.
+     * Constructs a new ModelInstance with only the specified nodes and materials of the given myLocationModel.
      */
     public SharedModel(final Model model, final Array<String> rootNodeIds) {
         this(model, null, rootNodeIds);
     }
 
     /**
-     * Constructs a new ModelInstance with only the specified nodes and materials of the given model.
+     * Constructs a new ModelInstance with only the specified nodes and materials of the given myLocationModel.
      */
     public SharedModel(final Model model, final Matrix4 transform, final Array<String> rootNodeIds) {
         this.model = model;
@@ -270,7 +270,7 @@ public class SharedModel implements RenderableProvider {
             e.key.invBoneBindTransforms.clear();
 
             for (final ObjectMap.Entry<Node, Matrix4> b : e.value.entries())
-                e.key.invBoneBindTransforms.put(getNode(b.key.id), b.value); // Share the inv bind matrix with the model
+                e.key.invBoneBindTransforms.put(getNode(b.key.id), b.value); // Share the inv bind matrix with the myLocationModel
 
             e.key.bones = new Matrix4[e.value.size];
             for (int i = 0; i < e.key.bones.length; i++)
@@ -420,7 +420,7 @@ public class SharedModel implements RenderableProvider {
     }
 
     /**
-     * Calculates the local and world transform of all {@link Node} instances in this model, recursively.
+     * Calculates the local and world transform of all {@link Node} instances in this myLocationModel, recursively.
      * First each {@link Node#localTransform} transform is calculated based on the translation, rotation and
      * scale of each Node. Then each {@link Node#calculateWorldTransform()}
      * is calculated, based on the parent's world transform and the local transform of each Node.
@@ -440,7 +440,7 @@ public class SharedModel implements RenderableProvider {
     }
 
     /**
-     * Calculate the bounding box of this model instance.
+     * Calculate the bounding box of this myLocationModel instance.
      * This is a potential slow operation, it is advised to cache the result.
      *
      * @param out the {@link BoundingBox} that will be set with the bounds.
@@ -452,7 +452,7 @@ public class SharedModel implements RenderableProvider {
     }
 
     /**
-     * Extends the bounding box with the bounds of this model instance.
+     * Extends the bounding box with the bounds of this myLocationModel instance.
      * This is a potential slow operation, it is advised to cache the result.
      *
      * @param out the {@link BoundingBox} that will be extended with the bounds.
