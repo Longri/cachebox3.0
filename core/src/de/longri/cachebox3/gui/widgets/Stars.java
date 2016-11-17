@@ -25,10 +25,8 @@ import com.kotcrab.vis.ui.widget.VisTable;
  * Created by Longri on 07.09.2016.
  */
 public class Stars extends VisTable {
-    private final int value;
 
     public Stars(int value) {
-        this.value = value;
 
         Skin skin = VisUI.getSkin();
         Drawable star1 = value >= 2 ? skin.getDrawable("star") : value >= 1 ? skin.getDrawable("star_half") : skin.getDrawable("star0");

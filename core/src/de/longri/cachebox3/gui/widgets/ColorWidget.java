@@ -34,7 +34,7 @@ public class ColorWidget extends Widget {
         texture = CB.getSkin().getSprite("color");
     }
 
-
+    @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         Color batchColor = batch.getColor();
