@@ -32,6 +32,7 @@ public class TestView extends AbstractView {
 
     public TestView() {
         super("TestView");
+
     }
 
     Actor3D actor3D;
@@ -45,8 +46,8 @@ public class TestView extends AbstractView {
         this.addActor(actor3D);
 
 
-       // ColorDrawable backgroundDrawable = new ColorDrawable(Color.FOREST);
-        //actor3D.setBackground(backgroundDrawable);
+        ColorDrawable backgroundDrawable = new ColorDrawable(Color.FOREST);
+        actor3D.setBackground(backgroundDrawable);
         actor3D.setBounds(30, 30, getWidth() / 2, getHeight() / 2);
 
 
@@ -55,7 +56,7 @@ public class TestView extends AbstractView {
 
     @Override
     public void onShow() {
-
+        create();
         actor3D.addAction(Actions.moveTo(100, 200, 5));
         actor3D.setModelScale(0.075f);
       //  actor3D.setModelRotate(1, 0, 0, 90);
@@ -78,6 +79,6 @@ public class TestView extends AbstractView {
 
     @Override
     protected void sizeChanged() {
-        create();
+       // create();
     }
 }

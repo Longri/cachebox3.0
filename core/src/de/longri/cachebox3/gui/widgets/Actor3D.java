@@ -50,8 +50,8 @@ public class Actor3D extends Actor {
 
         if (environment == null) {
             this.environment = new Environment();
-            this.environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-            this.environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+            this.environment.set(new ColorAttribute(ColorAttribute.Ambient, 0.8f, 0.8f, 0.8f, 1f));
+            this.environment.add(new DirectionalLight().set(1f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
         } else {
             this.environment = environment;
         }
