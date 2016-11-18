@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class SkinLoaderTask extends AbstractInitTask {
 
-    public static Model myLocationModel, compassModel;
+    public static Model myLocationModel, compassModel, compassGrayModel,compassYellowModel;
 
     public SkinLoaderTask(String name, int percent) {
         super(name, percent);
@@ -70,5 +70,7 @@ public final class SkinLoaderTask extends AbstractInitTask {
         SvgSkin skin = CB.getSkin();
         skin.add("MyLocationModel", myLocationModel, Model.class);
         skin.add("compassModel", compassModel, Model.class);
+        skin.add("compassGrayModel", compassGrayModel, Model.class);
+        skin.add("compassYellowModel", compassYellowModel, Model.class);
     }
 }

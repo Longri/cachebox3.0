@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -70,27 +71,25 @@ public class Actor3D extends Actor {
             background.draw(batch, getX(), getY(), getWidth(), getHeight());
         }
 
-
-        //we must finish the 2D Batch for rendering 3D
-        batch.flush();
-        batch.end();
-
         if (modelInstance != null) {
-
+            //we must finish the 2D Batch for rendering 3D
+            batch.flush();
+            batch.end();
 
             // move viewport
             Gdx.gl.glViewport((int) worldX, (int) worldY, (int) getWidth(), (int) getHeight());
 
+            //render 3d model
             modelBatch.begin(cam);
             modelBatch.render(modelInstance, environment);
             modelBatch.end();
 
             // return viewport
             Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        }
 
-        // restart 2D Batch
-        batch.begin();
+            // restart 2D Batch
+            batch.begin();
+        }
     }
 
     private void createModelInstance() {
@@ -126,9 +125,14 @@ public class Actor3D extends Actor {
         modelInstance.calculateTransforms();
     }
 
-    public void setModelRotate(float x, float y, float z, float degrees) {
-        modelInstance.transform.rotate(x, y, z, degrees);
+    public void setModelRotate(Vector3 axis, float degrees) {
+       // modelInstance.transform.setToRotation(axis,degrees);
+
+
+        modelInstance.transform.rotate(axis, degrees);
         modelInstance.calculateTransforms();
+
+
     }
 
 

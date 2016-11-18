@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.widgets.Actor3D;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
+import de.longri.cachebox3.gui.widgets.MapCompass;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -30,25 +31,25 @@ import org.slf4j.LoggerFactory;
 public class TestView extends AbstractView {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(TestView.class);
 
+    MapCompass mapCompass;
+
     public TestView() {
         super("TestView");
 
     }
 
-    Actor3D actor3D;
 
     protected void create() {
         this.clear();
 
-        Model model = CB.getSkin().get("compassModel", Model.class);
-        actor3D = new Actor3D("TestActor3D", model);
+        mapCompass = new MapCompass(getWidth() / 2, getWidth() / 2);
 
-        this.addActor(actor3D);
+        this.addActor(mapCompass);
 
 
         ColorDrawable backgroundDrawable = new ColorDrawable(Color.FOREST);
-        actor3D.setBackground(backgroundDrawable);
-        actor3D.setBounds(30, 30, getWidth() / 2, getHeight() / 2);
+        mapCompass.setDebug(true);
+        mapCompass.setPosition(30, 30);
 
 
     }
@@ -57,18 +58,15 @@ public class TestView extends AbstractView {
     @Override
     public void onShow() {
         create();
-        actor3D.addAction(Actions.moveTo(100, 200, 5));
-        actor3D.setModelScale(0.075f);
-      //  actor3D.setModelRotate(1, 0, 0, 90);
-
-
+      mapCompass.addAction(Actions.moveTo(100, 200, 5));
+        mapCompass.setTilt(45);
     }
 
 
     @Override
     public void draw(Batch batch, float parentColor) {
         super.draw(batch, parentColor);
-        actor3D.setModelRotate(0, 1, 0, 1);
+        // actor3D.setModelRotate(0, 1, 0, 1);
     }
 
 
@@ -79,6 +77,6 @@ public class TestView extends AbstractView {
 
     @Override
     protected void sizeChanged() {
-       // create();
+        // create();
     }
 }
