@@ -30,11 +30,12 @@ import de.longri.cachebox3.gui.map.layer.Compass;
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
 import de.longri.cachebox3.gui.stages.StageManager;
-import de.longri.cachebox3.gui.widgets.MapOrientationButton;
+import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
+import org.oscim.backend.GL;
 import org.oscim.core.MapPosition;
 import org.oscim.event.Event;
 import org.oscim.gdx.LayerHandler;
@@ -46,18 +47,19 @@ import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Layers;
 import org.oscim.map.Map;
 import org.oscim.map.Viewport;
-import org.oscim.renderer.BitmapRenderer;
-import org.oscim.renderer.GLViewport;
-import org.oscim.renderer.MapRenderer;
+import org.oscim.renderer.*;
 import org.oscim.renderer.bucket.TextItem;
 import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
-import org.oscim.tiling.TileSource;
 import org.oscim.tiling.source.mapfile.MapFileTileSource;
-import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 import org.slf4j.LoggerFactory;
+
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+
+import static org.oscim.backend.GLAdapter.gl;
 
 
 /**
@@ -74,7 +76,7 @@ public class MapView extends AbstractView {
     private MapScaleBarLayer mapScaleBarLayer;
     private float myBearing;
     private final MapStateButton mapStateButton;
-    private final MapOrientationButton mapOrientationButton;
+    private final MapCompass mapOrientationButton;
     private final ZoomButton zoomButton;
 
     private MapFileTileSource tileSource;
@@ -88,7 +90,7 @@ public class MapView extends AbstractView {
         super("MapView");
         this.setTouchable(Touchable.disabled);
         this.main = main;
-        this.mapOrientationButton = new MapOrientationButton();
+        this.mapOrientationButton = new MapCompass(50, 50);
         mMap = createMap();
         mapStateButton = new MapStateButton(new MapStateButton.StateChangedListener() {
             @Override
@@ -125,8 +127,8 @@ public class MapView extends AbstractView {
                         mapPosition.setTilt(Viewport.MAX_TILT);
                         mMap.setMapPosition(mapPosition);
 
-                        // set orientation by bearing
-                        mapOrientationButton.setChecked(true);
+//                        // set orientation by bearing
+//                        mapOrientationButton.setChecked(true);
 
                         break;
                 }
@@ -149,7 +151,7 @@ public class MapView extends AbstractView {
                     MapView.this.mMap.animator().animateZoom(500, 0.5, 0, 0);
 
                 MapView.this.mMap.updateMap(true);
-                
+
             }
         });
         this.zoomButton.pack();
@@ -193,7 +195,7 @@ public class MapView extends AbstractView {
 
         //add position changed handler
         positionChangedHandler = MapViewPositionChangedHandler.getInstance
-                (mMap, myLocationModel, myLocationAccuracy, mapOrientationButton);
+                (mMap, myLocationModel, myLocationAccuracy,mapOrientationButton);
 
 
         return mMap;
@@ -270,7 +272,7 @@ public class MapView extends AbstractView {
 
 //        TileSource tileSource = new OSciMap4TileSource();
 
-         tileSource = new MapFileTileSource();
+        tileSource = new MapFileTileSource();
         FileHandle mapFileHandle = Gdx.files.local(CB.WorkPath + "/repository/maps/germany.map");
         tileSource.setMapFile(mapFileHandle.path());
         tileSource.setPreferredLanguage("en");
@@ -352,7 +354,7 @@ public class MapView extends AbstractView {
         MapInputHandler inputHandler = new MapInputHandler(mMap) {
             @Override
             public void rotateByUser() {
-                mapOrientationButton.setChecked(false);
+//                mapOrientationButton.setChecked(false);
             }
         };
         mapInputHandler = new InputMultiplexer();

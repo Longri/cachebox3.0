@@ -236,7 +236,7 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionParking, false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView, false, GestureDirection.Left));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
-        tool_button.addAction(new ActionButton(new Action_Show_Quit(), true));
+        tool_button.addAction(new ActionButton(new Action_Show_TestView(), true));
 //
         misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, GestureDirection.Up));
         misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));

@@ -51,13 +51,14 @@ public class Actor3D extends Actor {
 
         if (environment == null) {
             this.environment = new Environment();
-            this.environment.set(new ColorAttribute(ColorAttribute.Ambient, 0.8f, 0.8f, 0.8f, 1f));
-            this.environment.add(new DirectionalLight().set(1f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+            this.environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.5f, 0.5f, 0.5f, 1f));
+            this.environment.add(new DirectionalLight().set(0.5f, 0.5f, 0.5f, -1f, -0.8f, -0.2f));
+            this.environment.add(new DirectionalLight().set(0.5f, 0.5f, 0.5f, 1f, -0.8f, -0.2f));
         } else {
             this.environment = environment;
         }
 
-        modelBatch = new ModelBatch();
+        if (modelBatch == null) modelBatch = new ModelBatch();
 
         this.createModelInstance();
     }
@@ -78,6 +79,9 @@ public class Actor3D extends Actor {
 
             // move viewport
             Gdx.gl.glViewport((int) worldX, (int) worldY, (int) getWidth(), (int) getHeight());
+
+
+
 
             //render 3d model
             modelBatch.begin(cam);
@@ -100,14 +104,13 @@ public class Actor3D extends Actor {
         if (dimensions.y > largest) largest = dimensions.y;
         if (dimensions.z > largest) largest = dimensions.z;
         if (largest > 25) {
-            float s = 25f / largest;
-            modelInstance.transform.setToScaling(s, s, s);
-            log.debug("Scaled Model" + this.name + " to: " + (s * 100f) + "%");
+            modelScale = 25f / largest;
         } else if (largest < 0.1f) {
-            float s = 5 / largest;
-            modelInstance.transform.setToScaling(s, s, s);
-            log.debug("Scaled Model" + this.name + " to: " + (s * 100f) + "%");
+            modelScale = 5 / largest;
         }
+
+        modelInstance.transform.setToScaling(modelScale, modelScale, modelScale);
+        log.debug("Scaled Model" + this.name + " to: " + (modelScale * 100f) + "%");
     }
 
     public void resetCam() {
@@ -121,25 +124,23 @@ public class Actor3D extends Actor {
 
 
     public void setModelScale(float scale) {
+        modelScale *= scale;
         modelInstance.transform.scale(scale, scale, scale);
         modelInstance.calculateTransforms();
     }
 
-    public void setModelRotate(Vector3 axis, float degrees) {
-       // modelInstance.transform.setToRotation(axis,degrees);
 
-
-        modelInstance.transform.rotate(axis, degrees);
+    public void setQuaternion(Quaternion q1) {
+        modelInstance.transform.set(q1);
+        modelInstance.transform.scale(modelScale, modelScale, modelScale);
         modelInstance.calculateTransforms();
 
 
     }
 
-
     @Override
     protected void positionChanged() {
         resetCam();
-
         Vector2 vector2 = new Vector2();
         this.localToStageCoordinates(vector2);
         this.worldX = vector2.x;

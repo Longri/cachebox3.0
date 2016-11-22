@@ -27,6 +27,7 @@ import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
+import org.oscim.backend.GL;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
 import org.slf4j.LoggerFactory;
@@ -126,22 +127,31 @@ public class CacheboxMain extends ApplicationAdapter {
             // set map position and size
             gl.viewport(mapDrawX, mapDrawY, mapDrawWidth, mapDrawHeight);
 
-            mMapRenderer.onDrawFrame();
+            try {
+                mMapRenderer.onDrawFrame();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
 
             //release Buffers from map renderer
             GLState.bindVertexBuffer(0);
             GLState.bindElementBuffer(0);
         } else {
-            // if Maprenderer not drawn, we must clear before draw stage
+            // if MapRenderer not drawn, we must clear before draw stage
             Gdx.gl.glClearColor(CB.backgroundColor.r, CB.backgroundColor.g, CB.backgroundColor.b, CB.backgroundColor.a);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ?
                     GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
+
         }
 
         gl.flush();
         gl.viewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        // MapRender sets the FrontFace to GL.CW, so we revert to GL.CCW
+        gl.frontFace(GL.CCW);
+
+
         StageManager.draw();
 
         if (CB.isTestVersion()) {

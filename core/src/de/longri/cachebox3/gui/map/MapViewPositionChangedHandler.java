@@ -17,7 +17,7 @@ package de.longri.cachebox3.gui.map;
 
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
-import de.longri.cachebox3.gui.widgets.MapOrientationButton;
+import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.PositionChangedEvent;
@@ -42,10 +42,10 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     private final Map map;
     private final MyLocationModel myLocationModel;
     private final LocationOverlay myLocationAccuracy;
-    private final MapOrientationButton mapOrientationButton;
+    private final MapCompass mapOrientationButton;
 
     public static MapViewPositionChangedHandler
-    getInstance(Map map, MyLocationModel myLocationModel, LocationOverlay myLocationAccuracy, MapOrientationButton mapOrientationButton) {
+    getInstance(Map map, MyLocationModel myLocationModel, LocationOverlay myLocationAccuracy, MapCompass mapOrientationButton) {
         MapViewPositionChangedHandler handler =
                 new MapViewPositionChangedHandler(map, myLocationModel, myLocationAccuracy, mapOrientationButton);
 
@@ -55,7 +55,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     }
 
 
-    private MapViewPositionChangedHandler(Map map, MyLocationModel myLocationModel, LocationOverlay myLocationAccuracy, MapOrientationButton mapOrientationButton) {
+    private MapViewPositionChangedHandler(Map map, MyLocationModel myLocationModel, LocationOverlay myLocationAccuracy, MapCompass mapOrientationButton) {
         this.map = map;
         this.myLocationModel = myLocationModel;
         this.myLocationAccuracy = myLocationAccuracy;
@@ -147,7 +147,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
             // heading for map must between -180 and 180
             if (mapBearing < -180) mapBearing += 360;
-            if (mapOrientationButton.isChecked()) curentMapPosition.setBearing(mapBearing);
+            //curentMapPosition.setBearing(mapBearing);
             curentMapPosition.setTilt(this.tilt);
             this.map.setMapPosition(curentMapPosition);
         }

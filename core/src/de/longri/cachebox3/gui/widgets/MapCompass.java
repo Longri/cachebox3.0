@@ -17,7 +17,9 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import de.longri.cachebox3.CB;
@@ -31,13 +33,17 @@ import de.longri.cachebox3.CB;
  */
 public class MapCompass extends Group {
 
-    private final static float MODEL_SCALE = 0.075f;
+    private final static float MODEL_SCALE = 0.15f;//0.075f;
 
     public enum State {NORTH, COMPASS, USER}
 
-    private State state = State.NORTH;
+    private State state = State.COMPASS;
     private final Actor3D actor3D_north, actor3D_compass, actor3D_user;
     private Actor3D actor3D_act;
+    private float tilt = 0;
+    private float orientation = 0;
+    Quaternion tiltQuaternation = new Quaternion();
+    Quaternion orientationQuaternation = new Quaternion();
 
     public MapCompass(float width, float height) {
 
@@ -114,14 +120,26 @@ public class MapCompass extends Group {
 
     }
 
-    /**
-     * Set the Tilt value like the Tilt on map!
-     * <p>
-     * Possible values are from org.oscim.map.Viewport.MIN_TILT (0) to org.oscim.map.Viewport.MAX_TILT (65).
-     *
-     * @param tilt
-     */
+    public void setOrientation(float orientation) {
+        this.orientation = orientation;
+        setRotation();
+    }
+
     public void setTilt(float tilt) {
-        if (actor3D_act != null) actor3D_act.setModelRotate(Vector3.Y, 45);
+        this.tilt = tilt;
+        setRotation();
+    }
+
+    private void setRotation() {
+        if (actor3D_act != null) {
+            tiltQuaternation.set(Vector3.X, tilt);
+            orientationQuaternation.set(Vector3.Y, orientation);
+            actor3D_act.setQuaternion(tiltQuaternation.mul(orientationQuaternation));
+        }
+    }
+
+    @Override
+    public void draw(Batch batch, float parentColor) {
+        super.draw(batch, parentColor);
     }
 }

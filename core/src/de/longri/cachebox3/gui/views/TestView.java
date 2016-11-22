@@ -17,10 +17,7 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.widgets.Actor3D;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.gui.widgets.MapCompass;
 import org.slf4j.LoggerFactory;
@@ -58,8 +55,7 @@ public class TestView extends AbstractView {
     @Override
     public void onShow() {
         create();
-      mapCompass.addAction(Actions.moveTo(100, 200, 5));
-        mapCompass.setTilt(45);
+        mapCompass.addAction(Actions.moveTo(100, 200, 5));
     }
 
 
