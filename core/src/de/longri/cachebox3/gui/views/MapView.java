@@ -87,9 +87,6 @@ public class MapView extends AbstractView {
         this.setTouchable(Touchable.disabled);
         this.main = main;
 
-        float scaledButtonSize = CB.getScaledFloat(100);
-
-        this.mapOrientationButton = new MapCompass(scaledButtonSize, scaledButtonSize);
         mMap = createMap();
         mapStateButton = new MapStateButton(new MapStateButton.StateChangedListener() {
             @Override
@@ -121,7 +118,7 @@ public class MapView extends AbstractView {
                         scale = mMap.getMapPosition().getScale();
                         mMap.setMapPosition(actLocation.latitude, actLocation.longitude, scale);
 
-                        // set full tillt
+                        // set full tilt
                         MapPosition mapPosition = mMap.getMapPosition();
                         mapPosition.setTilt(Viewport.MAX_TILT);
                         mMap.setMapPosition(mapPosition);
@@ -135,7 +132,7 @@ public class MapView extends AbstractView {
 
             }
         });
-
+        this.mapOrientationButton = new MapCompass(mapStateButton.getWidth(), mapStateButton.getHeight());
 
         this.addActor(mapStateButton);
         this.addActor(mapOrientationButton);
