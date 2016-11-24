@@ -1,6 +1,7 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -80,6 +81,9 @@ public class Actor3D extends Actor {
 
             // move viewport
             Gdx.gl.glViewport((int) worldX, (int) worldY, (int) getWidth(), (int) getHeight());
+
+            // finish depth test for previews 3D rendering like Map
+            Gdx.gl.glClear( GL20.GL_DEPTH_BUFFER_BIT );
 
 
             //render 3d model
