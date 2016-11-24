@@ -35,7 +35,6 @@ import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
-import org.oscim.backend.GL;
 import org.oscim.core.MapPosition;
 import org.oscim.event.Event;
 import org.oscim.gdx.LayerHandler;
@@ -47,7 +46,9 @@ import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Layers;
 import org.oscim.map.Map;
 import org.oscim.map.Viewport;
-import org.oscim.renderer.*;
+import org.oscim.renderer.BitmapRenderer;
+import org.oscim.renderer.GLViewport;
+import org.oscim.renderer.MapRenderer;
 import org.oscim.renderer.bucket.TextItem;
 import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
@@ -55,11 +56,6 @@ import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.source.mapfile.MapFileTileSource;
 import org.slf4j.LoggerFactory;
-
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
-import static org.oscim.backend.GLAdapter.gl;
 
 
 /**
@@ -90,7 +86,10 @@ public class MapView extends AbstractView {
         super("MapView");
         this.setTouchable(Touchable.disabled);
         this.main = main;
-        this.mapOrientationButton = new MapCompass(50, 50);
+
+        float scaledButtonSize = CB.getScaledFloat(100);
+
+        this.mapOrientationButton = new MapCompass(scaledButtonSize, scaledButtonSize);
         mMap = createMap();
         mapStateButton = new MapStateButton(new MapStateButton.StateChangedListener() {
             @Override
@@ -195,7 +194,7 @@ public class MapView extends AbstractView {
 
         //add position changed handler
         positionChangedHandler = MapViewPositionChangedHandler.getInstance
-                (mMap, myLocationModel, myLocationAccuracy,mapOrientationButton);
+                (mMap, myLocationModel, myLocationAccuracy, mapOrientationButton);
 
 
         return mMap;
@@ -255,7 +254,7 @@ public class MapView extends AbstractView {
                 getHeight() - (mapStateButton.getHeight() + CB.scaledSizes.MARGIN));
 
         mapOrientationButton.setPosition(CB.scaledSizes.MARGIN,
-                getHeight() - (mapStateButton.getHeight() + CB.scaledSizes.MARGIN));
+                getHeight() - (mapOrientationButton.getHeight() + CB.scaledSizes.MARGIN));
 
         zoomButton.setPosition(getWidth() - (zoomButton.getWidth() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN);
     }

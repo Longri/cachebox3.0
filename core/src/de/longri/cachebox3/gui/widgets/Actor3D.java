@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import de.longri.cachebox3.CB;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -81,8 +82,6 @@ public class Actor3D extends Actor {
             Gdx.gl.glViewport((int) worldX, (int) worldY, (int) getWidth(), (int) getHeight());
 
 
-
-
             //render 3d model
             modelBatch.begin(cam);
             modelBatch.render(modelInstance, environment);
@@ -130,12 +129,21 @@ public class Actor3D extends Actor {
     }
 
 
-    public void setQuaternion(Quaternion q1) {
-        modelInstance.transform.set(q1);
-        modelInstance.transform.scale(modelScale, modelScale, modelScale);
-        modelInstance.calculateTransforms();
-
-
+    public void setQuaternion(final Quaternion q1) {
+        if (CB.isMainThread()) {
+            modelInstance.transform.set(q1);
+            modelInstance.transform.scale(modelScale, modelScale, modelScale);
+            modelInstance.calculateTransforms();
+        } else {
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    modelInstance.transform.set(q1);
+                    modelInstance.transform.scale(modelScale, modelScale, modelScale);
+                    modelInstance.calculateTransforms();
+                }
+            });
+        }
     }
 
     @Override

@@ -21,7 +21,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.events.SelectedCacheEventList;
-import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
@@ -30,7 +29,6 @@ import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.ScaledSizes;
 import org.slf4j.LoggerFactory;
-import org.slf4j.impl.LibgdxLoggerFactory;
 
 /**
  * Static class
@@ -123,10 +121,10 @@ public class CB {
 
     private static float scalefactor = 0;
 
-    public static float getScaledFloat(float i) {
+    public static float getScaledFloat(float value) {
         if (scalefactor == 0)
             calcScaleFactor();
-        return (i * scalefactor);
+        return (value * scalefactor);
     }
 
     public static int getScaledInt(int i) {

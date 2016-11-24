@@ -95,7 +95,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         }
 
         //set orientation
-        this.mapOrientationButton.setOrientation(bearing);
+        this.mapOrientationButton.setOrientation(-bearing);
 
 
         assumeValues();
@@ -146,7 +146,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
             // heading for map must between -180 and 180
             if (mapBearing < -180) mapBearing += 360;
-            //currentMapPosition.setBearing(mapBearing);
+            currentMapPosition.setBearing(mapBearing);
             currentMapPosition.setTilt(this.tilt);
             this.map.setMapPosition(currentMapPosition);
         }
@@ -181,7 +181,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         {// set mapOrientationButton tilt
             if (this.tilt > 0) {
                 float buttonTilt = MathUtils.linearInterpolation
-                        (Viewport.MIN_TILT, Viewport.MAX_TILT, 0, 0.8f, this.tilt);
+                        (Viewport.MIN_TILT, Viewport.MAX_TILT, 0, -60f, this.tilt);
                 this.mapOrientationButton.setTilt(buttonTilt);
             } else {
                 this.mapOrientationButton.setTilt(0);
