@@ -126,6 +126,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
             // set map position and size
             gl.viewport(mapDrawX, mapDrawY, mapDrawWidth, mapDrawHeight);
+            gl.frontFace(GL.CW);
 
             try {
                 mMapRenderer.onDrawFrame();
