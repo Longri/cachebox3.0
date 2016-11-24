@@ -35,6 +35,10 @@ public class MapCompass extends Group {
 
     private final static float MODEL_SCALE = 0.15f;//0.075f;
 
+    public boolean isNorthOriented() {
+        return state == State.NORTH;
+    }
+
     public enum State {NORTH, COMPASS, USER}
 
     private State state = State.COMPASS;
@@ -42,8 +46,8 @@ public class MapCompass extends Group {
     private Actor3D actor3D_act;
     private float tilt = 0;
     private float orientation = 0;
-    Quaternion tiltQuaternation = new Quaternion();
-    Quaternion orientationQuaternation = new Quaternion();
+    Quaternion tiltQuaternion = new Quaternion();
+    Quaternion orientationQuaternion = new Quaternion();
 
     public MapCompass(float width, float height) {
 
@@ -132,9 +136,9 @@ public class MapCompass extends Group {
 
     private void setRotation() {
         if (actor3D_act != null) {
-            tiltQuaternation.set(Vector3.X, tilt);
-            orientationQuaternation.set(Vector3.Y, orientation);
-            actor3D_act.setQuaternion(tiltQuaternation.mul(orientationQuaternation));
+            tiltQuaternion.set(Vector3.X, tilt);
+            orientationQuaternion.set(Vector3.Y, orientation);
+            actor3D_act.setQuaternion(tiltQuaternion.mul(orientationQuaternion));
         }
     }
 

@@ -34,7 +34,6 @@ import org.oscim.utils.ThreadUtils;
 public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
 
-    private boolean NorthOriented;
     private float arrowHeading, accuracy, mapBearing, tilt, yOffset;
     private MapState mapState;
     private CoordinateGPS mapCenter;
@@ -87,7 +86,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         if (mapState == MapState.CAR && Locator.SpeedOverGround() < 20)
             bearing = this.mapBearing;
 
-        if (!this.NorthOriented || mapState == MapState.CAR) {
+        if (!this.mapOrientationButton.isNorthOriented() || mapState == MapState.CAR) {
             this.mapBearing = bearing;
             this.arrowHeading = -bearing;
         } else {
@@ -141,15 +140,15 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     private void assumeValues() {
 
         {// set map values
-            MapPosition curentMapPosition = this.map.getMapPosition();
+            MapPosition currentMapPosition = this.map.getMapPosition();
             if (this.mapCenter != null && getCenterGps())
-                curentMapPosition.setPosition(this.mapCenter.latitude, this.mapCenter.longitude);
+                currentMapPosition.setPosition(this.mapCenter.latitude, this.mapCenter.longitude);
 
             // heading for map must between -180 and 180
             if (mapBearing < -180) mapBearing += 360;
-            //curentMapPosition.setBearing(mapBearing);
-            curentMapPosition.setTilt(this.tilt);
-            this.map.setMapPosition(curentMapPosition);
+            //currentMapPosition.setBearing(mapBearing);
+            currentMapPosition.setTilt(this.tilt);
+            this.map.setMapPosition(currentMapPosition);
         }
 
         if (this.myPosition != null) {
@@ -174,8 +173,19 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
                 float offset = MathUtils.linearInterpolation
                         (Viewport.MIN_TILT, Viewport.MAX_TILT, 0, 0.8f, this.tilt);
                 this.map.viewport().setMapScreenCenter(offset);
-            } else
+            } else {
                 this.map.viewport().setMapScreenCenter(0);
+            }
+        }
+
+        {// set mapOrientationButton tilt
+            if (this.tilt > 0) {
+                float buttonTilt = MathUtils.linearInterpolation
+                        (Viewport.MIN_TILT, Viewport.MAX_TILT, 0, 0.8f, this.tilt);
+                this.mapOrientationButton.setTilt(buttonTilt);
+            } else {
+                this.mapOrientationButton.setTilt(0);
+            }
         }
     }
 
