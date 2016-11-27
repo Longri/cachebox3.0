@@ -95,9 +95,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         }
 
         //set orientation
-        this.mapOrientationButton.setOrientation(-bearing);
-
-
+        this.mapOrientationButton.setOrientation(-this.mapBearing);
         assumeValues();
     }
 

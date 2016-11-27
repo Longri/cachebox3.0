@@ -123,6 +123,7 @@ public class Actor3D extends Actor {
         cam.near = 1f;
         cam.far = 300f;
         cam.update();
+        Gdx.graphics.requestRendering();
     }
 
 
@@ -148,6 +149,8 @@ public class Actor3D extends Actor {
                 }
             });
         }
+
+        Gdx.graphics.requestRendering();
     }
 
     @Override
@@ -157,6 +160,7 @@ public class Actor3D extends Actor {
         this.localToStageCoordinates(vector2);
         this.worldX = vector2.x;
         this.worldY = vector2.y;
+        Gdx.graphics.requestRendering();
     }
 
     @Override

@@ -87,7 +87,7 @@ public class MapView extends AbstractView {
         this.setTouchable(Touchable.disabled);
         this.main = main;
 
-        mMap = createMap();
+
         mapStateButton = new MapStateButton(new MapStateButton.StateChangedListener() {
             @Override
             public void stateChanged(MapState state) {
@@ -133,6 +133,9 @@ public class MapView extends AbstractView {
             }
         });
         this.mapOrientationButton = new MapCompass(mapStateButton.getWidth(), mapStateButton.getHeight());
+
+
+        mMap = createMap();
 
         this.addActor(mapStateButton);
         this.addActor(mapOrientationButton);
@@ -212,7 +215,7 @@ public class MapView extends AbstractView {
 
     @Override
     protected void create() {
-        // overide and don't call super
+        // override and don't call super
         // for non creation of default name label
     }
 
@@ -345,18 +348,18 @@ public class MapView extends AbstractView {
 
 
     private void createMapInputHandler() {
-        GestureDetector gestureDetectore = new GestureDetector(new LayerHandler(mMap));
+        GestureDetector gestureDetector = new GestureDetector(new LayerHandler(mMap));
         MotionHandler motionHandler = new MotionHandler(mMap);
         MapInputHandler inputHandler = new MapInputHandler(mMap) {
             @Override
             public void rotateByUser() {
-//                mapOrientationButton.setChecked(false);
+                mapOrientationButton.setUserRotation();
             }
         };
         mapInputHandler = new InputMultiplexer();
         mapInputHandler.addProcessor(motionHandler);
-        mapInputHandler.addProcessor(gestureDetectore);
-        mapInputHandler.addProcessor(inputHandler);
+//        mapInputHandler.addProcessor(gestureDetector);
+//        mapInputHandler.addProcessor(inputHandler);
     }
 
     private void addInputListener() {

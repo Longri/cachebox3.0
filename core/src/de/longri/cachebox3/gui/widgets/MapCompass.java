@@ -16,12 +16,13 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.longri.cachebox3.CB;
 
 /**
@@ -39,9 +40,11 @@ public class MapCompass extends Group {
         return state == State.NORTH;
     }
 
+
+
     public enum State {NORTH, COMPASS, USER}
 
-    private State state = State.COMPASS;
+    private State state = State.NORTH;
     private final Actor3D actor3D_north, actor3D_compass, actor3D_user;
     private Actor3D actor3D_act;
     private float tilt = 0;
@@ -60,10 +63,12 @@ public class MapCompass extends Group {
         actor3D_user.setModelScale(MODEL_SCALE);
 
         //test
-        actor3D_north.setBackground(new ColorDrawable(Color.FOREST));
+//        actor3D_north.setBackground(new ColorDrawable(Color.FOREST));
 
         // initialisation with size
         setSize(width, height);
+
+        this.addListener(clickListener);
 
         setStateModel();
     }
@@ -90,6 +95,7 @@ public class MapCompass extends Group {
                 actor3D_act = actor3D_user;
                 break;
         }
+        setModelBounds();
         Gdx.graphics.requestRendering();
     }
 
@@ -146,4 +152,34 @@ public class MapCompass extends Group {
     public void draw(Batch batch, float parentColor) {
         super.draw(batch, parentColor);
     }
+
+    public void setUserRotation() {
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                state=State.USER;
+                setStateModel();
+            }
+        });
+    }
+
+
+    ClickListener clickListener = new ClickListener() {
+
+        public void clicked(InputEvent event, float x, float y) {
+
+            if (state == State.NORTH) {
+                state = State.COMPASS;
+            } else {
+                state = State.NORTH;
+            }
+
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    setStateModel();
+                }
+            });
+        }
+    };
 }
