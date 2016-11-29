@@ -149,85 +149,91 @@ public enum CacheTypes {
         return new CacheWidget(this);
     }
 
+    public Drawable getDrawable() {
+        Drawable drawable;
+
+        switch (this) {
+            case Traditional:
+                drawable = VisUI.getSkin().getDrawable("traddi");
+                break;
+            case Multi:
+                drawable = VisUI.getSkin().getDrawable("multi");
+                break;
+            case Mystery:
+                drawable = VisUI.getSkin().getDrawable("myterie");
+                break;
+            case Camera:
+                drawable = VisUI.getSkin().getDrawable("camera");
+                break;
+            case Earth:
+                drawable = VisUI.getSkin().getDrawable("earth");
+                break;
+            case Event:
+                drawable = VisUI.getSkin().getDrawable("event");
+                break;
+            case MegaEvent:
+                drawable = VisUI.getSkin().getDrawable("mega");
+                break;
+            case CITO:
+                drawable = VisUI.getSkin().getDrawable("cito");
+                break;
+            case Virtual:
+                drawable = VisUI.getSkin().getDrawable("virtual");
+                break;
+            case Letterbox:
+                drawable = VisUI.getSkin().getDrawable("letterbox");
+                break;
+            case Wherigo:
+                drawable = VisUI.getSkin().getDrawable("whereigo");
+                break;
+            case ReferencePoint:
+                drawable = null;
+                break;
+            case Wikipedia:
+                drawable = null;
+                break;
+            case Undefined:
+                drawable = null;
+                break;
+            case MultiStage:
+                drawable = null;
+                break;
+            case MultiQuestion:
+                drawable = null;
+                break;
+            case Trailhead:
+                drawable = null;
+                break;
+            case ParkingArea:
+                drawable = null;
+                break;
+            case Final:
+                drawable = null;
+                break;
+            case Cache:
+                drawable = null;
+                break;
+            case MyParking:
+                drawable = null;
+                break;
+            case Munzee:
+                drawable = null;
+                break;
+            case Giga:
+                drawable = VisUI.getSkin().getDrawable("giga");
+                break;
+            default:
+                drawable = null;
+        }
+        return drawable;
+    }
+
     public static class CacheWidget extends Widget {
         private final Drawable drawable;
         private boolean needsLayout = true;
 
         public CacheWidget(CacheTypes cacheType) {
-            switch (cacheType) {
-                case Traditional:
-                    drawable = VisUI.getSkin().getDrawable("traddi");
-                    break;
-                case Multi:
-                    drawable = VisUI.getSkin().getDrawable("multi");
-                    break;
-                case Mystery:
-                    drawable = VisUI.getSkin().getDrawable("myterie");
-                    break;
-                case Camera:
-                    drawable = VisUI.getSkin().getDrawable("camera");
-                    break;
-                case Earth:
-                    drawable = VisUI.getSkin().getDrawable("earth");
-                    break;
-                case Event:
-                    drawable = VisUI.getSkin().getDrawable("event");
-                    break;
-                case MegaEvent:
-                    drawable = VisUI.getSkin().getDrawable("mega");
-                    break;
-                case CITO:
-                    drawable = VisUI.getSkin().getDrawable("cito");
-                    break;
-                case Virtual:
-                    drawable = VisUI.getSkin().getDrawable("virtual");
-                    break;
-                case Letterbox:
-                    drawable = VisUI.getSkin().getDrawable("letterbox");
-                    break;
-                case Wherigo:
-                    drawable = VisUI.getSkin().getDrawable("whereigo");
-                    break;
-                case ReferencePoint:
-                    drawable = null;
-                    break;
-                case Wikipedia:
-                    drawable = null;
-                    break;
-                case Undefined:
-                    drawable = null;
-                    break;
-                case MultiStage:
-                    drawable = null;
-                    break;
-                case MultiQuestion:
-                    drawable = null;
-                    break;
-                case Trailhead:
-                    drawable = null;
-                    break;
-                case ParkingArea:
-                    drawable = null;
-                    break;
-                case Final:
-                    drawable = null;
-                    break;
-                case Cache:
-                    drawable = null;
-                    break;
-                case MyParking:
-                    drawable = null;
-                    break;
-                case Munzee:
-                    drawable = null;
-                    break;
-                case Giga:
-                    drawable = VisUI.getSkin().getDrawable("giga");
-                    break;
-                default:
-                    drawable = null;
-            }
-
+            drawable = cacheType.getDrawable();
         }
 
         private float x, y, imageWidth, imageHeight, scaleX, scaleY;

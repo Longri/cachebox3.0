@@ -29,6 +29,7 @@ import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.map.layer.Compass;
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
+import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
@@ -327,6 +328,7 @@ public class MapView extends AbstractView {
             layers.add(myLocationModel);
         }
 
+        layers.add(new WaypointLayer(mMap));
 
     }
 
