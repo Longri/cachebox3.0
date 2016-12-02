@@ -170,17 +170,19 @@ public class MapView extends AbstractView {
     public CacheboxMapAdapter createMap() {
         main.drawMap = true;
         mMap = new CacheboxMapAdapter() {
-
-            @Override
-            public void tiltChanged(float newTilt) {
-                if (positionChangedHandler != null) positionChangedHandler.tiltChangedFromMap(newTilt);
-            }
-
             @Override
             public void onMapEvent(Event e, MapPosition mapPosition) {
                 if (e == Map.MOVE_EVENT) {
-                    // map is moved by user
+//                    log.debug("Map.MOVE_EVENT");
                     mapStateButton.setState(MapState.FREE);
+                }else if (e == Map.TILT_EVENT) {
+//                    log.debug("Map.TILT_EVENT");
+                    if (positionChangedHandler != null) positionChangedHandler.tiltChangedFromMap(mapPosition.getTilt());
+                }else if (e == Map.ROTATE_EVENT) {
+//                    log.debug("Map.ROTATE_EVENT");
+                    if (positionChangedHandler != null) positionChangedHandler.rotateChangedFromUser(mapPosition.getBearing());
+                }else if (e == Map.SCALE_EVENT) {
+//                    log.debug("Map.SCALE_EVENT");
                 }
             }
         };
