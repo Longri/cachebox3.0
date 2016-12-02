@@ -28,6 +28,7 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import org.oscim.backend.GL;
+import org.oscim.map.Map;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
 import org.slf4j.LoggerFactory;
@@ -67,6 +68,7 @@ public class CacheboxMain extends ApplicationAdapter {
     public void create() {
 
         Gdx.graphics.setContinuousRendering(false);
+        Map.NEW_GESTURES = true;
 
         StageManager.setMainStage(new Splash(new Splash.LoadReady() {
             @Override
@@ -85,7 +87,6 @@ public class CacheboxMain extends ApplicationAdapter {
             }
         }));
 
-        Gdx.graphics.setContinuousRendering(false);
         Gdx.graphics.requestRendering();
         CB.initThreadCheck();
     }
