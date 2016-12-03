@@ -42,6 +42,7 @@ import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
 public class CacheboxMain extends ApplicationAdapter {
 
     static {
+        Map.NEW_GESTURES = true;
         System.setProperty(DEFAULT_LOG_LEVEL_KEY, CB.USED_LOG_LEVEL);
         LibgdxLogger.init();
     }
@@ -68,7 +69,6 @@ public class CacheboxMain extends ApplicationAdapter {
     public void create() {
 
         Gdx.graphics.setContinuousRendering(false);
-        Map.NEW_GESTURES = true;
 
         StageManager.setMainStage(new Splash(new Splash.LoadReady() {
             @Override

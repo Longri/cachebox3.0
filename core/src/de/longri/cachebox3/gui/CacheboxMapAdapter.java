@@ -19,6 +19,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
 import org.oscim.core.MapPosition;
 import org.oscim.event.Event;
+import org.oscim.event.Gesture;
+import org.oscim.event.MotionEvent;
 import org.oscim.map.Map;
 
 /**
@@ -139,6 +141,11 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     @Override
     public void onMapEvent(Event e, MapPosition mapPosition) {
         // handled at MapView
+    }
+
+    public boolean handleGesture(Gesture g, MotionEvent e) {
+        this.updateMap(true);
+        return super.handleGesture(g, e);
     }
 }
 
