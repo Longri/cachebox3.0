@@ -28,6 +28,7 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import org.oscim.backend.GL;
+import org.oscim.map.Map;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,7 @@ import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
 public class CacheboxMain extends ApplicationAdapter {
 
     static {
+        Map.NEW_GESTURES = true;
         System.setProperty(DEFAULT_LOG_LEVEL_KEY, CB.USED_LOG_LEVEL);
         LibgdxLogger.init();
     }
@@ -85,7 +87,6 @@ public class CacheboxMain extends ApplicationAdapter {
             }
         }));
 
-        Gdx.graphics.setContinuousRendering(false);
         Gdx.graphics.requestRendering();
         CB.initThreadCheck();
     }

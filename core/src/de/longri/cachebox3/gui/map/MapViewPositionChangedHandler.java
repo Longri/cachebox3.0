@@ -34,7 +34,7 @@ import org.oscim.utils.ThreadUtils;
 public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
 
-    private float arrowHeading, accuracy, mapBearing, tilt, yOffset;
+    private float arrowHeading, accuracy, mapBearing,userBearing, tilt, yOffset;
     private MapState mapState;
     private CoordinateGPS mapCenter;
     private CoordinateGPS myPosition;
@@ -86,7 +86,10 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         if (mapState == MapState.CAR && Locator.SpeedOverGround() < 20)
             bearing = this.mapBearing;
 
-        if (!this.mapOrientationButton.isNorthOriented() || mapState == MapState.CAR) {
+        if(this.mapOrientationButton.isUserRotate()){
+            this.mapBearing = userBearing;
+            this.arrowHeading = bearing;
+        }else if (!this.mapOrientationButton.isNorthOriented() || mapState == MapState.CAR) {
             this.mapBearing = bearing;
             this.arrowHeading = -bearing;
         } else {
@@ -193,5 +196,10 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
     public void setMapState(MapState state) {
         mapState = state;
+    }
+
+    public void rotateChangedFromUser(float bearing) {
+        this.mapOrientationButton.setUserRotation();
+        userBearing = bearing;
     }
 }

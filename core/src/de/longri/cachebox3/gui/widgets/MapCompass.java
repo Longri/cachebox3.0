@@ -40,6 +40,9 @@ public class MapCompass extends Group {
         return state == State.NORTH;
     }
 
+    public boolean isUserRotate() {
+        return state == State.USER;
+    }
 
 
     public enum State {NORTH, COMPASS, USER}

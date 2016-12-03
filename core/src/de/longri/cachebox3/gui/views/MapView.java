@@ -38,7 +38,7 @@ import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
 import org.oscim.core.MapPosition;
 import org.oscim.event.Event;
-import org.oscim.gdx.LayerHandler;
+import org.oscim.gdx.GestureHandlerImpl;
 import org.oscim.gdx.MotionHandler;
 import org.oscim.layers.TileGridLayer;
 import org.oscim.layers.tile.buildings.BuildingLayer;
@@ -171,17 +171,19 @@ public class MapView extends AbstractView {
     public CacheboxMapAdapter createMap() {
         main.drawMap = true;
         mMap = new CacheboxMapAdapter() {
-
-            @Override
-            public void tiltChanged(float newTilt) {
-                if (positionChangedHandler != null) positionChangedHandler.tiltChangedFromMap(newTilt);
-            }
-
             @Override
             public void onMapEvent(Event e, MapPosition mapPosition) {
                 if (e == Map.MOVE_EVENT) {
-                    // map is moved by user
+//                    log.debug("Map.MOVE_EVENT");
                     mapStateButton.setState(MapState.FREE);
+                }else if (e == Map.TILT_EVENT) {
+//                    log.debug("Map.TILT_EVENT");
+                    if (positionChangedHandler != null) positionChangedHandler.tiltChangedFromMap(mapPosition.getTilt());
+                }else if (e == Map.ROTATE_EVENT) {
+//                    log.debug("Map.ROTATE_EVENT");
+                    if (positionChangedHandler != null) positionChangedHandler.rotateChangedFromUser(mapPosition.getBearing());
+                }else if (e == Map.SCALE_EVENT) {
+//                    log.debug("Map.SCALE_EVENT");
                 }
             }
         };
@@ -350,18 +352,13 @@ public class MapView extends AbstractView {
 
 
     private void createMapInputHandler() {
-        GestureDetector gestureDetector = new GestureDetector(new LayerHandler(mMap));
+        GestureDetector gestureDetector = new GestureDetector(new GestureHandlerImpl(mMap));
         MotionHandler motionHandler = new MotionHandler(mMap);
-        MapInputHandler inputHandler = new MapInputHandler(mMap) {
-            @Override
-            public void rotateByUser() {
-                mapOrientationButton.setUserRotation();
-            }
-        };
+        MapInputHandler inputHandler = new MapInputHandler(mMap);
         mapInputHandler = new InputMultiplexer();
+        mapInputHandler.addProcessor(gestureDetector);
         mapInputHandler.addProcessor(motionHandler);
-//        mapInputHandler.addProcessor(gestureDetector);
-//        mapInputHandler.addProcessor(inputHandler);
+        mapInputHandler.addProcessor(inputHandler);
     }
 
     private void addInputListener() {
