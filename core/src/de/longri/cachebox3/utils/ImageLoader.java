@@ -68,7 +68,7 @@ public class ImageLoader {
 	private SpriteDrawable animDrawable;
 	private Sprite animSprite;
 
-	private Animation anim;
+	private Animation<TextureRegion> anim;
 
 	public boolean inLoad = false;
 	private float spriteWidth;
