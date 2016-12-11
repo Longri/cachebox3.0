@@ -17,12 +17,16 @@ package de.longri.cachebox3.gui.map.layer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.CacheTypes;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.GeoPoint;
 import org.oscim.layers.marker.ItemizedLayer;
@@ -32,6 +36,7 @@ import org.oscim.map.Map;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Longri on 27.11.16.
@@ -87,18 +92,47 @@ public class WaypointLayer extends ItemizedLayer<MarkerItem> implements CacheLis
 
     }
 
+
+    private final HashMap<String, MarkerSymbol> markerSymbolHashMap = new HashMap<String, MarkerSymbol>();
+
+
     private MarkerSymbol getMarkerSymbolByCache(Cache cache) {
+        MarkerSymbol symbol = null;
+        String symbolName = getMapIconName(cache);
+        symbol = markerSymbolHashMap.get(symbolName);
+        if (symbol == null) {
+            symbol = getMarkerSymbol(symbolName);
+            markerSymbolHashMap.put(symbolName, symbol);
+        }
+        return symbol;
+    }
 
-        float scale = 0.35f;
-        FileHandle fileHandle = Gdx.files.internal("skins/day/svg/cache-icon.svg");
+    private String getMapIconName(Cache cache) {
+        if (cache.ImTheOwner())
+            return "star";
+        else if (cache.isFound())
+            return "mapFound";
+        else if ((cache.Type == CacheTypes.Mystery) && cache.CorrectedCoordiantesOrMysterySolved())
+            return "mapSolved";
+        else if ((cache.Type == CacheTypes.Multi) && cache.HasStartWaypoint())
+            return "mapMultiStartP"; // Multi with start point
+        else if ((cache.Type == CacheTypes.Mystery) && cache.HasStartWaypoint())
+            return "mapMysteryStartP"; // Mystery without Final but with start point
+        else
+            return "map" + cache.Type.name();
 
+    }
+
+    private static MarkerSymbol getMarkerSymbol(String name) {
+        Skin skin = VisUI.getSkin();
+        ScaledSvg scaledSvg = skin.get(name, ScaledSvg.class);
+        FileHandle fileHandle = Gdx.files.internal(scaledSvg.path);
         Bitmap bitmap = null;
         try {
-            bitmap = PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scale);
+            bitmap = PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
         } catch (IOException e) {
             return null;
         }
-
         return new MarkerSymbol(bitmap, MarkerSymbol.HotspotPlace.CENTER, true);
     }
 }
