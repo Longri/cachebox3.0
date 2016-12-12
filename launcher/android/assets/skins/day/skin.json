@@ -390,6 +390,46 @@
     "ZoomMinusPressed": {
       "path": "skins/day/svg/minus_pressed.svg",
       "scale": 0.5
+    },
+    "mapFound": {
+      "path": "skins/day/svg/log0icon.svg",
+      "scale": 0.10
+    },
+    "mapTraditional": {
+      "path": "skins/day/svg/traddi.svg",
+      "scale": 0.15
+    },
+    "mapMulti": {
+      "path": "skins/day/svg/multi.svg",
+      "scale": 0.15
+    },
+    "mapMystery": {
+      "path": "skins/day/svg/myterie.svg",
+      "scale": 0.15
+    },
+    "mapSolved": {
+      "path": "skins/day/svg/solved.svg",
+      "scale": 0.15
+    },
+    "mapEarth": {
+      "path": "skins/day/svg/earth.svg",
+      "scale": 0.15
+    },
+    "mapEvent": {
+      "path": "skins/day/svg/event.svg",
+      "scale": 0.15
+    },
+    "mapCITO": {
+      "path": "skins/day/svg/cito.svg",
+      "scale": 0.15
+    },
+    "mapLetterbox": {
+      "path": "skins/day/svg/letterbox.svg",
+      "scale": 0.15
+    },
+    "mapWherigo": {
+      "path": "skins/day/svg/whereigo.svg",
+      "scale": 0.15
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
