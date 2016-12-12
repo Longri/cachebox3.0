@@ -21,6 +21,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
@@ -40,6 +41,7 @@ import org.oscim.core.MapPosition;
 import org.oscim.event.Event;
 import org.oscim.gdx.GestureHandlerImpl;
 import org.oscim.gdx.MotionHandler;
+import org.oscim.layers.Layer;
 import org.oscim.layers.TileGridLayer;
 import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
@@ -75,6 +77,7 @@ public class MapView extends AbstractView {
     private final MapStateButton mapStateButton;
     private final MapCompass mapOrientationButton;
     private final ZoomButton zoomButton;
+
 
     private MapFileTileSource tileSource;
 
@@ -176,13 +179,15 @@ public class MapView extends AbstractView {
                 if (e == Map.MOVE_EVENT) {
 //                    log.debug("Map.MOVE_EVENT");
                     mapStateButton.setState(MapState.FREE);
-                }else if (e == Map.TILT_EVENT) {
+                } else if (e == Map.TILT_EVENT) {
 //                    log.debug("Map.TILT_EVENT");
-                    if (positionChangedHandler != null) positionChangedHandler.tiltChangedFromMap(mapPosition.getTilt());
-                }else if (e == Map.ROTATE_EVENT) {
+                    if (positionChangedHandler != null)
+                        positionChangedHandler.tiltChangedFromMap(mapPosition.getTilt());
+                } else if (e == Map.ROTATE_EVENT) {
 //                    log.debug("Map.ROTATE_EVENT");
-                    if (positionChangedHandler != null) positionChangedHandler.rotateChangedFromUser(mapPosition.getBearing());
-                }else if (e == Map.SCALE_EVENT) {
+                    if (positionChangedHandler != null)
+                        positionChangedHandler.rotateChangedFromUser(mapPosition.getBearing());
+                } else if (e == Map.SCALE_EVENT) {
 //                    log.debug("Map.SCALE_EVENT");
                 }
             }
@@ -203,18 +208,6 @@ public class MapView extends AbstractView {
         return mMap;
     }
 
-    public void destroyMap() {
-        main.drawMap = true;
-        mMap.clearMap();
-        mMap.destroy();
-        mMap = null;
-
-        TextureBucket.pool.clear();
-        TextItem.pool.clear();
-        TextureItem.disposeTextures();
-
-        main.mMapRenderer = null;
-    }
 
     @Override
     protected void create() {
@@ -229,17 +222,45 @@ public class MapView extends AbstractView {
 
     @Override
     public void onHide() {
-        destroyMap();
+
     }
 
 
     @Override
     public void dispose() {
         log.debug("Dispose MapView");
+
+        Layers layers = mMap.layers();
+        for(Layer layer:layers){
+            if(layer instanceof Disposable){
+                ((Disposable) layer).dispose();
+            }
+        }
+
+        layers.clear();
+
         mapInputHandler.clear();
         mapInputHandler = null;
+
+        tileSource.close();
+        tileSource = null;
+
+        main.drawMap = false;
+        mMap.clearMap();
+        mMap.destroy();
+        TextureBucket.pool.clear();
+        TextItem.pool.clear();
+        TextureItem.disposeTextures();
+
+        main.mMapRenderer = null;
         mMap = null;
-        mapStateButton.dispose();
+
+        //dispose actors
+        mapOrientationButton.dispose();
+                mapStateButton.dispose();
+
+
+
     }
 
 
@@ -283,17 +304,7 @@ public class MapView extends AbstractView {
 
 
         //MyLocationLayer
-        myLocationAccuracy = new LocationOverlay(mMap, new Compass() {
-            @Override
-            public void setEnabled(boolean enabled) {
-
-            }
-
-            @Override
-            public float getRotation() {
-                return myBearing;
-            }
-        });
+        myLocationAccuracy = new LocationOverlay(mMap);
         myLocationAccuracy.setPosition(52.580400947530364, 13.385594096047232, 100);
 
 
@@ -369,4 +380,5 @@ public class MapView extends AbstractView {
     private void removeInputListener() {
         StageManager.removeMapMultiplexer(mapInputHandler);
     }
+
 }

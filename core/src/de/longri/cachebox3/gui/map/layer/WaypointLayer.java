@@ -52,7 +52,6 @@ public class WaypointLayer extends ItemizedLayer<MarkerItem> implements CacheLis
 
         //register as cacheListChanged eventListener
         CacheListChangedEventList.Add(this);
-
         CacheListChangedEvent();
     }
 
@@ -71,24 +70,33 @@ public class WaypointLayer extends ItemizedLayer<MarkerItem> implements CacheLis
     @Override
     public void dispose() {
         CacheListChangedEventList.Remove(this);
-
+        markerSymbolHashMap.clear();
+        mOnItemGestureListener=null;
     }
 
     @Override
     public void CacheListChangedEvent() {
 
-        //clear item list
-        mItemList.clear();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (Database.Data.Query) {
 
-        //add WayPoint items
-        for (Cache cache : Database.Data.Query) {
+                    //clear item list
+                    mItemList.clear();
 
-            double lat = cache.Latitude(), lon = cache.Longitude();
-            MarkerItem markerItem = new MarkerItem(lat + "/" + lon, "", new GeoPoint(lat, lon));
-            markerItem.setMarker(getMarkerSymbolByCache(cache));
-            mItemList.add(markerItem);
-        }
-        this.populate();
+                    //add WayPoint items
+                    for (Cache cache : Database.Data.Query) {
+                        double lat = cache.Latitude(), lon = cache.Longitude();
+                        MarkerItem markerItem = new MarkerItem(lat + "/" + lon, "", new GeoPoint(lat, lon));
+                        markerItem.setMarker(getMarkerSymbolByCache(cache));
+                        mItemList.add(markerItem);
+                    }
+                    WaypointLayer.this.populate();
+                }
+            }
+        });
+        thread.start();
 
     }
 
@@ -107,7 +115,8 @@ public class WaypointLayer extends ItemizedLayer<MarkerItem> implements CacheLis
         return symbol;
     }
 
-    private String getMapIconName(Cache cache) {
+
+    private static String getMapIconName(Cache cache) {
         if (cache.ImTheOwner())
             return "star";
         else if (cache.isFound())
