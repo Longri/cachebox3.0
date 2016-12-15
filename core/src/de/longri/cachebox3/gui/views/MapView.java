@@ -27,7 +27,6 @@ import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
-import de.longri.cachebox3.gui.map.layer.Compass;
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
@@ -222,7 +221,7 @@ public class MapView extends AbstractView {
 
     @Override
     public void onHide() {
-
+        removeInputListener();
     }
 
 
@@ -231,8 +230,8 @@ public class MapView extends AbstractView {
         log.debug("Dispose MapView");
 
         Layers layers = mMap.layers();
-        for(Layer layer:layers){
-            if(layer instanceof Disposable){
+        for (Layer layer : layers) {
+            if (layer instanceof Disposable) {
                 ((Disposable) layer).dispose();
             }
         }
@@ -257,9 +256,7 @@ public class MapView extends AbstractView {
 
         //dispose actors
         mapOrientationButton.dispose();
-                mapStateButton.dispose();
-
-
+        mapStateButton.dispose();
 
     }
 

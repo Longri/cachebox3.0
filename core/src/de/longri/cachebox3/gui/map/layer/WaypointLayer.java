@@ -85,6 +85,10 @@ public class WaypointLayer extends ItemizedLayer<MarkerItem> implements CacheLis
                     //clear item list
                     mItemList.clear();
 
+
+                    //TODO add GeoClustering like https://github.com/finn-no/geocluster
+
+
                     //add WayPoint items
                     for (Cache cache : Database.Data.Query) {
                         double lat = cache.Latitude(), lon = cache.Longitude();
