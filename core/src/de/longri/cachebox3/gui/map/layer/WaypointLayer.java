@@ -24,14 +24,14 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
+import de.longri.cachebox3.gui.map.layer.cluster.ClusterItem;
+import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
+import de.longri.cachebox3.gui.map.layer.cluster.ItemizedClusterLayer;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.GeoPoint;
-import org.oscim.layers.marker.ItemizedLayer;
-import org.oscim.layers.marker.MarkerItem;
-import org.oscim.layers.marker.MarkerSymbol;
 import org.oscim.map.Map;
 
 import java.io.IOException;
@@ -41,13 +41,13 @@ import java.util.HashMap;
 /**
  * Created by Longri on 27.11.16.
  */
-public class WaypointLayer extends ItemizedLayer<MarkerItem> implements CacheListChangedEventListener, Disposable {
+public class WaypointLayer extends ItemizedClusterLayer<ClusterItem> implements CacheListChangedEventListener, Disposable {
 
-    private static final MarkerSymbol defaultMarker = null;
+    private static final ClusterSymbol defaultMarker = null;
 
 
     public WaypointLayer(Map map) {
-        super(map, new ArrayList<MarkerItem>(), defaultMarker, null);
+        super(map, new ArrayList<ClusterItem>(), defaultMarker, null);
         mOnItemGestureListener = gestureListener;
 
         //register as cacheListChanged eventListener
@@ -55,14 +55,14 @@ public class WaypointLayer extends ItemizedLayer<MarkerItem> implements CacheLis
         CacheListChangedEvent();
     }
 
-    private final OnItemGestureListener<MarkerItem> gestureListener = new OnItemGestureListener<MarkerItem>() {
+    private final OnItemGestureListener<ClusterItem> gestureListener = new OnItemGestureListener<ClusterItem>() {
         @Override
-        public boolean onItemSingleTapUp(int index, MarkerItem item) {
+        public boolean onItemSingleTapUp(int index, ClusterItem item) {
             return false;
         }
 
         @Override
-        public boolean onItemLongPress(int index, MarkerItem item) {
+        public boolean onItemLongPress(int index, ClusterItem item) {
             return false;
         }
     };
@@ -70,7 +70,7 @@ public class WaypointLayer extends ItemizedLayer<MarkerItem> implements CacheLis
     @Override
     public void dispose() {
         CacheListChangedEventList.Remove(this);
-        markerSymbolHashMap.clear();
+         ClusterSymbolHashMap.clear();
         mOnItemGestureListener=null;
     }
 
@@ -92,9 +92,9 @@ public class WaypointLayer extends ItemizedLayer<MarkerItem> implements CacheLis
                     //add WayPoint items
                     for (Cache cache : Database.Data.Query) {
                         double lat = cache.Latitude(), lon = cache.Longitude();
-                        MarkerItem markerItem = new MarkerItem(lat + "/" + lon, "", new GeoPoint(lat, lon));
-                        markerItem.setMarker(getMarkerSymbolByCache(cache));
-                        mItemList.add(markerItem);
+                        ClusterItem clusterItem = new ClusterItem(lat + "/" + lon, "", new GeoPoint(lat, lon));
+                        clusterItem.setCluster(getClusterSymbolByCache(cache));
+                        mItemList.add(clusterItem);
                     }
                     WaypointLayer.this.populate();
                 }
@@ -105,16 +105,16 @@ public class WaypointLayer extends ItemizedLayer<MarkerItem> implements CacheLis
     }
 
 
-    private final HashMap<String, MarkerSymbol> markerSymbolHashMap = new HashMap<String, MarkerSymbol>();
+    private final HashMap<String,  ClusterSymbol>  ClusterSymbolHashMap = new HashMap<String,  ClusterSymbol>();
 
 
-    private MarkerSymbol getMarkerSymbolByCache(Cache cache) {
-        MarkerSymbol symbol = null;
+    private  ClusterSymbol getClusterSymbolByCache(Cache cache) {
+         ClusterSymbol symbol = null;
         String symbolName = getMapIconName(cache);
-        symbol = markerSymbolHashMap.get(symbolName);
+        symbol =  ClusterSymbolHashMap.get(symbolName);
         if (symbol == null) {
-            symbol = getMarkerSymbol(symbolName);
-            markerSymbolHashMap.put(symbolName, symbol);
+            symbol = getClusterSymbol(symbolName);
+             ClusterSymbolHashMap.put(symbolName, symbol);
         }
         return symbol;
     }
@@ -136,7 +136,7 @@ public class WaypointLayer extends ItemizedLayer<MarkerItem> implements CacheLis
 
     }
 
-    private static MarkerSymbol getMarkerSymbol(String name) {
+    private static  ClusterSymbol getClusterSymbol(String name) {
         Skin skin = VisUI.getSkin();
         ScaledSvg scaledSvg = skin.get(name, ScaledSvg.class);
         FileHandle fileHandle = Gdx.files.internal(scaledSvg.path);
@@ -146,6 +146,6 @@ public class WaypointLayer extends ItemizedLayer<MarkerItem> implements CacheLis
         } catch (IOException e) {
             return null;
         }
-        return new MarkerSymbol(bitmap, MarkerSymbol.HotspotPlace.CENTER, true);
+        return new  ClusterSymbol(bitmap,  ClusterSymbol.HotspotPlace.CENTER, true);
     }
 }
