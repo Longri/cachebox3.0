@@ -377,4 +377,15 @@ public class Utils {
         log.info(("Time for " + name + ": " + Long.toString(runningTime)));
     }
 
+    // for use copy method
+
+//    Utils.logRunningTime("Clustering", new Runnable() {
+//        @Override
+//        public void run() {
+//
+//
+//
+//        }
+//    });
+
 }

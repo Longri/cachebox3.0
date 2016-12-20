@@ -22,32 +22,38 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
-import de.longri.cachebox3.gui.map.layer.cluster.ClusterItem;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
 import de.longri.cachebox3.gui.map.layer.cluster.ItemizedClusterLayer;
+import de.longri.cachebox3.locator.geocluster.GeoCluster;
+import de.longri.cachebox3.locator.geocluster.GeoClusterReducer;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.GeoPoint;
 import org.oscim.map.Map;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Longri on 27.11.16.
  */
-public class WaypointLayer extends ItemizedClusterLayer<ClusterItem> implements CacheListChangedEventListener, Disposable {
+public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements CacheListChangedEventListener, Disposable {
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
-    private static final ClusterSymbol defaultMarker = null;
-
+    private static final ClusterSymbol defaultMarker = getClusterSymbol("myterie");
+    protected final List<GeoCluster> mAllItemList = new ArrayList<GeoCluster>();
+    private final double lastFactor = 2.0;
 
     public WaypointLayer(Map map) {
-        super(map, new ArrayList<ClusterItem>(), defaultMarker, null);
+        super(map, new ArrayList<GeoCluster>(), defaultMarker, null);
         mOnItemGestureListener = gestureListener;
 
         //register as cacheListChanged eventListener
@@ -55,14 +61,14 @@ public class WaypointLayer extends ItemizedClusterLayer<ClusterItem> implements 
         CacheListChangedEvent();
     }
 
-    private final OnItemGestureListener<ClusterItem> gestureListener = new OnItemGestureListener<ClusterItem>() {
+    private final OnItemGestureListener<GeoCluster> gestureListener = new OnItemGestureListener<GeoCluster>() {
         @Override
-        public boolean onItemSingleTapUp(int index, ClusterItem item) {
+        public boolean onItemSingleTapUp(int index, GeoCluster item) {
             return false;
         }
 
         @Override
-        public boolean onItemLongPress(int index, ClusterItem item) {
+        public boolean onItemLongPress(int index, GeoCluster item) {
             return false;
         }
     };
@@ -70,8 +76,8 @@ public class WaypointLayer extends ItemizedClusterLayer<ClusterItem> implements 
     @Override
     public void dispose() {
         CacheListChangedEventList.Remove(this);
-         ClusterSymbolHashMap.clear();
-        mOnItemGestureListener=null;
+        ClusterSymbolHashMap.clear();
+        mOnItemGestureListener = null;
     }
 
     @Override
@@ -85,18 +91,16 @@ public class WaypointLayer extends ItemizedClusterLayer<ClusterItem> implements 
                     //clear item list
                     mItemList.clear();
 
-
-                    //TODO add GeoClustering like https://github.com/finn-no/geocluster
-
-
                     //add WayPoint items
                     for (Cache cache : Database.Data.Query) {
                         double lat = cache.Latitude(), lon = cache.Longitude();
-                        ClusterItem clusterItem = new ClusterItem(lat + "/" + lon, "", new GeoPoint(lat, lon));
-                        clusterItem.setCluster(getClusterSymbolByCache(cache));
-                        mItemList.add(clusterItem);
+                        GeoCluster geoCluster = new GeoCluster(cache.Pos);
+                        geoCluster.setCluster(getClusterSymbolByCache(cache));
+                        mAllItemList.add(geoCluster);
                     }
+                    mItemList.addAll(mAllItemList);
                     WaypointLayer.this.populate();
+                    reduceCluster(0.0003);
                 }
             }
         });
@@ -105,16 +109,61 @@ public class WaypointLayer extends ItemizedClusterLayer<ClusterItem> implements 
     }
 
 
-    private final HashMap<String,  ClusterSymbol>  ClusterSymbolHashMap = new HashMap<String,  ClusterSymbol>();
+    boolean TEST_next, TEST_fertig;
+
+    private void reduceCluster(final double factor) {
+        log.debug("START GeoClustering ");
+        final List<GeoCluster> workList;
+
+        if (factor < lastFactor) {
+            workList = mAllItemList;
+        } else {
+            workList = mItemList;
+        }
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                GeoClusterReducer reducer = new GeoClusterReducer(factor);
+
+                List<GeoCluster> reducedList = reducer.reduce(workList);
+                //List<GeoCluster> reducedList = reducer.reduceSquare(workList);
+                log.debug("Cluster Reduce from " + mItemList.size() + " items to " + reducedList.size() + " items");
+                mItemList.clear();
+                mItemList.addAll(reducedList);
+                WaypointLayer.this.populate();
 
 
-    private  ClusterSymbol getClusterSymbolByCache(Cache cache) {
-         ClusterSymbol symbol = null;
+                if (!TEST_fertig)
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!TEST_next) {
+                                TEST_next = true;
+                                reduceCluster(0.0008);
+                            } else {
+                                TEST_fertig = true;
+                                reduceCluster(0.0002);
+                            }
+
+                        }
+                    });
+            }
+        });
+        thread.start();
+    }
+
+
+    private final HashMap<String, ClusterSymbol> ClusterSymbolHashMap = new HashMap<String, ClusterSymbol>();
+
+
+    private ClusterSymbol getClusterSymbolByCache(Cache cache) {
+        ClusterSymbol symbol = null;
         String symbolName = getMapIconName(cache);
-        symbol =  ClusterSymbolHashMap.get(symbolName);
+        symbol = ClusterSymbolHashMap.get(symbolName);
         if (symbol == null) {
             symbol = getClusterSymbol(symbolName);
-             ClusterSymbolHashMap.put(symbolName, symbol);
+            ClusterSymbolHashMap.put(symbolName, symbol);
         }
         return symbol;
     }
@@ -136,7 +185,7 @@ public class WaypointLayer extends ItemizedClusterLayer<ClusterItem> implements 
 
     }
 
-    private static  ClusterSymbol getClusterSymbol(String name) {
+    private static ClusterSymbol getClusterSymbol(String name) {
         Skin skin = VisUI.getSkin();
         ScaledSvg scaledSvg = skin.get(name, ScaledSvg.class);
         FileHandle fileHandle = Gdx.files.internal(scaledSvg.path);
@@ -146,6 +195,6 @@ public class WaypointLayer extends ItemizedClusterLayer<ClusterItem> implements 
         } catch (IOException e) {
             return null;
         }
-        return new  ClusterSymbol(bitmap,  ClusterSymbol.HotspotPlace.CENTER, true);
+        return new ClusterSymbol(bitmap, ClusterSymbol.HotspotPlace.CENTER, true);
     }
 }

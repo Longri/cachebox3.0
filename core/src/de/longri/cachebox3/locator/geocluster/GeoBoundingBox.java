@@ -16,6 +16,12 @@ public class GeoBoundingBox {
         this.bottomRight = bottomRight;
     }
 
+    public GeoBoundingBox(LatLong center, double maxDistance) {
+        this.topLeft = new LatLong(center.latitude + maxDistance, center.longitude - maxDistance);
+        this.bottomRight = new LatLong(center.latitude - maxDistance, center.longitude + maxDistance);
+
+    }
+
     public LatLong topLeft() {
         return topLeft;
     }

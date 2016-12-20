@@ -19,6 +19,8 @@
 package de.longri.cachebox3.gui.map.layer.cluster;
 
 
+import de.longri.cachebox3.locator.LatLong;
+import org.oscim.core.GeoPoint;
 import org.oscim.core.MercatorProjection;
 import org.oscim.core.Point;
 import org.oscim.core.Tile;
@@ -158,18 +160,18 @@ public class ClusterRenderer extends BucketRenderer {
                 continue;
             }
 
-            ClusterSymbol Cluster = it.item.getCluster();
-            if (Cluster == null)
-                Cluster = mDefaultCluster;
+            ClusterSymbol cluster = it.item.getCluster();
+            if (cluster == null)
+                cluster = mDefaultCluster;
 
             SymbolItem s = SymbolItem.pool.get();
-            if (Cluster.isBitmap()) {
-                s.set(it.x, it.y, Cluster.getBitmap(), true);
+            if (cluster.isBitmap()) {
+                s.set(it.x, it.y, cluster.getBitmap(), true);
             } else {
-                s.set(it.x, it.y, Cluster.getTextureRegion(), true);
+                s.set(it.x, it.y, cluster.getTextureRegion(), true);
             }
-            s.offset = Cluster.getHotspot();
-            s.billboard = Cluster.isBillboard();
+            s.offset = cluster.getHotspot();
+            s.billboard = cluster.isBillboard();
             mSymbolLayer.pushSymbol(s);
         }
 
@@ -189,7 +191,7 @@ public class ClusterRenderer extends BucketRenderer {
             it.item = mClusterLayer.createItem(i);
 
             /* pre-project points */
-            MercatorProjection.project(it.item.getPoint(), mMapPoint);
+            project(it.item.getPoint(), mMapPoint);
             it.px = mMapPoint.x;
             it.py = mMapPoint.y;
         }
@@ -234,24 +236,14 @@ public class ClusterRenderer extends BucketRenderer {
         }
     };
 
-    //    /**
-    //     * Returns the Item at the given index.
-    //     *
-    //     * @param position
-    //     *            the position of the item to return
-    //     * @return the Item of the given index.
-    //     */
-    //    public final Item getItem(int position) {
-    //
-    //        synchronized (lock) {
-    //            InternalItem item = mItems;
-    //            for (int i = mSize - position - 1; i > 0 && item != null; i--)
-    //                item = item.next;
-    //
-    //            if (item != null)
-    //                return item.item;
-    //
-    //            return null;
-    //        }
-    //    }
+    public static Point project(LatLong p, Point reuse) {
+        if(reuse == null) {
+            reuse = new Point();
+        }
+
+        reuse.x = ((double)p.longitude + 180.0D) / 360.0D;
+        double sinLatitude = Math.sin((double)p.latitude * 0.017453292519943295D);
+        reuse.y = 0.5D - Math.log((1.0D + sinLatitude) / (1.0D - sinLatitude)) / 12.566370614359172D;
+        return reuse;
+    }
 }

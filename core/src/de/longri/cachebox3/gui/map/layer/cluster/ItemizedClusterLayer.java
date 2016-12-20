@@ -22,7 +22,9 @@
 package de.longri.cachebox3.gui.map.layer.cluster;
 
 
+import de.longri.cachebox3.locator.LatLong;
 import org.oscim.core.Box;
+import org.oscim.core.GeoPoint;
 import org.oscim.core.Point;
 import org.oscim.event.Gesture;
 import org.oscim.event.GestureListener;
@@ -39,10 +41,11 @@ import java.util.List;
 public class ItemizedClusterLayer<Item extends ClusterInterface> extends ClusterLayer<Item>
         implements GestureListener {
 
-    static final Logger log = LoggerFactory.getLogger( ItemizedClusterLayer.class);
+    static final Logger log = LoggerFactory.getLogger(ItemizedClusterLayer.class);
 
     protected final List<Item> mItemList;
     protected final Point mTmpPoint = new Point();
+    protected final GeoPoint mTmpGeoPoint = new GeoPoint(0, 0);
     protected OnItemGestureListener<Item> mOnItemGestureListener;
     protected int mDrawnItemsLimit = Integer.MAX_VALUE;
 
@@ -151,7 +154,7 @@ public class ItemizedClusterLayer<Item extends ClusterInterface> extends Cluster
     private final ActiveItem mActiveItemSingleTap = new ActiveItem() {
         @Override
         public boolean run(int index) {
-            final ItemizedClusterLayer<Item> that =  ItemizedClusterLayer.this;
+            final ItemizedClusterLayer<Item> that = ItemizedClusterLayer.this;
             if (mOnItemGestureListener == null) {
                 return false;
             }
@@ -166,7 +169,7 @@ public class ItemizedClusterLayer<Item extends ClusterInterface> extends Cluster
     private final ActiveItem mActiveItemLongPress = new ActiveItem() {
         @Override
         public boolean run(final int index) {
-            final ItemizedClusterLayer<Item> that =  ItemizedClusterLayer.this;
+            final ItemizedClusterLayer<Item> that = ItemizedClusterLayer.this;
             if (that.mOnItemGestureListener == null) {
                 return false;
             }
@@ -204,11 +207,12 @@ public class ItemizedClusterLayer<Item extends ClusterInterface> extends Cluster
         for (int i = 0; i < size; i++) {
             Item item = mItemList.get(i);
 
-            if (!box.contains(item.getPoint().longitudeE6,
-                    item.getPoint().latitudeE6))
+            if (!box.contains((int) (item.getPoint().longitude * 1000000.0D),
+                    (int) (item.getPoint().latitude * 1000000.0D)))
                 continue;
 
-            mapPosition.toScreenPoint(item.getPoint(), mTmpPoint);
+            LatLong point = item.getPoint();
+            mapPosition.toScreenPoint(new GeoPoint(point.latitude, point.longitude), mTmpPoint);
 
             float dx = (float) (mTmpPoint.x - eventX);
             float dy = (float) (mTmpPoint.y - eventY);

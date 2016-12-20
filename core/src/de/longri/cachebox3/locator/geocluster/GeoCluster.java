@@ -1,17 +1,22 @@
 package de.longri.cachebox3.locator.geocluster;
 
+import de.longri.cachebox3.gui.map.layer.cluster.ClusterInterface;
+import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
 import de.longri.cachebox3.locator.LatLong;
+import org.oscim.core.GeoPoint;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GeoCluster {
+public class GeoCluster implements ClusterInterface {
 
     private int size;
     private LatLong center;
     private GeoBoundingBox bounds;
     private List<LatLong> points = new LinkedList<LatLong>();
+
+    protected ClusterSymbol mCluster;
 
     public GeoCluster(LatLong point) {
         this(1, point, new GeoBoundingBox(point));
@@ -23,6 +28,10 @@ public class GeoCluster {
         this.center = center;
         this.bounds = bounds;
     }
+
+//    public GeoCluster(GeoPoint geoPoint) {
+//        this.center = new LatLong(geoPoint.getLatitude(), geoPoint.getLongitude());
+//    }
 
     public void add(LatLong point) {
         ++size;
@@ -85,5 +94,20 @@ public class GeoCluster {
     @Override
     public String toString() {
         return String.format("%s (%d)", center.toString(), size);
+    }
+
+    @Override
+    public LatLong getPoint() {
+        return center;
+    }
+
+    @Override
+    public ClusterSymbol getCluster() {
+        return mCluster;
+    }
+
+
+    public void setCluster(ClusterSymbol Cluster) {
+        mCluster = Cluster;
     }
 }

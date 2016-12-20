@@ -196,7 +196,7 @@ public class MapView extends AbstractView {
         mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
 
         //          grid,labels,buldings,scalebar
-        initLayers(false, true, true, true);
+        initLayers(true, true, true, true);
 
 
         //add position changed handler
