@@ -191,7 +191,7 @@ public class ClusterRenderer extends BucketRenderer {
             it.item = mClusterLayer.createItem(i);
 
             /* pre-project points */
-            project(it.item.getPoint(), mMapPoint);
+            MercatorProjection.project(it.item.getPoint(), mMapPoint);
             it.px = mMapPoint.x;
             it.py = mMapPoint.y;
         }

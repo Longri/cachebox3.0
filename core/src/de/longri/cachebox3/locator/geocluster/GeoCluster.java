@@ -12,28 +12,38 @@ import java.util.List;
 public class GeoCluster implements ClusterInterface {
 
     private int size;
-    private LatLong center;
+    private GeoPoint center;
     private GeoBoundingBox bounds;
-    private List<LatLong> points = new LinkedList<LatLong>();
+    private List<GeoPoint> points = new LinkedList<GeoPoint>();
+
 
     protected ClusterSymbol mCluster;
 
-    public GeoCluster(LatLong point) {
+    public GeoCluster(LatLong pos) {
+        GeoPoint point = new GeoPoint(pos.getLatitude(), pos.getLongitude());
+        this.size = 1;
+        this.center = point;
+        this.bounds = new GeoBoundingBox(point);
+        points.add(center);
+    }
+
+    public GeoCluster(GeoPoint point) {
         this(1, point, new GeoBoundingBox(point));
         points.add(point);
     }
 
-    public GeoCluster(int size, LatLong center, GeoBoundingBox bounds) {
+    public GeoCluster(int size, GeoPoint center, GeoBoundingBox bounds) {
         this.size = size;
         this.center = center;
         this.bounds = bounds;
     }
 
+
 //    public GeoCluster(GeoPoint geoPoint) {
-//        this.center = new LatLong(geoPoint.getLatitude(), geoPoint.getLongitude());
+//        this.center = new GeoPoint(geoPoint.getLatitude(), geoPoint.getLongitude());
 //    }
 
-    public void add(LatLong point) {
+    public void add(GeoPoint point) {
         ++size;
         center = mean(center, size - 1, point, 1);
         bounds = bounds.extend(point);
@@ -42,7 +52,7 @@ public class GeoCluster implements ClusterInterface {
 
     public GeoCluster merge(GeoCluster that) {
         int size = this.size + that.size();
-        LatLong center = mean(this.center, size - that.size(), that.center(), that.size());
+        GeoPoint center = mean(this.center, size - that.size(), that.center(), that.size());
         GeoBoundingBox bounds = this.bounds.extend(that.bounds());
         GeoCluster cluster = new GeoCluster(size, center, bounds);
         cluster.points.addAll(points);
@@ -50,13 +60,13 @@ public class GeoCluster implements ClusterInterface {
         return cluster;
     }
 
-    private static LatLong mean(LatLong left, int leftWeight, LatLong right, int rightWeight) {
-        double lat = (left.latitude * leftWeight + right.latitude * rightWeight) / (leftWeight + rightWeight);
-        double lon = (left.longitude * leftWeight + right.longitude * rightWeight) / (leftWeight + rightWeight);
-        return new LatLong(lat, lon);
+    private static GeoPoint mean(GeoPoint left, int leftWeight, GeoPoint right, int rightWeight) {
+        double lat = (left.getLatitude() * leftWeight + right.getLatitude() * rightWeight) / (leftWeight + rightWeight);
+        double lon = (left.getLongitude() * leftWeight + right.getLongitude() * rightWeight) / (leftWeight + rightWeight);
+        return new GeoPoint(lat, lon);
     }
 
-    public List<LatLong> getPoints() {
+    public List<GeoPoint> getPoints() {
         return points;
     }
 
@@ -64,7 +74,7 @@ public class GeoCluster implements ClusterInterface {
         return size;
     }
 
-    public LatLong center() {
+    public GeoPoint center() {
         return center;
     }
 
@@ -97,7 +107,7 @@ public class GeoCluster implements ClusterInterface {
     }
 
     @Override
-    public LatLong getPoint() {
+    public GeoPoint getPoint() {
         return center;
     }
 
@@ -110,4 +120,5 @@ public class GeoCluster implements ClusterInterface {
     public void setCluster(ClusterSymbol Cluster) {
         mCluster = Cluster;
     }
+
 }

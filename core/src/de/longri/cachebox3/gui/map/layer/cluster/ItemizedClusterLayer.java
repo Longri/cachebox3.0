@@ -21,8 +21,6 @@
  */
 package de.longri.cachebox3.gui.map.layer.cluster;
 
-
-import de.longri.cachebox3.locator.LatLong;
 import org.oscim.core.Box;
 import org.oscim.core.GeoPoint;
 import org.oscim.core.Point;
@@ -207,12 +205,11 @@ public class ItemizedClusterLayer<Item extends ClusterInterface> extends Cluster
         for (int i = 0; i < size; i++) {
             Item item = mItemList.get(i);
 
-            if (!box.contains((int) (item.getPoint().longitude * 1000000.0D),
-                    (int) (item.getPoint().latitude * 1000000.0D)))
+            if (!box.contains((int) (item.getPoint().getLongitude() * 1000000.0D),
+                    (int) (item.getPoint().getLatitude() * 1000000.0D)))
                 continue;
 
-            LatLong point = item.getPoint();
-            mapPosition.toScreenPoint(new GeoPoint(point.latitude, point.longitude), mTmpPoint);
+            mapPosition.toScreenPoint(item.getPoint(), mTmpPoint);
 
             float dx = (float) (mTmpPoint.x - eventX);
             float dy = (float) (mTmpPoint.y - eventY);

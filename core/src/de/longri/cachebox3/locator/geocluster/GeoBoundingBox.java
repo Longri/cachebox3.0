@@ -1,41 +1,39 @@
 package de.longri.cachebox3.locator.geocluster;
 
-import de.longri.cachebox3.locator.LatLong;
+
+
+import org.oscim.core.GeoPoint;
 
 import java.util.Arrays;
 
 public class GeoBoundingBox {
-    private final LatLong topLeft, bottomRight;
+    private final GeoPoint topLeft, bottomRight;
+    private static final double EARTH_RADIUS = 6371.01d;
 
-    public GeoBoundingBox(LatLong point) {
+    public GeoBoundingBox(GeoPoint point) {
         this(point, point);
     }
 
-    public GeoBoundingBox(LatLong topLeft, LatLong bottomRight) {
+    public GeoBoundingBox(GeoPoint topLeft, GeoPoint bottomRight) {
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
     }
 
-    public GeoBoundingBox(LatLong center, double maxDistance) {
-        this.topLeft = new LatLong(center.latitude + maxDistance, center.longitude - maxDistance);
-        this.bottomRight = new LatLong(center.latitude - maxDistance, center.longitude + maxDistance);
 
-    }
-
-    public LatLong topLeft() {
+    public GeoPoint topLeft() {
         return topLeft;
     }
 
-    public LatLong bottomRight() {
+    public GeoPoint bottomRight() {
         return bottomRight;
     }
 
-    public boolean contains(LatLong point) {
-        return point.latitude <= topLeft.latitude && point.latitude >= bottomRight.latitude &&
-                point.longitude >= topLeft.longitude && point.longitude <= bottomRight.longitude;
+    public boolean contains(GeoPoint point) {
+        return point.getLatitude() <= topLeft.getLatitude() && point.getLatitude() >= bottomRight.getLatitude() &&
+                point.getLongitude() >= topLeft.getLongitude() && point.getLongitude() <= bottomRight.getLongitude();
     }
 
-    public GeoBoundingBox extend(LatLong point) {
+    public GeoBoundingBox extend(GeoPoint point) {
         return extend(point, point);
     }
 
@@ -49,18 +47,67 @@ public class GeoBoundingBox {
     }
 
     public GeoBoundingBox extend(double distance, GeoDistanceUnit unit) {
-        double offsetBy = unit.toKm(distance);
-        return new GeoBoundingBox(topLeft().offsetBy(offsetBy, 315.0, unit), bottomRight().offsetBy(offsetBy, 135.0, unit));
+        double offsetValue= unit.toKm(distance);
+        return new GeoBoundingBox(offsetBy(topLeft(),offsetValue, 315.0, unit), offsetBy(bottomRight(),offsetValue, 135.0, unit));
     }
 
-    private GeoBoundingBox extend(LatLong topLeft, LatLong bottomRight) {
+    private GeoBoundingBox extend(GeoPoint topLeft, GeoPoint bottomRight) {
         return contains(topLeft) && contains(bottomRight) ? this : new GeoBoundingBox(
-                new LatLong(Math.max(topLeft().latitude, topLeft.latitude), Math.min(topLeft().longitude, topLeft.longitude)),
-                new LatLong(Math.min(bottomRight().latitude, bottomRight.latitude), Math.max(bottomRight().longitude, bottomRight.longitude)));
+                new GeoPoint(Math.max(topLeft().getLatitude(), topLeft.getLatitude()), Math.min(topLeft().getLongitude(), topLeft.getLongitude())),
+                new GeoPoint(Math.min(bottomRight().getLatitude(), bottomRight.getLatitude()), Math.max(bottomRight().getLongitude(), bottomRight.getLongitude())));
     }
 
     public double size(GeoDistanceUnit unit) {
-        return topLeft.distanceTo(bottomRight, unit);
+        return distanceTo(topLeft,bottomRight, unit);
+    }
+
+    /**
+     * Destination point given distance and bearing from start point
+     *
+     * Given a start point, initial bearing, and distance, this will calculate the destination point and final bearing travelling along a (shortest distance) great circle arc.
+     *
+     * @param distance
+     * @param bearing
+     * @param unit
+     * @return
+     */
+    public static GeoPoint offsetBy(GeoPoint point,double distance, double bearing, GeoDistanceUnit unit) {
+
+        double radLat = Math.toRadians(point.getLatitude());
+        double radLon = Math.toRadians(point.getLongitude());
+
+        double d = unit.toKm(distance) / EARTH_RADIUS;
+        double b = Math.toRadians(bearing);
+
+        double lat = Math.asin(Math.sin(radLat) * Math.cos(d) +
+                Math.cos(radLat) * Math.sin(d) * Math.cos(b));
+        double lon = radLon + Math.atan2(Math.sin(b) * Math.sin(d) * Math.cos(radLat),
+                Math.cos(d) - Math.sin(radLat) * Math.sin(lat));
+
+        lon = (lon + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
+        return new GeoPoint(Math.toDegrees(lat), Math.toDegrees(lon));
+    }
+
+
+
+    /**
+     * Computes the great circle distance between this GeoPoint instance and {point} argument.
+     *
+     */
+    public static double distanceTo(GeoPoint point,GeoPoint point1, GeoDistanceUnit unit) {
+        double radLat = Math.toRadians(point.getLatitude());
+        double radLon = Math.toRadians(point.getLongitude());
+        double pointRadLat = Math.toRadians(point1.getLatitude());
+        double pointRadLon = Math.toRadians(point1.getLongitude());
+
+        double rad = Math.sin(radLat) * Math.sin(pointRadLat) +
+                Math.cos(radLat) * Math.cos(pointRadLat) *
+                        Math.cos(radLon - pointRadLon);
+
+        // Valid result is in range -1.0..+1.0
+        rad = (rad < -1.0) ? -1.0 : (rad > 1.0) ? 1.0 : rad;
+
+        return unit.fromKm(Math.acos(rad) * EARTH_RADIUS);
     }
 
     @Override

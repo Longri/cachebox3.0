@@ -1,6 +1,6 @@
 package de.longri.cachebox3.locator.geocluster;
 
-import de.longri.cachebox3.locator.LatLong;
+import org.oscim.core.GeoPoint;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class GeoClusterBuilder {
         this.factor = factor;
     }
 
-    public GeoClusterBuilder add(LatLong point) {
+    public GeoClusterBuilder add(GeoPoint point) {
         if (bounds == null) {
             bounds = new GeoBoundingBox(point);
         } else if (!bounds.contains(point)) {
@@ -34,7 +34,7 @@ public class GeoClusterBuilder {
         GeoCluster nearest = null;
         double minDistance = Double.MAX_VALUE;
         for (GeoCluster cluster : clusters) {
-            double distance = cluster.center().distanceTo(point, GeoDistanceUnit.KILOMETERS);
+            double distance = GeoBoundingBox.distanceTo(cluster.center(), point, GeoDistanceUnit.KILOMETERS);
             if (distance < minDistance && distance <= maxDistance && cluster.bounds().extend(point).size(GeoDistanceUnit.KILOMETERS) <= maxDistance) {
                 minDistance = distance;
                 nearest = cluster;

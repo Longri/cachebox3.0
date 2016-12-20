@@ -124,14 +124,20 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                GeoClusterReducer reducer = new GeoClusterReducer(factor);
 
-                List<GeoCluster> reducedList = reducer.reduce(workList);
-                //List<GeoCluster> reducedList = reducer.reduceSquare(workList);
-                log.debug("Cluster Reduce from " + mItemList.size() + " items to " + reducedList.size() + " items");
-                mItemList.clear();
-                mItemList.addAll(reducedList);
-                WaypointLayer.this.populate();
+                Utils.logRunningTime("Clustering", new Runnable() {
+                    @Override
+                    public void run() {
+                        GeoClusterReducer reducer = new GeoClusterReducer(factor);
+
+                        //List<GeoCluster> reducedList = reducer.reduce(workList);
+                        List<GeoCluster> reducedList = reducer.reduceSquare(workList);
+                        log.debug("Cluster Reduce from " + mItemList.size() + " items to " + reducedList.size() + " items");
+                        mItemList.clear();
+                        mItemList.addAll(reducedList);
+                        WaypointLayer.this.populate();
+                    }
+                });
 
 
                 if (!TEST_fertig)

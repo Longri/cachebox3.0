@@ -14,11 +14,10 @@
  */
 package de.longri.cachebox3.gui.map.layer.cluster;
 
-import de.longri.cachebox3.locator.LatLong;
 import org.oscim.core.GeoPoint;
 
 public interface ClusterInterface {
     ClusterSymbol getCluster();
 
-    LatLong getPoint();
+    GeoPoint getPoint();
 }

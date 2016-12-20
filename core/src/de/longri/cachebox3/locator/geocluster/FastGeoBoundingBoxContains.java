@@ -1,29 +1,30 @@
 package de.longri.cachebox3.locator.geocluster;
 
 import de.longri.cachebox3.locator.LatLong;
+import org.oscim.core.GeoPoint;
 
 /**
  * Created by Longri on 20.12.2016.
  */
 public class FastGeoBoundingBoxContains {
 
-    private final double mSquareLength;
-    private double latLeftTop, lonLeftTop, latRightButtom, lonRightButtom;
+    private final int mSquareLength;
+    private int latLeftTop, lonLeftTop, latRightButtom, lonRightButtom;
 
 
     public FastGeoBoundingBoxContains(double mSquareLength) {
-        this.mSquareLength = mSquareLength;
+        this.mSquareLength = (int)(mSquareLength * 1000000.0D);
     }
 
-    public void setCenter(LatLong center) {
-        latLeftTop = center.latitude + mSquareLength;
-        lonLeftTop = center.longitude - mSquareLength;
-        latRightButtom = center.latitude - mSquareLength;
-        lonRightButtom = center.longitude + mSquareLength;
+    public void setCenter(GeoPoint center) {
+        latLeftTop = center.latitudeE6 + mSquareLength;
+        lonLeftTop = center.longitudeE6 - mSquareLength;
+        latRightButtom = center.latitudeE6 - mSquareLength;
+        lonRightButtom = center.longitudeE6 + mSquareLength;
     }
 
-    public boolean contains(LatLong point) {
-        return point.latitude <= latLeftTop && point.latitude >= latRightButtom &&
-                point.longitude >= lonLeftTop && point.longitude <= lonRightButtom;
+    public boolean contains(GeoPoint point) {
+        return point.latitudeE6 <= latLeftTop && point.latitudeE6 >= latRightButtom &&
+                point.longitudeE6 >= lonLeftTop && point.longitudeE6 <= lonRightButtom;
     }
 }
