@@ -22,24 +22,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
 import de.longri.cachebox3.gui.map.layer.cluster.ItemizedClusterLayer;
+import de.longri.cachebox3.locator.geocluster.FastGeoBoundingBoxContains;
 import de.longri.cachebox3.locator.geocluster.GeoCluster;
-import de.longri.cachebox3.locator.geocluster.GeoClusterReducer;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import org.oscim.backend.canvas.Bitmap;
-import org.oscim.core.GeoPoint;
 import org.oscim.map.Map;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -50,7 +49,7 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
 
     private static final ClusterSymbol defaultMarker = getClusterSymbol("myterie");
     protected final List<GeoCluster> mAllItemList = new ArrayList<GeoCluster>();
-    private final double lastFactor = 2.0;
+    private double lastFactor = 2.0;
 
     public WaypointLayer(Map map) {
         super(map, new ArrayList<GeoCluster>(), defaultMarker, null);
@@ -108,55 +107,104 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
 
     }
 
+    Thread clusterThread;
+    ClusterRunnable clusterRunnable;
 
-    boolean TEST_next, TEST_fertig;
+    private class ClusterRunnable implements Runnable {
 
-    private void reduceCluster(final double factor) {
-        log.debug("START GeoClustering ");
-        final List<GeoCluster> workList;
-
-        if (factor < lastFactor) {
-            workList = mAllItemList;
-        } else {
-            workList = mItemList;
+        ClusterRunnable(double factor) {
+            this.factor = factor;
         }
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
+        private final double factor;
+        private volatile boolean running = true;
 
-                Utils.logRunningTime("Clustering", new Runnable() {
-                    @Override
-                    public void run() {
-                        GeoClusterReducer reducer = new GeoClusterReducer(factor);
+        public void terminate() {
+            running = false;
+        }
 
-                        //List<GeoCluster> reducedList = reducer.reduce(workList);
-                        List<GeoCluster> reducedList = reducer.reduceSquare(workList);
-                        log.debug("Cluster Reduce from " + mItemList.size() + " items to " + reducedList.size() + " items");
-                        mItemList.clear();
-                        mItemList.addAll(reducedList);
-                        WaypointLayer.this.populate();
-                    }
-                });
+        @Override
+        public void run() {
 
+            try {
 
-                if (!TEST_fertig)
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!TEST_next) {
-                                TEST_next = true;
-                                reduceCluster(0.0008);
-                            } else {
-                                TEST_fertig = true;
-                                reduceCluster(0.0002);
+                final List<GeoCluster> workList;
+                if (factor < lastFactor) {
+                    workList = mAllItemList;
+                } else {
+                    workList = mItemList;
+                }
+
+                double maxDistance = this.factor * 5;
+                FastGeoBoundingBoxContains boundingBoxContains = new FastGeoBoundingBoxContains(maxDistance);
+                List<GeoCluster> reduced = new LinkedList<GeoCluster>();
+                reduced.addAll(workList);
+                REDUCE:
+                while (true) {
+                    for (int i = 0; i < reduced.size(); ++i) {
+                        for (int j = i + 1; j < reduced.size(); ++j) {
+
+                            Thread.sleep(0);
+                            if (!running) {
+                                log.debug("CANCEL clustering");
+                                return;
                             }
 
+                            GeoCluster a = reduced.get(i);
+                            GeoCluster b = reduced.get(j);
+
+                            boundingBoxContains.setCenter(a.center());
+                            if (boundingBoxContains.contains(b.center())) {
+                                reduced.remove(a);
+                                reduced.remove(b);
+                                reduced.add(a.merge(b));
+                                continue REDUCE;
+                            }
                         }
-                    });
+                    }
+                    break;
+                }
+
+                if (!running) {
+                    log.debug("CANCEL clustering");
+                    return;
+                }
+
+                log.debug("Cluster Reduce from " + mItemList.size() + " items to " + reduced.size() + " items");
+                mItemList.clear();
+                mItemList.addAll(reduced);
+                WaypointLayer.this.populate();
+            } catch (InterruptedException e) {
+                running = false;
             }
-        });
-        thread.start();
+        }
+    }
+
+
+    private void reduceCluster(final double factor) {
+
+        if (lastFactor == factor) {
+            log.debug("GeoClustering  no factor changes");
+            return;
+        }
+
+        if (clusterThread != null && clusterThread.isAlive()) {
+            clusterRunnable.terminate();
+            try {
+                clusterThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        log.debug("START GeoClustering factor:" + factor + " ZoomLevel:" + lastZoomLevel);
+
+
+        lastFactor = factor;
+        clusterRunnable = new ClusterRunnable(factor);
+        clusterThread = new Thread(clusterRunnable);
+        clusterThread.start();
     }
 
 
@@ -202,5 +250,25 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
             return null;
         }
         return new ClusterSymbol(bitmap, ClusterSymbol.HotspotPlace.CENTER, true);
+    }
+
+
+    private int lastZoomLevel = -1;
+
+    public void setZoomLevel(int zoomLevel) {
+        if (lastZoomLevel == zoomLevel) return;
+        lastZoomLevel = zoomLevel;
+
+        double factor = 0.0;
+
+        if (lastZoomLevel < 15) {
+            if (lastZoomLevel > 13) {
+                factor = 0.0008;
+            } else {
+                factor = 0.002;
+            }
+        }
+        reduceCluster(factor);
+
     }
 }

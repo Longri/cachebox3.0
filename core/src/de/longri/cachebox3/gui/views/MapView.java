@@ -76,6 +76,7 @@ public class MapView extends AbstractView {
     private final MapStateButton mapStateButton;
     private final MapCompass mapOrientationButton;
     private final ZoomButton zoomButton;
+    private WaypointLayer wayPointLayer;
 
 
     private MapFileTileSource tileSource;
@@ -186,8 +187,9 @@ public class MapView extends AbstractView {
 //                    log.debug("Map.ROTATE_EVENT");
                     if (positionChangedHandler != null)
                         positionChangedHandler.rotateChangedFromUser(mapPosition.getBearing());
-                } else if (e == Map.SCALE_EVENT) {
+                } else if (e == Map.ANIM_START) {
 //                    log.debug("Map.SCALE_EVENT");
+                    wayPointLayer.setZoomLevel(mapPosition.getZoomLevel());
                 }
             }
         };
@@ -237,6 +239,8 @@ public class MapView extends AbstractView {
         }
 
         layers.clear();
+
+        wayPointLayer = null;
 
         mapInputHandler.clear();
         mapInputHandler = null;
@@ -337,8 +341,8 @@ public class MapView extends AbstractView {
             layers.add(myLocationAccuracy);
 //            layers.add(myLocationModel);
         }
-
-        layers.add(new WaypointLayer(mMap));
+        wayPointLayer = new WaypointLayer(mMap);
+        layers.add(wayPointLayer);
 
     }
 
