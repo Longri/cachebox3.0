@@ -161,10 +161,10 @@ public class LibgdxLogger extends MarkerIgnoringBase {
 
     private static int DEFAULT_LOG_LEVEL = LOG_LEVEL_DEBUG;
     private static boolean SHOW_DATE_TIME = true;
-    private static String DATE_TIME_FORMAT_STR = null;
+    private static String DATE_TIME_FORMAT_STR = "H:mm: ss.SSS";
     private static DateFormat DATE_FORMATTER = null;
-    private static boolean SHOW_THREAD_NAME = true;
-    private static boolean SHOW_LOG_NAME = true;
+    private static boolean SHOW_THREAD_NAME = false;
+    private static boolean SHOW_LOG_NAME = false;
     private static boolean SHOW_SHORT_LOG_NAME = false;
     private static String LOG_FILE = "System.err";
     private static boolean LEVEL_IN_BRACKETS = false;
@@ -231,7 +231,7 @@ public class LibgdxLogger extends MarkerIgnoringBase {
         SHOW_LOG_NAME = getBooleanProperty(SHOW_LOG_NAME_KEY, SHOW_LOG_NAME);
         SHOW_SHORT_LOG_NAME = getBooleanProperty(SHOW_SHORT_LOG_NAME_KEY,
                 SHOW_SHORT_LOG_NAME);
-        SHOW_DATE_TIME = getBooleanProperty(SHOW_DATE_TIME_KEY, SHOW_DATE_TIME);
+//        SHOW_DATE_TIME = getBooleanProperty(SHOW_DATE_TIME_KEY, SHOW_DATE_TIME);
         SHOW_THREAD_NAME = getBooleanProperty(SHOW_THREAD_NAME_KEY,
                 SHOW_THREAD_NAME);
         DATE_TIME_FORMAT_STR = getStringProperty(DATE_TIME_FORMAT_KEY,
