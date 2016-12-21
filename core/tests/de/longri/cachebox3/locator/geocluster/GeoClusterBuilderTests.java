@@ -2,9 +2,10 @@ package de.longri.cachebox3.locator.geocluster;
 
 //import org.testng.annotations.Test;
 
-import de.longri.cachebox3.locator.LatLong;
 
 import org.junit.jupiter.api.Test;
+import org.oscim.core.GeoPoint;
+
 import static de.longri.cachebox3.locator.geocluster.Places.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -60,7 +61,7 @@ public class GeoClusterBuilderTests {
         builder.add(LAS_VEGAS);
         assertThat("Cluster after adding Las Vegas", builder.build(), hasItems(
                 new GeoCluster(2, DENVER, new GeoBoundingBox(DENVER)),
-                new GeoCluster(2, new LatLong(34.4500, -116.1500), new GeoBoundingBox(SAN_DIEGO).extend(LAS_VEGAS))));
+                new GeoCluster(2, new GeoPoint(34.4500, -116.1500), new GeoBoundingBox(SAN_DIEGO).extend(LAS_VEGAS))));
     }
 
     @Test
@@ -79,11 +80,11 @@ public class GeoClusterBuilderTests {
 
         builder.add(SAN_DIEGO);
         assertThat("Cluster after adding San Diego", builder.build(), hasItems(
-                new GeoCluster(3, new LatLong(37.4400, -108.95666666666666), new GeoBoundingBox(DENVER).extend(SAN_DIEGO))));
+                new GeoCluster(3, new GeoPoint(37.4400, -108.95666666666666), new GeoBoundingBox(DENVER).extend(SAN_DIEGO))));
 
         builder.add(LAS_VEGAS);
         assertThat("Cluster after adding Las Vegas", builder.build(), hasItems(
-                new GeoCluster(4, new LatLong(37.099999999999994, -110.5100), new GeoBoundingBox(DENVER).extend(SAN_DIEGO).extend(LAS_VEGAS))));
+                new GeoCluster(4, new GeoPoint(37.099999999999994, -110.509999), new GeoBoundingBox(DENVER).extend(SAN_DIEGO).extend(LAS_VEGAS))));
     }
 
     @Test

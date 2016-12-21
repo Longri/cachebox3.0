@@ -1,15 +1,16 @@
 package de.longri.cachebox3.locator.geocluster;
 
-import de.longri.cachebox3.locator.LatLong;
+
 import org.junit.jupiter.api.Test;
+import org.oscim.core.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static de.longri.cachebox3.locator.geocluster.Places.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
-import static de.longri.cachebox3.locator.geocluster.Places.*;
 
 
 public class GeoClusterReducerTests {
@@ -64,7 +65,7 @@ public class GeoClusterReducerTests {
         clusters.add(new GeoCluster(LAS_VEGAS));
         assertThat("Cluster after adding Las Vegas", reducer.reduce(clusters), hasItems(
                 new GeoCluster(2, DENVER, new GeoBoundingBox(DENVER)),
-                new GeoCluster(2, new LatLong(34.4500, -116.1500), new GeoBoundingBox(SAN_DIEGO).extend(LAS_VEGAS))));
+                new GeoCluster(2, new GeoPoint(34.4500, -116.1500), new GeoBoundingBox(SAN_DIEGO).extend(LAS_VEGAS))));
     }
 
     @Test
@@ -84,10 +85,10 @@ public class GeoClusterReducerTests {
 
         clusters.add(new GeoCluster(SAN_DIEGO));
         assertThat("Cluster after adding San Diego", reducer.reduce(clusters), hasItems(
-                new GeoCluster(3, new LatLong(37.4400, -108.95666666666666), new GeoBoundingBox(DENVER).extend(SAN_DIEGO))));
+                new GeoCluster(3, new GeoPoint(37.4400, -108.95666666666666), new GeoBoundingBox(DENVER).extend(SAN_DIEGO))));
 
         clusters.add(new GeoCluster(LAS_VEGAS));
         assertThat("Cluster after adding Las Vegas", reducer.reduce(clusters), hasItems(
-                new GeoCluster(4, new LatLong(37.1000, -110.5100), new GeoBoundingBox(DENVER).extend(SAN_DIEGO).extend(LAS_VEGAS))));
+                new GeoCluster(4, new GeoPoint(37.1000, -110.5100), new GeoBoundingBox(DENVER).extend(SAN_DIEGO).extend(LAS_VEGAS))));
     }
 }

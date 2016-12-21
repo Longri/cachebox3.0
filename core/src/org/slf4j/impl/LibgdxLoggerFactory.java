@@ -75,6 +75,8 @@ public class LibgdxLoggerFactory implements ILoggerFactory {
 //        LibgdxLoggerFactory.INCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopCursor");
 
 
+        LibgdxLoggerFactory.INCLUDE_LIST.add("de.longri.cachebox3.gui.map.layer.WaypointLayer");
+
        // ((LibgdxLoggerFactory) LoggerFactory.getILoggerFactory()).reset();
     }
 
