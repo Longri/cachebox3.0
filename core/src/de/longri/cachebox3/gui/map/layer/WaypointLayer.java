@@ -26,7 +26,7 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
 import de.longri.cachebox3.gui.map.layer.cluster.ItemizedClusterLayer;
-import de.longri.cachebox3.locator.geocluster.FastGeoBoundingBoxContains;
+import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.GeoCluster;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -110,76 +109,6 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
     Thread clusterThread;
     ClusterRunnable clusterRunnable;
 
-    private class ClusterRunnable implements Runnable {
-
-        ClusterRunnable(double factor) {
-            this.factor = factor;
-        }
-
-        private final double factor;
-        private volatile boolean running = true;
-
-        public void terminate() {
-            running = false;
-        }
-
-        @Override
-        public void run() {
-
-            try {
-
-                final List<GeoCluster> workList;
-                if (factor < lastFactor) {
-                    workList = mAllItemList;
-                } else {
-                    workList = mItemList;
-                }
-
-                double maxDistance = this.factor * 5;
-                FastGeoBoundingBoxContains boundingBoxContains = new FastGeoBoundingBoxContains(maxDistance);
-                List<GeoCluster> reduced = new LinkedList<GeoCluster>();
-                reduced.addAll(workList);
-                REDUCE:
-                while (true) {
-                    for (int i = 0; i < reduced.size(); ++i) {
-                        for (int j = i + 1; j < reduced.size(); ++j) {
-
-                            Thread.sleep(0);
-                            if (!running) {
-                                log.debug("CANCEL clustering");
-                                return;
-                            }
-
-                            GeoCluster a = reduced.get(i);
-                            GeoCluster b = reduced.get(j);
-
-                            boundingBoxContains.setCenter(a.center());
-                            if (boundingBoxContains.contains(b.center())) {
-                                reduced.remove(a);
-                                reduced.remove(b);
-                                reduced.add(a.merge(b));
-                                continue REDUCE;
-                            }
-                        }
-                    }
-                    break;
-                }
-
-                if (!running) {
-                    log.debug("CANCEL clustering");
-                    return;
-                }
-
-                log.debug("Cluster Reduce from " + mItemList.size() + " items to " + reduced.size() + " items");
-                mItemList.clear();
-                mItemList.addAll(reduced);
-                WaypointLayer.this.populate();
-            } catch (InterruptedException e) {
-                running = false;
-            }
-        }
-    }
-
 
     private void reduceCluster(final double factor) {
 
@@ -201,8 +130,24 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
         log.debug("START GeoClustering factor:" + factor + " ZoomLevel:" + lastZoomLevel);
 
 
+        final List<GeoCluster> workList;
+        if (factor < lastFactor) {
+            workList = mAllItemList;
+        } else {
+            workList = mItemList;
+        }
+
+
         lastFactor = factor;
-        clusterRunnable = new ClusterRunnable(factor);
+        clusterRunnable = new ClusterRunnable(factor, workList, new ClusterRunnable.CallBack() {
+            @Override
+            public void callBack(List<GeoCluster> reduced) {
+                log.debug("Cluster Reduce from " + mItemList.size() + " items to " + reduced.size() + " items");
+                mItemList.clear();
+                mItemList.addAll(reduced);
+                WaypointLayer.this.populate();
+            }
+        });
         clusterThread = new Thread(clusterRunnable);
         clusterThread.start();
     }
