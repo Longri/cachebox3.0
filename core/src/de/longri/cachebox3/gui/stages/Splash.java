@@ -29,9 +29,10 @@ import com.kotcrab.vis.ui.widget.VisProgressBar;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.stages.initial_tasks.*;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
-import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ import java.util.ArrayList;
  * @author Longri
  */
 public class Splash extends NamedStage {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Splash.class);
+    final static Logger log = LoggerFactory.getLogger(Splash.class);
     private boolean threadStarted = false;
 
 

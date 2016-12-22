@@ -1,7 +1,8 @@
 package de.longri.cachebox3.settings;
 
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.sqlite.Database;
-import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 
@@ -9,7 +10,7 @@ import java.util.Iterator;
  * Created by Longri on 02.08.16.
  */
 public class Config extends Settings {
-    static final org.slf4j.Logger log = LoggerFactory.getLogger(Config.class);
+    static final Logger log = LoggerFactory.getLogger(Config.class);
 
     public static void AcceptChanges() {
         WriteToDB();

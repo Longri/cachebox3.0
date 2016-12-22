@@ -16,15 +16,16 @@
 package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
-import de.longri.cachebox3.sqlite.Database.Parameters;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.Database.Parameters;
 import de.longri.cachebox3.types.ImageEntry;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public class ImageDAO {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(ImageDAO.class);
+    final static Logger log = LoggerFactory.getLogger(ImageDAO.class);
 
     /**
      * @param image
@@ -45,7 +46,7 @@ public class ImageDAO {
                 Database.Data.insertWithConflictReplace("Images", args);
             }
         } catch (Exception exc) {
-            log.error( "Write Image", "", exc);
+            log.error("Write Image", exc);
         }
     }
 

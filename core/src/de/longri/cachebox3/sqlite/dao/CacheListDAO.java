@@ -21,10 +21,11 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.LongMap;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.lists.CB_List;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,7 +35,7 @@ import java.util.Iterator;
  * @author Longri
  */
 public class CacheListDAO {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheListDAO.class);
+    final static Logger log = LoggerFactory.getLogger(CacheListDAO.class);
 
     /**
      * !!! only exportBatch
@@ -278,7 +279,7 @@ public class CacheListDAO {
             Database.Data.GPXFilenameUpdateCacheCount();
             return ret;
         } catch (Exception e) {
-            log.error("CacheListDAO.DelArchiv()", "Archiv ERROR", e);
+            log.error("CacheListDAO.DelArchiv()", e);
             return -1;
         }
     }
@@ -297,7 +298,7 @@ public class CacheListDAO {
             Database.Data.GPXFilenameUpdateCacheCount(); // CoreSettingsForward.Categories will be set
             return ret;
         } catch (Exception e) {
-            log.error("CacheListDAO.DelFound()", "Found ERROR", e);
+            log.error("CacheListDAO.DelFound()", e);
             return -1;
         }
     }
@@ -317,7 +318,7 @@ public class CacheListDAO {
             Database.Data.GPXFilenameUpdateCacheCount(); // CoreSettingsForward.Categories will be set
             return ret;
         } catch (Exception e) {
-            log.error("CacheListDAO.DelFilter()", "Filter ERROR", e);
+            log.error("CacheListDAO.DelFilter()", e);
             return -1;
         }
     }

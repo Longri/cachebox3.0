@@ -1,8 +1,8 @@
 package de.longri.cachebox3.settings;
 
-import de.longri.cachebox3.CB;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.sqlite.Database;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 
 public class SettingsList extends ArrayList<SettingBase<?>> {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(SettingsList.class);
+    final static Logger log = LoggerFactory.getLogger(SettingsList.class);
 
     public static SettingsList that;
 
@@ -83,7 +83,7 @@ public class SettingsList extends ArrayList<SettingBase<?>> {
      */
     public boolean WriteToDB() {
 
-        Database settings= Database.Settings;
+        Database settings = Database.Settings;
         Database data = Database.Data;
 
         // Write into DB
@@ -138,7 +138,7 @@ public class SettingsList extends ArrayList<SettingBase<?>> {
 
     public void ReadFromDB() {
 
-        Database settings= Database.Settings;
+        Database settings = Database.Settings;
         Database data = Database.Data;
 
         SettingsDAO dao = new SettingsDAO();

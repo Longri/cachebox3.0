@@ -24,13 +24,14 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.IconNames;
-import org.slf4j.LoggerFactory;
 
 
 public class Action_Show_Quit extends AbstractAction {
-	final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Show_Quit.class);
+	final static Logger log = LoggerFactory.getLogger(Action_Show_Quit.class);
 
 	public Action_Show_Quit() {
 		super("quit", MenuID.AID_SHOW_QUIT);

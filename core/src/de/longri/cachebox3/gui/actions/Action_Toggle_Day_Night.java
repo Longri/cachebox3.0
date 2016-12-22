@@ -19,14 +19,15 @@ package de.longri.cachebox3.gui.actions;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.IconNames;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 16.08.16.
  */
 public class Action_Toggle_Day_Night extends AbstractAction {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Toggle_Day_Night.class);
+    final static Logger log = LoggerFactory.getLogger(Action_Toggle_Day_Night.class);
 
     public Action_Toggle_Day_Night() {
         super("DayNight", MenuID.AID_DAY_NIGHT);

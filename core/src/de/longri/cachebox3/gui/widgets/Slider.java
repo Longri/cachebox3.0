@@ -31,7 +31,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.settings.Config;
-import org.slf4j.impl.LibgdxLogger;
 
 /**
  * Created by Longri on 09.09.16.
@@ -87,8 +86,8 @@ public class Slider extends WidgetGroup {
 
     private void fillContent() {
 
-        logTextField = LibgdxLogger.getLogScrollPane(VisUI.getSkin().getFont("normal_font"), Color.WHITE);
-        content.addActor(logTextField);
+//        logTextField = LibgdxLogger.getLogScrollPane(VisUI.getSkin().getFont("normal_font"), Color.WHITE);
+//        content.addActor(logTextField);
     }
 
     String lastMemoryString;
@@ -139,7 +138,7 @@ public class Slider extends WidgetGroup {
         setSliderPos(getHeight() - nameWidgetHeight);
 
         //set size for Log text field
-        logTextField.setBounds(0, 0, getWidth(), getHeight() - (nameWidgetHeight + quickButtonMaxHeight));
+//        logTextField.setBounds(0, 0, getWidth(), getHeight() - (nameWidgetHeight + quickButtonMaxHeight));
 
         //call layout for set size direct
         layout();

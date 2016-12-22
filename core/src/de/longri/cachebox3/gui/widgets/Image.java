@@ -20,16 +20,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.building.utilities.Alignment;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.animations.AnimationBase;
 import de.longri.cachebox3.gui.animations.WorkAnimation;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.IconNames;
 import de.longri.cachebox3.utils.ImageLoader;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Longri
  */
 public class Image extends CB_View_Base {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Image.class);
+    final static Logger log = LoggerFactory.getLogger(Image.class);
     private AnimationBase Wait;
     private ImageLoader imageLoader;
 

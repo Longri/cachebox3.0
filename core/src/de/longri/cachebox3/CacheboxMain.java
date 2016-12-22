@@ -26,28 +26,25 @@ import com.badlogic.gdx.math.Matrix4;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import org.oscim.backend.GL;
 import org.oscim.map.Map;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
-import org.slf4j.LoggerFactory;
-import org.slf4j.impl.LibgdxLogger;
 
 import java.text.NumberFormat;
 
 import static org.oscim.backend.GLAdapter.gl;
-import static org.slf4j.impl.LibgdxLogger.DEFAULT_LOG_LEVEL_KEY;
 
 public class CacheboxMain extends ApplicationAdapter {
 
     static {
         Map.NEW_GESTURES = true;
-        System.setProperty(DEFAULT_LOG_LEVEL_KEY, CB.USED_LOG_LEVEL);
-        LibgdxLogger.init();
     }
 
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheboxMain.class);
+    final static Logger log = LoggerFactory.getLogger(CacheboxMain.class);
 
     Runtime runtime = Runtime.getRuntime();
     NumberFormat format = NumberFormat.getInstance();
@@ -189,7 +186,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void pause() {
-        log.debug("on pause", "close databases");
+        log.debug("close databases");
         //close databases
 //        if (Database.Data != null) Database.Data.Close();
 //        if (Database.Settings != null) Database.Settings.Close();

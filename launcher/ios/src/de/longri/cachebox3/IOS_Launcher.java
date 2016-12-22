@@ -15,8 +15,10 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
+import com.badlogic.gdx.backends.iosrobovm.IOSApplicationLogger;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GLAdapter;
 import org.oscim.gdx.GdxAssets;
@@ -26,10 +28,22 @@ import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.glkit.GLKViewDrawableMultisample;
 import org.robovm.apple.glkit.GLKViewDrawableStencilFormat;
 import org.robovm.apple.uikit.UIApplication;
+import org.robovm.apple.uikit.UIApplicationLaunchOptions;
 import org.robovm.apple.uikit.UIDevice;
 import org.robovm.apple.uikit.UIScreen;
 
 public class IOS_Launcher extends IOSApplication.Delegate {
+
+    @Override
+    public boolean didFinishLaunching(UIApplication application, UIApplicationLaunchOptions launchOptions) {
+        boolean retValue = super.didFinishLaunching(application, launchOptions);
+
+        Gdx.app.setApplicationLogger(new IOS_ApplicationLogger());
+
+        return retValue;
+    }
+
+
     @Override
     protected IOSApplication createApplication() {
 

@@ -18,20 +18,19 @@ package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.CreditsView;
-import de.longri.cachebox3.gui.views.DescriptionView;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.IconNames;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 16.08.16.
  */
 public class Action_Show_Credits extends Abstract_Action_ShowView {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Show_Credits.class);
+    final static Logger log = LoggerFactory.getLogger(Action_Show_Credits.class);
 
     public Action_Show_Credits() {
         super("Credits", MenuID.AID_SHOW_CREDITS);

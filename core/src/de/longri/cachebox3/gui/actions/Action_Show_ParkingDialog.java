@@ -23,7 +23,7 @@ import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.IconNames;
-import org.slf4j.LoggerFactory;
+import de.longri.cachebox3.logging.LoggerFactory;
 
 /**
  * Created by Longri on 14.09.2016.

@@ -17,12 +17,13 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.backend.canvas.Bitmap;
 import org.robovm.apple.avfoundation.AVCaptureDevice;
 import org.robovm.apple.avfoundation.AVCaptureTorchMode;
 import org.robovm.apple.avfoundation.AVMediaType;
 import org.robovm.apple.foundation.NSErrorException;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +33,7 @@ import java.io.InputStream;
  * Created by Longri on 17.07.16.
  */
 public class IOS_PlatformConnector extends PlatformConnector {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(IOS_PlatformConnector.class);
+    final static Logger log = LoggerFactory.getLogger(IOS_PlatformConnector.class);
 
     static {
         CB.platform = CB.Platform.IOS;

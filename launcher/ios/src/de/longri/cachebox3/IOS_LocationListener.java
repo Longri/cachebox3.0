@@ -17,18 +17,19 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import org.robovm.apple.corelocation.*;
 import org.robovm.apple.dispatch.DispatchQueue;
 import org.robovm.apple.foundation.Foundation;
 import org.robovm.apple.foundation.NSArray;
 import org.robovm.apple.foundation.NSError;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 26.07.2016.
  */
 public class IOS_LocationListener {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(IOS_LocationListener.class);
+    final static Logger log = LoggerFactory.getLogger(IOS_LocationListener.class);
     private static double ACCURACY = CLLocationAccuracy.Best;
     private static double DISTANCE_FILTER = 5;
     private static double HEADING_FILTER = 5;
@@ -107,7 +108,7 @@ public class IOS_LocationListener {
         public void didUpdateHeading(CLLocationManager manager, CLHeading newHeading) {
             if (newHeading.getHeadingAccuracy() > 0) {
                 float value = (float) newHeading.getTrueHeading();
-                log.debug("Set True heading:"+value);
+                log.debug("Set True heading:" + value);
                 de.longri.cachebox3.locator.Locator.setHeading(value,
                         Locator.CompassType.Magnetic);
             }

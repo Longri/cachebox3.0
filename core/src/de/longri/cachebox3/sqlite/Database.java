@@ -22,10 +22,11 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.types.CacheList;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Category;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,7 +36,7 @@ import java.util.Map.Entry;
 
 
 public class Database {
-    protected final org.slf4j.Logger log;
+    protected final Logger log;
     public static Database Data;
     public static Database FieldNotes;
     public static Database Settings;
@@ -438,7 +439,7 @@ public class Database {
                                 try {
                                     Database.Data.update("GpxFilenames", args, "Id=" + entry.getKey(), null);
                                 } catch (Exception exc) {
-                                    log.error("Database", "Update_CategoryId", exc);
+                                    log.error("Update_CategoryId", exc);
                                 }
                             }
                         }
@@ -530,7 +531,7 @@ public class Database {
 
                     setTransactionSuccessful();
                 } catch (Exception exc) {
-                    log.error("AlterDatabase", "", exc);
+                    log.error("AlterDatabase", exc);
                 } finally {
                     endTransaction();
                 }
@@ -580,7 +581,7 @@ public class Database {
                     }
                     setTransactionSuccessful();
                 } catch (Exception exc) {
-                    log.error("AlterDatabase", "", exc);
+                    log.error("AlterDatabase", exc);
                 } finally {
                     endTransaction();
                 }
@@ -599,7 +600,7 @@ public class Database {
                     }
                     setTransactionSuccessful();
                 } catch (Exception exc) {
-                    log.error("AlterDatabase", "", exc);
+                    log.error("AlterDatabase", exc);
                 } finally {
                     endTransaction();
                 }
@@ -885,19 +886,19 @@ public class Database {
     }
 
     public void beginTransaction() {
-       // log.trace("begin transaction");
+        // log.trace("begin transaction");
         if (myDB != null)
             myDB.setAutoCommit(false);
     }
 
     public void setTransactionSuccessful() {
-      //  log.trace("begin transaction");
+        //  log.trace("begin transaction");
         if (myDB != null)
             myDB.setTransactionSuccessful();
     }
 
     public void endTransaction() {
-       // log.trace("begin transaction");
+        // log.trace("begin transaction");
         if (myDB != null)
             myDB.endTransaction();
     }

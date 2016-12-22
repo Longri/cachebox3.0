@@ -21,14 +21,15 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.Settings_Activity;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.IconNames;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 16.08.16.
  */
 public class Action_Show_Settings extends AbstractAction {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Show_Settings.class);
+    final static Logger log = LoggerFactory.getLogger(Action_Show_Settings.class);
 
     public Action_Show_Settings() {
         super("settings", MenuID.AID_SHOW_SETTINGS);

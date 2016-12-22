@@ -21,11 +21,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.converter.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.oscim.backend.canvas.Bitmap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,7 +67,7 @@ public class Utils {
             return ninePatchDrawable;
 
         } catch (IOException e) {
-            log.error("get9PatchFromSvg", "IOE", e);
+            log.error("get9PatchFromSvg", e);
         }
         return null;
     }

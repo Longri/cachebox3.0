@@ -30,8 +30,8 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.ScaledSizes;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ import java.util.ArrayList;
  * Created by Longri on 20.07.2016.
  */
 public class SvgSkin extends Skin {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(SvgSkin.class);
+    final static de.longri.cachebox3.logging.Logger log = LoggerFactory.getLogger(SvgSkin.class);
 
     public final static String TMP_UI_ATLAS = "/user/temp/ui_tmp.atlas";
 

@@ -20,9 +20,10 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +32,7 @@ import java.io.IOException;
  * Created by Longri on 02.08.16.
  */
 public class InitialWorkPathTask extends AbstractInitTask {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(InitialWorkPathTask.class);
+    final static Logger log = LoggerFactory.getLogger(InitialWorkPathTask.class);
 
     public InitialWorkPathTask(String name, int percent) {
         super(name, percent);

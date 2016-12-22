@@ -25,8 +25,9 @@ import android.support.v4.app.ActivityCompat;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.backend.canvas.Bitmap;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +37,7 @@ import java.io.InputStream;
  * Created by Longri on 17.07.16.
  */
 public class AndroidPlatformConnector extends PlatformConnector {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(AndroidPlatformConnector.class);
+    final static Logger log = LoggerFactory.getLogger(AndroidPlatformConnector.class);
     private final AndroidApplication application;
 
     static {
@@ -117,7 +118,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
                     locationManager.addNmeaListener(locationListener);
                     locationManager.addGpsStatusListener(locationListener);
                 } catch (Exception e) {
-                    log.error("main.initialLocationManager()", "", e);
+                    log.error("main.initialLocationManager()", e);
                     e.printStackTrace();
                 }
             }
