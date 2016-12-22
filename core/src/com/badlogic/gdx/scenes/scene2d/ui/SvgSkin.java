@@ -214,9 +214,8 @@ public class SvgSkin extends Skin {
                         if (valueMap.name().equals(ScaledSvg.class.getName())) {
                             log.debug("read scaled SVG'S");
                             readScaledSvgs(json, ClassReflection.forName(valueMap.name()), valueMap);
-                        } else {
-                            readNamedObjects(json, ClassReflection.forName(valueMap.name()), valueMap);
                         }
+                            readNamedObjects(json, ClassReflection.forName(valueMap.name()), valueMap);
                     } catch (ReflectionException ex) {
                         throw new SerializationException(ex);
                     }
