@@ -7,13 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.gui.views.MapView;
-import org.slf4j.LoggerFactory;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 
 /**
  * Created by Hoepfner on 25.08.2016.
  */
 public class StageManager {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(StageManager.class);
+    final static Logger log = LoggerFactory.getLogger(StageManager.class);
     final static Array<NamedStage> stageList = new Array<NamedStage>(5);
     final static NamedStage toastStage = new NamedStage("toastStage");
 

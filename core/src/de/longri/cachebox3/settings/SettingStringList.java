@@ -15,81 +15,83 @@
  */
 package de.longri.cachebox3.settings;
 
-/** 
+import org.slf4j.Logger;
+
+/**
  * TODO document
- * @author Longri  2016
  *
+ * @author Longri  2016
  */
 public class SettingStringList extends SettingBase<String[]> {
-    final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SettingStringList.class);
+    final static Logger log = org.slf4j.LoggerFactory.getLogger(SettingStringList.class);
 
     public SettingStringList(String name, SettingCategory category, SettingMode modus, String[] defaultValue, SettingStoreType StoreType, SettingUsage usage) {
-	super(name, category, modus, StoreType, usage);
-	this.defaultValue = defaultValue;
+        super(name, category, modus, StoreType, usage);
+        this.defaultValue = defaultValue;
     }
 
     @Override
     public String toDBString() {
 
-	StringBuilder sb = new StringBuilder();
-	int idx = 0;
-	for (String str : value) {
-	    sb.append(str);
-	    if (idx++ < value.length - 1)
-		sb.append(SettingString.STRING_SPLITTER);
-	}
-	return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        int idx = 0;
+        for (String str : value) {
+            sb.append(str);
+            if (idx++ < value.length - 1)
+                sb.append(SettingString.STRING_SPLITTER);
+        }
+        return sb.toString();
     }
 
     @Override
     public boolean fromDBString(String dbString) {
-	try {
-	    value = dbString.split(SettingString.STRING_SPLITTER);
-	    return true;
-	} catch (Exception ex) {
-	    value = defaultValue;
-	    return false;
-	}
+        try {
+            value = dbString.split(SettingString.STRING_SPLITTER);
+            return true;
+        } catch (Exception ex) {
+            value = defaultValue;
+            return false;
+        }
     }
 
     @Override
     public SettingBase<String[]> copy() {
-	SettingBase<String[]> ret = new SettingStringList(this.name, this.category, this.mode, this.defaultValue, this.storeType, usage);
-	ret.value = this.value;
-	ret.lastValue = this.lastValue;
-	return ret;
+        SettingBase<String[]> ret = new SettingStringList(this.name, this.category, this.mode, this.defaultValue, this.storeType, usage);
+        ret.value = this.value;
+        ret.lastValue = this.lastValue;
+        return ret;
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (!(obj instanceof SettingStringList))
-	    return false;
+        if (!(obj instanceof SettingStringList))
+            return false;
 
-	SettingStringList inst = (SettingStringList) obj;
-	if (!(inst.name.equals(this.name)))
-	    return false;
-	if (this.value == null) {
-	    if (inst.value == null)
-		return true;
-	    return false;
-	}
-	if (!ifValueEquals(inst.value))
-	    return false;
+        SettingStringList inst = (SettingStringList) obj;
+        if (!(inst.name.equals(this.name)))
+            return false;
+        if (this.value == null) {
+            if (inst.value == null)
+                return true;
+            return false;
+        }
+        if (!ifValueEquals(inst.value))
+            return false;
 
-	return true;
+        return true;
     }
 
     @Override
     protected boolean ifValueEquals(String[] newValue) {
 
-	if (value.length != newValue.length)
-	    return false;
+        if (value.length != newValue.length)
+            return false;
 
-	for (int i = 0; i < value.length; i++) {
-	    if (!value[i].equals(newValue[i]))
-		return false;
-	}
+        for (int i = 0; i < value.length; i++) {
+            if (!value[i].equals(newValue[i]))
+                return false;
+        }
 
-	return true;
+        return true;
     }
 }

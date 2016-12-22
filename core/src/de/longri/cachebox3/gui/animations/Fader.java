@@ -15,10 +15,9 @@
  */
 package de.longri.cachebox3.gui.animations;
 
-import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.CacheboxMain;
-import org.slf4j.LoggerFactory;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 
 
 /**
@@ -28,7 +27,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Fader {
 
-	final static org.slf4j.Logger log = LoggerFactory.getLogger(Fader.class);
+	final static Logger log = LoggerFactory.getLogger(Fader.class);
 
 	/**
 	 * Default time to start the FadeOut Animation.<br>

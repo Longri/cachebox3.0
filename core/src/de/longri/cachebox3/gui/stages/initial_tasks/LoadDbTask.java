@@ -4,16 +4,17 @@ import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.FileList;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 28.08.16.
  */
 public class LoadDbTask extends AbstractInitTask {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(LoadDbTask.class);
+    final static Logger log = LoggerFactory.getLogger(LoadDbTask.class);
 
     public LoadDbTask(String name, int percent) {
         super(name, percent);
@@ -35,7 +36,7 @@ public class LoadDbTask extends AbstractInitTask {
                 try {
                     fileList = new FileList(CB.WorkPath, "DB3");
                 } catch (Exception ex) {
-                    log.error("slpash.Initial()", "search number of DB3 files", ex);
+                    log.error( "search number of DB3 files", ex);
                 }
                 if ((fileList.size > 1) && Config.MultiDBAsk.getValue()) {
                     selectDbDialog.execute();

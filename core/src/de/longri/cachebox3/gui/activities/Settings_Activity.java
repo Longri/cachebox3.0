@@ -42,16 +42,17 @@ import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.*;
 import de.longri.cachebox3.translation.Translation;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 24.08.2016.
  */
 public class Settings_Activity extends ActivityBase {
 
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Settings_Activity.class);
+    final static Logger log = LoggerFactory.getLogger(Settings_Activity.class);
     private static final boolean FORCE = true;
     private VisTextButton btnOk, btnCancel, btnMenu;
     private final SettingsActivityStyle style;

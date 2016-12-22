@@ -27,7 +27,8 @@ import com.badlogic.gdx.utils.*;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
-import org.slf4j.LoggerFactory;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.NONE;
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.SINGLE;
@@ -37,7 +38,7 @@ import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.SIN
  * Created by Longri on 12.08.2016.
  */
 public class ListView extends WidgetGroup {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(ListView.class);
+    final static Logger log = LoggerFactory.getLogger(ListView.class);
 
     private final static int OVERLOAD = 5;
 

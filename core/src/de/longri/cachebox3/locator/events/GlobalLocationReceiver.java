@@ -20,6 +20,8 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.locator.GPS;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
@@ -27,7 +29,6 @@ import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.CacheWithWP;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.SoundCache;
-import org.slf4j.LoggerFactory;
 
 /**
  * Empfängt alle Positions Änderungen und sortiert Liste oder spielt Sounds ab.
@@ -35,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * @author Longri
  */
 public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBackEvent {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(GlobalLocationReceiver.class);
+    final static Logger log = LoggerFactory.getLogger(GlobalLocationReceiver.class);
     public final static boolean DEBUG_POSITION = true;
 
     public final static String GPS_PROVIDER = "gps";
@@ -52,7 +53,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
         try {
             SoundCache.loadSounds();
         } catch (Exception e) {
-            log.error("GlobalLocationReceiver", "Load sound", e);
+            log.error("Load sound", e);
             e.printStackTrace();
         }
     }
@@ -93,7 +94,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
                             }
                         }
                     } catch (Exception e) {
-                        log.error("GlobalLocationReceiver", "Global.PlaySound(Approach.ogg)", e);
+                        log.error("Global.PlaySound(Approach.ogg)", e);
                         e.printStackTrace();
                     }
 
@@ -115,7 +116,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
                             initialResortAfterFirstFixCompleted = true;
                         }
                     } catch (Exception e) {
-                        log.error("GlobalLocationReceiver", "if (!initialResortAfterFirstFixCompleted && CB.LastValidPosition.Valid)", e);
+                        log.error("if (!initialResortAfterFirstFixCompleted && CB.LastValidPosition.Valid)", e);
                         e.printStackTrace();
                     }
 
@@ -176,7 +177,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
                             }
                         }
                     } catch (Exception e) {
-                        log.error("GlobalLocationReceiver", "Resort", e);
+                        log.error("Resort", e);
                         e.printStackTrace();
                     }
 
@@ -231,7 +232,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
 
             if (!initialFixSoundCompleted && Locator.isGPSprovided() && GPS.getFixedSats() > 3) {
 
-                log.debug( "Play Fix");
+                log.debug("Play Fix");
                 if (PlaySounds)
                     SoundCache.play(SoundCache.Sounds.GPS_fix);
                 initialFixSoundCompleted = true;
@@ -239,7 +240,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
 
             }
         } catch (Exception e) {
-            log.error("GlobalLocationReceiver", "Global.PlaySound(GPS_Fix.ogg)", e);
+            log.error("Global.PlaySound(GPS_Fix.ogg)", e);
             e.printStackTrace();
         }
 

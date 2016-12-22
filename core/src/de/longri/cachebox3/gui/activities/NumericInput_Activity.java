@@ -24,9 +24,10 @@ import com.kotcrab.vis.ui.widget.VisTextField;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.widgets.NumPad;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.exceptions.NotImplementedException;
-import org.slf4j.LoggerFactory;
 
 import static com.badlogic.gdx.Input.Keys.*;
 
@@ -34,7 +35,7 @@ import static com.badlogic.gdx.Input.Keys.*;
  * Created by Longri on 27.08.16.
  */
 public class NumericInput_Activity<T extends Number> extends ActivityBase {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(NumericInput_Activity.class);
+    final static Logger log = LoggerFactory.getLogger(NumericInput_Activity.class);
 
     private T value;
     private NumPad numPad;

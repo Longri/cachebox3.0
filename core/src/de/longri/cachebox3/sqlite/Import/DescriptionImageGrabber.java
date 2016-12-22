@@ -16,11 +16,12 @@
 package de.longri.cachebox3.sqlite.Import;
 
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.utils.Downloader;
 import de.longri.cachebox3.utils.lists.CB_List;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -29,7 +30,7 @@ import java.net.URL;
 import java.util.LinkedList;
 
 public class DescriptionImageGrabber {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(DescriptionImageGrabber.class);
+    final static Logger log = LoggerFactory.getLogger(DescriptionImageGrabber.class);
 
     public static class Segment {
         public int start;
@@ -139,7 +140,7 @@ public class DescriptionImageGrabber {
      */
     public static String ResolveImages(Cache Cache, String html, boolean suppressNonLocalMedia, LinkedList<String> NonLocalImages, LinkedList<String> NonLocalImagesUrl) {
         /*
-		 * NonLocalImages = new List<string>(); NonLocalImagesUrl = new List<string>();
+         * NonLocalImages = new List<string>(); NonLocalImagesUrl = new List<string>();
 		 */
 
         URI baseUri;

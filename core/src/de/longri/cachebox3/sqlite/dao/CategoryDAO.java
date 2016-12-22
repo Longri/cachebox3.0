@@ -16,11 +16,12 @@
 package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Database.Parameters;
 import de.longri.cachebox3.types.Category;
 import de.longri.cachebox3.types.GpxFilename;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -29,7 +30,7 @@ import java.util.Date;
 
 
 public class CategoryDAO {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(CategoryDAO.class);
+    final static Logger log = LoggerFactory.getLogger(CategoryDAO.class);
 
     public Category ReadFromCursor(SQLiteGdxDatabaseCursor reader) {
         Category result = new Category();
@@ -64,7 +65,7 @@ public class CategoryDAO {
         try {
             Database.Data.insert("Category", args);
         } catch (Exception exc) {
-            log.error("CreateNewCategory", filename, exc);
+            log.error(filename, exc);
         }
 
         long Category_ID = 0;
@@ -95,7 +96,7 @@ public class CategoryDAO {
         try {
             Database.Data.insert("GpxFilenames", args);
         } catch (Exception exc) {
-            log.error("CreateNewGpxFilename", filename, exc);
+            log.error(filename, exc);
         }
 
         long GPXFilename_ID = 0;
@@ -120,10 +121,9 @@ public class CategoryDAO {
         try {
             Database.Data.update("Category", args, "Id=" + String.valueOf(category.Id), null);
         } catch (Exception exc) {
-            log.error("SetPinned", "CategoryDAO", exc);
+            log.error("SetPinned", exc);
         }
     }
-
 
 
 //

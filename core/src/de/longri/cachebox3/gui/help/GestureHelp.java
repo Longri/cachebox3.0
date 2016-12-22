@@ -18,7 +18,6 @@ package de.longri.cachebox3.gui.help;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -36,16 +35,17 @@ import de.longri.cachebox3.gui.animations.actor_animations.GestureHelpAnimation;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CB_RectF;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 18.08.2016.
  */
 public class GestureHelp extends HelpWindow {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(GestureHelp.class);
+    final static Logger log = LoggerFactory.getLogger(GestureHelp.class);
 
     final Drawable buttonDrawable;
     final Sprite gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;

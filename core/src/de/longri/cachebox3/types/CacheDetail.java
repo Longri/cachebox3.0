@@ -29,7 +29,7 @@ import java.util.Locale;
 
 public class CacheDetail implements Serializable {
 	private static final long serialVersionUID = 2088367633865443637L;
-	// final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheDetail.class);
+	// final static Logger log = LoggerFactory.getLogger(CacheDetail.class);
 
 	/*
 	 * Public Member

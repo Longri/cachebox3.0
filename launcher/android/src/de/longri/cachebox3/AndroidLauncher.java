@@ -21,13 +21,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import de.longri.cachebox3.locator.Locator;
 import org.oscim.android.gl.AndroidGL;
-import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GLAdapter;
 import org.oscim.gdx.GdxAssets;
 import org.sqldroid.SQLDroidDriver;
@@ -52,6 +50,7 @@ public class AndroidLauncher extends AndroidApplication {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         // Don't change this LogLevel
         // Cachebox use the slf4j implematation for LibGdx as Log engine.
@@ -78,6 +77,8 @@ public class AndroidLauncher extends AndroidApplication {
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+
+        setApplicationLogger(new Android_ApplicationLogger());
     }
 
     protected void onStart() {

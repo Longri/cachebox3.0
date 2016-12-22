@@ -38,13 +38,14 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.FileList;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -55,7 +56,7 @@ import java.util.TimerTask;
  * Created by Longri on 29.08.2016.
  */
 public class SelectDB_Activity extends ActivityBase {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(SelectDB_Activity.class);
+    final static Logger log = LoggerFactory.getLogger(SelectDB_Activity.class);
 
     public interface IReturnListener {
         public void back();

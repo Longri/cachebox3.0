@@ -20,8 +20,9 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabase;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.sqlite.Database.Parameters;
-import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.Map.Entry;
@@ -30,13 +31,13 @@ import java.util.Map.Entry;
  * Created by Longri on 03.08.16.
  */
 public class RobovmDatabase implements SQLiteGdxDatabase {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(RobovmDatabase.class);
+    final static Logger log = LoggerFactory.getLogger(RobovmDatabase.class);
     private final FileHandle dbFileHandle;
 
     Connection myDB = null;
 
 
-    public RobovmDatabase(FileHandle dbFileHandle) throws ClassNotFoundException{
+    public RobovmDatabase(FileHandle dbFileHandle) throws ClassNotFoundException {
         this.dbFileHandle = dbFileHandle;
     }
 
@@ -67,7 +68,6 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
             e.printStackTrace();
         }
     }
-
 
 
     @Override

@@ -18,8 +18,9 @@ package de.longri.cachebox3.locator;
 import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.locator.events.GPS_FallBackEventList;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.UnitFormatter;
-import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
@@ -28,7 +29,7 @@ import java.util.Date;
  * @author Longri
  */
 public class Locator {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Locator.class);
+    final static Logger log = LoggerFactory.getLogger(Locator.class);
 
     /**
      * @author Longri
