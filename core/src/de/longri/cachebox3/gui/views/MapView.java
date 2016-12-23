@@ -177,21 +177,32 @@ public class MapView extends AbstractView {
         main.drawMap = true;
         mMap = new CacheboxMapAdapter() {
             @Override
-            public void onMapEvent(Event e, MapPosition mapPosition) {
+            public void onMapEvent(Event e, final MapPosition mapPosition) {
+
                 if (e == Map.MOVE_EVENT) {
-//                    log.debug("Map.MOVE_EVENT");
+                    log.debug("Map.MOVE_EVENT");
                     mapStateButton.setState(MapState.FREE);
                 } else if (e == Map.TILT_EVENT) {
-//                    log.debug("Map.TILT_EVENT");
+                    log.debug("Map.TILT_EVENT");
                     if (positionChangedHandler != null)
                         positionChangedHandler.tiltChangedFromMap(mapPosition.getTilt());
                 } else if (e == Map.ROTATE_EVENT) {
-//                    log.debug("Map.ROTATE_EVENT");
+                    log.debug("Map.ROTATE_EVENT");
                     if (positionChangedHandler != null)
                         positionChangedHandler.rotateChangedFromUser(mapPosition.getBearing());
                 } else if (e == Map.ANIM_START) {
-//                    log.debug("Map.SCALE_EVENT");
-                    wayPointLayer.setZoomLevel(mapPosition.getZoomLevel());
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            log.debug("Map.ANIM_START" + mapPosition);
+                            try {
+                                wayPointLayer.setZoomLevel(mapPosition.getZoomLevel());
+                            } catch (Exception e1) {
+                                log.error("error", e1);
+                            }
+                        }
+                    });
+
                 }
             }
         };

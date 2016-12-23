@@ -1,7 +1,8 @@
 package de.longri.cachebox3.locator.geocluster;
 
-import de.longri.cachebox3.gui.map.layer.WaypointLayer;
-import org.slf4j.LoggerFactory;
+
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class ClusterRunnable implements Runnable {
 
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(ClusterRunnable.class);
+    final static Logger log = LoggerFactory.getLogger(ClusterRunnable.class);
 
     protected final double factor;
     private final CallBack callBack;
@@ -22,10 +23,10 @@ public class ClusterRunnable implements Runnable {
         public void callBack(List<GeoCluster> reduced);
     }
 
-    public ClusterRunnable(double factor,final List<GeoCluster> workList, final CallBack callBack) {
+    public ClusterRunnable(double factor, final List<GeoCluster> workList, final CallBack callBack) {
         this.callBack = callBack;
         this.factor = factor;
-        this.workList=workList;
+        this.workList = workList;
     }
 
     public void terminate() {
@@ -35,31 +36,36 @@ public class ClusterRunnable implements Runnable {
     @Override
     public void run() {
 
+        log.debug("Runnable started");
+
         try {
             double maxDistance = this.factor * 5;
             FastGeoBoundingBoxContains boundingBoxContains = new FastGeoBoundingBoxContains(maxDistance);
             List<GeoCluster> reduced = new LinkedList<GeoCluster>();
             reduced.addAll(workList);
-            REDUCE:
-            while (true) {
+//            REDUCE:
+            while (running) {
                 for (int i = 0; i < reduced.size(); ++i) {
                     for (int j = i + 1; j < reduced.size(); ++j) {
 
-                        Thread.sleep(0);
-                        if (!running) {
-                            log.debug("CANCEL clustering");
-                            return;
-                        }
+//                        Thread.sleep(0);
+//                        if (!running) {
+//                            log.debug("CANCEL clustering");
+//                            return;
+//                        }
 
                         GeoCluster a = reduced.get(i);
                         GeoCluster b = reduced.get(j);
 
                         boundingBoxContains.setCenter(a.center());
                         if (boundingBoxContains.contains(b.center())) {
+
+                            log.debug("merge " + a + " and " + b);
+
                             reduced.remove(a);
                             reduced.remove(b);
                             reduced.add(a.merge(b));
-                            continue REDUCE;
+                           i=j=reduced.size();
                         }
                     }
                 }
@@ -71,9 +77,12 @@ public class ClusterRunnable implements Runnable {
                 return;
             }
 
+            log.debug("callback with reduced to " + reduced.size());
+
             callBack.callBack(reduced);
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             running = false;
+            log.error("Runnable exception", e);
         }
     }
 }

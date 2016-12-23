@@ -1,8 +1,11 @@
 package de.longri.cachebox3.logging;
 
+import de.longri.cachebox3.gui.stages.StageManager;
+
 import java.text.SimpleDateFormat;
 
 import static de.longri.cachebox3.logging.GdxLogger.*;
+import static de.longri.cachebox3.logging.LoggerFactory.EXCLUDE_LIST;
 
 /**
  * Created by Longri on 22.12.16.
@@ -22,13 +25,14 @@ public class LoggerSettings {
         DATE_FORMATTER = new SimpleDateFormat("HH:mm:ss.SSS");
 
 
-//        EXCLUDE_LIST.add("Database.CacheBox");
-//        EXCLUDE_LIST.add("Database.Settings");
-//        EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");
-//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-//        EXCLUDE_LIST.add(StageManager.class.getName());
-//        EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
-//        EXCLUDE_LIST.add("de.longri.cachebox3.locator.Locator");
+        EXCLUDE_LIST.add("Database.CacheBox");
+        EXCLUDE_LIST.add("Database.Settings");
+        EXCLUDE_LIST.add("de.longri.cachebox3.settings.Config");
+        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+        EXCLUDE_LIST.add(StageManager.class.getName());
+        EXCLUDE_LIST.add("com.badlogic.gdx.scenes.scene2d.ui.SvgSkin");
+        EXCLUDE_LIST.add("de.longri.cachebox3.locator.Locator");
+        EXCLUDE_LIST.add("de.longri.cachebox3.IOS_LocationListener");
 
 //        INCLUDE_LIST.add(StageManager.class.getName());
 //        INCLUDE_LIST.add(CacheListDAO.class.getName());

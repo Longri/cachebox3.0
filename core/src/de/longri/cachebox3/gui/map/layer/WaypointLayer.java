@@ -28,12 +28,13 @@ import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
 import de.longri.cachebox3.gui.map.layer.cluster.ItemizedClusterLayer;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.GeoCluster;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.map.Map;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ import java.util.List;
  * Created by Longri on 27.11.16.
  */
 public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements CacheListChangedEventListener, Disposable {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(WaypointLayer.class);
+    final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
     private static final ClusterSymbol defaultMarker = getClusterSymbol("myterie");
     protected final List<GeoCluster> mAllItemList = new ArrayList<GeoCluster>();
@@ -201,7 +202,13 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
     private int lastZoomLevel = -1;
 
     public void setZoomLevel(int zoomLevel) {
-        if (lastZoomLevel == zoomLevel) return;
+
+        log.debug("Set zoom level to " + zoomLevel);
+
+        if (lastZoomLevel == zoomLevel) {
+            log.debug("no zoom level changes");
+            return;
+        }
         lastZoomLevel = zoomLevel;
 
         double factor = 0.0;
@@ -213,6 +220,8 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
                 factor = 0.002;
             }
         }
+
+        log.debug("call reduce cluster with factor: " + factor);
         reduceCluster(factor);
 
     }
