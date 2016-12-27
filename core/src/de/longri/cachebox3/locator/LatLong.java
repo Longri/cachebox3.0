@@ -14,8 +14,6 @@
  */
 package de.longri.cachebox3.locator;
 
-import de.longri.cachebox3.locator.geocluster.GeoDistanceUnit;
-
 import java.io.Serializable;
 
 /**
@@ -24,7 +22,6 @@ import java.io.Serializable;
 public class LatLong implements Comparable<LatLong>, Serializable {
     private static final long serialVersionUID = 1L;
 
-    private static final double EARTH_RADIUS = 6371.01d;
 
     /**
      * The latitude coordinate of this LatLong in degrees.
@@ -112,58 +109,4 @@ public class LatLong implements Comparable<LatLong>, Serializable {
         return this.longitude;
     }
 
-    /**
-     * Computes the great circle distance between this GeoPoint instance and {point} argument.
-     *
-     * @param radius the radius of the sphere, e.g. the average radius for a spherical approximation of the figure of the Earth is
-     *               approximately 6371.01 kilometers.
-     * @return the distance, measured in the same unit as the radius argument.
-     */
-    public double distanceTo(LatLong point, double radius, GeoDistanceUnit unit) {
-        double radLat = Math.toRadians(latitude);
-        double radLon = Math.toRadians(longitude);
-        double pointRadLat = Math.toRadians(point.latitude);
-        double pointRadLon = Math.toRadians(point.longitude);
-
-        double rad = Math.sin(radLat) * Math.sin(pointRadLat) +
-                Math.cos(radLat) * Math.cos(pointRadLat) *
-                        Math.cos(radLon - pointRadLon);
-
-        // Valid result is in range -1.0..+1.0
-        rad = (rad < -1.0) ? -1.0 : (rad > 1.0) ? 1.0 : rad;
-
-        return unit.fromKm(Math.acos(rad) * radius);
-    }
-
-    /* Same as above, but we assume that we're referring to coordinates on planet earth. */
-    public double distanceTo(LatLong point, GeoDistanceUnit unit) {
-        return distanceTo(point, EARTH_RADIUS, unit);
-    }
-
-    /**
-     * Destination point given distance and bearing from start point
-     * <p>
-     * Given a start point, initial bearing, and distance, this will calculate the destination point and final bearing travelling along a (shortest distance) great circle arc.
-     *
-     * @param distance
-     * @param bearing
-     * @param unit
-     * @return
-     */
-    public LatLong offsetBy(double distance, double bearing, GeoDistanceUnit unit) {
-        double radLat = Math.toRadians(latitude);
-        double radLon = Math.toRadians(longitude);
-
-        double d = unit.toKm(distance) / EARTH_RADIUS;
-        double b = Math.toRadians(bearing);
-
-        double lat = Math.asin(Math.sin(radLat) * Math.cos(d) +
-                Math.cos(radLat) * Math.sin(d) * Math.cos(b));
-        double lon = radLon + Math.atan2(Math.sin(b) * Math.sin(d) * Math.cos(radLat),
-                Math.cos(d) - Math.sin(radLat) * Math.sin(lat));
-
-        lon = (lon + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
-
-        return new LatLong(Math.toDegrees(lat), Math.toDegrees(lon));
-    }
 }

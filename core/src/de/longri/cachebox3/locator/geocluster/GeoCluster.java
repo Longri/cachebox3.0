@@ -6,15 +6,13 @@ import de.longri.cachebox3.locator.LatLong;
 import org.oscim.core.GeoPoint;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class GeoCluster implements ClusterInterface {
 
     private int size;
     private GeoPoint center;
     private GeoBoundingBox bounds;
-    private List<GeoPoint> points = new LinkedList<GeoPoint>();
+    private ClusteredList points = new ClusteredList();
 
 
     protected ClusterSymbol mCluster;
@@ -24,30 +22,13 @@ public class GeoCluster implements ClusterInterface {
         this.size = 1;
         this.center = point;
         this.bounds = new GeoBoundingBox(point);
-        points.add(center);
-    }
 
-    public GeoCluster(GeoPoint point) {
-        this(1, point, new GeoBoundingBox(point));
-        points.add(point);
     }
 
     public GeoCluster(int size, GeoPoint center, GeoBoundingBox bounds) {
         this.size = size;
         this.center = center;
         this.bounds = bounds;
-    }
-
-
-//    public GeoCluster(GeoPoint geoPoint) {
-//        this.center = new GeoPoint(geoPoint.getLatitude(), geoPoint.getLongitude());
-//    }
-
-    public void add(GeoPoint point) {
-        ++size;
-        center = mean(center, size - 1, point, 1);
-        bounds = bounds.extend(point);
-        points.add(point);
     }
 
     public GeoCluster merge(GeoCluster that) {
@@ -64,10 +45,6 @@ public class GeoCluster implements ClusterInterface {
         double lat = (left.getLatitude() * leftWeight + right.getLatitude() * rightWeight) / (leftWeight + rightWeight);
         double lon = (left.getLongitude() * leftWeight + right.getLongitude() * rightWeight) / (leftWeight + rightWeight);
         return new GeoPoint(lat, lon);
-    }
-
-    public List<GeoPoint> getPoints() {
-        return points;
     }
 
     public int size() {
@@ -121,4 +98,31 @@ public class GeoCluster implements ClusterInterface {
         mCluster = Cluster;
     }
 
+    public void setDistanceBoundce(double distance) {
+
+
+        double halfDistance = distance / 2;
+        double bbDistance = Math.hypot(halfDistance, halfDistance);
+
+        GeoPoint leftTop = this.center.destinationPoint(bbDistance, 315);
+        GeoPoint rightBottom = this.center.destinationPoint(bbDistance, 135);
+
+        this.bounds = new GeoBoundingBox(leftTop, rightBottom);
+
+
+    }
+
+    public boolean contains(GeoCluster testCluster) {
+        return this.bounds.contains(testCluster.center);
+    }
+
+    public void addAll(ClusteredList list) {
+        for (GeoCluster cluster : list) {
+            this.merge(cluster);
+        }
+    }
+
+    public ClusteredList getClusters() {
+        return points;
+    }
 }

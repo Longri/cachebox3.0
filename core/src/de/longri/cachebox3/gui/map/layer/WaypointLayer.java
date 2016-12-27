@@ -27,6 +27,7 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
 import de.longri.cachebox3.gui.map.layer.cluster.ItemizedClusterLayer;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
+import de.longri.cachebox3.locator.geocluster.ClusteredList;
 import de.longri.cachebox3.locator.geocluster.GeoCluster;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
@@ -34,12 +35,14 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import org.oscim.backend.canvas.Bitmap;
+import org.oscim.core.MapPosition;
+import org.oscim.core.MercatorProjection;
+import org.oscim.core.Tile;
 import org.oscim.map.Map;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Longri on 27.11.16.
@@ -48,7 +51,7 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
     final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
     private static final ClusterSymbol defaultMarker = getClusterSymbol("myterie");
-    protected final List<GeoCluster> mAllItemList = new ArrayList<GeoCluster>();
+    protected final ClusteredList mAllItemList = new ClusteredList();
     private double lastFactor = 2.0;
 
     public WaypointLayer(Map map) {
@@ -99,7 +102,7 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
                     }
                     mItemList.addAll(mAllItemList);
                     WaypointLayer.this.populate();
-                    reduceCluster(0.0003);
+                    setZoomLevel(mMap.getMapPosition());
                 }
             }
         });
@@ -111,10 +114,10 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
     ClusterRunnable clusterRunnable;
 
 
-    private void reduceCluster(final double factor) {
+    private void reduceCluster(final double distance) {
 
-        if (lastFactor == factor) {
-            log.debug("GeoClustering  no factor changes");
+        if (lastFactor == distance) {
+            log.debug("GeoClustering  no distance changes");
             return;
         }
 
@@ -128,21 +131,21 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
         }
 
 
-        log.debug("START GeoClustering factor:" + factor + " ZoomLevel:" + lastZoomLevel);
+        log.debug("START GeoClustering distance:" + distance + " ZoomLevel:" + lastZoomLevel);
 
 
-        final List<GeoCluster> workList;
-        if (factor < lastFactor) {
+        final ClusteredList workList;
+        if (distance < lastFactor) {
             workList = mAllItemList;
         } else {
-            workList = mItemList;
+            workList = mAllItemList;
         }
 
 
-        lastFactor = factor;
-        clusterRunnable = new ClusterRunnable(factor, workList, new ClusterRunnable.CallBack() {
+        lastFactor = distance;
+        clusterRunnable = new ClusterRunnable(distance, workList, new ClusterRunnable.CallBack() {
             @Override
-            public void callBack(List<GeoCluster> reduced) {
+            public void callBack(ClusteredList reduced) {
                 log.debug("Cluster Reduce from " + mItemList.size() + " items to " + reduced.size() + " items");
                 mItemList.clear();
                 mItemList.addAll(reduced);
@@ -201,7 +204,9 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
 
     private int lastZoomLevel = -1;
 
-    public void setZoomLevel(int zoomLevel) {
+    public void setZoomLevel(MapPosition mapPos) {
+
+        int zoomLevel = mapPos.getZoomLevel();
 
         log.debug("Set zoom level to " + zoomLevel);
 
@@ -211,18 +216,10 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
         }
         lastZoomLevel = zoomLevel;
 
-        double factor = 0.0;
+        double groundResolution = (MercatorProjection.groundResolution(mapPos) * Tile.SIZE) / 10;
 
-        if (lastZoomLevel < 15) {
-            if (lastZoomLevel > 13) {
-                factor = 0.0008;
-            } else {
-                factor = 0.002;
-            }
-        }
-
-        log.debug("call reduce cluster with factor: " + factor);
-        reduceCluster(factor);
+        log.debug("call reduce cluster with distance: " + groundResolution);
+        reduceCluster(groundResolution);
 
     }
 }

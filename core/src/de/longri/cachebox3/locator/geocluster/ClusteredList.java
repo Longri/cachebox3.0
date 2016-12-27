@@ -1,40 +1,38 @@
 package de.longri.cachebox3.locator.geocluster;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 /**
  * Created by Longri on 25.12.16.
  */
-public class ClusterdList extends ArrayList<GeoCluster> {
+public class ClusteredList extends LinkedList<GeoCluster> {
 
 
     double lastDistance = -1;
 
 
-    public ClusterdList getClustertByDistancs(double distance) {
+    public void clusterByDistance(double distance) {
 
-        if (lastDistance == -1 || lastDistance > distance) {
-            return reduce(distance);
+        if (lastDistance == -1 || lastDistance < distance) {
+            lastDistance = distance;
+            reduce(distance);
         } else {
-            return expand(distance);
+            lastDistance = distance;
+            expand(distance);
         }
 
 
     }
 
-    private ClusterdList reduce(double distance) {
-
+    private void reduce(double distance) {
         int index = 0;
-
         while (index < this.size()) {
 
             GeoCluster cluster = this.get(index);
             cluster.setDistanceBoundce(distance);
 
-
             //search all cluster inside
-            ClusterdList inside = new ClusterdList();
+            ClusteredList inside = new ClusteredList();
 
             for (int i = index + 1; i < this.size(); i++) {
                 GeoCluster testCluster = this.get(i);
@@ -49,14 +47,19 @@ public class ClusterdList extends ArrayList<GeoCluster> {
             }
             index++;
         }
-
-        return this;
-
     }
 
-    private ClusterdList expand(double distance) {
-        return this;
+    private void expand(double distance) {
+        ClusteredList outsideList = new ClusteredList();
+        for (GeoCluster cluster : this) {
+            cluster.setDistanceBoundce(distance);
+            for (GeoCluster includedCluster : cluster.getClusters()) {
+
+                if (!cluster.contains(includedCluster)) {
+                    outsideList.add(includedCluster);
+                }
+            }
+        }
+        this.addAll(outsideList);
     }
-
-
 }

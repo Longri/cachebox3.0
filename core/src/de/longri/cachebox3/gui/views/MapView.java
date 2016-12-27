@@ -190,13 +190,13 @@ public class MapView extends AbstractView {
                     log.debug("Map.ROTATE_EVENT");
                     if (positionChangedHandler != null)
                         positionChangedHandler.rotateChangedFromUser(mapPosition.getBearing());
-                } else if (e == Map.ANIM_START) {
+                } else if (e == Map.ANIM_END) {
                     Gdx.app.postRunnable(new Runnable() {
                         @Override
                         public void run() {
                             log.debug("Map.ANIM_START" + mapPosition);
                             try {
-                                wayPointLayer.setZoomLevel(mapPosition.getZoomLevel());
+                                wayPointLayer.setZoomLevel(mapPosition);
                             } catch (Exception e1) {
                                 log.error("error", e1);
                             }
