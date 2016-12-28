@@ -329,8 +329,8 @@ public class CacheInfoList {
 
         int ListingCheckSum = (int) (Utils.sdbm(stringForListingCheckSum) + Utils.sdbm(recentOwnerLogString));
         info.ListingCheckSum = ListingCheckSum;
-        info.Latitude = cache.Latitude();
-        info.Longitude = cache.Longitude();
+        info.Latitude = cache.latitude;
+        info.Longitude = cache.longitude;
         info.Found = cache.isFound();
         info.favorite = cache.isFavorite();
         info.CorrectedCoordinates = cache.CorrectedCoordiantesOrMysterySolved();

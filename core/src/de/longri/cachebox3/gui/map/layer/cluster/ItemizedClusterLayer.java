@@ -21,6 +21,7 @@
  */
 package de.longri.cachebox3.gui.map.layer.cluster;
 
+import de.longri.cachebox3.locator.Coordinate;
 import org.oscim.core.Box;
 import org.oscim.core.GeoPoint;
 import org.oscim.core.Point;
@@ -36,14 +37,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ItemizedClusterLayer<Item extends ClusterInterface> extends ClusterLayer<Item>
+public class ItemizedClusterLayer<Item extends Coordinate> extends ClusterLayer<Item>
         implements GestureListener {
 
     static final Logger log = LoggerFactory.getLogger(ItemizedClusterLayer.class);
 
     protected final List<Item> mItemList;
     protected final Point mTmpPoint = new Point();
-    protected final GeoPoint mTmpGeoPoint = new GeoPoint(0, 0);
     protected OnItemGestureListener<Item> mOnItemGestureListener;
     protected int mDrawnItemsLimit = Integer.MAX_VALUE;
 
@@ -205,16 +205,16 @@ public class ItemizedClusterLayer<Item extends ClusterInterface> extends Cluster
         for (int i = 0; i < size; i++) {
             Item item = mItemList.get(i);
 
-            if (!box.contains((int) (item.getPoint().getLongitude() * 1000000.0D),
-                    (int) (item.getPoint().getLatitude() * 1000000.0D)))
+            if (!box.contains((int) (item.longitude * 1000000.0D),
+                    (int) (item.latitude * 1000000.0D)))
                 continue;
 
-            mapPosition.toScreenPoint(item.getPoint(), mTmpPoint);
+            mapPosition.toScreenPoint(new GeoPoint(item.latitude, item.longitude), mTmpPoint);
 
             float dx = (float) (mTmpPoint.x - eventX);
             float dy = (float) (mTmpPoint.y - eventY);
 
-            ClusterSymbol it = item.getCluster();
+            ClusterSymbol it = item.clustersymbol;
             if (it == null)
                 it = mClusterRenderer.mDefaultCluster;
 

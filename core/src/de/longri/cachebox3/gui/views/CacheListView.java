@@ -101,7 +101,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
                         // get coordinate from Cache or from Final Waypoint
                         Waypoint finalWp = cache.GetFinalWaypoint();
-                        Coordinate finalCoord = finalWp != null ? finalWp.Pos : cache.Pos;
+                        Coordinate finalCoord = finalWp != null ? finalWp : cache;
 
                         //calculate distance and bearing
                         float result[] = new float[4];

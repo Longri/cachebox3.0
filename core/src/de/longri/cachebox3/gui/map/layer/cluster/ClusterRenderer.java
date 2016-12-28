@@ -19,6 +19,7 @@
 package de.longri.cachebox3.gui.map.layer.cluster;
 
 
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
 import org.oscim.core.GeoPoint;
 import org.oscim.core.MercatorProjection;
@@ -39,7 +40,7 @@ public class ClusterRenderer extends BucketRenderer {
 
     private final SymbolBucket mSymbolLayer;
     private final float[] mBox = new float[8];
-    private final ClusterLayer<ClusterInterface> mClusterLayer;
+    private final ClusterLayer<Coordinate> mClusterLayer;
     private final Point mMapPoint = new Point();
 
     /**
@@ -55,7 +56,7 @@ public class ClusterRenderer extends BucketRenderer {
     private InternalItem[] mItems;
 
     static class InternalItem {
-        ClusterInterface item;
+        Coordinate item;
         boolean visible;
         boolean changes;
         float x, y;
@@ -68,7 +69,7 @@ public class ClusterRenderer extends BucketRenderer {
         }
     }
 
-    public ClusterRenderer(ClusterLayer<ClusterInterface> ClusterLayer, ClusterSymbol defaultSymbol) {
+    public ClusterRenderer(ClusterLayer<Coordinate> ClusterLayer, ClusterSymbol defaultSymbol) {
         mSymbolLayer = new SymbolBucket();
         mClusterLayer = ClusterLayer;
         mDefaultCluster = defaultSymbol;
@@ -160,7 +161,7 @@ public class ClusterRenderer extends BucketRenderer {
                 continue;
             }
 
-            ClusterSymbol cluster = it.item.getCluster();
+            ClusterSymbol cluster = it.item.clustersymbol;
             if (cluster == null)
                 cluster = mDefaultCluster;
 
@@ -191,7 +192,16 @@ public class ClusterRenderer extends BucketRenderer {
             it.item = mClusterLayer.createItem(i);
 
             /* pre-project points */
-            MercatorProjection.project(it.item.getPoint(), mMapPoint);
+            mMapPoint.x = (it.item.longitude + 180.0) / 360.0;
+
+            double sinLatitude = Math.sin(it.item.latitude * (Math.PI / 180.0));
+            mMapPoint.y = 0.5 - Math.log((1.0 + sinLatitude) / (1.0 - sinLatitude)) / (4.0 * Math.PI);
+
+
+
+
+
+
             it.px = mMapPoint.x;
             it.py = mMapPoint.y;
         }

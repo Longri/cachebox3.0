@@ -1,31 +1,31 @@
 package de.longri.cachebox3.locator.geocluster;
 
-import de.longri.cachebox3.gui.map.layer.cluster.ClusterInterface;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import org.oscim.core.GeoPoint;
 
 import java.util.Arrays;
 
-public class GeoCluster implements ClusterInterface {
+public class GeoCluster extends Coordinate {
 
     private int size;
     private GeoPoint center;
     private GeoBoundingBox bounds;
-    private ClusteredList points = new ClusteredList();
+    private ClusteredList includedClusters = new ClusteredList();
 
 
     protected ClusterSymbol mCluster;
 
-    public GeoCluster(LatLong pos) {
-        GeoPoint point = new GeoPoint(pos.getLatitude(), pos.getLongitude());
+    public GeoCluster(Coordinate pos) {
+        super(pos.getLatitude(), pos.getLongitude());
         this.size = 1;
-        this.center = point;
-        this.bounds = new GeoBoundingBox(point);
+        this.center = new GeoPoint(pos.latitude, pos.longitude);
+        this.bounds = new GeoBoundingBox(this.center);
 
     }
 
     public GeoCluster(int size, GeoPoint center, GeoBoundingBox bounds) {
+        super(center.getLatitude(), center.getLongitude());
         this.size = size;
         this.center = center;
         this.bounds = bounds;
@@ -36,8 +36,8 @@ public class GeoCluster implements ClusterInterface {
         GeoPoint center = mean(this.center, size - that.size(), that.center(), that.size());
         GeoBoundingBox bounds = this.bounds.extend(that.bounds());
         GeoCluster cluster = new GeoCluster(size, center, bounds);
-        cluster.points.addAll(points);
-        cluster.points.addAll(that.points);
+        cluster.includedClusters.addAll(includedClusters);
+        cluster.includedClusters.addAll(that.includedClusters);
         return cluster;
     }
 
@@ -83,16 +83,6 @@ public class GeoCluster implements ClusterInterface {
         return String.format("%s (%d)", center.toString(), size);
     }
 
-    @Override
-    public GeoPoint getPoint() {
-        return center;
-    }
-
-    @Override
-    public ClusterSymbol getCluster() {
-        return mCluster;
-    }
-
 
     public void setCluster(ClusterSymbol Cluster) {
         mCluster = Cluster;
@@ -123,6 +113,6 @@ public class GeoCluster implements ClusterInterface {
     }
 
     public ClusteredList getClusters() {
-        return points;
+        return includedClusters;
     }
 }

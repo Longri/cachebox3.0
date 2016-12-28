@@ -69,11 +69,10 @@ public class CacheDAO {
     Cache ReadFromCursor(SQLiteGdxDatabaseCursor reader, boolean fullDetails, boolean withDescription) {
 
         try {
-            Cache cache = new Cache(fullDetails);
+            Cache cache = new Cache(reader.getDouble(2), reader.getDouble(3),fullDetails);
 
             cache.Id = reader.getLong(0);
             cache.setGcCode(reader.getString(1).trim());
-            cache.Pos = new Coordinate(reader.getDouble(2), reader.getDouble(3));
             cache.setName(reader.getString(4).trim());
             cache.Size = CacheSizes.parseInt(reader.getInt(5));
             cache.setDifficulty(((float) reader.getShort(6)) / 2);
@@ -196,8 +195,8 @@ public class CacheDAO {
         Database.Parameters args = new Database.Parameters();
         args.put("Id", cache.Id);
         args.put("GcCode", cache.getGcCode());
-        args.put("Latitude", cache.Pos.getLatitude());
-        args.put("Longitude", cache.Pos.getLongitude());
+        args.put("Latitude", cache.latitude);
+        args.put("Longitude", cache.longitude);
         args.put("Name", cache.getName());
         try {
             args.put("Size", cache.Size.ordinal());
@@ -288,10 +287,10 @@ public class CacheDAO {
         args.put("Id", cache.Id);
         args.put("GcCode", cache.getGcCode());
         args.put("GcId", cache.getGcId());
-        if (cache.Pos.isValid() && !cache.Pos.isZero()) {
+        if (cache.isValid() && !cache.isZero()) {
             // Update Cache position only when new position is valid and not zero
-            args.put("Latitude", cache.Pos.getLatitude());
-            args.put("Longitude", cache.Pos.getLongitude());
+            args.put("Latitude", cache.latitude);
+            args.put("Longitude", cache.longitude);
         }
         args.put("Name", cache.getName());
         try {

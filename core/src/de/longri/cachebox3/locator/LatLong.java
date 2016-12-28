@@ -19,7 +19,7 @@ import java.io.Serializable;
 /**
  * A LatLong represents an immutable pair of latitude and longitude coordinates.
  */
-public class LatLong implements Comparable<LatLong>, Serializable {
+public class LatLong implements  Serializable {
     private static final long serialVersionUID = 1L;
 
 
@@ -39,19 +39,6 @@ public class LatLong implements Comparable<LatLong>, Serializable {
         this.longitude = longitude;
     }
 
-    @Override
-    public int compareTo(LatLong latLong) {
-        if (this.longitude > latLong.longitude) {
-            return 1;
-        } else if (this.longitude < latLong.longitude) {
-            return -1;
-        } else if (this.latitude > latLong.latitude) {
-            return 1;
-        } else if (this.latitude < latLong.latitude) {
-            return -1;
-        }
-        return 0;
-    }
 
     /**
      * Returns the approximate distance in degrees between this location and the

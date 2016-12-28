@@ -294,9 +294,9 @@ public class CB {
         Coordinate ret = null;
 
         if (selectedWaypoint != null) {
-            ret = selectedWaypoint.Pos;
+            ret = selectedWaypoint;
         } else if (selectedCache != null) {
-            ret = selectedCache.Pos;
+            ret = selectedCache;
         }
 
         return ret;

@@ -23,6 +23,7 @@
  */
 package de.longri.cachebox3.gui.map.layer.cluster;
 
+import de.longri.cachebox3.locator.Coordinate;
 import org.oscim.core.Point;
 import org.oscim.layers.Layer;
 import org.oscim.layers.marker.MarkerInterface;
@@ -34,7 +35,7 @@ import org.oscim.map.Map;
  * gets checked for onTap first. This class is generic, because you then you get
  * your custom item-class passed back in onTap(). << TODO
  */
-public abstract class ClusterLayer<Item extends ClusterInterface> extends Layer {
+public abstract class ClusterLayer<Item extends Coordinate> extends Layer {
 
     protected final ClusterRenderer mClusterRenderer;
     protected Item mFocusedItem;
@@ -54,7 +55,7 @@ public abstract class ClusterLayer<Item extends ClusterInterface> extends Layer 
     public ClusterLayer(Map map, ClusterSymbol defaultSymbol) {
         super(map);
 
-        mClusterRenderer = new ClusterRenderer((ClusterLayer<ClusterInterface>) this, defaultSymbol);
+        mClusterRenderer = new ClusterRenderer((ClusterLayer<Coordinate>) this, defaultSymbol);
         mRenderer = mClusterRenderer;
     }
 

@@ -26,6 +26,7 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
 import de.longri.cachebox3.gui.map.layer.cluster.ItemizedClusterLayer;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.ClusteredList;
 import de.longri.cachebox3.locator.geocluster.GeoCluster;
@@ -47,7 +48,7 @@ import java.util.HashMap;
 /**
  * Created by Longri on 27.11.16.
  */
-public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements CacheListChangedEventListener, Disposable {
+public class WaypointLayer extends ItemizedClusterLayer<Coordinate> implements CacheListChangedEventListener, Disposable {
     final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
     private static final ClusterSymbol defaultMarker = getClusterSymbol("myterie");
@@ -55,7 +56,7 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
     private double lastFactor = 2.0;
 
     public WaypointLayer(Map map) {
-        super(map, new ArrayList<GeoCluster>(), defaultMarker, null);
+        super(map, new ArrayList<Coordinate>(), defaultMarker, null);
         mOnItemGestureListener = gestureListener;
 
         //register as cacheListChanged eventListener
@@ -63,14 +64,14 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
         CacheListChangedEvent();
     }
 
-    private final OnItemGestureListener<GeoCluster> gestureListener = new OnItemGestureListener<GeoCluster>() {
+    private final OnItemGestureListener<Coordinate> gestureListener = new OnItemGestureListener<Coordinate>() {
         @Override
-        public boolean onItemSingleTapUp(int index, GeoCluster item) {
+        public boolean onItemSingleTapUp(int index, Coordinate item) {
             return false;
         }
 
         @Override
-        public boolean onItemLongPress(int index, GeoCluster item) {
+        public boolean onItemLongPress(int index, Coordinate item) {
             return false;
         }
     };
@@ -95,8 +96,7 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
 
                     //add WayPoint items
                     for (Cache cache : Database.Data.Query) {
-                        double lat = cache.Latitude(), lon = cache.Longitude();
-                        GeoCluster geoCluster = new GeoCluster(cache.Pos);
+                        GeoCluster geoCluster = new GeoCluster(cache);
                         geoCluster.setCluster(getClusterSymbolByCache(cache));
                         mAllItemList.add(geoCluster);
                     }

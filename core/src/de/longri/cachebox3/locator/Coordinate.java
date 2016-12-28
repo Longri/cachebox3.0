@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
+import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.MathUtils.CalculationType;
 import de.longri.cachebox3.utils.converter.UTMConvert;
@@ -29,6 +30,8 @@ public class Coordinate extends LatLong implements Serializable {
 	static final String br = System.getProperty("line.separator");
 
 	protected boolean valid;
+
+	public ClusterSymbol clustersymbol;
 
 	private static final float[] mResults = new float[2];
 

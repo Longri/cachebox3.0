@@ -46,8 +46,8 @@ public class WaypointDAO {
         Parameters args = new Parameters();
         args.put("gccode", WP.getGcCode());
         args.put("cacheid", WP.CacheId);
-        args.put("latitude", WP.Pos.getLatitude());
-        args.put("longitude", WP.Pos.getLongitude());
+        args.put("latitude", WP.latitude);
+        args.put("longitude", WP.longitude);
         args.put("description", WP.getDescription());
         args.put("type", WP.Type.ordinal());
         args.put("syncexclude", WP.IsSyncExcluded);
@@ -90,8 +90,8 @@ public class WaypointDAO {
             Parameters args = new Parameters();
             args.put("gccode", WP.getGcCode());
             args.put("cacheid", WP.CacheId);
-            args.put("latitude", WP.Pos.getLatitude());
-            args.put("longitude", WP.Pos.getLongitude());
+            args.put("latitude", WP.latitude);
+            args.put("longitude", WP.longitude);
             args.put("description", WP.getDescription());
             args.put("type", WP.Type.ordinal());
             args.put("syncexclude", WP.IsSyncExcluded);
@@ -133,13 +133,10 @@ public class WaypointDAO {
     public Waypoint getWaypoint(SQLiteGdxDatabaseCursor reader, boolean full) {
         Waypoint WP = null;
 
-        WP = new Waypoint(full);
+        WP = new Waypoint(reader.getDouble(2),reader.getDouble(3),full);
 
         WP.setGcCode(reader.getString(0));
         WP.CacheId = reader.getLong(1);
-        double latitude = reader.getDouble(2);
-        double longitude = reader.getDouble(3);
-        WP.Pos = new Coordinate(latitude, longitude);
         WP.Type = CacheTypes.values()[reader.getShort(4)];
         WP.IsSyncExcluded = reader.getInt(5) == 1;
         WP.IsUserWaypoint = reader.getInt(6) == 1;
@@ -157,8 +154,8 @@ public class WaypointDAO {
     private int createCheckSum(Waypoint WP) {
         // for Replication
         String sCheckSum = WP.getGcCode();
-        sCheckSum += UnitFormatter.FormatLatitudeDM(WP.Pos.getLatitude());
-        sCheckSum += UnitFormatter.FormatLongitudeDM(WP.Pos.getLongitude());
+        sCheckSum += UnitFormatter.FormatLatitudeDM(WP.latitude);
+        sCheckSum += UnitFormatter.FormatLongitudeDM(WP.longitude);
         sCheckSum += WP.getDescription();
         sCheckSum += WP.Type.ordinal();
         sCheckSum += WP.getClue();
@@ -172,8 +169,8 @@ public class WaypointDAO {
         Parameters args = new Parameters();
         args.put("gccode", WP.getGcCode());
         args.put("cacheid", WP.CacheId);
-        args.put("latitude", WP.Pos.getLatitude());
-        args.put("longitude", WP.Pos.getLongitude());
+        args.put("latitude", WP.latitude);
+        args.put("longitude", WP.longitude);
         args.put("description", WP.getDescription());
         args.put("type", WP.Type.ordinal());
         args.put("syncexclude", WP.IsSyncExcluded);

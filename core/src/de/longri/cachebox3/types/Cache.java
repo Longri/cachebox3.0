@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-public class Cache implements Comparable<Cache>, Serializable {
+public class Cache extends Coordinate implements Comparable<Cache>, Serializable {
     private static final long serialVersionUID = 1015307624242318838L;
     // ########################################################
     // Boolean Handling
@@ -120,10 +120,10 @@ public class Cache implements Comparable<Cache>, Serializable {
      * Id des Caches in der Datenbank von geocaching.com
      */
     public long Id;
-    /**
-     * Die Coordinate, an der der Cache liegt.
-     */
-    public Coordinate Pos = new Coordinate(0, 0);
+//    /**
+//     * Die Coordinate, an der der Cache liegt.
+//     */
+//    public Coordinate Pos = new Coordinate(0, 0);
 
     /**
      * Durchschnittliche Bewertung des Caches von GcVote
@@ -171,7 +171,8 @@ public class Cache implements Comparable<Cache>, Serializable {
     /**
      * Constructor
      */
-    public Cache(boolean withDetails) {
+    public Cache(double lat, double lon, boolean withDetails) {
+        super(lat, lon);
         this.NumTravelbugs = 0;
         this.setDifficulty(0);
         this.setTerrain(0);
@@ -187,7 +188,7 @@ public class Cache implements Comparable<Cache>, Serializable {
      * Constructor
      */
     public Cache(double Latitude, double Longitude, String Name, CacheTypes type, String GcCode) {
-        this.Pos = new Coordinate(Latitude, Longitude);
+        super(Latitude, Longitude);
         this.setName(Name);
         this.Type = type;
         this.setGcCode(GcCode);
@@ -201,19 +202,6 @@ public class Cache implements Comparable<Cache>, Serializable {
 
     }
 
-    /**
-     * Breitengrad
-     */
-    public double Latitude() {
-        return Pos.getLatitude();
-    }
-
-    /**
-     * Längengrad
-     */
-    public double Longitude() {
-        return Pos.getLongitude();
-    }
 
     /**
      * Delete Detail Information to save memory
@@ -322,7 +310,7 @@ public class Cache implements Comparable<Cache>, Serializable {
         for (int i = 0, n = waypoints.size(); i < n; i++) {
             Waypoint wp = waypoints.get(i);
             if (wp.Type == CacheTypes.Final) {
-                if (!(wp.Pos.getLatitude() == 0 && wp.Pos.getLongitude() == 0))
+                if (!(wp.latitude == 0 && wp.longitude == 0))
                     x = true;
             }
         }
@@ -350,7 +338,7 @@ public class Cache implements Comparable<Cache>, Serializable {
             Waypoint wp = waypoints.get(i);
             if (wp.Type == CacheTypes.Final) {
                 // do not activate final waypoint with invalid coordinates
-                if (!wp.Pos.isValid() || wp.Pos.isZero())
+                if (!wp.isValid() || wp.isZero())
                     continue;
                 return wp;
             }
@@ -449,12 +437,12 @@ public class Cache implements Comparable<Cache>, Serializable {
         // Diszanzberechnung vom Final aus gemacht werden
         // If a mystery has a final waypoint, the distance will be calculated to
         // the final not the the cache coordinates
-        Coordinate toPos = Pos;
+        Coordinate toPos = this;
         if (waypoint != null) {
-            toPos = new Coordinate(waypoint.Pos.getLatitude(), waypoint.Pos.getLongitude());
+            toPos = new Coordinate(waypoint.latitude, waypoint.longitude);
             // nur sinnvolles Final, sonst vom Cache
-            if (waypoint.Pos.getLatitude() == 0 && waypoint.Pos.getLongitude() == 0)
-                toPos = Pos;
+            if (waypoint.latitude == 0 && waypoint.longitude == 0)
+                toPos = this;
         }
         float[] dist = new float[4];
         MathUtils.computeDistanceAndBearing(type, fromPos.getLatitude(), fromPos.getLongitude(), toPos.getLatitude(), toPos.getLongitude(), dist);
@@ -463,7 +451,7 @@ public class Cache implements Comparable<Cache>, Serializable {
     }
 
 	/*
-	 * Overrides
+     * Overrides
 	 */
 
     @Override
@@ -505,61 +493,61 @@ public class Cache implements Comparable<Cache>, Serializable {
         return null;
     }
 
-    // copy all Informations from cache into this
-    // this is used after actualization of cache with API
-    public void copyFrom(Cache cache) {
-        // this.MapX = cache.MapX;
-        // this.MapY = cache.MapY;
-        this.Name = cache.Name;
-        this.Pos = cache.Pos;
-        this.Rating = cache.Rating;
-        this.Size = cache.Size;
-        this.setDifficulty(cache.getDifficulty());
-        this.setTerrain(cache.getTerrain());
-        this.setArchived(cache.isArchived());
-        this.setAvailable(cache.isAvailable());
-        // this.favorite = false;
-        // this.noteCheckSum = 0;
-        // this.solverCheckSum = 0;
-        // this.hasUserData = false;
-        // this.CorrectedCoordinates = false;
-        // only change the found status when it is true in the loaded cache
-        // This will prevent ACB from overriding a found cache which is still not found in GC
-        if (cache.isFound())
-            this.setFound(cache.isFound());
-        // this.TourName = "";
-        // this.GPXFilename_ID = 0;
-        this.Type = cache.Type;
-        // this.PlacedBy = cache.PlacedBy;
-        this.Owner = cache.Owner;
-        // this.listingChanged = true; // so that spoiler download will be done again
-        this.NumTravelbugs = cache.NumTravelbugs;
-        // this.cachedDistance = 0;
-        // do not copy waypoints List directly because actual user defined Waypoints would be deleted
-        // this.waypoints = new ArrayList<Waypoint>();
-
-        for (int i = 0, n = cache.waypoints.size(); i < n; i++) {
-            Waypoint newWaypoint = cache.waypoints.get(i);
-
-            Waypoint aktWaypoint = this.findWaypointByGc(newWaypoint.getGcCode());
-            if (aktWaypoint == null) {
-                // this waypoint is new -> Add to list
-                this.waypoints.add(newWaypoint);
-            } else {
-                // this waypoint is already in our list -> Copy Informations
-                aktWaypoint.setDescription(newWaypoint.getDescription());
-                aktWaypoint.Pos = newWaypoint.Pos;
-                aktWaypoint.setTitle(newWaypoint.getTitle());
-                aktWaypoint.Type = newWaypoint.Type;
-            }
-        }
-        // this.spoilerRessources = null;
-        // copy Detail Information
-        this.detail = cache.detail;
-        this.myCache = cache.myCache;
-        // this.gcLogin = null;
-
-    }
+//    // copy all Informations from cache into this
+//    // this is used after actualization of cache with API
+//    public void copyFrom(Cache cache) {
+//        // this.MapX = cache.MapX;
+//        // this.MapY = cache.MapY;
+//        this.Name = cache.Name;
+//        this.Pos = cache.Pos;
+//        this.Rating = cache.Rating;
+//        this.Size = cache.Size;
+//        this.setDifficulty(cache.getDifficulty());
+//        this.setTerrain(cache.getTerrain());
+//        this.setArchived(cache.isArchived());
+//        this.setAvailable(cache.isAvailable());
+//        // this.favorite = false;
+//        // this.noteCheckSum = 0;
+//        // this.solverCheckSum = 0;
+//        // this.hasUserData = false;
+//        // this.CorrectedCoordinates = false;
+//        // only change the found status when it is true in the loaded cache
+//        // This will prevent ACB from overriding a found cache which is still not found in GC
+//        if (cache.isFound())
+//            this.setFound(cache.isFound());
+//        // this.TourName = "";
+//        // this.GPXFilename_ID = 0;
+//        this.Type = cache.Type;
+//        // this.PlacedBy = cache.PlacedBy;
+//        this.Owner = cache.Owner;
+//        // this.listingChanged = true; // so that spoiler download will be done again
+//        this.NumTravelbugs = cache.NumTravelbugs;
+//        // this.cachedDistance = 0;
+//        // do not copy waypoints List directly because actual user defined Waypoints would be deleted
+//        // this.waypoints = new ArrayList<Waypoint>();
+//
+//        for (int i = 0, n = cache.waypoints.size(); i < n; i++) {
+//            Waypoint newWaypoint = cache.waypoints.get(i);
+//
+//            Waypoint aktWaypoint = this.findWaypointByGc(newWaypoint.getGcCode());
+//            if (aktWaypoint == null) {
+//                // this waypoint is new -> Add to list
+//                this.waypoints.add(newWaypoint);
+//            } else {
+//                // this waypoint is already in our list -> Copy Informations
+//                aktWaypoint.setDescription(newWaypoint.getDescription());
+//                aktWaypoint.Pos = newWaypoint.Pos;
+//                aktWaypoint.setTitle(newWaypoint.getTitle());
+//                aktWaypoint.Type = newWaypoint.Type;
+//            }
+//        }
+//        // this.spoilerRessources = null;
+//        // copy Detail Information
+//        this.detail = cache.detail;
+//        this.myCache = cache.myCache;
+//        // this.gcLogin = null;
+//
+//    }
 
     @Override
     public String toString() {
@@ -575,7 +563,6 @@ public class Cache implements Comparable<Cache>, Serializable {
 
         GcCode = null;
         Name = null;
-        Pos = null;
         Size = null;
         Type = null;
         Owner = null;
