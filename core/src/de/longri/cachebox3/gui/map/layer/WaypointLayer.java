@@ -35,6 +35,7 @@ import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.utils.lists.CB_List;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.MapPosition;
 import org.oscim.core.MercatorProjection;
@@ -48,7 +49,7 @@ import java.util.HashMap;
 /**
  * Created by Longri on 27.11.16.
  */
-public class WaypointLayer extends ItemizedClusterLayer<Coordinate> implements CacheListChangedEventListener, Disposable {
+public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements CacheListChangedEventListener, Disposable {
     final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
     private static final ClusterSymbol defaultMarker = getClusterSymbol("myterie");
@@ -56,7 +57,7 @@ public class WaypointLayer extends ItemizedClusterLayer<Coordinate> implements C
     private double lastFactor = 2.0;
 
     public WaypointLayer(Map map) {
-        super(map, new ArrayList<Coordinate>(), defaultMarker, null);
+        super(map, new CB_List<GeoCluster>(), defaultMarker, null);
         mOnItemGestureListener = gestureListener;
 
         //register as cacheListChanged eventListener
@@ -64,14 +65,14 @@ public class WaypointLayer extends ItemizedClusterLayer<Coordinate> implements C
         CacheListChangedEvent();
     }
 
-    private final OnItemGestureListener<Coordinate> gestureListener = new OnItemGestureListener<Coordinate>() {
+    private final OnItemGestureListener<GeoCluster> gestureListener = new OnItemGestureListener<GeoCluster>() {
         @Override
-        public boolean onItemSingleTapUp(int index, Coordinate item) {
+        public boolean onItemSingleTapUp(int index, GeoCluster item) {
             return false;
         }
 
         @Override
-        public boolean onItemLongPress(int index, Coordinate item) {
+        public boolean onItemLongPress(int index, GeoCluster item) {
             return false;
         }
     };
@@ -145,7 +146,7 @@ public class WaypointLayer extends ItemizedClusterLayer<Coordinate> implements C
         lastFactor = distance;
         clusterRunnable = new ClusterRunnable(distance, workList, new ClusterRunnable.CallBack() {
             @Override
-            public void callBack(ClusteredList reduced) {
+            public void callBack(CB_List<GeoCluster> reduced) {
                 log.debug("Cluster Reduce from " + mItemList.size() + " items to " + reduced.size() + " items");
                 mItemList.clear();
                 mItemList.addAll(reduced);

@@ -22,6 +22,8 @@
 package de.longri.cachebox3.gui.map.layer.cluster;
 
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.geocluster.GeoCluster;
+import de.longri.cachebox3.utils.lists.CB_List;
 import org.oscim.core.Box;
 import org.oscim.core.GeoPoint;
 import org.oscim.core.Point;
@@ -37,21 +39,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ItemizedClusterLayer<Item extends Coordinate> extends ClusterLayer<Item>
+public class ItemizedClusterLayer<Item extends GeoCluster> extends ClusterLayer<Item>
         implements GestureListener {
 
     static final Logger log = LoggerFactory.getLogger(ItemizedClusterLayer.class);
 
-    protected final List<Item> mItemList;
+    protected final CB_List<Item> mItemList;
     protected final Point mTmpPoint = new Point();
     protected OnItemGestureListener<Item> mOnItemGestureListener;
     protected int mDrawnItemsLimit = Integer.MAX_VALUE;
 
     public ItemizedClusterLayer(Map map, ClusterSymbol defaultCluster) {
-        this(map, new ArrayList<Item>(), defaultCluster, null);
+        this(map, new CB_List<Item>(), defaultCluster, null);
     }
 
-    public ItemizedClusterLayer(Map map, List<Item> list,
+    public ItemizedClusterLayer(Map map, CB_List<Item> list,
                                 ClusterSymbol defaultCluster,
                                 OnItemGestureListener<Item> listener) {
 
@@ -63,10 +65,10 @@ public class ItemizedClusterLayer<Item extends Coordinate> extends ClusterLayer<
     }
 
     public ItemizedClusterLayer(Map map, ClusterRendererFactory ClusterRendererFactory) {
-        this(map, new ArrayList<Item>(), ClusterRendererFactory, null);
+        this(map, new CB_List<Item>(), ClusterRendererFactory, null);
     }
 
-    public ItemizedClusterLayer(Map map, List<Item> list,
+    public ItemizedClusterLayer(Map map, CB_List<Item> list,
                                 ClusterRendererFactory ClusterRendererFactory,
                                 OnItemGestureListener<Item> listener) {
 
@@ -92,22 +94,22 @@ public class ItemizedClusterLayer<Item extends Coordinate> extends ClusterLayer<
     }
 
     public boolean addItem(Item item) {
-        final boolean result = mItemList.add(item);
+        final int result = mItemList.add(item);
         populate();
-        return result;
+        return result>=0;
     }
 
     public void addItem(int location, Item item) {
         mItemList.add(location, item);
     }
 
-    public boolean addItems(Collection<Item> items) {
-        final boolean result = mItemList.addAll(items);
+    public boolean addItems(CB_List<Item> items) {
+         mItemList.addAll(items);
         populate();
-        return result;
+        return true;
     }
 
-    public List<Item> getItemList() {
+    public CB_List<Item> getItemList() {
         return mItemList;
     }
 
@@ -123,9 +125,9 @@ public class ItemizedClusterLayer<Item extends Coordinate> extends ClusterLayer<
     }
 
     public boolean removeItem(Item item) {
-        final boolean result = mItemList.remove(item);
+        final Item result = mItemList.remove(item);
         populate();
-        return result;
+        return result!=null;
     }
 
     public Item removeItem(int position) {

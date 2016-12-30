@@ -3,6 +3,7 @@ package de.longri.cachebox3.locator.geocluster;
 
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
+import de.longri.cachebox3.utils.lists.CB_List;
 
 /**
  * Created by Longri on 21.12.16.
@@ -17,7 +18,7 @@ public class ClusterRunnable implements Runnable {
     private volatile boolean running = true;
 
     public interface CallBack {
-        public void callBack(ClusteredList reduced);
+        public void callBack(CB_List<GeoCluster> reduced);
     }
 
     public ClusterRunnable(double distance, final ClusteredList workList, final CallBack callBack) {

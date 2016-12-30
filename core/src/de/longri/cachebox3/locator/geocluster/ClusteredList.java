@@ -1,11 +1,12 @@
 package de.longri.cachebox3.locator.geocluster;
 
-import java.util.LinkedList;
+import de.longri.cachebox3.utils.lists.CB_List;
+
 
 /**
  * Created by Longri on 25.12.16.
  */
-public class ClusteredList extends LinkedList<GeoCluster> {
+public class ClusteredList extends CB_List<GeoCluster> {
 
 
     double lastDistance = -1;
