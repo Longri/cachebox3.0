@@ -56,6 +56,8 @@ public class ClusteredList extends CB_List<GeoCluster> {
             cluster.setDistanceBoundce(distance);
             for (GeoCluster includedCluster : cluster.getClusters()) {
 
+                if (this.contains(includedCluster)) continue;
+
                 if (!cluster.contains(includedCluster)) {
                     outsideList.add(includedCluster);
                 }

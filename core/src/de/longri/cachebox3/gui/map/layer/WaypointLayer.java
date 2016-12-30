@@ -26,7 +26,6 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
 import de.longri.cachebox3.gui.map.layer.cluster.ItemizedClusterLayer;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.ClusteredList;
 import de.longri.cachebox3.locator.geocluster.GeoCluster;
@@ -43,7 +42,6 @@ import org.oscim.core.Tile;
 import org.oscim.map.Map;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -217,7 +215,7 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
         }
         lastZoomLevel = zoomLevel;
 
-        double groundResolution = (MercatorProjection.groundResolution(mapPos) * Tile.SIZE) / 10;
+        double groundResolution = zoomLevel < 14 ? (MercatorProjection.groundResolution(mapPos) * Tile.SIZE) / 5 : 0;
 
         log.debug("call reduce cluster with distance: " + groundResolution);
         reduceCluster(groundResolution);

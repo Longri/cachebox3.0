@@ -107,9 +107,7 @@ public class GeoCluster extends Coordinate {
     }
 
     public void addAll(ClusteredList list) {
-        for (GeoCluster cluster : list) {
-            this.merge(cluster);
-        }
+        this.includedClusters.addAll(list);
     }
 
     public ClusteredList getClusters() {

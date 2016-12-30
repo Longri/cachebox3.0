@@ -93,6 +93,14 @@ public class SquareTest {
         assertThat("cluster size", allCluster.size(), equalTo(650));
 
 
+        allCluster.clusterByDistance(distance * 2);
+        assertThat("cluster size", allCluster.size(), equalTo(2550));
+
+
+        allCluster.clusterByDistance(distance - 2);
+        assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
+
+
     }
 
 }
