@@ -61,7 +61,6 @@ import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.source.mapfile.MapFileTileSource;
 
 
-
 /**
  * The MapView has transparent background. The Map render runs at CacheboxMain.
  * This View has only the controls for the Map!
@@ -180,29 +179,19 @@ public class MapView extends AbstractView {
             public void onMapEvent(Event e, final MapPosition mapPosition) {
 
                 if (e == Map.MOVE_EVENT) {
-                    log.debug("Map.MOVE_EVENT");
+//                    log.debug("Map.MOVE_EVENT");
                     mapStateButton.setState(MapState.FREE);
                 } else if (e == Map.TILT_EVENT) {
-                    log.debug("Map.TILT_EVENT");
+//                    log.debug("Map.TILT_EVENT");
                     if (positionChangedHandler != null)
                         positionChangedHandler.tiltChangedFromMap(mapPosition.getTilt());
                 } else if (e == Map.ROTATE_EVENT) {
-                    log.debug("Map.ROTATE_EVENT");
+//                    log.debug("Map.ROTATE_EVENT");
                     if (positionChangedHandler != null)
                         positionChangedHandler.rotateChangedFromUser(mapPosition.getBearing());
                 } else if (e == Map.ANIM_END) {
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            log.debug("Map.ANIM_START" + mapPosition);
-                            try {
-                                wayPointLayer.setZoomLevel(mapPosition);
-                            } catch (Exception e1) {
-                                log.error("error", e1);
-                            }
-                        }
-                    });
-
+                    log.debug("Map.ANIM_START" + mapPosition);
+                    wayPointLayer.setZoomLevel(mapPosition);
                 }
             }
         };

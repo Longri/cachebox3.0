@@ -14,8 +14,6 @@ public class GeoCluster extends Coordinate {
     private ClusteredList includedClusters = new ClusteredList();
 
 
-    protected ClusterSymbol mCluster;
-
     public GeoCluster(Coordinate pos) {
         super(pos.getLatitude(), pos.getLongitude());
         this.size = 1;
@@ -85,7 +83,7 @@ public class GeoCluster extends Coordinate {
 
 
     public void setCluster(ClusterSymbol Cluster) {
-        mCluster = Cluster;
+        clustersymbol = Cluster;
     }
 
     public void setDistanceBoundce(double distance) {
@@ -107,10 +105,20 @@ public class GeoCluster extends Coordinate {
     }
 
     public void addAll(ClusteredList list) {
+        this.size += list.size();
+
+        for (GeoCluster cluster : list) {
+            this.size += cluster.includedClusters.size();
+        }
+
         this.includedClusters.addAll(list);
     }
 
     public ClusteredList getClusters() {
         return includedClusters;
+    }
+
+    public void removeAll(ClusteredList list) {
+        this.includedClusters.removeAll(list);
     }
 }

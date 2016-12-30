@@ -50,7 +50,13 @@ import java.util.HashMap;
 public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements CacheListChangedEventListener, Disposable {
     final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
-    private static final ClusterSymbol defaultMarker = getClusterSymbol("myterie");
+
+    public static final ClusterSymbol defaultMarker = getClusterSymbol("myterie");
+    public static final ClusterSymbol CLUSTER1_SYMBOL = getClusterSymbol("cluster1");
+    public static final ClusterSymbol CLUSTER10_SYMBOL = getClusterSymbol("cluster10");
+    public static final ClusterSymbol CLUSTER100_SYMBOL = getClusterSymbol("cluster100");
+
+
     protected final ClusteredList mAllItemList = new ClusteredList();
     private double lastFactor = 2.0;
 
@@ -149,6 +155,7 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
                 mItemList.clear();
                 mItemList.addAll(reduced);
                 WaypointLayer.this.populate();
+                mMap.updateMap(true);
             }
         });
         clusterThread = new Thread(clusterRunnable);
@@ -188,6 +195,9 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
     }
 
     private static ClusterSymbol getClusterSymbol(String name) {
+
+        if (!VisUI.isLoaded()) return null;
+
         Skin skin = VisUI.getSkin();
         ScaledSvg scaledSvg = skin.get(name, ScaledSvg.class);
         FileHandle fileHandle = Gdx.files.internal(scaledSvg.path);
@@ -203,9 +213,9 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
 
     private int lastZoomLevel = -1;
 
-    public void setZoomLevel(MapPosition mapPos) {
+    public void setZoomLevel(final MapPosition mapPos) {
 
-        int zoomLevel = mapPos.getZoomLevel();
+        final int zoomLevel = mapPos.getZoomLevel();
 
         log.debug("Set zoom level to " + zoomLevel);
 
@@ -215,10 +225,16 @@ public class WaypointLayer extends ItemizedClusterLayer<GeoCluster> implements C
         }
         lastZoomLevel = zoomLevel;
 
-        double groundResolution = zoomLevel < 14 ? (MercatorProjection.groundResolution(mapPos) * Tile.SIZE) / 5 : 0;
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                double groundResolution = zoomLevel < 14 ? (MercatorProjection.groundResolution(mapPos) * Tile.SIZE) / 5 : 0;
 
-        log.debug("call reduce cluster with distance: " + groundResolution);
-        reduceCluster(groundResolution);
+                log.debug("call reduce cluster with distance: " + groundResolution);
+                reduceCluster(groundResolution);
+            }
+        });
+        thread.start();
 
     }
 }

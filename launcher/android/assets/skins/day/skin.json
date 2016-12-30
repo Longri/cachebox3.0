@@ -430,6 +430,18 @@
     "mapWherigo": {
       "path": "skins/day/svg/whereigo.svg",
       "scale": 0.15
+    },
+    "cluster1": {
+      "path": "skins/day/svg/cluster1.svg",
+      "scale": 0.15
+    },
+    "cluster10": {
+      "path": "skins/day/svg/cluster10.svg",
+      "scale": 0.15
+    },
+    "cluster100": {
+      "path": "skins/day/svg/cluster100.svg",
+      "scale": 0.15
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {

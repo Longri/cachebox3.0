@@ -75,24 +75,9 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             } else {
                 mRenderWait = true;
             }
-
-            if (lastTilt != this.getMapPosition().getTilt()) {
-                lastTilt = this.getMapPosition().getTilt();
-                tiltChanged(lastTilt);
-            }
-
-            if (lastRotate != this.getMapPosition().getBearing()) {
-                lastRotate = this.getMapPosition().getBearing();
-                rotateChanged(lastRotate);
-            }
         }
     }
 
-    public void rotateChanged(float lastRotate) {
-    }
-
-    public void tiltChanged(float newTilt) {
-    }
 
     @Override
     public void render() {

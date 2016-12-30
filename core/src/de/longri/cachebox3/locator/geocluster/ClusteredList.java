@@ -1,5 +1,6 @@
 package de.longri.cachebox3.locator.geocluster;
 
+import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.utils.lists.CB_List;
 
 
@@ -25,7 +26,7 @@ public class ClusteredList extends CB_List<GeoCluster> {
 
     }
 
-    private void reduce(double distance) {
+    private void reduce(final double distance) {
         int index = 0;
         while (index < this.size()) {
 
@@ -45,6 +46,18 @@ public class ClusteredList extends CB_List<GeoCluster> {
             if (inside.size() > 0) {
                 this.removeAll(inside);
                 cluster.addAll(inside);
+
+                int clusterSize = cluster.size();
+
+                if (WaypointLayer.CLUSTER1_SYMBOL != null) { //is NULL in case of JUnit test
+                    if (clusterSize > 1 && clusterSize <= 10) {
+                        cluster.setCluster(WaypointLayer.CLUSTER1_SYMBOL);
+                    } else if (clusterSize > 10 && clusterSize <= 100) {
+                        cluster.setCluster(WaypointLayer.CLUSTER10_SYMBOL);
+                    } else if (clusterSize > 100) {
+                        cluster.setCluster(WaypointLayer.CLUSTER100_SYMBOL);
+                    }
+                }
             }
             index++;
         }
@@ -60,6 +73,20 @@ public class ClusteredList extends CB_List<GeoCluster> {
 
                 if (!cluster.contains(includedCluster)) {
                     outsideList.add(includedCluster);
+                }
+            }
+
+            cluster.removeAll(outsideList);
+
+            int clusterSize = cluster.size();
+
+            if (WaypointLayer.CLUSTER1_SYMBOL != null) { //is NULL in case of JUnit test
+                if (clusterSize > 1 && clusterSize <= 10) {
+                    cluster.setCluster(WaypointLayer.CLUSTER1_SYMBOL);
+                } else if (clusterSize > 10 && clusterSize <= 100) {
+                    cluster.setCluster(WaypointLayer.CLUSTER10_SYMBOL);
+                } else if (clusterSize > 100) {
+                    cluster.setCluster(WaypointLayer.CLUSTER100_SYMBOL);
                 }
             }
         }
