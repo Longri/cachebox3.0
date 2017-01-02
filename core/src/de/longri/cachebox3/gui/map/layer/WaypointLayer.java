@@ -57,7 +57,7 @@ public class WaypointLayer extends ItemizedClusterLayer implements CacheListChan
     public static final ClusterSymbol CLUSTER100_SYMBOL = getClusterSymbol("cluster100");
 
 
-//    protected final ClusteredList mAllItemList = new ClusteredList();
+    //    protected final ClusteredList mAllItemList = new ClusteredList();
     private double lastFactor = 2.0;
 
     public WaypointLayer(Map map) {
@@ -72,11 +72,13 @@ public class WaypointLayer extends ItemizedClusterLayer implements CacheListChan
     private final OnItemGestureListener<ClusterablePoint> gestureListener = new OnItemGestureListener<ClusterablePoint>() {
         @Override
         public boolean onItemSingleTapUp(int index, ClusterablePoint item) {
+            log.debug("Click on: " + item);
             return false;
         }
 
         @Override
         public boolean onItemLongPress(int index, ClusterablePoint item) {
+            log.debug("LongClick on: " + item);
             return false;
         }
     };
@@ -101,7 +103,7 @@ public class WaypointLayer extends ItemizedClusterLayer implements CacheListChan
 
                     //add WayPoint items
                     for (Cache cache : Database.Data.Query) {
-                        ClusterablePoint geoCluster = new ClusterablePoint(cache,cache.getGcCode());
+                        ClusterablePoint geoCluster = new ClusterablePoint(cache, cache.getGcCode());
                         geoCluster.setClusterSymbol(getClusterSymbolByCache(cache));
                         mItemList.add(geoCluster);
                     }
@@ -136,8 +138,6 @@ public class WaypointLayer extends ItemizedClusterLayer implements CacheListChan
 
 
         log.debug("START GeoClustering distance:" + distance + " ZoomLevel:" + lastZoomLevel);
-
-
 
 
         lastFactor = distance;
@@ -219,7 +219,7 @@ public class WaypointLayer extends ItemizedClusterLayer implements CacheListChan
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                double groundResolution = zoomLevel < 14 ? (MercatorProjection.groundResolution(mapPos) * Tile.SIZE) / 5 : 0;
+                double groundResolution = zoomLevel < 14 ? (MercatorProjection.groundResolution(mapPos) * Tile.SIZE) : 0;
 
                 log.debug("call reduce cluster with distance: " + groundResolution);
                 reduceCluster(groundResolution);

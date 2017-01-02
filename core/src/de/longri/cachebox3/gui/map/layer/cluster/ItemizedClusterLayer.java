@@ -105,44 +105,7 @@ public class ItemizedClusterLayer extends ClusterLayer<ClusterablePoint>
         return true;
     }
 
-    public CB_List<ClusterablePoint> getItemList() {
-        return mItemList;
-    }
 
-    public void removeAllItems() {
-        removeAllItems(true);
-    }
-
-    public void removeAllItems(boolean withPopulate) {
-        mItemList.clear();
-        if (withPopulate) {
-            populate();
-        }
-    }
-
-    public boolean removeItem(ClusterablePoint item) {
-        final ClusterablePoint result = mItemList.remove(item);
-        populate();
-        return result!=null;
-    }
-
-    public ClusterablePoint removeItem(int position) {
-        final ClusterablePoint result = mItemList.remove(position);
-        populate();
-        return result;
-    }
-
-    /**
-     * Each of these methods performs a item sensitive check. If the item is
-     * located its corresponding method is called. The result of the call is
-     * returned. Helper methods are provided so that child classes may more
-     * easily override behavior without resorting to overriding the
-     * ItemGestureListener methods.
-     */
-    //    @Override
-    //    public boolean onTap(MotionEvent event, MapPosition pos) {
-    //        return activateSelectedItems(event, mActiveItemSingleTap);
-    //    }
     protected boolean onSingleTapUpHelper(int index, ClusterablePoint item) {
         return mOnItemGestureListener.onItemSingleTapUp(index, item);
     }
