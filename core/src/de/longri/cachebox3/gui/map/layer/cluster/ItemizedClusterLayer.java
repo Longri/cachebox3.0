@@ -22,6 +22,7 @@
 package de.longri.cachebox3.gui.map.layer.cluster;
 
 import de.longri.cachebox3.locator.geocluster.ClusterablePoint;
+import de.longri.cachebox3.locator.geocluster.ClusteredList;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.oscim.core.Box;
 import org.oscim.core.GeoPoint;
@@ -34,23 +35,23 @@ import org.oscim.map.Viewport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ItemizedClusterLayer<Item extends ClusterablePoint> extends ClusterLayer<Item>
+public class ItemizedClusterLayer extends ClusterLayer<ClusterablePoint>
         implements GestureListener {
 
     static final Logger log = LoggerFactory.getLogger(ItemizedClusterLayer.class);
 
-    protected final CB_List<Item> mItemList;
+    protected final ClusteredList mItemList;
     protected final Point mTmpPoint = new Point();
-    protected OnItemGestureListener<Item> mOnItemGestureListener;
+    protected OnItemGestureListener<ClusterablePoint> mOnItemGestureListener;
     protected int mDrawnItemsLimit = Integer.MAX_VALUE;
 
     public ItemizedClusterLayer(Map map, ClusterSymbol defaultCluster) {
-        this(map, new CB_List<Item>(), defaultCluster, null);
+        this(map, new ClusteredList(), defaultCluster, null);
     }
 
-    public ItemizedClusterLayer(Map map, CB_List<Item> list,
+    public ItemizedClusterLayer(Map map, ClusteredList list,
                                 ClusterSymbol defaultCluster,
-                                OnItemGestureListener<Item> listener) {
+                                OnItemGestureListener<ClusterablePoint> listener) {
 
         super(map, defaultCluster);
 
@@ -60,12 +61,12 @@ public class ItemizedClusterLayer<Item extends ClusterablePoint> extends Cluster
     }
 
     public ItemizedClusterLayer(Map map, ClusterRendererFactory ClusterRendererFactory) {
-        this(map, new CB_List<Item>(), ClusterRendererFactory, null);
+        this(map, new ClusteredList(), ClusterRendererFactory, null);
     }
 
-    public ItemizedClusterLayer(Map map, CB_List<Item> list,
+    public ItemizedClusterLayer(Map map, ClusteredList list,
                                 ClusterRendererFactory ClusterRendererFactory,
-                                OnItemGestureListener<Item> listener) {
+                                OnItemGestureListener<ClusterablePoint> listener) {
 
         super(map, ClusterRendererFactory);
 
@@ -74,12 +75,12 @@ public class ItemizedClusterLayer<Item extends ClusterablePoint> extends Cluster
         populate();
     }
 
-    public void setOnItemGestureListener(OnItemGestureListener<Item> listener) {
+    public void setOnItemGestureListener(OnItemGestureListener<ClusterablePoint> listener) {
         mOnItemGestureListener = listener;
     }
 
     @Override
-    protected Item createItem(int index) {
+    protected ClusterablePoint createItem(int index) {
         return mItemList.get(index);
     }
 
@@ -88,23 +89,23 @@ public class ItemizedClusterLayer<Item extends ClusterablePoint> extends Cluster
         return Math.min(mItemList.size(), mDrawnItemsLimit);
     }
 
-    public boolean addItem(Item item) {
+    public boolean addItem(ClusterablePoint item) {
         final int result = mItemList.add(item);
         populate();
         return result>=0;
     }
 
-    public void addItem(int location, Item item) {
+    public void addItem(int location, ClusterablePoint item) {
         mItemList.add(location, item);
     }
 
-    public boolean addItems(CB_List<Item> items) {
+    public boolean addItems(CB_List<ClusterablePoint> items) {
          mItemList.addAll(items);
         populate();
         return true;
     }
 
-    public CB_List<Item> getItemList() {
+    public CB_List<ClusterablePoint> getItemList() {
         return mItemList;
     }
 
@@ -119,14 +120,14 @@ public class ItemizedClusterLayer<Item extends ClusterablePoint> extends Cluster
         }
     }
 
-    public boolean removeItem(Item item) {
-        final Item result = mItemList.remove(item);
+    public boolean removeItem(ClusterablePoint item) {
+        final ClusterablePoint result = mItemList.remove(item);
         populate();
         return result!=null;
     }
 
-    public Item removeItem(int position) {
-        final Item result = mItemList.remove(position);
+    public ClusterablePoint removeItem(int position) {
+        final ClusterablePoint result = mItemList.remove(position);
         populate();
         return result;
     }
@@ -142,14 +143,14 @@ public class ItemizedClusterLayer<Item extends ClusterablePoint> extends Cluster
     //    public boolean onTap(MotionEvent event, MapPosition pos) {
     //        return activateSelectedItems(event, mActiveItemSingleTap);
     //    }
-    protected boolean onSingleTapUpHelper(int index, Item item) {
+    protected boolean onSingleTapUpHelper(int index, ClusterablePoint item) {
         return mOnItemGestureListener.onItemSingleTapUp(index, item);
     }
 
     private final ActiveItem mActiveItemSingleTap = new ActiveItem() {
         @Override
         public boolean run(int index) {
-            final ItemizedClusterLayer<Item> that = ItemizedClusterLayer.this;
+            final ItemizedClusterLayer that = ItemizedClusterLayer.this;
             if (mOnItemGestureListener == null) {
                 return false;
             }
@@ -157,14 +158,14 @@ public class ItemizedClusterLayer<Item extends ClusterablePoint> extends Cluster
         }
     };
 
-    protected boolean onLongPressHelper(int index, Item item) {
+    protected boolean onLongPressHelper(int index, ClusterablePoint item) {
         return this.mOnItemGestureListener.onItemLongPress(index, item);
     }
 
     private final ActiveItem mActiveItemLongPress = new ActiveItem() {
         @Override
         public boolean run(final int index) {
-            final ItemizedClusterLayer<Item> that = ItemizedClusterLayer.this;
+            final ItemizedClusterLayer that = ItemizedClusterLayer.this;
             if (that.mOnItemGestureListener == null) {
                 return false;
             }
@@ -200,7 +201,7 @@ public class ItemizedClusterLayer<Item extends ClusterablePoint> extends Cluster
         double dist = 2500;
 
         for (int i = 0; i < size; i++) {
-            Item item = mItemList.get(i);
+            ClusterablePoint item = mItemList.get(i);
 
             if (!box.contains((int) (item.longitude * 1000000.0D),
                     (int) (item.latitude * 1000000.0D)))

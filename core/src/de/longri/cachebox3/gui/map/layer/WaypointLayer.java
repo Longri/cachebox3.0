@@ -47,7 +47,7 @@ import java.util.HashMap;
 /**
  * Created by Longri on 27.11.16.
  */
-public class WaypointLayer extends ItemizedClusterLayer<ClusterablePoint> implements CacheListChangedEventListener, Disposable {
+public class WaypointLayer extends ItemizedClusterLayer implements CacheListChangedEventListener, Disposable {
     final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
 
@@ -57,11 +57,11 @@ public class WaypointLayer extends ItemizedClusterLayer<ClusterablePoint> implem
     public static final ClusterSymbol CLUSTER100_SYMBOL = getClusterSymbol("cluster100");
 
 
-    protected final ClusteredList mAllItemList = new ClusteredList();
+//    protected final ClusteredList mAllItemList = new ClusteredList();
     private double lastFactor = 2.0;
 
     public WaypointLayer(Map map) {
-        super(map, new CB_List<ClusterablePoint>(), defaultMarker, null);
+        super(map, new ClusteredList(), defaultMarker, null);
         mOnItemGestureListener = gestureListener;
 
         //register as cacheListChanged eventListener
@@ -103,9 +103,8 @@ public class WaypointLayer extends ItemizedClusterLayer<ClusterablePoint> implem
                     for (Cache cache : Database.Data.Query) {
                         ClusterablePoint geoCluster = new ClusterablePoint(cache,cache.getGcCode());
                         geoCluster.setClusterSymbol(getClusterSymbolByCache(cache));
-                        mAllItemList.add(geoCluster);
+                        mItemList.add(geoCluster);
                     }
-                    mItemList.addAll(mAllItemList);
                     WaypointLayer.this.populate();
                     setZoomLevel(mMap.getMapPosition());
                 }
@@ -139,21 +138,13 @@ public class WaypointLayer extends ItemizedClusterLayer<ClusterablePoint> implem
         log.debug("START GeoClustering distance:" + distance + " ZoomLevel:" + lastZoomLevel);
 
 
-        final ClusteredList workList;
-        if (distance < lastFactor) {
-            workList = mAllItemList;
-        } else {
-            workList = mAllItemList;
-        }
 
 
         lastFactor = distance;
-        clusterRunnable = new ClusterRunnable(distance, workList, new ClusterRunnable.CallBack() {
+        clusterRunnable = new ClusterRunnable(distance, mItemList, new ClusterRunnable.CallBack() {
             @Override
             public void callBack(CB_List<ClusterablePoint> reduced) {
                 log.debug("Cluster Reduce from " + mItemList.size() + " items to " + reduced.size() + " items");
-                mItemList.clear();
-                mItemList.addAll(reduced);
                 WaypointLayer.this.populate();
                 mMap.updateMap(true);
             }

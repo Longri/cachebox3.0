@@ -35,16 +35,16 @@ import org.oscim.map.Map;
  * gets checked for onTap first. This class is generic, because you then you get
  * your custom item-class passed back in onTap(). << TODO
  */
-public abstract class ClusterLayer<Item extends Coordinate> extends Layer {
+public abstract class ClusterLayer<ClusterablePoint> extends Layer {
 
     protected final ClusterRenderer mClusterRenderer;
-    protected Item mFocusedItem;
+    protected ClusterablePoint mFocusedItem;
 
     /**
      * Method by which subclasses create the actual Items. This will only be
      * called from populate() we'll cache them for later use.
      */
-    protected abstract Item createItem(int i);
+    protected abstract ClusterablePoint createItem(int i);
 
     /**
      * The number of items in this overlay.
@@ -86,7 +86,7 @@ public abstract class ClusterLayer<Item extends Coordinate> extends Layer {
      *
      * @param item
      */
-    public void setFocus(Item item) {
+    public void setFocus(ClusterablePoint item) {
         mFocusedItem = item;
     }
 
@@ -94,7 +94,7 @@ public abstract class ClusterLayer<Item extends Coordinate> extends Layer {
      * @return the currently-focused item, or null if no item is currently
      * focused.
      */
-    public Item getFocus() {
+    public ClusterablePoint getFocus() {
         return mFocusedItem;
     }
 

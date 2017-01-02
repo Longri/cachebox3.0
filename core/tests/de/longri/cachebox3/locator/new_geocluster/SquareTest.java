@@ -1,10 +1,9 @@
 package de.longri.cachebox3.locator.new_geocluster;
 
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.geocluster.ClusteredList;
 import de.longri.cachebox3.locator.geocluster.ClusterablePoint;
+import de.longri.cachebox3.locator.geocluster.ClusteredList;
 import de.longri.cachebox3.utils.lists.CB_List;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.oscim.core.GeoPoint;
 
@@ -97,6 +96,44 @@ public class SquareTest {
 
         allCluster.clusterByDistance(distance * 2);
         assertThat("cluster size", allCluster.size(), equalTo(4));
+
+
+        allCluster.clusterByDistance(distance - 2);
+        assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
+
+
+    }
+
+    @Test
+    public void clustering100() {
+
+        init(100);
+        chkInit(100);
+
+        ClusteredList allCluster = new ClusteredList();
+
+        int index = 0;
+        for (GeoPoint point : allPoints) {
+            allCluster.add(new ClusterablePoint(
+                    new Coordinate(point.getLatitude(), point.getLongitude()), Integer.toString(index++)));
+        }
+
+        assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
+
+
+        allCluster.clusterByDistance(distance - 2);
+        assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
+
+
+        allCluster.clusterByDistance(distance * 2);
+        assertThat("cluster size", allCluster.size(), equalTo(2550));
+
+        allCluster.clusterByDistance(distance * 4);
+        assertThat("cluster size", allCluster.size(), equalTo(650));
+
+
+        allCluster.clusterByDistance(distance * 2);
+        assertThat("cluster size", allCluster.size(), equalTo(2550));
 
 
         allCluster.clusterByDistance(distance - 2);
