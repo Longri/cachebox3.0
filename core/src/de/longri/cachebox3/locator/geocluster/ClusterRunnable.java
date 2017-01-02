@@ -18,7 +18,7 @@ public class ClusterRunnable implements Runnable {
     private volatile boolean running = true;
 
     public interface CallBack {
-        void callBack(CB_List<GeoCluster> reduced);
+        void callBack(CB_List<ClusterablePoint> reduced);
     }
 
     public ClusterRunnable(double distance, final ClusteredList workList, final CallBack callBack) {

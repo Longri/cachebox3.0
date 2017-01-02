@@ -21,8 +21,7 @@
  */
 package de.longri.cachebox3.gui.map.layer.cluster;
 
-import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.geocluster.GeoCluster;
+import de.longri.cachebox3.locator.geocluster.ClusterablePoint;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.oscim.core.Box;
 import org.oscim.core.GeoPoint;
@@ -35,11 +34,7 @@ import org.oscim.map.Viewport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-public class ItemizedClusterLayer<Item extends GeoCluster> extends ClusterLayer<Item>
+public class ItemizedClusterLayer<Item extends ClusterablePoint> extends ClusterLayer<Item>
         implements GestureListener {
 
     static final Logger log = LoggerFactory.getLogger(ItemizedClusterLayer.class);

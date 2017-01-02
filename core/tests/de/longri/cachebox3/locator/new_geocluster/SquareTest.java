@@ -2,14 +2,11 @@ package de.longri.cachebox3.locator.new_geocluster;
 
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.ClusteredList;
-import de.longri.cachebox3.locator.geocluster.GeoCluster;
+import de.longri.cachebox3.locator.geocluster.ClusterablePoint;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.oscim.core.GeoPoint;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
@@ -33,9 +30,9 @@ public class SquareTest {
     static CB_List<GeoPoint> allPoints = new CB_List<GeoPoint>();
 
 
-    @BeforeAll
-    public static void init() {
+    public static void init(int arraySize) {
         points = new GeoPoint[arraySize][arraySize];
+        allPoints.clear();
         GeoPoint leftTop = new GeoPoint(60.0, 13.0);
 
         GeoPoint pX, pY;
@@ -54,8 +51,8 @@ public class SquareTest {
         }
     }
 
-    @Test
-    public void chkInit() {
+
+    public void chkInit(int arraySize) {
         for (int x = 0; x < arraySize - 1; x++) {
             for (int y = 0; y < arraySize - 1; y++) {
                 GeoPoint a = points[x][y];
@@ -71,12 +68,17 @@ public class SquareTest {
     }
 
     @Test
-    public void clusteringNoReduce() {
+    public void clustering3() {
+
+        init(3);
+        chkInit(3);
 
         ClusteredList allCluster = new ClusteredList();
 
+        int index = 0;
         for (GeoPoint point : allPoints) {
-            allCluster.add(new GeoCluster(new Coordinate(point.getLatitude(),point.getLongitude())));
+            allCluster.add(new ClusterablePoint(
+                    new Coordinate(point.getLatitude(), point.getLongitude()), Integer.toString(index++)));
         }
 
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
@@ -87,14 +89,14 @@ public class SquareTest {
 
 
         allCluster.clusterByDistance(distance * 2);
-        assertThat("cluster size", allCluster.size(), equalTo(2550));
+        assertThat("cluster size", allCluster.size(), equalTo(4));
 
         allCluster.clusterByDistance(distance * 4);
-        assertThat("cluster size", allCluster.size(), equalTo(650));
+        assertThat("cluster size", allCluster.size(), equalTo(2));
 
 
         allCluster.clusterByDistance(distance * 2);
-        assertThat("cluster size", allCluster.size(), equalTo(2550));
+        assertThat("cluster size", allCluster.size(), equalTo(4));
 
 
         allCluster.clusterByDistance(distance - 2);
