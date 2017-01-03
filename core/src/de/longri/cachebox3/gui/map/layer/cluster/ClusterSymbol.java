@@ -20,79 +20,12 @@ package de.longri.cachebox3.gui.map.layer.cluster;
 
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.PointF;
-import org.oscim.renderer.atlas.TextureRegion;
 
 public class ClusterSymbol {
-    /**
-     * Indicates a hotspot for an area. This is where the origin (0,0) of a
-     * point will be located relative to the area. In otherwords this acts as an
-     * offset. NONE indicates that no adjustment should be made.
-     */
-    public enum HotspotPlace {
-        NONE, CENTER, BOTTOM_CENTER,
-        TOP_CENTER, RIGHT_CENTER, LEFT_CENTER,
-        UPPER_RIGHT_CORNER, LOWER_RIGHT_CORNER,
-        UPPER_LEFT_CORNER, LOWER_LEFT_CORNER
-    }
+
 
     final Bitmap mBitmap;
-    final TextureRegion mTextureRegion;
 
-    /**
-     * Hotspot offset
-     */
-    final PointF mOffset;
-    final boolean mBillboard;
-
-    public ClusterSymbol(TextureRegion textureRegion, float relX, float relY) {
-        this(textureRegion, relX, relY, true);
-    }
-
-    public ClusterSymbol(TextureRegion textureRegion, float relX, float relY, boolean billboard) {
-        mBitmap = null;
-        mTextureRegion = textureRegion;
-        mOffset = new PointF(relX, relY);
-        mBillboard = billboard;
-    }
-
-    public ClusterSymbol(TextureRegion textureRegion, HotspotPlace hotspot) {
-        this(textureRegion, hotspot, true);
-    }
-
-    public ClusterSymbol(TextureRegion textureRegion, HotspotPlace hotspot, boolean billboard) {
-        mBitmap = null;
-        mTextureRegion = textureRegion;
-        switch (hotspot) {
-            case BOTTOM_CENTER:
-                mOffset = new PointF(0.5f, 1);
-                break;
-            case TOP_CENTER:
-                mOffset = new PointF(0.5f, 0);
-                break;
-            case RIGHT_CENTER:
-                mOffset = new PointF(1, 0.5f);
-                break;
-            case LEFT_CENTER:
-                mOffset = new PointF(0, 0.5f);
-                break;
-            case UPPER_RIGHT_CORNER:
-                mOffset = new PointF(1, 0);
-                break;
-            case LOWER_RIGHT_CORNER:
-                mOffset = new PointF(1, 1);
-                break;
-            case UPPER_LEFT_CORNER:
-                mOffset = new PointF(0, 0);
-                break;
-            case LOWER_LEFT_CORNER:
-                mOffset = new PointF(0, 1);
-                break;
-            default:
-                mOffset = new PointF(0.5f, 0.5f);
-        }
-
-        mBillboard = billboard;
-    }
 
     public ClusterSymbol(Bitmap bitmap, float relX, float relY) {
         this(bitmap, relX, relY, true);
@@ -100,84 +33,31 @@ public class ClusterSymbol {
 
     public ClusterSymbol(Bitmap bitmap, float relX, float relY, boolean billboard) {
         mBitmap = bitmap;
-        mOffset = new PointF(relX, relY);
-        mBillboard = billboard;
-        mTextureRegion = null;
     }
 
-    public ClusterSymbol(Bitmap bitmap, HotspotPlace hotspot) {
-        this(bitmap, hotspot, true);
+    public ClusterSymbol(Bitmap bitmap) {
+        this(bitmap, true);
     }
 
-    public ClusterSymbol(Bitmap bitmap, HotspotPlace hotspot, boolean billboard) {
-
-        switch (hotspot) {
-            case BOTTOM_CENTER:
-                mOffset = new PointF(0.5f, 1);
-                break;
-            case TOP_CENTER:
-                mOffset = new PointF(0.5f, 0);
-                break;
-            case RIGHT_CENTER:
-                mOffset = new PointF(1, 0.5f);
-                break;
-            case LEFT_CENTER:
-                mOffset = new PointF(0, 0.5f);
-                break;
-            case UPPER_RIGHT_CORNER:
-                mOffset = new PointF(1, 0);
-                break;
-            case LOWER_RIGHT_CORNER:
-                mOffset = new PointF(1, 1);
-                break;
-            case UPPER_LEFT_CORNER:
-                mOffset = new PointF(0, 0);
-                break;
-            case LOWER_LEFT_CORNER:
-                mOffset = new PointF(0, 1);
-                break;
-            default:
-                mOffset = new PointF(0.5f, 0.5f);
-        }
-
+    public ClusterSymbol(Bitmap bitmap, boolean billboard) {
         mBitmap = bitmap;
-        mBillboard = billboard;
-        mTextureRegion = null;
     }
 
-    public boolean isBillboard() {
-        return mBillboard;
-    }
-
-    public PointF getHotspot() {
-        return mOffset;
-    }
-
-    public boolean isBitmap() {
-        return mBitmap != null;
-    }
 
     public Bitmap getBitmap() {
         return mBitmap;
     }
 
-    public TextureRegion getTextureRegion() {
-        return mTextureRegion;
-    }
 
-    public boolean isInside(float dx, float dy) {
-        /* TODO handle no-billboard */
-        int w, h;
-        if (isBitmap()) {
-            w = mBitmap.getWidth();
-            h = mBitmap.getHeight();
-        } else {
-            w = mTextureRegion.rect.w;
-            h = mTextureRegion.rect.h;
-        }
-        float ox = -w * mOffset.x;
-        float oy = -h * (1 - mOffset.y);
-
-        return dx >= ox && dy >= oy && dx <= ox + w && dy <= oy + h;
-    }
+//    public boolean isInside(float dx, float dy) {
+//        /* TODO handle no-billboard */
+//        int w, h;
+//        w = mBitmap.getWidth();
+//        h = mBitmap.getHeight();
+//
+//        float ox = -w * mOffset.x;
+//        float oy = -h * (1 - mOffset.y);
+//
+//        return dx >= ox && dy >= oy && dx <= ox + w && dy <= oy + h;
+//    }
 }

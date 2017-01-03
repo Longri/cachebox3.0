@@ -24,8 +24,8 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
+import de.longri.cachebox3.gui.map.layer.cluster.ClusterRenderer;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
-import de.longri.cachebox3.gui.map.layer.cluster.ItemizedClusterLayer;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.ClusterablePoint;
 import de.longri.cachebox3.locator.geocluster.ClusteredList;
@@ -36,10 +36,13 @@ import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.oscim.backend.canvas.Bitmap;
-import org.oscim.core.MapPosition;
-import org.oscim.core.MercatorProjection;
-import org.oscim.core.Tile;
+import org.oscim.core.*;
+import org.oscim.event.Gesture;
+import org.oscim.event.GestureListener;
+import org.oscim.event.MotionEvent;
+import org.oscim.layers.Layer;
 import org.oscim.map.Map;
+import org.oscim.map.Viewport;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -47,7 +50,7 @@ import java.util.HashMap;
 /**
  * Created by Longri on 27.11.16.
  */
-public class WaypointLayer extends ItemizedClusterLayer implements CacheListChangedEventListener, Disposable {
+public class WaypointLayer extends Layer implements GestureListener, CacheListChangedEventListener, Disposable {
     final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
 
@@ -57,37 +60,41 @@ public class WaypointLayer extends ItemizedClusterLayer implements CacheListChan
     public static final ClusterSymbol CLUSTER100_SYMBOL = getClusterSymbol("cluster100");
 
 
-    //    protected final ClusteredList mAllItemList = new ClusteredList();
+    private final ClusterRenderer mClusterRenderer;
+    private final Point mTmpPoint = new Point();
+    private final ClusteredList mItemList;
+
     private double lastFactor = 2.0;
+    private int mDrawnItemsLimit = Integer.MAX_VALUE;
+    private Thread clusterThread;
+    private ClusterRunnable clusterRunnable;
+
 
     public WaypointLayer(Map map) {
-        super(map, new ClusteredList(), defaultMarker, null);
-        mOnItemGestureListener = gestureListener;
+        super(map);
+        mClusterRenderer = new ClusterRenderer(this, defaultMarker);
+        mRenderer = mClusterRenderer;
+        mItemList = new ClusteredList();
+        populate();
 
         //register as cacheListChanged eventListener
         CacheListChangedEventList.Add(this);
         CacheListChangedEvent();
     }
 
-    private final OnItemGestureListener<ClusterablePoint> gestureListener = new OnItemGestureListener<ClusterablePoint>() {
-        @Override
-        public boolean onItemSingleTapUp(int index, ClusterablePoint item) {
-            log.debug("Click on: " + item);
-            return false;
-        }
+    public ClusterablePoint createItem(int index) {
+        return mItemList.get(index);
+    }
 
-        @Override
-        public boolean onItemLongPress(int index, ClusterablePoint item) {
-            log.debug("LongClick on: " + item);
-            return false;
-        }
-    };
+
+    public void populate() {
+        mClusterRenderer.populate(mItemList.size());
+    }
 
     @Override
     public void dispose() {
         CacheListChangedEventList.Remove(this);
         ClusterSymbolHashMap.clear();
-        mOnItemGestureListener = null;
     }
 
     @Override
@@ -115,9 +122,6 @@ public class WaypointLayer extends ItemizedClusterLayer implements CacheListChan
         thread.start();
 
     }
-
-    Thread clusterThread;
-    ClusterRunnable clusterRunnable;
 
 
     private void reduceCluster(final double distance) {
@@ -147,6 +151,7 @@ public class WaypointLayer extends ItemizedClusterLayer implements CacheListChan
                 log.debug("Cluster Reduce from " + mItemList.size() + " items to " + reduced.size() + " items");
                 WaypointLayer.this.populate();
                 mMap.updateMap(true);
+                mMap.render();
             }
         });
         clusterThread = new Thread(clusterRunnable);
@@ -198,7 +203,7 @@ public class WaypointLayer extends ItemizedClusterLayer implements CacheListChan
         } catch (IOException e) {
             return null;
         }
-        return new ClusterSymbol(bitmap, ClusterSymbol.HotspotPlace.CENTER, true);
+        return new ClusterSymbol(bitmap, true);
     }
 
 
@@ -219,13 +224,114 @@ public class WaypointLayer extends ItemizedClusterLayer implements CacheListChan
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                double groundResolution = zoomLevel < 14 ? (MercatorProjection.groundResolution(mapPos) * Tile.SIZE) : 0;
+                double groundResolution = zoomLevel < 13 ?
+                        (MercatorProjection.groundResolution(mapPos) * Tile.SIZE) / 2 : 0;
 
                 log.debug("call reduce cluster with distance: " + groundResolution);
                 reduceCluster(groundResolution);
             }
         });
         thread.start();
+    }
 
+
+    public interface ActiveItem {
+        boolean run(int aIndex);
+    }
+
+    protected boolean onItemSingleTap(int index, ClusterablePoint item) {
+        log.debug("Click on: " + item);
+        return true;
+    }
+
+    protected boolean onItemLongPress(int index, ClusterablePoint item) {
+        log.debug("LongClick on: " + item);
+        return true;
+    }
+
+    private final ActiveItem mActiveItemSingleTap = new ActiveItem() {
+        @Override
+        public boolean run(int index) {
+            return onItemSingleTap(index, WaypointLayer.this.mItemList.get(index));
+        }
+    };
+
+    private final ActiveItem mActiveItemLongPress = new ActiveItem() {
+        @Override
+        public boolean run(final int index) {
+            return onItemLongPress(index, WaypointLayer.this.mItemList.get(index));
+        }
+    };
+
+    @Override
+    public boolean onGesture(Gesture g, MotionEvent e) {
+        if (g instanceof Gesture.Tap)
+            return activateSelectedItems(e, mActiveItemSingleTap);
+
+        if (g instanceof Gesture.LongPress)
+            return activateSelectedItems(e, mActiveItemLongPress);
+
+        return false;
+    }
+
+    /**
+     * When a content sensitive action is performed the content item needs to be
+     * identified. This method does that and then performs the assigned task on
+     * that item.
+     *
+     * @return true if event is handled false otherwise
+     */
+    protected boolean activateSelectedItems(MotionEvent event, ActiveItem task) {
+        int size = mItemList.size();
+        if (size == 0)
+            return false;
+
+        int eventX = (int) event.getX() - mMap.getWidth() / 2;
+        int eventY = (int) event.getY() - mMap.getHeight() / 2;
+        Viewport mapPosition = mMap.viewport();
+
+        Box box = mapPosition.getBBox(null, 128);
+        box.map2mercator();
+        box.scale(1E6);
+
+        int nearest = -1;
+        int inside = -1;
+        double insideY = -Double.MAX_VALUE;
+
+        /* squared dist: 50*50 pixel ~ 2mm on 400dpi */
+        double dist = 2500;
+
+        for (int i = 0; i < size; i++) {
+            ClusterablePoint item = mItemList.get(i);
+
+            if (!box.contains((int) (item.longitude * 1000000.0D),
+                    (int) (item.latitude * 1000000.0D)))
+                continue;
+
+            mapPosition.toScreenPoint(new GeoPoint(item.latitude, item.longitude), mTmpPoint);
+
+            float dx = (float) (mTmpPoint.x - eventX);
+            float dy = (float) (mTmpPoint.y - eventY);
+
+            if (inside >= 0)
+                continue;
+
+            double d = dx * dx + dy * dy;
+            if (d > dist)
+                continue;
+
+            dist = d;
+            nearest = i;
+        }
+
+        if (inside >= 0)
+            nearest = inside;
+
+        if (nearest >= 0 && task.run(nearest)) {
+            mClusterRenderer.update();
+            mMap.render();
+            return true;
+        }
+        return false;
     }
 }

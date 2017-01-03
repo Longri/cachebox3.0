@@ -19,10 +19,11 @@
 package de.longri.cachebox3.gui.map.layer.cluster;
 
 
+import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
-import org.oscim.core.GeoPoint;
-import org.oscim.core.MercatorProjection;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.core.Point;
 import org.oscim.core.Tile;
 import org.oscim.renderer.BucketRenderer;
@@ -36,12 +37,16 @@ import java.util.Comparator;
 
 public class ClusterRenderer extends BucketRenderer {
 
+    public static final Logger log = LoggerFactory.getLogger(BucketRenderer.class);
+
     public final ClusterSymbol mDefaultCluster;
 
     private final SymbolBucket mSymbolLayer;
     private final float[] mBox = new float[8];
-    private final ClusterLayer<Coordinate> mClusterLayer;
+    private final WaypointLayer mWaypointLayer;
     private final Point mMapPoint = new Point();
+
+    private int lastZoomLevel = -1;
 
     /**
      * increase view to show items that are partially visible
@@ -69,16 +74,38 @@ public class ClusterRenderer extends BucketRenderer {
         }
     }
 
-    public ClusterRenderer(ClusterLayer<Coordinate> ClusterLayer, ClusterSymbol defaultSymbol) {
+    public ClusterRenderer(WaypointLayer waypointLayer, ClusterSymbol defaultSymbol) {
         mSymbolLayer = new SymbolBucket();
-        mClusterLayer = ClusterLayer;
+        mWaypointLayer = waypointLayer;
         mDefaultCluster = defaultSymbol;
+    }
+
+
+    private boolean chekZoomLevelChanged(GLViewport v) {
+        mMapPosition.copy(v.pos);
+        if (mMapPosition.getZoomLevel() != lastZoomLevel) {
+            lastZoomLevel = mMapPosition.getZoomLevel();
+            mWaypointLayer.setZoomLevel(mMapPosition);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public synchronized void update(GLViewport v) {
-        if (!v.changed() && !mUpdate)
-            return;
+
+        boolean zoomChecked = false;
+        boolean zoomChanged = false;
+
+        if (!v.changed() && !mUpdate) {
+            zoomChecked = true;
+            if (!chekZoomLevelChanged(v)) {
+                return;
+            }
+        }
+        if (!zoomChecked) {
+            zoomChanged = chekZoomLevelChanged(v);
+        }
 
         mUpdate = false;
 
@@ -90,7 +117,7 @@ public class ClusterRenderer extends BucketRenderer {
         //int changedVisible = 0;
         int numVisible = 0;
 
-        mClusterLayer.map().viewport().getMapExtents(mBox, mExtents);
+        mWaypointLayer.map().viewport().getMapExtents(mBox, mExtents);
 
         long flip = (long) (Tile.SIZE * v.pos.scale) >> 1;
 
@@ -134,23 +161,17 @@ public class ClusterRenderer extends BucketRenderer {
             numVisible++;
         }
 
-        //log.debug(numVisible + " " + changedVisible + " " + changesInvisible);
-
-        /* only update when zoomlevel changed, new items are visible
-         * or more than 10 of the current items became invisible */
-        //if ((numVisible == 0) && (changedVisible == 0 && changesInvisible < 10))
-        //    return;
         buckets.clear();
 
         if (numVisible == 0) {
             compile();
             return;
         }
-        /* keep position for current state */
-        mMapPosition.copy(v.pos);
+
         mMapPosition.bearing = -mMapPosition.bearing;
 
-        sort(mItems, 0, mItems.length);
+
+        if (zoomChanged) sort(mItems, 0, mItems.length);
         //log.debug(Arrays.toString(mItems));
         for (InternalItem it : mItems) {
             if (!it.visible)
@@ -166,13 +187,8 @@ public class ClusterRenderer extends BucketRenderer {
                 cluster = mDefaultCluster;
 
             SymbolItem s = SymbolItem.pool.get();
-            if (cluster.isBitmap()) {
-                s.set(it.x, it.y, cluster.getBitmap(), true);
-            } else {
-                s.set(it.x, it.y, cluster.getTextureRegion(), true);
-            }
-            s.offset = cluster.getHotspot();
-            s.billboard = cluster.isBillboard();
+            s.set(it.x, it.y, cluster.getBitmap(), true);
+
             mSymbolLayer.pushSymbol(s);
         }
 
@@ -182,25 +198,20 @@ public class ClusterRenderer extends BucketRenderer {
         compile();
     }
 
-    protected void populate(int size) {
+    public void populate(int size) {
 
         InternalItem[] tmp = new InternalItem[size];
 
         for (int i = 0; i < size; i++) {
             InternalItem it = new InternalItem();
             tmp[i] = it;
-            it.item = mClusterLayer.createItem(i);
+            it.item = mWaypointLayer.createItem(i);
 
             /* pre-project points */
             mMapPoint.x = (it.item.longitude + 180.0) / 360.0;
 
             double sinLatitude = Math.sin(it.item.latitude * (Math.PI / 180.0));
             mMapPoint.y = 0.5 - Math.log((1.0 + sinLatitude) / (1.0 - sinLatitude)) / (4.0 * Math.PI);
-
-
-
-
-
 
             it.px = mMapPoint.x;
             it.py = mMapPoint.y;
@@ -215,14 +226,16 @@ public class ClusterRenderer extends BucketRenderer {
         mUpdate = true;
     }
 
-    static TimSort<InternalItem> ZSORT = new TimSort<InternalItem>();
+    private static TimSort<InternalItem> ZSORT = new TimSort<InternalItem>();
 
     public static void sort(InternalItem[] a, int lo, int hi) {
         int nRemaining = hi - lo;
         if (nRemaining < 2) {
+            log.debug("Items not sorted");
             return;
         }
 
+        log.debug("Sort Items");
         ZSORT.doSort(a, zComparator, lo, hi);
     }
 
@@ -247,12 +260,12 @@ public class ClusterRenderer extends BucketRenderer {
     };
 
     public static Point project(LatLong p, Point reuse) {
-        if(reuse == null) {
+        if (reuse == null) {
             reuse = new Point();
         }
 
-        reuse.x = ((double)p.longitude + 180.0D) / 360.0D;
-        double sinLatitude = Math.sin((double)p.latitude * 0.017453292519943295D);
+        reuse.x = (p.longitude + 180.0D) / 360.0D;
+        double sinLatitude = Math.sin(p.latitude * 0.017453292519943295D);
         reuse.y = 0.5D - Math.log((1.0D + sinLatitude) / (1.0D - sinLatitude)) / 12.566370614359172D;
         return reuse;
     }
