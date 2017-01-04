@@ -207,10 +207,8 @@ public class ClusterRenderer extends BucketRenderer {
 
             double lat, lon;
             if (it.item instanceof Cluster) {
-
                 //set draw point to center of cluster
-                Cluster cluster = (Cluster) it.item;
-                Coordinate centerCoord = cluster.getCenter();
+                Coordinate centerCoord = ((Cluster) it.item).getCenter();
                 lat = centerCoord.latitude;
                 lon = centerCoord.longitude;
 

@@ -26,6 +26,8 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterRenderer;
+import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.geocluster.Cluster;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.ClusterablePoint;
 import de.longri.cachebox3.locator.geocluster.ClusteredList;
@@ -331,7 +333,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         Box box = mapPosition.getBBox(null, 128);
         box.map2mercator();
-        box.scale(1E6);
+//        box.scale(1E6);
 
         int nearest = -1;
         int inside = -1;
@@ -343,11 +345,22 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         for (int i = 0; i < size; i++) {
             ClusterablePoint item = mItemList.get(i);
 
-            if (!box.contains((int) (item.longitude * 1000000.0D),
-                    (int) (item.latitude * 1000000.0D)))
+            double lat, lon;
+            if (item instanceof Cluster) {
+                //the draw point is set to center of cluster
+                Coordinate centerCoord = ((Cluster) item).getCenter();
+                lat = centerCoord.latitude;
+                lon = centerCoord.longitude;
+
+            } else {
+                lat = item.latitude;
+                lon = item.longitude;
+            }
+
+            if (!box.contains(lon, lat))
                 continue;
 
-            mapPosition.toScreenPoint(new GeoPoint(item.latitude, item.longitude), mTmpPoint);
+            mapPosition.toScreenPoint(new GeoPoint(lat, lon), mTmpPoint);
 
             float dx = (float) (mTmpPoint.x - eventX);
             float dy = (float) (mTmpPoint.y - eventY);
