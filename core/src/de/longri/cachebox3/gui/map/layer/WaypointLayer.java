@@ -68,7 +68,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     private final ClusteredList mItemList;
 
     private double lastFactor = 2.0;
-    private int mDrawnItemsLimit = Integer.MAX_VALUE;
     private Thread clusterThread;
     private ClusterRunnable clusterRunnable;
 
@@ -132,7 +131,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             }
         });
         thread.start();
-
     }
 
 

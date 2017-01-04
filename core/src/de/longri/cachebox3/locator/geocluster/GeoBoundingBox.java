@@ -1,6 +1,19 @@
+/*
+ * Copyright (C) 2016-2017 team-cachebox.de
+ *
+ * Licensed under the : GNU General Public License (GPL);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.gnu.org/licenses/gpl.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.longri.cachebox3.locator.geocluster;
-
-
 
 import org.oscim.core.GeoPoint;
 
@@ -8,7 +21,6 @@ import java.util.Arrays;
 
 public class GeoBoundingBox {
     private final GeoPoint topLeft, bottomRight;
-    private static final double EARTH_RADIUS = 6371.01d;
 
     public GeoBoundingBox(GeoPoint point) {
         this(point, point);
@@ -19,35 +31,10 @@ public class GeoBoundingBox {
         this.bottomRight = bottomRight;
     }
 
-
-    public GeoPoint topLeft() {
-        return topLeft;
-    }
-
-    public GeoPoint bottomRight() {
-        return bottomRight;
-    }
-
     public boolean contains(GeoPoint point) {
         return point.getLatitude() <= topLeft.getLatitude() && point.getLatitude() >= bottomRight.getLatitude() &&
                 point.getLongitude() >= topLeft.getLongitude() && point.getLongitude() <= bottomRight.getLongitude();
     }
-
-
-
-    public GeoBoundingBox extend(GeoBoundingBox bounds) {
-        return extend(bounds.topLeft(), bounds.bottomRight());
-    }
-
-
-
-
-    private GeoBoundingBox extend(GeoPoint topLeft, GeoPoint bottomRight) {
-        return contains(topLeft) && contains(bottomRight) ? this : new GeoBoundingBox(
-                new GeoPoint(Math.max(topLeft().getLatitude(), topLeft.getLatitude()), Math.min(topLeft().getLongitude(), topLeft.getLongitude())),
-                new GeoPoint(Math.min(bottomRight().getLatitude(), bottomRight.getLatitude()), Math.max(bottomRight().getLongitude(), bottomRight.getLongitude())));
-    }
-
 
     @Override
     public boolean equals(Object that) {
