@@ -68,6 +68,8 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     private final ClusterRenderer mClusterRenderer;
     private final Point mTmpPoint = new Point();
     private final ClusteredList mItemList;
+    private final Box mapClickDetectionBox = new Box();
+    private final double[] out = new double[2];
 
     private double lastFactor = 2.0;
     private Thread clusterThread;
@@ -331,13 +333,12 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         int eventY = (int) event.getY() - mMap.getHeight() / 2;
         Viewport mapPosition = mMap.viewport();
 
-        Box box = mapPosition.getBBox(null, 128);
-        box.map2mercator();
-//        box.scale(1E6);
+        mapPosition.getBBox(mapClickDetectionBox, 128);
+        mapClickDetectionBox.map2mercator();
 
         int nearest = -1;
         int inside = -1;
-        double insideY = -Double.MAX_VALUE;
+
 
         /* squared dist: 50*50 pixel ~ 2mm on 400dpi */
         double dist = 2500;
@@ -357,10 +358,11 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                 lon = item.longitude;
             }
 
-            if (!box.contains(lon, lat))
+            if (!mapClickDetectionBox.contains(lon, lat))
                 continue;
 
-            mapPosition.toScreenPoint(new GeoPoint(lat, lon), mTmpPoint);
+            MercatorProjection.project(lat, lon, out, 0);
+            mapPosition.toScreenPoint(out[0], out[1], true, mTmpPoint);
 
             float dx = (float) (mTmpPoint.x - eventX);
             float dy = (float) (mTmpPoint.y - eventY);
