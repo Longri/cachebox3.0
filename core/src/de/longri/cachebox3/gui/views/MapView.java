@@ -190,8 +190,7 @@ public class MapView extends AbstractView {
                     if (positionChangedHandler != null)
                         positionChangedHandler.rotateChangedFromUser(mapPosition.getBearing());
                 } else if (e == Map.ANIM_END) {
-                    log.debug("Map.ANIM_START" + mapPosition);
-//                    wayPointLayer.setZoomLevel(mapPosition);
+//                    log.debug("Map.ANIM_END" + mapPosition);
                 }
             }
         };

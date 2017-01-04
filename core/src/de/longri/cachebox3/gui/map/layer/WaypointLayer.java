@@ -43,6 +43,7 @@ import org.oscim.core.*;
 import org.oscim.event.Gesture;
 import org.oscim.event.GestureListener;
 import org.oscim.event.MotionEvent;
+import org.oscim.gdx.MotionHandler;
 import org.oscim.layers.Layer;
 import org.oscim.map.Map;
 import org.oscim.map.Viewport;
@@ -294,6 +295,9 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     @Override
     public boolean onGesture(Gesture g, MotionEvent e) {
+
+        if (!(e instanceof MotionHandler)) return false;
+
         if (g instanceof Gesture.Tap)
             return activateSelectedItems(e, mActiveItemSingleTap);
 
