@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterRenderer;
-import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.ClusterablePoint;
 import de.longri.cachebox3.locator.geocluster.ClusteredList;
@@ -58,10 +57,10 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
 
-    public static final ClusterSymbol defaultMarker = getClusterSymbol("myterie");
-    public static final ClusterSymbol CLUSTER1_SYMBOL = getClusterSymbol("cluster1");
-    public static final ClusterSymbol CLUSTER10_SYMBOL = getClusterSymbol("cluster10");
-    public static final ClusterSymbol CLUSTER100_SYMBOL = getClusterSymbol("cluster100");
+    public static final Bitmap defaultMarker = getClusterSymbol("myterie");
+    public static final Bitmap CLUSTER1_SYMBOL = getClusterSymbol("cluster1");
+    public static final Bitmap CLUSTER10_SYMBOL = getClusterSymbol("cluster10");
+    public static final Bitmap CLUSTER100_SYMBOL = getClusterSymbol("cluster100");
 
 
     private final ClusterRenderer mClusterRenderer;
@@ -172,11 +171,11 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    private final HashMap<String, ClusterSymbol> ClusterSymbolHashMap = new HashMap<String, ClusterSymbol>();
+    private final HashMap<String, Bitmap> ClusterSymbolHashMap = new HashMap<String, Bitmap>();
 
 
-    private ClusterSymbol getClusterSymbolByCache(Cache cache) {
-        ClusterSymbol symbol = null;
+    private Bitmap getClusterSymbolByCache(Cache cache) {
+        Bitmap symbol = null;
         String symbolName = getMapIconName(cache);
         symbol = ClusterSymbolHashMap.get(symbolName);
         if (symbol == null) {
@@ -186,8 +185,8 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         return symbol;
     }
 
-    private ClusterSymbol getClusterSymbolByWaypoint(Waypoint waypoint) {
-        ClusterSymbol symbol = null;
+    private Bitmap getClusterSymbolByWaypoint(Waypoint waypoint) {
+        Bitmap symbol = null;
         String symbolName = getMapIconName(waypoint);
         symbol = ClusterSymbolHashMap.get(symbolName);
         if (symbol == null) {
@@ -220,7 +219,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             return "map" + waypoint.Type.name();
     }
 
-    private static ClusterSymbol getClusterSymbol(String name) {
+    private static Bitmap getClusterSymbol(String name) {
 
         if (!VisUI.isLoaded()) return null;
 
@@ -233,7 +232,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         } catch (IOException e) {
             return null;
         }
-        return new ClusterSymbol(bitmap, true);
+        return bitmap;
     }
 
 

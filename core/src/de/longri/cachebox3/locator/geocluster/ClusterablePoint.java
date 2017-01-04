@@ -1,7 +1,7 @@
 package de.longri.cachebox3.locator.geocluster;
 
-import de.longri.cachebox3.gui.map.layer.cluster.ClusterSymbol;
 import de.longri.cachebox3.locator.Coordinate;
+import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.GeoPoint;
 
 import java.util.Arrays;
@@ -52,8 +52,8 @@ public class ClusterablePoint extends Coordinate {
         return "Cluster : " + debugName;
     }
 
-    public void setClusterSymbol(ClusterSymbol Cluster) {
-        clustersymbol = Cluster;
+    public void setClusterSymbol(Bitmap Cluster) {
+        mapSymbol = Cluster;
     }
 
     public void setDistanceBoundce(double distance) {

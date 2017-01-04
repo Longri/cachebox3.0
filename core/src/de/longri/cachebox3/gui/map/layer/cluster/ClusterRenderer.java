@@ -1,21 +1,18 @@
 /*
- * Copyright 2013 Hannes Janetzek
- * Copyright 2016 Izumi Kawashima
+ * Copyright (C) 2016-2017 team-cachebox.de
  *
- * This file is part of the OpenScienceMap project (http://www.opensciencemap.org).
+ * Licensed under the : GNU General Public License (GPL);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later version.
+ *      http://www.gnu.org/licenses/gpl.html
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
- * PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package de.longri.cachebox3.gui.map.layer.cluster;
 
 
@@ -24,6 +21,7 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
+import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.Point;
 import org.oscim.core.Tile;
 import org.oscim.renderer.BucketRenderer;
@@ -39,7 +37,7 @@ public class ClusterRenderer extends BucketRenderer {
 
     public static final Logger log = LoggerFactory.getLogger(BucketRenderer.class);
 
-    public final ClusterSymbol mDefaultCluster;
+    public final Bitmap mDefaultBitmap;
 
     private final SymbolBucket mSymbolLayer;
     private final float[] mBox = new float[8];
@@ -47,11 +45,6 @@ public class ClusterRenderer extends BucketRenderer {
     private final Point mMapPoint = new Point();
 
     private int lastZoomLevel = -1;
-
-    /**
-     * increase view to show items that are partially visible
-     */
-    protected int mExtents = 100;
 
     /**
      * flag to force update of Clusters
@@ -74,10 +67,10 @@ public class ClusterRenderer extends BucketRenderer {
         }
     }
 
-    public ClusterRenderer(WaypointLayer waypointLayer, ClusterSymbol defaultSymbol) {
+    public ClusterRenderer(WaypointLayer waypointLayer, Bitmap defaultSymbol) {
         mSymbolLayer = new SymbolBucket();
         mWaypointLayer = waypointLayer;
-        mDefaultCluster = defaultSymbol;
+        mDefaultBitmap = defaultSymbol;
     }
 
 
@@ -113,10 +106,12 @@ public class ClusterRenderer extends BucketRenderer {
         double my = v.pos.y;
         double scale = Tile.SIZE * v.pos.scale;
 
-        //int changesInvisible = 0;
-        //int changedVisible = 0;
+
         int numVisible = 0;
 
+        //increase view to show items that are partially visible
+
+        int mExtents = 100;
         mWaypointLayer.map().viewport().getMapExtents(mBox, mExtents);
 
         long flip = (long) (Tile.SIZE * v.pos.scale) >> 1;
@@ -182,12 +177,12 @@ public class ClusterRenderer extends BucketRenderer {
                 continue;
             }
 
-            ClusterSymbol cluster = it.item.clustersymbol;
-            if (cluster == null)
-                cluster = mDefaultCluster;
+            Bitmap bitmap = it.item.mapSymbol;
+            if (bitmap == null)
+                bitmap = mDefaultBitmap;
 
             SymbolItem s = SymbolItem.pool.get();
-            s.set(it.x, it.y, cluster.getBitmap(), true);
+            s.set(it.x, it.y, bitmap, true);
 
             mSymbolLayer.pushSymbol(s);
         }
