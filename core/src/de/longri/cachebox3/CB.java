@@ -286,6 +286,11 @@ public class CB {
         return selectedCache;
     }
 
+    public static boolean isSelectedCache(Cache cache) {
+        if (selectedCache != null && selectedCache.equals(cache)) return true;
+        return false;
+    }
+
     public static void setNearestCache(Cache Cache) {
         nearestCache = Cache;
     }

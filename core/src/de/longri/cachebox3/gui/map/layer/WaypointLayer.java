@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
@@ -31,9 +32,11 @@ import de.longri.cachebox3.locator.geocluster.ClusterablePoint;
 import de.longri.cachebox3.locator.geocluster.ClusteredList;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
+import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.*;
@@ -113,6 +116,15 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                         ClusterablePoint geoCluster = new ClusterablePoint(cache, cache.getGcCode());
                         geoCluster.setClusterSymbol(getClusterSymbolByCache(cache));
                         mItemList.add(geoCluster);
+
+                        //add waypoints from selected Cache or all Waypoints if set
+                        if (Settings.ShowAllWaypoints.getValue() || CB.isSelectedCache(cache)) {
+                            for (Waypoint waypoint : cache.waypoints) {
+                                ClusterablePoint waypointCluster = new ClusterablePoint(waypoint, waypoint.getGcCode());
+                                waypointCluster.setClusterSymbol(getClusterSymbolByWaypoint(waypoint));
+                                mItemList.add(waypointCluster);
+                            }
+                        }
                     }
                     WaypointLayer.this.populate();
                     setZoomLevel(mMap.getMapPosition());
@@ -173,6 +185,17 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         return symbol;
     }
 
+    private ClusterSymbol getClusterSymbolByWaypoint(Waypoint waypoint) {
+        ClusterSymbol symbol = null;
+        String symbolName = getMapIconName(waypoint);
+        symbol = ClusterSymbolHashMap.get(symbolName);
+        if (symbol == null) {
+            symbol = getClusterSymbol(symbolName);
+            ClusterSymbolHashMap.put(symbolName, symbol);
+        }
+        return symbol;
+    }
+
 
     private static String getMapIconName(Cache cache) {
         if (cache.ImTheOwner())
@@ -187,7 +210,13 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             return "mapMysteryStartP"; // Mystery without Final but with start point
         else
             return "map" + cache.Type.name();
+    }
 
+    private static String getMapIconName(Waypoint waypoint) {
+        if ((waypoint.Type == CacheTypes.MultiStage) && (waypoint.IsStart))
+            return "mapMultiStageStartP";
+        else
+            return "map" + waypoint.Type.name();
     }
 
     private static ClusterSymbol getClusterSymbol(String name) {

@@ -442,6 +442,30 @@
     "cluster100": {
       "path": "skins/day/svg/cluster100.svg",
       "scale": 0.15
+    },
+    "mapParkingArea": {
+      "path": "skins/day/svg/mapParkingArea.svg",
+      "scale": 0.15
+    },
+    "mapReferencePoint": {
+      "path": "skins/day/svg/mapReferencePoint.svg",
+      "scale": 0.13
+    },
+    "mapTrailhead": {
+      "path": "skins/day/svg/mapTrailhead.svg",
+      "scale": 0.13
+    },
+    "mapFinal": {
+      "path": "skins/day/svg/final.svg",
+      "scale": 0.13
+    },
+    "mapMultiQuestion": {
+      "path": "skins/day/svg/multiQuestion.svg",
+      "scale": 0.13
+    },
+    "mapMultiStage": {
+      "path": "skins/day/svg/multiStage.svg",
+      "scale": 0.13
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
