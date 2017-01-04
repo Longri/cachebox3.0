@@ -125,6 +125,9 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                             }
                         }
                     }
+
+                    mItemList.setFinishFill();
+
                     WaypointLayer.this.populate();
                     setZoomLevel(mMap.getMapPosition());
                 }
@@ -137,8 +140,14 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     private void reduceCluster(final double distance) {
 
         if (lastFactor == distance) {
-            log.debug("GeoClustering  no distance changes");
-            return;
+            if (distance == 0) {
+                // ensure that cluster is expand to all
+                if (mItemList.isExpandToAll()) {
+                    log.debug("GeoClustering  no distance changes");
+                    return;
+                }
+                log.debug("GeoClustering  must expand to all");
+            }
         }
 
         if (clusterThread != null && clusterThread.isAlive()) {

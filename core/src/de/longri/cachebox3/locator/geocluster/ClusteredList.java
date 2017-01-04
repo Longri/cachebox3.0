@@ -27,16 +27,22 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
 
 
     private double lastDistance = -1;
+    private int allItemSize = 0;
 
 
     public void clusterByDistance(double distance) {
 
-        if (lastDistance == -1 || lastDistance < distance) {
+        if (distance == 0) {
+            if (this.size < allItemSize) {
+                lastDistance = distance;
+                expand(distance, true);
+            }
+        } else if (lastDistance == -1 || lastDistance < distance) {
             lastDistance = distance;
             reduce(distance);
         } else {
             lastDistance = distance;
-            expand(distance);
+            expand(distance, false);
         }
 
 
@@ -101,7 +107,7 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
         return new Coordinate(avLat / this.size, avLon / this.size);
     }
 
-    private void expand(final double distance) {
+    private void expand(final double distance, boolean all) {
         ClusteredList outsideList = new ClusteredList();
         ClusteredList emptyList = new ClusteredList();
         ClusteredList clusterOutList = new ClusteredList();
@@ -112,14 +118,14 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
             Cluster cluster = (Cluster) obj;
 
             clusterOutList.clear();
-            cluster.setDistanceBoundce(distance);
+            if (!all) cluster.setDistanceBoundce(distance);
             for (ClusterablePoint includedCluster : cluster.includedClusters) {
 
                 if (this.contains(includedCluster)) {
                     continue;
                 }
 
-                if (!cluster.contains(includedCluster)) {
+                if (all || !cluster.contains(includedCluster)) {
                     clusterOutList.add(includedCluster);
                 }
             }
@@ -131,10 +137,13 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
                 emptyList.add(cluster);
             }
 
+            if (cluster.size() == 0) {
+                emptyList.add(cluster);
+            }
+
             outsideList.addAll(clusterOutList);
 
             int clusterSize = cluster.size();
-
             if (WaypointLayer.CLUSTER1_SYMBOL != null) { //is NULL in case of JUnit test
                 if (clusterSize > 1 && clusterSize <= 10) {
                     cluster.setClusterSymbol(WaypointLayer.CLUSTER1_SYMBOL);
@@ -147,6 +156,14 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
         }
         this.addAll(outsideList);
         this.removeAll(emptyList);
-        this.reduce(distance);
+        if (!all) this.reduce(distance); //don't reduce with show all
+    }
+
+    public void setFinishFill() {
+        allItemSize = this.size;
+    }
+
+    public boolean isExpandToAll() {
+        return allItemSize == this.size;
     }
 }
