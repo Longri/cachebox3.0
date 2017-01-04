@@ -33,7 +33,7 @@ public class ClusterRunnable implements Runnable {
     private volatile boolean running = true; //TODO implement cancel thread
 
     public interface CallBack {
-        void callBack(CB_List<ClusterablePoint> reduced);
+        void callBack();
     }
 
     public ClusterRunnable(double distance, final ClusteredList workList, final CallBack callBack) {
@@ -54,7 +54,7 @@ public class ClusterRunnable implements Runnable {
         try {
             workList.clusterByDistance(distance);
             log.debug("callback with reduced to " + workList.size());
-            callBack.callBack(workList);
+            callBack.callBack();
         } catch (Exception e) {
             running = false;
             log.error("Runnable exception", e);

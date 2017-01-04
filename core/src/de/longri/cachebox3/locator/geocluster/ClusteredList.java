@@ -16,7 +16,6 @@
 package de.longri.cachebox3.locator.geocluster;
 
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.lists.CB_List;
 
 
@@ -148,5 +147,9 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
 
     public boolean isExpandToAll() {
         return allItemSize == this.size;
+    }
+
+    public int getAllSize() {
+        return allItemSize;
     }
 }

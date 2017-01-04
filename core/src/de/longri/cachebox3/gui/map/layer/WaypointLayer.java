@@ -38,7 +38,6 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
-import de.longri.cachebox3.utils.lists.CB_List;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.*;
 import org.oscim.event.Gesture;
@@ -168,10 +167,12 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
 
         lastFactor = distance;
+        final int lastSize = mItemList.size();
         clusterRunnable = new ClusterRunnable(distance, mItemList, new ClusterRunnable.CallBack() {
             @Override
-            public void callBack(CB_List<ClusterablePoint> reduced) {
-                log.debug("Cluster Reduce from " + mItemList.size() + " items to " + reduced.size() + " items");
+            public void callBack() {
+                log.debug("Cluster Reduce from " + lastSize + " items to "
+                        + mItemList.size() + " items [" + mItemList.getAllSize() + "]");
                 WaypointLayer.this.populate();
                 mMap.updateMap(true);
                 mMap.render();

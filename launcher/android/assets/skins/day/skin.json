@@ -466,6 +466,10 @@
     "mapMultiStage": {
       "path": "skins/day/svg/multiStage.svg",
       "scale": 0.13
+    },
+    "mapMultiStageStartP": {
+      "path": "skins/day/svg/multiStageStartP.svg",
+      "scale": 0.13
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
