@@ -90,23 +90,6 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
         }
     }
 
-
-    /**
-     * Calculate the center coordinate of all included Coordinates
-     *
-     * @return Coordinate
-     */
-    private Coordinate getCenter() {
-        double avLat = 0;
-        double avLon = 0;
-
-        for (ClusterablePoint cluster : this) {
-            avLat += cluster.latitude;
-            avLon += cluster.longitude;
-        }
-        return new Coordinate(avLat / this.size, avLon / this.size);
-    }
-
     private void expand(final double distance, boolean all) {
         ClusteredList outsideList = new ClusteredList();
         ClusteredList emptyList = new ClusteredList();
@@ -119,7 +102,7 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
 
             clusterOutList.clear();
             if (!all) cluster.setDistanceBoundce(distance);
-            for (ClusterablePoint includedCluster : cluster.includedClusters) {
+            for (ClusterablePoint includedCluster : cluster.getIncludedClusters()) {
 
                 if (this.contains(includedCluster)) {
                     continue;
@@ -133,7 +116,7 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
             cluster.removeAll(clusterOutList);
 
             if (cluster.size() == 1) {
-                clusterOutList.add(cluster.includedClusters.get(0));
+                clusterOutList.add(cluster.getIncludedClusters().get(0));
                 emptyList.add(cluster);
             }
 

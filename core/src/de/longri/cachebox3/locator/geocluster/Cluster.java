@@ -22,7 +22,8 @@ import de.longri.cachebox3.locator.Coordinate;
  */
 public class Cluster extends ClusterablePoint {
 
-    final ClusteredList includedClusters = new ClusteredList();
+    private final ClusteredList includedClusters = new ClusteredList();
+    private Coordinate centerCoordinate;
 
     public Cluster(Coordinate pos, String name) {
         super(pos, name);
@@ -38,6 +39,7 @@ public class Cluster extends ClusterablePoint {
                 this.includedClusters.add(cluster);
             }
         }
+        centerCoordinate = null;
     }
 
 
@@ -47,16 +49,19 @@ public class Cluster extends ClusterablePoint {
         } else {
             this.includedClusters.add(cluster);
         }
+        centerCoordinate = null;
     }
 
     public void add(Cluster cluster) {
         this.includedClusters.addAll(cluster.includedClusters);
         cluster.includedClusters.clear();
         this.includedClusters.add(cluster);
+        centerCoordinate = null;
     }
 
     void removeAll(ClusteredList list) {
         this.includedClusters.removeAll(list);
+        centerCoordinate = null;
     }
 
     public int size() {
@@ -66,5 +71,31 @@ public class Cluster extends ClusterablePoint {
     @Override
     public String toString() {
         return "Cluster [" + this.includedClusters.size() + "]: ";
+    }
+
+    /**
+     * Calculate the center coordinate of all included Coordinates
+     *
+     * @return Coordinate
+     */
+    public Coordinate getCenter() {
+
+        if (centerCoordinate != null) return centerCoordinate;
+
+        double avLat = 0;
+        double avLon = 0;
+
+        for (ClusterablePoint cluster : this.includedClusters) {
+            avLat += cluster.latitude;
+            avLon += cluster.longitude;
+        }
+        centerCoordinate = new Coordinate(avLat / this.includedClusters.size(),
+                avLon / this.includedClusters.size());
+
+        return centerCoordinate;
+    }
+
+    public ClusteredList getIncludedClusters() {
+        return includedClusters;
     }
 }

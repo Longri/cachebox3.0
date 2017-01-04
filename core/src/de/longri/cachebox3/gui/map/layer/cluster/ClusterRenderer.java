@@ -19,6 +19,7 @@ package de.longri.cachebox3.gui.map.layer.cluster;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.geocluster.Cluster;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.backend.canvas.Bitmap;
@@ -203,9 +204,24 @@ public class ClusterRenderer extends BucketRenderer {
             it.item = mWaypointLayer.createItem(i);
 
             /* pre-project points */
-            mMapPoint.x = (it.item.longitude + 180.0) / 360.0;
 
-            double sinLatitude = Math.sin(it.item.latitude * (Math.PI / 180.0));
+            double lat, lon;
+            if (it.item instanceof Cluster) {
+
+                //set draw point to center of cluster
+                Cluster cluster = (Cluster) it.item;
+                Coordinate centerCoord = cluster.getCenter();
+                lat = centerCoord.latitude;
+                lon = centerCoord.longitude;
+
+            } else {
+                lat = it.item.latitude;
+                lon = it.item.longitude;
+            }
+
+            mMapPoint.x = (lon + 180.0) / 360.0;
+
+            double sinLatitude = Math.sin(lat * (Math.PI / 180.0));
             mMapPoint.y = 0.5 - Math.log((1.0 + sinLatitude) / (1.0 - sinLatitude)) / (4.0 * Math.PI);
 
             it.px = mMapPoint.x;

@@ -260,7 +260,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                double groundResolution = zoomLevel < 13 ?
+                double groundResolution = zoomLevel < 14 ?
                         (MercatorProjection.groundResolution(mapPos) * Tile.SIZE) / 2 : 0;
 
                 log.debug("call reduce cluster with distance: " + groundResolution);
