@@ -30,16 +30,23 @@ public class GeoBoundingBox {
     public GeoBoundingBox(GeoPoint topLeft, GeoPoint bottomRight) {
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
+        validate();
     }
 
     public GeoBoundingBox(Box box) {
-        topLeft = new GeoPoint(box.xmin, box.ymin);
-        bottomRight = new GeoPoint(box.xmax, box.ymax);
+        bottomRight = new GeoPoint( box.ymin,box.xmax);
+        topLeft = new GeoPoint( box.ymax,box.xmin);
+        validate();
     }
 
     public boolean contains(GeoPoint point) {
         return point.latitudeE6 <= topLeft.latitudeE6 && point.latitudeE6 >= bottomRight.latitudeE6 &&
                 point.longitudeE6 >= topLeft.longitudeE6 && point.longitudeE6 <= bottomRight.longitudeE6;
+    }
+
+    private void validate() {
+        if (topLeft.latitudeE6 < bottomRight.latitudeE6 || topLeft.longitudeE6 > bottomRight.longitudeE6)
+            throw new IllegalArgumentException("Wrong leftTop to rightBottom");
     }
 
     @Override

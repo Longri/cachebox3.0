@@ -167,7 +167,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         final int lastSize = mItemList.size();
 
         Viewport mapPosition = mMap.viewport();
-        mapPosition.getBBox(mapClickDetectionBox, 128);
+        mapPosition.getBBox(mapClickDetectionBox, 0);
         mapClickDetectionBox.map2mercator();
 
         GeoBoundingBox boundingBox = new GeoBoundingBox(mapClickDetectionBox);
