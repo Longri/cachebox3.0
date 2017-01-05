@@ -18,7 +18,6 @@ package de.longri.cachebox3.locator.geocluster;
 
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
-import de.longri.cachebox3.utils.lists.CB_List;
 
 /**
  * Created by Longri on 21.12.16.
@@ -30,16 +29,18 @@ public class ClusterRunnable implements Runnable {
     protected final double distance;
     private final CallBack callBack;
     private final ClusteredList workList;
+    private final GeoBoundingBox boundingBox;
     private volatile boolean running = true; //TODO implement cancel thread
 
     public interface CallBack {
         void callBack();
     }
 
-    public ClusterRunnable(double distance, final ClusteredList workList, final CallBack callBack) {
+    public ClusterRunnable(double distance, final ClusteredList workList, final CallBack callBack, GeoBoundingBox boundingBox) {
         this.callBack = callBack;
         this.distance = distance;
         this.workList = workList;
+        this.boundingBox = boundingBox;
     }
 
     public void terminate() {
@@ -52,7 +53,7 @@ public class ClusterRunnable implements Runnable {
         log.debug("Runnable started");
 
         try {
-            workList.clusterByDistance(distance);
+            workList.clusterByDistance(distance, this.boundingBox);
             log.debug("callback with reduced to " + workList.size());
             callBack.callBack();
         } catch (Exception e) {

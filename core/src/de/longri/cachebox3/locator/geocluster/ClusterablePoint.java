@@ -23,9 +23,9 @@ import java.util.Arrays;
 
 public class ClusterablePoint extends Coordinate {
 
-   private final Object dataObject; // Cache.class or WayPoint.class
+    private final Object dataObject; // Cache.class or WayPoint.class
 
-    final private GeoPoint geoPoint;
+    final GeoPoint geoPoint;
     private GeoBoundingBox bounds;
     private final int cachedHash;
 

@@ -27,10 +27,7 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterRenderer;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.geocluster.Cluster;
-import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
-import de.longri.cachebox3.locator.geocluster.ClusterablePoint;
-import de.longri.cachebox3.locator.geocluster.ClusteredList;
+import de.longri.cachebox3.locator.geocluster.*;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Settings;
@@ -168,6 +165,14 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         lastFactor = distance;
         final int lastSize = mItemList.size();
+
+        Viewport mapPosition = mMap.viewport();
+        mapPosition.getBBox(mapClickDetectionBox, 128);
+        mapClickDetectionBox.map2mercator();
+
+        GeoBoundingBox boundingBox = new GeoBoundingBox(mapClickDetectionBox);
+
+
         clusterRunnable = new ClusterRunnable(distance, mItemList, new ClusterRunnable.CallBack() {
             @Override
             public void callBack() {
@@ -177,7 +182,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                 mMap.updateMap(true);
                 mMap.render();
             }
-        });
+        }, boundingBox);
         clusterThread = new Thread(clusterRunnable);
         clusterThread.start();
     }
@@ -333,7 +338,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         int eventX = (int) event.getX() - mMap.getWidth() / 2;
         int eventY = (int) event.getY() - mMap.getHeight() / 2;
         Viewport mapPosition = mMap.viewport();
-
         mapPosition.getBBox(mapClickDetectionBox, 128);
         mapClickDetectionBox.map2mercator();
 

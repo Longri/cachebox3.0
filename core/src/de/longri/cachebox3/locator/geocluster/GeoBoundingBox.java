@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.locator.geocluster;
 
+import org.oscim.core.Box;
 import org.oscim.core.GeoPoint;
 
 import java.util.Arrays;
@@ -31,9 +32,14 @@ public class GeoBoundingBox {
         this.bottomRight = bottomRight;
     }
 
+    public GeoBoundingBox(Box box) {
+        topLeft = new GeoPoint(box.xmin, box.ymin);
+        bottomRight = new GeoPoint(box.xmax, box.ymax);
+    }
+
     public boolean contains(GeoPoint point) {
-        return point.getLatitude() <= topLeft.getLatitude() && point.getLatitude() >= bottomRight.getLatitude() &&
-                point.getLongitude() >= topLeft.getLongitude() && point.getLongitude() <= bottomRight.getLongitude();
+        return point.latitudeE6 <= topLeft.latitudeE6 && point.latitudeE6 >= bottomRight.latitudeE6 &&
+                point.longitudeE6 >= topLeft.longitudeE6 && point.longitudeE6 <= bottomRight.longitudeE6;
     }
 
     @Override
