@@ -77,6 +77,7 @@ public class ClusterablePoint extends Coordinate {
     }
 
     public boolean contains(ClusterablePoint testCluster) {
+        if (this.bounds == null) return false;
         return this.bounds.contains(testCluster.geoPoint);
     }
 
