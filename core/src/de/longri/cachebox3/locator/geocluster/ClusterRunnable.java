@@ -30,17 +30,20 @@ public class ClusterRunnable implements Runnable {
     private final CallBack callBack;
     private final ClusteredList workList;
     private final GeoBoundingBox boundingBox;
+    private final boolean forceReduce;
     private volatile boolean running = true; //TODO implement cancel thread
 
     public interface CallBack {
         void callBack();
     }
 
-    public ClusterRunnable(double distance, final ClusteredList workList, final CallBack callBack, GeoBoundingBox boundingBox) {
+    public ClusterRunnable(double distance, final ClusteredList workList, final CallBack callBack,
+                           GeoBoundingBox boundingBox, boolean forceReduce) {
         this.callBack = callBack;
         this.distance = distance;
         this.workList = workList;
         this.boundingBox = boundingBox;
+        this.forceReduce = forceReduce;
     }
 
     public void terminate() {
@@ -53,7 +56,7 @@ public class ClusterRunnable implements Runnable {
         log.debug("Runnable started");
 
         try {
-            workList.clusterByDistance(distance, this.boundingBox);
+            workList.clusterByDistance(distance, this.boundingBox, forceReduce);
             log.debug("callback with reduced to " + workList.size());
             callBack.callBack();
         } catch (Exception e) {

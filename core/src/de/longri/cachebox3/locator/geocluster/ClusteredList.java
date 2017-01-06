@@ -31,14 +31,20 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
     private GeoBoundingBox clusterBoundingBox;
 
 
-    public void clusterByDistance(double distance, GeoBoundingBox boundingBox) {
+    public void clusterByDistance(double distance, GeoBoundingBox boundingBox, boolean forcereduce) {
         clusterBoundingBox = boundingBox;
+
+        if (forcereduce) {
+            reduce(distance);
+            return;
+        }
+
         if (distance == 0) {
             if (this.size < allItemSize) {
                 lastDistance = distance;
                 expand(distance, true);
             }
-        } else if (lastDistance == -1 || lastDistance < distance) {
+        } else if (lastDistance == -1 || lastDistance <= distance) {
             lastDistance = distance;
             reduce(distance);
         } else {
@@ -112,7 +118,7 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
             if (!all) cluster.setDistanceBoundce(distance);
             for (ClusterablePoint includedCluster : cluster.getIncludedClusters()) {
 
-                if (this.contains(includedCluster)) {
+                if (includedCluster == null || this.contains(includedCluster)) {
                     continue;
                 }
 

@@ -129,7 +129,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                     mItemList.setFinishFill();
 
                     WaypointLayer.this.populate();
-                    setZoomLevel(mMap.getMapPosition());
+                    calculateCluster(mMap.getMapPosition(), false);
                 }
             }
         });
@@ -137,7 +137,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    private void reduceCluster(final double distance) {
+    private void reduceCluster(final double distance, final boolean forceReduce) {
 
         if (lastFactor == distance) {
             if (distance == 0) {
@@ -167,7 +167,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         final int lastSize = mItemList.size();
 
         Viewport mapPosition = mMap.viewport();
-        mapPosition.getBBox(mapClickDetectionBox, 0);
+        mapPosition.getBBox(mapClickDetectionBox, 350);
         mapClickDetectionBox.map2mercator();
 
         GeoBoundingBox boundingBox = new GeoBoundingBox(mapClickDetectionBox);
@@ -182,7 +182,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                 mMap.updateMap(true);
                 mMap.render();
             }
-        }, boundingBox);
+        }, boundingBox, forceReduce);
         clusterThread = new Thread(clusterRunnable);
         clusterThread.start();
     }
@@ -255,16 +255,21 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     private int lastZoomLevel = -1;
 
-    public void setZoomLevel(final MapPosition mapPos) {
+    public void calculateCluster(final MapPosition mapPos, final boolean forcePosChanged) {
 
         final int zoomLevel = mapPos.getZoomLevel();
 
         log.debug("Set zoom level to " + zoomLevel);
 
-        if (lastZoomLevel == zoomLevel) {
+        if (!forcePosChanged && lastZoomLevel == zoomLevel) {
             log.debug("no zoom level changes");
             return;
         }
+
+        if (forcePosChanged) {
+            log.debug("force calculate cluster with Pos changes");
+        }
+
         lastZoomLevel = zoomLevel;
 
         Thread thread = new Thread(new Runnable() {
@@ -274,7 +279,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                         (MercatorProjection.groundResolution(mapPos) * Tile.SIZE) / 2 : 0;
 
                 log.debug("call reduce cluster with distance: " + groundResolution);
-                reduceCluster(groundResolution);
+                reduceCluster(groundResolution, forcePosChanged);
             }
         });
         thread.start();

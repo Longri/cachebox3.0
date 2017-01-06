@@ -46,6 +46,9 @@ public class ClusterRenderer extends BucketRenderer {
     private final Point mMapPoint = new Point();
 
     private int lastZoomLevel = -1;
+    private double lastMapPosX = Double.MIN_VALUE;
+    private double lastMapPosY = Double.MIN_VALUE;
+    private float lastMapBearing = Float.MIN_VALUE;
 
     /**
      * flag to force update of Clusters
@@ -75,11 +78,27 @@ public class ClusterRenderer extends BucketRenderer {
     }
 
 
-    private boolean chekZoomLevelChanged(GLViewport v) {
+    private boolean chekForClusterChanges(GLViewport v) {
         mMapPosition.copy(v.pos);
         if (mMapPosition.getZoomLevel() != lastZoomLevel) {
             lastZoomLevel = mMapPosition.getZoomLevel();
-            mWaypointLayer.setZoomLevel(mMapPosition);
+            mWaypointLayer.calculateCluster(mMapPosition, false);
+            lastMapPosX = mMapPosition.x;
+            lastMapPosY = mMapPosition.y;
+            lastMapBearing = mMapPosition.bearing;
+            return true;
+        }
+
+        // check if map pos changed and not all clusterd
+        if (lastMapPosX != mMapPosition.x ||
+                lastMapPosY != mMapPosition.y ||
+                lastMapBearing != mMapPosition.bearing) {
+
+            mWaypointLayer.calculateCluster(mMapPosition, true);
+            lastMapPosX = mMapPosition.x;
+            lastMapPosY = mMapPosition.y;
+            lastMapBearing = mMapPosition.bearing;
+
             return true;
         }
         return false;
@@ -93,12 +112,12 @@ public class ClusterRenderer extends BucketRenderer {
 
         if (!v.changed() && !mUpdate) {
             zoomChecked = true;
-            if (!chekZoomLevelChanged(v)) {
+            if (!chekForClusterChanges(v)) {
                 return;
             }
         }
         if (!zoomChecked) {
-            zoomChanged = chekZoomLevelChanged(v);
+            zoomChanged = chekForClusterChanges(v);
         }
 
         mUpdate = false;
