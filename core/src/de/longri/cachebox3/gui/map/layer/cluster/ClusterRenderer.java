@@ -36,7 +36,7 @@ import java.util.Comparator;
 
 public class ClusterRenderer extends BucketRenderer {
 
-    public static final Logger log = LoggerFactory.getLogger(BucketRenderer.class);
+    public static final Logger log = LoggerFactory.getLogger(ClusterRenderer.class);
 
     public final Bitmap mDefaultBitmap;
 
@@ -89,17 +89,18 @@ public class ClusterRenderer extends BucketRenderer {
             return true;
         }
 
-        // check if map pos changed and not all clusterd
+        // check if map pos changed and not all clustered
         if (lastMapPosX != mMapPosition.x ||
                 lastMapPosY != mMapPosition.y ||
                 lastMapBearing != mMapPosition.bearing) {
 
-            mWaypointLayer.calculateCluster(mMapPosition, true);
-            lastMapPosX = mMapPosition.x;
-            lastMapPosY = mMapPosition.y;
-            lastMapBearing = mMapPosition.bearing;
-
-            return true;
+            if (mWaypointLayer.isAnyClusterNotVisible()) {
+                mWaypointLayer.calculateCluster(mMapPosition, true);
+                lastMapPosX = mMapPosition.x;
+                lastMapPosY = mMapPosition.y;
+                lastMapBearing = mMapPosition.bearing;
+                return true;
+            }
         }
         return false;
     }

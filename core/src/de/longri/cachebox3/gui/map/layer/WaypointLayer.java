@@ -170,7 +170,12 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         mapPosition.getBBox(mapClickDetectionBox, 350);
         mapClickDetectionBox.map2mercator();
 
-        GeoBoundingBox boundingBox = new GeoBoundingBox(mapClickDetectionBox);
+        GeoBoundingBox boundingBox = null;
+        try {
+            boundingBox = new GeoBoundingBox(mapClickDetectionBox);
+        } catch (Exception e) {
+            return;
+        }
 
 
         clusterRunnable = new ClusterRunnable(distance, mItemList, new ClusterRunnable.CallBack() {
@@ -283,6 +288,10 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             }
         });
         thread.start();
+    }
+
+    public boolean isAnyClusterNotVisible() {
+        return mItemList.isAnyClusterNotVisible();
     }
 
 
