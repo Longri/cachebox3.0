@@ -15,18 +15,90 @@
  */
 package de.longri.cachebox3.utils.lists;
 
+import com.badlogic.gdx.utils.Disposable;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+
 /**
  * Created by Longri on 06.01.2017.
  */
-public class ThreadStack<T extends Runnable> extends CB_Stack<T> {
+public class ThreadStack<T extends CancelRunable> implements Disposable {
 
+    private final CB_List<T> items;
+    private ExecutorService executor;
+    private final int maxItems;
+    private boolean isDisposed = false;
 
     public ThreadStack() {
-        super();
+        this(1);
     }
 
     public ThreadStack(int maxItemSize) {
-        super();
-        this.setMaxItemSize(maxItemSize);
+        items = new CB_List<T>();
+        maxItems = maxItemSize;
+        controlThread.start();
+    }
+
+    private Thread controlThread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            while (!isDisposed) {
+
+
+                if (executor == null && !items.isEmpty()) {
+                    //start
+                    executor = Executors.newFixedThreadPool(1, new ThreadFactory() {
+                        @Override
+                        public Thread newThread(Runnable r) {
+                            Thread thread = new Thread(r, "ThreadStackExecutor");
+                            thread.setDaemon(true);
+                            thread.setPriority(Thread.NORM_PRIORITY + 3);
+                            return thread;
+                        }
+                    });
+                    synchronized (items) {
+                        T item = items.first();
+                        items.remove(item);
+                        executor.execute(item);
+                    }
+                    // executor.shutdown();
+                    while (!executor.isTerminated()) {
+                    }
+                    try {
+                        Thread.sleep(0);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    executor = null;
+                }
+            }
+        }
+    });
+
+    public int getMaxItemSize() {
+        return maxItems;
+    }
+
+    public void pushAndStart(T runnable) {
+        synchronized (items) {
+            if (items.size >= maxItems) {
+                T item = items.first();
+                items.remove(item);
+            }
+            items.add(runnable);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        isDisposed = true;
+    }
+
+    public boolean isReadyAndEmpty() {
+        synchronized (items) {
+            return executor == null && items.isEmpty();
+        }
     }
 }
