@@ -45,13 +45,24 @@ class ThreadStackTest {
         @Override
         public void run() {
             stringBuilder.append("Start Runnable " + name + "\n");
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            int count = 0;
+            while (!cancel && count < 50) {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                count++;
             }
-            stringBuilder.append("Finish Runnable " + name + "\n");
-            stringBuilder.append("\n");
+
+            if (count < 50) {
+                stringBuilder.append("Cancel Runnable " + name + "\n");
+                stringBuilder.append("\n");
+            } else {
+                stringBuilder.append("Finish Runnable " + name + "\n");
+                stringBuilder.append("\n");
+            }
+
         }
     }
 
@@ -154,13 +165,13 @@ class ThreadStackTest {
 
 
         runnables.pushAndStart(runnable1);
-        sleep(5);
+        sleep(10);
         runnables.pushAndStart(runnable2);
-        sleep(5);
+        sleep(10);
         runnables.pushAndStart(runnable3);
         sleep(100);
         runnables.pushAndStart(runnable4);
-        sleep(5);
+        sleep(10);
         runnables.pushAndStart(runnable5);
 
 
@@ -187,6 +198,62 @@ class ThreadStackTest {
 
         testStringBuilder.append("Start Runnable Runnable 4\n");
         testStringBuilder.append("Finish Runnable Runnable 4\n\n");
+
+        testStringBuilder.append("Start Runnable Runnable 5\n");
+        testStringBuilder.append("Finish Runnable Runnable 5\n\n");
+
+        assertThat("Runnable1 mast start and finish before Runnable3," +
+                " Runnable2 must ignored", testStringBuilder.equals(stringBuilder));
+    }
+
+    @Test()
+    void runTestwithCancel() {
+        StringBuilder stringBuilder = new StringBuilder();
+        ThreadStack<TestCancelRunnable> runnables = new ThreadStack<TestCancelRunnable>();
+        TestCancelRunnable runnable1 = new TestCancelRunnable(stringBuilder, "Runnable 1");
+        TestCancelRunnable runnable2 = new TestCancelRunnable(stringBuilder, "Runnable 2");
+        TestCancelRunnable runnable3 = new TestCancelRunnable(stringBuilder, "Runnable 3");
+        TestCancelRunnable runnable4 = new TestCancelRunnable(stringBuilder, "Runnable 4");
+        TestCancelRunnable runnable5 = new TestCancelRunnable(stringBuilder, "Runnable 5");
+
+
+        runnables.pushAndStartWithCancelRunning(runnable1);
+        sleep(10);
+        runnables.pushAndStartWithCancelRunning(runnable2);
+        sleep(10);
+        runnables.pushAndStartWithCancelRunning(runnable3);
+        sleep(100);
+        runnables.pushAndStartWithCancelRunning(runnable4);
+        sleep(10);
+        runnables.pushAndStartWithCancelRunning(runnable5);
+
+
+        sleep(1000);
+
+        //wait for ready with work
+        int testCount = 0;
+        while (!runnables.isReadyAndEmpty()) {
+            sleep(10);
+            testCount++;
+        }
+
+        System.out.println("TestCount:" + testCount);
+
+        System.out.print(stringBuilder.toString());
+        System.out.flush();
+
+        StringBuilder testStringBuilder = new StringBuilder();
+        testStringBuilder.append("Start Runnable Runnable 1\n");
+        testStringBuilder.append("Cancel Runnable Runnable 1\n\n");
+
+        testStringBuilder.append("Start Runnable Runnable 2\n");
+        testStringBuilder.append("Cancel Runnable Runnable 2\n\n");
+
+        testStringBuilder.append("Start Runnable Runnable 3\n");
+        testStringBuilder.append("Finish Runnable Runnable 3\n\n");
+
+        testStringBuilder.append("Start Runnable Runnable 4\n");
+        testStringBuilder.append("Cancel Runnable Runnable 4\n\n");
 
         testStringBuilder.append("Start Runnable Runnable 5\n");
         testStringBuilder.append("Finish Runnable Runnable 5\n\n");

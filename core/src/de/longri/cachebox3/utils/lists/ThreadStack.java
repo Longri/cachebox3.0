@@ -31,6 +31,7 @@ public class ThreadStack<T extends CancelRunable> implements Disposable {
     private ExecutorService executor;
     private final int maxItems;
     private boolean isDisposed = false;
+    private T actualRunning;
 
     public ThreadStack() {
         this(1);
@@ -60,6 +61,7 @@ public class ThreadStack<T extends CancelRunable> implements Disposable {
                     synchronized (items) {
                         T item = items.first();
                         items.remove(item);
+                        actualRunning = item;
                         executor.execute(item);
                     }
                     executor.shutdown();
@@ -68,10 +70,11 @@ public class ThreadStack<T extends CancelRunable> implements Disposable {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    actualRunning = null;
                     executor = null;
                 }
                 try {
-                    Thread.sleep(1);
+                    Thread.sleep(0);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -93,6 +96,13 @@ public class ThreadStack<T extends CancelRunable> implements Disposable {
         }
     }
 
+    public void pushAndStartWithCancelRunning(T runnable) {
+        if (actualRunning != null) {
+            actualRunning.cancel();
+        }
+        pushAndStart(runnable);
+    }
+
     @Override
     public void dispose() {
         isDisposed = true;
@@ -107,4 +117,6 @@ public class ThreadStack<T extends CancelRunable> implements Disposable {
             }
         }
     }
+
+
 }
