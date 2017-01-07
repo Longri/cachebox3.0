@@ -18,11 +18,17 @@ package de.longri.cachebox3.locator.geocluster;
 
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
+import de.longri.cachebox3.utils.lists.CancelRunable;
 
 /**
  * Created by Longri on 21.12.16.
  */
-public class ClusterRunnable implements Runnable {
+public class ClusterRunnable implements CancelRunable {
+
+    public enum Task {
+        expand, reduce
+    }
+
 
     private final static Logger log = LoggerFactory.getLogger(ClusterRunnable.class);
 
@@ -30,37 +36,38 @@ public class ClusterRunnable implements Runnable {
     private final CallBack callBack;
     private final ClusteredList workList;
     private final GeoBoundingBox boundingBox;
-    private final boolean forceReduce;
-    private volatile boolean running = true; //TODO implement cancel thread
+    private final boolean all;
+    private final Task task;
+
+    @Override
+    public void cancel() {
+        workList.cancel();
+    }
 
     public interface CallBack {
         void callBack();
     }
 
     public ClusterRunnable(double distance, final ClusteredList workList, final CallBack callBack,
-                           GeoBoundingBox boundingBox, boolean forceReduce) {
+                           GeoBoundingBox boundingBox, Task task, boolean all) {
         this.callBack = callBack;
         this.distance = distance;
         this.workList = workList;
         this.boundingBox = boundingBox;
-        this.forceReduce = forceReduce;
+        this.task = task;
+        this.all = all;
     }
 
-    public void terminate() {
-        running = false;
-    }
 
     @Override
     public void run() {
-
-        log.debug("Runnable started");
-
+        log.debug("Runnable started with " + task);
+        int lastSize = workList.size();
         try {
-            workList.clusterByDistance(distance, this.boundingBox, forceReduce);
-            log.debug("callback with reduced to " + workList.size());
+            workList.clusterByDistance(distance, boundingBox, task, all);
+            log.debug(task + "from " + lastSize + " to " + workList.size()+"[" + workList.getAllSize() + "]");
             callBack.callBack();
         } catch (Exception e) {
-            running = false;
             log.error("Runnable exception", e);
         }
     }

@@ -18,46 +18,41 @@ package de.longri.cachebox3.locator.geocluster;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.utils.lists.CB_List;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 
 /**
  * Created by Longri on 25.12.16.
  */
 public class ClusteredList extends CB_List<ClusterablePoint> {
 
-
-    private double lastDistance = -1;
     private int allItemSize = 0;
 
     private GeoBoundingBox clusterBoundingBox;
     private boolean anyClusterOutsideBoundingBox = true;
+    private AtomicBoolean cancel = new AtomicBoolean(false);
+
+    public void cancel() {
+        cancel.set(true);
+    }
 
 
-    public void clusterByDistance(double distance, GeoBoundingBox boundingBox, boolean forceReduce) {
+    public void clusterByDistance(double distance, GeoBoundingBox boundingBox, ClusterRunnable.Task task, boolean all) {
         clusterBoundingBox = boundingBox;
-
-        if (forceReduce) {
-            reduce(distance);
-            return;
-        }
-
-        if (distance == 0) {
-            if (this.size < allItemSize) {
-                lastDistance = distance;
-                expand(distance, true);
-            }
-        } else if (lastDistance == -1 || lastDistance <= distance) {
-            lastDistance = distance;
-            reduce(distance);
-        } else {
-            lastDistance = distance;
-            expand(distance, false);
+        switch (task) {
+            case expand:
+                expand(distance, all);
+                break;
+            case reduce:
+                reduce(distance);
+                break;
         }
     }
 
     private void reduce(final double distance) {
         int index = 0;
         anyClusterOutsideBoundingBox = false;
-        while (index < this.size) {
+        while (!cancel.get() && index < this.size) {
 
             ClusterablePoint cluster = this.get(index);
 
@@ -75,6 +70,11 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
             ClusteredList inside = new ClusteredList();
 
             for (int i = index + 1; i < this.size(); i++) {
+
+                if (cancel.get()) {
+                    break;
+                }
+
                 ClusterablePoint testCluster = this.get(i);
                 if (testCluster == cluster) continue;
                 if (cluster.contains(testCluster)) {
@@ -112,6 +112,10 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
         ClusteredList clusterOutList = new ClusteredList();
         for (ClusterablePoint obj : this) {
 
+            if (cancel.get()) {
+                break;
+            }
+
             if (!(obj instanceof Cluster)) continue;
 
             Cluster cluster = (Cluster) obj;
@@ -119,6 +123,10 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
             clusterOutList.clear();
             if (!all) cluster.setDistanceBoundce(distance);
             for (ClusterablePoint includedCluster : cluster.getIncludedClusters()) {
+
+                if (cancel.get()) {
+                    break;
+                }
 
                 if (includedCluster == null || this.contains(includedCluster)) {
                     continue;

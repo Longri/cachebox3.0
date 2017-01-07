@@ -83,22 +83,22 @@ public class SquareTest {
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
-        allCluster.clusterByDistance(distance - 2, null, false);
+        allCluster.clusterByDistance(distance - 2, null, false, task);
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
-        allCluster.clusterByDistance(distance * 2, null, false);
+        allCluster.clusterByDistance(distance * 2, null, false, task);
         assertThat("cluster size", allCluster.size(), equalTo(4));
 
-        allCluster.clusterByDistance(distance * 4, null, false);
+        allCluster.clusterByDistance(distance * 4, null, false, task);
         assertThat("cluster size", allCluster.size(), equalTo(2));
 
 
-        allCluster.clusterByDistance(distance * 2, null, false);
+        allCluster.clusterByDistance(distance * 2, null, false, task);
         assertThat("cluster size", allCluster.size(), equalTo(4));
 
 
-        allCluster.clusterByDistance(distance - 2, null, false);
+        allCluster.clusterByDistance(distance - 2, null, false, task);
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
@@ -121,22 +121,22 @@ public class SquareTest {
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
-        allCluster.clusterByDistance(distance - 2, null, false);
+        allCluster.clusterByDistance(distance - 2, null, false, task);
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
-        allCluster.clusterByDistance(distance * 2, null, false);
+        allCluster.clusterByDistance(distance * 2, null, false, task);
         assertThat("cluster size", allCluster.size(), equalTo(2550));
 
-        allCluster.clusterByDistance(distance * 4, null, false);
+        allCluster.clusterByDistance(distance * 4, null, false, task);
         assertThat("cluster size", allCluster.size(), equalTo(650));
 
 
-        allCluster.clusterByDistance(distance * 2, null, false);
+        allCluster.clusterByDistance(distance * 2, null, false, task);
         assertThat("cluster size", allCluster.size(), equalTo(2550));
 
 
-        allCluster.clusterByDistance(distance - 2, null, false);
+        allCluster.clusterByDistance(distance - 2, null, false, task);
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
