@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.utils.lists;
 
+import com.badlogic.gdx.utils.StringBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,13 +25,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 class ThreadStackTest {
 
-    static class TestCancelRunnable implements CancelRunable {
+    class TestCancelRunnable implements CancelRunable {
+
+        private final StringBuilder stringBuilder;
 
         private final String name;
-
         private boolean cancel = false;
 
-        TestCancelRunnable(String name) {
+        TestCancelRunnable(StringBuilder stringBuilder, String name) {
+            this.stringBuilder = stringBuilder;
             this.name = name;
         }
 
@@ -41,14 +44,14 @@ class ThreadStackTest {
 
         @Override
         public void run() {
-            System.out.println("Start Runnable " + name);
+            stringBuilder.append("Start Runnable " + name + "\n");
             try {
-                Thread.sleep(100);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("Finish Runnable " + name);
-            System.out.println();
+            stringBuilder.append("Finish Runnable " + name + "\n");
+            stringBuilder.append("\n");
         }
     }
 
@@ -69,26 +72,42 @@ class ThreadStackTest {
 
     @Test
     void runTest() {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
         ThreadStack<TestCancelRunnable> runnables = new ThreadStack<TestCancelRunnable>();
-        TestCancelRunnable runnable = new TestCancelRunnable("SingleRunnable");
+        TestCancelRunnable runnable = new TestCancelRunnable(stringBuilder, "SingleRunnable");
 
         runnables.pushAndStart(runnable);
 
-
-        sleep(100);
+        sleep(1000);
 
         //wait for ready with work
-        while (runnables.isReadyAndEmpty()) {
-
+        int testCount = 0;
+        while (!runnables.isReadyAndEmpty()) {
+            sleep(10);
+            testCount++;
         }
+
+        System.out.println("TestCount:" + testCount);
+        System.out.print(stringBuilder.toString());
+        System.out.flush();
+
+
+        StringBuilder testStringBuilder = new StringBuilder();
+        testStringBuilder.append("Start Runnable SingleRunnable\n");
+        testStringBuilder.append("Finish Runnable SingleRunnable\n\n");
+
+        assertThat("Threat must start and finish", testStringBuilder.equals(stringBuilder));
     }
 
-    @Test
+    @Test()
     void runTest2() {
+        StringBuilder stringBuilder = new StringBuilder();
         ThreadStack<TestCancelRunnable> runnables = new ThreadStack<TestCancelRunnable>();
-        TestCancelRunnable runnable1 = new TestCancelRunnable("Runnable 1");
-        TestCancelRunnable runnable2 = new TestCancelRunnable("Runnable 2");
-        TestCancelRunnable runnable3 = new TestCancelRunnable("Runnable 3");
+        TestCancelRunnable runnable1 = new TestCancelRunnable(stringBuilder, "Runnable 1");
+        TestCancelRunnable runnable2 = new TestCancelRunnable(stringBuilder, "Runnable 2");
+        TestCancelRunnable runnable3 = new TestCancelRunnable(stringBuilder, "Runnable 3");
 
 
         runnables.pushAndStart(runnable1);
@@ -98,12 +117,82 @@ class ThreadStackTest {
         runnables.pushAndStart(runnable3);
 
 
-        sleep(20);
+        sleep(1000);
 
         //wait for ready with work
-        while (runnables.isReadyAndEmpty()) {
-
+        int testCount = 0;
+        while (!runnables.isReadyAndEmpty()) {
+            sleep(10);
+            testCount++;
         }
+
+        System.out.println("TestCount:" + testCount);
+
+        System.out.print(stringBuilder.toString());
+        System.out.flush();
+
+        StringBuilder testStringBuilder = new StringBuilder();
+        testStringBuilder.append("Start Runnable Runnable 1\n");
+        testStringBuilder.append("Finish Runnable Runnable 1\n\n");
+
+        testStringBuilder.append("Start Runnable Runnable 3\n");
+        testStringBuilder.append("Finish Runnable Runnable 3\n\n");
+
+        assertThat("Runnable1 mast start and finish before Runnable3," +
+                " Runnable2 must ignored", testStringBuilder.equals(stringBuilder));
+    }
+
+    @Test()
+    void runTest3() {
+        StringBuilder stringBuilder = new StringBuilder();
+        ThreadStack<TestCancelRunnable> runnables = new ThreadStack<TestCancelRunnable>();
+        TestCancelRunnable runnable1 = new TestCancelRunnable(stringBuilder, "Runnable 1");
+        TestCancelRunnable runnable2 = new TestCancelRunnable(stringBuilder, "Runnable 2");
+        TestCancelRunnable runnable3 = new TestCancelRunnable(stringBuilder, "Runnable 3");
+        TestCancelRunnable runnable4 = new TestCancelRunnable(stringBuilder, "Runnable 4");
+        TestCancelRunnable runnable5 = new TestCancelRunnable(stringBuilder, "Runnable 5");
+
+
+        runnables.pushAndStart(runnable1);
+        sleep(5);
+        runnables.pushAndStart(runnable2);
+        sleep(5);
+        runnables.pushAndStart(runnable3);
+        sleep(100);
+        runnables.pushAndStart(runnable4);
+        sleep(5);
+        runnables.pushAndStart(runnable5);
+
+
+        sleep(1000);
+
+        //wait for ready with work
+        int testCount = 0;
+        while (!runnables.isReadyAndEmpty()) {
+            sleep(10);
+            testCount++;
+        }
+
+        System.out.println("TestCount:" + testCount);
+
+        System.out.print(stringBuilder.toString());
+        System.out.flush();
+
+        StringBuilder testStringBuilder = new StringBuilder();
+        testStringBuilder.append("Start Runnable Runnable 1\n");
+        testStringBuilder.append("Finish Runnable Runnable 1\n\n");
+
+        testStringBuilder.append("Start Runnable Runnable 3\n");
+        testStringBuilder.append("Finish Runnable Runnable 3\n\n");
+
+        testStringBuilder.append("Start Runnable Runnable 4\n");
+        testStringBuilder.append("Finish Runnable Runnable 4\n\n");
+
+        testStringBuilder.append("Start Runnable Runnable 5\n");
+        testStringBuilder.append("Finish Runnable Runnable 5\n\n");
+
+        assertThat("Runnable1 mast start and finish before Runnable3," +
+                " Runnable2 must ignored", testStringBuilder.equals(stringBuilder));
     }
 
     private void sleep(int value) {

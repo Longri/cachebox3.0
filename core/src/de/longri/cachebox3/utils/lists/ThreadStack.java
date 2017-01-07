@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Disposable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Longri on 06.01.2017.
@@ -45,8 +46,6 @@ public class ThreadStack<T extends CancelRunable> implements Disposable {
         @Override
         public void run() {
             while (!isDisposed) {
-
-
                 if (executor == null && !items.isEmpty()) {
                     //start
                     executor = Executors.newFixedThreadPool(1, new ThreadFactory() {
@@ -63,15 +62,18 @@ public class ThreadStack<T extends CancelRunable> implements Disposable {
                         items.remove(item);
                         executor.execute(item);
                     }
-                    // executor.shutdown();
-                    while (!executor.isTerminated()) {
-                    }
+                    executor.shutdown();
                     try {
-                        Thread.sleep(0);
+                        executor.awaitTermination(4, TimeUnit.HOURS);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     executor = null;
+                }
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -98,7 +100,11 @@ public class ThreadStack<T extends CancelRunable> implements Disposable {
 
     public boolean isReadyAndEmpty() {
         synchronized (items) {
-            return executor == null && items.isEmpty();
+            if (executor == null && items.isEmpty()) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }
