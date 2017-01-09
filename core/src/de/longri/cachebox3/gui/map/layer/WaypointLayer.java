@@ -141,7 +141,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    private void reduceCluster(final GeoBoundingBox boundingBox, final double distance, final boolean forceReduce) {
+    public void reduceCluster(final GeoBoundingBox boundingBox, final double distance, final boolean forceReduce) {
 
         if (lastFactor == distance) {
             if (distance == 0) {
@@ -260,39 +260,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         return bitmap;
     }
 
-
-    private int lastZoomLevel = -1;
-
-    public void calculateCluster(final GeoBoundingBox boundingBox, final MapPosition mapPos, double distance, final boolean forcePosChanged) {
-
-        final int zoomLevel = mapPos.getZoomLevel();
-
-        log.debug("Set zoom level to " + zoomLevel);
-
-        if (!forcePosChanged && lastZoomLevel == zoomLevel) {
-            log.debug("no zoom level changes");
-            return;
-        }
-
-        if (forcePosChanged) {
-            log.debug("force calculate cluster with Pos changes");
-        }
-
-        lastZoomLevel = zoomLevel;
-
-        // set distance to 0 with zoom levels bigger then 13
-        distance = zoomLevel < 14 ? distance : 0;
-
-
-        log.debug("call reduce cluster with distance: " + distance);
-        reduceCluster(boundingBox, distance, forcePosChanged);
-    }
-
-    public boolean isAnyClusterNotVisible() {
-        return mItemList.isAnyClusterNotVisible();
-    }
-
-
     public interface ActiveItem {
         boolean run(int aIndex);
     }
@@ -342,7 +309,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
      *
      * @return true if event is handled false otherwise
      */
-    protected boolean activateSelectedItems(MotionEvent event, ActiveItem task) {
+    private boolean activateSelectedItems(MotionEvent event, ActiveItem task) {
         int size = mItemList.size();
         if (size == 0)
             return false;
@@ -350,7 +317,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         int eventX = (int) event.getX() - mMap.getWidth() / 2;
         int eventY = (int) event.getY() - mMap.getHeight() / 2;
         Viewport mapPosition = mMap.viewport();
-        mapPosition.getBBox(mapClickDetectionBox, 128);
+        mapPosition.getBBox(mapClickDetectionBox, 0);
         mapClickDetectionBox.map2mercator();
 
         int nearest = -1;

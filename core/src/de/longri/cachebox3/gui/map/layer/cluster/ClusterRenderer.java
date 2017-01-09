@@ -85,25 +85,31 @@ public class ClusterRenderer extends BucketRenderer {
     private boolean chekForClusterChanges(GLViewport v) {
 
 
-
-
-
 //check if maybe all not clustered remove this if statement from calculate cluster
 //        // set distance to 0 with zoom levels bigger then 13
 //        distance = zoomLevel < 14 ? distance : 0;
 
-
-
-
         mMapPosition.copy(v.pos);
+
+        final int zoomLevel = mMapPosition.getZoomLevel();
+//
+//        log.debug("Set zoom level to " + zoomLevel);
+//
+//        if (lastZoomLevel == zoomLevel) {
+//            log.debug("no zoom level changes");
+//            return;
+//        }
+
+
         if (mMapPosition.getZoomLevel() != lastZoomLevel) {
             lastZoomLevel = mMapPosition.getZoomLevel();
 
-            mWaypointLayer.map().viewport().getBBox(mapVisibleBoundingBox, 1350);;
+            mWaypointLayer.map().viewport().getBBox(mapVisibleBoundingBox, 1350);
+            ;
             mapVisibleBoundingBox.map2mercator();
 
-            mWaypointLayer.calculateCluster(new GeoBoundingBox(mapVisibleBoundingBox),
-                    mMapPosition, mapVisibleBoundingBox.getWidth() * 7675, false);
+            mWaypointLayer.reduceCluster(new GeoBoundingBox(mapVisibleBoundingBox),
+                    zoomLevel < 14 ? mapVisibleBoundingBox.getWidth() * 7675 : 0, false);
             lastMapPosX = mMapPosition.x;
             lastMapPosY = mMapPosition.y;
             lastMapBearing = mMapPosition.bearing;
@@ -117,12 +123,12 @@ public class ClusterRenderer extends BucketRenderer {
             double moved = Math.hypot(Math.abs(lastMapPosX - mMapPosition.x),
                     Math.abs(lastMapPosY - mMapPosition.y)) * 7675;
 
-            mWaypointLayer.map().viewport().getBBox(mapVisibleBoundingBox, 1350);;
+            mWaypointLayer.map().viewport().getBBox(mapVisibleBoundingBox, 1350);
             mapVisibleBoundingBox.map2mercator();
 
             if (moved > mapVisibleBoundingBox.getWidth()) {
-                mWaypointLayer.calculateCluster(new GeoBoundingBox(mapVisibleBoundingBox),
-                        mMapPosition, mapVisibleBoundingBox.getWidth() * 7675, true);
+                mWaypointLayer.reduceCluster(new GeoBoundingBox(mapVisibleBoundingBox),
+                        zoomLevel < 14 ? mapVisibleBoundingBox.getWidth() * 7675 : 0, true);
                 lastMapPosX = mMapPosition.x;
                 lastMapPosY = mMapPosition.y;
                 lastMapBearing = mMapPosition.bearing;
