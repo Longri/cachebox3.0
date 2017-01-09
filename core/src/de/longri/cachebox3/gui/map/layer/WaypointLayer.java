@@ -35,8 +35,12 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.utils.lists.ThreadStack;
 import org.oscim.backend.canvas.Bitmap;
-import org.oscim.core.*;
+import org.oscim.core.Box;
+import org.oscim.core.MapPosition;
+import org.oscim.core.MercatorProjection;
+import org.oscim.core.Point;
 import org.oscim.event.Gesture;
 import org.oscim.event.GestureListener;
 import org.oscim.event.MotionEvent;
@@ -67,9 +71,11 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     private final Box mapClickDetectionBox = new Box();
     private final double[] out = new double[2];
 
+
+    private double lastDistance = Double.MIN_VALUE;
     private double lastFactor = 2.0;
-    private Thread clusterThread;
-    private ClusterRunnable clusterRunnable;
+    private ThreadStack<ClusterRunnable> clusterWorker = new ThreadStack<ClusterRunnable>();
+    private ClusterRunnable.Task lastTask;
 
 
     public WaypointLayer(Map map) {
@@ -127,9 +133,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                     }
 
                     mItemList.setFinishFill();
-
                     WaypointLayer.this.populate();
-                    calculateCluster(mMap.getMapPosition(), false);
                 }
             }
         });
@@ -137,7 +141,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    private void reduceCluster(final double distance, final boolean forceReduce) {
+    public void reduceCluster(final GeoBoundingBox boundingBox, final double distance, final boolean forceReduce) {
 
         if (lastFactor == distance) {
             if (distance == 0) {
@@ -150,46 +154,45 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             }
         }
 
-        if (clusterThread != null && clusterThread.isAlive()) {
-            clusterRunnable.terminate();
-            try {
-                clusterThread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        log.debug("START GeoClustering distance:" + distance + " ZoomLevel:" + lastZoomLevel);
-
-
         lastFactor = distance;
-        final int lastSize = mItemList.size();
 
-        Viewport mapPosition = mMap.viewport();
-        mapPosition.getBBox(mapClickDetectionBox, 350);
-        mapClickDetectionBox.map2mercator();
+        boolean all = false;
+        ClusterRunnable.Task task = ClusterRunnable.Task.reduce;
 
-        GeoBoundingBox boundingBox = null;
-        try {
-            boundingBox = new GeoBoundingBox(mapClickDetectionBox);
-        } catch (Exception e) {
-            return;
+        if (forceReduce) {
+            task = ClusterRunnable.Task.reduce;
+        } else if (distance == 0) {
+            if (mItemList.size() < mItemList.getAllSize()) {
+                lastDistance = distance;
+                task = ClusterRunnable.Task.expand;
+                all = true;
+            }
+        } else if (lastDistance == Double.MIN_VALUE || lastDistance <= distance) {
+            lastDistance = distance;
+            task = ClusterRunnable.Task.reduce;
+        } else {
+            lastDistance = distance;
+            task = ClusterRunnable.Task.expand;
         }
 
 
-        clusterRunnable = new ClusterRunnable(distance, mItemList, new ClusterRunnable.CallBack() {
+        ClusterRunnable clusterRunnable = new ClusterRunnable(distance, mItemList, new ClusterRunnable.CallBack() {
             @Override
             public void callBack() {
-                log.debug("Cluster Reduce from " + lastSize + " items to "
-                        + mItemList.size() + " items [" + mItemList.getAllSize() + "]");
                 WaypointLayer.this.populate();
                 mMap.updateMap(true);
                 mMap.render();
             }
-        }, boundingBox, forceReduce);
-        clusterThread = new Thread(clusterRunnable);
-        clusterThread.start();
+        }, boundingBox, task, all);
+
+        if (lastTask == task) {
+            clusterWorker.pushAndStart(clusterRunnable);
+        } else {
+            clusterWorker.pushAndStartWithCancelRunning(clusterRunnable);
+            lastTask = task;
+        }
+
+
     }
 
 
@@ -257,44 +260,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         return bitmap;
     }
 
-
-    private int lastZoomLevel = -1;
-
-    public void calculateCluster(final MapPosition mapPos, final boolean forcePosChanged) {
-
-        final int zoomLevel = mapPos.getZoomLevel();
-
-        log.debug("Set zoom level to " + zoomLevel);
-
-        if (!forcePosChanged && lastZoomLevel == zoomLevel) {
-            log.debug("no zoom level changes");
-            return;
-        }
-
-        if (forcePosChanged) {
-            log.debug("force calculate cluster with Pos changes");
-        }
-
-        lastZoomLevel = zoomLevel;
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                double groundResolution = zoomLevel < 14 ?
-                        (MercatorProjection.groundResolution(mapPos) * Tile.SIZE) / 2 : 0;
-
-                log.debug("call reduce cluster with distance: " + groundResolution);
-                reduceCluster(groundResolution, forcePosChanged);
-            }
-        });
-        thread.start();
-    }
-
-    public boolean isAnyClusterNotVisible() {
-        return mItemList.isAnyClusterNotVisible();
-    }
-
-
     public interface ActiveItem {
         boolean run(int aIndex);
     }
@@ -344,7 +309,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
      *
      * @return true if event is handled false otherwise
      */
-    protected boolean activateSelectedItems(MotionEvent event, ActiveItem task) {
+    private boolean activateSelectedItems(MotionEvent event, ActiveItem task) {
         int size = mItemList.size();
         if (size == 0)
             return false;
@@ -352,7 +317,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         int eventX = (int) event.getX() - mMap.getWidth() / 2;
         int eventY = (int) event.getY() - mMap.getHeight() / 2;
         Viewport mapPosition = mMap.viewport();
-        mapPosition.getBBox(mapClickDetectionBox, 128);
+        mapPosition.getBBox(mapClickDetectionBox, 0);
         mapClickDetectionBox.map2mercator();
 
         int nearest = -1;

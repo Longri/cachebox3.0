@@ -1,6 +1,7 @@
 package de.longri.cachebox3.locator.new_geocluster;
 
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.ClusterablePoint;
 import de.longri.cachebox3.locator.geocluster.ClusteredList;
 import de.longri.cachebox3.utils.lists.CB_List;
@@ -83,22 +84,22 @@ public class SquareTest {
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
-        allCluster.clusterByDistance(distance - 2, null, false);
+        allCluster.clusterByDistance(distance - 2, null,ClusterRunnable.Task.reduce, false);
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
-        allCluster.clusterByDistance(distance * 2, null, false);
+        allCluster.clusterByDistance(distance * 2, null,ClusterRunnable.Task.reduce, false);
         assertThat("cluster size", allCluster.size(), equalTo(4));
 
-        allCluster.clusterByDistance(distance * 4, null, false);
+        allCluster.clusterByDistance(distance * 4, null,ClusterRunnable.Task.reduce, false);
         assertThat("cluster size", allCluster.size(), equalTo(2));
 
 
-        allCluster.clusterByDistance(distance * 2, null, false);
+        allCluster.clusterByDistance(distance * 2, null,ClusterRunnable.Task.expand, false);
         assertThat("cluster size", allCluster.size(), equalTo(4));
 
 
-        allCluster.clusterByDistance(distance - 2, null, false);
+        allCluster.clusterByDistance(distance - 2, null,ClusterRunnable.Task.expand, false);
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
@@ -121,22 +122,22 @@ public class SquareTest {
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
-        allCluster.clusterByDistance(distance - 2, null, false);
+        allCluster.clusterByDistance(distance - 2, null, ClusterRunnable.Task.reduce, false);
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
-        allCluster.clusterByDistance(distance * 2, null, false);
+        allCluster.clusterByDistance(distance * 2, null,ClusterRunnable.Task.reduce, false);
         assertThat("cluster size", allCluster.size(), equalTo(2550));
 
-        allCluster.clusterByDistance(distance * 4, null, false);
+        allCluster.clusterByDistance(distance * 4, null,ClusterRunnable.Task.reduce, false);
         assertThat("cluster size", allCluster.size(), equalTo(650));
 
 
-        allCluster.clusterByDistance(distance * 2, null, false);
+        allCluster.clusterByDistance(distance * 2, null,ClusterRunnable.Task.expand, false);
         assertThat("cluster size", allCluster.size(), equalTo(2550));
 
 
-        allCluster.clusterByDistance(distance - 2, null, false);
+        allCluster.clusterByDistance(distance - 2, null,ClusterRunnable.Task.expand, false);
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
