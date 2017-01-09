@@ -37,7 +37,10 @@ import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.lists.ThreadStack;
 import org.oscim.backend.canvas.Bitmap;
-import org.oscim.core.*;
+import org.oscim.core.Box;
+import org.oscim.core.MapPosition;
+import org.oscim.core.MercatorProjection;
+import org.oscim.core.Point;
 import org.oscim.event.Gesture;
 import org.oscim.event.GestureListener;
 import org.oscim.event.MotionEvent;
@@ -130,9 +133,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                     }
 
                     mItemList.setFinishFill();
-
                     WaypointLayer.this.populate();
-                    calculateCluster(mMap.getMapPosition(), false);
                 }
             }
         });
@@ -140,7 +141,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    private void reduceCluster(final double distance, final boolean forceReduce) {
+    private void reduceCluster(final GeoBoundingBox boundingBox, final double distance, final boolean forceReduce) {
 
         if (lastFactor == distance) {
             if (distance == 0) {
@@ -154,18 +155,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         }
 
         lastFactor = distance;
-
-        Viewport mapPosition = mMap.viewport();
-        mapPosition.getBBox(mapClickDetectionBox, 350);
-        mapClickDetectionBox.map2mercator();
-
-        GeoBoundingBox boundingBox = null;
-        try {
-            boundingBox = new GeoBoundingBox(mapClickDetectionBox);
-        } catch (Exception e) {
-            return;
-        }
-
 
         boolean all = false;
         ClusterRunnable.Task task = ClusterRunnable.Task.reduce;
@@ -274,7 +263,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     private int lastZoomLevel = -1;
 
-    public void calculateCluster(final MapPosition mapPos, final boolean forcePosChanged) {
+    public void calculateCluster(final GeoBoundingBox boundingBox, final MapPosition mapPos, double distance, final boolean forcePosChanged) {
 
         final int zoomLevel = mapPos.getZoomLevel();
 
@@ -291,17 +280,12 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         lastZoomLevel = zoomLevel;
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                double groundResolution = zoomLevel < 14 ?
-                        (MercatorProjection.groundResolution(mapPos) * Tile.SIZE) / 2 : 0;
+        // set distance to 0 with zoom levels bigger then 13
+        distance = zoomLevel < 14 ? distance : 0;
 
-                log.debug("call reduce cluster with distance: " + groundResolution);
-                reduceCluster(groundResolution, forcePosChanged);
-            }
-        });
-        thread.start();
+
+        log.debug("call reduce cluster with distance: " + distance);
+        reduceCluster(boundingBox, distance, forcePosChanged);
     }
 
     public boolean isAnyClusterNotVisible() {

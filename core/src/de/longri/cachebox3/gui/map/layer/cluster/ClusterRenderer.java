@@ -20,11 +20,14 @@ import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.locator.geocluster.Cluster;
+import de.longri.cachebox3.locator.geocluster.GeoBoundingBox;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.backend.canvas.Bitmap;
+import org.oscim.core.Box;
 import org.oscim.core.Point;
 import org.oscim.core.Tile;
+import org.oscim.map.Viewport;
 import org.oscim.renderer.BucketRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.bucket.SymbolBucket;
@@ -49,6 +52,7 @@ public class ClusterRenderer extends BucketRenderer {
     private double lastMapPosX = Double.MIN_VALUE;
     private double lastMapPosY = Double.MIN_VALUE;
     private float lastMapBearing = Float.MIN_VALUE;
+    private Box mapVisibleBoundingBox = new Box();
 
     /**
      * flag to force update of Clusters
@@ -79,23 +83,46 @@ public class ClusterRenderer extends BucketRenderer {
 
 
     private boolean chekForClusterChanges(GLViewport v) {
+
+
+
+
+
+//check if maybe all not clustered remove this if statement from calculate cluster
+//        // set distance to 0 with zoom levels bigger then 13
+//        distance = zoomLevel < 14 ? distance : 0;
+
+
+
+
         mMapPosition.copy(v.pos);
         if (mMapPosition.getZoomLevel() != lastZoomLevel) {
             lastZoomLevel = mMapPosition.getZoomLevel();
-            mWaypointLayer.calculateCluster(mMapPosition, false);
+
+            mWaypointLayer.map().viewport().getBBox(mapVisibleBoundingBox, 1350);;
+            mapVisibleBoundingBox.map2mercator();
+
+            mWaypointLayer.calculateCluster(new GeoBoundingBox(mapVisibleBoundingBox),
+                    mMapPosition, mapVisibleBoundingBox.getWidth() * 7675, false);
             lastMapPosX = mMapPosition.x;
             lastMapPosY = mMapPosition.y;
             lastMapBearing = mMapPosition.bearing;
             return true;
         }
 
-        // check if map pos changed and not all clustered
+        // check if map pos changed
         if (lastMapPosX != mMapPosition.x ||
-                lastMapPosY != mMapPosition.y ||
-                lastMapBearing != mMapPosition.bearing) {
+                lastMapPosY != mMapPosition.y) {
 
-            if (mWaypointLayer.isAnyClusterNotVisible()) {
-                mWaypointLayer.calculateCluster(mMapPosition, true);
+            double moved = Math.hypot(Math.abs(lastMapPosX - mMapPosition.x),
+                    Math.abs(lastMapPosY - mMapPosition.y)) * 7675;
+
+            mWaypointLayer.map().viewport().getBBox(mapVisibleBoundingBox, 1350);;
+            mapVisibleBoundingBox.map2mercator();
+
+            if (moved > mapVisibleBoundingBox.getWidth()) {
+                mWaypointLayer.calculateCluster(new GeoBoundingBox(mapVisibleBoundingBox),
+                        mMapPosition, mapVisibleBoundingBox.getWidth() * 7675, true);
                 lastMapPosX = mMapPosition.x;
                 lastMapPosY = mMapPosition.y;
                 lastMapBearing = mMapPosition.bearing;
