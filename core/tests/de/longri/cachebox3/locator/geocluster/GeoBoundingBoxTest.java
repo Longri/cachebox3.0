@@ -27,7 +27,7 @@ class GeoBoundingBoxTest {
         GeoPoint geoPoint = new GeoPoint(latCenter, lonCenter);
 
 
-        GeoBoundingBox gbb = new GeoBoundingBox(leftTop, rightBotom);
+        GeoBoundingBoxInt gbb = new GeoBoundingBoxInt(leftTop, rightBotom);
         assertThat("Point must inside Box", gbb.contains(geoPoint));
 
 
@@ -39,7 +39,7 @@ class GeoBoundingBoxTest {
         box.map2mercator();
         assertThat("Point must inside Box", box.contains(lonCenter, latCenter));
 
-        GeoBoundingBox geoBoundingBox = new GeoBoundingBox(box);
+        GeoBoundingBoxInt geoBoundingBox = new GeoBoundingBoxInt(box);
         assertThat("Point must inside Box", geoBoundingBox.contains(geoPoint));
 
     }

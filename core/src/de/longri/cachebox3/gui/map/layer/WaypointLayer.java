@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterRenderer;
@@ -37,17 +38,13 @@ import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.lists.ThreadStack;
 import org.oscim.backend.canvas.Bitmap;
-import org.oscim.core.Box;
-import org.oscim.core.MapPosition;
-import org.oscim.core.MercatorProjection;
-import org.oscim.core.Point;
+import org.oscim.core.*;
 import org.oscim.event.Gesture;
 import org.oscim.event.GestureListener;
 import org.oscim.event.MotionEvent;
 import org.oscim.gdx.MotionHandler;
 import org.oscim.layers.Layer;
 import org.oscim.map.Map;
-import org.oscim.map.Viewport;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -68,7 +65,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     private final ClusterRenderer mClusterRenderer;
     private final Point mTmpPoint = new Point();
     private final ClusteredList mItemList;
-    private final Box mapClickDetectionBox = new Box();
     private final double[] out = new double[2];
 
 
@@ -103,6 +99,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     public void dispose() {
         CacheListChangedEventList.Remove(this);
         ClusterSymbolHashMap.clear();
+//        TODO dispose ClusterList and ThreadStack
     }
 
     @Override
@@ -141,7 +138,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    public void reduceCluster(final GeoBoundingBox boundingBox, final double distance, final boolean forceReduce) {
+    public void reduceCluster(final GeoBoundingBoxInt boundingBox, final double distance, final boolean forceReduce) {
 
         if (lastFactor == distance) {
             if (distance == 0) {
@@ -261,30 +258,30 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
     public interface ActiveItem {
-        boolean run(int aIndex);
+        boolean run(ClusterablePoint aIndex);
     }
 
-    protected boolean onItemSingleTap(int index, ClusterablePoint item) {
+    protected boolean onItemSingleTap(ClusterablePoint item) {
         log.debug("Click on: " + item);
         return true;
     }
 
-    protected boolean onItemLongPress(int index, ClusterablePoint item) {
+    protected boolean onItemLongPress(ClusterablePoint item) {
         log.debug("LongClick on: " + item);
         return true;
     }
 
     private final ActiveItem mActiveItemSingleTap = new ActiveItem() {
         @Override
-        public boolean run(int index) {
-            return onItemSingleTap(index, WaypointLayer.this.mItemList.get(index));
+        public boolean run(ClusterablePoint item) {
+            return onItemSingleTap(item);
         }
     };
 
     private final ActiveItem mActiveItemLongPress = new ActiveItem() {
         @Override
-        public boolean run(final int index) {
-            return onItemLongPress(index, WaypointLayer.this.mItemList.get(index));
+        public boolean run(final ClusterablePoint item) {
+            return onItemLongPress(item);
         }
     };
 
@@ -310,24 +307,31 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
      * @return true if event is handled false otherwise
      */
     private boolean activateSelectedItems(MotionEvent event, ActiveItem task) {
-        int size = mItemList.size();
-        if (size == 0)
+        // no click detection without items
+        if (mItemList.size() == 0)
             return false;
 
-        int eventX = (int) event.getX() - mMap.getWidth() / 2;
-        int eventY = (int) event.getY() - mMap.getHeight() / 2;
-        Viewport mapPosition = mMap.viewport();
-        mapPosition.getBBox(mapClickDetectionBox, 0);
-        mapClickDetectionBox.map2mercator();
+        //add MapView drawing offset to event point
+        final CacheboxMapAdapter mapAdapter = (CacheboxMapAdapter) mMap;
+        final int eventX = (int) event.getX() - mapAdapter.getX_Offset();
+        final int eventY = (int) event.getY() - mapAdapter.getY_Offset();
+        log.debug("MapEvent " + eventX + "/" + eventY);
 
-        int nearest = -1;
-        int inside = -1;
+        // calculate geoCoordinate from click point
+        final Point clickPoint = new Point();
+        mMap.viewport().fromScreenPoint(eventX, eventY, clickPoint);
+        double clickLat = MercatorProjection.toLatitude(clickPoint.y);
+        double clickLon = MercatorProjection.toLongitude(clickPoint.x);
+        log.debug("ClickEvent Lat/Lon :" + clickLat + "/" + clickLon);
 
+        //extend geoCoordinate to BoundingBox
+        double groundResolution = MercatorProjection.groundResolution(mMap.getMapPosition());
+        double extendValue = MercatorProjection.latitudeToY(groundResolution * defaultMarker.getWidth());
+        GeoBoundingBoxDouble boundingBox = new GeoBoundingBoxDouble(clickLat, clickLon, extendValue);
 
-        /* squared dist: 50*50 pixel ~ 2mm on 400dpi */
-        double dist = 2500;
-
-        for (int i = 0; i < size; i++) {
+        // search item inside click bounding box
+        ClusterablePoint clickedItem = null;
+        for (int i = 0, n = mItemList.size(); i < n; i++) {
             ClusterablePoint item = mItemList.get(i);
 
             double lat, lon;
@@ -336,36 +340,16 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                 Coordinate centerCoord = ((Cluster) item).getCenter();
                 lat = centerCoord.latitude;
                 lon = centerCoord.longitude;
-
             } else {
                 lat = item.latitude;
                 lon = item.longitude;
             }
-
-            if (!mapClickDetectionBox.contains(lon, lat))
+            if (!boundingBox.contains(lat, lon))
                 continue;
-
-            MercatorProjection.project(lat, lon, out, 0);
-            mapPosition.toScreenPoint(out[0], out[1], true, mTmpPoint);
-
-            float dx = (float) (mTmpPoint.x - eventX);
-            float dy = (float) (mTmpPoint.y - eventY);
-
-            if (inside >= 0)
-                continue;
-
-            double d = dx * dx + dy * dy;
-            if (d > dist)
-                continue;
-
-            dist = d;
-            nearest = i;
+            clickedItem = item;
         }
 
-        if (inside >= 0)
-            nearest = inside;
-
-        if (nearest >= 0 && task.run(nearest)) {
+        if (clickedItem != null && task.run(clickedItem)) {
             mClusterRenderer.update();
             mMap.render();
             return true;

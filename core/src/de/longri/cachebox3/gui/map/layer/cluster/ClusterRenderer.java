@@ -20,14 +20,13 @@ import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.locator.geocluster.Cluster;
-import de.longri.cachebox3.locator.geocluster.GeoBoundingBox;
+import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.Box;
 import org.oscim.core.Point;
 import org.oscim.core.Tile;
-import org.oscim.map.Viewport;
 import org.oscim.renderer.BucketRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.bucket.SymbolBucket;
@@ -108,7 +107,7 @@ public class ClusterRenderer extends BucketRenderer {
             ;
             mapVisibleBoundingBox.map2mercator();
 
-            mWaypointLayer.reduceCluster(new GeoBoundingBox(mapVisibleBoundingBox),
+            mWaypointLayer.reduceCluster(new GeoBoundingBoxInt(mapVisibleBoundingBox),
                     zoomLevel < 14 ? mapVisibleBoundingBox.getWidth() * 7675 : 0, false);
             lastMapPosX = mMapPosition.x;
             lastMapPosY = mMapPosition.y;
@@ -127,7 +126,7 @@ public class ClusterRenderer extends BucketRenderer {
             mapVisibleBoundingBox.map2mercator();
 
             if (moved > mapVisibleBoundingBox.getWidth()) {
-                mWaypointLayer.reduceCluster(new GeoBoundingBox(mapVisibleBoundingBox),
+                mWaypointLayer.reduceCluster(new GeoBoundingBoxInt(mapVisibleBoundingBox),
                         zoomLevel < 14 ? mapVisibleBoundingBox.getWidth() * 7675 : 0, true);
                 lastMapPosX = mMapPosition.x;
                 lastMapPosY = mMapPosition.y;

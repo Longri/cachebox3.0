@@ -20,22 +20,29 @@ import org.oscim.core.GeoPoint;
 
 import java.util.Arrays;
 
-public class GeoBoundingBox {
+public class GeoBoundingBoxInt {
     private final GeoPoint topLeft, bottomRight;
 
-    public GeoBoundingBox(GeoPoint point) {
+    public GeoBoundingBoxInt(GeoPoint point) {
         this(point, point);
     }
 
-    public GeoBoundingBox(GeoPoint topLeft, GeoPoint bottomRight) {
+    public GeoBoundingBoxInt(GeoPoint topLeft, GeoPoint bottomRight) {
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
         validate();
     }
 
-    public GeoBoundingBox(Box box) {
-        bottomRight = new GeoPoint( box.ymin,box.xmax);
-        topLeft = new GeoPoint( box.ymax,box.xmin);
+    public GeoBoundingBoxInt(Box box) {
+        bottomRight = new GeoPoint(box.ymin, box.xmax);
+        topLeft = new GeoPoint(box.ymax, box.xmin);
+        validate();
+    }
+
+    public GeoBoundingBoxInt(double lat, double lon, double extend) {
+        double half = extend / 2;
+        topLeft = new GeoPoint(lat - half, lon);
+        bottomRight = new GeoPoint(lat, lon + half);
         validate();
     }
 
@@ -51,11 +58,11 @@ public class GeoBoundingBox {
 
     @Override
     public boolean equals(Object that) {
-        return that instanceof GeoBoundingBox &&
-                equals((GeoBoundingBox) that);
+        return that instanceof GeoBoundingBoxInt &&
+                equals((GeoBoundingBoxInt) that);
     }
 
-    private boolean equals(GeoBoundingBox that) {
+    private boolean equals(GeoBoundingBoxInt that) {
         return topLeft.equals(that.topLeft) && bottomRight.equals(that.bottomRight);
     }
 

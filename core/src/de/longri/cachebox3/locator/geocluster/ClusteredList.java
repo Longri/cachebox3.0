@@ -28,7 +28,7 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
 
     private int allItemSize = 0;
 
-    private GeoBoundingBox clusterBoundingBox;
+    private GeoBoundingBoxInt clusterBoundingBox;
     private boolean anyClusterOutsideBoundingBox = true;
     private AtomicBoolean cancel = new AtomicBoolean(false);
 
@@ -37,7 +37,7 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
     }
 
 
-    public void clusterByDistance(double distance, GeoBoundingBox boundingBox, ClusterRunnable.Task task, boolean all) {
+    public void clusterByDistance(double distance, GeoBoundingBoxInt boundingBox, ClusterRunnable.Task task, boolean all) {
         clusterBoundingBox = boundingBox;
         switch (task) {
             case expand:

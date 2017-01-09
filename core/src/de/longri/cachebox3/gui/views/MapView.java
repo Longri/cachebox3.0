@@ -269,7 +269,7 @@ public class MapView extends AbstractView {
     @Override
     public void sizeChanged() {
         if (mMap == null) return;
-        mMap.setSize((int) this.getWidth(), (int) this.getHeight());
+        mMap.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
         mMap.viewport().setScreenSize((int) this.getWidth(), (int) this.getHeight());
         main.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
 

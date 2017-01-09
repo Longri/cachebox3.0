@@ -35,7 +35,7 @@ public class ClusterRunnable implements CancelRunable {
     protected final double distance;
     private final CallBack callBack;
     private final ClusteredList workList;
-    private final GeoBoundingBox boundingBox;
+    private final GeoBoundingBoxInt boundingBox;
     private final boolean all;
     private final Task task;
 
@@ -49,7 +49,7 @@ public class ClusterRunnable implements CancelRunable {
     }
 
     public ClusterRunnable(double distance, final ClusteredList workList, final CallBack callBack,
-                           GeoBoundingBox boundingBox, Task task, boolean all) {
+                           GeoBoundingBoxInt boundingBox, Task task, boolean all) {
         this.callBack = callBack;
         this.distance = distance;
         this.workList = workList;

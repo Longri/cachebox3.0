@@ -26,7 +26,7 @@ public class ClusterablePoint extends Coordinate {
     private final Object dataObject; // Cache.class or WayPoint.class
 
     final GeoPoint geoPoint;
-    private GeoBoundingBox bounds;
+    private GeoBoundingBoxInt bounds;
     private final int cachedHash;
 
 
@@ -72,7 +72,7 @@ public class ClusterablePoint extends Coordinate {
         double halfDistance = distance / 2;
         double bbDistance = Math.hypot(halfDistance, halfDistance);
 
-        this.bounds = new GeoBoundingBox(this.geoPoint.destinationPoint(bbDistance, 315)
+        this.bounds = new GeoBoundingBoxInt(this.geoPoint.destinationPoint(bbDistance, 315)
                 , this.geoPoint.destinationPoint(bbDistance, 135));
     }
 

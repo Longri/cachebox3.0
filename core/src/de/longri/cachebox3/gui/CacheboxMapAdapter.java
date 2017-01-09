@@ -35,10 +35,9 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     }
 
 
-    /* private */ boolean mRenderWait;
-    /* private */ boolean mRenderRequest;
-    /* private */ boolean mUpdateRequest;
-    private int width = Gdx.graphics.getWidth(), height = Gdx.graphics.getHeight();
+    private boolean mRenderWait;
+    private boolean mRenderRequest;
+    private int width = Gdx.graphics.getWidth(), height = Gdx.graphics.getHeight(), xOffset, yOffset;
 
     @Override
     public int getWidth() {
@@ -50,9 +49,20 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         return height;
     }
 
-    public void setSize(float newWidth, float newHeight) {
+    public void setMapPosAndSize(float newX, float newY, float newWidth, float newHeight) {
         width = (int) newWidth;
         height = (int) newHeight;
+
+        xOffset = (int) newX;
+        yOffset = (int) (Gdx.graphics.getHeight() - newY - newHeight);
+    }
+
+    public int getX_Offset() {
+        return xOffset;
+    }
+
+    public int getY_Offset() {
+        return yOffset;
     }
 
     private final Runnable mRedrawCb = new Runnable() {
@@ -62,9 +72,6 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             Gdx.graphics.requestRendering();
         }
     };
-
-    private float lastTilt = -1;
-    private float lastRotate = -1;
 
     @Override
     public void updateMap(boolean forceRender) {
