@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.map.layer.cluster;
 
 
+import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
@@ -35,25 +36,27 @@ import org.oscim.renderer.bucket.SymbolItem;
 import org.oscim.utils.TimSort;
 import org.oscim.utils.geom.GeometryUtils;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
-public class ClusterRenderer extends BucketRenderer {
+public class ClusterRenderer extends BucketRenderer implements Disposable {
 
     public static final Logger log = LoggerFactory.getLogger(ClusterRenderer.class);
-    private static final PointF CENTER_OFFSET = new PointF(0.5f, 0.5f);;
+    private static final PointF CENTER_OFFSET = new PointF(0.5f, 0.5f);
 
-    public final Bitmap mDefaultBitmap;
+    private final Bitmap mDefaultBitmap;
 
     private final SymbolBucket mSymbolLayer;
     private final float[] mBox = new float[8];
     private final WaypointLayer mWaypointLayer;
     private final Point mMapPoint = new Point();
+    private final Box mapVisibleBoundingBox = new Box();
 
     private int lastZoomLevel = -1;
     private double lastMapPosX = Double.MIN_VALUE;
     private double lastMapPosY = Double.MIN_VALUE;
     private float lastMapBearing = Float.MIN_VALUE;
-    private Box mapVisibleBoundingBox = new Box();
+
 
     /**
      * flag to force update of Clusters
@@ -61,6 +64,11 @@ public class ClusterRenderer extends BucketRenderer {
     private boolean mUpdate;
 
     private InternalItem[] mItems;
+
+    public void dispose() {
+        Arrays.fill(mItems, null);
+        mItems = null;
+    }
 
     static class InternalItem {
         Coordinate item;
@@ -84,29 +92,13 @@ public class ClusterRenderer extends BucketRenderer {
 
 
     private boolean chekForClusterChanges(GLViewport v) {
-
-
-//check if maybe all not clustered remove this if statement from calculate cluster
-//        // set distance to 0 with zoom levels bigger then 13
-//        distance = zoomLevel < 14 ? distance : 0;
-
         mMapPosition.copy(v.pos);
-
         final int zoomLevel = mMapPosition.getZoomLevel();
-//
-//        log.debug("Set zoom level to " + zoomLevel);
-//
-//        if (lastZoomLevel == zoomLevel) {
-//            log.debug("no zoom level changes");
-//            return;
-//        }
-
 
         if (mMapPosition.getZoomLevel() != lastZoomLevel) {
             lastZoomLevel = mMapPosition.getZoomLevel();
 
             mWaypointLayer.map().viewport().getBBox(mapVisibleBoundingBox, 1350);
-            ;
             mapVisibleBoundingBox.map2mercator();
 
             mWaypointLayer.reduceCluster(new GeoBoundingBoxInt(mapVisibleBoundingBox),
@@ -119,7 +111,7 @@ public class ClusterRenderer extends BucketRenderer {
 
         // check if map pos changed
         if (lastMapPosX != mMapPosition.x ||
-                lastMapPosY != mMapPosition.y) {
+                lastMapPosY != mMapPosition.y || lastMapBearing != mMapPosition.bearing) {
 
             double moved = Math.hypot(Math.abs(lastMapPosX - mMapPosition.x),
                     Math.abs(lastMapPosY - mMapPosition.y)) * 7675;
@@ -306,7 +298,7 @@ public class ClusterRenderer extends BucketRenderer {
         ZSORT.doSort(a, zComparator, lo, hi);
     }
 
-    final static Comparator<InternalItem> zComparator = new Comparator<InternalItem>() {
+    private final static Comparator<InternalItem> zComparator = new Comparator<InternalItem>() {
         @Override
         public int compare(InternalItem a, InternalItem b) {
             if (a.visible && b.visible) {

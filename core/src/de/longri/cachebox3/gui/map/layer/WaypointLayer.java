@@ -54,24 +54,27 @@ import java.util.HashMap;
  * Created by Longri on 27.11.16.
  */
 public class WaypointLayer extends Layer implements GestureListener, CacheListChangedEventListener, Disposable {
-    final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
+    private final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
 
-    public static final Bitmap defaultMarker = getClusterSymbol("myterie");
+    private static final Bitmap defaultMarker = getClusterSymbol("myterie");
     public static final Bitmap CLUSTER1_SYMBOL = getClusterSymbol("cluster1");
     public static final Bitmap CLUSTER10_SYMBOL = getClusterSymbol("cluster10");
     public static final Bitmap CLUSTER100_SYMBOL = getClusterSymbol("cluster100");
 
 
     private final ClusterRenderer mClusterRenderer;
-    private final Point mTmpPoint = new Point();
     private final ClusteredList mItemList;
-    private final double[] out = new double[2];
+    private final Point clickPoint = new Point();
     private final Box mapVisibleBoundingBox = new Box();
+    private final CB_List<ClusterablePoint> clickedItems = new CB_List<ClusterablePoint>();
+    private final HashMap<String, Bitmap> ClusterSymbolHashMap = new HashMap<String, Bitmap>();
+    private final ThreadStack<ClusterRunnable> clusterWorker = new ThreadStack<ClusterRunnable>();
+
 
     private double lastDistance = Double.MIN_VALUE;
     private double lastFactor = 2.0;
-    private ThreadStack<ClusterRunnable> clusterWorker = new ThreadStack<ClusterRunnable>();
+
     private ClusterRunnable.Task lastTask;
 
     public WaypointLayer(Map map) {
@@ -91,7 +94,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    public void populate() {
+    private void populate() {
         mClusterRenderer.populate(mItemList.size());
     }
 
@@ -99,6 +102,9 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     public void dispose() {
         CacheListChangedEventList.Remove(this);
         ClusterSymbolHashMap.clear();
+        clickedItems.clear();
+        mClusterRenderer.dispose();
+        clusterWorker.dispose();
 //        TODO dispose ClusterList and ThreadStack
     }
 
@@ -193,11 +199,8 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    private final HashMap<String, Bitmap> ClusterSymbolHashMap = new HashMap<String, Bitmap>();
-
-
     private Bitmap getClusterSymbolByCache(Cache cache) {
-        Bitmap symbol = null;
+        Bitmap symbol;
         String symbolName = getMapIconName(cache);
         symbol = ClusterSymbolHashMap.get(symbolName);
         if (symbol == null) {
@@ -208,7 +211,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
     private Bitmap getClusterSymbolByWaypoint(Waypoint waypoint) {
-        Bitmap symbol = null;
+        Bitmap symbol;
         String symbolName = getMapIconName(waypoint);
         symbol = ClusterSymbolHashMap.get(symbolName);
         if (symbol == null) {
@@ -248,7 +251,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         Skin skin = VisUI.getSkin();
         ScaledSvg scaledSvg = skin.get(name, ScaledSvg.class);
         FileHandle fileHandle = Gdx.files.internal(scaledSvg.path);
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         try {
             bitmap = PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
         } catch (IOException e) {
@@ -261,12 +264,12 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         boolean run(ClusterablePoint aIndex);
     }
 
-    protected boolean onItemSingleTap(ClusterablePoint item) {
+    private boolean onItemSingleTap(ClusterablePoint item) {
         log.debug("Click on: " + item);
         return true;
     }
 
-    protected boolean onItemLongPress(ClusterablePoint item) {
+    private boolean onItemLongPress(ClusterablePoint item) {
         log.debug("LongClick on: " + item);
         return true;
     }
@@ -287,9 +290,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     @Override
     public boolean onGesture(Gesture g, MotionEvent e) {
-
         if (!(e instanceof MotionHandler)) return false;
-
         if (g instanceof Gesture.Tap)
             return activateSelectedItems(e, mActiveItemSingleTap);
 
@@ -315,14 +316,11 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         final CacheboxMapAdapter mapAdapter = (CacheboxMapAdapter) mMap;
         final int eventX = (int) event.getX() - mapAdapter.getX_Offset();
         final int eventY = (int) event.getY() - mapAdapter.getY_Offset();
-        log.debug("MapEvent " + eventX + "/" + eventY);
 
         // calculate geoCoordinate from click point
-        final Point clickPoint = new Point();
         mMap.viewport().fromScreenPoint(eventX, eventY, clickPoint);
         double clickLon = MercatorProjection.toLatitude(clickPoint.y);
         double clickLat = MercatorProjection.toLongitude(clickPoint.x);
-        log.debug("ClickEvent Lat/Lon :" + clickLat + "/" + clickLon);
 
         //extend geoCoordinate to BoundingBox
         double groundResolution = getGroundresolution();
@@ -330,14 +328,14 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         GeoBoundingBoxDouble boundingBox = new GeoBoundingBoxDouble(clickLat, clickLon, extendValue);
 
         // search item inside click bounding box
-        CB_List<ClusterablePoint> clickedItems = new CB_List<ClusterablePoint>();
+        clickedItems.clear();
         for (int i = 0, n = mItemList.size(); i < n; i++) {
             ClusterablePoint item = mItemList.get(i);
 
             double lat, lon;
             if (item instanceof Cluster) {
                 //the draw point is set to center of cluster
-                Coordinate centerCoord = ((Cluster) item).getCenter();
+                final Coordinate centerCoord = ((Cluster) item).getCenter();
                 lat = centerCoord.latitude;
                 lon = centerCoord.longitude;
             } else {

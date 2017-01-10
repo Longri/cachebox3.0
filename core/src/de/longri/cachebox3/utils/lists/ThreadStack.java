@@ -37,7 +37,7 @@ public class ThreadStack<T extends CancelRunable> implements Disposable {
         this(1);
     }
 
-    public ThreadStack(int maxItemSize) {
+    ThreadStack(int maxItemSize) {
         items = new CB_List<T>();
         maxItems = maxItemSize;
         controlThread.start();
@@ -82,7 +82,7 @@ public class ThreadStack<T extends CancelRunable> implements Disposable {
         }
     });
 
-    public int getMaxItemSize() {
+    int getMaxItemSize() {
         return maxItems;
     }
 
@@ -106,17 +106,16 @@ public class ThreadStack<T extends CancelRunable> implements Disposable {
     @Override
     public void dispose() {
         isDisposed = true;
-    }
-
-    public boolean isReadyAndEmpty() {
-        synchronized (items) {
-            if (executor == null && items.isEmpty()) {
-                return true;
-            } else {
-                return false;
+        if (executor != null) {
+            if (actualRunning != null) {
+                actualRunning.cancel();
             }
         }
     }
 
-
+    public boolean isReadyAndEmpty() {
+        synchronized (items) {
+            return executor == null && items.isEmpty();
+        }
+    }
 }
