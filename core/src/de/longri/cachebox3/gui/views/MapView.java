@@ -232,6 +232,9 @@ public class MapView extends AbstractView {
     public void dispose() {
         log.debug("Dispose MapView");
 
+        positionChangedHandler.dispose();
+        positionChangedHandler = null;
+
         Layers layers = mMap.layers();
         for (Layer layer : layers) {
             if (layer instanceof Disposable) {
