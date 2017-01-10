@@ -36,6 +36,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.utils.lists.CB_List;
 import de.longri.cachebox3.utils.lists.ThreadStack;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.*;
@@ -66,13 +67,12 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     private final Point mTmpPoint = new Point();
     private final ClusteredList mItemList;
     private final double[] out = new double[2];
-
+    private final Box mapVisibleBoundingBox = new Box();
 
     private double lastDistance = Double.MIN_VALUE;
     private double lastFactor = 2.0;
     private ThreadStack<ClusterRunnable> clusterWorker = new ThreadStack<ClusterRunnable>();
     private ClusterRunnable.Task lastTask;
-
 
     public WaypointLayer(Map map) {
         super(map);
@@ -320,17 +320,17 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         // calculate geoCoordinate from click point
         final Point clickPoint = new Point();
         mMap.viewport().fromScreenPoint(eventX, eventY, clickPoint);
-        double clickLat = MercatorProjection.toLatitude(clickPoint.y);
-        double clickLon = MercatorProjection.toLongitude(clickPoint.x);
+        double clickLon = MercatorProjection.toLatitude(clickPoint.y);
+        double clickLat = MercatorProjection.toLongitude(clickPoint.x);
         log.debug("ClickEvent Lat/Lon :" + clickLat + "/" + clickLon);
 
         //extend geoCoordinate to BoundingBox
-        double groundResolution = MercatorProjection.groundResolution(mMap.getMapPosition());
-        double extendValue = MercatorProjection.latitudeToY(groundResolution * defaultMarker.getWidth());
+        double groundResolution = getGroundresolution();
+        double extendValue = groundResolution * defaultMarker.getWidth();
         GeoBoundingBoxDouble boundingBox = new GeoBoundingBoxDouble(clickLat, clickLon, extendValue);
 
         // search item inside click bounding box
-        ClusterablePoint clickedItem = null;
+        CB_List<ClusterablePoint> clickedItems = new CB_List<ClusterablePoint>();
         for (int i = 0, n = mItemList.size(); i < n; i++) {
             ClusterablePoint item = mItemList.get(i);
 
@@ -346,14 +346,45 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             }
             if (!boundingBox.contains(lat, lon))
                 continue;
-            clickedItem = item;
+            clickedItems.add(item);
         }
 
-        if (clickedItem != null && task.run(clickedItem)) {
+        if (!clickedItems.isEmpty()) {
+            ClusterablePoint clickedItem = null;
+            //if more then one item so search nearest
+            if (clickedItems.size() == 1) {
+                clickedItem = clickedItems.get(0);
+            } else {
+                Coordinate clickCoord = new Coordinate(clickLon, clickLat);
+                double minDistance = Double.MAX_VALUE;
+                for (int i = 0, n = clickedItems.size(); i < n; i++) {
+                    ClusterablePoint item = clickedItems.get(i);
+                    Coordinate pos;
+                    if (item instanceof Cluster) {
+                        //the draw point is set to center of cluster
+                        pos = ((Cluster) item).getCenter();
+                    } else {
+                        pos = item;
+                    }
+                    double distance = clickCoord.distance(pos);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        clickedItem = item;
+                    }
+                }
+            }
+
+            task.run(clickedItem);
             mClusterRenderer.update();
             mMap.render();
             return true;
         }
         return false;
+    }
+
+    private double getGroundresolution() {
+        mMap.viewport().getBBox(mapVisibleBoundingBox, 0);
+        mapVisibleBoundingBox.map2mercator();
+        return mapVisibleBoundingBox.getWidth() / mMap.getWidth();
     }
 }

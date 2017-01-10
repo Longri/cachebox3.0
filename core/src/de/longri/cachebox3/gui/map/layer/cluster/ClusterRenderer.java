@@ -26,6 +26,7 @@ import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.Box;
 import org.oscim.core.Point;
+import org.oscim.core.PointF;
 import org.oscim.core.Tile;
 import org.oscim.renderer.BucketRenderer;
 import org.oscim.renderer.GLViewport;
@@ -39,6 +40,7 @@ import java.util.Comparator;
 public class ClusterRenderer extends BucketRenderer {
 
     public static final Logger log = LoggerFactory.getLogger(ClusterRenderer.class);
+    private static final PointF CENTER_OFFSET = new PointF(0.5f, 0.5f);;
 
     public final Bitmap mDefaultBitmap;
 
@@ -234,8 +236,12 @@ public class ClusterRenderer extends BucketRenderer {
             if (bitmap == null)
                 bitmap = mDefaultBitmap;
 
+
             SymbolItem s = SymbolItem.pool.get();
             s.set(it.x, it.y, bitmap, true);
+
+            //set center offset
+            s.offset = CENTER_OFFSET;
 
             mSymbolLayer.pushSymbol(s);
         }

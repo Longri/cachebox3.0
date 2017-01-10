@@ -32,8 +32,8 @@ public class GeoBoundingBoxDouble {
 
     public GeoBoundingBoxDouble(double lat, double lon, double extend) {
         double half = extend / 2;
-        topLeft = new Coordinate(lat + half, lon);
-        bottomRight = new Coordinate(lat, lon + half);
+        topLeft = new Coordinate(lat + half, lon - half);
+        bottomRight = new Coordinate(lat - half, lon + half);
         validate();
     }
 
@@ -42,7 +42,7 @@ public class GeoBoundingBoxDouble {
                 point.longitude >= topLeft.longitude && point.longitude <= bottomRight.longitude;
     }
 
-    public boolean contains(double latitude, double longitude) {
+    public boolean contains(double longitude, double latitude) {
         return latitude <= topLeft.latitude && latitude >= bottomRight.latitude &&
                 longitude >= topLeft.longitude && longitude <= bottomRight.longitude;
     }
