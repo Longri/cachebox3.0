@@ -16,16 +16,17 @@
 package de.longri.cachebox3.types;
 
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FilterProperties {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(FilterProperties.class);
+    final static Logger log = LoggerFactory.getLogger(FilterProperties.class);
 
     private final static String SEPARATOR = ",";
     private final static String GPXSEPARATOR = "^";
@@ -123,7 +124,6 @@ public class FilterProperties {
         if (serialization.startsWith("{")) {
 
 
-
             JSONTokener tokener = new JSONTokener(serialization);
             try {
                 JSONObject json = (JSONObject) tokener.nextValue();
@@ -202,7 +202,7 @@ public class FilterProperties {
                     }
                 }
             } catch (JSONException e) {
-                log.error( "Json Version FilterProperties(" + serialization + ")", "", e);
+                log.error("Json Version FilterProperties(" + serialization + ")", e);
             }
         } else {
             // Filter ist noch in alten Einstellungen gegeben...
@@ -277,7 +277,7 @@ public class FilterProperties {
                     }
                 }
             } catch (Exception exc) {
-                log.error( "old Version FilterProperties(" + serialization + ")", "", exc);
+                log.error("old Version FilterProperties(" + serialization + ")", exc);
             }
         }
     }
@@ -380,7 +380,7 @@ public class FilterProperties {
 
             result = json.toString();
         } catch (JSONException e) {
-            log.error( "JSON toString", "", e);
+            log.error("JSON toString", e);
         }
         return result;
     }

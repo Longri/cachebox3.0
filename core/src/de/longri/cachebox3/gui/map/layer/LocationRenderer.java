@@ -2,6 +2,7 @@
  * Copyright 2013 Ahmad Saleem
  * Copyright 2013 Hannes Janetzek
  * Copyright 2016 devemux86
+ * Copyright 2017 Longri
  *
  * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free Software
@@ -16,25 +17,15 @@
  */
 package de.longri.cachebox3.gui.map.layer;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g3d.*;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
-import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.gui.map.MapCamera;
 import org.oscim.backend.GL;
 import org.oscim.core.Box;
-import org.oscim.core.MapPosition;
 import org.oscim.core.Point;
 import org.oscim.core.Tile;
 import org.oscim.layers.Layer;
 import org.oscim.map.Map;
 import org.oscim.renderer.*;
-import org.oscim.renderer.bucket.SymbolItem;
 import org.oscim.utils.FastMath;
 import org.oscim.utils.math.Interpolation;
 
@@ -42,7 +33,7 @@ import java.util.Locale;
 
 import static org.oscim.backend.GLAdapter.gl;
 
-public class LocationRenderer extends LayerRenderer {
+public class LocationRenderer extends LayerRenderer implements Disposable {
 
     private static final long ANIM_RATE = 50;
     private static final long INTERVAL = 2000;
@@ -89,10 +80,14 @@ public class LocationRenderer extends LayerRenderer {
     }
 
     private void initial3DModel() {
-               cam = new MapCamera(mMap);
-
-
+        cam = new MapCamera(mMap);
     }
+
+    @Override
+    public void dispose() {
+        cam = null;
+    }
+
 
     public void setCallback(Callback callback) {
         mCallback = callback;

@@ -17,7 +17,8 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import org.slf4j.LoggerFactory;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 
 /**
  * Draw a 3D Model at Position of an Actor
@@ -26,7 +27,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Actor3D extends Actor {
 
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Actor3D.class);
+    final static Logger log = LoggerFactory.getLogger(Actor3D.class);
 
     /**
      * myLocationModel batch must set from initialisation

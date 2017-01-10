@@ -20,13 +20,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.gui.widgets.MapCompass;
-import org.slf4j.LoggerFactory;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 
 /**
  * Created by Longri on 27.07.16.
  */
 public class TestView extends AbstractView {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(TestView.class);
+    final static Logger log = LoggerFactory.getLogger(TestView.class);
 
     MapCompass mapCompass;
 

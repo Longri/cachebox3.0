@@ -35,12 +35,12 @@ import de.longri.cachebox3.gui.help.GestureHelp;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.IconNames;
 import de.longri.cachebox3.utils.SizeChangedEvent;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
@@ -49,7 +49,7 @@ import java.util.ArrayList;
  */
 public class GestureButton extends Button {
 
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(GestureButton.class);
+    final static Logger log = LoggerFactory.getLogger(GestureButton.class);
     final static float MIN_GESTURE_VELOCITY = 100;
 
 

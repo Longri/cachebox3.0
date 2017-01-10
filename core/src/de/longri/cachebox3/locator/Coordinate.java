@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.MathUtils.CalculationType;
 import de.longri.cachebox3.utils.converter.UTMConvert;
+import org.oscim.backend.canvas.Bitmap;
 
 public class Coordinate extends LatLong implements Serializable {
 	private static final long serialVersionUID = 4288564255686705L;
@@ -29,6 +30,8 @@ public class Coordinate extends LatLong implements Serializable {
 	static final String br = System.getProperty("line.separator");
 
 	protected boolean valid;
+
+	public Bitmap mapSymbol;
 
 	private static final float[] mResults = new float[2];
 

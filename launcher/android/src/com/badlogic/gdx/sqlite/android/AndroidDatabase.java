@@ -26,8 +26,9 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabase;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.sqlite.Database;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -37,7 +38,7 @@ import java.util.Map;
  */
 public class AndroidDatabase implements SQLiteGdxDatabase {
 
-    final org.slf4j.Logger log = LoggerFactory.getLogger(AndroidDatabase.class);
+    final Logger log = LoggerFactory.getLogger(AndroidDatabase.class);
     private SQLiteDatabaseHelper helper;
     private SQLiteDatabase database;
     private Context context;

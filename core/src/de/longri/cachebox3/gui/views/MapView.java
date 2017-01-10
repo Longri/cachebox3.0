@@ -21,24 +21,28 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
-import de.longri.cachebox3.gui.map.layer.Compass;
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
+import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.core.MapPosition;
 import org.oscim.event.Event;
 import org.oscim.gdx.GestureHandlerImpl;
 import org.oscim.gdx.MotionHandler;
+import org.oscim.layers.Layer;
 import org.oscim.layers.TileGridLayer;
 import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
@@ -55,7 +59,6 @@ import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.source.mapfile.MapFileTileSource;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -64,7 +67,7 @@ import org.slf4j.LoggerFactory;
  * Created by Longri on 24.07.16.
  */
 public class MapView extends AbstractView {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(MapView.class);
+    final static Logger log = LoggerFactory.getLogger(MapView.class);
 
     private InputMultiplexer mapInputHandler;
     private CacheboxMapAdapter mMap;
@@ -74,6 +77,8 @@ public class MapView extends AbstractView {
     private final MapStateButton mapStateButton;
     private final MapCompass mapOrientationButton;
     private final ZoomButton zoomButton;
+    private WaypointLayer wayPointLayer;
+
 
     private MapFileTileSource tileSource;
 
@@ -171,18 +176,21 @@ public class MapView extends AbstractView {
         main.drawMap = true;
         mMap = new CacheboxMapAdapter() {
             @Override
-            public void onMapEvent(Event e, MapPosition mapPosition) {
+            public void onMapEvent(Event e, final MapPosition mapPosition) {
+
                 if (e == Map.MOVE_EVENT) {
 //                    log.debug("Map.MOVE_EVENT");
                     mapStateButton.setState(MapState.FREE);
-                }else if (e == Map.TILT_EVENT) {
+                } else if (e == Map.TILT_EVENT) {
 //                    log.debug("Map.TILT_EVENT");
-                    if (positionChangedHandler != null) positionChangedHandler.tiltChangedFromMap(mapPosition.getTilt());
-                }else if (e == Map.ROTATE_EVENT) {
+                    if (positionChangedHandler != null)
+                        positionChangedHandler.tiltChangedFromMap(mapPosition.getTilt());
+                } else if (e == Map.ROTATE_EVENT) {
 //                    log.debug("Map.ROTATE_EVENT");
-                    if (positionChangedHandler != null) positionChangedHandler.rotateChangedFromUser(mapPosition.getBearing());
-                }else if (e == Map.SCALE_EVENT) {
-//                    log.debug("Map.SCALE_EVENT");
+                    if (positionChangedHandler != null)
+                        positionChangedHandler.rotateChangedFromUser(mapPosition.getBearing());
+                } else if (e == Map.ANIM_END) {
+//                    log.debug("Map.ANIM_END" + mapPosition);
                 }
             }
         };
@@ -191,7 +199,7 @@ public class MapView extends AbstractView {
         mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
 
         //          grid,labels,buldings,scalebar
-        initLayers(false, true, true, true);
+        initLayers(true, true, true, true);
 
 
         //add position changed handler
@@ -202,18 +210,6 @@ public class MapView extends AbstractView {
         return mMap;
     }
 
-    public void destroyMap() {
-        main.drawMap = true;
-        mMap.clearMap();
-        mMap.destroy();
-        mMap = null;
-
-        TextureBucket.pool.clear();
-        TextItem.pool.clear();
-        TextureItem.disposeTextures();
-
-        main.mMapRenderer = null;
-    }
 
     @Override
     protected void create() {
@@ -228,24 +224,55 @@ public class MapView extends AbstractView {
 
     @Override
     public void onHide() {
-        destroyMap();
+        removeInputListener();
     }
 
 
     @Override
     public void dispose() {
         log.debug("Dispose MapView");
+
+        positionChangedHandler.dispose();
+        positionChangedHandler = null;
+
+        Layers layers = mMap.layers();
+        for (Layer layer : layers) {
+            if (layer instanceof Disposable) {
+                ((Disposable) layer).dispose();
+            }
+        }
+
+        layers.clear();
+
+        wayPointLayer = null;
+
         mapInputHandler.clear();
         mapInputHandler = null;
+
+        tileSource.close();
+        tileSource = null;
+
+        main.drawMap = false;
+        mMap.clearMap();
+        mMap.destroy();
+        TextureBucket.pool.clear();
+        TextItem.pool.clear();
+        TextureItem.disposeTextures();
+
+        main.mMapRenderer = null;
         mMap = null;
+
+        //dispose actors
+        mapOrientationButton.dispose();
         mapStateButton.dispose();
+
     }
 
 
     @Override
     public void sizeChanged() {
         if (mMap == null) return;
-        mMap.setSize((int) this.getWidth(), (int) this.getHeight());
+        mMap.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
         mMap.viewport().setScreenSize((int) this.getWidth(), (int) this.getHeight());
         main.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
 
@@ -282,17 +309,7 @@ public class MapView extends AbstractView {
 
 
         //MyLocationLayer
-        myLocationAccuracy = new LocationOverlay(mMap, new Compass() {
-            @Override
-            public void setEnabled(boolean enabled) {
-
-            }
-
-            @Override
-            public float getRotation() {
-                return myBearing;
-            }
-        });
+        myLocationAccuracy = new LocationOverlay(mMap);
         myLocationAccuracy.setPosition(52.580400947530364, 13.385594096047232, 100);
 
 
@@ -326,9 +343,10 @@ public class MapView extends AbstractView {
             mapScaleBarLayer = new MapScaleBarLayer(mMap, mapScaleBar);
             layers.add(mapScaleBarLayer);
             layers.add(myLocationAccuracy);
-            layers.add(myLocationModel);
+//            layers.add(myLocationModel);
         }
-
+        wayPointLayer = new WaypointLayer(mMap);
+        layers.add(wayPointLayer);
 
     }
 
@@ -367,4 +385,5 @@ public class MapView extends AbstractView {
     private void removeInputListener() {
         StageManager.removeMapMultiplexer(mapInputHandler);
     }
+
 }

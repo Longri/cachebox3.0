@@ -23,6 +23,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.CB;
 
 /**
@@ -32,7 +33,7 @@ import de.longri.cachebox3.CB;
  * <p>
  * Created by Longri on 18.11.2016.
  */
-public class MapCompass extends Group {
+public class MapCompass extends Group implements Disposable {
 
     private final static float MODEL_SCALE = 0.15f;//0.075f;
 
@@ -76,6 +77,11 @@ public class MapCompass extends Group {
         setStateModel();
     }
 
+    public void dispose() {
+        actor3D_act = null;
+        tiltQuaternion = null;
+        orientationQuaternion = null;
+    }
 
     private void setStateModel() {
         switch (state) {
@@ -160,7 +166,7 @@ public class MapCompass extends Group {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                state=State.USER;
+                state = State.USER;
                 setStateModel();
             }
         });

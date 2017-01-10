@@ -1,4 +1,5 @@
 <config>
+
     <executableName>${app.executable}</executableName>
     <mainClass>${app.mainclass}</mainClass>
     <os>ios</os>

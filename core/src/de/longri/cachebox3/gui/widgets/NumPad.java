@@ -24,14 +24,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.translation.Translation;
-import org.slf4j.LoggerFactory;
+import de.longri.cachebox3.logging.LoggerFactory;
 
 /**
  * Created by Longri on 26.08.2016.
  */
 public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposable {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(NumPad.class);
+    final static Logger log = LoggerFactory.getLogger(NumPad.class);
 
     @Override
     public void show(boolean visible) {

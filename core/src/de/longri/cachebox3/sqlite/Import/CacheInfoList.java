@@ -18,20 +18,17 @@ package de.longri.cachebox3.sqlite.Import;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.Category;
-import de.longri.cachebox3.types.LogEntry;
-import de.longri.cachebox3.utils.lists.CB_List;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 
 public class CacheInfoList {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheInfoList.class);
+    final static Logger log = LoggerFactory.getLogger(CacheInfoList.class);
 
     /**
      * Die Liste der Cache Infos, welche mit IndexDB() gefüllt und mit dispose() gelöscht wird.
@@ -280,7 +277,7 @@ public class CacheInfoList {
             try {
                 Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(info.id)});
             } catch (Exception exc) {
-                log.error("CacheInfoList.writeListToDB()", "", exc);
+                log.error("CacheInfoList.writeListToDB()", exc);
 
             }
         }
@@ -332,8 +329,8 @@ public class CacheInfoList {
 
         int ListingCheckSum = (int) (Utils.sdbm(stringForListingCheckSum) + Utils.sdbm(recentOwnerLogString));
         info.ListingCheckSum = ListingCheckSum;
-        info.Latitude = cache.Latitude();
-        info.Longitude = cache.Longitude();
+        info.Latitude = cache.latitude;
+        info.Longitude = cache.longitude;
         info.Found = cache.isFound();
         info.favorite = cache.isFavorite();
         info.CorrectedCoordinates = cache.CorrectedCoordiantesOrMysterySolved();

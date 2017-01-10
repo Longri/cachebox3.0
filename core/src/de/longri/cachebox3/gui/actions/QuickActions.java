@@ -20,10 +20,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings;
 import de.longri.cachebox3.gui.actions.show_vies.*;
 import de.longri.cachebox3.gui.widgets.QuickButtonItem;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.MoveableList;
-import org.slf4j.LoggerFactory;
 
 /**
  * Enthält die Actions Möglichkeiten für die Quick Buttons
@@ -63,7 +64,7 @@ public enum QuickActions {
     empty,;
 
 
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(QuickActions.class);
+    final static Logger log = LoggerFactory.getLogger(QuickActions.class);
 
     /**
      * Gibt eine ArrayList von Actions zurück aus einem übergebenen String Array

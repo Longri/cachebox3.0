@@ -57,7 +57,7 @@ public class Settings {
     public static final SettingBool FieldNotesLoadAll = (SettingBool) SettingsList.addSetting(new SettingBool("FieldNotesLoadAll", SettingCategory.Fieldnotes, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingInt FieldNotesLoadLength = (SettingInt) SettingsList.addSetting(new SettingInt("FieldNotesLoadLength", SettingCategory.Fieldnotes, EXPERT, 10, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingString Friends = (SettingString) SettingsList.addSetting(new SettingString("Friends", SettingCategory.Login, NORMAL, "", SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingBool ShowAllWaypoints = (SettingBool) SettingsList.addSetting(new SettingBool("ShowAllWaypoints", SettingCategory.Map, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingBool ShowAllWaypoints = (SettingBool) SettingsList.addSetting(new SettingBool("ShowAllWaypoints", SettingCategory.Map, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool DisableLiveMap = (SettingBool) SettingsList.addSetting(new SettingBool("DisableLiveMap", SettingCategory.LiveMap, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingInt LiveMaxCount = (SettingInt) SettingsList.addSetting(new SettingInt("LiveMaxCount", SettingCategory.LiveMap, EXPERT, 350, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool LiveExcludeFounds = (SettingBool) SettingsList.addSetting(new SettingBool("LiveExcludeFounds", SettingCategory.LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));

@@ -15,83 +15,84 @@
  */
 package de.longri.cachebox3.settings;
 
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.lists.CB_List;
-import org.slf4j.LoggerFactory;
 
 
 public class SettingEnum<EnumTyp extends Enum<?>> extends SettingString {
-	final static org.slf4j.Logger log = LoggerFactory.getLogger(SettingEnum.class);
-	private final CB_List<String> values;
+    final static Logger log = LoggerFactory.getLogger(SettingEnum.class);
+    private final CB_List<String> values;
 
-	private EnumTyp myEnum;
+    private EnumTyp myEnum;
 
-	@SuppressWarnings("rawtypes")
-	public SettingEnum(String name, SettingCategory category, SettingMode modus, EnumTyp defaultValue, SettingStoreType StoreType, SettingUsage usage, EnumTyp enu) {
-		super(name, category, modus, defaultValue.name(), StoreType, usage);
-		myEnum = enu;
+    @SuppressWarnings("rawtypes")
+    public SettingEnum(String name, SettingCategory category, SettingMode modus, EnumTyp defaultValue, SettingStoreType StoreType, SettingUsage usage, EnumTyp enu) {
+        super(name, category, modus, defaultValue.name(), StoreType, usage);
+        myEnum = enu;
 
-		values = new CB_List<String>();
+        values = new CB_List<String>();
 
-		// hier bekommst du die Klasse TestEnum
-		Class c = enu.getDeclaringClass();
-		// hier kannst du alle Zust�nde abfragen
-		Object[] oo = c.getEnumConstants();
-		// hier kannst du dann �ber alle Zust�nde iterieren
-		for (Object o : oo) {
-			// und von jedem den Namen abfragen (in unserem Beispiel "wert1",
-			// "wert2", "wert3"
-			values.add(((Enum) o).name());
-		}
+        // hier bekommst du die Klasse TestEnum
+        Class c = enu.getDeclaringClass();
+        // hier kannst du alle Zust�nde abfragen
+        Object[] oo = c.getEnumConstants();
+        // hier kannst du dann �ber alle Zust�nde iterieren
+        for (Object o : oo) {
+            // und von jedem den Namen abfragen (in unserem Beispiel "wert1",
+            // "wert2", "wert3"
+            values.add(((Enum) o).name());
+        }
 
-	}
+    }
 
-	public CB_List<String> getValues() {
-		return values;
-	}
+    public CB_List<String> getValues() {
+        return values;
+    }
 
-	@Override
-	public void setValue(String value) {
-		if (this.value.equals(value))
-			return;
+    @Override
+    public void setValue(String value) {
+        if (this.value.equals(value))
+            return;
 
-		if (value == null || value.isEmpty()) {
-			myEnum = getEnumFromString(defaultValue);
-			setDirty();
-			return;
-		}
+        if (value == null || value.isEmpty()) {
+            myEnum = getEnumFromString(defaultValue);
+            setDirty();
+            return;
+        }
 
-		this.value = value;
-		myEnum = getEnumFromString(value);
-		setDirty();
-	}
+        this.value = value;
+        myEnum = getEnumFromString(value);
+        setDirty();
+    }
 
-	public EnumTyp getEnumValue() {
-		return getEnumFromString(value);
-	}
+    public EnumTyp getEnumValue() {
+        return getEnumFromString(value);
+    }
 
-	public EnumTyp getEnumDefaultValue() {
-		return getEnumFromString(defaultValue);
-	}
+    public EnumTyp getEnumDefaultValue() {
+        return getEnumFromString(defaultValue);
+    }
 
-	@SuppressWarnings("unchecked")
-	private EnumTyp getEnumFromString(String stringValue) {
-		EnumTyp ret = null;
-		try {
-			ret = (EnumTyp) Enum.valueOf(myEnum.getDeclaringClass(), stringValue);
-		} catch (Exception e) {
-			log.error( "Wrong ENUM value:" + stringValue, e);
-			ret = getEnumFromString(defaultValue);
-		}
+    @SuppressWarnings("unchecked")
+    private EnumTyp getEnumFromString(String stringValue) {
+        EnumTyp ret = null;
+        try {
+            ret = (EnumTyp) Enum.valueOf(myEnum.getDeclaringClass(), stringValue);
+        } catch (Exception e) {
+            log.error("Wrong ENUM value:" + stringValue, e);
+            ret = getEnumFromString(defaultValue);
+        }
 
-		return ret;
-	}
+        return ret;
+    }
 
-	public void setEnumValue(EnumTyp value) {
-		if (this.myEnum == value)
-			return;
-		this.value = value.name();
-		myEnum = value;
-		setDirty();
-	}
+    public void setEnumValue(EnumTyp value) {
+        if (this.myEnum == value)
+            return;
+        this.value = value.name();
+        myEnum = value;
+        setDirty();
+    }
 
 }

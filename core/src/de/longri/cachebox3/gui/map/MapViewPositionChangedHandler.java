@@ -28,13 +28,15 @@ import org.oscim.map.Map;
 import org.oscim.map.Viewport;
 import org.oscim.utils.ThreadUtils;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * Created by Longri on 28.09.2016.
  */
 public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
 
-    private float arrowHeading, accuracy, mapBearing,userBearing, tilt, yOffset;
+    private float arrowHeading, accuracy, mapBearing, userBearing, tilt;
     private MapState mapState;
     private CoordinateGPS mapCenter;
     private CoordinateGPS myPosition;
@@ -42,6 +44,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     private final MyLocationModel myLocationModel;
     private final LocationOverlay myLocationAccuracy;
     private final MapCompass mapOrientationButton;
+    private final AtomicBoolean isDisposed = new AtomicBoolean(false);
 
     public static MapViewPositionChangedHandler
     getInstance(Map map, MyLocationModel myLocationModel, LocationOverlay myLocationAccuracy, MapCompass mapOrientationButton) {
@@ -86,10 +89,10 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         if (mapState == MapState.CAR && Locator.SpeedOverGround() < 20)
             bearing = this.mapBearing;
 
-        if(this.mapOrientationButton.isUserRotate()){
+        if (this.mapOrientationButton.isUserRotate()) {
             this.mapBearing = userBearing;
             this.arrowHeading = bearing;
-        }else if (!this.mapOrientationButton.isNorthOriented() || mapState == MapState.CAR) {
+        } else if (!this.mapOrientationButton.isNorthOriented() || mapState == MapState.CAR) {
             this.mapBearing = bearing;
             this.arrowHeading = -bearing;
         } else {
@@ -118,6 +121,9 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     }
 
     public void dispose() {
+
+        isDisposed.set(true);
+
         // unregister this handler
         PositionChangedEventList.Remove(this);
 
@@ -129,16 +135,18 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
      * MapState.LOCK<br>
      * MapState.CAR<br>
      *
-     * @return
+     * @return Boolean
      */
-    public boolean getCenterGps() {
+    private boolean getCenterGps() {
         return this.mapState != MapState.FREE && this.mapState != MapState.WP;
     }
 
     /**
-     * Set th values to Map and position overlays
+     * Set the values to Map and position overlays
      */
     private void assumeValues() {
+
+        if (isDisposed.get()) return;
 
         {// set map values
             MapPosition currentMapPosition = this.map.getMapPosition();

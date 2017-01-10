@@ -16,14 +16,15 @@
 package de.longri.cachebox3.gui.actions;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import org.slf4j.LoggerFactory;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 
 /**
  * Created by Longri on 24.07.16.
  */
 public abstract class AbstractAction {
 
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(AbstractAction.class);
+    final static Logger log = LoggerFactory.getLogger(AbstractAction.class);
 
     protected String name;
     protected int id;

@@ -25,6 +25,8 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.SelectDB_Activity;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheListDAO;
@@ -33,10 +35,9 @@ import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.IconNames;
-import org.slf4j.LoggerFactory;
 
 public class Action_Show_SelectDB_Dialog extends AbstractAction {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Action_Show_SelectDB_Dialog.class);
+    final static Logger log = LoggerFactory.getLogger(Action_Show_SelectDB_Dialog.class);
 
     public enum ViewMode {
         FORCE_SHOW, ASK

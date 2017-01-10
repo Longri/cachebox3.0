@@ -15,7 +15,8 @@
  */
 package de.longri.cachebox3.utils;
 
-import org.slf4j.LoggerFactory;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,7 +27,7 @@ public class UnitFormatter {
     private UnitFormatter() {
     }
 
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(UnitFormatter.class);
+    final static Logger log = LoggerFactory.getLogger(UnitFormatter.class);
     private final static String ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private final static String ROT13_LOOKUP = "nopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM";
 

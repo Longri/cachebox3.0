@@ -16,12 +16,13 @@
 package de.longri.cachebox3.sqlite.Import;
 
 
-import org.slf4j.LoggerFactory;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 
 /**
  * Created by Longri on 27.07.16.
  */
 public class GPXFileImporter {
-    final static org.slf4j.Logger logger = LoggerFactory.getLogger(GPXFileImporter.class);
+    final static Logger logger = LoggerFactory.getLogger(GPXFileImporter.class);
 
 }

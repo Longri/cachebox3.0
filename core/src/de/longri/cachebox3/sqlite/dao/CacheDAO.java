@@ -18,9 +18,10 @@ package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
-import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -31,7 +32,7 @@ import java.util.Date;
 import static de.longri.cachebox3.sqlite.dao.SQL.*;
 
 public class CacheDAO {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(CacheDAO.class);
+    final static Logger log = LoggerFactory.getLogger(CacheDAO.class);
 
 
     public static String GetShortDescription(Cache cache) {
@@ -68,11 +69,10 @@ public class CacheDAO {
     Cache ReadFromCursor(SQLiteGdxDatabaseCursor reader, boolean fullDetails, boolean withDescription) {
 
         try {
-            Cache cache = new Cache(fullDetails);
+            Cache cache = new Cache(reader.getDouble(2), reader.getDouble(3),fullDetails);
 
             cache.Id = reader.getLong(0);
             cache.setGcCode(reader.getString(1).trim());
-            cache.Pos = new Coordinate(reader.getDouble(2), reader.getDouble(3));
             cache.setName(reader.getString(4).trim());
             cache.Size = CacheSizes.parseInt(reader.getInt(5));
             cache.setDifficulty(((float) reader.getShort(6)) / 2);
@@ -112,7 +112,7 @@ public class CacheDAO {
 
             return cache;
         } catch (Exception exc) {
-            log.error("Read Cache", "", exc);
+            log.error("Read Cache", exc);
             return null;
         }
     }
@@ -195,8 +195,8 @@ public class CacheDAO {
         Database.Parameters args = new Database.Parameters();
         args.put("Id", cache.Id);
         args.put("GcCode", cache.getGcCode());
-        args.put("Latitude", cache.Pos.getLatitude());
-        args.put("Longitude", cache.Pos.getLongitude());
+        args.put("Latitude", cache.latitude);
+        args.put("Longitude", cache.longitude);
         args.put("Name", cache.getName());
         try {
             args.put("Size", cache.Size.ordinal());
@@ -264,7 +264,7 @@ public class CacheDAO {
             Database.Data.insert("Caches", args);
 
         } catch (Exception exc) {
-            log.error("Write Cache", "", exc);
+            log.error("Write Cache", exc);
 
         }
     }
@@ -276,7 +276,7 @@ public class CacheDAO {
             Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(cache.Id)});
             Replication.FoundChanged(cache.Id, cache.isFound());
         } catch (Exception exc) {
-            log.error("Write Cache Found", "", exc);
+            log.error("Write Cache Found", exc);
         }
     }
 
@@ -287,10 +287,10 @@ public class CacheDAO {
         args.put("Id", cache.Id);
         args.put("GcCode", cache.getGcCode());
         args.put("GcId", cache.getGcId());
-        if (cache.Pos.isValid() && !cache.Pos.isZero()) {
+        if (cache.isValid() && !cache.isZero()) {
             // Update Cache position only when new position is valid and not zero
-            args.put("Latitude", cache.Pos.getLatitude());
-            args.put("Longitude", cache.Pos.getLongitude());
+            args.put("Latitude", cache.latitude);
+            args.put("Longitude", cache.longitude);
         }
         args.put("Name", cache.getName());
         try {
@@ -348,7 +348,7 @@ public class CacheDAO {
             long ret = Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(cache.Id)});
             return ret > 0;
         } catch (Exception exc) {
-            log.error("Update Cache", "", exc);
+            log.error("Update Cache", exc);
             return false;
 
         }
@@ -458,7 +458,7 @@ public class CacheDAO {
             try {
                 Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(writeTmp.Id)});
             } catch (Exception exc) {
-                log.error("Update Cache", "", exc);
+                log.error("Update Cache", exc);
 
             }
         }

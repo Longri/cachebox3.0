@@ -19,8 +19,9 @@ import java.io.Serializable;
 /**
  * A LatLong represents an immutable pair of latitude and longitude coordinates.
  */
-public class LatLong implements Comparable<LatLong>, Serializable {
+public class LatLong implements  Serializable {
     private static final long serialVersionUID = 1L;
+
 
     /**
      * The latitude coordinate of this LatLong in degrees.
@@ -38,19 +39,6 @@ public class LatLong implements Comparable<LatLong>, Serializable {
         this.longitude = longitude;
     }
 
-    @Override
-    public int compareTo(LatLong latLong) {
-        if (this.longitude > latLong.longitude) {
-            return 1;
-        } else if (this.longitude < latLong.longitude) {
-            return -1;
-        } else if (this.latitude > latLong.latitude) {
-            return 1;
-        } else if (this.latitude < latLong.latitude) {
-            return -1;
-        }
-        return 0;
-    }
 
     /**
      * Returns the approximate distance in degrees between this location and the
@@ -91,10 +79,12 @@ public class LatLong implements Comparable<LatLong>, Serializable {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("latitude=");
-        stringBuilder.append(this.latitude);
-        stringBuilder.append(", longitude=");
-        stringBuilder.append(this.longitude);
+        stringBuilder.append("lat=");
+        stringBuilder.append(String.format("%.4f", this.latitude));
+        // stringBuilder.append(this.latitude);
+        stringBuilder.append(", long=");
+        stringBuilder.append(String.format("%.4f", this.longitude));
+        // stringBuilder.append(this.longitude);
         return stringBuilder.toString();
     }
 
@@ -105,4 +95,5 @@ public class LatLong implements Comparable<LatLong>, Serializable {
     public double getLongitude() {
         return this.longitude;
     }
+
 }

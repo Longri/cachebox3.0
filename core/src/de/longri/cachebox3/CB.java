@@ -23,19 +23,20 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.ScaledSizes;
-import org.slf4j.LoggerFactory;
 
 /**
  * Static class
  * Created by Longri on 20.07.2016.
  */
 public class CB {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(CB.class);
+    final static Logger log = LoggerFactory.getLogger(CB.class);
 
     public static final int CurrentRevision = 20160806;
     public static final String CurrentVersion = "0.1.";
@@ -285,6 +286,11 @@ public class CB {
         return selectedCache;
     }
 
+    public static boolean isSelectedCache(Cache cache) {
+        if (selectedCache != null && selectedCache.equals(cache)) return true;
+        return false;
+    }
+
     public static void setNearestCache(Cache Cache) {
         nearestCache = Cache;
     }
@@ -293,9 +299,9 @@ public class CB {
         Coordinate ret = null;
 
         if (selectedWaypoint != null) {
-            ret = selectedWaypoint.Pos;
+            ret = selectedWaypoint;
         } else if (selectedCache != null) {
-            ret = selectedCache.Pos;
+            ret = selectedCache;
         }
 
         return ret;
