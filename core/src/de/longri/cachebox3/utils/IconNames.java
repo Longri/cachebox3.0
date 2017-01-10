@@ -78,7 +78,6 @@ public enum IconNames {
     save, // 66
     TORCHON, // 67
     TORCHOFF, // 68
-    userdata, //
     mapsforge_logo, //
     download, //
     freizeit,

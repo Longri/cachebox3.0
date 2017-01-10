@@ -65,6 +65,6 @@ public class Action_Show_NoteView extends Abstract_Action_ShowView {
 
     @Override
     public Sprite getIcon() {
-        return CB.getSprite(IconNames.userdata.name());
+        return CB.getSprite(IconNames.noteIcon.name());
     }
 }

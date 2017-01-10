@@ -90,6 +90,9 @@
     "infoIcon": {
       "path": "skins/day/svg/infoIcon.svg"
     },
+    "noteIcon": {
+      "path": "skins/day/svg/noteIcon.svg"
+    },
     "list_background": {
       "path": "skins/day/svg/list_background.svg"
     },
@@ -181,6 +184,9 @@
     },
     "importIcon": {
       "path": "skins/day/svg/missingIcon.svg"
+    },
+    "imagesIcon": {
+      "path": "skins/day/svg/images-icon.svg"
     },
     "manageDb": {
       "path": "skins/day/svg/missingIcon.svg"
@@ -317,10 +323,10 @@
       "path": "skins/day/svg/missingIcon.svg"
     },
     "waypointListIcon": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "skins/day/svg/waypointListIcon.svg"
     },
     "listIcon": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "skins/day/svg/listIcon.svg"
     },
     "UPLOADFIELDNOTE": {
       "path": "skins/day/svg/missingIcon.svg"

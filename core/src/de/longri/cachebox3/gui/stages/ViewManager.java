@@ -209,17 +209,17 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     private void initialActionButtons() {
         // assign the actions to the buttons
 
-        db_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_CacheList(), true, GestureDirection.Up));
-        db_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_TrackableListView(), false, GestureDirection.Right));
-        db_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_vies.Action_Show_TrackListView(), false, GestureDirection.Down));
+        db_button.addAction(new ActionButton(new Action_Show_CacheList(), true, GestureDirection.Up));
+        db_button.addAction(new ActionButton(new Action_Show_TrackableListView(), false, GestureDirection.Right));
+        db_button.addAction(new ActionButton(new Action_Show_TrackListView(), false, GestureDirection.Down));
 
-//        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowDescriptionView, true, GestureDirection.Up));
-//        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowWaypointView, false, GestureDirection.Right));
-//        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowLogView, false, GestureDirection.Down));
-//        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowHint, false));
-//        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowDescExt, false));
-//        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSpoilerView, false));
-//        mDescriptionButtonOnLeftTab.addAction(new CB_ActionButton(actionShowNotesView, false));
+        cache_button.addAction(new ActionButton(new Action_Show_DescriptionView(), true, GestureDirection.Up));
+        cache_button.addAction(new ActionButton(new Action_Show_WaypointView(), false, GestureDirection.Right));
+        cache_button.addAction(new ActionButton(new Action_Show_LogView(), false, GestureDirection.Down));
+//        cache_button.addAction(new ActionButton(actionShowHint, false));
+//        cache_button.addAction(new ActionButton(actionShowDescExt, false));
+        cache_button.addAction(new ActionButton(new Action_Show_SpoilerView(), false));
+        cache_button.addAction(new ActionButton(new Action_Show_NoteView(), false));
 
         navButton.addAction(new ActionButton(new Action_Show_MapView(), true, GestureDirection.Up));
         navButton.addAction(new ActionButton(new Action_Show_CompassView(), false, GestureDirection.Right));
