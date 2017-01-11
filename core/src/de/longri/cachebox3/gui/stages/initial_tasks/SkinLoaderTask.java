@@ -30,7 +30,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class SkinLoaderTask extends AbstractInitTask {
 
-    public static Model myLocationModel, compassModel, compassGrayModel,compassYellowModel;
+    private static final String INTERNAL_SKIN_DEFAULT_NAME = "internalDefault";
+
+    public static Model myLocationModel, compassModel, compassGrayModel, compassYellowModel;
 
     public SkinLoaderTask(String name, int percent) {
         super(name, percent);
@@ -45,16 +47,15 @@ public final class SkinLoaderTask extends AbstractInitTask {
         ui.Density = CB.getScalefactor();
         ui.isLandscape = false;
 
+//        Get selected skin name and check if available
+        
 
         // the SvgSkin must create in a OpenGL context. so we post a runnable and wait!
         final AtomicBoolean wait = new AtomicBoolean(true);
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                FileHandle svgFolder = Gdx.files.internal("skins/day/svg");
-                FileHandle skinJson = Gdx.files.internal("skins/day/skin.json");
-                CB.setActSkin(new SvgSkin(svgFolder, skinJson));
-                CB.backgroundColor = CB.getColor("background");
+                loadInternaleDefaultSkin();
                 wait.set(false);
             }
         });
@@ -73,4 +74,13 @@ public final class SkinLoaderTask extends AbstractInitTask {
         skin.add("compassGrayModel", compassGrayModel, Model.class);
         skin.add("compassYellowModel", compassYellowModel, Model.class);
     }
+
+
+    private void loadInternaleDefaultSkin() {
+        FileHandle svgFolder = Gdx.files.internal("skins/day/svg");
+        FileHandle skinJson = Gdx.files.internal("skins/day/skin.json");
+        CB.setActSkin(new SvgSkin(INTERNAL_SKIN_DEFAULT_NAME, SvgSkin.StorageType.INTERNAL, svgFolder, skinJson));
+        CB.backgroundColor = CB.getColor("background");
+    }
+
 }

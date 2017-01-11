@@ -20,8 +20,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
-import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 
 import java.io.BufferedReader;
@@ -89,11 +87,9 @@ public class HashAtlasWriter {
     }
 
 
-    public static boolean hashEquals(ArrayList<ScaledSvg> svgs, FileHandle skinFile) {
+    public static boolean hashEquals(FileHandle cachedAtlas, ArrayList<ScaledSvg> svgs, FileHandle skinFile) {
 
-        FileHandle file = Gdx.files.absolute(CB.WorkPath + SvgSkin.TMP_UI_ATLAS);
-
-        FileHandle hashFile = file.sibling(file.nameWithoutExtension() + ".hash");
+        FileHandle hashFile = cachedAtlas.sibling(cachedAtlas.nameWithoutExtension() + ".hash");
         int hash = -1;
         BufferedReader reader = new BufferedReader(new InputStreamReader(hashFile.read()), 64);
         try {
