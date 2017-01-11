@@ -91,7 +91,8 @@
       "path": "skins/day/svg/infoIcon.svg"
     },
     "noteIcon": {
-      "path": "skins/day/svg/noteIcon.svg"
+      "path": "skins/day/svg/noteIcon.svg",
+      "scale": 0.19298245
     },
     "list_background": {
       "path": "skins/day/svg/list_background.svg"
@@ -186,7 +187,8 @@
       "path": "skins/day/svg/missingIcon.svg"
     },
     "imagesIcon": {
-      "path": "skins/day/svg/images-icon.svg"
+      "path": "skins/day/svg/images-icon.svg",
+      "scale": 0.19298245
     },
     "manageDb": {
       "path": "skins/day/svg/missingIcon.svg"
@@ -323,10 +325,12 @@
       "path": "skins/day/svg/missingIcon.svg"
     },
     "waypointListIcon": {
-      "path": "skins/day/svg/waypointListIcon.svg"
+      "path": "skins/day/svg/waypointListIcon.svg",
+      "scale": 0.19298245
     },
     "listIcon": {
-      "path": "skins/day/svg/listIcon.svg"
+      "path": "skins/day/svg/listIcon.svg",
+      "scale": 0.19298245
     },
     "UPLOADFIELDNOTE": {
       "path": "skins/day/svg/missingIcon.svg"
