@@ -122,14 +122,14 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                     //add WayPoint items
                     for (Cache cache : Database.Data.Query) {
                         ClusterablePoint geoCluster = new ClusterablePoint(cache, cache.getGcCode());
-                        geoCluster.setClusterSymbol(getClusterSymbolByCache(cache));
+                        geoCluster.setClusterSymbol(getClusterSymbolsByCache(cache));
                         mItemList.add(geoCluster);
 
                         //add waypoints from selected Cache or all Waypoints if set
                         if (Settings.ShowAllWaypoints.getValue() || CB.isSelectedCache(cache)) {
                             for (Waypoint waypoint : cache.waypoints) {
                                 ClusterablePoint waypointCluster = new ClusterablePoint(waypoint, waypoint.getGcCode());
-                                waypointCluster.setClusterSymbol(getClusterSymbolByWaypoint(waypoint));
+                                waypointCluster.setClusterSymbol(getClusterSymbolsByWaypoint(waypoint));
                                 mItemList.add(waypointCluster);
                             }
                         }
@@ -199,26 +199,32 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    private Bitmap getClusterSymbolByCache(Cache cache) {
-        Bitmap symbol;
-        String symbolName = getMapIconName(cache);
-        symbol = ClusterSymbolHashMap.get(symbolName);
-        if (symbol == null) {
-            symbol = getClusterSymbol(symbolName);
-            ClusterSymbolHashMap.put(symbolName, symbol);
+    private Bitmap[] getClusterSymbolsByCache(Cache cache) {
+        Bitmap[] symbols = new Bitmap[3];
+        for (int i = 0; i < 3; i++) {
+            String symbolName = getMapIconName(cache) + (i < 2 ? Integer.toString(i) : "");
+            Bitmap symbol = ClusterSymbolHashMap.get(symbolName);
+            if (symbol == null) {
+                symbol = getClusterSymbol(symbolName);
+                ClusterSymbolHashMap.put(symbolName, symbol);
+            }
+            symbols[i] = symbol;
         }
-        return symbol;
+        return symbols;
     }
 
-    private Bitmap getClusterSymbolByWaypoint(Waypoint waypoint) {
-        Bitmap symbol;
-        String symbolName = getMapIconName(waypoint);
-        symbol = ClusterSymbolHashMap.get(symbolName);
-        if (symbol == null) {
-            symbol = getClusterSymbol(symbolName);
-            ClusterSymbolHashMap.put(symbolName, symbol);
+    private Bitmap[] getClusterSymbolsByWaypoint(Waypoint waypoint) {
+        Bitmap[] symbols = new Bitmap[3];
+        for (int i = 0; i < 3; i++) {
+            String symbolName = getMapIconName(waypoint) + (i < 2 ? Integer.toString(i) : "");
+            Bitmap symbol = ClusterSymbolHashMap.get(symbolName);
+            if (symbol == null) {
+                symbol = getClusterSymbol(symbolName);
+                ClusterSymbolHashMap.put(symbolName, symbol);
+            }
+            symbols[i] = symbol;
         }
-        return symbol;
+        return symbols;
     }
 
 

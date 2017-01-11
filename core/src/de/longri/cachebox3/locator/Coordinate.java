@@ -31,8 +31,6 @@ public class Coordinate extends LatLong implements Serializable {
 
 	protected boolean valid;
 
-	public Bitmap mapSymbol;
-
 	private static final float[] mResults = new float[2];
 
 	public static Coordinate Project(Coordinate coord, double Direction, double Distance) {
@@ -410,5 +408,6 @@ public class Coordinate extends LatLong implements Serializable {
 	public String toString() {
 		return FormatCoordinate();
 	}
+
 
 }
