@@ -28,6 +28,7 @@ public class ClusterablePoint extends Coordinate {
     final GeoPoint geoPoint;
     private GeoBoundingBoxInt bounds;
     private final int cachedHash;
+    private final Bitmap[] mapSymbol = new Bitmap[3];
 
 
     public ClusterablePoint(Coordinate pos, Object obj) {
@@ -50,6 +51,18 @@ public class ClusterablePoint extends Coordinate {
                 && dataObject.equals(that.dataObject);
     }
 
+
+    public Bitmap getMapSymbol(int zoomLevel) {
+        // calculate icon size
+        int iconSize = 0; // 8x8
+        if ((zoomLevel >= 13) && (zoomLevel <= 14))
+            iconSize = 1; // 13x13
+        else if (zoomLevel > 14)
+            iconSize = 2; // default Images
+        return mapSymbol[iconSize];
+    }
+
+
     @Override
     public int hashCode() {
         return hashCode(geoPoint, dataObject);
@@ -64,8 +77,16 @@ public class ClusterablePoint extends Coordinate {
         return "Cluster : " + dataObject;
     }
 
-    public void setClusterSymbol(Bitmap Cluster) {
-        mapSymbol = Cluster;
+    public void setClusterSymbol(Bitmap symbol) {
+        mapSymbol[0] = symbol;
+        mapSymbol[1] = symbol;
+        mapSymbol[2] = symbol;
+    }
+
+    public void setClusterSymbol(Bitmap[] symbols) {
+        mapSymbol[0] = symbols[0];
+        mapSymbol[1] = symbols[1];
+        mapSymbol[2] = symbols[2];
     }
 
     void setDistanceBoundce(double distance) {

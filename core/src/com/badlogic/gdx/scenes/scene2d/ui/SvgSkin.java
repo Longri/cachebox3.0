@@ -52,8 +52,9 @@ public class SvgSkin extends Skin {
      * @param json
      */
     public SvgSkin(FileHandle svgFolder, FileHandle json) {
-        //  this.addRegions(createTextureAtlasFromImages(svgFolder));
-        this.load(json);
+        super(json);
+//        this.addRegions(createTextureAtlasFromImages(svgFolder));
+
     }
 
 
@@ -215,7 +216,7 @@ public class SvgSkin extends Skin {
                             log.debug("read scaled SVG'S");
                             readScaledSvgs(json, ClassReflection.forName(valueMap.name()), valueMap);
                         }
-                            readNamedObjects(json, ClassReflection.forName(valueMap.name()), valueMap);
+                        readNamedObjects(json, ClassReflection.forName(valueMap.name()), valueMap);
                     } catch (ReflectionException ex) {
                         throw new SerializationException(ex);
                     }

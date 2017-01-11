@@ -21,6 +21,7 @@ import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.locator.geocluster.Cluster;
+import de.longri.cachebox3.locator.geocluster.ClusterablePoint;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
@@ -71,7 +72,7 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
     }
 
     static class InternalItem {
-        Coordinate item;
+        ClusterablePoint item;
         boolean visible;
         boolean changes;
         float x, y;
@@ -209,10 +210,9 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
             compile();
             return;
         }
-
         mMapPosition.bearing = -mMapPosition.bearing;
-
-
+        int zoomLevel = mMapPosition.getZoomLevel();
+        //TODO try without sort
         if (zoomChanged) sort(mItems, 0, mItems.length);
         //log.debug(Arrays.toString(mItems));
         for (InternalItem it : mItems) {
@@ -224,17 +224,15 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
                 continue;
             }
 
-            Bitmap bitmap = it.item.mapSymbol;
+            Bitmap bitmap = it.item.getMapSymbol(zoomLevel);
             if (bitmap == null)
                 bitmap = mDefaultBitmap;
-
 
             SymbolItem s = SymbolItem.pool.get();
             s.set(it.x, it.y, bitmap, true);
 
             //set center offset
             s.offset = CENTER_OFFSET;
-
             mSymbolLayer.pushSymbol(s);
         }
 
