@@ -47,6 +47,22 @@ public class SvgSkin extends Skin {
     public final String name;
     public final FileHandle skinFolder;
 
+    public SvgSkin() {
+        super();
+        this.storageType = null;
+        this.name = null;
+        this.skinFolder = null;
+    }
+
+
+    public SvgSkin(FileHandle jsonFile) {
+        super(jsonFile);
+        this.storageType = null;
+        this.name = null;
+        this.skinFolder = null;
+    }
+
+
     /**
      * Create a Skin from given Jason-file!
      * The drawable resources are created from Svg-Folder and putted into a Atlas
