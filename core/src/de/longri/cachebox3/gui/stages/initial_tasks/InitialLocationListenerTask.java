@@ -30,7 +30,7 @@ public final class InitialLocationListenerTask extends AbstractInitTask {
     }
 
     @Override
-    public void runable() {
+    public void runnable() {
 
         //TODO initial with last saved location from settings
         new Locator(null);

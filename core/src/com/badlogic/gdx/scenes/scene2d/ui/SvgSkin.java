@@ -37,6 +37,7 @@ import java.util.ArrayList;
  */
 public class SvgSkin extends Skin {
     private final static Logger log = LoggerFactory.getLogger(SvgSkin.class);
+    private static final String SKIN_JSON_NAME = "skin.json";
 
     public enum StorageType {
         LOCAL, INTERNAL
@@ -52,12 +53,12 @@ public class SvgSkin extends Skin {
      * @param name        Name of this skin, will be used for create tmp cache folder!
      * @param storageType LOCAL or INTERNAL
      * @param svgFolder   {@link FileHandle} to the folder included the svg files
-     * @param json        {@link FileHandle} to the skin Json file
      */
-    public SvgSkin(String name, StorageType storageType, FileHandle svgFolder, FileHandle json) {
-        super(json);
+    public SvgSkin(String name, StorageType storageType, FileHandle svgFolder) {
+        super();
         this.storageType = storageType;
         this.name = name;
+        load(svgFolder.child(SKIN_JSON_NAME));
     }
 
 

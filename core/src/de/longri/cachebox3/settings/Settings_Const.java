@@ -15,10 +15,16 @@
  */
 package de.longri.cachebox3.settings;
 
+import de.longri.cachebox3.settings.types.SettingsList;
+
 /**
  * Created by Longri on 12.01.2017.
  */
 public abstract class Settings_Const {
+
+    static {
+        new SettingsList();
+    }
 
     protected static final de.longri.cachebox3.settings.types.SettingMode DEVELOPER = de.longri.cachebox3.settings.types.SettingMode.DEVELOPER;
     protected static final de.longri.cachebox3.settings.types.SettingMode NORMAL = de.longri.cachebox3.settings.types.SettingMode.Normal;

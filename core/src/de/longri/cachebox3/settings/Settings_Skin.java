@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.settings;
 
+import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.utils.HSV_Color;
 
 /**
@@ -24,12 +25,19 @@ import de.longri.cachebox3.utils.HSV_Color;
  */
 public abstract class Settings_Skin extends Settings_Const {
 
-    public static final de.longri.cachebox3.settings.types.SettingFolder SkinFolder = (de.longri.cachebox3.settings.types.SettingFolder) de.longri.cachebox3.settings.types.SettingsList.addSetting(new de.longri.cachebox3.settings.types.SettingFolder("SkinFolder", de.longri.cachebox3.settings.types.SettingCategory.Folder, DEVELOPER, "default", de.longri.cachebox3.settings.types.SettingStoreType.Global, de.longri.cachebox3.settings.types.SettingUsage.ACB, false));
+    public static final SettingFolder SkinFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("SkinFolder", SettingCategory.Folder, DEVELOPER, "default", SettingStoreType.Global, SettingUsage.ACB, false));
 
-    public static final de.longri.cachebox3.settings.types.SettingBool useMipMap = (de.longri.cachebox3.settings.types.SettingBool) de.longri.cachebox3.settings.types.SettingsList.addSetting(new de.longri.cachebox3.settings.types.SettingBool("useMipMap", de.longri.cachebox3.settings.types.SettingCategory.Skin, EXPERT, false, de.longri.cachebox3.settings.types.SettingStoreType.Global, de.longri.cachebox3.settings.types.SettingUsage.ACB));
-    public static final de.longri.cachebox3.settings.types.SettingBool dontUseAmbient = (de.longri.cachebox3.settings.types.SettingBool) de.longri.cachebox3.settings.types.SettingsList.addSetting(new de.longri.cachebox3.settings.types.SettingBool("dontUseAmbient", de.longri.cachebox3.settings.types.SettingCategory.Skin, EXPERT, true, de.longri.cachebox3.settings.types.SettingStoreType.Global, de.longri.cachebox3.settings.types.SettingUsage.ACB));
-    public static final de.longri.cachebox3.settings.types.SettingInt ambientTime = (de.longri.cachebox3.settings.types.SettingInt) de.longri.cachebox3.settings.types.SettingsList.addSetting(new de.longri.cachebox3.settings.types.SettingInt("ambientTime", de.longri.cachebox3.settings.types.SettingCategory.Skin, EXPERT, 10, de.longri.cachebox3.settings.types.SettingStoreType.Global, de.longri.cachebox3.settings.types.SettingUsage.ACB));
+    public static final SettingBool nightMode = (SettingBool) SettingsList.addSetting(new SettingBool("nightMode", SettingCategory.Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
 
-    public static final de.longri.cachebox3.settings.types.SettingColor SolvedMysteryColor = (de.longri.cachebox3.settings.types.SettingColor) de.longri.cachebox3.settings.types.SettingsList.addSetting(new de.longri.cachebox3.settings.types.SettingColor("SolvedMysteryColor", de.longri.cachebox3.settings.types.SettingCategory.Skin, EXPERT, new HSV_Color(0.2f, 1f, 0.2f, 1f), de.longri.cachebox3.settings.types.SettingStoreType.Global, de.longri.cachebox3.settings.types.SettingUsage.ACB));
+
+    public static final SettingString daySkinName = (SettingString) SettingsList.addSetting(new SettingString("daySkinName", SettingCategory.Skin, NORMAL, "internalDefault", SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingString nightSkinName = (SettingString) SettingsList.addSetting(new SettingString("nightSkinName", SettingCategory.Skin, NORMAL, "internalNight", SettingStoreType.Global, SettingUsage.ACB));
+
+
+    public static final SettingBool useMipMap = (SettingBool) SettingsList.addSetting(new SettingBool("useMipMap", SettingCategory.Skin, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingBool dontUseAmbient = (SettingBool) SettingsList.addSetting(new SettingBool("dontUseAmbient", SettingCategory.Skin, EXPERT, true, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingInt ambientTime = (SettingInt) SettingsList.addSetting(new SettingInt("ambientTime", SettingCategory.Skin, EXPERT, 10, SettingStoreType.Global, SettingUsage.ACB));
+
+    public static final SettingColor SolvedMysteryColor = (SettingColor) SettingsList.addSetting(new SettingColor("SolvedMysteryColor", SettingCategory.Skin, EXPERT, new HSV_Color(0.2f, 1f, 0.2f, 1f), SettingStoreType.Global, SettingUsage.ACB));
 
 }

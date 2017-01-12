@@ -21,7 +21,7 @@ public class LoadDbTask extends AbstractInitTask {
     }
 
     @Override
-    public void runable() {
+    public void runnable() {
 
         Gdx.app.postRunnable(new Runnable() {
             @Override
