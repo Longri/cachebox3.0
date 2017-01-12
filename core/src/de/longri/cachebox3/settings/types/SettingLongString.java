@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2016 team-cachebox.de
+/* 
+ * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.stages.initial_tasks;
+package de.longri.cachebox3.settings.types;
 
-/**
- * Created by Longri on 02.08.16.
- */
-public abstract class AbstractInitTask {
+public class SettingLongString extends SettingString {
 
-    public final String name;
-    public final int percent;
-
-    public AbstractInitTask(String name, int percent) {
-        this.name = name;
-        this.percent = percent;
+    public SettingLongString(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+        super(name, category, modus, defaultValue, StoreType, usage);
     }
-
-    public abstract void runnable();
-
 }
-

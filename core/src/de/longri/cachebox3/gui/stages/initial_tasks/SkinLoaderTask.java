@@ -20,6 +20,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.utils.DevicesSizes;
 import de.longri.cachebox3.utils.SizeF;
 
@@ -30,14 +31,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class SkinLoaderTask extends AbstractInitTask {
 
-    public static Model myLocationModel, compassModel, compassGrayModel,compassYellowModel;
+    private static final String INTERNAL_SKIN_DEFAULT_NAME = "internalDefault";
+
+    public static Model myLocationModel, compassModel, compassGrayModel, compassYellowModel;
 
     public SkinLoaderTask(String name, int percent) {
         super(name, percent);
     }
 
     @Override
-    public void runable() {
+    public void runnable() {
 
         //initial sizes
         DevicesSizes ui = new DevicesSizes();
@@ -46,14 +49,65 @@ public final class SkinLoaderTask extends AbstractInitTask {
         ui.isLandscape = false;
 
 
+        String skinName = null;
+        SvgSkin.StorageType storageType = null;
+        FileHandle skinFileHandle = null;
+
+
+        //Get selected skin name and check if available
+        if (Settings.nightMode.getValue()) {
+            if (!Settings.nightSkinName.isDefault()) {
+                // check if skin exist into skin folder
+                FileHandle skinFolder = Gdx.files.absolute(Settings.SkinFolder.getValue());
+                if (skinFolder.exists()) {
+                    FileHandle skin = skinFolder.child(Settings.nightSkinName.getValue());
+                    if (skin.exists()) {
+                        skinName = Settings.nightSkinName.getValue();
+                        storageType = SvgSkin.StorageType.LOCAL;
+                        skinFileHandle = skin;
+                    }
+                }
+            }
+
+            if (skinName == null) {
+                // use default internal night skin
+                skinName = Settings.nightSkinName.getDefaultValue();
+                storageType = SvgSkin.StorageType.INTERNAL;
+                skinFileHandle = Gdx.files.internal("skins/night");
+            }
+        } else {
+            if (!Settings.daySkinName.isDefault()) {
+                // check if skin exist into skin folder
+                FileHandle skinFolder = Gdx.files.absolute(Settings.SkinFolder.getValue());
+                if (skinFolder.exists()) {
+                    FileHandle skin = skinFolder.child(Settings.daySkinName.getValue());
+                    if (skin.exists()) {
+                        skinName = Settings.daySkinName.getValue();
+                        storageType = SvgSkin.StorageType.LOCAL;
+                        skinFileHandle = skin;
+                    }
+                }
+            }
+
+            if (skinName == null) {
+                // use default internal day skin
+                skinName = Settings.daySkinName.getDefaultValue();
+                storageType = SvgSkin.StorageType.INTERNAL;
+                skinFileHandle = Gdx.files.internal("skins/day");
+            }
+        }
+
+
         // the SvgSkin must create in a OpenGL context. so we post a runnable and wait!
         final AtomicBoolean wait = new AtomicBoolean(true);
+
+        final String finalSkinName = skinName;
+        final SvgSkin.StorageType finalType = storageType;
+        final FileHandle finalSkinFileHandle = skinFileHandle;
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                FileHandle svgFolder = Gdx.files.internal("skins/day/svg");
-                FileHandle skinJson = Gdx.files.internal("skins/day/skin.json");
-                CB.setActSkin(new SvgSkin(svgFolder, skinJson));
+                CB.setActSkin(new SvgSkin(finalSkinName, finalType, finalSkinFileHandle));
                 CB.backgroundColor = CB.getColor("background");
                 wait.set(false);
             }
@@ -73,4 +127,11 @@ public final class SkinLoaderTask extends AbstractInitTask {
         skin.add("compassGrayModel", compassGrayModel, Model.class);
         skin.add("compassYellowModel", compassYellowModel, Model.class);
     }
+
+
+    private void loadInternaleDefaultSkin() {
+
+
+    }
+
 }

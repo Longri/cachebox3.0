@@ -31,7 +31,7 @@ public final class TranslationLoaderTask extends AbstractInitTask {
     }
 
     @Override
-    public void runable() {
+    public void runnable() {
         new Translation("lang");
 
         loadTranslation();
