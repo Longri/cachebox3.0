@@ -572,23 +572,23 @@
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "normal_font": {
-      "font": "fonts/DroidSans",
+      "font": "fonts/DroidSans.ttf",
       "size": 21
     },
     "normal_bold_font": {
-      "font": "fonts/DroidSans-Bold",
+      "font": "fonts/DroidSans-Bold.ttf",
       "size": 20
     },
     "settings_desc_font": {
-      "font": "fonts/DroidSerif-Italic",
+      "font": "fonts/DroidSerif-Italic.ttf",
       "size": 14
     },
     "settings_default_value_font": {
-      "font": "fonts/DroidSerif-Bold",
+      "font": "fonts/DroidSerif-Bold.ttf",
       "size": 12
     },
     "settings_value_font": {
-      "font": "fonts/DroidSans-BoldItalic",
+      "font": "fonts/DroidSans-BoldItalic.ttf",
       "size": 21
     }
   },

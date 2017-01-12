@@ -325,11 +325,11 @@ public class SvgSkin extends Skin {
 
         json.setSerializer(BitmapFont.class, new Json.ReadOnlySerializer<BitmapFont>() {
             public BitmapFont read(Json json, JsonValue jsonData, Class type) {
-                String path = json.readValue("font", String.class, jsonData) + ".ttf";
+                String path = json.readValue("font", String.class, jsonData);
                 int scaledSize = json.readValue("size", int.class, -1, jsonData);
 
                 FileHandle fontFile = skinFile.parent().child(path);
-                if (!fontFile.exists()) fontFile = Gdx.files.internal(path);
+//                if (!fontFile.exists()) fontFile = Gdx.files.internal(path);
                 if (!fontFile.exists()) throw new SerializationException("Font file not found: " + fontFile);
 
                 try {
