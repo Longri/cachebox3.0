@@ -74,7 +74,7 @@ public class GestureButton extends Button {
     }
 
     static public class GestureButtonStyle extends ButtonStyle {
-        Drawable select;
+        public Drawable select;
     }
 
     public GestureButton(String styleName) {
