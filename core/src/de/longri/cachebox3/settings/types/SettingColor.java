@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2011-2014 team-cachebox.de
+ * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package de.longri.cachebox3.settings.types;
 
 import com.badlogic.gdx.graphics.Color;
-import de.longri.cachebox3.settings.SettingBase;
 import de.longri.cachebox3.utils.HSV_Color;
 
 
@@ -25,48 +24,48 @@ import de.longri.cachebox3.utils.HSV_Color;
  */
 public class SettingColor extends SettingBase<Color> {
 
-	public SettingColor(String name, SettingCategory category, SettingMode modus, Color defaultValue, SettingStoreType StoreType, SettingUsage usage) {
-		super(name, category, modus, StoreType, usage);
-		this.defaultValue = defaultValue;
-	}
+    public SettingColor(String name, SettingCategory category, SettingMode modus, Color defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+        super(name, category, modus, StoreType, usage);
+        this.defaultValue = defaultValue;
+    }
 
-	@Override
-	public String toDBString() {
-		return value.toString();
-	}
+    @Override
+    public String toDBString() {
+        return value.toString();
+    }
 
-	@Override
-	public boolean fromDBString(String dbString) {
-		try {
-			value = new HSV_Color(dbString);
-			return true;
-		} catch (Exception e) {
-			value = defaultValue;
-			return false;
-		}
-	}
+    @Override
+    public boolean fromDBString(String dbString) {
+        try {
+            value = new HSV_Color(dbString);
+            return true;
+        } catch (Exception e) {
+            value = defaultValue;
+            return false;
+        }
+    }
 
-	@Override
-	public SettingBase<Color> copy() {
-		SettingBase<Color> ret = new SettingColor(this.name, this.category, this.mode, this.defaultValue, this.storeType, this.usage);
-		ret.value = this.value;
-		ret.lastValue = this.lastValue;
-		return ret;
-	}
+    @Override
+    public SettingBase<Color> copy() {
+        SettingBase<Color> ret = new SettingColor(this.name, this.category, this.mode, this.defaultValue, this.storeType, this.usage);
+        ret.value = this.value;
+        ret.lastValue = this.lastValue;
+        return ret;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-		if (!(obj instanceof SettingColor))
-			return false;
-		SettingColor inst = (SettingColor) obj;
-		if (!(inst.name.equals(this.name)))
-			return false;
-		if (!inst.value.equals(this.value))
-			return false;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (!(obj instanceof SettingColor))
+            return false;
+        SettingColor inst = (SettingColor) obj;
+        if (!(inst.name.equals(this.name)))
+            return false;
+        if (!inst.value.equals(this.value))
+            return false;
 
-		return true;
-	}
+        return true;
+    }
 
 }

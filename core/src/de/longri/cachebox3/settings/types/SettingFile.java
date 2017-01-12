@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2011-2014 team-cachebox.de
+ * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,18 @@
 package de.longri.cachebox3.settings.types;
 
 public class SettingFile extends SettingLongString {
-	private String ext = "*";
+    private String ext = "*";
 
-	public SettingFile(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
-		super(name, category, modus, defaultValue, StoreType, usage);
-	}
+    public SettingFile(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+        super(name, category, modus, defaultValue, StoreType, usage);
+    }
 
-	public SettingFile(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage, String ext) {
-		super(name, category, modus, defaultValue, StoreType, usage);
-		this.ext = ext;
-	}
+    public SettingFile(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage, String ext) {
+        super(name, category, modus, defaultValue, StoreType, usage);
+        this.ext = ext;
+    }
 
-	public String getExt() {
-		return ext;
-	}
+    public String getExt() {
+        return ext;
+    }
 }

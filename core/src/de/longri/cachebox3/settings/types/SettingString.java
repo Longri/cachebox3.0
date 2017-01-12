@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2011-2014 team-cachebox.de
+ * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,53 +15,51 @@
  */
 package de.longri.cachebox3.settings.types;
 
-import de.longri.cachebox3.settings.SettingBase;
-
 public class SettingString extends SettingBase<String> {
-	public static final String STRING_SPLITTER = "�";
+    public static final String STRING_SPLITTER = "�";
 
-	public SettingString(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
-		super(name, category, modus, StoreType, usage);
-		this.defaultValue = defaultValue;
-		this.value = defaultValue;
-	}
+    public SettingString(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+        super(name, category, modus, StoreType, usage);
+        this.defaultValue = defaultValue;
+        this.value = defaultValue;
+    }
 
-	@Override
-	public String toDBString() {
-		return String.valueOf(value);
-	}
+    @Override
+    public String toDBString() {
+        return String.valueOf(value);
+    }
 
-	@Override
-	public boolean fromDBString(String dbString) {
-		try {
-			value = dbString;
-			return true;
-		} catch (Exception ex) {
-			value = defaultValue;
-			return false;
-		}
-	}
+    @Override
+    public boolean fromDBString(String dbString) {
+        try {
+            value = dbString;
+            return true;
+        } catch (Exception ex) {
+            value = defaultValue;
+            return false;
+        }
+    }
 
-	@Override
-	public SettingBase<String> copy() {
-		SettingBase<String> ret = new SettingString(this.name, this.category, this.mode, this.defaultValue, this.storeType, usage);
-		ret.value = this.value;
-		ret.lastValue = this.lastValue;
-		return ret;
-	}
+    @Override
+    public SettingBase<String> copy() {
+        SettingBase<String> ret = new SettingString(this.name, this.category, this.mode, this.defaultValue, this.storeType, usage);
+        ret.value = this.value;
+        ret.lastValue = this.lastValue;
+        return ret;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof SettingString))
-			return false;
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof SettingString))
+            return false;
 
-		SettingString inst = (SettingString) obj;
-		if (!(inst.name.equals(this.name)))
-			return false;
-		if (!inst.value.equals(this.value))
-			return false;
+        SettingString inst = (SettingString) obj;
+        if (!(inst.name.equals(this.name)))
+            return false;
+        if (!inst.value.equals(this.value))
+            return false;
 
-		return true;
-	}
+        return true;
+    }
 
 }

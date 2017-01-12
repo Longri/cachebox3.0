@@ -61,8 +61,8 @@ public class Config extends Settings {
         boolean needRestart = false;
 
         try {
-            for (Iterator<SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
-                SettingBase<?> setting = it.next();
+            for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
+                de.longri.cachebox3.settings.types.SettingBase<?> setting = it.next();
                 if (!setting.isDirty())
                     continue; // is not changed -> do not
 
@@ -76,7 +76,7 @@ public class Config extends Settings {
                     dao.WriteToDatabase(SettingsDB, setting);
                 }
 
-                if (setting.needRestart) {
+                if (setting.needRestart()) {
                     needRestart = true;
                 }
 
@@ -102,8 +102,8 @@ public class Config extends Settings {
         // Read from DB
 
         de.longri.cachebox3.settings.types.SettingsDAO dao = new de.longri.cachebox3.settings.types.SettingsDAO();
-        for (Iterator<SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
-            SettingBase<?> setting = it.next();
+        for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
+            de.longri.cachebox3.settings.types.SettingBase<?> setting = it.next();
             String debugString;
 
             boolean isPlatform = false;
@@ -118,7 +118,7 @@ public class Config extends Settings {
                 setting = dao.ReadFromDatabase(SettingsDB, setting);
             } else if (SettingStoreType.Platform == setting.getStoreType()) {
                 isPlatform = true;
-                SettingBase<?> cpy = setting.copy();
+                de.longri.cachebox3.settings.types.SettingBase<?> cpy = setting.copy();
                 cpy = dao.ReadFromDatabase(SettingsDB, cpy);
                 setting = dao.ReadFromPlatformSetting(setting);
 
@@ -127,13 +127,13 @@ public class Config extends Settings {
                 if (setting instanceof de.longri.cachebox3.settings.types.SettingString) {
                     de.longri.cachebox3.settings.types.SettingString st = (SettingString) setting;
 
-                    if (st.value.length() == 0) {
+                    if (st.getValue().length() == 0) {
                         // Platform Settings are empty use db3 value or default
                         setting = dao.ReadFromDatabase(SettingsDB, setting);
                         dao.WriteToPlatformSettings(setting);
                     }
-                } else if (!cpy.value.equals(setting.value)) {
-                    if (setting.value.equals(setting.defaultValue)) {
+                } else if (!cpy.getValue().equals(setting.getValue())) {
+                    if (setting.getValue().equals(setting.getDefaultValue())) {
                         // override Platformsettings with UserDBSettings
                         setting.setValueFrom(cpy);
                         dao.WriteToPlatformSettings(setting);
@@ -151,7 +151,7 @@ public class Config extends Settings {
             if (setting instanceof SettingEncryptedString) {// Don't write encrypted settings in to a log file
                 debugString = "*******";
             } else {
-                debugString = setting.value.toString();
+                debugString = setting.getValue().toString();
             }
 
             if (isPlatform) {
@@ -161,7 +161,7 @@ public class Config extends Settings {
                     log.debug("Override PlatformDB setting [" + setting.name + "] from Platform to: " + debugString);
                 }
             } else {
-                if (!setting.value.equals(setting.defaultValue)) {
+                if (!setting.getValue().equals(setting.getDefaultValue())) {
                     log.debug("Change " + setting.getStoreType() + " setting [" + setting.name + "] to: " + debugString);
                 } else {
                     log.debug("Default " + setting.getStoreType() + " setting [" + setting.name + "] to: " + debugString);
@@ -172,22 +172,22 @@ public class Config extends Settings {
     }
 
     public static void LoadFromLastValue() {
-        for (Iterator<SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
-            SettingBase<?> setting = it.next();
+        for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
+            de.longri.cachebox3.settings.types.SettingBase<?> setting = it.next();
             setting.loadFromLastValue();
         }
     }
 
     public static void SaveToLastValue() {
-        for (Iterator<SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
-            SettingBase<?> setting = it.next();
+        for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
+            de.longri.cachebox3.settings.types.SettingBase<?> setting = it.next();
             setting.saveToLastValue();
         }
     }
 
     public static void LoadAllDefaultValues() {
-        for (Iterator<SettingBase<?>> it = SettingsList.that.iterator(); it.hasNext(); ) {
-            SettingBase<?> setting = it.next();
+        for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = SettingsList.that.iterator(); it.hasNext(); ) {
+            de.longri.cachebox3.settings.types.SettingBase<?> setting = it.next();
             setting.loadDefault();
         }
     }

@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2011-2014 team-cachebox.de
+ * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,10 @@ package de.longri.cachebox3.settings.types;
 
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
-import de.longri.cachebox3.settings.SettingCategory;
-import de.longri.cachebox3.settings.SettingMode;
-import de.longri.cachebox3.settings.SettingStoreType;
-import de.longri.cachebox3.settings.SettingUsage;
 import de.longri.cachebox3.utils.lists.CB_List;
 
 
-public class SettingEnum<EnumTyp extends Enum<?>> extends de.longri.cachebox3.settings.SettingString {
+public class SettingEnum<EnumTyp extends Enum<?>> extends SettingString {
     final static Logger log = LoggerFactory.getLogger(SettingEnum.class);
     private final CB_List<String> values;
 

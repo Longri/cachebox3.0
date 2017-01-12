@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2011-2014 team-cachebox.de
+ * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,40 +16,38 @@
 package de.longri.cachebox3.settings.types;
 
 /**
- * 
  * String is for translation
- * 
  */
 public enum SettingCategory {
-	Login("Login"), QuickList("QuickList"), Map("Map"), LiveMap("LiveMap"), Gps("Gps"), Compass("Compass"), Misc("Misc"), Sounds("Sounds"), Skin("Skin"), API("API"), Folder("Folder"), Templates("Templates"), Fieldnotes("Fieldnotes"), Internal(
-			"Internal"), CarMode("CarMode"), RememberAsk("RememberAsk"), Debug("Debug"), Button("Button"), Positions("Positions"), CBS("CBS"),;
+    Login("Login"), QuickList("QuickList"), Map("Map"), LiveMap("LiveMap"), Gps("Gps"), Compass("Compass"), Misc("Misc"), Sounds("Sounds"), Skin("Skin"), API("API"), Folder("Folder"), Templates("Templates"), Fieldnotes("Fieldnotes"), Internal(
+            "Internal"), CarMode("CarMode"), RememberAsk("RememberAsk"), Debug("Debug"), Button("Button"), Positions("Positions"), CBS("CBS"),;
 
-	private String langString;
+    private String langString;
 
-	SettingCategory(String langString) {
-		this.langString = langString;
-	}
+    SettingCategory(String langString) {
+        this.langString = langString;
+    }
 
-	public String getLangString() {
-		return langString;
-	}
+    public String getLangString() {
+        return langString;
+    }
 
-	public void setLangString(String langString) {
-		this.langString = langString;
-	}
+    public void setLangString(String langString) {
+        this.langString = langString;
+    }
 
-	private boolean mIsCollapse = false;
+    private boolean mIsCollapse = false;
 
-	public boolean IsCollapse() {
-		return mIsCollapse;
-	}
+    public boolean IsCollapse() {
+        return mIsCollapse;
+    }
 
-	public void Toggle() {
-		mIsCollapse = !mIsCollapse;
-	}
+    public void Toggle() {
+        mIsCollapse = !mIsCollapse;
+    }
 
-	public void Toggle(boolean value) {
-		mIsCollapse = value;
-	}
+    public void Toggle(boolean value) {
+        mIsCollapse = value;
+    }
 
 }

@@ -45,7 +45,7 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.settings.SettingBase;
+import de.longri.cachebox3.settings.types.SettingBase;
 import de.longri.cachebox3.translation.Translation;
 
 /**
@@ -231,7 +231,7 @@ public class Settings_Activity extends ActivityBase {
             }
         };
 
-        showListView(new ListView(listViewAdapter,true), Translation.Get("setting"), true);
+        showListView(new ListView(listViewAdapter, true), Translation.Get("setting"), true);
     }
 
     private void showListView(ListView listView, String name, boolean animate) {
@@ -464,8 +464,9 @@ public class Settings_Activity extends ActivityBase {
             return getFolderView((de.longri.cachebox3.settings.types.SettingFolder) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingFile) {
             return getFileView((de.longri.cachebox3.settings.types.SettingFile) setting);
-        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingEnum) {
-            return getEnumView((de.longri.cachebox3.settings.types.SettingEnum<?>) setting);
+
+//            }  else if (setting instanceof de.longri.cachebox3.settings.types.SettingEnum<?>) {
+//                return getEnumView((de.longri.cachebox3.settings.types.SettingEnum<?>) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingString) {
             return getStringView((de.longri.cachebox3.settings.types.SettingString) setting);
 //        } else if (setting instanceof SettingsListCategoryButton) {
@@ -626,7 +627,7 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private ListViewItem getBoolView(int listIndex, final de.longri.cachebox3.settings.types.SettingBool setting) {
-        ListViewItem table = new ListViewItem(listIndex){
+        ListViewItem table = new ListViewItem(listIndex) {
             @Override
             public void dispose() {
             }
@@ -685,7 +686,7 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private ListViewItem getNumericItemTable(int listIndex, VisLabel valueLabel, SettingBase<?> setting) {
-        ListViewItem table = new ListViewItem(listIndex){
+        ListViewItem table = new ListViewItem(listIndex) {
             @Override
             public void dispose() {
             }

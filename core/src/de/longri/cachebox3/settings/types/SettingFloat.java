@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2011-2014 team-cachebox.de
+ * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,51 +15,49 @@
  */
 package de.longri.cachebox3.settings.types;
 
-import de.longri.cachebox3.settings.SettingBase;
-
 public class SettingFloat extends SettingBase<Float> {
 
-	public SettingFloat(String name, SettingCategory category, SettingMode modus, float defaultValue, SettingStoreType StoreType, SettingUsage usage) {
-		super(name, category, modus, StoreType, usage);
-		this.defaultValue = defaultValue;
-		this.value = defaultValue;
-	}
+    public SettingFloat(String name, SettingCategory category, SettingMode modus, float defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+        super(name, category, modus, StoreType, usage);
+        this.defaultValue = defaultValue;
+        this.value = defaultValue;
+    }
 
-	@Override
-	public String toDBString() {
-		return String.valueOf(value);
-	}
+    @Override
+    public String toDBString() {
+        return String.valueOf(value);
+    }
 
-	@Override
-	public boolean fromDBString(String dbString) {
-		try {
-			value = Float.valueOf(dbString);
-			return true;
-		} catch (Exception ex) {
-			value = defaultValue;
-			return false;
-		}
-	}
+    @Override
+    public boolean fromDBString(String dbString) {
+        try {
+            value = Float.valueOf(dbString);
+            return true;
+        } catch (Exception ex) {
+            value = defaultValue;
+            return false;
+        }
+    }
 
-	@Override
-	public SettingBase<Float> copy() {
-		SettingBase<Float> ret = new SettingFloat(this.name, this.category, this.mode, this.defaultValue, this.storeType, this.usage);
-		ret.value = this.value;
-		ret.lastValue = this.lastValue;
-		return ret;
-	}
+    @Override
+    public SettingBase<Float> copy() {
+        SettingBase<Float> ret = new SettingFloat(this.name, this.category, this.mode, this.defaultValue, this.storeType, this.usage);
+        ret.value = this.value;
+        ret.lastValue = this.lastValue;
+        return ret;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof SettingFloat))
-			return false;
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof SettingFloat))
+            return false;
 
-		SettingFloat inst = (SettingFloat) obj;
-		if (!(inst.name.equals(this.name)))
-			return false;
-		if (inst.value != this.value)
-			return false;
+        SettingFloat inst = (SettingFloat) obj;
+        if (!(inst.name.equals(this.name)))
+            return false;
+        if (inst.value != this.value)
+            return false;
 
-		return true;
-	}
+        return true;
+    }
 }

@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2011-2014 team-cachebox.de
+ * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -19,59 +19,59 @@ package de.longri.cachebox3.settings.types;
 import de.longri.cachebox3.Utils;
 
 /**
- *  im value intern ist die Einstellung verschl�sselt abgespeichert
- *  so wie sie dann in die DB geschrieben wird.
+ * im value intern ist die Einstellung verschl�sselt abgespeichert
+ * so wie sie dann in die DB geschrieben wird.
  */
 public class SettingEncryptedString extends SettingLongString {
 
-	public SettingEncryptedString(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
-		super(name, category, modus, defaultValue, StoreType, usage);
-	}
+    public SettingEncryptedString(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
+        super(name, category, modus, defaultValue, StoreType, usage);
+    }
 
-	// liefert die Einstellung im Klartext
-	@Override
-	public String getValue() {
-		if (value == null)
-			return value;
-		else
-			return Utils.decrypt(this.value);
-	}
+    // liefert die Einstellung im Klartext
+    @Override
+    public String getValue() {
+        if (value == null)
+            return value;
+        else
+            return Utils.decrypt(this.value);
+    }
 
-	// Liefert die verschl�sselte Einstellung zur�ck
-	public String getEncryptedValue() {
-		return this.value;
-	}
+    // Liefert die verschl�sselte Einstellung zur�ck
+    public String getEncryptedValue() {
+        return this.value;
+    }
 
-	// liefert den Standardwert im Klartext
-	@Override
-	public String getDefaultValue() {
-		return Utils.decrypt(this.defaultValue);
-	}
+    // liefert den Standardwert im Klartext
+    @Override
+    public String getDefaultValue() {
+        return Utils.decrypt(this.defaultValue);
+    }
 
-	// liefert den verschl�sselten Standadwert
-	public String getEncryptedDefaultValue() {
-		return this.defaultValue;
-	}
+    // liefert den verschl�sselten Standadwert
+    public String getEncryptedDefaultValue() {
+        return this.defaultValue;
+    }
 
-	// hiermit kann die Einstellung im Klartext �bergeben werden und wird sofort
-	// verschl�sselt
-	@Override
-	public void setValue(String value) {
-		String encrypted = "";
-		if (value.length() > 0)
-			encrypted = Utils.encrypt(value);
-		if ((this.value != null) && (this.value.equals(encrypted)))
-			return;
-		this.value = encrypted;
-		setDirty();
-	}
+    // hiermit kann die Einstellung im Klartext �bergeben werden und wird sofort
+    // verschl�sselt
+    @Override
+    public void setValue(String value) {
+        String encrypted = "";
+        if (value.length() > 0)
+            encrypted = Utils.encrypt(value);
+        if ((this.value != null) && (this.value.equals(encrypted)))
+            return;
+        this.value = encrypted;
+        setDirty();
+    }
 
-	// hier kann die schon verschl�sselte Einstellung �bergeben werden.
-	public void setEncryptedValue(String value) {
-		if ((this.value != null) && (this.value.equals(value)))
-			return;
-		this.value = value;
-		setDirty();
-	}
+    // hier kann die schon verschl�sselte Einstellung �bergeben werden.
+    public void setEncryptedValue(String value) {
+        if ((this.value != null) && (this.value.equals(value)))
+            return;
+        this.value = value;
+        setDirty();
+    }
 
 }
