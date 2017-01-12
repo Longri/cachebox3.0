@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
@@ -254,12 +255,12 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         if (!VisUI.isLoaded()) return null;
 
-        Skin skin = VisUI.getSkin();
+        SvgSkin skin = (SvgSkin) VisUI.getSkin();
         ScaledSvg scaledSvg = skin.get(name, ScaledSvg.class);
-        FileHandle fileHandle = Gdx.files.internal(scaledSvg.path);
         Bitmap bitmap;
         try {
-            bitmap = PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
+            FileHandle svgFile = skin.skinFolder.child(scaledSvg.path);
+            bitmap = PlatformConnector.getSvg(svgFile.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
         } catch (IOException e) {
             return null;
         }

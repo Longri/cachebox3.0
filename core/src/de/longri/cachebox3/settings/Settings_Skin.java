@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.settings;
 
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.utils.HSV_Color;
 
@@ -25,7 +26,7 @@ import de.longri.cachebox3.utils.HSV_Color;
  */
 public abstract class Settings_Skin extends Settings_Const {
 
-    public static final SettingFolder SkinFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("SkinFolder", SettingCategory.Folder, DEVELOPER, "default", SettingStoreType.Global, SettingUsage.ACB, false));
+    public static final SettingFolder SkinFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("SkinFolder", SettingCategory.Folder, DEVELOPER, CB.WorkPath + "/skins", SettingStoreType.Global, SettingUsage.ACB, false));
 
     public static final SettingBool nightMode = (SettingBool) SettingsList.addSetting(new SettingBool("nightMode", SettingCategory.Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
 

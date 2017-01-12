@@ -43,8 +43,9 @@ public class SvgSkin extends Skin {
         LOCAL, INTERNAL
     }
 
-    private final StorageType storageType;
-    private final String name;
+    public final StorageType storageType;
+    public final String name;
+    public final FileHandle skinFolder;
 
     /**
      * Create a Skin from given Jason-file!
@@ -52,13 +53,14 @@ public class SvgSkin extends Skin {
      *
      * @param name        Name of this skin, will be used for create tmp cache folder!
      * @param storageType LOCAL or INTERNAL
-     * @param svgFolder   {@link FileHandle} to the folder included the svg files
+     * @param skinFolder  {@link FileHandle} to the folder of this skin
      */
-    public SvgSkin(String name, StorageType storageType, FileHandle svgFolder) {
+    public SvgSkin(String name, StorageType storageType, FileHandle skinFolder) {
         super();
         this.storageType = storageType;
         this.name = name;
-        load(svgFolder.child(SKIN_JSON_NAME));
+        this.skinFolder = skinFolder;
+        load(skinFolder.child(SKIN_JSON_NAME));
     }
 
 
