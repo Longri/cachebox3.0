@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014 team-cachebox.de
+ * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package de.longri.cachebox3.settings;
 
 
+import de.longri.cachebox3.settings.types.SettingMode;
+import de.longri.cachebox3.settings.types.SettingStoreType;
+import de.longri.cachebox3.settings.types.SettingUsage;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.lists.CB_List;
 
@@ -27,11 +29,11 @@ import de.longri.cachebox3.utils.lists.CB_List;
 public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
 
     protected CB_List<IChanged> ChangedEventList = new CB_List<IChanged>();
-    protected SettingCategory category;
+    protected de.longri.cachebox3.settings.types.SettingCategory category;
     protected String name;
-    protected SettingMode mode;
-    protected SettingStoreType storeType;
-    protected SettingUsage usage;
+    protected de.longri.cachebox3.settings.types.SettingMode mode;
+    protected de.longri.cachebox3.settings.types.SettingStoreType storeType;
+    protected de.longri.cachebox3.settings.types.SettingUsage usage;
 
     protected T value;
     protected T defaultValue;
@@ -46,7 +48,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     private static int indexCount = 0;
     private int index = -1;
 
-    public SettingBase(String name, SettingCategory category, SettingMode modus, SettingStoreType StoreType, SettingUsage usage) {
+    public SettingBase(String name, de.longri.cachebox3.settings.types.SettingCategory category, de.longri.cachebox3.settings.types.SettingMode modus, de.longri.cachebox3.settings.types.SettingStoreType StoreType, de.longri.cachebox3.settings.types.SettingUsage usage) {
 	this.name = name;
 	this.category = category;
 	this.mode = modus;
@@ -87,7 +89,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
 	return name;
     }
 
-    public SettingCategory getCategory() {
+    public de.longri.cachebox3.settings.types.SettingCategory getCategory() {
 	return category;
     }
 
@@ -95,7 +97,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
 	return storeType;
     }
 
-    public SettingMode getMode() {
+    public de.longri.cachebox3.settings.types.SettingMode getMode() {
 	return mode;
     }
 

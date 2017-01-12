@@ -22,7 +22,7 @@ import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.settings.SettingsAudio;
+import de.longri.cachebox3.settings.types.SettingsAudio;
 
 public class SoundCache {
     final static Logger log = LoggerFactory.getLogger(SoundCache.class);

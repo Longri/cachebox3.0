@@ -47,7 +47,7 @@ public final class SkinLoaderTask extends AbstractInitTask {
         ui.Density = CB.getScalefactor();
         ui.isLandscape = false;
 
-//        Get selected skin name and check if available
+        //Get selected skin name and check if available
         
 
         // the SvgSkin must create in a OpenGL context. so we post a runnable and wait!

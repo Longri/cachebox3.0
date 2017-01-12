@@ -1,7 +1,27 @@
+/*
+ * Copyright (C) 2014-2017 team-cachebox.de
+ *
+ * Licensed under the : GNU General Public License (GPL);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.gnu.org/licenses/gpl.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.longri.cachebox3.settings;
 
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
+import de.longri.cachebox3.settings.types.PlatformSettings;
+import de.longri.cachebox3.settings.types.SettingEncryptedString;
+import de.longri.cachebox3.settings.types.SettingStoreType;
+import de.longri.cachebox3.settings.types.SettingString;
+import de.longri.cachebox3.settings.types.SettingsList;
 import de.longri.cachebox3.sqlite.Database;
 
 import java.util.Iterator;
@@ -23,7 +43,7 @@ public class Config extends Settings {
      */
     public static boolean WriteToDB() {
         // Write into DB
-        SettingsDAO dao = new SettingsDAO();
+        de.longri.cachebox3.settings.types.SettingsDAO dao = new de.longri.cachebox3.settings.types.SettingsDAO();
 
         Database Data = Database.Data;
         Database SettingsDB = Database.Settings;
@@ -41,17 +61,17 @@ public class Config extends Settings {
         boolean needRestart = false;
 
         try {
-            for (Iterator<SettingBase<?>> it = SettingsList.that.iterator(); it.hasNext(); ) {
+            for (Iterator<SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
                 SettingBase<?> setting = it.next();
                 if (!setting.isDirty())
                     continue; // is not changed -> do not
 
-                if (SettingStoreType.Local == setting.getStoreType()) {
+                if (de.longri.cachebox3.settings.types.SettingStoreType.Local == setting.getStoreType()) {
                     if (Data != null)
                         dao.WriteToDatabase(Data, setting);
-                } else if (SettingStoreType.Global == setting.getStoreType() || (!PlatformSettings.canUsePlatformSettings() && SettingStoreType.Platform == setting.getStoreType())) {
+                } else if (de.longri.cachebox3.settings.types.SettingStoreType.Global == setting.getStoreType() || (!de.longri.cachebox3.settings.types.PlatformSettings.canUsePlatformSettings() && de.longri.cachebox3.settings.types.SettingStoreType.Platform == setting.getStoreType())) {
                     dao.WriteToDatabase(SettingsDB, setting);
-                } else if (SettingStoreType.Platform == setting.getStoreType()) {
+                } else if (de.longri.cachebox3.settings.types.SettingStoreType.Platform == setting.getStoreType()) {
                     dao.WriteToPlatformSettings(setting);
                     dao.WriteToDatabase(SettingsDB, setting);
                 }
@@ -81,20 +101,20 @@ public class Config extends Settings {
         Database SettingsDB = Database.Settings;
         // Read from DB
 
-        SettingsDAO dao = new SettingsDAO();
-        for (Iterator<SettingBase<?>> it = SettingsList.that.iterator(); it.hasNext(); ) {
+        de.longri.cachebox3.settings.types.SettingsDAO dao = new de.longri.cachebox3.settings.types.SettingsDAO();
+        for (Iterator<SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
             SettingBase<?> setting = it.next();
             String debugString;
 
             boolean isPlatform = false;
             boolean isPlattformoverride = false;
 
-            if (SettingStoreType.Local == setting.getStoreType()) {
+            if (de.longri.cachebox3.settings.types.SettingStoreType.Local == setting.getStoreType()) {
                 if (Data == null)
                     setting.loadDefault();
                 else
                     setting = dao.ReadFromDatabase(Data, setting);
-            } else if (SettingStoreType.Global == setting.getStoreType() || (!PlatformSettings.canUsePlatformSettings() && SettingStoreType.Platform == setting.getStoreType())) {
+            } else if (de.longri.cachebox3.settings.types.SettingStoreType.Global == setting.getStoreType() || (!PlatformSettings.canUsePlatformSettings() && de.longri.cachebox3.settings.types.SettingStoreType.Platform == setting.getStoreType())) {
                 setting = dao.ReadFromDatabase(SettingsDB, setting);
             } else if (SettingStoreType.Platform == setting.getStoreType()) {
                 isPlatform = true;
@@ -104,8 +124,8 @@ public class Config extends Settings {
 
                 // chk for Value on User.db3 and cleared Platform Value
 
-                if (setting instanceof SettingString) {
-                    SettingString st = (SettingString) setting;
+                if (setting instanceof de.longri.cachebox3.settings.types.SettingString) {
+                    de.longri.cachebox3.settings.types.SettingString st = (SettingString) setting;
 
                     if (st.value.length() == 0) {
                         // Platform Settings are empty use db3 value or default
@@ -152,14 +172,14 @@ public class Config extends Settings {
     }
 
     public static void LoadFromLastValue() {
-        for (Iterator<SettingBase<?>> it = SettingsList.that.iterator(); it.hasNext(); ) {
+        for (Iterator<SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
             SettingBase<?> setting = it.next();
             setting.loadFromLastValue();
         }
     }
 
     public static void SaveToLastValue() {
-        for (Iterator<SettingBase<?>> it = SettingsList.that.iterator(); it.hasNext(); ) {
+        for (Iterator<SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
             SettingBase<?> setting = it.next();
             setting.saveToLastValue();
         }

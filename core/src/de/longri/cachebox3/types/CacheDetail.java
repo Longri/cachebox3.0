@@ -18,14 +18,12 @@ package de.longri.cachebox3.types;
 
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
-import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.lists.CB_List;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 public class CacheDetail implements Serializable {
 	private static final long serialVersionUID = 2088367633865443637L;

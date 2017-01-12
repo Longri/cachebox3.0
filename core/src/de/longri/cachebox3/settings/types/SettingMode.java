@@ -1,4 +1,4 @@
-package de.longri.cachebox3.settings;
+package de.longri.cachebox3.settings.types;
 
 /***
  * DEVELOPER, Normal, Expert
