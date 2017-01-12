@@ -74,8 +74,8 @@ public class SvgSkinUtil {
 
             Pixmap pixmap = null;
             String name = null;
-
-            FileHandle fileHandle = Gdx.files.internal(scaledSvg.path);
+            skinFile.parent().child(scaledSvg.path);
+            FileHandle fileHandle = skinFile.parent().child(scaledSvg.path);
 
             try {
                 resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();

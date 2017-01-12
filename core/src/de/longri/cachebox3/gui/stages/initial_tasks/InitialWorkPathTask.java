@@ -87,7 +87,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
         ini_Dir(Config.SpoilerFolder.getValue(), nomedia);
 
 //DEBUG SKIN set for debug
-//        Config.daySkinName.setValue("testDay");
+        Config.daySkinName.setValue("testDay");
 //        Config.daySkinName.loadDefault();
 
     }

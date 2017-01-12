@@ -87,6 +87,6 @@ public class QuickButtonList extends Group {
 
 
     public static class QuickButtonListStyle {
-        Drawable background, button;
+        public Drawable background, button;
     }
 }

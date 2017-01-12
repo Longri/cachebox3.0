@@ -260,8 +260,8 @@ public class Slider extends WidgetGroup {
 
 
     public static class SliderStyle {
-        Drawable background, slider;
-        BitmapFont font;
-        Color fontColor;
+        public Drawable background, slider;
+        public BitmapFont font;
+        public Color fontColor;
     }
 }

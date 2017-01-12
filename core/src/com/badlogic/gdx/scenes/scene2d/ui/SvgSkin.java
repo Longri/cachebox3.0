@@ -141,7 +141,15 @@ public class SvgSkin extends Skin {
         return drawable;
     }
 
+    @Override
     protected Json getJsonLoader(final FileHandle skinFile) {
+
+        if (name == null) {
+            //return default skin
+            return super.getJsonLoader(skinFile);
+        }
+
+
         final Skin skin = this;
 
         final Json json = new Json() {

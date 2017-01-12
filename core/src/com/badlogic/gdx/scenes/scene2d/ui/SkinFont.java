@@ -26,7 +26,11 @@ import de.longri.cachebox3.CB;
  */
 public class SkinFont extends BitmapFont {
 
-    public static final String DEFAULT_CHARACTER = getCyrilCharSet();
+    private static final String DEFAULT_CHARACTER = getCyrilCharSet();
+
+    public final FileHandle fileHandle;
+    public final int size;
+
 
     static String getCyrilCharSet() {
         int CharSize = 0x04ff - 0x0400;
@@ -46,19 +50,19 @@ public class SkinFont extends BitmapFont {
         parameter.genMipMaps = true;
         parameter.minFilter = Texture.TextureFilter.MipMapNearestNearest;
         BitmapFont bitmapFont = generator.generateFont(parameter);
-
         return bitmapFont;
     }
 
-    public SkinFont() {
-    }
 
     public SkinFont(FileHandle fileHandle, int size) {
-        this(generateFont(fileHandle, size));
+        this(generateFont(fileHandle, size), fileHandle, size);
+
     }
 
-    public SkinFont(BitmapFont bitmapFont) {
+    private SkinFont(BitmapFont bitmapFont, FileHandle fileHandle, int size) {
         super(bitmapFont.getData(), bitmapFont.getRegions(), false);
+        this.fileHandle = fileHandle;
+        this.size = size;
     }
 
 }

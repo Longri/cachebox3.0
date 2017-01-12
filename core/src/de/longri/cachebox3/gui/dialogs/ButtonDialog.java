@@ -265,10 +265,10 @@ public class ButtonDialog extends Window {
     }
 
     public static class ButtonDialogStyle {
-        SvgNinePatchDrawable title, header, center, footer;
-        Drawable stageBackground;
-        BitmapFont titleFont;
-        Color titleFontColor;
+        public SvgNinePatchDrawable title, header, center, footer;
+        public  Drawable stageBackground;
+        public  BitmapFont titleFont;
+        public Color titleFontColor;
     }
 
 }

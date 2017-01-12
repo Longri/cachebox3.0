@@ -11,7 +11,7 @@ import de.longri.cachebox3.CB;
 public class ColorDrawable extends EmptyDrawable {
 
     public static class ColorDrawableStyle {
-        Color color;
+        public Color color;
 
         public ColorDrawableStyle() {
         }
