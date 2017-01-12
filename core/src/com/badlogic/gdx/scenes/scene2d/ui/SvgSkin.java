@@ -333,7 +333,7 @@ public class SvgSkin extends Skin {
                 if (!fontFile.exists()) throw new SerializationException("Font file not found: " + fontFile);
 
                 try {
-                    SkinFont font = new SkinFont(fontFile, scaledSize);
+                    SkinFont font = new SkinFont(path,fontFile, scaledSize);
                     return font;
                 } catch (RuntimeException ex) {
                     throw new SerializationException("Error loading bitmap font: " + fontFile, ex);

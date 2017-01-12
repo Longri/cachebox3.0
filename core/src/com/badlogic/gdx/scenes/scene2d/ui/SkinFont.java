@@ -28,7 +28,7 @@ public class SkinFont extends BitmapFont {
 
     private static final String DEFAULT_CHARACTER = getCyrilCharSet();
 
-    public final FileHandle font;
+    public final String font;
     public final int size;
 
 
@@ -54,13 +54,13 @@ public class SkinFont extends BitmapFont {
     }
 
 
-    public SkinFont(FileHandle fileHandle, int size) {
-        this(generateFont(fileHandle, size), fileHandle, size);
+    public SkinFont(String path, FileHandle fileHandle, int size) {
+        this(generateFont(fileHandle, size), path, size);
     }
 
-    private SkinFont(BitmapFont bitmapFont, FileHandle fileHandle, int size) {
+    private SkinFont(BitmapFont bitmapFont, String path, int size) {
         super(bitmapFont.getData(), bitmapFont.getRegions(), false);
-        this.font = fileHandle;
+        this.font = path;
         this.size = size;
     }
 
