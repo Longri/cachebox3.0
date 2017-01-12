@@ -316,9 +316,12 @@ public class SvgSkin extends Skin {
                 if (topHeight < 0) topHeight = textureRegion.getRegionHeight() / 2;
                 if (bottomHeight < 0) bottomHeight = textureRegion.getRegionHeight() / 2;
 
-
-                return new SvgNinePatchDrawable(new NinePatch(textureRegion, (int) left, (int) right, (int) top, (int) bottom),
+                SvgNinePatchDrawable svgNinePatchDrawable = new SvgNinePatchDrawable(new NinePatch(textureRegion, (int) left, (int) right, (int) top, (int) bottom),
                         (int) leftWidth, (int) rightWidth, (int) topHeight, (int) bottomHeight);
+
+                svgNinePatchDrawable.name = name;
+
+                return svgNinePatchDrawable;
             }
         });
 
@@ -333,7 +336,7 @@ public class SvgSkin extends Skin {
                 if (!fontFile.exists()) throw new SerializationException("Font file not found: " + fontFile);
 
                 try {
-                    SkinFont font = new SkinFont(path,fontFile, scaledSize);
+                    SkinFont font = new SkinFont(path, fontFile, scaledSize);
                     return font;
                 } catch (RuntimeException ex) {
                     throw new SerializationException("Error loading bitmap font: " + fontFile, ex);

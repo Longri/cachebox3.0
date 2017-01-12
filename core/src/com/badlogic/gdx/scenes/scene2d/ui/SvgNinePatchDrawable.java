@@ -26,9 +26,9 @@ public class SvgNinePatchDrawable extends BaseDrawable {
 
     NinePatch patch;
 
-    String name;
-    int left, right, top, bottom;
-    int leftWidth, rightWidth, topHeight, bottomHeight;
+    public String name;
+    public int left, right, top, bottom;
+    public int leftWidth, rightWidth, topHeight, bottomHeight;
 
     public SvgNinePatchDrawable() {
     }
