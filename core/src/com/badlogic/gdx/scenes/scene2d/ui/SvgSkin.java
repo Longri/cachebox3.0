@@ -235,20 +235,12 @@ public class SvgSkin extends Skin {
                 style.secondItem = getDrawable(secondItem);
                 style.selectedItem = getDrawable(selectedItem);
 
-                float pad, padLeft, padRight, padTop, padBottom;
-                pad = json.readValue("pad", float.class, 0f, jsonData);
-                padLeft = json.readValue("padLeft", float.class, 0f, jsonData);
-                padRight = json.readValue("padRight", float.class, 0f, jsonData);
-                padTop = json.readValue("padTop", float.class, 0f, jsonData);
-                padBottom = json.readValue("padBottom", float.class, 0f, jsonData);
 
-                //scale values
-                style.pad = CB.getScaledFloat(pad);
-                style.padLeft = CB.getScaledFloat(padLeft);
-                style.padRight = CB.getScaledFloat(padRight);
-                style.padTop = CB.getScaledFloat(padTop);
-                style.padBottom = CB.getScaledFloat(padBottom);
-
+                style.pad = json.readValue("pad", float.class, 0f, jsonData);
+                style.padLeft = json.readValue("padLeft", float.class, 0f, jsonData);
+                style.padRight = json.readValue("padRight", float.class, 0f, jsonData);
+                style.padTop = json.readValue("padTop", float.class, 0f, jsonData);
+                style.padBottom = json.readValue("padBottom", float.class, 0f, jsonData);
 
                 try {
                     vScroll = json.readValue("vScroll", String.class, jsonData);
