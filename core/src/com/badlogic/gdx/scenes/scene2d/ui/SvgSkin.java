@@ -15,7 +15,6 @@
  */
 package com.badlogic.gdx.scenes.scene2d.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -29,6 +28,7 @@ import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.ScaledSizes;
+import de.longri.cachebox3.utils.SkinColor;
 
 import java.util.ArrayList;
 
@@ -77,6 +77,14 @@ public class SvgSkin extends Skin {
         this.name = name;
         this.skinFolder = skinFolder;
         load(skinFolder.child(SKIN_JSON_NAME));
+    }
+
+
+    @Override
+    public Color getColor(String name) {
+        throw new RuntimeException("\n\nUse de.longri.cachebox3.utils.SkinColor " +
+                "instead of com.badlogic.gdx.graphics.Color:\n" +
+                ".get(name, SkinColor.class)\n\n");
     }
 
 
@@ -154,6 +162,13 @@ public class SvgSkin extends Skin {
 
         final Json json = new Json() {
             public <T> T readValue(Class<T> type, Class elementType, JsonValue jsonData) {
+
+                if (type.getName().equals("com.badlogic.gdx.graphics.Color")) {
+                    //change type to de.longri.cachebox3.utils.SkinColor
+                    type = (Class<T>) SkinColor.class;
+                }
+
+
                 // If the JSON is a string but the type is not, look up the actual value by path.
                 if (jsonData.isString() && !ClassReflection.isAssignableFrom(CharSequence.class, type))
                     return get(jsonData.asString(), type);
@@ -336,16 +351,22 @@ public class SvgSkin extends Skin {
             }
         });
 
-        json.setSerializer(Color.class, new Json.ReadOnlySerializer<Color>() {
-            public Color read(Json json, JsonValue jsonData, Class type) {
-                if (jsonData.isString()) return get(jsonData.asString(), Color.class);
+        json.setSerializer(SkinColor.class, new Json.ReadOnlySerializer<SkinColor>() {
+            public SkinColor read(Json json, JsonValue jsonData, Class type) {
+                if (jsonData.isString()) return get(jsonData.asString(), SkinColor.class);
                 String hex = json.readValue("hex", String.class, (String) null, jsonData);
-                if (hex != null) return Color.valueOf(hex);
+                if (hex != null) {
+                    SkinColor c = new SkinColor(Color.valueOf(hex));
+                    c.skinName = "test";
+                    return c;
+                }
                 float r = json.readValue("r", float.class, 0f, jsonData);
                 float g = json.readValue("g", float.class, 0f, jsonData);
                 float b = json.readValue("b", float.class, 0f, jsonData);
                 float a = json.readValue("a", float.class, 1f, jsonData);
-                return new Color(r, g, b, a);
+                SkinColor c = new SkinColor(r, g, b, a);
+                c.skinName = "test";
+                return c;
             }
         });
 

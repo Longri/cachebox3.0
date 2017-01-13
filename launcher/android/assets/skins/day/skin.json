@@ -491,7 +491,7 @@
       "check_box_height": 12
     }
   },
-  "com.badlogic.gdx.graphics.Color": {
+  "de.longri.cachebox3.utils.SkinColor": {
     "background": {
       "r": 1,
       "g": 1,

@@ -21,6 +21,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.widgets.CB_View_Base;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
+import de.longri.cachebox3.utils.SkinColor;
 
 /**
  * Created by Longri on 23.07.16.
@@ -41,7 +42,7 @@ public abstract class AbstractView extends CB_View_Base {
         nameLabel.setAlignment(Align.center);
         nameLabel.setPosition(10, 10);
 
-        colorWidget = new ColorWidget(CB.getSkin().getColor("abstract_background"));
+        colorWidget = new ColorWidget(CB.getSkin().get("abstract_background",SkinColor.class));
         colorWidget.setBounds(0, 0, this.getWidth(), this.getHeight());
 
         this.addActor(colorWidget);
