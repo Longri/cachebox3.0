@@ -24,6 +24,11 @@ public class SkinColor extends HSV_Color {
 
     public String skinName;
 
+
+    public SkinColor() {
+        super(0f, 0f, 0f, 0f);
+    }
+
     public SkinColor(Color color) {
         super(color);
     }

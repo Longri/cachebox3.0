@@ -54,6 +54,13 @@ public class SvgSkin extends Skin {
         this.skinFolder = null;
     }
 
+    public SvgSkin(String name) {
+        super();
+        this.storageType = null;
+        this.name = name;
+        this.skinFolder = null;
+    }
+
 
     public SvgSkin(FileHandle jsonFile) {
         super(jsonFile);
@@ -75,16 +82,27 @@ public class SvgSkin extends Skin {
         super();
         this.storageType = storageType;
         this.name = name;
-        this.skinFolder = skinFolder;
-        load(skinFolder.child(SKIN_JSON_NAME));
+
+        FileHandle skinFile = null;
+        if (skinFolder.extension().equals("json")) {
+            skinFile = skinFolder;
+            this.skinFolder = skinFile.parent();
+        } else {
+            skinFile = skinFolder.child(SKIN_JSON_NAME);
+            this.skinFolder = skinFolder;
+        }
+        load(skinFile);
     }
 
 
     @Override
     public Color getColor(String name) {
-        throw new RuntimeException("\n\nUse de.longri.cachebox3.utils.SkinColor " +
-                "instead of com.badlogic.gdx.graphics.Color:\n" +
-                ".get(name, SkinColor.class)\n\n");
+        try {
+            return get(name, SkinColor.class);
+        } catch (Exception e) {
+
+        }
+        return super.getColor(name);
     }
 
 
