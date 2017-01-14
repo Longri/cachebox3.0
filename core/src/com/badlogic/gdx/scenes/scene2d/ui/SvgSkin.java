@@ -375,7 +375,7 @@ public class SvgSkin extends Skin {
                 String hex = json.readValue("hex", String.class, (String) null, jsonData);
                 if (hex != null) {
                     SkinColor c = new SkinColor(Color.valueOf(hex));
-                    c.skinName = "test";
+                    c.skinName = jsonData.name;
                     return c;
                 }
                 float r = json.readValue("r", float.class, 0f, jsonData);
@@ -383,7 +383,7 @@ public class SvgSkin extends Skin {
                 float b = json.readValue("b", float.class, 0f, jsonData);
                 float a = json.readValue("a", float.class, 1f, jsonData);
                 SkinColor c = new SkinColor(r, g, b, a);
-                c.skinName = "test";
+                c.skinName = jsonData.name;
                 return c;
             }
         });
