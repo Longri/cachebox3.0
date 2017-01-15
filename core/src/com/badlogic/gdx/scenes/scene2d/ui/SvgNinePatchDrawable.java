@@ -24,11 +24,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
  */
 public class SvgNinePatchDrawable extends BaseDrawable {
 
+    public static class SvgNinePatchDrawableUnScaledValues {
+        // unscaled values from SvgSkon
+        public float left, right, top, bottom, leftWidth, rightWidth, topHeight, bottomHeight;
+    }
+
+
     NinePatch patch;
 
     public String name;
-    public int left, right, top, bottom;
-    public int leftWidth, rightWidth, topHeight, bottomHeight;
+    private int left, right, top, bottom;
+    private int leftWidth, rightWidth, topHeight, bottomHeight;
+    public SvgNinePatchDrawableUnScaledValues values;
 
     public SvgNinePatchDrawable() {
     }

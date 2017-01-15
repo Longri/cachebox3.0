@@ -129,6 +129,12 @@ public class CB {
         return (value * scalefactor);
     }
 
+    public static float getUnScaledFloat(float value) {
+        if (scalefactor == 0)
+            calcScaleFactor();
+        return (value / scalefactor);
+    }
+
     public static int getScaledInt(int i) {
         if (scalefactor == 0)
             calcScaleFactor();

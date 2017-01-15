@@ -317,6 +317,16 @@ public class SvgSkin extends Skin {
                 float topHeight = json.readValue("topHeight", float.class, 0f, jsonData);
                 float bottomHeight = json.readValue("bottomHeight", float.class, 0f, jsonData);
 
+                SvgNinePatchDrawable.SvgNinePatchDrawableUnScaledValues values = new SvgNinePatchDrawable.SvgNinePatchDrawableUnScaledValues();
+                values.left = left;
+                values.right = right;
+                values.top = top;
+                values.bottom = bottom;
+                values.leftWidth = leftWidth;
+                values.rightWidth = rightWidth;
+                values.topHeight = topHeight;
+                values.bottomHeight = bottomHeight;
+
                 // get texture region
                 TextureRegion textureRegion = getRegion(name);
 
@@ -345,7 +355,7 @@ public class SvgSkin extends Skin {
                         (int) leftWidth, (int) rightWidth, (int) topHeight, (int) bottomHeight);
 
                 svgNinePatchDrawable.name = name;
-
+                svgNinePatchDrawable.values = values;
                 return svgNinePatchDrawable;
             }
         });
