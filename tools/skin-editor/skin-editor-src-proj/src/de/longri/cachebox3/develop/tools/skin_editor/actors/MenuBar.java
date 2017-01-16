@@ -154,6 +154,7 @@ public class MenuBar extends Table {
 
         labelProjectName = new Label("---", game.skin);
         add(labelProjectName).pad(5).padRight(20);
+        
     }
 
 

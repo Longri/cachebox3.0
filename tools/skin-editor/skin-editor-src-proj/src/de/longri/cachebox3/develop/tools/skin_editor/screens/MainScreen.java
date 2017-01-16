@@ -66,6 +66,7 @@ public class MainScreen implements Screen {
      */
     public void setCurrentProject(String project) {
         currentProject = project;
+        barMenu.update(currentProject);
     }
 
     public String getcurrentProject() {

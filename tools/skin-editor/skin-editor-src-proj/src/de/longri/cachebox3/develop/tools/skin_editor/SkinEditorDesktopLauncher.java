@@ -58,7 +58,7 @@ public class SkinEditorDesktopLauncher {
         config.width = screenDimensions.width;
         config.height = screenDimensions.height;
         config.resizable = true;
-        config.title = "alt_Skin Editor for Cachebox 3.0 (v0.1)";
+        config.title = "Skin Editor for Cachebox 3.0 (v0.1)";
         config.backgroundFPS = 1;
 //		config.resizable = false;
         config.vSyncEnabled = true;
