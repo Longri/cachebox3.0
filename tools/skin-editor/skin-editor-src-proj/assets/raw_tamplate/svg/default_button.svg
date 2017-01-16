@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="80" height="80" viewBox="0 0 80.00 80.00" enable-background="new 0 0 80.00 80.00" xml:space="preserve">
+	<path fill="#8C9E64" fill-opacity="1" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" d="M 12.3763,1.71712L 67.5013,1.71712C 73.5764,1.71712 78.5013,6.64199 78.5013,12.7171L 78.5013,67.9671C 78.5013,74.0423 73.5764,78.9671 67.5013,78.9671L 12.3763,78.9671C 6.30117,78.9671 1.3763,74.0423 1.3763,67.9671L 1.3763,12.7171C 1.3763,6.64199 6.30117,1.71712 12.3763,1.71712 Z "/>
+	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.5" y1="-2.34737" x2="6.19475" y2="-2.34737" gradientTransform="rotate(90.000000 0.500000 -2.347375)">
+		<stop offset="0.427907" stop-color="#EEEAEA" stop-opacity="1"/>
+		<stop offset="0.576744" stop-color="#FFFFFF" stop-opacity="0"/>
+	</linearGradient>
+	<path fill="url(#SVGID_Fill1_)" stroke-width="0.2" stroke-linejoin="round" d="M 66.7809,2.0713L 12.919,2.0713C 7.42998,2.0713 2.90199,6.28252 2.2513,11.7203C 3.53702,14.2323 6.1088,15.9463 9.07172,15.9463L 70.9946,15.9463C 73.7332,15.9463 76.1377,14.482 77.5013,12.2768C 77.1035,6.57251 72.4558,2.0713 66.7809,2.0713 Z "/>
+</svg>
