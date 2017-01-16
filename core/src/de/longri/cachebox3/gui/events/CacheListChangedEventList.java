@@ -21,7 +21,6 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.FilterInstances;
 
 import java.util.ArrayList;
 

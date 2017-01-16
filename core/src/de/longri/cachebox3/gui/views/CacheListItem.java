@@ -170,11 +170,11 @@ public class CacheListItem extends ListViewItem implements Disposable {
 
 
     public static class CacheListItemStyle {
-        BitmapFont nameFont;
-        Color nameFontColor;
-        Drawable arrow;
-        BitmapFont distanceFont;
-        Color distanceFontColor;
+        public BitmapFont nameFont;
+        public Color nameFontColor;
+        public Drawable arrow;
+        public BitmapFont distanceFont;
+        public Color distanceFontColor;
     }
 
 }

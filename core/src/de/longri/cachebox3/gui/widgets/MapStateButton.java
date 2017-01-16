@@ -168,6 +168,6 @@ public class MapStateButton extends Widget implements Disposable {
 
 
     public static class MapStateButtonStyle {
-        Drawable stateWaypoint, stateGps, stateFree, stateLock, stateCar, pressedOverdraw;
+        public Drawable stateWaypoint, stateGps, stateFree, stateLock, stateCar, pressedOverdraw;
     }
 }

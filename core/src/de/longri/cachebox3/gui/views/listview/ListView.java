@@ -201,10 +201,10 @@ public class ListView extends WidgetGroup {
         itemGroup.setWidth(this.getWidth());
         itemGroup.clear();
 
-        padLeft = style.padLeft > 0 ? style.padLeft : style.pad;
-        padRight = style.padRight > 0 ? style.padRight : style.pad;
-        padTop = style.padTop > 0 ? style.padTop : style.pad;
-        padBottom = style.padBottom > 0 ? style.padBottom : style.pad;
+        padLeft = CB.getScaledFloat(style.padLeft > 0 ? style.padLeft : style.pad);
+        padRight = CB.getScaledFloat(style.padRight > 0 ? style.padRight : style.pad);
+        padTop = CB.getScaledFloat(style.padTop > 0 ? style.padTop : style.pad);
+        padBottom = CB.getScaledFloat(style.padBottom > 0 ? style.padBottom : style.pad);
 
         for (int i = 0; i < this.listCount; i++) {
             addItem(i, false, -1);

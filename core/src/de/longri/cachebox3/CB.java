@@ -30,6 +30,7 @@ import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.ScaledSizes;
+import de.longri.cachebox3.utils.SkinColor;
 
 /**
  * Static class
@@ -111,8 +112,8 @@ public class CB {
         VisUI.load(actSkin);
     }
 
-    public static Color getColor(String name) {
-        return actSkin.getColor(name);
+    public static SkinColor getColor(String name) {
+        return actSkin.get(name, SkinColor.class);
     }
 
     public static SvgSkin getSkin() {
@@ -126,6 +127,12 @@ public class CB {
         if (scalefactor == 0)
             calcScaleFactor();
         return (value * scalefactor);
+    }
+
+    public static float getUnScaledFloat(float value) {
+        if (scalefactor == 0)
+            calcScaleFactor();
+        return (value / scalefactor);
     }
 
     public static int getScaledInt(int i) {

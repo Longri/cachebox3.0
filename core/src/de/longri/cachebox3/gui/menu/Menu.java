@@ -134,7 +134,7 @@ public class Menu extends Window {
                 trans = Translation.Get(StringId) + appendix;
         }
 
-        MenuItem item = new MenuItem(0, ID, "Menu Item@" + ID, this);
+        MenuItem item = new MenuItem(0, ID, "Menu Item@" + ID + "[" + trans + "]", this);
         item.setTitle(trans);
         addItem(item);
 

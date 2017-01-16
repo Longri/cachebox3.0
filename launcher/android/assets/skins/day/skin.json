@@ -1,474 +1,484 @@
 {
   "com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg": {
     "button_bar_back": {
-      "path": "skins/day/svg/button_bar_back.svg"
+      "path": "svg/button_bar_back.svg"
     },
     "cache": {
-      "path": "skins/day/svg/cache.svg",
+      "path": "svg/cache.svg",
       "scale": 0.72
     },
     "cache_pressed": {
-      "path": "skins/day/svg/cache_pressed.svg",
+      "path": "svg/cache_pressed.svg",
       "scale": 0.72
     },
     "cache_selected": {
-      "path": "skins/day/svg/cache_selected.svg",
+      "path": "svg/cache_selected.svg",
       "scale": 0.72
     },
     "cb": {
-      "path": "skins/day/svg/cb.svg",
+      "path": "svg/cb.svg",
       "scale": 0.15
     },
     "check_disabled": {
-      "path": "skins/day/svg/check_disabled.svg"
+      "path": "svg/check_disabled.svg"
     },
     "check_off": {
-      "path": "skins/day/svg/check_off.svg"
+      "path": "svg/check_off.svg"
     },
     "check_on": {
-      "path": "skins/day/svg/check_on.svg"
+      "path": "svg/check_on.svg"
     },
     "closeIcon": {
-      "path": "skins/day/svg/closeIcon.svg"
+      "path": "svg/closeIcon.svg"
     },
     "cm_icon": {
-      "path": "skins/day/svg/cm_icon.svg",
+      "path": "svg/cm_icon.svg",
       "scale": 0.72
     },
     "cm_icon_filterd": {
-      "path": "skins/day/svg/cm_icon_filterd.svg",
+      "path": "svg/cm_icon_filterd.svg",
       "scale": 0.72
     },
     "db": {
-      "path": "skins/day/svg/db.svg",
+      "path": "svg/db.svg",
       "scale": 0.72
     },
     "db_filter_active": {
-      "path": "skins/day/svg/db_filter_active.svg",
+      "path": "svg/db_filter_active.svg",
       "scale": 0.72
     },
     "db_pressed": {
-      "path": "skins/day/svg/db_pressed.svg",
+      "path": "svg/db_pressed.svg",
       "scale": 0.72
     },
     "db_pressed_filter_active": {
-      "path": "skins/day/svg/db_pressed_filter_active.svg",
+      "path": "svg/db_pressed_filter_active.svg",
       "scale": 0.72
     },
     "db_selected": {
-      "path": "skins/day/svg/db_selected.svg",
+      "path": "svg/db_selected.svg",
       "scale": 0.72
     },
     "db_selected_filter_active": {
-      "path": "skins/day/svg/db_selected_filter_active.svg",
+      "path": "svg/db_selected_filter_active.svg",
       "scale": 0.72
     },
     "default_button": {
-      "path": "skins/day/svg/default_button.svg"
+      "path": "svg/default_button.svg"
     },
     "default_button_pressed": {
-      "path": "skins/day/svg/default_button_pressed.svg"
+      "path": "svg/default_button_pressed.svg"
     },
     "dialog_center": {
-      "path": "skins/day/svg/dialog_center.svg"
+      "path": "svg/dialog_center.svg"
     },
     "dialog_footer": {
-      "path": "skins/day/svg/dialog_footer.svg"
+      "path": "svg/dialog_footer.svg"
     },
     "dialog_header": {
-      "path": "skins/day/svg/dialog_header.svg"
+      "path": "svg/dialog_header.svg"
     },
     "dialog_title": {
-      "path": "skins/day/svg/dialog_title.svg"
+      "path": "svg/dialog_title.svg"
     },
     "gc_liveIcon": {
-      "path": "skins/day/svg/gc_liveIcon.svg"
+      "path": "svg/gc_liveIcon.svg"
     },
     "helpIcon": {
-      "path": "skins/day/svg/helpIcon.svg"
+      "path": "svg/helpIcon.svg"
     },
     "infoIcon": {
-      "path": "skins/day/svg/infoIcon.svg"
+      "path": "svg/infoIcon.svg"
+    },
+    "noteIcon": {
+      "path": "svg/noteIcon.svg",
+      "scale": 0.19298245
     },
     "list_background": {
-      "path": "skins/day/svg/list_background.svg"
+      "path": "svg/list_background.svg"
     },
     "listrec_first": {
-      "path": "skins/day/svg/listrec_first.svg"
+      "path": "svg/listrec_first.svg"
     },
     "listrec_second": {
-      "path": "skins/day/svg/listrec_second.svg"
+      "path": "svg/listrec_second.svg"
     },
     "listrec_selected": {
-      "path": "skins/day/svg/listrec_selected.svg"
+      "path": "svg/listrec_selected.svg"
     },
     "misc": {
-      "path": "skins/day/svg/misc.svg",
+      "path": "svg/misc.svg",
       "scale": 0.72
     },
     "misc_pressed": {
-      "path": "skins/day/svg/misc_pressed.svg",
+      "path": "svg/misc_pressed.svg",
       "scale": 0.72
     },
     "misc_selected": {
-      "path": "skins/day/svg/misc_selected.svg",
+      "path": "svg/misc_selected.svg",
       "scale": 0.72
     },
     "nav": {
-      "path": "skins/day/svg/nav.svg",
+      "path": "svg/nav.svg",
       "scale": 0.72
     },
     "nav_pressed": {
-      "path": "skins/day/svg/nav_pressed.svg",
+      "path": "svg/nav_pressed.svg",
       "scale": 0.72
     },
     "nav_selected": {
-      "path": "skins/day/svg/nav_selected.svg",
+      "path": "svg/nav_selected.svg",
       "scale": 0.72
     },
     "toast_background": {
-      "path": "skins/day/svg/toast_background.svg"
+      "path": "svg/toast_background.svg"
     },
     "tool": {
-      "path": "skins/day/svg/tool.svg",
+      "path": "svg/tool.svg",
       "scale": 0.72
     },
     "tool_pressed": {
-      "path": "skins/day/svg/tool_pressed.svg",
+      "path": "svg/tool_pressed.svg",
       "scale": 0.72
     },
     "tool_selected": {
-      "path": "skins/day/svg/tool_selected.svg",
+      "path": "svg/tool_selected.svg",
       "scale": 0.72
     },
     "arrow_help": {
-      "path": "skins/day/svg/arrow_help.svg",
+      "path": "svg/arrow_help.svg",
       "scale": 0.27
     },
     "arrow_help_90": {
-      "path": "skins/day/svg/arrow_help_90.svg",
+      "path": "svg/arrow_help_90.svg",
       "scale": 0.28
     },
     "settings_icon": {
-      "path": "skins/day/svg/settings_icon.svg",
+      "path": "svg/settings_icon.svg",
       "scale": 0.27
     },
     "finger": {
-      "path": "skins/day/svg/finger.svg",
+      "path": "svg/finger.svg",
       "scale": 1.0
     },
     "finger_click": {
-      "path": "skins/day/svg/finger_click.svg",
+      "path": "svg/finger_click.svg",
       "scale": 1.0
     },
     "menu_for": {
-      "path": "skins/day/svg/menu_for.svg",
+      "path": "svg/menu_for.svg",
       "scale": 0.3
     },
     "menu_back": {
-      "path": "skins/day/svg/menu_back.svg",
+      "path": "svg/menu_back.svg",
       "scale": 0.3
     },
     "sortIcon": {
-      "path": "skins/day/svg/sortIcon.svg",
+      "path": "svg/sortIcon.svg",
       "scale": 0.19455253
     },
     "filter": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
     },
     "lupe": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
     },
     "importIcon": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
+    },
+    "imagesIcon": {
+      "path": "svg/images-icon.svg",
+      "scale": 0.19298245
     },
     "manageDb": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
     },
     "addCacheIcon": {
-      "path": "skins/day/svg/addCacheIcon.svg",
+      "path": "svg/addCacheIcon.svg",
       "scale": 0.19455253
     },
     "deleteIcon": {
-      "path": "skins/day/svg/deleteIcon.svg",
+      "path": "svg/deleteIcon.svg",
       "scale": 0.19455253
     },
     "cacheListIcon": {
-      "path": "skins/day/svg/cacheListIcon.svg",
+      "path": "svg/cacheListIcon.svg",
       "scale": 0.19455253
     },
     "tbListIcon": {
-      "path": "skins/day/svg/tbListIcon.svg",
+      "path": "svg/tbListIcon.svg",
       "scale": 0.19455253
     },
     "trackListIcon": {
-      "path": "skins/day/svg/trackListIcon.svg",
+      "path": "svg/trackListIcon.svg",
       "scale": 0.19455253
     },
     "menu_divider": {
-      "path": "skins/day/svg/menuDivider.svg",
+      "path": "svg/menuDivider.svg",
       "scale": 5
     },
     "map": {
-      "path": "skins/day/svg/map.svg",
+      "path": "svg/map.svg",
       "scale": 0.19455253
     },
     "compass": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
     },
     "navigate": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
     },
     "activityBack": {
-      "path": "skins/day/svg/activityBack.svg"
+      "path": "svg/activityBack.svg"
     },
     "cursor": {
-      "path": "skins/day/svg/cursor.svg"
+      "path": "svg/cursor.svg"
     },
     "slider": {
-      "path": "skins/day/svg/slider.svg",
+      "path": "svg/slider.svg",
       "scale": 0.3
     },
     "sliderKnob": {
-      "path": "skins/day/svg/sliderKnob.svg",
+      "path": "svg/sliderKnob.svg",
       "scale": 0.3
     },
     "traddi": {
-      "path": "skins/day/svg/traddi.svg",
+      "path": "svg/traddi.svg",
       "scale": 0.2
     },
     "multi": {
-      "path": "skins/day/svg/multi.svg",
+      "path": "svg/multi.svg",
       "scale": 0.2
     },
     "myterie": {
-      "path": "skins/day/svg/myterie.svg",
+      "path": "svg/myterie.svg",
       "scale": 0.2
     },
     "earth": {
-      "path": "skins/day/svg/earth.svg",
+      "path": "svg/earth.svg",
       "scale": 0.2
     },
     "event": {
-      "path": "skins/day/svg/event.svg",
+      "path": "svg/event.svg",
       "scale": 0.2
     },
     "mega": {
-      "path": "skins/day/svg/mega.svg",
+      "path": "svg/mega.svg",
       "scale": 0.2
     },
     "giga": {
-      "path": "skins/day/svg/giga.svg",
+      "path": "svg/giga.svg",
       "scale": 0.2
     },
     "cito": {
-      "path": "skins/day/svg/cito.svg",
+      "path": "svg/cito.svg",
       "scale": 0.2
     },
     "letterbox": {
-      "path": "skins/day/svg/letterbox.svg",
+      "path": "svg/letterbox.svg",
       "scale": 0.2
     },
     "whereigo": {
-      "path": "skins/day/svg/whereigo.svg",
+      "path": "svg/whereigo.svg",
       "scale": 0.2
     },
     "virtual": {
-      "path": "skins/day/svg/virtual.svg",
+      "path": "svg/virtual.svg",
       "scale": 0.2
     },
     "arrow-compass": {
-      "path": "skins/day/svg/arrow-compass.svg",
+      "path": "svg/arrow-compass.svg",
       "scale": 0.15
     },
     "star": {
-      "path": "skins/day/svg/star.svg",
+      "path": "svg/star.svg",
       "scale": 0.25
     },
     "star_half": {
-      "path": "skins/day/svg/star_half.svg",
+      "path": "svg/star_half.svg",
       "scale": 0.25
     },
     "star0": {
-      "path": "skins/day/svg/star0.svg",
+      "path": "svg/star0.svg",
       "scale": 0.25
     },
     "micro": {
-      "path": "skins/day/svg/micro.svg",
+      "path": "svg/micro.svg",
       "scale": 0.25
     },
     "small": {
-      "path": "skins/day/svg/small.svg",
+      "path": "svg/small.svg",
       "scale": 0.25
     },
     "regular": {
-      "path": "skins/day/svg/regular.svg",
+      "path": "svg/regular.svg",
       "scale": 0.25
     },
     "large": {
-      "path": "skins/day/svg/large.svg",
+      "path": "svg/large.svg",
       "scale": 0.25
     },
     "other": {
-      "path": "skins/day/svg/other.svg",
+      "path": "svg/other.svg",
       "scale": 0.25
     },
     "docIcon": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
     },
     "waypointListIcon": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/waypointListIcon.svg",
+      "scale": 0.19298245
     },
     "listIcon": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/listIcon.svg",
+      "scale": 0.19298245
     },
     "UPLOADFIELDNOTE": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
     },
     "log10icon": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
     },
     "videoIcon": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
     },
     "voiceRecIcon": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
     },
     "DayNight": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
     },
     "TORCHON": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
     },
     "TORCHOFF": {
-      "path": "skins/day/svg/missingIcon.svg"
+      "path": "svg/missingIcon.svg"
     },
     "Mapstate.free": {
-      "path": "skins/day/svg/map-state-free.svg",
+      "path": "svg/map-state-free.svg",
       "scale": 0.75
     },
     "Mapstate.waypoint": {
-      "path": "skins/day/svg/map-state-wp.svg",
+      "path": "svg/map-state-wp.svg",
       "scale": 0.75
     },
     "Mapstate.gps": {
-      "path": "skins/day/svg/map-state-gps.svg",
+      "path": "svg/map-state-gps.svg",
       "scale": 0.75
     },
     "Mapstate.lock": {
-      "path": "skins/day/svg/map-state-lock.svg",
+      "path": "svg/map-state-lock.svg",
       "scale": 0.75
     },
     "Mapstate.car": {
-      "path": "skins/day/svg/map-state-car.svg",
+      "path": "svg/map-state-car.svg",
       "scale": 0.75
     },
     "MapstateOverdraw": {
-      "path": "skins/day/svg/map-state-overdraw.svg",
+      "path": "svg/map-state-overdraw.svg",
       "scale": 0.75
     },
     "ZoomPlus": {
-      "path": "skins/day/svg/plus.svg",
+      "path": "svg/plus.svg",
       "scale": 0.5
     },
     "ZoomPlusDisabled": {
-      "path": "skins/day/svg/plus_disabled.svg",
+      "path": "svg/plus_disabled.svg",
       "scale": 0.5
     },
     "ZoomPlusPressed": {
-      "path": "skins/day/svg/plus_pressed.svg",
+      "path": "svg/plus_pressed.svg",
       "scale": 0.5
     },
     "ZoomMinus": {
-      "path": "skins/day/svg/minus.svg",
+      "path": "svg/minus.svg",
       "scale": 0.5
     },
     "ZoomMinusDisabled": {
-      "path": "skins/day/svg/minus_disabled.svg",
+      "path": "svg/minus_disabled.svg",
       "scale": 0.5
     },
     "ZoomMinusPressed": {
-      "path": "skins/day/svg/minus_pressed.svg",
+      "path": "svg/minus_pressed.svg",
       "scale": 0.5
     },
     "mapFound": {
-      "path": "skins/day/svg/log0icon.svg",
+      "path": "svg/log0icon.svg",
       "scale": 0.10
     },
     "mapTraditional": {
-      "path": "skins/day/svg/traddi.svg",
+      "path": "svg/traddi.svg",
       "scale": 0.15
     },
     "mapMulti": {
-      "path": "skins/day/svg/multi.svg",
+      "path": "svg/multi.svg",
       "scale": 0.15
     },
     "mapMystery": {
-      "path": "skins/day/svg/myterie.svg",
+      "path": "svg/myterie.svg",
       "scale": 0.15
     },
     "mapSolved": {
-      "path": "skins/day/svg/solved.svg",
+      "path": "svg/solved.svg",
       "scale": 0.15
     },
     "mapEarth": {
-      "path": "skins/day/svg/earth.svg",
+      "path": "svg/earth.svg",
       "scale": 0.15
     },
     "mapEvent": {
-      "path": "skins/day/svg/event.svg",
+      "path": "svg/event.svg",
       "scale": 0.15
     },
     "mapCITO": {
-      "path": "skins/day/svg/cito.svg",
+      "path": "svg/cito.svg",
       "scale": 0.15
     },
     "mapLetterbox": {
-      "path": "skins/day/svg/letterbox.svg",
+      "path": "svg/letterbox.svg",
       "scale": 0.15
     },
     "mapWherigo": {
-      "path": "skins/day/svg/whereigo.svg",
+      "path": "svg/whereigo.svg",
       "scale": 0.15
     },
     "cluster1": {
-      "path": "skins/day/svg/cluster1.svg",
+      "path": "svg/cluster1.svg",
       "scale": 0.15
     },
     "cluster10": {
-      "path": "skins/day/svg/cluster10.svg",
+      "path": "svg/cluster10.svg",
       "scale": 0.15
     },
     "cluster100": {
-      "path": "skins/day/svg/cluster100.svg",
+      "path": "svg/cluster100.svg",
       "scale": 0.15
     },
     "mapParkingArea": {
-      "path": "skins/day/svg/mapParkingArea.svg",
+      "path": "svg/mapParkingArea.svg",
       "scale": 0.15
     },
     "mapReferencePoint": {
-      "path": "skins/day/svg/mapReferencePoint.svg",
+      "path": "svg/mapReferencePoint.svg",
       "scale": 0.13
     },
     "mapTrailhead": {
-      "path": "skins/day/svg/mapTrailhead.svg",
+      "path": "svg/mapTrailhead.svg",
       "scale": 0.13
     },
     "mapFinal": {
-      "path": "skins/day/svg/final.svg",
+      "path": "svg/final.svg",
       "scale": 0.13
     },
     "mapMultiQuestion": {
-      "path": "skins/day/svg/multiQuestion.svg",
+      "path": "svg/multiQuestion.svg",
       "scale": 0.13
     },
     "mapMultiStage": {
-      "path": "skins/day/svg/multiStage.svg",
+      "path": "svg/multiStage.svg",
       "scale": 0.13
     },
     "mapMultiStageStartP": {
-      "path": "skins/day/svg/multiStageStartP.svg",
+      "path": "svg/multiStageStartP.svg",
       "scale": 0.13
     }
   },
@@ -481,7 +491,7 @@
       "check_box_height": 12
     }
   },
-  "com.badlogic.gdx.graphics.Color": {
+  "de.longri.cachebox3.utils.SkinColor": {
     "background": {
       "r": 1,
       "g": 1,
@@ -562,23 +572,23 @@
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "normal_font": {
-      "font": "fonts/DroidSans",
+      "font": "fonts/DroidSans.ttf",
       "size": 21
     },
     "normal_bold_font": {
-      "font": "fonts/DroidSans-Bold",
+      "font": "fonts/DroidSans-Bold.ttf",
       "size": 20
     },
     "settings_desc_font": {
-      "font": "fonts/DroidSerif-Italic",
+      "font": "fonts/DroidSerif-Italic.ttf",
       "size": 14
     },
     "settings_default_value_font": {
-      "font": "fonts/DroidSerif-Bold",
+      "font": "fonts/DroidSerif-Bold.ttf",
       "size": 12
     },
     "settings_value_font": {
-      "font": "fonts/DroidSans-BoldItalic",
+      "font": "fonts/DroidSans-BoldItalic.ttf",
       "size": 21
     }
   },

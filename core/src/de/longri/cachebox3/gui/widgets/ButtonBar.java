@@ -31,7 +31,7 @@ public class ButtonBar extends WidgetGroup {
 
 
     public static class ButtonBarStyle {
-        Drawable background;
+        public Drawable background;
 
         public ButtonBarStyle() {
         }

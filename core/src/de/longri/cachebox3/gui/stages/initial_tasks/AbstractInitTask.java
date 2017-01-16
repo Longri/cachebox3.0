@@ -28,7 +28,7 @@ public abstract class AbstractInitTask {
         this.percent = percent;
     }
 
-    public abstract void runable();
+    public abstract void runnable();
 
 }
 
