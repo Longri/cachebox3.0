@@ -3,7 +3,7 @@ apply plugin: "java"
 sourceCompatibility = 1.6
 sourceSets.main.java.srcDirs = [ "src/" ]
 
-project.ext.mainClassName = "org.shadebob.skineditor.desktop.DesktopLauncher"
+project.ext.mainClassName = "de.longri.cachebox3.develop.tools.skin_editor.SkinEditorDesktopLauncher"
 project.ext.assetsDir = new File("../assets");
 
 task run(dependsOn: classes, type: JavaExec) {
@@ -29,5 +29,5 @@ dist.dependsOn classes
 
 
 eclipse.project {
-    name = appName + "-desktop"
+    name = appName + "-skineditor"
 }
