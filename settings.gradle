@@ -1,6 +1,7 @@
-include 'desktop', 'android', 'ios', 'core', 'gps-simulator'
+include 'desktop', 'android', 'ios', 'core', 'gps-simulator', "skin-editor-src-proj"
 
 project(':desktop').projectDir = new File('./launcher/desktop')
 project(':android').projectDir = new File('./launcher/android')
 project(':ios').projectDir = new File('./launcher/ios')
 project(':gps-simulator').projectDir = new File('./tools/gps-simulator')
+project(':skin-editor-src-proj').projectDir = new File('./tools/skin-editor/skin-editor-src-proj')
