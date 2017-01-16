@@ -21,6 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -57,7 +59,7 @@ import java.util.HashMap;
 public class WaypointLayer extends Layer implements GestureListener, CacheListChangedEventListener, Disposable {
     private final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
-
+    private static final String ERROR_MSG = "No com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg registered with name:";
     private static final Bitmap defaultMarker = getClusterSymbol("myterie");
     public static final Bitmap CLUSTER1_SYMBOL = getClusterSymbol("cluster1");
     public static final Bitmap CLUSTER10_SYMBOL = getClusterSymbol("cluster10");
@@ -121,9 +123,23 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                     mItemList.clear();
 
                     //add WayPoint items
+
+                    CB_List<String> missingIconList = new CB_List<String>(0);
+
                     for (Cache cache : Database.Data.Query) {
                         ClusterablePoint geoCluster = new ClusterablePoint(cache, cache.getGcCode());
-                        geoCluster.setClusterSymbol(getClusterSymbolsByCache(cache));
+                        try {
+                            geoCluster.setClusterSymbol(getClusterSymbolsByCache(cache));
+                        } catch (GdxRuntimeException e) {
+                            if (e.getMessage().startsWith(ERROR_MSG)) {
+                                String iconName = e.getMessage().replaceFirst(ERROR_MSG, "");
+                                if (!missingIconList.contains(iconName))
+                                    missingIconList.add(iconName);
+                            } else {
+                                e.printStackTrace();
+                            }
+                            continue;
+                        }
                         mItemList.add(geoCluster);
 
                         //add waypoints from selected Cache or all Waypoints if set
@@ -134,6 +150,20 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                                 mItemList.add(waypointCluster);
                             }
                         }
+                    }
+
+                    if (!missingIconList.isEmpty()) {
+                        StringBuilder msg = new StringBuilder("\n\n" + ERROR_MSG + "\n");
+                        int count = 0;
+                        for (String name : missingIconList) {
+                            msg.append(", " + name);
+                            count++;
+                            if (count > 5) {
+                                msg.append("\n");
+                                count = 0;
+                            }
+                        }
+                        throw new GdxRuntimeException(msg.toString());
                     }
 
                     mItemList.setFinishFill();
