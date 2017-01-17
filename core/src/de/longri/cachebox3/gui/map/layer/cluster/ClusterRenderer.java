@@ -21,7 +21,7 @@ import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.locator.geocluster.Cluster;
-import de.longri.cachebox3.locator.geocluster.ClusterablePoint;
+import de.longri.cachebox3.locator.geocluster.MapWayPointItem;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
@@ -72,7 +72,7 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
     }
 
     static class InternalItem {
-        ClusterablePoint item;
+        MapWayPointItem item;
         boolean visible;
         boolean changes;
         float x, y;

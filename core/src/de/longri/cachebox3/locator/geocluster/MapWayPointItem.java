@@ -21,45 +21,49 @@ import org.oscim.core.GeoPoint;
 
 import java.util.Arrays;
 
-public class ClusterablePoint extends Coordinate {
+public class MapWayPointItem extends Coordinate {
+
+
+    public static class MapWayPointItemStyle {
+        Bitmap small, middle, large;
+    }
+
 
     private final Object dataObject; // Cache.class or WayPoint.class
 
     final GeoPoint geoPoint;
     private GeoBoundingBoxInt bounds;
     private final int cachedHash;
-    private final Bitmap[] mapSymbol = new Bitmap[3];
+    private final MapWayPointItemStyle mapSymbols;
 
 
-    public ClusterablePoint(Coordinate pos, Object obj) {
+    public MapWayPointItem(Coordinate pos, Object obj, MapWayPointItemStyle mapSymbols) {
         super(pos.latitude, pos.longitude);
         geoPoint = new GeoPoint(pos.latitude, pos.longitude);
         this.dataObject = obj;
+        this.mapSymbols = mapSymbols;
 
         cachedHash = hashCode();
     }
 
     @Override
     public boolean equals(Object that) {
-        return that instanceof ClusterablePoint &&
-                equals((ClusterablePoint) that);
+        return that instanceof MapWayPointItem &&
+                equals((MapWayPointItem) that);
     }
 
-    private boolean equals(ClusterablePoint that) {
+    private boolean equals(MapWayPointItem that) {
         return that.cachedHash == this.cachedHash
                 && geoPoint.equals(that.geoPoint)
                 && dataObject.equals(that.dataObject);
     }
 
-
     public Bitmap getMapSymbol(int zoomLevel) {
-        // calculate icon size
-        int iconSize = 0; // 8x8
         if ((zoomLevel >= 13) && (zoomLevel <= 14))
-            iconSize = 1; // 13x13
+            return mapSymbols.middle; // 13x13
         else if (zoomLevel > 14)
-            iconSize = 2; // default Images
-        return mapSymbol[iconSize];
+            return mapSymbols.large; // default Images
+        return mapSymbols.small;
     }
 
 
@@ -77,18 +81,6 @@ public class ClusterablePoint extends Coordinate {
         return "Cluster : " + dataObject;
     }
 
-    public void setClusterSymbol(Bitmap symbol) {
-        mapSymbol[0] = symbol;
-        mapSymbol[1] = symbol;
-        mapSymbol[2] = symbol;
-    }
-
-    public void setClusterSymbol(Bitmap[] symbols) {
-        mapSymbol[0] = symbols[0];
-        mapSymbol[1] = symbols[1];
-        mapSymbol[2] = symbols[2];
-    }
-
     void setDistanceBoundce(double distance) {
         double halfDistance = distance / 2;
         double bbDistance = Math.hypot(halfDistance, halfDistance);
@@ -97,7 +89,7 @@ public class ClusterablePoint extends Coordinate {
                 , this.geoPoint.destinationPoint(bbDistance, 135));
     }
 
-    public boolean contains(ClusterablePoint testCluster) {
+    public boolean contains(MapWayPointItem testCluster) {
         if (this.bounds == null) return false;
         return this.bounds.contains(testCluster.geoPoint);
     }

@@ -16,11 +16,8 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.AtlasBitmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.gui.widgets.MapCompass;
@@ -78,7 +75,7 @@ public class TestView extends AbstractView {
     @Override
     public void draw(Batch batch, float parentColor) {
         super.draw(batch, parentColor);
-      
+
     }
 
 

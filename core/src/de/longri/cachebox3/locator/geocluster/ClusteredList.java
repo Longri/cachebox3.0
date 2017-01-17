@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.locator.geocluster;
 
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.utils.lists.CB_List;
 
@@ -24,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Longri on 25.12.16.
  */
-public class ClusteredList extends CB_List<ClusterablePoint> {
+public class ClusteredList extends CB_List<MapWayPointItem> {
 
     private int allItemSize = 0;
 
@@ -54,7 +55,7 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
         anyClusterOutsideBoundingBox = false;
         while (!cancel.get() && index < this.size) {
 
-            ClusterablePoint cluster = this.get(index);
+            MapWayPointItem cluster = this.get(index);
 
             if (clusterBoundingBox != null) {
                 if (!clusterBoundingBox.contains(cluster.geoPoint)) {
@@ -75,7 +76,7 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
                     break;
                 }
 
-                ClusterablePoint testCluster = this.get(i);
+                MapWayPointItem testCluster = this.get(i);
                 if (testCluster == cluster) continue;
                 if (cluster.contains(testCluster)) {
                     inside.add(testCluster);
@@ -85,22 +86,11 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
             if (inside.size() > 0) {
                 this.removeAll(inside);
 
-                Cluster newCluster = new Cluster(cluster, "New Cluster");
+                Cluster newCluster = new Cluster(cluster, "New Cluster", VisUI.isLoaded() ?
+                        VisUI.getSkin().get("cluster", MapWayPointItem.MapWayPointItemStyle.class) : null);
                 newCluster.add(cluster);
                 newCluster.addAll(inside);
                 this.set(index, newCluster);
-
-                int clusterSize = newCluster.size();
-
-                if (WaypointLayer.CLUSTER1_SYMBOL != null) { //is NULL in case of JUnit test
-                    if (clusterSize > 1 && clusterSize <= 10) {
-                        newCluster.setClusterSymbol(WaypointLayer.CLUSTER1_SYMBOL);
-                    } else if (clusterSize > 10 && clusterSize <= 100) {
-                        newCluster.setClusterSymbol(WaypointLayer.CLUSTER10_SYMBOL);
-                    } else if (clusterSize > 100) {
-                        newCluster.setClusterSymbol(WaypointLayer.CLUSTER100_SYMBOL);
-                    }
-                }
             }
             index++;
         }
@@ -110,7 +100,7 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
         ClusteredList outsideList = new ClusteredList();
         ClusteredList emptyList = new ClusteredList();
         ClusteredList clusterOutList = new ClusteredList();
-        for (ClusterablePoint obj : this) {
+        for (MapWayPointItem obj : this) {
 
             if (cancel.get()) {
                 break;
@@ -122,7 +112,7 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
 
             clusterOutList.clear();
             if (!all) cluster.setDistanceBoundce(distance);
-            for (ClusterablePoint includedCluster : cluster.getIncludedClusters()) {
+            for (MapWayPointItem includedCluster : cluster.getIncludedClusters()) {
 
                 if (cancel.get()) {
                     break;
@@ -147,19 +137,7 @@ public class ClusteredList extends CB_List<ClusterablePoint> {
             if (cluster.size() == 0) {
                 emptyList.add(cluster);
             }
-
             outsideList.addAll(clusterOutList);
-
-            int clusterSize = cluster.size();
-            if (WaypointLayer.CLUSTER1_SYMBOL != null) { //is NULL in case of JUnit test
-                if (clusterSize > 1 && clusterSize <= 10) {
-                    cluster.setClusterSymbol(WaypointLayer.CLUSTER1_SYMBOL);
-                } else if (clusterSize > 10 && clusterSize <= 100) {
-                    cluster.setClusterSymbol(WaypointLayer.CLUSTER10_SYMBOL);
-                } else if (clusterSize > 100) {
-                    cluster.setClusterSymbol(WaypointLayer.CLUSTER100_SYMBOL);
-                }
-            }
         }
         this.addAll(outsideList);
         this.removeAll(emptyList);

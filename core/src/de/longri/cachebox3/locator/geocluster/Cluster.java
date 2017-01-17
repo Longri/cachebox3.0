@@ -16,22 +16,24 @@
 package de.longri.cachebox3.locator.geocluster;
 
 import de.longri.cachebox3.locator.Coordinate;
+import org.oscim.backend.canvas.Bitmap;
 
 /**
  * Created by Longri on 31.12.16.
  */
-public class Cluster extends ClusterablePoint {
+public class Cluster extends MapWayPointItem {
 
     private final ClusteredList includedClusters = new ClusteredList();
     private Coordinate centerCoordinate;
+    private Bitmap clusterSymbol;
 
-    public Cluster(Coordinate pos, String name) {
-        super(pos, name);
+    public Cluster(Coordinate pos, String name, MapWayPointItemStyle mapSymbols) {
+        super(pos, name, mapSymbols);
     }
 
 
     void addAll(ClusteredList list) {
-        for (ClusterablePoint cluster : list) {
+        for (MapWayPointItem cluster : list) {
             if (cluster instanceof Cluster) {
                 this.includedClusters.addAll(((Cluster) cluster).includedClusters);
                 ((Cluster) cluster).includedClusters.clear();
@@ -43,7 +45,7 @@ public class Cluster extends ClusterablePoint {
     }
 
 
-    public void add(ClusterablePoint cluster) {
+    public void add(MapWayPointItem cluster) {
         if (cluster instanceof Cluster) {
             this.includedClusters.addAll(((Cluster) cluster).includedClusters);
         } else {
@@ -85,7 +87,7 @@ public class Cluster extends ClusterablePoint {
         double avLat = 0;
         double avLon = 0;
 
-        for (ClusterablePoint cluster : this.includedClusters) {
+        for (MapWayPointItem cluster : this.includedClusters) {
             avLat += cluster.latitude;
             avLon += cluster.longitude;
         }
@@ -98,4 +100,5 @@ public class Cluster extends ClusterablePoint {
     public ClusteredList getIncludedClusters() {
         return includedClusters;
     }
+
 }
