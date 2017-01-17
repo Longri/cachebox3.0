@@ -16,8 +16,7 @@
 package de.longri.cachebox3.gui.map.layer;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
-import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -29,7 +28,9 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterRenderer;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.geocluster.*;
+import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
+import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxDouble;
+import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Settings;
@@ -40,7 +41,9 @@ import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.lists.CB_List;
 import de.longri.cachebox3.utils.lists.ThreadStack;
 import org.oscim.backend.canvas.Bitmap;
-import org.oscim.core.*;
+import org.oscim.core.Box;
+import org.oscim.core.MercatorProjection;
+import org.oscim.core.Point;
 import org.oscim.event.Gesture;
 import org.oscim.event.GestureListener;
 import org.oscim.event.MotionEvent;
@@ -59,7 +62,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     private static final String ERROR_MSG = "No de.longri.cachebox3." +
             "locator.geocluster.MapWayPointItem$MapWayPointItemStyle registered with name:";
     private static final Bitmap defaultMarker = getClusterSymbol("myterie");
-
 
 
     private final ClusterRenderer mClusterRenderer;

@@ -248,6 +248,15 @@ public class SvgSkin extends Skin {
             }
         });
 
+        json.setSerializer(Bitmap.class, new Json.ReadOnlySerializer<Bitmap>() {
+            public Bitmap read(Json json, JsonValue jsonData, Class type) {
+//                Color color = json.readValue("color", Color.class, jsonData);
+//                ColorDrawable drawable = new ColorDrawable(color);
+                return null;
+            }
+        });
+
+
         json.setSerializer(ColorDrawable.class, new Json.ReadOnlySerializer<ColorDrawable>() {
             public ColorDrawable read(Json json, JsonValue jsonData, Class type) {
                 Color color = json.readValue("color", Color.class, jsonData);

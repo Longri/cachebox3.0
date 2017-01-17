@@ -391,10 +391,6 @@
       "path": "svg/minus_pressed.svg",
       "scale": 0.5
     },
-    "mapFound": {
-      "path": "svg/log0icon.svg",
-      "scale": 0.10
-    },
     "mapTraditional": {
       "path": "svg/traddi.svg",
       "scale": 0.15
@@ -470,6 +466,18 @@
     "mapMultiStageStartP": {
       "path": "svg/multiStageStartP.svg",
       "scale": 0.13
+    },
+    "mapFound0": {
+      "path": "svg/mapFound0.svg",
+      "scale": 0.50
+    },
+    "mapFound1": {
+      "path": "svg/mapFound1.svg",
+      "scale": 0.50
+    },
+    "mapFound2": {
+      "path": "svg/mapFound2.svg",
+      "scale": 0.50
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
@@ -960,6 +968,13 @@
       "minusDown": "ZoomMinusPressed",
       "plusDisabled": "ZoomPlusDisabled",
       "minusDisabled": "ZoomMinusDisabled"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem$MapWayPointItemStyle": {
+    "mapFound": {
+      "small": "mapFound0",
+      "middle": "mapFound1",
+      "large": "mapFound2"
     }
   }
 }

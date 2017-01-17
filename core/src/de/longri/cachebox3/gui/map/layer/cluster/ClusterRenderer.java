@@ -16,12 +16,12 @@
 package de.longri.cachebox3.gui.map.layer.cluster;
 
 
+import com.badlogic.gdx.scenes.scene2d.ui.Cluster;
+import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
 import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
-import de.longri.cachebox3.locator.geocluster.Cluster;
-import de.longri.cachebox3.locator.geocluster.MapWayPointItem;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;

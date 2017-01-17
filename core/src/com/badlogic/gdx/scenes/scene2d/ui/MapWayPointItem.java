@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.locator.geocluster;
+package com.badlogic.gdx.scenes.scene2d.ui;
 
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.GeoPoint;
 
@@ -25,7 +26,7 @@ public class MapWayPointItem extends Coordinate {
 
 
     public static class MapWayPointItemStyle {
-        Bitmap small, middle, large;
+        public Bitmap small, middle, large;
     }
 
 

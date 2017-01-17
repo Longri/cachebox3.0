@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
@@ -28,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Keys;
@@ -38,6 +40,7 @@ import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.DrawablePickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
+import org.oscim.backend.canvas.Bitmap;
 
 import java.util.Iterator;
 
@@ -384,6 +387,41 @@ public class OptionsPane extends Table {
                      */
 
                     Drawable drawable = (Drawable) field.get(currentStyle);
+                    String resourceName = "";
+                    ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
+                            game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
+
+                    if (drawable != null) {
+                        resourceName = game.skin.resolveObjectName(Drawable.class, drawable);
+                        buttonStyle.imageUp = drawable;
+                    } else {
+                        buttonStyle.up = game.skin.getDrawable("default-rect");
+                        buttonStyle.checked = game.skin.getDrawable("default-rect");
+                    }
+
+                    actor = new ImageTextButton(resourceName, buttonStyle);
+                    ((ImageTextButton) actor).setClip(true);
+                    actor.addListener(new ChangeListener() {
+
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            showDrawableDialog(field);
+
+                        }
+
+                    });
+
+                } else if (name.equals("Bitmap")) {
+
+                    /**
+                     * Handle Bitmap object
+                     */
+
+                    Bitmap bitmap = (Bitmap) field.get(currentStyle);
+
+                    byte[] bytes = bitmap.getPngEncodedData();
+                    Drawable drawable=new TextureRegionDrawable(new TextureRegion( new Texture(new Pixmap(bytes, 0, bytes.length))));
+
                     String resourceName = "";
                     ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
                             game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));

@@ -36,7 +36,7 @@ import de.longri.cachebox3.develop.tools.skin_editor.screens.WelcomeScreen;
 public class SkinEditorGame extends Game {
 
 
-    public final static String[] widgets = {"Label", "Button", "TextButton", "ImageButton", "CheckBox", "TextField", "List", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Touchpad", "Tree"};
+    public final static String[] widgets = {"MapWayPointItem", "Label", "Button", "TextButton", "ImageButton", "CheckBox", "TextField", "List", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Touchpad", "Tree"};
 
     public SpriteBatch batch;
     public SaveableSvgSkin skin;

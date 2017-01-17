@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.locator.geocluster;
+package com.badlogic.gdx.scenes.scene2d.ui;
 
 import com.kotcrab.vis.ui.VisUI;
-import de.longri.cachebox3.gui.map.layer.WaypointLayer;
+import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
+import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import de.longri.cachebox3.utils.lists.CB_List;
 
 import java.util.concurrent.atomic.AtomicBoolean;
