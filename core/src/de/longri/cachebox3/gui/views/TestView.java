@@ -16,12 +16,17 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.AtlasBitmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
+import org.oscim.backend.canvas.Bitmap;
 
 /**
  * Created by Longri on 27.07.16.
@@ -29,7 +34,14 @@ import de.longri.cachebox3.logging.LoggerFactory;
 public class TestView extends AbstractView {
     final static Logger log = LoggerFactory.getLogger(TestView.class);
 
+
+    public static class TestStyle {
+        public Bitmap region;
+    }
+
+
     MapCompass mapCompass;
+    TestStyle style;
 
     public TestView() {
         super("TestView");
@@ -41,6 +53,9 @@ public class TestView extends AbstractView {
         this.clear();
 
         mapCompass = new MapCompass(getWidth() / 2, getWidth() / 2);
+
+        style = VisUI.getSkin().get("default", TestStyle.class);
+
 
         this.addActor(mapCompass);
 
@@ -63,7 +78,7 @@ public class TestView extends AbstractView {
     @Override
     public void draw(Batch batch, float parentColor) {
         super.draw(batch, parentColor);
-        // actor3D.setModelRotate(0, 1, 0, 1);
+      
     }
 
 

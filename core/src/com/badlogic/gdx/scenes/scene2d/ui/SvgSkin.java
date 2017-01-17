@@ -18,18 +18,22 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.ScaledSizes;
 import de.longri.cachebox3.utils.SkinColor;
+import org.oscim.backend.canvas.Bitmap;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -440,5 +444,31 @@ public class SvgSkin extends Skin {
         return json;
     }
 
+    @Override
+    public <T> T get(String name, Class<T> type) {
+
+        if (type.getName().equals("org.oscim.backend.canvas.Bitmap")) {
+            ObjectMap<String, Object> typeResources = resources.get(type);
+            if (typeResources != null) {
+                Object resource = typeResources.get(name);
+                if (resource != null)
+                    return (T) resource;
+            }
+
+            // get ScaledSvg
+            ScaledSvg scaledSvg = get(name, ScaledSvg.class);
+            FileHandle fileHandle = this.skinFolder.child(scaledSvg.path);
+            Bitmap bitmap = null;
+            try {
+                bitmap = PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            add(name, bitmap, Bitmap.class);
+            return (T) bitmap;
+        }
+
+        return super.get(name, type);
+    }
 
 }

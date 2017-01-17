@@ -177,6 +177,8 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     public void reduceCluster(final GeoBoundingBoxInt boundingBox, final double distance, final boolean forceReduce) {
 
+        if(true)return;
+
         if (lastFactor == distance) {
             if (distance == 0) {
                 // ensure that cluster is expand to all
@@ -233,10 +235,14 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     private Bitmap[] getClusterSymbolsByCache(Cache cache) {
         Bitmap[] symbols = new Bitmap[3];
         for (int i = 0; i < 3; i++) {
-            String symbolName = getMapIconName(cache) + (i < 2 ? Integer.toString(i) : "");
+            String symbolName = getMapIconName(cache) +  Integer.toString(i);
             Bitmap symbol = ClusterSymbolHashMap.get(symbolName);
             if (symbol == null) {
-                symbol = getClusterSymbol(symbolName);
+                try {
+                    symbol = getClusterSymbol(symbolName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 ClusterSymbolHashMap.put(symbolName, symbol);
             }
             symbols[i] = symbol;
@@ -250,7 +256,11 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             String symbolName = getMapIconName(waypoint) + (i < 2 ? Integer.toString(i) : "");
             Bitmap symbol = ClusterSymbolHashMap.get(symbolName);
             if (symbol == null) {
-                symbol = getClusterSymbol(symbolName);
+                try {
+                    symbol = getClusterSymbol(symbolName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 ClusterSymbolHashMap.put(symbolName, symbol);
             }
             symbols[i] = symbol;

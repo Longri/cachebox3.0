@@ -74,7 +74,7 @@ public class SvgSkinUtil {
 
             Pixmap pixmap = null;
             String name = null;
-            skinFile.parent().child(scaledSvg.path);
+//            skinFile.parent().child(scaledSvg.path);
             FileHandle fileHandle = skinFile.parent().child(scaledSvg.path);
 
             try {
