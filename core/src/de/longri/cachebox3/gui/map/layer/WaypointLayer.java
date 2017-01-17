@@ -59,8 +59,8 @@ import java.io.IOException;
 public class WaypointLayer extends Layer implements GestureListener, CacheListChangedEventListener, Disposable {
     private final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
-    private static final String ERROR_MSG = "No de.longri.cachebox3." +
-            "locator.geocluster.MapWayPointItem$MapWayPointItemStyle registered with name:";
+    private static final String ERROR_MSG = "No com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem$MapWayPointItemStyle" +
+            " registered with name: ";
     private static final Bitmap defaultMarker = getClusterSymbol("myterie");
 
 
@@ -157,6 +157,9 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                             }
                         }
                     }
+                    mItemList.setFinishFill();
+                    WaypointLayer.this.populate();
+
 
                     if (!missingIconList.isEmpty()) {
                         StringBuilder msg = new StringBuilder("\n\n" + ERROR_MSG + "\n");
@@ -171,9 +174,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                         }
                         throw new GdxRuntimeException(msg.toString());
                     }
-
-                    mItemList.setFinishFill();
-                    WaypointLayer.this.populate();
                 }
             }
         });
