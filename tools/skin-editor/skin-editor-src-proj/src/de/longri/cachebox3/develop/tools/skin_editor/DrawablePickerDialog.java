@@ -215,7 +215,7 @@ public class DrawablePickerDialog extends Dialog {
 
         });
 
-        getContentTable().add(scrollPane).width(960).height(640).pad(20);
+        getContentTable().add(scrollPane).width(getPrefWidth()).height(getPrefHeight()*0.9f).pad(20);
         getButtonTable().add(buttonNewNinePatch);
         getButtonTable().add(buttonNewDrawable);
         getButtonTable().add(buttonZoom);
@@ -380,11 +380,11 @@ public class DrawablePickerDialog extends Dialog {
     }
 
     public float getPrefWidth() {
-        return game.screenMain.stage.getWidth() * 0.7f;
+        return game.screenMain.stage.getWidth() * 0.8f;
     }
 
     public float getPrefHeight() {
-        return game.screenMain.stage.getHeight() * 0.7f;
+        return game.screenMain.stage.getHeight() * 0.9f;
     }
 
 
