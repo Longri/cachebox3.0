@@ -15,14 +15,6 @@
  ******************************************************************************/
 package de.longri.cachebox3.develop.tools.skin_editor;
 
-import java.awt.Frame;
-import java.io.File;
-import java.util.Iterator;
-
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -33,9 +25,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -43,6 +34,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.reflect.Field;
 import org.oscim.backend.canvas.Bitmap;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+import java.io.File;
+import java.util.Iterator;
 
 /**
  * Display a dialog allowing to pick a drawable resource such as a ninepatch
@@ -139,12 +136,12 @@ public class DrawablePickerDialog extends Dialog {
 
                     // Lower case everything ! I sound like someone on
                     // libgdx channel ;]
-                    resourceName = resourceName.toLowerCase();
+                    // resourceName = resourceName.toLowerCase();
 
                     // Check for duplicate resources
-                    FileHandle[] assetsFolder = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/assets/").list();
+                    FileHandle[] svgFolder = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/svg/").list();
                     boolean foundSomething = false;
-                    for (FileHandle file : assetsFolder) {
+                    for (FileHandle file : svgFolder) {
 
                         if (file.nameWithoutExtension().toLowerCase().equals(resourceName)) {
                             foundSomething = true;
@@ -155,11 +152,24 @@ public class DrawablePickerDialog extends Dialog {
                         JOptionPane.showMessageDialog(null, "Sorry but this resource name is already in use!");
                     } else {
 
+                        String scalfactor = JOptionPane.showInputDialog("Please choose the scale of your resource", "1.0");
+
+                        // write scaled svg section
+                        ScaledSvg scaledSvg = new ScaledSvg();
+                        scaledSvg.path = "svg/" + resourceName + "." + ext;
+                        scaledSvg.scale = Float.parseFloat(scalfactor);
+                        scaledSvg.setRegisterName(resourceName);
+                        game.skinProject.add(resourceName, scaledSvg);
+
                         // Copy the file
                         FileHandle orig = new FileHandle(selectedFile);
-                        FileHandle dest = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/assets/" + resourceName + "." + ext);
+                        FileHandle dest = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/svg/" + resourceName + "." + ext);
                         orig.copyTo(dest);
 
+
+                        FileHandle projectFolder = new FileHandle("../../projects/" + game.screenMain.getcurrentProject());
+                        FileHandle projectFile = projectFolder.child("skin.json");
+                        game.skinProject.save(projectFile);
 
                         game.screenMain.refreshResources();
                         refresh();
