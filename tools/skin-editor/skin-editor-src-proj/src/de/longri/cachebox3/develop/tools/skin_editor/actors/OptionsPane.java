@@ -418,16 +418,18 @@ public class OptionsPane extends Table {
                      */
 
                     Bitmap bitmap = (Bitmap) field.get(currentStyle);
-
-                    byte[] bytes = bitmap.getPngEncodedData();
-                    Drawable drawable=new TextureRegionDrawable(new TextureRegion( new Texture(new Pixmap(bytes, 0, bytes.length))));
+                    byte[] bytes = null;
+                    if (bitmap != null) bytes = bitmap.getPngEncodedData();
+                    Drawable drawable = bitmap != null ?
+                            new TextureRegionDrawable(new TextureRegion(new Texture(new Pixmap(bytes, 0, bytes.length))))
+                            : null;
 
                     String resourceName = "";
                     ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
                             game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
 
                     if (drawable != null) {
-                        resourceName = game.skin.resolveObjectName(Drawable.class, drawable);
+                        resourceName = ((GetName) bitmap).getName();
                         buttonStyle.imageUp = drawable;
                     } else {
                         buttonStyle.up = game.skin.getDrawable("default-rect");

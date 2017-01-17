@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -47,8 +47,11 @@ public class DesktopPlatformConnector extends PlatformConnector {
     }
 
     @Override
-    public Bitmap getRealScaledSVG(InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {
-        return new DesktopRealSvgBitmap(stream, scaleType, scaleValue);
+    public Bitmap getRealScaledSVG(String name, InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {
+
+        DesktopRealSvgBitmap bmp = new DesktopRealSvgBitmap(stream, scaleType, scaleValue);
+        bmp.name = name;
+        return bmp;
     }
 
     @Override

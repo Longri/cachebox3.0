@@ -156,7 +156,7 @@ public class SaveableSvgSkin extends SvgSkin {
                     try {
 
                         Object valueObject = field.get(typeResources.get(style));
-                        if (valueObject != null) {
+                        if (valueObject != null|| valueObject instanceof GetName) {
                             if (valueObject instanceof BitmapFont) {
 
                                 String value = resolveObjectName(BitmapFont.class, valueObject);
@@ -216,6 +216,8 @@ public class SaveableSvgSkin extends SvgSkin {
                                 // Don't store.
                             } else if (valueObject instanceof float[]) {
                                 // Don't store.
+                            } else if (valueObject instanceof GetName) {
+                                json.writeValue(field.getName(), ((GetName) valueObject).getName());
                             } else {
                                 throw new IllegalArgumentException("resource object type is unknown: " + valueObject.getClass().getCanonicalName());
                             }

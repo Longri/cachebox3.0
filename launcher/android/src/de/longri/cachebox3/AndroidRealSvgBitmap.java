@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Picture;
 import android.graphics.RectF;
+import com.badlogic.gdx.scenes.scene2d.ui.GetName;
 import com.caverock.androidsvg.SVG;
-import de.longri.cachebox3.CB;
-import de.longri.cachebox3.PlatformConnector;
 import org.oscim.android.canvas.AndroidBitmap;
 
 import java.io.IOException;
@@ -32,7 +31,14 @@ import java.io.InputStream;
 /**
  * Created by Longri on 19.07.16.
  */
-public class AndroidRealSvgBitmap extends AndroidBitmap {
+public class AndroidRealSvgBitmap extends AndroidBitmap implements GetName {
+
+    public String name;
+
+    public String getName() {
+        return name;
+    }
+
 
     private static android.graphics.Bitmap getAndroidBitmap(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
         synchronized (SVG.getVersion()) {

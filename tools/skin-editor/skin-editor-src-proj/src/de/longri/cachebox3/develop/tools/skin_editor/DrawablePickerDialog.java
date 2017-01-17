@@ -42,6 +42,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.reflect.Field;
+import org.oscim.backend.canvas.Bitmap;
 
 /**
  * Display a dialog allowing to pick a drawable resource such as a ninepatch
@@ -304,7 +305,12 @@ public class DrawablePickerDialog extends Dialog {
 
                         // game.screenMain.paneOptions.refreshSelection();
                         if (items.get(key) instanceof Drawable) {
-                            field.set(game.screenMain.paneOptions.currentStyle, items.get(key));
+                            if (field.getType() == Bitmap.class) {
+                                Bitmap bmp = game.skinProject.get(key, Bitmap.class);
+                                field.set(game.screenMain.paneOptions.currentStyle, bmp);
+                            } else {
+                                field.set(game.screenMain.paneOptions.currentStyle, items.get(key));
+                            }
                         } else {
 
                             boolean ninepatch = false;
@@ -318,9 +324,14 @@ public class DrawablePickerDialog extends Dialog {
                                 field.set(game.screenMain.paneOptions.currentStyle, game.skinProject.getDrawable(key));
 
                             } else {
-                                game.skinProject.add(key, new SpriteDrawable(new Sprite((TextureRegion) items.get(key))));
-                                field.set(game.screenMain.paneOptions.currentStyle, game.skinProject.getDrawable(key));
 
+                                if (field.getType() == Bitmap.class) {
+                                    Bitmap bmp = game.skinProject.get(key, Bitmap.class);
+                                    field.set(game.screenMain.paneOptions.currentStyle, bmp);
+                                } else {
+                                    game.skinProject.add(key, new SpriteDrawable(new Sprite((TextureRegion) items.get(key))));
+                                    field.set(game.screenMain.paneOptions.currentStyle, game.skinProject.getDrawable(key));
+                                }
                             }
                         }
 

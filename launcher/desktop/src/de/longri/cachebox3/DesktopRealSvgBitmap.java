@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.scenes.scene2d.ui.GetName;
 import com.kitfox.svg.SVGCache;
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.app.beans.SVGIcon;
@@ -29,7 +30,14 @@ import java.net.URI;
 /**
  * Created by Longri on 19.07.16.
  */
-public class DesktopRealSvgBitmap extends AwtBitmap {
+public class DesktopRealSvgBitmap extends AwtBitmap implements GetName {
+
+    public String name;
+
+    public String getName() {
+        return name;
+    }
+
 
     private static BufferedImage getBufferdImage(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
         synchronized (SVGCache.getSVGUniverse()) {

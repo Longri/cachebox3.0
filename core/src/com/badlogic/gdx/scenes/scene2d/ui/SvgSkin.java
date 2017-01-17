@@ -469,7 +469,7 @@ public class SvgSkin extends Skin {
             FileHandle fileHandle = this.skinFolder.child(scaledSvg.path);
             Bitmap bitmap = null;
             try {
-                bitmap = PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
+                bitmap = PlatformConnector.getSvg(name,fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import org.oscim.backend.canvas.Bitmap;
 
@@ -56,12 +55,12 @@ public abstract class PlatformConnector {
         SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED, NONE
     }
 
-    public static Bitmap getSvg(InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {
-        return platformConnector.getRealScaledSVG(stream, scaleType, scaleValue);
+    public static Bitmap getSvg(String name, InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {
+        return platformConnector.getRealScaledSVG(name, stream, scaleType, scaleValue);
     }
 
 
-    public abstract Bitmap getRealScaledSVG(InputStream stream,
+    public abstract Bitmap getRealScaledSVG(String name, InputStream stream,
                                             SvgScaleType scaleType, float scaleValue) throws IOException;
 
 

@@ -280,7 +280,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         Bitmap bitmap;
         try {
             FileHandle svgFile = skin.skinFolder.child(scaledSvg.path);
-            bitmap = PlatformConnector.getSvg(svgFile.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
+            bitmap = PlatformConnector.getSvg(scaledSvg.getRegisterName(), svgFile.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
         } catch (IOException e) {
             return null;
         }
