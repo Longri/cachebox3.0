@@ -39,7 +39,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Display a dialog allowing to pick a drawable resource such as a ninepatch
@@ -53,7 +53,7 @@ public class DrawablePickerDialog extends Dialog {
     private Field field;
     private Table tableDrawables;
     private boolean zoom = false;
-    private ObjectMap<String, Object> items = new ObjectMap<String, Object>();
+    private HashMap<String, Object> items = new HashMap<String, Object>();
     private ScrollPane scrollPane;
 
     public DrawablePickerDialog(final SkinEditorGame game, final Field field) {
@@ -274,7 +274,19 @@ public class DrawablePickerDialog extends Dialog {
 
         tableDrawables.clear();
 
-        Iterator<String> keys = items.keys().iterator();
+
+        // Sorted Map......By Key
+        Comparator<String> comparator =new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareToIgnoreCase(o2);
+            }
+        };
+        Map<String, Object> treeMap = new TreeMap<String, Object>(comparator);
+        treeMap.putAll(items);
+
+
+        Iterator<String> keys = treeMap.keySet().iterator();
         int count = 0;
 
         while (keys.hasNext()) {
