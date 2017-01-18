@@ -59,6 +59,9 @@ public class AndroidRealSvgBitmap extends AndroidBitmap implements GetName {
                     case DPI_SCALED:
                         scale = CB.getScaledFloat(scaleValue);
                         break;
+                    case SCALED_TO_WIDTH_OR_HEIGHT:
+                        scale = Math.min(scaleValue / picture.getHeight(), scaleValue / picture.getWidth());
+                        break;
                 }
 
                 float bitmapWidth = picture.getWidth() * scale;

@@ -58,8 +58,10 @@ public class DesktopRealSvgBitmap extends AwtBitmap implements GetName {
                     case DPI_SCALED:
                         scale = CB.getScaledFloat(scaleValue);
                         break;
+                    case SCALED_TO_WIDTH_OR_HEIGHT:
+                        scale = Math.min(scaleValue / diagram.getHeight(), scaleValue / diagram.getWidth());
+                        break;
                 }
-
 
                 float bitmapWidth = diagram.getWidth() * scale;
                 float bitmapHeight = diagram.getHeight() * scale;

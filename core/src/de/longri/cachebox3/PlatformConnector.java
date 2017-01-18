@@ -52,7 +52,7 @@ public abstract class PlatformConnector {
 
     // SVG implementations #############################################################################################
     public enum SvgScaleType {
-        SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED, NONE
+        SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED, NONE, SCALED_TO_WIDTH_OR_HEIGHT
     }
 
     public static Bitmap getSvg(String name, InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {

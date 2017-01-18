@@ -62,12 +62,15 @@ public class DrawablePickerDialog extends Dialog {
     private HashMap<String, Object> items = new HashMap<String, Object>();
     private ScrollPane scrollPane;
     static private FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+    static private SvgFileIconProvider svgFileIconProvider;
 
     static {
         FileTypeFilter typeFilter = new FileTypeFilter(true); //allow "All Types" mode where all files are shown
         typeFilter.addRule("SVG files (*.svg)", "svg");
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
         fileChooser.setFileTypeFilter(typeFilter);
+        svgFileIconProvider = new SvgFileIconProvider(fileChooser);
+        fileChooser.setIconProvider(svgFileIconProvider);
     }
 
     public DrawablePickerDialog(final SkinEditorGame game, final Field field) {

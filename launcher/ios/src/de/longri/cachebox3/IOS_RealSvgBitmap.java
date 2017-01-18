@@ -56,6 +56,9 @@ public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap implement
             case DPI_SCALED:
                 scale = CB.getScaledFloat(scaleValue);
                 break;
+            case SCALED_TO_WIDTH_OR_HEIGHT:
+                scale = Math.min(scaleValue / viewRect.getHeight(), scaleValue / viewRect.getWidth());
+                break;
         }
 
         double bitmapWidth = viewRect.getWidth() * scale;
