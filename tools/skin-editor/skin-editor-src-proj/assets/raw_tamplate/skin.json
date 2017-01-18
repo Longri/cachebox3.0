@@ -1010,6 +1010,11 @@
       "small": "mapFound0",
       "middle": "mapFound1",
       "large": "mapFound2"
+    },
+    "mapTraditional": {
+      "small": "mapTraditional0",
+      "middle": "mapTraditional1",
+      "large": "mapTraditional2"
     }
   }
 }
