@@ -359,7 +359,7 @@ public class DrawablePickerDialog extends Dialog {
                         // Since we have reloaded everything we have to get
                         // field back
 
-                        // game.screenMain.paneOptions.refreshSelection();
+                        game.screenMain.paneOptions.refreshSelection();
                         if (items.get(key) instanceof Drawable) {
                             if (field.getType() == Bitmap.class) {
                                 Bitmap bmp = game.skinProject.get(key, Bitmap.class);
