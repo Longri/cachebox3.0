@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.SaveableSvgSkin;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.WelcomeScreen;
 
@@ -36,6 +37,9 @@ import de.longri.cachebox3.develop.tools.skin_editor.screens.WelcomeScreen;
  */
 public class SkinEditorGame extends Game {
 
+    static {
+        FileChooser.setDefaultPrefsName("SkinEditor");
+    }
 
     public final static String[] widgets = {"MapWayPointItem", "Label", "Button", "TextButton", "ImageButton", "CheckBox", "TextField", "List", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Touchpad", "Tree"};
 

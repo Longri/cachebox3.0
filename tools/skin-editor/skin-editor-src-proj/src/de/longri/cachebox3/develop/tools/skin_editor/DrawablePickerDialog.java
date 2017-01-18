@@ -51,9 +51,6 @@ import java.util.*;
  */
 public class DrawablePickerDialog extends Dialog {
 
-    static {
-        FileChooser.setDefaultPrefsName("SkinEditor");
-    }
 
     private SkinEditorGame game;
     private Field field;
