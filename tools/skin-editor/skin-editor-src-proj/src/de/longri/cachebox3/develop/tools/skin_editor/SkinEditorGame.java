@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.SaveableSvgSkin;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.WelcomeScreen;
 
@@ -40,7 +41,7 @@ public class SkinEditorGame extends Game {
 
     public SpriteBatch batch;
     public SaveableSvgSkin skin;
-    public TextureAtlas atlas;
+
 
     public MainScreen screenMain;
     public WelcomeScreen screenWelcome;
@@ -76,11 +77,20 @@ public class SkinEditorGame extends Game {
 
         batch = new SpriteBatch();
 
+//        skin = new SaveableSvgSkin(null);
         skin = new SaveableSvgSkin("UiSkin");
-        atlas = new TextureAtlas(Gdx.files.internal("resources/uiskin.atlas"));
-        skin.addRegions(atlas);
 
-        skin.load(Gdx.files.local("resources/uiskin.json"));
+        // add skin editor Texture pack
+        skin.addRegions(new TextureAtlas(Gdx.files.internal("resources/uiskin.atlas")));
+
+        // add VisUi Texture pack
+        skin.addRegions(new TextureAtlas(Gdx.files.internal("resources/visuiskin.atlas")));
+
+
+        skin.load(Gdx.files.local("resources/visuiskin.json"));
+
+        VisUI.load(skin);
+
 
         screenMain = new MainScreen(this);
         screenWelcome = new WelcomeScreen(this);

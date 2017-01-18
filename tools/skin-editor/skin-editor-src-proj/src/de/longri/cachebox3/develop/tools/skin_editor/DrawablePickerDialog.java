@@ -31,8 +31,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.reflect.Field;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
+import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
 import org.oscim.backend.canvas.Bitmap;
 
 import javax.swing.*;
@@ -113,70 +117,94 @@ public class DrawablePickerDialog extends Dialog {
                 frame.dispose();
 
 
-                JFileChooser chooser = new JFileChooser();
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "svg");
-                chooser.setFileFilter(filter);
-                int returnVal = chooser.showOpenDialog(null);
-                if (returnVal != JFileChooser.APPROVE_OPTION) {
-                    return;
-                }
-                File selectedFile = chooser.getSelectedFile();
-                if (selectedFile == null) {
-                    return;
-                }
-                // Loop until the file is not found
-                while (true) {
-                    String resourceName = selectedFile.getName();
-                    String ext = resourceName.substring(resourceName.lastIndexOf(".") + 1);
-                    resourceName = resourceName.substring(0, resourceName.lastIndexOf("."));
-                    resourceName = JOptionPane.showInputDialog("Please choose the name of your resource", resourceName);
-                    if (resourceName == null) {
-                        return;
+//                JFileChooser chooser = new JFileChooser();
+//                FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "svg");
+//                chooser.setFileFilter(filter);
+//                int returnVal = chooser.showOpenDialog(null);
+//                if (returnVal != JFileChooser.APPROVE_OPTION) {
+//                    return;
+//                }
+
+
+                FileTypeFilter typeFilter = new FileTypeFilter(true); //allow "All Types" mode where all files are shown
+                typeFilter.addRule("SVG files (*.svg)", "svg");
+
+
+                FileChooser  fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+                fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+                fileChooser.setFileTypeFilter(typeFilter);
+                fileChooser.setListener(new FileChooserAdapter() {
+                    @Override
+                    public void selected (Array<FileHandle> file) {
+                        System.out.print("");
                     }
-
-                    // Lower case everything ! I sound like someone on
-                    // libgdx channel ;]
-                    // resourceName = resourceName.toLowerCase();
-
-                    // Check for duplicate resources
-                    FileHandle[] svgFolder = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/svg/").list();
-                    boolean foundSomething = false;
-                    for (FileHandle file : svgFolder) {
-
-                        if (file.nameWithoutExtension().toLowerCase().equals(resourceName)) {
-                            foundSomething = true;
-                            break;
-                        }
-                    }
-                    if (foundSomething == true) {
-                        JOptionPane.showMessageDialog(null, "Sorry but this resource name is already in use!");
-                    } else {
-
-                        String scalfactor = JOptionPane.showInputDialog("Please choose the scale of your resource", "1.0");
-
-                        // write scaled svg section
-                        ScaledSvg scaledSvg = new ScaledSvg();
-                        scaledSvg.path = "svg/" + resourceName + "." + ext;
-                        scaledSvg.scale = Float.parseFloat(scalfactor);
-                        scaledSvg.setRegisterName(resourceName);
-                        game.skinProject.add(resourceName, scaledSvg);
-
-                        // Copy the file
-                        FileHandle orig = new FileHandle(selectedFile);
-                        FileHandle dest = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/svg/" + resourceName + "." + ext);
-                        orig.copyTo(dest);
+                });
 
 
-                        FileHandle projectFolder = new FileHandle("../../projects/" + game.screenMain.getcurrentProject());
-                        FileHandle projectFile = projectFolder.child("skin.json");
-                        game.skinProject.save(projectFile);
+                //displaying chooser with fade in animation
+                getStage().addActor(fileChooser.fadeIn());
 
-                        game.screenMain.refreshResources();
-                        refresh();
-                        JOptionPane.showMessageDialog(null, "File successfully added to your project.");
-                        return;
-                    }
-                }
+
+
+
+//
+//                File selectedFile = chooser.getSelectedFile();
+//                if (selectedFile == null) {
+//                    return;
+//                }
+//                // Loop until the file is not found
+//                while (true) {
+//                    String resourceName = selectedFile.getName();
+//                    String ext = resourceName.substring(resourceName.lastIndexOf(".") + 1);
+//                    resourceName = resourceName.substring(0, resourceName.lastIndexOf("."));
+//                    resourceName = JOptionPane.showInputDialog("Please choose the name of your resource", resourceName);
+//                    if (resourceName == null) {
+//                        return;
+//                    }
+//
+//                    // Lower case everything ! I sound like someone on
+//                    // libgdx channel ;]
+//                    // resourceName = resourceName.toLowerCase();
+//
+//                    // Check for duplicate resources
+//                    FileHandle[] svgFolder = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/svg/").list();
+//                    boolean foundSomething = false;
+//                    for (FileHandle file : svgFolder) {
+//
+//                        if (file.nameWithoutExtension().toLowerCase().equals(resourceName)) {
+//                            foundSomething = true;
+//                            break;
+//                        }
+//                    }
+//                    if (foundSomething == true) {
+//                        JOptionPane.showMessageDialog(null, "Sorry but this resource name is already in use!");
+//                    } else {
+//
+//                        String scalfactor = JOptionPane.showInputDialog("Please choose the scale of your resource", "1.0");
+//
+//                        // write scaled svg section
+//                        ScaledSvg scaledSvg = new ScaledSvg();
+//                        scaledSvg.path = "svg/" + resourceName + "." + ext;
+//                        scaledSvg.scale = Float.parseFloat(scalfactor);
+//                        scaledSvg.setRegisterName(resourceName);
+//                        game.skinProject.add(resourceName, scaledSvg);
+//
+//                        // Copy the file
+//                        FileHandle orig = new FileHandle(selectedFile);
+//                        FileHandle dest = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/svg/" + resourceName + "." + ext);
+//                        orig.copyTo(dest);
+//
+//
+//                        FileHandle projectFolder = new FileHandle("../../projects/" + game.screenMain.getcurrentProject());
+//                        FileHandle projectFile = projectFolder.child("skin.json");
+//                        game.skinProject.save(projectFile);
+//
+//                        game.screenMain.refreshResources();
+//                        refresh();
+//                        JOptionPane.showMessageDialog(null, "File successfully added to your project.");
+//                        return;
+//                    }
+//                }
             }
         });
 

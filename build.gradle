@@ -24,7 +24,7 @@ allprojects {
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
-        visUiVersion = '1.2.1'
+        visUiVersion = '1.2.5'
         vtmVersion = 'master-SNAPSHOT'
     }
 
