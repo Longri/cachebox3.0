@@ -79,7 +79,9 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	link-label: {fontColor: link-label, font: default-font },
 	small: {font: small-font, fontColor: white },
 	menuitem-shortcut: {font: default-font, fontColor: menuitem },
-	title: { font: default-font, fontColor: light_grey }
+	title: { font: default-font, fontColor: light_grey },
+	optional: { font: default-font, fontColor: grey },
+	error: { font: default-font, fontColor: red }
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 	default: {font: default-font, fontColor: white, disabledFontColor: grey, selection: selection, background: textfield, cursor: cursor, messageFont: default-font, messageFontColor: grey },

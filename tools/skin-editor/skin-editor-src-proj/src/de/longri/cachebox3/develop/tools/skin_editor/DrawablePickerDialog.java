@@ -40,9 +40,7 @@ import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
 import org.oscim.backend.canvas.Bitmap;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.io.File;
 import java.util.*;
 
 /**
@@ -53,12 +51,24 @@ import java.util.*;
  */
 public class DrawablePickerDialog extends Dialog {
 
+    static {
+        FileChooser.setDefaultPrefsName("SkinEditor");
+    }
+
     private SkinEditorGame game;
     private Field field;
     private Table tableDrawables;
     private boolean zoom = false;
     private HashMap<String, Object> items = new HashMap<String, Object>();
     private ScrollPane scrollPane;
+    static private FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+
+    static {
+        FileTypeFilter typeFilter = new FileTypeFilter(true); //allow "All Types" mode where all files are shown
+        typeFilter.addRule("SVG files (*.svg)", "svg");
+        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+        fileChooser.setFileTypeFilter(typeFilter);
+    }
 
     public DrawablePickerDialog(final SkinEditorGame game, final Field field) {
 
@@ -126,85 +136,78 @@ public class DrawablePickerDialog extends Dialog {
 //                }
 
 
-                FileTypeFilter typeFilter = new FileTypeFilter(true); //allow "All Types" mode where all files are shown
-                typeFilter.addRule("SVG files (*.svg)", "svg");
-
-
-                FileChooser  fileChooser = new FileChooser(FileChooser.Mode.OPEN);
-                fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-                fileChooser.setFileTypeFilter(typeFilter);
                 fileChooser.setListener(new FileChooserAdapter() {
                     @Override
-                    public void selected (Array<FileHandle> file) {
-                        System.out.print("");
+                    public void selected(Array<FileHandle> fileList) {
+                        FileHandle selectedFile = fileList.get(0);
+
+                        if (selectedFile == null) {
+                            return;
+                        }
+                        // Loop until the file is not found
+                        while (true) {
+                            String resourceName = selectedFile.name();
+                            String ext = resourceName.substring(resourceName.lastIndexOf(".") + 1);
+                            resourceName = resourceName.substring(0, resourceName.lastIndexOf("."));
+                            resourceName = JOptionPane.showInputDialog("Please choose the name of your resource", resourceName);
+                            if (resourceName == null) {
+                                return;
+                            }
+
+
+                            // Check for duplicate resources
+                            FileHandle[] svgFolder = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/svg/").list();
+                            boolean foundSomething = false;
+                            for (FileHandle file : svgFolder) {
+
+                                if (file.nameWithoutExtension().toLowerCase().equals(resourceName)) {
+                                    foundSomething = true;
+                                    break;
+                                }
+                            }
+                            if (foundSomething == true) {
+                                JOptionPane.showMessageDialog(null, "Sorry but this resource name is already in use!");
+                            } else {
+
+                                String scalfactor = JOptionPane.showInputDialog("Please choose the scale of your resource", "1.0");
+
+                                // write scaled svg section
+                                ScaledSvg scaledSvg = new ScaledSvg();
+                                scaledSvg.path = "svg/" + resourceName + "." + ext;
+                                scaledSvg.scale = Float.parseFloat(scalfactor);
+                                scaledSvg.setRegisterName(resourceName);
+                                game.skinProject.add(resourceName, scaledSvg);
+
+                                // Copy the file
+                                FileHandle orig = selectedFile;
+                                FileHandle dest = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/svg/" + resourceName + "." + ext);
+                                orig.copyTo(dest);
+
+
+                                FileHandle projectFolder = new FileHandle("../../projects/" + game.screenMain.getcurrentProject());
+                                FileHandle projectFile = projectFolder.child("skin.json");
+                                game.skinProject.save(projectFile);
+
+                                game.screenMain.refreshResources();
+                                refresh();
+                                JOptionPane.showMessageDialog(null, "File successfully added to your project.");
+                                return;
+                            }
+                        }
                     }
                 });
 
+
+                fileChooser.setSize(game.screenMain.stage.getWidth() * 0.9f,
+                        game.screenMain.stage.getHeight() * 0.9f);
 
                 //displaying chooser with fade in animation
                 getStage().addActor(fileChooser.fadeIn());
 
 
-
-
 //
 //                File selectedFile = chooser.getSelectedFile();
-//                if (selectedFile == null) {
-//                    return;
-//                }
-//                // Loop until the file is not found
-//                while (true) {
-//                    String resourceName = selectedFile.getName();
-//                    String ext = resourceName.substring(resourceName.lastIndexOf(".") + 1);
-//                    resourceName = resourceName.substring(0, resourceName.lastIndexOf("."));
-//                    resourceName = JOptionPane.showInputDialog("Please choose the name of your resource", resourceName);
-//                    if (resourceName == null) {
-//                        return;
-//                    }
 //
-//                    // Lower case everything ! I sound like someone on
-//                    // libgdx channel ;]
-//                    // resourceName = resourceName.toLowerCase();
-//
-//                    // Check for duplicate resources
-//                    FileHandle[] svgFolder = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/svg/").list();
-//                    boolean foundSomething = false;
-//                    for (FileHandle file : svgFolder) {
-//
-//                        if (file.nameWithoutExtension().toLowerCase().equals(resourceName)) {
-//                            foundSomething = true;
-//                            break;
-//                        }
-//                    }
-//                    if (foundSomething == true) {
-//                        JOptionPane.showMessageDialog(null, "Sorry but this resource name is already in use!");
-//                    } else {
-//
-//                        String scalfactor = JOptionPane.showInputDialog("Please choose the scale of your resource", "1.0");
-//
-//                        // write scaled svg section
-//                        ScaledSvg scaledSvg = new ScaledSvg();
-//                        scaledSvg.path = "svg/" + resourceName + "." + ext;
-//                        scaledSvg.scale = Float.parseFloat(scalfactor);
-//                        scaledSvg.setRegisterName(resourceName);
-//                        game.skinProject.add(resourceName, scaledSvg);
-//
-//                        // Copy the file
-//                        FileHandle orig = new FileHandle(selectedFile);
-//                        FileHandle dest = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/svg/" + resourceName + "." + ext);
-//                        orig.copyTo(dest);
-//
-//
-//                        FileHandle projectFolder = new FileHandle("../../projects/" + game.screenMain.getcurrentProject());
-//                        FileHandle projectFile = projectFolder.child("skin.json");
-//                        game.skinProject.save(projectFile);
-//
-//                        game.screenMain.refreshResources();
-//                        refresh();
-//                        JOptionPane.showMessageDialog(null, "File successfully added to your project.");
-//                        return;
-//                    }
-//                }
             }
         });
 
@@ -243,7 +246,7 @@ public class DrawablePickerDialog extends Dialog {
 
         });
 
-        getContentTable().add(scrollPane).width(getPrefWidth()).height(getPrefHeight()*0.9f).pad(20);
+        getContentTable().add(scrollPane).width(getPrefWidth()).height(getPrefHeight() * 0.9f).pad(20);
         getButtonTable().add(buttonNewNinePatch);
         getButtonTable().add(buttonNewDrawable);
         getButtonTable().add(buttonZoom);
@@ -304,7 +307,7 @@ public class DrawablePickerDialog extends Dialog {
 
 
         // Sorted Map......By Key
-        Comparator<String> comparator =new Comparator<String>() {
+        Comparator<String> comparator = new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
                 return o1.compareToIgnoreCase(o2);
