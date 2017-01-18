@@ -515,6 +515,18 @@
     "cursor": {
       "path": "svg/cursor.svg",
       "scale": 1
+    },
+    "mapTraditional0": {
+      "path": "svg/mapTraditional0.svg",
+      "scale": 0.3
+    },
+    "mapTraditional1": {
+      "path": "svg/mapTraditional1.svg",
+      "scale": 0.15
+    },
+    "mapTraditional2": {
+      "path": "svg/mapTraditional2.svg",
+      "scale": 0.2
     }
   },
   "de.longri.cachebox3.utils.ScaledSizes": {
