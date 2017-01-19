@@ -103,6 +103,21 @@ public class SkinEditorGame extends Game {
 
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        //delete temp folder
+
+        FileHandle tmp = Gdx.files.local("null");
+        if (tmp.exists()) {
+            Gdx.app.log("FINISH", "Delete tmp folder");
+            tmp.deleteDirectory();
+        }
+
+
+    }
+
 
     /**
      * Display a dialog with a notice
