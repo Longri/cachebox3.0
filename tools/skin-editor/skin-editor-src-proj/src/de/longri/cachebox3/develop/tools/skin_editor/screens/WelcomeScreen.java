@@ -206,7 +206,7 @@ public class WelcomeScreen implements Screen {
 
         Array<String> items = new Array<String>();
 
-        FileHandle[] projects = Gdx.files.local("../../projects").list();
+        FileHandle[] projects = Gdx.files.local("projects").list();
         for (FileHandle project : projects) {
             if (project.child("skin.json").exists() == true) {
                 items.add(project.name());
@@ -221,7 +221,7 @@ public class WelcomeScreen implements Screen {
      */
     public void createProject(String projectName) {
 
-        FileHandle projectFolder = Gdx.files.local("../../projects").child(projectName);
+        FileHandle projectFolder = Gdx.files.local("projects").child(projectName);
         if (projectFolder.exists() == true) {
             game.showNotice("Error", "Project name already in use!", stage);
             return;
@@ -231,13 +231,13 @@ public class WelcomeScreen implements Screen {
 
         //create folder "svg" and copy default svg's
         projectFolder.child("svg").mkdirs();
-        FileHandle svgFolder = Gdx.files.local("raw_tamplate/svg");
+        FileHandle svgFolder = Gdx.files.classpath("raw_tamplate/svg");
         svgFolder.copyTo(projectFolder.child("svg"));
 
 
         //create folder "fonts" and copy default fonts
         projectFolder.child("fonts").mkdirs();
-        FileHandle fontFolder = Gdx.files.local("raw_tamplate/fonts");
+        FileHandle fontFolder = Gdx.files.classpath("raw_tamplate/fonts");
         fontFolder.copyTo(projectFolder.child("fonts"));
 
         // create skin backup folder
@@ -245,8 +245,8 @@ public class WelcomeScreen implements Screen {
 
 
         //load default skin and save into project folder
-        FileHandle skinFolder = Gdx.files.local("raw_tamplate");
-        SaveableSvgSkin defaultSkin = new SaveableSvgSkin("raw_tamplate", SvgSkin.StorageType.LOCAL, skinFolder);
+        FileHandle skinFolder = Gdx.files.classpath("raw_tamplate");
+        SaveableSvgSkin defaultSkin = new SaveableSvgSkin("raw_tamplate", SvgSkin.StorageType.INTERNAL, skinFolder);
         defaultSkin.save(projectFolder.child("skin.json"));
 
 
@@ -270,7 +270,7 @@ public class WelcomeScreen implements Screen {
                 }
 
                 // We delete it
-                FileHandle projectFolder = Gdx.files.local("../../projects/" + (String) listProjects.getSelected());
+                FileHandle projectFolder = Gdx.files.local("projects/" + (String) listProjects.getSelected());
                 projectFolder.deleteDirectory();
 
                 refreshProjects();

@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: de.longri.cachebox3.develop.tools.skin_editor.SkinEditorDe
+ sktopLauncher
+

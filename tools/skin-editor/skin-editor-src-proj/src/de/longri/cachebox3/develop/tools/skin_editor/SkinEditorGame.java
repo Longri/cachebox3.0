@@ -68,16 +68,17 @@ public class SkinEditorGame extends Game {
         fm.refreshFonts();
 
         // Create projects folder if not already here
-        FileHandle dirProjects = new FileHandle("../../projects");
+        FileHandle dirProjects = new FileHandle("/projects");
 
         if (dirProjects.isDirectory() == false) {
             dirProjects.mkdirs();
         }
 
         // Rebuild from raw resources, kind of overkill, might disable it for production
-        TexturePacker.Settings settings = new TexturePacker.Settings();
-        settings.combineSubdirectories = true;
-        TexturePacker.process(settings, "resources/raw/", ".", "resources/uiskin");
+        //TODO enable ones for create a new uiskin.atlas
+//        TexturePacker.Settings settings = new TexturePacker.Settings();
+//        settings.combineSubdirectories = true;
+//        TexturePacker.process(settings, "assets/resources/raw/", ".", "assets/resources/uiskin");
 
         batch = new SpriteBatch();
 
@@ -85,13 +86,13 @@ public class SkinEditorGame extends Game {
         skin = new SaveableSvgSkin("UiSkin");
 
         // add skin editor Texture pack
-        skin.addRegions(new TextureAtlas(Gdx.files.internal("resources/uiskin.atlas")));
+        skin.addRegions(new TextureAtlas(Gdx.files.classpath("resources/uiskin.atlas")));
 
         // add VisUi Texture pack
-        skin.addRegions(new TextureAtlas(Gdx.files.internal("resources/visuiskin.atlas")));
+        skin.addRegions(new TextureAtlas(Gdx.files.classpath("resources/visuiskin.atlas")));
 
 
-        skin.load(Gdx.files.local("resources/visuiskin.json"));
+        skin.load(Gdx.files.classpath("resources/visuiskin.json"));
 
         VisUI.load(skin);
 

@@ -197,7 +197,7 @@ public class MenuBar extends Table {
 
                     // Copy uiskin.* and *.fnt
 
-                    FileHandle projectFolder = Gdx.files.local("../../projects").child(game.screenMain.getcurrentProject());
+                    FileHandle projectFolder = Gdx.files.local("projects").child(game.screenMain.getcurrentProject());
                     for (FileHandle file : projectFolder.list()) {
                         if (file.name().startsWith("skin.")) {
                             Gdx.app.log("MenuBar", "Copying file: " + file.name() + " ...");
