@@ -285,7 +285,7 @@ public class OptionsPane extends Table {
 
         ImageButton button = (ImageButton) game.screenMain.barWidgets.group.getChecked();
         String widget = button.getUserObject().toString();
-        String widgetStyle = "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
+        String widgetStyle = game.resolveWidgetPackageName(widget);
         Gdx.app.log("OptionsPane", "Fetching style:" + widgetStyle);
 
         listItems.clear();

@@ -27,6 +27,7 @@ import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterRenderer;
+import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxDouble;
@@ -59,8 +60,7 @@ import java.io.IOException;
 public class WaypointLayer extends Layer implements GestureListener, CacheListChangedEventListener, Disposable {
     private final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
-    private static final String ERROR_MSG = "No com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem$MapWayPointItemStyle" +
-            " registered with name: ";
+    private static final String ERROR_MSG = "No de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle registered with name: ";
     private static final Bitmap defaultMarker = getClusterSymbol("myterie");
 
 
@@ -238,14 +238,14 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    private MapWayPointItem.MapWayPointItemStyle getClusterSymbolsByCache(Cache cache) {
+    private MapWayPointItemStyle getClusterSymbolsByCache(Cache cache) {
         String symbolStyleName = getMapIconName(cache);
-        return VisUI.getSkin().get(symbolStyleName, MapWayPointItem.MapWayPointItemStyle.class);
+        return VisUI.getSkin().get(symbolStyleName, MapWayPointItemStyle.class);
     }
 
-    private MapWayPointItem.MapWayPointItemStyle getClusterSymbolsByWaypoint(Waypoint waypoint) {
+    private MapWayPointItemStyle getClusterSymbolsByWaypoint(Waypoint waypoint) {
         String symbolStyleName = getMapIconName(waypoint);
-        return VisUI.getSkin().get(symbolStyleName, MapWayPointItem.MapWayPointItemStyle.class);
+        return VisUI.getSkin().get(symbolStyleName, MapWayPointItemStyle.class);
     }
 
 

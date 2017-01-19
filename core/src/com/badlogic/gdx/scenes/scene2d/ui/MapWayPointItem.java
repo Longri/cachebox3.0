@@ -15,6 +15,7 @@
  */
 package com.badlogic.gdx.scenes.scene2d.ui;
 
+import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import org.oscim.backend.canvas.Bitmap;
@@ -23,11 +24,6 @@ import org.oscim.core.GeoPoint;
 import java.util.Arrays;
 
 public class MapWayPointItem extends Coordinate {
-
-
-    public static class MapWayPointItemStyle {
-        public Bitmap small, middle, large;
-    }
 
 
     private final Object dataObject; // Cache.class or WayPoint.class

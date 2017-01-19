@@ -98,7 +98,7 @@ public class SaveableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.widgets.QuickButtonList.QuickButtonListStyle.class);
         items.add(de.longri.cachebox3.gui.widgets.MapStateButton.MapStateButtonStyle.class);
         items.add(de.longri.cachebox3.gui.widgets.ZoomButton.ZoomButtonStyle.class);
-        items.add(com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem.MapWayPointItemStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle.class);
 
 
         for (Class<?> item : items) {

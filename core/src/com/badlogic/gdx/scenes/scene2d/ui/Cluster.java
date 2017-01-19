@@ -15,6 +15,7 @@
  */
 package com.badlogic.gdx.scenes.scene2d.ui;
 
+import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.locator.Coordinate;
 
 /**

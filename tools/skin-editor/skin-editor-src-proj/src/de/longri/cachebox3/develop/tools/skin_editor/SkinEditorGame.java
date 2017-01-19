@@ -116,4 +116,11 @@ public class SkinEditorGame extends Game {
         dlg.show(stage);
     }
 
+    public String resolveWidgetPackageName(String widget) {
+        if (widget.equals("MapWayPointItem")) {
+            return "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle";
+        } else {
+            return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
+        }
+    }
 }
