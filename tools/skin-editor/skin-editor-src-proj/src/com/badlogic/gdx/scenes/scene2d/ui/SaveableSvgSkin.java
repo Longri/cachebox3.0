@@ -85,7 +85,6 @@ public class SaveableSvgSkin extends SvgSkin {
 
         //items for cachebox 3.0 skin
         items.add(com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg.class);
-        items.add(de.longri.cachebox3.utils.ScaledSizes.class);
         items.add(de.longri.cachebox3.utils.SkinColor.class);
         items.add(de.longri.cachebox3.gui.widgets.ColorDrawable.ColorDrawableStyle.class);
         items.add(com.badlogic.gdx.graphics.g2d.BitmapFont.class);
@@ -114,6 +113,7 @@ public class SaveableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.widgets.MapStateButton.MapStateButtonStyle.class);
         items.add(de.longri.cachebox3.gui.widgets.ZoomButton.ZoomButtonStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.ScaledSize.class);
 
 
         for (Class<?> item : items) {
@@ -171,7 +171,7 @@ public class SaveableSvgSkin extends SvgSkin {
                     try {
 
                         Object valueObject = field.get(typeResources.get(style));
-                        if (valueObject != null|| valueObject instanceof GetName) {
+                        if (valueObject != null || valueObject instanceof GetName) {
                             if (valueObject instanceof BitmapFont) {
 
                                 String value = resolveObjectName(BitmapFont.class, valueObject);

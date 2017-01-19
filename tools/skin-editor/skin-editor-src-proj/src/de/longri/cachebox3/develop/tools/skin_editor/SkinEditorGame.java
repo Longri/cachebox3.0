@@ -41,7 +41,7 @@ public class SkinEditorGame extends Game {
         FileChooser.setDefaultPrefsName("SkinEditor");
     }
 
-    public final static String[] widgets = {"MapWayPointItem", "Label", "Button", "TextButton", "ImageButton", "CheckBox", "TextField", "List", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Touchpad", "Tree"};
+    public final static String[] widgets = {"MapWayPointItem", "Sizes", "Label", "Button", "TextButton", "ImageButton", "CheckBox", "TextField", "List", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree"};
 
     public SpriteBatch batch;
     public SaveableSvgSkin skin;
@@ -78,7 +78,8 @@ public class SkinEditorGame extends Game {
         //TODO enable ones for create a new uiskin.atlas
 //        TexturePacker.Settings settings = new TexturePacker.Settings();
 //        settings.combineSubdirectories = true;
-//        TexturePacker.process(settings, "assets/resources/raw/", ".", "assets/resources/uiskin");
+//        TexturePacker.process(settings, "skin-editor-src-proj/assets/resources/raw/", ".",
+//                "skin-editor-src-proj/assets/resources/uiskin");
 
         batch = new SpriteBatch();
 
@@ -135,7 +136,9 @@ public class SkinEditorGame extends Game {
     public String resolveWidgetPackageName(String widget) {
         if (widget.equals("MapWayPointItem")) {
             return "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle";
-        } else {
+        }else if (widget.equals("Sizes")) {
+            return "de.longri.cachebox3.gui.skin.styles.ScaledSize";
+        }  else {
             return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
         }
     }

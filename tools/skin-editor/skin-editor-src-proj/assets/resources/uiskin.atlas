@@ -267,35 +267,35 @@ widgets/SelectBox
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/Slider
+widgets/Sizes
   rotate: false
   xy: 468, 79
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/SplitPane
+widgets/Slider
   rotate: false
   xy: 517, 79
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/TextButton
+widgets/SplitPane
   rotate: false
   xy: 566, 79
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/TextField
+widgets/TextButton
   rotate: false
   xy: 615, 79
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/Touchpad
+widgets/TextField
   rotate: false
   xy: 664, 79
   size: 48, 48
