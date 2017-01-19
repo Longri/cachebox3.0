@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.events.SelectedCacheEventList;
+import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.logging.Logger;
@@ -110,6 +111,16 @@ public class CB {
         }
         actSkin = skin;
         VisUI.load(actSkin);
+
+        // calculate scaled sizes
+        float button_width = CB.getScaledFloat(actSkin.get("button_width", ScaledSize.class).value);
+        float button_height = CB.getScaledFloat(actSkin.get("button_height", ScaledSize.class).value);
+        float button_width_wide = CB.getScaledFloat(actSkin.get("button_width_wide", ScaledSize.class).value);
+        float margin = CB.getScaledFloat(actSkin.get("margin", ScaledSize.class).value);
+        float check_box_height = CB.getScaledFloat(actSkin.get("check_box_height", ScaledSize.class).value);
+        float window_margin = CB.getScaledFloat(actSkin.get("check_box_height", ScaledSize.class).value);
+        CB.scaledSizes = new ScaledSizes(button_width, button_height, button_width_wide, margin,
+                check_box_height, window_margin);
     }
 
     public static SkinColor getColor(String name) {
