@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.stages.initial_tasks.*;
@@ -140,7 +141,12 @@ public class Splash extends NamedStage {
         initTaskList.add(new GdxInitialTask("Initial GDX", 2));
         initTaskList.add(new InitialLocationListenerTask("Initial Loacation Reciver", 1));
         initTaskList.add(new LoadDbTask("Load Database", 10));
-        assets = new AssetManager(new ClasspathFileHandleResolver());
+
+        // Use classpath for Desktop or assets for iOS and Android
+        assets = (CB.platform == CB.Platform.DESKTOP) ?
+                new AssetManager(new ClasspathFileHandleResolver())
+                : new AssetManager();
+
         assets.load("skins/day/3d_model/Pfeil.g3db", Model.class);
         assets.load("skins/day/3d_model/compass.g3db", Model.class);
         assets.load("skins/day/3d_model/compass_gray.g3db", Model.class);

@@ -172,7 +172,9 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                                 count = 0;
                             }
                         }
-                        throw new GdxRuntimeException(msg.toString());
+                        if (CB.platform == CB.Platform.DESKTOP)
+                            throw new GdxRuntimeException(msg.toString());
+                        else log.error(msg.toString());
                     }
                 }
             }
