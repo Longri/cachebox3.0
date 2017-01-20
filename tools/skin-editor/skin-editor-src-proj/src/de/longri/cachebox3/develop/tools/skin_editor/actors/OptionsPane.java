@@ -703,9 +703,7 @@ public class OptionsPane extends Table {
                     refresh();
                     game.screenMain.paneOptions.updateSelectedTableFields();
                     game.screenMain.panePreview.refresh();
-
                 }
-
             };
 
             dlg.pad(20);

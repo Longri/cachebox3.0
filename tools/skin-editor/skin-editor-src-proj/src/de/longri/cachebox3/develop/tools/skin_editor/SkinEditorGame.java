@@ -23,7 +23,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.SaveableSvgSkin;
-import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
@@ -68,7 +67,7 @@ public class SkinEditorGame extends Game {
         fm.refreshFonts();
 
         // Create projects folder if not already here
-        FileHandle dirProjects = new FileHandle("/projects");
+        FileHandle dirProjects = new FileHandle("projects");
 
         if (dirProjects.isDirectory() == false) {
             dirProjects.mkdirs();
@@ -120,6 +119,17 @@ public class SkinEditorGame extends Game {
     }
 
 
+    public String resolveWidgetPackageName(String widget) {
+        if (widget.equals("MapWayPointItem")) {
+            return "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle";
+        } else if (widget.equals("Sizes")) {
+            return "de.longri.cachebox3.gui.skin.styles.ScaledSize";
+        } else {
+            return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
+        }
+    }
+
+
     /**
      * Display a dialog with a notice
      */
@@ -129,17 +139,16 @@ public class SkinEditorGame extends Game {
         dlg.getContentTable().add(message).pad(20);
         dlg.button("OK", true);
         dlg.key(com.badlogic.gdx.Input.Keys.ENTER, true);
-        dlg.key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
+        dlg.key(com.badlogic.gdx.Input.Keys.ESCAPE, true);
         dlg.show(stage);
     }
 
-    public String resolveWidgetPackageName(String widget) {
-        if (widget.equals("MapWayPointItem")) {
-            return "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle";
-        }else if (widget.equals("Sizes")) {
-            return "de.longri.cachebox3.gui.skin.styles.ScaledSize";
-        }  else {
-            return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
-        }
+    public void showMsgDlg(String msg, Stage stage) {
+        Dialog dlg = new Dialog(msg, skin);
+        dlg.pad(20);
+        dlg.button("OK", true);
+        dlg.key(com.badlogic.gdx.Input.Keys.ENTER, true);
+        dlg.key(com.badlogic.gdx.Input.Keys.ESCAPE, true);
+        dlg.show(stage);
     }
 }
