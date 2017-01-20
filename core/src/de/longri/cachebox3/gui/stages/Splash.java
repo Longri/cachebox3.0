@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -139,7 +140,7 @@ public class Splash extends NamedStage {
         initTaskList.add(new GdxInitialTask("Initial GDX", 2));
         initTaskList.add(new InitialLocationListenerTask("Initial Loacation Reciver", 1));
         initTaskList.add(new LoadDbTask("Load Database", 10));
-        assets = new AssetManager();
+        assets = new AssetManager(new ClasspathFileHandleResolver());
         assets.load("skins/day/3d_model/Pfeil.g3db", Model.class);
         assets.load("skins/day/3d_model/compass.g3db", Model.class);
         assets.load("skins/day/3d_model/compass_gray.g3db", Model.class);
