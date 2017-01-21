@@ -24,7 +24,7 @@ import de.longri.cachebox3.utils.HSV_Color;
  * <p>
  * Created by Longri on 12.01.2017.
  */
-public abstract class Settings_Skin extends Settings_Const {
+public abstract class Settings_Skin extends Settings_Map {
 
     public static final SettingFolder SkinFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("SkinFolder", SettingCategory.Folder, DEVELOPER, CB.WorkPath + "/skins", SettingStoreType.Global, SettingUsage.ACB, false));
 

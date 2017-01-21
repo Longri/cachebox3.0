@@ -155,7 +155,7 @@ public class IosBitmap implements Bitmap {
         if (this.cgBitmapContext != null) this.cgBitmapContext.release();
         if (this.directPixelBuffer != null) {
             //cgBitmapContext.release() will also release the directPixelBuffer
-            this.directPixelBuffer = null;
+            this.directPixelBuffer = null; //only hint for GC
         }
     }
 
@@ -184,11 +184,12 @@ public class IosBitmap implements Bitmap {
         //create a pixel buffer for upload from direct memory pointer
         if (directPixelBuffer == null) {
 
-            //create Pixmap from cgBitmapContext for extract glFormat infos
+            //create Pixmap from cgBitmapContext for extract glFormat info's
             UIImage uiImage = new UIImage(cgBitmapContext.toImage());
             NSData data = uiImage.toPNGData();
             byte[] encodedData = data.getBytes();
             Pixmap pixmap = new Pixmap(encodedData, 0, encodedData.length);
+
             gLInternalFormat = pixmap.getGLInternalFormat();
             gLFormat = pixmap.getGLFormat();
             gLType = pixmap.getGLType();

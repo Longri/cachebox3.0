@@ -18,7 +18,6 @@ package de.longri.cachebox3;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
-import com.badlogic.gdx.backends.iosrobovm.IOSApplicationLogger;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GLAdapter;
 import org.oscim.gdx.GdxAssets;
@@ -46,9 +45,11 @@ public class IOS_Launcher extends IOSApplication.Delegate {
 
     @Override
     protected IOSApplication createApplication() {
-
-        float scale = (float) (getIosVersion() >= 8 ? UIScreen.getMainScreen().getNativeScale() : UIScreen.getMainScreen().getScale());
-        CanvasAdapter.dpi *= scale;
+//
+//        float scale = (float) (getIosVersion() >= 8 ? UIScreen.getMainScreen().getNativeScale() : UIScreen.getMainScreen().getScale());
+////        CanvasAdapter.dpi *= scale;
+//
+//        CanvasAdapter.dpi = 20 * scale;
 
         //initialize platform bitmap factory
         IosGraphics.init();
