@@ -200,8 +200,8 @@ public class NewFontDialog extends Dialog {
 				FileHandle handleFont = new FileHandle(System.getProperty("java.io.tmpdir")).child(properFontName + ".fnt");
 				FileHandle handleImage = new FileHandle(System.getProperty("java.io.tmpdir")).child(properFontName + ".png");
 				
-				FileHandle targetFont = Gdx.files.local("../../projects/" + game.screenMain.getcurrentProject() + "/" + textFontName.getText() + ".fnt");
-				FileHandle targetImage = Gdx.files.local("../../projects/" + game.screenMain.getcurrentProject() + "/assets/" + textFontName.getText() + ".png");
+				FileHandle targetFont = Gdx.files.local("projects/" + game.screenMain.getcurrentProject() + "/" + textFontName.getText() + ".fnt");
+				FileHandle targetImage = Gdx.files.local("projects/" + game.screenMain.getcurrentProject() + "/assets/" + textFontName.getText() + ".png");
 				
 				if ((targetFont.exists() == true) || (targetImage.exists() == true)) {
 					

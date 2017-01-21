@@ -23,7 +23,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.SaveableSvgSkin;
-import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.WelcomeScreen;
 
@@ -35,12 +36,15 @@ import de.longri.cachebox3.develop.tools.skin_editor.screens.WelcomeScreen;
  */
 public class SkinEditorGame extends Game {
 
+    static {
+        FileChooser.setDefaultPrefsName("SkinEditor");
+    }
 
-    public final static String[] widgets = {"Label", "Button", "TextButton", "ImageButton", "CheckBox", "TextField", "List", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Touchpad", "Tree"};
+    public final static String[] widgets = {"MapWayPointItem", "Sizes", "Label", "Button", "TextButton", "ImageButton", "CheckBox", "TextField", "List", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree"};
 
     public SpriteBatch batch;
     public SaveableSvgSkin skin;
-    public TextureAtlas atlas;
+
 
     public MainScreen screenMain;
     public WelcomeScreen screenWelcome;
@@ -63,29 +67,66 @@ public class SkinEditorGame extends Game {
         fm.refreshFonts();
 
         // Create projects folder if not already here
-        FileHandle dirProjects = new FileHandle("../../projects");
+        FileHandle dirProjects = new FileHandle("projects");
 
         if (dirProjects.isDirectory() == false) {
             dirProjects.mkdirs();
         }
 
         // Rebuild from raw resources, kind of overkill, might disable it for production
-        TexturePacker.Settings settings = new TexturePacker.Settings();
-        settings.combineSubdirectories = true;
-        TexturePacker.process(settings, "resources/raw/", ".", "resources/uiskin");
+        //TODO enable ones for create a new uiskin.atlas
+//        TexturePacker.Settings settings = new TexturePacker.Settings();
+//        settings.combineSubdirectories = true;
+//        TexturePacker.process(settings, "skin-editor-src-proj/assets/resources/raw/", ".",
+//                "skin-editor-src-proj/assets/resources/uiskin");
 
         batch = new SpriteBatch();
 
+//        skin = new SaveableSvgSkin(null);
         skin = new SaveableSvgSkin("UiSkin");
-        atlas = new TextureAtlas(Gdx.files.internal("resources/uiskin.atlas"));
-        skin.addRegions(atlas);
 
-        skin.load(Gdx.files.local("resources/uiskin.json"));
+        // add skin editor Texture pack
+        skin.addRegions(new TextureAtlas(Gdx.files.classpath("resources/uiskin.atlas")));
+
+        // add VisUi Texture pack
+        skin.addRegions(new TextureAtlas(Gdx.files.classpath("resources/visuiskin.atlas")));
+
+
+        skin.load(Gdx.files.classpath("resources/visuiskin.json"));
+
+        VisUI.load(skin);
+
 
         screenMain = new MainScreen(this);
         screenWelcome = new WelcomeScreen(this);
         setScreen(screenWelcome);
 
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        //delete temp folder
+
+        FileHandle tmp = Gdx.files.local("null");
+        if (tmp.exists()) {
+            Gdx.app.log("FINISH", "Delete tmp folder");
+            tmp.deleteDirectory();
+        }
+
+
+    }
+
+
+    public String resolveWidgetPackageName(String widget) {
+        if (widget.equals("MapWayPointItem")) {
+            return "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle";
+        } else if (widget.equals("Sizes")) {
+            return "de.longri.cachebox3.gui.skin.styles.ScaledSize";
+        } else {
+            return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
+        }
     }
 
 
@@ -98,8 +139,16 @@ public class SkinEditorGame extends Game {
         dlg.getContentTable().add(message).pad(20);
         dlg.button("OK", true);
         dlg.key(com.badlogic.gdx.Input.Keys.ENTER, true);
-        dlg.key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
+        dlg.key(com.badlogic.gdx.Input.Keys.ESCAPE, true);
         dlg.show(stage);
     }
 
+    public void showMsgDlg(String msg, Stage stage) {
+        Dialog dlg = new Dialog(msg, skin);
+        dlg.pad(20);
+        dlg.button("OK", true);
+        dlg.key(com.badlogic.gdx.Input.Keys.ENTER, true);
+        dlg.key(com.badlogic.gdx.Input.Keys.ESCAPE, true);
+        dlg.show(stage);
+    }
 }

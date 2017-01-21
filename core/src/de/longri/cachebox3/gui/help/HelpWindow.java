@@ -125,7 +125,7 @@ public class HelpWindow extends Window {
                     InputStream stream = new ByteArrayInputStream(svgString.getBytes(Charset.forName("UTF-8")));
 
                     try {
-                        pixmap[0] = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(stream, PlatformConnector.SvgScaleType.NONE, 1));
+                        pixmap[0] = Utils.getPixmapFromBitmap(PlatformConnector.getSvg("",stream, PlatformConnector.SvgScaleType.NONE, 1));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

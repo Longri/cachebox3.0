@@ -15,14 +15,8 @@
  ******************************************************************************/
 package de.longri.cachebox3.develop.tools.skin_editor;
 
-import java.awt.Frame;
-import java.io.File;
-import java.util.Iterator;
-
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -33,15 +27,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.reflect.Field;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
+import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
+import org.oscim.backend.canvas.Bitmap;
+
+import java.awt.*;
+import java.util.*;
 
 /**
  * Display a dialog allowing to pick a drawable resource such as a ninepatch
@@ -51,12 +53,24 @@ import com.badlogic.gdx.utils.reflect.Field;
  */
 public class DrawablePickerDialog extends Dialog {
 
+
     private SkinEditorGame game;
     private Field field;
     private Table tableDrawables;
     private boolean zoom = false;
-    private ObjectMap<String, Object> items = new ObjectMap<String, Object>();
+    private HashMap<String, Object> items = new HashMap<String, Object>();
     private ScrollPane scrollPane;
+    static private FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+    static private SvgFileIconProvider svgFileIconProvider;
+
+    static {
+        FileTypeFilter typeFilter = new FileTypeFilter(true); //allow "All Types" mode where all files are shown
+        typeFilter.addRule("SVG files (*.svg)", "svg");
+        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+        fileChooser.setFileTypeFilter(typeFilter);
+        svgFileIconProvider = new SvgFileIconProvider(fileChooser);
+        fileChooser.setIconProvider(svgFileIconProvider);
+    }
 
     public DrawablePickerDialog(final SkinEditorGame game, final Field field) {
 
@@ -104,6 +118,8 @@ public class DrawablePickerDialog extends Dialog {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
+                final Preferences prefs = Gdx.app.getPreferences("skin_editor_project_" + game.screenMain.getcurrentProject());
+
                 // Need to steal focus first with this hack (Thanks to Z-Man)
                 Frame frame = new Frame();
                 frame.setUndecorated(true);
@@ -115,57 +131,100 @@ public class DrawablePickerDialog extends Dialog {
                 frame.dispose();
 
 
-                JFileChooser chooser = new JFileChooser();
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "svg");
-                chooser.setFileFilter(filter);
-                int returnVal = chooser.showOpenDialog(null);
-                if (returnVal != JFileChooser.APPROVE_OPTION) {
-                    return;
-                }
-                File selectedFile = chooser.getSelectedFile();
-                if (selectedFile == null) {
-                    return;
-                }
-                // Loop until the file is not found
-                while (true) {
-                    String resourceName = selectedFile.getName();
-                    String ext = resourceName.substring(resourceName.lastIndexOf(".") + 1);
-                    resourceName = resourceName.substring(0, resourceName.lastIndexOf("."));
-                    resourceName = JOptionPane.showInputDialog("Please choose the name of your resource", resourceName);
-                    if (resourceName == null) {
-                        return;
-                    }
+                fileChooser.setListener(new FileChooserAdapter() {
+                    @Override
+                    public void selected(Array<FileHandle> fileList) {
+                        if (fileList.size < 1) return;
+                        final FileHandle selectedFile = fileList.get(0);
 
-                    // Lower case everything ! I sound like someone on
-                    // libgdx channel ;]
-                    resourceName = resourceName.toLowerCase();
-
-                    // Check for duplicate resources
-                    FileHandle[] assetsFolder = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/assets/").list();
-                    boolean foundSomething = false;
-                    for (FileHandle file : assetsFolder) {
-
-                        if (file.nameWithoutExtension().toLowerCase().equals(resourceName)) {
-                            foundSomething = true;
-                            break;
+                        if (selectedFile == null) {
+                            return;
                         }
+
+                        prefs.putString("last_import_directory", selectedFile.parent().path());
+
+                        // ask for name of generated recource
+                        String selectedFileName = selectedFile.name().substring(0, selectedFile.name().lastIndexOf("."));
+                        final TextField nameTextField = new TextField(selectedFileName, game.skin);
+                        Dialog dlg0 = new Dialog("Set resource name", game.skin) {
+
+                            @Override
+                            protected void result(Object object) {
+                                if ((Boolean) object == false) {
+                                    return;
+                                }
+
+                                final String finalResourceName = nameTextField.getText();
+                                final TextField scaleValueTextField = new TextField(String.valueOf(1.0f), game.skin);
+                                Dialog dlg = new Dialog("Set Scale Value", game.skin) {
+
+                                    @Override
+                                    protected void result(Object object) {
+                                        if ((Boolean) object == false) {
+                                            return;
+                                        }
+
+                                        float scalfactor = 0;
+                                        String text = scaleValueTextField.getText();
+                                        if (text.isEmpty() == false) {
+                                            scalfactor = Float.valueOf(text);
+                                        }
+
+                                        // Copy the file
+                                        FileHandle orig = selectedFile;
+                                        String originalName = orig.name();
+                                        FileHandle dest = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/svg/" + originalName);
+                                        orig.copyTo(dest);
+
+                                        // write scaled svg section
+                                        ScaledSvg scaledSvg = new ScaledSvg();
+                                        scaledSvg.path = "svg/" + originalName;
+                                        scaledSvg.scale = scalfactor;
+                                        scaledSvg.setRegisterName(finalResourceName);
+                                        game.skinProject.add(finalResourceName, scaledSvg);
+
+                                        FileHandle projectFolder = new FileHandle("projects/" + game.screenMain.getcurrentProject());
+                                        FileHandle projectFile = projectFolder.child("skin.json");
+                                        game.skinProject.save(projectFile);
+
+                                        game.screenMain.refreshResources();
+                                        refresh();
+                                        game.showMsgDlg("File successfully added to your project.", getStage());
+                                    }
+                                };
+
+                                dlg.pad(20);
+                                dlg.getContentTable().add("Float Value:");
+                                dlg.getContentTable().add(scaleValueTextField).pad(20);
+                                dlg.button("OK", true);
+                                dlg.button("Cancel", false);
+                                dlg.key(com.badlogic.gdx.Input.Keys.ENTER, true);
+                                dlg.key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
+                                dlg.show(getStage());
+                                getStage().setKeyboardFocus(scaleValueTextField);
+                            }
+                        };
+
+                        dlg0.pad(20);
+                        dlg0.getContentTable().add("Resource name:");
+                        dlg0.getContentTable().add(nameTextField).pad(20);
+                        dlg0.button("OK", true);
+                        dlg0.button("Cancel", false);
+                        dlg0.key(com.badlogic.gdx.Input.Keys.ENTER, true);
+                        dlg0.key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
+                        dlg0.show(getStage());
+                        getStage().setKeyboardFocus(nameTextField);
                     }
-                    if (foundSomething == true) {
-                        JOptionPane.showMessageDialog(null, "Sorry but this resource name is already in use!");
-                    } else {
+                });
 
-                        // Copy the file
-                        FileHandle orig = new FileHandle(selectedFile);
-                        FileHandle dest = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/assets/" + resourceName + "." + ext);
-                        orig.copyTo(dest);
+                fileChooser.setDirectory(prefs.getString("last_import_directory"));
 
+                fileChooser.setSize(game.screenMain.stage.getWidth() * 0.9f,
+                        game.screenMain.stage.getHeight() * 0.9f);
 
-                        game.screenMain.refreshResources();
-                        refresh();
-                        JOptionPane.showMessageDialog(null, "File successfully added to your project.");
-                        return;
-                    }
-                }
+                //displaying chooser with fade in animation
+                getStage().addActor(fileChooser.fadeIn());
+
             }
         });
 
@@ -204,7 +263,7 @@ public class DrawablePickerDialog extends Dialog {
 
         });
 
-        getContentTable().add(scrollPane).width(960).height(640).pad(20);
+        getContentTable().add(scrollPane).width(getPrefWidth()).height(getPrefHeight() * 0.9f).pad(20);
         getButtonTable().add(buttonNewNinePatch);
         getButtonTable().add(buttonNewDrawable);
         getButtonTable().add(buttonZoom);
@@ -263,7 +322,19 @@ public class DrawablePickerDialog extends Dialog {
 
         tableDrawables.clear();
 
-        Iterator<String> keys = items.keys().iterator();
+
+        // Sorted Map......By Key
+        Comparator<String> comparator = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareToIgnoreCase(o2);
+            }
+        };
+        Map<String, Object> treeMap = new TreeMap<String, Object>(comparator);
+        treeMap.putAll(items);
+
+
+        Iterator<String> keys = treeMap.keySet().iterator();
         int count = 0;
 
         while (keys.hasNext()) {
@@ -302,13 +373,18 @@ public class DrawablePickerDialog extends Dialog {
                         // Since we have reloaded everything we have to get
                         // field back
 
-                        // game.screenMain.paneOptions.refreshSelection();
+                        game.screenMain.paneOptions.refreshSelection();
                         if (items.get(key) instanceof Drawable) {
-                            field.set(game.screenMain.paneOptions.currentStyle, items.get(key));
+                            if (field.getType() == Bitmap.class) {
+                                Bitmap bmp = game.skinProject.get(key, Bitmap.class);
+                                field.set(game.screenMain.paneOptions.currentStyle, bmp);
+                            } else {
+                                field.set(game.screenMain.paneOptions.currentStyle, items.get(key));
+                            }
                         } else {
 
                             boolean ninepatch = false;
-                            FileHandle test = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/assets/" + key + ".9.png");
+                            FileHandle test = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/assets/" + key + ".9.png");
                             if (test.exists() == true) {
                                 ninepatch = true;
                             }
@@ -318,9 +394,14 @@ public class DrawablePickerDialog extends Dialog {
                                 field.set(game.screenMain.paneOptions.currentStyle, game.skinProject.getDrawable(key));
 
                             } else {
-                                game.skinProject.add(key, new SpriteDrawable(new Sprite((TextureRegion) items.get(key))));
-                                field.set(game.screenMain.paneOptions.currentStyle, game.skinProject.getDrawable(key));
 
+                                if (field.getType() == Bitmap.class) {
+                                    Bitmap bmp = game.skinProject.get(key, Bitmap.class);
+                                    field.set(game.screenMain.paneOptions.currentStyle, bmp);
+                                } else {
+                                    game.skinProject.add(key, new SpriteDrawable(new Sprite((TextureRegion) items.get(key))));
+                                    field.set(game.screenMain.paneOptions.currentStyle, game.skinProject.getDrawable(key));
+                                }
                             }
                         }
 
@@ -359,11 +440,11 @@ public class DrawablePickerDialog extends Dialog {
     }
 
     public float getPrefWidth() {
-        return game.screenMain.stage.getWidth() * 0.7f;
+        return game.screenMain.stage.getWidth() * 0.8f;
     }
 
     public float getPrefHeight() {
-        return game.screenMain.stage.getHeight() * 0.7f;
+        return game.screenMain.stage.getHeight() * 0.9f;
     }
 
 

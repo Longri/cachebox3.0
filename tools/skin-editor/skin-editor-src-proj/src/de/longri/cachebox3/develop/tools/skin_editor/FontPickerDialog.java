@@ -162,8 +162,8 @@ public class FontPickerDialog extends Dialog {
 							} else {
 								
 								// Remove files from disk (fnt and png)
-								FileHandle targetFont = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/" +key + ".fnt");
-								FileHandle targetImage = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/assets/" + key + ".png");
+								FileHandle targetFont = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/" +key + ".fnt");
+								FileHandle targetImage = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/assets/" + key + ".png");
 								targetFont.delete();
 								targetImage.delete();
 								

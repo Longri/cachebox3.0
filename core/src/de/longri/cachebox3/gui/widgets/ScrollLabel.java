@@ -65,7 +65,10 @@ public class ScrollLabel extends Label {
         ScissorStack.pushScissors(scissorRec);
         cache.draw(batch);
         batch.flush();
-        ScissorStack.popScissors();
+        try {
+            ScissorStack.popScissors();
+        } catch (Exception e) {
+        }
     }
 
 

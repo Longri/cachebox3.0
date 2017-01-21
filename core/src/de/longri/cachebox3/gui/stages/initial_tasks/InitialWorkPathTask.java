@@ -79,7 +79,6 @@ public class InitialWorkPathTask extends AbstractInitTask {
         ini_Dir(Config.UserImageFolder.getValue(), nomedia);
         ini_Dir(CB.WorkPath + "/repository", nomedia);
         ini_Dir(CB.WorkPath + "/repositories", nomedia);
-        ini_Dir(Config.daySkinName.getValue(), nomedia);
         ini_Dir(CB.WorkPath + "/data", nomedia);
         ini_Dir(CB.WorkPath + "/user/temp", nomedia);
         ini_Dir(Config.DescriptionImageFolder.getValue(), nomedia);

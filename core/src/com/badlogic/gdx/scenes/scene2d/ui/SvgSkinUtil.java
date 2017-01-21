@@ -74,14 +74,15 @@ public class SvgSkinUtil {
 
             Pixmap pixmap = null;
             String name = null;
-            skinFile.parent().child(scaledSvg.path);
+//            skinFile.parent().child(scaledSvg.path);
             FileHandle fileHandle = skinFile.parent().child(scaledSvg.path);
 
             try {
                 resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
                 resultHashCode = (resultHashCode * (int) (prime * scaledSvg.scale));
-                pixmap = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale));
                 name = scaledSvg.getRegisterName();
+                pixmap = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(name, fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale));
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

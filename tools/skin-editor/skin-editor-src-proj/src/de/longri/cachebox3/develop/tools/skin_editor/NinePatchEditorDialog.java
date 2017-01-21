@@ -224,7 +224,7 @@ public class NinePatchEditorDialog extends Dialog {
 				}
 				
 				
-				FileHandle targetImage = new FileHandle("../../projects/" + game.screenMain.getcurrentProject() + "/assets/" + textName.getText() + ".9.png");
+				FileHandle targetImage = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/assets/" + textName.getText() + ".9.png");
 				
 				if (targetImage.exists() == true) {
 					

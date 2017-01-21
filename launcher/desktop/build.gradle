@@ -2,9 +2,10 @@ apply plugin: "java"
 
 sourceCompatibility = 1.6
 sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.output.resourcesDir "../android/assets/"
 
 project.ext.mainClassName = "de.longri.cachebox3.DesktopLauncher"
-project.ext.assetsDir = new File("../android/assets");
+project.ext.assetsDir = new File("../android/assets")
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
@@ -25,15 +26,15 @@ task dist(type: Jar) {
     }
 }
 
-task copyAssets(type: Copy) {
-    from("../android/assets")
-    into("workingDir")
-}
-
-
-tasks.withType(org.gradle.api.tasks.compile.JavaCompile) {
-    compileTask -> compileTask.dependsOn copyAssets
-}
+//task copyAssets(type: Copy) {
+//    from("../android/assets")
+//    into("workingDir")
+//}
+//
+//
+//tasks.withType(org.gradle.api.tasks.compile.JavaCompile) {
+//    compileTask -> compileTask.dependsOn copyAssets
+//}
 
 
 

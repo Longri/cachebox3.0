@@ -133,7 +133,7 @@ public class MainScreen implements Screen {
      */
     public void saveToSkin() {
 
-        FileHandle projectFolder = Gdx.files.local("../../projects").child(currentProject);
+        FileHandle projectFolder = Gdx.files.local("projects").child(currentProject);
 
         FileHandle[] items = projectFolder.child("backups").list();
         Array<String> sortedItems = new Array<String>();
@@ -166,7 +166,7 @@ public class MainScreen implements Screen {
         if (game.skinProject != null) {
             game.skinProject.dispose();
         }
-        FileHandle skinFolder = (Gdx.files.local("../../projects/" + currentProject));
+        FileHandle skinFolder = (Gdx.files.local("projects/" + currentProject));
         game.skinProject = new SaveableSvgSkin(currentProject, SvgSkin.StorageType.LOCAL, skinFolder);
 
     }

@@ -70,21 +70,12 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
     public ViewManager(final CacheboxMain main) {
         super("ViewManager");
 
-        Gdx.app.log("ScaleFactor", Float.toString(CB.getScaledFloat(1)));
-        Gdx.app.log("Width", Float.toString(Gdx.graphics.getWidth()));
-        Gdx.app.log("Height", Float.toString(Gdx.graphics.getHeight()));
-        Gdx.app.log("PPI", Float.toString(Gdx.graphics.getPpiX()));
+        log.info("ScaleFactor:" + Float.toString(CB.getScaledFloat(1)));
+        log.info("Width:"+ Float.toString(Gdx.graphics.getWidth()));
+        log.info("Height:"+ Float.toString(Gdx.graphics.getHeight()));
+        log.info("PPI:"+ Float.toString(Gdx.graphics.getPpiX()));
 
-        float scaleFactor = CB.getScaledFloat(1);
-        Tile.SIZE = (int) (400 * scaleFactor);
-        CanvasAdapter.dpi = 240 * scaleFactor;
-        CanvasAdapter.textScale = scaleFactor;
-        CanvasAdapter.scale = scaleFactor;
-        PolygonBucket.enableTexture = CB.platform != CB.Platform.IOS;//fixme if vtm can render polygon texture
-//  PolygonBucket.enableTexture=false;
 
-        Gdx.app.log("Tile.SIZE", Integer.toString(Tile.SIZE));
-        Gdx.app.log("Canvas.dpi", Float.toString(CanvasAdapter.dpi));
 
 
         this.main = main;

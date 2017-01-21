@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.stages.initial_tasks.*;
@@ -89,7 +91,7 @@ public class Splash extends NamedStage {
         try {
             InputStream stream = Gdx.files.internal("cb_logo.svg").read();
             float targetWidth = Gdx.graphics.getWidth() * 0.8f;
-            Bitmap svgBitmap = PlatformConnector.getSvg(stream, PlatformConnector.SvgScaleType.SCALED_TO_WIDTH, targetWidth);
+            Bitmap svgBitmap = PlatformConnector.getSvg("", stream, PlatformConnector.SvgScaleType.SCALED_TO_WIDTH, targetWidth);
             CB_Logo = new Image(new Texture(Utils.getPixmapFromBitmap(svgBitmap)));
             CB_Logo.setPosition((Gdx.graphics.getWidth() - svgBitmap.getWidth()) / 2, svgBitmap.getHeight() * 2);
             this.addActor(CB_Logo);
@@ -139,7 +141,12 @@ public class Splash extends NamedStage {
         initTaskList.add(new GdxInitialTask("Initial GDX", 2));
         initTaskList.add(new InitialLocationListenerTask("Initial Loacation Reciver", 1));
         initTaskList.add(new LoadDbTask("Load Database", 10));
-        assets = new AssetManager();
+
+        // Use classpath for Desktop or assets for iOS and Android
+        assets = (CB.platform == CB.Platform.DESKTOP) ?
+                new AssetManager(new ClasspathFileHandleResolver())
+                : new AssetManager();
+
         assets.load("skins/day/3d_model/Pfeil.g3db", Model.class);
         assets.load("skins/day/3d_model/compass.g3db", Model.class);
         assets.load("skins/day/3d_model/compass_gray.g3db", Model.class);

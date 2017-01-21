@@ -3,6 +3,8 @@ apply plugin: "java"
 sourceCompatibility = 1.6
 sourceSets.main.java.srcDirs = [ "src/" ]
 
+sourceSets.main.output.resourcesDir "assets/"
+
 project.ext.mainClassName = "de.longri.cachebox3.develop.tools.skin_editor.SkinEditorDesktopLauncher"
 project.ext.assetsDir = new File("../assets");
 

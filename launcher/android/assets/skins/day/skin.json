@@ -1,975 +1,497 @@
 {
-  "com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg": {
-    "button_bar_back": {
-      "path": "svg/button_bar_back.svg"
-    },
-    "cache": {
-      "path": "svg/cache.svg",
-      "scale": 0.72
-    },
-    "cache_pressed": {
-      "path": "svg/cache_pressed.svg",
-      "scale": 0.72
-    },
-    "cache_selected": {
-      "path": "svg/cache_selected.svg",
-      "scale": 0.72
-    },
-    "cb": {
-      "path": "svg/cb.svg",
-      "scale": 0.15
-    },
-    "check_disabled": {
-      "path": "svg/check_disabled.svg"
-    },
-    "check_off": {
-      "path": "svg/check_off.svg"
-    },
-    "check_on": {
-      "path": "svg/check_on.svg"
-    },
-    "closeIcon": {
-      "path": "svg/closeIcon.svg"
-    },
-    "cm_icon": {
-      "path": "svg/cm_icon.svg",
-      "scale": 0.72
-    },
-    "cm_icon_filterd": {
-      "path": "svg/cm_icon_filterd.svg",
-      "scale": 0.72
-    },
-    "db": {
-      "path": "svg/db.svg",
-      "scale": 0.72
-    },
-    "db_filter_active": {
-      "path": "svg/db_filter_active.svg",
-      "scale": 0.72
-    },
-    "db_pressed": {
-      "path": "svg/db_pressed.svg",
-      "scale": 0.72
-    },
-    "db_pressed_filter_active": {
-      "path": "svg/db_pressed_filter_active.svg",
-      "scale": 0.72
-    },
-    "db_selected": {
-      "path": "svg/db_selected.svg",
-      "scale": 0.72
-    },
-    "db_selected_filter_active": {
-      "path": "svg/db_selected_filter_active.svg",
-      "scale": 0.72
-    },
-    "default_button": {
-      "path": "svg/default_button.svg"
-    },
-    "default_button_pressed": {
-      "path": "svg/default_button_pressed.svg"
-    },
-    "dialog_center": {
-      "path": "svg/dialog_center.svg"
-    },
-    "dialog_footer": {
-      "path": "svg/dialog_footer.svg"
-    },
-    "dialog_header": {
-      "path": "svg/dialog_header.svg"
-    },
-    "dialog_title": {
-      "path": "svg/dialog_title.svg"
-    },
-    "gc_liveIcon": {
-      "path": "svg/gc_liveIcon.svg"
-    },
-    "helpIcon": {
-      "path": "svg/helpIcon.svg"
-    },
-    "infoIcon": {
-      "path": "svg/infoIcon.svg"
-    },
-    "noteIcon": {
-      "path": "svg/noteIcon.svg",
-      "scale": 0.19298245
-    },
-    "list_background": {
-      "path": "svg/list_background.svg"
-    },
-    "listrec_first": {
-      "path": "svg/listrec_first.svg"
-    },
-    "listrec_second": {
-      "path": "svg/listrec_second.svg"
-    },
-    "listrec_selected": {
-      "path": "svg/listrec_selected.svg"
-    },
-    "misc": {
-      "path": "svg/misc.svg",
-      "scale": 0.72
-    },
-    "misc_pressed": {
-      "path": "svg/misc_pressed.svg",
-      "scale": 0.72
-    },
-    "misc_selected": {
-      "path": "svg/misc_selected.svg",
-      "scale": 0.72
-    },
-    "nav": {
-      "path": "svg/nav.svg",
-      "scale": 0.72
-    },
-    "nav_pressed": {
-      "path": "svg/nav_pressed.svg",
-      "scale": 0.72
-    },
-    "nav_selected": {
-      "path": "svg/nav_selected.svg",
-      "scale": 0.72
-    },
-    "toast_background": {
-      "path": "svg/toast_background.svg"
-    },
-    "tool": {
-      "path": "svg/tool.svg",
-      "scale": 0.72
-    },
-    "tool_pressed": {
-      "path": "svg/tool_pressed.svg",
-      "scale": 0.72
-    },
-    "tool_selected": {
-      "path": "svg/tool_selected.svg",
-      "scale": 0.72
-    },
-    "arrow_help": {
-      "path": "svg/arrow_help.svg",
-      "scale": 0.27
-    },
-    "arrow_help_90": {
-      "path": "svg/arrow_help_90.svg",
-      "scale": 0.28
-    },
-    "settings_icon": {
-      "path": "svg/settings_icon.svg",
-      "scale": 0.27
-    },
-    "finger": {
-      "path": "svg/finger.svg",
-      "scale": 1.0
-    },
-    "finger_click": {
-      "path": "svg/finger_click.svg",
-      "scale": 1.0
-    },
-    "menu_for": {
-      "path": "svg/menu_for.svg",
-      "scale": 0.3
-    },
-    "menu_back": {
-      "path": "svg/menu_back.svg",
-      "scale": 0.3
-    },
-    "sortIcon": {
-      "path": "svg/sortIcon.svg",
-      "scale": 0.19455253
-    },
-    "filter": {
-      "path": "svg/missingIcon.svg"
-    },
-    "lupe": {
-      "path": "svg/missingIcon.svg"
-    },
-    "importIcon": {
-      "path": "svg/missingIcon.svg"
-    },
-    "imagesIcon": {
-      "path": "svg/images-icon.svg",
-      "scale": 0.19298245
-    },
-    "manageDb": {
-      "path": "svg/missingIcon.svg"
-    },
-    "addCacheIcon": {
-      "path": "svg/addCacheIcon.svg",
-      "scale": 0.19455253
-    },
-    "deleteIcon": {
-      "path": "svg/deleteIcon.svg",
-      "scale": 0.19455253
-    },
-    "cacheListIcon": {
-      "path": "svg/cacheListIcon.svg",
-      "scale": 0.19455253
-    },
-    "tbListIcon": {
-      "path": "svg/tbListIcon.svg",
-      "scale": 0.19455253
-    },
-    "trackListIcon": {
-      "path": "svg/trackListIcon.svg",
-      "scale": 0.19455253
-    },
-    "menu_divider": {
-      "path": "svg/menuDivider.svg",
-      "scale": 5
-    },
-    "map": {
-      "path": "svg/map.svg",
-      "scale": 0.19455253
-    },
-    "compass": {
-      "path": "svg/missingIcon.svg"
-    },
-    "navigate": {
-      "path": "svg/missingIcon.svg"
-    },
-    "activityBack": {
-      "path": "svg/activityBack.svg"
-    },
-    "cursor": {
-      "path": "svg/cursor.svg"
-    },
-    "slider": {
-      "path": "svg/slider.svg",
-      "scale": 0.3
-    },
-    "sliderKnob": {
-      "path": "svg/sliderKnob.svg",
-      "scale": 0.3
-    },
-    "traddi": {
-      "path": "svg/traddi.svg",
-      "scale": 0.2
-    },
-    "multi": {
-      "path": "svg/multi.svg",
-      "scale": 0.2
-    },
-    "myterie": {
-      "path": "svg/myterie.svg",
-      "scale": 0.2
-    },
-    "earth": {
-      "path": "svg/earth.svg",
-      "scale": 0.2
-    },
-    "event": {
-      "path": "svg/event.svg",
-      "scale": 0.2
-    },
-    "mega": {
-      "path": "svg/mega.svg",
-      "scale": 0.2
-    },
-    "giga": {
-      "path": "svg/giga.svg",
-      "scale": 0.2
-    },
-    "cito": {
-      "path": "svg/cito.svg",
-      "scale": 0.2
-    },
-    "letterbox": {
-      "path": "svg/letterbox.svg",
-      "scale": 0.2
-    },
-    "whereigo": {
-      "path": "svg/whereigo.svg",
-      "scale": 0.2
-    },
-    "virtual": {
-      "path": "svg/virtual.svg",
-      "scale": 0.2
-    },
-    "arrow-compass": {
-      "path": "svg/arrow-compass.svg",
-      "scale": 0.15
-    },
-    "star": {
-      "path": "svg/star.svg",
-      "scale": 0.25
-    },
-    "star_half": {
-      "path": "svg/star_half.svg",
-      "scale": 0.25
-    },
-    "star0": {
-      "path": "svg/star0.svg",
-      "scale": 0.25
-    },
-    "micro": {
-      "path": "svg/micro.svg",
-      "scale": 0.25
-    },
-    "small": {
-      "path": "svg/small.svg",
-      "scale": 0.25
-    },
-    "regular": {
-      "path": "svg/regular.svg",
-      "scale": 0.25
-    },
-    "large": {
-      "path": "svg/large.svg",
-      "scale": 0.25
-    },
-    "other": {
-      "path": "svg/other.svg",
-      "scale": 0.25
-    },
-    "docIcon": {
-      "path": "svg/missingIcon.svg"
-    },
-    "waypointListIcon": {
-      "path": "svg/waypointListIcon.svg",
-      "scale": 0.19298245
-    },
-    "listIcon": {
-      "path": "svg/listIcon.svg",
-      "scale": 0.19298245
-    },
-    "UPLOADFIELDNOTE": {
-      "path": "svg/missingIcon.svg"
-    },
-    "log10icon": {
-      "path": "svg/missingIcon.svg"
-    },
-    "videoIcon": {
-      "path": "svg/missingIcon.svg"
-    },
-    "voiceRecIcon": {
-      "path": "svg/missingIcon.svg"
-    },
-    "DayNight": {
-      "path": "svg/missingIcon.svg"
-    },
-    "TORCHON": {
-      "path": "svg/missingIcon.svg"
-    },
-    "TORCHOFF": {
-      "path": "svg/missingIcon.svg"
-    },
-    "Mapstate.free": {
-      "path": "svg/map-state-free.svg",
-      "scale": 0.75
-    },
-    "Mapstate.waypoint": {
-      "path": "svg/map-state-wp.svg",
-      "scale": 0.75
-    },
-    "Mapstate.gps": {
-      "path": "svg/map-state-gps.svg",
-      "scale": 0.75
-    },
-    "Mapstate.lock": {
-      "path": "svg/map-state-lock.svg",
-      "scale": 0.75
-    },
-    "Mapstate.car": {
-      "path": "svg/map-state-car.svg",
-      "scale": 0.75
-    },
-    "MapstateOverdraw": {
-      "path": "svg/map-state-overdraw.svg",
-      "scale": 0.75
-    },
-    "ZoomPlus": {
-      "path": "svg/plus.svg",
-      "scale": 0.5
-    },
-    "ZoomPlusDisabled": {
-      "path": "svg/plus_disabled.svg",
-      "scale": 0.5
-    },
-    "ZoomPlusPressed": {
-      "path": "svg/plus_pressed.svg",
-      "scale": 0.5
-    },
-    "ZoomMinus": {
-      "path": "svg/minus.svg",
-      "scale": 0.5
-    },
-    "ZoomMinusDisabled": {
-      "path": "svg/minus_disabled.svg",
-      "scale": 0.5
-    },
-    "ZoomMinusPressed": {
-      "path": "svg/minus_pressed.svg",
-      "scale": 0.5
-    },
-    "mapFound": {
-      "path": "svg/log0icon.svg",
-      "scale": 0.10
-    },
-    "mapTraditional": {
-      "path": "svg/traddi.svg",
-      "scale": 0.15
-    },
-    "mapMulti": {
-      "path": "svg/multi.svg",
-      "scale": 0.15
-    },
-    "mapMystery": {
-      "path": "svg/myterie.svg",
-      "scale": 0.15
-    },
-    "mapSolved": {
-      "path": "svg/solved.svg",
-      "scale": 0.15
-    },
-    "mapEarth": {
-      "path": "svg/earth.svg",
-      "scale": 0.15
-    },
-    "mapEvent": {
-      "path": "svg/event.svg",
-      "scale": 0.15
-    },
-    "mapCITO": {
-      "path": "svg/cito.svg",
-      "scale": 0.15
-    },
-    "mapLetterbox": {
-      "path": "svg/letterbox.svg",
-      "scale": 0.15
-    },
-    "mapWherigo": {
-      "path": "svg/whereigo.svg",
-      "scale": 0.15
-    },
-    "cluster1": {
-      "path": "svg/cluster1.svg",
-      "scale": 0.15
-    },
-    "cluster10": {
-      "path": "svg/cluster10.svg",
-      "scale": 0.15
-    },
-    "cluster100": {
-      "path": "svg/cluster100.svg",
-      "scale": 0.15
-    },
-    "mapParkingArea": {
-      "path": "svg/mapParkingArea.svg",
-      "scale": 0.15
-    },
-    "mapReferencePoint": {
-      "path": "svg/mapReferencePoint.svg",
-      "scale": 0.13
-    },
-    "mapTrailhead": {
-      "path": "svg/mapTrailhead.svg",
-      "scale": 0.13
-    },
-    "mapFinal": {
-      "path": "svg/final.svg",
-      "scale": 0.13
-    },
-    "mapMultiQuestion": {
-      "path": "svg/multiQuestion.svg",
-      "scale": 0.13
-    },
-    "mapMultiStage": {
-      "path": "svg/multiStage.svg",
-      "scale": 0.13
-    },
-    "mapMultiStageStartP": {
-      "path": "svg/multiStageStartP.svg",
-      "scale": 0.13
-    }
-  },
-  "de.longri.cachebox3.utils.ScaledSizes": {
-    "default": {
-      "button_width": 63,
-      "button_height": 63,
-      "button_width_wide": 120,
-      "margin": 10,
-      "check_box_height": 12
-    }
-  },
-  "de.longri.cachebox3.utils.SkinColor": {
-    "background": {
-      "r": 1,
-      "g": 1,
-      "b": 1,
-      "a": 1
-    },
-    "abstract_background": {
-      "r": 1,
-      "g": 0,
-      "b": 0,
-      "a": 1
-    },
-    "font_color": {
-      "r": 0,
-      "g": 0,
-      "b": 0,
-      "a": 1
-    },
-    "menu_title_back_color": {
-      "r": 0.9,
-      "g": 1,
-      "b": 0.9,
-      "a": 1
-    },
-    "menu_parent_font_color": {
-      "r": 0.76,
-      "g": 0.9,
-      "b": 0.55,
-      "a": 1
-    },
-    "menu_font_color": {
-      "r": 1,
-      "g": 1,
-      "b": 1,
-      "a": 1
-    },
-    "dialog_background": {
-      "r": 0,
-      "g": 0,
-      "b": 0,
-      "a": 0.8
-    },
-    "transparent_color": {
-      "r": 0,
-      "g": 0,
-      "b": 0,
-      "a": 0
-    },
-    "help_window_font": {
-      "r": 1,
-      "g": 1,
-      "b": 1,
-      "a": 1
-    },
-    "settings_default_value_font_color": {
-      "r": 0.6,
-      "g": 0.6,
-      "b": 0.6,
-      "a": 1
-    },
-    "text_selection_color": {
-      "r": 0.5,
-      "g": 1,
-      "b": 0.5,
-      "a": 0.7
-    }
-  },
-  "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
-    "dialog_stage_background": {
-      "color": "dialog_background"
-    },
-    "transparent_drawable": {
-      "color": "transparent_color"
-    },
-    "text_selection_drawable": {
-      "color": "text_selection_color"
-    }
-  },
-  "com.badlogic.gdx.graphics.g2d.BitmapFont": {
-    "normal_font": {
-      "font": "fonts/DroidSans.ttf",
-      "size": 21
-    },
-    "normal_bold_font": {
-      "font": "fonts/DroidSans-Bold.ttf",
-      "size": 20
-    },
-    "settings_desc_font": {
-      "font": "fonts/DroidSerif-Italic.ttf",
-      "size": 14
-    },
-    "settings_default_value_font": {
-      "font": "fonts/DroidSerif-Bold.ttf",
-      "size": 12
-    },
-    "settings_value_font": {
-      "font": "fonts/DroidSans-BoldItalic.ttf",
-      "size": 21
-    }
-  },
-  "com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable": {
-    "drawable_default_button": {
-      "name": "default_button",
-      "left": 15,
-      "right": 15,
-      "top": 15,
-      "bottom": 15,
-      "leftWidth": 13,
-      "rightWidth": 13,
-      "topHeight": 11,
-      "bottomHeight": 11
-    },
-    "drawable_default_button_pressed": {
-      "name": "default_button_pressed",
-      "left": 15,
-      "right": 15,
-      "top": 15,
-      "bottom": 15,
-      "leftWidth": 13,
-      "rightWidth": 13,
-      "topHeight": 11,
-      "bottomHeight": 11
-    },
-    "drawable_dialog_header": {
-      "name": "dialog_header",
-      "left": 16,
-      "right": 16,
-      "top": 16,
-      "bottom": 1
-    },
-    "drawable_dialog_center": {
-      "name": "dialog_center",
-      "left": 16,
-      "right": 16,
-      "top": 16,
-      "bottom": 1,
-      "leftWidth": 10,
-      "rightWidth": 10,
-      "topHeight": 10,
-      "bottomHeight": 10
-    },
-    "drawable_dialog_footer": {
-      "name": "dialog_footer",
-      "left": 16,
-      "right": 16,
-      "top": 1,
-      "bottom": 16,
-      "leftWidth": 10,
-      "rightWidth": 10,
-      "topHeight": 10,
-      "bottomHeight": 10
-    },
-    "drawable_dialog_title": {
-      "name": "dialog_title",
-      "left": 16,
-      "right": 39,
-      "top": 18,
-      "bottom": 33,
-      "leftWidth": 15,
-      "rightWidth": 36,
-      "topHeight": 8,
-      "bottomHeight": 9
-    },
-    "list_background_drawable": {
-      "name": "list_background",
-      "left": 10,
-      "right": 10,
-      "top": 10,
-      "bottom": 10,
-      "leftWidth": 5,
-      "rightWidth": 5,
-      "topHeight": 5,
-      "bottomHeight": 5
-    },
-    "listrec_first_drawable": {
-      "name": "listrec_first",
-      "left": 10,
-      "right": 10,
-      "top": 10,
-      "bottom": 10,
-      "leftWidth": 5,
-      "rightWidth": 5,
-      "topHeight": 5,
-      "bottomHeight": 5
-    },
-    "listrec_second_drawable": {
-      "name": "listrec_second",
-      "left": 10,
-      "right": 10,
-      "top": 10,
-      "bottom": 10,
-      "leftWidth": 5,
-      "rightWidth": 5,
-      "topHeight": 5,
-      "bottomHeight": 5
-    },
-    "listrec_selected_drawable": {
-      "name": "listrec_selected",
-      "left": 10,
-      "right": 10,
-      "top": 10,
-      "bottom": 10,
-      "leftWidth": 5,
-      "rightWidth": 5,
-      "topHeight": 5,
-      "bottomHeight": 5
-    },
-    "toast_background_drawable": {
-      "name": "toast_background",
-      "left": 10,
-      "right": 10,
-      "top": 10,
-      "bottom": 10,
-      "leftWidth": 5,
-      "rightWidth": 5,
-      "topHeight": 5,
-      "bottomHeight": 5
-    },
-    "menu_divider_drawable": {
-      "name": "menu_divider",
-      "left": 20,
-      "right": 20,
-      "top": 5,
-      "bottom": 5
-    },
-    "activityBack_drawable": {
-      "name": "activityBack",
-      "left": 11,
-      "right": 11,
-      "top": 11,
-      "bottom": 11,
-      "leftWidth": 6,
-      "rightWidth": 6,
-      "topHeight": 6,
-      "bottomHeight": 6
-    },
-    "slider_drawable": {
-      "name": "slider",
-      "left": -1,
-      "right": -1,
-      "top": 5,
-      "bottom": 5
-    }
-  },
-  "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
-    "default": {
-      "up": "drawable_default_button",
-      "down": "drawable_default_button_pressed"
-    },
-    "toggle": {
-      "up": "drawable_default_button",
-      "checked": "drawable_default_button_pressed"
-    }
-  },
-  "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
-    "default": {
-      "font": "normal_font",
-      "fontColor": "font_color"
-    },
-    "toast": {
-      "font": "normal_font",
-      "fontColor": "font_color",
-      "background": "toast_background_drawable"
-    },
-    "menu_title_act": {
-      "font": "normal_bold_font",
-      "fontColor": "menu_font_color"
-    },
-    "menu_title_parent": {
-      "font": "normal_bold_font",
-      "fontColor": "menu_parent_font_color"
-    }
-  },
-  "de.longri.cachebox3.gui.widgets.ButtonBar$ButtonBarStyle": {
-    "main_button_bar": {
-      "background": "button_bar_back"
-    }
-  },
-  "de.longri.cachebox3.gui.widgets.GestureButton$GestureButtonStyle": {
-    "nav": {
-      "up": "nav",
-      "down": "nav_pressed",
-      "select": "nav_selected"
-    },
-    "db": {
-      "up": "db",
-      "down": "db_pressed",
-      "select": "db_selected"
-    },
-    "cache": {
-      "up": "cache",
-      "down": "cache_pressed",
-      "select": "cache_selected"
-    },
-    "tool": {
-      "up": "tool",
-      "down": "tool_pressed",
-      "select": "tool_selected"
-    },
-    "misc": {
-      "up": "misc",
-      "down": "misc_pressed",
-      "select": "misc_selected"
-    }
-  },
-  "com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
-    "transparent": {
-      "background": "transparent_drawable",
-      "titleFont": "normal_font",
-      "stageBackground": "dialog_stage_background"
-    }
-  },
-  "com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle": {
-    "default": {
-      "font": "normal_font",
-      "fontColor": "font_color",
-      "up": "drawable_default_button",
-      "down": "drawable_default_button_pressed"
-    }
-  },
-  "de.longri.cachebox3.gui.dialogs.ButtonDialog$ButtonDialogStyle": {
-    "default": {
-      "title": "drawable_dialog_title",
-      "header": "drawable_dialog_header",
-      "center": "drawable_dialog_center",
-      "footer": "drawable_dialog_footer",
-      "stageBackground": "dialog_stage_background",
-      "titleFont": "normal_font",
-      "titleFontColor": "font_color"
-    }
-  },
-  "com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
-    "list": {
-      "background": "transparent_drawable"
-    }
-  },
-  "de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle": {
-    "default": {
-      "background": "transparent_drawable",
-      "firstItem": "listrec_first_drawable",
-      "secondItem": "listrec_second_drawable",
-      "selectedItem": "listrec_selected_drawable",
-      "vScroll": "slider_drawable",
-      "vScrollKnob": "sliderKnob",
-      "pad": 1
-    }
-  },
-  "de.longri.cachebox3.gui.menu.Menu$MenuStyle": {
-    "default": {
-      "background": "list_background_drawable",
-      "font": "normal_font",
-      "fontColor": "font_color",
-      "stageBackground": "dialog_stage_background",
-      "menu_back": "menu_back",
-      "menu_for": "menu_for",
-      "divider": "menu_divider_drawable"
-    }
-  },
-  "de.longri.cachebox3.gui.menu.MenuItem$MenuItemStyle": {
-    "default": {
-      "font": "normal_font",
-      "fontColor": "font_color"
-    }
-  },
-  "de.longri.cachebox3.gui.help.HelpWindow$HelpWindowStyle": {
-    "default": {
-      "backgroundColor": "dialog_background",
-      "borderColor": "help_window_font",
-      "fontColor": "help_window_font",
-      "font": "normal_font",
-      "borderSize": 3
-    }
-  },
-  "de.longri.cachebox3.gui.help.GestureHelp$GestureHelpStyle": {
-    "default": {
-      "backgroundColor": "dialog_background",
-      "borderColor": "help_window_font",
-      "fontColor": "help_window_font",
-      "font": "normal_font",
-      "borderSize": 3,
-      "arrowDrawable": "arrow_help",
-      "arrowDrawable90": "arrow_help_90"
-    }
-  },
-  "de.longri.cachebox3.gui.ActivityBase$ActivityBaseStyle": {
-    "default": {
-      "background": "activityBack_drawable"
-    }
-  },
-  "de.longri.cachebox3.gui.activities.Settings_Activity$SettingsActivityStyle": {
-    "default": {
-      "background": "activityBack_drawable",
-      "nextIcon": "menu_for",
-      "backIcon": "menu_back",
-      "nameFont": "normal_font",
-      "descFont": "settings_desc_font",
-      "defaultValueFont": "settings_default_value_font",
-      "nameFontColor": "font_color",
-      "descFontColor": "font_color",
-      "defaultValueFontColor": "settings_default_value_font_color",
-      "valueFont": "settings_value_font",
-      "valueFontColor": "font_color"
-    }
-  },
-  "com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle": {
-    "default": {
-      "font": "normal_font",
-      "fontColor": "font_color",
-      "focusedFontColor": "font_color",
-      "disabledFontColor": "font_color",
-      "background": "listrec_second_drawable",
-      "focusedBackground": "listrec_second_drawable",
-      "disabledBackground": "listrec_second_drawable",
-      "selection": "text_selection_drawable",
-      "cursor": "cursor",
-      "messageFont": "normal_font",
-      "messageFontColor": "font_color"
-    }
-  },
-  "de.longri.cachebox3.gui.activities.SelectDB_Activity$SelectDbStyle": {
-    "default": {
-      "nameFont": "normal_bold_font",
-      "infoFont": "settings_desc_font",
-      "nameColor": "font_color",
-      "infoColor": "settings_default_value_font_color"
-    }
-  },
-  "com.kotcrab.vis.ui.widget.VisCheckBox$VisCheckBoxStyle": {
-    "default": {
-      "font": "normal_font",
-      "fontColor": "font_color",
-      "checkBackground": "check_off",
-      "checkBackgroundOver": "check_off",
-      "checkBackgroundDown": "check_off",
-      "tick": "check_on"
-    }
-  },
-  "de.longri.cachebox3.gui.views.CacheListItem$CacheListItemStyle": {
-    "default": {
-      "nameFont": "normal_font",
-      "nameFontColor": "font_color",
-      "arrow": "arrow-compass",
-      "distanceFont": "settings_default_value_font",
-      "distanceFontColor": "font_color"
-    }
-  },
-  "de.longri.cachebox3.gui.widgets.Slider$SliderStyle": {
-    "default": {
-      "background": "dialog_stage_background",
-      "slider": "drawable_default_button",
-      "font": "normal_font",
-      "fontColor": "font_color"
-    }
-  },
-  "de.longri.cachebox3.gui.widgets.QuickButtonList$QuickButtonListStyle": {
-    "default": {
-      "background": "button_bar_back",
-      "button": "drawable_default_button"
-    }
-  },
-  "de.longri.cachebox3.gui.widgets.MapStateButton$MapStateButtonStyle": {
-    "default": {
-      "stateWaypoint": "Mapstate.waypoint",
-      "stateGps": "Mapstate.gps",
-      "stateFree": "Mapstate.free",
-      "stateLock": "Mapstate.lock",
-      "stateCar": "Mapstate.car",
-      "pressedOverdraw": "MapstateOverdraw"
-    }
-  },
-  "de.longri.cachebox3.gui.widgets.ZoomButton$ZoomButtonStyle": {
-    "default": {
-      "plus": "ZoomPlus",
-      "minus": "ZoomMinus",
-      "plusDown": "ZoomPlusPressed",
-      "minusDown": "ZoomMinusPressed",
-      "plusDisabled": "ZoomPlusDisabled",
-      "minusDisabled": "ZoomMinusDisabled"
-    }
-  }
+"com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg": {
+	"star_half": { "path": "svg/star_half.svg", "scale": 0.25 },
+	"mapParkingArea0": { "path": "svg/mapParkingArea.svg", "scale": 0.1 },
+	"nav_pressed": { "path": "svg/nav_pressed.svg", "scale": 0.72 },
+	"small": { "path": "svg/small.svg", "scale": 0.25 },
+	"listrec_selected": { "path": "svg/listrec_selected.svg", "scale": 1 },
+	"virtual": { "path": "svg/virtual.svg", "scale": 0.2 },
+	"ZoomPlus": { "path": "svg/plus.svg", "scale": 0.5 },
+	"MapstateOverdraw": { "path": "svg/map-state-overdraw.svg", "scale": 0.75 },
+	"nav_selected": { "path": "svg/nav_selected.svg", "scale": 0.72 },
+	"other": { "path": "svg/other.svg", "scale": 0.25 },
+	"Mapstate.gps": { "path": "svg/map-state-gps.svg", "scale": 0.75 },
+	"compass": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"settings_icon": { "path": "svg/settings_icon.svg", "scale": 0.27 },
+	"mapWherigo": { "path": "svg/whereigo.svg", "scale": 0.15 },
+	"star0": { "path": "svg/star0.svg", "scale": 0.25 },
+	"listrec_second": { "path": "svg/listrec_second.svg", "scale": 1 },
+	"nav": { "path": "svg/nav.svg", "scale": 0.72 },
+	"ZoomMinusPressed": { "path": "svg/minus_pressed.svg", "scale": 0.5 },
+	"menu_for": { "path": "svg/menu_for.svg", "scale": 0.3 },
+	"dialog_center": { "path": "svg/dialog_center.svg", "scale": 1 },
+	"check_disabled": { "path": "svg/check_disabled.svg", "scale": 1 },
+	"cm_icon": { "path": "svg/cm_icon.svg", "scale": 0.72 },
+	"finger_click": { "path": "svg/finger_click.svg", "scale": 1 },
+	"arrow-compass": { "path": "svg/arrow-compass.svg", "scale": 0.15 },
+	"ZoomPlusPressed": { "path": "svg/plus_pressed.svg", "scale": 0.5 },
+	"default_button_pressed": { "path": "svg/default_button_pressed.svg", "scale": 1 },
+	"multi": { "path": "svg/multi.svg", "scale": 0.2 },
+	"large": { "path": "svg/large.svg", "scale": 0.25 },
+	"db_selected": { "path": "svg/db_selected.svg", "scale": 0.72 },
+	"mapMulti": { "path": "svg/multi.svg", "scale": 0.15 },
+	"lupe": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"letterbox": { "path": "svg/letterbox.svg", "scale": 0.2 },
+	"mapMultiQuestion": { "path": "svg/multiQuestion.svg", "scale": 0.13 },
+	"menu_divider": { "path": "svg/menuDivider.svg", "scale": 5 },
+	"toast_background": { "path": "svg/toast_background.svg", "scale": 1 },
+	"finger": { "path": "svg/finger.svg", "scale": 1 },
+	"mapTraditional0": { "path": "svg/mapTraditional0.svg", "scale": 0.3 },
+	"cacheListIcon": { "path": "svg/cacheListIcon.svg", "scale": 0.19455253 },
+	"earth": { "path": "svg/earth.svg", "scale": 0.2 },
+	"Mapstate.car": { "path": "svg/map-state-car.svg", "scale": 0.75 },
+	"listIcon": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"mapMultiStageStartP": { "path": "svg/multiStageStartP.svg", "scale": 0.13 },
+	"star": { "path": "svg/star.svg", "scale": 0.25 },
+	"cursor": { "path": "svg/cursor.svg", "scale": 1 },
+	"mapReferencePoint0": { "path": "svg/mapReferencePoint0.svg", "scale": 0.15 },
+	"helpIcon": { "path": "svg/helpIcon.svg", "scale": 1 },
+	"map": { "path": "svg/map.svg", "scale": 0.19455253 },
+	"cb": { "path": "svg/cb.svg", "scale": 0.15 },
+	"mapFound1": { "path": "svg/mapFound1.svg", "scale": 0.15 },
+	"cito": { "path": "svg/cito.svg", "scale": 0.2 },
+	"ZoomPlusDisabled": { "path": "svg/plus_disabled.svg", "scale": 0.5 },
+	"listrec_first": { "path": "svg/listrec_first.svg", "scale": 1 },
+	"dialog_header": { "path": "svg/dialog_header.svg", "scale": 1 },
+	"cache_pressed": { "path": "svg/cache_pressed.svg", "scale": 0.72 },
+	"traddi": { "path": "svg/traddi.svg", "scale": 0.2 },
+	"mapParkingArea": { "path": "svg/mapParkingArea.svg", "scale": 0.15 },
+	"check_off": { "path": "svg/check_off.svg", "scale": 1 },
+	"mapMystery": { "path": "svg/myterie.svg", "scale": 0.15 },
+	"mapFound2": { "path": "svg/mapFound2.svg", "scale": 0.25 },
+	"list_background": { "path": "svg/list_background.svg", "scale": 1 },
+	"micro": { "path": "svg/micro.svg", "scale": 0.25 },
+	"navigate": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"dialog_footer": { "path": "svg/dialog_footer.svg", "scale": 1 },
+	"db_pressed": { "path": "svg/db_pressed.svg", "scale": 0.72 },
+	"check_on": { "path": "svg/check_on.svg", "scale": 1 },
+	"cluster1": { "path": "svg/cluster1.svg", "scale": 0.15 },
+	"filter": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"addCacheIcon": { "path": "svg/addCacheIcon.svg", "scale": 0.19455253 },
+	"tool_pressed": { "path": "svg/tool_pressed.svg", "scale": 0.72 },
+	"log10icon": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"giga": { "path": "svg/giga.svg", "scale": 0.2 },
+	"db": { "path": "svg/db.svg", "scale": 0.72 },
+	"mapSolved": { "path": "svg/solved.svg", "scale": 0.15 },
+	"cache": { "path": "svg/cache.svg", "scale": 0.72 },
+	"mapTrailhead0": { "path": "svg/mapTrailhead0.svg", "scale": 0.3 },
+	"mapTrailhead1": { "path": "svg/mapTrailhead1.svg", "scale": 0.15 },
+	"gc_liveIcon": { "path": "svg/gc_liveIcon.svg", "scale": 1 },
+	"misc_selected": { "path": "svg/misc_selected.svg", "scale": 0.72 },
+	"closeIcon": { "path": "svg/closeIcon.svg", "scale": 1 },
+	"videoIcon": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"activityBack": { "path": "svg/activityBack.svg", "scale": 1 },
+	"voiceRecIcon": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"tool": { "path": "svg/tool.svg", "scale": 0.72 },
+	"cluster10": { "path": "svg/cluster10.svg", "scale": 0.15 },
+	"event": { "path": "svg/event.svg", "scale": 0.2 },
+	"mapTraditional2": { "path": "svg/mapTraditional2.svg", "scale": 0.2 },
+	"regular": { "path": "svg/regular.svg", "scale": 0.25 },
+	"mapEvent": { "path": "svg/event.svg", "scale": 0.15 },
+	"arrow_help_90": { "path": "svg/arrow_help_90.svg", "scale": 0.28 },
+	"dialog_title": { "path": "svg/dialog_title.svg", "scale": 1 },
+	"trackListIcon": { "path": "svg/trackListIcon.svg", "scale": 0.19455253 },
+	"Mapstate.lock": { "path": "svg/map-state-lock.svg", "scale": 0.75 },
+	"mapLetterbox": { "path": "svg/letterbox.svg", "scale": 0.15 },
+	"mapReferencePoint": { "path": "svg/mapReferencePoint.svg", "scale": 0.13 },
+	"mapTraditional": { "path": "svg/traddi.svg", "scale": 0.15 },
+	"db_filter_active": { "path": "svg/db_filter_active.svg", "scale": 0.72 },
+	"mega": { "path": "svg/mega.svg", "scale": 0.2 },
+	"DayNight": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"cluster100": { "path": "svg/cluster100.svg", "scale": 0.15 },
+	"cache_selected": { "path": "svg/cache_selected.svg", "scale": 0.72 },
+	"TORCHON": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"mapCITO": { "path": "svg/cito.svg", "scale": 0.15 },
+	"importIcon": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"mapMultiStage": { "path": "svg/multiStage.svg", "scale": 0.13 },
+	"manageDb": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"deleteIcon": { "path": "svg/deleteIcon.svg", "scale": 0.19455253 },
+	"tbListIcon": { "path": "svg/tbListIcon.svg", "scale": 0.19455253 },
+	"menu_back": { "path": "svg/menu_back.svg", "scale": 0.3 },
+	"mapTrailhead2": { "path": "svg/mapTrailhead2.svg", "scale": 0.2 },
+	"whereigo": { "path": "svg/whereigo.svg", "scale": 0.2 },
+	"infoIcon": { "path": "svg/infoIcon.svg", "scale": 1 },
+	"misc_pressed": { "path": "svg/misc_pressed.svg", "scale": 0.72 },
+	"mapReferencePoint1": { "path": "svg/mapReferencePoint0.svg", "scale": 0.2 },
+	"mapReferencePoint2": { "path": "svg/mapReferencePoint1.svg", "scale": 0.25 },
+	"sortIcon": { "path": "svg/sortIcon.svg", "scale": 0.19455253 },
+	"mapFound0": { "path": "svg/mapFound0.svg", "scale": 0.3 },
+	"docIcon": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"button_bar_back": { "path": "svg/button_bar_back.svg", "scale": 1 },
+	"ZoomMinusDisabled": { "path": "svg/minus_disabled.svg", "scale": 0.5 },
+	"cm_icon_filterd": { "path": "svg/cm_icon_filterd.svg", "scale": 0.72 },
+	"arrow_help": { "path": "svg/arrow_help.svg", "scale": 0.27 },
+	"mapTrailhead": { "path": "svg/mapTrailhead.svg", "scale": 0.13 },
+	"slider": { "path": "svg/slider.svg", "scale": 0.3 },
+	"waypointListIcon": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"myterie": { "path": "svg/myterie.svg", "scale": 0.2 },
+	"Mapstate.free": { "path": "svg/map-state-free.svg", "scale": 0.75 },
+	"mapTraditional1": { "path": "svg/mapTraditional1.svg", "scale": 0.15 },
+	"tool_selected": { "path": "svg/tool_selected.svg", "scale": 0.72 },
+	"mapParkingArea1": { "path": "svg/mapParkingArea.svg", "scale": 0.15 },
+	"mapParkingArea2": { "path": "svg/mapParkingArea.svg", "scale": 0.2 },
+	"db_selected_filter_active": { "path": "svg/db_selected_filter_active.svg", "scale": 0.72 },
+	"UPLOADFIELDNOTE": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"misc": { "path": "svg/misc.svg", "scale": 0.72 },
+	"mapFinal": { "path": "svg/final.svg", "scale": 0.13 },
+	"default_button": { "path": "svg/default_button.svg", "scale": 1 },
+	"mapEarth": { "path": "svg/earth.svg", "scale": 0.15 },
+	"TORCHOFF": { "path": "svg/missingIcon.svg", "scale": 1 },
+	"ZoomMinus": { "path": "svg/minus.svg", "scale": 0.5 },
+	"sliderKnob": { "path": "svg/sliderKnob.svg", "scale": 0.3 },
+	"Mapstate.waypoint": { "path": "svg/map-state-wp.svg", "scale": 0.75 },
+	"db_pressed_filter_active": { "path": "svg/db_pressed_filter_active.svg", "scale": 0.72 }
+},
+"de.longri.cachebox3.utils.SkinColor": {
+	"dialog_background": { "a": 0.8 },
+	"background": { "r": 1, "g": 1, "b": 1, "a": 1 },
+	"menu_title_back_color": { "r": 0.9, "g": 1, "b": 0.9, "a": 1 },
+	"transparent_color": { "a": 1 },
+	"help_window_font": { "r": 1, "g": 1, "b": 1, "a": 1 },
+	"menu_parent_font_color": { "r": 0.76, "g": 0.9, "b": 0.55, "a": 1 },
+	"menu_font_color": { "r": 1, "g": 1, "b": 1, "a": 1 },
+	"settings_default_value_font_color": { "r": 0.6, "g": 0.6, "b": 0.6, "a": 1 },
+	"text_selection_color": { "r": 0.5, "g": 1, "b": 0.5, "a": 0.7 },
+	"abstract_background": { "r": 1, "a": 1 },
+	"font_color": { "a": 1 }
+},
+"de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
+	"dialog_stage_background": { "color": "dialog_background" },
+	"text_selection_drawable": { "color": "text_selection_color" },
+	"transparent_drawable": { "color": "transparent_color" }
+},
+"com.badlogic.gdx.graphics.g2d.BitmapFont": {
+	"settings_desc_font": { "font": "fonts/DroidSerif-Italic.ttf", "size": 14 },
+	"normal_font": { "font": "fonts/DroidSans.ttf", "size": 21 },
+	"settings_default_value_font": { "font": "fonts/DroidSerif-Bold.ttf", "size": 12 },
+	"normal_bold_font": { "font": "fonts/DroidSans-Bold.ttf", "size": 20 },
+	"settings_value_font": { "font": "fonts/DroidSans-BoldItalic.ttf", "size": 21 }
+},
+"com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable": {
+	"drawable_dialog_header": { "name": "dialog_header", "left": 16, "right": 16, "top": 16, "bottom": 1 },
+	"drawable_dialog_footer": {
+		"name": "dialog_footer",
+		"left": 16,
+		"right": 16,
+		"top": 1,
+		"bottom": 16,
+		"leftWidth": 10,
+		"rightWidth": 10,
+		"topHeight": 10,
+		"bottomHeight": 10
+	},
+	"drawable_default_button_pressed": {
+		"name": "default_button_pressed",
+		"left": 15,
+		"right": 15,
+		"top": 15,
+		"bottom": 15,
+		"leftWidth": 13,
+		"rightWidth": 13,
+		"topHeight": 11,
+		"bottomHeight": 11
+	},
+	"drawable_dialog_title": {
+		"name": "dialog_title",
+		"left": 16,
+		"right": 39,
+		"top": 18,
+		"bottom": 33,
+		"leftWidth": 15,
+		"rightWidth": 36,
+		"topHeight": 8,
+		"bottomHeight": 9
+	},
+	"activityBack_drawable": {
+		"name": "activityBack",
+		"left": 11,
+		"right": 11,
+		"top": 11,
+		"bottom": 11,
+		"leftWidth": 6,
+		"rightWidth": 6,
+		"topHeight": 6,
+		"bottomHeight": 6
+	},
+	"drawable_default_button": {
+		"name": "default_button",
+		"left": 15,
+		"right": 15,
+		"top": 15,
+		"bottom": 15,
+		"leftWidth": 13,
+		"rightWidth": 13,
+		"topHeight": 11,
+		"bottomHeight": 11
+	},
+	"slider_drawable": { "name": "slider", "left": -1, "right": -1, "top": 5, "bottom": 5 },
+	"drawable_dialog_center": {
+		"name": "dialog_center",
+		"left": 16,
+		"right": 16,
+		"top": 16,
+		"bottom": 1,
+		"leftWidth": 10,
+		"rightWidth": 10,
+		"topHeight": 10,
+		"bottomHeight": 10
+	},
+	"menu_divider_drawable": { "name": "menu_divider", "left": 20, "right": 20, "top": 5, "bottom": 5 },
+	"list_background_drawable": {
+		"name": "list_background",
+		"left": 10,
+		"right": 10,
+		"top": 10,
+		"bottom": 10,
+		"leftWidth": 5,
+		"rightWidth": 5,
+		"topHeight": 5,
+		"bottomHeight": 5
+	},
+	"listrec_selected_drawable": {
+		"name": "listrec_selected",
+		"left": 10,
+		"right": 10,
+		"top": 10,
+		"bottom": 10,
+		"leftWidth": 5,
+		"rightWidth": 5,
+		"topHeight": 5,
+		"bottomHeight": 5
+	},
+	"toast_background_drawable": {
+		"name": "toast_background",
+		"left": 10,
+		"right": 10,
+		"top": 10,
+		"bottom": 10,
+		"leftWidth": 5,
+		"rightWidth": 5,
+		"topHeight": 5,
+		"bottomHeight": 5
+	},
+	"listrec_first_drawable": {
+		"name": "listrec_first",
+		"left": 10,
+		"right": 10,
+		"top": 10,
+		"bottom": 10,
+		"leftWidth": 5,
+		"rightWidth": 5,
+		"topHeight": 5,
+		"bottomHeight": 5
+	},
+	"listrec_second_drawable": {
+		"name": "listrec_second",
+		"left": 10,
+		"right": 10,
+		"top": 10,
+		"bottom": 10,
+		"leftWidth": 5,
+		"rightWidth": 5,
+		"topHeight": 5,
+		"bottomHeight": 5
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
+	"default": { "up": "drawable_default_button", "down": "drawable_default_button_pressed" },
+	"toggle": { "up": "drawable_default_button", "checked": "drawable_default_button_pressed" }
+},
+"com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+	"toast": { "font": "normal_font", "fontColor": "font_color", "background": "toast_background_drawable" },
+	"default": { "font": "normal_font", "fontColor": "font_color" },
+	"menu_title_act": { "font": "normal_bold_font", "fontColor": "menu_font_color" },
+	"menu_title_parent": { "font": "normal_bold_font", "fontColor": "menu_parent_font_color" }
+},
+"de.longri.cachebox3.gui.widgets.ButtonBar$ButtonBarStyle": {
+	"main_button_bar": { "background": "button_bar_back" }
+},
+"de.longri.cachebox3.gui.widgets.GestureButton$GestureButtonStyle": {
+	"cache": { "select": "cache_selected", "up": "cache", "down": "cache_pressed" },
+	"tool": { "select": "tool_selected", "up": "tool", "down": "tool_pressed" },
+	"nav": { "select": "nav_selected", "up": "nav", "down": "nav_pressed" },
+	"misc": { "select": "misc_selected", "up": "misc", "down": "misc_pressed" },
+	"db": { "select": "db_selected", "up": "db", "down": "db_pressed" }
+},
+"com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
+	"transparent": {
+		"background": "transparent_drawable",
+		"titleFont": "normal_font",
+		"stageBackground": "dialog_stage_background"
+	}
+},
+"com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle": {
+	"default": {
+		"font": "normal_font",
+		"fontColor": "font_color",
+		"up": "drawable_default_button",
+		"down": "drawable_default_button_pressed"
+	}
+},
+"de.longri.cachebox3.gui.dialogs.ButtonDialog$ButtonDialogStyle": {
+	"default": {
+		"title": "drawable_dialog_title",
+		"header": "drawable_dialog_header",
+		"center": "drawable_dialog_center",
+		"footer": "drawable_dialog_footer",
+		"stageBackground": "dialog_stage_background",
+		"titleFont": "normal_font",
+		"titleFontColor": "font_color"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
+	"list": { "background": "transparent_drawable" }
+},
+"de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle": {
+	"default": {
+		"firstItem": "listrec_first_drawable",
+		"secondItem": "listrec_second_drawable",
+		"selectedItem": "listrec_selected_drawable",
+		"pad": 1,
+		"background": "transparent_drawable",
+		"vScroll": "slider_drawable",
+		"vScrollKnob": "sliderKnob"
+	}
+},
+"de.longri.cachebox3.gui.menu.Menu$MenuStyle": {
+	"default": {
+		"font": "normal_font",
+		"fontColor": "font_color",
+		"background": "list_background_drawable",
+		"stageBackground": "dialog_stage_background",
+		"menu_back": "menu_back",
+		"menu_for": "menu_for",
+		"divider": "menu_divider_drawable"
+	}
+},
+"de.longri.cachebox3.gui.menu.MenuItem$MenuItemStyle": {
+	"default": { "font": "normal_font", "fontColor": "font_color" }
+},
+"de.longri.cachebox3.gui.help.HelpWindow$HelpWindowStyle": {
+	"default": {
+		"backgroundColor": "dialog_background",
+		"borderColor": "help_window_font",
+		"fontColor": "help_window_font",
+		"font": "normal_font",
+		"borderSize": 3
+	}
+},
+"de.longri.cachebox3.gui.help.GestureHelp$GestureHelpStyle": {
+	"default": {
+		"arrowDrawable": "arrow_help",
+		"arrowDrawable90": "arrow_help_90",
+		"backgroundColor": "dialog_background",
+		"borderColor": "help_window_font",
+		"fontColor": "help_window_font",
+		"font": "normal_font",
+		"borderSize": 3
+	}
+},
+"de.longri.cachebox3.gui.ActivityBase$ActivityBaseStyle": {
+	"default": { "background": "activityBack_drawable" }
+},
+"de.longri.cachebox3.gui.activities.Settings_Activity$SettingsActivityStyle": {
+	"default": {
+		"nextIcon": "menu_for",
+		"backIcon": "menu_back",
+		"nameFont": "normal_font",
+		"descFont": "settings_desc_font",
+		"defaultValueFont": "settings_default_value_font",
+		"valueFont": "settings_value_font",
+		"nameFontColor": "font_color",
+		"descFontColor": "font_color",
+		"defaultValueFontColor": "settings_default_value_font_color",
+		"valueFontColor": "font_color",
+		"background": "activityBack_drawable"
+	}
+},
+"com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle": {
+	"default": {
+		"font": "normal_font",
+		"fontColor": "font_color",
+		"focusedFontColor": "font_color",
+		"disabledFontColor": "font_color",
+		"background": "listrec_second_drawable",
+		"focusedBackground": "listrec_second_drawable",
+		"disabledBackground": "listrec_second_drawable",
+		"cursor": "cursor",
+		"selection": "text_selection_drawable",
+		"messageFont": "normal_font",
+		"messageFontColor": "font_color"
+	}
+},
+"de.longri.cachebox3.gui.activities.SelectDB_Activity$SelectDbStyle": {
+	"default": {
+		"nameFont": "normal_bold_font",
+		"infoFont": "settings_desc_font",
+		"nameColor": "font_color",
+		"infoColor": "settings_default_value_font_color"
+	}
+},
+"com.kotcrab.vis.ui.widget.VisCheckBox$VisCheckBoxStyle": {
+	"default": {
+		"checkBackground": "check_off",
+		"checkBackgroundOver": "check_off",
+		"checkBackgroundDown": "check_off",
+		"tick": "check_on",
+		"font": "normal_font",
+		"fontColor": "font_color"
+	}
+},
+"de.longri.cachebox3.gui.views.CacheListItem$CacheListItemStyle": {
+	"default": {
+		"nameFont": "normal_font",
+		"nameFontColor": "font_color",
+		"arrow": "arrow-compass",
+		"distanceFont": "settings_default_value_font",
+		"distanceFontColor": "font_color"
+	}
+},
+"de.longri.cachebox3.gui.widgets.Slider$SliderStyle": {
+	"default": {
+		"background": "dialog_stage_background",
+		"slider": "drawable_default_button",
+		"font": "normal_font",
+		"fontColor": "font_color"
+	}
+},
+"de.longri.cachebox3.gui.widgets.QuickButtonList$QuickButtonListStyle": {
+	"default": { "background": "button_bar_back", "button": "drawable_default_button" }
+},
+"de.longri.cachebox3.gui.widgets.MapStateButton$MapStateButtonStyle": {
+	"default": {
+		"stateWaypoint": "Mapstate.waypoint",
+		"stateGps": "Mapstate.gps",
+		"stateFree": "Mapstate.free",
+		"stateLock": "Mapstate.lock",
+		"stateCar": "Mapstate.car",
+		"pressedOverdraw": "MapstateOverdraw"
+	}
+},
+"de.longri.cachebox3.gui.widgets.ZoomButton$ZoomButtonStyle": {
+	"default": {
+		"plus": "ZoomPlus",
+		"minus": "ZoomMinus",
+		"plusDown": "ZoomPlusPressed",
+		"minusDown": "ZoomMinusPressed",
+		"plusDisabled": "ZoomPlusDisabled",
+		"minusDisabled": "ZoomMinusDisabled",
+		"alphaOff": 0.2,
+		"alphaOn": 1
+	}
+},
+"de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle": {
+	"mapReferencePoint": { "small": "mapReferencePoint0", "middle": "mapReferencePoint1", "large": "mapReferencePoint2" },
+	"mapFound": { "small": "mapFound0", "middle": "mapFound1", "large": "mapFound2" },
+	"mapTraditional": { "small": "mapTraditional0", "middle": "mapTraditional1", "large": "mapTraditional2" },
+	"mapParkingArea": { "small": "mapParkingArea0", "middle": "mapParkingArea1", "large": "mapParkingArea2" },
+	"mapTrailhead": { "small": "mapTrailhead0", "middle": "mapTrailhead1", "large": "mapTrailhead2" }
+},
+"de.longri.cachebox3.gui.skin.styles.ScaledSize": {
+	"margin": { "value": 10 },
+	"check_box_height": { "value": 12 },
+	"button_height": { "value": 63 },
+	"button_width_wide": { "value": 120 },
+	"button_width": { "value": 63 }
+}
 }
