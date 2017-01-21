@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package de.longri.cachebox3.develop.tools.skin_editor;
+package com.badlogic.gdx.scenes.scene2d.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -23,13 +23,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -40,6 +33,9 @@ import com.badlogic.gdx.utils.reflect.Field;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
+import de.longri.cachebox3.develop.tools.skin_editor.NinePatchEditorDialog;
+import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
+import de.longri.cachebox3.develop.tools.skin_editor.SvgFileIconProvider;
 import org.oscim.backend.canvas.Bitmap;
 
 import java.awt.*;
@@ -53,7 +49,7 @@ import java.util.*;
  */
 public class DrawablePickerDialog extends Dialog {
 
-
+    private Table topMenuTable;
     private SkinEditorGame game;
     private Field field;
     private Table tableDrawables;
@@ -62,6 +58,12 @@ public class DrawablePickerDialog extends Dialog {
     private ScrollPane scrollPane;
     static private FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
     static private SvgFileIconProvider svgFileIconProvider;
+
+    TextButton togglShowNinePatch;
+    TextButton togglShowDrawable;
+    TextField filterField;
+    private final boolean disableNinePatch;
+
 
     static {
         FileTypeFilter typeFilter = new FileTypeFilter(true); //allow "All Types" mode where all files are shown
@@ -72,22 +74,47 @@ public class DrawablePickerDialog extends Dialog {
         fileChooser.setIconProvider(svgFileIconProvider);
     }
 
-    public DrawablePickerDialog(final SkinEditorGame game, final Field field) {
+    public DrawablePickerDialog(final SkinEditorGame game, final Field field, boolean disableNinePatch) {
 
         super("Drawable Picker", game.skin);
+
         this.game = game;
         this.field = field;
+        this.disableNinePatch = disableNinePatch;
 
+        initializeSelf();
 
-        //set size
+    }
 
-        //TODO set size
+    private void initializeSelf() {
+        this.clear();
+        defaults().space(6);
+        add(topMenuTable = new Table(game.skin)).fillX();
+        row();
+        add(contentTable = new Table(game.skin)).expand().fill();
+        row();
+        add(buttonTable = new Table(game.skin)).fillX();
+
+        topMenuTable.defaults().space(6);
+        contentTable.defaults().space(6);
+        buttonTable.defaults().space(6);
+
+        buttonTable.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!values.containsKey(actor)) return;
+                while (actor.getParent() != buttonTable)
+                    actor = actor.getParent();
+                result(values.get(actor));
+                if (!cancelHide) hide();
+                cancelHide = false;
+            }
+        });
 
 
         tableDrawables = new Table(game.skin);
         scrollPane = new ScrollPane(tableDrawables, game.skin);
 
-        getContentTable().add(scrollPane);
+        contentTable.add(scrollPane);
         scrollPane.setFlickScroll(false);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollbarsOnTop(true);
@@ -263,29 +290,53 @@ public class DrawablePickerDialog extends Dialog {
 
         });
 
-        getContentTable().add(scrollPane).width(getPrefWidth()).height(getPrefHeight() * 0.9f).pad(20);
-        getButtonTable().add(buttonNewNinePatch);
-        getButtonTable().add(buttonNewDrawable);
-        getButtonTable().add(buttonZoom);
-        if (field != null) {
-            getButtonTable().add(buttonNoDrawable);
+        ChangeListener refreshListener = new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                refresh();
+            }
+        };
+
+        togglShowNinePatch = new TextButton("Show NinePatch", game.skin, "toggle");
+        togglShowDrawable = new TextButton("Show Drawable", game.skin, "toggle");
+        filterField = new TextField("", game.skin);
+
+        togglShowNinePatch.addListener(refreshListener);
+        togglShowDrawable.addListener(refreshListener);
+        filterField.addListener(refreshListener);
+
+
+        togglShowNinePatch.toggle();
+        togglShowDrawable.toggle();
+
+        if (disableNinePatch) {
+            togglShowNinePatch.setDisabled(true);
         }
-        getButtonTable().padBottom(15);
-        button("Cancel", false);
+
+        topMenuTable.add(togglShowNinePatch);
+        topMenuTable.add(togglShowDrawable);
+        topMenuTable.add(filterField);
+
+        contentTable.add(scrollPane).width(getPrefWidth()).height(getPrefHeight() * 0.7f).pad(20);
+
+        buttonTable.add(buttonNewNinePatch);
+        buttonTable.add(buttonNewDrawable);
+        buttonTable.add(buttonZoom);
+        if (field != null) {
+            buttonTable.add(buttonNoDrawable);
+        }
+        buttonTable.padBottom(15);
+        button("Cancel", true);
         key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
 
+        this.layout();
     }
 
     @Override
     public Dialog show(Stage stage) {
-
         refresh();
-
         Dialog d = super.show(stage);
         getStage().setScrollFocus(scrollPane);
-
-//        d.setBounds(0, 0, 700, 700);
-
         return d;
     }
 
@@ -296,20 +347,53 @@ public class DrawablePickerDialog extends Dialog {
 
         items.clear();
 
+        boolean showDrawables = togglShowDrawable.isChecked();
+        boolean show9Patch = togglShowNinePatch.isChecked() && !disableNinePatch;
+
         Iterator<String> it = itemsDrawables.keys().iterator();
         while (it.hasNext()) {
             String key = it.next();
-            items.put(key, itemsDrawables.get(key));
+
+            // key filter
+            String filter = filterField.getText();
+            if (!filter.isEmpty()) {
+                if (!key.toLowerCase().contains(filter.toLowerCase())) {
+                    continue;
+                }
+            }
+
+
+            Drawable drawable = itemsDrawables.get(key);
+            if (show9Patch && drawable instanceof SvgNinePatchDrawable)
+                items.put(key, drawable);
+            else if (showDrawables && !(drawable instanceof SvgNinePatchDrawable)) {
+                items.put(key, drawable);
+            }
+
+
         }
 
-        it = itemsRegions.keys().iterator();
-        while (it.hasNext()) {
-            String key = it.next();
-            if (itemsDrawables.containsKey(key)) {
-                continue;
+        if(showDrawables){
+            it = itemsRegions.keys().iterator();
+            while (it.hasNext()) {
+                String key = it.next();
+
+                // key filter
+                String filter = filterField.getText();
+                if (!filter.isEmpty()) {
+                    if (!key.toLowerCase().contains(filter.toLowerCase())) {
+                        continue;
+                    }
+                }
+
+                if (items.containsKey(key))
+                    continue;
+
+                items.put(key, itemsRegions.get(key));
             }
-            items.put(key, itemsRegions.get(key));
         }
+
+
 
         updateTable();
 
@@ -347,14 +431,15 @@ public class DrawablePickerDialog extends Dialog {
             Button buttonItem = new Button(game.skin);
 
             Image img = null;
-            if (items.get(key) instanceof Drawable) {
-                img = new Image((Drawable) items.get(key));
+            Object item = items.get(key);
+            if (item instanceof Drawable) {
+                img = new Image((Drawable) item);
             } else {
-                img = new Image((TextureRegion) items.get(key));
+                img = new Image((TextureRegion) item);
 
             }
 
-            if (zoom == true) {
+            if (zoom == true || item instanceof SvgNinePatchDrawable) {
                 buttonItem.add(img).expand().fill().pad(5);
             } else {
                 buttonItem.add(img).expand().pad(5);
