@@ -18,7 +18,6 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
@@ -29,7 +28,6 @@ import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
-import de.longri.cachebox3.utils.ScaledSizes;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
 
@@ -42,6 +40,8 @@ import java.util.ArrayList;
 public class SvgSkin extends Skin {
     private final static Logger log = LoggerFactory.getLogger(SvgSkin.class);
     private static final String SKIN_JSON_NAME = "skin.json";
+    private boolean forceCreateNewAtlas = false;
+
 
     public enum StorageType {
         LOCAL, INTERNAL
@@ -82,10 +82,11 @@ public class SvgSkin extends Skin {
      * @param storageType LOCAL or INTERNAL
      * @param skinFolder  {@link FileHandle} to the folder of this skin
      */
-    public SvgSkin(String name, StorageType storageType, FileHandle skinFolder) {
+    public SvgSkin(boolean forceCreateNewAtlas, String name, StorageType storageType, FileHandle skinFolder) {
         super();
         this.storageType = storageType;
         this.name = name;
+        this.forceCreateNewAtlas = forceCreateNewAtlas;
 
         FileHandle skinFile = null;
         if (skinFolder.extension().equals("json")) {
@@ -227,7 +228,7 @@ public class SvgSkin extends Skin {
 
                 //create and register atlas
 
-                SvgSkin.this.addRegions(SvgSkinUtil.createTextureAtlasFromImages(SvgSkin.this.name, registerdSvgs, skinFile));
+                SvgSkin.this.addRegions(SvgSkinUtil.createTextureAtlasFromImages(forceCreateNewAtlas, SvgSkin.this.name, registerdSvgs, skinFile));
             }
 
 
@@ -451,7 +452,7 @@ public class SvgSkin extends Skin {
             FileHandle fileHandle = this.skinFolder.child(scaledSvg.path);
             Bitmap bitmap = null;
             try {
-                bitmap = PlatformConnector.getSvg(name,fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
+                bitmap = PlatformConnector.getSvg(name, fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
             } catch (IOException e) {
                 e.printStackTrace();
             }

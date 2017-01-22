@@ -31,4 +31,9 @@ public class ScaledSvg {
     public String getRegisterName() {
         return registerName;
     }
+
+    @Override
+    public String toString() {
+        return path + "/" + scale + "/" + registerName;
+    }
 }

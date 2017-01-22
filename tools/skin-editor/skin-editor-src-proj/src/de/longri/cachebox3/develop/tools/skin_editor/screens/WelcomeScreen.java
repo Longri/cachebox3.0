@@ -284,7 +284,7 @@ public class WelcomeScreen implements Screen {
 
         //load default skin and save into project folder
         FileHandle skinFolder = Gdx.files.classpath("raw_tamplate");
-        SaveableSvgSkin defaultSkin = new SaveableSvgSkin("raw_tamplate", SvgSkin.StorageType.INTERNAL, skinFolder);
+        SaveableSvgSkin defaultSkin = new SaveableSvgSkin(true, "raw_tamplate", SvgSkin.StorageType.INTERNAL, skinFolder);
         defaultSkin.save(projectFolder.child("skin.json"));
 
 

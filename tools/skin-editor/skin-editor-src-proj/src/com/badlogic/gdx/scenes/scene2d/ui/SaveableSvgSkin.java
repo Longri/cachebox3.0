@@ -36,8 +36,8 @@ public class SaveableSvgSkin extends SvgSkin {
         super(name);
     }
 
-    public SaveableSvgSkin(String name, StorageType storageType, FileHandle skinFolder) {
-        super(name, storageType, skinFolder);
+    public SaveableSvgSkin(boolean forceCreateNewAtlas, String name, StorageType storageType, FileHandle skinFolder) {
+        super(forceCreateNewAtlas, name, storageType, skinFolder);
     }
 
     /**
@@ -133,6 +133,7 @@ public class SaveableSvgSkin extends SvgSkin {
                 styles.add(style);
             }
 
+            styles.sort();
             for (String style : styles) {
                 Object object = typeResources.get(style);
 

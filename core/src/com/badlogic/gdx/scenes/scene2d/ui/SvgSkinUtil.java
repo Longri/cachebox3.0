@@ -42,20 +42,21 @@ public class SvgSkinUtil {
     }
 
     private final static Logger log = LoggerFactory.getLogger(SvgSkinUtil.class);
-    private final static String TMP_UI_ATLAS_PATH = "/user/temp/";
+    public final static String TMP_UI_ATLAS_PATH = "/user/temp/";
     private final static String TMP_UI_ATLAS = "_ui_tmp.atlas";
 
-    public static TextureAtlas createTextureAtlasFromImages(String skinName, ArrayList<ScaledSvg> scaledSvgList,
+    public static TextureAtlas createTextureAtlasFromImages(boolean forceNew, String skinName, ArrayList<ScaledSvg> scaledSvgList,
                                                             FileHandle skinFile) {
-
-        FileHandle cachedTexturatlasFileHandle = Gdx.files.absolute(CB.WorkPath + TMP_UI_ATLAS_PATH + skinName + TMP_UI_ATLAS);
-        if (cachedTexturatlasFileHandle.exists()) {
-            if (HashAtlasWriter.hashEquals(cachedTexturatlasFileHandle, scaledSvgList, skinFile)) {
-                log.debug("Load cached TextureAtlas");
-                return new TextureAtlas(cachedTexturatlasFileHandle);
+        FileHandle cachedTexturatlasFileHandle = null;
+        if (!forceNew) {
+            cachedTexturatlasFileHandle = Gdx.files.absolute(CB.WorkPath + TMP_UI_ATLAS_PATH + skinName + TMP_UI_ATLAS);
+            if (cachedTexturatlasFileHandle.exists()) {
+                if (HashAtlasWriter.hashEquals(cachedTexturatlasFileHandle, scaledSvgList, skinFile)) {
+                    log.debug("Load cached TextureAtlas");
+                    return new TextureAtlas(cachedTexturatlasFileHandle);
+                }
             }
         }
-
         log.debug("Create new TextureAtlas");
 
         // max texture size are 2048x2048
@@ -109,12 +110,13 @@ public class SvgSkinUtil {
         parameters.magFilter = Texture.TextureFilter.MipMapNearestNearest;
         parameters.minFilter = Texture.TextureFilter.MipMapNearestNearest;
 
-        try {
-            HashAtlasWriter.save(resultHashCode, cachedTexturatlasFileHandle, packer, parameters);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (cachedTexturatlasFileHandle != null) {
+            try {
+                HashAtlasWriter.save(resultHashCode, cachedTexturatlasFileHandle, packer, parameters);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
 
         packer.dispose();
         pixmap.dispose();

@@ -18,7 +18,6 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -42,7 +41,6 @@ import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -324,8 +322,12 @@ public class DrawablePickerDialog extends Dialog {
         filterField.addListener(refreshListener);
 
 
-        togglShowNinePatch.toggle();
-        togglShowDrawable.toggle();
+        togglShowNinePatch.setProgrammaticChangeEvents(false);
+        togglShowDrawable.setProgrammaticChangeEvents(false);
+        togglShowNinePatch.setChecked(true);
+        togglShowDrawable.setChecked(true);
+        togglShowNinePatch.setProgrammaticChangeEvents(true);
+        togglShowDrawable.setProgrammaticChangeEvents(true);
 
         if (disableNinePatch) {
             togglShowNinePatch.setDisabled(true);

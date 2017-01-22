@@ -18,8 +18,6 @@ import de.longri.cachebox3.develop.tools.skin_editor.actors.OptionsPane;
 import de.longri.cachebox3.develop.tools.skin_editor.actors.PreviewPane;
 import de.longri.cachebox3.develop.tools.skin_editor.actors.WidgetsBar;
 
-import java.io.IOException;
-
 public class MainScreen implements Screen {
 
     private SkinEditorGame game;
@@ -168,8 +166,15 @@ public class MainScreen implements Screen {
         if (game.skinProject != null) {
             game.skinProject.dispose();
         }
+
+        //delete temp Cache
+        FileHandle cachedTexturatlasFileHandle = Gdx.files.local("null");
+        if (cachedTexturatlasFileHandle.exists()) {
+            cachedTexturatlasFileHandle.delete();
+        }
+
         FileHandle skinFolder = (Gdx.files.local("projects/" + currentProject));
-        game.skinProject = new SaveableSvgSkin(currentProject, SvgSkin.StorageType.LOCAL, skinFolder);
+        game.skinProject = new SaveableSvgSkin(true, currentProject, SvgSkin.StorageType.LOCAL, skinFolder);
 
     }
 }
