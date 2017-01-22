@@ -37,7 +37,6 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
 import de.longri.cachebox3.utils.SkinColor;
 import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
-import de.longri.cachebox3.develop.tools.skin_editor.DrawablePickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import org.oscim.backend.canvas.Bitmap;
@@ -405,7 +404,7 @@ public class OptionsPane extends Table {
 
                         @Override
                         public void changed(ChangeEvent event, Actor actor) {
-                            showDrawableDialog(field);
+                            showDrawableDialog(field,false);
 
                         }
 
@@ -442,7 +441,7 @@ public class OptionsPane extends Table {
 
                         @Override
                         public void changed(ChangeEvent event, Actor actor) {
-                            showDrawableDialog(field);
+                            showDrawableDialog(field,true);
 
                         }
 
@@ -745,9 +744,9 @@ public class OptionsPane extends Table {
      *
      * @param field
      */
-    public void showDrawableDialog(final Field field) {
+    public void showDrawableDialog(final Field field, boolean disableNinePatch) {
 
-        DrawablePickerDialog dlg = new DrawablePickerDialog(game, field);
+        DrawablePickerDialog dlg = new DrawablePickerDialog(game, field, disableNinePatch, getStage());
         dlg.show(getStage());
     }
 

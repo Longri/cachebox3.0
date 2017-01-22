@@ -15,30 +15,18 @@
  ******************************************************************************/
 package de.longri.cachebox3.develop.tools.skin_editor.actors;
 
-import java.awt.Frame;
-import java.io.File;
-
-import javax.swing.JFileChooser;
-
-import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.widget.file.FileChooser;
-import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
-import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
-import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
-import de.longri.cachebox3.develop.tools.skin_editor.DrawablePickerDialog;
-import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
-import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
+import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
+import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
+import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 
 
 /**
@@ -78,7 +66,7 @@ public class MenuBar extends Table {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
-                DrawablePickerDialog dlg = new DrawablePickerDialog(game, null);
+                DrawablePickerDialog dlg = new DrawablePickerDialog(game, null, false, getStage());
                 dlg.show(game.screenMain.stage);
 
             }
