@@ -746,7 +746,7 @@ public class OptionsPane extends Table {
      */
     public void showDrawableDialog(final Field field, boolean disableNinePatch) {
 
-        DrawablePickerDialog dlg = new DrawablePickerDialog(game, field, disableNinePatch);
+        DrawablePickerDialog dlg = new DrawablePickerDialog(game, field, disableNinePatch, getStage());
         dlg.show(getStage());
     }
 

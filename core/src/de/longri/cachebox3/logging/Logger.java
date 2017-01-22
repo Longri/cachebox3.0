@@ -1,14 +1,21 @@
 package de.longri.cachebox3.logging;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
-import static de.longri.cachebox3.logging.GdxLogger.LOG_LEVEL_INFO;
 
 /**
  * Created by Longri on 22.12.16.
  */
 public abstract class Logger {
+
+    public static final int LOG_LEVEL_TRACE = 00;
+    public static final int LOG_LEVEL_DEBUG = 10;
+    public static final int LOG_LEVEL_INFO = 20;
+    public static final int LOG_LEVEL_WARN = 30;
+    public static final int LOG_LEVEL_ERROR = 40;
 
     /**
      * The current log level
@@ -25,6 +32,12 @@ public abstract class Logger {
     static boolean SHOW_SHORT_LOG_NAME = false;
     static boolean SHOW_LOG_NAME = true;
 
+    public static void setCurrentLogLevel(int level) {
+        currentLogLevel = level;
+
+        //must also set Gdx.LogLevel
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
+    }
 
     /**
      * Log a message at the TRACE level.
