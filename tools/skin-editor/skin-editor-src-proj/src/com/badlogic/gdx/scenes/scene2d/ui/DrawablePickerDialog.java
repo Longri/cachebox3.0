@@ -42,6 +42,7 @@ import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
 
 /**

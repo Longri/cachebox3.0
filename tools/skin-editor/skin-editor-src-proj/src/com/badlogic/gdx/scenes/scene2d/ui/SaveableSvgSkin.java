@@ -251,7 +251,7 @@ public class SaveableSvgSkin extends SvgSkin {
 
         JsonValue.PrettyPrintSettings settings = new JsonValue.PrettyPrintSettings();
         settings.outputType = JsonWriter.OutputType.json;
-        settings.singleLineColumns = 100;
+        settings.singleLineColumns = 1; // wrap all
         skinFile.writeString(json.prettyPrint(jsonText.toString(), settings), false);
 
         return true;

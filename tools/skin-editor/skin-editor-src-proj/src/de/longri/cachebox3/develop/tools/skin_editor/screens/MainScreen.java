@@ -18,6 +18,8 @@ import de.longri.cachebox3.develop.tools.skin_editor.actors.OptionsPane;
 import de.longri.cachebox3.develop.tools.skin_editor.actors.PreviewPane;
 import de.longri.cachebox3.develop.tools.skin_editor.actors.WidgetsBar;
 
+import java.io.IOException;
+
 public class MainScreen implements Screen {
 
     private SkinEditorGame game;
