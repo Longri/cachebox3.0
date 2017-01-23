@@ -15,26 +15,18 @@
  ******************************************************************************/
 package de.longri.cachebox3.develop.tools.skin_editor.actors;
 
-import java.awt.Frame;
-import java.io.File;
-
-import javax.swing.JFileChooser;
-
-import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
-import de.longri.cachebox3.develop.tools.skin_editor.DrawablePickerDialog;
-import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
-import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
+import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
+import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
+import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 
 
 /**
@@ -47,6 +39,12 @@ public class MenuBar extends Table {
 
     private SkinEditorGame game;
     private Label labelProjectName;
+
+    static private FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+
+    static {
+        fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
+    }
 
     /**
      *
@@ -68,7 +66,7 @@ public class MenuBar extends Table {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
-                DrawablePickerDialog dlg = new DrawablePickerDialog(game, null);
+                DrawablePickerDialog dlg = new DrawablePickerDialog(game, null, false, getStage());
                 dlg.show(game.screenMain.stage);
 
             }
@@ -154,7 +152,7 @@ public class MenuBar extends Table {
 
         labelProjectName = new Label("---", game.skin);
         add(labelProjectName).pad(5).padRight(20);
-        
+
     }
 
 
@@ -187,7 +185,7 @@ public class MenuBar extends Table {
 
                     // Copy uiskin.* and *.fnt
 
-                    FileHandle projectFolder = Gdx.files.local("../../projects").child(game.screenMain.getcurrentProject());
+                    FileHandle projectFolder = Gdx.files.local("projects").child(game.screenMain.getcurrentProject());
                     for (FileHandle file : projectFolder.list()) {
                         if (file.name().startsWith("skin.")) {
                             Gdx.app.log("MenuBar", "Copying file: " + file.name() + " ...");
@@ -231,28 +229,45 @@ public class MenuBar extends Table {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
-                // Need to steal focus first with this hack (Thanks to Z-Man)
-                Frame frame = new Frame();
-                frame.setUndecorated(true);
-                frame.setOpacity(0);
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-                frame.toFront();
-                frame.setVisible(false);
-                frame.dispose();
+//                // Need to steal focus first with this hack (Thanks to Z-Man)
+//                Frame frame = new Frame();
+//                frame.setUndecorated(true);
+//                frame.setOpacity(0);
+//                frame.setLocationRelativeTo(null);
+//                frame.setVisible(true);
+//                frame.toFront();
+//                frame.setVisible(false);
+//                frame.dispose();
 
 
-                JFileChooser chooser = new JFileChooser();
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                int ret = chooser.showOpenDialog(null);
-                if (ret == JFileChooser.APPROVE_OPTION) {
-                    File f = chooser.getSelectedFile();
-                    textDirectory.setText(f.getAbsolutePath());
+//                JFileChooser chooser = new JFileChooser();
+//                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//                int ret = chooser.showOpenDialog(null);
+//                if (ret == JFileChooser.APPROVE_OPTION) {
+//                    File f = chooser.getSelectedFile();
+//                    textDirectory.setText(f.getAbsolutePath());
+//
+//                    // Store to file
+//                    prefs.putString("export_to_directory", f.getAbsolutePath());
+//                    prefs.flush();
+//                }
 
-                    // Store to file
-                    prefs.putString("export_to_directory", f.getAbsolutePath());
-                    prefs.flush();
-                }
+
+                fileChooser.setListener(new FileChooserAdapter() {
+                    @Override
+                    public void selected(Array<FileHandle> fileList) {
+                        FileHandle selectedFolder = fileList.get(0);
+                        textDirectory.setText(selectedFolder.file().getAbsolutePath());
+
+                        // Store to file
+                        prefs.putString("export_to_directory", selectedFolder.file().getAbsolutePath());
+                        prefs.flush();
+                    }
+                });
+                FileHandle directory = Gdx.files.absolute(prefs.getString("export_to_directory"));
+                fileChooser.setDirectory(directory);
+                //displaying chooser with fade in animation
+                getStage().addActor(fileChooser.fadeIn());
 
             }
 

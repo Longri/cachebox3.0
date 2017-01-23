@@ -38,7 +38,10 @@ import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
+import de.longri.cachebox3.settings.Settings;
+import org.oscim.backend.CanvasAdapter;
 import org.oscim.core.MapPosition;
+import org.oscim.core.Tile;
 import org.oscim.event.Event;
 import org.oscim.gdx.GestureHandlerImpl;
 import org.oscim.gdx.MotionHandler;
@@ -53,6 +56,7 @@ import org.oscim.map.Viewport;
 import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
+import org.oscim.renderer.bucket.PolygonBucket;
 import org.oscim.renderer.bucket.TextItem;
 import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
@@ -173,6 +177,22 @@ public class MapView extends AbstractView {
     }
 
     public CacheboxMapAdapter createMap() {
+        
+        {//set map scale
+            float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
+            Tile.SIZE = (int) (400 * scaleFactor);
+            CanvasAdapter.dpi = 240 * scaleFactor;
+            CanvasAdapter.textScale = scaleFactor;
+            CanvasAdapter.scale = scaleFactor;
+            PolygonBucket.enableTexture = CB.platform != CB.Platform.IOS;//fixme if vtm can render polygon texture
+
+            log.debug("Create new map instance with scale factor:" + Float.toString(scaleFactor));
+            log.debug("Tile.SIZE:" + Integer.toString(Tile.SIZE));
+            log.debug("Canvas.dpi:" + Float.toString(CanvasAdapter.dpi));
+        }
+
+
+
         main.drawMap = true;
         mMap = new CacheboxMapAdapter() {
             @Override

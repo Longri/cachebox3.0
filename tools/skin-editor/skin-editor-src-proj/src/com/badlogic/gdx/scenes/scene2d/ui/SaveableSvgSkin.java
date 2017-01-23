@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2017 team-cachebox.de
+ *
+ * Licensed under the : GNU General Public License (GPL);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.gnu.org/licenses/gpl.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.badlogic.gdx.scenes.scene2d.ui;
 
 import com.badlogic.gdx.files.FileHandle;
@@ -21,8 +36,8 @@ public class SaveableSvgSkin extends SvgSkin {
         super(name);
     }
 
-    public SaveableSvgSkin(String name, StorageType storageType, FileHandle skinFolder) {
-        super(name, storageType, skinFolder);
+    public SaveableSvgSkin(boolean forceCreateNewAtlas, String name, StorageType storageType, FileHandle skinFolder) {
+        super(forceCreateNewAtlas, name, storageType, skinFolder);
     }
 
     /**
@@ -70,7 +85,6 @@ public class SaveableSvgSkin extends SvgSkin {
 
         //items for cachebox 3.0 skin
         items.add(com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg.class);
-        items.add(de.longri.cachebox3.utils.ScaledSizes.class);
         items.add(de.longri.cachebox3.utils.SkinColor.class);
         items.add(de.longri.cachebox3.gui.widgets.ColorDrawable.ColorDrawableStyle.class);
         items.add(com.badlogic.gdx.graphics.g2d.BitmapFont.class);
@@ -98,6 +112,8 @@ public class SaveableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.widgets.QuickButtonList.QuickButtonListStyle.class);
         items.add(de.longri.cachebox3.gui.widgets.MapStateButton.MapStateButtonStyle.class);
         items.add(de.longri.cachebox3.gui.widgets.ZoomButton.ZoomButtonStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.ScaledSize.class);
 
 
         for (Class<?> item : items) {
@@ -117,6 +133,7 @@ public class SaveableSvgSkin extends SvgSkin {
                 styles.add(style);
             }
 
+            styles.sort();
             for (String style : styles) {
                 Object object = typeResources.get(style);
 
@@ -155,7 +172,7 @@ public class SaveableSvgSkin extends SvgSkin {
                     try {
 
                         Object valueObject = field.get(typeResources.get(style));
-                        if (valueObject != null) {
+                        if (valueObject != null || valueObject instanceof GetName) {
                             if (valueObject instanceof BitmapFont) {
 
                                 String value = resolveObjectName(BitmapFont.class, valueObject);
@@ -215,6 +232,8 @@ public class SaveableSvgSkin extends SvgSkin {
                                 // Don't store.
                             } else if (valueObject instanceof float[]) {
                                 // Don't store.
+                            } else if (valueObject instanceof GetName) {
+                                json.writeValue(field.getName(), ((GetName) valueObject).getName());
                             } else {
                                 throw new IllegalArgumentException("resource object type is unknown: " + valueObject.getClass().getCanonicalName());
                             }
@@ -233,7 +252,7 @@ public class SaveableSvgSkin extends SvgSkin {
 
         JsonValue.PrettyPrintSettings settings = new JsonValue.PrettyPrintSettings();
         settings.outputType = JsonWriter.OutputType.json;
-        settings.singleLineColumns = 100;
+        settings.singleLineColumns = 1; // wrap all
         skinFile.writeString(json.prettyPrint(jsonText.toString(), settings), false);
 
         return true;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -72,8 +72,11 @@ public class IOS_PlatformConnector extends PlatformConnector {
     }
 
     @Override
-    public Bitmap getRealScaledSVG(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
-        return new IOS_RealSvgBitmap(inputStream, scaleType, scaleValue);
+    public Bitmap getRealScaledSVG(String name, InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
+
+        IOS_RealSvgBitmap bmp = new IOS_RealSvgBitmap(inputStream, scaleType, scaleValue);
+        bmp.name = name;
+        return bmp;
     }
 
 

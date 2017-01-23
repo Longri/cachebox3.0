@@ -9,11 +9,6 @@ import java.util.Date;
  */
 public class GdxLogger extends Logger {
 
-    public static final int LOG_LEVEL_TRACE = 00;
-    public static final int LOG_LEVEL_DEBUG = 10;
-    public static final int LOG_LEVEL_INFO = 20;
-    public static final int LOG_LEVEL_WARN = 30;
-    public static final int LOG_LEVEL_ERROR = 40;
 
     private final String NAME;
     private String shortLogName;

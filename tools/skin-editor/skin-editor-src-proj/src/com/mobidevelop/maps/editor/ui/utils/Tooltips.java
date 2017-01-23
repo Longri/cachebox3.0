@@ -83,7 +83,7 @@ public class Tooltips {
                                     showTooltip(finalActor);
                                 }
                             };
-                            Timer.schedule(show, 1);
+                            Timer.schedule(show, 0.5f);
                         } else {
                             showTooltip(actor);
                         }

@@ -11,6 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
+import de.longri.cachebox3.utils.UnZip;
+
+import java.io.File;
+import java.io.IOException;
 
 public class WelcomeScreen implements Screen {
 
@@ -206,7 +210,7 @@ public class WelcomeScreen implements Screen {
 
         Array<String> items = new Array<String>();
 
-        FileHandle[] projects = Gdx.files.local("../../projects").list();
+        FileHandle[] projects = Gdx.files.local("projects").list();
         for (FileHandle project : projects) {
             if (project.child("skin.json").exists() == true) {
                 items.add(project.name());
@@ -221,7 +225,7 @@ public class WelcomeScreen implements Screen {
      */
     public void createProject(String projectName) {
 
-        FileHandle projectFolder = Gdx.files.local("../../projects").child(projectName);
+        FileHandle projectFolder = Gdx.files.local("projects").child(projectName);
         if (projectFolder.exists() == true) {
             game.showNotice("Error", "Project name already in use!", stage);
             return;
@@ -229,24 +233,58 @@ public class WelcomeScreen implements Screen {
 
         projectFolder.mkdirs();
 
-        //create folder "svg" and copy default svg's
+
+        //Unzip Jar and copy resource folder
+        File folder = new File(".");
+        File[] files = folder.listFiles();
+
+        FileHandle resourceFolder = null;
+        for (File f : files) {
+            if (f.getName().contains("skin") && f.getName().endsWith(".jar")) {
+
+                try {
+                    UnZip.extractFolder(f.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                resourceFolder = Gdx.files.absolute(f.getAbsolutePath().replace(".jar", ""));
+
+                break;
+            }
+        }
+
+        boolean deleteTemp = resourceFolder != null;
+
+        if (!deleteTemp) {
+            resourceFolder = Gdx.files.local("skin-editor-src-proj/assets");
+        }
+
+
+        //create folder "svg" and copy default svg's from classpath
         projectFolder.child("svg").mkdirs();
-        FileHandle svgFolder = Gdx.files.local("raw_tamplate/svg");
+        FileHandle svgFolder = resourceFolder.child("raw_tamplate/svg");
         svgFolder.copyTo(projectFolder.child("svg"));
 
 
-        //create folder "fonts" and copy default fonts
+        //create folder "fonts" and copy default fonts from classpath
         projectFolder.child("fonts").mkdirs();
-        FileHandle fontFolder = Gdx.files.local("raw_tamplate/fonts");
+        FileHandle fontFolder = resourceFolder.child("raw_tamplate/fonts");
         fontFolder.copyTo(projectFolder.child("fonts"));
+
+
+        if (deleteTemp) {
+            Gdx.app.log("New Project", "Delete extracted jar folder");
+            resourceFolder.deleteDirectory();
+        }
+
 
         // create skin backup folder
         projectFolder.child("backups").mkdirs();
 
 
         //load default skin and save into project folder
-        FileHandle skinFolder = Gdx.files.local("raw_tamplate");
-        SaveableSvgSkin defaultSkin = new SaveableSvgSkin("raw_tamplate", SvgSkin.StorageType.LOCAL, skinFolder);
+        FileHandle skinFolder = Gdx.files.classpath("raw_tamplate");
+        SaveableSvgSkin defaultSkin = new SaveableSvgSkin(true, "raw_tamplate", SvgSkin.StorageType.INTERNAL, skinFolder);
         defaultSkin.save(projectFolder.child("skin.json"));
 
 
@@ -270,7 +308,7 @@ public class WelcomeScreen implements Screen {
                 }
 
                 // We delete it
-                FileHandle projectFolder = Gdx.files.local("../../projects/" + (String) listProjects.getSelected());
+                FileHandle projectFolder = Gdx.files.local("projects/" + (String) listProjects.getSelected());
                 projectFolder.deleteDirectory();
 
                 refreshProjects();

@@ -54,7 +54,7 @@ public class Utils {
 
     public static Drawable get9PatchFromSvg(InputStream inputStream, int left, int right, int top, int bottom) {
         try {
-            Bitmap svgBitmap = PlatformConnector.getSvg(inputStream, PlatformConnector.SvgScaleType.DPI_SCALED, 1f);
+            Bitmap svgBitmap = PlatformConnector.getSvg("", inputStream, PlatformConnector.SvgScaleType.DPI_SCALED, 1f);
 
             //scale nine patch regions
             float scale = CB.getScaledFloat(1);

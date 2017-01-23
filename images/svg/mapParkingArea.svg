@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="248" height="248" viewBox="0 0 248.00 248.00" enable-background="new 0 0 248.00 248.00" xml:space="preserve">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="208" height="208" viewBox="0 0 208.00 208.00" enable-background="new 0 0 208.00 208.00" xml:space="preserve">
 	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.5" y1="1.06035" x2="1.62071" y2="1.06035" gradientTransform="rotate(-90.000000 0.500000 1.060354)">
 		<stop offset="0" stop-color="#052F73" stop-opacity="1"/>
 		<stop offset="1" stop-color="#3883FC" stop-opacity="1"/>
 	</linearGradient>
-	<path fill="url(#SVGID_Fill1_)" stroke-width="8" stroke-linecap="square" stroke-linejoin="bevel" stroke="#1A5EC7" stroke-opacity="1" d="M 44,4.00012L 204,4.00012C 226.091,4.00012 244,21.9086 244,44L 244,204C 244,226.092 226.091,244 204,244L 44,244C 21.9086,244 3.99997,226.092 3.99997,204L 3.99997,44C 3.99997,21.9086 21.9086,4.00012 44,4.00012 Z "/>
+	<path fill="url(#SVGID_Fill1_)" stroke-width="8" stroke-linecap="square" stroke-linejoin="bevel" stroke="#1A5EC7" stroke-opacity="1" d="M 44,3.99994L 164,3.99994C 186.091,3.99994 204,21.9085 204,44.0001L 204,164C 204,186.092 186.091,204 164,204L 44,204C 21.9086,204 4,186.092 4,164L 4,44.0001C 4,21.9085 21.9086,3.99994 44,3.99994 Z "/>
 	<g>
-		<path fill="#FFFFFF" fill-opacity="1" stroke-width="3" stroke-linejoin="round" stroke="#1A5EC7" stroke-opacity="1" d="M 111.694,145.307L 111.694,196.507L 77.5608,196.507L 77.5608,47.1737L 130.094,47.1737C 167.605,47.1737 186.361,63.0736 186.361,94.8737C 186.361,109.918 181.022,122.085 170.344,131.374C 159.666,140.663 145.405,145.307 127.561,145.307L 111.694,145.307 Z M 111.694,72.7737L 111.694,119.707L 124.361,119.707C 141.516,119.707 150.094,111.796 150.094,95.9738C 150.094,80.507 141.516,72.7737 124.361,72.7737L 111.694,72.7737 Z "/>
+		<path fill="#FFFFFF" fill-opacity="1" stroke-width="3" stroke-linejoin="round" stroke="#1A5EC7" stroke-opacity="1" d="M 93.7451,121.756L 93.7451,164.423L 65.3007,164.423L 65.3007,39.9782L 109.078,39.9782C 140.338,39.9782 155.967,53.2282 155.967,79.7282C 155.967,92.2652 151.518,102.404 142.62,110.145C 133.722,117.886 121.838,121.756 106.967,121.756L 93.7451,121.756 Z M 93.7451,61.3116L 93.7451,100.423L 104.301,100.423C 118.597,100.423 125.745,93.83 125.745,80.6448C 125.745,67.7559 118.597,61.3116 104.301,61.3116L 93.7451,61.3116 Z "/>
 	</g>
 </svg>

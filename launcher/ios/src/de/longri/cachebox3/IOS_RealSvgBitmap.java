@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.scenes.scene2d.ui.GetName;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.coregraphics.CGSize;
 import org.robovm.apple.uikit.UIImage;
@@ -28,7 +29,21 @@ import java.io.InputStreamReader;
 /**
  * Created by Longri on 19.07.16.
  */
-public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap {
+public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap implements GetName {
+
+    public String name;
+
+    public String getName() {
+        return name;
+    }
+
+
+    //TODO check direct upload of texture on iOS
+    // http://stackoverflow.com/a/9704392/5478780
+    // or use upload of buffered byte array if not internal
+
+
+
 
     private static UIImage getUIImage(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) {
         String svg = getStringFromInputStream(inputStream);
@@ -48,6 +63,9 @@ public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap {
                 break;
             case DPI_SCALED:
                 scale = CB.getScaledFloat(scaleValue);
+                break;
+            case SCALED_TO_WIDTH_OR_HEIGHT:
+                scale = Math.min(scaleValue / viewRect.getHeight(), scaleValue / viewRect.getWidth());
                 break;
         }
 

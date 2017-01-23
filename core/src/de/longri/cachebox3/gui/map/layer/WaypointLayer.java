@@ -15,11 +15,8 @@
  */
 package de.longri.cachebox3.gui.map.layer;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -30,8 +27,11 @@ import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterRenderer;
+import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.geocluster.*;
+import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
+import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxDouble;
+import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Settings;
@@ -42,7 +42,9 @@ import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.lists.CB_List;
 import de.longri.cachebox3.utils.lists.ThreadStack;
 import org.oscim.backend.canvas.Bitmap;
-import org.oscim.core.*;
+import org.oscim.core.Box;
+import org.oscim.core.MercatorProjection;
+import org.oscim.core.Point;
 import org.oscim.event.Gesture;
 import org.oscim.event.GestureListener;
 import org.oscim.event.MotionEvent;
@@ -51,7 +53,6 @@ import org.oscim.layers.Layer;
 import org.oscim.map.Map;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * Created by Longri on 27.11.16.
@@ -59,19 +60,15 @@ import java.util.HashMap;
 public class WaypointLayer extends Layer implements GestureListener, CacheListChangedEventListener, Disposable {
     private final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
-    private static final String ERROR_MSG = "No com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg registered with name:";
+    private static final String ERROR_MSG = "No de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle registered with name: ";
     private static final Bitmap defaultMarker = getClusterSymbol("myterie");
-    public static final Bitmap CLUSTER1_SYMBOL = getClusterSymbol("cluster1");
-    public static final Bitmap CLUSTER10_SYMBOL = getClusterSymbol("cluster10");
-    public static final Bitmap CLUSTER100_SYMBOL = getClusterSymbol("cluster100");
 
 
     private final ClusterRenderer mClusterRenderer;
     private final ClusteredList mItemList;
     private final Point clickPoint = new Point();
     private final Box mapVisibleBoundingBox = new Box();
-    private final CB_List<ClusterablePoint> clickedItems = new CB_List<ClusterablePoint>();
-    private final HashMap<String, Bitmap> ClusterSymbolHashMap = new HashMap<String, Bitmap>();
+    private final CB_List<MapWayPointItem> clickedItems = new CB_List<MapWayPointItem>();
     private final ThreadStack<ClusterRunnable> clusterWorker = new ThreadStack<ClusterRunnable>();
 
 
@@ -92,7 +89,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         CacheListChangedEvent();
     }
 
-    public ClusterablePoint createItem(int index) {
+    public MapWayPointItem createItem(int index) {
         return mItemList.get(index);
     }
 
@@ -104,7 +101,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     @Override
     public void dispose() {
         CacheListChangedEventList.Remove(this);
-        ClusterSymbolHashMap.clear();
         clickedItems.clear();
         mClusterRenderer.dispose();
         clusterWorker.dispose();
@@ -127,12 +123,12 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                     CB_List<String> missingIconList = new CB_List<String>(0);
 
                     for (Cache cache : Database.Data.Query) {
-                        ClusterablePoint geoCluster = new ClusterablePoint(cache, cache.getGcCode());
                         try {
-                            geoCluster.setClusterSymbol(getClusterSymbolsByCache(cache));
+                            MapWayPointItem geoCluster = new MapWayPointItem(cache, cache.getGcCode(), getClusterSymbolsByCache(cache));
+                            mItemList.add(geoCluster);
                         } catch (GdxRuntimeException e) {
                             if (e.getMessage().startsWith(ERROR_MSG)) {
-                                String iconName = e.getMessage().replaceFirst(ERROR_MSG, "");
+                                String iconName = e.getMessage().replace(ERROR_MSG, "");
                                 if (!missingIconList.contains(iconName))
                                     missingIconList.add(iconName);
                             } else {
@@ -140,17 +136,30 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                             }
                             continue;
                         }
-                        mItemList.add(geoCluster);
+
 
                         //add waypoints from selected Cache or all Waypoints if set
                         if (Settings.ShowAllWaypoints.getValue() || CB.isSelectedCache(cache)) {
                             for (Waypoint waypoint : cache.waypoints) {
-                                ClusterablePoint waypointCluster = new ClusterablePoint(waypoint, waypoint.getGcCode());
-                                waypointCluster.setClusterSymbol(getClusterSymbolsByWaypoint(waypoint));
-                                mItemList.add(waypointCluster);
+                                try {
+                                    MapWayPointItem waypointCluster = new MapWayPointItem(waypoint, waypoint.getGcCode(), getClusterSymbolsByWaypoint(waypoint));
+                                    mItemList.add(waypointCluster);
+                                } catch (GdxRuntimeException e) {
+                                    if (e.getMessage().startsWith(ERROR_MSG)) {
+                                        String iconName = e.getMessage().replace(ERROR_MSG, "");
+                                        if (!missingIconList.contains(iconName))
+                                            missingIconList.add(iconName);
+                                    } else {
+                                        e.printStackTrace();
+                                    }
+                                    continue;
+                                }
                             }
                         }
                     }
+                    mItemList.setFinishFill();
+                    WaypointLayer.this.populate();
+
 
                     if (!missingIconList.isEmpty()) {
                         StringBuilder msg = new StringBuilder("\n\n" + ERROR_MSG + "\n");
@@ -163,11 +172,10 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                                 count = 0;
                             }
                         }
-                        throw new GdxRuntimeException(msg.toString());
+                        if (CB.platform == CB.Platform.DESKTOP)
+                            throw new GdxRuntimeException(msg.toString());
+                        else log.error(msg.toString());
                     }
-
-                    mItemList.setFinishFill();
-                    WaypointLayer.this.populate();
                 }
             }
         });
@@ -176,6 +184,8 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
 
     public void reduceCluster(final GeoBoundingBoxInt boundingBox, final double distance, final boolean forceReduce) {
+
+        if (true) return;
 
         if (lastFactor == distance) {
             if (distance == 0) {
@@ -230,32 +240,14 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    private Bitmap[] getClusterSymbolsByCache(Cache cache) {
-        Bitmap[] symbols = new Bitmap[3];
-        for (int i = 0; i < 3; i++) {
-            String symbolName = getMapIconName(cache) + (i < 2 ? Integer.toString(i) : "");
-            Bitmap symbol = ClusterSymbolHashMap.get(symbolName);
-            if (symbol == null) {
-                symbol = getClusterSymbol(symbolName);
-                ClusterSymbolHashMap.put(symbolName, symbol);
-            }
-            symbols[i] = symbol;
-        }
-        return symbols;
+    private MapWayPointItemStyle getClusterSymbolsByCache(Cache cache) {
+        String symbolStyleName = getMapIconName(cache);
+        return VisUI.getSkin().get(symbolStyleName, MapWayPointItemStyle.class);
     }
 
-    private Bitmap[] getClusterSymbolsByWaypoint(Waypoint waypoint) {
-        Bitmap[] symbols = new Bitmap[3];
-        for (int i = 0; i < 3; i++) {
-            String symbolName = getMapIconName(waypoint) + (i < 2 ? Integer.toString(i) : "");
-            Bitmap symbol = ClusterSymbolHashMap.get(symbolName);
-            if (symbol == null) {
-                symbol = getClusterSymbol(symbolName);
-                ClusterSymbolHashMap.put(symbolName, symbol);
-            }
-            symbols[i] = symbol;
-        }
-        return symbols;
+    private MapWayPointItemStyle getClusterSymbolsByWaypoint(Waypoint waypoint) {
+        String symbolStyleName = getMapIconName(waypoint);
+        return VisUI.getSkin().get(symbolStyleName, MapWayPointItemStyle.class);
     }
 
 
@@ -290,7 +282,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         Bitmap bitmap;
         try {
             FileHandle svgFile = skin.skinFolder.child(scaledSvg.path);
-            bitmap = PlatformConnector.getSvg(svgFile.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
+            bitmap = PlatformConnector.getSvg(scaledSvg.getRegisterName(), svgFile.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
         } catch (IOException e) {
             return null;
         }
@@ -298,29 +290,29 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
     public interface ActiveItem {
-        boolean run(ClusterablePoint aIndex);
+        boolean run(MapWayPointItem aIndex);
     }
 
-    private boolean onItemSingleTap(ClusterablePoint item) {
+    private boolean onItemSingleTap(MapWayPointItem item) {
         log.debug("Click on: " + item);
         return true;
     }
 
-    private boolean onItemLongPress(ClusterablePoint item) {
+    private boolean onItemLongPress(MapWayPointItem item) {
         log.debug("LongClick on: " + item);
         return true;
     }
 
     private final ActiveItem mActiveItemSingleTap = new ActiveItem() {
         @Override
-        public boolean run(ClusterablePoint item) {
+        public boolean run(MapWayPointItem item) {
             return onItemSingleTap(item);
         }
     };
 
     private final ActiveItem mActiveItemLongPress = new ActiveItem() {
         @Override
-        public boolean run(final ClusterablePoint item) {
+        public boolean run(final MapWayPointItem item) {
             return onItemLongPress(item);
         }
     };
@@ -367,7 +359,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         // search item inside click bounding box
         clickedItems.clear();
         for (int i = 0, n = mItemList.size(); i < n; i++) {
-            ClusterablePoint item = mItemList.get(i);
+            MapWayPointItem item = mItemList.get(i);
 
             double lat, lon;
             if (item instanceof Cluster) {
@@ -385,7 +377,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         }
 
         if (!clickedItems.isEmpty()) {
-            ClusterablePoint clickedItem = null;
+            MapWayPointItem clickedItem = null;
             //if more then one item so search nearest
             if (clickedItems.size() == 1) {
                 clickedItem = clickedItems.get(0);
@@ -393,7 +385,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                 Coordinate clickCoord = new Coordinate(clickLon, clickLat);
                 double minDistance = Double.MAX_VALUE;
                 for (int i = 0, n = clickedItems.size(); i < n; i++) {
-                    ClusterablePoint item = clickedItems.get(i);
+                    MapWayPointItem item = clickedItems.get(i);
                     Coordinate pos;
                     if (item instanceof Cluster) {
                         //the draw point is set to center of cluster

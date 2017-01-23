@@ -107,7 +107,7 @@ public final class SkinLoaderTask extends AbstractInitTask {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                CB.setActSkin(new SvgSkin(finalSkinName, finalType, finalSkinFileHandle));
+                CB.setActSkin(new SvgSkin(false, finalSkinName, finalType, finalSkinFileHandle));
                 CB.backgroundColor = CB.getColor("background");
                 wait.set(false);
             }
