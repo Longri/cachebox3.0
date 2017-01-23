@@ -31,7 +31,6 @@ import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
 import com.mobidevelop.maps.editor.ui.utils.Tooltips;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.develop.tools.skin_editor.NinePatchEditorDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.develop.tools.skin_editor.SvgFileIconProvider;
@@ -51,7 +50,7 @@ import java.util.*;
  */
 public class DrawablePickerDialog extends Dialog {
 
-    private final static Logger log = LoggerFactory.getLogger(CB.class);
+    private final static Logger log = LoggerFactory.getLogger(DrawablePickerDialog.class);
 
     private Table topMenuTable;
     private SkinEditorGame game;
@@ -60,6 +59,7 @@ public class DrawablePickerDialog extends Dialog {
     private boolean zoom = false;
     private HashMap<String, InternalItem> items = new HashMap<String, InternalItem>();
     private ScrollPane scrollPane;
+    private final boolean callSelectedSvg;
     static private FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
     static private SvgFileIconProvider svgFileIconProvider;
 
@@ -90,17 +90,29 @@ public class DrawablePickerDialog extends Dialog {
     }
 
     public DrawablePickerDialog(final SkinEditorGame game, final Field field, boolean disableNinePatch, Stage stage) {
-
         super("Drawable Picker", game.skin);
-
         this.game = game;
         this.field = field;
         this.disableNinePatch = disableNinePatch;
         this.stage = stage;
-
+        this.callSelectedSvg = false;
         initializeSelf();
-
     }
+
+    public DrawablePickerDialog(final SkinEditorGame game, Stage stage) {
+        super("Drawable Picker", game.skin);
+        this.game = game;
+        this.field = field;
+        this.disableNinePatch = true;
+        this.stage = stage;
+        this.callSelectedSvg = true;
+        initializeSelf();
+    }
+
+
+    public void selectedSvg(ScaledSvg scaledSvg) {
+    }
+
 
     private void initializeSelf() {
         this.clear();
@@ -553,6 +565,10 @@ public class DrawablePickerDialog extends Dialog {
 
 
                     if (field == null || event.isCancelled()) {
+                        if (callSelectedSvg) {
+                            selectedSvg((ScaledSvg) items.get(key).skinInfo);
+                            hide();
+                        }
                         return;
                     }
 

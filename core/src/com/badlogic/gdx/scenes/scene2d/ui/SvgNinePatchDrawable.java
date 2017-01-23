@@ -34,16 +34,16 @@ public class SvgNinePatchDrawable extends BaseDrawable {
 
     public String name;
     private int left, right, top, bottom;
-    private int leftWidth, rightWidth, topHeight, bottomHeight;
+//    private int leftWidth, rightWidth, topHeight, bottomHeight;
     public SvgNinePatchDrawableUnScaledValues values;
 
     public SvgNinePatchDrawable() {
     }
 
-    public SvgNinePatchDrawable(SvgNinePatchDrawable drawable) {
-        super(drawable);
-        setPatch(drawable.patch, drawable.leftWidth, drawable.rightWidth, drawable.topHeight, drawable.bottomHeight);
-    }
+//    public SvgNinePatchDrawable(SvgNinePatchDrawable drawable) {
+//        super(drawable);
+//        setPatch(drawable.patch, drawable.leftWidth, drawable.rightWidth, drawable.topHeight, drawable.bottomHeight);
+//    }
 
     public SvgNinePatchDrawable(NinePatch ninePatch, int leftWidth, int rightWidth, int topHeight, int bottomHeight) {
         setPatch(ninePatch, leftWidth, rightWidth, topHeight, bottomHeight);

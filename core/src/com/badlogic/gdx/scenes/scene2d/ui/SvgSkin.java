@@ -209,8 +209,10 @@ public class SvgSkin extends Skin {
                         if (valueMap.name().equals(ScaledSvg.class.getName())) {
                             log.debug("read scaled SVG'S");
                             readScaledSvgs(json, ClassReflection.forName(valueMap.name()), valueMap);
+                        } else {
+                            readNamedObjects(json, ClassReflection.forName(valueMap.name()), valueMap);
                         }
-                        readNamedObjects(json, ClassReflection.forName(valueMap.name()), valueMap);
+
                     } catch (ReflectionException ex) {
                         throw new SerializationException(ex);
                     }
@@ -224,10 +226,12 @@ public class SvgSkin extends Skin {
                     ScaledSvg object = (ScaledSvg) json.readValue(type, valueEntry);
                     object.setRegisterName(valueEntry.name);
                     registerdSvgs.add(object);
+
+                    //  register as Resource
+                    SvgSkin.this.add(object.getRegisterName(), object, ScaledSvg.class);
                 }
 
                 //create and register atlas
-
                 SvgSkin.this.addRegions(SvgSkinUtil.createTextureAtlasFromImages(forceCreateNewAtlas, SvgSkin.this.name, registerdSvgs, skinFile));
             }
 
