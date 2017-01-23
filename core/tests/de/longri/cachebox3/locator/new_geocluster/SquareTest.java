@@ -1,9 +1,9 @@
 package de.longri.cachebox3.locator.new_geocluster;
 
+import com.badlogic.gdx.scenes.scene2d.ui.ClusteredList;
+import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
-import de.longri.cachebox3.locator.geocluster.MapWayPointItem;
-import de.longri.cachebox3.locator.geocluster.ClusteredList;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.junit.jupiter.api.Test;
 import org.oscim.core.GeoPoint;
