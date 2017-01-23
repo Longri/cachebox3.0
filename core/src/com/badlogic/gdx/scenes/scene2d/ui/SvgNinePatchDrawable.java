@@ -26,7 +26,7 @@ public class SvgNinePatchDrawable extends BaseDrawable {
 
     public static class SvgNinePatchDrawableUnScaledValues {
         // unscaled values from SvgSkon
-        public float left, right, top, bottom, leftWidth, rightWidth, topHeight, bottomHeight;
+        public int left, right, top, bottom, leftWidth, rightWidth, topHeight, bottomHeight;
     }
 
 

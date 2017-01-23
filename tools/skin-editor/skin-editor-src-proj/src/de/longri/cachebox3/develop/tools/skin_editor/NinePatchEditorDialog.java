@@ -55,17 +55,18 @@ public class NinePatchEditorDialog extends Dialog {
     private Cell cellPreview3;
     private Pixmap sourcePixmap;
     private ScaledSvg selectedScaledSvg;
+    private boolean isChange;
 
     private FileHandle tmpFile;
 
-    /**
-     *
-     */
     public NinePatchEditorDialog(final SkinEditorGame game) {
+        this(game, null);
+    }
 
-        super("Create NinePatch", game.skin);
+    public NinePatchEditorDialog(final SkinEditorGame game, ScaledSvg scaledSvg) {
+        super(scaledSvg != null ? "Change NinePatch" : "Create NinePatch", game.skin);
         this.game = game;
-
+        isChange = scaledSvg != null;
 
         tmpFile = new FileHandle(System.getProperty("java.io.tmpdir")).child("skin_ninepatch");
         if (tmpFile.exists() == false) {
@@ -97,52 +98,19 @@ public class NinePatchEditorDialog extends Dialog {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
-
                 DrawablePickerDialog dlg = new DrawablePickerDialog(game, getStage()) {
                     public void selectedSvg(ScaledSvg scaledSvg) {
-                        log.debug(scaledSvg.toString() + "selected");
-
-                        selectedScaledSvg = scaledSvg;
-
-                        textName.setText(scaledSvg.getRegisterName() + "_9_Patch");
-                        textSourceImage.setText(scaledSvg.path);
-
-                        //create a Bitmap
-                        Bitmap bitmap;
-                        try {
-                            FileHandle svgFile = game.skinProject.skinFolder.child(scaledSvg.path);
-                            bitmap = PlatformConnector.getSvg(scaledSvg.getRegisterName(), svgFile.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
-                        } catch (IOException e) {
-                            return;
-                        }
-
-                        byte[] data = bitmap.getPngEncodedData();
-                        sourcePixmap = new Pixmap(data, 0, data.length);
-
-
-                        TextureRegionDrawable trd = new TextureRegionDrawable(new TextureRegion(new Texture(sourcePixmap)));
-                        image = new Image(trd);
-                        imgWidth = image.getWidth();
-                        imgHeight = image.getHeight();
-
-                        cellImage.clearActor().setActor(image);
-                        cellImage.width(imgWidth * currentZoom).height(imgHeight * currentZoom);
-                        image.setDrawable(trd);
-                        image.setWidth(trd.getMinWidth());
-                        image.setHeight(trd.getMinHeight());
-                        refreshPreview();
-                        refreshImage();
+                        setScaledSvg(scaledSvg);
                     }
                 };
                 dlg.show(getStage());
             }
         });
 
-
-        table.add(tableTop).colspan(2).expandX().fillX();
-        table.row();
-
+        if (!isChange) {
+            table.add(tableTop).colspan(2).expandX().fillX();
+            table.row();
+        }
 
         rangeTop = new RangeSelector(false, game.skin);
         rangeRight = new RangeSelector(true, game.skin);
@@ -150,11 +118,9 @@ public class NinePatchEditorDialog extends Dialog {
         rangeLeft = new RangeSelector(true, game.skin);
 
         ChangeListener listener = new ChangeListener() {
-
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 refreshPreview();
-
             }
         };
 
@@ -164,7 +130,7 @@ public class NinePatchEditorDialog extends Dialog {
         rangeLeft.addListener(listener);
 
         tableEditor = new Table(game.skin);
-        tableEditor.debug();
+//        tableEditor.debug();
         tableEditor.add();
         tableEditor.add(rangeTop).fillX().height(10);
         tableEditor.row();
@@ -233,8 +199,8 @@ public class NinePatchEditorDialog extends Dialog {
                     return;
 
                 }
-                // First check if the name is already in use
-                if (game.skinProject.has(saveName, SvgNinePatchDrawable.class)) {
+                // if no change check if the name is already in use
+                if (!isChange && game.skinProject.has(saveName, SvgNinePatchDrawable.class)) {
                     game.showNotice("Error", "A ninepatch with the same name already exists!", getStage());
                     return;
                 }
@@ -310,6 +276,45 @@ public class NinePatchEditorDialog extends Dialog {
 
         key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
         refreshPreview();
+        setScaledSvg(scaledSvg);
+    }
+
+    private void setScaledSvg(ScaledSvg scaledSvg) {
+
+        if (scaledSvg == null) return;
+
+        log.debug(scaledSvg.toString() + "selected");
+
+        selectedScaledSvg = scaledSvg;
+
+        textName.setText(scaledSvg.getRegisterName() + "_9_Patch");
+        textSourceImage.setText(scaledSvg.path);
+
+        //create a Bitmap
+        Bitmap bitmap;
+        try {
+            FileHandle svgFile = game.skinProject.skinFolder.child(scaledSvg.path);
+            bitmap = PlatformConnector.getSvg(scaledSvg.getRegisterName(), svgFile.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
+        } catch (IOException e) {
+            return;
+        }
+
+        byte[] data = bitmap.getPngEncodedData();
+        sourcePixmap = new Pixmap(data, 0, data.length);
+
+
+        TextureRegionDrawable trd = new TextureRegionDrawable(new TextureRegion(new Texture(sourcePixmap)));
+        image = new Image(trd);
+        imgWidth = image.getWidth();
+        imgHeight = image.getHeight();
+
+        cellImage.clearActor().setActor(image);
+        cellImage.width(imgWidth * currentZoom).height(imgHeight * currentZoom);
+        image.setDrawable(trd);
+        image.setWidth(trd.getMinWidth());
+        image.setHeight(trd.getMinHeight());
+        refreshPreview();
+        refreshImage();
     }
 
     private void reviewTablePreview() {
@@ -336,9 +341,6 @@ public class NinePatchEditorDialog extends Dialog {
 
     }
 
-    /**
-     *
-     */
     private void refreshImage() {
 
         float newX = imgWidth * currentZoom;
@@ -393,7 +395,6 @@ public class NinePatchEditorDialog extends Dialog {
         w = pixmapImage.getWidth() + 1;
         pixmap.drawLine((int) (w * rangeBottom.rangeStart), pixmap.getHeight() - 1, (int) (w * rangeBottom.rangeStop), pixmap.getHeight() - 1);
 
-
         if (sourcePixmap != null) {
             PixmapIO.writePNG(tmpFile, pixmap);
 
@@ -407,15 +408,11 @@ public class NinePatchEditorDialog extends Dialog {
             reviewTablePreview();
             buttonPreview1.getStyle().up = drawable;
 
-
-            log.debug("Source size:" + selectedScaledSvg.toString());
-            log.debug("source width:" + sourcePixmap.getWidth());
-            log.debug("rangeTop.rangeStart:" + rangeTop.rangeStart);
-            log.debug("rangeTop.rangeStop:" + rangeTop.rangeStop);
-            log.debug("  ");
-
+//            log.debug("Source size:" + selectedScaledSvg.toString());
+//            log.debug("source width:" + sourcePixmap.getWidth());
+//            log.debug("rangeTop.rangeStart:" + rangeTop.rangeStart);
+//            log.debug("rangeTop.rangeStop:" + rangeTop.rangeStop);
+//            log.debug("  ");
         }
-
-
     }
 }

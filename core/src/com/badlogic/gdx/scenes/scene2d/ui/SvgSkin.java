@@ -326,14 +326,14 @@ public class SvgSkin extends Skin {
             public SvgNinePatchDrawable read(Json json, JsonValue jsonData, Class type) {
 
                 String name = json.readValue("name", String.class, jsonData);
-                float left = json.readValue("left", float.class, 0f, jsonData);
-                float right = json.readValue("right", float.class, 0f, jsonData);
-                float top = json.readValue("top", float.class, 0f, jsonData);
-                float bottom = json.readValue("bottom", float.class, 0f, jsonData);
-                float leftWidth = json.readValue("leftWidth", float.class, 0f, jsonData);
-                float rightWidth = json.readValue("rightWidth", float.class, 0f, jsonData);
-                float topHeight = json.readValue("topHeight", float.class, 0f, jsonData);
-                float bottomHeight = json.readValue("bottomHeight", float.class, 0f, jsonData);
+                int left = json.readValue("left", int.class, 0, jsonData);
+                int right = json.readValue("right", int.class, 0, jsonData);
+                int top = json.readValue("top", int.class, 0, jsonData);
+                int bottom = json.readValue("bottom", int.class, 0, jsonData);
+                int leftWidth = json.readValue("leftWidth", int.class, 0, jsonData);
+                int rightWidth = json.readValue("rightWidth", int.class, 0, jsonData);
+                int topHeight = json.readValue("topHeight", int.class, 0, jsonData);
+                int bottomHeight = json.readValue("bottomHeight", int.class, 0, jsonData);
 
                 SvgNinePatchDrawable.SvgNinePatchDrawableUnScaledValues values = new SvgNinePatchDrawable.SvgNinePatchDrawableUnScaledValues();
                 values.left = left;
@@ -349,14 +349,14 @@ public class SvgSkin extends Skin {
                 TextureRegion textureRegion = getRegion(name);
 
                 //scale nine patch regions
-                left = CB.getScaledFloat(left);
-                right = CB.getScaledFloat(right);
-                top = CB.getScaledFloat(top);
-                bottom = CB.getScaledFloat(bottom);
-                leftWidth = leftWidth == 0 ? left : CB.getScaledFloat(leftWidth);
-                rightWidth = rightWidth == 0 ? right : CB.getScaledFloat(rightWidth);
-                topHeight = topHeight == 0 ? top : CB.getScaledFloat(topHeight);
-                bottomHeight = bottomHeight == 0 ? bottom : CB.getScaledFloat(bottomHeight);
+                left = CB.getScaledInt(left);
+                right = CB.getScaledInt(right);
+                top = CB.getScaledInt(top);
+                bottom = CB.getScaledInt(bottom);
+                leftWidth = leftWidth == 0 ? left : CB.getScaledInt(leftWidth);
+                rightWidth = rightWidth == 0 ? right : CB.getScaledInt(rightWidth);
+                topHeight = topHeight == 0 ? top : CB.getScaledInt(topHeight);
+                bottomHeight = bottomHeight == 0 ? bottom : CB.getScaledInt(bottomHeight);
 
 
                 // if any value < 0 set to half width or height!
@@ -369,8 +369,8 @@ public class SvgSkin extends Skin {
                 if (topHeight < 0) topHeight = textureRegion.getRegionHeight() / 2;
                 if (bottomHeight < 0) bottomHeight = textureRegion.getRegionHeight() / 2;
 
-                SvgNinePatchDrawable svgNinePatchDrawable = new SvgNinePatchDrawable(new NinePatch(textureRegion, (int) left, (int) right, (int) top, (int) bottom),
-                        (int) leftWidth, (int) rightWidth, (int) topHeight, (int) bottomHeight);
+                SvgNinePatchDrawable svgNinePatchDrawable = new SvgNinePatchDrawable(new NinePatch(textureRegion, left, right, top, bottom),
+                        leftWidth, rightWidth, topHeight, bottomHeight);
 
                 svgNinePatchDrawable.name = name;
                 svgNinePatchDrawable.values = values;

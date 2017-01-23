@@ -18,6 +18,7 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -157,7 +158,6 @@ public class DrawablePickerDialog extends Dialog {
                     @Override
                     public void hide() {
                         super.hide();
-
                         updateTable();
                     }
                 };
@@ -341,17 +341,13 @@ public class DrawablePickerDialog extends Dialog {
         togglShowNinePatch.setProgrammaticChangeEvents(true);
         togglShowDrawable.setProgrammaticChangeEvents(true);
 
-        if (disableNinePatch) {
-            togglShowNinePatch.setDisabled(true);
-        }
-
-        topMenuTable.add(togglShowNinePatch);
+        if (!disableNinePatch) topMenuTable.add(togglShowNinePatch);
         topMenuTable.add(togglShowDrawable);
         topMenuTable.add(filterField);
 
         contentTable.add(scrollPane).width(getPrefWidth()).height(getPrefHeight() * 0.7f).pad(20);
 
-        buttonTable.add(buttonNewNinePatch);
+        if (!disableNinePatch) buttonTable.add(buttonNewNinePatch);
         buttonTable.add(buttonNewDrawable);
         buttonTable.add(buttonZoom);
         if (field != null) {
@@ -508,11 +504,17 @@ public class DrawablePickerDialog extends Dialog {
                         //handle click on info Label
 
                         if (((InternalItem) actor.getUserObject()).drawable instanceof SvgNinePatchDrawable) {
-
+                            String name = ((SvgNinePatchDrawable) ((InternalItem) actor.getUserObject()).drawable).name;
+                            ScaledSvg scaledSvg = game.skinProject.get(name, ScaledSvg.class);
+                            NinePatchEditorDialog dlg = new NinePatchEditorDialog(game, scaledSvg) {
+                                public void hide() {
+                                    super.hide();
+                                    updateTable();
+                                }
+                            };
+                            dlg.show(game.screenMain.stage);
                         } else {
-
                             String lastScaleValue = Float.toString(((ScaledSvg) ((InternalItem) actor.getUserObject()).skinInfo).scale);
-
                             // show change Scale Value dialog
                             final TextField scaleValueTextField = new TextField(lastScaleValue, game.skin);
                             Dialog dlg = new Dialog("Set new Scale Value", game.skin) {
@@ -601,10 +603,13 @@ public class DrawablePickerDialog extends Dialog {
             boolean isNinePatch = itemObject.drawable instanceof SvgNinePatchDrawable;
 
 
-            String info = " info line ";
-
+            String info;
             if (isNinePatch) {
-
+                SvgNinePatchDrawable.SvgNinePatchDrawableUnScaledValues values =
+                        ((SvgNinePatchDrawable) itemObject.drawable).values;
+                info = String.format("l:%d, r:%d, t:%d, b:%d \nlw:%d, rw:%d, th:%d, bh:%d ",
+                        values.left, values.right, values.top, values.bottom,
+                        values.leftWidth, values.rightWidth, values.topHeight, values.bottomHeight);
             } else {
                 info = "scale: " + Float.toString(((ScaledSvg) itemObject.skinInfo).scale) +
                         "\n  w: " + itemObject.drawable.getMinWidth() +
