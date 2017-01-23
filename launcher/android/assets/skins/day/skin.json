@@ -344,9 +344,33 @@
       "path": "svg/multi.svg",
       "scale": 0.15
     },
+    "mapMulti0": {
+      "path": "svg/mapMulti0.svg",
+      "scale": 0.32
+    },
+    "mapMulti1": {
+      "path": "svg/mapMulti1.svg",
+      "scale": 0.09
+    },
+    "mapMulti2": {
+      "path": "svg/mapMulti2.svg",
+      "scale": 0.15
+    },
     "mapMultiQuestion": {
       "path": "svg/multiQuestion.svg",
       "scale": 0.13
+    },
+    "mapMultiQuestion0": {
+      "path": "svg/mapMultiQuestion0.svg",
+      "scale": 0.2
+    },
+    "mapMultiQuestion1": {
+      "path": "svg/mapMultiQuestion1.svg",
+      "scale": 0.09
+    },
+    "mapMultiQuestion2": {
+      "path": "svg/mapMultiQuestion2.svg",
+      "scale": 0.15
     },
     "mapMultiStage": {
       "path": "svg/multiStage.svg",
@@ -386,7 +410,7 @@
     },
     "mapReferencePoint1": {
       "path": "svg/mapReferencePoint0.svg",
-      "scale": 0.1
+      "scale": 0.09
     },
     "mapReferencePoint2": {
       "path": "svg/mapReferencePoint1.svg",
@@ -402,7 +426,7 @@
     },
     "mapTraditional0": {
       "path": "svg/mapTraditional0.svg",
-      "scale": 0.2
+      "scale": 0.25
     },
     "mapTraditional1": {
       "path": "svg/mapTraditional1.svg",
@@ -1060,7 +1084,16 @@
       "middle": "mapFound1",
       "large": "mapFound2"
     },
-    "mapMulti": {},
+    "mapMulti": {
+      "small": "mapMulti0",
+      "middle": "mapMulti1",
+      "large": "mapMulti2"
+    },
+    "mapMultiQuestion": {
+      "small": "mapMultiQuestion0",
+      "middle": "mapMultiQuestion1",
+      "large": "mapMultiQuestion2"
+    },
     "mapParkingArea": {
       "small": "mapParkingArea0",
       "middle": "mapParkingArea1",
