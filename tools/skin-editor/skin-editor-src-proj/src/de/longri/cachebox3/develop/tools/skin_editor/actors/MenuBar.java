@@ -27,6 +27,7 @@ import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
+import de.longri.cachebox3.develop.tools.skin_editor.ValidateDialog;
 
 
 /**
@@ -145,6 +146,18 @@ public class MenuBar extends Table {
             }
 
         });
+
+        TextButton buttonValidate = new TextButton("Validate Skin", game.skin);
+        buttonValidate.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ValidateDialog dlg = new ValidateDialog(game, game.skinProject);
+                dlg.show(game.screenMain.stage);
+            }
+
+        });
+        add(buttonValidate).pad(5);
 
 
         Label labelCurrentProject = new Label("Current Project:", game.skin, "title");

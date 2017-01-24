@@ -240,18 +240,18 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    private MapWayPointItemStyle getClusterSymbolsByCache(Cache cache) {
+    public static MapWayPointItemStyle getClusterSymbolsByCache(Cache cache) {
         String symbolStyleName = getMapIconName(cache);
         return VisUI.getSkin().get(symbolStyleName, MapWayPointItemStyle.class);
     }
 
-    private MapWayPointItemStyle getClusterSymbolsByWaypoint(Waypoint waypoint) {
+    public static MapWayPointItemStyle getClusterSymbolsByWaypoint(Waypoint waypoint) {
         String symbolStyleName = getMapIconName(waypoint);
         return VisUI.getSkin().get(symbolStyleName, MapWayPointItemStyle.class);
     }
 
 
-    private static String getMapIconName(Cache cache) {
+    public static String getMapIconName(Cache cache) {
         if (cache.ImTheOwner())
             return "star";
         else if (cache.isFound())
