@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.develop.tools.skin_editor.validation.Validate_MapWayPointItemStyle;
+import de.longri.cachebox3.develop.tools.skin_editor.validation.Validate_UnusedSvgFiles;
 import de.longri.cachebox3.develop.tools.skin_editor.validation.ValidationTask;
 
 /**
@@ -65,8 +66,7 @@ public class ValidateDialog extends Dialog {
 
     private void addValidationTasks() {
         tasks.add(new Validate_MapWayPointItemStyle(game, validationSkin));
-        tasks.add(new Validate_MapWayPointItemStyle(game, validationSkin));
-        tasks.add(new Validate_MapWayPointItemStyle(game, validationSkin));
+        tasks.add(new Validate_UnusedSvgFiles(game, validationSkin));
     }
 
     public void runValidate() {
@@ -92,6 +92,7 @@ public class ValidateDialog extends Dialog {
                 @Override
                 public void run() {
                     task.runValidation();
+                    task.setReadyIcon();
                 }
             });
             thread.start();

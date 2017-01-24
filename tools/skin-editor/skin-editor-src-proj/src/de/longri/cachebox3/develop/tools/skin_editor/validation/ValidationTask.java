@@ -34,7 +34,7 @@ public abstract class ValidationTask {
     final protected SkinEditorGame game;
     final protected SavableSvgSkin validationSkin;
     private Cell cell;
-    private String errorMsg, warnMsg;
+    protected String errorMsg, warnMsg;
 
     public ValidationTask(SkinEditorGame game, SavableSvgSkin validationSkin) {
         this.game = game;
@@ -61,7 +61,7 @@ public abstract class ValidationTask {
         this.cell = cell;
     }
 
-    protected void setReadyIcon() {
+    public void setReadyIcon() {
         //Ready , set icon on render Thread
 
         Gdx.app.postRunnable(new Runnable() {

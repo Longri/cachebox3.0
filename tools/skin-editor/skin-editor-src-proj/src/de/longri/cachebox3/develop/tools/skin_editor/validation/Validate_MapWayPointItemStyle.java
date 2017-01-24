@@ -18,12 +18,15 @@ package de.longri.cachebox3.develop.tools.skin_editor.validation;
 import com.badlogic.gdx.scenes.scene2d.ui.SavableSvgSkin;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Field;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.Waypoint;
 import org.oscim.backend.canvas.Bitmap;
 
 /**
@@ -52,23 +55,66 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
     @Override
     public void runValidation() {
 
-//
-//        if (cache.ImTheOwner())
-//            return "star";
-//        else if (cache.isFound())
-//            return "mapFound";
-//        else if ((cache.Type == CacheTypes.Mystery) && cache.CorrectedCoordiantesOrMysterySolved())
-//            return "mapSolved";
-//        else if ((cache.Type == CacheTypes.Multi) && cache.HasStartWaypoint())
-//            return "mapMultiStartP"; // Multi with start point
-//        else if ((cache.Type == CacheTypes.Mystery) && cache.HasStartWaypoint())
-//            return "mapMysteryStartP"; // Mystery without Final but with start point
-//        else
+        checkCacheTypes();
 
 
+        //Check changes of MapWayPointItemStyle.class
+        Field[] fields = ClassReflection.getFields(MapWayPointItemStyle.class);
+        String classChanged = "";
+        if (fields.length > 3) {
+            classChanged = "MapWayPointItemStyle is changed, maybe you must add new Validation " +
+                    "on de.longri.cachebox3.develop.tools.skin_editor.validation.Validate_MapWayPointItemStyle.java";
+        }
+
+
+        //set result
+        if (missingBitmaps.length > 0 || missingSyles.length > 0) {
+            errorMsg = "Missing Styles:\n" + missingSyles.toString() + "\nMissing Bitmaps:\n" + missingBitmaps.toString();
+        }
+
+        if (!classChanged.isEmpty()) {
+            warnMsg = classChanged + "\n Wrong Sizes:\n" + wrongBitmapsSize.toString();
+        } else if (wrongBitmapsSize.length > 0) {
+            warnMsg = "Wrong Sizes:\n" + wrongBitmapsSize.toString();
+        }
+
+
+
+    }
+
+    private void checkCacheTypes() {
         //Check Cache, I'm the owner
         Cache ownerCache = new Cache(0, 0, "test", CacheTypes.Cache, "GCCODE");
         checkCache(ownerCache);
+
+        //Check Cache, found
+        Cache foundCache = new Cache(0, 0, "test", CacheTypes.Cache, "GCCODE");
+        foundCache.setOwner("nicht meiner");
+        foundCache.setFound(true);
+        checkCache(foundCache);
+
+        //Check Cache, solved
+        Cache solvedCache = new Cache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
+        solvedCache.setOwner("nicht meiner");
+        solvedCache.setCorrectedCoordinates(true);
+        checkCache(solvedCache);
+
+
+        //Check Cache, multi start
+        Cache multiStartCache = new Cache(0, 0, "test", CacheTypes.Multi, "GCCODE");
+        multiStartCache.setOwner("nicht meiner");
+        Waypoint wp = new Waypoint(0, 0, false);
+        wp.IsStart = true;
+        multiStartCache.waypoints.add(wp);
+        checkCache(multiStartCache);
+
+        //Check Cache, myst start
+        Cache mystStartCache = new Cache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
+        mystStartCache.setOwner("nicht meiner");
+        Waypoint wpm = new Waypoint(0, 0, false);
+        wpm.IsStart = true;
+        mystStartCache.waypoints.add(wpm);
+        checkCache(mystStartCache);
 
 
         for (CacheTypes type : CacheTypes.values()) {
@@ -78,9 +124,8 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
             cache.setOwner("nicht meiner");
             checkCache(cache);
         }
-
-        setReadyIcon();
     }
+
 
     private void checkCache(Cache cache) {
         MapWayPointItemStyle style = null;
@@ -105,7 +150,7 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
 
     private enum Size {
 
-        small(".small", 2.5f, 4.5f), middle(".middle", 5f, 8.5f), large(".large", 9f, 13f);
+        small(".small", 8f, 14f), middle(".middle", 17, 27f), large(".large", 35f, 44f);
 
         private final float min;
         private final float max;
