@@ -57,14 +57,16 @@ public class OptionsPane extends Table {
     private Table tableFields;
     public Object currentStyle;
     private ObjectMap<String, ?> styles;
+    final private PreviewPane previewPane;
 
     /**
      *
      */
-    public OptionsPane(final SkinEditorGame game) {
+    public OptionsPane(final SkinEditorGame game, PreviewPane previewPane) {
         super();
 
         this.game = game;
+        this.previewPane = previewPane;
 
         left();
         top();
@@ -404,7 +406,7 @@ public class OptionsPane extends Table {
 
                         @Override
                         public void changed(ChangeEvent event, Actor actor) {
-                            showDrawableDialog(field,false);
+                            showDrawableDialog(field, false);
 
                         }
 
@@ -441,7 +443,7 @@ public class OptionsPane extends Table {
 
                         @Override
                         public void changed(ChangeEvent event, Actor actor) {
-                            showDrawableDialog(field,true);
+                            showDrawableDialog(field, true);
 
                         }
 
@@ -667,6 +669,9 @@ public class OptionsPane extends Table {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            //send changes to PreviewPane
+            previewPane.selectedStyleChanged();
         }
 
     }
@@ -750,4 +755,7 @@ public class OptionsPane extends Table {
         dlg.show(getStage());
     }
 
+    public Object getSelectedStyle() {
+        return currentStyle;
+    }
 }

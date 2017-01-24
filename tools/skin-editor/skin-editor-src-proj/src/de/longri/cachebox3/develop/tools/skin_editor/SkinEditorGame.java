@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.SaveableSvgSkin;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
@@ -78,11 +79,14 @@ public class SkinEditorGame extends Game {
         }
 
         // Rebuild from raw resources, kind of overkill, might disable it for production
-        //TODO enable ones for create a new uiskin.atlas
-//        TexturePacker.Settings settings = new TexturePacker.Settings();
-//        settings.combineSubdirectories = true;
-//        TexturePacker.process(settings, "skin-editor-src-proj/assets/resources/raw/", ".",
-//                "skin-editor-src-proj/assets/resources/uiskin");
+        {//TODO enable ones for create a new uiskin.atlas
+//            TexturePacker.Settings settings = new TexturePacker.Settings();
+//            settings.maxHeight = 2048;
+//            settings.maxWidth = 2048;
+//            settings.combineSubdirectories = true;
+//            TexturePacker.process(settings, "skin-editor-src-proj/assets/resources/raw/", ".",
+//                    "skin-editor-src-proj/assets/resources/uiskin");
+        }
 
         batch = new SpriteBatch();
 

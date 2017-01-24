@@ -33,8 +33,8 @@ public class MainScreen implements Screen {
 
         barMenu = new MenuBar(game);
         barWidgets = new WidgetsBar(game);
-        panePreview = new PreviewPane(game);
-        paneOptions = new OptionsPane(game);
+        panePreview = new PreviewPane(game, this);
+        paneOptions = new OptionsPane(game, panePreview);
         stage = new Stage(new ScreenViewport());
 
         Table table = new Table();
@@ -158,9 +158,7 @@ public class MainScreen implements Screen {
 
     }
 
-    /**
-     *
-     */
+
     public void refreshResources() {
         // Load project skin
         if (game.skinProject != null) {
@@ -176,5 +174,9 @@ public class MainScreen implements Screen {
         FileHandle skinFolder = (Gdx.files.local("projects/" + currentProject));
         game.skinProject = new SaveableSvgSkin(true, currentProject, SvgSkin.StorageType.LOCAL, skinFolder);
 
+    }
+
+    public Object getSelectedStyle() {
+        return paneOptions.getSelectedStyle();
     }
 }
