@@ -140,7 +140,7 @@ public class SkinEditorGame extends Game {
     /**
      * Display a dialog with a notice
      */
-    public void showNotice(String title, String message, Stage stage) {
+    public void showMsgDlg(String title, String message, Stage stage) {
         Dialog dlg = new Dialog(title, skin);
         dlg.pad(20);
         dlg.getContentTable().add(message).pad(20);

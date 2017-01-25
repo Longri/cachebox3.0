@@ -227,7 +227,7 @@ public class WelcomeScreen implements Screen {
 
         FileHandle projectFolder = Gdx.files.local("projects").child(projectName);
         if (projectFolder.exists() == true) {
-            game.showNotice("Error", "Project name already in use!", stage);
+            game.showMsgDlg("Error", "Project name already in use!", stage);
             return;
         }
 
@@ -288,7 +288,7 @@ public class WelcomeScreen implements Screen {
         defaultSkin.save(projectFolder.child("skin.json"));
 
 
-        game.showNotice("Operation completed", "New project successfully created.", stage);
+        game.showMsgDlg("Operation completed", "New project successfully created.", stage);
 
         refreshProjects();
     }

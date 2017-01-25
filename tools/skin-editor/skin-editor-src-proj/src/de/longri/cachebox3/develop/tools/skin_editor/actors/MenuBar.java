@@ -185,14 +185,14 @@ public class MenuBar extends Table {
                 if ((Boolean) object == true) {
 
                     if (textDirectory.getText().isEmpty() == true) {
-                        game.showNotice("Warning", "Directory field is empty!", game.screenMain.stage);
+                        game.showMsgDlg("Warning", "Directory field is empty!", game.screenMain.stage);
                         return;
                     }
 
 
                     FileHandle targetDirectory = new FileHandle(textDirectory.getText());
                     if (targetDirectory.exists() == false) {
-                        game.showNotice("Warning", "Directory not found!", game.screenMain.stage);
+                        game.showMsgDlg("Warning", "Directory not found!", game.screenMain.stage);
                         return;
                     }
 
@@ -224,7 +224,7 @@ public class MenuBar extends Table {
                             }
                         }
                     }
-                    game.showNotice("Operation Completed", "Project successfully exported!", game.screenMain.stage);
+                    game.showMsgDlg("Operation Completed", "Project successfully exported!", game.screenMain.stage);
                 }
             }
         };

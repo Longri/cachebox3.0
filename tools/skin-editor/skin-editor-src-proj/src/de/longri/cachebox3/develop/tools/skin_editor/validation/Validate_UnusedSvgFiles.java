@@ -16,6 +16,7 @@
 package de.longri.cachebox3.develop.tools.skin_editor.validation;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.SavableSvgSkin;
 import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
 import com.badlogic.gdx.utils.Array;
@@ -28,8 +29,8 @@ import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
  */
 public class Validate_UnusedSvgFiles extends ValidationTask {
 
-    public Validate_UnusedSvgFiles(SkinEditorGame game, SavableSvgSkin validationSkin) {
-        super(game, validationSkin);
+    public Validate_UnusedSvgFiles(SkinEditorGame game, SavableSvgSkin validationSkin, Stage stage) {
+        super(game, validationSkin, stage);
     }
 
     @Override
@@ -61,13 +62,11 @@ public class Validate_UnusedSvgFiles extends ValidationTask {
 
         StringBuilder warnMassageBuilder = new StringBuilder();
         if (svgList.size > 0) {
-            warnMassageBuilder.append("Unused *.svg files :");
-
+            warnMassageBuilder.append("Unused *.svg files : \n\n");
             for (String unusedFile : svgList) {
                 warnMassageBuilder.append(unusedFile);
-                warnMassageBuilder.append(",\n");
+                warnMassageBuilder.append("\n");
             }
-
             warnMsg = warnMassageBuilder.toString();
         }
 

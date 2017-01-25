@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.develop.tools.skin_editor.validation;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.SavableSvgSkin;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -39,8 +40,8 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
     StringBuilder wrongBitmapsSize = new StringBuilder();
 
 
-    public Validate_MapWayPointItemStyle(SkinEditorGame game, SavableSvgSkin validationSkin) {
-        super(game, validationSkin);
+    public Validate_MapWayPointItemStyle(SkinEditorGame game, SavableSvgSkin validationSkin, Stage stage) {
+        super(game, validationSkin, stage);
     }
 
 
@@ -69,15 +70,14 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
 
         //set result
         if (missingBitmaps.length > 0 || missingSyles.length > 0) {
-            errorMsg = "Missing Styles:\n" + missingSyles.toString() + "\nMissing Bitmaps:\n" + missingBitmaps.toString();
+            errorMsg = "Missing Styles:\n\n" + missingSyles.toString() + "\n\nMissing Bitmaps:\n\n" + missingBitmaps.toString();
         }
 
         if (!classChanged.isEmpty()) {
-            warnMsg = classChanged + "\n Wrong Sizes:\n" + wrongBitmapsSize.toString();
+            warnMsg = classChanged + "\n\n Wrong Sizes:\n\n" + wrongBitmapsSize.toString();
         } else if (wrongBitmapsSize.length > 0) {
-            warnMsg = "Wrong Sizes:\n" + wrongBitmapsSize.toString();
+            warnMsg = "Wrong Sizes:\n\n" + wrongBitmapsSize.toString();
         }
-
 
 
     }
@@ -168,7 +168,7 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
         if (bitmap == null) {
             missingBitmaps.append(styleName);
             missingBitmaps.append(fieldSize.fieldName);
-            missingBitmaps.append(", \n");
+            missingBitmaps.append("\n");
         } else { // check Size
             float minWidth = CB.getScaledFloat(fieldSize.min);
             float maxWidth = CB.getScaledFloat(fieldSize.max);
@@ -176,7 +176,8 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
                 wrongBitmapsSize.append(styleName);
                 wrongBitmapsSize.append(fieldSize.fieldName);
                 wrongBitmapsSize.append(" width: " + bitmap.getWidth());
-                wrongBitmapsSize.append(", \n");
+                wrongBitmapsSize.append("   => The size should be between " + minWidth + " and " + maxWidth + "!");
+                wrongBitmapsSize.append(" \n");
             }
 
             if (bitmap.getHeight() <= minWidth || bitmap.getHeight() > maxWidth) {

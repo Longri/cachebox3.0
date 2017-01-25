@@ -192,7 +192,7 @@ public class NewFontDialog extends Dialog {
 				
 				// First check if the name is already in use
 				if (game.skinProject.has(textFontName.getText(), BitmapFont.class)) {
-					game.showNotice("Error", "A font with the same name already exists!", getStage());
+					game.showMsgDlg("Error", "A font with the same name already exists!", getStage());
 					return;
 				}
 				
@@ -205,7 +205,7 @@ public class NewFontDialog extends Dialog {
 				
 				if ((targetFont.exists() == true) || (targetImage.exists() == true)) {
 					
-					game.showNotice("Error", "A file with the same name already exists!", getStage());
+					game.showMsgDlg("Error", "A file with the same name already exists!", getStage());
 					return;
 				}
 				

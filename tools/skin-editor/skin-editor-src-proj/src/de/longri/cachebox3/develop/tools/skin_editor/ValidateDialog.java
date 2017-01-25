@@ -16,10 +16,14 @@
 package de.longri.cachebox3.develop.tools.skin_editor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.develop.tools.skin_editor.validation.Validate_MapWayPointItemStyle;
+import de.longri.cachebox3.develop.tools.skin_editor.validation.Validate_UnusedResources;
 import de.longri.cachebox3.develop.tools.skin_editor.validation.Validate_UnusedSvgFiles;
 import de.longri.cachebox3.develop.tools.skin_editor.validation.ValidationTask;
 
@@ -53,20 +57,34 @@ public class ValidateDialog extends Dialog {
         button("Cancel", false);
         key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
 
+    }
+
+    @Override
+    public Dialog show(Stage stage, Action action) {
+        super.show(stage, action);
+
         addValidationTasks();
-
-
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
                 runValidate();
             }
         });
+        return this;
+    }
+
+    @Override
+    public void hide(Action action) {
+        super.hide(action);
+        // back to normal ui skin!
+        VisUI.dispose();
+        VisUI.load(game.skin);
     }
 
     private void addValidationTasks() {
-        tasks.add(new Validate_MapWayPointItemStyle(game, validationSkin));
-        tasks.add(new Validate_UnusedSvgFiles(game, validationSkin));
+        tasks.add(new Validate_MapWayPointItemStyle(game, validationSkin, getStage()));
+        tasks.add(new Validate_UnusedSvgFiles(game, validationSkin, getStage()));
+        tasks.add(new Validate_UnusedResources(game, validationSkin, getStage()));
     }
 
     public void runValidate() {

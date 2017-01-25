@@ -16,9 +16,9 @@
 package de.longri.cachebox3.develop.tools.skin_editor.validation;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.SavableSvgSkin;
+import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 
 /**
@@ -33,12 +33,14 @@ public abstract class ValidationTask {
 
     final protected SkinEditorGame game;
     final protected SavableSvgSkin validationSkin;
+    final private Stage stage;
     private Cell cell;
     protected String errorMsg, warnMsg;
 
-    public ValidationTask(SkinEditorGame game, SavableSvgSkin validationSkin) {
+    public ValidationTask(SkinEditorGame game, SavableSvgSkin validationSkin, Stage stage) {
         this.game = game;
         this.validationSkin = validationSkin;
+        this.stage = stage;
     }
 
     public boolean hasError() {
@@ -63,20 +65,65 @@ public abstract class ValidationTask {
 
     public void setReadyIcon() {
         //Ready , set icon on render Thread
-
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
                 if (hasWarn() || hasError()) {
-
+                    if (hasError()) {
+                        Image errorImage = new Image(game.skin.getRegion("error"));
+                        ValidationTask.this.cell.setActor(errorImage);
+                    } else {
+                        Image warnImage = new Image(game.skin.getRegion("warn"));
+                        ValidationTask.this.cell.setActor(warnImage);
+                    }
                 } else {
-                    Image readyImage = new Image(game.skin.getRegion("check-on"));
+                    Image readyImage = new Image(game.skin.getRegion("valid"));
                     ValidationTask.this.cell.setActor(readyImage);
                 }
+                ValidationTask.this.cell.getActor().addListener(clickListener);
+                ValidationTask.this.cell.getActor().setTouchable(Touchable.enabled);
                 Gdx.graphics.requestRendering();
             }
         });
-
-
     }
+
+    InputListener clickListener = new InputListener() {
+        @Override
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            if (hasWarn() || hasError()) {
+
+                getWarnMsg();
+
+                Dialog dlg = new Dialog(getName(), game.skin);
+                dlg.pad(20);
+
+                TextArea taError = new TextArea(getErrorMsg(), game.skin, "error");
+                TextArea taWarn = new TextArea(getWarnMsg(), game.skin, "warn");
+
+                Table ta = new Table();
+                if (hasError()) {
+                    ta.add(taError).fill().expand();
+                    if (hasWarn()) ta.row();
+                }
+                if (hasWarn()) {
+                    ta.add(taWarn).fill().expand();
+                }
+
+                ScrollPane scrollPane = new ScrollPane(ta, game.skin);
+                scrollPane.setFlickScroll(false);
+                scrollPane.setFadeScrollBars(false);
+                scrollPane.setScrollbarsOnTop(true);
+
+                dlg.getContentTable().add(scrollPane).width(720).height(420).pad(20);
+
+                dlg.button("OK", true);
+                dlg.key(com.badlogic.gdx.Input.Keys.ENTER, true);
+                dlg.key(com.badlogic.gdx.Input.Keys.ESCAPE, true);
+                dlg.show(stage);
+            } else {
+                game.showMsgDlg(getName(), "All tests are ok!", stage);
+            }
+            return false;
+        }
+    };
 }

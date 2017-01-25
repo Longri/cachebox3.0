@@ -89,7 +89,7 @@ public class ColorPickerDialog extends Dialog {
                     if ((colorName != null) && (colorName.isEmpty() == false)) {
                         // Verify if the color name is already in use
                         if (colors.containsKey(colorName) == true) {
-                            game.showNotice("Error", "Color name already in use!", game.screenMain.stage);
+                            game.showMsgDlg("Error", "Color name already in use!", game.screenMain.stage);
                         } else {
                             // Add the color (asuming RGBA)
                             float[] components = color.getComponents(null);

@@ -195,13 +195,13 @@ public class OptionsPane extends Table {
                 String styleName = textStyleName.getText();
                 if (styleName.length() == 0) {
 
-                    game.showNotice("Warning", "No style name entered!", game.screenMain.stage);
+                    game.showMsgDlg("Warning", "No style name entered!", game.screenMain.stage);
                     return;
                 }
 
                 // Check if the style name is already in use
                 if (listItems.contains(styleName, false)) {
-                    game.showNotice("Warning", "Style name already in use!", game.screenMain.stage);
+                    game.showMsgDlg("Warning", "Style name already in use!", game.screenMain.stage);
                     return;
                 }
 

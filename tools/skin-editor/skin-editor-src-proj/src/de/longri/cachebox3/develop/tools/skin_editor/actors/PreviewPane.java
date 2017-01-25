@@ -116,17 +116,23 @@ public class PreviewPane extends Table {
 
         float previewScaleFactor = previewImage.getHeight() / 1440;
 
-        Image largeScaledImage = getImageFromBitmapName(((GetName) selectedStyle.large).getName(), previewScaleFactor);
-        largeScaledImage.setPosition(300, 820);
-        addActor(largeScaledImage);
+        if (selectedStyle.large != null) {
+            Image largeScaledImage = getImageFromBitmapName(((GetName) selectedStyle.large).getName(), previewScaleFactor);
+            largeScaledImage.setPosition(300, 820);
+            addActor(largeScaledImage);
+        }
 
-        Image middleScaledImage = getImageFromBitmapName(((GetName) selectedStyle.middle).getName(), previewScaleFactor);
-        middleScaledImage.setPosition(350, 870);
-        addActor(middleScaledImage);
+        if (selectedStyle.middle != null) {
+            Image middleScaledImage = getImageFromBitmapName(((GetName) selectedStyle.middle).getName(), previewScaleFactor);
+            middleScaledImage.setPosition(350, 870);
+            addActor(middleScaledImage);
+        }
 
-        Image smallScaledImage = getImageFromBitmapName(((GetName) selectedStyle.small).getName(), previewScaleFactor);
-        smallScaledImage.setPosition(380, 900);
-        addActor(smallScaledImage);
+        if (selectedStyle.small != null) {
+            Image smallScaledImage = getImageFromBitmapName(((GetName) selectedStyle.small).getName(), previewScaleFactor);
+            smallScaledImage.setPosition(380, 900);
+            addActor(smallScaledImage);
+        }
 
     }
 
