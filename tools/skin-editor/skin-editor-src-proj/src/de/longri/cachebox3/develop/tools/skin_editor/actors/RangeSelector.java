@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.SaveableSvgSkin;
+import com.badlogic.gdx.scenes.scene2d.ui.SavableSvgSkin;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -17,7 +17,7 @@ public class RangeSelector extends Widget {
     public float rangeStart = 0.25f;
     public float rangeStop = 0.75f;
 
-    public RangeSelector(final boolean vertical, SaveableSvgSkin skin) {
+    public RangeSelector(final boolean vertical, SavableSvgSkin skin) {
         super();
 
         this.vertical = vertical;

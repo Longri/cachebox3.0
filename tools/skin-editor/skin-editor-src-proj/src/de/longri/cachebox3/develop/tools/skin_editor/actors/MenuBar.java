@@ -27,6 +27,7 @@ import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
+import de.longri.cachebox3.develop.tools.skin_editor.ValidateDialog;
 
 
 /**
@@ -146,6 +147,18 @@ public class MenuBar extends Table {
 
         });
 
+        TextButton buttonValidate = new TextButton("Validate Skin", game.skin);
+        buttonValidate.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ValidateDialog dlg = new ValidateDialog(game, game.skinProject);
+                dlg.show(game.screenMain.stage);
+            }
+
+        });
+        add(buttonValidate).pad(5);
+
 
         Label labelCurrentProject = new Label("Current Project:", game.skin, "title");
         add(labelCurrentProject).pad(5).padRight(20);
@@ -172,14 +185,14 @@ public class MenuBar extends Table {
                 if ((Boolean) object == true) {
 
                     if (textDirectory.getText().isEmpty() == true) {
-                        game.showNotice("Warning", "Directory field is empty!", game.screenMain.stage);
+                        game.showMsgDlg("Warning", "Directory field is empty!", game.screenMain.stage);
                         return;
                     }
 
 
                     FileHandle targetDirectory = new FileHandle(textDirectory.getText());
                     if (targetDirectory.exists() == false) {
-                        game.showNotice("Warning", "Directory not found!", game.screenMain.stage);
+                        game.showMsgDlg("Warning", "Directory not found!", game.screenMain.stage);
                         return;
                     }
 
@@ -211,7 +224,7 @@ public class MenuBar extends Table {
                             }
                         }
                     }
-                    game.showNotice("Operation Completed", "Project successfully exported!", game.screenMain.stage);
+                    game.showMsgDlg("Operation Completed", "Project successfully exported!", game.screenMain.stage);
                 }
             }
         };

@@ -157,7 +157,7 @@ public class FontPickerDialog extends Dialog {
 
 							if (isFontInUse(font) == true) {
 
-								game.showNotice("Error", "Bitmap font already in use!", getStage());
+								game.showMsgDlg("Error", "Bitmap font already in use!", getStage());
 
 							} else {
 								

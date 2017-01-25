@@ -5,10 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.SaveableSvgSkin;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -33,8 +30,8 @@ public class MainScreen implements Screen {
 
         barMenu = new MenuBar(game);
         barWidgets = new WidgetsBar(game);
-        panePreview = new PreviewPane(game);
-        paneOptions = new OptionsPane(game);
+        panePreview = new PreviewPane(game, this);
+        paneOptions = new OptionsPane(game, panePreview);
         stage = new Stage(new ScreenViewport());
 
         Table table = new Table();
@@ -158,9 +155,7 @@ public class MainScreen implements Screen {
 
     }
 
-    /**
-     *
-     */
+
     public void refreshResources() {
         // Load project skin
         if (game.skinProject != null) {
@@ -174,7 +169,11 @@ public class MainScreen implements Screen {
         }
 
         FileHandle skinFolder = (Gdx.files.local("projects/" + currentProject));
-        game.skinProject = new SaveableSvgSkin(true, currentProject, SvgSkin.StorageType.LOCAL, skinFolder);
+        game.skinProject = new SavableSvgSkin(true, currentProject, SvgSkin.StorageType.LOCAL, skinFolder);
 
+    }
+
+    public Object getSelectedStyle() {
+        return paneOptions.getSelectedStyle();
     }
 }

@@ -30,13 +30,13 @@ import java.util.Iterator;
 /**
  * Created by Longri on 12.01.2017.
  */
-public class SaveableSvgSkin extends SvgSkin {
+public class SavableSvgSkin extends SvgSkin {
 
-    public SaveableSvgSkin(String name) {
+    public SavableSvgSkin(String name) {
         super(name);
     }
 
-    public SaveableSvgSkin(boolean forceCreateNewAtlas, String name, StorageType storageType, FileHandle skinFolder) {
+    public SavableSvgSkin(boolean forceCreateNewAtlas, String name, StorageType storageType, FileHandle skinFolder) {
         super(forceCreateNewAtlas, name, storageType, skinFolder);
     }
 
@@ -199,7 +199,7 @@ public class SaveableSvgSkin extends SvgSkin {
                                     }
                                 }
                             } else if (valueObject instanceof Drawable) {
-                                if (typeResources.get(style) instanceof SaveableSvgSkin.TintedDrawable) {
+                                if (typeResources.get(style) instanceof SavableSvgSkin.TintedDrawable) {
                                     // Skip drawable if it is from tinted drawable
                                 } else {
                                     String value = null;

@@ -195,13 +195,13 @@ public class NinePatchEditorDialog extends Dialog {
                 String saveName = textName.getText();
 
                 if (saveName.isEmpty() == true) {
-                    game.showNotice("Error", "Empty name!", getStage());
+                    game.showMsgDlg("Error", "Empty name!", getStage());
                     return;
 
                 }
                 // if no change check if the name is already in use
                 if (!isChange && game.skinProject.has(saveName, SvgNinePatchDrawable.class)) {
-                    game.showNotice("Error", "A ninepatch with the same name already exists!", getStage());
+                    game.showMsgDlg("Error", "A ninepatch with the same name already exists!", getStage());
                     return;
                 }
 

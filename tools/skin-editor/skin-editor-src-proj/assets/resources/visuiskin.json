@@ -11,6 +11,7 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 de.longri.cachebox3.utils.SkinColor: {
 	green: { a: 1, b: 0, g: 1, r: 0 },
 	white: { a: 1, b: 1, g: 1, r: 1 },
+	yellow: { a: 1, b: 0, g: 1, r: 1 },
 	light_grey: { a: 1, b: 0.8, g: 0.8, r: 0.8 },
 	grey: { a: 1, b: 0.7, g: 0.7, r: 0.7 },
 	red: { a: 1, b: 0, g: 0, r: 1 },
@@ -85,7 +86,9 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 	default: {font: default-font, fontColor: white, disabledFontColor: grey, selection: selection, background: textfield, cursor: cursor, messageFont: default-font, messageFontColor: grey },
-	small: {font: small-font, fontColor: white, disabledFontColor: grey, selection: selection, background: textfield, cursor: cursor, messageFont: default-font, messageFontColor: grey }
+	small: {font: small-font, fontColor: white, disabledFontColor: grey, selection: selection, background: textfield, cursor: cursor, messageFont: default-font, messageFontColor: grey },
+	error: {font: default-font, fontColor: red, disabledFontColor: grey, selection: selection, background: textfield, cursor: cursor, messageFont: default-font, messageFontColor: grey },
+	warn: {font: default-font, fontColor: yellow, disabledFontColor: grey, selection: selection, background: textfield, cursor: cursor, messageFont: default-font, messageFontColor: grey }
 },
 com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 	default: {checkboxOn: check-on, checkboxOff: check-off, font: default-font, fontColor: white, disabledFontColor: grey },

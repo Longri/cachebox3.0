@@ -22,7 +22,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.SaveableSvgSkin;
+import com.badlogic.gdx.scenes.scene2d.ui.SavableSvgSkin;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
@@ -44,14 +44,14 @@ public class SkinEditorGame extends Game {
     public final static String[] widgets = {"MapWayPointItem", "Sizes", "Label", "Button", "TextButton", "ImageButton", "CheckBox", "TextField", "List", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree"};
 
     public SpriteBatch batch;
-    public SaveableSvgSkin skin;
+    public SavableSvgSkin skin;
 
 
     public MainScreen screenMain;
     public WelcomeScreen screenWelcome;
 
     // Project related
-    public SaveableSvgSkin skinProject;
+    public SavableSvgSkin skinProject;
 
     // System fonts
     public SystemFonts fm;
@@ -78,16 +78,19 @@ public class SkinEditorGame extends Game {
         }
 
         // Rebuild from raw resources, kind of overkill, might disable it for production
-        //TODO enable ones for create a new uiskin.atlas
-//        TexturePacker.Settings settings = new TexturePacker.Settings();
-//        settings.combineSubdirectories = true;
-//        TexturePacker.process(settings, "skin-editor-src-proj/assets/resources/raw/", ".",
-//                "skin-editor-src-proj/assets/resources/uiskin");
+        {//TODO enable ones for create a new uiskin.atlas
+//            TexturePacker.Settings settings = new TexturePacker.Settings();
+//            settings.maxHeight = 2048;
+//            settings.maxWidth = 2048;
+//            settings.combineSubdirectories = true;
+//            TexturePacker.process(settings, "skin-editor-src-proj/assets/resources/raw/", ".",
+//                    "skin-editor-src-proj/assets/resources/uiskin");
+        }
 
         batch = new SpriteBatch();
 
-//        skin = new SaveableSvgSkin(null);
-        skin = new SaveableSvgSkin("UiSkin");
+//        skin = new SavableSvgSkin(null);
+        skin = new SavableSvgSkin("UiSkin");
 
         // add skin editor Texture pack
         skin.addRegions(new TextureAtlas(Gdx.files.classpath("resources/uiskin.atlas")));
@@ -137,7 +140,7 @@ public class SkinEditorGame extends Game {
     /**
      * Display a dialog with a notice
      */
-    public void showNotice(String title, String message, Stage stage) {
+    public void showMsgDlg(String title, String message, Stage stage) {
         Dialog dlg = new Dialog(title, skin);
         dlg.pad(20);
         dlg.getContentTable().add(message).pad(20);
