@@ -150,7 +150,7 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
 
     private enum Size {
 
-        small(".small", 8f, 14f), middle(".middle", 17, 27f), large(".large", 35f, 44f);
+        small(".small", 7f, 14f), middle(".middle", 17, 27f), large(".large", 35f, 44f);
 
         private final float min;
         private final float max;
@@ -170,20 +170,21 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
             missingBitmaps.append(fieldSize.fieldName);
             missingBitmaps.append("\n");
         } else { // check Size
-            float minWidth = CB.getScaledFloat(fieldSize.min);
-            float maxWidth = CB.getScaledFloat(fieldSize.max);
-            if (bitmap.getWidth() <= minWidth || bitmap.getWidth() > maxWidth) {
+            int minWidth = (int) CB.getScaledFloat(fieldSize.min);
+            int maxWidth = (int) CB.getScaledFloat(fieldSize.max);
+            if (bitmap.getWidth() < minWidth || bitmap.getWidth() > maxWidth) {
                 wrongBitmapsSize.append(styleName);
                 wrongBitmapsSize.append(fieldSize.fieldName);
                 wrongBitmapsSize.append(" width: " + bitmap.getWidth());
-                wrongBitmapsSize.append("   => The size should be between " + minWidth + " and " + maxWidth + "!");
+                wrongBitmapsSize.append("   => The width should be between " + minWidth + " and " + maxWidth + "!");
                 wrongBitmapsSize.append(" \n");
             }
 
-            if (bitmap.getHeight() <= minWidth || bitmap.getHeight() > maxWidth) {
+            if (bitmap.getHeight() < minWidth || bitmap.getHeight() > maxWidth) {
                 wrongBitmapsSize.append(styleName);
                 wrongBitmapsSize.append(fieldSize.fieldName);
                 wrongBitmapsSize.append(" height: " + bitmap.getHeight());
+                wrongBitmapsSize.append("   => The height should be between " + minWidth + " and " + maxWidth + "!");
                 wrongBitmapsSize.append(", \n");
             }
         }
