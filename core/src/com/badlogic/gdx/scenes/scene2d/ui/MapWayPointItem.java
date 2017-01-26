@@ -15,30 +15,34 @@
  */
 package com.badlogic.gdx.scenes.scene2d.ui;
 
-import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
-import org.oscim.backend.canvas.Bitmap;
+import de.longri.cachebox3.logging.Logger;
+import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.core.GeoPoint;
+import org.oscim.renderer.atlas.TextureRegion;
 
 import java.util.Arrays;
 
 public class MapWayPointItem extends Coordinate {
-
+    private final static Logger log = LoggerFactory.getLogger(MapWayPointItem.class);
 
     private final Object dataObject; // Cache.class or WayPoint.class
 
     final GeoPoint geoPoint;
     private GeoBoundingBoxInt bounds;
     private final int cachedHash;
-    private final MapWayPointItemStyle mapSymbols;
+    private final TextureRegion small, middle, large;
 
 
-    public MapWayPointItem(Coordinate pos, Object obj, MapWayPointItemStyle mapSymbols) {
+    public MapWayPointItem(Coordinate pos, Object obj, TextureRegion small, TextureRegion middle, TextureRegion large) {
         super(pos.latitude, pos.longitude);
         geoPoint = new GeoPoint(pos.latitude, pos.longitude);
         this.dataObject = obj;
-        this.mapSymbols = mapSymbols;
+        this.small = small;
+        this.middle = middle;
+        this.large = large;
+
 
         cachedHash = hashCode();
     }
@@ -55,14 +59,14 @@ public class MapWayPointItem extends Coordinate {
                 && dataObject.equals(that.dataObject);
     }
 
-    public Bitmap getMapSymbol(int zoomLevel) {
-        if ((zoomLevel >= 13) && (zoomLevel <= 14))
-            return mapSymbols.middle; // 13x13
-        else if (zoomLevel > 14)
-            return mapSymbols.large; // default Images
-        return mapSymbols.small;
+    public TextureRegion getMapSymbol(int zoomLevel) {
+        if ((zoomLevel >= 13) && (zoomLevel <= 14)) {
+            return middle; // 13x13
+        } else if (zoomLevel > 14) {
+            return large; // default Images
+        }
+        return small;
     }
-
 
     @Override
     public int hashCode() {
@@ -90,6 +94,4 @@ public class MapWayPointItem extends Coordinate {
         if (this.bounds == null) return false;
         return this.bounds.contains(testCluster.geoPoint);
     }
-
-
 }

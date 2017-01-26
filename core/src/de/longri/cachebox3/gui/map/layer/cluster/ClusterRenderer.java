@@ -32,6 +32,7 @@ import org.oscim.core.PointF;
 import org.oscim.core.Tile;
 import org.oscim.renderer.BucketRenderer;
 import org.oscim.renderer.GLViewport;
+import org.oscim.renderer.atlas.TextureRegion;
 import org.oscim.renderer.bucket.SymbolBucket;
 import org.oscim.renderer.bucket.SymbolItem;
 import org.oscim.utils.TimSort;
@@ -224,12 +225,10 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
                 continue;
             }
 
-            Bitmap bitmap = it.item.getMapSymbol(zoomLevel);
-            if (bitmap == null)
-                bitmap = mDefaultBitmap;
-
+            TextureRegion textureRegion = it.item.getMapSymbol(zoomLevel);
+            if (textureRegion == null) continue;
             SymbolItem s = SymbolItem.pool.get();
-            s.set(it.x, it.y, bitmap, true);
+            s.set(it.x, it.y, textureRegion, true);
 
             //set center offset
             s.offset = CENTER_OFFSET;
