@@ -24,6 +24,8 @@ import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import org.oscim.backend.CanvasAdapter;
+import org.oscim.backend.Platform;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +47,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
 
         log.info("WorkPath set to :" + CB.WorkPath);
 
-        boolean nomedia = CB.platform == CB.Platform.ANDROID;
+        boolean nomedia = CanvasAdapter.platform == Platform.ANDROID;
 
         // initial Database on user path
         ini_Dir(CB.WorkPath + "/user", false);

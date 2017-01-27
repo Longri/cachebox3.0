@@ -43,6 +43,8 @@ import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.lists.CB_List;
 import de.longri.cachebox3.utils.lists.ThreadStack;
+import org.oscim.backend.CanvasAdapter;
+import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.Box;
 import org.oscim.core.MercatorProjection;
@@ -106,7 +108,8 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                 input.put(((GetName) bmp).getName(), bmp);
             }
             ArrayList<TextureAtlas> atlasList = new ArrayList<TextureAtlas>();
-            TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, true, CB.platform == CB.Platform.IOS);
+            TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, true,
+                    CanvasAdapter.platform == Platform.IOS);
 
 
             if (false) {//Debug write atlas Bitmap to tmp folder
@@ -217,7 +220,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                                 count = 0;
                             }
                         }
-                        if (CB.platform == CB.Platform.DESKTOP)
+                        if (CanvasAdapter.platform.isDesktop())
                             throw new GdxRuntimeException(msg.toString());
                         else log.error(msg.toString());
                     }
