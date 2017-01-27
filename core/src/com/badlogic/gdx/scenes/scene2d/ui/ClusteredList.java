@@ -15,8 +15,6 @@
  */
 package com.badlogic.gdx.scenes.scene2d.ui;
 
-import com.kotcrab.vis.ui.VisUI;
-import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import de.longri.cachebox3.utils.lists.CB_List;
@@ -87,9 +85,7 @@ public class ClusteredList extends CB_List<MapWayPointItem> {
 
             if (inside.size() > 0) {
                 this.removeAll(inside);
-
-                Cluster newCluster = new Cluster(cluster, "New Cluster", VisUI.isLoaded() ?
-                        VisUI.getSkin().get("cluster", MapWayPointItemStyle.class) : null);
+                Cluster newCluster = new Cluster(cluster, "New Cluster", null, null, null);
                 newCluster.add(cluster);
                 newCluster.addAll(inside);
                 this.set(index, newCluster);
