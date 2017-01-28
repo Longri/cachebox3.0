@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,12 @@
  */
 package de.longri.cachebox3.gui.actions.show_vies;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.TestView;
-import de.longri.cachebox3.utils.IconNames;
 
 /**
  * Created by Longri on 24.07.16.
@@ -64,7 +62,7 @@ public class Action_Show_TestView extends Abstract_Action_ShowView {
     }
 
     @Override
-    public Sprite getIcon() {
-        return CB.getSprite(IconNames.cb.name());
+    public Drawable getIcon() {
+        return CB.getSkin().getIcon.cb;
     }
 }

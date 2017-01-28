@@ -15,10 +15,12 @@
  */
 package de.longri.cachebox3.gui.map.layer;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
@@ -41,6 +43,8 @@ import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.lists.CB_List;
 import de.longri.cachebox3.utils.lists.ThreadStack;
+import org.oscim.backend.CanvasAdapter;
+import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.Box;
 import org.oscim.core.MercatorProjection;
@@ -51,8 +55,13 @@ import org.oscim.event.MotionEvent;
 import org.oscim.gdx.MotionHandler;
 import org.oscim.layers.Layer;
 import org.oscim.map.Map;
+import org.oscim.renderer.atlas.TextureAtlas;
+import org.oscim.renderer.atlas.TextureRegion;
+import org.oscim.utils.TextureAtlasUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  * Created by Longri on 27.11.16.
@@ -70,6 +79,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     private final Box mapVisibleBoundingBox = new Box();
     private final CB_List<MapWayPointItem> clickedItems = new CB_List<MapWayPointItem>();
     private final ThreadStack<ClusterRunnable> clusterWorker = new ThreadStack<ClusterRunnable>();
+    private final LinkedHashMap<Object, TextureRegion> textureRegionMap;
 
 
     private double lastDistance = Double.MIN_VALUE;
@@ -83,6 +93,36 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         mRenderer = mClusterRenderer;
         mItemList = new ClusteredList();
         populate();
+
+        {// create TextureRegions from all Bitmap symbols
+            textureRegionMap = new LinkedHashMap<Object, TextureRegion>();
+            ObjectMap<String, MapWayPointItemStyle> list = VisUI.getSkin().getAll(MapWayPointItemStyle.class);
+            Array<Bitmap> bitmapList = new Array<Bitmap>();
+            for (MapWayPointItemStyle style : list.values()) {
+                if (style.small != null) if (!bitmapList.contains(style.small, true)) bitmapList.add(style.small);
+                if (style.middle != null) if (!bitmapList.contains(style.middle, true)) bitmapList.add(style.middle);
+                if (style.large != null) if (!bitmapList.contains(style.large, true)) bitmapList.add(style.large);
+            }
+            LinkedHashMap<Object, Bitmap> input = new LinkedHashMap<Object, Bitmap>();
+            for (Bitmap bmp : bitmapList) {
+                input.put(((GetName) bmp).getName(), bmp);
+            }
+            ArrayList<TextureAtlas> atlasList = new ArrayList<TextureAtlas>();
+            TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, true,
+                    CanvasAdapter.platform == Platform.IOS);
+
+
+            if (false) {//Debug write atlas Bitmap to tmp folder
+                int count = 0;
+                for (TextureAtlas atlas : atlasList) {
+                    byte[] data = atlas.texture.bitmap.getPngEncodedData();
+                    Pixmap pixmap = new Pixmap(data, 0, data.length);
+                    FileHandle file = Gdx.files.absolute(CB.WorkPath + "/user/temp/testAtlas" + count++ + ".png");
+                    PixmapIO.writePNG(file, pixmap);
+                    pixmap.dispose();
+                }
+            }
+        }
 
         //register as cacheListChanged eventListener
         CacheListChangedEventList.Add(this);
@@ -124,7 +164,11 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
                     for (Cache cache : Database.Data.Query) {
                         try {
-                            MapWayPointItem geoCluster = new MapWayPointItem(cache, cache.getGcCode(), getClusterSymbolsByCache(cache));
+                            MapWayPointItemStyle style = getClusterSymbolsByCache(cache);
+                            TextureRegion small = textureRegionMap.get(((GetName) style.small).getName());
+                            TextureRegion middle = textureRegionMap.get(((GetName) style.middle).getName());
+                            TextureRegion large = textureRegionMap.get(((GetName) style.large).getName());
+                            MapWayPointItem geoCluster = new MapWayPointItem(cache, cache.getGcCode(), small, middle, large);
                             mItemList.add(geoCluster);
                         } catch (GdxRuntimeException e) {
                             if (e.getMessage().startsWith(ERROR_MSG)) {
@@ -142,7 +186,11 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                         if (Settings.ShowAllWaypoints.getValue() || CB.isSelectedCache(cache)) {
                             for (Waypoint waypoint : cache.waypoints) {
                                 try {
-                                    MapWayPointItem waypointCluster = new MapWayPointItem(waypoint, waypoint.getGcCode(), getClusterSymbolsByWaypoint(waypoint));
+                                    MapWayPointItemStyle style = getClusterSymbolsByWaypoint(waypoint);
+                                    TextureRegion small = textureRegionMap.get(((GetName) style.small).getName());
+                                    TextureRegion middle = textureRegionMap.get(((GetName) style.middle).getName());
+                                    TextureRegion large = textureRegionMap.get(((GetName) style.large).getName());
+                                    MapWayPointItem waypointCluster = new MapWayPointItem(waypoint, waypoint.getGcCode(), small, middle, large);
                                     mItemList.add(waypointCluster);
                                 } catch (GdxRuntimeException e) {
                                     if (e.getMessage().startsWith(ERROR_MSG)) {
@@ -172,7 +220,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                                 count = 0;
                             }
                         }
-                        if (CB.platform == CB.Platform.DESKTOP)
+                        if (CanvasAdapter.platform.isDesktop())
                             throw new GdxRuntimeException(msg.toString());
                         else log.error(msg.toString());
                     }

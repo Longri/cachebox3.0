@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 package de.longri.cachebox3.gui.dialogs;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -29,8 +29,9 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
+import de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle;
+import de.longri.cachebox3.gui.skin.styles.IconsStyle;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.utils.IconNames;
 
 /**
  * Created by Longri on 03.08.16.
@@ -161,53 +162,38 @@ public class ButtonDialog extends Window {
                 ((Gdx.graphics.getHeight() - getHeight()) / 2));
     }
 
-    private static Sprite getIcon(MessageBoxIcon msgIcon) {
+    private static Drawable getIcon(MessageBoxIcon msgIcon) {
         if (msgIcon == null)
             return null;
 
-        Sprite icon;
+        IconsStyle style = VisUI.getSkin().get(IconsStyle.class);
 
-        switch (msgIcon.ordinal()) {
-            case 0:
-                icon = CB.getSprite(IconNames.infoIcon.name());
-                break;
-            case 1:
-                icon = CB.getSprite(IconNames.closeIcon.name());
-                break;
-            case 2:
-                icon = CB.getSprite(IconNames.warningIcon.name());
-                break;
-            case 3:
-                icon = CB.getSprite(IconNames.closeIcon.name());
-                break;
-            case 4:
-                icon = CB.getSprite(IconNames.infoIcon.name());
-                break;
-            case 5:
-                icon = null;
-                break;
-            case 6:
-                icon = CB.getSprite(IconNames.helpIcon.name());
-                break;
-            case 7:
-                icon = CB.getSprite(IconNames.closeIcon.name());
-                break;
-            case 8:
-                icon = CB.getSprite(IconNames.warningIcon.name());
-                break;
-            case 9:
-                icon = CB.getSprite(IconNames.gc_liveIcon.name());
-                break;
-            case 10:
-                icon = CB.getSprite(IconNames.gc_liveIcon.name());
-                break;
-
+        switch (msgIcon) {
+            case Asterisk:
+                return style.Asterisk;
+            case Error:
+                return style.Error;
+            case Exclamation:
+                return style.Exclamation;
+            case Hand:
+                return style.Hand;
+            case Information:
+                return style.Information;
+            case None:
+                return null;
+            case Question:
+                return style.Question;
+            case Stop:
+                return style.Stop;
+            case Warning:
+                return style.Warning;
+            case Powerd_by_GC_Live:
+                return style.Powerd_by_GC_Live;
+            case GC_Live:
+                return style.GC_Live;
             default:
-                icon = null;
-
+                return null;
         }
-
-        return icon;
     }
 
     private void setButtonCaptions(MessageBoxButtons buttons) {
@@ -263,12 +249,4 @@ public class ButtonDialog extends Window {
             this.hide();
         }
     }
-
-    public static class ButtonDialogStyle {
-        public SvgNinePatchDrawable title, header, center, footer;
-        public  Drawable stageBackground;
-        public  BitmapFont titleFont;
-        public Color titleFontColor;
-    }
-
 }

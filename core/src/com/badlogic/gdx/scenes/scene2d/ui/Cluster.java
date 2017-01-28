@@ -15,8 +15,8 @@
  */
 package com.badlogic.gdx.scenes.scene2d.ui;
 
-import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.locator.Coordinate;
+import org.oscim.renderer.atlas.TextureRegion;
 
 /**
  * Created by Longri on 31.12.16.
@@ -26,8 +26,8 @@ public class Cluster extends MapWayPointItem {
     private final ClusteredList includedClusters = new ClusteredList();
     private Coordinate centerCoordinate;
 
-    public Cluster(Coordinate pos, String name, MapWayPointItemStyle mapSymbols) {
-        super(pos, name, mapSymbols);
+    public Cluster(Coordinate pos, String name, TextureRegion small, TextureRegion middle, TextureRegion large) {
+        super(pos, name, small, middle, large);
     }
 
 

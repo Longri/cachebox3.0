@@ -40,10 +40,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
     final static Logger log = LoggerFactory.getLogger(AndroidPlatformConnector.class);
     private final AndroidApplication application;
 
-    static {
-        CB.platform = CB.Platform.ANDROID;
-    }
-
 
     public AndroidPlatformConnector(AndroidApplication app) {
         this.application = app;
