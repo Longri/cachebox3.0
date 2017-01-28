@@ -15,22 +15,20 @@
  ******************************************************************************/
 package de.longri.cachebox3.develop.tools.skin_editor.actors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import de.longri.cachebox3.CB;
-import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Keys;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.logging.Logger;
@@ -110,6 +108,7 @@ public class PreviewPane extends Table {
         add(previewImage);
 
         // create three images from icons of selected style and scale to corresponding size of preview image
+        if (!(mainScreen.getSelectedStyle() instanceof MapWayPointItemStyle)) return;
         MapWayPointItemStyle selectedStyle = (MapWayPointItemStyle) mainScreen.getSelectedStyle();
 
         if (selectedStyle == null) return;

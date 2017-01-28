@@ -246,7 +246,7 @@ widgets/CheckBox
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/ImageButton
+widgets/Icons
   rotate: false
   xy: 781, 1310
   size: 48, 48

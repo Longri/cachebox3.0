@@ -15,16 +15,16 @@
  ******************************************************************************/
 package de.longri.cachebox3.develop.tools.skin_editor.actors;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
-import de.longri.cachebox3.utils.SkinColor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mobidevelop.maps.editor.ui.utils.Tooltips;
+import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
+import de.longri.cachebox3.utils.SkinColor;
 
 /**
  * A table representing the buttons panel at the top
@@ -67,7 +67,7 @@ public class WidgetsBar extends Table {
             style.down = game.skin.getDrawable("default-round-down");
             style.up = game.skin.getDrawable("default-round");
             style.imageUp = game.skin.getDrawable("widgets/" + widget);
-            ImageButton button = new ImageButton(style);
+            final ImageButton button = new ImageButton(style);
             button.setUserObject(widget);
 
             Tooltips tooltip = new Tooltips(styleTooltip, getStage());
@@ -78,7 +78,12 @@ public class WidgetsBar extends Table {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     game.screenMain.panePreview.refresh();
-                    game.screenMain.paneOptions.refresh();
+
+                    boolean withStyle = true;
+                    if (button.getUserObject().equals("Icons"))
+                        withStyle = false;
+
+                    game.screenMain.paneOptions.refresh(withStyle);
 
                 }
 

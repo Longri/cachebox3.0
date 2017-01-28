@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.SavableSvgSkin;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
@@ -41,7 +42,7 @@ public class SkinEditorGame extends Game {
         FileChooser.setDefaultPrefsName("SkinEditor");
     }
 
-    public final static String[] widgets = {"MapWayPointItem", "Sizes", "Label", "Button", "TextButton", "ImageButton", "CheckBox", "TextField", "List", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree"};
+    public final static String[] widgets = {"MapWayPointItem", "Sizes", "Icons","Label", "Button", "TextButton",  "CheckBox", "TextField", "List", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree"};
 
     public SpriteBatch batch;
     public SavableSvgSkin skin;
@@ -131,6 +132,8 @@ public class SkinEditorGame extends Game {
             return "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle";
         } else if (widget.equals("Sizes")) {
             return "de.longri.cachebox3.gui.skin.styles.ScaledSize";
+        } else if (widget.equals("Icons")) {
+            return "de.longri.cachebox3.gui.skin.styles.IconsStyle";
         } else {
             return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
         }

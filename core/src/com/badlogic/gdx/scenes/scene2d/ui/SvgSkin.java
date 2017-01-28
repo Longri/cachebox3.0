@@ -105,7 +105,10 @@ public class SvgSkin extends Skin {
         super.load(skinFile);
 
         //after load set iconStyle
-        getIcon = get(IconsStyle.class);
+        try {
+            getIcon = get(IconsStyle.class);
+        } catch (Exception e) {
+        }
     }
 
 
