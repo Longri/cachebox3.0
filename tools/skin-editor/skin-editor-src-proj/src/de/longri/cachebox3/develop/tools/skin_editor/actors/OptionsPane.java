@@ -702,7 +702,7 @@ public class OptionsPane extends Table {
                     actor = new Label("Unknown Type", game.skin);
                 }
 
-                tableFields.add(actor).left().height(32).padRight(24).expandX().fillX();
+                tableFields.add(actor).left().height(64).padRight(24).expandX().fillX();
 
                 tableFields.row();
             } catch (Exception e) {
