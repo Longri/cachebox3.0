@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2015-2016 team-cachebox.de
+ * Copyright (C) 2015-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -371,7 +371,8 @@ public class ImageLoader {
     private void generate() {
         inLoad = true;
         if (ImageLoadError) {
-            setSprite(CB.getSprite(IconNames.deleteIcon.name()), this.reziseHeight);
+            //Fixme use style
+            setSprite(CB.getSkin().getSprite("deleteIcon"), this.reziseHeight);
             ImageLoadError = false;
             return;
         }

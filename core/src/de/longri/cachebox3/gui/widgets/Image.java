@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2016 team-cachebox.de
+ * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import de.longri.cachebox3.gui.animations.WorkAnimation;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.CB_RectF;
-import de.longri.cachebox3.utils.IconNames;
 import de.longri.cachebox3.utils.ImageLoader;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -48,7 +47,7 @@ public class Image extends CB_View_Base {
     private Alignment hAlignment = Alignment.CENTER;
 
     public Image(float x, float y, float width, float height, String name, boolean reziseHeight) {
-        super(x,y,width,height, name);
+        super(x, y, width, height, name);
         this.imageLoader = new ImageLoader();
         this.imageLoader.reziseHeight = reziseHeight;
         if (this.imageLoader.reziseHeight && this.imageLoader.getResizeListener() == null) {
@@ -64,7 +63,7 @@ public class Image extends CB_View_Base {
     }
 
     public Image(CB_RectF rec, String name, boolean reziseHeight) {
-        super(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight(),name);
+        super(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight(), name);
         this.imageLoader = new ImageLoader();
         this.imageLoader.reziseHeight = reziseHeight;
         if (this.imageLoader.reziseHeight && this.imageLoader.getResizeListener() == null) {
@@ -79,7 +78,7 @@ public class Image extends CB_View_Base {
     }
 
     public Image(ImageLoader img, CB_RectF rec, String name, boolean reziseHeight) {
-        super(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight(),name);
+        super(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight(), name);
         this.imageLoader = img;
         this.imageLoader.reziseHeight = reziseHeight;
         if (this.imageLoader.reziseHeight && this.imageLoader.getResizeListener() == null) {
@@ -184,7 +183,8 @@ public class Image extends CB_View_Base {
                     this.removeChild(Wait);
 
                     //set error image
-                    this.setSprite(new Sprite(CB.getSprite(IconNames.disabled.name())), false);
+                    //Fixme use style
+                    this.setSprite(CB.getSkin().getSprite("error"), false);
 
                 }
             }

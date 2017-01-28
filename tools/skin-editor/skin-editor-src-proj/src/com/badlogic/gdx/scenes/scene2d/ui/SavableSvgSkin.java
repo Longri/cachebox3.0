@@ -95,7 +95,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.widgets.GestureButton.GestureButtonStyle.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle.class);
         items.add(com.kotcrab.vis.ui.widget.VisTextButton.VisTextButtonStyle.class);
-        items.add(de.longri.cachebox3.gui.dialogs.ButtonDialog.ButtonDialogStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle.class);
         items.add(de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle.class);
         items.add(de.longri.cachebox3.gui.menu.Menu.MenuStyle.class);
@@ -114,6 +114,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.widgets.ZoomButton.ZoomButtonStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.ScaledSize.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.IconsStyle.class);
 
 
         for (Class<?> item : items) {

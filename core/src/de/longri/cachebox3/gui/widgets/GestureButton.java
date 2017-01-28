@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -24,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
@@ -39,7 +37,6 @@ import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.CB_RectF;
-import de.longri.cachebox3.utils.IconNames;
 import de.longri.cachebox3.utils.SizeChangedEvent;
 
 import java.util.ArrayList;
@@ -54,8 +51,8 @@ public class GestureButton extends Button {
 
 
     private static int idCounter = 0;
-    protected static Sprite menuSprite;
-    protected static Sprite menuSpriteFiltered;
+    protected static Drawable menuDrawable;
+    protected static Drawable menuDrawableFiltered;
 
     private GestureButtonStyle style;
     private final ArrayList<ActionButton> buttonActions;
@@ -63,7 +60,7 @@ public class GestureButton extends Button {
     private Abstract_Action_ShowView aktActionView;
     private boolean hasContextMenu;
     private GestureHelp gestureHelper;
-    private Sprite gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
+    private Drawable gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
 
     public ArrayList<ActionButton> getButtonActions() {
         return buttonActions;
@@ -341,20 +338,16 @@ public class GestureButton extends Button {
             mi.setEnabled(action.getEnabled());
             mi.setCheckable(action.getIsCheckable());
             mi.setChecked(action.getIsChecked());
-            Sprite icon = action.getIcon();
-            if (icon != null)
-                mi.setIcon(new SpriteDrawable(action.getIcon()));
-            else
-                icon = null;
+            mi.setIcon(action.getIcon());
         }
         return cm;
     }
 
 
-    private static final CB_RectF menuSpriteDrawRec = new CB_RectF().add(new SizeChangedEvent() {
+    private static final CB_RectF menuIconDrawRec = new CB_RectF().add(new SizeChangedEvent() {
         @Override
         public void sizeChanged() {
-            menuSprite.setPosition(menuSpriteDrawRec.getX(), menuSpriteDrawRec.getY());
+
         }
     });
 
@@ -364,22 +357,24 @@ public class GestureButton extends Button {
         if (hasContextMenu && isChecked()) {
 
             // draw Menu Sprite
-            if (menuSprite == null || menuSpriteFiltered == null) {
-                menuSprite = new Sprite(CB.getSprite(IconNames.cm_icon.name()));
-                menuSpriteFiltered = new Sprite(CB.getSprite(IconNames.cm_icon_filterd.name()));
+            if (menuDrawable == null || menuDrawableFiltered == null) {
+                menuDrawable = CB.getSkin().getIcon.cm_icon; //TODO replace with GestureButtonStyle
+                menuDrawableFiltered = CB.getSkin().getIcon.cm_icon_filterd;
             }
 
             Vector2 stagePos = new Vector2();
             this.localToStageCoordinates(stagePos);
-            menuSpriteDrawRec.setPos(stagePos.x, stagePos.y);
-            // menuSpriteDrawRec.setPos(this.getX(), this.getY());
+            menuIconDrawRec.setPos(stagePos.x, stagePos.y);
+            // menuIconDrawRec.setPos(this.getX(), this.getY());
 
             boolean isFiltered = false; //TODO set filtered!
 
-            if (!isFiltered && menuSprite != null)
-                menuSprite.draw(batch);
-            if (isFiltered && menuSpriteFiltered != null)
-                menuSpriteFiltered.draw(batch);
+            if (!isFiltered && menuDrawable != null)
+                menuDrawable.draw(batch, menuIconDrawRec.getX(), menuIconDrawRec.getY(),
+                        menuIconDrawRec.getWidth(), menuIconDrawRec.getHeight());
+            if (isFiltered && menuDrawableFiltered != null)
+                menuDrawableFiltered.draw(batch, menuIconDrawRec.getX(), menuIconDrawRec.getY(),
+                        menuIconDrawRec.getWidth(), menuIconDrawRec.getHeight());
         }
     }
 }

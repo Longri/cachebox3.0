@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2017 team-cachebox.de
+ * Copyright (C) 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions;
+package de.longri.cachebox3.gui.skin.styles;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.MenuID;
 
 /**
- * Created by Longri on 14.09.2016.
+ * Created by Longri on 27.01.17.
  */
-public class Action_TakePhoto extends AbstractAction {
-
-    public Action_TakePhoto() {
-        super("takePhoto", MenuID.AID_TAKE_PHOTO);
-    }
-
-    @Override
-    public void execute() {
-        CB.viewmanager.toast("Take Photo not implemented");
-
-    }
-
-    @Override
-    public Drawable getIcon() {
-        return CB.getSkin().getIcon.takePhoto;
-    }
+public class ButtonDialogStyle {
+    public SvgNinePatchDrawable title, header, center, footer;
+    public Drawable stageBackground;
+    public BitmapFont titleFont;
+    public Color titleFontColor;
 }

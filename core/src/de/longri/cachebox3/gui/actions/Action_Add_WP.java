@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.actions;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
 
@@ -28,8 +29,8 @@ public class Action_Add_WP extends AbstractAction {
     }
 
     @Override
-    public Sprite getIcon() {
-        return CB.getSprite("add-wp");
+    public Drawable getIcon() {
+        return CB.getSkin().getIcon.addWp;
     }
 
     @Override
