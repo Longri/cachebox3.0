@@ -24,19 +24,20 @@ import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
-import de.longri.cachebox3.gui.skin.styles.IconsStyle;
-import de.longri.cachebox3.utils.exceptions.NullArgumentException;
 
 /**
  * Created by Longri on 28.01.17.
  */
-public class Validate_IconsStyle extends ValidationTask {
+public abstract class Validate_Abstract_Icons<T extends ValidationTask> extends ValidationTask {
 
     private final Array<String> isNullList = new Array<String>();
     private final Array<String> isMissingIconList = new Array<String>();
+    private final StringBuilder wrongBitmapsSize = new StringBuilder();
+    private final Class<T> tClass;
 
-    public Validate_IconsStyle(SkinEditorGame game, SavableSvgSkin validationSkin, Stage stage) {
+    public Validate_Abstract_Icons(SkinEditorGame game, SavableSvgSkin validationSkin, Stage stage, Class<T> tClass) {
         super(game, validationSkin, stage);
+        this.tClass = tClass;
     }
 
     @Override
@@ -48,13 +49,15 @@ public class Validate_IconsStyle extends ValidationTask {
     public void runValidation() {
 
         errorMsg = "";
+        warnMsg = "";
 
 
         try {
-            Field[] fields = ClassReflection.getFields(IconsStyle.class);
+            Field[] fields = ClassReflection.getFields(tClass);
+            Object instance = validationSkin.get(tClass);
 
             for (Field field : fields) {
-                Object object = field.get(validationSkin.getIcon);
+                Object object = field.get(instance);
 
                 if (object != null) {
                     TextureRegionDrawable trd = (TextureRegionDrawable) object;
@@ -64,6 +67,10 @@ public class Validate_IconsStyle extends ValidationTask {
                     if (scaledSvg.path.toLowerCase().contains("missingicon")) {
                         isMissingIconList.add(field.getName());
                     }
+
+                    checkSize(object, field.getName());
+
+
                 } else {
                     isNullList.add(field.getName());
                 }
@@ -92,9 +99,43 @@ public class Validate_IconsStyle extends ValidationTask {
                 sb.append(name);
                 sb.append("\n");
             }
-
             warnMsg = sb.toString();
         }
 
+        if (wrongBitmapsSize.length > 0) {
+            warnMsg += "\n\nWrong Sizes:\n\n" + wrongBitmapsSize.toString();
+        }
     }
+
+    private void checkSize(Object object, String fieldName) {
+        int width = 0, height = 0;
+
+        if (object instanceof TextureRegionDrawable) {
+            TextureRegionDrawable trd = (TextureRegionDrawable) object;
+            width = (int) trd.getMinWidth();
+            height = (int) trd.getMinHeight();
+        }
+
+        if (width < getMinWidth() || width > getMaxWidth()) {
+            wrongBitmapsSize.append(fieldName);
+            wrongBitmapsSize.append(" width: " + width);
+            wrongBitmapsSize.append("   => The width should be between " + getMinWidth() + " and " + getMaxWidth() + "!");
+            wrongBitmapsSize.append(" \n");
+        }
+
+        if (height < getMinHeight() || height > getMaxHeight()) {
+            wrongBitmapsSize.append(fieldName);
+            wrongBitmapsSize.append(" height: " + height);
+            wrongBitmapsSize.append("   => The height should be between " + getMinHeight() + " and " + getMaxHeight() + "!");
+            wrongBitmapsSize.append(", \n");
+        }
+    }
+
+    protected abstract int getMinWidth();
+
+    protected abstract int getMaxWidth();
+
+    protected abstract int getMinHeight();
+
+    protected abstract int getMaxHeight();
 }

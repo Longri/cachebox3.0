@@ -81,7 +81,7 @@ public class ValidateDialog extends Dialog {
         tasks.add(new Validate_MapWayPointItemStyle(game, validationSkin, getStage()));
         tasks.add(new Validate_UnusedSvgFiles(game, validationSkin, getStage()));
         tasks.add(new Validate_UnusedResources(game, validationSkin, getStage()));
-        tasks.add(new Validate_IconsStyle(game, validationSkin, getStage()));
+        tasks.add(new Validate_Icons(game, validationSkin, getStage()));
     }
 
     public void runValidate() {
