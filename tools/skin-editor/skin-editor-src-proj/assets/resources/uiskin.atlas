@@ -253,6 +253,13 @@ widgets/Icons
   orig: 48, 48
   offset: 0, 0
   index: -1
+widgets/MenuIcons
+  rotate: false
+  xy: 781, 1310
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
 widgets/Label
   rotate: false
   xy: 846, 1375

@@ -38,6 +38,7 @@ import com.badlogic.gdx.utils.reflect.Field;
 import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
+import de.longri.cachebox3.gui.skin.styles.AbstractIconStyle;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
 
@@ -405,20 +406,9 @@ public class OptionsPane extends Table {
         for (final Field field : fields) {
             try {
 
-                // field name
 
-                // White required
-                // Grey optional
-                if (game.opt.isFieldOptional(currentStyle.getClass(), field.getName())) {
 
-                    tableFields.add(new Label(field.getName(), game.skin, "optional")).left();
-
-                } else {
-                    tableFields.add(new Label(field.getName(), game.skin, "default")).left();
-
-                }
-
-                Actor actor;
+                Actor actor = null;
 
                 // field type
                 String name = field.getType().getSimpleName();
@@ -706,12 +696,31 @@ public class OptionsPane extends Table {
                 } else {
 
                     Gdx.app.log("OptionsPane", "Unknown type: " + name);
-                    actor = new Label("Unknown Type", game.skin);
+                    if (!(currentStyle instanceof AbstractIconStyle)) {
+                        actor = new Label("Unknown Type", game.skin);
+                    }
                 }
 
-                tableFields.add(actor).left().height(64).padRight(24).expandX().fillX();
+                if (actor != null){
 
-                tableFields.row();
+                    // field name
+
+                    // White required
+                    // Grey optional
+                    if (game.opt.isFieldOptional(currentStyle.getClass(), field.getName())) {
+
+                        tableFields.add(new Label(field.getName(), game.skin, "optional")).left();
+
+                    } else {
+                        tableFields.add(new Label(field.getName(), game.skin, "default")).left();
+
+                    }
+
+                    tableFields.add(actor).left().height(64).padRight(24).expandX().fillX();
+                    tableFields.row();
+                }
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

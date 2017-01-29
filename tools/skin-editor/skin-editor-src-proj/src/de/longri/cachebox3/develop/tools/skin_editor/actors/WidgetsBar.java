@@ -83,6 +83,9 @@ public class WidgetsBar extends Table {
                     if (button.getUserObject().equals("Icons"))
                         withStyle = false;
 
+                    if (button.getUserObject().equals("MenuIcons"))
+                        withStyle = false;
+
                     game.screenMain.paneOptions.refresh(withStyle);
 
                 }
