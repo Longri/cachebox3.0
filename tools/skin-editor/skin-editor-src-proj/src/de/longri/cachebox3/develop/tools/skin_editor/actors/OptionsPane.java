@@ -314,56 +314,63 @@ public class OptionsPane extends Table {
     /**
      *
      */
-    public void refresh(boolean stylePane) {
+    public void refresh(final boolean stylePane) {
 
-        setStylePaneVisible(stylePane);
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                setStylePaneVisible(stylePane);
 
-        Gdx.app.log("OptionsPane", "Refresh");
+                Gdx.app.log("OptionsPane", "Refresh");
 
-        ImageButton button = (ImageButton) game.screenMain.barWidgets.group.getChecked();
-        String widget = button.getUserObject().toString();
-        String widgetStyle = game.resolveWidgetPackageName(widget);
-        Gdx.app.log("OptionsPane", "Fetching style:" + widgetStyle);
+                ImageButton button = (ImageButton) game.screenMain.barWidgets.group.getChecked();
+                String widget = button.getUserObject().toString();
+                String widgetStyle = game.resolveWidgetPackageName(widget);
+                Gdx.app.log("OptionsPane", "Fetching style:" + widgetStyle);
 
-        listItems.clear();
-        int selection = -1;
+                listItems.clear();
+                int selection = -1;
 
-        try {
-            Class<?> style = Class.forName(widgetStyle);
+                try {
+                    Class<?> style = Class.forName(widgetStyle);
 
-            styles = game.skinProject.getAll(style);
-            if (styles == null) {
-                Gdx.app.error("OptionsPane", "No styles defined for this widget type");
+                    styles = game.skinProject.getAll(style);
+                    if (styles == null) {
+                        Gdx.app.error("OptionsPane", "No styles defined for this widget type");
 
-                tableFields.clear();
-            } else {
-                Keys<String> keys = styles.keys();
-                boolean first = true;
+                        tableFields.clear();
+                    } else {
+                        Array<String> keys = styles.keys().toArray();
+                        boolean first = true;
 
-                for (String key : keys) {
-                    listItems.add(key);
+                        for (int i = 0, n = keys.size; i < n; i++) {
+                            String key = keys.get(i);
+                            listItems.add(key);
 
-                    if (first == true) {
+                            if (first == true) {
 
-                        currentStyle = styles.get(key);
-                        updateTableFields(key);
-                        selection = listItems.size - 1;
-                        first = false;
+                                currentStyle = styles.get(key);
+                                updateTableFields(key);
+                                selection = listItems.size - 1;
+                                first = false;
+                            }
+
+                        }
+
+                    }
+                    listItems.sort();
+                    listStyles.setItems(listItems);
+
+                    if (selection != -1) {
+                        listStyles.setSelectedIndex(selection);
                     }
 
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
             }
-            listItems.sort();
-            listStyles.setItems(listItems);
+        });
 
-            if (selection != -1) {
-                listStyles.setSelectedIndex(selection);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 

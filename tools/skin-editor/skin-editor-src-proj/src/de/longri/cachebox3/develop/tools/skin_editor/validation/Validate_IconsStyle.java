@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.gui.skin.styles.IconsStyle;
+import de.longri.cachebox3.utils.exceptions.NullArgumentException;
 
 /**
  * Created by Longri on 28.01.17.
@@ -47,6 +48,7 @@ public class Validate_IconsStyle extends ValidationTask {
     public void runValidation() {
 
         errorMsg = "";
+
 
         try {
             Field[] fields = ClassReflection.getFields(IconsStyle.class);
