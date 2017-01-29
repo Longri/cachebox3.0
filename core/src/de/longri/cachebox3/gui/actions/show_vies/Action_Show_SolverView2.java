@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 -2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,12 @@
  */
 package de.longri.cachebox3.gui.actions.show_vies;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.SolverView;
 import de.longri.cachebox3.gui.views.SolverView2;
-import de.longri.cachebox3.utils.IconNames;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -40,7 +38,7 @@ public class Action_Show_SolverView2 extends Abstract_Action_ShowView {
     @Override
     public Menu getContextMenu() {
         if (CB.viewmanager.getActView() instanceof SolverView2) {
-            SolverView2 solverView= (SolverView2) CB.viewmanager.getActView();
+            SolverView2 solverView = (SolverView2) CB.viewmanager.getActView();
             return solverView.getContextMenu();
         }
         return null;
@@ -64,7 +62,7 @@ public class Action_Show_SolverView2 extends Abstract_Action_ShowView {
     }
 
     @Override
-    public Sprite getIcon() {
-        return CB.getSprite(IconNames.solverView2.name());
+    public Drawable getIcon() {
+        return CB.getSkin().getMenuIcon.solver2Icon;
     }
 }

@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2015-2016 team-cachebox.de
+ * Copyright (C) 2015-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -199,7 +199,7 @@ public class MenuItem extends ListViewItem {
      */
     public MenuItem setIcon(Drawable icon) {
         CB.scaledSizes.checkMaxIconSize();
-        if (icon.getMinWidth() > CB.scaledSizes.ICON_HEIGHT) {
+        if (icon != null && icon.getMinWidth() > CB.scaledSizes.ICON_HEIGHT) {
             // set scaled icon size!
             imageScaleValue = Math.min(CB.scaledSizes.ICON_WIDTH / icon.getMinWidth(), CB.scaledSizes.ICON_HEIGHT / icon.getMinHeight());
             log.debug("Menu Icon size not otimal for item: " + this.getName() + "! Maby use scalefactor = " + imageScaleValue);

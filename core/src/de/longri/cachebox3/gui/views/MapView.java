@@ -40,6 +40,7 @@ import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Settings;
 import org.oscim.backend.CanvasAdapter;
+import org.oscim.backend.Platform;
 import org.oscim.core.MapPosition;
 import org.oscim.core.Tile;
 import org.oscim.event.Event;
@@ -177,20 +178,19 @@ public class MapView extends AbstractView {
     }
 
     public CacheboxMapAdapter createMap() {
-        
+
         {//set map scale
             float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
             Tile.SIZE = (int) (400 * scaleFactor);
             CanvasAdapter.dpi = 240 * scaleFactor;
             CanvasAdapter.textScale = scaleFactor;
             CanvasAdapter.scale = scaleFactor;
-            PolygonBucket.enableTexture = CB.platform != CB.Platform.IOS;//fixme if vtm can render polygon texture
+            PolygonBucket.enableTexture = CanvasAdapter.platform != Platform.IOS;//fixme if vtm can render polygon texture
 
             log.debug("Create new map instance with scale factor:" + Float.toString(scaleFactor));
             log.debug("Tile.SIZE:" + Integer.toString(Tile.SIZE));
             log.debug("Canvas.dpi:" + Float.toString(CanvasAdapter.dpi));
         }
-
 
 
         main.drawMap = true;

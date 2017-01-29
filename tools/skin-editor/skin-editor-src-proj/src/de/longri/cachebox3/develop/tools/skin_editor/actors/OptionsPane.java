@@ -35,10 +35,11 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Keys;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
-import de.longri.cachebox3.utils.SkinColor;
 import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
+import de.longri.cachebox3.gui.skin.styles.AbstractIconStyle;
+import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
 
 import java.util.Iterator;
@@ -58,12 +59,16 @@ public class OptionsPane extends Table {
     public Object currentStyle;
     private ObjectMap<String, ?> styles;
     final private PreviewPane previewPane;
+    final private Cell styleLabelCell, styleCell, styleButtonCell;
+    final private float styleButtonCellPrefHeight, styleLabelCellPrefHeight;
 
     /**
      *
      */
     public OptionsPane(final SkinEditorGame game, PreviewPane previewPane) {
         super();
+
+        //this.setDebug(true);
 
         this.game = game;
         this.previewPane = previewPane;
@@ -72,16 +77,20 @@ public class OptionsPane extends Table {
         top();
         setBackground(game.skin.getDrawable("default-pane"));
 
-        add(new Label("Styles", game.skin, "title")).pad(5).row();
+        styleLabelCell = add(new Label("Styles", game.skin, "title")).pad(5);
+        styleLabelCell.row();
+        styleLabelCellPrefHeight = styleLabelCell.getPrefHeight();
         listStyles = new List<String>(game.skin, "dimmed");
         listStyles.setItems(listItems);
-        ScrollPane scroll = new ScrollPane(listStyles, game.skin);
-        scroll.setFlickScroll(false);
-        scroll.setFadeScrollBars(false);
-        scroll.setScrollbarsOnTop(true);
-        scroll.setScrollBarPositions(false, true);
-        scroll.setScrollingDisabled(true, false);
-        add(scroll).height(200).expandX().fillX().pad(5).row();
+        ScrollPane styleScrollPane = new ScrollPane(listStyles, game.skin);
+        styleScrollPane.setFlickScroll(false);
+        styleScrollPane.setFadeScrollBars(false);
+        styleScrollPane.setScrollbarsOnTop(true);
+        styleScrollPane.setScrollBarPositions(false, true);
+        styleScrollPane.setScrollingDisabled(true, false);
+        styleCell = add(styleScrollPane).height(200).expandX().fillX().pad(5);
+        styleCell.row();
+
 
         // Add buttons
         Table tableStylesButtons = new Table();
@@ -89,10 +98,12 @@ public class OptionsPane extends Table {
         TextButton buttonDeleteStyle = new TextButton("Delete Style", game.skin);
         tableStylesButtons.add(buttonNewStyle).pad(5);
         tableStylesButtons.add(buttonDeleteStyle).pad(5);
-        add(tableStylesButtons).row();
+        styleButtonCell = add(tableStylesButtons);
+        styleButtonCell.row();
+        styleButtonCellPrefHeight = styleButtonCell.getPrefHeight();
+
 
         // Callbacks
-
         listStyles.addListener(new ChangeListener() {
 
             @Override
@@ -141,7 +152,31 @@ public class OptionsPane extends Table {
         scroll2.setScrollBarPositions(false, true);
         scroll2.setScrollingDisabled(true, false);
         add(scroll2).pad(5).expand().fill();
+
+        this.layout();
     }
+
+
+    private void setStylePaneVisible(boolean visible) {
+
+        if (!visible) {
+            styleButtonCell.getActor().setVisible(false);
+            styleButtonCell.height(0);
+            styleLabelCell.getActor().setVisible(false);
+            styleLabelCell.height(0);
+            styleCell.getActor().setVisible(false);
+            styleCell.height(0);
+        } else {
+            styleButtonCell.getActor().setVisible(true);
+            styleButtonCell.height(styleButtonCellPrefHeight);
+            styleLabelCell.getActor().setVisible(true);
+            styleLabelCell.height(styleLabelCellPrefHeight);
+            styleCell.getActor().setVisible(true);
+            styleCell.height(200);
+        }
+        this.invalidateHierarchy();
+    }
+
 
     /**
      *
@@ -160,7 +195,7 @@ public class OptionsPane extends Table {
 
                 // Now we really add it!
                 game.skinProject.remove((String) listStyles.getSelected(), currentStyle.getClass());
-                refresh();
+                refresh(true);
                 game.screenMain.saveToSkin();
                 game.screenMain.panePreview.refresh();
 
@@ -213,7 +248,7 @@ public class OptionsPane extends Table {
                 }
                 //game.skinProject.add(text, game.skin.get("default", currentStyle.getClass()), currentStyle.getClass());
                 game.screenMain.saveToSkin();
-                refresh();
+                refresh(true);
 
                 game.screenMain.panePreview.refresh();
 
@@ -280,54 +315,63 @@ public class OptionsPane extends Table {
     /**
      *
      */
-    public void refresh() {
+    public void refresh(final boolean stylePane) {
 
-        Gdx.app.log("OptionsPane", "Refresh");
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                setStylePaneVisible(stylePane);
 
-        ImageButton button = (ImageButton) game.screenMain.barWidgets.group.getChecked();
-        String widget = button.getUserObject().toString();
-        String widgetStyle = game.resolveWidgetPackageName(widget);
-        Gdx.app.log("OptionsPane", "Fetching style:" + widgetStyle);
+                Gdx.app.log("OptionsPane", "Refresh");
 
-        listItems.clear();
-        int selection = -1;
+                ImageButton button = (ImageButton) game.screenMain.barWidgets.group.getChecked();
+                String widget = button.getUserObject().toString();
+                String widgetStyle = game.resolveWidgetPackageName(widget);
+                Gdx.app.log("OptionsPane", "Fetching style:" + widgetStyle);
 
-        try {
-            Class<?> style = Class.forName(widgetStyle);
+                listItems.clear();
+                int selection = -1;
 
-            styles = game.skinProject.getAll(style);
-            if (styles == null) {
-                Gdx.app.error("OptionsPane", "No styles defined for this widget type");
+                try {
+                    Class<?> style = Class.forName(widgetStyle);
 
-                tableFields.clear();
-            } else {
-                Keys<String> keys = styles.keys();
-                boolean first = true;
+                    styles = game.skinProject.getAll(style);
+                    if (styles == null) {
+                        Gdx.app.error("OptionsPane", "No styles defined for this widget type");
 
-                for (String key : keys) {
-                    listItems.add(key);
+                        tableFields.clear();
+                    } else {
+                        Array<String> keys = styles.keys().toArray();
+                        boolean first = true;
 
-                    if (first == true) {
+                        for (int i = 0, n = keys.size; i < n; i++) {
+                            String key = keys.get(i);
+                            listItems.add(key);
 
-                        currentStyle = styles.get(key);
-                        updateTableFields(key);
-                        selection = listItems.size - 1;
-                        first = false;
+                            if (first == true) {
+
+                                currentStyle = styles.get(key);
+                                updateTableFields(key);
+                                selection = listItems.size - 1;
+                                first = false;
+                            }
+
+                        }
+
+                    }
+                    listItems.sort();
+                    listStyles.setItems(listItems);
+
+                    if (selection != -1) {
+                        listStyles.setSelectedIndex(selection);
                     }
 
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
             }
-            listItems.sort();
-            listStyles.setItems(listItems);
+        });
 
-            if (selection != -1) {
-                listStyles.setSelectedIndex(selection);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -362,20 +406,9 @@ public class OptionsPane extends Table {
         for (final Field field : fields) {
             try {
 
-                // field name
 
-                // White required
-                // Grey optional
-                if (game.opt.isFieldOptional(currentStyle.getClass(), field.getName())) {
 
-                    tableFields.add(new Label(field.getName(), game.skin, "optional")).left();
-
-                } else {
-                    tableFields.add(new Label(field.getName(), game.skin, "default")).left();
-
-                }
-
-                Actor actor;
+                Actor actor = null;
 
                 // field type
                 String name = field.getType().getSimpleName();
@@ -393,7 +426,10 @@ public class OptionsPane extends Table {
                             game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
 
                     if (drawable != null) {
-                        resourceName = game.skin.resolveObjectName(Drawable.class, drawable);
+                        resourceName = game.skinProject.resolveObjectName(Drawable.class, drawable);
+                        if (resourceName == null) {
+                            resourceName = game.skinProject.resolveObjectName(TextureRegion.class, drawable);
+                        }
                         buttonStyle.imageUp = drawable;
                     } else {
                         buttonStyle.up = game.skin.getDrawable("default-rect");
@@ -600,7 +636,7 @@ public class OptionsPane extends Table {
                             }
 
                             game.screenMain.saveToSkin();
-                            refresh();
+                            refresh(true);
                             game.screenMain.paneOptions.updateSelectedTableFields();
                             game.screenMain.panePreview.refresh();
                         }
@@ -650,7 +686,7 @@ public class OptionsPane extends Table {
                             }
 
                             game.screenMain.saveToSkin();
-                            refresh();
+                            refresh(true);
                             game.screenMain.paneOptions.updateSelectedTableFields();
                             game.screenMain.panePreview.refresh();
                         }
@@ -660,12 +696,31 @@ public class OptionsPane extends Table {
                 } else {
 
                     Gdx.app.log("OptionsPane", "Unknown type: " + name);
-                    actor = new Label("Unknown Type", game.skin);
+                    if (!(currentStyle instanceof AbstractIconStyle)) {
+                        actor = new Label("Unknown Type", game.skin);
+                    }
                 }
 
-                tableFields.add(actor).left().height(32).padRight(24).expandX().fillX();
+                if (actor != null){
 
-                tableFields.row();
+                    // field name
+
+                    // White required
+                    // Grey optional
+                    if (game.opt.isFieldOptional(currentStyle.getClass(), field.getName())) {
+
+                        tableFields.add(new Label(field.getName(), game.skin, "optional")).left();
+
+                    } else {
+                        tableFields.add(new Label(field.getName(), game.skin, "default")).left();
+
+                    }
+
+                    tableFields.add(actor).left().height(64).padRight(24).expandX().fillX();
+                    tableFields.row();
+                }
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -704,7 +759,7 @@ public class OptionsPane extends Table {
                     }
 
                     game.screenMain.saveToSkin();
-                    refresh();
+                    refresh(true);
                     game.screenMain.paneOptions.updateSelectedTableFields();
                     game.screenMain.panePreview.refresh();
                 }

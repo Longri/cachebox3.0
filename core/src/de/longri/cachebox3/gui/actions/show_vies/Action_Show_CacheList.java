@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package de.longri.cachebox3.gui.actions.show_vies;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings;
 import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
@@ -26,10 +26,8 @@ import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.CacheListView;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.utils.IconNames;
 
 /**
  * Created by Longri on 24.07.16.
@@ -52,8 +50,8 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 
     }
 
-    public Sprite getIcon() {
-        return CB.getSprite(IconNames.cacheListIcon.name());
+    public Drawable getIcon() {
+        return CB.getSkin().getMenuIcon.cacheListIcon;
     }
 
     @Override
@@ -175,20 +173,20 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
         }
 
         MenuItem mi;
-        cm.addItem(MenuID.MI_RESORT, "ResortList", CB.getSprite(IconNames.sortIcon.name()));
-        cm.addItem(MenuID.MI_FilterSet, "filter", CB.getSprite(IconNames.filter.name()));
-        cm.addItem(MenuID.MI_RESET_FILTER, "MI_RESET_FILTER", CB.getSprite(IconNames.filter.name()));
-        cm.addItem(MenuID.MI_SEARCH_LIST, "search", CB.getSprite(IconNames.lupe.name()));
-        cm.addItem(MenuID.MI_IMPORT, "importExport", CB.getSprite(IconNames.importIcon.name()));
+        cm.addItem(MenuID.MI_RESORT, "ResortList", CB.getSkin().getMenuIcon.sortIcon);
+        cm.addItem(MenuID.MI_FilterSet, "filter", CB.getSkin().getMenuIcon.filterIcon);
+        cm.addItem(MenuID.MI_RESET_FILTER, "MI_RESET_FILTER", CB.getSkin().getMenuIcon.resetFilterIcon);
+        cm.addItem(MenuID.MI_SEARCH_LIST, "search", CB.getSkin().getMenuIcon.searchIcon);
+        cm.addItem(MenuID.MI_IMPORT, "importExport", CB.getSkin().getMenuIcon.importIcon);
 //        if (SyncActivity.RELEASED)
 //            cm.addItem(MenuID.MI_SYNC, "sync", CB.getSprite(IconNames.importIcon.name()));
-        mi = cm.addItem(MenuID.MI_MANAGE_DB, "manage", "  (" + DBName + ")", CB.getSprite(IconNames.manageDb.name()));
+        mi = cm.addItem(MenuID.MI_MANAGE_DB, "manage", "  (" + DBName + ")", CB.getSkin().getMenuIcon.manageDB);
         mi = cm.addItem(MenuID.MI_AUTO_RESORT, "AutoResort");
         mi.setCheckable(true);
         //    mi.setChecked(CB.getAutoResort());
-        cm.addItem(MenuID.MI_CHK_STATE_API, "chkState", CB.getSprite(IconNames.gc_liveIcon.name()));
-        cm.addItem(MenuID.MI_NEW_CACHE, "MI_NEW_CACHE", CB.getSprite(IconNames.addCacheIcon.name()));
-        cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSprite(IconNames.deleteIcon.name()));
+        cm.addItem(MenuID.MI_CHK_STATE_API, "chkState", CB.getSkin().getMenuIcon.GC_Live);
+        cm.addItem(MenuID.MI_NEW_CACHE, "MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon);
+        cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSkin().getMenuIcon.deleteIcon);
 
         return cm;
     }

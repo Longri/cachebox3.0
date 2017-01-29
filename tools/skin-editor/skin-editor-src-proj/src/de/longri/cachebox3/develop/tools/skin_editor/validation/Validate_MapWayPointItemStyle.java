@@ -35,9 +35,9 @@ import org.oscim.backend.canvas.Bitmap;
  */
 public class Validate_MapWayPointItemStyle extends ValidationTask {
 
-    StringBuilder missingSyles = new StringBuilder();
-    StringBuilder missingBitmaps = new StringBuilder();
-    StringBuilder wrongBitmapsSize = new StringBuilder();
+    private final StringBuilder missingSyles = new StringBuilder();
+    private final StringBuilder missingBitmaps = new StringBuilder();
+    private final StringBuilder wrongBitmapsSize = new StringBuilder();
 
 
     public Validate_MapWayPointItemStyle(SkinEditorGame game, SavableSvgSkin validationSkin, Stage stage) {

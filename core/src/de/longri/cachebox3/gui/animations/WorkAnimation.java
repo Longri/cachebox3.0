@@ -18,7 +18,6 @@ package de.longri.cachebox3.gui.animations;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.utils.CB_RectF;
-import de.longri.cachebox3.utils.IconNames;
 
 public class WorkAnimation extends RotateAnimation {
     protected static WorkAnimation mINSTANCE = new WorkAnimation();
@@ -46,7 +45,8 @@ public class WorkAnimation extends RotateAnimation {
     public WorkAnimation() {
         super(new CB_RectF(0, 0, 50, 50), "DownloadAnimation");
 
-        setSprite(CB.getSprite(IconNames.settings_icon.name()));
+        //Fixme use Style
+        setSprite(CB.getSkin().getSprite("settingsIcon"));
         setOrigin(this.getWidth() / 2, this.getHeight() / 2);
         play(ANIMATION_DURATION);
     }

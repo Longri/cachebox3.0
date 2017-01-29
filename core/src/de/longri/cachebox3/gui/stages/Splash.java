@@ -27,7 +27,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.stages.initial_tasks.*;
@@ -143,7 +142,7 @@ public class Splash extends NamedStage {
         initTaskList.add(new LoadDbTask("Load Database", 10));
 
         // Use classpath for Desktop or assets for iOS and Android
-        assets = (CB.platform == CB.Platform.DESKTOP) ?
+        assets = (CanvasAdapter.platform.isDesktop()) ?
                 new AssetManager(new ClasspathFileHandleResolver())
                 : new AssetManager();
 

@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package de.longri.cachebox3.gui.actions;
 
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
@@ -27,24 +27,23 @@ import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.utils.IconNames;
 
 
 public class Action_Show_Quit extends AbstractAction {
-	final static Logger log = LoggerFactory.getLogger(Action_Show_Quit.class);
+    final static Logger log = LoggerFactory.getLogger(Action_Show_Quit.class);
 
-	public Action_Show_Quit() {
-		super("quit", MenuID.AID_SHOW_QUIT);
-	}
+    public Action_Show_Quit() {
+        super("quit", MenuID.AID_SHOW_QUIT);
+    }
 
-	@Override
-	public void execute() {
+    @Override
+    public void execute() {
 
-		String Msg = Translation.Get("QuitReally");
-		String Title = Translation.Get("Quit?");
+        String Msg = Translation.Get("QuitReally");
+        String Title = Translation.Get("Quit?");
 
         //Name, msg, title, buttons, icon, OnMsgBoxClickListener
-		Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.OKCancel, MessageBoxIcon.Stop, new OnMsgBoxClickListener() {
+        Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.OKCancel, MessageBoxIcon.Stop, new OnMsgBoxClickListener() {
             @Override
             public boolean onClick(int which, Object data) {
                 if (which == ButtonDialog.BUTTON_POSITIVE) {
@@ -54,16 +53,16 @@ public class Action_Show_Quit extends AbstractAction {
                 return true;
             }
         });
-		dialog.show();
-	}
+        dialog.show();
+    }
 
-	@Override
-	public boolean getEnabled() {
-		return true;
-	}
+    @Override
+    public boolean getEnabled() {
+        return true;
+    }
 
-	@Override
-	public Sprite getIcon() {
-		return CB.getSprite(IconNames.closeIcon.name());
-	}
+    @Override
+    public Drawable getIcon() {
+        return CB.getSkin().getIcon.Close;
+    }
 }

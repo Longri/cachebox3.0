@@ -214,12 +214,6 @@ public class CB {
         return false; //TODO
     }
 
-    public enum Platform {
-        ANDROID, IOS, DESKTOP
-    }
-
-    public static Platform platform;
-
     public static void requestRendering() {
         Gdx.graphics.requestRendering();
     }

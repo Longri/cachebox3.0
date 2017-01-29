@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -52,10 +52,10 @@ public class QuickButtonItem extends ListViewItem {
         mAction = action;
         mActionDesc = Desc;
         imageMargin = CB.scaledSizes.MARGIN_HALF;
-        SpriteDrawable spriteDrawable = null;
+        Drawable spriteDrawable = null;
 
         try {
-            spriteDrawable = new SpriteDrawable(action.getIcon());
+            spriteDrawable = action.getIcon();
         } catch (Exception e) {
             throw new IllegalStateException(action.getName() + " Action has no Icon");
         }

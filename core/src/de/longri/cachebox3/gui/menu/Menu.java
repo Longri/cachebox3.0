@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -79,10 +79,10 @@ public class Menu extends Window {
         this(name, VisUI.getSkin().get(styleName, MenuStyle.class));
     }
 
-    public MenuItem addItem(int ID, String StringId, Sprite icon) {
+    public MenuItem addItem(int ID, String StringId, Drawable icon) {
         MenuItem item = addItem(ID, StringId);
         if (icon != null)
-            item.setIcon(new SpriteDrawable(icon));
+            item.setIcon(icon);
         return item;
     }
 

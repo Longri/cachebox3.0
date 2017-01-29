@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 -2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,12 @@
 package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.SolverView;
 import de.longri.cachebox3.gui.views.SpoilerView;
-import de.longri.cachebox3.utils.IconNames;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -67,20 +65,12 @@ public class Action_Show_SpoilerView extends Abstract_Action_ShowView {
         CB.viewmanager.showView(view);
     }
 
-    int spoilerState = -1;
-    Sprite SpoilerIcon;
-
     @Override
-    public Sprite getIcon() {
+    public Drawable getIcon() {
         boolean hasSpoiler = CB.selectedCachehasSpoiler();
-        if (hasSpoiler && spoilerState != 1) {
-            SpoilerIcon = CB.getSprite(IconNames.imagesIcon.name());
-            spoilerState = 1;
-        } else if (!hasSpoiler && spoilerState != 0) {
-            SpoilerIcon = new Sprite(CB.getSprite(IconNames.imagesIcon.name()));
-            SpoilerIcon.setColor(DISABLE_COLOR);
-            spoilerState = 0;
+        if (hasSpoiler) {
+            return CB.getSkin().getMenuIcon.imagesIcon;
         }
-        return SpoilerIcon;
+        return CB.getSkin().getMenuIcon.imagesIconOff;
     }
 }

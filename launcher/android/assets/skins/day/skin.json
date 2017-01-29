@@ -599,6 +599,10 @@
     "whereigo": {
       "path": "svg/whereigo.svg",
       "scale": 0.2
+    },
+    "warningIcon": {
+      "path": "svg/missingIcon.svg",
+      "scale": 1
     }
   },
   "de.longri.cachebox3.utils.SkinColor": {
@@ -911,7 +915,7 @@
       "down": "drawable_default_button_pressed"
     }
   },
-  "de.longri.cachebox3.gui.dialogs.ButtonDialog$ButtonDialogStyle": {
+  "de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle": {
     "default": {
       "title": "drawable_dialog_title",
       "header": "drawable_dialog_header",
@@ -1130,6 +1134,20 @@
     },
     "margin": {
       "value": 10
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.IconsStyle": {
+    "default": {
+      "Asterisk": "infoIcon",
+      "Error": "closeIcon",
+      "Exclamation": "warningIcon",
+      "Hand": "closeIcon",
+      "Information": "infoIcon",
+      "Question": "helpIcon",
+      "Stop": "closeIcon",
+      "Warning": "warningIcon",
+      "Powerd_by_GC_Live": "gc_liveIcon",
+      "GC_Live": "gc_liveIcon"
     }
   }
 }

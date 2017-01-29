@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public class GestureHelp extends HelpWindow {
     final static Logger log = LoggerFactory.getLogger(GestureHelp.class);
 
     final Drawable buttonDrawable;
-    final Sprite gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
+    final Drawable gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
     final GestureHelpStyle style;
     final String GESTURE_MSG = Translation.Get("gestureHelp"); // "You can also use this gesture to call this function"
     final String DONT_SHOW_AGAIN_MSG = Translation.Get("DontShowHelp"); // "Don't show help Msg again!"
@@ -57,7 +57,7 @@ public class GestureHelp extends HelpWindow {
 
     private Actor arrowRight, arrowDown, arrowLeft, arrowUp;
 
-    public GestureHelp(CB_RectF ellipseRectangle, Drawable buttonDrawable, Sprite gestureRightIcon, Sprite gestureUpIcon, Sprite gestureLeftIcon, Sprite gestureDownIcon) {
+    public GestureHelp(CB_RectF ellipseRectangle, Drawable buttonDrawable, Drawable gestureRightIcon, Drawable gestureUpIcon, Drawable gestureLeftIcon, Drawable gestureDownIcon) {
         super(ellipseRectangle);
         this.gestureRightIcon = gestureRightIcon;
         this.gestureUpIcon = gestureUpIcon;
