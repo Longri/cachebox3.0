@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2017 team-cachebox.de
+ *
+ * Licensed under the : GNU General Public License (GPL);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.gnu.org/licenses/gpl.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.longri.cachebox3.locator.new_geocluster;
 
 import com.badlogic.gdx.scenes.scene2d.ui.ClusteredList;
@@ -78,28 +93,28 @@ public class SquareTest {
         int index = 0;
         for (GeoPoint point : allPoints) {
             allCluster.add(new MapWayPointItem(
-                    new Coordinate(point.getLatitude(), point.getLongitude()), Integer.toString(index++), null));
+                    new Coordinate(point.getLatitude(), point.getLongitude()), Integer.toString(index++), null, null, null));
         }
 
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
-        allCluster.clusterByDistance(distance - 2, null,ClusterRunnable.Task.reduce, false);
+        allCluster.clusterByDistance(distance - 2, null, ClusterRunnable.Task.reduce, false);
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
-        allCluster.clusterByDistance(distance * 2, null,ClusterRunnable.Task.reduce, false);
+        allCluster.clusterByDistance(distance * 2, null, ClusterRunnable.Task.reduce, false);
         assertThat("cluster size", allCluster.size(), equalTo(4));
 
-        allCluster.clusterByDistance(distance * 4, null,ClusterRunnable.Task.reduce, false);
+        allCluster.clusterByDistance(distance * 4, null, ClusterRunnable.Task.reduce, false);
         assertThat("cluster size", allCluster.size(), equalTo(2));
 
 
-        allCluster.clusterByDistance(distance * 2, null,ClusterRunnable.Task.expand, false);
+        allCluster.clusterByDistance(distance * 2, null, ClusterRunnable.Task.expand, false);
         assertThat("cluster size", allCluster.size(), equalTo(4));
 
 
-        allCluster.clusterByDistance(distance - 2, null,ClusterRunnable.Task.expand, false);
+        allCluster.clusterByDistance(distance - 2, null, ClusterRunnable.Task.expand, false);
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
@@ -116,7 +131,7 @@ public class SquareTest {
         int index = 0;
         for (GeoPoint point : allPoints) {
             allCluster.add(new MapWayPointItem(
-                    new Coordinate(point.getLatitude(), point.getLongitude()), Integer.toString(index++), null));
+                    new Coordinate(point.getLatitude(), point.getLongitude()), Integer.toString(index++), null, null, null));
         }
 
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
@@ -126,18 +141,18 @@ public class SquareTest {
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 
-        allCluster.clusterByDistance(distance * 2, null,ClusterRunnable.Task.reduce, false);
+        allCluster.clusterByDistance(distance * 2, null, ClusterRunnable.Task.reduce, false);
         assertThat("cluster size", allCluster.size(), equalTo(2550));
 
-        allCluster.clusterByDistance(distance * 4, null,ClusterRunnable.Task.reduce, false);
+        allCluster.clusterByDistance(distance * 4, null, ClusterRunnable.Task.reduce, false);
         assertThat("cluster size", allCluster.size(), equalTo(650));
 
 
-        allCluster.clusterByDistance(distance * 2, null,ClusterRunnable.Task.expand, false);
+        allCluster.clusterByDistance(distance * 2, null, ClusterRunnable.Task.expand, false);
         assertThat("cluster size", allCluster.size(), equalTo(2550));
 
 
-        allCluster.clusterByDistance(distance - 2, null,ClusterRunnable.Task.expand, false);
+        allCluster.clusterByDistance(distance - 2, null, ClusterRunnable.Task.expand, false);
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
 
 

@@ -39,7 +39,7 @@ public class Action_Show_TrackListView extends Abstract_Action_ShowView {
     }
 
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.trackListIcon;
+        return CB.getSkin().getMenuIcon.trackListIcon;
     }
 
     @Override

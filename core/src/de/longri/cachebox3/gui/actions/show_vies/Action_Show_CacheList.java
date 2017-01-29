@@ -51,7 +51,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
     }
 
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.cacheListIcon;
+        return CB.getSkin().getMenuIcon.cacheListIcon;
     }
 
     @Override
@@ -173,20 +173,20 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
         }
 
         MenuItem mi;
-        cm.addItem(MenuID.MI_RESORT, "ResortList", CB.getSkin().getIcon.sortIcon);
-        cm.addItem(MenuID.MI_FilterSet, "filter", CB.getSkin().getIcon.filterIcon);
-        cm.addItem(MenuID.MI_RESET_FILTER, "MI_RESET_FILTER", CB.getSkin().getIcon.resetFilterIcon);
-        cm.addItem(MenuID.MI_SEARCH_LIST, "search", CB.getSkin().getIcon.searchIcon);
-        cm.addItem(MenuID.MI_IMPORT, "importExport", CB.getSkin().getIcon.importIcon);
+        cm.addItem(MenuID.MI_RESORT, "ResortList", CB.getSkin().getMenuIcon.sortIcon);
+        cm.addItem(MenuID.MI_FilterSet, "filter", CB.getSkin().getMenuIcon.filterIcon);
+        cm.addItem(MenuID.MI_RESET_FILTER, "MI_RESET_FILTER", CB.getSkin().getMenuIcon.resetFilterIcon);
+        cm.addItem(MenuID.MI_SEARCH_LIST, "search", CB.getSkin().getMenuIcon.searchIcon);
+        cm.addItem(MenuID.MI_IMPORT, "importExport", CB.getSkin().getMenuIcon.importIcon);
 //        if (SyncActivity.RELEASED)
 //            cm.addItem(MenuID.MI_SYNC, "sync", CB.getSprite(IconNames.importIcon.name()));
-        mi = cm.addItem(MenuID.MI_MANAGE_DB, "manage", "  (" + DBName + ")", CB.getSkin().getIcon.manageDB);
+        mi = cm.addItem(MenuID.MI_MANAGE_DB, "manage", "  (" + DBName + ")", CB.getSkin().getMenuIcon.manageDB);
         mi = cm.addItem(MenuID.MI_AUTO_RESORT, "AutoResort");
         mi.setCheckable(true);
         //    mi.setChecked(CB.getAutoResort());
-        cm.addItem(MenuID.MI_CHK_STATE_API, "chkState", CB.getSkin().getIcon.GC_Live);
-        cm.addItem(MenuID.MI_NEW_CACHE, "MI_NEW_CACHE", CB.getSkin().getIcon.addCacheIcon);
-        cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSkin().getIcon.deleteIcon);
+        cm.addItem(MenuID.MI_CHK_STATE_API, "chkState", CB.getSkin().getMenuIcon.GC_Live);
+        cm.addItem(MenuID.MI_NEW_CACHE, "MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon);
+        cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSkin().getMenuIcon.deleteIcon);
 
         return cm;
     }

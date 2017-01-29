@@ -63,6 +63,6 @@ public class Action_Show_FieldNotesView extends Abstract_Action_ShowView {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.fieldNoteList;
+        return CB.getSkin().getMenuIcon.fieldNoteList;
     }
 }

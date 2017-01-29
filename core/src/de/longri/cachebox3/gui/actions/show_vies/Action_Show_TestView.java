@@ -63,6 +63,6 @@ public class Action_Show_TestView extends Abstract_Action_ShowView {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.cb;
+        return CB.getSkin().getMenuIcon.cb;
     }
 }

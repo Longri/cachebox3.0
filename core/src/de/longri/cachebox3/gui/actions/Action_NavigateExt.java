@@ -45,6 +45,6 @@ public class Action_NavigateExt extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.navigate;
+        return CB.getSkin().getMenuIcon.navigate;
     }
 }

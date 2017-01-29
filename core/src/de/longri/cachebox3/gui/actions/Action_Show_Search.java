@@ -46,6 +46,6 @@ public class Action_Show_Search extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.searchIcon;
+        return CB.getSkin().getMenuIcon.searchIcon;
     }
 }

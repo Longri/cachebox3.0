@@ -34,7 +34,7 @@ public class Action_ShowFilterSettings extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.filterIcon;
+        return CB.getSkin().getMenuIcon.filterIcon;
     }
 
     @Override

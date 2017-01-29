@@ -38,7 +38,7 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
     }
 
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.mapIcon;
+        return CB.getSkin().getMenuIcon.mapIcon;
     }
 
     @Override

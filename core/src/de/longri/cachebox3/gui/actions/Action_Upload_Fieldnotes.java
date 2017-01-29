@@ -36,6 +36,6 @@ public class Action_Upload_Fieldnotes extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.uploadFieldNote;
+        return CB.getSkin().getMenuIcon.uploadFieldNote;
     }
 }

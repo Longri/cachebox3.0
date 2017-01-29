@@ -16,9 +16,11 @@
 package de.longri.cachebox3.develop.tools.skin_editor.validation;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 
 /**
@@ -97,17 +99,42 @@ public abstract class ValidationTask {
                 Dialog dlg = new Dialog(getName(), game.skin);
                 dlg.pad(20);
 
-                TextArea taError = new TextArea(getErrorMsg(), game.skin, "error");
-                TextArea taWarn = new TextArea(getWarnMsg(), game.skin, "warn");
+                TextArea taError = new TextArea(getErrorMsg(), game.skin, "error") {
+                    public float getPrefHeight() {
+                        calculateOffsets();
+                        float prefHeight = (getLines() + 1) * getStyle().font.getLineHeight(); // Work around
+                        TextFieldStyle style = getStyle();
+                        if (style.background != null) {
+                            prefHeight = Math.max(prefHeight + style.background.getBottomHeight() + style.background.getTopHeight(), style.background.getMinHeight());
+                        }
+                        return prefHeight;
+                    }
+                };
+
+                TextArea taWarn = new TextArea(getWarnMsg(), game.skin, "warn"){
+                    public float getPrefHeight() {
+                        calculateOffsets();
+                        float prefHeight = (getLines() + 1) * getStyle().font.getLineHeight(); // Work around
+                        TextFieldStyle style = getStyle();
+                        if (style.background != null) {
+                            prefHeight = Math.max(prefHeight + style.background.getBottomHeight() + style.background.getTopHeight(), style.background.getMinHeight());
+                        }
+                        return prefHeight;
+                    }
+                };
+
 
                 Table ta = new Table();
+
                 if (hasError()) {
-                    ta.add(taError).fill().expand();
+                    ta.add(taError).expand().fill();
+
                     if (hasWarn()) ta.row();
                 }
                 if (hasWarn()) {
-                    ta.add(taWarn).fill().expand();
+                    ta.add(taWarn).expand().fill();
                 }
+
 
                 ScrollPane scrollPane = new ScrollPane(ta, game.skin);
                 scrollPane.setFlickScroll(false);
@@ -115,6 +142,7 @@ public abstract class ValidationTask {
                 scrollPane.setScrollbarsOnTop(true);
 
                 dlg.getContentTable().add(scrollPane).width(720).height(420).pad(20);
+
 
                 dlg.button("OK", true);
                 dlg.key(com.badlogic.gdx.Input.Keys.ENTER, true);

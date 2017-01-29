@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 /**
  * Created by Longri on 27.01.17.
  */
-public class IconsStyle {
+public class IconsStyle extends AbstractIconStyle {
 
     // Button Dialog Icons
     public Drawable Asterisk; //	Das Meldungsfeld enth�lt ein Symbol, das aus dem Kleinbuchstaben i in einem Kreis besteht.
@@ -33,48 +33,20 @@ public class IconsStyle {
     public Drawable Warning; //	Das Meldungsfeld enth�lt ein Symbol, das aus einem Ausrufezeichen in einem Dreieck mit gelbem Hintergrund besteht.
     public Drawable Powerd_by_GC_Live;
     public Drawable GC_Live;
-
     public Drawable Close;
     public Drawable Help;
-    public Drawable favorit;
-    public Drawable docIcon;
-    public Drawable addCacheIcon;
-    public Drawable deleteIcon;
-    public Drawable sortIcon;
-    public Drawable filterIcon;
-    public Drawable resetFilterIcon;
-    public Drawable searchIcon;
-    public Drawable importIcon;
-    public Drawable cacheListIcon;
-    public Drawable addWp;
-    public Drawable navigate;
-    public Drawable fieldNote;
-    public Drawable videoIcon;
-    public Drawable voiceRecIcon;
-    public Drawable hintIcon;
-    public Drawable my_parking;
-    public Drawable autoSortOffIcon;
-    public Drawable torchOn;
-    public Drawable torchOff;
-    public Drawable takePhoto;
-    public Drawable dayNight;
-    public Drawable uploadFieldNote;
-    public Drawable manageDB;
-    public Drawable settingsIcon;
-    public Drawable compassIcon;
-    public Drawable creditsIcon;
-    public Drawable fieldNoteList;
-    public Drawable logViewIcon;
-    public Drawable mapIcon;
-    public Drawable noteIcon;
-    public Drawable solverIcon;
-    public Drawable solver2Icon;
-    public Drawable imagesIcon;
-    public Drawable imagesIconOff;
-    public Drawable cb;
-    public Drawable tbListIcon;
-    public Drawable waypointListIcon;
-    public Drawable trackListIcon;
+
+
     public Drawable cm_icon;
     public Drawable cm_icon_filterd;
+
+    @Override
+    protected int getPrefWidth() {
+        return 0;
+    }
+
+    @Override
+    protected int getPrefHeight() {
+        return 0;
+    }
 }

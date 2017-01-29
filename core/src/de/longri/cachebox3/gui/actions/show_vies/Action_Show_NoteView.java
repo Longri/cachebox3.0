@@ -63,6 +63,6 @@ public class Action_Show_NoteView extends Abstract_Action_ShowView {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.noteIcon;
+        return CB.getSkin().getMenuIcon.noteIcon;
     }
 }

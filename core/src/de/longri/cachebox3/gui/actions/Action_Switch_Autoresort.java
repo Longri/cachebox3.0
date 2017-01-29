@@ -48,7 +48,7 @@ public class Action_Switch_Autoresort extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.autoSortOffIcon ;
+        return CB.getSkin().getMenuIcon.autoSortOffIcon ;
     }
 
 }
