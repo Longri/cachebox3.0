@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.skin.styles.IconsStyle;
+import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.logging.Logger;
@@ -43,6 +44,7 @@ public class SvgSkin extends Skin {
     private static final String SKIN_JSON_NAME = "skin.json";
     private boolean forceCreateNewAtlas = false;
     public IconsStyle getIcon;
+    public MenuIconStyle getMenuIcon;
 
 
     public enum StorageType {
@@ -109,6 +111,12 @@ public class SvgSkin extends Skin {
             getIcon = get(IconsStyle.class);
         } catch (Exception e) {
         }
+
+        try {
+            getMenuIcon = get(MenuIconStyle.class);
+        } catch (Exception e) {
+        }
+
     }
 
 

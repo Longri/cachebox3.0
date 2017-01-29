@@ -59,6 +59,10 @@ public abstract class Validate_Abstract_Icons<T extends ValidationTask> extends 
             for (Field field : fields) {
                 Object object = field.get(instance);
 
+                if (object instanceof Integer) {
+                    continue;
+                }
+
                 if (object != null) {
                     TextureRegionDrawable trd = (TextureRegionDrawable) object;
                     String svgName = trd.getName();

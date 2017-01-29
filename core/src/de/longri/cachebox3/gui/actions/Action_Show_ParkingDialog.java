@@ -42,6 +42,6 @@ public class Action_Show_ParkingDialog extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.my_parking;
+        return CB.getSkin().getMenuIcon.my_parking;
     }
 }

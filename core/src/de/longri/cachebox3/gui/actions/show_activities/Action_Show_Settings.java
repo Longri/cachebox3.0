@@ -46,6 +46,6 @@ public class Action_Show_Settings extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.settingsIcon;
+        return CB.getSkin().getMenuIcon.settingsIcon;
     }
 }

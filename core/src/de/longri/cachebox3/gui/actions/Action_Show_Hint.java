@@ -38,7 +38,7 @@ public class Action_Show_Hint extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.hintIcon;
+        return CB.getSkin().getMenuIcon.hintIcon;
     }
 
     @Override

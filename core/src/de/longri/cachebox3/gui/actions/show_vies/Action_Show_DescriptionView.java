@@ -87,7 +87,7 @@ public class Action_Show_DescriptionView extends Abstract_Action_ShowView {
 
         boolean isSelected = (CB.isSetSelectedCache());
 
-        mi = cm.addItem(MenuID.MI_FAVORIT, "Favorite", CB.getSkin().getIcon.favorit);
+        mi = cm.addItem(MenuID.MI_FAVORIT, "Favorite", CB.getSkin().getMenuIcon.favorit);
         mi.setCheckable(true);
         if (isSelected) {
             mi.setChecked(CB.getSelectedCache().isFavorite());
@@ -127,6 +127,6 @@ public class Action_Show_DescriptionView extends Abstract_Action_ShowView {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.docIcon;
+        return CB.getSkin().getMenuIcon.docIcon;
     }
 }

@@ -36,6 +36,6 @@ public class Action_RecVoice extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.voiceRecIcon;
+        return CB.getSkin().getMenuIcon.voiceRecIcon;
     }
 }

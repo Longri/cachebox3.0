@@ -49,7 +49,7 @@ public class Action_Show_Credits extends Abstract_Action_ShowView {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.creditsIcon;
+        return CB.getSkin().getMenuIcon.creditsIcon;
     }
 
     @Override

@@ -40,7 +40,7 @@ public class Action_Show_TrackableListView extends Abstract_Action_ShowView {
     }
 
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.tbListIcon;
+        return CB.getSkin().getMenuIcon.tbListIcon;
     }
 
     @Override

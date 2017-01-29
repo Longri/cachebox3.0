@@ -115,6 +115,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.ScaledSize.class);
         items.add(de.longri.cachebox3.gui.skin.styles.IconsStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.MenuIconStyle.class);
 
 
         for (Class<?> item : items) {

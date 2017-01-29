@@ -36,6 +36,6 @@ public class Action_TakePhoto extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.takePhoto;
+        return CB.getSkin().getMenuIcon.takePhoto;
     }
 }

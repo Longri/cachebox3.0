@@ -63,6 +63,6 @@ public class Action_Show_SolverView2 extends Abstract_Action_ShowView {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.solver2Icon;
+        return CB.getSkin().getMenuIcon.solver2Icon;
     }
 }

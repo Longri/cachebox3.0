@@ -35,6 +35,6 @@ public class Action_QuickFieldNote extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.fieldNote;
+        return CB.getSkin().getMenuIcon.fieldNote;
     }
 }

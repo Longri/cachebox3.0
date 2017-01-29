@@ -63,6 +63,6 @@ public class Action_Show_LogView extends Abstract_Action_ShowView {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.logViewIcon;
+        return CB.getSkin().getMenuIcon.logViewIcon;
     }
 }

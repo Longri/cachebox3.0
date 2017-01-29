@@ -1149,5 +1149,9 @@
       "Powerd_by_GC_Live": "gc_liveIcon",
       "GC_Live": "gc_liveIcon"
     }
+  },
+  "de.longri.cachebox3.gui.skin.styles.MenuIconStyle": {
+    "default": {
+    }
   }
 }
