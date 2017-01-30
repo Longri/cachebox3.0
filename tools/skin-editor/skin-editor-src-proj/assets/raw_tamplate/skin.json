@@ -4,6 +4,10 @@
       "path": "svg/missingIcon.svg",
       "scale": 1
     },
+    "FieldNote": {
+      "path": "svg/FieldNote.svg",
+      "scale": 0.19
+    },
     "Mapstate.car": {
       "path": "svg/map-state-car.svg",
       "scale": 0.75
@@ -68,6 +72,10 @@
       "path": "svg/activityBack.svg",
       "scale": 1
     },
+    "add-wp": {
+      "path": "svg/add-wp.svg",
+      "scale": 0.19
+    },
     "addCacheIcon": {
       "path": "svg/addCacheIcon.svg",
       "scale": 0.19455253
@@ -106,7 +114,7 @@
     },
     "cb": {
       "path": "svg/cb.svg",
-      "scale": 0.15
+      "scale": 0.097
     },
     "check_disabled": {
       "path": "svg/check_disabled.svg",
@@ -220,6 +228,10 @@
       "path": "svg/event.svg",
       "scale": 0.2
     },
+    "fieldnoteListIcon": {
+      "path": "svg/fieldnoteListIcon.svg",
+      "scale": 0.195
+    },
     "filter": {
       "path": "svg/missingIcon.svg",
       "scale": 1
@@ -243,6 +255,10 @@
     "helpIcon": {
       "path": "svg/helpIcon.svg",
       "scale": 1
+    },
+    "images-icon": {
+      "path": "svg/images-icon.svg",
+      "scale": 0.195
     },
     "importIcon": {
       "path": "svg/missingIcon.svg",
@@ -512,6 +528,10 @@
       "path": "svg/missingIcon.svg",
       "scale": 1
     },
+    "noteIcon": {
+      "path": "svg/noteIcon.svg",
+      "scale": 0.195
+    },
     "other": {
       "path": "svg/other.svg",
       "scale": 0.25
@@ -522,7 +542,7 @@
     },
     "settings_icon": {
       "path": "svg/settings_icon.svg",
-      "scale": 0.27
+      "scale": 0.19
     },
     "slider": {
       "path": "svg/slider.svg",
@@ -535,6 +555,14 @@
     "small": {
       "path": "svg/small.svg",
       "scale": 0.25
+    },
+    "solver-icon": {
+      "path": "svg/solver-icon.svg",
+      "scale": 0.195
+    },
+    "solver-icon-2": {
+      "path": "svg/solver-icon-2.svg",
+      "scale": 0.195
     },
     "sortIcon": {
       "path": "svg/sortIcon.svg",
@@ -592,6 +620,14 @@
       "path": "svg/missingIcon.svg",
       "scale": 1
     },
+    "warning": {
+      "path": "svg/warning.svg",
+      "scale": 1.2
+    },
+    "warningIcon": {
+      "path": "svg/missingIcon.svg",
+      "scale": 1
+    },
     "waypointListIcon": {
       "path": "svg/missingIcon.svg",
       "scale": 1
@@ -599,10 +635,6 @@
     "whereigo": {
       "path": "svg/whereigo.svg",
       "scale": 0.2
-    },
-    "warningIcon": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
     }
   },
   "de.longri.cachebox3.utils.SkinColor": {
@@ -1140,18 +1172,44 @@
     "default": {
       "Asterisk": "infoIcon",
       "Error": "closeIcon",
-      "Exclamation": "warningIcon",
+      "Exclamation": "warning",
       "Hand": "closeIcon",
       "Information": "infoIcon",
       "Question": "helpIcon",
       "Stop": "closeIcon",
-      "Warning": "warningIcon",
+      "Warning": "warning",
       "Powerd_by_GC_Live": "gc_liveIcon",
-      "GC_Live": "gc_liveIcon"
+      "GC_Live": "gc_liveIcon",
+      "Close": "closeIcon",
+      "Help": "helpIcon",
+      "cm_icon": "cm_icon",
+      "cm_icon_filterd": "cm_icon_filterd",
+      "prefWidth": 0,
+      "prefHeight": 0
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MenuIconStyle": {
     "default": {
+      "addCacheIcon": "addCacheIcon",
+      "deleteIcon": "deleteIcon",
+      "sortIcon": "sortIcon",
+      "cacheListIcon": "cacheListIcon",
+      "addWp": "add-wp",
+      "fieldNote": "FieldNote",
+      "settingsIcon": "settings_icon",
+      "creditsIcon": "cb",
+      "fieldNoteList": "fieldnoteListIcon",
+      "mapIcon": "map",
+      "noteIcon": "noteIcon",
+      "solverIcon": "solver-icon",
+      "solver2Icon": "solver-icon-2",
+      "imagesIcon": "images-icon",
+      "cb": "cb",
+      "tbListIcon": "tbListIcon",
+      "trackListIcon": "trackListIcon",
+      "GC_Live": "gc_liveIcon",
+      "prefWidth": -1,
+      "prefHeight": -1
     }
   }
 }
