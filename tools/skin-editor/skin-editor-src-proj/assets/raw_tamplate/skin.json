@@ -1110,6 +1110,7 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle": {
+    "disabledOverlay": {},
     "mapFinal": {
       "small": "mapFinal0",
       "middle": "mapFinal1",
@@ -1149,7 +1150,8 @@
       "small": "mapTrailhead0",
       "middle": "mapTrailhead1",
       "large": "mapTrailhead2"
-    }
+    },
+    "selectOverlay": {}
   },
   "de.longri.cachebox3.gui.skin.styles.ScaledSize": {
     "button_height": {
