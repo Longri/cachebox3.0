@@ -136,11 +136,15 @@ public class SkinEditorGame extends Game {
             return "de.longri.cachebox3.gui.skin.styles.IconsStyle";
         } else if (widget.equals("MenuIcons")) {
             return "de.longri.cachebox3.gui.skin.styles.MenuIconStyle";
+        } else if (widget.equals("TextButton")) {
+            return "com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle";
         } else {
             return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
         }
     }
 
+
+//
 
     /**
      * Display a dialog with a notice

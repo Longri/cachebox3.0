@@ -225,14 +225,17 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
                 continue;
             }
 
-            TextureRegion textureRegion = it.item.getMapSymbol(zoomLevel);
-            if (textureRegion == null) continue;
-            SymbolItem s = SymbolItem.pool.get();
-            s.set(it.x, it.y, textureRegion, true);
+            TextureRegion[] textureRegions = it.item.getMapSymbol(zoomLevel);
+            if (textureRegions == null) continue;
 
-            //set center offset
-            s.offset = CENTER_OFFSET;
-            mSymbolLayer.pushSymbol(s);
+            for (TextureRegion region : textureRegions) {
+                SymbolItem s = SymbolItem.pool.get();
+                s.set(it.x, it.y, region, true);
+
+                //set center offset
+                s.offset = CENTER_OFFSET;
+                mSymbolLayer.pushSymbol(s);
+            }
         }
 
         buckets.set(mSymbolLayer);
