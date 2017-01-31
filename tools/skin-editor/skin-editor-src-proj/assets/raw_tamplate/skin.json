@@ -691,7 +691,7 @@
       "a": 0.7
     },
     "transparent_color": {
-      "a": 1
+      "a": 0
     }
   },
   "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
