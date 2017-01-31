@@ -407,7 +407,6 @@ public class OptionsPane extends Table {
             try {
 
 
-
                 Actor actor = null;
 
                 // field type
@@ -430,6 +429,13 @@ public class OptionsPane extends Table {
                         if (resourceName == null) {
                             resourceName = game.skinProject.resolveObjectName(TextureRegion.class, drawable);
                         }
+
+                        if (drawable instanceof SvgNinePatchDrawable) {
+                            //override pref width and height
+                            drawable.setMinWidth(50);
+                            drawable.setMinHeight(50);
+                        }
+
                         buttonStyle.imageUp = drawable;
                     } else {
                         buttonStyle.up = game.skin.getDrawable("default-rect");
@@ -437,7 +443,7 @@ public class OptionsPane extends Table {
                     }
 
                     actor = new ImageTextButton(resourceName, buttonStyle);
-                    ((ImageTextButton) actor).setClip(true);
+                    ((ImageTextButton) actor).setClip(false);
                     actor.addListener(new ChangeListener() {
 
                         @Override
@@ -701,7 +707,7 @@ public class OptionsPane extends Table {
                     }
                 }
 
-                if (actor != null){
+                if (actor != null) {
 
                     // field name
 
@@ -715,7 +721,6 @@ public class OptionsPane extends Table {
                         tableFields.add(new Label(field.getName(), game.skin, "default")).left();
 
                     }
-
                     tableFields.add(actor).left().height(64).padRight(24).expandX().fillX();
                     tableFields.row();
                 }
