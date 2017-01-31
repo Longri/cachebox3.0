@@ -33,16 +33,14 @@ import org.oscim.backend.canvas.Bitmap;
 public class TestView extends AbstractView {
     final static Logger log = LoggerFactory.getLogger(TestView.class);
 
-    private Button toggleButton;
-eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+
     public TestView() {
-        super("TestView");super("TestView");
+        super("TestView");
 
     }
 
     protected void create() {
         this.clear();
-        toggleButton = new TextButton("toggggggggggggggggggggggggggggggggggggg        toggleButton = new TextButton(\"toggggggggggggggggggggggggggggggggggggggggg\")\nlllllllllllllllllllllllllllllllllllllllllgggg")
 
     }
 
