@@ -515,8 +515,8 @@ public class OptionsPane extends Table {
                         buttonStyle.imageUp = new SpriteDrawable(new Sprite(texture));
                         pixmap.dispose();
                     } else {
-                        buttonStyle.up = game.skinProject.getDrawable("default-rect");
-                        buttonStyle.checked = game.skinProject.getDrawable("default-rect");
+                        buttonStyle.up = game.skin.getDrawable("default-rect");
+                        buttonStyle.checked = game.skin.getDrawable("default-rect");
                     }
 
                     actor = new ImageTextButton(resourceName, buttonStyle);
@@ -546,8 +546,8 @@ public class OptionsPane extends Table {
                         resourceName = game.skinProject.resolveObjectName(BitmapFont.class, font);
                         buttonStyle.font = font;
                     } else {
-                        buttonStyle.up = game.skinProject.getDrawable("default-rect");
-                        buttonStyle.checked = game.skinProject.getDrawable("default-rect");
+                        buttonStyle.up = game.skin.getDrawable("default-rect");
+                        buttonStyle.checked = game.skin.getDrawable("default-rect");
                     }
 
                     actor = new ImageTextButton(resourceName, buttonStyle);
@@ -578,8 +578,8 @@ public class OptionsPane extends Table {
                     if ((value != null) && (value != 0)) {
                         resourceName = String.valueOf(value);
                     } else {
-                        buttonStyle.up = game.skinProject.getDrawable("default-rect");
-                        buttonStyle.checked = game.skinProject.getDrawable("default-rect");
+                        buttonStyle.up = game.skin.getDrawable("default-rect");
+                        buttonStyle.checked = game.skin.getDrawable("default-rect");
                     }
 
                     actor = new ImageTextButton(resourceName, buttonStyle);
