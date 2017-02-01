@@ -26,7 +26,7 @@ import de.longri.cachebox3.CB;
  */
 public class SkinFont extends BitmapFont {
 
-    private static final String DEFAULT_CHARACTER = getCyrilCharSet();
+    public static final String DEFAULT_CHARACTER = getCyrilCharSet();
 
     public final String font;
     public final int size;

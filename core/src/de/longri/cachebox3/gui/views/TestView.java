@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
 import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.logging.Logger;
@@ -33,6 +34,7 @@ import org.oscim.backend.canvas.Bitmap;
 public class TestView extends AbstractView {
     final static Logger log = LoggerFactory.getLogger(TestView.class);
 
+    VisTextButton test;
 
     public TestView() {
         super("TestView");
