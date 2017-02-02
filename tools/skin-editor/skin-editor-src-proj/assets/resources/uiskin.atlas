@@ -267,7 +267,7 @@ widgets/Label
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/List
+widgets/ListView
   rotate: false
   xy: 1, 120
   size: 48, 48
