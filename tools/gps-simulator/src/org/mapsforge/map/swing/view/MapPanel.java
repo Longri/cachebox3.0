@@ -31,12 +31,12 @@ import org.mapsforge.map.model.MapViewPosition;
 import org.mapsforge.map.model.Model;
 import org.mapsforge.map.model.common.PreferencesFacade;
 import org.mapsforge.map.reader.MapFile;
-import org.mapsforge.map.rendertheme.InternalRenderTheme;
 
 
 import ch.fhnw.imvs.gpssimulator.SimulatorMain;
 import ch.fhnw.imvs.gpssimulator.data.GPSData;
 import ch.fhnw.imvs.gpssimulator.data.GPSDataListener;
+import org.mapsforge.map.rendertheme.InternalRenderTheme;
 
 public class MapPanel extends JPanel implements ActionListener {
 
