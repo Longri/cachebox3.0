@@ -108,13 +108,13 @@ public class SvgNinePatchDrawable extends BaseDrawable {
         return top + bottom + additionalPrefHeight;
     }
 
-    @Override
-    public void setMinWidth(float minWidth) {
+
+    public void setAdditionalPrefWidth(float minWidth) {
         this.additionalPrefWidth = minWidth - (left + right);
     }
 
-    @Override
-    public void setMinHeight(float minHeight) {
+
+    public void setAdditionalPrefHeight(float minHeight) {
         this.additionalPrefHeight = minHeight - (top + bottom);
     }
 
