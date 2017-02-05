@@ -16,12 +16,12 @@
 package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Database.Parameters;
 import de.longri.cachebox3.types.Category;
 import de.longri.cachebox3.types.GpxFilename;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.text.DateFormat;

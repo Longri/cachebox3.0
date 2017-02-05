@@ -36,8 +36,6 @@ import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Settings;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
@@ -64,6 +62,8 @@ import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.source.mapfile.MapFileTileSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**

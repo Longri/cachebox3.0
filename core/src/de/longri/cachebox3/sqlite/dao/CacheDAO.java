@@ -17,11 +17,10 @@ package de.longri.cachebox3.sqlite.dao;
 
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
-import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -69,7 +68,7 @@ public class CacheDAO {
     Cache ReadFromCursor(SQLiteGdxDatabaseCursor reader, boolean fullDetails, boolean withDescription) {
 
         try {
-            Cache cache = new Cache(reader.getDouble(2), reader.getDouble(3),fullDetails);
+            Cache cache = new Cache(reader.getDouble(2), reader.getDouble(3), fullDetails);
 
             cache.Id = reader.getLong(0);
             cache.setGcCode(reader.getString(1).trim());

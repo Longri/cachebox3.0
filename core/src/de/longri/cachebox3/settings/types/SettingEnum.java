@@ -15,9 +15,9 @@
  */
 package de.longri.cachebox3.settings.types;
 
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.lists.CB_List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class SettingEnum<EnumTyp extends Enum<?>> extends SettingString {

@@ -15,9 +15,11 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
+import com.badlogic.gdx.backends.iosrobovm.IOSFileHandle;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GLAdapter;
 import org.oscim.gdx.GdxAssets;
@@ -30,6 +32,7 @@ import org.robovm.apple.uikit.UIApplication;
 import org.robovm.apple.uikit.UIApplicationLaunchOptions;
 import org.robovm.apple.uikit.UIDevice;
 import org.robovm.apple.uikit.UIScreen;
+import org.slf4j.impl.LibgdxLogger;
 
 public class IOS_Launcher extends IOSApplication.Delegate {
 
@@ -45,11 +48,11 @@ public class IOS_Launcher extends IOSApplication.Delegate {
 
     @Override
     protected IOSApplication createApplication() {
-//
-//        float scale = (float) (getIosVersion() >= 8 ? UIScreen.getMainScreen().getNativeScale() : UIScreen.getMainScreen().getScale());
-////        CanvasAdapter.dpi *= scale;
-//
-//        CanvasAdapter.dpi = 20 * scale;
+
+         final String appDir = System.getenv("HOME");
+         final String localPath = appDir + "/Library/local/";
+
+        LibgdxLogger.PROPERTIES_FILE_HANDLE=new LibgdxLoggerIosFileHandle(localPath, Files.FileType.Absolute).child(LibgdxLogger.CONFIGURATION_FILE);
 
         //initialize platform bitmap factory
         IosGraphics.init();

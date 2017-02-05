@@ -20,8 +20,6 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.locator.GPS;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
@@ -29,6 +27,8 @@ import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.CacheWithWP;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.SoundCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Empfängt alle Positions Änderungen und sortiert Liste oder spielt Sounds ab.

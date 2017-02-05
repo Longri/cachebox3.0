@@ -18,10 +18,10 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.core.GeoPoint;
 import org.oscim.renderer.atlas.TextureRegion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 

@@ -1,8 +1,8 @@
 package de.longri.cachebox3.locator.events;
 
 import de.longri.cachebox3.locator.Locator;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;

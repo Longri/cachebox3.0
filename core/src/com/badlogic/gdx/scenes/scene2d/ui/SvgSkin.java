@@ -28,10 +28,9 @@ import de.longri.cachebox3.gui.skin.styles.IconsStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.ColorDrawable;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
+import org.slf4j.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ import java.util.ArrayList;
  * Created by Longri on 20.07.2016.
  */
 public class SvgSkin extends Skin {
-    private final static Logger log = LoggerFactory.getLogger(SvgSkin.class);
+    private final static org.slf4j.Logger log = LoggerFactory.getLogger(SvgSkin.class);
     private static final String SKIN_JSON_NAME = "skin.json";
     private boolean forceCreateNewAtlas = false;
     public IconsStyle getIcon;

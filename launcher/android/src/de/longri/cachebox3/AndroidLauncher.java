@@ -21,14 +21,20 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import de.longri.cachebox3.locator.Locator;
 import org.oscim.android.gl.AndroidGL;
 import org.oscim.backend.GLAdapter;
 import org.oscim.gdx.GdxAssets;
+import org.slf4j.impl.LibgdxLogger;
 import org.sqldroid.SQLDroidDriver;
+
+import java.io.File;
 
 public class AndroidLauncher extends AndroidApplication {
 
@@ -50,6 +56,16 @@ public class AndroidLauncher extends AndroidApplication {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        File filesDir = getExternalFilesDir(null);
+        LibgdxLogger.PROPERTIES_FILE_HANDLE = new LibgdxLoggerAndroidFileHandle(filesDir, Files.FileType.Absolute).child(LibgdxLogger.CONFIGURATION_FILE);
+
+
+        //create private path for Log
+        // => /data/user/0/de.longri.cachebox3/files
+        FileHandle fileHandle = LibgdxLogger.PROPERTIES_FILE_HANDLE.child("test.tmp");
+        fileHandle.parent().mkdirs();
+
 
 
         // Don't change this LogLevel
@@ -79,6 +95,10 @@ public class AndroidLauncher extends AndroidApplication {
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 
         setApplicationLogger(new Android_ApplicationLogger());
+
+
+
+
     }
 
     protected void onStart() {

@@ -25,10 +25,10 @@ import com.kotcrab.vis.ui.building.utilities.Alignment;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.animations.AnimationBase;
 import de.longri.cachebox3.gui.animations.WorkAnimation;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.ImageLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
