@@ -27,6 +27,7 @@ allprojects {
         aiVersion = '1.8.0'
         visUiVersion = '1.2.5'
         vtmVersion = 'master-SNAPSHOT'
+        slf4jLibgdxVersion = '1.9.5-SNAPSHOT'
     }
 
     repositories {
@@ -156,6 +157,8 @@ project(":android") {
         compile "org.mapsforge:vtm-android:$vtmVersion:natives-x86"
         compile "org.mapsforge:vtm-android:$vtmVersion:natives-x86_64"
 
+        compile "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+
         //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])
     }
@@ -203,6 +206,8 @@ project(":core") {
         compile "org.mapsforge:vtm:$vtmVersion"
         compile "org.mapsforge:vtm-gdx:$vtmVersion"
         compile "org.mapsforge:vtm-themes:$vtmVersion"
+
+        compile "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
 
         //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])
