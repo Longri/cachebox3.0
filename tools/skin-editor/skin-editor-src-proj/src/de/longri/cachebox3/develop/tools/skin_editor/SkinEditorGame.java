@@ -28,7 +28,8 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.WelcomeScreen;
-import de.longri.cachebox3.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -63,7 +64,6 @@ public class SkinEditorGame extends Game {
     @Override
     public void create() {
 
-        Logger.setCurrentLogLevel(Logger.LOG_LEVEL_TRACE);
 
 
         opt = new OptionalChecker();

@@ -112,6 +112,8 @@ project(":skin-editor-src-proj") {
         compile "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
         compile "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
 
+        compile "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+
         //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])
     }
