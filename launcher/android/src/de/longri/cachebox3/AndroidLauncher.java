@@ -58,14 +58,14 @@ public class AndroidLauncher extends AndroidApplication {
         super.onCreate(savedInstanceState);
 
         File filesDir = getExternalFilesDir(null);
-        LibgdxLogger.PROPERTIES_FILE_HANDLE = new LibgdxLoggerAndroidFileHandle(filesDir, Files.FileType.Absolute).child(LibgdxLogger.CONFIGURATION_FILE);
+        FileHandle loggerConfig = new LibgdxLoggerAndroidFileHandle(filesDir, Files.FileType.Absolute).child(LibgdxLogger.CONFIGURATION_FILE_XML);
+        LibgdxLogger.initial(loggerConfig);
 
 
         //create private path for Log
         // => /data/user/0/de.longri.cachebox3/files
         FileHandle fileHandle = LibgdxLogger.PROPERTIES_FILE_HANDLE.child("test.tmp");
         fileHandle.parent().mkdirs();
-
 
 
         // Don't change this LogLevel
@@ -95,8 +95,6 @@ public class AndroidLauncher extends AndroidApplication {
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 
         setApplicationLogger(new Android_ApplicationLogger());
-
-
 
 
     }

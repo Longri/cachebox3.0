@@ -84,12 +84,13 @@ public class ListView extends WidgetGroup {
         drawedIndexList.clear();
         adapter = null;
         backgroundDrawable = null;
-        scrollPane.clearActions();
-        scrollPane.clearListeners();
-        scrollPane.clearChildren();
-        scrollPane.clear();
-        scrollPane = null;
-
+        if (scrollPane != null) {
+            scrollPane.clearActions();
+            scrollPane.clearListeners();
+            scrollPane.clearChildren();
+            scrollPane.clear();
+            scrollPane = null;
+        }
 
         for (Actor item : itemGroup.getChildren()) {
             itemGroup.removeActor(item);
@@ -101,8 +102,6 @@ public class ListView extends WidgetGroup {
         itemGroup.clearActions();
         itemGroup.clearListeners();
         itemGroup.clear();
-
-
     }
 
     public enum SelectableType {
