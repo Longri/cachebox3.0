@@ -19,8 +19,8 @@ package de.longri.cachebox3.gui.actions;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 16.08.16.
@@ -45,6 +45,6 @@ public class Action_Toggle_Day_Night extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-       return CB.getSkin().getMenuIcon.dayNight;
+        return CB.getSkin().getMenuIcon.dayNight;
     }
 }

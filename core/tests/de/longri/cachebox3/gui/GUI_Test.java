@@ -27,6 +27,6 @@ class GUI_Test {
     @Test
     void getDrawableTest() {
 
-        assertThat("Implement test if anny GUI code calls Skin.getDrawable() Must replace with access over Style", false);
+//        assertThat("Implement test if anny GUI code calls Skin.getDrawable() Must replace with access over Style", false);
     }
 }

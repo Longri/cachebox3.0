@@ -16,8 +16,8 @@
 package de.longri.cachebox3.sqlite.Import;
 
 
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 27.07.16.

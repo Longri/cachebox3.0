@@ -20,6 +20,9 @@ android {
         targetSdkVersion 24
         multiDexEnabled true
     }
+    lintOptions {
+        abortOnError false
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7

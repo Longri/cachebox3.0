@@ -16,20 +16,25 @@
 package de.longri.cachebox3;
 
 import ch.fhnw.imvs.gpssimulator.SimulatorMain;
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl.LwjglFileHandle;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import org.apache.commons.cli.*;
 import org.oscim.awt.AwtGraphics;
 import org.oscim.backend.GLAdapter;
 import org.oscim.gdx.GdxAssets;
 import org.oscim.gdx.LwjglGL20;
+import org.slf4j.impl.LibgdxLogger;
 
 import javax.swing.*;
 
 public class DesktopLauncher {
     public static void main(String[] args) {
 
+        LibgdxLogger.PROPERTIES_FILE_HANDLE = new LwjglFileHandle(LibgdxLogger.CONFIGURATION_FILE, Files.FileType.Local);
 
         System.setProperty("org.lwjgl.util.NoChecks", "false");
 

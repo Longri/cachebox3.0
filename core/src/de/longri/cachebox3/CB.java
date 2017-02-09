@@ -24,21 +24,21 @@ import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.ScaledSizes;
 import de.longri.cachebox3.utils.SkinColor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Static class
  * Created by Longri on 20.07.2016.
  */
 public class CB {
-    final static Logger log = LoggerFactory.getLogger(CB.class);
+    static Logger log = LoggerFactory.getLogger(CB.class);
 
     public static final int CurrentRevision = 20160806;
     public static final String CurrentVersion = "0.1.";
@@ -200,6 +200,7 @@ public class CB {
             // speichere selektierten Cache, da nicht alles über die SelectedCacheEventList läuft
             Config.LastSelectedCache.setValue(CB.getSelectedCache().getGcCode());
             Config.AcceptChanges();
+            checkLogger();
             log.debug("LastSelectedCache = " + CB.getSelectedCache().getGcCode());
         }
 
@@ -249,6 +250,7 @@ public class CB {
     public static void setSelectedWaypoint(Cache cache, Waypoint waypoint, boolean changeAutoResort) {
 
         if (cache == null) {
+            checkLogger();
             log.info("[CB]setSelectedWaypoint: cache=null");
             selectedCache = null;
             selectedWaypoint = null;
@@ -260,6 +262,7 @@ public class CB {
             selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
         }
         selectedCache = cache;
+        checkLogger();
         log.info("[CB]setSelectedWaypoint: cache=" + cache.getGcCode());
         selectedWaypoint = waypoint;
 
@@ -354,5 +357,11 @@ public class CB {
                 MAIN_THREAD = Thread.currentThread();
             }
         });
+    }
+
+    private static void checkLogger() {
+        if (log == null) {
+            log = LoggerFactory.getLogger(CB.class);
+        }
     }
 }

@@ -20,9 +20,9 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.develop.tools.skin_editor.actors.RangeSelector;
 import de.longri.cachebox3.gui.widgets.EmptyDrawable;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.backend.canvas.Bitmap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 

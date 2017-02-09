@@ -34,8 +34,6 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxDouble;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
@@ -58,6 +56,7 @@ import org.oscim.map.Map;
 import org.oscim.renderer.atlas.TextureAtlas;
 import org.oscim.renderer.atlas.TextureRegion;
 import org.oscim.utils.TextureAtlasUtils;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,7 +66,7 @@ import java.util.LinkedHashMap;
  * Created by Longri on 27.11.16.
  */
 public class WaypointLayer extends Layer implements GestureListener, CacheListChangedEventListener, Disposable {
-    private final static Logger log = LoggerFactory.getLogger(WaypointLayer.class);
+    private final static org.slf4j.Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
     private static final String ERROR_MSG = "No de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle registered with name: ";
     private static final Bitmap defaultMarker = getClusterSymbol("myterie");

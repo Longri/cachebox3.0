@@ -18,10 +18,10 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.core.GeoPoint;
 import org.oscim.renderer.atlas.TextureRegion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
@@ -42,7 +42,13 @@ public class MapWayPointItem extends Coordinate {
         this.dataObject = obj;
         cachedHash = hashCode();
 
-        // extract regions
+        // extract regions if regions not NULL
+        if (regions == null){
+            small = null;
+            middle = null;
+            large = null;
+            return;
+        }
         Array<TextureRegion> smallList = new Array<TextureRegion>(new TextureRegion[0]);
         Array<TextureRegion> middleList = new Array<TextureRegion>(new TextureRegion[0]);
         Array<TextureRegion> largeList = new Array<TextureRegion>(new TextureRegion[0]);

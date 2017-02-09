@@ -21,22 +21,32 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import de.longri.cachebox3.locator.Locator;
 import org.oscim.android.gl.AndroidGL;
 import org.oscim.backend.GLAdapter;
 import org.oscim.gdx.GdxAssets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.impl.LibgdxLogger;
 import org.sqldroid.SQLDroidDriver;
 
+import java.io.File;
+
 public class AndroidLauncher extends AndroidApplication {
+    private final static Logger log = LoggerFactory.getLogger(AndroidLauncher.class);
 
     static {
         try {
+            log.debug("initial SQLDroidDriver");
             java.sql.DriverManager.registerDriver(new SQLDroidDriver());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("With initial SQLDroidDriver", e);
         }
 
     }
@@ -49,6 +59,7 @@ public class AndroidLauncher extends AndroidApplication {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        log.debug("onStart()");
         super.onCreate(savedInstanceState);
 
 
@@ -63,9 +74,6 @@ public class AndroidLauncher extends AndroidApplication {
         //initialize platform connector
         PlatformConnector.init(new AndroidPlatformConnector(this));
 
-//        DisplayMetrics metrics = getResources().getDisplayMetrics();
-//        CanvasAdapter.dpi = (int) Math.max(metrics.xdpi, metrics.ydpi);
-
         GdxAssets.init("");
         GLAdapter.init(new AndroidGL());
 
@@ -79,9 +87,20 @@ public class AndroidLauncher extends AndroidApplication {
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 
         setApplicationLogger(new Android_ApplicationLogger());
+
+        //    ## INITIAL LOGGER ##                ################################
+        File filesDir = getExternalFilesDir(null);
+        FileHandle loggerConfig = Gdx.files.absolute(filesDir.getAbsolutePath())
+                .child(LibgdxLogger.CONFIGURATION_FILE_XML);
+        LibgdxLogger.initial(loggerConfig);
+
+        //create private path for Log and properties file
+        // => /data/user/0/de.longri.cachebox3/files
+        loggerConfig.parent().mkdirs();
     }
 
     protected void onStart() {
+        log.debug("onStart()");
         super.onStart();
 
         if (android.os.Build.VERSION.SDK_INT >= 23) {
@@ -100,6 +119,7 @@ public class AndroidLauncher extends AndroidApplication {
 
     @Override
     protected void onResume() {
+        log.debug("onResume()");
         super.onResume();
         if (mSensorManager != null)
             mSensorManager.registerListener(mListener, mSensor, SensorManager.SENSOR_DELAY_UI);
@@ -107,6 +127,7 @@ public class AndroidLauncher extends AndroidApplication {
 
     @Override
     protected void onStop() {
+        log.debug("onStop()");
         super.onStop();
 
         if (mSensorManager != null)

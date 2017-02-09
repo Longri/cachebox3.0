@@ -26,13 +26,13 @@ import com.badlogic.gdx.math.Matrix4;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import org.oscim.backend.GL;
 import org.oscim.map.Map;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.NumberFormat;
 
@@ -44,7 +44,7 @@ public class CacheboxMain extends ApplicationAdapter {
         Map.NEW_GESTURES = true;
     }
 
-    final static Logger log = LoggerFactory.getLogger(CacheboxMain.class);
+     static Logger log = LoggerFactory.getLogger(CacheboxMain.class);
 
     Runtime runtime = Runtime.getRuntime();
     NumberFormat format = NumberFormat.getInstance();
@@ -186,6 +186,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void pause() {
+        checkLogger();
         log.debug("close databases");
         //close databases
 //        if (Database.Data != null) Database.Data.Close();
@@ -195,7 +196,8 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void resume() {
-//        log.debug("on resume", "reopen databases");
+        checkLogger();
+      log.debug("on resume", "reopen databases");
 //        //open databases
 //        if (Database.Data != null) Database.Data.Open();
 //        if (Database.Settings != null) Database.Settings.Open();
@@ -206,4 +208,10 @@ public class CacheboxMain extends ApplicationAdapter {
         return memoryUsage;
     }
 
+
+    private static void checkLogger() {
+        if (log == null) {
+            log = LoggerFactory.getLogger(CacheboxMain.class);
+        }
+    }
 }

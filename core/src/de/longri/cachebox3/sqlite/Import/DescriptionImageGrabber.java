@@ -16,12 +16,12 @@
 package de.longri.cachebox3.sqlite.Import;
 
 import de.longri.cachebox3.Utils;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.utils.Downloader;
 import de.longri.cachebox3.utils.lists.CB_List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -147,7 +147,7 @@ public class DescriptionImageGrabber {
         try {
             baseUri = URI.create(Cache.getUrl());
         } catch (Exception exc) {
-			/*
+            /*
 			 * #if DEBUG Global.AddLog( "DescriptionImageGrabber.ResolveImages: failed to resolve '" + Cache.Url + "': " + exc.ToString());
 			 * #endif
 			 */

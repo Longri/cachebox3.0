@@ -25,9 +25,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.SizeF;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MenuItem extends ListViewItem {
     final static Logger log = LoggerFactory.getLogger(MenuItem.class);
