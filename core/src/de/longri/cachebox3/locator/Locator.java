@@ -18,9 +18,9 @@ package de.longri.cachebox3.locator;
 import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.locator.events.GPS_FallBackEventList;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.UnitFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
@@ -476,21 +476,21 @@ public class Locator {
         synchronized (that) {
 
             if (type == CompassType.GPS || !mUseMagneticCompass) {
-                log.debug("Return mlastGPSHeading1");
+//                log.debug("Return mlastGPSHeading1");
                 return that.mlastGPSHeading;
             }
 
             if (type == CompassType.Magnetic) {
-                log.debug("Return mlastGPSHeading2");
+//                log.debug("Return mlastGPSHeading2");
                 return that.mlastGPSHeading;
             }
 
 
             if (UseMagneticCompass()) {
-                log.debug("Return mlastGPSHeading3");
+//                log.debug("Return mlastGPSHeading3");
                 return that.mlastMagneticHeading;
             } else {
-                log.debug("Return mlastMagneticHeading");
+//                log.debug("Return mlastMagneticHeading");
                 return that.mlastGPSHeading;
             }
         }
@@ -507,10 +507,10 @@ public class Locator {
         if (that == null) return;
 
         if (type == CompassType.GPS) {
-            log.debug("Set last Gps heading:");
+//            log.debug("Set last Gps heading:");
             that.mlastGPSHeading = heading;
         } else {
-            log.debug("Set last Magnetic heading:");
+//            log.debug("Set last Magnetic heading:");
             that.mlastMagneticHeading = heading;
         }
 
@@ -522,7 +522,7 @@ public class Locator {
             that.mLastUsedCompassType = CompassType.Magnetic;
         }
 
-        log.debug("Set last used Compass type:" + that.mLastUsedCompassType);
+//        log.debug("Set last used Compass type:" + that.mLastUsedCompassType);
 
         PositionChangedEventList.OrientationChanged();
 

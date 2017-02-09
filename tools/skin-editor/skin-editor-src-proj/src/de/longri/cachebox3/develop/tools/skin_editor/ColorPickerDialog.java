@@ -27,10 +27,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.reflect.Field;
+import com.kotcrab.vis.ui.widget.color.ColorPicker;
+import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import de.longri.cachebox3.utils.SkinColor;
 
-import javax.swing.*;
-import java.awt.*;
+
 import java.util.Iterator;
 
 /**
@@ -45,6 +46,54 @@ public class ColorPickerDialog extends Dialog {
     private Table tableColors;
     ObjectMap<String, SkinColor> colors;
     private Field field;
+
+    ColorPickerAdapter colorPickerAdapter = new ColorPickerAdapter() {
+        @Override
+        public void finished(final Color color) {
+            if (color != null) {
+                final TextField nameTextField = new TextField("???", game.skin);
+                Dialog dlg0 = new Dialog("Name your color", game.skin) {
+
+                    @Override
+                    protected void result(Object object) {
+                        if ((Boolean) object == false) {
+                            return;
+                        }
+
+                        String colorName = nameTextField.getText();
+
+                        if ((colorName != null) && (colorName.isEmpty() == false)) {
+                            // Verify if the color name is already in use
+                            if (colors.containsKey(colorName) == true) {
+                                game.showMsgDlg("Error", "Color name already in use!", game.screenMain.stage);
+                            } else {
+                                // Add the color (asuming RGBA)
+
+                                SkinColor newColor = new SkinColor(color);
+                                newColor.skinName = colorName;
+                                colors.put(colorName, newColor);
+                                game.screenMain.saveToSkin();
+
+                                // update table
+                                updateTable();
+                            }
+                        }
+                    }
+                };
+                dlg0.pad(20);
+                dlg0.getContentTable().add("Resource name:");
+                dlg0.getContentTable().add(nameTextField).pad(20);
+                dlg0.button("OK", true);
+                dlg0.button("Cancel", false);
+                dlg0.key(com.badlogic.gdx.Input.Keys.ENTER, true);
+                dlg0.key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
+                dlg0.show(getStage());
+
+            }
+        }
+    };
+
+    ColorPicker colorPicker = new ColorPicker(colorPickerAdapter);
 
     /**
      *
@@ -69,41 +118,8 @@ public class ColorPickerDialog extends Dialog {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
-                // Need to steal focus first with this hack (Thanks to Z-Man)
-                Frame frame = new Frame();
-                frame.setUndecorated(true);
-                frame.setOpacity(0);
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-                frame.toFront();
-                frame.setVisible(false);
-                frame.dispose();
-
-                // Call swing color picker
-                java.awt.Color color = JColorChooser.showDialog(null, "Pick your color", java.awt.Color.WHITE);
-                if (color != null) {
-
-                    String colorName = JOptionPane.showInputDialog("Name your color");
-
-                    if ((colorName != null) && (colorName.isEmpty() == false)) {
-                        // Verify if the color name is already in use
-                        if (colors.containsKey(colorName) == true) {
-                            game.showMsgDlg("Error", "Color name already in use!", game.screenMain.stage);
-                        } else {
-                            // Add the color (asuming RGBA)
-                            float[] components = color.getComponents(null);
-                            SkinColor newColor = new SkinColor(components[0], components[1], components[2], components[3]);
-                            newColor.skinName = colorName;
-                            colors.put(colorName, newColor);
-                            game.screenMain.saveToSkin();
-
-                            // update table
-                            updateTable();
-                        }
-                    }
-                }
-
+                // Call color picker
+                getStage().addActor(colorPicker.fadeIn());
             }
 
         });
@@ -146,6 +162,7 @@ public class ColorPickerDialog extends Dialog {
 
 
     }
+
 
     /**
      * Refresh table content with colors from the skin

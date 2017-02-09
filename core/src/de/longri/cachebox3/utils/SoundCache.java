@@ -19,10 +19,10 @@ package de.longri.cachebox3.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.SettingsAudio;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SoundCache {
     final static Logger log = LoggerFactory.getLogger(SoundCache.class);

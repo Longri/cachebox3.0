@@ -17,8 +17,8 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Draw a 3D Model at Position of an Actor
@@ -84,7 +84,7 @@ public class Actor3D extends Actor {
             Gdx.gl.glViewport((int) worldX, (int) worldY, (int) getWidth(), (int) getHeight());
 
             // finish depth test for previews 3D rendering like Map
-            Gdx.gl.glClear( GL20.GL_DEPTH_BUFFER_BIT );
+            Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
 
 
             //render 3d model

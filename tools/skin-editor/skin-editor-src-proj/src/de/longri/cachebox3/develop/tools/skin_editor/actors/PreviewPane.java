@@ -31,8 +31,8 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.oscim.backend.canvas.Bitmap;
 
 import java.io.IOException;

@@ -85,7 +85,7 @@ public class ClusteredList extends CB_List<MapWayPointItem> {
 
             if (inside.size() > 0) {
                 this.removeAll(inside);
-                Cluster newCluster = new Cluster(cluster, "New Cluster", null, null, null);
+                Cluster newCluster = new Cluster(cluster, "New Cluster", null);
                 newCluster.add(cluster);
                 newCluster.addAll(inside);
                 this.set(index, newCluster);

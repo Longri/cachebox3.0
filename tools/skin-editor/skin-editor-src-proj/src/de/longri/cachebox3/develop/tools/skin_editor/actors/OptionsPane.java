@@ -407,7 +407,6 @@ public class OptionsPane extends Table {
             try {
 
 
-
                 Actor actor = null;
 
                 // field type
@@ -430,6 +429,13 @@ public class OptionsPane extends Table {
                         if (resourceName == null) {
                             resourceName = game.skinProject.resolveObjectName(TextureRegion.class, drawable);
                         }
+
+                        if (drawable instanceof SvgNinePatchDrawable) {
+                            //override pref width and height
+                            ((SvgNinePatchDrawable) drawable).setAdditionalPrefWidth(50);
+                            ((SvgNinePatchDrawable) drawable).setAdditionalPrefHeight(50);
+                        }
+
                         buttonStyle.imageUp = drawable;
                     } else {
                         buttonStyle.up = game.skin.getDrawable("default-rect");
@@ -437,7 +443,7 @@ public class OptionsPane extends Table {
                     }
 
                     actor = new ImageTextButton(resourceName, buttonStyle);
-                    ((ImageTextButton) actor).setClip(true);
+                    ((ImageTextButton) actor).setClip(false);
                     actor.addListener(new ChangeListener() {
 
                         @Override
@@ -515,8 +521,8 @@ public class OptionsPane extends Table {
                         buttonStyle.imageUp = new SpriteDrawable(new Sprite(texture));
                         pixmap.dispose();
                     } else {
-                        buttonStyle.up = game.skinProject.getDrawable("default-rect");
-                        buttonStyle.checked = game.skinProject.getDrawable("default-rect");
+                        buttonStyle.up = game.skin.getDrawable("default-rect");
+                        buttonStyle.checked = game.skin.getDrawable("default-rect");
                     }
 
                     actor = new ImageTextButton(resourceName, buttonStyle);
@@ -546,8 +552,8 @@ public class OptionsPane extends Table {
                         resourceName = game.skinProject.resolveObjectName(BitmapFont.class, font);
                         buttonStyle.font = font;
                     } else {
-                        buttonStyle.up = game.skinProject.getDrawable("default-rect");
-                        buttonStyle.checked = game.skinProject.getDrawable("default-rect");
+                        buttonStyle.up = game.skin.getDrawable("default-rect");
+                        buttonStyle.checked = game.skin.getDrawable("default-rect");
                     }
 
                     actor = new ImageTextButton(resourceName, buttonStyle);
@@ -578,8 +584,8 @@ public class OptionsPane extends Table {
                     if ((value != null) && (value != 0)) {
                         resourceName = String.valueOf(value);
                     } else {
-                        buttonStyle.up = game.skinProject.getDrawable("default-rect");
-                        buttonStyle.checked = game.skinProject.getDrawable("default-rect");
+                        buttonStyle.up = game.skin.getDrawable("default-rect");
+                        buttonStyle.checked = game.skin.getDrawable("default-rect");
                     }
 
                     actor = new ImageTextButton(resourceName, buttonStyle);
@@ -701,7 +707,7 @@ public class OptionsPane extends Table {
                     }
                 }
 
-                if (actor != null){
+                if (actor != null) {
 
                     // field name
 
@@ -715,7 +721,6 @@ public class OptionsPane extends Table {
                         tableFields.add(new Label(field.getName(), game.skin, "default")).left();
 
                     }
-
                     tableFields.add(actor).left().height(64).padRight(24).expandX().fillX();
                     tableFields.row();
                 }

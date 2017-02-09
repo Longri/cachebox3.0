@@ -23,8 +23,6 @@ import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.Box;
 import org.oscim.core.Point;
@@ -37,6 +35,8 @@ import org.oscim.renderer.bucket.SymbolBucket;
 import org.oscim.renderer.bucket.SymbolItem;
 import org.oscim.utils.TimSort;
 import org.oscim.utils.geom.GeometryUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -225,14 +225,17 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
                 continue;
             }
 
-            TextureRegion textureRegion = it.item.getMapSymbol(zoomLevel);
-            if (textureRegion == null) continue;
-            SymbolItem s = SymbolItem.pool.get();
-            s.set(it.x, it.y, textureRegion, true);
+            TextureRegion[] textureRegions = it.item.getMapSymbol(zoomLevel);
+            if (textureRegions == null) continue;
 
-            //set center offset
-            s.offset = CENTER_OFFSET;
-            mSymbolLayer.pushSymbol(s);
+            for (TextureRegion region : textureRegions) {
+                SymbolItem s = SymbolItem.pool.get();
+                s.set(it.x, it.y, region, true);
+
+                //set center offset
+                s.offset = CENTER_OFFSET;
+                mSymbolLayer.pushSymbol(s);
+            }
         }
 
         buckets.set(mSymbolLayer);

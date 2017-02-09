@@ -18,15 +18,13 @@ package com.badlogic.gdx.sqlite.desktop;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabase;
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.logging.Logger;
 import de.longri.cachebox3.sqlite.Database.Parameters;
-import de.longri.cachebox3.utils.exceptions.NotImplementedException;
-import de.longri.cachebox3.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.Map.Entry;

@@ -26,8 +26,8 @@ public class Cluster extends MapWayPointItem {
     private final ClusteredList includedClusters = new ClusteredList();
     private Coordinate centerCoordinate;
 
-    public Cluster(Coordinate pos, String name, TextureRegion small, TextureRegion middle, TextureRegion large) {
-        super(pos, name, small, middle, large);
+    public Cluster(Coordinate pos, String name, Regions regions) {
+        super(pos, name, regions);
     }
 
 

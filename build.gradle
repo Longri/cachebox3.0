@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.0'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.0'
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M1'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M3'
     }
 }
 
@@ -27,7 +27,9 @@ allprojects {
         aiVersion = '1.8.0'
         visUiVersion = '1.2.5'
         vtmVersion = 'master-SNAPSHOT'
+        slf4jLibgdxVersion = '1.9.5-SNAPSHOT'
     }
+
 
     repositories {
         mavenLocal()
@@ -71,10 +73,11 @@ project(":gps-simulator") {
 
     dependencies {
         compile project(":core")
-        compile 'org.mapsforge:mapsforge-core:0.6.1'
-        compile 'org.mapsforge:mapsforge-map:0.6.1'
-        compile 'org.mapsforge:mapsforge-map-reader:0.6.1'
-        compile 'org.mapsforge:mapsforge-map-awt:0.6.1'
+        compile 'org.mapsforge:mapsforge-core:0.7.0'
+        compile 'org.mapsforge:mapsforge-themes:0.7.0'
+        compile 'org.mapsforge:mapsforge-map:0.7.0'
+        compile 'org.mapsforge:mapsforge-map-reader:0.7.0'
+        compile 'org.mapsforge:mapsforge-map-awt:0.7.0'
         compile 'com.kitfox.svg:svg-salamander:1.0'
         compile 'net.sf.kxml:kxml2:2.3.0'
 
@@ -109,6 +112,8 @@ project(":skin-editor-src-proj") {
         compile "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
         compile "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
         compile "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
+
+        compile "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
 
         //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -155,6 +160,8 @@ project(":android") {
         compile "org.mapsforge:vtm-android:$vtmVersion:natives-x86"
         compile "org.mapsforge:vtm-android:$vtmVersion:natives-x86_64"
 
+        compile "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+
         //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])
     }
@@ -189,6 +196,11 @@ project(":core") {
     apply plugin: "java"
     apply plugin: 'org.junit.platform.gradle.plugin'
 
+    junitPlatform {
+        platformVersion = "1.0.0-M3"
+    }
+
+
     dependencies {
         compile 'org.slf4j:slf4j-api:1.7.21'
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -202,6 +214,8 @@ project(":core") {
         compile "org.mapsforge:vtm:$vtmVersion"
         compile "org.mapsforge:vtm-gdx:$vtmVersion"
         compile "org.mapsforge:vtm-themes:$vtmVersion"
+
+        compile "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
 
         //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])

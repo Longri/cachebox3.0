@@ -32,11 +32,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.utils.exceptions.NotImplementedException;
 import de.longri.cachebox3.utils.texturepacker.TexturePacker_Base;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.MalformedURLException;

@@ -15,15 +15,10 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.kotcrab.vis.ui.VisUI;
-import de.longri.cachebox3.gui.widgets.ColorDrawable;
-import de.longri.cachebox3.gui.widgets.MapCompass;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
-import org.oscim.backend.canvas.Bitmap;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 27.07.16.
@@ -31,53 +26,29 @@ import org.oscim.backend.canvas.Bitmap;
 public class TestView extends AbstractView {
     final static Logger log = LoggerFactory.getLogger(TestView.class);
 
-
-    public static class TestStyle {
-        public Bitmap region;
-    }
-
-
-    MapCompass mapCompass;
-    TestStyle style;
+    VisTextButton test;
 
     public TestView() {
         super("TestView");
 
     }
 
-
     protected void create() {
         this.clear();
-
-        mapCompass = new MapCompass(getWidth() / 2, getWidth() / 2);
-
-        style = VisUI.getSkin().get("default", TestStyle.class);
-
-
-        this.addActor(mapCompass);
-
-
-        ColorDrawable backgroundDrawable = new ColorDrawable(Color.FOREST);
-        mapCompass.setDebug(true);
-        mapCompass.setPosition(30, 30);
-
 
     }
 
 
     @Override
     public void onShow() {
-        create();
-        mapCompass.addAction(Actions.moveTo(100, 200, 5));
+
     }
 
 
     @Override
     public void draw(Batch batch, float parentColor) {
         super.draw(batch, parentColor);
-
     }
-
 
     @Override
     public void dispose() {

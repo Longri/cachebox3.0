@@ -122,7 +122,13 @@ public class SavableSvgSkin extends SvgSkin {
 
             String name = item.getName();
             json.writeObjectStart(name);
+
             ObjectMap<String, Object> typeResources = resources.get(item);
+
+            if (item == BitmapFont.class) {
+                ObjectMap<String, Object> addTypeResources = resources.get(SkinFont.class);
+                if (addTypeResources != null) typeResources.putAll(addTypeResources);
+            }
 
 
             // Build a temporary array for string keys to prevent nested
@@ -170,6 +176,7 @@ public class SavableSvgSkin extends SvgSkin {
                         }
                     }
 
+                    if (field.isStatic()) continue;
 
                     try {
 

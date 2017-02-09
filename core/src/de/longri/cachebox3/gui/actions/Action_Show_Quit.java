@@ -24,9 +24,9 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.translation.Translation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class Action_Show_Quit extends AbstractAction {

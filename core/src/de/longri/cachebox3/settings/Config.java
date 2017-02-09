@@ -15,14 +15,10 @@
  */
 package de.longri.cachebox3.settings;
 
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
-import de.longri.cachebox3.settings.types.PlatformSettings;
-import de.longri.cachebox3.settings.types.SettingEncryptedString;
-import de.longri.cachebox3.settings.types.SettingStoreType;
-import de.longri.cachebox3.settings.types.SettingString;
-import de.longri.cachebox3.settings.types.SettingsList;
+import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.sqlite.Database;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 

@@ -38,15 +38,12 @@ import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
 import de.longri.cachebox3.gui.widgets.Slider;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
-import org.oscim.backend.CanvasAdapter;
-import org.oscim.core.Tile;
-import org.oscim.renderer.bucket.PolygonBucket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
@@ -71,11 +68,9 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         super("ViewManager");
 
         log.info("ScaleFactor:" + Float.toString(CB.getScaledFloat(1)));
-        log.info("Width:"+ Float.toString(Gdx.graphics.getWidth()));
-        log.info("Height:"+ Float.toString(Gdx.graphics.getHeight()));
-        log.info("PPI:"+ Float.toString(Gdx.graphics.getPpiX()));
-
-
+        log.info("Width:" + Float.toString(Gdx.graphics.getWidth()));
+        log.info("Height:" + Float.toString(Gdx.graphics.getHeight()));
+        log.info("PPI:" + Float.toString(Gdx.graphics.getPpiX()));
 
 
         this.main = main;

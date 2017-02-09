@@ -34,31 +34,9 @@ import com.badlogic.gdx.utils.Array;
  */
 public class SystemFonts {
 
-	private Array<String> fontPaths = new Array<String>();
+	public Array<String> fontPaths = new Array<String>();
 	public HashMap<String, File> fonts = new HashMap<String, File>();
-	
-	/**
-	 * 
-	 */
-	public SystemFonts() {
-	
-		String osName = System.getProperty("os.name");
-		if (osName.equals("Linux")) {
-			
-			fontPaths.add("/usr/share/fonts/");
-			fontPaths.add("~/.fonts/");
-			
-		} else if (osName.contains("Windows")) { 
-			
-			fontPaths.add("c:\\Windows\\Fonts\\");
-			
-		} else { // Mac OS X
-			
-			fontPaths.add("/Network/Library/Fonts/");
-			fontPaths.add("~/Library/Fonts/");
-		}
-		
-	}
+
 	
 	/**
 	 * Perform a search for fonts in the OS folders

@@ -34,7 +34,7 @@ public class SvgNinePatchDrawable extends BaseDrawable {
 
     public String name;
     private int left, right, top, bottom;
-//    private int leftWidth, rightWidth, topHeight, bottomHeight;
+    private float additionalPrefWidth = 0, additionalPrefHeight = 0;
     public SvgNinePatchDrawableUnScaledValues values;
 
     public SvgNinePatchDrawable() {
@@ -101,11 +101,22 @@ public class SvgNinePatchDrawable extends BaseDrawable {
     }
 
     public float getMinWidth() {
-        return left + right;
+        return left + right + additionalPrefWidth;
     }
 
     public float getMinHeight() {
-        return top + bottom;
+        return top + bottom + additionalPrefHeight;
     }
+
+
+    public void setAdditionalPrefWidth(float minWidth) {
+        this.additionalPrefWidth = minWidth - (left + right);
+    }
+
+
+    public void setAdditionalPrefHeight(float minHeight) {
+        this.additionalPrefHeight = minHeight - (top + bottom);
+    }
+
 
 }

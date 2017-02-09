@@ -17,9 +17,9 @@ package de.longri.cachebox3.locator.geocluster;
 
 
 import com.badlogic.gdx.scenes.scene2d.ui.ClusteredList;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import de.longri.cachebox3.utils.lists.CancelRunable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 21.12.16.

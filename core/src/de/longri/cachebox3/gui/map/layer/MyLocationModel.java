@@ -25,8 +25,6 @@ import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.logging.Logger;
-import de.longri.cachebox3.logging.LoggerFactory;
 import org.oscim.backend.GL;
 import org.oscim.core.MapPosition;
 import org.oscim.core.Tile;
@@ -37,6 +35,8 @@ import org.oscim.map.Viewport;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.LayerRenderer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.oscim.backend.GLAdapter.gl;
 
