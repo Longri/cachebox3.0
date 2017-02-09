@@ -46,7 +46,7 @@ class ThreadStackTest {
         public void run() {
             stringBuilder.append("Start Runnable " + name + "\n");
             int count = 0;
-            while (!cancel && count < 50) {
+            while (!cancel && count < 20) {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
@@ -55,7 +55,7 @@ class ThreadStackTest {
                 count++;
             }
 
-            if (count < 50) {
+            if (count < 20) {
                 stringBuilder.append("Cancel Runnable " + name + "\n");
                 stringBuilder.append("\n");
             } else {
