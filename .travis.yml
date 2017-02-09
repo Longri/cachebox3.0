@@ -4,5 +4,6 @@ jdk: oraclejdk8
 global: GRADLE_OPTS="-Xmx2048m"
 before_install: chmod +x gradlew
 before_script: chmod +x gradlew
-script: ./gradlew clean build --refresh-dependencies
-
+script:
+- gradle core:clean
+- gradle core:build
