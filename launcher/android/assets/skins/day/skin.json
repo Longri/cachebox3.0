@@ -400,6 +400,18 @@
       "path": "svg/myterie.svg",
       "scale": 0.15
     },
+    "mapMystery0": {
+      "path": "svg/mapMystery0.svg",
+      "scale": 0.25
+    },
+    "mapMystery1": {
+      "path": "svg/mapMystery1.svg",
+      "scale": 0.09
+    },
+    "mapMystery2": {
+      "path": "svg/mapMystery2.svg",
+      "scale": 0.15
+    },
     "mapParkingArea": {
       "path": "svg/mapParkingArea.svg",
       "scale": 0.15
@@ -434,6 +446,30 @@
     },
     "mapSolved": {
       "path": "svg/solved.svg",
+      "scale": 0.15
+    },
+    "mapSolved0": {
+      "path": "svg/mapSolved0.svg",
+      "scale": 0.25
+    },
+    "mapSolved1": {
+      "path": "svg/mapSolved1.svg",
+      "scale": 0.12
+    },
+    "mapSolved2": {
+      "path": "svg/mapSolved2.svg",
+      "scale": 0.15
+    },
+    "mapStar0": {
+      "path": "svg/mapStar0.svg",
+      "scale": 0.25
+    },
+    "mapStar1": {
+      "path": "svg/mapStar1.svg",
+      "scale": 0.09
+    },
+    "mapStar2": {
+      "path": "svg/mapStar2.svg",
       "scale": 0.15
     },
     "mapTraditional": {
@@ -1131,6 +1167,11 @@
       "middle": "mapMultiQuestion1",
       "large": "mapMultiQuestion2"
     },
+    "mapMystery": {
+      "small": "mapMystery0",
+      "middle": "mapMystery1",
+      "large": "mapMystery2"
+    },
     "mapParkingArea": {
       "small": "mapParkingArea0",
       "middle": "mapParkingArea1",
@@ -1140,6 +1181,16 @@
       "small": "mapReferencePoint0",
       "middle": "mapReferencePoint1",
       "large": "mapReferencePoint2"
+    },
+    "mapSolved": {
+      "small": "mapSolved0",
+      "middle": "mapSolved1",
+      "large": "mapSolved2"
+    },
+    "mapStar": {
+      "small": "mapStar0",
+      "middle": "mapStar1",
+      "large": "mapStar2"
     },
     "mapTraditional": {
       "small": "mapTraditional0",

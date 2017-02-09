@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="258" height="258" viewBox="0 0 258.00 258.00" enable-background="new 0 0 258.00 258.00" xml:space="preserve">
+	<radialGradient id="SVGID_Fill1_" cx="178.495" cy="213.639" r="199.244" gradientUnits="userSpaceOnUse" gradientTransform="rotate(7.720263 178.495117 213.638733)">
+		<stop offset="0" stop-color="#C7C400" stop-opacity="1"/>
+		<stop offset="0.387213" stop-color="#BEAD00" stop-opacity="1"/>
+		<stop offset="0.520927" stop-color="#B69600" stop-opacity="1"/>
+		<stop offset="0.706977" stop-color="#E88500" stop-opacity="1"/>
+		<stop offset="0.916279" stop-color="#EEB100" stop-opacity="1"/>
+		<stop offset="0.986046" stop-color="#F4DD00" stop-opacity="1"/>
+	</radialGradient>
+	<path fill="url(#SVGID_Fill1_)" stroke-width="4" stroke-linejoin="round" stroke="#FC9100" stroke-opacity="1" d="M 194.547,225.465L 169.226,149.117L 234.195,101.692L 153.76,102.181L 128.733,25.7363L 104.341,102.386L 23.9047,102.565L 89.2655,149.449L 64.5797,226.004L 129.366,178.33L 194.547,225.465 Z "/>
+	<radialGradient id="SVGID_Fill2_" cx="176.659" cy="213.24" r="199.244" gradientUnits="userSpaceOnUse" gradientTransform="rotate(7.720300 176.659180 213.240051)">
+		<stop offset="0" stop-color="#C7C400" stop-opacity="1"/>
+		<stop offset="0.387213" stop-color="#BEAD00" stop-opacity="1"/>
+		<stop offset="0.520927" stop-color="#B69600" stop-opacity="1"/>
+		<stop offset="0.706977" stop-color="#E88500" stop-opacity="1"/>
+		<stop offset="0.916279" stop-color="#EEB100" stop-opacity="1"/>
+		<stop offset="0.986046" stop-color="#F4DD00" stop-opacity="1"/>
+	</radialGradient>
+	<path fill="url(#SVGID_Fill2_)" stroke-width="7" stroke-linejoin="round" stroke="#5B3400" stroke-opacity="1" d="M 192.711,225.066L 167.39,148.718L 232.359,101.294L 151.924,101.782L 126.897,25.3376L 102.505,101.987L 22.0687,102.167L 87.4296,149.05L 62.744,225.606L 127.53,177.932L 192.711,225.066 Z "/>
+</svg>
