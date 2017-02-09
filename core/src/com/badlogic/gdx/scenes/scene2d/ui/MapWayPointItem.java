@@ -42,7 +42,13 @@ public class MapWayPointItem extends Coordinate {
         this.dataObject = obj;
         cachedHash = hashCode();
 
-        // extract regions
+        // extract regions if regions not NULL
+        if (regions == null){
+            small = null;
+            middle = null;
+            large = null;
+            return;
+        }
         Array<TextureRegion> smallList = new Array<TextureRegion>(new TextureRegion[0]);
         Array<TextureRegion> middleList = new Array<TextureRegion>(new TextureRegion[0]);
         Array<TextureRegion> largeList = new Array<TextureRegion>(new TextureRegion[0]);

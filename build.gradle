@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.0'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.0'
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M1'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M3'
     }
 }
 
@@ -29,6 +29,7 @@ allprojects {
         vtmVersion = 'master-SNAPSHOT'
         slf4jLibgdxVersion = '1.9.5-SNAPSHOT'
     }
+
 
     repositories {
         mavenLocal()
@@ -194,6 +195,11 @@ project(":ios") {
 project(":core") {
     apply plugin: "java"
     apply plugin: 'org.junit.platform.gradle.plugin'
+
+    junitPlatform {
+        platformVersion = "1.0.0-M3"
+    }
+
 
     dependencies {
         compile 'org.slf4j:slf4j-api:1.7.21'
