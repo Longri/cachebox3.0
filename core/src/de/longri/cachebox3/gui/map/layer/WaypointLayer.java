@@ -171,10 +171,10 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                     TextureRegion middleDisabled = disabledStyle.middle != null ? textureRegionMap.get(((GetName) disabledStyle.middle).getName()) : null;
                     TextureRegion largeDisabled = disabledStyle.large != null ? textureRegionMap.get(((GetName) disabledStyle.large).getName()) : null;
 
-                    boolean hasSelectedWP = CB.getSelectedWaypoint() == null;
+                    boolean hasSelectedWP = CB.getSelectedWaypoint() != null;
                     for (Cache cache : Database.Data.Query) {
 
-                        boolean dis = cache.isArchived() || cache.isAvailable();
+                        boolean dis = cache.isArchived() || !cache.isAvailable();
                         boolean sel = !hasSelectedWP && CB.isSelectedCache(cache);
                         try {
                             MapWayPointItemStyle style = getClusterSymbolsByCache(cache);
