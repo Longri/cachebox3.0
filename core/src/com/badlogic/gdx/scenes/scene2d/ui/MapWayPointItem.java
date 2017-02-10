@@ -28,7 +28,7 @@ import java.util.Arrays;
 public class MapWayPointItem extends Coordinate {
     private final static Logger log = LoggerFactory.getLogger(MapWayPointItem.class);
 
-    private final Object dataObject; // Cache.class or WayPoint.class
+    public final Object dataObject; // Cache.class or WayPoint.class
 
     final GeoPoint geoPoint;
     private GeoBoundingBoxInt bounds;

@@ -17,6 +17,7 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import org.oscim.awt.DesktopRealSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
 
 import java.io.IOException;
@@ -45,7 +46,6 @@ public class DesktopPlatformConnector extends PlatformConnector {
 
     @Override
     public Bitmap getRealScaledSVG(String name, InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {
-
         DesktopRealSvgBitmap bmp = new DesktopRealSvgBitmap(stream, scaleType, scaleValue);
         bmp.name = name;
         return bmp;

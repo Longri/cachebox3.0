@@ -25,6 +25,7 @@ import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Waypoint;
@@ -38,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * Created by Longri on 20.07.2016.
  */
 public class CB {
-    static Logger log = LoggerFactory.getLogger(CB.class);
+    static final Logger log = LoggerFactory.getLogger(CB.class);
 
     public static final int CurrentRevision = 20160806;
     public static final String CurrentVersion = "0.1.";
@@ -200,7 +201,6 @@ public class CB {
             // speichere selektierten Cache, da nicht alles über die SelectedCacheEventList läuft
             Config.LastSelectedCache.setValue(CB.getSelectedCache().getGcCode());
             Config.AcceptChanges();
-            checkLogger();
             log.debug("LastSelectedCache = " + CB.getSelectedCache().getGcCode());
         }
 
@@ -220,10 +220,16 @@ public class CB {
     }
 
     public static void setSelectedCache(Cache cache) {
+
         selectedCache = cache;
+        if (cache == null){
+            log.debug("Set selected Cache to NULL");
+        }else{
+            log.debug("Set selected Cache: " + cache.toString());
+        }
 
         //call selected cache changed event
-        SelectedCacheEventList.Call(selectedCache, selectedWaypoint);
+        SelectedCacheEventList.Call(selectedCache, null);
 
     }
 
@@ -237,6 +243,8 @@ public class CB {
             if (cacheHistory.length() > 120) {
                 cacheHistory = cacheHistory.substring(0, cacheHistory.lastIndexOf(","));
             }
+        }else{
+            log.debug("Set selected WP: " + waypoint.toString());
         }
     }
 
@@ -250,7 +258,6 @@ public class CB {
     public static void setSelectedWaypoint(Cache cache, Waypoint waypoint, boolean changeAutoResort) {
 
         if (cache == null) {
-            checkLogger();
             log.info("[CB]setSelectedWaypoint: cache=null");
             selectedCache = null;
             selectedWaypoint = null;
@@ -262,7 +269,6 @@ public class CB {
             selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
         }
         selectedCache = cache;
-        checkLogger();
         log.info("[CB]setSelectedWaypoint: cache=" + cache.getGcCode());
         selectedWaypoint = waypoint;
 
@@ -359,9 +365,7 @@ public class CB {
         });
     }
 
-    private static void checkLogger() {
-        if (log == null) {
-            log = LoggerFactory.getLogger(CB.class);
-        }
+    public static Cache getCacheFromId(long cacheId) {
+        return Database.Data.Query.GetCacheById(cacheId);
     }
 }
