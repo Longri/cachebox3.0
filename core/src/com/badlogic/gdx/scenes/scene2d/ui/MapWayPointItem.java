@@ -54,7 +54,10 @@ public class MapWayPointItem extends Coordinate {
         Array<TextureRegion> largeList = new Array<TextureRegion>(new TextureRegion[0]);
 
 
+        boolean isSelected = false;
+
         if (regions.selectedOverlay != null) {
+            isSelected = true;
             if (regions.selectedOverlay.small != null) smallList.add(regions.selectedOverlay.small);
             if (regions.selectedOverlay.middle != null) middleList.add(regions.selectedOverlay.middle);
             if (regions.selectedOverlay.large != null) largeList.add(regions.selectedOverlay.large);
@@ -71,9 +74,22 @@ public class MapWayPointItem extends Coordinate {
         largeList.add(regions.normal.large);
 
 
-        small = smallList.shrink();
-        middle = middleList.shrink();
-        large = largeList.shrink();
+        while (smallList.removeValue(null, true)) ;
+        while (middleList.removeValue(null, true)) ;
+        while (largeList.removeValue(null, true)) ;
+
+
+
+        if(isSelected){
+            // set to large icons
+            small = largeList.shrink();
+            middle = largeList.shrink();
+            large = largeList.shrink();
+        }else{
+            small = smallList.shrink();
+            middle = middleList.shrink();
+            large = largeList.shrink();
+        }
 
     }
 

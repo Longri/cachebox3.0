@@ -45,9 +45,9 @@ public class SelectedCacheEventList {
         boolean change = true;
 
         if (lastSelectedCache != null) {
-            if (lastSelectedCache == selectedCache) {
+            if (lastSelectedCache.equals(selectedCache)) {
                 if (lastSelectedWayPoint != null) {
-                    if (lastSelectedWayPoint == waypoint)
+                    if (lastSelectedWayPoint.equals(waypoint))
                         change = false;
                 } else {
                     if (waypoint == null)

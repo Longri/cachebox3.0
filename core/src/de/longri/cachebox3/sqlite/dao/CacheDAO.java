@@ -121,9 +121,11 @@ public class CacheDAO {
             return true;
         cache.detail = new CacheDetail();
 
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(SQL_GET_DETAIL_FROM_ID, new String[]{String.valueOf(cache.Id)});
+        SQLiteGdxDatabaseCursor reader = null;
 
         try {
+            reader = Database.Data.rawQuery(SQL_GET_DETAIL_FROM_ID, new String[]{String.valueOf(cache.Id)});
+
             if (reader != null && reader.getCount() > 0) {
                 reader.moveToFirst();
                 readDetailFromCursor(reader, cache.detail, false, false);
@@ -138,7 +140,6 @@ public class CacheDAO {
         } catch (Exception e) {
             if (reader != null)
                 reader.close();
-            e.printStackTrace();
             return false;
         }
     }

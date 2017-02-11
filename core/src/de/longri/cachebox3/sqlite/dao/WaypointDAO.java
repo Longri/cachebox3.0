@@ -18,7 +18,6 @@ package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.Utils;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Database.Parameters;
 import de.longri.cachebox3.types.Cache;
@@ -133,7 +132,7 @@ public class WaypointDAO {
     public Waypoint getWaypoint(SQLiteGdxDatabaseCursor reader, boolean full) {
         Waypoint WP = null;
 
-        WP = new Waypoint(reader.getDouble(2),reader.getDouble(3),full);
+        WP = new Waypoint(reader.getDouble(2), reader.getDouble(3), full);
 
         WP.setGcCode(reader.getString(0));
         WP.CacheId = reader.getLong(1);
@@ -236,19 +235,21 @@ public class WaypointDAO {
         sqlState.append("  where CacheId = ?");
 
         SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(sqlState.toString(), new String[]{String.valueOf(CacheID)});
-        reader.moveToFirst();
-        while (!reader.isAfterLast()) {
-            Waypoint wp = getWaypoint(reader, Full);
-            if (wp.CacheId != aktCacheID) {
-                aktCacheID = wp.CacheId;
-                wpList = new CB_List<Waypoint>();
+        if (reader != null) {
+            reader.moveToFirst();
+            while (!reader.isAfterLast()) {
+                Waypoint wp = getWaypoint(reader, Full);
+                if (wp.CacheId != aktCacheID) {
+                    aktCacheID = wp.CacheId;
+                    wpList = new CB_List<Waypoint>();
+
+                }
+                wpList.add(wp);
+                reader.moveToNext();
 
             }
-            wpList.add(wp);
-            reader.moveToNext();
-
+            reader.close();
         }
-        reader.close();
 
         return wpList;
     }
