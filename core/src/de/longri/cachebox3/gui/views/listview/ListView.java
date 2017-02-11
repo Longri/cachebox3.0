@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import com.badlogic.gdx.utils.*;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
-import org.slf4j.*;
+import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.NONE;
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.SINGLE;
@@ -61,21 +61,67 @@ public class ListView extends WidgetGroup {
     private boolean mustAdd = false;
     private boolean needsLayout = true;
 
+    private final static int SAME_HEIGHT_INITIAL_COUNT = 10;
+    private final boolean itemsHaveSameHeight;
+
     public SnapshotArray<ListViewItem> items() {
         return itemViews;
     }
+
+    //##################################################################
+    //
+    // Constructors
+    //
+    //##################################################################
+    public ListView() {
+        this(false);
+    }
+
+    public ListView(boolean dontDisposeItems) {
+        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems, false);
+    }
+
+    public ListView(Adapter listViewAdapter) {
+        this(listViewAdapter, false);
+    }
+
+    public ListView(Adapter listViewAdapter, boolean dontDisposeItems) {
+        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems, false);
+        this.adapter = listViewAdapter;
+        this.listCount = adapter.getCount();
+    }
+
+    public ListView(Adapter listViewAdapter, boolean dontDisposeItems, boolean itemsHaveSameHeight) {
+        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems, itemsHaveSameHeight);
+        this.adapter = listViewAdapter;
+        this.listCount = adapter.getCount();
+    }
+
+    private ListView(ListView.ListViewStyle style, boolean dontDisposeItems, boolean itemsHaveSameHeight) {
+        this.style = style;
+        this.dontDisposeItems = dontDisposeItems;
+        this.itemsHaveSameHeight = itemsHaveSameHeight;
+        setLayoutEnabled(true);
+    }
+
+
+    //##################################################################
+
 
     public void setSelectedItem(int selectedIndex) {
         if (itemViews != null && itemViews.size > 0) selectedItemList.add(itemViews.get(selectedIndex));
     }
 
-    public void dispose() {
+    public synchronized void dispose() {
 
-        for (ListViewItem item : itemViews) {
+        Object[] tmpItems = itemViews.begin();
+        for (int i = 0, n = tmpItems.length; i < n; i++) {
+            ListViewItem item = (ListViewItem) tmpItems[i];
             if (item instanceof Disposable) {
                 item.dispose();
             }
         }
+        itemViews.end();
 
         itemViews.clear();
         clearList.clear();
@@ -92,12 +138,15 @@ public class ListView extends WidgetGroup {
             scrollPane = null;
         }
 
-        for (Actor item : itemGroup.getChildren()) {
+        Object[] childrens = itemGroup.getChildren().begin();
+        for (int i = 0, n = childrens.length; i < n; i++) {
+            Actor item = (Actor) childrens[i];
             itemGroup.removeActor(item);
             if (item instanceof Disposable) {
                 ((Disposable) item).dispose();
             }
         }
+        itemGroup.getChildren().end();
         itemGroup.clearChildren();
         itemGroup.clearActions();
         itemGroup.clearListeners();
@@ -122,35 +171,6 @@ public class ListView extends WidgetGroup {
     public void removeSelectionChangedEventListner(SelectionChangedEvent event) {
         changedEventListeners.removeValue(event, true);
     }
-
-    public ListView() {
-        this(false);
-    }
-
-    public ListView(boolean dontDisposeItems) {
-        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems);
-    }
-
-    public ListView(Adapter listViewAdapter) {
-        this(listViewAdapter, false);
-    }
-
-    public ListView(Adapter listViewAdapter, boolean dontDisposeItems) {
-        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems);
-        this.adapter = listViewAdapter;
-        this.listCount = adapter.getCount();
-    }
-
-    private ListView(ListView.ListViewStyle style) {
-        this(style, false);
-    }
-
-    private ListView(ListView.ListViewStyle style, boolean dontDisposeItems) {
-        this.style = style;
-        this.dontDisposeItems = dontDisposeItems;
-        setLayoutEnabled(true);
-    }
-
 
     public void setAdapter(Adapter listViewAdapter) {
         this.adapter = listViewAdapter;
@@ -182,6 +202,7 @@ public class ListView extends WidgetGroup {
         if (atWork) return;
         atWork = true;
 
+
         if (!this.needsLayout) {
             super.layout();
             atWork = false;
@@ -189,7 +210,7 @@ public class ListView extends WidgetGroup {
         }
 
         if (adapter == null) return;
-
+        log.debug("Start Layout Items");
         this.clear();
         itemHeights.clear();
         itemYPos.clear();
@@ -204,15 +225,38 @@ public class ListView extends WidgetGroup {
         padTop = CB.getScaledFloat(style.padTop > 0 ? style.padTop : style.pad);
         padBottom = CB.getScaledFloat(style.padBottom > 0 ? style.padBottom : style.pad);
 
-        for (int i = 0; i < this.listCount; i++) {
-            addItem(i, false, -1);
+
+        completeHeight = 0;
+
+        if (itemsHaveSameHeight) {
+
+            //initial with only 10 items, for speedup initial
+            for (int i = 0; i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount); i++) {
+                addItem(i, false, -1);
+            }
+
+
+            float itemHeight = itemHeights.items[0];
+            completeHeight = itemHeight;
+            for (int i = 0; i < this.listCount; i++) {
+                if (i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount)) {
+                    completeHeight += itemHeights.items[i];
+                } else {
+                    completeHeight += itemHeight;
+                    itemHeights.add(itemHeight);
+                }
+
+            }
+        } else {
+            for (int i = 0; i < this.listCount; i++) {
+                addItem(i, false, -1);
+            }
+            //layout itemGroup
+            for (int i = 0; i < this.listCount; i++) { //calculate complete height of all Items
+                completeHeight += itemHeights.items[i];
+            }
         }
 
-        //layout itemGroup
-        completeHeight = 0;
-        for (int i = 0; i < itemHeights.size; i++) { //calculate complete hight of all Items
-            completeHeight += itemHeights.items[i];
-        }
 
         itemGroup.setWidth(this.getWidth());
         itemGroup.setHeight(completeHeight);
@@ -222,10 +266,15 @@ public class ListView extends WidgetGroup {
         float yPos = completeHeight;
 
         Actor[] actors = itemGroup.getChildren().items;
-        for (int i = 0; i < itemGroup.getChildren().size; i++) {// calculate Y position of all Items
+        for (int i = 0; i < this.listCount; i++) {// calculate Y position of all Items
             yPos -= itemHeights.get(i);
             itemYPos.add(yPos);
-            actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
+            if (itemsHaveSameHeight && i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount)) {
+                actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
+            } else if (!itemsHaveSameHeight) {
+                actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
+            }
+
         }
 
         scrollPane = new VisScrollPane(itemGroup, style);
@@ -240,6 +289,7 @@ public class ListView extends WidgetGroup {
         scrollPane.layout();
         needsLayout = false;
         atWork = false;
+        log.debug("Finish Layout Items");
     }
 
     private void addItem(final int index, final boolean reAdd, final float yPos) {
