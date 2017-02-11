@@ -218,13 +218,13 @@ class ThreadStackTest {
 
 
         runnables.pushAndStartWithCancelRunning(runnable1);
-        sleep(10);
+        sleep(20);
         runnables.pushAndStartWithCancelRunning(runnable2);
-        sleep(10);
+        sleep(20);
         runnables.pushAndStartWithCancelRunning(runnable3);
         sleep(100);
         runnables.pushAndStartWithCancelRunning(runnable4);
-        sleep(10);
+        sleep(20);
         runnables.pushAndStartWithCancelRunning(runnable5);
 
 
