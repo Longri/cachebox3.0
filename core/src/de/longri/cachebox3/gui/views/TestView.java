@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.kotcrab.vis.ui.widget.VisTextButton;
+import de.longri.cachebox3.gui.widgets.CoordinateButton;
+import de.longri.cachebox3.locator.Coordinate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,6 @@ import org.slf4j.LoggerFactory;
 public class TestView extends AbstractView {
     final static Logger log = LoggerFactory.getLogger(TestView.class);
 
-    VisTextButton test;
 
     public TestView() {
         super("TestView");
@@ -35,6 +35,16 @@ public class TestView extends AbstractView {
 
     protected void create() {
         this.clear();
+
+        Coordinate coordinate = new Coordinate(53.0, 14.0);
+
+        CoordinateButton coordinateButton = new CoordinateButton(coordinate);
+
+
+        this.addActor(coordinateButton);
+
+        coordinateButton.setBounds(20, 100, 300, 50);
+
 
     }
 
