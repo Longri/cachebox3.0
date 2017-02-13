@@ -48,6 +48,7 @@ public enum CacheTypes {
     MyParking(true), // = 20
     Munzee(true), // 21
     Giga(true), // 22
+    LabCache(true)
     ;
 
     private boolean isCache;
@@ -149,7 +150,7 @@ public enum CacheTypes {
         return new CacheWidget(this);
     }
 
-    public Drawable getDrawable() {
+    public Drawable getDrawable() { // TODO replace with Skin Style
         Drawable drawable;
 
         switch (this) {

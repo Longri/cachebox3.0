@@ -328,6 +328,18 @@
       "path": "svg/cito.svg",
       "scale": 0.15
     },
+    "mapCITO0": {
+      "path": "svg/mapCITO0.svg",
+      "scale": 0.2
+    },
+    "mapCITO1": {
+      "path": "svg/mapCITO1.svg",
+      "scale": 0.09
+    },
+    "mapCITO2": {
+      "path": "svg/mapCITO2.svg",
+      "scale": 0.15
+    },
     "mapCamera0": {
       "path": "svg/mapCamera0.svg",
       "scale": 0.2
@@ -410,6 +422,18 @@
     },
     "mapLetterbox": {
       "path": "svg/letterbox.svg",
+      "scale": 0.15
+    },
+    "mapLetterbox0": {
+      "path": "svg/mapLetterbox0.svg",
+      "scale": 0.2
+    },
+    "mapLetterbox1": {
+      "path": "svg/mapLetterbox1.svg",
+      "scale": 0.09
+    },
+    "mapLetterbox2": {
+      "path": "svg/mapLetterbox2.svg",
       "scale": 0.15
     },
     "mapMegaEvent1": {
@@ -568,8 +592,44 @@
       "path": "svg/mapTrailhead2.svg",
       "scale": 0.15
     },
+    "mapVirtual0": {
+      "path": "svg/mapVirtual0.svg",
+      "scale": 0.2
+    },
+    "mapVirtual1": {
+      "path": "svg/mapVirtual1.svg",
+      "scale": 0.09
+    },
+    "mapVirtual2": {
+      "path": "svg/mapVirtual2.svg",
+      "scale": 0.15
+    },
     "mapWherigo": {
       "path": "svg/whereigo.svg",
+      "scale": 0.15
+    },
+    "mapWherigo0": {
+      "path": "svg/mapWherigo0.svg",
+      "scale": 0.2
+    },
+    "mapWherigo1": {
+      "path": "svg/mapWherigo1.svg",
+      "scale": 0.09
+    },
+    "mapWherigo2": {
+      "path": "svg/mapWherigo2.svg",
+      "scale": 0.15
+    },
+    "mapWikipedia0": {
+      "path": "svg/mapWikipedia0.svg",
+      "scale": 0.2
+    },
+    "mapWikipedia1": {
+      "path": "svg/mapWikipedia1.svg",
+      "scale": 0.09
+    },
+    "mapWikipedia2": {
+      "path": "svg/mapWikipedia2.svg",
       "scale": 0.15
     },
     "mega": {
@@ -1074,29 +1134,39 @@
       "background": "button_bar_back"
     }
   },
-  "de.longri.cachebox3.gui.widgets.GestureButton$GestureButtonStyle": {
+  "de.longri.cachebox3.gui.skin.styles.GestureButtonStyle": {
     "cache": {
       "select": "cache_selected",
+      "hasMenu": "cm_icon",
+      "hasFilteredMenu": "cm_icon_filterd",
       "up": "cache",
       "down": "cache_pressed"
     },
     "db": {
       "select": "db_selected",
+      "hasMenu": "cm_icon",
+      "hasFilteredMenu": "cm_icon_filterd",
       "up": "db",
       "down": "db_pressed"
     },
     "misc": {
       "select": "misc_selected",
+      "hasMenu": "cm_icon",
+      "hasFilteredMenu": "cm_icon_filterd",
       "up": "misc",
       "down": "misc_pressed"
     },
     "nav": {
       "select": "nav_selected",
+      "hasMenu": "cm_icon",
+      "hasFilteredMenu": "cm_icon_filterd",
       "up": "nav",
       "down": "nav_pressed"
     },
     "tool": {
       "select": "tool_selected",
+      "hasMenu": "cm_icon",
+      "hasFilteredMenu": "cm_icon_filterd",
       "up": "tool",
       "down": "tool_pressed"
     }
@@ -1304,6 +1374,11 @@
       "middle": "disabledOverlay1",
       "large": "disabledOverlay2"
     },
+    "mapCITO": {
+      "small": "mapCITO0",
+      "middle": "mapCITO1",
+      "large": "mapCITO2"
+    },
     "mapCamera": {
       "small": "mapCamera0",
       "middle": "mapCamera1",
@@ -1333,6 +1408,11 @@
       "small": "mapGiga0",
       "middle": "mapGiga1",
       "large": "mapGiga2"
+    },
+    "mapLetterbox": {
+      "small": "mapLetterbox0",
+      "middle": "mapLetterbox1",
+      "large": "mapLetterbox2"
     },
     "mapMegaEvent": {
       "small": "mapGiga0",
@@ -1383,6 +1463,21 @@
       "small": "mapTrailhead0",
       "middle": "mapTrailhead1",
       "large": "mapTrailhead2"
+    },
+    "mapVirtual": {
+      "small": "mapVirtual0",
+      "middle": "mapVirtual1",
+      "large": "mapVirtual2"
+    },
+    "mapWherigo": {
+      "small": "mapWherigo0",
+      "middle": "mapWherigo1",
+      "large": "mapWherigo2"
+    },
+    "mapWikipedia": {
+      "small": "mapWikipedia0",
+      "middle": "mapWikipedia1",
+      "large": "mapWikipedia2"
     },
     "selectOverlay": {
       "small": "selectOverlay",
