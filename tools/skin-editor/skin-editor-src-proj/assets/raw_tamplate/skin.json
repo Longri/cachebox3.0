@@ -190,11 +190,11 @@
     },
     "default_button": {
       "path": "svg/default_button.svg",
-      "scale": 1
+      "scale": 0.5
     },
     "default_button_pressed": {
       "path": "svg/default_button_pressed.svg",
-      "scale": 1
+      "scale": 0.5
     },
     "deleteIcon": {
       "path": "svg/deleteIcon.svg",
@@ -215,6 +215,18 @@
     "dialog_title": {
       "path": "svg/dialog_title.svg",
       "scale": 1
+    },
+    "disabledOverlay0": {
+      "path": "svg/disabledOverlay0.svg",
+      "scale": 0.2
+    },
+    "disabledOverlay1": {
+      "path": "svg/disabledOverlay1.svg",
+      "scale": 0.09
+    },
+    "disabledOverlay2": {
+      "path": "svg/disabledOverlay2.svg",
+      "scale": 0.15
     },
     "docIcon": {
       "path": "svg/missingIcon.svg",
@@ -316,12 +328,44 @@
       "path": "svg/cito.svg",
       "scale": 0.15
     },
+    "mapCamera0": {
+      "path": "svg/mapCamera0.svg",
+      "scale": 0.2
+    },
+    "mapCamera1": {
+      "path": "svg/mapCamera1.svg",
+      "scale": 0.09
+    },
+    "mapCamera2": {
+      "path": "svg/mapCamera2.svg",
+      "scale": 0.15
+    },
     "mapEarth": {
       "path": "svg/earth.svg",
       "scale": 0.15
     },
+    "mapEarth0": {
+      "path": "svg/mapEarth0.svg",
+      "scale": 0.2
+    },
+    "mapEarth1": {
+      "path": "svg/mapEarth1.svg",
+      "scale": 0.09
+    },
+    "mapEarth2": {
+      "path": "svg/mapEarth2.svg",
+      "scale": 0.15
+    },
     "mapEvent": {
       "path": "svg/event.svg",
+      "scale": 0.15
+    },
+    "mapEvent1": {
+      "path": "svg/mapEvent1.svg",
+      "scale": 0.09
+    },
+    "mapEvent2": {
+      "path": "svg/mapEvent2.svg",
       "scale": 0.15
     },
     "mapFinal": {
@@ -352,8 +396,28 @@
       "path": "svg/mapFound2.svg",
       "scale": 0.15
     },
+    "mapGiga0": {
+      "path": "svg/mapGiga0.svg",
+      "scale": 0.2
+    },
+    "mapGiga1": {
+      "path": "svg/mapGiga1.svg",
+      "scale": 0.09
+    },
+    "mapGiga2": {
+      "path": "svg/mapGiga2.svg",
+      "scale": 0.15
+    },
     "mapLetterbox": {
       "path": "svg/letterbox.svg",
+      "scale": 0.15
+    },
+    "mapMegaEvent1": {
+      "path": "svg/mapMegaEvent1.svg",
+      "scale": 0.09
+    },
+    "mapMegaEvent2": {
+      "path": "svg/mapMegaEvent2.svg",
       "scale": 0.15
     },
     "mapMulti": {
@@ -400,6 +464,18 @@
       "path": "svg/myterie.svg",
       "scale": 0.15
     },
+    "mapMystery0": {
+      "path": "svg/mapMystery0.svg",
+      "scale": 0.25
+    },
+    "mapMystery1": {
+      "path": "svg/mapMystery1.svg",
+      "scale": 0.09
+    },
+    "mapMystery2": {
+      "path": "svg/mapMystery2.svg",
+      "scale": 0.15
+    },
     "mapParkingArea": {
       "path": "svg/mapParkingArea.svg",
       "scale": 0.15
@@ -434,6 +510,30 @@
     },
     "mapSolved": {
       "path": "svg/solved.svg",
+      "scale": 0.15
+    },
+    "mapSolved0": {
+      "path": "svg/mapSolved0.svg",
+      "scale": 0.25
+    },
+    "mapSolved1": {
+      "path": "svg/mapSolved1.svg",
+      "scale": 0.12
+    },
+    "mapSolved2": {
+      "path": "svg/mapSolved2.svg",
+      "scale": 0.15
+    },
+    "mapStar0": {
+      "path": "svg/mapStar0.svg",
+      "scale": 0.25
+    },
+    "mapStar1": {
+      "path": "svg/mapStar1.svg",
+      "scale": 0.09
+    },
+    "mapStar2": {
+      "path": "svg/mapStar2.svg",
       "scale": 0.15
     },
     "mapTraditional": {
@@ -540,6 +640,10 @@
       "path": "svg/regular.svg",
       "scale": 0.25
     },
+    "selectOverlay": {
+      "path": "svg/selectOverlay.svg",
+      "scale": 0.15
+    },
     "settings_icon": {
       "path": "svg/settings_icon.svg",
       "scale": 0.19
@@ -586,6 +690,18 @@
     },
     "toast_background": {
       "path": "svg/toast_background.svg",
+      "scale": 1
+    },
+    "toggleOff": {
+      "path": "svg/toggleOff.svg",
+      "scale": 1
+    },
+    "toggleOn": {
+      "path": "svg/toggleOn.svg",
+      "scale": 1
+    },
+    "togglePress": {
+      "path": "svg/togglePress.svg",
       "scale": 1
     },
     "tool": {
@@ -648,6 +764,11 @@
       "b": 1,
       "a": 1
     },
+    "coordinateValuesFocus": {
+      "r": 0.07450981,
+      "g": 0.54901963,
+      "a": 1
+    },
     "dialog_background": {
       "a": 0.8
     },
@@ -691,7 +812,7 @@
       "a": 0.7
     },
     "transparent_color": {
-      "a": 0
+      "a": 1
     }
   },
   "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
@@ -706,6 +827,10 @@
     }
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "coordinateValueFont": {
+      "font": "fonts/DroidSans-Bold.ttf",
+      "size": 24
+    },
     "normal_bold_font": {
       "font": "fonts/DroidSans-Bold.ttf",
       "size": 20
@@ -739,27 +864,38 @@
       "topHeight": 6,
       "bottomHeight": 6
     },
+    "default_button_9_Patch": {
+      "name": "default_button",
+      "left": 8,
+      "right": 8,
+      "top": 8,
+      "bottom": 8,
+      "leftWidth": 8,
+      "rightWidth": 8,
+      "topHeight": 8,
+      "bottomHeight": 8
+    },
     "drawable_default_button": {
       "name": "default_button",
-      "left": 15,
-      "right": 15,
-      "top": 15,
-      "bottom": 15,
-      "leftWidth": 13,
-      "rightWidth": 13,
-      "topHeight": 11,
-      "bottomHeight": 11
+      "left": 8,
+      "right": 8,
+      "top": 8,
+      "bottom": 8,
+      "leftWidth": 8,
+      "rightWidth": 8,
+      "topHeight": 8,
+      "bottomHeight": 8
     },
     "drawable_default_button_pressed": {
       "name": "default_button_pressed",
-      "left": 15,
-      "right": 15,
-      "top": 15,
-      "bottom": 15,
-      "leftWidth": 13,
-      "rightWidth": 13,
-      "topHeight": 11,
-      "bottomHeight": 11
+      "left": 8,
+      "right": 8,
+      "top": 8,
+      "bottom": 8,
+      "leftWidth": 8,
+      "rightWidth": 8,
+      "topHeight": 8,
+      "bottomHeight": 8
     },
     "drawable_dialog_center": {
       "name": "dialog_center",
@@ -869,6 +1005,39 @@
       "rightWidth": 5,
       "topHeight": 5,
       "bottomHeight": 5
+    },
+    "toggleOff_9_Patch": {
+      "name": "toggleOff",
+      "left": 13,
+      "right": 13,
+      "top": 13,
+      "bottom": 13,
+      "leftWidth": 13,
+      "rightWidth": 13,
+      "topHeight": 13,
+      "bottomHeight": 13
+    },
+    "toggleOn_9_Patch": {
+      "name": "toggleOn",
+      "left": 13,
+      "right": 13,
+      "top": 13,
+      "bottom": 13,
+      "leftWidth": 13,
+      "rightWidth": 13,
+      "topHeight": 13,
+      "bottomHeight": 13
+    },
+    "togglePress_9_Patch": {
+      "name": "togglePress",
+      "left": 13,
+      "right": 13,
+      "top": 13,
+      "bottom": 13,
+      "leftWidth": 13,
+      "rightWidth": 13,
+      "topHeight": 13,
+      "bottomHeight": 13
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
@@ -940,11 +1109,31 @@
     }
   },
   "com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle": {
+    "coordinate": {
+      "font": "normal_bold_font",
+      "fontColor": "font_color",
+      "up": "drawable_default_button",
+      "down": "drawable_default_button_pressed"
+    },
+    "coordinateValues": {
+      "font": "coordinateValueFont",
+      "fontColor": "font_color",
+      "overFontColor": "coordinateValuesFocus",
+      "up": "default_button_9_Patch",
+      "down": "drawable_default_button_pressed"
+    },
     "default": {
       "font": "normal_font",
       "fontColor": "font_color",
       "up": "drawable_default_button",
       "down": "drawable_default_button_pressed"
+    },
+    "toggle": {
+      "font": "normal_font",
+      "fontColor": "font_color",
+      "up": "toggleOff_9_Patch",
+      "down": "togglePress_9_Patch",
+      "checked": "toggleOn_9_Patch"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle": {
@@ -1110,7 +1299,26 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle": {
-    "disabledOverlay": {},
+    "disabledOverlay": {
+      "small": "disabledOverlay0",
+      "middle": "disabledOverlay1",
+      "large": "disabledOverlay2"
+    },
+    "mapCamera": {
+      "small": "mapCamera0",
+      "middle": "mapCamera1",
+      "large": "mapCamera2"
+    },
+    "mapEarth": {
+      "small": "mapEarth0",
+      "middle": "mapEarth1",
+      "large": "mapEarth2"
+    },
+    "mapEvent": {
+      "small": "mapGiga0",
+      "middle": "mapEvent1",
+      "large": "mapEvent2"
+    },
     "mapFinal": {
       "small": "mapFinal0",
       "middle": "mapFinal1",
@@ -1120,6 +1328,16 @@
       "small": "mapFound0",
       "middle": "mapFound1",
       "large": "mapFound2"
+    },
+    "mapGiga": {
+      "small": "mapGiga0",
+      "middle": "mapGiga1",
+      "large": "mapGiga2"
+    },
+    "mapMegaEvent": {
+      "small": "mapGiga0",
+      "middle": "mapMegaEvent1",
+      "large": "mapMegaEvent2"
     },
     "mapMulti": {
       "small": "mapMulti0",
@@ -1131,6 +1349,11 @@
       "middle": "mapMultiQuestion1",
       "large": "mapMultiQuestion2"
     },
+    "mapMystery": {
+      "small": "mapMystery0",
+      "middle": "mapMystery1",
+      "large": "mapMystery2"
+    },
     "mapParkingArea": {
       "small": "mapParkingArea0",
       "middle": "mapParkingArea1",
@@ -1140,6 +1363,16 @@
       "small": "mapReferencePoint0",
       "middle": "mapReferencePoint1",
       "large": "mapReferencePoint2"
+    },
+    "mapSolved": {
+      "small": "mapSolved0",
+      "middle": "mapSolved1",
+      "large": "mapSolved2"
+    },
+    "mapStar": {
+      "small": "mapStar0",
+      "middle": "mapStar1",
+      "large": "mapStar2"
     },
     "mapTraditional": {
       "small": "mapTraditional0",
@@ -1151,7 +1384,11 @@
       "middle": "mapTrailhead1",
       "large": "mapTrailhead2"
     },
-    "selectOverlay": {}
+    "selectOverlay": {
+      "small": "selectOverlay",
+      "middle": "selectOverlay",
+      "large": "selectOverlay"
+    }
   },
   "de.longri.cachebox3.gui.skin.styles.ScaledSize": {
     "button_height": {
@@ -1167,7 +1404,7 @@
       "value": 12
     },
     "margin": {
-      "value": 10
+      "value": 5
     }
   },
   "de.longri.cachebox3.gui.skin.styles.IconsStyle": {

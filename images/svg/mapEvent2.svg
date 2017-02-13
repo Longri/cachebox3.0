@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="258" height="258" viewBox="0 0 258.00 258.00" enable-background="new 0 0 258.00 258.00" xml:space="preserve">
+	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.5" y1="1.08111" x2="1.66222" y2="1.08111" gradientTransform="rotate(-90.000000 0.500000 1.081108)">
+		<stop offset="0" stop-color="#ABC4AB" stop-opacity="1"/>
+		<stop offset="0.771552" stop-color="#D5E1D5" stop-opacity="1"/>
+		<stop offset="1" stop-color="#FFFFFF" stop-opacity="1"/>
+	</linearGradient>
+	<path fill="url(#SVGID_Fill1_)" stroke-width="8" stroke-linecap="square" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 44,4L 214,4C 236.091,4 254,21.9086 254,43.9999L 254,214C 254,236.091 236.091,254 214,254L 44,254C 21.9084,254 4,236.091 4,214L 4,43.9999C 4,21.9086 21.9084,4 44,4 Z "/>
+	<g>
+		<path fill="#E4E4E1" fill-opacity="1" stroke-width="5" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" d="M 127.473,52.2324C 177.593,52.2324 218.223,80.4384 218.223,115.232C 218.223,130.151 210.754,143.858 198.27,154.65L 193.722,159.732L 183.722,166.732L 176.722,178.232L 169.722,192.232L 162.222,202.732L 157.222,201.732L 155.723,192.732L 154.462,175.399C 145.936,177.241 136.871,178.232 127.473,178.232C 77.353,178.232 36.7229,150.026 36.7229,115.232C 36.7229,80.4384 77.353,52.2324 127.473,52.2324 Z "/>
+		<path fill="#EFF487" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 196.222,77.6302C 180.183,63.1134 154.736,53.7324 126.085,53.7324C 77.5601,53.7324 38.2228,80.6429 38.2228,113.839C 38.2228,123.308 41.4231,132.265 47.1243,140.232L 67.6667,129.388C 63.233,123.933 60.733,117.757 60.733,111.215C 60.733,89.0845 89.342,71.144 124.633,71.144C 142.426,71.144 158.521,75.7046 170.107,83.0631L 196.222,77.6302 Z "/>
+		<ellipse fill="#FFFFFF" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" cx="126.223" cy="112.232" rx="66" ry="41.9999"/>
+		<rect x="84.7227" y="89.7321" fill="#BE7474" fill-opacity="1" stroke-width="2" stroke-linejoin="round" stroke="#CE9696" stroke-opacity="1" width="91.5" height="17"/>
+		<rect x="115.223" y="114.482" fill="#BE7474" fill-opacity="1" stroke-width="2" stroke-linejoin="round" stroke="#CE9696" stroke-opacity="1" width="60.3331" height="17"/>
+	</g>
+</svg>

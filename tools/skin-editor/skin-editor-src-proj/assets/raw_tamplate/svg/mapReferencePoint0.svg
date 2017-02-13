@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="258" height="258" viewBox="0 0 258.00 258.00" enable-background="new 0 0 258.00 258.00" xml:space="preserve">
-	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="1.03871" y1="0.5" x2="2.11613" y2="0.5" gradientTransform="rotate(180.000000 1.038710 0.500000)">
+	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="1.03871" y1="0.5" x2="2.11613" y2="0.5" gradientTransform="rotate(180.000000 1.038711 0.500000)">
 		<stop offset="0" stop-color="#052F73" stop-opacity="1"/>
 		<stop offset="1" stop-color="#3883FC" stop-opacity="1"/>
 	</linearGradient>
-	<ellipse fill="url(#SVGID_Fill1_)" stroke-width="8" stroke-linecap="square" stroke-linejoin="bevel" stroke="#1A5EC7" stroke-opacity="1" cx="126.787" cy="126.513" rx="90" ry="90.8107"/>
+	<ellipse fill="url(#SVGID_Fill1_)" stroke-width="8" stroke-linecap="square" stroke-linejoin="bevel" stroke="#1A5EC7" stroke-opacity="1" cx="126.789" cy="126.513" rx="90.0002" ry="90.8107"/>
 	<linearGradient id="SVGID_Fill2_" gradientUnits="objectBoundingBox" x1="1.03871" y1="0.499999" x2="2.11613" y2="0.499999" gradientTransform="rotate(180.000000 1.038711 0.499999)">
 		<stop offset="0" stop-color="#B4CAEE" stop-opacity="1"/>
 		<stop offset="1" stop-color="#FFFFFF" stop-opacity="1"/>

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="258" height="258" viewBox="0 0 258.00 258.00" enable-background="new 0 0 258.00 258.00" xml:space="preserve">
+	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.5" y1="1.08111" x2="1.66222" y2="1.08111" gradientTransform="rotate(-90.000000 0.500000 1.081108)">
+		<stop offset="0" stop-color="#FF0000" stop-opacity="0.407843"/>
+		<stop offset="1" stop-color="#EA5D2F" stop-opacity="0.407843"/>
+	</linearGradient>
+	<path fill="url(#SVGID_Fill1_)" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" d="M 42.4784,8.27417L 214.979,8.27417C 234.308,8.27417 249.979,23.9443 249.979,43.2742L 249.979,214.775C 249.979,234.105 234.308,249.775 214.979,249.775L 42.4784,249.775C 23.1483,249.775 7.47839,234.105 7.47839,214.775L 7.47839,43.2742C 7.47839,23.9443 23.1483,8.27417 42.4784,8.27417 Z "/>
+	<line fill="none" stroke-width="20" stroke-linecap="round" stroke-linejoin="bevel" stroke="#FF0000" stroke-opacity="1" x1="38.2285" y1="217.789" x2="222.229" y2="36.2891"/>
+</svg>

@@ -142,8 +142,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             log.debug("Readed " + Database.Data.Query.size() + "Caches into CacheList");
         }
 
-        // set selectedCache from lastselected Cache
-        CB.setSelectedCache(null);
+        // set selectedCache from last selected Cache
         String sGc = Config.LastSelectedCache.getValue();
         if (sGc != null && !sGc.equals("")) {
             for (int i = 0, n = Database.Data.Query.size(); i < n; i++) {

@@ -856,10 +856,11 @@ public class Database {
 
 
     public SQLiteGdxDatabaseCursor rawQuery(String sql, String[] args) {
+        if (myDB == null) return null;
         try {
             return myDB.rawQuery(sql, args);
         } catch (SQLiteGdxException e) {
-            e.printStackTrace();
+
         }
         return null;
     }

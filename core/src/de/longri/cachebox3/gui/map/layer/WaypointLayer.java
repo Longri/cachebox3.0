@@ -28,6 +28,8 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
+import de.longri.cachebox3.gui.events.SelectedCacheEvent;
+import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterRenderer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.locator.Coordinate;
@@ -65,20 +67,28 @@ import java.util.LinkedHashMap;
 /**
  * Created by Longri on 27.11.16.
  */
-public class WaypointLayer extends Layer implements GestureListener, CacheListChangedEventListener, Disposable {
+public class WaypointLayer extends Layer implements GestureListener, CacheListChangedEventListener, Disposable, SelectedCacheEvent {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
     private static final String ERROR_MSG = "No de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle registered with name: ";
-    private static final Bitmap defaultMarker = getClusterSymbol("myterie");
-
 
     private final ClusterRenderer mClusterRenderer;
-    private final ClusteredList mItemList;
+    final ClusteredList mItemList;
     private final Point clickPoint = new Point();
     private final Box mapVisibleBoundingBox = new Box();
     private final CB_List<MapWayPointItem> clickedItems = new CB_List<MapWayPointItem>();
     private final ThreadStack<ClusterRunnable> clusterWorker = new ThreadStack<ClusterRunnable>();
     private final LinkedHashMap<Object, TextureRegion> textureRegionMap;
+
+    private final MapWayPointItemStyle selectedStyle;
+    private final TextureRegion smallSelected;
+    private final TextureRegion middleSelected;
+    private final TextureRegion largeSelected;
+
+    private final MapWayPointItemStyle disabledStyle;
+    private final TextureRegion smallDisabled;
+    private final TextureRegion middleDisabled;
+    private final TextureRegion largeDisabled;
 
 
     private double lastDistance = Double.MIN_VALUE;
@@ -88,7 +98,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     public WaypointLayer(Map map) {
         super(map);
-        mClusterRenderer = new ClusterRenderer(this, defaultMarker);
+        mClusterRenderer = new ClusterRenderer(this, null);
         mRenderer = mClusterRenderer;
         mItemList = new ClusteredList();
         populate();
@@ -123,9 +133,24 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             }
         }
 
+        //initial Overlay styles
+        selectedStyle = VisUI.getSkin().get("selectOverlay", MapWayPointItemStyle.class);
+        smallSelected = selectedStyle.small != null ? textureRegionMap.get(((GetName) selectedStyle.small).getName()) : null;
+        middleSelected = selectedStyle.middle != null ? textureRegionMap.get(((GetName) selectedStyle.middle).getName()) : null;
+        largeSelected = selectedStyle.large != null ? textureRegionMap.get(((GetName) selectedStyle.large).getName()) : null;
+
+        disabledStyle = VisUI.getSkin().get("disabledOverlay", MapWayPointItemStyle.class);
+        smallDisabled = disabledStyle.small != null ? textureRegionMap.get(((GetName) disabledStyle.small).getName()) : null;
+        middleDisabled = disabledStyle.middle != null ? textureRegionMap.get(((GetName) disabledStyle.middle).getName()) : null;
+        largeDisabled = disabledStyle.large != null ? textureRegionMap.get(((GetName) disabledStyle.large).getName()) : null;
+
+
         //register as cacheListChanged eventListener
         CacheListChangedEventList.Add(this);
         CacheListChangedEvent();
+
+        //register SelectedCacheChangedEvent
+        SelectedCacheEventList.Add(this);
     }
 
     public MapWayPointItem createItem(int index) {
@@ -161,34 +186,14 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
                     CB_List<String> missingIconList = new CB_List<String>(0);
 
-                    MapWayPointItemStyle selectedStyle = VisUI.getSkin().get("selectOverlay", MapWayPointItemStyle.class);
-                    TextureRegion smallSelected = selectedStyle.small != null ? textureRegionMap.get(((GetName) selectedStyle.small).getName()) : null;
-                    TextureRegion middleSelected = selectedStyle.middle != null ? textureRegionMap.get(((GetName) selectedStyle.middle).getName()) : null;
-                    TextureRegion largeSelected = selectedStyle.large != null ? textureRegionMap.get(((GetName) selectedStyle.large).getName()) : null;
 
-                    MapWayPointItemStyle disabledStyle = VisUI.getSkin().get("disabledOverlay", MapWayPointItemStyle.class);
-                    TextureRegion smallDisabled = disabledStyle.small != null ? textureRegionMap.get(((GetName) disabledStyle.small).getName()) : null;
-                    TextureRegion middleDisabled = disabledStyle.middle != null ? textureRegionMap.get(((GetName) disabledStyle.middle).getName()) : null;
-                    TextureRegion largeDisabled = disabledStyle.large != null ? textureRegionMap.get(((GetName) disabledStyle.large).getName()) : null;
-
-                    boolean hasSelectedWP = CB.getSelectedWaypoint() == null;
+                    boolean hasSelectedWP = CB.getSelectedWaypoint() != null;
                     for (Cache cache : Database.Data.Query) {
 
-                        boolean dis = cache.isArchived() || cache.isAvailable();
+                        boolean dis = cache.isArchived() || !cache.isAvailable();
                         boolean sel = !hasSelectedWP && CB.isSelectedCache(cache);
                         try {
-                            MapWayPointItemStyle style = getClusterSymbolsByCache(cache);
-                            TextureRegion small = textureRegionMap.get(((GetName) style.small).getName());
-                            TextureRegion middle = textureRegionMap.get(((GetName) style.middle).getName());
-                            TextureRegion large = textureRegionMap.get(((GetName) style.large).getName());
-
-                            MapWayPointItem.SizedRegions normal = new MapWayPointItem.SizedRegions(small, middle, large);
-                            MapWayPointItem.SizedRegions selectedOverlay = sel ? new MapWayPointItem.SizedRegions(smallSelected, middleSelected, largeSelected) : null;
-                            MapWayPointItem.SizedRegions disabledOverlay = dis ? new MapWayPointItem.SizedRegions(smallDisabled, middleDisabled, largeDisabled) : null;
-
-                            MapWayPointItem.Regions regions = new MapWayPointItem.Regions(normal, selectedOverlay, disabledOverlay);
-
-                            MapWayPointItem geoCluster = new MapWayPointItem(cache, cache.getGcCode(), regions);
+                            MapWayPointItem geoCluster = getMapWayPointItem(cache, dis, sel);
                             mItemList.add(geoCluster);
                         } catch (GdxRuntimeException e) {
                             if (e.getMessage().startsWith(ERROR_MSG)) {
@@ -207,24 +212,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                             Waypoint selectedWaypoint = CB.getSelectedWaypoint();
                             for (Waypoint waypoint : cache.waypoints) {
                                 try {
-                                    MapWayPointItemStyle style = getClusterSymbolsByWaypoint(waypoint);
-
-                                    TextureRegion small = textureRegionMap.get(((GetName) style.small).getName());
-                                    TextureRegion middle = textureRegionMap.get(((GetName) style.middle).getName());
-                                    TextureRegion large = textureRegionMap.get(((GetName) style.large).getName());
-                                    boolean selWP = false;
-                                    if (sel && selectedWaypoint != null) {
-                                        selWP = waypoint.equals(selectedWaypoint);
-                                    }
-
-                                    MapWayPointItem.SizedRegions normal = new MapWayPointItem.SizedRegions(small, middle, large);
-                                    MapWayPointItem.SizedRegions selectedOverlay = selWP ? new MapWayPointItem.SizedRegions(smallSelected, middleSelected, largeSelected) : null;
-                                    MapWayPointItem.SizedRegions disabledOverlay = dis ? new MapWayPointItem.SizedRegions(smallDisabled, middleDisabled, largeDisabled) : null;
-
-                                    MapWayPointItem.Regions regions = new MapWayPointItem.Regions(normal, selectedOverlay, disabledOverlay);
-
-
-                                    MapWayPointItem waypointCluster = new MapWayPointItem(waypoint, waypoint.getGcCode(), regions);
+                                    MapWayPointItem waypointCluster = getMapWayPointItem(waypoint, dis, selectedWaypoint != null && selectedWaypoint.equals(waypoint));
                                     mItemList.add(waypointCluster);
                                 } catch (GdxRuntimeException e) {
                                     if (e.getMessage().startsWith(ERROR_MSG)) {
@@ -262,6 +250,39 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             }
         });
         thread.start();
+    }
+
+    private MapWayPointItem getMapWayPointItem(Cache cache, boolean dis, boolean sel) {
+        MapWayPointItemStyle style = getClusterSymbolsByCache(cache);
+        TextureRegion small = style.small == null ? null : textureRegionMap.get(((GetName) style.small).getName());
+        TextureRegion middle = style.middle == null ? null : textureRegionMap.get(((GetName) style.middle).getName());
+        TextureRegion large = style.large == null ? null : textureRegionMap.get(((GetName) style.large).getName());
+
+        MapWayPointItem.SizedRegions normal = new MapWayPointItem.SizedRegions(small, middle, large);
+        MapWayPointItem.SizedRegions selectedOverlay = sel ? new MapWayPointItem.SizedRegions(smallSelected, middleSelected, largeSelected) : null;
+        MapWayPointItem.SizedRegions disabledOverlay = dis ? new MapWayPointItem.SizedRegions(smallDisabled, middleDisabled, largeDisabled) : null;
+
+        MapWayPointItem.Regions regions = new MapWayPointItem.Regions(normal, selectedOverlay, disabledOverlay);
+
+        return new MapWayPointItem(cache, cache, regions);
+    }
+
+    private MapWayPointItem getMapWayPointItem(Waypoint waypoint, boolean dis, boolean sel) {
+        MapWayPointItemStyle style = getClusterSymbolsByWaypoint(waypoint);
+
+        TextureRegion small = textureRegionMap.get(((GetName) style.small).getName());
+        TextureRegion middle = textureRegionMap.get(((GetName) style.middle).getName());
+        TextureRegion large = textureRegionMap.get(((GetName) style.large).getName());
+
+
+        MapWayPointItem.SizedRegions normal = new MapWayPointItem.SizedRegions(small, middle, large);
+        MapWayPointItem.SizedRegions selectedOverlay = sel ? new MapWayPointItem.SizedRegions(smallSelected, middleSelected, largeSelected) : null;
+        MapWayPointItem.SizedRegions disabledOverlay = dis ? new MapWayPointItem.SizedRegions(smallDisabled, middleDisabled, largeDisabled) : null;
+
+        MapWayPointItem.Regions regions = new MapWayPointItem.Regions(normal, selectedOverlay, disabledOverlay);
+
+
+        return new MapWayPointItem(waypoint, waypoint, regions);
     }
 
 
@@ -371,12 +392,90 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         return bitmap;
     }
 
+    @Override
+    public void selectedCacheChanged(Cache selectedCache, Waypoint selectedwaypoint, Cache lastSelectedCache, Waypoint lastWaypoint) {
+
+        //reset selected state of last Cache/WP
+        //set selected state to Cache/WP
+        boolean wpchanged = false;
+        if (selectedCache.equals(lastSelectedCache)) {
+            if (selectedwaypoint != null) {
+                if (selectedwaypoint.equals(lastWaypoint)) {
+                    return;
+                } else {
+                    wpchanged = true;
+                }
+            } else {
+                if (lastWaypoint == null) return;
+            }
+        }
+
+
+        int indexOfLastSelectedCache = selectedCache.equals(lastSelectedCache) && !wpchanged ? -2 : -1;
+        int indexOfNewSelectedCache = -1;
+        int indexOfLastSelectedWp = lastWaypoint == null ? -2 : -1;
+        int indexOfNewSelectedWp = selectedwaypoint == null ? -2 : -1;
+
+        for (int i = 0, n = mItemList.size(); i < n; i++) {
+            MapWayPointItem item = mItemList.get(i);
+            if (indexOfNewSelectedCache == -1 && item.dataObject.equals(selectedCache)) indexOfNewSelectedCache = i;
+            if (indexOfLastSelectedCache == -1 && item.dataObject.equals(lastSelectedCache))
+                indexOfLastSelectedCache = i;
+            if (indexOfLastSelectedWp == -1 && item.dataObject.equals(lastWaypoint)) indexOfLastSelectedWp = i;
+            if (indexOfNewSelectedWp == -1 && item.dataObject.equals(selectedwaypoint)) indexOfNewSelectedWp = i;
+
+
+            if (indexOfLastSelectedCache != -1 && indexOfNewSelectedCache != -1 &&
+                    indexOfLastSelectedWp != -1 && indexOfNewSelectedWp != -1) break;
+        }
+
+        log.debug("Last item" + indexOfNewSelectedCache);
+        log.debug("New item" + indexOfNewSelectedCache);
+
+
+        // new selected cache
+        if (indexOfNewSelectedCache >= 0 && indexOfNewSelectedWp < 0) {
+            MapWayPointItem newItem = getMapWayPointItem(selectedCache, selectedCache.isArchived() || !selectedCache.isAvailable(), true);
+            mItemList.set(indexOfNewSelectedCache, newItem);
+        }
+
+        // last selected cache
+        if (indexOfLastSelectedCache >= 0) {
+            MapWayPointItem lastItem = getMapWayPointItem(lastSelectedCache, lastSelectedCache.isArchived() || !lastSelectedCache.isAvailable(), false);
+            mItemList.set(indexOfLastSelectedCache, lastItem);
+        }
+
+        // new selected wp
+        if (indexOfNewSelectedWp >= 0) {
+            MapWayPointItem newWp = getMapWayPointItem(selectedwaypoint, selectedCache.isArchived() || !selectedCache.isAvailable(), true);
+            mItemList.set(indexOfNewSelectedWp, newWp);
+        }
+
+        // last selected wp
+        if (indexOfLastSelectedWp >= 0) {
+            MapWayPointItem lastWp = getMapWayPointItem(lastWaypoint, lastSelectedCache.isArchived() || !lastSelectedCache.isAvailable(), false);
+            mItemList.set(indexOfLastSelectedWp, lastWp);
+        }
+
+
+        populate();
+    }
+
     public interface ActiveItem {
         boolean run(MapWayPointItem aIndex);
     }
 
     private boolean onItemSingleTap(MapWayPointItem item) {
         log.debug("Click on: " + item);
+
+        //set as selected cache/wp
+        if (item.dataObject instanceof Cache) {
+            CB.setSelectedCache((Cache) item.dataObject);
+        } else if (item.dataObject instanceof Waypoint) {
+            Waypoint wp = (Waypoint) item.dataObject;
+            Cache cache = CB.getCacheFromId(wp.CacheId);
+            CB.setSelectedWaypoint(cache, wp);
+        }
         return true;
     }
 
@@ -435,7 +534,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         //extend geoCoordinate to BoundingBox
         double groundResolution = getGroundresolution();
-        double extendValue = groundResolution * defaultMarker.getWidth();
+        double extendValue = groundResolution * CB.scaledSizes.BUTTON_WIDTH;
         GeoBoundingBoxDouble boundingBox = new GeoBoundingBoxDouble(clickLat, clickLon, extendValue);
 
         // search item inside click bounding box

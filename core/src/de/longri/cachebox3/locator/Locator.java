@@ -255,6 +255,8 @@ public class Locator {
      * Returns the last valid position of the given ProviderType
      */
     public static Location getLocation(Location.ProviderType type) {
+        if (that == null) return new Location(0, 0, 0);
+
         synchronized (that) {
 
             if (type == Location.ProviderType.any) {
