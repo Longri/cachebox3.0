@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -54,22 +54,27 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         PositionChangedEventList.Add(this);
     }
 
-    public void layout() {
+    public synchronized void layout() {
+        log.debug("Layout");
         super.layout();
         if (listView == null) addNewListView();
+        log.debug("Finish Layout");
     }
 
     public void resort() {
+        log.debug("resort Query");
         synchronized (Database.Data.Query) {
             CacheWithWP nearstCacheWp = Database.Data.Query.Resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
 
             if (nearstCacheWp != null)
                 CB.setSelectedWaypoint(nearstCacheWp.getCache(), nearstCacheWp.getWaypoint());
         }
+        log.debug("Finish resort Query");
     }
 
 
     private void addNewListView() {
+        log.debug("Start Thread add new listView");
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -123,7 +128,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     disposeListView();
                 }
 
-                CacheListView.this.listView = new ListView(listViewAdapter);
+                CacheListView.this.listView = new ListView(listViewAdapter,false,true);
                 synchronized (CacheListView.this.listView) {
                     listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
                     addActor(listView);
@@ -156,6 +161,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
                 listView.setSelectedItem(selectedIndex);
                 listView.setSelectedItemVisible();
+                log.debug("Finish Thread add new listView");
             }
         });
         thread.start();
@@ -186,6 +192,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         disposeListView();
         CacheListChangedEventList.Remove(this);
         PositionChangedEventList.Remove(this);
+        if (listView != null) listView.dispose();
         listView = null;
     }
 

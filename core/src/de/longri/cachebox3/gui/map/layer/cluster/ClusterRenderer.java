@@ -65,15 +65,15 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
      */
     private boolean mUpdate;
 
-    private InternalItem[] mItems;
+    public InternalItem[] mItems;
 
     public void dispose() {
         Arrays.fill(mItems, null);
         mItems = null;
     }
 
-    static class InternalItem {
-        MapWayPointItem item;
+    public static class InternalItem {
+        public MapWayPointItem item;
         boolean visible;
         boolean changes;
         float x, y;
@@ -249,36 +249,46 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
         InternalItem[] tmp = new InternalItem[size];
 
         for (int i = 0; i < size; i++) {
-            InternalItem it = new InternalItem();
-            tmp[i] = it;
-            it.item = mWaypointLayer.createItem(i);
-
-            /* pre-project points */
-
-            double lat, lon;
-            if (it.item instanceof Cluster) {
-                //set draw point to center of cluster
-                Coordinate centerCoord = ((Cluster) it.item).getCenter();
-                lat = centerCoord.latitude;
-                lon = centerCoord.longitude;
-
-            } else {
-                lat = it.item.latitude;
-                lon = it.item.longitude;
-            }
-
-            mMapPoint.x = (lon + 180.0) / 360.0;
-
-            double sinLatitude = Math.sin(lat * (Math.PI / 180.0));
-            mMapPoint.y = 0.5 - Math.log((1.0 + sinLatitude) / (1.0 - sinLatitude)) / (4.0 * Math.PI);
-
-            it.px = mMapPoint.x;
-            it.py = mMapPoint.y;
+            populateItem(tmp, i);
         }
         synchronized (this) {
             mUpdate = true;
             mItems = tmp;
         }
+    }
+
+    public void populateItem(int index) {
+        synchronized (this) {
+            populateItem(mItems, index);
+        }
+    }
+
+    private void populateItem(InternalItem[] tmp, int index) {
+        InternalItem it = new InternalItem();
+        tmp[index] = it;
+        it.item = mWaypointLayer.createItem(index);
+
+            /* pre-project points */
+
+        double lat, lon;
+        if (it.item instanceof Cluster) {
+            //set draw point to center of cluster
+            Coordinate centerCoord = ((Cluster) it.item).getCenter();
+            lat = centerCoord.latitude;
+            lon = centerCoord.longitude;
+
+        } else {
+            lat = it.item.latitude;
+            lon = it.item.longitude;
+        }
+
+        mMapPoint.x = (lon + 180.0) / 360.0;
+
+        double sinLatitude = Math.sin(lat * (Math.PI / 180.0));
+        mMapPoint.y = 0.5 - Math.log((1.0 + sinLatitude) / (1.0 - sinLatitude)) / (4.0 * Math.PI);
+
+        it.px = mMapPoint.x;
+        it.py = mMapPoint.y;
     }
 
     public void update() {

@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3;
+package org.oscim.awt;
 
 import com.badlogic.gdx.scenes.scene2d.ui.GetName;
 import com.kitfox.svg.SVGCache;
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.app.beans.SVGIcon;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
 import org.oscim.awt.AwtBitmap;
+import org.oscim.backend.canvas.Bitmap;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -90,6 +93,10 @@ public class DesktopRealSvgBitmap extends AwtBitmap implements GetName {
 
     public DesktopRealSvgBitmap(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
         super(getBufferdImage(inputStream, scaleType, scaleValue));
+    }
+
+    public DesktopRealSvgBitmap (Bitmap bmp){
+        super(((AwtBitmap)bmp).bitmap);
     }
 
 }

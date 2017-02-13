@@ -28,8 +28,6 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.WelcomeScreen;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -43,7 +41,7 @@ public class SkinEditorGame extends Game {
         FileChooser.setDefaultPrefsName("SkinEditor");
     }
 
-    public final static String[] widgets = {"MapWayPointItem", "Sizes", "Icons", "MenuIcons", "Label", "Button", "TextButton", "CheckBox", "TextField", "ListView", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree"};
+    public final static String[] widgets = {"MapWayPointItem", "Sizes", "Icons", "MenuIcons", "Label", "Button", "GestureButton", "TextButton", "CheckBox", "TextField", "ListView", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree"};
 
     public SpriteBatch batch;
     public SavableSvgSkin skin;
@@ -63,7 +61,6 @@ public class SkinEditorGame extends Game {
 
     @Override
     public void create() {
-
 
 
         opt = new OptionalChecker();
@@ -130,6 +127,8 @@ public class SkinEditorGame extends Game {
     public String resolveWidgetPackageName(String widget) {
         if (widget.equals("MapWayPointItem")) {
             return "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle";
+        } else if (widget.equals("GestureButton")) {
+            return "de.longri.cachebox3.gui.skin.styles.GestureButtonStyle";
         } else if (widget.equals("Sizes")) {
             return "de.longri.cachebox3.gui.skin.styles.ScaledSize";
         } else if (widget.equals("Icons")) {

@@ -92,7 +92,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle.class);
         items.add(de.longri.cachebox3.gui.widgets.ButtonBar.ButtonBarStyle.class);
-        items.add(de.longri.cachebox3.gui.widgets.GestureButton.GestureButtonStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.GestureButtonStyle.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle.class);
         items.add(com.kotcrab.vis.ui.widget.VisTextButton.VisTextButtonStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle.class);

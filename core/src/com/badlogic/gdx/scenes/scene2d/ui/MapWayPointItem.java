@@ -28,7 +28,7 @@ import java.util.Arrays;
 public class MapWayPointItem extends Coordinate {
     private final static Logger log = LoggerFactory.getLogger(MapWayPointItem.class);
 
-    private final Object dataObject; // Cache.class or WayPoint.class
+    public final Object dataObject; // Cache.class or WayPoint.class
 
     final GeoPoint geoPoint;
     private GeoBoundingBoxInt bounds;
@@ -43,7 +43,7 @@ public class MapWayPointItem extends Coordinate {
         cachedHash = hashCode();
 
         // extract regions if regions not NULL
-        if (regions == null){
+        if (regions == null) {
             small = null;
             middle = null;
             large = null;
@@ -53,9 +53,15 @@ public class MapWayPointItem extends Coordinate {
         Array<TextureRegion> middleList = new Array<TextureRegion>(new TextureRegion[0]);
         Array<TextureRegion> largeList = new Array<TextureRegion>(new TextureRegion[0]);
 
-        smallList.add(regions.normal.small);
-        middleList.add(regions.normal.middle);
-        largeList.add(regions.normal.large);
+
+        boolean isSelected = false;
+
+        if (regions.selectedOverlay != null) {
+            isSelected = true;
+            if (regions.selectedOverlay.small != null) smallList.add(regions.selectedOverlay.small);
+            if (regions.selectedOverlay.middle != null) middleList.add(regions.selectedOverlay.middle);
+            if (regions.selectedOverlay.large != null) largeList.add(regions.selectedOverlay.large);
+        }
 
         if (regions.disabledOverlay != null) {
             if (regions.disabledOverlay.small != null) smallList.add(regions.disabledOverlay.small);
@@ -63,16 +69,27 @@ public class MapWayPointItem extends Coordinate {
             if (regions.disabledOverlay.large != null) largeList.add(regions.disabledOverlay.large);
         }
 
-        if (regions.selectedOverlay != null) {
-            if (regions.selectedOverlay.small != null) smallList.add(regions.selectedOverlay.small);
-            if (regions.selectedOverlay.middle != null) middleList.add(regions.selectedOverlay.middle);
-            if (regions.selectedOverlay.large != null) largeList.add(regions.selectedOverlay.large);
+        smallList.add(regions.normal.small);
+        middleList.add(regions.normal.middle);
+        largeList.add(regions.normal.large);
+
+
+        while (smallList.removeValue(null, true)) ;
+        while (middleList.removeValue(null, true)) ;
+        while (largeList.removeValue(null, true)) ;
+
+
+
+        if(isSelected){
+            // set to large icons
+            small = largeList.shrink();
+            middle = largeList.shrink();
+            large = largeList.shrink();
+        }else{
+            small = smallList.shrink();
+            middle = middleList.shrink();
+            large = largeList.shrink();
         }
-
-
-        small = smallList.shrink();
-        middle = middleList.shrink();
-        large = largeList.shrink();
 
     }
 

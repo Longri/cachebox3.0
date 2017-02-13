@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.events;
+package de.longri.cachebox3.gui.skin.styles;
 
-// this is an interface for all Objects which should receive the selectedCacheChanged Event
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
-
-import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.Waypoint;
-
-public interface SelectedCacheEvent {
-	void selectedCacheChanged(Cache selectedCache, Waypoint waypoint,Cache LastSelectedCache, Waypoint LastWaypoint);
+/**
+ * Created by Longri on 13.02.2017.
+ */
+public class GestureButtonStyle extends Button.ButtonStyle {
+    public Drawable select,hasMenu,hasFilteredMenu;
 }
