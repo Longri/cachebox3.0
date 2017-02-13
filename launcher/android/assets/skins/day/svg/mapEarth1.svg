@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="258" height="258" viewBox="0 0 258.00 258.00" enable-background="new 0 0 258.00 258.00" xml:space="preserve">
+	<g>
+		<ellipse fill="#A0D4E0" fill-opacity="1" stroke-width="5" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" cx="131.502" cy="130.232" rx="89.9011" ry="90.2144"/>
+		<path fill="#205910" fill-opacity="1" stroke-width="0.2" stroke-linejoin="bevel" d="M 212.828,134.735L 207.895,137.554L 205.545,139.669L 204.84,148.126L 206.485,154.704L 205.31,158.698L 202.491,161.752L 200.612,166.216L 197.557,169.035L 194.973,170.68L 188.16,171.15L 185.576,168.33L 179.703,165.746L 171.48,165.041L 166.781,162.692L 160.908,162.457L 154.565,165.041L 150.806,167.626L 148.926,173.264L 149.866,178.198L 151.745,181.722L 150.336,185.246L 147.282,187.125L 145.637,191.589L 146.812,199.342L 148.926,202.631L 147.282,206.155L 144.932,209.209L 142.348,213.438L 143.053,217.667L 143.249,218.477C 185.086,212.093 217.448,176.773 219.428,133.498L 217.996,133.56L 212.828,134.735 Z "/>
+		<path fill="#205910" fill-opacity="1" stroke-width="0.2" stroke-linejoin="bevel" d="M 97.7107,59.7911L 98.1807,52.2731L 95.7854,48.2609C 65.7349,62.1627 44.6318,92.2153 43.5259,127.33L 47.9048,127.922L 53.0732,127.217L 57.0673,123.928L 59.1816,120.639L 61.061,116.175L 63.8802,114.061L 64.5852,107.953L 66.4646,102.314L 69.9886,99.025L 73.2777,98.3203L 76.3318,99.7299L 79.386,102.314L 84.7894,102.784L 90.6626,102.314L 92.7771,98.0853L 97.4758,94.5614L 100.765,89.6278L 103.114,83.5194L 102.644,76.0016L 101.235,71.5377L 97.7107,67.3091L 97.7107,59.7911 Z "/>
+		<radialGradient id="SVGID_Fill1_" cx="157.3" cy="109.999" r="97.946" gradientUnits="userSpaceOnUse" gradientTransform="rotate(-90.000000 157.300293 109.999390)">
+			<stop offset="0" stop-color="#FFFDFD" stop-opacity="1"/>
+			<stop offset="0.731481" stop-color="#FFFFFF" stop-opacity="1"/>
+			<stop offset="0.805556" stop-color="#FFB600" stop-opacity="1"/>
+			<stop offset="0.925926" stop-color="#FFB600" stop-opacity="1"/>
+			<stop offset="1" stop-color="#FFE45C" stop-opacity="1"/>
+		</radialGradient>
+		<path fill="url(#SVGID_Fill1_)" stroke-width="5" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 151.946,125.572L 151.32,126.018L 146.218,127.704L 110.791,150.828L 107.72,135.131L 105.973,114.937L 107.106,99.7622L 110.224,81.6967L 116.742,67.4849L 124.678,52.3097L 133.748,40.2661L 136.125,42.4658L 149.266,125.606L 151.946,125.572 Z "/>
+		<radialGradient id="SVGID_Fill2_" cx="135.603" cy="127.558" r="66.094" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#FFFDFD" stop-opacity="1"/>
+			<stop offset="0.606481" stop-color="#FFFFFF" stop-opacity="1"/>
+			<stop offset="0.699074" stop-color="#FFB600" stop-opacity="1"/>
+			<stop offset="0.925926" stop-color="#FFB600" stop-opacity="1"/>
+			<stop offset="1" stop-color="#FFE45C" stop-opacity="1"/>
+		</radialGradient>
+		<path fill="url(#SVGID_Fill2_)" stroke-width="5" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 135.183,117.859L 220.6,129.333C 219.622,82.2723 182.734,44.0713 136.321,41.2079L 135.183,117.859 Z "/>
+		<radialGradient id="SVGID_Fill3_" cx="150.218" cy="111.609" r="56.2666" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#FFFDFD" stop-opacity="1"/>
+			<stop offset="0.606481" stop-color="#FFFFFF" stop-opacity="1"/>
+			<stop offset="0.699074" stop-color="#FFB600" stop-opacity="1"/>
+			<stop offset="0.925926" stop-color="#FFB600" stop-opacity="1"/>
+			<stop offset="1" stop-color="#FFE45C" stop-opacity="1"/>
+		</radialGradient>
+		<path fill="url(#SVGID_Fill3_)" stroke-width="5" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 135.03,116.048L 134.595,116.567L 132.951,120.796L 110.397,150.162L 125.707,152.707L 145.402,154.156L 160.203,153.216L 177.823,150.632L 191.684,145.229L 206.485,138.651L 218.232,131.133L 216.086,129.162L 134.997,118.27L 135.03,116.048 Z "/>
+		<g>
+			<path fill="#000000" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 218.183,54.0731L 212.92,54.0731L 212.92,69.0713L 208.71,69.0713L 208.71,54.0731L 203.448,54.0731L 203.448,50.6525L 218.183,50.6525L 218.183,54.0731 Z "/>
+			<path fill="#000000" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 241.601,69.0713L 237.391,69.0713L 237.391,58.0488C 237.391,56.8593 237.445,55.5449 237.552,54.106L 237.449,54.106C 237.235,55.2379 237.042,56.0521 236.869,56.5482L 232.552,69.0713L 229.16,69.0713L 224.765,56.6757C 224.645,56.3412 224.452,55.4847 224.186,54.106L 224.071,54.106C 224.18,55.9232 224.235,57.5171 224.235,58.8876L 224.235,69.0713L 220.551,69.0713L 220.551,50.6525L 226.574,50.6525L 230.336,61.5723C 230.638,62.4438 230.857,63.3209 230.994,64.2035L 231.072,64.2035C 231.302,63.184 231.546,62.2972 231.804,61.5435L 235.566,50.6525L 241.601,50.6525L 241.601,69.0713 Z "/>
+		</g>
+	</g>
+</svg>
