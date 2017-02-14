@@ -18,18 +18,26 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.GetName;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
+import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.map.layer.LocationOverlay;
 import de.longri.cachebox3.gui.map.layer.MyLocationModel;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
+import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
@@ -39,6 +47,7 @@ import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.settings.Settings;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
+import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.MapPosition;
 import org.oscim.core.Tile;
 import org.oscim.event.Event;
@@ -55,6 +64,8 @@ import org.oscim.map.Viewport;
 import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
+import org.oscim.renderer.atlas.TextureAtlas;
+import org.oscim.renderer.atlas.TextureRegion;
 import org.oscim.renderer.bucket.PolygonBucket;
 import org.oscim.renderer.bucket.TextItem;
 import org.oscim.renderer.bucket.TextureBucket;
@@ -62,8 +73,12 @@ import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.source.mapfile.MapFileTileSource;
+import org.oscim.utils.TextureAtlasUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 
 /**
@@ -83,20 +98,23 @@ public class MapView extends AbstractView {
     private final MapCompass mapOrientationButton;
     private final ZoomButton zoomButton;
     private WaypointLayer wayPointLayer;
+    private final LinkedHashMap<Object, TextureRegion> textureRegionMap;
 
 
     private MapFileTileSource tileSource;
 
     LocationOverlay myLocationAccuracy;
     MyLocationModel myLocationModel;
+    private LocationLayer myLocationLayer;
 
     MapViewPositionChangedHandler positionChangedHandler;
+
 
     public MapView(CacheboxMain main) {
         super("MapView");
         this.setTouchable(Touchable.disabled);
         this.main = main;
-
+        this.textureRegionMap = createTextureAtlasRegions();
 
         mapStateButton = new MapStateButton(new MapStateButton.StateChangedListener() {
             @Override
@@ -224,12 +242,43 @@ public class MapView extends AbstractView {
 
         //add position changed handler
         positionChangedHandler = MapViewPositionChangedHandler.getInstance
-                (mMap, myLocationModel, myLocationAccuracy, mapOrientationButton);
+                (mMap, myLocationLayer, myLocationAccuracy, mapOrientationButton);
 
 
         return mMap;
     }
 
+    public static LinkedHashMap<Object, TextureRegion> createTextureAtlasRegions() {
+        // create TextureRegions from all Bitmap symbols
+        LinkedHashMap<Object, TextureRegion> textureRegionMap = new LinkedHashMap<Object, TextureRegion>();
+        ObjectMap<String, MapWayPointItemStyle> list = VisUI.getSkin().getAll(MapWayPointItemStyle.class);
+        Array<Bitmap> bitmapList = new Array<Bitmap>();
+        for (MapWayPointItemStyle style : list.values()) {
+            if (style.small != null) if (!bitmapList.contains(style.small, true)) bitmapList.add(style.small);
+            if (style.middle != null) if (!bitmapList.contains(style.middle, true)) bitmapList.add(style.middle);
+            if (style.large != null) if (!bitmapList.contains(style.large, true)) bitmapList.add(style.large);
+        }
+        LinkedHashMap<Object, Bitmap> input = new LinkedHashMap<Object, Bitmap>();
+        for (Bitmap bmp : bitmapList) {
+            input.put(((GetName) bmp).getName(), bmp);
+        }
+        ArrayList<TextureAtlas> atlasList = new ArrayList<TextureAtlas>();
+        TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, true,
+                CanvasAdapter.platform == Platform.IOS);
+
+
+        if (false) {//Debug write atlas Bitmap to tmp folder
+            int count = 0;
+            for (TextureAtlas atlas : atlasList) {
+                byte[] data = atlas.texture.bitmap.getPngEncodedData();
+                Pixmap pixmap = new Pixmap(data, 0, data.length);
+                FileHandle file = Gdx.files.absolute(CB.WorkPath + "/user/temp/testAtlas" + count++ + ".png");
+                PixmapIO.writePNG(file, pixmap);
+                pixmap.dispose();
+            }
+        }
+        return textureRegionMap;
+    }
 
     @Override
     protected void create() {
@@ -332,12 +381,14 @@ public class MapView extends AbstractView {
         myLocationAccuracy = new LocationOverlay(mMap);
         myLocationAccuracy.setPosition(52.580400947530364, 13.385594096047232, 100);
 
+        myLocationLayer = new LocationLayer(mMap,textureRegionMap);
+        myLocationLayer.setPosition(52.580400947530364, 13.385594096047232);
+
 
         Model model = CB.getSkin().get("MyLocationModel", Model.class);
 
         myLocationModel = new MyLocationModel(mMap, model);
 
-        myLocationAccuracy.setPosition(52.580400947530364, 13.385594096047232, 100);
 
         if (tileSource != null) {
             VectorTileLayer mapLayer = mMap.setBaseMap(tileSource);
@@ -365,8 +416,9 @@ public class MapView extends AbstractView {
             layers.add(myLocationAccuracy);
 //            layers.add(myLocationModel);
         }
-        wayPointLayer = new WaypointLayer(mMap);
+        wayPointLayer = new WaypointLayer(mMap, textureRegionMap);
         layers.add(wayPointLayer);
+        layers.add(myLocationLayer);
 
     }
 

@@ -78,7 +78,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     private final Box mapVisibleBoundingBox = new Box();
     private final CB_List<MapWayPointItem> clickedItems = new CB_List<MapWayPointItem>();
     private final ThreadStack<ClusterRunnable> clusterWorker = new ThreadStack<ClusterRunnable>();
-    private final LinkedHashMap<Object, TextureRegion> textureRegionMap;
+    public final LinkedHashMap<Object, TextureRegion> textureRegionMap;
 
     private final MapWayPointItemStyle selectedStyle;
     private final TextureRegion smallSelected;
@@ -96,42 +96,14 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     private ClusterRunnable.Task lastTask;
 
-    public WaypointLayer(Map map) {
+    public WaypointLayer(Map map, LinkedHashMap<Object, TextureRegion> textureRegionMap) {
         super(map);
         mClusterRenderer = new ClusterRenderer(this, null);
         mRenderer = mClusterRenderer;
         mItemList = new ClusteredList();
         populate();
 
-        {// create TextureRegions from all Bitmap symbols
-            textureRegionMap = new LinkedHashMap<Object, TextureRegion>();
-            ObjectMap<String, MapWayPointItemStyle> list = VisUI.getSkin().getAll(MapWayPointItemStyle.class);
-            Array<Bitmap> bitmapList = new Array<Bitmap>();
-            for (MapWayPointItemStyle style : list.values()) {
-                if (style.small != null) if (!bitmapList.contains(style.small, true)) bitmapList.add(style.small);
-                if (style.middle != null) if (!bitmapList.contains(style.middle, true)) bitmapList.add(style.middle);
-                if (style.large != null) if (!bitmapList.contains(style.large, true)) bitmapList.add(style.large);
-            }
-            LinkedHashMap<Object, Bitmap> input = new LinkedHashMap<Object, Bitmap>();
-            for (Bitmap bmp : bitmapList) {
-                input.put(((GetName) bmp).getName(), bmp);
-            }
-            ArrayList<TextureAtlas> atlasList = new ArrayList<TextureAtlas>();
-            TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, true,
-                    CanvasAdapter.platform == Platform.IOS);
-
-
-            if (false) {//Debug write atlas Bitmap to tmp folder
-                int count = 0;
-                for (TextureAtlas atlas : atlasList) {
-                    byte[] data = atlas.texture.bitmap.getPngEncodedData();
-                    Pixmap pixmap = new Pixmap(data, 0, data.length);
-                    FileHandle file = Gdx.files.absolute(CB.WorkPath + "/user/temp/testAtlas" + count++ + ".png");
-                    PixmapIO.writePNG(file, pixmap);
-                    pixmap.dispose();
-                }
-            }
-        }
+        this.textureRegionMap = textureRegionMap;
 
         //initial Overlay styles
         selectedStyle = VisUI.getSkin().get("selectOverlay", MapWayPointItemStyle.class);
@@ -152,6 +124,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         //register SelectedCacheChangedEvent
         SelectedCacheEventList.Add(this);
     }
+
 
     public MapWayPointItem createItem(int index) {
         return mItemList.get(index);

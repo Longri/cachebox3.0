@@ -22,6 +22,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.map.layer.cluster.ClusterRenderer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
+import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheList;
@@ -33,12 +34,15 @@ import org.oscim.awt.DesktopRealSvgBitmap;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.renderer.atlas.TextureRegion;
 
+import java.util.LinkedHashMap;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Created by Longri on 10.02.2017.
  */
 class WaypointLayerTest {
+
 
     /**
      * Will check if, after selection changed, the correct Symbol set!
@@ -71,8 +75,8 @@ class WaypointLayerTest {
         Database.Data.Query = new CacheList();
         if (VisUI.isLoaded()) VisUI.dispose();
         VisUI.load(skin);
-
-        WaypointLayer wpLayer = new WaypointLayer(null);
+        LinkedHashMap<Object, TextureRegion> textureRegionMap = MapView.createTextureAtlasRegions();
+        WaypointLayer wpLayer = new WaypointLayer(null,textureRegionMap);
         Cache testCache1 = new Cache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
         Cache testCache2 = new Cache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
         Cache testCache3 = new Cache(0.3, 0, "Cache3", CacheTypes.Traditional, "GC3");
@@ -238,8 +242,9 @@ class WaypointLayerTest {
 
         if (VisUI.isLoaded()) VisUI.dispose();
         VisUI.load(skin);
+        LinkedHashMap<Object, TextureRegion> textureRegionMap = MapView.createTextureAtlasRegions();
 
-        WaypointLayer wpLayer = new WaypointLayer(null);
+        WaypointLayer wpLayer = new WaypointLayer(null,textureRegionMap);
         Cache testCache1 = new Cache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
         Cache testCache2 = new Cache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
         Cache testCache3 = new Cache(0.3, 0, "Cache3", CacheTypes.Traditional, "GC3");

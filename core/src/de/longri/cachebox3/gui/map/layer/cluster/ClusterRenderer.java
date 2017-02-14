@@ -216,6 +216,7 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
         //TODO try without sort
         if (zoomChanged) sort(mItems, 0, mItems.length);
         //log.debug(Arrays.toString(mItems));
+
         for (InternalItem it : mItems) {
             if (!it.visible)
                 continue;
@@ -240,7 +241,7 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
 
         buckets.set(mSymbolLayer);
         buckets.prepare();
-
+        buckets.compile(true);
         compile();
     }
 
