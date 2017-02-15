@@ -256,12 +256,16 @@ public class MapView extends AbstractView {
         }
 
         //add Bitmaps from MapArrowStyle
-        MapArrowStyle mapArrowStyle = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
+        MapArrowStyle mapArrowStyle = null;
+        try {
+            mapArrowStyle = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
+        } catch (Exception e) {
+        }
 
-        if(mapArrowStyle!=null){
-            if(mapArrowStyle.myLocation!=null)bitmapList.add(mapArrowStyle.myLocation);
-            if(mapArrowStyle.myLocationTransparent!=null)bitmapList.add(mapArrowStyle.myLocationTransparent);
-            if(mapArrowStyle.myLocationCar!=null)bitmapList.add(mapArrowStyle.myLocationCar);
+        if (mapArrowStyle != null) {
+            if (mapArrowStyle.myLocation != null) bitmapList.add(mapArrowStyle.myLocation);
+            if (mapArrowStyle.myLocationTransparent != null) bitmapList.add(mapArrowStyle.myLocationTransparent);
+            if (mapArrowStyle.myLocationCar != null) bitmapList.add(mapArrowStyle.myLocationCar);
         }
 
 
