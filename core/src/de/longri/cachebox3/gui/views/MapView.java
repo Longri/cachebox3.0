@@ -20,7 +20,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.GetName;
@@ -34,8 +33,7 @@ import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
-import de.longri.cachebox3.gui.map.layer.LocationOverlay;
-import de.longri.cachebox3.gui.map.layer.MyLocationModel;
+import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
@@ -103,8 +101,8 @@ public class MapView extends AbstractView {
 
     private MapFileTileSource tileSource;
 
-    LocationOverlay myLocationAccuracy;
-    MyLocationModel myLocationModel;
+    LocationAccuracyLayer myLocationAccuracy;
+
     private LocationLayer myLocationLayer;
 
     MapViewPositionChangedHandler positionChangedHandler;
@@ -150,9 +148,6 @@ public class MapView extends AbstractView {
                         MapPosition mapPosition = mMap.getMapPosition();
                         mapPosition.setTilt(Viewport.MAX_TILT);
                         mMap.setMapPosition(mapPosition);
-
-//                        // set orientation by bearing
-//                        mapOrientationButton.setChecked(true);
 
                         break;
                 }
@@ -378,17 +373,11 @@ public class MapView extends AbstractView {
 
 
         //MyLocationLayer
-        myLocationAccuracy = new LocationOverlay(mMap);
+        myLocationAccuracy = new LocationAccuracyLayer(mMap);
         myLocationAccuracy.setPosition(52.580400947530364, 13.385594096047232, 100);
 
         myLocationLayer = new LocationLayer(mMap,textureRegionMap);
         myLocationLayer.setPosition(52.580400947530364, 13.385594096047232);
-
-
-        Model model = CB.getSkin().get("MyLocationModel", Model.class);
-
-        myLocationModel = new MyLocationModel(mMap, model);
-
 
         if (tileSource != null) {
             VectorTileLayer mapLayer = mMap.setBaseMap(tileSource);

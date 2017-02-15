@@ -16,8 +16,7 @@
 package de.longri.cachebox3.gui.map;
 
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
-import de.longri.cachebox3.gui.map.layer.LocationOverlay;
-import de.longri.cachebox3.gui.map.layer.MyLocationModel;
+import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.Locator;
@@ -42,13 +41,13 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     private CoordinateGPS mapCenter;
     private CoordinateGPS myPosition;
     private final Map map;
-    private final LocationOverlay myLocationAccuracy;
+    private final LocationAccuracyLayer myLocationAccuracy;
     private final LocationLayer myLocationLayer;
     private final MapCompass mapOrientationButton;
     private final AtomicBoolean isDisposed = new AtomicBoolean(false);
 
     public static MapViewPositionChangedHandler
-    getInstance(Map map, LocationLayer myLocationLayer, LocationOverlay myLocationAccuracy, MapCompass mapOrientationButton) {
+    getInstance(Map map, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy, MapCompass mapOrientationButton) {
         MapViewPositionChangedHandler handler =
                 new MapViewPositionChangedHandler(map, myLocationLayer, myLocationAccuracy, mapOrientationButton);
 
@@ -58,7 +57,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     }
 
 
-    private MapViewPositionChangedHandler(Map map, LocationLayer myLocationLayer, LocationOverlay myLocationAccuracy, MapCompass mapOrientationButton) {
+    private MapViewPositionChangedHandler(Map map, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy, MapCompass mapOrientationButton) {
         this.map = map;
         this.myLocationLayer = myLocationLayer;
         this.myLocationAccuracy = myLocationAccuracy;

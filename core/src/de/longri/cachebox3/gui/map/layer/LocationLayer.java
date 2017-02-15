@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.map.layer;
 
 import com.badlogic.gdx.utils.Disposable;
+import de.longri.cachebox3.gui.map.layer.renderer.LocationRenderer;
 import org.oscim.layers.Layer;
 import org.oscim.map.Map;
 import org.oscim.renderer.atlas.TextureRegion;
@@ -29,12 +30,12 @@ import java.util.LinkedHashMap;
 public class LocationLayer extends Layer implements Disposable {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(LocationLayer.class);
 
-    private final NewLocationRenderer locationRenderer;
+    private final de.longri.cachebox3.gui.map.layer.renderer.LocationRenderer locationRenderer;
     private final LinkedHashMap<Object, TextureRegion> textureRegionMap;
 
     public LocationLayer(Map map, LinkedHashMap<Object, TextureRegion> textureRegionMap) {
         super(map);
-        mRenderer = locationRenderer = new NewLocationRenderer(map, this);
+        mRenderer = locationRenderer = new LocationRenderer(map, this);
         this.textureRegionMap = textureRegionMap;
         setArrow(textureRegionMap.get("mapStar1"));
     }

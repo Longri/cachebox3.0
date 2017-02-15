@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.map.layer;
+package de.longri.cachebox3.gui.map.layer.renderer;
 
 
 import com.badlogic.gdx.utils.Disposable;
+import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import org.oscim.core.Point;
 import org.oscim.core.PointF;
 import org.oscim.core.Tile;
@@ -33,9 +34,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 14.02.17
  */
-public class NewLocationRenderer extends BucketRenderer implements Disposable {
+public class LocationRenderer extends BucketRenderer implements Disposable {
 
-    public static final Logger log = LoggerFactory.getLogger(NewLocationRenderer.class);
+    public static final Logger log = LoggerFactory.getLogger(LocationRenderer.class);
     private static final PointF CENTER_OFFSET = new PointF(0.5f, 0.5f);
 
     private final SymbolBucket mSymbolBucket;
@@ -56,7 +57,7 @@ public class NewLocationRenderer extends BucketRenderer implements Disposable {
 
     }
 
-    public NewLocationRenderer(Map map, LocationLayer locationLayer) {
+    public LocationRenderer(Map map, LocationLayer locationLayer) {
         mSymbolBucket = new SymbolBucket();
         this.locationLayer = locationLayer;
         this.mMap = map;

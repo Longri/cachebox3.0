@@ -15,10 +15,7 @@
  */
 package de.longri.cachebox3.gui.map.layer;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -30,7 +27,7 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.events.SelectedCacheEvent;
 import de.longri.cachebox3.gui.events.SelectedCacheEventList;
-import de.longri.cachebox3.gui.map.layer.cluster.ClusterRenderer;
+import de.longri.cachebox3.gui.map.layer.renderer.WaypointLayerRenderer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
@@ -44,7 +41,6 @@ import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.lists.CB_List;
 import de.longri.cachebox3.utils.lists.ThreadStack;
 import org.oscim.backend.CanvasAdapter;
-import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.Box;
 import org.oscim.core.MercatorProjection;
@@ -55,13 +51,10 @@ import org.oscim.event.MotionEvent;
 import org.oscim.gdx.MotionHandler;
 import org.oscim.layers.Layer;
 import org.oscim.map.Map;
-import org.oscim.renderer.atlas.TextureAtlas;
 import org.oscim.renderer.atlas.TextureRegion;
-import org.oscim.utils.TextureAtlasUtils;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
@@ -72,7 +65,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     private static final String ERROR_MSG = "No de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle registered with name: ";
 
-    private final ClusterRenderer mClusterRenderer;
+    private final WaypointLayerRenderer mClusterRenderer;
     final ClusteredList mItemList;
     private final Point clickPoint = new Point();
     private final Box mapVisibleBoundingBox = new Box();
@@ -98,7 +91,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     public WaypointLayer(Map map, LinkedHashMap<Object, TextureRegion> textureRegionMap) {
         super(map);
-        mClusterRenderer = new ClusterRenderer(this, null);
+        mClusterRenderer = new WaypointLayerRenderer(this, null);
         mRenderer = mClusterRenderer;
         mItemList = new ClusteredList();
         populate();

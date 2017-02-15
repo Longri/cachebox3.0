@@ -19,26 +19,27 @@ package de.longri.cachebox3.gui.map.layer;
 
 
 import com.badlogic.gdx.utils.Disposable;
+import de.longri.cachebox3.gui.map.layer.renderer.LocationAccuracyRenderer;
 import org.oscim.core.MercatorProjection;
 import org.oscim.core.Point;
 import org.oscim.layers.Layer;
 import org.oscim.map.Map;
 
-public class LocationOverlay extends Layer implements Disposable {
+public class LocationAccuracyLayer extends Layer implements Disposable {
     private final Point mLocation = new Point();
     private double mRadius;
-    private LocationRenderer locationRenderer;
+    private LocationAccuracyRenderer locationAccuracyRenderer;
 
-    public LocationOverlay(Map map) {
+    public LocationAccuracyLayer(Map map) {
         super(map);
-        mRenderer = locationRenderer = new LocationRenderer(map, this);
+        mRenderer = locationAccuracyRenderer = new LocationAccuracyRenderer(map, this);
     }
 
     public void setPosition(double latitude, double longitude, double accuracy) {
         mLocation.x = MercatorProjection.longitudeToX(longitude);
         mLocation.y = MercatorProjection.latitudeToY(latitude);
         mRadius = accuracy / MercatorProjection.groundResolution(latitude, 1);
-        locationRenderer.setLocation(mLocation.x, mLocation.y, mRadius);
+        locationAccuracyRenderer.setLocation(mLocation.x, mLocation.y, mRadius);
     }
 
     @Override
@@ -51,8 +52,8 @@ public class LocationOverlay extends Layer implements Disposable {
 
     @Override
     public void dispose() {
-        locationRenderer.dispose();
-        locationRenderer = null;
+        locationAccuracyRenderer.dispose();
+        locationAccuracyRenderer = null;
         mRenderer = null;
     }
 }

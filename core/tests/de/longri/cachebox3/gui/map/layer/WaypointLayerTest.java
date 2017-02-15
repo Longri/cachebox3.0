@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
-import de.longri.cachebox3.gui.map.layer.cluster.ClusterRenderer;
+import de.longri.cachebox3.gui.map.layer.renderer.WaypointLayerRenderer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.sqlite.Database;
@@ -85,7 +85,7 @@ class WaypointLayerTest {
         Database.Data.Query.add(testCache2);
         Database.Data.Query.add(testCache3);
 
-        ClusterRenderer renderer = (ClusterRenderer) wpLayer.getRenderer();
+        WaypointLayerRenderer renderer = (WaypointLayerRenderer) wpLayer.getRenderer();
 
         assertThat("itemList must empty", wpLayer.mItemList.size() == 0);
 
@@ -117,7 +117,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(testCache1)) {
@@ -144,7 +144,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(testCache2)) {
@@ -170,7 +170,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(testCache3)) {
@@ -264,7 +264,7 @@ class WaypointLayerTest {
         Database.Data.Query.add(testCache2);
         Database.Data.Query.add(testCache3);
 
-        ClusterRenderer renderer = (ClusterRenderer) wpLayer.getRenderer();
+        WaypointLayerRenderer renderer = (WaypointLayerRenderer) wpLayer.getRenderer();
 
         assertThat("itemList must empty", wpLayer.mItemList.size() == 0);
 
@@ -297,7 +297,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(wp1)) {
@@ -323,7 +323,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(testCache3)) {
@@ -349,7 +349,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(wp3)) {
@@ -374,7 +374,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(wp2)) {
@@ -399,7 +399,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(testCache2)) {
@@ -426,7 +426,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(testCache1)) {
@@ -453,7 +453,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(wp1)) {
