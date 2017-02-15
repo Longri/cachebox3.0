@@ -39,6 +39,7 @@ import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.gui.skin.styles.AbstractIconStyle;
+import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
 
@@ -57,7 +58,7 @@ public class OptionsPane extends Table {
     private Array<String> listItems = new Array<String>();
     private Table tableFields;
     public Object currentStyle;
-    private ObjectMap<String, ?> styles;
+    private ObjectMap<String, Object> styles;
     final private PreviewPane previewPane;
     final private Cell styleLabelCell, styleCell, styleButtonCell;
     final private float styleButtonCellPrefHeight, styleLabelCellPrefHeight;
@@ -285,7 +286,7 @@ public class OptionsPane extends Table {
         try {
             Class<?> style = Class.forName(widgetStyle);
 
-            styles = game.skinProject.getAll(style);
+            styles = (ObjectMap<String, Object>) game.skinProject.getAll(style);
             if (styles == null) {
                 Gdx.app.error("OptionsPane", "No styles defined for this widget type");
 
@@ -333,10 +334,17 @@ public class OptionsPane extends Table {
                 int selection = -1;
 
                 try {
-                    Class<?> style = Class.forName(widgetStyle);
 
-                    styles = game.skinProject.getAll(style);
-                    if (styles == null) {
+                    Class<?> style = Class.forName(widgetStyle);
+                    styles = (ObjectMap<String, Object>) game.skinProject.getAll(style);
+
+                    if (widgetStyle.equals("de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle")) {
+                        MapArrowStyle mapArrowStyle = game.skinProject.get("myLocation", MapArrowStyle.class);
+                        styles.put("myLocation", mapArrowStyle);
+                    }
+
+
+                    if (styles == null || styles.size == 0) {
                         Gdx.app.error("OptionsPane", "No styles defined for this widget type");
 
                         tableFields.clear();

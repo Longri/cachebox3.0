@@ -15,8 +15,11 @@
  */
 package de.longri.cachebox3.gui.map.layer;
 
+import com.badlogic.gdx.scenes.scene2d.ui.GetName;
 import com.badlogic.gdx.utils.Disposable;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.map.layer.renderer.LocationRenderer;
+import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import org.oscim.layers.Layer;
 import org.oscim.map.Map;
 import org.oscim.renderer.atlas.TextureRegion;
@@ -32,12 +35,19 @@ public class LocationLayer extends Layer implements Disposable {
 
     private final de.longri.cachebox3.gui.map.layer.renderer.LocationRenderer locationRenderer;
     private final LinkedHashMap<Object, TextureRegion> textureRegionMap;
+    private final MapArrowStyle style;
+
 
     public LocationLayer(Map map, LinkedHashMap<Object, TextureRegion> textureRegionMap) {
         super(map);
         mRenderer = locationRenderer = new LocationRenderer(map, this);
         this.textureRegionMap = textureRegionMap;
-        setArrow(textureRegionMap.get("mapStar1"));
+
+        style = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
+
+        String bmpName = ((GetName) style.myLocation).getName();
+
+        setArrow(textureRegionMap.get(bmpName));
     }
 
 

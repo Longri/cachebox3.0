@@ -84,14 +84,14 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
             symbolX -= (flip << 1);
         else if (symbolX < -flip)
             symbolX += (flip << 1);
-
+        buckets.clear();
         if (!GeometryUtils.pointInPoly(symbolX, symbolY, mBox, 8, 0)) {
             return;
         }
 
-        buckets.clear();
         mMapPosition.bearing = -mMapPosition.bearing;
         if (arrowRegion == null) return;
+        symbolItem.next = null;
         symbolItem.set(symbolX, symbolY, arrowRegion, true);
         mSymbolBucket.pushSymbol(symbolItem);
 

@@ -35,6 +35,7 @@ import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
+import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.MapCompass;
@@ -253,6 +254,17 @@ public class MapView extends AbstractView {
             if (style.middle != null) if (!bitmapList.contains(style.middle, true)) bitmapList.add(style.middle);
             if (style.large != null) if (!bitmapList.contains(style.large, true)) bitmapList.add(style.large);
         }
+
+        //add Bitmaps from MapArrowStyle
+        MapArrowStyle mapArrowStyle = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
+
+        if(mapArrowStyle!=null){
+            if(mapArrowStyle.myLocation!=null)bitmapList.add(mapArrowStyle.myLocation);
+            if(mapArrowStyle.myLocationTransparent!=null)bitmapList.add(mapArrowStyle.myLocationTransparent);
+            if(mapArrowStyle.myLocationCar!=null)bitmapList.add(mapArrowStyle.myLocationCar);
+        }
+
+
         LinkedHashMap<Object, Bitmap> input = new LinkedHashMap<Object, Bitmap>();
         for (Bitmap bmp : bitmapList) {
             input.put(((GetName) bmp).getName(), bmp);
@@ -376,7 +388,7 @@ public class MapView extends AbstractView {
         myLocationAccuracy = new LocationAccuracyLayer(mMap);
         myLocationAccuracy.setPosition(52.580400947530364, 13.385594096047232, 100);
 
-        myLocationLayer = new LocationLayer(mMap,textureRegionMap);
+        myLocationLayer = new LocationLayer(mMap, textureRegionMap);
         myLocationLayer.setPosition(52.580400947530364, 13.385594096047232);
 
         if (tileSource != null) {

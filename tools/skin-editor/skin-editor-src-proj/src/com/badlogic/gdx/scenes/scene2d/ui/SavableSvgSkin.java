@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
+import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.utils.SkinColor;
 
 import java.io.StringWriter;
@@ -116,7 +117,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.skin.styles.ScaledSize.class);
         items.add(de.longri.cachebox3.gui.skin.styles.IconsStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.MenuIconStyle.class);
-
+        items.add(de.longri.cachebox3.gui.skin.styles.MapArrowStyle.class);
 
         for (Class<?> item : items) {
 
@@ -144,6 +145,10 @@ public class SavableSvgSkin extends SvgSkin {
             styles.sort();
             for (String style : styles) {
                 Object object = typeResources.get(style);
+
+                if (item.equals(MapWayPointItemStyle.class)) {
+                    if (!item.equals(object.getClass())) continue;
+                }
 
                 json.writeObjectStart(style);
                 Field[] fields = ClassReflection.getFields(object.getClass());
