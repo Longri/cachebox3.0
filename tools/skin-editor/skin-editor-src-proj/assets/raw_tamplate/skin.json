@@ -340,6 +340,18 @@
       "path": "svg/mapCITO2.svg",
       "scale": 0.15
     },
+    "mapCache0": {
+      "path": "svg/mapCache0.svg",
+      "scale": 0.2
+    },
+    "mapCache1": {
+      "path": "svg/mapCache1.svg",
+      "scale": 0.09
+    },
+    "mapCache2": {
+      "path": "svg/mapCache2.svg",
+      "scale": 0.15
+    },
     "mapCamera0": {
       "path": "svg/mapCamera0.svg",
       "scale": 0.2
@@ -420,6 +432,18 @@
       "path": "svg/mapGiga2.svg",
       "scale": 0.15
     },
+    "mapLabCache0": {
+      "path": "svg/mapLabCache0.svg",
+      "scale": 0.2
+    },
+    "mapLabCache1": {
+      "path": "svg/mapLabCache1.svg",
+      "scale": 0.09
+    },
+    "mapLabCache2": {
+      "path": "svg/mapLabCache2.svg",
+      "scale": 0.15
+    },
     "mapLetterbox": {
       "path": "svg/letterbox.svg",
       "scale": 0.15
@@ -480,9 +504,49 @@
       "path": "svg/multiStage.svg",
       "scale": 0.13
     },
+    "mapMultiStage0": {
+      "path": "svg/mapMultiStage0.svg",
+      "scale": 0.2
+    },
+    "mapMultiStage1": {
+      "path": "svg/mapMultiStage1.svg",
+      "scale": 0.09
+    },
+    "mapMultiStage2": {
+      "path": "svg/mapMultiStage2.svg",
+      "scale": 0.15
+    },
     "mapMultiStageStartP": {
       "path": "svg/multiStageStartP.svg",
       "scale": 0.13
+    },
+    "mapMultiStageStartP0": {
+      "path": "svg/mapMultiStageStartP0.svg",
+      "scale": 0.2
+    },
+    "mapMultiStageStartP1": {
+      "path": "svg/mapMultiStageStartP1.svg",
+      "scale": 0.09
+    },
+    "mapMultiStageStartP2": {
+      "path": "svg/mapMultiStageStartP2.svg",
+      "scale": 0.15
+    },
+    "mapMultiStartP0": {
+      "path": "svg/mapMultiStartP0.svg",
+      "scale": 0.2
+    },
+    "mapMultiStartP1": {
+      "path": "svg/mapMultiStartP1.svg",
+      "scale": 0.09
+    },
+    "mapMultiStartP2": {
+      "path": "svg/mapMultiStartP2.svg",
+      "scale": 0.15
+    },
+    "mapMyParking": {
+      "path": "svg/mapMyParking.svg",
+      "scale": 0.15
     },
     "mapMystery": {
       "path": "svg/myterie.svg",
@@ -498,6 +562,18 @@
     },
     "mapMystery2": {
       "path": "svg/mapMystery2.svg",
+      "scale": 0.15
+    },
+    "mapMysteryStartP0": {
+      "path": "svg/mapMysteryStartP0.svg",
+      "scale": 0.2
+    },
+    "mapMysteryStartP1": {
+      "path": "svg/mapMysteryStartP1.svg",
+      "scale": 0.09
+    },
+    "mapMysteryStartP2": {
+      "path": "svg/mapMysteryStartP2.svg",
       "scale": 0.15
     },
     "mapParkingArea": {
@@ -592,6 +668,18 @@
       "path": "svg/mapTrailhead2.svg",
       "scale": 0.15
     },
+    "mapUndefined0": {
+      "path": "svg/mapUndefined0.svg",
+      "scale": 0.2
+    },
+    "mapUndefined1": {
+      "path": "svg/mapUndefined1.svg",
+      "scale": 0.09
+    },
+    "mapUndefined2": {
+      "path": "svg/mapUndefined2.svg",
+      "scale": 0.15
+    },
     "mapVirtual0": {
       "path": "svg/mapVirtual0.svg",
       "scale": 0.2
@@ -670,15 +758,15 @@
     },
     "myLocation": {
       "path": "svg/myLocation.svg",
-      "scale": 1
+      "scale": 0.3
     },
     "myLocationCar": {
       "path": "svg/myLocationCar.svg",
-      "scale": 1
+      "scale": 0.3
     },
     "myLocationTransparent": {
       "path": "svg/myLocationTransparent.svg",
-      "scale": 1
+      "scale": 0.3
     },
     "myterie": {
       "path": "svg/myterie.svg",
@@ -1391,6 +1479,11 @@
       "middle": "mapCITO1",
       "large": "mapCITO2"
     },
+    "mapCache": {
+      "small": "mapCache0",
+      "middle": "mapCache1",
+      "large": "mapCache2"
+    },
     "mapCamera": {
       "small": "mapCamera0",
       "middle": "mapCamera1",
@@ -1421,6 +1514,11 @@
       "middle": "mapGiga1",
       "large": "mapGiga2"
     },
+    "mapLabCache": {
+      "small": "mapLabCache0",
+      "middle": "mapLabCache1",
+      "large": "mapLabCache2"
+    },
     "mapLetterbox": {
       "small": "mapLetterbox0",
       "middle": "mapLetterbox1",
@@ -1441,10 +1539,35 @@
       "middle": "mapMultiQuestion1",
       "large": "mapMultiQuestion2"
     },
+    "mapMultiStage": {
+      "small": "mapMultiStage0",
+      "middle": "mapMultiStage1",
+      "large": "mapMultiStage2"
+    },
+    "mapMultiStageStartP": {
+      "small": "mapMultiStageStartP0",
+      "middle": "mapMultiStageStartP1",
+      "large": "mapMultiStageStartP2"
+    },
+    "mapMultiStartP": {
+      "small": "mapMultiStartP0",
+      "middle": "mapMultiStartP1",
+      "large": "mapMultiStartP2"
+    },
+    "mapMyParking": {
+      "small": "mapMyParking",
+      "middle": "mapMyParking",
+      "large": "mapMyParking"
+    },
     "mapMystery": {
       "small": "mapMystery0",
       "middle": "mapMystery1",
       "large": "mapMystery2"
+    },
+    "mapMysteryStartP": {
+      "small": "mapMysteryStartP0",
+      "middle": "mapMysteryStartP1",
+      "large": "mapMysteryStartP2"
     },
     "mapParkingArea": {
       "small": "mapParkingArea0",
@@ -1475,6 +1598,11 @@
       "small": "mapTrailhead0",
       "middle": "mapTrailhead1",
       "large": "mapTrailhead2"
+    },
+    "mapUndefined": {
+      "small": "mapUndefined0",
+      "middle": "mapUndefined1",
+      "large": "mapUndefined2"
     },
     "mapVirtual": {
       "small": "mapVirtual0",
@@ -1559,6 +1687,7 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
+    "mapUndefined": {},
     "myLocation": {
       "myLocation": "myLocation",
       "myLocationTransparent": "myLocationTransparent",

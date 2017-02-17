@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="258" height="258" viewBox="0 0 258.00 258.00" enable-background="new 0 0 258.00 258.00" xml:space="preserve">
+	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.5" y1="1.08111" x2="1.66222" y2="1.08111" gradientTransform="rotate(-90.000000 0.500000 1.081108)">
+		<stop offset="0" stop-color="#ABC4AB" stop-opacity="1"/>
+		<stop offset="0.771552" stop-color="#D5E1D5" stop-opacity="1"/>
+		<stop offset="1" stop-color="#FFFFFF" stop-opacity="1"/>
+	</linearGradient>
+	<path fill="url(#SVGID_Fill1_)" stroke-width="8" stroke-linecap="square" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 44,4L 214,4C 236.091,4 254,21.9086 254,43.9999L 254,214C 254,236.091 236.091,254 214,254L 44,254C 21.9086,254 4,236.091 4,214L 4,43.9999C 4,21.9086 21.9086,4 44,4 Z "/>
+	<g>
+		<path fill="#FFDE19" fill-opacity="1" stroke-width="5" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 46.482,64.7313L 208.482,64.4291L 208.482,77.6382L 46.7834,77.8541L 46.482,64.7313 Z "/>
+		<path fill="#FFDE19" fill-opacity="1" stroke-width="5" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 206.524,64.8223L 236.524,45.8571L 236.524,59.1069L 206.595,77.9452L 206.524,64.8223 Z "/>
+		<path fill="#FFDE19" fill-opacity="1" stroke-width="5" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 85.7737,45.8541L 237.524,44.8541L 207.928,64.9767L 49.2737,64.3544L 85.7737,45.8541 Z "/>
+		<path fill="#D66919" fill-opacity="1" stroke-width="5" stroke-linecap="square" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 204.524,78.8544L 234.315,61.9913L 234.315,109.658L 204.524,129.354L 204.524,78.8544 Z "/>
+		<rect x="56.8987" y="78.3549" fill="#D66919" fill-opacity="1" stroke-width="5" stroke-linecap="square" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" width="146.875" height="51.25"/>
+		<path fill="#D66919" fill-opacity="1" stroke-width="5" stroke-linecap="square" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 108.728,156.014L 199.061,105.514L 199.061,153.181L 108.728,206.014L 108.728,156.014 Z "/>
+		<path fill="#D66919" fill-opacity="1" stroke-width="5" stroke-linecap="square" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 28.7277,153.181L 108.061,153.181L 108.103,206.139L 45.8527,206.389L 35.1027,203.389L 28.8527,194.389L 28.7277,153.181 Z "/>
+		<linearGradient id="SVGID_Fill2_" gradientUnits="objectBoundingBox" x1="-0.0487922" y1="0.500001" x2="1.04879" y2="0.499999">
+			<stop offset="0.00925926" stop-color="#C0C0C0" stop-opacity="1"/>
+			<stop offset="0.197949" stop-color="#8B8B8B" stop-opacity="0.501961"/>
+			<stop offset="0.421296" stop-color="#575757" stop-opacity="0"/>
+			<stop offset="0.611111" stop-color="#626262" stop-opacity="0"/>
+			<stop offset="1" stop-color="#C0C0C0" stop-opacity="0.4"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill2_)" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" d="M 97.1009,129.256C 130.101,113.521 162.96,113.571 170.492,129.368C 178.024,145.165 157.378,170.727 124.378,186.462C 91.3777,202.198 58.5195,202.147 50.9871,186.35C 43.4548,170.554 64.101,144.991 97.1009,129.256 Z "/>
+		<path fill="#FFDE19" fill-opacity="1" stroke-width="5" stroke-linejoin="miter" stroke="#000000" stroke-opacity="1" d="M 22.6444,140.264L 112.228,139.972L 112.228,152.722L 22.811,152.931L 22.6444,140.264 Z "/>
+		<path fill="#FFDE19" fill-opacity="1" stroke-width="5" stroke-linejoin="miter" stroke="#000000" stroke-opacity="1" d="M 21.9777,140.431L 120.193,87.7021L 200.978,87.2225L 108.756,140.473L 21.9777,140.431 Z "/>
+		<linearGradient id="SVGID_Fill3_" gradientUnits="objectBoundingBox" x1="0.997261" y1="0.655398" x2="2.03921" y2="0.655398" gradientTransform="rotate(182.024399 0.997261 0.655398)">
+			<stop offset="0.00462963" stop-color="#B24E04" stop-opacity="1"/>
+			<stop offset="0.660537" stop-color="#D06515" stop-opacity="1"/>
+			<stop offset="0.99537" stop-color="#EE7C27" stop-opacity="1"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill3_)" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" d="M 74.6487,58.7643L 200.065,58.646L 213.982,48.7295L 90.7321,49.9794L 74.6487,58.7643 Z "/>
+		<path fill="#FFDE19" fill-opacity="1" stroke-width="5" stroke-linecap="square" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 113.311,139.097L 203.686,85.7222L 203.686,101.222L 113.311,152.764L 113.311,139.097 Z "/>
+		<linearGradient id="SVGID_Fill4_" gradientUnits="objectBoundingBox" x1="-0.0487919" y1="0.5" x2="1.04879" y2="0.5">
+			<stop offset="0" stop-color="#C0C0C0" stop-opacity="0"/>
+			<stop offset="0.19505" stop-color="#989898" stop-opacity="0"/>
+			<stop offset="0.425926" stop-color="#707070" stop-opacity="0"/>
+			<stop offset="0.787037" stop-color="#6C6C6C" stop-opacity="0"/>
+			<stop offset="0.986111" stop-color="#B9B9B9" stop-opacity="0.6"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill4_)" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" d="M 119.256,119.244C 152.255,103.509 185.114,103.559 192.646,119.356C 200.179,135.153 179.533,160.715 146.533,176.45C 113.532,192.186 80.6741,192.135 73.1417,176.338C 65.6094,160.541 86.2556,134.979 119.256,119.244 Z "/>
+		<path fill="#FFDE19" fill-opacity="1" stroke-width="5" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 48.2693,152.722L 94.7693,152.972L 78.2693,170.972L 34.5193,170.972L 48.2693,152.722 Z "/>
+		<linearGradient id="SVGID_Fill5_" gradientUnits="objectBoundingBox" x1="0.99726" y1="0.655412" x2="2.03922" y2="0.655412" gradientTransform="rotate(182.024399 0.997260 0.655412)">
+			<stop offset="0.00462963" stop-color="#B24E04" stop-opacity="1"/>
+			<stop offset="0.660537" stop-color="#D06515" stop-opacity="1"/>
+			<stop offset="0.99537" stop-color="#EE7C27" stop-opacity="1"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill5_)" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" d="M 70.4403,127.938L 107.524,127.854L 163.857,96.521L 125.19,96.8544L 70.4403,127.938 Z "/>
+	</g>
+</svg>
