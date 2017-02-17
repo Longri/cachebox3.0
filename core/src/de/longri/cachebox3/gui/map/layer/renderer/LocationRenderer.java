@@ -43,7 +43,6 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
     private final float[] mBox = new float[8];
     private final LocationLayer locationLayer;
     private final Point mMapPoint = new Point();
-    private final SymbolItem symbolItem = new SymbolItem();
     private final Map mMap;
 
 
@@ -61,7 +60,7 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
         mSymbolBucket = new SymbolBucket();
         this.locationLayer = locationLayer;
         this.mMap = map;
-        symbolItem.offset = CENTER_OFFSET;
+
     }
 
 
@@ -91,8 +90,9 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
 
         mMapPosition.bearing = -mMapPosition.bearing;
         if (arrowRegion == null) return;
-        symbolItem.next = null;
+        SymbolItem symbolItem = SymbolItem.pool.get();
         symbolItem.set(symbolX, symbolY, arrowRegion, true);
+        symbolItem.offset = CENTER_OFFSET;
         mSymbolBucket.pushSymbol(symbolItem);
 
         buckets.set(mSymbolBucket);
