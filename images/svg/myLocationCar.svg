@@ -2,7 +2,7 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="161.667" height="256.667" viewBox="0 0 161.67 256.67" enable-background="new 0 0 161.67 256.67" xml:space="preserve">
 	<g>
-		<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="-0.016165" y1="0.500001" x2="1.01616" y2="0.500001">
+		<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="-0.016165" y1="0.5" x2="1.01616" y2="0.5">
 			<stop offset="0.0344828" stop-color="#EEFF00" stop-opacity="1"/>
 			<stop offset="0.5" stop-color="#D9FF00" stop-opacity="1"/>
 			<stop offset="1" stop-color="#F8E6E6" stop-opacity="1"/>
@@ -14,7 +14,7 @@
 			<stop offset="0.752898" stop-color="#B0BC00" stop-opacity="0.560784"/>
 			<stop offset="1" stop-color="#EEFF00" stop-opacity="0.345098"/>
 		</linearGradient>
-		<path fill="url(#SVGID_Fill2_)" stroke-width="0.2" stroke-linejoin="round" d="M 8.03644,245.714L 80.833,11.6669L 79.9845,197.214L 8.03644,245.714 Z "/>
+		<path fill="url(#SVGID_Fill2_)" stroke-width="0.2" stroke-linejoin="round" d="M 8.03644,245.714L 80.833,11.667L 79.9845,197.214L 8.03644,245.714 Z "/>
 	</g>
-	<path fill="none" stroke-width="7" stroke-linejoin="miter" stroke="#FF0000" stroke-opacity="1" d="M 14.3303,237.072L 80.6635,22.9161L 145.705,236.437L 80.5594,193.187L 14.3303,237.072 Z "/>
+	<path fill="none" stroke-width="7" stroke-linejoin="miter" stroke="#FF0000" stroke-opacity="1" d="M 14.3302,237.072L 80.6634,22.9161L 145.705,236.437L 80.5593,193.187L 14.3302,237.072 Z "/>
 </svg>

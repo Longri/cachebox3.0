@@ -335,7 +335,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             return "map" + cache.Type.name();
     }
 
-    private static String getMapIconName(Waypoint waypoint) {
+    public static String getMapIconName(Waypoint waypoint) {
         if ((waypoint.Type == CacheTypes.MultiStage) && (waypoint.IsStart))
             return "mapMultiStageStartP";
         else

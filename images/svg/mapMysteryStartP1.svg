@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="258" height="258" viewBox="0 0 258.00 258.00" enable-background="new 0 0 258.00 258.00" xml:space="preserve">
+	<g>
+		<ellipse fill="#D66919" fill-opacity="1" stroke-width="5" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" cx="123.33" cy="197.381" rx="19" ry="19.2499"/>
+		<path fill="#D66919" fill-opacity="1" stroke-width="5" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" d="M 96.83,115.631L 79.83,108.131L 70.83,97.1309L 66.83,87.1309L 66.33,74.1309L 70.33,63.6309L 76.33,54.1309L 82.83,47.6309L 93.83,40.1309L 102.33,36.6309L 113.33,34.6309L 124.83,34.1309L 136.83,33.1309L 148.33,34.6309L 155.83,38.1309L 165.83,43.1309L 174.83,49.6309L 181.33,56.6309L 188.33,68.6309L 189.33,79.6309L 187.83,93.6309L 183.33,101.131L 175.83,109.131L 166.83,119.131L 154.83,127.631L 142.83,137.631L 136.33,149.131L 132.83,157.131L 133.102,160.664L 132.517,163.818L 129.642,165.318L 118.83,165.131L 114.83,162.131L 114.83,153.131L 121.33,142.631L 129.83,130.131L 141.33,117.131L 145.83,110.131L 149.83,98.6309L 149.83,88.1309L 147.33,76.1309L 141.33,70.1309L 131.33,65.6309L 122.33,64.6309L 114.83,65.1309L 105.83,68.1309L 99.83,73.6309L 99.83,80.1309L 101.83,86.6309L 109.33,91.6309L 114.33,94.6309L 115.83,99.6309L 114.83,105.131L 111.83,109.131L 108.33,112.631L 101.83,114.131L 96.83,115.631 Z "/>
+		<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.992414" y1="0.442438" x2="1.98393" y2="0.442438" gradientTransform="rotate(165.104248 0.992414 0.442438)">
+			<stop offset="0.00925926" stop-color="#FFFFFF" stop-opacity="1"/>
+			<stop offset="1" stop-color="#FCFCFF" stop-opacity="0"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill1_)" stroke-width="0.2" stroke-linejoin="round" d="M 142.163,39.6306L 153.497,47.2974L 162.83,54.6309L 171.163,64.9641L 174.83,74.2975L 176.163,86.6309L 174.163,98.6309L 170.83,104.298L 175.461,105.844L 184.83,93.2975L 186.497,83.6309L 186.163,70.6309L 178.961,58.8438L 174.497,53.6309L 172.83,51.2975L 168.163,48.2975L 161.497,43.2975L 154.83,40.2975L 148.83,38.9641L 142.163,39.6306 Z "/>
+		<linearGradient id="SVGID_Fill2_" gradientUnits="objectBoundingBox" x1="0.992401" y1="0.440365" x2="1.9844" y2="0.440365" gradientTransform="rotate(165.603821 0.992401 0.440365)">
+			<stop offset="0.00925926" stop-color="#FFFFFF" stop-opacity="1"/>
+			<stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill2_)" stroke-width="0.2" stroke-linejoin="round" d="M 98.9966,85.7141L 96.0383,83.6725L 93.6633,89.3806L 97.6633,93.7141L 101.663,98.3809L 102.663,103.714L 102.33,109.714L 101.788,111.756L 106.205,111.006L 109.872,108.922L 112.705,106.256L 112.622,102.756L 112.955,99.3391L 111.955,96.5059L 107.288,93.5059L 103.872,91.3391L 100.872,89.1725"/>
+		<linearGradient id="SVGID_Fill3_" gradientUnits="objectBoundingBox" x1="1.01199" y1="0.456821" x2="2.01995" y2="0.456821" gradientTransform="rotate(160.124634 1.011991 0.456821)">
+			<stop offset="0.00925926" stop-color="#FFFFFF" stop-opacity="1"/>
+			<stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill3_)" stroke-width="0.2" stroke-linejoin="round" d="M 124.83,180.964L 128.497,185.297L 130.83,189.964L 130.497,196.631L 129.163,203.298L 126.83,208.964L 127.497,211.964L 130.856,211.865L 134.69,209.615L 137.773,205.448L 139.44,200.531C 139.44,200.531 140.249,196.819 139.83,195.298C 139.465,193.972 138.83,189.964 138.83,189.964L 137.497,185.964L 134.163,182.964L 131.163,180.964L 124.83,180.964 Z "/>
+	</g>
+</svg>

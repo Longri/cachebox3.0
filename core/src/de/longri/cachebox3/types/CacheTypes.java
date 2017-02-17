@@ -46,7 +46,6 @@ public enum CacheTypes {
     Final(false), // = 18, !!! 18 used in CacheListDAO
     Cache(true), // = 19,
     MyParking(true), // = 20
-    Munzee(true), // 21
     Giga(true), // 22
     LabCache(true)
     ;
@@ -108,8 +107,6 @@ public enum CacheTypes {
                 return ParkingArea;
             if (string.toLowerCase().contains("stages"))
                 return MultiStage;
-            if (string.toLowerCase().contains("munzee"))
-                return Munzee;
             if (string.toLowerCase().contains("mega"))
                 return MegaEvent;
             if (string.toLowerCase().contains("virtual"))
@@ -215,9 +212,6 @@ public enum CacheTypes {
                 drawable = null;
                 break;
             case MyParking:
-                drawable = null;
-                break;
-            case Munzee:
                 drawable = null;
                 break;
             case Giga:
@@ -326,8 +320,6 @@ public enum CacheTypes {
                 return "Question to Answer";
             case MultiStage:
                 return "Stages of a Multicache";
-            case Munzee:
-                break;
             case MyParking:
                 break;
             case Mystery:
@@ -376,8 +368,6 @@ public enum CacheTypes {
                 return "X";
             case Multi:
                 return "M";
-            case Munzee:
-                return "Z";
             case Mystery:
                 return "U";
             case Traditional:

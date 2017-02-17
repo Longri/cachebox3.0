@@ -40,6 +40,7 @@ import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.gui.skin.styles.AbstractIconStyle;
 import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
+import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
 
@@ -243,6 +244,11 @@ public class OptionsPane extends Table {
 
 
                 try {
+                    if (currentStyle instanceof MapArrowStyle) {
+                        // switch current style to MapWayPointItemStyle
+                        // we have only one MapArrowStyle
+                        currentStyle = MapWayPointItemStyle.class.newInstance();
+                    }
                     game.skinProject.add(styleName, currentStyle.getClass().newInstance());
                 } catch (Exception e) {
                     e.printStackTrace();
