@@ -15,10 +15,9 @@
  * You should have received a copy of the GNU Lesser General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package de.longri.cachebox3.gui.map.layer;
+package de.longri.cachebox3.gui.map.layer.renderer;
 
 import com.badlogic.gdx.utils.Disposable;
-import de.longri.cachebox3.gui.map.MapCamera;
 import org.oscim.backend.GL;
 import org.oscim.core.Box;
 import org.oscim.core.Point;
@@ -33,14 +32,13 @@ import java.util.Locale;
 
 import static org.oscim.backend.GLAdapter.gl;
 
-public class LocationRenderer extends LayerRenderer implements Disposable {
+public class LocationAccuracyRenderer extends LayerRenderer implements Disposable {
 
     private static final long ANIM_RATE = 50;
     private static final long INTERVAL = 2000;
 
     private static final float CIRCLE_SIZE = 30;
     private static final int SHOW_ACCURACY_ZOOM = 16;
-    private MapCamera cam;
 
     public enum Shader {SHADER_1, SHADER_2, SHADER_3}
 
@@ -72,20 +70,15 @@ public class LocationRenderer extends LayerRenderer implements Disposable {
     private Shader mShader = Shader.SHADER_3;
     private int mShowAccuracyZoom = SHOW_ACCURACY_ZOOM;
 
-    public LocationRenderer(Map map, Layer layer) {
+    public LocationAccuracyRenderer(Map map, Layer layer) {
         mMap = map;
         mLayer = layer;
 
-        initial3DModel();
-    }
-
-    private void initial3DModel() {
-        cam = new MapCamera(mMap);
     }
 
     @Override
     public void dispose() {
-        cam = null;
+
     }
 
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.map.layer.cluster;
+package de.longri.cachebox3.gui.map.layer.renderer;
 
 
 import com.badlogic.gdx.scenes.scene2d.ui.Cluster;
@@ -41,9 +41,9 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class ClusterRenderer extends BucketRenderer implements Disposable {
+public class WaypointLayerRenderer extends BucketRenderer implements Disposable {
 
-    public static final Logger log = LoggerFactory.getLogger(ClusterRenderer.class);
+    public static final Logger log = LoggerFactory.getLogger(WaypointLayerRenderer.class);
     private static final PointF CENTER_OFFSET = new PointF(0.5f, 0.5f);
 
     private final Bitmap mDefaultBitmap;
@@ -86,7 +86,7 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
         }
     }
 
-    public ClusterRenderer(WaypointLayer waypointLayer, Bitmap defaultSymbol) {
+    public WaypointLayerRenderer(WaypointLayer waypointLayer, Bitmap defaultSymbol) {
         mSymbolLayer = new SymbolBucket();
         mWaypointLayer = waypointLayer;
         mDefaultBitmap = defaultSymbol;
@@ -216,6 +216,7 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
         //TODO try without sort
         if (zoomChanged) sort(mItems, 0, mItems.length);
         //log.debug(Arrays.toString(mItems));
+
         for (InternalItem it : mItems) {
             if (!it.visible)
                 continue;
@@ -240,7 +241,7 @@ public class ClusterRenderer extends BucketRenderer implements Disposable {
 
         buckets.set(mSymbolLayer);
         buckets.prepare();
-
+        buckets.compile(true);
         compile();
     }
 

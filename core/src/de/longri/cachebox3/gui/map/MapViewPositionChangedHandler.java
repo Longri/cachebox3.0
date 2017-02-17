@@ -15,8 +15,8 @@
  */
 package de.longri.cachebox3.gui.map;
 
-import de.longri.cachebox3.gui.map.layer.LocationOverlay;
-import de.longri.cachebox3.gui.map.layer.MyLocationModel;
+import de.longri.cachebox3.gui.map.layer.LocationLayer;
+import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.Locator;
@@ -41,15 +41,15 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     private CoordinateGPS mapCenter;
     private CoordinateGPS myPosition;
     private final Map map;
-    private final MyLocationModel myLocationModel;
-    private final LocationOverlay myLocationAccuracy;
+    private final LocationAccuracyLayer myLocationAccuracy;
+    private final LocationLayer myLocationLayer;
     private final MapCompass mapOrientationButton;
     private final AtomicBoolean isDisposed = new AtomicBoolean(false);
 
     public static MapViewPositionChangedHandler
-    getInstance(Map map, MyLocationModel myLocationModel, LocationOverlay myLocationAccuracy, MapCompass mapOrientationButton) {
+    getInstance(Map map, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy, MapCompass mapOrientationButton) {
         MapViewPositionChangedHandler handler =
-                new MapViewPositionChangedHandler(map, myLocationModel, myLocationAccuracy, mapOrientationButton);
+                new MapViewPositionChangedHandler(map, myLocationLayer, myLocationAccuracy, mapOrientationButton);
 
         //register this handler
         PositionChangedEventList.Add(handler);
@@ -57,9 +57,9 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     }
 
 
-    private MapViewPositionChangedHandler(Map map, MyLocationModel myLocationModel, LocationOverlay myLocationAccuracy, MapCompass mapOrientationButton) {
+    private MapViewPositionChangedHandler(Map map, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy, MapCompass mapOrientationButton) {
         this.map = map;
-        this.myLocationModel = myLocationModel;
+        this.myLocationLayer = myLocationLayer;
         this.myLocationAccuracy = myLocationAccuracy;
         this.mapOrientationButton = mapOrientationButton;
     }
@@ -165,14 +165,14 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
                 this.map.post(new Runnable() {
                     @Override
                     public void run() {
-                        myLocationModel.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
                         myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
+                        myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude);
                         map.updateMap(true);
                     }
                 });
             else {
-                myLocationModel.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
                 myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
+                myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude);
                 map.updateMap(true);
             }
         }

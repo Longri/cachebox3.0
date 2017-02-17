@@ -668,6 +668,18 @@
       "path": "svg/multi.svg",
       "scale": 0.2
     },
+    "myLocation": {
+      "path": "svg/myLocation.svg",
+      "scale": 1
+    },
+    "myLocationCar": {
+      "path": "svg/myLocationCar.svg",
+      "scale": 1
+    },
+    "myLocationTransparent": {
+      "path": "svg/myLocationTransparent.svg",
+      "scale": 1
+    },
     "myterie": {
       "path": "svg/myterie.svg",
       "scale": 0.2
@@ -1544,6 +1556,13 @@
       "GC_Live": "gc_liveIcon",
       "prefWidth": -1,
       "prefHeight": -1
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
+    "myLocation": {
+      "myLocation": "myLocation",
+      "myLocationTransparent": "myLocationTransparent",
+      "myLocationCar": "myLocationCar"
     }
   }
 }
