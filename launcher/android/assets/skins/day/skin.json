@@ -190,11 +190,11 @@
     },
     "default_button": {
       "path": "svg/default_button.svg",
-      "scale": 1
+      "scale": 0.5
     },
     "default_button_pressed": {
       "path": "svg/default_button_pressed.svg",
-      "scale": 1
+      "scale": 0.5
     },
     "deleteIcon": {
       "path": "svg/deleteIcon.svg",
@@ -640,6 +640,18 @@
       "path": "svg/toast_background.svg",
       "scale": 1
     },
+    "toggleOff": {
+      "path": "svg/toggleOff.svg",
+      "scale": 1
+    },
+    "toggleOn": {
+      "path": "svg/toggleOn.svg",
+      "scale": 1
+    },
+    "togglePress": {
+      "path": "svg/togglePress.svg",
+      "scale": 1
+    },
     "tool": {
       "path": "svg/tool.svg",
       "scale": 0.72
@@ -700,6 +712,11 @@
       "b": 1,
       "a": 1
     },
+    "coordinateValuesFocus": {
+      "r": 0.07450981,
+      "g": 0.54901963,
+      "a": 1
+    },
     "dialog_background": {
       "a": 0.8
     },
@@ -743,7 +760,7 @@
       "a": 0.7
     },
     "transparent_color": {
-      "a": 0
+      "a": 1
     }
   },
   "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
@@ -758,6 +775,10 @@
     }
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "coordinateValueFont": {
+      "font": "fonts/DroidSans-Bold.ttf",
+      "size": 24
+    },
     "normal_bold_font": {
       "font": "fonts/DroidSans-Bold.ttf",
       "size": 20
@@ -791,27 +812,38 @@
       "topHeight": 6,
       "bottomHeight": 6
     },
+    "default_button_9_Patch": {
+      "name": "default_button",
+      "left": 8,
+      "right": 8,
+      "top": 8,
+      "bottom": 8,
+      "leftWidth": 8,
+      "rightWidth": 8,
+      "topHeight": 8,
+      "bottomHeight": 8
+    },
     "drawable_default_button": {
       "name": "default_button",
-      "left": 15,
-      "right": 15,
-      "top": 15,
-      "bottom": 15,
-      "leftWidth": 13,
-      "rightWidth": 13,
-      "topHeight": 11,
-      "bottomHeight": 11
+      "left": 8,
+      "right": 8,
+      "top": 8,
+      "bottom": 8,
+      "leftWidth": 8,
+      "rightWidth": 8,
+      "topHeight": 8,
+      "bottomHeight": 8
     },
     "drawable_default_button_pressed": {
       "name": "default_button_pressed",
-      "left": 15,
-      "right": 15,
-      "top": 15,
-      "bottom": 15,
-      "leftWidth": 13,
-      "rightWidth": 13,
-      "topHeight": 11,
-      "bottomHeight": 11
+      "left": 8,
+      "right": 8,
+      "top": 8,
+      "bottom": 8,
+      "leftWidth": 8,
+      "rightWidth": 8,
+      "topHeight": 8,
+      "bottomHeight": 8
     },
     "drawable_dialog_center": {
       "name": "dialog_center",
@@ -921,6 +953,39 @@
       "rightWidth": 5,
       "topHeight": 5,
       "bottomHeight": 5
+    },
+    "toggleOff_9_Patch": {
+      "name": "toggleOff",
+      "left": 13,
+      "right": 13,
+      "top": 13,
+      "bottom": 13,
+      "leftWidth": 13,
+      "rightWidth": 13,
+      "topHeight": 13,
+      "bottomHeight": 13
+    },
+    "toggleOn_9_Patch": {
+      "name": "toggleOn",
+      "left": 13,
+      "right": 13,
+      "top": 13,
+      "bottom": 13,
+      "leftWidth": 13,
+      "rightWidth": 13,
+      "topHeight": 13,
+      "bottomHeight": 13
+    },
+    "togglePress_9_Patch": {
+      "name": "togglePress",
+      "left": 13,
+      "right": 13,
+      "top": 13,
+      "bottom": 13,
+      "leftWidth": 13,
+      "rightWidth": 13,
+      "topHeight": 13,
+      "bottomHeight": 13
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
@@ -992,11 +1057,31 @@
     }
   },
   "com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle": {
+    "coordinate": {
+      "font": "normal_bold_font",
+      "fontColor": "font_color",
+      "up": "drawable_default_button",
+      "down": "drawable_default_button_pressed"
+    },
+    "coordinateValues": {
+      "font": "coordinateValueFont",
+      "fontColor": "font_color",
+      "overFontColor": "coordinateValuesFocus",
+      "up": "default_button_9_Patch",
+      "down": "drawable_default_button_pressed"
+    },
     "default": {
       "font": "normal_font",
       "fontColor": "font_color",
       "up": "drawable_default_button",
       "down": "drawable_default_button_pressed"
+    },
+    "toggle": {
+      "font": "normal_font",
+      "fontColor": "font_color",
+      "up": "toggleOff_9_Patch",
+      "down": "togglePress_9_Patch",
+      "checked": "toggleOn_9_Patch"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle": {
