@@ -44,7 +44,6 @@ public class FilterInstances {
 		mCacheTypes[CacheTypes.Traditional.ordinal()] = true;
 		mCacheTypes[CacheTypes.Camera.ordinal()] = true;
 		mCacheTypes[CacheTypes.Earth.ordinal()] = true;
-		mCacheTypes[CacheTypes.Munzee.ordinal()] = true;
 		String tmp = String.valueOf(mCacheTypes[0]);
 		for (int i = 1; i < mCacheTypes.length; i++) {
 			tmp = tmp + "," + String.valueOf(mCacheTypes[i]);

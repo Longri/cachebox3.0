@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="258" height="258" viewBox="0 0 258.00 258.00" enable-background="new 0 0 258.00 258.00" xml:space="preserve">
+	<g>
+		<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="-0.101112" y1="0.499995" x2="1.10113" y2="0.499995">
+			<stop offset="0" stop-color="#1FA3FF" stop-opacity="1"/>
+			<stop offset="1" stop-color="#000000" stop-opacity="1"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill1_)" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" d="M 94.225,58.3834L 165.425,58.3834L 165.425,74.9711L 152.226,85.5533L 152.226,146.473L 165.425,156.197L 165.425,170.784L 94.225,170.784L 94.225,156.195L 108.626,145.901L 108.626,85.5533L 94.225,74.6871L 94.225,58.3834 Z "/>
+		<linearGradient id="SVGID_Fill2_" gradientUnits="objectBoundingBox" x1="0" y1="0.499998" x2="0.999979" y2="0.499998">
+			<stop offset="0" stop-color="#909CA4" stop-opacity="1"/>
+			<stop offset="1" stop-color="#000000" stop-opacity="1"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill2_)" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" d="M 126.776,170.784L 132.586,170.784L 132.411,220.799L 129.561,223.949L 126.776,220.699L 126.776,170.784 Z "/>
+		<radialGradient id="SVGID_Stroke1_" cx="128.661" cy="128.048" r="98.9999" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#909CA4" stop-opacity="1"/>
+			<stop offset="0.469828" stop-color="#768087" stop-opacity="1"/>
+			<stop offset="0.517774" stop-color="#626B71" stop-opacity="1"/>
+			<stop offset="0.547414" stop-color="#4E565B" stop-opacity="1"/>
+			<stop offset="0.570813" stop-color="#6B747B" stop-opacity="1"/>
+			<stop offset="0.62931" stop-color="#88939B" stop-opacity="1"/>
+			<stop offset="1" stop-color="#88939B" stop-opacity="1"/>
+		</radialGradient>
+		<path fill="none" fill-rule="evenodd" stroke-width="10" stroke-linecap="square" stroke-linejoin="bevel" stroke="url(#SVGID_Stroke1_)" d="M 109.011,216.972C 68.7557,208.007 38.6613,172.08 38.6613,129.124C 38.6613,79.4181 78.9558,39.1237 128.661,39.1237C 178.367,39.1237 218.661,79.4181 218.661,129.124C 218.661,170.789 190.348,205.842 151.911,216.092"/>
+	</g>
+</svg>

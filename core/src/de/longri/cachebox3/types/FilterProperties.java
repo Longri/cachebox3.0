@@ -294,10 +294,8 @@ public class FilterProperties {
                     result[i] = true;
                 }
             }
-            result[CacheTypes.Munzee.ordinal()] = result[11];
-            result[CacheTypes.Giga.ordinal()] = result[12];
+            result[CacheTypes.Giga.ordinal()] = result[11];
             result[11] = true;
-            result[12] = true;
         } else {
             for (int i = 0; i < result.length; i++) {
                 result[i] = Boolean.parseBoolean(parts[i]);
