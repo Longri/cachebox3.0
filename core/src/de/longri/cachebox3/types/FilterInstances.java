@@ -102,7 +102,6 @@ public class FilterInstances {
 
 	// Drop off Travelbugs 4
 	private final static String sTBsCacheTypes() {
-		// "\"types\":\"true,false,false,false,false,false,false,false,false,false,false,true,false\"," + //
 		boolean[] mCacheTypes = new boolean[CacheTypes.values().length];
 		Arrays.fill(mCacheTypes, false);
 		mCacheTypes[CacheTypes.Traditional.ordinal()] = true;

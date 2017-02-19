@@ -285,22 +285,11 @@ public class FilterProperties {
     private boolean[] parseCacheTypes(String types) {
         String[] parts = types.split(SEPARATOR);
         final boolean[] result = new boolean[CacheTypes.values().length];
-        if (parts.length < CacheTypes.values().length) {
-            // old (json) version
-            for (int i = 0; i < result.length; i++) {
-                if (i < parts.length) {
-                    result[i] = Boolean.parseBoolean(parts[i]);
-                } else {
-                    result[i] = true;
-                }
-            }
-            result[CacheTypes.Giga.ordinal()] = result[11];
-            result[11] = true;
-        } else {
+
             for (int i = 0; i < result.length; i++) {
                 result[i] = Boolean.parseBoolean(parts[i]);
             }
-        }
+
         return result;
     }
 
