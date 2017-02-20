@@ -25,8 +25,8 @@ import de.longri.cachebox3.gui.ActivityBase;
  * Created by Longri on 20.02.2017.
  */
 public class FileChooserStyle extends ActivityBase.ActivityBaseStyle {
-    public BitmapFont itemNameFont;
-    public Color itemNameFontColor;
+    public BitmapFont itemNameFont, backItemNameFont;
+    public Color itemNameFontColor, backItemNameFontColor;
     public Drawable backIcon;
     public Drawable folderIcon;
 }

@@ -253,98 +253,105 @@ widgets/CheckBox
   orig: 48, 48
   offset: 0, 0
   index: -1
+widgets/FileChooser
+  rotate: false
+  xy: 781, 1310
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+widgets/Tree
+  rotate: false
+  xy: 781, 1310
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
 widgets/Icons
-  rotate: false
-  xy: 781, 1310
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: -1
-widgets/MenuIcons
-  rotate: false
-  xy: 781, 1310
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: -1
-widgets/Label
   rotate: false
   xy: 846, 1375
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/ListView
+widgets/MenuIcons
+  rotate: false
+  xy: 846, 1375
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+widgets/Label
   rotate: false
   xy: 1, 120
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/MapWayPointItem
+widgets/ListView
   rotate: false
   xy: 50, 169
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/ProgressBar
+widgets/MapWayPointItem
   rotate: false
   xy: 305, 247
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/ScrollPane
+widgets/ProgressBar
   rotate: false
   xy: 781, 1261
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/SelectBox
+widgets/ScrollPane
   rotate: false
   xy: 895, 1375
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/Sizes
+widgets/SelectBox
   rotate: false
   xy: 1, 71
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/Slider
+widgets/Sizes
   rotate: false
   xy: 50, 120
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/SplitPane
+widgets/Slider
   rotate: false
   xy: 99, 169
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/TextButton
+widgets/SplitPane
   rotate: false
   xy: 354, 247
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/TextField
+widgets/TextButton
   rotate: false
   xy: 781, 1212
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/Tree
+widgets/TextField
   rotate: false
   xy: 944, 1375
   size: 48, 48

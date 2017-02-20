@@ -108,7 +108,7 @@ public class FileChooser extends ActivityBase {
 
     private void createButtons() {
 
-        btnOk = new VisTextButton(Translation.Get("save"));
+        btnOk = new VisTextButton(Translation.Get("select"));
         btnCancel = new VisTextButton(Translation.Get("cancel"));
 
         this.addActor(btnOk);
@@ -238,12 +238,21 @@ public class FileChooser extends ActivityBase {
             titleGroup.addActor(backImage);
         }
 
-        VisLabel titleLabel = new VisLabel(name, "menu_title_act");
+
+        Label.LabelStyle nameStyle = new Label.LabelStyle();
+        nameStyle.font = fileChooserStyle.itemNameFont;
+        nameStyle.fontColor = fileChooserStyle.itemNameFontColor;
+
+        VisLabel titleLabel = new VisLabel(name, nameStyle);
 
         if (listViewsNames.size > 0) {
-            VisLabel parentTitleLabel = new VisLabel(listViewsNames.get(listViewsNames.size - 1), "menu_title_parent");
+            Label.LabelStyle parentStyle = new Label.LabelStyle();
+            parentStyle.font = fileChooserStyle.backItemNameFont;
+            parentStyle.fontColor = fileChooserStyle.backItemNameFontColor;
+
+            VisLabel parentTitleLabel = new VisLabel(listViewsNames.get(listViewsNames.size - 1), parentStyle);
             parentTitleLabel.setPosition(xPos, 0);
-            xPos += parentTitleLabel.getWidth() + CB.scaledSizes.MARGINx2;
+            xPos += parentTitleLabel.getWidth() + CB.scaledSizes.MARGINx2 * 4;
             titleGroup.addActor(parentTitleLabel);
         } else {
             //center titleLabel

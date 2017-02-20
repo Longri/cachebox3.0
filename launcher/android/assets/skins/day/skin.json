@@ -256,6 +256,10 @@
       "path": "svg/finger_click.svg",
       "scale": 1
     },
+    "folder": {
+      "path": "svg/folder.svg",
+      "scale": 1
+    },
     "gc_liveIcon": {
       "path": "svg/gc_liveIcon.svg",
       "scale": 1
@@ -918,6 +922,12 @@
       "r": 1,
       "a": 1
     },
+    "back_font_color": {
+      "r": 0.5411765,
+      "g": 0.49019608,
+      "b": 0.49019608,
+      "a": 1
+    },
     "background": {
       "r": 1,
       "g": 1,
@@ -1390,13 +1400,6 @@
       "background": "activityBack_drawable"
     }
   },
-  "de.longri.cachebox3.gui.skin.styles.FileChooserStyle": {
-    "default": {
-      "background": "activityBack_drawable",
-      "itemNameFont": "normal_font",
-      "itemNameFontColor": "font_color"
-    }
-  },
   "com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle": {
     "default": {
       "font": "normal_font",
@@ -1699,6 +1702,17 @@
       "myLocation": "myLocation",
       "myLocationTransparent": "myLocationTransparent",
       "myLocationCar": "myLocationCar"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.FileChooserStyle": {
+    "default": {
+      "itemNameFont": "normal_font",
+      "backItemNameFont": "normal_font",
+      "itemNameFontColor": "font_color",
+      "backItemNameFontColor": "back_font_color",
+      "backIcon": "menu_back",
+      "folderIcon": "folder",
+      "background": "activityBack_drawable"
     }
   }
 }
