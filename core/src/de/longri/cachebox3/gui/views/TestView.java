@@ -15,8 +15,14 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import de.longri.cachebox3.gui.activities.FileChooser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +34,9 @@ public class TestView extends AbstractView {
 
     VisTextButton test;
 
+    static private FileChooser fileChooser = new FileChooser("select file", FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES);
+
+
     public TestView() {
         super("TestView");
 
@@ -35,7 +44,24 @@ public class TestView extends AbstractView {
 
     protected void create() {
         this.clear();
+        test = new VisTextButton("SelectFolder");
+        test.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
 
+                FileHandle directory = Gdx.files.absolute("./");
+                fileChooser.setDirectory(directory);
+                //displaying chooser with fade in animation
+                fileChooser.show();
+               // getStage().addActor(fileChooser.fadeIn());
+
+
+            }
+        });
+
+        Table tbl = new Table();
+        tbl.add(test);
+        tbl.setBounds(10,10,300,300);
+        this.addActor(tbl);
     }
 
 

@@ -1390,6 +1390,13 @@
       "background": "activityBack_drawable"
     }
   },
+  "de.longri.cachebox3.gui.skin.styles.FileChooserStyle": {
+    "default": {
+      "background": "activityBack_drawable",
+      "itemNameFont": "normal_font",
+      "itemNameFontColor": "font_color"
+    }
+  },
   "com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle": {
     "default": {
       "font": "normal_font",
