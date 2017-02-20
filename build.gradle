@@ -208,7 +208,6 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.kotcrab.vis:vis-ui:$visUiVersion"
         compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
-        compile group: 'org.json', name: 'json', version: '20160810'
 
         //vtm
         compile "org.mapsforge:vtm:$vtmVersion"

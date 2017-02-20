@@ -15,13 +15,15 @@
  */
 package de.longri.cachebox3.types;
 
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonWriter;
 import de.longri.cachebox3.CB;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -120,165 +122,84 @@ public class FilterProperties {
             initCreation();
             return;
         }
-        // Try to parse as JSON
-        if (serialization.startsWith("{")) {
-
-
-            JSONTokener tokener = new JSONTokener(serialization);
+        try {
+            JsonValue json = new JsonReader().parse(serialization);
             try {
-                JSONObject json = (JSONObject) tokener.nextValue();
-                try {
-                    isHistory = json.getBoolean("isHistory");
-                } catch (Exception e) {
-                    isHistory = false;
-                }
-                String caches = json.getString("caches");
-                String[] parts = caches.split(SEPARATOR);
-                int cnt = 0;
-                Finds = Integer.parseInt(parts[cnt++]);
-                NotAvailable = Integer.parseInt(parts[cnt++]);
-                Archived = Integer.parseInt(parts[cnt++]);
-                Own = Integer.parseInt(parts[cnt++]);
-                ContainsTravelbugs = Integer.parseInt(parts[cnt++]);
-                Favorites = Integer.parseInt(parts[cnt++]);
-                HasUserData = Integer.parseInt(parts[cnt++]);
-                ListingChanged = Integer.parseInt(parts[cnt++]);
-                WithManualWaypoint = Integer.parseInt(parts[cnt++]);
-
-                MinDifficulty = Float.parseFloat(parts[cnt++]);
-                MaxDifficulty = Float.parseFloat(parts[cnt++]);
-                MinTerrain = Float.parseFloat(parts[cnt++]);
-                MaxTerrain = Float.parseFloat(parts[cnt++]);
-                MinContainerSize = Float.parseFloat(parts[cnt++]);
-                MaxContainerSize = Float.parseFloat(parts[cnt++]);
-                MinRating = Float.parseFloat(parts[cnt++]);
-                MaxRating = Float.parseFloat(parts[cnt++]);
-
-                if (parts.length == 17) {
-                    this.hasCorrectedCoordinates = 0;
-                } else {
-                    hasCorrectedCoordinates = Integer.parseInt(parts[cnt++]);
-                }
-
-                mCacheTypes = parseCacheTypes(json.getString("types"));
-
-                String attributes = json.getString("attributes");
-                parts = attributes.split(SEPARATOR);
-                mAttributes = new int[Attributes.values().length];
-                mAttributes[0] = 0; // gibts nicht
-                int og = parts.length;
-                if (parts.length == mAttributes.length) {
-                    og = parts.length - 1; // falls doch schon mal mit mehr gespeichert
-                }
-                for (int i = 0; i < (og); i++)
-                    mAttributes[i + 1] = Integer.parseInt(parts[i]);
-                // aus älteren Versionen
-                for (int i = og; i < mAttributes.length - 1; i++)
-                    mAttributes[i + 1] = 0;
-
-                GPXFilenameIds = new ArrayList<Long>();
-                String gpxfilenames = json.getString("gpxfilenameids");
-                parts = gpxfilenames.split(SEPARATOR);
-                cnt = 0;
-                if (parts.length > cnt) {
-                    String tempGPX = parts[cnt++];
-                    String[] partsGPX = tempGPX.split("\\" + GPXSEPARATOR);
-                    for (int i = 1; i < partsGPX.length; i++) {
-                        GPXFilenameIds.add(Long.parseLong(partsGPX[i]));
-                    }
-                }
-
-                filterName = json.getString("filtername");
-                filterGcCode = json.getString("filtergc");
-                filterOwner = json.getString("filterowner");
-
-                Categories = new ArrayList<Long>();
-                String filtercategories = json.getString("categories");
-                if (filtercategories.length() > 0) {
-                    String[] partsGPX = filtercategories.split("\\" + GPXSEPARATOR);
-                    for (int i = 1; i < partsGPX.length; i++) {
-                        // Log.info(log, "parts[" + i + "]=" + partsGPX[i]);
-                        Categories.add(Long.parseLong(partsGPX[i]));
-                    }
-                }
-            } catch (JSONException e) {
-                log.error("Json Version FilterProperties(" + serialization + ")", e);
+                isHistory = json.getBoolean("isHistory");
+            } catch (Exception e) {
+                isHistory = false;
             }
-        } else {
-            // Filter ist noch in alten Einstellungen gegeben...
-            try {
-                String[] parts = serialization.split(SEPARATOR);
-                int cnt = 0;
-                Finds = Integer.parseInt(parts[cnt++]);
-                NotAvailable = Integer.parseInt(parts[cnt++]);
-                Archived = Integer.parseInt(parts[cnt++]);
-                Own = Integer.parseInt(parts[cnt++]);
-                ContainsTravelbugs = Integer.parseInt(parts[cnt++]);
-                Favorites = Integer.parseInt(parts[cnt++]);
-                HasUserData = Integer.parseInt(parts[cnt++]);
-                ListingChanged = Integer.parseInt(parts[cnt++]);
-                WithManualWaypoint = Integer.parseInt(parts[cnt++]);
+            String caches = json.getString("caches");
+            String[] parts = caches.split(SEPARATOR);
+            int cnt = 0;
+            Finds = Integer.parseInt(parts[cnt++]);
+            NotAvailable = Integer.parseInt(parts[cnt++]);
+            Archived = Integer.parseInt(parts[cnt++]);
+            Own = Integer.parseInt(parts[cnt++]);
+            ContainsTravelbugs = Integer.parseInt(parts[cnt++]);
+            Favorites = Integer.parseInt(parts[cnt++]);
+            HasUserData = Integer.parseInt(parts[cnt++]);
+            ListingChanged = Integer.parseInt(parts[cnt++]);
+            WithManualWaypoint = Integer.parseInt(parts[cnt++]);
 
-                MinDifficulty = Float.parseFloat(parts[cnt++]);
-                MaxDifficulty = Float.parseFloat(parts[cnt++]);
-                MinTerrain = Float.parseFloat(parts[cnt++]);
-                MaxTerrain = Float.parseFloat(parts[cnt++]);
-                MinContainerSize = Float.parseFloat(parts[cnt++]);
-                MaxContainerSize = Float.parseFloat(parts[cnt++]);
-                MinRating = Float.parseFloat(parts[cnt++]);
-                MaxRating = Float.parseFloat(parts[cnt++]);
+            MinDifficulty = Float.parseFloat(parts[cnt++]);
+            MaxDifficulty = Float.parseFloat(parts[cnt++]);
+            MinTerrain = Float.parseFloat(parts[cnt++]);
+            MaxTerrain = Float.parseFloat(parts[cnt++]);
+            MinContainerSize = Float.parseFloat(parts[cnt++]);
+            MaxContainerSize = Float.parseFloat(parts[cnt++]);
+            MinRating = Float.parseFloat(parts[cnt++]);
+            MaxRating = Float.parseFloat(parts[cnt++]);
 
-                mCacheTypes = new boolean[CacheTypes.values().length];
-                for (int i = 0; i < 11; i++)
-                    mCacheTypes[i] = Boolean.parseBoolean(parts[cnt++]);
-                for (int i = 11; i < CacheTypes.values().length; i++) {
-                    mCacheTypes[i] = true;
-                }
-
-                mAttributes = new int[Attributes.values().length];
-                mAttributes[0] = 0;
-                for (int i = 0; i < 66; i++) {
-                    if (parts.length > cnt)
-                        mAttributes[i + 1] = Integer.parseInt(parts[cnt++]);
-                }
-                for (int i = 66; i < mAttributes.length; i++)
-                    mAttributes[i + 1] = 0;
-
-                GPXFilenameIds = new ArrayList<Long>();
-                GPXFilenameIds.clear();
-                if (parts.length > cnt) {
-                    String tempGPX = parts[cnt++];
-                    String[] partsGPX = new String[]{};
-                    partsGPX = tempGPX.split("\\" + GPXSEPARATOR);
-                    for (int i = 1; i < partsGPX.length; i++) {
-                        GPXFilenameIds.add(Long.parseLong(partsGPX[i]));
-                    }
-                }
-                if (parts.length > cnt)
-                    filterName = parts[cnt++];
-                else
-                    filterName = "";
-                if (parts.length > cnt)
-                    filterGcCode = parts[cnt++];
-                else
-                    filterGcCode = "";
-                if (parts.length > cnt)
-                    filterOwner = parts[cnt++];
-                else
-                    filterOwner = "";
-
-                if (parts.length > cnt) {
-                    String tempGPX = parts[cnt++];
-                    String[] partsGPX = new String[]{};
-                    partsGPX = tempGPX.split("\\" + GPXSEPARATOR);
-                    Categories = new ArrayList<Long>();
-                    for (int i = 1; i < partsGPX.length; i++) {
-                        Categories.add(Long.parseLong(partsGPX[i]));
-                    }
-                }
-            } catch (Exception exc) {
-                log.error("old Version FilterProperties(" + serialization + ")", exc);
+            if (parts.length == 17) {
+                this.hasCorrectedCoordinates = 0;
+            } else {
+                hasCorrectedCoordinates = Integer.parseInt(parts[cnt++]);
             }
+
+            mCacheTypes = parseCacheTypes(json.getString("types"));
+
+            String attributes = json.getString("attributes");
+            parts = attributes.split(SEPARATOR);
+            mAttributes = new int[Attributes.values().length];
+            mAttributes[0] = 0; // gibts nicht
+            int og = parts.length;
+            if (parts.length == mAttributes.length) {
+                og = parts.length - 1; // falls doch schon mal mit mehr gespeichert
+            }
+            for (int i = 0; i < (og); i++)
+                mAttributes[i + 1] = Integer.parseInt(parts[i]);
+            // aus älteren Versionen
+            for (int i = og; i < mAttributes.length - 1; i++)
+                mAttributes[i + 1] = 0;
+
+            GPXFilenameIds = new ArrayList<Long>();
+            String gpxfilenames = json.getString("gpxfilenameids");
+            parts = gpxfilenames.split(SEPARATOR);
+            cnt = 0;
+            if (parts.length > cnt) {
+                String tempGPX = parts[cnt++];
+                String[] partsGPX = tempGPX.split("\\" + GPXSEPARATOR);
+                for (int i = 1; i < partsGPX.length; i++) {
+                    GPXFilenameIds.add(Long.parseLong(partsGPX[i]));
+                }
+            }
+
+            filterName = json.getString("filtername");
+            filterGcCode = json.getString("filtergc");
+            filterOwner = json.getString("filterowner");
+
+            Categories = new ArrayList<Long>();
+            String filtercategories = json.getString("categories");
+            if (filtercategories.length() > 0) {
+                String[] partsGPX = filtercategories.split("\\" + GPXSEPARATOR);
+                for (int i = 1; i < partsGPX.length; i++) {
+                    // Log.info(log, "parts[" + i + "]=" + partsGPX[i]);
+                    Categories.add(Long.parseLong(partsGPX[i]));
+                }
+            }
+        } catch (Exception e) {
+            log.error("Json Version FilterProperties(" + serialization + ")", e);
         }
     }
 
@@ -286,9 +207,9 @@ public class FilterProperties {
         String[] parts = types.split(SEPARATOR);
         final boolean[] result = new boolean[CacheTypes.values().length];
 
-            for (int i = 0; i < result.length; i++) {
-                result[i] = Boolean.parseBoolean(parts[i]);
-            }
+        for (int i = 0; i < result.length; i++) {
+            result[i] = Boolean.parseBoolean(parts[i]);
+        }
 
         return result;
     }
@@ -321,15 +242,13 @@ public class FilterProperties {
         String result = "";
 
         try {
+            StringWriter stringWriter = new StringWriter();
+            JsonWriter writer = new JsonWriter(stringWriter);
+            Json json = new Json();
+            json.setOutputType(JsonWriter.OutputType.json);
+            json.setWriter(writer);
+            json.writeObjectStart();
 
-            JSONObject json = new JSONObject();
-            json.put("isHistory", isHistory);
-            // add Cache properties
-            json.put("caches",
-                    String.valueOf(Finds) + SEPARATOR + String.valueOf(NotAvailable) + SEPARATOR + String.valueOf(Archived) + SEPARATOR + String.valueOf(Own) + SEPARATOR + String.valueOf(ContainsTravelbugs) + SEPARATOR + String.valueOf(Favorites)
-                            + SEPARATOR + String.valueOf(HasUserData) + SEPARATOR + String.valueOf(ListingChanged) + SEPARATOR + String.valueOf(WithManualWaypoint) + SEPARATOR + String.valueOf(MinDifficulty) + SEPARATOR
-                            + String.valueOf(MaxDifficulty) + SEPARATOR + String.valueOf(MinTerrain) + SEPARATOR + String.valueOf(MaxTerrain) + SEPARATOR + String.valueOf(MinContainerSize) + SEPARATOR + String.valueOf(MaxContainerSize) + SEPARATOR
-                            + String.valueOf(MinRating) + SEPARATOR + String.valueOf(MaxRating) + SEPARATOR + String.valueOf(this.hasCorrectedCoordinates));
             // add Cache Types
             String tmp = "";
             for (int i = 0; i < mCacheTypes.length; i++) {
@@ -337,7 +256,25 @@ public class FilterProperties {
                     tmp += SEPARATOR;
                 tmp += String.valueOf(mCacheTypes[i]);
             }
-            json.put("types", tmp);
+            json.writeValue("types", tmp);
+
+            // add Cache properties
+            json.writeValue("caches",
+                    String.valueOf(Finds) + SEPARATOR + String.valueOf(NotAvailable) + SEPARATOR + String.valueOf(Archived) + SEPARATOR + String.valueOf(Own) + SEPARATOR + String.valueOf(ContainsTravelbugs) + SEPARATOR + String.valueOf(Favorites)
+                            + SEPARATOR + String.valueOf(HasUserData) + SEPARATOR + String.valueOf(ListingChanged) + SEPARATOR + String.valueOf(WithManualWaypoint) + SEPARATOR + String.valueOf(MinDifficulty) + SEPARATOR
+                            + String.valueOf(MaxDifficulty) + SEPARATOR + String.valueOf(MinTerrain) + SEPARATOR + String.valueOf(MaxTerrain) + SEPARATOR + String.valueOf(MinContainerSize) + SEPARATOR + String.valueOf(MaxContainerSize) + SEPARATOR
+                            + String.valueOf(MinRating) + SEPARATOR + String.valueOf(MaxRating) + SEPARATOR + String.valueOf(this.hasCorrectedCoordinates));
+
+            // Filter GCCode
+            json.writeValue("filtergc", filterGcCode);
+
+            // GPX Filenames
+            tmp = "";
+            for (int i = 0; i <= GPXFilenameIds.size() - 1; i++) {
+                tmp += GPXSEPARATOR + String.valueOf(GPXFilenameIds.get(i));
+            }
+            json.writeValue("gpxfilenameids", tmp);
+
             // add Cache Attributes
             tmp = "";
             for (int i = 1; i < mAttributes.length; i++) {
@@ -345,28 +282,28 @@ public class FilterProperties {
                     tmp += SEPARATOR;
                 tmp += String.valueOf(mAttributes[i]);
             }
-            json.put("attributes", tmp);
-            // GPX Filenames
-            tmp = "";
-            for (int i = 0; i <= GPXFilenameIds.size() - 1; i++) {
-                tmp += GPXSEPARATOR + String.valueOf(GPXFilenameIds.get(i));
-            }
-            json.put("gpxfilenameids", tmp);
+            json.writeValue("attributes", tmp);
+
             // Filter Name
-            json.put("filtername", filterName);
-            // Filter GCCode
-            json.put("filtergc", filterGcCode);
-            // Filter Owner
-            json.put("filterowner", filterOwner);
+            json.writeValue("filtername", filterName);
+
+            // History
+            json.writeValue("isHistory", isHistory);
+
             // Categories
             tmp = "";
             for (long i : Categories) {
                 tmp += GPXSEPARATOR + i;
             }
-            json.put("categories", tmp);
+            json.writeValue("categories", tmp);
 
-            result = json.toString();
-        } catch (JSONException e) {
+            // Filter Owner
+            json.writeValue("filterowner", filterOwner);
+
+            json.writeObjectEnd();
+            result = stringWriter.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
             log.error("JSON toString", e);
         }
         return result;
