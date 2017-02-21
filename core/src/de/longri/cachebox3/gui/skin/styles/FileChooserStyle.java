@@ -29,4 +29,6 @@ public class FileChooserStyle extends ActivityBase.ActivityBaseStyle {
     public Color itemNameFontColor, backItemNameFontColor;
     public Drawable backIcon;
     public Drawable folderIcon;
+    public Drawable fileIcon;
+    public Drawable mapFileIcon;
 }

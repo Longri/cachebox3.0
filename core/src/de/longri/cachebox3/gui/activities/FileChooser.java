@@ -38,7 +38,6 @@ import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.utils.lists.CB_List;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -54,7 +53,11 @@ public class FileChooser extends ActivityBase {
     }
 
     public enum SelectionMode {
-        FILES, DIRECTORIES, FILES_AND_DIRECTORIES
+        FILES, DIRECTORIES
+    }
+
+    public interface SelectionReturnListner {
+        void selected(FileHandle fileHandle);
     }
 
     private VisTextButton btnOk, btnCancel;
@@ -62,21 +65,66 @@ public class FileChooser extends ActivityBase {
     private FileChooserStyle fileChooserStyle;
     private FileFilter actFilter;
     private FileHandle[] actFileList;
-
+    private String[] fileExtentions;
+    private FileHandle selectedFile;
+    private final SelectionMode selectionMode;
+    private SelectionReturnListner selectionReturnListner;
 
     public FileChooser(String title, Mode mode, SelectionMode selectMode) {
+        this(title, mode, selectMode, null);
+    }
+
+    public FileChooser(String title, Mode mode, SelectionMode selectMode, String... extentions) {
         super("FileChooser", VisUI.getSkin().get("default", FileChooserStyle.class));
         fileChooserStyle = (FileChooserStyle) this.style;
         this.setStageBackground(style.background);
         createButtons();
 
-        this.actFilter = directoryFileFilter;
+        switch (selectMode) {
+            case FILES:
+                if (extentions == null) {
+                    this.actFilter = fileFilter;
+                } else {
+                    this.fileExtentions = extentions;
+                    this.actFilter = extentionFileFilter;
+                }
+                break;
+            case DIRECTORIES:
+                this.actFilter = directoryFileFilter;
+                break;
+        }
+        this.selectionMode = selectMode;
+
     }
 
     FileFilter directoryFileFilter = new FileFilter() {
         @Override
         public boolean accept(File pathname) {
             return pathname.isDirectory();
+        }
+    };
+
+    FileFilter fileFilter = new FileFilter() {
+        @Override
+        public boolean accept(File pathname) {
+            return true;
+        }
+    };
+
+    FileFilter extentionFileFilter = new FileFilter() {
+        @Override
+        public boolean accept(File pathname) {
+            if (pathname.isDirectory()) return true;
+
+            String name = pathname.getName();
+            int dotIndex = name.lastIndexOf('.');
+            if (dotIndex == -1) return false;
+            String ext = name.substring(dotIndex + 1);
+
+            for (String ex : fileExtentions) {
+                if (ext.equals(ex)) return true;
+            }
+            return false;
         }
     };
 
@@ -101,9 +149,21 @@ public class FileChooser extends ActivityBase {
     }
 
     private void setInternDirectory(FileHandle directory) {
+        this.selectedFile = null;
         this.actDir = directory;
         actFileList = this.actDir.list(this.actFilter);
         fillContent();
+        checkButton();
+    }
+
+    private void checkButton() {
+        if (selectionMode == SelectionMode.FILES) {
+            if (this.selectedFile == null) {
+                btnOk.setDisabled(true);
+            } else {
+                btnOk.setDisabled(false);
+            }
+        }
     }
 
     private void createButtons() {
@@ -116,15 +176,28 @@ public class FileChooser extends ActivityBase {
 
         btnOk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (btnOk.isDisabled()) return;
+                if (selectionReturnListner != null) {
+                    if (selectionMode == SelectionMode.FILES) {
+                        selectionReturnListner.selected(selectedFile);
+                    } else {
+                        selectionReturnListner.selected(actDir);
+                    }
+                }
                 finish();
             }
         });
 
         btnCancel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (selectionReturnListner != null) selectionReturnListner.selected(null);
                 finish();
             }
         });
+    }
+
+    public void setSelectionReturnListener(SelectionReturnListner listener) {
+        this.selectionReturnListner = listener;
     }
 
     @Override
@@ -174,7 +247,8 @@ public class FileChooser extends ActivityBase {
                 return 0;
             }
 
-            private ListViewItem getEntryItem(int index) {
+
+            private ListViewItem getEntryItem(final int index) {
 
                 final FileHandle file = fileList[index];
                 if (file.isDirectory()) {
@@ -190,7 +264,7 @@ public class FileChooser extends ActivityBase {
                     label.setAlignment(Align.left);
                     table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
-                    // add next icon
+                    // add folder icon
                     Image next = new Image(fileChooserStyle.folderIcon);
                     table.add(next).width(next.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
@@ -203,13 +277,74 @@ public class FileChooser extends ActivityBase {
                         }
                     });
                     return table;
+                } else if (file.extension().equals("map")) {
+                    ListViewItem table = new ListViewItem(index) {
+                        @Override
+                        public void dispose() {
+                        }
+                    };
+
+                    // add label with category name, align left
+                    table.left();
+                    VisLabel label = new VisLabel(file.name());
+                    label.setAlignment(Align.left);
+                    table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+                    // add map file icon
+                    Image next = new Image(fileChooserStyle.mapFileIcon);
+                    table.add(next).width(next.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+
+                    // add clicklistener
+                    table.addListener(new ClickListener() {
+                        public void clicked(InputEvent event, float x, float y) {
+                            if (event.getType() == InputEvent.Type.touchUp) {
+                                selectedFile = file;
+                                select(listView, index);
+                            }
+                        }
+                    });
+                    return table;
+                } else {
+                    ListViewItem table = new ListViewItem(index) {
+                        @Override
+                        public void dispose() {
+                        }
+                    };
+
+                    // add label with category name, align left
+                    table.left();
+                    VisLabel label = new VisLabel(file.name());
+                    label.setAlignment(Align.left);
+                    table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+                    // add file icon
+                    Image next = new Image(fileChooserStyle.fileIcon);
+                    table.add(next).width(next.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+
+                    // add clicklistener
+                    table.addListener(new ClickListener() {
+                        public void clicked(InputEvent event, float x, float y) {
+                            if (event.getType() == InputEvent.Type.touchUp) {
+                                selectedFile = file;
+                                select(listView, index);
+                            }
+                        }
+                    });
+                    return table;
                 }
-                return null;
             }
+
         };
-        showListView(new ListView(listViewAdapter, true), this.actDir.name(), true);
+        ListView listView = new ListView(listViewAdapter, true);
+        listViewAdapter.listView = listView;
+        showListView(listView, this.actDir.name(), true);
     }
 
+    private void select(ListView listView, int index) {
+        listView.setSelectable(ListView.SelectableType.SINGLE);
+        listView.setSelection(index);
+        this.checkButton();
+    }
 
     private void showListView(ListView listView, String name, boolean animate) {
 
@@ -252,7 +387,14 @@ public class FileChooser extends ActivityBase {
 
             VisLabel parentTitleLabel = new VisLabel(listViewsNames.get(listViewsNames.size - 1), parentStyle);
             parentTitleLabel.setPosition(xPos, 0);
-            xPos += parentTitleLabel.getWidth() + CB.scaledSizes.MARGINx2 * 4;
+
+            if (parentTitleLabel.getWidth() + CB.scaledSizes.MARGINx2 > (Gdx.graphics.getWidth() - titleLabel.getWidth()) / 2) {
+                //center titleLabel
+                xPos = parentTitleLabel.getWidth() + CB.scaledSizes.MARGINx2 * 2;
+            } else {
+                //center titleLabel
+                xPos = (Gdx.graphics.getWidth() - titleLabel.getWidth()) / 2;
+            }
             titleGroup.addActor(parentTitleLabel);
         } else {
             //center titleLabel
@@ -308,5 +450,8 @@ public class FileChooser extends ActivityBase {
         protected FileListAdapter(FileHandle[] fileList) {
             this.fileList = fileList;
         }
+
+        ListView listView;
+
     }
 }
