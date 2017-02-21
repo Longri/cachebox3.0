@@ -342,6 +342,9 @@ public class OptionsPane extends Table {
                 try {
 
                     Class<?> style = Class.forName(widgetStyle);
+
+                    currentStyle = style.newInstance();
+
                     styles = (ObjectMap<String, Object>) game.skinProject.getAll(style);
 
                     if (widgetStyle.equals("de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle")) {

@@ -41,7 +41,7 @@ public class SkinEditorGame extends Game {
         FileChooser.setDefaultPrefsName("SkinEditor");
     }
 
-    public final static String[] widgets = {"MapWayPointItem", "Sizes", "Icons", "MenuIcons", "Label", "Button", "GestureButton", "TextButton", "CheckBox", "TextField", "ListView", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree"};
+    public final static String[] widgets = {"MapWayPointItem", "Sizes", "Icons", "MenuIcons", "Label", "Button", "GestureButton", "TextButton", "FileChooser", "CheckBox", "TextField", "ListView", "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree"};
 
     public SpriteBatch batch;
     public SavableSvgSkin skin;
@@ -139,6 +139,8 @@ public class SkinEditorGame extends Game {
             return "com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle";
         } else if (widget.equals("ListView")) {
             return "de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle";
+        } else if (widget.equals("FileChooser")) {
+            return "de.longri.cachebox3.gui.skin.styles.FileChooserStyle";
         } else {
             return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
         }

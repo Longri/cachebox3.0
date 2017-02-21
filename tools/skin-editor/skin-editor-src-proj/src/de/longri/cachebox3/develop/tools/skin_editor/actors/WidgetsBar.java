@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.mobidevelop.maps.editor.ui.utils.Tooltips;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.utils.SkinColor;
@@ -85,6 +86,16 @@ public class WidgetsBar extends Table {
 
                     if (button.getUserObject().equals("MenuIcons"))
                         withStyle = false;
+
+
+                    String styleClassName = game.resolveWidgetPackageName((String) button.getUserObject());
+
+                    Class<?> style = null;
+                    try {
+                        style = Class.forName(styleClassName);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
 
                     game.screenMain.paneOptions.refresh(withStyle);
 

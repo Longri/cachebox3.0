@@ -15,20 +15,24 @@
  ******************************************************************************/
 package de.longri.cachebox3.develop.tools.skin_editor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.reflect.Field;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
+import com.kotcrab.vis.ui.widget.color.ColorPickerListener;
 import de.longri.cachebox3.utils.SkinColor;
 
 
@@ -47,7 +51,7 @@ public class ColorPickerDialog extends Dialog {
     ObjectMap<String, SkinColor> colors;
     private Field field;
 
-    ColorPickerAdapter colorPickerAdapter = new ColorPickerAdapter() {
+    ColorPickerAdapter newColorPickerAdapter = new ColorPickerAdapter() {
         @Override
         public void finished(final Color color) {
             if (color != null) {
@@ -93,7 +97,7 @@ public class ColorPickerDialog extends Dialog {
         }
     };
 
-    ColorPicker colorPicker = new ColorPicker(colorPickerAdapter);
+    ColorPicker colorPicker = new ColorPicker(newColorPickerAdapter);
 
     /**
      *
@@ -190,7 +194,38 @@ public class ColorPickerDialog extends Dialog {
             pixmap.drawRectangle(0, 0, 18, 18);
             Texture texture = new Texture(pixmap);
             pixmap.dispose();
-            tableColors.add(new Image(texture));
+
+
+            Image colorImage = new Image(texture);
+            colorImage.addListener(new ClickListener() {
+
+                public void clicked (InputEvent event, float x, float y) {
+                    // change color
+                    colorPicker.setColor(color);
+
+                    colorPicker.setListener(new ColorPickerAdapter(){
+                        @Override
+                        public void finished (final Color newColor) {
+                            Gdx.app.postRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SkinColor changedColor = new SkinColor(newColor);
+                                    changedColor.skinName = key;
+                                    colors.put(key, changedColor);
+                                    game.screenMain.saveToSkin();
+                                    // update table
+                                    updateTable();
+                                }
+                            });
+                        }
+                    } );
+                    // Call color picker
+                    ColorPickerDialog.this.getStage().addActor(colorPicker.fadeIn());
+                }
+
+            });
+
+            tableColors.add(colorImage);
             tableColors.add(color.toString()).left();
 
             TextButton buttonSelect = new TextButton("Select", game.skin);

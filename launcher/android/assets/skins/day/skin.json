@@ -192,6 +192,10 @@
       "path": "svg/default_button.svg",
       "scale": 0.5
     },
+    "default_button_disabled": {
+      "path": "svg/default_button_disabled.svg",
+      "scale": 0.5
+    },
     "default_button_pressed": {
       "path": "svg/default_button_pressed.svg",
       "scale": 0.5
@@ -244,6 +248,14 @@
       "path": "svg/fieldnoteListIcon.svg",
       "scale": 0.195
     },
+    "file": {
+      "path": "svg/file.svg",
+      "scale": 1
+    },
+    "filebackIcon": {
+      "path": "svg/backIcon.svg",
+      "scale": 0.3
+    },
     "filter": {
       "path": "svg/missingIcon.svg",
       "scale": 1
@@ -254,6 +266,10 @@
     },
     "finger_click": {
       "path": "svg/finger_click.svg",
+      "scale": 1
+    },
+    "folder": {
+      "path": "svg/folder.svg",
       "scale": 1
     },
     "gc_liveIcon": {
@@ -391,6 +407,10 @@
     "mapEvent2": {
       "path": "svg/mapEvent2.svg",
       "scale": 0.15
+    },
+    "mapFile": {
+      "path": "svg/mapFile.svg",
+      "scale": 1
     },
     "mapFinal": {
       "path": "svg/final.svg",
@@ -918,6 +938,12 @@
       "r": 1,
       "a": 1
     },
+    "back_font_color": {
+      "r": 0.5411765,
+      "g": 0.49019608,
+      "b": 0.49019608,
+      "a": 1
+    },
     "background": {
       "r": 1,
       "g": 1,
@@ -1026,6 +1052,17 @@
     },
     "default_button_9_Patch": {
       "name": "default_button",
+      "left": 8,
+      "right": 8,
+      "top": 8,
+      "bottom": 8,
+      "leftWidth": 8,
+      "rightWidth": 8,
+      "topHeight": 8,
+      "bottomHeight": 8
+    },
+    "default_button_disabled_9_Patch": {
+      "name": "default_button_disabled",
       "left": 8,
       "right": 8,
       "top": 8,
@@ -1283,7 +1320,8 @@
       "font": "normal_bold_font",
       "fontColor": "font_color",
       "up": "drawable_default_button",
-      "down": "drawable_default_button_pressed"
+      "down": "drawable_default_button_pressed",
+      "disabled": "default_button_disabled_9_Patch"
     },
     "coordinateValues": {
       "font": "coordinateValueFont",
@@ -1296,7 +1334,8 @@
       "font": "normal_font",
       "fontColor": "font_color",
       "up": "drawable_default_button",
-      "down": "drawable_default_button_pressed"
+      "down": "drawable_default_button_pressed",
+      "disabled": "default_button_disabled_9_Patch"
     },
     "toggle": {
       "font": "normal_font",
@@ -1692,6 +1731,19 @@
       "myLocation": "myLocation",
       "myLocationTransparent": "myLocationTransparent",
       "myLocationCar": "myLocationCar"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.FileChooserStyle": {
+    "default": {
+      "itemNameFont": "normal_font",
+      "backItemNameFont": "normal_font",
+      "itemNameFontColor": "font_color",
+      "backItemNameFontColor": "back_font_color",
+      "backIcon": "filebackIcon",
+      "folderIcon": "folder",
+      "fileIcon": "file",
+      "mapFileIcon": "mapFile",
+      "background": "activityBack_drawable"
     }
   }
 }
