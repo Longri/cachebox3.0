@@ -21,6 +21,8 @@ import com.badlogic.gdx.graphics.Color;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.locator.events.PositionChangedEvent;
+import de.longri.cachebox3.locator.events.PositionChangedEventList;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.translation.Translation;
@@ -34,18 +36,26 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class TrackRecorder {
+public class TrackRecorder implements PositionChangedEvent {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(TrackRecorder.class);
-    // StreamWriter outStream = null;
-    private static FileHandle gpxfile = null;
-    public static boolean pauseRecording = false;
-    public static boolean recording = false;
-    public static double SaveAltitude = 0;
+
+    public final static TrackRecorder INSTANCE = new TrackRecorder();
+
+
+    private TrackRecorder() {
+    }
+
+    private FileHandle gpxfile = null;
+    public boolean pauseRecording = false;
+    public boolean recording = false;
+    public double SaveAltitude = 0;
 
     // / Letzte aufgezeichnete Position des Empfängers
-    public static Location LastRecordedPosition = Location.NULL_LOCATION;
+    public Location LastRecordedPosition = Location.NULL_LOCATION;
 
-    public static void StartRecording() {
+    public void StartRecording() {
+
+        PositionChangedEventList.Add(this);
 
         CB.actRoute = new Track(Translation.Get("actualTrack"), Color.BLUE);
         CB.actRoute.ShowRoute = true;
@@ -58,7 +68,7 @@ public class TrackRecorder {
 
         if (gpxfile == null) {
             gpxfile = Gdx.files.absolute(directory + "/" + generateTrackFileName());
-            gpxfile.mkdirs();
+            gpxfile.parent().mkdirs();
 
             writeAppend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             writeAppend(
@@ -81,12 +91,12 @@ public class TrackRecorder {
         // updateRecorderButtonAccessibility();
     }
 
-    private static void writeAppend(String txt) {
+    private void writeAppend(String txt) {
         if (gpxfile == null) return;
         gpxfile.writeString(txt, true);
     }
 
-    private static String GetDateTimeString() {
+    private String GetDateTimeString() {
         Date timestamp = new Date();
         SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd");
         datFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -97,17 +107,17 @@ public class TrackRecorder {
         return sDate;
     }
 
-    private static boolean writeAnnotateMedia = false;
+    private boolean writeAnnotateMedia = false;
 
-    private static int insertPos = 24;
+    private int insertPos = 24;
 
-    private static boolean mustWriteMedia = false;
-    static String mFriendlyName = "";
-    static String mMediaPath = "";
-    static Location mMediaCoord = null;
-    static String mTimestamp = "";
+    private boolean mustWriteMedia = false;
+    String mFriendlyName = "";
+    String mMediaPath = "";
+    Location mMediaCoord = null;
+    String mTimestamp = "";
 
-    public static void AnnotateMedia(final String friendlyName, final String mediaPath, final Location location, final String timestamp) {
+    public void AnnotateMedia(final String friendlyName, final String mediaPath, final Location location, final String timestamp) {
         writeAnnotateMedia = true;
 
         if (writePos) {
@@ -158,17 +168,40 @@ public class TrackRecorder {
         if (mustRecPos) {
             mustRecPos = false;
         }
-        recordPosition();
+        PositionChanged();
     }
 
-    private static boolean mustRecPos = false;
-    private static boolean writePos = false;
+    private boolean mustRecPos = false;
+    private boolean writePos = false;
 
-    private final static Location.ProviderType GPS = Location.ProviderType.GPS;
-    private final static Locator.CompassType _GPS = Locator.CompassType.GPS;
+    private final Location.ProviderType GPS = Location.ProviderType.GPS;
+    private final Locator.CompassType _GPS = Locator.CompassType.GPS;
 
-    public static void recordPosition() {
 
+    public void PauseRecording() {
+        pauseRecording = !pauseRecording;
+    }
+
+    public void StopRecording() {
+        PositionChangedEventList.Remove(this);
+        if (CB.actRoute != null) {
+            CB.actRoute.IsActualTrack = false;
+            CB.actRoute.Name = Translation.Get("recordetTrack");
+        }
+        pauseRecording = false;
+        recording = false;
+        gpxfile = null;
+    }
+
+    private String generateTrackFileName() {
+        SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd-HHmmss");
+        String sDate = datFormat.format(new Date());
+
+        return "Track_" + sDate + ".gpx";
+    }
+
+    @Override
+    public void PositionChanged() {
         if (gpxfile == null || pauseRecording || !Locator.isGPSprovided())
             return;
 
@@ -257,25 +290,23 @@ public class TrackRecorder {
         }
     }
 
-    public static void PauseRecording() {
-        pauseRecording = !pauseRecording;
+    @Override
+    public void OrientationChanged() {
+        // do nothing
     }
 
-    public static void StopRecording() {
-        if (CB.actRoute != null) {
-            CB.actRoute.IsActualTrack = false;
-            CB.actRoute.Name = Translation.Get("recordetTrack");
-        }
-        pauseRecording = false;
-        recording = false;
-        gpxfile = null;
+    @Override
+    public void SpeedChanged() {
+        // do nothing
     }
 
-    private static String generateTrackFileName() {
-        SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd-HHmmss");
-        String sDate = datFormat.format(new Date());
-
-        return "Track_" + sDate + ".gpx";
+    @Override
+    public String getReceiverName() {
+        return "TrackRecorder";
     }
 
+    @Override
+    public Priority getPriority() {
+        return Priority.High;
+    }
 }

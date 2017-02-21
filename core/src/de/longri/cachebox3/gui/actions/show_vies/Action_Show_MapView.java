@@ -15,9 +15,7 @@
  */
 package de.longri.cachebox3.gui.actions.show_vies;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
@@ -30,16 +28,13 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.settings.types.SettingBool;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 /**
  * Created by Longri on 24.07.16.
  */
 public class Action_Show_MapView extends Abstract_Action_ShowView {
-   
+
     private MapView mapViewInstance;
-   
+
     public Action_Show_MapView() {
         super("Map", MenuID.AID_SHOW_MAP);
     }
@@ -89,7 +84,7 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
         // icm.addItem(MenuID.MI_SETTINGS, "settings", Sprites.getSprite(IconName.settings.name()));
         // icm.addItem(MenuID.MI_SEARCH, "search", SpriteCache.Icons.get(27));
         icm.addItem(MenuID.MI_MAPVIEW_VIEW, "view");
-        //icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
+        icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
         icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
 
         icm.setOnItemClickListener(onItemClickListener);
@@ -283,14 +278,14 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
                     return true;
                 case MenuID.MI_CENTER_WP:
                     if (mapViewInstance != null) {
-                     //TODO   mapViewInstance.createWaypointAtCenter();
+                        //TODO   mapViewInstance.createWaypointAtCenter();
                     }
                     return true;
                 case MenuID.MI_TREC_REC:
                     showMenuTrackRecording();
                     return true;
                 case MenuID.MI_MAP_DOWNOAD:
-                   //TODO MapDownload.INSTANCE.show();
+                    //TODO MapDownload.INSTANCE.show();
                     return true;
                 default:
                     return false;
@@ -311,30 +306,30 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
             public boolean onItemClick(MenuItem item) {
                 switch (item.getMenuItemId()) {
                     case START:
-                        TrackRecorder.StartRecording();
+                        TrackRecorder.INSTANCE.StartRecording();
                         return true;
                     case PAUSE:
-                        TrackRecorder.PauseRecording();
+                        TrackRecorder.INSTANCE.PauseRecording();
                         return true;
                     case STOP:
-                        TrackRecorder.StopRecording();
+                        TrackRecorder.INSTANCE.StopRecording();
                         return true;
                 }
                 return false;
             }
         });
         mi = cm2.addItem(START, "start");
-        mi.setEnabled(!TrackRecorder.recording);
+        mi.setEnabled(!TrackRecorder.INSTANCE.recording);
 
-        if (TrackRecorder.pauseRecording)
+        if (TrackRecorder.INSTANCE.pauseRecording)
             mi = cm2.addItem(PAUSE, "continue");
         else
             mi = cm2.addItem(PAUSE, "pause");
 
-        mi.setEnabled(TrackRecorder.recording);
+        mi.setEnabled(TrackRecorder.INSTANCE.recording);
 
         mi = cm2.addItem(STOP, "stop");
-        mi.setEnabled(TrackRecorder.recording | TrackRecorder.pauseRecording);
+        mi.setEnabled(TrackRecorder.INSTANCE.recording | TrackRecorder.INSTANCE.pauseRecording);
 
         cm2.show();
     }
