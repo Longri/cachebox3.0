@@ -24,6 +24,7 @@ import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.track.Track;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
@@ -89,6 +90,8 @@ public class CB {
     private static SvgSkin actSkin;
     public static Color backgroundColor = new Color(0, 1, 0, 1);
     public static ScaledSizes scaledSizes;
+    public static Track actRoute;
+    public static int actRouteCount;
 
     private CB() {
     }

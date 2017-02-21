@@ -463,4 +463,15 @@ public class MapView extends AbstractView {
         StageManager.removeMapMultiplexer(mapInputHandler);
     }
 
+    public boolean getAlignToCompass() {
+        return mapOrientationButton.isNorthOriented();
+    }
+
+    public void setAlignToCompass(boolean align) {
+        mapOrientationButton.setState(align ? MapCompass.State.NORTH : MapCompass.State.COMPASS);
+    }
+
+    public void setNewSettings() {
+        //TODO
+    }
 }

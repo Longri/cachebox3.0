@@ -253,7 +253,7 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
 
     // Toast pop up
     public enum ToastLength {
-        SHORT(1.0f), NORMAL(1.5f), LONG(3.5f);
+        SHORT(1.0f), NORMAL(1.5f), LONG(3.5f), EXTRA_LONG(6.0f);
 
         public final float value;
 

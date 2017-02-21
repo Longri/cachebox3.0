@@ -191,4 +191,15 @@ public class MapCompass extends Group implements Disposable {
             });
         }
     };
+
+    public void setState(State state) {
+        this.state = state;
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                setStateModel();
+            }
+        });
+
+    }
 }
