@@ -33,6 +33,7 @@ import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
+import de.longri.cachebox3.gui.map.baseMap.MapsforgeSingleMap;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
@@ -53,11 +54,9 @@ import org.oscim.core.Tile;
 import org.oscim.event.Event;
 import org.oscim.gdx.GestureHandlerImpl;
 import org.oscim.gdx.MotionHandler;
+import org.oscim.layers.GroupLayer;
 import org.oscim.layers.Layer;
 import org.oscim.layers.TileGridLayer;
-import org.oscim.layers.tile.buildings.BuildingLayer;
-import org.oscim.layers.tile.vector.VectorTileLayer;
-import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Layers;
 import org.oscim.map.Map;
 import org.oscim.map.Viewport;
@@ -71,7 +70,6 @@ import org.oscim.renderer.bucket.TextItem;
 import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
-import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.source.mapfile.MapFileTileSource;
 import org.oscim.utils.TextureAtlasUtils;
 import org.slf4j.Logger;
@@ -379,15 +377,9 @@ public class MapView extends AbstractView {
     protected void initLayers(boolean tileGrid, boolean labels,
                               boolean buildings, boolean mapScalebar) {
 
-//        TileSource tileSource = new OSciMap4TileSource();
+        MapsforgeSingleMap singleMap = new MapsforgeSingleMap(Gdx.files.local(CB.WorkPath + "/repository/maps/germany.map"));
 
-        tileSource = new MapFileTileSource();
-        FileHandle mapFileHandle = Gdx.files.local(CB.WorkPath + "/repository/maps/germany.map");
-        tileSource.setMapFile(mapFileHandle.path());
-        tileSource.setPreferredLanguage("en");
-
-        Layers layers = mMap.layers();
-
+        setBaseMap(singleMap);
 
         //MyLocationLayer
         myLocationAccuracy = new LocationAccuracyLayer(mMap);
@@ -396,19 +388,12 @@ public class MapView extends AbstractView {
         myLocationLayer = new LocationLayer(mMap, textureRegionMap);
         myLocationLayer.setPosition(52.580400947530364, 13.385594096047232);
 
-        if (tileSource != null) {
-            VectorTileLayer mapLayer = mMap.setBaseMap(tileSource);
-            mMap.setTheme(VtmThemes.DEFAULT);
 
-            if (buildings)
-                layers.add(new BuildingLayer(mMap, mapLayer));
+        GroupLayer layerGroup = new GroupLayer(mMap);
 
-            if (labels)
-                layers.add(new LabelLayer(mMap, mapLayer));
-        }
 
         if (tileGrid)
-            layers.add(new TileGridLayer(mMap));
+            layerGroup.layers.add(new TileGridLayer(mMap));
 
         if (mapScalebar) {
             DefaultMapScaleBar mapScaleBar = new DefaultMapScaleBar(mMap);
@@ -418,13 +403,14 @@ public class MapView extends AbstractView {
             mapScaleBar.setScaleBarPosition(MapScaleBar.ScaleBarPosition.BOTTOM_LEFT);
 
             mapScaleBarLayer = new MapScaleBarLayer(mMap, mapScaleBar);
-            layers.add(mapScaleBarLayer);
-            layers.add(myLocationAccuracy);
-//            layers.add(myLocationModel);
+            layerGroup.layers.add(mapScaleBarLayer);
+            layerGroup.layers.add(myLocationAccuracy);
         }
         wayPointLayer = new WaypointLayer(mMap, textureRegionMap);
-        layers.add(wayPointLayer);
-        layers.add(myLocationLayer);
+        layerGroup.layers.add(wayPointLayer);
+        layerGroup.layers.add(myLocationLayer);
+
+        mMap.layers().add(layerGroup);
 
     }
 
@@ -477,6 +463,6 @@ public class MapView extends AbstractView {
     }
 
     public void setBaseMap(AbstractManagedMapLayer baseMap) {
-
+        this.mMap.setNewBaseMap(baseMap);
     }
 }

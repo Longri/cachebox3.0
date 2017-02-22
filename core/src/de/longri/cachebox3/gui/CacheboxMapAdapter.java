@@ -17,11 +17,14 @@ package de.longri.cachebox3.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
+import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
 import org.oscim.core.MapPosition;
 import org.oscim.event.Event;
 import org.oscim.event.Gesture;
 import org.oscim.event.MotionEvent;
+import org.oscim.layers.tile.TileLayer;
 import org.oscim.map.Map;
+import org.oscim.theme.VtmThemes;
 
 /**
  * Created by Longri on 08.09.2016.
@@ -138,6 +141,17 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     public boolean handleGesture(Gesture g, MotionEvent e) {
         this.updateMap(true);
         return super.handleGesture(g, e);
+    }
+
+    public void setNewBaseMap(AbstractManagedMapLayer baseMap) {
+        if (this.layers().size() > 1) this.layers().remove(1);
+        TileLayer tileLayer = this.setBaseMap(baseMap.getTileLayer(this));
+        if (baseMap.isVector()) this.setTheme(VtmThemes.DEFAULT);
+
+        tileLayer.getManager().update(mMapPosition.setX(mMapPosition.getX() + 0.00001));
+
+        //force reload
+        this.updateMap(true);
     }
 }
 
