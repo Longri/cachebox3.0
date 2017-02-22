@@ -33,10 +33,8 @@ import javax.swing.*;
 
 public class DesktopLauncher {
     public static void main(String[] args) {
-
+        System.setProperty("org.lwjgl.util.NoChecks", "true");
         LibgdxLogger.PROPERTIES_FILE_HANDLE = new LwjglFileHandle(LibgdxLogger.CONFIGURATION_FILE, Files.FileType.Local);
-
-        System.setProperty("org.lwjgl.util.NoChecks", "false");
 
 
         CommandLine cmd = getCommandLine(args);
