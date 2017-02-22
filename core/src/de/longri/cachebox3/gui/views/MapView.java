@@ -32,8 +32,9 @@ import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
-import de.longri.cachebox3.gui.map.layer.LocationLayer;
+import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
+import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
@@ -473,5 +474,9 @@ public class MapView extends AbstractView {
 
     public void setNewSettings() {
         //TODO
+    }
+
+    public void setBaseMap(AbstractManagedMapLayer baseMap) {
+
     }
 }

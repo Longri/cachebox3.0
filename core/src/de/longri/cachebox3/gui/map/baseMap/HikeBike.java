@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.menu;
+package de.longri.cachebox3.gui.map.baseMap;
+
+import org.oscim.layers.tile.TileLayer;
+import org.oscim.layers.tile.bitmap.BitmapTileLayer;
+import org.oscim.map.Map;
+import org.oscim.tiling.source.bitmap.DefaultSources;
 
 /**
- * Created by Longri on 15.08.2016.
+ * Created by Longri on 22.02.2017.
  */
-public interface OnItemClickListener {
+public class HikeBike extends AbstractBitmapLayer {
+    public HikeBike() {
+        super("Hike Bike", false, true);
+    }
 
-    public boolean onItemClick(MenuItem item);
-
+    @Override
+    public TileLayer getTileLayer(Map map) {
+        return new BitmapTileLayer(map, DefaultSources.HIKEBIKE.build());
+    }
 }

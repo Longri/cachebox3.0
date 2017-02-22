@@ -15,12 +15,18 @@
  */
 package de.longri.cachebox3.gui.actions.show_vies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
+import de.longri.cachebox3.gui.map.baseMap.BaseMapManager;
+import de.longri.cachebox3.gui.map.baseMap.MapsforgeSingleMap;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.locator.track.TrackRecorder;
@@ -94,59 +100,61 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
     private void showMapLayerMenu() {
         Menu icm = new Menu("MapViewShowLayerContextMenu");
 
-//        // Sorting (perhaps use an arraylist of layers without the overlay layers)
-//        Collections.sort(ManagerBase.Manager.getLayers(), new Comparator<Layer>() {
-//            @Override
-//            public int compare(Layer layer1, Layer layer2) {
-//                return layer1.Name.toLowerCase().compareTo(layer2.Name.toLowerCase());
-//            }
-//        });
-//
-//        int menuID = 0;
-//        String[] curentLayerNames = MapView.mapTileLoader.getCurrentLayer().getNames();
-//        for (Layer layer : ManagerBase.Manager.getLayers()) {
-//            if (!layer.isOverlay()) {
-//                MenuItem mi = icm.addItem(menuID++, "", layer.Name); // == friendlyName == FileName !!! ohne Translation
-//                mi.setData(layer);
-//                mi.setCheckable(true);
-//
-//                //set icon (Online, Mapsforge or Freizeitkarte)
-//                Sprite sprite = null;
-//                switch (layer.getMapType()) {
-//                    case BITMAP:
-//                        break;
-//                    case FREIZEITKARTE:
-//                        sprite = Sprites.getSprite(IconName.freizeit.name());
-//                        break;
-//                    case MAPSFORGE:
-//                        sprite = Sprites.getSprite(IconName.mapsforge_logo.name());
-//                        break;
-//                    case ONLINE:
-//                        sprite = Sprites.getSprite(IconName.download.name());
-//                        break;
-//                    default:
-//                        break;
-//                }
-//
-//                if (sprite != null)
-//                    mi.setIcon(new SpriteDrawable(sprite));
-//
-//                for (String str : curentLayerNames) {
-//                    if (str.equals(layer.Name)) {
-//                        mi.setChecked(true);
-//                        break;
-//                    }
-//                }
-//            }
-//        }
+        BaseMapManager.INSTANCE.setMapFolder(Gdx.files.absolute(Settings_Map.MapPackFolder.getValue()));
 
-//        icm.addOnClickListener(new OnClickListener() {
-//            @Override
-//            public boolean onClick(GL_View_Base v, int x, int y, int pointer, int button) {
-//                final Layer layer = (Layer) ((MenuItem) v).getData();
-//
-//                // if curent layer a Mapsforge map, it is posible to add the selected Mapsforge map
-//                // to the current layer. We ask the User!
+
+        int menuID = 0;
+        for (int i = 0, n = BaseMapManager.INSTANCE.size(); i < n; i++) {
+
+            AbstractManagedMapLayer baseMap = BaseMapManager.INSTANCE.get(i);
+
+            if (!baseMap.isOverlay) {
+                MenuItem mi = icm.addItem(menuID++, "", baseMap.name); // == friendlyName == FileName !!! without translation
+                mi.setData(baseMap);
+                mi.setCheckable(true);
+
+                //set icon (Online_BMP, Online_Vector, Mapsforge or Freizeitkarte)
+                Drawable icon = null;
+                MenuIconStyle style = VisUI.getSkin().get(MenuIconStyle.class);
+
+                if (baseMap.isOnline) {
+                    if (baseMap.isVector()) {
+                        icon = style.baseMapOnlineVector;
+                    } else {
+                        icon = style.baseMapOnlineBitmap;
+                    }
+                } else {
+                    if (baseMap instanceof MapsforgeSingleMap) {
+                        MapsforgeSingleMap map = (MapsforgeSingleMap) baseMap;
+                        if (map.isFreizeitKarte()) {
+                            icon = style.baseMapFreizeitkarte;
+                        } else {
+                            icon = style.baseMapMapsforge;
+                        }
+                    }
+
+                }
+
+                if (icon != null)
+                    mi.setIcon(icon);
+
+                for (int j = 0, m = BaseMapManager.INSTANCE.currentSelected.size(); j < m; j++) {
+                    String str = BaseMapManager.INSTANCE.currentSelected.get(j);
+                    if (str.equals(baseMap.name)) {
+                        mi.setChecked(true);
+                        break;
+                    }
+                }
+            }
+        }
+
+        icm.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public boolean onItemClick(MenuItem item) {
+                final AbstractManagedMapLayer baseMap = (AbstractManagedMapLayer) item.getData();
+
+                // if curent layer a Mapsforge map, it is posible to add the selected Mapsforge map
+                // to the current layer. We ask the User!
 //                if (MapView.mapTileLoader.getCurrentLayer().isMapsForge() && layer.isMapsForge()) {
 //                    GL_MsgBox msgBox = GL_MsgBox.Show("add or change", "Map selection", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
 //
@@ -173,11 +181,11 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
 //                    msgBox.button2.setText("select");
 //                    return true;
 //                }
-//
-//                TabMainView.mapView.setCurrentLayer(layer);
-//                return true;
-//            }
-//        });
+
+                mapViewInstance.setBaseMap(baseMap);
+                return true;
+            }
+        });
 
         icm.show();
     }
