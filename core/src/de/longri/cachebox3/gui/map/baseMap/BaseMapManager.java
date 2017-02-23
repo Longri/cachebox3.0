@@ -30,9 +30,6 @@ public final class BaseMapManager extends CB_List<AbstractManagedMapLayer> {
 
     public final static BaseMapManager INSTANCE = new BaseMapManager();
 
-
-    public final CB_StringList currentSelected = new CB_StringList();
-
     private BaseMapManager() {
     }
 
@@ -63,6 +60,6 @@ public final class BaseMapManager extends CB_List<AbstractManagedMapLayer> {
         this.add(new OpenStreetMapTransport());
         this.add(new OpenStreetMap());
         this.add(new ImagicoLandCover());
-        this.add(new HikeBike());
+        this.add(new HikeBikeHillShade());
     }
 }

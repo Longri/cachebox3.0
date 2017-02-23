@@ -138,8 +138,10 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
                 if (icon != null)
                     mi.setIcon(icon);
 
-                for (int j = 0, m = BaseMapManager.INSTANCE.currentSelected.size(); j < m; j++) {
-                    String str = BaseMapManager.INSTANCE.currentSelected.get(j);
+                String[] currentLayer = Settings_Map.CurrentMapLayer.getValue();
+
+                for (int j = 0, m = currentLayer.length; j < m; j++) {
+                    String str = currentLayer[j];
                     if (str.equals(baseMap.name)) {
                         mi.setChecked(true);
                         break;
