@@ -17,8 +17,11 @@ package de.longri.cachebox3.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
 import de.longri.cachebox3.gui.map.baseMap.AbstractVectorLayer;
+import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.settings.Settings_Map;
 import org.oscim.core.MapPosition;
 import org.oscim.event.Event;
 import org.oscim.event.Gesture;
@@ -28,7 +31,6 @@ import org.oscim.layers.tile.TileLayer;
 import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
-import org.oscim.map.Layers;
 import org.oscim.map.Map;
 import org.oscim.theme.VtmThemes;
 
@@ -50,9 +52,7 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     private boolean mRenderRequest;
     private int width = Gdx.graphics.getWidth(), height = Gdx.graphics.getHeight(), xOffset, yOffset;
     VectorTileLayer vectorTileLayer;
-    GroupLayer vectorbuldingLabelgruop = new GroupLayer(this);
-    BuildingLayer buldingVectorLayer;
-    LabelLayer labelVectorLayer;
+
 
     @Override
     public int getWidth() {
@@ -155,7 +155,7 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         return super.handleGesture(g, e);
     }
 
-    public void setNewBaseMap(AbstractManagedMapLayer baseMap) {
+    public void setNewBaseMap(final AbstractManagedMapLayer baseMap) {
         if (this.layers().size() > 1) this.layers().remove(1);
         TileLayer tileLayer;
 
@@ -177,7 +177,7 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             tileLayer = this.setBaseMap(vectorTileLayer);
             this.setTheme(VtmThemes.DEFAULT);
 
-            ((AbstractList)this.layers()).add(2,new BuildingLabelLayer(this, vectorTileLayer));
+            ((AbstractList) this.layers()).add(2, new BuildingLabelLayer(this, vectorTileLayer));
 
         } else {
             tileLayer = this.setBaseMap(baseMap.getTileLayer(this));
@@ -187,6 +187,14 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
 
         //force reload
         this.updateMap(true);
+
+        CB.postAsync(new Runnable() {
+            @Override
+            public void run() {
+                Settings_Map.CurrentMapLayer.setValue(new String[]{baseMap.name});
+                Config.AcceptChanges();
+            }
+        });
     }
 
     private final class BuildingLabelLayer extends GroupLayer {

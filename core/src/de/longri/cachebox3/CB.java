@@ -225,9 +225,9 @@ public class CB {
     public static void setSelectedCache(Cache cache) {
 
         selectedCache = cache;
-        if (cache == null){
+        if (cache == null) {
             log.debug("Set selected Cache to NULL");
-        }else{
+        } else {
             log.debug("Set selected Cache: " + cache.toString());
         }
 
@@ -246,7 +246,7 @@ public class CB {
             if (cacheHistory.length() > 120) {
                 cacheHistory = cacheHistory.substring(0, cacheHistory.lastIndexOf(","));
             }
-        }else{
+        } else {
             log.debug("Set selected WP: " + waypoint.toString());
         }
     }
@@ -370,5 +370,10 @@ public class CB {
 
     public static Cache getCacheFromId(long cacheId) {
         return Database.Data.Query.GetCacheById(cacheId);
+    }
+
+    public static void postAsync(Runnable runnable) {
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 }

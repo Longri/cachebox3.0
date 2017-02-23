@@ -33,7 +33,8 @@ import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
-import de.longri.cachebox3.gui.map.baseMap.MapsforgeSingleMap;
+import de.longri.cachebox3.gui.map.baseMap.BaseMapManager;
+import de.longri.cachebox3.gui.map.baseMap.OSciMap;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
@@ -46,6 +47,7 @@ import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.settings.Settings;
+import de.longri.cachebox3.settings.Settings_Map;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
@@ -370,9 +372,23 @@ public class MapView extends AbstractView {
     protected void initLayers(boolean tileGrid, boolean labels,
                               boolean buildings, boolean mapScalebar) {
 
-        MapsforgeSingleMap singleMap = new MapsforgeSingleMap(Gdx.files.local(CB.WorkPath + "/repository/maps/germany.map"));
+        // load last saved BaseMap
+        String baseMapName = Settings_Map.CurrentMapLayer.getValue()[0];
+        BaseMapManager.INSTANCE.setMapFolder(Gdx.files.absolute(Settings_Map.MapPackFolder.getValue()));
+        AbstractManagedMapLayer baseMap = null;
+        for (int i = 0, n = BaseMapManager.INSTANCE.size(); i < n; i++) {
+            AbstractManagedMapLayer map = BaseMapManager.INSTANCE.get(i);
+            if (baseMapName.equals(map.name)) {
+                baseMap = map;
+                break;
+            }
+        }
 
-        setBaseMap(singleMap);
+        if (baseMap == null) {
+            baseMap = new OSciMap();
+        }
+
+        setBaseMap(baseMap);
 
         //MyLocationLayer
         myLocationAccuracy = new LocationAccuracyLayer(mMap);
