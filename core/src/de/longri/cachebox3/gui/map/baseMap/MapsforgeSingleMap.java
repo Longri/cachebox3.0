@@ -65,10 +65,13 @@ public class MapsforgeSingleMap extends AbstractVectorLayer {
         }
 
         //check type of mapsforge
+        tileSource.open();
         MapInfo info = tileSource.getMapInfo();
         if (info != null && info.comment != null && info.comment.contains("FZK")) {
+            tileSource.close();
             return true;
         }
+        tileSource.close();
         return false;
     }
 }
