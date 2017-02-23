@@ -92,6 +92,22 @@
       "path": "svg/arrow_help_90.svg",
       "scale": 0.28
     },
+    "baseMapFreizeitkarte": {
+      "path": "svg/baseMapFreizeitkarte.svg",
+      "scale": 0.19
+    },
+    "baseMapMapsforge": {
+      "path": "svg/baseMapMapsforge.svg",
+      "scale": 0.19
+    },
+    "baseMapOnlineBitmap": {
+      "path": "svg/baseMapOnlineBitmap.svg",
+      "scale": 0.19
+    },
+    "baseMapOnlineVector": {
+      "path": "svg/baseMapOnlineVector.svg",
+      "scale": 0.19
+    },
     "button_bar_back": {
       "path": "svg/button_bar_back.svg",
       "scale": 1
@@ -1703,6 +1719,10 @@
   },
   "de.longri.cachebox3.gui.skin.styles.MenuIconStyle": {
     "default": {
+      "baseMapOnlineVector": "baseMapOnlineVector",
+      "baseMapOnlineBitmap": "baseMapOnlineBitmap",
+      "baseMapMapsforge": "baseMapMapsforge",
+      "baseMapFreizeitkarte": "baseMapFreizeitkarte",
       "addCacheIcon": "addCacheIcon",
       "deleteIcon": "deleteIcon",
       "sortIcon": "sortIcon",
