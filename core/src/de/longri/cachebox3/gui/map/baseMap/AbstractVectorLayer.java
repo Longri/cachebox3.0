@@ -22,6 +22,7 @@ import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Map;
+import org.oscim.tiling.TileSource;
 
 /**
  * Created by Longri on 22.02.2017.
@@ -55,4 +56,6 @@ public abstract class AbstractVectorLayer extends AbstractManagedMapLayer {
         layer.layers.add(new LabelLayer(map, vectorTileLayer));
         return layer;
     }
+
+    public abstract TileSource getVectorTileSource();
 }

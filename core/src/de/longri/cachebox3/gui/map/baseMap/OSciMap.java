@@ -18,6 +18,8 @@ package de.longri.cachebox3.gui.map.baseMap;
 import org.oscim.layers.tile.vector.OsmTileLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.map.Map;
+import org.oscim.tiling.TileSource;
+import org.oscim.tiling.source.mapfile.MapFileTileSource;
 import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 
 /**
@@ -25,14 +27,21 @@ import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
  */
 public class OSciMap extends AbstractVectorLayer {
 
+    private final TileSource tileSource = new OSciMap4TileSource();
+
     public OSciMap() {
         super("opensciencemap", false, true);
     }
 
     protected VectorTileLayer createVectorTileLayer(Map map) {
         OsmTileLayer vectorTileLayer = new OsmTileLayer(map);
-        vectorTileLayer.setTileSource(new OSciMap4TileSource());
+        vectorTileLayer.setTileSource(tileSource);
         return vectorTileLayer;
+    }
+
+    @Override
+    public TileSource getVectorTileSource() {
+        return tileSource;
     }
 
 

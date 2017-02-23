@@ -19,6 +19,7 @@ import com.badlogic.gdx.files.FileHandle;
 import org.oscim.layers.tile.vector.OsmTileLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.map.Map;
+import org.oscim.tiling.TileSource;
 import org.oscim.tiling.source.mapfile.MapFileTileSource;
 import org.oscim.tiling.source.mapfile.MapInfo;
 
@@ -44,6 +45,16 @@ public class MapsforgeSingleMap extends AbstractVectorLayer {
         VectorTileLayer vectorTileLayer = new OsmTileLayer(map);
         vectorTileLayer.setTileSource(tileSource);
         return vectorTileLayer;
+    }
+
+    @Override
+    public TileSource getVectorTileSource() {
+        if (tileSource == null) {
+            tileSource = new MapFileTileSource();
+            tileSource.setMapFile(mapFile.path());
+            tileSource.setPreferredLanguage("en");
+        }
+        return tileSource;
     }
 
     public boolean isFreizeitKarte() {

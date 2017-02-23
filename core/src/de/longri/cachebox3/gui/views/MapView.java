@@ -70,7 +70,6 @@ import org.oscim.renderer.bucket.TextItem;
 import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
-import org.oscim.tiling.source.mapfile.MapFileTileSource;
 import org.oscim.utils.TextureAtlasUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,9 +96,6 @@ public class MapView extends AbstractView {
     private final ZoomButton zoomButton;
     private WaypointLayer wayPointLayer;
     private final LinkedHashMap<Object, TextureRegion> textureRegionMap;
-
-
-    private MapFileTileSource tileSource;
 
     LocationAccuracyLayer myLocationAccuracy;
 
@@ -327,9 +323,6 @@ public class MapView extends AbstractView {
 
         mapInputHandler.clear();
         mapInputHandler = null;
-
-        tileSource.close();
-        tileSource = null;
 
         main.drawMap = false;
         mMap.clearMap();
