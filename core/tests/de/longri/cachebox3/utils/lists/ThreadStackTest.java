@@ -17,17 +17,17 @@ package de.longri.cachebox3.utils.lists;
 
 import com.badlogic.gdx.utils.StringBuilder;
 import org.junit.jupiter.api.Test;
+import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by Longri on 06.01.2017.
  */
 class ThreadStackTest {
-
-    private static final boolean EXCLUDE_FROM_TRAVIS = true;
 
     AtomicBoolean TestIsRunning = new AtomicBoolean(false);
 
@@ -124,7 +124,7 @@ class ThreadStackTest {
 
     @Test()
     void runTest2() {
-        if (EXCLUDE_FROM_TRAVIS) return;
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
         synchronized (TestIsRunning) {
             StringBuilder stringBuilder = new StringBuilder();
             ThreadStack<TestCancelRunnable> runnables = new ThreadStack<TestCancelRunnable>();
@@ -223,7 +223,7 @@ class ThreadStackTest {
 
     @Test()
     void runTestwithCancel() {
-        if (EXCLUDE_FROM_TRAVIS) return;
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
         synchronized (TestIsRunning) {
             StringBuilder stringBuilder = new StringBuilder();
             ThreadStack<TestCancelRunnable> runnables = new ThreadStack<TestCancelRunnable>();
@@ -236,13 +236,13 @@ class ThreadStackTest {
             sleep(100);
 
             runnables.pushAndStartWithCancelRunning(runnable1);
-            sleep(10);
+            sleep(20);
             runnables.pushAndStartWithCancelRunning(runnable2);
-            sleep(10);
+            sleep(5);
             runnables.pushAndStartWithCancelRunning(runnable3);
             sleep(100);
             runnables.pushAndStartWithCancelRunning(runnable4);
-            sleep(10);
+            sleep(100);
             runnables.pushAndStartWithCancelRunning(runnable5);
 
 
@@ -263,20 +263,20 @@ class ThreadStackTest {
             testStringBuilder.append("Start Runnable Runnable 1\n");
             testStringBuilder.append("Cancel Runnable Runnable 1\n\n");
 
-            testStringBuilder.append("Start Runnable Runnable 2\n");
-            testStringBuilder.append("Cancel Runnable Runnable 2\n\n");
+//            testStringBuilder.append("Start Runnable Runnable 2\n");
+//            testStringBuilder.append("Cancel Runnable Runnable 2\n\n");
 
             testStringBuilder.append("Start Runnable Runnable 3\n");
             testStringBuilder.append("Finish Runnable Runnable 3\n\n");
 
             testStringBuilder.append("Start Runnable Runnable 4\n");
-            testStringBuilder.append("Cancel Runnable Runnable 4\n\n");
+            testStringBuilder.append("Finish Runnable Runnable 4\n\n");
 
             testStringBuilder.append("Start Runnable Runnable 5\n");
             testStringBuilder.append("Finish Runnable Runnable 5\n\n");
 
-            assertThat("Runnable1 must start and finish before Runnable3," +
-                    " Runnable2 must ignored", testStringBuilder.equals(stringBuilder));
+            assertEquals( testStringBuilder,stringBuilder,"Runnable1 must start and finish before Runnable3," +
+                    " Runnable2 must ignored");
         }
     }
 

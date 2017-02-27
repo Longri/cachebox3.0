@@ -15,6 +15,7 @@ import de.longri.cachebox3.utils.SkinColor;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.util.ArrayList;
 
@@ -39,6 +40,7 @@ class HashAtlasWriterTest {
     @BeforeAll
     static void beforeAll() {
 
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
 
         // Initial JUnit GDX App
         new JUnitGdxTestApp("TestHashWriter");
@@ -75,10 +77,10 @@ class HashAtlasWriterTest {
 
     @AfterAll
     static void afterAll() {
-
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
         // delete all test files
 
-        if(!testFolder.deleteDirectory()){
+        if (!testFolder.deleteDirectory()) {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -98,6 +100,8 @@ class HashAtlasWriterTest {
 
     @Test
     void save() {
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
+
         String testSkinName = "TestSkin";
         SvgSkin testSkin = new SvgSkin(testSkinName);
         testSkin.load(skinFile);
