@@ -92,6 +92,7 @@ public class HashAtlasWriter {
         FileHandle hashFile = cachedAtlas.sibling(cachedAtlas.nameWithoutExtension() + ".hash");
         int hash = -1;
         BufferedReader reader = new BufferedReader(new InputStreamReader(hashFile.read()), 64);
+
         try {
             String line = reader.readLine();
             int colon = line.indexOf(':');
@@ -99,6 +100,12 @@ public class HashAtlasWriter {
             hash = Integer.parseInt(sValue);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 

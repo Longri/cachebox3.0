@@ -227,6 +227,7 @@ project(":core") {
         testCompile "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
         testCompile "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
         testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0-M3")
+        testCompile 'com.kitfox.svg:svg-salamander:1.0'
         testCompile project(":desktop")
     }
 }
