@@ -442,9 +442,9 @@ public class OptionsPane extends Table {
                             game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
 
                     if (drawable != null) {
-                        resourceName = game.skinProject.resolveObjectName(Drawable.class, drawable);
+                        resourceName = SvgSkinUtil.resolveObjectName(game.skinProject,Drawable.class, drawable);
                         if (resourceName == null) {
-                            resourceName = game.skinProject.resolveObjectName(TextureRegion.class, drawable);
+                            resourceName =SvgSkinUtil.resolveObjectName(game.skinProject,TextureRegion.class, drawable);
                         }
 
                         if (drawable instanceof SvgNinePatchDrawable) {
@@ -523,7 +523,7 @@ public class OptionsPane extends Table {
                         if (color instanceof SkinColor) {
                             resourceName = ((SkinColor) color).skinName;
                         } else {
-                            resourceName = game.skinProject.resolveObjectName(SkinColor.class, color);
+                            resourceName = SvgSkinUtil.resolveObjectName(game.skinProject,SkinColor.class, color);
                         }
 
                         resourceName += " (" + color.toString() + ")";
@@ -566,7 +566,7 @@ public class OptionsPane extends Table {
                             game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
 
                     if (font != null) {
-                        resourceName = game.skinProject.resolveObjectName(BitmapFont.class, font);
+                        resourceName = SvgSkinUtil.resolveObjectName(game.skinProject,BitmapFont.class, font);
                         buttonStyle.font = font;
                     } else {
                         buttonStyle.up = game.skin.getDrawable("default-rect");

@@ -265,6 +265,14 @@ public class HSV_Color extends Color {
             0.0f, 0.0f, -1.5f, 0.0f, 0.f, /* */
             0.0f, 0.0f, 0.0f, 0.0f, 255f};
 
+
+    public static final float[] GRAYSCALE_COLOR_MATRIX = new float[]{
+            0.3f, 0.59f, 0.11f, 0, 0,
+            0.3f, 0.59f, 0.11f, 0, 0,
+            0.3f, 0.59f, 0.11f, 0, 0,
+            0, 0, 0, 1, 0,};
+
+
     public static Color colorMatrixManipulation(Color color, float[] nightColorMatrix) {
         return new HSV_Color(colorMatrixManipulation(color.toIntBits(), nightColorMatrix));
     }

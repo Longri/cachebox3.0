@@ -40,7 +40,7 @@ import java.util.ArrayList;
  */
 public class SvgSkin extends Skin {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(SvgSkin.class);
-    private static final String SKIN_JSON_NAME = "skin.json";
+    public static final String SKIN_JSON_NAME = "skin.json";
     private boolean forceCreateNewAtlas = false;
     public IconsStyle getIcon;
     public MenuIconStyle getMenuIcon;

@@ -293,7 +293,7 @@ public class SvgSkinUtil {
     /**
      * Retrieve the textual name of an object
      */
-    private static String resolveObjectName(Skin skin, Class<?> classType, Object object) {
+    public static String resolveObjectName(Skin skin, Class<?> classType, Object object) {
 
         if (skin.resources.get(classType) == null) {
             return null;

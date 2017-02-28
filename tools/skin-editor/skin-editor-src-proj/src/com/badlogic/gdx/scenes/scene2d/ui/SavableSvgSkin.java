@@ -82,4 +82,14 @@ public class SavableSvgSkin extends SvgSkin {
 
         return true;
     }
+
+    public SavableSvgSkin clone(String newName) {
+        SavableSvgSkin newSkin = new SavableSvgSkin(newName);
+        newSkin.getIcon = getIcon;
+        newSkin.getMenuIcon = getMenuIcon;
+        newSkin.resources = resources;
+        newSkin.atlas = atlas;
+
+        return newSkin;
+    }
 }
