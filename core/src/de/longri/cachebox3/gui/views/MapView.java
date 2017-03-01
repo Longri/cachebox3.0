@@ -395,7 +395,7 @@ public class MapView extends AbstractView {
         myLocationAccuracy.setPosition(52.580400947530364, 13.385594096047232, 100);
 
         myLocationLayer = new LocationLayer(mMap, textureRegionMap);
-        myLocationLayer.setPosition(52.580400947530364, 13.385594096047232);
+        myLocationLayer.setPosition(52.580400947530364, 13.385594096047232, 0);
 
 
         GroupLayer layerGroup = new GroupLayer(mMap);

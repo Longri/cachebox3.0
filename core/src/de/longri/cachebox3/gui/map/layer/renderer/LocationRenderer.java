@@ -51,6 +51,7 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
      */
     private boolean mUpdate;
     private TextureRegion arrowRegion;
+    private float arrowHeading;
 
     public void dispose() {
 
@@ -91,7 +92,7 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
         mMapPosition.bearing = -mMapPosition.bearing;
         if (arrowRegion == null) return;
         SymbolItem symbolItem = SymbolItem.pool.get();
-        symbolItem.set(symbolX, symbolY, arrowRegion, true);
+        symbolItem.set(symbolX, symbolY, arrowRegion, this.arrowHeading, true);
         symbolItem.offset = CENTER_OFFSET;
         mSymbolBucket.pushSymbol(symbolItem);
 
@@ -102,8 +103,10 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
         mUpdate = false;
     }
 
-    public void update(double latitude, double longitude) {
+    public void update(double latitude, double longitude, float arrowHeading) {
         mUpdate = true;
+        this.arrowHeading = -arrowHeading;
+        while (this.arrowHeading < 0) this.arrowHeading += 360;
         mMapPoint.x = (longitude + 180.0) / 360.0;
         double sinLatitude = Math.sin(latitude * (Math.PI / 180.0));
         mMapPoint.y = 0.5 - Math.log((1.0 + sinLatitude) / (1.0 - sinLatitude)) / (4.0 * Math.PI);

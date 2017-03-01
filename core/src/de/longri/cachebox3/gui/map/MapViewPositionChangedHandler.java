@@ -166,13 +166,13 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
                     @Override
                     public void run() {
                         myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
-                        myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude);
+                        myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
                         map.updateMap(true);
                     }
                 });
             else {
                 myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
-                myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude);
+                myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude,arrowHeading);
                 map.updateMap(true);
             }
         }
