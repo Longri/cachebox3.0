@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -113,7 +113,7 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
 
 
         //register SelectedCacheChangedEvent
-        SelectedCacheEventList.Add(this);
+        SelectedCacheEventList.add(this);
 
         //set selected Cache to slider
         selectedCacheChanged(CB.getSelectedCache(), CB.getSelectedWaypoint(), null, null);

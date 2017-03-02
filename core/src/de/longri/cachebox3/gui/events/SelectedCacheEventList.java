@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -25,14 +25,14 @@ import java.util.ArrayList;
 public class SelectedCacheEventList {
     public static ArrayList<SelectedCacheEvent> list = new ArrayList<SelectedCacheEvent>();
 
-    public static void Add(SelectedCacheEvent event) {
+    public static void add(SelectedCacheEvent event) {
         synchronized (list) {
             if (!list.contains(event))
                 list.add(event);
         }
     }
 
-    public static void Remove(SelectedCacheEvent event) {
+    public static void remove(SelectedCacheEvent event) {
         synchronized (list) {
             list.remove(event);
         }
@@ -41,7 +41,7 @@ public class SelectedCacheEventList {
     private static Cache lastSelectedCache;
     private static Waypoint lastSelectedWayPoint;
 
-    public static void Call(final Cache selectedCache, final Waypoint waypoint) {
+    public static void call(final Cache selectedCache, final Waypoint waypoint) {
         boolean change = true;
 
         if (lastSelectedCache != null) {

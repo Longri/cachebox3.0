@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -368,7 +368,7 @@ public class Locator {
     static long lastFixLose = 0;
 
     /**
-     * Call this if GPS state changed to no sat have a fix
+     * call this if GPS state changed to no sat have a fix
      */
     public static void FallBack2Network() {
         synchronized (that) {

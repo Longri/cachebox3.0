@@ -115,7 +115,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         CacheListChangedEvent();
 
         //register SelectedCacheChangedEvent
-        SelectedCacheEventList.Add(this);
+        SelectedCacheEventList.add(this);
     }
 
 

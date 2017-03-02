@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
 import de.longri.cachebox3.gui.map.baseMap.BaseMapManager;
 import de.longri.cachebox3.gui.map.baseMap.OSciMap;
+import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
@@ -415,6 +416,10 @@ public class MapView extends AbstractView {
             layerGroup.layers.add(mapScaleBarLayer);
             layerGroup.layers.add(myLocationAccuracy);
         }
+
+        DirectLineLayer directLineLayer = new DirectLineLayer(mMap);
+        layerGroup.layers.add(directLineLayer);
+
         wayPointLayer = new WaypointLayer(mMap, textureRegionMap);
         layerGroup.layers.add(wayPointLayer);
         layerGroup.layers.add(myLocationLayer);

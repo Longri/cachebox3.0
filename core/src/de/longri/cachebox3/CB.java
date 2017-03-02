@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -232,7 +232,7 @@ public class CB {
         }
 
         //call selected cache changed event
-        SelectedCacheEventList.Call(selectedCache, null);
+        SelectedCacheEventList.call(selectedCache, null);
 
     }
 
@@ -280,7 +280,7 @@ public class CB {
             selectedCache.loadDetail();
         }
 
-        SelectedCacheEventList.Call(selectedCache, selectedWaypoint);
+        SelectedCacheEventList.call(selectedCache, selectedWaypoint);
 
         if (changeAutoResort) {
             // switch off auto select
