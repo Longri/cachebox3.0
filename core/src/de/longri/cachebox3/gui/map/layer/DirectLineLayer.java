@@ -96,9 +96,7 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
             directLineRenderer.setInvalid();
             return;
         }
-
         directLineRenderer.setLine(selectedCoordinate, ownPosition);
-
     }
 
     @Override
@@ -112,14 +110,12 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
         LineBucket ll = buckets.addLineBucket(0,
                 new LineStyle(Color.fade(Color.RED, 0.8f), 5.5f, Paint.Cap.ROUND));
 
-        GeometryBuffer g = new GeometryBuffer(10, 1);
+        GeometryBuffer g = new GeometryBuffer(2, 1);
         private boolean invalidLine = true;
         private double startPointX, startPointY, endPointX, endPointY;
         private Box mBBox;
-        private Map map;
 
         private DirectLineRenderer(Map map) {
-            this.map = map;
             this.mBBox = new Box();
             float halfWidth = map.getWidth() / 2;
             float halfHeight = map.getHeight() / 2;
@@ -154,12 +150,6 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
                 eX = (float) FastMath.clamp(eX, mBBox.xmin, mBBox.xmax);
                 eY = (float) FastMath.clamp(eY, mBBox.ymin, mBBox.ymax);
             }
-
-
-            // clamp location to a position that can be
-            // savely translated to screen coordinates
-//            v.getBBox(mBBox, 0);
-
 
             buckets.set(ll);
             g.clear();
