@@ -75,6 +75,7 @@ class ThreadStackTest {
 
     @Test
     void ConstructorTest() {
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
         synchronized (TestIsRunning) {
             ThreadStack<TestCancelRunnable> runnables = new ThreadStack<TestCancelRunnable>();
             assertThat("Must constructable", runnables != null);
@@ -92,6 +93,7 @@ class ThreadStackTest {
 
     @Test
     void runTest() {
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
         synchronized (TestIsRunning) {
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -168,6 +170,7 @@ class ThreadStackTest {
 
     @Test()
     void runTest3() {
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
         synchronized (TestIsRunning) {
             StringBuilder stringBuilder = new StringBuilder();
             ThreadStack<TestCancelRunnable> runnables = new ThreadStack<TestCancelRunnable>();

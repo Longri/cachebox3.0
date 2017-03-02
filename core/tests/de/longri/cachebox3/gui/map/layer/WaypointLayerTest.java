@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.map.layer;
 
+import com.badlogic.gdx.backends.lwjgl.JUnitGdxTestApp;
 import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.kotcrab.vis.ui.VisUI;
@@ -28,11 +29,13 @@ import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheList;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.oscim.awt.AwtGraphics;
 import org.oscim.awt.DesktopRealSvgBitmap;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.renderer.atlas.TextureRegion;
+import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.util.LinkedHashMap;
 
@@ -43,13 +46,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 class WaypointLayerTest {
 
+    @BeforeAll
+    static void beforeAll() {
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
+        // Initial JUnit GDX App
+        new JUnitGdxTestApp("TestHashWriter");
+    }
 
     /**
      * Will check if, after selection changed, the correct Symbol set!
      */
     @Test
     void selectedCacheChanged() {
-
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
         // create test Skin
         AwtGraphics.init();
         MapWayPointItemStyle styleSelectOverlay = new MapWayPointItemStyle();
@@ -76,7 +85,7 @@ class WaypointLayerTest {
         if (VisUI.isLoaded()) VisUI.dispose();
         VisUI.load(skin);
         LinkedHashMap<Object, TextureRegion> textureRegionMap = MapView.createTextureAtlasRegions();
-        WaypointLayer wpLayer = new WaypointLayer(null,textureRegionMap);
+        WaypointLayer wpLayer = new WaypointLayer(null, textureRegionMap);
         Cache testCache1 = new Cache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
         Cache testCache2 = new Cache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
         Cache testCache3 = new Cache(0.3, 0, "Cache3", CacheTypes.Traditional, "GC3");
@@ -189,7 +198,7 @@ class WaypointLayerTest {
      */
     @Test
     void selectedWaypointChanged() {
-
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
         // create test Skin
         AwtGraphics.init();
         MapWayPointItemStyle styleSelectOverlay = new MapWayPointItemStyle();
@@ -244,7 +253,7 @@ class WaypointLayerTest {
         VisUI.load(skin);
         LinkedHashMap<Object, TextureRegion> textureRegionMap = MapView.createTextureAtlasRegions();
 
-        WaypointLayer wpLayer = new WaypointLayer(null,textureRegionMap);
+        WaypointLayer wpLayer = new WaypointLayer(null, textureRegionMap);
         Cache testCache1 = new Cache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
         Cache testCache2 = new Cache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
         Cache testCache3 = new Cache(0.3, 0, "Cache3", CacheTypes.Traditional, "GC3");

@@ -93,7 +93,7 @@ public class StageManager {
 
 
         stageList.add(newStage);
-        log.debug("Add new Stage: " + newStage.getName());
+        log.debug("add new Stage: " + newStage.getName());
         log.debug("Stage list: " + stageList.toString());
 
         //switch input processor to window stage
@@ -120,7 +120,7 @@ public class StageManager {
     public static void removeAllWithActStage() {
         NamedStage stage = stageList.pop();
 
-        log.debug("Remove Stage: " + stage.getName());
+        log.debug("remove Stage: " + stage.getName());
         log.debug("Stage list: " + stageList.toString());
 
         //switch input processor to main stage

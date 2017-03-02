@@ -27,6 +27,7 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.MathUtils;
+import org.oscim.event.Event;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
@@ -55,7 +56,7 @@ public class TrackRecorder implements PositionChangedEvent {
 
     public void StartRecording() {
 
-        PositionChangedEventList.Add(this);
+        PositionChangedEventList.add(this);
 
         CB.actRoute = new Track(Translation.Get("actualTrack"), Color.BLUE);
         CB.actRoute.ShowRoute = true;
@@ -168,7 +169,7 @@ public class TrackRecorder implements PositionChangedEvent {
         if (mustRecPos) {
             mustRecPos = false;
         }
-        PositionChanged();
+        positionChanged(new Event());
     }
 
     private boolean mustRecPos = false;
@@ -183,7 +184,7 @@ public class TrackRecorder implements PositionChangedEvent {
     }
 
     public void StopRecording() {
-        PositionChangedEventList.Remove(this);
+        PositionChangedEventList.remove(this);
         if (CB.actRoute != null) {
             CB.actRoute.IsActualTrack = false;
             CB.actRoute.Name = Translation.Get("recordetTrack");
@@ -201,7 +202,7 @@ public class TrackRecorder implements PositionChangedEvent {
     }
 
     @Override
-    public void PositionChanged() {
+    public void positionChanged(Event event) {
         if (gpxfile == null || pauseRecording || !Locator.isGPSprovided())
             return;
 
@@ -291,12 +292,12 @@ public class TrackRecorder implements PositionChangedEvent {
     }
 
     @Override
-    public void OrientationChanged() {
+    public void orientationChanged(Event event) {
         // do nothing
     }
 
     @Override
-    public void SpeedChanged() {
+    public void speedChanged(Event event) {
         // do nothing
     }
 

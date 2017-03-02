@@ -191,7 +191,7 @@ public class Splash extends NamedStage {
 
     private void doneLoading() {
 
-        log.info("Add 3DModels");
+        log.info("add 3DModels");
 
         Model myLocationModel = assets.get("skins/day/3d_model/Pfeil.g3db", Model.class);
         myLocationModel.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));
