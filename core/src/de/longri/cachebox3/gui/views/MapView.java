@@ -98,6 +98,7 @@ public class MapView extends AbstractView {
     private final MapCompass mapOrientationButton;
     private final ZoomButton zoomButton;
     private WaypointLayer wayPointLayer;
+    private DirectLineLayer directLineLayer;
     private final LinkedHashMap<Object, TextureRegion> textureRegionMap;
 
     LocationAccuracyLayer myLocationAccuracy;
@@ -317,6 +318,12 @@ public class MapView extends AbstractView {
         for (Layer layer : layers) {
             if (layer instanceof Disposable) {
                 ((Disposable) layer).dispose();
+            } else if (layer instanceof GroupLayer) {
+                for (Layer groupLayer : ((GroupLayer) layer).layers) {
+                    if (groupLayer instanceof Disposable) {
+                        ((Disposable) groupLayer).dispose();
+                    }
+                }
             }
         }
 
@@ -417,7 +424,7 @@ public class MapView extends AbstractView {
             layerGroup.layers.add(myLocationAccuracy);
         }
 
-        DirectLineLayer directLineLayer = new DirectLineLayer(mMap);
+        directLineLayer = new DirectLineLayer(mMap);
         layerGroup.layers.add(directLineLayer);
 
         wayPointLayer = new WaypointLayer(mMap, textureRegionMap);

@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.map.layer;
 
+import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.events.SelectedCacheEvent;
 import de.longri.cachebox3.gui.events.SelectedCacheEventList;
@@ -41,7 +42,7 @@ import org.oscim.utils.FastMath;
 /**
  * Created by Longri on 02.03.2017.
  */
-public class DirectLineLayer extends GenericLayer implements PositionChangedEvent, SelectedCacheEvent {
+public class DirectLineLayer extends GenericLayer implements PositionChangedEvent, SelectedCacheEvent, Disposable {
 
     private final DirectLineRenderer directLineRenderer;
     private Event lastEvent;
@@ -102,6 +103,12 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
     @Override
     public void selectedCacheChanged(Cache selectedCache, Waypoint waypoint, Cache LastSelectedCache, Waypoint LastWaypoint) {
         redrawLine(new Event());
+    }
+
+    @Override
+    public void dispose() {
+        PositionChangedEventList.remove(this);
+        SelectedCacheEventList.remove(this);
     }
 
     private static class DirectLineRenderer extends BucketRenderer {
