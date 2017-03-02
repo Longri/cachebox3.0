@@ -18,6 +18,7 @@
 package de.longri.cachebox3.gui.map.layer.renderer;
 
 import com.badlogic.gdx.utils.Disposable;
+import de.longri.cachebox3.CB;
 import org.oscim.backend.GL;
 import org.oscim.core.Box;
 import org.oscim.core.Point;
@@ -212,12 +213,11 @@ public class LocationAccuracyRenderer extends LayerRenderer implements Disposabl
         float radius = 10;
         boolean viewShed = false;
         if (!mLocationIsVisible /* || pos.zoomLevel < SHOW_ACCURACY_ZOOM */) {
-            radius = CIRCLE_SIZE;
+            radius = CB.getScaledFloat(CIRCLE_SIZE);
         } else {
             if (v.pos.zoomLevel >= mShowAccuracyZoom)
                 radius = (float) (mRadius * v.pos.scale);
-            radius = Math.max(10, radius);
-
+            radius = Math.max(CB.getScaledFloat(10), radius);
             viewShed = true;
         }
         gl.uniform1f(hScale, radius);

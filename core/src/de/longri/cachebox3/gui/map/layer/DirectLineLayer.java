@@ -124,12 +124,12 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
 
         private DirectLineRenderer(Map map) {
             this.mBBox = new Box();
-            float halfWidth = map.getWidth() / 2;
-            float halfHeight = map.getHeight() / 2;
-            this.mBBox.xmin = -halfWidth;
-            this.mBBox.xmax = halfWidth;
-            this.mBBox.ymin = -halfHeight;
-            this.mBBox.ymax = halfHeight;
+            float extendedMapWidth = map.getWidth() * 1.5f;
+            float extendedMapHeight = map.getHeight() * 1.5f;
+            this.mBBox.xmin = -extendedMapWidth;
+            this.mBBox.xmax = extendedMapWidth;
+            this.mBBox.ymin = -extendedMapHeight;
+            this.mBBox.ymax = extendedMapHeight;
         }
 
         @Override

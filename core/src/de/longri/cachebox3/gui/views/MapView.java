@@ -424,12 +424,14 @@ public class MapView extends AbstractView {
             layerGroup.layers.add(myLocationAccuracy);
         }
 
-        directLineLayer = new DirectLineLayer(mMap);
-        layerGroup.layers.add(directLineLayer);
+
 
         wayPointLayer = new WaypointLayer(mMap, textureRegionMap);
         layerGroup.layers.add(wayPointLayer);
         layerGroup.layers.add(myLocationLayer);
+
+        directLineLayer = new DirectLineLayer(mMap);
+        layerGroup.layers.add(directLineLayer);
 
         mMap.layers().add(layerGroup);
 
