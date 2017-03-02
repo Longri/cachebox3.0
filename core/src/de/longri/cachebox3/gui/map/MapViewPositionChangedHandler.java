@@ -94,7 +94,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
             this.arrowHeading = bearing;
         } else if (!this.mapOrientationButton.isNorthOriented() || mapState == MapState.CAR) {
             this.mapBearing = bearing;
-            this.arrowHeading = -bearing;
+            this.arrowHeading = 0;
         } else {
             this.mapBearing = 0;
             this.arrowHeading = bearing;
