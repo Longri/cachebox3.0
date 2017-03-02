@@ -146,7 +146,7 @@ public class MainScreen implements Screen {
         int count = 0;
         for (String item : sortedItems) {
             if (count++ > 8) {
-                // Remove file
+                // remove file
                 projectFolder.child("backups").child(item).delete();
             }
         }

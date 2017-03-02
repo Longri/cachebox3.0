@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.locator.events.GPS_FallBackEventList;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
 import de.longri.cachebox3.utils.UnitFormatter;
+import org.oscim.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -185,11 +186,12 @@ public class Locator {
                     break;
             }
 
-            PositionChangedEventList.SpeedChanged();
-            PositionChangedEventList.PositionChanged();
-            PositionChangedEventList.OrientationChanged();
+            Event event = new Event();
+            PositionChangedEventList.speedChanged(event);
+            PositionChangedEventList.positionChanged(event);
+            PositionChangedEventList.orientationChanged(event);
 
-            Gdx.graphics.requestRendering();
+//            Gdx.graphics.requestRendering();
         }
     }
 
@@ -526,7 +528,7 @@ public class Locator {
 
 //        log.debug("Set last used Compass type:" + that.mLastUsedCompassType);
 
-        PositionChangedEventList.OrientationChanged();
+        PositionChangedEventList.orientationChanged(new Event());
 
         Gdx.graphics.requestRendering();
     }

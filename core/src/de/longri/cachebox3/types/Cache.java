@@ -259,7 +259,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
             }
             if (!found) {
                 // Waypoint not in List
-                // Add Waypoint to List
+                // add Waypoint to List
                 waypoints.add(wp);
             }
         }
@@ -531,7 +531,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
 //
 //            Waypoint aktWaypoint = this.findWaypointByGc(newWaypoint.getGcCode());
 //            if (aktWaypoint == null) {
-//                // this waypoint is new -> Add to list
+//                // this waypoint is new -> add to list
 //                this.waypoints.add(newWaypoint);
 //            } else {
 //                // this waypoint is already in our list -> Copy Informations

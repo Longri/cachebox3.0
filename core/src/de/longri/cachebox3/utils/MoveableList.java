@@ -30,12 +30,12 @@ import java.util.Iterator;
 ///  <para><b>Der Aufruf folgender Methoden l�sen ein Changed Event aus:</b></para>
 /// 
 /// <para>
-///  Add / 
+///  add /
 ///  AddRange / 
 ///  Clear / 
 ///  Insert / 
 ///  InsertRange / 
-///  Remove / 
+///  remove /
 ///  RemoveAll / 
 ///  RemoveAt / 
 ///  RemoveRange / (geerbt von DynamicList(Of T)

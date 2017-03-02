@@ -71,7 +71,7 @@ public class ColorPickerDialog extends Dialog {
                             if (colors.containsKey(colorName) == true) {
                                 game.showMsgDlg("Error", "Color name already in use!", game.screenMain.stage);
                             } else {
-                                // Add the color (asuming RGBA)
+                                // add the color (asuming RGBA)
 
                                 SkinColor newColor = new SkinColor(color);
                                 newColor.skinName = colorName;
@@ -249,7 +249,7 @@ public class ColorPickerDialog extends Dialog {
 
             });
 
-            TextButton buttonRemove = new TextButton("Remove", game.skin);
+            TextButton buttonRemove = new TextButton("remove", game.skin);
             buttonRemove.addListener(new ChangeListener() {
 
                 @Override

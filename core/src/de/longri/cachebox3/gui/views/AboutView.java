@@ -22,6 +22,7 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.PositionChangedEvent;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
+import org.oscim.event.Event;
 
 /**
  * Created by Longri on 23.07.16.
@@ -42,7 +43,7 @@ public class AboutView extends AbstractView implements PositionChangedEvent {
         this.addActor(coordinateLabel);
 
         //register as Location receiver
-        PositionChangedEventList.Add(this);
+        PositionChangedEventList.add(this);
     }
 
 
@@ -52,19 +53,19 @@ public class AboutView extends AbstractView implements PositionChangedEvent {
     }
 
     @Override
-    public void PositionChanged() {
+    public void positionChanged(Event event) {
         Coordinate coordinate = Locator.getCoordinate();
         coordinateLabel.setText(coordinate.formatCoordinateLineBreak());
         CB.requestRendering();
     }
 
     @Override
-    public void OrientationChanged() {
+    public void orientationChanged(Event event) {
 
     }
 
     @Override
-    public void SpeedChanged() {
+    public void speedChanged(Event event) {
 
     }
 

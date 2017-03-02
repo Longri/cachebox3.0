@@ -10,13 +10,15 @@ import java.util.Properties;
  */
 public class EXCLUDE_FROM_TRAVIS {
     static final Properties p = new Properties();
+    static boolean readFailer = false;
+
     static {
         try {
             p.load(new FileInputStream(new File("unittest.properties")));
         } catch (IOException e) {
-
+            readFailer = true;
         }
     }
 
-    public static final boolean VALUE = p.getProperty("ExcludeOnTravis", "true").equals("true");
+    public static final boolean VALUE = readFailer || p.getProperty("ExcludeOnTravis", "true").equals("true");
 }

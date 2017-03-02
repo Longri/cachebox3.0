@@ -35,7 +35,7 @@ public class CB_Stack<T> {
 	}
 
 	/**
-	 * Add an item onto the last of this stack.
+	 * add an item onto the last of this stack.
 	 * 
 	 * @param item
 	 */

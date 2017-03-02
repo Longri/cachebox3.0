@@ -24,6 +24,7 @@ import de.longri.cachebox3.locator.events.PositionChangedEvent;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
 import de.longri.cachebox3.utils.MathUtils;
 import org.oscim.core.MapPosition;
+import org.oscim.event.Event;
 import org.oscim.map.Map;
 import org.oscim.map.Viewport;
 import org.oscim.utils.ThreadUtils;
@@ -45,6 +46,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     private final LocationLayer myLocationLayer;
     private final MapCompass mapOrientationButton;
     private final AtomicBoolean isDisposed = new AtomicBoolean(false);
+    private Event lastEvent;
 
     public static MapViewPositionChangedHandler
     getInstance(Map map, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy, MapCompass mapOrientationButton) {
@@ -52,7 +54,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
                 new MapViewPositionChangedHandler(map, myLocationLayer, myLocationAccuracy, mapOrientationButton);
 
         //register this handler
-        PositionChangedEventList.Add(handler);
+        PositionChangedEventList.add(handler);
         return handler;
     }
 
@@ -65,7 +67,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     }
 
     @Override
-    public void PositionChanged() {
+    public void positionChanged(Event event) {
         if (mapState == MapState.CAR && !Locator.isGPSprovided())
             return;// at CarMode ignore Network provided positions!
 
@@ -78,11 +80,11 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
         this.accuracy = this.myPosition.getAccuracy();
 
-        assumeValues();
+        assumeValues(event);
     }
 
     @Override
-    public void OrientationChanged() {
+    public void orientationChanged(Event event) {
         float bearing = -Locator.getHeading();
 
         // at CarMode no orientation changes below 20kmh
@@ -102,11 +104,11 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
         //set orientation
         this.mapOrientationButton.setOrientation(-this.mapBearing);
-        assumeValues();
+        assumeValues(event);
     }
 
     @Override
-    public void SpeedChanged() {
+    public void speedChanged(Event event) {
 
     }
 
@@ -125,7 +127,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         isDisposed.set(true);
 
         // unregister this handler
-        PositionChangedEventList.Remove(this);
+        PositionChangedEventList.remove(this);
 
     }
 
@@ -144,8 +146,12 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     /**
      * Set the values to Map and position overlays
      */
-    private void assumeValues() {
-
+    private void assumeValues(Event event) {
+        if (event != null && event == lastEvent) {
+            // skip handling
+            return;
+        }
+        lastEvent = event;
         if (isDisposed.get()) return;
 
         {// set map values
@@ -172,7 +178,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
                 });
             else {
                 myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
-                myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude,arrowHeading);
+                myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
                 map.updateMap(true);
             }
         }

@@ -35,7 +35,7 @@ public class Action_Add_WP extends AbstractAction {
 
     @Override
     public void execute() {
-        CB.viewmanager.toast("Add WP not implemented");
+        CB.viewmanager.toast("add WP not implemented");
 
 //        // wenn MapView sichtbar und im Modus Free, dann nehme Koordinaten vom Mittelpunkt der Karte
 //        // ansonsten mit den aktuellen Koordinaten!

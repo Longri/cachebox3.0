@@ -1,6 +1,7 @@
 package de.longri.cachebox3.locator.events;
 
 import de.longri.cachebox3.locator.Locator;
+import org.oscim.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,7 @@ public class PositionChangedEventList {
     final static Logger log = LoggerFactory.getLogger(PositionChangedEventList.class);
     private static final ArrayList<PositionChangedEvent> list = new ArrayList<PositionChangedEvent>();
 
-    public static void Add(PositionChangedEvent event) {
+    public static void add(PositionChangedEvent event) {
         synchronized (list) {
             if (!list.contains(event)) {
                 list.add(event);
@@ -32,7 +33,7 @@ public class PositionChangedEventList {
 
     }
 
-    public static void Remove(PositionChangedEvent event) {
+    public static void remove(PositionChangedEvent event) {
         synchronized (list) {
             list.remove(event);
         }
@@ -48,7 +49,7 @@ public class PositionChangedEventList {
 
     private static long lastOrintationChangedEvent = 0;
 
-    public static void PositionChanged() {
+    public static void positionChanged(Event event) {
         minPosEventTime = Math.min(minPosEventTime, System.currentTimeMillis() - lastPosTime);
         lastPosTime = System.currentTimeMillis();
 
@@ -58,14 +59,14 @@ public class PositionChangedEventList {
 
         synchronized (list) {
             try {
-                for (PositionChangedEvent event : list) {
+                for (PositionChangedEvent listener : list) {
                     // If display is switched off fire only events with high priority!
-                    if (Locator.isDisplayOff() && (event.getPriority() != PositionChangedEvent.Priority.High))
+                    if (Locator.isDisplayOff() && (listener.getPriority() != PositionChangedEvent.Priority.High))
                         continue;
                     try {
-                        event.PositionChanged();
+                        listener.positionChanged(event);
                     } catch (Exception e) {
-                        log.error("Core.PositionEventList.Call(location)" + event.getReceiverName(), e);
+                        log.error("Core.PositionEventList.Call(location)" + listener.getReceiverName(), e);
                         e.printStackTrace();
                     }
                 }
@@ -76,7 +77,7 @@ public class PositionChangedEventList {
 
     }
 
-    public static void OrientationChanged() {
+    public static void orientationChanged(final Event event) {
 
         if (Locator.isDisplayOff())
             return; // Hier braucht niemand ein OriantationChangedEvent
@@ -89,9 +90,9 @@ public class PositionChangedEventList {
         lastOrintationChangedEvent = System.currentTimeMillis();
 
         synchronized (list) {
-            for (PositionChangedEvent event : list) {
+            for (PositionChangedEvent listener : list) {
                 try {
-                    event.OrientationChanged();
+                    listener.orientationChanged(event);
                 } catch (Exception e) {
                     // TODO reactivate if possible Log.err(log, "Core.PositionEventList.Call(heading)", event.getReceiverName(), e);
                     e.printStackTrace();
@@ -100,15 +101,15 @@ public class PositionChangedEventList {
         }
     }
 
-    public static void SpeedChanged() {
+    public static void speedChanged(Event event) {
 
         if (Locator.isDisplayOff())
             return; // Hier braucht niemand ein SpeedChangedEvent
 
         synchronized (list) {
-            for (PositionChangedEvent event : list) {
+            for (PositionChangedEvent listener : list) {
                 try {
-                    event.SpeedChanged();
+                    listener.speedChanged(event);
                 } catch (Exception e) {
                     // TODO reactivate if possible Log.err(log, "Core.PositionEventList.Call(heading)", event.getReceiverName(), e);
                     e.printStackTrace();

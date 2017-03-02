@@ -77,10 +77,10 @@ public enum CacheTypes {
         } else if (string.equalsIgnoreCase("Cache In Trash Out Event")) {
             return CITO;
         } else {
-            // Remove trailing " cache" or " hybrid" fragments
+            // remove trailing " cache" or " hybrid" fragments
             if (string.contains(" "))
                 string = string.substring(0, string.indexOf(" "));
-            // Remove trailing "-cache" fragments
+            // remove trailing "-cache" fragments
             if (string.contains("-"))
                 string = string.substring(0, string.indexOf("-"));
 

@@ -34,6 +34,7 @@ import de.longri.cachebox3.types.CacheWithWP;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
+import org.oscim.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,7 @@ import org.slf4j.LoggerFactory;
 public class CacheListView extends AbstractView implements CacheListChangedEventListener, PositionChangedEvent {
     final static Logger log = LoggerFactory.getLogger(CacheListView.class);
     private ListView listView;
+    private Event lastEvent;
 
     public CacheListView() {
         super("CacheListView CacheCount: " + Database.Data.Query.size());
@@ -51,7 +53,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         CacheListChangedEventList.Add(this);
 
         //register as positionChanged eventListener
-        PositionChangedEventList.Add(this);
+        PositionChangedEventList.add(this);
     }
 
     public synchronized void layout() {
@@ -191,7 +193,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     public void dispose() {
         disposeListView();
         CacheListChangedEventList.Remove(this);
-        PositionChangedEventList.Remove(this);
+        PositionChangedEventList.remove(this);
         if (listView != null) listView.dispose();
         listView = null;
     }
@@ -212,16 +214,22 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     }
 
     @Override
-    public void PositionChanged() {
-        setChangedFlagToAllItems();
+    public void positionChanged(Event event) {
+        setChangedFlagToAllItems(event);
     }
 
     @Override
-    public void OrientationChanged() {
-        setChangedFlagToAllItems();
+    public void orientationChanged(Event event) {
+        setChangedFlagToAllItems(event);
     }
 
-    private void setChangedFlagToAllItems() {
+    private void setChangedFlagToAllItems(Event event) {
+        if (event != null && event == lastEvent) {
+            // skip handling
+            return;
+        }
+        lastEvent = event;
+
         if (listView == null) return;
         SnapshotArray<ListViewItem> allItems = listView.items();
         Object[] actors = allItems.begin();
@@ -234,7 +242,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     }
 
     @Override
-    public void SpeedChanged() {
+    public void speedChanged(Event event) {
         //do nothing
     }
 

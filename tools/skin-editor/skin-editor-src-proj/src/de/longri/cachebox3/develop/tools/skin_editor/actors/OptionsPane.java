@@ -94,7 +94,7 @@ public class OptionsPane extends Table {
         styleCell.row();
 
 
-        // Add buttons
+        // add buttons
         Table tableStylesButtons = new Table();
         TextButton buttonNewStyle = new TextButton("New Style", game.skin);
         TextButton buttonDeleteStyle = new TextButton("Delete Style", game.skin);

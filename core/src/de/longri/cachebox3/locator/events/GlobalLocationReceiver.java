@@ -27,6 +27,7 @@ import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.CacheWithWP;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.SoundCache;
+import org.oscim.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +49,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
 
     public GlobalLocationReceiver() {
 
-        PositionChangedEventList.Add(this);
+        PositionChangedEventList.add(this);
         GPS_FallBackEventList.Add(this);
         try {
             SoundCache.loadSounds();
@@ -61,7 +62,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
     private static boolean PlaySounds = false;
 
     @Override
-    public void PositionChanged() {
+    public void positionChanged(Event event) {
 
         PlaySounds = !Config.GlobalVolume.getValue().Mute;
 
@@ -212,7 +213,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
     }
 
     @Override
-    public void OrientationChanged() {
+    public void orientationChanged(Event event) {
     }
 
     @Override
@@ -221,7 +222,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
     }
 
     @Override
-    public void SpeedChanged() {
+    public void speedChanged(Event event) {
     }
 
     @Override

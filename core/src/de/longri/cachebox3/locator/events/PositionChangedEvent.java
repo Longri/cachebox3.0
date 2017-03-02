@@ -1,5 +1,7 @@
 package de.longri.cachebox3.locator.events;
 
+import org.oscim.event.Event;
+
 public interface PositionChangedEvent {
 	public enum Priority {
 		Low, Normal, High
@@ -8,17 +10,17 @@ public interface PositionChangedEvent {
 	/**
 	 * Position is changed! Get the new Location from Locator!!!
 	 */
-	public abstract void PositionChanged();
+	public abstract void positionChanged(Event event);
 
 	/**
 	 * Orientation is changed! Get the new Orientation from Locator!!!
 	 */
-	public abstract void OrientationChanged();
+	public abstract void orientationChanged(Event event);
 
 	/**
 	 * Speed is changed! Get the new Speed from Locator!!!
 	 */
-	public abstract void SpeedChanged();
+	public abstract void speedChanged(Event event);
 
 	/**
 	 * Return the Name of this Receiver, for Debug
