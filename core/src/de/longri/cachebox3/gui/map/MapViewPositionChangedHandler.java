@@ -186,7 +186,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         {// set yOffset at dependency of tilt
             if (this.tilt > 0) {
                 float offset = MathUtils.linearInterpolation
-                        (Viewport.MIN_TILT, Viewport.MAX_TILT, 0, 0.8f, this.tilt);
+                        (map.viewport().getMinTilt(), map.viewport().getMaxTilt(), 0, 0.8f, this.tilt);
                 this.map.viewport().setMapScreenCenter(offset);
             } else {
                 this.map.viewport().setMapScreenCenter(0);
@@ -196,7 +196,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         {// set mapOrientationButton tilt
             if (this.tilt > 0) {
                 float buttonTilt = MathUtils.linearInterpolation
-                        (Viewport.MIN_TILT, Viewport.MAX_TILT, 0, -60f, this.tilt);
+                        (this.map.viewport().getMinTilt(), this.map.viewport().getMaxTilt(), 0, -60f, this.tilt);
                 this.mapOrientationButton.setTilt(buttonTilt);
             } else {
                 this.mapOrientationButton.setTilt(0);

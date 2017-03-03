@@ -45,6 +45,7 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     public CacheboxMapAdapter() {
         super();
         events.bind(this); //register Update listener
+        this.viewport().setMaxTilt(41f);
     }
 
 

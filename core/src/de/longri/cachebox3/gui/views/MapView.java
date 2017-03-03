@@ -146,7 +146,7 @@ public class MapView extends AbstractView {
 
                         // set full tilt
                         MapPosition mapPosition = mMap.getMapPosition();
-                        mapPosition.setTilt(Viewport.MAX_TILT);
+                        mapPosition.setTilt(mMap.viewport().getMaxTilt());
                         mMap.setMapPosition(mapPosition);
 
                         break;
