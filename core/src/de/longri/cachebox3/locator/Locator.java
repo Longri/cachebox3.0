@@ -188,10 +188,8 @@ public class Locator {
 
             Event event = new Event();
             PositionChangedEventList.speedChanged(event);
-            PositionChangedEventList.positionChanged(event);
             PositionChangedEventList.orientationChanged(event);
-
-//            Gdx.graphics.requestRendering();
+            PositionChangedEventList.positionChanged(event);
         }
     }
 

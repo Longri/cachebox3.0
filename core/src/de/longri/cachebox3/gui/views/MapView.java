@@ -144,10 +144,15 @@ public class MapView extends AbstractView {
                         scale = mMap.getMapPosition().getScale();
                         mMap.setMapPosition(actLocation.latitude, actLocation.longitude, scale);
 
-                        // set full tilt
-                        MapPosition mapPosition = mMap.getMapPosition();
-                        mapPosition.setTilt(mMap.viewport().getMaxTilt());
-                        mMap.setMapPosition(mapPosition);
+                        Gdx.app.postRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                // set full tilt
+                                MapPosition mapPosition = mMap.getMapPosition();
+                                mapPosition.setTilt(mMap.viewport().getMaxTilt());
+                                mMap.animator().animateTo(500, mapPosition);
+                            }
+                        });
 
                         break;
                 }
@@ -423,7 +428,6 @@ public class MapView extends AbstractView {
             layerGroup.layers.add(mapScaleBarLayer);
             layerGroup.layers.add(myLocationAccuracy);
         }
-
 
 
         wayPointLayer = new WaypointLayer(mMap, textureRegionMap);
