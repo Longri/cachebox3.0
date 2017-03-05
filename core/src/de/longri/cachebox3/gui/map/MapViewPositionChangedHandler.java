@@ -23,10 +23,13 @@ import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.PositionChangedEvent;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
+import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.utils.MathUtils;
 import org.oscim.core.MapPosition;
 import org.oscim.event.Event;
 import org.oscim.map.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,6 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
+    private static Logger log = LoggerFactory.getLogger(MapViewPositionChangedHandler.class);
 
     private float arrowHeading, accuracy, mapBearing, userBearing, tilt;
     private MapState mapState;
@@ -148,6 +152,8 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
     private Timer timer;
 
+    private double lastDynZoom;
+
     /**
      * Set the values to Map and position overlays
      */
@@ -173,24 +179,47 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
         if (isDisposed.get()) return;
 
+
         // set map values
-            final MapPosition currentMapPosition = this.map.getMapPosition();
-            this.tilt = currentMapPosition.tilt;
-            if (this.mapCenter != null && getCenterGps())
-                currentMapPosition.setPosition(this.mapCenter.latitude, this.mapCenter.longitude);
+        final MapPosition currentMapPosition = this.map.getMapPosition();
+        this.tilt = currentMapPosition.tilt;
+        if (this.mapCenter != null && getCenterGps())
+            currentMapPosition.setPosition(this.mapCenter.latitude, this.mapCenter.longitude);
 
-            // heading for map must between -180 and 180
-            if (mapBearing < -180) mapBearing += 360;
-            currentMapPosition.setBearing(mapBearing);
-            currentMapPosition.setTilt(this.tilt);
+        // heading for map must between -180 and 180
+        if (mapBearing < -180) mapBearing += 360;
+        currentMapPosition.setBearing(mapBearing);
+        currentMapPosition.setTilt(this.tilt);
 
-//            this.map.setMapPosition(currentMapPosition);
+
+        if (this.mapState == MapState.CAR && Settings_Map.dynamicZoom.getValue()) {
+            // calculate dynamic Zoom
+
+            double maxSpeed = Settings_Map.MoveMapCenterMaxSpeed.getValue();
+            double maxZoom = 1 << Settings_Map.dynamicZoomLevelMax.getValue();
+            double minZoom = 1 << Settings_Map.dynamicZoomLevelMin.getValue();
+
+            double percent = Locator.SpeedOverGround() / maxSpeed;
+
+            double dynZoom = (float) (maxZoom - ((maxZoom - minZoom) * percent));
+            if (dynZoom > maxZoom)
+                dynZoom = maxZoom;
+            if (dynZoom < minZoom)
+                dynZoom = minZoom;
+
+            currentMapPosition.setScale(dynZoom);
+            if (lastDynZoom != (dynZoom)) {
+                lastDynZoom = dynZoom;
+                log.debug("SetDynamic scale to: " + lastDynZoom);
+            }
+
+        }
 
 
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                map.animator().animateTo(500,currentMapPosition);
+                map.animator().animateTo(500, currentMapPosition);
                 myPosition = Locator.getCoordinate();
                 myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
                 myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
