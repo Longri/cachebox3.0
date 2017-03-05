@@ -13,31 +13,43 @@ package ch.fhnw.imvs.gpssimulator.tools;
 
 // Immutable
 public class XMLData {
-	private int time;
-	private double latitude;
-	private double longitude;
-	private double altitude;
+    private int time;
+    private double latitude;
+    private double longitude;
+    private double altitude;
+    private double course;
+    private double speed;
 
-	public XMLData(int time, double latitude, double longitude, double altitude) {
-		this.time = time;
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.altitude = altitude;
-	}
+    public XMLData(int time, double latitude, double longitude, double altitude, double course, double speed) {
+        this.time = time;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.altitude = altitude;
+        this.course = course;
+        this.speed = speed;
+    }
 
-	public int getTime() {
-		return time;
-	}
+    public int getTime() {
+        return time;
+    }
 
-	public double getAltitude() {
-		return altitude;
-	}
+    public double getAltitude() {
+        return altitude;
+    }
 
-	public double getLatitude() {
-		return latitude;
-	}
+    public double getLatitude() {
+        return latitude;
+    }
 
-	public double getLongitude() {
-		return longitude;
-	}
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getCourse() {
+        return course;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
 }

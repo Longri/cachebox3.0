@@ -80,7 +80,7 @@ public class MapPanel extends JPanel implements ActionListener {
                 if (Locator.that != null) {
                     LatLong pos = new LatLong(GPSData.getLatitude(), GPSData.getLongitude());
                     model.mapViewPosition.setCenter(pos);
-                    Locator.setNewLocation(new Location(pos.getLatitude(), pos.getLongitude(), GPSData.getQuality(), true, (float) GPSData.getSpeed(), true, GPSData.getCourse(), GPSData.getAltitude(), Location.ProviderType.GPS));
+                    Locator.setNewLocation(new Location(pos.getLatitude(), pos.getLongitude(), GPSData.getQuality(), true, (float) GPSData.getSpeed(), true,(float) GPSData.getCourse(), GPSData.getAltitude(), Location.ProviderType.GPS));
                 }
 
             }
