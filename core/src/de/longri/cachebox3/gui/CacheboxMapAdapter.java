@@ -176,7 +176,7 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
                 vectorTileLayer.setTileSource(((AbstractVectorLayer) baseMap).getVectorTileSource());
             }
             tileLayer = this.setBaseMap(vectorTileLayer);
-            this.setTheme(VtmThemes.DEFAULT);
+            this.setTheme(VtmThemes.OSMARENDER);
 
             ((AbstractList) this.layers()).add(2, new BuildingLabelLayer(this, vectorTileLayer));
 

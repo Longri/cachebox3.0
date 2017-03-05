@@ -203,7 +203,7 @@ public class MapView extends AbstractView {
             CanvasAdapter.dpi = 240 * scaleFactor;
             CanvasAdapter.textScale = scaleFactor;
             CanvasAdapter.scale = scaleFactor;
-            PolygonBucket.enableTexture = CanvasAdapter.platform != Platform.IOS;//fixme if vtm can render polygon texture
+//            PolygonBucket.enableTexture = CanvasAdapter.platform != Platform.IOS;//fixme if vtm can render polygon texture
 
             log.debug("Create new map instance with scale factor:" + Float.toString(scaleFactor));
             log.debug("Tile.SIZE:" + Integer.toString(Tile.SIZE));
@@ -278,11 +278,13 @@ public class MapView extends AbstractView {
             input.put(((GetName) bmp).getName(), bmp);
         }
         ArrayList<TextureAtlas> atlasList = new ArrayList<TextureAtlas>();
+        boolean flipped = CanvasAdapter.platform == Platform.IOS;
+        System.out.print("create MapTextureAtlas with flipped Y? "+flipped);
         TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, true,
-                CanvasAdapter.platform == Platform.IOS);
+                flipped);
 
 
-        if (false) {//Debug write atlas Bitmap to tmp folder
+        if (true) {//Debug write atlas Bitmap to tmp folder
             int count = 0;
             for (TextureAtlas atlas : atlasList) {
                 byte[] data = atlas.texture.bitmap.getPngEncodedData();

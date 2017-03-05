@@ -165,8 +165,6 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
             g.addPoint(sX, sY);
             g.addPoint(eX, eY);
 
-            log.debug("tilt: " + mMapPosition.getTilt());
-
             ll.addLine(g);
 
             compile();

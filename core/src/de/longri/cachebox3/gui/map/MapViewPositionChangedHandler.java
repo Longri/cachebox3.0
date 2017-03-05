@@ -173,8 +173,8 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
         if (isDisposed.get()) return;
 
-        {// set map values
-            MapPosition currentMapPosition = this.map.getMapPosition();
+        // set map values
+            final MapPosition currentMapPosition = this.map.getMapPosition();
             this.tilt = currentMapPosition.tilt;
             if (this.mapCenter != null && getCenterGps())
                 currentMapPosition.setPosition(this.mapCenter.latitude, this.mapCenter.longitude);
@@ -183,12 +183,14 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
             if (mapBearing < -180) mapBearing += 360;
             currentMapPosition.setBearing(mapBearing);
             currentMapPosition.setTilt(this.tilt);
-            this.map.setMapPosition(currentMapPosition);
-        }
+
+//            this.map.setMapPosition(currentMapPosition);
+
 
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
+                map.animator().animateTo(500,currentMapPosition);
                 myPosition = Locator.getCoordinate();
                 myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
                 myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
