@@ -19,6 +19,8 @@ import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Locale;
 
@@ -27,9 +29,29 @@ import java.util.Locale;
  */
 public class AndroidLocationListener implements LocationListener, GpsStatus.Listener, GpsStatus.NmeaListener {
 
+    private static Logger log = LoggerFactory.getLogger(AndroidLocationListener.class);
+
+    long lastTime;
+    Location lastLocation;
 
     @Override
     public void onLocationChanged(Location location) {
+
+        if (location.getTime() < lastTime + 1000) {
+            return;
+        }
+        lastTime = location.getTime();
+
+        if (lastLocation != null) {
+            float dis = location.distanceTo(lastLocation);
+            if (dis < 10) {
+                System.out.print("distance to slow, skip");
+                return;
+            }
+        }
+        lastLocation = location;
+
+
         de.longri.cachebox3.locator.Location.ProviderType provider = de.longri.cachebox3.locator.Location.ProviderType.NULL;
 
         if (location.getProvider().toLowerCase(new Locale("en")).contains("gps"))

@@ -136,6 +136,7 @@ public class AndroidLauncher extends AndroidApplication {
     }
 
     private float compassHeading = -1;
+    private float lastCompassHeading;
 
     private final SensorEventListener mListener = new SensorEventListener() {
         @Override
@@ -143,6 +144,11 @@ public class AndroidLauncher extends AndroidApplication {
             try {
                 mCompassValues = event.values;
                 compassHeading = mCompassValues[0];
+
+                if (Math.abs(lastCompassHeading - compassHeading)<1) {
+                    return;
+                }
+                lastCompassHeading = compassHeading;
                 Locator.setHeading(compassHeading, Locator.CompassType.Magnetic);
             } catch (Exception e) {
                 e.printStackTrace();
