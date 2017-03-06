@@ -47,6 +47,7 @@ import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.settings.Settings_Map;
 import org.oscim.backend.CanvasAdapter;
@@ -62,13 +63,11 @@ import org.oscim.layers.Layer;
 import org.oscim.layers.TileGridLayer;
 import org.oscim.map.Layers;
 import org.oscim.map.Map;
-import org.oscim.map.Viewport;
 import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
 import org.oscim.renderer.atlas.TextureAtlas;
 import org.oscim.renderer.atlas.TextureRegion;
-import org.oscim.renderer.bucket.PolygonBucket;
 import org.oscim.renderer.bucket.TextItem;
 import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
@@ -234,7 +233,13 @@ public class MapView extends AbstractView {
         };
         main.mMapRenderer = new MapRenderer(mMap);
         main.mMapRenderer.onSurfaceCreated();
-        mMap.setMapPosition(52.580400947530364, 13.385594096047232, 1 << 17);
+
+
+        int lastZoomLevel = Settings_Map.lastZoomLevel.getValue();
+        double lastLatitude = Settings_Map.MapInitLatitude.getValue();
+        double lastLongitude = Settings_Map.MapInitLongitude.getValue();
+
+        mMap.setMapPosition(lastLatitude, lastLongitude, 1 << lastZoomLevel);
 
         //          grid,labels,buldings,scalebar
         initLayers(true, true, true, true);
@@ -279,7 +284,7 @@ public class MapView extends AbstractView {
         }
         ArrayList<TextureAtlas> atlasList = new ArrayList<TextureAtlas>();
         boolean flipped = CanvasAdapter.platform == Platform.IOS;
-        System.out.print("create MapTextureAtlas with flipped Y? "+flipped);
+        System.out.print("create MapTextureAtlas with flipped Y? " + flipped);
         TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, true,
                 flipped);
 
@@ -317,6 +322,13 @@ public class MapView extends AbstractView {
     @Override
     public void dispose() {
         log.debug("Dispose MapView");
+
+        //save last position for next initial
+        MapPosition mapPosition = this.mMap.getMapPosition();
+        Settings_Map.lastZoomLevel.setValue(mapPosition.getZoomLevel());
+        Settings_Map.MapInitLatitude.setValue(mapPosition.getLatitude());
+        Settings_Map.MapInitLongitude.setValue(mapPosition.getLongitude());
+        Config.AcceptChanges();
 
         positionChangedHandler.dispose();
         positionChangedHandler = null;
