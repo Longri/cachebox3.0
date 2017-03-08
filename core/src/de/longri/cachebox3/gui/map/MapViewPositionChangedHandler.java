@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.widgets.MapCompass;
+import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.PositionChangedEvent;
@@ -43,7 +44,6 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     private static Logger log = LoggerFactory.getLogger(MapViewPositionChangedHandler.class);
 
     private float arrowHeading, accuracy, mapBearing, userBearing, tilt;
-    private MapState mapState;
     private CoordinateGPS mapCenter;
     private CoordinateGPS myPosition;
     private final Map map;
@@ -51,13 +51,14 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     private final LocationLayer myLocationLayer;
     private final MapCompass mapOrientationButton;
     private final AtomicBoolean isDisposed = new AtomicBoolean(false);
+    private final MapStateButton mapStateButton;
     private Event lastEvent;
 
     public static MapViewPositionChangedHandler
     getInstance(Map map, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy
-            , MapCompass mapOrientationButton) {
+            , MapCompass mapOrientationButton, MapStateButton mapStateButton) {
         MapViewPositionChangedHandler handler =
-                new MapViewPositionChangedHandler(map, myLocationLayer, myLocationAccuracy, mapOrientationButton);
+                new MapViewPositionChangedHandler(map, myLocationLayer, myLocationAccuracy, mapOrientationButton, mapStateButton);
 
         //register this handler
         PositionChangedEventList.add(handler);
@@ -66,16 +67,17 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
 
     private MapViewPositionChangedHandler(Map map, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy
-            , MapCompass mapOrientationButton) {
+            , MapCompass mapOrientationButton, MapStateButton mapStateButton) {
         this.map = map;
         this.myLocationLayer = myLocationLayer;
         this.myLocationAccuracy = myLocationAccuracy;
         this.mapOrientationButton = mapOrientationButton;
+        this.mapStateButton = mapStateButton;
     }
 
     @Override
     public void positionChanged(Event event) {
-        if (mapState == MapState.CAR && !Locator.isGPSprovided())
+        if (this.mapStateButton.getMapMode() == MapMode.CAR && !Locator.isGPSprovided())
             return;// at CarMode ignore Network provided positions!
 
         this.myPosition = Locator.getCoordinate();
@@ -87,7 +89,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
         this.accuracy = this.myPosition.getAccuracy();
 
-        assumeValues(event);
+        assumeValues(event, false);
     }
 
     @Override
@@ -95,13 +97,13 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         float bearing = -Locator.getHeading();
 
         // at CarMode no orientation changes below 20kmh
-        if (mapState == MapState.CAR && Locator.SpeedOverGround() < 20)
+        if (this.mapStateButton.getMapMode() == MapMode.CAR && Locator.SpeedOverGround() < 20)
             bearing = this.mapBearing;
 
         if (this.mapOrientationButton.isUserRotate()) {
             this.mapBearing = userBearing;
             this.arrowHeading = bearing;
-        } else if (!this.mapOrientationButton.isNorthOriented() || mapState == MapState.CAR) {
+        } else if (!this.mapOrientationButton.isNorthOriented() || this.mapStateButton.getMapMode() == MapMode.CAR) {
             this.mapBearing = bearing;
             this.arrowHeading = 0;
         } else {
@@ -111,7 +113,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
         //set orientation
         this.mapOrientationButton.setOrientation(-this.mapBearing);
-        assumeValues(event);
+        assumeValues(event, false);
     }
 
     @Override
@@ -139,15 +141,15 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     }
 
     /**
-     * Returns True, if MapState <br>
-     * MapState.GPS<br>
-     * MapState.LOCK<br>
-     * MapState.CAR<br>
+     * Returns True, if MapMode <br>
+     * MapMode.GPS<br>
+     * MapMode.LOCK<br>
+     * MapMode.CAR<br>
      *
      * @return Boolean
      */
     private boolean getCenterGps() {
-        return this.mapState != MapState.FREE && this.mapState != MapState.WP;
+        return this.mapStateButton.getMapMode() != MapMode.FREE && this.mapStateButton.getMapMode() != MapMode.WP;
     }
 
     private Timer timer;
@@ -157,14 +159,17 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
     /**
      * Set the values to Map and position overlays
      */
-    private void assumeValues(final Event event) {
-        if (this.map.animator().isActive()) {
+    private void assumeValues(final Event event, boolean force) {
+
+        if (block.get()) return;
+
+        if (!force && this.map.animator().isActive()) {
             if (timer != null) return;
             timer = new Timer();
             TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    assumeValues(event);
+                    assumeValues(event, true);
                 }
             };
             timer.schedule(timerTask, 500);
@@ -192,7 +197,7 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         currentMapPosition.setTilt(this.tilt);
 
 
-        if (this.mapState == MapState.CAR && Settings_Map.dynamicZoom.getValue()) {
+        if (this.mapStateButton.getMapMode() == MapMode.CAR && Settings_Map.dynamicZoom.getValue()) {
             // calculate dynamic Zoom
 
             double maxSpeed = Settings_Map.MoveMapCenterMaxSpeed.getValue();
@@ -210,11 +215,9 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
             currentMapPosition.setScale(dynZoom);
             if (lastDynZoom != (dynZoom)) {
                 lastDynZoom = dynZoom;
-                log.debug("SetDynamic scale to: " + lastDynZoom);
+//                log.debug("SetDynamic scale to: " + lastDynZoom);
             }
-
         }
-
 
         Gdx.app.postRunnable(new Runnable() {
             @Override
@@ -254,14 +257,31 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         this.tilt = newTilt;
     }
 
-    public void setMapState(MapState state) {
-        mapState = state;
-    }
-
     public void rotateChangedFromUser(float bearing) {
         this.mapOrientationButton.setUserRotation();
         userBearing = bearing;
     }
 
+    private final AtomicBoolean block = new AtomicBoolean(false);
 
+    public void block() {
+        block.set(true);
+
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                block.set(false);
+            }
+        };
+        new Timer().schedule(timerTask, 600);
+    }
+
+
+    public void setBearing(float bearing) {
+        this.mapBearing = bearing;
+    }
+
+    public boolean isBlocked() {
+        return block.get();
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 
 /**
  * A clickable 3D actor with three states for compass.
@@ -37,37 +38,23 @@ public class MapCompass extends Group implements Disposable {
 
     private final static float MODEL_SCALE = 0.15f;//0.075f;
 
-    public boolean isNorthOriented() {
-        return state == State.NORTH;
-    }
-
-    public boolean isUserRotate() {
-        return state == State.USER;
-    }
-
-
-    public enum State {NORTH, COMPASS, USER}
-
-    private State state = State.NORTH;
     private final Actor3D actor3D_north, actor3D_compass, actor3D_user;
+    private MapOrientationMode mode = MapOrientationMode.NORTH;
     private Actor3D actor3D_act;
     private float tilt = 0;
     private float orientation = 0;
-    Quaternion tiltQuaternion = new Quaternion();
-    Quaternion orientationQuaternion = new Quaternion();
+    private Quaternion tiltQuaternion = new Quaternion();
+    private Quaternion orientationQuaternion = new Quaternion();
 
     public MapCompass(float width, float height) {
 
-        //initial the three state models
+        //initial the three mode models
         actor3D_north = new Actor3D("NorthCompass", CB.getSkin().get("compassGrayModel", Model.class));
         actor3D_compass = new Actor3D("MagneticCompass", CB.getSkin().get("compassModel", Model.class));
         actor3D_user = new Actor3D("UserCompass", CB.getSkin().get("compassYellowModel", Model.class));
         actor3D_north.setModelScale(MODEL_SCALE);
         actor3D_compass.setModelScale(MODEL_SCALE);
         actor3D_user.setModelScale(MODEL_SCALE);
-
-        //test
-//        actor3D_north.setBackground(new ColorDrawable(Color.FOREST));
 
         // initialisation with size
         setSize(width, height);
@@ -84,7 +71,7 @@ public class MapCompass extends Group implements Disposable {
     }
 
     private void setStateModel() {
-        switch (state) {
+        switch (mode) {
             case NORTH:
                 this.addActor(actor3D_north);
                 this.removeActor(actor3D_compass);
@@ -166,7 +153,7 @@ public class MapCompass extends Group implements Disposable {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                state = State.USER;
+                mode = MapOrientationMode.USER;
                 setStateModel();
             }
         });
@@ -177,10 +164,10 @@ public class MapCompass extends Group implements Disposable {
 
         public void clicked(InputEvent event, float x, float y) {
 
-            if (state == State.NORTH) {
-                state = State.COMPASS;
+            if (mode == MapOrientationMode.NORTH) {
+                mode = MapOrientationMode.COMPASS;
             } else {
-                state = State.NORTH;
+                mode = MapOrientationMode.NORTH;
             }
 
             Gdx.app.postRunnable(new Runnable() {
@@ -192,8 +179,16 @@ public class MapCompass extends Group implements Disposable {
         }
     };
 
-    public void setState(State state) {
-        this.state = state;
+    public boolean isNorthOriented() {
+        return mode == MapOrientationMode.NORTH;
+    }
+
+    public boolean isUserRotate() {
+        return mode == MapOrientationMode.USER;
+    }
+
+    public void setMode(MapOrientationMode mode) {
+        this.mode = mode;
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
@@ -201,5 +196,9 @@ public class MapCompass extends Group implements Disposable {
             }
         });
 
+    }
+
+    public MapOrientationMode getMode() {
+        return this.mode;
     }
 }

@@ -65,7 +65,7 @@ public class GpsStateChangeEventList {
 
 	private static void FireEvent(GpsStateChangeEvent event) {
 		event.GpsStateChanged();
-		// Log.d("CACHEBOX", "GPS State Change called " + event.toString());
+		// Log.d("CACHEBOX", "GPS MapMode Change called " + event.toString());
 	}
 
 }

@@ -551,7 +551,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
 
     @Override
     public String toString() {
-        return "Cache:" + getGcCode();
+        return "Cache:" + getGcCode() + " " + super.toString();
     }
 
     void dispose() {

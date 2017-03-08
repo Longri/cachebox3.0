@@ -82,7 +82,7 @@ public class CacheDetail implements Serializable {
 	public String Country = "";
 
 	/**
-	 * State des Caches
+	 * MapMode des Caches
 	 */
 	public String State = "";
 

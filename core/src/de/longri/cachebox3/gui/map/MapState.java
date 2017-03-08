@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,67 @@
  */
 package de.longri.cachebox3.gui.map;
 
-/**
- * Created by Longri on 28.09.2016.
- */
-public enum MapState {
-    FREE, GPS, WP, LOCK, CAR;
+import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    public static MapState fromOrdinal(int ordinal) {
-        for (MapState state : MapState.values())
-            if (state.ordinal() == ordinal) return state;
-        return null;
+/**
+ * Store for map state like MapMode, zoom , orientation
+ * Store 3 Bit's for MapMode FREE 000, GPS 001, WP 010, LOCK 011, CAR 100;
+ * Store 2 Bit's for MapOrientationMode NORTH 00, COMPASS 01, USER 10
+ * Store 5 Bit's for ZoomLevel 0-28
+ * Created by Longri on 08.03.2017.
+ */
+public class MapState {
+    private final static Logger log = LoggerFactory.getLogger(MapState.class);
+
+    private final int MAP_MODE_MASK = 7;
+    private final int MAP_ORIENTATION_MODE_MASK = 24;
+    private final int MAP_ZOOM_MASK = 992;
+
+    private int value = 0;
+
+    public void setMapMode(MapMode mode) {
+        log.debug("set MapMode to: {}", mode);
+        int shift = mode.ordinal() & MAP_MODE_MASK;
+        value = (~MAP_MODE_MASK & value) | shift;
+    }
+
+    public MapMode getMapMode() {
+        int ordinal = value & MAP_MODE_MASK;
+        return MapMode.fromOrdinal(ordinal);
+    }
+
+    public void setMapOrientationMode(MapOrientationMode mode) {
+        log.debug("set MapOrientationMode to: {}", mode);
+        int shift = (mode.ordinal() << 3 & MAP_ORIENTATION_MODE_MASK);
+        value = (~MAP_ORIENTATION_MODE_MASK & value) | shift;
+    }
+
+    public MapOrientationMode getMapOrientationMode() {
+        int ordinal = (value & MAP_ORIENTATION_MODE_MASK) >> 3;
+        return MapOrientationMode.fromOrdinal(ordinal);
+    }
+
+    public void setZoom(int zoom) {
+        log.debug("set Zoom to: {}", zoom);
+        int shift = (zoom << 5 & MAP_ZOOM_MASK);
+        value = (~MAP_ZOOM_MASK & value) | shift;
+    }
+
+    public int getZoom() {
+        return (value & MAP_ZOOM_MASK) >> 5;
+    }
+
+    public void setValues(int values) {
+        this.value = values;
+    }
+
+    public int getValues() {
+        return this.value;
+    }
+
+    public String toString() {
+        return getMapMode() + "/ " + getMapOrientationMode() + " / Z:" + getZoom();
     }
 }
