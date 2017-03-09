@@ -44,7 +44,7 @@ public class CacheboxMain extends ApplicationAdapter {
         Map.NEW_GESTURES = true;
     }
 
-     static Logger log = LoggerFactory.getLogger(CacheboxMain.class);
+    static Logger log = LoggerFactory.getLogger(CacheboxMain.class);
 
     Runtime runtime = Runtime.getRuntime();
     NumberFormat format = NumberFormat.getInstance();
@@ -151,7 +151,11 @@ public class CacheboxMain extends ApplicationAdapter {
         gl.frontFace(GL.CCW);
 
 
-        StageManager.draw();
+        try {
+            StageManager.draw();
+        } catch (Exception e) {
+            log.error("Draw StageManager", e);
+        }
 
         if (CB.isTestVersion()) {
             float FpsInfoSize = CB.getScaledFloat(4f);
@@ -197,7 +201,7 @@ public class CacheboxMain extends ApplicationAdapter {
     @Override
     public void resume() {
         checkLogger();
-      log.debug("on resume", "reopen databases");
+        log.debug("on resume", "reopen databases");
 //        //open databases
 //        if (Database.Data != null) Database.Data.Open();
 //        if (Database.Settings != null) Database.Settings.Open();

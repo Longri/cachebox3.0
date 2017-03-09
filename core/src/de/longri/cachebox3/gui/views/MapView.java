@@ -96,7 +96,7 @@ public class MapView extends AbstractView {
     private final ZoomButton zoomButton;
     private WaypointLayer wayPointLayer;
     private DirectLineLayer directLineLayer;
-    private final LinkedHashMap<Object, TextureRegion> textureRegionMap;
+
     private final MapState lastMapState = new MapState();
 
     LocationAccuracyLayer myLocationAccuracy;
@@ -110,7 +110,7 @@ public class MapView extends AbstractView {
         super("MapView");
         this.setTouchable(Touchable.disabled);
         this.main = main;
-        this.textureRegionMap = createTextureAtlasRegions();
+        if (CB.textureRegionMap == null) CB.textureRegionMap = createTextureAtlasRegions();
 
         mapStateButton = new MapStateButton(new MapStateButton.StateChangedListener() {
 
@@ -337,11 +337,11 @@ public class MapView extends AbstractView {
         ArrayList<TextureAtlas> atlasList = new ArrayList<TextureAtlas>();
         boolean flipped = CanvasAdapter.platform == Platform.IOS;
         System.out.print("create MapTextureAtlas with flipped Y? " + flipped);
-        TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, true,
+        TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, false,
                 flipped);
 
 
-        if (true) {//Debug write atlas Bitmap to tmp folder
+        if (false) {//Debug write atlas Bitmap to tmp folder
             int count = 0;
             for (TextureAtlas atlas : atlasList) {
                 byte[] data = atlas.texture.bitmap.getPngEncodedData();
@@ -478,7 +478,7 @@ public class MapView extends AbstractView {
         myLocationAccuracy = new LocationAccuracyLayer(map);
         myLocationAccuracy.setPosition(52.580400947530364, 13.385594096047232, 100);
 
-        myLocationLayer = new LocationLayer(map, textureRegionMap);
+        myLocationLayer = new LocationLayer(map, CB.textureRegionMap);
         myLocationLayer.setPosition(52.580400947530364, 13.385594096047232, 0);
 
 
@@ -501,7 +501,7 @@ public class MapView extends AbstractView {
         }
 
 
-        wayPointLayer = new WaypointLayer(map, textureRegionMap);
+        wayPointLayer = new WaypointLayer(map, CB.textureRegionMap);
         layerGroup.layers.add(wayPointLayer);
         layerGroup.layers.add(myLocationLayer);
 

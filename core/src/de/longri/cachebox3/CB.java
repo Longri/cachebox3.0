@@ -32,10 +32,13 @@ import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.ScaledSizes;
 import de.longri.cachebox3.utils.SkinColor;
+import org.oscim.renderer.atlas.TextureRegion;
 import org.oscim.theme.IRenderTheme;
 import org.oscim.theme.ThemeFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.LinkedHashMap;
 
 /**
  * Static class
@@ -96,6 +99,7 @@ public class CB {
     public static int actRouteCount;
     public static ThemeFile actThemeFile;
     public static IRenderTheme actTheme;
+    public static LinkedHashMap<Object, TextureRegion> textureRegionMap;
 
     private CB() {
     }
