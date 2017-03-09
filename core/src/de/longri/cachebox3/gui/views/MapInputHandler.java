@@ -3,7 +3,8 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import org.oscim.gdx.GdxMap;
+import de.longri.cachebox3.gui.map.MapMode;
+import de.longri.cachebox3.gui.widgets.MapStateButton;
 import org.oscim.layers.GenericLayer;
 import org.oscim.layers.TileGridLayer;
 import org.oscim.map.Map;
@@ -15,13 +16,15 @@ import org.oscim.theme.VtmThemes;
  */
 public class MapInputHandler implements InputProcessor {
 
-    private ViewController mViewport;
-    private final Map mMap;
+    private final ViewController mViewport;
+    private final Map map;
+    private final MapStateButton mapStateButton;
     private GenericLayer mGridLayer;
 
-    public MapInputHandler(Map map) {
-        mMap = map;
-        mViewport = mMap.viewport();
+    public MapInputHandler(Map map, MapStateButton mapStateButton) {
+        this.map = map;
+        mViewport = this.map.viewport();
+        this.mapStateButton = mapStateButton;
     }
 
     private boolean mActiveScale;
@@ -55,67 +58,67 @@ public class MapInputHandler implements InputProcessor {
 
             case Input.Keys.UP:
                 mViewport.moveMap(0, -50);
-                mMap.updateMap(true);
+                map.updateMap(true);
                 break;
             case Input.Keys.DOWN:
                 mViewport.moveMap(0, 50);
-                mMap.updateMap(true);
+                map.updateMap(true);
                 break;
             case Input.Keys.LEFT:
                 mViewport.moveMap(-50, 0);
-                mMap.updateMap(true);
+                map.updateMap(true);
                 break;
             case Input.Keys.RIGHT:
                 mViewport.moveMap(50, 0);
-                mMap.updateMap(true);
+                map.updateMap(true);
                 break;
             case Input.Keys.M:
                 mViewport.scaleMap(1.05f, 0, 0);
-                mMap.updateMap(true);
+                map.updateMap(true);
                 break;
             case Input.Keys.N:
                 mViewport.scaleMap(0.95f, 0, 0);
-                mMap.updateMap(true);
+                map.updateMap(true);
                 break;
             case Input.Keys.NUM_1:
-                mMap.animator().animateZoom(500, 0.5, 0, 0);
-                mMap.updateMap(false);
+                map.animator().animateZoom(500, 0.5, 0, 0);
+                map.updateMap(false);
                 break;
             case Input.Keys.NUM_2:
-                mMap.animator().animateZoom(500, 2, 0, 0);
-                mMap.updateMap(false);
+                map.animator().animateZoom(500, 2, 0, 0);
+                map.updateMap(false);
                 break;
 
             case Input.Keys.D:
-                mMap.setTheme(VtmThemes.DEFAULT);
-                mMap.updateMap(false);
+                map.setTheme(VtmThemes.DEFAULT);
+                map.updateMap(false);
                 break;
 
             case Input.Keys.T:
-                mMap.setTheme(VtmThemes.TRONRENDER);
-                mMap.updateMap(false);
+                map.setTheme(VtmThemes.TRONRENDER);
+                map.updateMap(false);
                 break;
 
             case Input.Keys.R:
-                mMap.setTheme(VtmThemes.OSMARENDER);
-                mMap.updateMap(false);
+                map.setTheme(VtmThemes.OSMARENDER);
+                map.updateMap(false);
                 break;
 
             case Input.Keys.G:
                 if (mGridLayer == null) {
-                    mGridLayer = new TileGridLayer(mMap);
+                    mGridLayer = new TileGridLayer(map);
                     mGridLayer.setEnabled(true);
-                    mMap.layers().add(mGridLayer);
+                    map.layers().add(mGridLayer);
                 } else {
                     if (mGridLayer.isEnabled()) {
                         mGridLayer.setEnabled(false);
-                        mMap.layers().remove(mGridLayer);
+                        map.layers().remove(mGridLayer);
                     } else {
                         mGridLayer.setEnabled(true);
-                        mMap.layers().add(mGridLayer);
+                        map.layers().add(mGridLayer);
                     }
                 }
-                mMap.render();
+                map.render();
                 break;
         }
         return false;
@@ -170,6 +173,7 @@ public class MapInputHandler implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        if (mapStateButton.getMapMode() == MapMode.CAR || mapStateButton.getMapMode() == MapMode.LOCK) return true;
         boolean changed = false;
 
         if (!(mActiveScale || mActiveRotate || mActiveTilt))
@@ -196,7 +200,7 @@ public class MapInputHandler implements InputProcessor {
         }
 
         if (changed) {
-            mMap.updateMap(true);
+            map.updateMap(true);
         }
         return true;
     }
@@ -217,14 +221,14 @@ public class MapInputHandler implements InputProcessor {
 
         if (amount > 0) {
 
-            mMap.animator().animateZoom(250, 0.75f, 0, 0);
+            map.animator().animateZoom(250, 0.75f, 0, 0);
         } else {
-            float fx = mPosX - mMap.getWidth() / 2;
-            float fy = mPosY - mMap.getHeight() / 2;
+            float fx = mPosX - map.getWidth() / 2;
+            float fy = mPosY - map.getHeight() / 2;
 
-            mMap.animator().animateZoom(250, 1.333f, fx, fy);
+            map.animator().animateZoom(250, 1.333f, fx, fy);
         }
-        mMap.updateMap(false);
+        map.updateMap(false);
 
         return true;
     }

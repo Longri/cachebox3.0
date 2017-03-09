@@ -48,7 +48,6 @@ import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.settings.Settings_Map;
-import de.longri.cachebox3.utils.DEBUG_SB;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
@@ -56,7 +55,6 @@ import org.oscim.core.MapPosition;
 import org.oscim.core.Tile;
 import org.oscim.event.Event;
 import org.oscim.gdx.GestureHandlerImpl;
-import org.oscim.gdx.MotionHandler;
 import org.oscim.layers.GroupLayer;
 import org.oscim.layers.Layer;
 import org.oscim.layers.TileGridLayer;
@@ -78,8 +76,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 /**
@@ -157,7 +153,7 @@ public class MapView extends AbstractView {
                                 map.animateTo(mapPosition);
                             }
                         });
-                    }else{
+                    } else {
                         map.animateTo(mapPosition);
                     }
                     map.updateMap(true);
@@ -183,7 +179,7 @@ public class MapView extends AbstractView {
                                     map.animateTo(mapPosition);
                                 }
                             });
-                        }else{
+                        } else {
                             map.animateTo(mapPosition);
                         }
                         map.updateMap(true);
@@ -207,7 +203,7 @@ public class MapView extends AbstractView {
                                             map.animateTo(mapPosition);
                                         }
                                     });
-                                }else{
+                                } else {
                                     map.animateTo(mapPosition);
                                 }
                                 map.updateMap(true);
@@ -249,16 +245,6 @@ public class MapView extends AbstractView {
         this.addActor(zoomButton);
     }
 
-
-    private void checkInputListener() {
-        MapMode mapMode = mapStateButton.getMapMode();
-        // remove input handler with map mapMode Car and Lock
-        if (mapMode == MapMode.CAR || mapMode == MapMode.LOCK) {
-            removeInputListener();
-        } else {
-            addInputListener();
-        }
-    }
 
     public CacheboxMapAdapter createMap() {
 
@@ -536,7 +522,7 @@ public class MapView extends AbstractView {
 
     public void setInputListener(boolean on) {
         if (on) {
-            checkInputListener();
+            addInputListener();
         } else {
             removeInputListener();
         }
@@ -545,8 +531,8 @@ public class MapView extends AbstractView {
 
     private void createMapInputHandler() {
         GestureDetector gestureDetector = new GestureDetector(new GestureHandlerImpl(map));
-        MotionHandler motionHandler = new MotionHandler(map);
-        MapInputHandler inputHandler = new MapInputHandler(map);
+        MapMotionHandler motionHandler = new MapMotionHandler(map, mapStateButton);
+        MapInputHandler inputHandler = new MapInputHandler(map, mapStateButton);
         mapInputHandler = new InputMultiplexer();
         mapInputHandler.addProcessor(gestureDetector);
         mapInputHandler.addProcessor(motionHandler);
