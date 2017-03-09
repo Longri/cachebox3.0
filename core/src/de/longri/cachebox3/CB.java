@@ -32,6 +32,8 @@ import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.ScaledSizes;
 import de.longri.cachebox3.utils.SkinColor;
+import org.oscim.theme.IRenderTheme;
+import org.oscim.theme.ThemeFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,6 +94,8 @@ public class CB {
     public static ScaledSizes scaledSizes;
     public static Track actRoute;
     public static int actRouteCount;
+    public static ThemeFile actThemeFile;
+    public static IRenderTheme actTheme;
 
     private CB() {
     }

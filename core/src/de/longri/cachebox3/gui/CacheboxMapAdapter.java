@@ -37,6 +37,8 @@ import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Map;
+import org.oscim.theme.ThemeFile;
+import org.oscim.theme.ThemeLoader;
 import org.oscim.theme.VtmThemes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +51,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by Longri on 08.09.2016.
  */
 public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
+
+    static {
+        ThemeLoader.USE_ATLAS = true;
+    }
 
     private final static Logger log = LoggerFactory.getLogger(CacheboxMapAdapter.class);
     private final MapCompass mapOrientationButton;
@@ -280,6 +286,18 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             this.layers.add(new BuildingLayer(map, vectorTileLayer));
             this.layers.add(new LabelLayer(map, vectorTileLayer));
         }
+    }
+
+    public void setTheme(ThemeFile themeFile) {
+
+        if (CB.actThemeFile != null && EQUALS.is(CB.actThemeFile, themeFile)) {
+            log.debug("set cached Theme");
+        } else {
+            log.debug("load new Theme");
+            CB.actTheme = ThemeLoader.load(themeFile);
+            CB.actThemeFile = themeFile;
+        }
+        setTheme(CB.actTheme, false);
     }
 }
 
