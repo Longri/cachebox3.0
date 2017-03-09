@@ -294,8 +294,7 @@ public class MapView extends AbstractView {
 
         map.setMapPosition(lastLatitude, lastLongitude, 1 << this.lastMapState.getZoom());
 
-        //          grid,labels,buldings,scalebar
-        initLayers(true, true, true, true);
+        initLayers(false);
 
 
         //add position changed handler
@@ -453,8 +452,7 @@ public class MapView extends AbstractView {
     }
 
 
-    protected void initLayers(boolean tileGrid, boolean labels,
-                              boolean buildings, boolean mapScalebar) {
+    protected void initLayers(boolean tileGrid) {
 
         // load last saved BaseMap
         String baseMapName = Settings_Map.CurrentMapLayer.getValue()[0];
@@ -488,17 +486,16 @@ public class MapView extends AbstractView {
         if (tileGrid)
             layerGroup.layers.add(new TileGridLayer(map));
 
-        if (mapScalebar) {
-            DefaultMapScaleBar mapScaleBar = new DefaultMapScaleBar(map);
-            mapScaleBar.setScaleBarMode(DefaultMapScaleBar.ScaleBarMode.BOTH);
-            mapScaleBar.setDistanceUnitAdapter(MetricUnitAdapter.INSTANCE);
-            mapScaleBar.setSecondaryDistanceUnitAdapter(ImperialUnitAdapter.INSTANCE);
-            mapScaleBar.setScaleBarPosition(MapScaleBar.ScaleBarPosition.BOTTOM_LEFT);
 
-            mapScaleBarLayer = new MapScaleBarLayer(map, mapScaleBar);
-            layerGroup.layers.add(mapScaleBarLayer);
-            layerGroup.layers.add(myLocationAccuracy);
-        }
+        DefaultMapScaleBar mapScaleBar = new DefaultMapScaleBar(map);
+        mapScaleBar.setScaleBarMode(DefaultMapScaleBar.ScaleBarMode.BOTH);
+        mapScaleBar.setDistanceUnitAdapter(MetricUnitAdapter.INSTANCE);
+        mapScaleBar.setSecondaryDistanceUnitAdapter(ImperialUnitAdapter.INSTANCE);
+        mapScaleBar.setScaleBarPosition(MapScaleBar.ScaleBarPosition.BOTTOM_LEFT);
+
+        mapScaleBarLayer = new MapScaleBarLayer(map, mapScaleBar);
+        layerGroup.layers.add(mapScaleBarLayer);
+        layerGroup.layers.add(myLocationAccuracy);
 
 
         wayPointLayer = new WaypointLayer(map, CB.textureRegionMap);
