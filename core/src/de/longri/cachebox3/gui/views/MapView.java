@@ -167,30 +167,26 @@ public class MapView extends AbstractView {
                 } else if (mapMode == MapMode.WP) {
                     log.debug("Activate WP Mode");
                     if (event == selfEvent) {
-                        //must wait for animator
-                        TimerTask task = new TimerTask() {
-                            @Override
-                            public void run() {
-                                Gdx.app.postRunnable(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        final MapPosition mapPosition = map.getMapPosition();
-                                        final Coordinate wpCoord = CB.getSelectedCoord();
-                                        mapPosition.setPosition(wpCoord.latitude, wpCoord.longitude);
-                                        float ori = 0;
-                                        if (!mapOrientationButton.isNorthOriented()) {
-                                            ori = Locator.getHeading();
-                                        }
-                                        mapPosition.setBearing(ori);
+                        final MapPosition mapPosition = map.getMapPosition();
+                        final Coordinate wpCoord = CB.getSelectedCoord();
+                        mapPosition.setPosition(wpCoord.latitude, wpCoord.longitude);
+                        float ori = 0;
+                        if (!mapOrientationButton.isNorthOriented()) {
+                            ori = Locator.getHeading();
+                        }
+                        mapPosition.setBearing(ori);
 
-                                        log.debug("After wait, start Map animation to WP coordinates:{}", wpCoord);
-                                        map.animateTo(mapPosition);
-                                        map.updateMap(true);
-                                    }
-                                });
-                            }
-                        };
-                        new Timer().schedule(task, 700);
+                        if (map.isBlocked()) {
+                            map.waitForAnimationEnd(new Runnable() {
+                                @Override
+                                public void run() {
+                                    map.animateTo(mapPosition);
+                                }
+                            });
+                        }else{
+                            map.animateTo(mapPosition);
+                        }
+                        map.updateMap(true);
                     } else {
                         Gdx.app.postRunnable(new Runnable() {
                             @Override
@@ -204,8 +200,16 @@ public class MapView extends AbstractView {
                                 }
                                 mapPosition.setBearing(ori);
 
-                                log.debug("without wait start Map animation to WP coordinates:{}", wpCoord);
-                                map.animateTo(mapPosition);
+                                if (map.isBlocked()) {
+                                    map.waitForAnimationEnd(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            map.animateTo(mapPosition);
+                                        }
+                                    });
+                                }else{
+                                    map.animateTo(mapPosition);
+                                }
                                 map.updateMap(true);
                             }
                         });
