@@ -23,6 +23,7 @@ import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
+import de.longri.cachebox3.utils.MathUtils;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.Box;
 import org.oscim.core.Point;
@@ -188,7 +189,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
             else if (it.x < -flip)
                 it.x += (flip << 1);
 
-            if (!GeometryUtils.pointInPoly(it.x, it.y, mBox, 8, 0)) {
+            if (!MathUtils.rectContainsPoint(it.x, it.y, mBox, 0)) {
                 if (it.visible) {
                     it.changes = true;
                     //changesInvisible++;
@@ -305,7 +306,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
             return;
         }
 
-        log.debug("Sort Items");
+        log.trace("Sort Items");
         ZSORT.doSort(a, zComparator, lo, hi);
     }
 

@@ -20,7 +20,6 @@ import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
 import de.longri.cachebox3.gui.map.baseMap.AbstractVectorLayer;
-import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
@@ -44,7 +43,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.AbstractList;
-import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -170,7 +168,7 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     @Override
     public void onMapEvent(Event e, MapPosition mapPosition) {
         if (e == Map.ANIM_END) {
-            log.debug("Map.ANIM_END     " + DEBUG_SB.toString(mapPosition));
+            log.trace("Map.ANIM_END     " + DEBUG_SB.toString(mapPosition));
             block.set(false);
             if (waitForAnimationEndRunnable != null) {
                 waitForAnimationEndRunnable.run();
@@ -256,7 +254,7 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         if (mapPosition == null || EQUALS.is(mapPosition, lastAnimationEndPosition)) return;
 
         if (isBlocked()) {
-            log.debug("animation is blocked!");
+            log.trace("animation is blocked!");
             return;
         }
         lastAnimationEndPosition = mapPosition;
@@ -266,8 +264,7 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             @Override
             public void run() {
                 animator().animateTo(500, mapPosition);
-                log.debug(""); //empty line
-                log.debug("animate to: {}", DEBUG_SB.toString(mapPosition));
+                log.trace("animate to: {}", DEBUG_SB.toString(mapPosition));
                 updateMap(true);
             }
         });

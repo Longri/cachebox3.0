@@ -57,11 +57,11 @@ public class MapInputHandler implements InputProcessor {
                 break;
 
             case Input.Keys.UP:
-                mViewport.moveMap(0, -50);
+                mViewport.tiltMap( +10);
                 map.updateMap(true);
                 break;
             case Input.Keys.DOWN:
-                mViewport.moveMap(0, 50);
+                mViewport.tiltMap(-10);
                 map.updateMap(true);
                 break;
             case Input.Keys.LEFT:

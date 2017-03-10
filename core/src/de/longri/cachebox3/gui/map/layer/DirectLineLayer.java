@@ -25,9 +25,9 @@ import de.longri.cachebox3.locator.events.PositionChangedEvent;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.utils.MathUtils;
 import org.oscim.backend.canvas.Color;
 import org.oscim.backend.canvas.Paint;
-import org.oscim.core.Box;
 import org.oscim.core.GeometryBuffer;
 import org.oscim.core.Tile;
 import org.oscim.event.Event;
@@ -37,7 +37,6 @@ import org.oscim.renderer.BucketRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.bucket.LineBucket;
 import org.oscim.theme.styles.LineStyle;
-import org.oscim.utils.FastMath;
 
 /**
  * Created by Longri on 02.03.2017.
@@ -120,53 +119,58 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
         GeometryBuffer g = new GeometryBuffer(2, 1);
         private boolean invalidLine = true;
         private double startPointX, startPointY, endPointX, endPointY;
-        private Box mBBox;
+        //        private Box mBBox;
+        private final float[] mBox = new float[12];
 
         private DirectLineRenderer(Map map) {
-            this.mBBox = new Box();
-            float extendedMapWidth = map.getWidth();
-            float extendedMapHeight = map.getHeight();
-            this.mBBox.xmin = -extendedMapWidth;
-            this.mBBox.xmax = extendedMapWidth;
-            this.mBBox.ymin = -extendedMapHeight;
-            this.mBBox.ymax = extendedMapHeight;
+//            this.mBBox = new Box();
+//            float extendedMapWidth = map.getWidth();
+//            float extendedMapHeight = map.getHeight();
+//            this.mBBox.xmin = -extendedMapWidth;
+//            this.mBBox.xmax = extendedMapWidth;
+//            this.mBBox.ymin = -extendedMapHeight;
+//            this.mBBox.ymax = extendedMapHeight;
         }
 
         @Override
         public void update(GLViewport v) {
             buckets.clear();
-
             if (invalidLine) return;
 
             mMapPosition.copy(v.pos);
+            v.getMapExtents(mBox, 0);
             double mx = v.pos.x;
             double my = v.pos.y;
             double scale = Tile.SIZE * v.pos.scale;
 
             float sX = (float) ((startPointX - mx) * scale);
             float sY = (float) ((startPointY - my) * scale);
-            if (!mBBox.contains(sX, sY)) {
-                sX = (float) FastMath.clamp(sX, mBBox.xmin, mBBox.xmax);
-                sY = (float) FastMath.clamp(sY, mBBox.ymin, mBBox.ymax);
-            }
-
 
             float eX = (float) ((endPointX - mx) * scale);
             float eY = (float) ((endPointY - my) * scale);
-            if (!mBBox.contains(eX, eY)) {
-                eX = (float) FastMath.clamp(eX, mBBox.xmin, mBBox.xmax);
-                eY = (float) FastMath.clamp(eY, mBBox.ymin, mBBox.ymax);
-            }
+
+            mBox[8] = sX;
+            mBox[9] = sY;
+            mBox[10] = eX;
+            mBox[11] = eY;
+
+            int ret = MathUtils.clampLineToIntersectRect(mBox, 0, 8);
+
+            sX = mBox[8];
+            sY = mBox[9];
+            eX = mBox[10];
+            eY = mBox[11];
+
+            log.debug("Intersection returns {}", ret);
+            log.debug("mBox:{}", mBox);
+            log.debug("draw line x/y {}/{} to {}/{}", sX, sY, eX, eY);
 
             buckets.set(ll);
             g.clear();
             g.startLine();
-
             g.addPoint(sX, sY);
             g.addPoint(eX, eY);
-
             ll.addLine(g);
-
             compile();
         }
 

@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.utils;
 
+import org.oscim.core.Point;
+
 /**
  * Implements some static methods!
  *
@@ -229,6 +231,101 @@ public class MathUtils {
         float range1 = max - min;
         float range2 = max2 - min2;
         return ((value - min) * range2 / range1) + min2;
+    }
+
+
+    public static boolean lineIntersect(float[] p, int p1, int p2, int p3, int p4, float[] i) {
+
+        float xMin1 = Math.min(p[p1], p[p2]);
+        float xMax1 = Math.max(p[p1], p[p2]);
+        float yMin1 = Math.min(p[p1 + 1], p[p2 + 1]);
+        float yMax1 = Math.max(p[p1 + 1], p[p2 + 1]);
+        float xMin2 = Math.min(p[p3], p[p4]);
+        float xMax2 = Math.max(p[p3], p[p4]);
+        float yMin2 = Math.min(p[p3 + 1], p[p4 + 1]);
+        float yMax2 = Math.max(p[p3 + 1], p[p4 + 1]);
+
+        float denom = (p[p4 + 1] - p[p3 + 1]) * (p[p2] - p[p1]) - (p[p4] - p[p3]) * (p[p2 + 1] - p[p1 + 1]);
+        if (denom == 0.0) { // Lines are parallel.
+            return false;
+        }
+        float ua = ((p[p4] - p[p3]) * (p[p1 + 1] - p[p3 + 1]) - (p[p4 + 1] - p[p3 + 1]) * (p[p1] - p[p3])) / denom;
+        float ub = ((p[p2] - p[p1]) * (p[p1 + 1] - p[p3 + 1]) - (p[p2 + 1] - p[p1 + 1]) * (p[p1] - p[p3])) / denom;
+        if (ua >= 0.0f && ua <= 1.0f && ub >= 0.0f && ub <= 1.0f) {
+            // Set the intersection point.
+            i[0] = p[p1] + ua * (p[p2] - p[p1]);
+            i[1] = p[p1 + 1] + ua * (p[p2 + 1] - p[p1 + 1]);
+            float intersect_X = i[0];
+            float intersect_Y = i[1];
+
+            // check if on the line 1 and 2
+            if (!(xMin1 <= intersect_X && intersect_X <= xMax1)) return false;
+            if (!(yMin1 <= intersect_Y && intersect_Y <= yMax1)) return false;
+            if (!(xMin2 <= intersect_X && intersect_X <= xMax2)) return false;
+            if (!(yMin2 <= intersect_Y && intersect_Y <= yMax2)) return false;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns 0 if line outside!
+     * Returns -1 if line inside
+     * Returns 1 or 2 if line intersect
+     *
+     * @param r
+     * @param offRec
+     * @param offLine
+     * @return
+     */
+    public static int clampLineToIntersectRect(float[] r, int offRec, int offLine) {
+        // if line completed into rec or outside
+
+        boolean point1Inside = rectContainsPoint(r[0 + offLine], r[1 + offLine], r, offRec);
+        boolean point2Inside = rectContainsPoint(r[2 + offLine], r[3 + offLine], r, offRec);
+        boolean bothOutside = !point1Inside && !point2Inside;
+        if (point1Inside && point2Inside) {
+            return -1;
+        }
+
+        float[] intersectPoint = new float[4];
+        int intersectCount = 0;
+        for (int i = 0; i < 8; i += 2) {
+            if (lineIntersect(r, i, i > 4 ? 0 : i + 2, offLine, offLine + 2, intersectPoint)) {
+                intersectCount++;
+                if (!bothOutside) {
+                    // can only one line intersect
+                    if (point1Inside) {
+                        r[offLine] = intersectPoint[0];
+                        r[offLine + 1] = intersectPoint[1];
+                    } else {
+                        r[offLine + 2] = intersectPoint[0];
+                        r[offLine + 3] = intersectPoint[1];
+                    }
+                    return 1;
+                }
+                intersectPoint[2] = intersectPoint[0];
+                intersectPoint[3] = intersectPoint[1];
+                if (intersectCount == 2) {
+                    r[offLine] = intersectPoint[0];
+                    r[offLine + 1] = intersectPoint[1];
+                    r[offLine + 2] = intersectPoint[2];
+                    r[offLine + 3] = intersectPoint[3];
+                    return 2;
+                }
+            }
+
+        }
+        return 0;
+    }
+
+    public static boolean rectContainsPoint(float x, float y, float[] r, int offset) {
+        return x >= Math.min(r[0 + offset], r[2 + offset]) &&
+                x <= Math.max(r[4 + offset], r[6 + offset]) &&
+                y >= Math.min(r[1 + offset], r[5 + offset]) &&
+                y <= Math.max(r[3 + offset], r[7 + offset]);
     }
 
 }
