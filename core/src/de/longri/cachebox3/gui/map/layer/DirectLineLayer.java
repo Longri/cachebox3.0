@@ -119,8 +119,8 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
 
         GeometryBuffer g = new GeometryBuffer(2, 1);
         private boolean invalidLine = true;
-        private double startPointX, startPointY, endPointX, endPointY;
         private final float[] buffer = new float[19];
+        private final double[] doubles = new double[8];
 
         private DirectLineRenderer() {
         }
@@ -131,19 +131,19 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
             if (invalidLine) return;
 
             mMapPosition.copy(v.pos);
-            v.getMapExtents(buffer, 0);
+            v.getMapExtents(buffer, mMapPosition.tilt > 0 ? 100f : 0f);
 
-            double mx = v.pos.x;
-            double my = v.pos.y;
-            double scale = Tile.SIZE * v.pos.scale;
+            doubles[0] = v.pos.x;
+            doubles[1] = v.pos.y;
+            doubles[2] = Tile.SIZE * v.pos.scale;
 
-            buffer[8] = (float) ((startPointX - mx) * scale);
-            buffer[9] = (float) ((startPointY - my) * scale);
+            buffer[8] = (float) ((doubles[3] - doubles[0]) * doubles[2]);
+            buffer[9] = (float) ((doubles[4] - doubles[1]) * doubles[2]);
 
-            buffer[10] = (float) ((endPointX - mx) * scale);
-            buffer[11] = (float) ((endPointY - my) * scale);
+            buffer[10] = (float) ((doubles[5] - doubles[0]) * doubles[2]);
+            buffer[11] = (float) ((doubles[6] - doubles[1]) * doubles[2]);
 
-            if (MathUtils.clampLineToIntersectRect(buffer, 0, 8, 12,16) == 0) return;
+            if (MathUtils.clampLineToIntersectRect(buffer, 0, 8, 12, 16) == 0) return;
 
             buckets.set(ll);
             g.clear();
@@ -159,13 +159,13 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
         }
 
         public void setLine(Coordinate selectedCoordinate, Coordinate ownPosition) {
-            startPointX = (ownPosition.longitude + 180.0) / 360.0;
-            double sinLatitude = Math.sin(ownPosition.latitude * (Math.PI / 180.0));
-            startPointY = 0.5 - Math.log((1.0 + sinLatitude) / (1.0 - sinLatitude)) / (4.0 * Math.PI);
+            doubles[3] = (ownPosition.longitude + 180.0) / 360.0;
+            doubles[7] = Math.sin(ownPosition.latitude * (Math.PI / 180.0));
+            doubles[4] = 0.5 - Math.log((1.0 + doubles[7]) / (1.0 - doubles[7])) / (4.0 * Math.PI);
 
-            endPointX = (selectedCoordinate.longitude + 180.0) / 360.0;
-            sinLatitude = Math.sin(selectedCoordinate.latitude * (Math.PI / 180.0));
-            endPointY = 0.5 - Math.log((1.0 + sinLatitude) / (1.0 - sinLatitude)) / (4.0 * Math.PI);
+            doubles[5] = (selectedCoordinate.longitude + 180.0) / 360.0;
+            doubles[7] = Math.sin(selectedCoordinate.latitude * (Math.PI / 180.0));
+            doubles[6] = 0.5 - Math.log((1.0 + doubles[7]) / (1.0 - doubles[7])) / (4.0 * Math.PI);
             this.invalidLine = false;
         }
     }

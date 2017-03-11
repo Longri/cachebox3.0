@@ -233,6 +233,7 @@ public class CB {
     public static void setSelectedCache(Cache cache) {
 
         selectedCache = cache;
+        selectedWaypoint = null;
         if (cache == null) {
             log.debug("Set selected Cache to NULL");
         } else {
@@ -280,7 +281,7 @@ public class CB {
             selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
         }
         selectedCache = cache;
-        log.info("[CB]setSelectedWaypoint: cache=" + cache.getGcCode());
+        log.info("setSelected Cache/Waypoint: {}/{}", cache, waypoint);
         selectedWaypoint = waypoint;
 
         // load Detail Info if not available
