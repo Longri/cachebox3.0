@@ -297,7 +297,7 @@ public class MathUtils {
                 intersectCount++;
                 if (!bothOutside) {
                     // can only one line intersect
-                    if (point1Inside) {
+                    if (point2Inside) {
                         r[offLine] = intersectPoint[0];
                         r[offLine + 1] = intersectPoint[1];
                     } else {
@@ -306,8 +306,6 @@ public class MathUtils {
                     }
                     return 1;
                 }
-                intersectPoint[2] = intersectPoint[0];
-                intersectPoint[3] = intersectPoint[1];
                 if (intersectCount == 2) {
                     r[offLine] = intersectPoint[0];
                     r[offLine + 1] = intersectPoint[1];
@@ -315,6 +313,8 @@ public class MathUtils {
                     r[offLine + 3] = intersectPoint[3];
                     return 2;
                 }
+                intersectPoint[2] = intersectPoint[0];
+                intersectPoint[3] = intersectPoint[1];
             }
 
         }

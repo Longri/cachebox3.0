@@ -156,14 +156,13 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
 
             int ret = MathUtils.clampLineToIntersectRect(mBox, 0, 8);
 
+            if(ret==0)return;
+
             sX = mBox[8];
             sY = mBox[9];
             eX = mBox[10];
             eY = mBox[11];
-
-            log.debug("Intersection returns {}", ret);
-            log.debug("mBox:{}", mBox);
-            log.debug("draw line x/y {}/{} to {}/{}", sX, sY, eX, eY);
+            
 
             buckets.set(ll);
             g.clear();
