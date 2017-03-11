@@ -234,39 +234,31 @@ public class MathUtils {
     }
 
 
-    public static boolean lineIntersect(float[] p, int p1, int p2, int p3, int p4, float[] i) {
+    public static boolean lineIntersect(float[] p, int p1, int p2, int p3, int p4, int intersect, int threeFloatTmp) {
 
-        float xMin1 = Math.min(p[p1], p[p2]);
-        float xMax1 = Math.max(p[p1], p[p2]);
-        float yMin1 = Math.min(p[p1 + 1], p[p2 + 1]);
-        float yMax1 = Math.max(p[p1 + 1], p[p2 + 1]);
-        float xMin2 = Math.min(p[p3], p[p4]);
-        float xMax2 = Math.max(p[p3], p[p4]);
-        float yMin2 = Math.min(p[p3 + 1], p[p4 + 1]);
-        float yMax2 = Math.max(p[p3 + 1], p[p4 + 1]);
-
-        float denom = (p[p4 + 1] - p[p3 + 1]) * (p[p2] - p[p1]) - (p[p4] - p[p3]) * (p[p2 + 1] - p[p1 + 1]);
-        if (denom == 0.0) { // Lines are parallel.
+        p[threeFloatTmp] = (p[p4 + 1] - p[p3 + 1]) * (p[p2] - p[p1]) - (p[p4] - p[p3]) * (p[p2 + 1] - p[p1 + 1]);
+        if (p[threeFloatTmp] == 0.0) { // Lines are parallel.
             return false;
         }
-        float ua = ((p[p4] - p[p3]) * (p[p1 + 1] - p[p3 + 1]) - (p[p4 + 1] - p[p3 + 1]) * (p[p1] - p[p3])) / denom;
-        float ub = ((p[p2] - p[p1]) * (p[p1 + 1] - p[p3 + 1]) - (p[p2 + 1] - p[p1 + 1]) * (p[p1] - p[p3])) / denom;
-        if (ua >= 0.0f && ua <= 1.0f && ub >= 0.0f && ub <= 1.0f) {
+        p[threeFloatTmp+1] = ((p[p4] - p[p3]) * (p[p1 + 1] - p[p3 + 1]) - (p[p4 + 1] - p[p3 + 1]) * (p[p1] - p[p3])) / p[threeFloatTmp];
+        p[threeFloatTmp+2] = ((p[p2] - p[p1]) * (p[p1 + 1] - p[p3 + 1]) - (p[p2 + 1] - p[p1 + 1]) * (p[p1] - p[p3])) / p[threeFloatTmp];
+        if (p[threeFloatTmp+1] >= 0.0f && p[threeFloatTmp+1] <= 1.0f && p[threeFloatTmp+2] >= 0.0f && p[threeFloatTmp+2] <= 1.0f) {
             // Set the intersection point.
-            i[0] = p[p1] + ua * (p[p2] - p[p1]);
-            i[1] = p[p1 + 1] + ua * (p[p2 + 1] - p[p1 + 1]);
-            float intersect_X = i[0];
-            float intersect_Y = i[1];
+            p[intersect + 0] = p[p1] + p[threeFloatTmp+1] * (p[p2] - p[p1]);
+            p[intersect + 1] = p[p1 + 1] + p[threeFloatTmp+1] * (p[p2 + 1] - p[p1 + 1]);
 
             // check if on the line 1 and 2
-            if (!(xMin1 <= intersect_X && intersect_X <= xMax1)) return false;
-            if (!(yMin1 <= intersect_Y && intersect_Y <= yMax1)) return false;
-            if (!(xMin2 <= intersect_X && intersect_X <= xMax2)) return false;
-            if (!(yMin2 <= intersect_Y && intersect_Y <= yMax2)) return false;
+            if (!(Math.min(p[p1], p[p2]) <= p[intersect + 0]
+                    && p[intersect + 0] <= Math.max(p[p1], p[p2]))) return false;
+            if (!(Math.min(p[p1 + 1], p[p2 + 1]) <= p[intersect + 1]
+                    && p[intersect + 1] <= Math.max(p[p1 + 1], p[p2 + 1]))) return false;
+            if (!(Math.min(p[p3], p[p4]) <= p[intersect + 0]
+                    && p[intersect + 0] <= Math.max(p[p3], p[p4]))) return false;
+            if (!(Math.min(p[p3 + 1], p[p4 + 1]) <= p[intersect + 1]
+                    && p[intersect + 1] <= Math.max(p[p3 + 1], p[p4 + 1]))) return false;
 
             return true;
         }
-
         return false;
     }
 
@@ -280,7 +272,7 @@ public class MathUtils {
      * @param offLine
      * @return
      */
-    public static int clampLineToIntersectRect(float[] r, int offRec, int offLine) {
+    public static int clampLineToIntersectRect(float[] r, int offRec, int offLine, int intersectionPointOffset, int threeFloatTmp) {
         // if line completed into rec or outside
 
         boolean point1Inside = rectContainsPoint(r[0 + offLine], r[1 + offLine], r, offRec);
@@ -290,33 +282,31 @@ public class MathUtils {
             return -1;
         }
 
-        float[] intersectPoint = new float[4];
         int intersectCount = 0;
         for (int i = 0; i < 8; i += 2) {
-            if (lineIntersect(r, i, i > 4 ? 0 : i + 2, offLine, offLine + 2, intersectPoint)) {
+            if (lineIntersect(r, i, i > 4 ? 0 : i + 2, offLine, offLine + 2, intersectionPointOffset, threeFloatTmp)) {
                 intersectCount++;
                 if (!bothOutside) {
                     // can only one line intersect
                     if (point2Inside) {
-                        r[offLine] = intersectPoint[0];
-                        r[offLine + 1] = intersectPoint[1];
+                        r[offLine] = r[intersectionPointOffset + 0];
+                        r[offLine + 1] = r[intersectionPointOffset + 1];
                     } else {
-                        r[offLine + 2] = intersectPoint[0];
-                        r[offLine + 3] = intersectPoint[1];
+                        r[offLine + 2] = r[intersectionPointOffset + 0];
+                        r[offLine + 3] = r[intersectionPointOffset + 1];
                     }
                     return 1;
                 }
                 if (intersectCount == 2) {
-                    r[offLine] = intersectPoint[0];
-                    r[offLine + 1] = intersectPoint[1];
-                    r[offLine + 2] = intersectPoint[2];
-                    r[offLine + 3] = intersectPoint[3];
+                    r[offLine] = r[intersectionPointOffset + 0];
+                    r[offLine + 1] = r[intersectionPointOffset + 1];
+                    r[offLine + 2] = r[intersectionPointOffset + 2];
+                    r[offLine + 3] = r[intersectionPointOffset + 3];
                     return 2;
                 }
-                intersectPoint[2] = intersectPoint[0];
-                intersectPoint[3] = intersectPoint[1];
+                r[intersectionPointOffset + 2] = r[intersectionPointOffset + 0];
+                r[intersectionPointOffset + 3] = r[intersectionPointOffset + 1];
             }
-
         }
         return 0;
     }

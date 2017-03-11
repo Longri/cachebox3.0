@@ -443,6 +443,7 @@ public class MapView extends AbstractView {
                 getHeight() - (mapOrientationButton.getHeight() + CB.scaledSizes.MARGIN));
 
         zoomButton.setPosition(getWidth() - (zoomButton.getWidth() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN);
+
     }
 
 

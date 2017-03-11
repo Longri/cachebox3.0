@@ -24,7 +24,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 class MathUtilsTest {
 
-    final float[] recBB = new float[]{242, 390, -242, 390, -242, -390, 242, -390, 0, 0, 0, 0};
+    final float[] recBB = new float[]{242, 390, -242, 390, -242, -390, 242, -390, 0, 0, 0, 0,0,0,0,0,0,0,0};
 
 
     @Test
@@ -35,7 +35,7 @@ class MathUtilsTest {
         recBB[10] = -119;
         recBB[11] = 165;
 
-        int ret = MathUtils.clampLineToIntersectRect(recBB, 0, 8);
+        int ret = MathUtils.clampLineToIntersectRect(recBB, 0, 8,12,16);
         assertThat("ret must -1 no intersection, line complete inside", ret == -1);
 
         recBB[8] = -120;
@@ -43,7 +43,7 @@ class MathUtilsTest {
         recBB[10] = -515;
         recBB[11] = 428;
 
-        ret = MathUtils.clampLineToIntersectRect(recBB, 0, 8);
+        ret = MathUtils.clampLineToIntersectRect(recBB, 0, 8,12,16);
         assertThat("ret must 1 only one intersection", ret == 1);
 
         recBB[8] = 475;
@@ -51,7 +51,7 @@ class MathUtilsTest {
         recBB[10] = 80;
         recBB[11] = 69;
 
-        ret = MathUtils.clampLineToIntersectRect(recBB, 0, 8);
+        ret = MathUtils.clampLineToIntersectRect(recBB, 0, 8,12,16);
         assertThat("ret must 1 only one intersection", ret == 1);
 
         recBB[8] = 86;
@@ -59,7 +59,7 @@ class MathUtilsTest {
         recBB[10] = -308;
         recBB[11] = -102;
 
-        ret = MathUtils.clampLineToIntersectRect(recBB, 0, 8);
+        ret = MathUtils.clampLineToIntersectRect(recBB, 0, 8,12,16);
         assertThat("ret must 2, with two intersection", ret == 2);
 
 
@@ -68,7 +68,7 @@ class MathUtilsTest {
         recBB[10] = -496;
         recBB[11] = -393;
 
-        ret = MathUtils.clampLineToIntersectRect(recBB, 0, 8);
+        ret = MathUtils.clampLineToIntersectRect(recBB, 0, 8,12,16);
         assertThat("ret must 0, without any intersection", ret == 0);
 
     }

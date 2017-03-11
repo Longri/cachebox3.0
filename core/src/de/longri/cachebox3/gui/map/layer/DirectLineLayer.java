@@ -50,7 +50,7 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
      * @param map ...
      */
     public DirectLineLayer(Map map) {
-        super(map, new DirectLineRenderer(map));
+        super(map, new DirectLineRenderer());
         directLineRenderer = (DirectLineRenderer) mRenderer;
         PositionChangedEventList.add(this);
         SelectedCacheEventList.add(this);
@@ -110,6 +110,7 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
         SelectedCacheEventList.remove(this);
     }
 
+
     private static class DirectLineRenderer extends BucketRenderer {
 
         //TODO initial with style (Color, with, Cap, Texture)
@@ -119,17 +120,9 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
         GeometryBuffer g = new GeometryBuffer(2, 1);
         private boolean invalidLine = true;
         private double startPointX, startPointY, endPointX, endPointY;
-        //        private Box mBBox;
-        private final float[] mBox = new float[12];
+        private final float[] buffer = new float[19];
 
-        private DirectLineRenderer(Map map) {
-//            this.mBBox = new Box();
-//            float extendedMapWidth = map.getWidth();
-//            float extendedMapHeight = map.getHeight();
-//            this.mBBox.xmin = -extendedMapWidth;
-//            this.mBBox.xmax = extendedMapWidth;
-//            this.mBBox.ymin = -extendedMapHeight;
-//            this.mBBox.ymax = extendedMapHeight;
+        private DirectLineRenderer() {
         }
 
         @Override
@@ -138,37 +131,25 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
             if (invalidLine) return;
 
             mMapPosition.copy(v.pos);
-            v.getMapExtents(mBox, 0);
+            v.getMapExtents(buffer, 0);
+
             double mx = v.pos.x;
             double my = v.pos.y;
             double scale = Tile.SIZE * v.pos.scale;
 
-            float sX = (float) ((startPointX - mx) * scale);
-            float sY = (float) ((startPointY - my) * scale);
+            buffer[8] = (float) ((startPointX - mx) * scale);
+            buffer[9] = (float) ((startPointY - my) * scale);
 
-            float eX = (float) ((endPointX - mx) * scale);
-            float eY = (float) ((endPointY - my) * scale);
+            buffer[10] = (float) ((endPointX - mx) * scale);
+            buffer[11] = (float) ((endPointY - my) * scale);
 
-            mBox[8] = sX;
-            mBox[9] = sY;
-            mBox[10] = eX;
-            mBox[11] = eY;
-
-            int ret = MathUtils.clampLineToIntersectRect(mBox, 0, 8);
-
-            if(ret==0)return;
-
-            sX = mBox[8];
-            sY = mBox[9];
-            eX = mBox[10];
-            eY = mBox[11];
-            
+            if (MathUtils.clampLineToIntersectRect(buffer, 0, 8, 12,16) == 0) return;
 
             buckets.set(ll);
             g.clear();
             g.startLine();
-            g.addPoint(sX, sY);
-            g.addPoint(eX, eY);
+            g.addPoint(buffer[8], buffer[9]);
+            g.addPoint(buffer[10], buffer[11]);
             ll.addLine(g);
             compile();
         }
