@@ -188,7 +188,9 @@ project(":ios") {
 //        compile fileTree(dir: 'libs', include: ['*.jar'])
 
         //vtm
-        compile "org.mapsforge:vtm-ios:$vtmVersion"
+        compile( "org.mapsforge:vtm-ios:$vtmVersion"){
+            exclude group: 'org.slf4j', module: 'slf4j-simple'
+        }
         natives "org.mapsforge:vtm-ios:$vtmVersion:natives"
     }
 }
