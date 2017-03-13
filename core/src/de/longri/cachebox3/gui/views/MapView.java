@@ -126,8 +126,11 @@ public class MapView extends AbstractView {
                     positionChangedHandler.setBearing(bearing);
                     mapOrientationButton.setOrientation(-bearing);
                     positionChangedHandler.positionChanged(new Event());
+                    setBuildingLayerEnabled(false);
+
                 } else if (lastMapMode == MapMode.CAR) {
                     log.debug("Disable Carmode! Activate last Mode:" + lastMapState);
+                    setBuildingLayerEnabled(true);
                     final MapPosition mapPosition = map.getMapPosition();
                     // restore last MapState
                     if (lastMapState.getMapMode() == MapMode.WP) {
@@ -243,6 +246,16 @@ public class MapView extends AbstractView {
         });
         this.zoomButton.pack();
         this.addActor(zoomButton);
+    }
+
+    private void setBuildingLayerEnabled(boolean enabled) {
+        Layers layers = map.layers();
+        for (Layer layer : layers) {
+            if (layer instanceof CacheboxMapAdapter.BuildingLabelLayer) {
+                log.debug("{} BuildingLayer", enabled ? "Enable" : "Disable");
+                ((CacheboxMapAdapter.BuildingLabelLayer) layer).buildingLayer.setEnabled(enabled);
+            }
+        }
     }
 
 

@@ -277,10 +277,13 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         waitForAnimationEndRunnable = runnable;
     }
 
-    private final class BuildingLabelLayer extends GroupLayer {
+    public final class BuildingLabelLayer extends GroupLayer {
+        public final BuildingLayer buildingLayer;
+
         public BuildingLabelLayer(Map map, VectorTileLayer vectorTileLayer) {
             super(map);
-            this.layers.add(new BuildingLayer(map, vectorTileLayer));
+            this.buildingLayer = new BuildingLayer(map, vectorTileLayer);
+            this.layers.add(this.buildingLayer);
             this.layers.add(new LabelLayer(map, vectorTileLayer));
         }
     }
