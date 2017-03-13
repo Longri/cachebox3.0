@@ -240,12 +240,12 @@ public class MathUtils {
         if (p[threeFloatTmp] == 0.0) { // Lines are parallel.
             return false;
         }
-        p[threeFloatTmp+1] = ((p[p4] - p[p3]) * (p[p1 + 1] - p[p3 + 1]) - (p[p4 + 1] - p[p3 + 1]) * (p[p1] - p[p3])) / p[threeFloatTmp];
-        p[threeFloatTmp+2] = ((p[p2] - p[p1]) * (p[p1 + 1] - p[p3 + 1]) - (p[p2 + 1] - p[p1 + 1]) * (p[p1] - p[p3])) / p[threeFloatTmp];
-        if (p[threeFloatTmp+1] >= 0.0f && p[threeFloatTmp+1] <= 1.0f && p[threeFloatTmp+2] >= 0.0f && p[threeFloatTmp+2] <= 1.0f) {
+        p[threeFloatTmp + 1] = ((p[p4] - p[p3]) * (p[p1 + 1] - p[p3 + 1]) - (p[p4 + 1] - p[p3 + 1]) * (p[p1] - p[p3])) / p[threeFloatTmp];
+        p[threeFloatTmp + 2] = ((p[p2] - p[p1]) * (p[p1 + 1] - p[p3 + 1]) - (p[p2 + 1] - p[p1 + 1]) * (p[p1] - p[p3])) / p[threeFloatTmp];
+        if (p[threeFloatTmp + 1] >= 0.0f && p[threeFloatTmp + 1] <= 1.0f && p[threeFloatTmp + 2] >= 0.0f && p[threeFloatTmp + 2] <= 1.0f) {
             // Set the intersection point.
-            p[intersect + 0] = p[p1] + p[threeFloatTmp+1] * (p[p2] - p[p1]);
-            p[intersect + 1] = p[p1 + 1] + p[threeFloatTmp+1] * (p[p2 + 1] - p[p1 + 1]);
+            p[intersect + 0] = p[p1] + p[threeFloatTmp + 1] * (p[p2] - p[p1]);
+            p[intersect + 1] = p[p1 + 1] + p[threeFloatTmp + 1] * (p[p2 + 1] - p[p1 + 1]);
 
             // check if on the line 1 and 2
             if (!(Math.min(p[p1], p[p2]) <= p[intersect + 0]
@@ -275,8 +275,8 @@ public class MathUtils {
     public static int clampLineToIntersectRect(float[] r, int offRec, int offLine, int intersectionPointOffset, int threeFloatTmp) {
         // if line completed into rec or outside
 
-        boolean point1Inside = rectContainsPoint(r[0 + offLine], r[1 + offLine], r, offRec);
-        boolean point2Inside = rectContainsPoint(r[2 + offLine], r[3 + offLine], r, offRec);
+        boolean point1Inside = org.oscim.utils.geom.GeometryUtils.pointInPoly(r[0 + offLine], r[1 + offLine], r, 8, offRec);
+        boolean point2Inside = org.oscim.utils.geom.GeometryUtils.pointInPoly(r[2 + offLine], r[3 + offLine], r, 8, offRec);
         boolean bothOutside = !point1Inside && !point2Inside;
         if (point1Inside && point2Inside) {
             return -1;
@@ -310,12 +310,4 @@ public class MathUtils {
         }
         return 0;
     }
-
-    public static boolean rectContainsPoint(float x, float y, float[] r, int offset) {
-        return x >= Math.min(r[0 + offset], r[2 + offset]) &&
-                x <= Math.max(r[4 + offset], r[6 + offset]) &&
-                y >= Math.min(r[1 + offset], r[5 + offset]) &&
-                y <= Math.max(r[3 + offset], r[7 + offset]);
-    }
-
 }

@@ -10,6 +10,7 @@ import org.oscim.layers.TileGridLayer;
 import org.oscim.map.Map;
 import org.oscim.map.ViewController;
 import org.oscim.theme.VtmThemes;
+import org.oscim.utils.math.MathUtils;
 
 /**
  * Created by Longri on 12.09.2016.
@@ -57,7 +58,7 @@ public class MapInputHandler implements InputProcessor {
                 break;
 
             case Input.Keys.UP:
-                mViewport.tiltMap( +10);
+                mViewport.tiltMap(+10);
                 map.updateMap(true);
                 break;
             case Input.Keys.DOWN:
@@ -65,11 +66,11 @@ public class MapInputHandler implements InputProcessor {
                 map.updateMap(true);
                 break;
             case Input.Keys.LEFT:
-                mViewport.moveMap(-50, 0);
+                mViewport.rotateMap(-0.0490873852, 0, 0);
                 map.updateMap(true);
                 break;
             case Input.Keys.RIGHT:
-                mViewport.moveMap(50, 0);
+                mViewport.rotateMap(0.0490873852, 0, 0);
                 map.updateMap(true);
                 break;
             case Input.Keys.M:

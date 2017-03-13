@@ -189,7 +189,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
             else if (it.x < -flip)
                 it.x += (flip << 1);
 
-            if (!MathUtils.rectContainsPoint(it.x, it.y, mBox, 0)) {
+            if (!GeometryUtils.pointInPoly(it.x, it.y, mBox, 8, 0)) {
                 if (it.visible) {
                     it.changes = true;
                     //changesInvisible++;
