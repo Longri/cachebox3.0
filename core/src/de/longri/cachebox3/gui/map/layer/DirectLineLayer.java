@@ -32,6 +32,7 @@ import org.oscim.core.GeometryBuffer;
 import org.oscim.core.Tile;
 import org.oscim.event.Event;
 import org.oscim.layers.GenericLayer;
+import org.oscim.layers.Layer;
 import org.oscim.map.Map;
 import org.oscim.renderer.BucketRenderer;
 import org.oscim.renderer.GLViewport;
@@ -52,6 +53,7 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
     public DirectLineLayer(Map map) {
         super(map, new DirectLineRenderer());
         directLineRenderer = (DirectLineRenderer) mRenderer;
+        directLineRenderer.setLayer(this);
         PositionChangedEventList.add(this);
         SelectedCacheEventList.add(this);
     }
@@ -82,6 +84,7 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
     }
 
     private void redrawLine(Event event) {
+        if (!this.isEnabled()) return;
         if (lastEvent == event) return;
         lastEvent = event;
 
@@ -108,6 +111,7 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
     public void dispose() {
         PositionChangedEventList.remove(this);
         SelectedCacheEventList.remove(this);
+        this.directLineRenderer.dispose();
     }
 
 
@@ -121,6 +125,7 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
         private boolean invalidLine = true;
         private final float[] buffer = new float[19];
         private final double[] doubles = new double[8];
+        private Layer layer;
 
         private DirectLineRenderer() {
         }
@@ -128,7 +133,10 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
         @Override
         public void update(GLViewport v) {
             buckets.clear();
-            if (invalidLine) return;
+            if (invalidLine || !layer.isEnabled()) {
+                setReady(false);
+                return;
+            }
 
             mMapPosition.copy(v.pos);
             v.getMapExtents(buffer, mMapPosition.tilt > 0 ? 100f : 0f);
@@ -159,6 +167,7 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
         }
 
         public void setLine(Coordinate selectedCoordinate, Coordinate ownPosition) {
+            if (!layer.isEnabled()) return;
             doubles[3] = (ownPosition.longitude + 180.0) / 360.0;
             doubles[7] = Math.sin(ownPosition.latitude * (Math.PI / 180.0));
             doubles[4] = 0.5 - Math.log((1.0 + doubles[7]) / (1.0 - doubles[7])) / (4.0 * Math.PI);
@@ -167,6 +176,14 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
             doubles[7] = Math.sin(selectedCoordinate.latitude * (Math.PI / 180.0));
             doubles[6] = 0.5 - Math.log((1.0 + doubles[7]) / (1.0 - doubles[7])) / (4.0 * Math.PI);
             this.invalidLine = false;
+        }
+
+        public void setLayer(DirectLineLayer layer) {
+            this.layer = layer;
+        }
+
+        public void dispose() {
+            this.layer = null;
         }
     }
 }

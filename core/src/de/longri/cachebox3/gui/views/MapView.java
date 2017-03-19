@@ -48,6 +48,7 @@ import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.settings.Settings_Map;
+import de.longri.cachebox3.utils.IChanged;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
@@ -516,8 +517,19 @@ public class MapView extends AbstractView {
         layerGroup.layers.add(wayPointLayer);
         layerGroup.layers.add(myLocationLayer);
 
+        boolean showDirectLine = Settings_Map.ShowDirektLine.getValue();
+        log.debug("Initial direct line layer and {}", showDirectLine ? "enable" : "disable");
         directLineLayer = new DirectLineLayer(map);
         layerGroup.layers.add(directLineLayer);
+        directLineLayer.setEnabled(showDirectLine);
+        Settings_Map.ShowDirektLine.addChangedEventListener(new IChanged() {
+            @Override
+            public void isChanged() {
+                log.debug("change direct line visibility to {}", Settings_Map.ShowDirektLine.getValue() ? "visible" : "invisible");
+                directLineLayer.setEnabled(Settings_Map.ShowDirektLine.getValue());
+                map.updateMap(true);
+            }
+        });
 
         map.layers().add(layerGroup);
 
