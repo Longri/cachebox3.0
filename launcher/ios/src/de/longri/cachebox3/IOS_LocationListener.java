@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3;
 
-import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.locator.Locator;
 import org.robovm.apple.corelocation.*;
 import org.robovm.apple.dispatch.DispatchQueue;
@@ -38,7 +37,7 @@ public class IOS_LocationListener {
 
 
     private void stopUpdatingLocation(String state) {
-        Gdx.app.log("locationManager stop", state);
+        log.debug("locationManager stop", state);
         locationManager.stopUpdatingLocation();
         locationManager.setDelegate(null);
     }
@@ -62,7 +61,7 @@ public class IOS_LocationListener {
                 // Once configured, the location manager must be "started".
                 locationManager.startUpdatingLocation();
                 locationManager.startUpdatingHeading();
-                Gdx.app.log("locationManager", "startet");
+                log.debug("locationManager started");
             }
         });
 
@@ -108,7 +107,7 @@ public class IOS_LocationListener {
         public void didUpdateHeading(CLLocationManager manager, CLHeading newHeading) {
             if (newHeading.getHeadingAccuracy() > 0) {
                 float value = (float) newHeading.getTrueHeading();
-                log.debug("Set True heading:" + value);
+                log.trace("Set True heading:" + value);
                 de.longri.cachebox3.locator.Locator.setHeading(value,
                         Locator.CompassType.Magnetic);
             }

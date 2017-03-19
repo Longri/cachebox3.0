@@ -50,9 +50,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
 
-    static {
-        ThemeLoader.USE_ATLAS = true;
-    }
 
     private final static Logger log = LoggerFactory.getLogger(CacheboxMapAdapter.class);
     private final MapCompass mapOrientationButton;
@@ -60,7 +57,7 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     public CacheboxMapAdapter(MapCompass mapOrientationButton) {
         super();
         events.bind(this); //register Update listener
-        this.viewport().setMaxTilt(41f);
+        this.viewport().setMaxTilt(65f);
         this.mapOrientationButton = mapOrientationButton;
     }
 

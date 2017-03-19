@@ -31,6 +31,7 @@ import org.oscim.backend.GL;
 import org.oscim.map.Map;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
+import org.oscim.theme.ThemeLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +43,8 @@ public class CacheboxMain extends ApplicationAdapter {
 
     static {
         Map.NEW_GESTURES = true;
+        ThemeLoader.POT_TEXTURES = true;
+        ThemeLoader.USE_ATLAS = true;
     }
 
     static Logger log = LoggerFactory.getLogger(CacheboxMain.class);
