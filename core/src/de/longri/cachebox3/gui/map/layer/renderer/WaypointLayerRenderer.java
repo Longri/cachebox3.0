@@ -214,10 +214,6 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
         }
         mMapPosition.bearing = -mMapPosition.bearing;
         int zoomLevel = mMapPosition.getZoomLevel();
-        //TODO try without sort
-        if (zoomChanged) sort(mItems, 0, mItems.length);
-        //log.debug(Arrays.toString(mItems));
-
         for (InternalItem it : mItems) {
             if (!it.visible)
                 continue;

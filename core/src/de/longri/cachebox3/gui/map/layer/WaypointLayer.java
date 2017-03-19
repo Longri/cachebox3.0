@@ -38,6 +38,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.lists.CB_List;
 import de.longri.cachebox3.utils.lists.ThreadStack;
 import org.oscim.backend.CanvasAdapter;
@@ -116,6 +117,13 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         //register SelectedCacheChangedEvent
         SelectedCacheEventList.add(this);
+
+        Settings.ShowAllWaypoints.addChangedEventListener(new IChanged() {
+            @Override
+            public void isChanged() {
+                CacheListChangedEvent();
+            }
+        });
     }
 
 
