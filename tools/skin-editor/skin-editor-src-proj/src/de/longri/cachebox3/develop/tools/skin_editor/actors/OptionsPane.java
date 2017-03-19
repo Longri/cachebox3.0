@@ -40,9 +40,12 @@ import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.gui.skin.styles.AbstractIconStyle;
 import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
+import de.longri.cachebox3.gui.skin.styles.MapCenterCrossStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.utils.SkinColor;
+import org.mapsforge.core.graphics.Cap;
 import org.oscim.backend.canvas.Bitmap;
+import org.oscim.backend.canvas.Paint;
 
 import java.util.Iterator;
 
@@ -350,8 +353,10 @@ public class OptionsPane extends Table {
                     if (widgetStyle.equals("de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle")) {
                         MapArrowStyle mapArrowStyle = game.skinProject.get("myLocation", MapArrowStyle.class);
                         styles.put("myLocation", mapArrowStyle);
-                    }
 
+                        MapCenterCrossStyle mapCenterCrossStyle = game.skinProject.get("centerCross", MapCenterCrossStyle.class);
+                        styles.put("centerCross", mapCenterCrossStyle);
+                    }
 
                     if (styles == null || styles.size == 0) {
                         Gdx.app.error("OptionsPane", "No styles defined for this widget type");
@@ -442,9 +447,9 @@ public class OptionsPane extends Table {
                             game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
 
                     if (drawable != null) {
-                        resourceName = SvgSkinUtil.resolveObjectName(game.skinProject,Drawable.class, drawable);
+                        resourceName = SvgSkinUtil.resolveObjectName(game.skinProject, Drawable.class, drawable);
                         if (resourceName == null) {
-                            resourceName =SvgSkinUtil.resolveObjectName(game.skinProject,TextureRegion.class, drawable);
+                            resourceName = SvgSkinUtil.resolveObjectName(game.skinProject, TextureRegion.class, drawable);
                         }
 
                         if (drawable instanceof SvgNinePatchDrawable) {
@@ -523,7 +528,7 @@ public class OptionsPane extends Table {
                         if (color instanceof SkinColor) {
                             resourceName = ((SkinColor) color).skinName;
                         } else {
-                            resourceName = SvgSkinUtil.resolveObjectName(game.skinProject,SkinColor.class, color);
+                            resourceName = SvgSkinUtil.resolveObjectName(game.skinProject, SkinColor.class, color);
                         }
 
                         resourceName += " (" + color.toString() + ")";
@@ -566,7 +571,7 @@ public class OptionsPane extends Table {
                             game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
 
                     if (font != null) {
-                        resourceName = SvgSkinUtil.resolveObjectName(game.skinProject,BitmapFont.class, font);
+                        resourceName = SvgSkinUtil.resolveObjectName(game.skinProject, BitmapFont.class, font);
                         buttonStyle.font = font;
                     } else {
                         buttonStyle.up = game.skin.getDrawable("default-rect");
@@ -712,6 +717,82 @@ public class OptionsPane extends Table {
                             refresh(true);
                             game.screenMain.paneOptions.updateSelectedTableFields();
                             game.screenMain.panePreview.refresh();
+                        }
+
+                    });
+
+                } else if (name.equals("boolean")) {
+
+                    /**
+                     * Handle boolean object
+                     */
+
+                    final Boolean[] value = new Boolean[]{(Boolean) field.get(currentStyle)};
+                    String resourceName = "";
+
+                    ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
+                            game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
+
+                    if ((value != null)) {
+                        resourceName = String.valueOf(value[0]);
+                    } else {
+                        buttonStyle.up = game.skin.getDrawable("default-rect");
+                        buttonStyle.checked = game.skin.getDrawable("default-rect");
+                    }
+
+                    actor = new ImageTextButton(resourceName, buttonStyle);
+                    ((ImageTextButton) actor).setClip(true);
+                    actor.addListener(new ChangeListener() {
+
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            value[0] = !value[0];
+                            try {
+                                field.set(currentStyle, value[0]);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            game.screenMain.saveToSkin();
+                            ((ImageTextButton) actor).setText(String.valueOf(value[0]));
+                        }
+
+                    });
+
+                } else if (name.equals("Cap")) {
+
+                    /**
+                     * Handle Paint.Cap object
+                     */
+
+                    final Paint.Cap[] value = new Paint.Cap[]{(Paint.Cap) field.get(currentStyle)};
+                    String resourceName = "";
+
+                    ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
+                            game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
+
+                    if ((value != null)) {
+                        resourceName = String.valueOf(value[0]);
+                    } else {
+                        buttonStyle.up = game.skin.getDrawable("default-rect");
+                        buttonStyle.checked = game.skin.getDrawable("default-rect");
+                    }
+
+                    actor = new ImageTextButton(resourceName, buttonStyle);
+                    ((ImageTextButton) actor).setClip(true);
+                    actor.addListener(new ChangeListener() {
+
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            int ordinal = value[0].ordinal() + 1;
+                            if (ordinal > Paint.Cap.values().length - 1) ordinal = 0;
+                            value[0] = Paint.Cap.values()[ordinal];
+                            try {
+                                field.set(currentStyle, value[0]);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            game.screenMain.saveToSkin();
+                            ((ImageTextButton) actor).setText(String.valueOf(value[0]));
                         }
 
                     });

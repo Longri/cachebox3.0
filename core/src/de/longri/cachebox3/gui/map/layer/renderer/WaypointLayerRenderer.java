@@ -149,7 +149,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
         if (!zoomChecked) {
             zoomChanged = chekForClusterChanges(v);
         }
-        
+
         mUpdate = false;
 
         double mx = v.pos.x;

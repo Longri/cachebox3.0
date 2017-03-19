@@ -30,6 +30,7 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.utils.SkinColor;
+import org.oscim.backend.canvas.Paint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -216,8 +217,20 @@ public class SvgSkinUtil {
                                     json.writeValue(field.getName(), value);
                                 }
 
+                            } else if (valueObject instanceof Boolean) {
+                                if (valueObject.equals(field.get(ClassReflection.newInstance(typeResources.get(style).getClass())))) {
+                                    // skip if default value
+                                } else {
+                                    json.writeValue(field.getName(), valueObject);
+                                }
                             } else if (valueObject instanceof Float) {
                                 if ((Float) valueObject != 0.0f) {
+                                    json.writeValue(field.getName(), valueObject);
+                                }
+                            } else if (valueObject instanceof Paint.Cap) {
+                                if (valueObject.equals(field.get(ClassReflection.newInstance(typeResources.get(style).getClass())))) {
+                                    // skip if default value
+                                } else {
                                     json.writeValue(field.getName(), valueObject);
                                 }
                             } else if (valueObject instanceof Integer) {

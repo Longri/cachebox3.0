@@ -966,6 +966,12 @@
       "b": 1,
       "a": 1
     },
+    "centerCrossColor": {
+      "r": 0.05882353,
+      "g": 0.12156863,
+      "b": 0.05490196,
+      "a": 0.7764706
+    },
     "coordinateValuesFocus": {
       "r": 0.07450981,
       "g": 0.54901963,
@@ -1764,6 +1770,13 @@
       "fileIcon": "file",
       "mapFileIcon": "mapFile",
       "background": "activityBack_drawable"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.MapCenterCrossStyle": {
+    "centerCross": {
+      "color": "centerCrossColor",
+      "width": 2,
+      "length": 100
     }
   }
 }

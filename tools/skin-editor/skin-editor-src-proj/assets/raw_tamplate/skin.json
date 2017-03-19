@@ -1765,5 +1765,9 @@
       "mapFileIcon": "mapFile",
       "background": "activityBack_drawable"
     }
+  },
+  "de.longri.cachebox3.gui.skin.styles.MapCenterCrossStyle": {
+  "centerCross": {
   }
+}
 }

@@ -97,6 +97,7 @@ public class MapView extends AbstractView {
     private final ZoomButton zoomButton;
     private WaypointLayer wayPointLayer;
     private DirectLineLayer directLineLayer;
+    private CenterCrossLayer ccl;
 
     private final MapState lastMapState = new MapState();
 
@@ -530,6 +531,22 @@ public class MapView extends AbstractView {
                 map.updateMap(true);
             }
         });
+
+
+        boolean showCenterCross = Settings_Map.ShowMapCenterCross.getValue();
+        log.debug("Initial center cross layer and {}", showCenterCross ? "enable" : "disable");
+        ccl = new CenterCrossLayer(map);
+        layerGroup.layers.add(ccl);
+        ccl.setEnabled(showCenterCross);
+        Settings_Map.ShowMapCenterCross.addChangedEventListener(new IChanged() {
+            @Override
+            public void isChanged() {
+                log.debug("change center cross visibility to {}", Settings_Map.ShowMapCenterCross.getValue() ? "visible" : "invisible");
+                ccl.setEnabled(Settings_Map.ShowMapCenterCross.getValue());
+                map.updateMap(true);
+            }
+        });
+
 
         map.layers().add(layerGroup);
 

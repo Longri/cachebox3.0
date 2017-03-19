@@ -199,13 +199,13 @@ public class ColorPickerDialog extends Dialog {
             Image colorImage = new Image(texture);
             colorImage.addListener(new ClickListener() {
 
-                public void clicked (InputEvent event, float x, float y) {
+                public void clicked(InputEvent event, float x, float y) {
                     // change color
                     colorPicker.setColor(color);
 
-                    colorPicker.setListener(new ColorPickerAdapter(){
+                    colorPicker.setListener(new ColorPickerAdapter() {
                         @Override
-                        public void finished (final Color newColor) {
+                        public void finished(final Color newColor) {
                             Gdx.app.postRunnable(new Runnable() {
                                 @Override
                                 public void run() {
@@ -218,7 +218,7 @@ public class ColorPickerDialog extends Dialog {
                                 }
                             });
                         }
-                    } );
+                    });
                     // Call color picker
                     ColorPickerDialog.this.getStage().addActor(colorPicker.fadeIn());
                 }

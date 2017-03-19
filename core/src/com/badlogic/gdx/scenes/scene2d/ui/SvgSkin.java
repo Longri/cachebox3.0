@@ -33,6 +33,7 @@ import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.*;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 /**
@@ -212,8 +213,21 @@ public class SvgSkin extends Skin {
 
 
                 // If the JSON is a string but the type is not, look up the actual value by path.
-                if (jsonData.isString() && !ClassReflection.isAssignableFrom(CharSequence.class, type))
+                if (jsonData.isString() && !ClassReflection.isAssignableFrom(CharSequence.class, type)) {
+                    if (ClassReflection.isEnum(type)) {
+                        try {
+                            return (T) type.getDeclaredMethod("valueOf", String.class).invoke(null, jsonData.asString());
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        } catch (NoSuchMethodException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
                     return get(jsonData.asString(), type);
+                }
                 return super.readValue(type, elementType, jsonData);
             }
         };

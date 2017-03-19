@@ -93,7 +93,7 @@ public class SquareTest {
         int index = 0;
         for (GeoPoint point : allPoints) {
             allCluster.add(new MapWayPointItem(
-                    new Coordinate(point.getLatitude(), point.getLongitude()), Integer.toString(index++), null));
+                    new Coordinate(point.getLatitude(), point.getLongitude()), Integer.toString(index++), null,false));
         }
 
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
@@ -131,7 +131,7 @@ public class SquareTest {
         int index = 0;
         for (GeoPoint point : allPoints) {
             allCluster.add(new MapWayPointItem(
-                    new Coordinate(point.getLatitude(), point.getLongitude()), Integer.toString(index++), null));
+                    new Coordinate(point.getLatitude(), point.getLongitude()), Integer.toString(index++), null,false));
         }
 
         assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
