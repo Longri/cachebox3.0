@@ -149,7 +149,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
         if (!zoomChecked) {
             zoomChanged = chekForClusterChanges(v);
         }
-
+        
         mUpdate = false;
 
         double mx = v.pos.x;
@@ -242,7 +242,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
         compile();
     }
 
-    public void populate(int size) {
+    public void populate(int size, boolean resort) {
 
         InternalItem[] tmp = new InternalItem[size];
 
@@ -251,8 +251,10 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
         }
         synchronized (this) {
             mUpdate = true;
+            sort(tmp);
             mItems = tmp;
         }
+
     }
 
     public void populateItem(int index) {
@@ -295,33 +297,16 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
 
     private static TimSort<InternalItem> ZSORT = new TimSort<InternalItem>();
 
-    public static void sort(InternalItem[] a, int lo, int hi) {
-        int nRemaining = hi - lo;
-        if (nRemaining < 2) {
-            log.debug("Items not sorted");
-            return;
-        }
-
-        log.trace("Sort Items");
-        ZSORT.doSort(a, zComparator, lo, hi);
+    public static void sort(InternalItem[] a) {
+        log.debug("Sort Items");
+        ZSORT.doSort(a, zComparator, 0, a.length);
     }
 
     private final static Comparator<InternalItem> zComparator = new Comparator<InternalItem>() {
         @Override
         public int compare(InternalItem a, InternalItem b) {
-            if (a.visible && b.visible) {
-                if (a.dy > b.dy) {
-                    return -1;
-                }
-                if (a.dy < b.dy) {
-                    return 1;
-                }
-            } else if (a.visible) {
-                return -1;
-            } else if (b.visible) {
-                return 1;
-            }
-
+            if (a.item.selected) return -1;
+            if (b.item.selected) return 1;
             return 0;
         }
     };

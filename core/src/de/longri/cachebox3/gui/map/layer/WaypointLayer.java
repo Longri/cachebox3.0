@@ -95,7 +95,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         mClusterRenderer = new WaypointLayerRenderer(this, null);
         mRenderer = mClusterRenderer;
         mItemList = new ClusteredList();
-        populate();
+        populate(true);
 
         this.textureRegionMap = textureRegionMap;
 
@@ -132,8 +132,8 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    private void populate() {
-        mClusterRenderer.populate(mItemList.size());
+    private void populate(boolean resort) {
+        mClusterRenderer.populate(mItemList.size(),resort);
     }
 
     @Override
@@ -159,50 +159,15 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                     //add WayPoint items
 
                     CB_List<String> missingIconList = new CB_List<String>(0);
-
-
                     boolean hasSelectedWP = CB.getSelectedWaypoint() != null;
+
+                    //set selected Cache at front
                     for (Cache cache : Database.Data.Query) {
-
-                        boolean dis = cache.isArchived() || !cache.isAvailable();
-                        boolean sel = !hasSelectedWP && CB.isSelectedCache(cache);
-                        try {
-                            MapWayPointItem geoCluster = getMapWayPointItem(cache, dis, sel);
-                            mItemList.add(geoCluster);
-                        } catch (GdxRuntimeException e) {
-                            if (e.getMessage().startsWith(ERROR_MSG)) {
-                                String iconName = e.getMessage().replace(ERROR_MSG, "");
-                                if (!missingIconList.contains(iconName))
-                                    missingIconList.add(iconName);
-                            } else {
-                                e.printStackTrace();
-                            }
-                            continue;
-                        }
-
-
-                        //add waypoints from selected Cache or all Waypoints if set
-                        if (Settings.ShowAllWaypoints.getValue() || CB.isSelectedCache(cache)) {
-                            Waypoint selectedWaypoint = CB.getSelectedWaypoint();
-                            for (Waypoint waypoint : cache.waypoints) {
-                                try {
-                                    MapWayPointItem waypointCluster = getMapWayPointItem(waypoint, dis, selectedWaypoint != null && selectedWaypoint.equals(waypoint));
-                                    mItemList.add(waypointCluster);
-                                } catch (GdxRuntimeException e) {
-                                    if (e.getMessage().startsWith(ERROR_MSG)) {
-                                        String iconName = e.getMessage().replace(ERROR_MSG, "");
-                                        if (!missingIconList.contains(iconName))
-                                            missingIconList.add(iconName);
-                                    } else {
-                                        e.printStackTrace();
-                                    }
-                                    continue;
-                                }
-                            }
-                        }
+                        addCache(missingIconList, hasSelectedWP, cache);
                     }
+
                     mItemList.setFinishFill();
-                    WaypointLayer.this.populate();
+                    WaypointLayer.this.populate(true);
 
 
                     if (!missingIconList.isEmpty()) {
@@ -226,6 +191,45 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         thread.start();
     }
 
+    private void addCache(CB_List<String> missingIconList, boolean hasSelectedWP, Cache cache) {
+        boolean dis = cache.isArchived() || !cache.isAvailable();
+        boolean sel = !hasSelectedWP && CB.isSelectedCache(cache);
+        try {
+            MapWayPointItem geoCluster = getMapWayPointItem(cache, dis, sel);
+            mItemList.add(geoCluster);
+        } catch (GdxRuntimeException e) {
+            if (e.getMessage().startsWith(ERROR_MSG)) {
+                String iconName = e.getMessage().replace(ERROR_MSG, "");
+                if (!missingIconList.contains(iconName))
+                    missingIconList.add(iconName);
+            } else {
+                e.printStackTrace();
+            }
+            return;
+        }
+
+
+        //add waypoints from selected Cache or all Waypoints if set
+        if (Settings.ShowAllWaypoints.getValue() || CB.isSelectedCache(cache)) {
+            Waypoint selectedWaypoint = CB.getSelectedWaypoint();
+            for (Waypoint waypoint : cache.waypoints) {
+                try {
+                    MapWayPointItem waypointCluster = getMapWayPointItem(waypoint, dis, selectedWaypoint != null && selectedWaypoint.equals(waypoint));
+                    mItemList.add(waypointCluster);
+                } catch (GdxRuntimeException e) {
+                    if (e.getMessage().startsWith(ERROR_MSG)) {
+                        String iconName = e.getMessage().replace(ERROR_MSG, "");
+                        if (!missingIconList.contains(iconName))
+                            missingIconList.add(iconName);
+                    } else {
+                        e.printStackTrace();
+                    }
+                    continue;
+                }
+            }
+        }
+    }
+
     private MapWayPointItem getMapWayPointItem(Cache cache, boolean dis, boolean sel) {
         MapWayPointItemStyle style = getClusterSymbolsByCache(cache);
         TextureRegion small = style.small == null ? null : textureRegionMap.get(((GetName) style.small).getName());
@@ -238,7 +242,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         MapWayPointItem.Regions regions = new MapWayPointItem.Regions(normal, selectedOverlay, disabledOverlay);
 
-        return new MapWayPointItem(cache, cache, regions);
+        return new MapWayPointItem(cache, cache, regions, sel);
     }
 
     private MapWayPointItem getMapWayPointItem(Waypoint waypoint, boolean dis, boolean sel) {
@@ -256,7 +260,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         MapWayPointItem.Regions regions = new MapWayPointItem.Regions(normal, selectedOverlay, disabledOverlay);
 
 
-        return new MapWayPointItem(waypoint, waypoint, regions);
+        return new MapWayPointItem(waypoint, waypoint, regions, sel);
     }
 
 
@@ -300,7 +304,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         ClusterRunnable clusterRunnable = new ClusterRunnable(distance, mItemList, new ClusterRunnable.CallBack() {
             @Override
             public void callBack() {
-                WaypointLayer.this.populate();
+                WaypointLayer.this.populate(false);
                 mMap.updateMap(true);
                 mMap.render();
             }
@@ -432,7 +436,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         }
 
 
-        populate();
+        populate(true);
     }
 
     public interface ActiveItem {

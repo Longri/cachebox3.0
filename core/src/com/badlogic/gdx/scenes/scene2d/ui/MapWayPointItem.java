@@ -34,13 +34,15 @@ public class MapWayPointItem extends Coordinate {
     private GeoBoundingBoxInt bounds;
     private final int cachedHash;
     private final TextureRegion[] small, middle, large;
+    public final boolean selected;
 
 
-    public MapWayPointItem(Coordinate pos, Object obj, Regions regions) {
+    public MapWayPointItem(Coordinate pos, Object obj, Regions regions, boolean selected) {
         super(pos.latitude, pos.longitude);
         geoPoint = new GeoPoint(pos.latitude, pos.longitude);
         this.dataObject = obj;
         cachedHash = hashCode();
+        this.selected = selected;
 
         // extract regions if regions not NULL
         if (regions == null) {
@@ -79,13 +81,12 @@ public class MapWayPointItem extends Coordinate {
         while (largeList.removeValue(null, true)) ;
 
 
-
-        if(isSelected){
+        if (isSelected) {
             // set to large icons
             small = largeList.shrink();
             middle = largeList.shrink();
             large = largeList.shrink();
-        }else{
+        } else {
             small = smallList.shrink();
             middle = middleList.shrink();
             large = largeList.shrink();
