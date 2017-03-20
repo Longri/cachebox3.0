@@ -25,8 +25,10 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DoubleClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.settings.Config;
@@ -47,7 +49,7 @@ public class MapStateButton extends Widget implements Disposable {
 
     private MapStateButtonStyle style;
     private MapMode mapMode = MapMode.FREE;
-    private final ClickListener clickListener;
+    private final DoubleClickListener clickListener;
     private final ActorGestureListener gestureListener;
     private final StateChangedListener stateChangedListener;
     private final int mapStateLength = MapMode.values().length;
@@ -60,10 +62,9 @@ public class MapStateButton extends Widget implements Disposable {
                 || style.stateWaypoint == null || style.stateGps == null) {
             throw new RuntimeException("MapStateButtonStyle drawables can not be NULL");
         }
-        clickListener = new ClickListener() {
+        clickListener = new DoubleClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
                 log.debug("button clicked" + event);
                 if (isLongPressed) {
                     isLongPressed = false;
@@ -71,10 +72,17 @@ public class MapStateButton extends Widget implements Disposable {
                 }
                 int intState = mapMode.ordinal();
                 intState++;
-                if (intState > mapStateLength - 2) {// last mapMode is Mapstate.Car. Activated with long click
+                if (intState > mapStateLength - 3) {// last mapMode is Mapstate.Lock. Activated with double click
                     intState = 0;
                 }
                 setMapMode(MapMode.fromOrdinal(intState), new Event());
+            }
+
+            @Override
+            public void doubleClicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                log.debug("button double clicked" + event);
+                setMapMode(MapMode.LOCK, false, new Event());
             }
         };
 
@@ -111,6 +119,7 @@ public class MapStateButton extends Widget implements Disposable {
         log.debug("Set to Mode: {} from last Mode {} / fireEvet:{}", mapMode, lastMode, !programmatic);
         if (!programmatic && this.stateChangedListener != null)
             this.stateChangedListener.stateChanged(mapMode, lastMode, event);
+        Gdx.graphics.requestRendering();
     }
 
 
