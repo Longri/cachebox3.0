@@ -22,6 +22,7 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.PositionChangedEvent;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
+import de.longri.cachebox3.utils.BuildInfo;
 import org.oscim.event.Event;
 
 /**
@@ -29,7 +30,7 @@ import org.oscim.event.Event;
  */
 public class AboutView extends AbstractView implements PositionChangedEvent {
 
-    VisLabel coordinateLabel;
+    VisLabel coordinateLabel, versionLabel;
 
     public AboutView() {
         super("AboutView");
@@ -41,6 +42,11 @@ public class AboutView extends AbstractView implements PositionChangedEvent {
         coordinateLabel.setAlignment(Align.center);
         coordinateLabel.setPosition(10, 10);
         this.addActor(coordinateLabel);
+
+        versionLabel = new VisLabel("CB 3.0." + BuildInfo.getRevison() + "\n" + BuildInfo.getDetail());
+        versionLabel.setAlignment(Align.center);
+        versionLabel.setPosition(10, this.getHeight() / 2);
+        this.addActor(versionLabel);
 
         //register as Location receiver
         PositionChangedEventList.add(this);
@@ -80,6 +86,6 @@ public class AboutView extends AbstractView implements PositionChangedEvent {
     }
 
     protected void boundsChanged(float x, float y, float width, float height) {
-        coordinateLabel.setBounds(0, 0, this.getWidth(), this.getHeight());
+        coordinateLabel.setBounds(0, 0, this.getWidth(), this.getHeight() / 2);
     }
 }
