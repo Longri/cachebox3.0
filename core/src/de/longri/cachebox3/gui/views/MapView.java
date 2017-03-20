@@ -77,6 +77,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 
 /**
@@ -256,6 +257,19 @@ public class MapView extends AbstractView {
             if (layer instanceof CacheboxMapAdapter.BuildingLabelLayer) {
                 log.debug("{} BuildingLayer", enabled ? "Enable" : "Disable");
                 ((CacheboxMapAdapter.BuildingLabelLayer) layer).buildingLayer.setEnabled(enabled);
+            } else if (layer instanceof GroupLayer) {
+                List<Layer> groupLayers = ((GroupLayer) layer).layers;
+                for (Layer l : groupLayers) {
+                    if (l instanceof CenterCrossLayer) {
+                        log.debug("{} CenterCrossLayer", enabled ? "Enable" : "Disable");
+                        if (enabled) {
+                            //check settings
+                            l.setEnabled(Settings_Map.ShowMapCenterCross.getValue());
+                        } else {
+                            l.setEnabled(enabled);
+                        }
+                    }
+                }
             }
         }
     }
