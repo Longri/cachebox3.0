@@ -41,6 +41,7 @@ import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.MapCompass;
+import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Coordinate;
@@ -99,6 +100,7 @@ public class MapView extends AbstractView {
     private WaypointLayer wayPointLayer;
     private DirectLineLayer directLineLayer;
     private CenterCrossLayer ccl;
+    private MapInfoPanel infoPanel;
 
     private final MapState lastMapState = new MapState();
 
@@ -249,6 +251,9 @@ public class MapView extends AbstractView {
         });
         this.zoomButton.pack();
         this.addActor(zoomButton);
+
+        infoPanel=new MapInfoPanel();
+        infoPanel.setBounds(10,100,200,100);
     }
 
     private void setBuildingLayerEnabled(boolean enabled) {
