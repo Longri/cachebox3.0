@@ -38,10 +38,7 @@ import com.badlogic.gdx.utils.reflect.Field;
 import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
-import de.longri.cachebox3.gui.skin.styles.AbstractIconStyle;
-import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
-import de.longri.cachebox3.gui.skin.styles.MapCenterCrossStyle;
-import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
+import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.utils.SkinColor;
 import org.mapsforge.core.graphics.Cap;
 import org.oscim.backend.canvas.Bitmap;
@@ -356,6 +353,9 @@ public class OptionsPane extends Table {
 
                         MapCenterCrossStyle mapCenterCrossStyle = game.skinProject.get("centerCross", MapCenterCrossStyle.class);
                         styles.put("centerCross", mapCenterCrossStyle);
+
+                        MapInfoPanelStyle mapInfoPanelStyle = game.skinProject.get("infoPanel", MapInfoPanelStyle.class);
+                        styles.put("infoPanel", mapInfoPanelStyle);
                     }
 
                     if (styles == null || styles.size == 0) {

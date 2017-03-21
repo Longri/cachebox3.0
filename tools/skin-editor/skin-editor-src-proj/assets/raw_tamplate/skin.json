@@ -172,8 +172,24 @@
       "path": "svg/cm_icon_filterd.svg",
       "scale": 0.72
     },
+    "compas_icon": {
+      "path": "svg/compas_icon.svg",
+      "scale": 0.319
+    },
     "compass": {
       "path": "svg/missingIcon.svg",
+      "scale": 1
+    },
+    "compass_1_arrow": {
+      "path": "svg/compass_1_arrow.svg",
+      "scale": 1
+    },
+    "compass_1_frame": {
+      "path": "svg/compass_1_frame.svg",
+      "scale": 1
+    },
+    "compass_1_scale": {
+      "path": "svg/compass_1_scale.svg",
       "scale": 1
     },
     "cursor": {
@@ -966,6 +982,12 @@
       "b": 1,
       "a": 1
     },
+    "centerCrossColor": {
+      "r": 0.05882353,
+      "g": 0.12156863,
+      "b": 0.05490196,
+      "a": 0.7764706
+    },
     "coordinateValuesFocus": {
       "r": 0.07450981,
       "g": 0.54901963,
@@ -1730,6 +1752,7 @@
       "addWp": "add-wp",
       "fieldNote": "FieldNote",
       "settingsIcon": "settings_icon",
+      "compassIcon": "compas_icon",
       "creditsIcon": "cb",
       "fieldNoteList": "fieldnoteListIcon",
       "mapIcon": "map",
@@ -1767,7 +1790,22 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapCenterCrossStyle": {
-  "centerCross": {
+    "centerCross": {
+      "color": "centerCrossColor",
+      "width": 2,
+      "length": 100
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.CompassStyle": {
+    "default": {
+      "frame": "compass_1_frame",
+      "scale": "compass_1_scale",
+      "arrow": "compass_1_arrow"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle": {
+    "infoPanel": {
+      "background": "activityBack_drawable"
+    }
   }
-}
 }

@@ -116,10 +116,13 @@ public class HashAtlasWriter {
         FileHandle skinFolder = skinFile.parent();
 
         for (ScaledSvg svg : svgs) {
-            FileHandle fileHandle =skinFolder.child(svg.path);// Gdx.files.internal(svg.path);
+            FileHandle fileHandle = skinFolder.child(svg.path);// Gdx.files.internal(svg.path);
             resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
-            resultHashCode = (resultHashCode * (int) (prime * svg.scale));
+            resultHashCode = (resultHashCode * (int) (prime * 2000 * svg.scale));
         }
+
+        resultHashCode *= prime * svgs.size();
+
         return resultHashCode == hash;
     }
 }

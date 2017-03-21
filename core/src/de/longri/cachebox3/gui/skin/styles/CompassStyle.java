@@ -15,8 +15,11 @@
  */
 package de.longri.cachebox3.gui.skin.styles;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+
 /**
  * Created by Longri on 21.03.2017.
  */
 public class CompassStyle {
+    public Drawable frame, scale, arrow;
 }

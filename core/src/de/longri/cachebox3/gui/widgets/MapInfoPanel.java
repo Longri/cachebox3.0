@@ -26,8 +26,8 @@ public class MapInfoPanel extends Actor {
 
     final MapInfoPanelStyle style;
 
-    public MapInfoPanel(){
-        style= VisUI.getSkin().get(MapInfoPanelStyle.class);
+    public MapInfoPanel() {
+        style = VisUI.getSkin().get("infoPanel", MapInfoPanelStyle.class);
     }
 
 
