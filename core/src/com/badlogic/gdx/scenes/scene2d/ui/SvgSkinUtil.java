@@ -121,13 +121,15 @@ public class SvgSkinUtil {
         }
 
         //write hash file
-        try {
-            FileHandle hashFile = cachedTexturatlasFileHandle.sibling(cachedTexturatlasFileHandle.nameWithoutExtension() + ".hash");
-            Writer hashwriter = hashFile.writer(false);
-            hashwriter.write("hash: " + resultHashCode + "\n");
-            hashwriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (cachedTexturatlasFileHandle != null) {
+            try {
+                FileHandle hashFile = cachedTexturatlasFileHandle.sibling(cachedTexturatlasFileHandle.nameWithoutExtension() + ".hash");
+                Writer hashwriter = hashFile.writer(false);
+                hashwriter.write("hash: " + resultHashCode + "\n");
+                hashwriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         packer.dispose();

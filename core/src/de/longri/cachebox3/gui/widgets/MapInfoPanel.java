@@ -16,9 +16,17 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
+import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.utils.UnitFormatter;
 
 /**
  * Created by Longri on 21.03.2017.
@@ -26,11 +34,73 @@ import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
 public class MapInfoPanel extends Table {
 
     final MapInfoPanelStyle style;
+    final Compass compass;
+    final VisLabel distanceLabel, speedLabel, coordinateLabel1, coordinateLabel2;
 
     public MapInfoPanel() {
         style = VisUI.getSkin().get("infoPanel", MapInfoPanelStyle.class);
         this.setBackground(style.background);
+        this.setDebug(true);
+        compass = new Compass("mapCompassStyle");
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = style.distanceLabel_Font;
+        labelStyle.fontColor = style.distanceLabel_Color;
+        distanceLabel = new VisLabel("---", labelStyle);
+
+        Label.LabelStyle labelStyle2 = new Label.LabelStyle();
+        labelStyle2.font = style.speedLabel_Font;
+        labelStyle2.fontColor = style.speedLabel_Color;
+        speedLabel = new VisLabel("+++", labelStyle2);
+
+        Label.LabelStyle labelStyle3 = new Label.LabelStyle();
+        labelStyle3.font = style.coordinateLabel_Font;
+        labelStyle3.fontColor = style.coordinateLabel_Color;
+        coordinateLabel1 = new VisLabel("------------", labelStyle3);
+        coordinateLabel2 = new VisLabel("============", labelStyle3);
+
+
+        // add controls to table
+        this.add(compass).center();
+
+        Table nestedTable = new Table();
+
+        nestedTable.add(distanceLabel).center();
+        nestedTable.add(coordinateLabel1).center();
+        nestedTable.row();
+        nestedTable.add(speedLabel).center();
+        nestedTable.add(coordinateLabel2).center();
+        this.add(nestedTable).expandX();
+
+        this.pack();
     }
 
+
+    public void setNewValues(CoordinateGPS myPosition, float heading) {
+        compass.setHeading(heading);
+        coordinateLabel1.setText(UnitFormatter.FormatLatitudeDM(myPosition.getLatitude()));
+        coordinateLabel2.setText(UnitFormatter.FormatLongitudeDM(myPosition.getLongitude()));
+        speedLabel.setText(Locator.SpeedString());
+        setDistance(CB.getSelectedCoord().Distance(MathUtils.CalculationType.ACCURATE));
+    }
+
+    private float aktDistance = -1;
+
+    private void setDistance(float distance) {
+        if (distanceLabel == null)
+            return;
+        if (aktDistance == distance)
+            return;
+        aktDistance = distance;
+        try {
+            if (distance == -1)
+                distanceLabel.setText("?");
+            else
+                distanceLabel.setText(UnitFormatter.DistanceString(distance));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

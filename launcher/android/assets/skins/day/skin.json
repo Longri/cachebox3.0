@@ -772,6 +772,18 @@
       "path": "svg/mapWikipedia2.svg",
       "scale": 0.15
     },
+    "map_compass_1_arrow": {
+      "path": "svg/compass_1_arrow.svg",
+      "scale": 0.22
+    },
+    "map_compass_1_frame": {
+      "path": "svg/compass_1_frame.svg",
+      "scale": 0.22
+    },
+    "map_compass_1_scale": {
+      "path": "svg/compass_1_scale.svg",
+      "scale": 0.22
+    },
     "mega": {
       "path": "svg/mega.svg",
       "scale": 0.2
@@ -1801,11 +1813,22 @@
       "frame": "compass_1_frame",
       "scale": "compass_1_scale",
       "arrow": "compass_1_arrow"
+    },
+    "mapCompassStyle": {
+      "frame": "map_compass_1_frame",
+      "scale": "map_compass_1_scale",
+      "arrow": "map_compass_1_arrow"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle": {
     "infoPanel": {
-      "background": "activityBack_drawable"
+      "background": "activityBack_drawable",
+      "distanceLabel_Color": "font_color",
+      "speedLabel_Color": "font_color",
+      "coordinateLabel_Color": "font_color",
+      "distanceLabel_Font": "normal_font",
+      "speedLabel_Font": "normal_font",
+      "coordinateLabel_Font": "normal_font"
     }
   }
 }

@@ -241,9 +241,18 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     private void block() {
         // block will release with animation end map event
         block.set(true);
+        lastBlockTime = System.currentTimeMillis();
     }
 
+    long lastBlockTime;
+
     public boolean isBlocked() {
+        if (block.get()) {
+            if (System.currentTimeMillis() - lastBlockTime > 2000) {
+                // release Block, maybe animation end not fired
+                block.set(false);
+            }
+        }
         return block.get();
     }
 

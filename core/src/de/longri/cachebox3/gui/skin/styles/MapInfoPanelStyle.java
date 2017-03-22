@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.gui.skin.styles;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 /**
@@ -22,4 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
  */
 public class MapInfoPanelStyle {
     public Drawable background;
+    public Color distanceLabel_Color, speedLabel_Color, coordinateLabel_Color;
+    public BitmapFont distanceLabel_Font, speedLabel_Font, coordinateLabel_Font;
 }

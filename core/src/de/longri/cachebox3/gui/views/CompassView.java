@@ -42,6 +42,6 @@ public class CompassView extends AbstractView {
      * Called when the actor's size has been changed.
      */
     protected void sizeChanged() {
-        compass.setBounds(10, 10, this.getWidth() - 20, this.getWidth() - 20);
+        compass.setBounds(20, 100, this.getWidth() - 20, this.getWidth() - 20);
     }
 }

@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.skin.styles.CompassStyle;
 import de.longri.cachebox3.utils.CB_RectF;
@@ -32,7 +33,7 @@ import de.longri.cachebox3.utils.CB_RectF;
 /**
  * Created by Longri on 21.03.2017.
  */
-public class Compass extends Group {
+public class Compass extends Group implements Layout {
 
     private final CompassStyle style;
     private final CB_RectF rec_frame, rec_scale, rec_arrow;
@@ -51,6 +52,17 @@ public class Compass extends Group {
     }
 
     public void draw(Batch batch, float parentAlpha) {
+
+        validate();
+
+            applyTransform(batch, computeTransform());
+            drawBackground(batch, parentAlpha);
+            resetTransform(batch);
+    }
+
+    private void drawBackground(Batch batch, float parentAlpha) {
+
+
         Color color = batch.getColor();
         batch.setColor(1, 1, 1, 1);
         //draw frame
@@ -78,10 +90,8 @@ public class Compass extends Group {
 
         batch.setTransformMatrix(oldTransform);
         batch.setColor(color);
-        super.draw(batch, parentAlpha);
-//        setBearing(test++);
-//        setHeading(-test);
-//        Gdx.graphics.requestRendering();
+        setBearing(test++);
+        setHeading(-test);
     }
 
     @Override
@@ -94,8 +104,8 @@ public class Compass extends Group {
         layout();
     }
 
-    private void layout() {
-        rec_frame.setPos(this.getX(), this.getY());
+    public void layout() {
+        rec_frame.setPos(0, 0);
         rec_frame.setSize(style.frame.getMinWidth(), style.frame.getMinHeight());
 
         float centerX = rec_frame.getCenterPosX();
@@ -108,6 +118,66 @@ public class Compass extends Group {
         rec_arrow.setSize(style.arrow.getMinWidth(), style.arrow.getMinHeight());
         rec_arrow.setX(centerX - rec_arrow.getHalfWidth());
         rec_arrow.setY(centerY - rec_arrow.getHalfHeight());
+    }
+
+    @Override
+    public void invalidate() {
+
+    }
+
+    @Override
+    public void invalidateHierarchy() {
+
+    }
+
+    @Override
+    public void validate() {
+
+    }
+
+    @Override
+    public void pack() {
+
+    }
+
+    @Override
+    public void setFillParent(boolean fillParent) {
+
+    }
+
+    @Override
+    public void setLayoutEnabled(boolean enabled) {
+
+    }
+
+    @Override
+    public float getMinWidth() {
+        return rec_frame.getWidth();
+    }
+
+    @Override
+    public float getMinHeight() {
+        return rec_frame.getHeight();
+    }
+
+    @Override
+    public float getPrefWidth() {
+        return rec_frame.getWidth();
+    }
+
+    @Override
+    public float getPrefHeight() {
+        return rec_frame.getHeight();
+    }
+
+    @Override
+    public float getMaxWidth() {
+        return rec_frame.getWidth();
+    }
+
+    @Override
+    public float getMaxHeight() {
+        return rec_frame.getHeight();
     }
 
 
@@ -124,4 +194,5 @@ public class Compass extends Group {
         transform_arrow.rotate(0, 0, 1, heading);
         transform_arrow.translate(-(rec_arrow.getHalfWidth() + rec_arrow.getX()), -(rec_arrow.getHalfHeight() + rec_arrow.getY()), 0);
     }
+
 }

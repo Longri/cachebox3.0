@@ -1801,6 +1801,11 @@
       "frame": "compass_1_frame",
       "scale": "compass_1_scale",
       "arrow": "compass_1_arrow"
+    },
+    "mapCompassStyle": {
+      "frame": "compass_1_frame",
+      "scale": "compass_1_scale",
+      "arrow": "compass_1_arrow"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle": {

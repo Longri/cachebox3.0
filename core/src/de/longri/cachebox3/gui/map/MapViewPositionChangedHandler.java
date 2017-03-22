@@ -20,6 +20,7 @@ import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.widgets.MapCompass;
+import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.Locator;
@@ -43,6 +44,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
     private static Logger log = LoggerFactory.getLogger(MapViewPositionChangedHandler.class);
+    private final MapInfoPanel infoPanel;
 
     private float arrowHeading, accuracy, mapBearing, userBearing, tilt;
     private CoordinateGPS mapCenter;
@@ -57,9 +59,9 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
     public static MapViewPositionChangedHandler
     getInstance(CacheboxMapAdapter map, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy
-            , MapCompass mapOrientationButton, MapStateButton mapStateButton) {
+            , MapCompass mapOrientationButton, MapStateButton mapStateButton, MapInfoPanel infoPanel) {
         MapViewPositionChangedHandler handler =
-                new MapViewPositionChangedHandler(map, myLocationLayer, myLocationAccuracy, mapOrientationButton, mapStateButton);
+                new MapViewPositionChangedHandler(map, myLocationLayer, myLocationAccuracy, mapOrientationButton, mapStateButton, infoPanel);
 
         //register this handler
         PositionChangedEventList.add(handler);
@@ -69,12 +71,13 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
 
     private MapViewPositionChangedHandler(CacheboxMapAdapter map, LocationLayer myLocationLayer,
                                           LocationAccuracyLayer myLocationAccuracy, MapCompass mapOrientationButton,
-                                          MapStateButton mapStateButton) {
+                                          MapStateButton mapStateButton, MapInfoPanel infoPanel) {
         this.map = map;
         this.myLocationLayer = myLocationLayer;
         this.myLocationAccuracy = myLocationAccuracy;
         this.mapOrientationButton = mapOrientationButton;
         this.mapStateButton = mapStateButton;
+        this.infoPanel = infoPanel;
     }
 
     @Override
@@ -185,7 +188,8 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
         lastEvent = event;
 
         if (isDisposed.get()) return;
-
+        myPosition = Locator.getCoordinate();
+        infoPanel.setNewValues(myPosition, arrowHeading );
 
         // set map values
         final MapPosition currentMapPosition = this.map.getMapPosition();
@@ -231,13 +235,14 @@ public class MapViewPositionChangedHandler implements PositionChangedEvent {
             public void run() {
 
                 map.animateTo(currentMapPosition);
-                myPosition = Locator.getCoordinate();
                 myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
                 myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
                 map.updateMap(true);
 
             }
         });
+
+
     }
 
     public void tiltChangedFromMap(float newTilt) {

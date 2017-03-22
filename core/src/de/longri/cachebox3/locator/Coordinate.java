@@ -27,7 +27,7 @@ import org.oscim.backend.canvas.Bitmap;
 public class Coordinate extends LatLong implements Serializable {
 	private static final long serialVersionUID = 4288564255686705L;
 
-	static final String br = System.getProperty("line.separator");
+	public static final String br = System.getProperty("line.separator");
 
 	protected boolean valid;
 

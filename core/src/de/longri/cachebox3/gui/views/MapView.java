@@ -227,6 +227,10 @@ public class MapView extends AbstractView {
         });
         this.mapOrientationButton = new MapCompass(mapStateButton.getWidth(), mapStateButton.getHeight());
 
+        infoPanel = new MapInfoPanel();
+        infoPanel.setBounds(10, 100, 200, 100);
+        this.addActor(infoPanel);
+
         map = createMap();
 
         this.addActor(mapStateButton);
@@ -252,9 +256,7 @@ public class MapView extends AbstractView {
         this.zoomButton.pack();
         this.addActor(zoomButton);
 
-        infoPanel=new MapInfoPanel();
-        infoPanel.setBounds(10,100,200,100);
-        this.addActor(infoPanel);
+
     }
 
     private void setBuildingLayerEnabled(boolean enabled) {
@@ -334,7 +336,7 @@ public class MapView extends AbstractView {
 
         //add position changed handler
         positionChangedHandler = MapViewPositionChangedHandler.getInstance
-                (map, myLocationLayer, myLocationAccuracy, mapOrientationButton, mapStateButton);
+                (map, myLocationLayer, myLocationAccuracy, mapOrientationButton, mapStateButton, infoPanel);
 
         return map;
     }
@@ -479,6 +481,9 @@ public class MapView extends AbstractView {
 
         zoomButton.setPosition(getWidth() - (zoomButton.getWidth() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN);
 
+        infoPanel.setBounds(CB.scaledSizes.MARGIN,
+                getHeight() - (infoPanel.getHeight() + CB.scaledSizes.MARGIN),
+                mapStateButton.getX() - (CB.scaledSizes.MARGINx2), CB.getScaledFloat(100));
     }
 
 
