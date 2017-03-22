@@ -78,12 +78,6 @@ public class HashAtlasWriter {
             }
         }
         writer.close();
-
-        //write hash file
-        FileHandle hashFile = file.sibling(file.nameWithoutExtension() + ".hash");
-        Writer hashwriter = hashFile.writer(false);
-        hashwriter.write("hash: " + resultHashCode + "\n");
-        hashwriter.close();
     }
 
 
@@ -109,6 +103,12 @@ public class HashAtlasWriter {
         }
 
 
+        int resultHashCode = getResultHashCode(svgs, skinFile);
+
+        return resultHashCode == hash;
+    }
+
+    public static int getResultHashCode(ArrayList<ScaledSvg> svgs, FileHandle skinFile) {
         final int prime = 31;
         int resultHashCode = 1;
         resultHashCode = resultHashCode * prime + Utils.getMd5(skinFile).hashCode();
@@ -122,7 +122,6 @@ public class HashAtlasWriter {
         }
 
         resultHashCode *= prime * svgs.size();
-
-        return resultHashCode == hash;
+        return resultHashCode;
     }
 }

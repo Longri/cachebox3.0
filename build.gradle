@@ -57,7 +57,9 @@ project(":desktop") {
 
         //vtm
         compile "org.mapsforge:vtm-gdx:$vtmVersion"
-        compile "org.mapsforge:vtm-desktop:$vtmVersion"
+        compile ("org.mapsforge:vtm-desktop:$vtmVersion"){
+            exclude group: 'com.metsci.ext.com.kitfox.svg'
+        }
         compile "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
         compile "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
         compile "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
@@ -77,7 +79,7 @@ project(":gps-simulator") {
         compile 'org.mapsforge:mapsforge-themes:0.7.0'
         compile 'org.mapsforge:mapsforge-map:0.7.0'
         compile 'org.mapsforge:mapsforge-map-reader:0.7.0'
-        compile 'org.mapsforge:mapsforge-map-awt:0.7.0'
+        compile ("org.mapsforge:mapsforge-map-awt:0.7.0")
         compile 'com.kitfox.svg:svg-salamander:1.0'
         compile 'net.sf.kxml:kxml2:2.3.0'
 

@@ -16,18 +16,20 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
 
 /**
  * Created by Longri on 21.03.2017.
  */
-public class MapInfoPanel extends Actor {
+public class MapInfoPanel extends Table {
 
     final MapInfoPanelStyle style;
 
     public MapInfoPanel() {
         style = VisUI.getSkin().get("infoPanel", MapInfoPanelStyle.class);
+        this.setBackground(style.background);
     }
 
 

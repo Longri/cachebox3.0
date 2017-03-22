@@ -254,6 +254,7 @@ public class MapView extends AbstractView {
 
         infoPanel=new MapInfoPanel();
         infoPanel.setBounds(10,100,200,100);
+        this.addActor(infoPanel);
     }
 
     private void setBuildingLayerEnabled(boolean enabled) {

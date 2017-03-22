@@ -79,9 +79,9 @@ public class Compass extends Group {
         batch.setTransformMatrix(oldTransform);
         batch.setColor(color);
         super.draw(batch, parentAlpha);
-        setBearing(test++);
-        setHeading(-test);
-        Gdx.graphics.requestRendering();
+//        setBearing(test++);
+//        setHeading(-test);
+//        Gdx.graphics.requestRendering();
     }
 
     @Override

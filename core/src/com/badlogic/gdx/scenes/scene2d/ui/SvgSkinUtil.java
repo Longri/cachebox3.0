@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -74,9 +75,6 @@ public class SvgSkinUtil {
         PixmapPacker packer = new PixmapPacker(pageWidth, pageHeight, Pixmap.Format.RGBA8888, padding, duplicateBorder);
 
 
-        final int prime = 31;
-        int resultHashCode = 1;
-        resultHashCode = resultHashCode * prime + Utils.getMd5(skinFile).hashCode();
         for (ScaledSvg scaledSvg : scaledSvgList) {
 
             Pixmap pixmap = null;
@@ -85,8 +83,6 @@ public class SvgSkinUtil {
             FileHandle fileHandle = skinFile.parent().child(scaledSvg.path);
 
             try {
-                resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
-                resultHashCode = (resultHashCode * (int) (prime * scaledSvg.scale));
                 name = scaledSvg.getRegisterName();
                 pixmap = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(name, fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale));
 
@@ -97,7 +93,6 @@ public class SvgSkinUtil {
             log.debug("Pack Svg: " + name + " Size:" + pixmap.getWidth() + "/" + pixmap.getHeight());
 
             if (pixmap != null) {
-
                 packer.pack(name, pixmap);
             }
 
@@ -110,11 +105,12 @@ public class SvgSkinUtil {
         packer.pack("color", pixmap);
 
         TextureAtlas atlas = packer.generateTextureAtlas(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.MipMapNearestNearest, true);
-        PixmapPackerIO pixmapPackerIO = new PixmapPackerIO();
 
         PixmapPackerIO.SaveParameters parameters = new PixmapPackerIO.SaveParameters();
         parameters.magFilter = Texture.TextureFilter.MipMapNearestNearest;
         parameters.minFilter = Texture.TextureFilter.MipMapNearestNearest;
+
+        int resultHashCode = HashAtlasWriter.getResultHashCode(scaledSvgList, skinFile);
 
         if (cachedTexturatlasFileHandle != null) {
             try {
@@ -122,6 +118,16 @@ public class SvgSkinUtil {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        //write hash file
+        try {
+            FileHandle hashFile = cachedTexturatlasFileHandle.sibling(cachedTexturatlasFileHandle.nameWithoutExtension() + ".hash");
+            Writer hashwriter = hashFile.writer(false);
+            hashwriter.write("hash: " + resultHashCode + "\n");
+            hashwriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         packer.dispose();
