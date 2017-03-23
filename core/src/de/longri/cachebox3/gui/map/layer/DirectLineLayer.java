@@ -23,6 +23,7 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.PositionChangedEvent;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
@@ -88,7 +89,7 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
         if (lastEvent == event) return;
         lastEvent = event;
 
-        Coordinate selectedCoordinate = CB.getSelectedCoord();
+        Coordinate selectedCoordinate = EventHandler.getSelectedCoord();
         if (selectedCoordinate == null) {
             directLineRenderer.setInvalid();
             return;

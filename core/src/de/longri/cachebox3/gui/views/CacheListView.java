@@ -28,6 +28,9 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.PositionChangedEvent;
 import de.longri.cachebox3.locator.events.PositionChangedEventList;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.locator.events.newT.SelectedCacheChangedEvent;
+import de.longri.cachebox3.locator.events.newT.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheWithWP;
@@ -66,10 +69,13 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     public void resort() {
         log.debug("resort Query");
         synchronized (Database.Data.Query) {
-            CacheWithWP nearstCacheWp = Database.Data.Query.Resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
+            CacheWithWP nearstCacheWp = Database.Data.Query.Resort(EventHandler.getSelectedCoord(),
+                    new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWaypoint()));
 
-            if (nearstCacheWp != null)
-                CB.setSelectedWaypoint(nearstCacheWp.getCache(), nearstCacheWp.getWaypoint());
+            if (nearstCacheWp != null){
+                EventHandler.fire(new SelectedCacheChangedEvent(nearstCacheWp.getCache()));
+                EventHandler.fire(new SelectedWayPointChangedEvent(nearstCacheWp.getWaypoint()));
+            }
         }
         log.debug("Finish resort Query");
     }
@@ -149,13 +155,13 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         Cache cache = Database.Data.Query.get(selectedItemListIndex);
                         log.debug("Cache selection changed to: " + cache.toString());
                         //set selected Cache global
-                        CB.setSelectedCache(cache);
+                        EventHandler.fire(new SelectedCacheChangedEvent(cache));
                     }
                 });
 
                 int selectedIndex = 0;
                 for (Cache cache : Database.Data.Query) {
-                    if (cache.equals(CB.getSelectedCache())) {
+                    if (cache.equals(EventHandler.getSelectedCache())) {
                         break;
                     }
                     selectedIndex++;

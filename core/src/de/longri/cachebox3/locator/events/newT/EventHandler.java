@@ -2,7 +2,6 @@ package de.longri.cachebox3.locator.events.newT;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
-import de.longri.cachebox3.gui.events.SelectedCacheEvent;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
@@ -22,16 +21,21 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     static final private ArrayMap<Class, Array<Object>> listenerMap = new ArrayMap<>();
 
     static final EventHandler INSTANCE = new EventHandler();
+
+    public static void INIT() {
+    }
+
     public static void add(Object listener) {
         for (Type type : listener.getClass().getGenericInterfaces()) {
             for (Class clazz : allListener) {
                 if (type == clazz) {
-                    Array<Object> list = listenerMap.get(listener.getClass().getSuperclass());
+                    Array<Object> list = listenerMap.get(clazz);
                     if (list == null) {
                         list = new Array<>();
                         listenerMap.put(clazz, list);
                     }
-                    list.add(listener);
+                    if (!list.contains(listener, true))
+                        list.add(listener);
                 }
             }
         }
@@ -41,7 +45,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         for (Type type : listener.getClass().getGenericInterfaces()) {
             for (Class clazz : allListener) {
                 if (type == clazz) {
-                    Array<Object> list = listenerMap.get(listener.getClass().getSuperclass());
+                    Array<Object> list = listenerMap.get(clazz);
                     if (list != null) {
                         list.removeValue(listener, true);
                     }
@@ -52,13 +56,15 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     public static void fire(AbstractEvent event) {
         Array<Object> list = listenerMap.get(event.getListenerClass());
-        for (int i = 0, n = list.size; i < n; i++) {
-            try {
-                event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
+        if (list != null) {
+            for (int i = 0, n = list.size; i < n; i++) {
+                try {
+                    event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -73,18 +79,18 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
-        if (selectedCache != event.cache) {
+        if (selectedCache == null || selectedCache.equals(event.cache)) {
+            selectedCache = event.cache;
             fireSelectedCoordChanged();
         }
-        selectedCache = event.cache;
     }
 
     @Override
     public void selectedWayPointChanged(SelectedWayPointChangedEvent event) {
-        if (selectedWayPoint != event.wayPoint) {
+        if (selectedWayPoint == null || selectedWayPoint.equals(event.wayPoint)) {
+            selectedWayPoint = event.wayPoint;
             fireSelectedCoordChanged();
         }
-        selectedWayPoint = event.wayPoint;
     }
 
     private void fireSelectedCoordChanged() {
@@ -99,9 +105,9 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
 
     private void fireCoordChanged(SelectedCoordChangedEvent event) {
-        if (this.selectedCoordinate != event.coordinate) {
-            fire(event);
+        if (this.selectedCoordinate == null || !this.selectedCoordinate.equals(event.coordinate)) {
             this.selectedCoordinate = event.coordinate;
+            fire(event);
             fireDistanceChanged();
         }
     }
@@ -112,16 +118,48 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (this.myPosition != null && this.selectedCoordinate != null) {
             float distance = this.myPosition.Distance(this.selectedCoordinate, MathUtils.CalculationType.ACCURATE);
             if (lastDistance != distance) {
-                fire(new DistanceChangedEvent(distance));
                 lastDistance = distance;
+                fire(new DistanceChangedEvent(distance));
             }
         }
     }
 
     @Override
     public void positionChanged(PositionChangedEvent event) {
-        if (!this.myPosition.equals(event.pos)) {
+        if ((this.myPosition == null && event.pos != null) || !this.myPosition.equals(event.pos)) {
+            this.myPosition = event.pos;
             fireDistanceChanged();
         }
     }
+
+    public static Cache getSelectedCache() {
+        return INSTANCE.selectedCache;
+    }
+
+    public static boolean isSelectedCache(Cache cache) {
+        if (INSTANCE.selectedCache != null && INSTANCE.selectedCache.equals(cache)) return true;
+        return false;
+    }
+
+    public static Waypoint getSelectedWaypoint() {
+        return INSTANCE.selectedWayPoint;
+    }
+
+    public static Coordinate getSelectedCoord() {
+        Coordinate ret = null;
+
+        if (INSTANCE.selectedWayPoint != null) {
+            ret = INSTANCE.selectedWayPoint;
+        } else if (INSTANCE.selectedWayPoint != null) {
+            ret = INSTANCE.selectedWayPoint;
+        }
+
+        return ret;
+    }
+
+    public String toString() {
+        return "EventHandler";
+    }
+
+
 }

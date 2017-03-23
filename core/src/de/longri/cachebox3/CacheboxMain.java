@@ -26,6 +26,7 @@ import com.badlogic.gdx.math.Matrix4;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import org.oscim.backend.GL;
 import org.oscim.map.Map;
@@ -45,6 +46,7 @@ public class CacheboxMain extends ApplicationAdapter {
         Map.NEW_GESTURES = true;
         ThemeLoader.POT_TEXTURES = true;
         ThemeLoader.USE_ATLAS = true;
+        EventHandler.INIT();
     }
 
     static Logger log = LoggerFactory.getLogger(CacheboxMain.class);
@@ -164,7 +166,8 @@ public class CacheboxMain extends ApplicationAdapter {
             float FpsInfoSize = CB.getScaledFloat(4f);
             if (FpsInfoSprite != null) {
                 batch = StageManager.getBatch();
-                batch.begin();
+                if (!batch.isDrawing())
+                    batch.begin();
                 Color lastColor = batch.getColor();
                 batch.setColor(1.0f, 0.0f, 0.0f, 1.0f);
                 batch.draw(FpsInfoSprite, FpsInfoPos, 2, FpsInfoSize, FpsInfoSize);

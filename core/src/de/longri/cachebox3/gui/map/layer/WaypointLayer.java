@@ -30,6 +30,9 @@ import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.map.layer.renderer.WaypointLayerRenderer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.locator.events.newT.SelectedCacheChangedEvent;
+import de.longri.cachebox3.locator.events.newT.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxDouble;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
@@ -159,7 +162,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                     //add WayPoint items
 
                     CB_List<String> missingIconList = new CB_List<String>(0);
-                    boolean hasSelectedWP = CB.getSelectedWaypoint() != null;
+                    boolean hasSelectedWP = EventHandler.getSelectedWaypoint() != null;
 
                     //set selected Cache at front
                     for (Cache cache : Database.Data.Query) {
@@ -193,7 +196,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     private void addCache(CB_List<String> missingIconList, boolean hasSelectedWP, Cache cache) {
         boolean dis = cache.isArchived() || !cache.isAvailable();
-        boolean sel = !hasSelectedWP && CB.isSelectedCache(cache);
+        boolean sel = !hasSelectedWP && EventHandler.isSelectedCache(cache);
         try {
             MapWayPointItem geoCluster = getMapWayPointItem(cache, dis, sel);
             mItemList.add(geoCluster);
@@ -210,8 +213,8 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
 
         //add waypoints from selected Cache or all Waypoints if set
-        if (Settings.ShowAllWaypoints.getValue() || CB.isSelectedCache(cache)) {
-            Waypoint selectedWaypoint = CB.getSelectedWaypoint();
+        if (Settings.ShowAllWaypoints.getValue() || EventHandler.isSelectedCache(cache)) {
+            Waypoint selectedWaypoint = EventHandler.getSelectedWaypoint();
             for (Waypoint waypoint : cache.waypoints) {
                 try {
                     MapWayPointItem waypointCluster = getMapWayPointItem(waypoint, dis, selectedWaypoint != null && selectedWaypoint.equals(waypoint));
@@ -448,11 +451,11 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         //set as selected cache/wp
         if (item.dataObject instanceof Cache) {
-            CB.setSelectedCache((Cache) item.dataObject);
+            EventHandler.fire(new SelectedCacheChangedEvent((Cache) item.dataObject));
         } else if (item.dataObject instanceof Waypoint) {
             Waypoint wp = (Waypoint) item.dataObject;
             Cache cache = CB.getCacheFromId(wp.CacheId);
-            CB.setSelectedWaypoint(cache, wp);
+            EventHandler.fire(new SelectedWayPointChangedEvent(wp));
         }
         return true;
     }

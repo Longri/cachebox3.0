@@ -85,4 +85,8 @@ public class AboutView extends AbstractView implements PositionChangedListener, 
         coordinateLabel.setText(sb);
         CB.requestRendering();
     }
+
+    public String toString() {
+        return "AboutView";
+    }
 }

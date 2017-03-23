@@ -27,6 +27,7 @@ import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.DescriptionView;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.translation.Translation;
@@ -54,19 +55,19 @@ public class Action_Show_DescriptionView extends Abstract_Action_ShowView {
             public boolean onItemClick(MenuItem item) {
                 switch (item.getMenuItemId()) {
                     case MenuID.MI_FAVORIT:
-                        if (CB.getSelectedCache() == null) {
+                        if (EventHandler.getSelectedCache() == null) {
 
                             new ButtonDialog("NoCacheSelect", Translation.Get("NoCacheSelect"), Translation.Get("Error"),
                                     MessageBoxButtons.OKCancel, MessageBoxIcon.Error, null).show();
                             return true;
                         }
 
-                        CB.getSelectedCache().setFavorite(!CB.getSelectedCache().isFavorite());
+                        EventHandler.getSelectedCache().setFavorite(!EventHandler.getSelectedCache().isFavorite());
                         CacheDAO dao = new CacheDAO();
-                        dao.UpdateDatabase(CB.getSelectedCache());
+                        dao.UpdateDatabase(EventHandler.getSelectedCache());
 
                         // Update Query
-                        Database.Data.Query.GetCacheById(CB.getSelectedCache().Id).setFavorite(CB.getSelectedCache().isFavorite());
+                        Database.Data.Query.GetCacheById(EventHandler.getSelectedCache().Id).setFavorite(EventHandler.getSelectedCache().isFavorite());
 
                         // Update View
                         //TODO update
@@ -85,12 +86,12 @@ public class Action_Show_DescriptionView extends Abstract_Action_ShowView {
 
         MenuItem mi;
 
-        boolean isSelected = (CB.isSetSelectedCache());
+        boolean isSelected = (EventHandler.getSelectedCache()!=null);
 
         mi = cm.addItem(MenuID.MI_FAVORIT, "Favorite", CB.getSkin().getMenuIcon.favorit);
         mi.setCheckable(true);
         if (isSelected) {
-            mi.setChecked(CB.getSelectedCache().isFavorite());
+            mi.setChecked(EventHandler.getSelectedCache().isFavorite());
         } else {
             mi.setEnabled(false);
         }
@@ -98,7 +99,7 @@ public class Action_Show_DescriptionView extends Abstract_Action_ShowView {
         boolean selectedCacheIsNoGC = false;
 
         if (isSelected)
-            selectedCacheIsNoGC = !CB.getSelectedCache().getGcCode().startsWith("GC");
+            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().startsWith("GC");
         mi = cm.addItem(MenuID.MI_RELOAD_CACHE, "ReloadCacheAPI", CB.getSkin().getIcon.GC_Live);
         if (!isSelected)
             mi.setEnabled(false);

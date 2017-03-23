@@ -46,6 +46,7 @@ import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.settings.Settings_Map;
@@ -139,7 +140,7 @@ public class MapView extends AbstractView {
                     final MapPosition mapPosition = map.getMapPosition();
                     // restore last MapState
                     if (lastMapState.getMapMode() == MapMode.WP) {
-                        final Coordinate wpCoord = CB.getSelectedCoord();
+                        final Coordinate wpCoord = EventHandler.getSelectedCoord();
                         log.debug("set animation to WP coords");
                         mapPosition.setPosition(wpCoord.latitude, wpCoord.longitude);
                     }
@@ -172,7 +173,7 @@ public class MapView extends AbstractView {
                     log.debug("Activate WP Mode");
                     if (event == selfEvent) {
                         final MapPosition mapPosition = map.getMapPosition();
-                        final Coordinate wpCoord = CB.getSelectedCoord();
+                        final Coordinate wpCoord = EventHandler.getSelectedCoord();
                         mapPosition.setPosition(wpCoord.latitude, wpCoord.longitude);
                         float ori = 0;
                         if (!mapOrientationButton.isNorthOriented()) {
@@ -196,7 +197,7 @@ public class MapView extends AbstractView {
                             @Override
                             public void run() {
                                 final MapPosition mapPosition = map.getMapPosition();
-                                final Coordinate wpCoord = CB.getSelectedCoord();
+                                final Coordinate wpCoord = EventHandler.getSelectedCoord();
                                 mapPosition.setPosition(wpCoord.latitude, wpCoord.longitude);
                                 float ori = 0;
                                 if (!mapOrientationButton.isNorthOriented()) {

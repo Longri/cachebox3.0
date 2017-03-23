@@ -25,6 +25,7 @@ import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
 
@@ -81,7 +82,7 @@ public class MapInfoPanel extends Table {
         coordinateLabel1.setText(UnitFormatter.FormatLatitudeDM(myPosition.getLatitude()));
         coordinateLabel2.setText(UnitFormatter.FormatLongitudeDM(myPosition.getLongitude()));
         speedLabel.setText(Locator.SpeedString());
-        setDistance(CB.getSelectedCoord().Distance(MathUtils.CalculationType.ACCURATE));
+        setDistance(EventHandler.getSelectedCoord().Distance(MathUtils.CalculationType.ACCURATE));
     }
 
     private float aktDistance = -1;

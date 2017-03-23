@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.actions;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -43,10 +44,10 @@ public class Action_Show_Hint extends AbstractAction {
 
     @Override
     public boolean getEnabled() {
-        // liefert true zurück wenn ein Cache gewählt ist und dieser einen Hint hat
-        if (CB.getSelectedCache() == null)
+        // return true if any Cache selected and this Cache has a Hint
+        if (EventHandler.getSelectedCache() == null)
             return false;
-        String hintText = CB.getSelectedCache().getHint();
+        String hintText = EventHandler.getSelectedCache().getHint();
         if ((hintText == null) || (hintText.length() == 0))
             return false;
         return true;
