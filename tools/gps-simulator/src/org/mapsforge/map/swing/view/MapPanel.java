@@ -11,8 +11,11 @@ import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Location;
 import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.locator.events.newT.PositionChangedEvent;
 import org.mapsforge.core.graphics.GraphicFactory;
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.awt.graphics.AwtGraphicFactory;
@@ -80,7 +83,14 @@ public class MapPanel extends JPanel implements ActionListener {
                 if (Locator.that != null) {
                     LatLong pos = new LatLong(GPSData.getLatitude(), GPSData.getLongitude());
                     model.mapViewPosition.setCenter(pos);
-                    Locator.setNewLocation(new Location(pos.getLatitude(), pos.getLongitude(), GPSData.getQuality(), true, (float) GPSData.getSpeed(), true,(float) GPSData.getCourse(), GPSData.getAltitude(), Location.ProviderType.GPS));
+                    Locator.setNewLocation(new Location(pos.getLatitude(), pos.getLongitude(), GPSData.getQuality(), true, (float) GPSData.getSpeed(), true, (float) GPSData.getCourse(), GPSData.getAltitude(), Location.ProviderType.GPS));
+
+
+                    {// new Listener
+                        EventHandler.fire(new PositionChangedEvent(new Coordinate(GPSData.getLatitude(), GPSData.getLongitude())));
+                    }
+
+
                 }
 
             }
