@@ -19,15 +19,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.locator.Location;
-import de.longri.cachebox3.locator.Locator;
-import de.longri.cachebox3.locator.events.PositionChangedEvent;
-import de.longri.cachebox3.locator.events.PositionChangedEventList;
+import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.locator.events.newT.PositionChangedEvent;
+import de.longri.cachebox3.locator.events.newT.PositionChangedListener;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.MathUtils;
-import org.oscim.event.Event;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
@@ -37,7 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class TrackRecorder implements PositionChangedEvent {
+public class TrackRecorder implements PositionChangedListener {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(TrackRecorder.class);
 
     public final static TrackRecorder INSTANCE = new TrackRecorder();
@@ -51,12 +50,12 @@ public class TrackRecorder implements PositionChangedEvent {
     public boolean recording = false;
     public double SaveAltitude = 0;
 
-    // / Letzte aufgezeichnete Position des Empfängers
-    public Location LastRecordedPosition = Location.NULL_LOCATION;
 
-    public void StartRecording() {
+    public CoordinateGPS LastRecordedPosition = null;
 
-        PositionChangedEventList.add(this);
+    public void startRecording() {
+
+        EventHandler.add(this);
 
         CB.actRoute = new Track(Translation.Get("actualTrack"), Color.BLUE);
         CB.actRoute.ShowRoute = true;
@@ -74,7 +73,7 @@ public class TrackRecorder implements PositionChangedEvent {
             writeAppend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             writeAppend(
                     "<gpx version=\"1.0\" creator=\"cachebox track recorder\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.topografix.com/GPX/1/0\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">\n");
-            writeAppend("<time>" + GetDateTimeString() + "</time>\n");
+            writeAppend("<time>" + getDateTimeString() + "</time>\n");
             // set real bounds or basecamp (mapsource) will not import this track
             // writeAppend("<bounds minlat=\"-90\" minlon=\"-180\" maxlat=\"90\" maxlon=\"180\"/>\n");
             writeAppend("<trk><trkseg>\n");
@@ -97,7 +96,7 @@ public class TrackRecorder implements PositionChangedEvent {
         gpxfile.writeString(txt, true);
     }
 
-    private String GetDateTimeString() {
+    private String getDateTimeString() {
         Date timestamp = new Date();
         SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd");
         datFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -115,10 +114,10 @@ public class TrackRecorder implements PositionChangedEvent {
     private boolean mustWriteMedia = false;
     String mFriendlyName = "";
     String mMediaPath = "";
-    Location mMediaCoord = null;
+    CoordinateGPS mMediaCoord = null;
     String mTimestamp = "";
 
-    public void AnnotateMedia(final String friendlyName, final String mediaPath, final Location location, final String timestamp) {
+    public void annotateMedia(final String friendlyName, final String mediaPath, final CoordinateGPS location, final String timestamp) {
         writeAnnotateMedia = true;
 
         if (writePos) {
@@ -132,7 +131,8 @@ public class TrackRecorder implements PositionChangedEvent {
         if (gpxfile == null)
             return;
 
-        String xml = "<wpt lat=\"" + String.valueOf(location.getLatitude()) + "\" lon=\"" + String.valueOf(location.getLongitude()) + "\">\n" + "   <ele>" + String.valueOf(location.getAltitude()) + "</ele>\n" + "   <time>" + timestamp + "</time>\n"
+        String xml = "<wpt lat=\"" + String.valueOf(location.latitude) + "\" lon=\"" + String.valueOf(location.longitude)
+                + "\">\n" + "   <ele>" + String.valueOf(location.getElevation()) + "</ele>\n" + "   <time>" + timestamp + "</time>\n"
                 + "   <name>" + friendlyName + "</name>\n" + "   <link href=\"" + mediaPath + "\" />\n" + "</wpt>\n";
 
         RandomAccessFile rand;
@@ -169,22 +169,18 @@ public class TrackRecorder implements PositionChangedEvent {
         if (mustRecPos) {
             mustRecPos = false;
         }
-        positionChanged(new Event());
+        positionChanged(new PositionChangedEvent(location));
     }
 
     private boolean mustRecPos = false;
     private boolean writePos = false;
 
-    private final Location.ProviderType GPS = Location.ProviderType.GPS;
-    private final Locator.CompassType _GPS = Locator.CompassType.GPS;
-
-
-    public void PauseRecording() {
+    public void pauseRecording() {
         pauseRecording = !pauseRecording;
     }
 
-    public void StopRecording() {
-        PositionChangedEventList.remove(this);
+    public void stopRecording() {
+        EventHandler.remove(this);
         if (CB.actRoute != null) {
             CB.actRoute.IsActualTrack = false;
             CB.actRoute.Name = Translation.Get("recordetTrack");
@@ -201,19 +197,20 @@ public class TrackRecorder implements PositionChangedEvent {
         return "Track_" + sDate + ".gpx";
     }
 
+
     @Override
-    public void positionChanged(Event event) {
-        if (gpxfile == null || pauseRecording || !Locator.isGPSprovided())
+    public void positionChanged(PositionChangedEvent event) {
+        if (gpxfile == null || pauseRecording || !event.pos.isGPSprovided())
             return;
 
         if (writeAnnotateMedia) {
             mustRecPos = true;
         }
 
-        if (LastRecordedPosition.getProviderType() == Location.ProviderType.NULL) // Warte bis 2 gültige Koordinaten vorliegen
+        if (LastRecordedPosition == null) // Warte bis 2 gültige Koordinaten vorliegen
         {
-            LastRecordedPosition = Locator.getLocation(GPS).cpy();
-            SaveAltitude = LastRecordedPosition.getAltitude();
+            LastRecordedPosition = event.pos;
+            SaveAltitude = event.pos.getElevation();
         } else {
             writePos = true;
             TrackPoint NewPoint;
@@ -223,17 +220,18 @@ public class TrackRecorder implements PositionChangedEvent {
             // zurückgelegt? Wenn nicht, dann nicht aufzeichnen.
             float[] dist = new float[1];
 
-            MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, LastRecordedPosition.getLatitude(), LastRecordedPosition.getLongitude(), Locator.getLatitude(GPS), Locator.getLongitude(GPS), dist);
+            MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, LastRecordedPosition.latitude,
+                    LastRecordedPosition.longitude, event.pos.latitude, event.pos.longitude, dist);
             float cachedDistance = dist[0];
 
             if (cachedDistance > Config.TrackDistance.getValue()) {
                 StringBuilder sb = new StringBuilder();
 
-                sb.append("<trkpt lat=\"" + String.valueOf(Locator.getLatitude(GPS)) + "\" lon=\"" + String.valueOf(Locator.getLongitude(GPS)) + "\">\n");
-                sb.append("   <ele>" + String.valueOf(Locator.getAlt()) + "</ele>\n");
-                sb.append("   <time>" + GetDateTimeString() + "</time>\n");
-                sb.append("   <course>" + String.valueOf(Locator.getHeading(_GPS)) + "</course>\n");
-                sb.append("   <speed>" + String.valueOf(Locator.SpeedOverGround()) + "</speed>\n");
+                sb.append("<trkpt lat=\"" + String.valueOf(event.pos.latitude) + "\" lon=\"" + String.valueOf(event.pos.longitude) + "\">\n");
+                sb.append("   <ele>" + String.valueOf(event.pos.getElevation()) + "</ele>\n");
+                sb.append("   <time>" + getDateTimeString() + "</time>\n");
+                sb.append("   <course>" + String.valueOf(event.pos.getHeading()) + "</course>\n");
+                sb.append("   <speed>" + String.valueOf(event.pos.getSpeed()) + "</speed>\n");
                 sb.append("</trkpt>\n");
 
                 RandomAccessFile rand;
@@ -263,7 +261,8 @@ public class TrackRecorder implements PositionChangedEvent {
                     log.error("Trackrecorder", "IOException", e);
                 }
 
-                NewPoint = new TrackPoint(Locator.getLongitude(GPS), Locator.getLatitude(GPS), Locator.getAlt(), Locator.getHeading(_GPS), new Date());
+                NewPoint = new TrackPoint(event.pos.longitude, event.pos.longitude, event.pos.getElevation(),
+                        event.pos.getHeading(), new Date());
 
                 CB.actRoute.Points.add(NewPoint);
 
@@ -273,41 +272,21 @@ public class TrackRecorder implements PositionChangedEvent {
 //					TrackListView.that.notifyActTrackChanged();
 //
 //				RouteOverlay.RoutesChanged();
-                LastRecordedPosition = Locator.getLocation(GPS).cpy();
+                LastRecordedPosition = event.pos;
                 CB.actRoute.TrackLength += cachedDistance;
 
-                AltDiff = Math.abs(SaveAltitude - Locator.getAlt());
+                AltDiff = Math.abs(SaveAltitude - event.pos.getElevation());
                 if (AltDiff >= 25) {
                     CB.actRoute.AltitudeDifference += AltDiff;
-                    SaveAltitude = Locator.getAlt();
+                    SaveAltitude = event.pos.getElevation();
                 }
                 writePos = false;
 
                 if (mustWriteMedia) {
                     mustWriteMedia = false;
-                    AnnotateMedia(mFriendlyName, mMediaPath, mMediaCoord, mTimestamp);
+                    annotateMedia(mFriendlyName, mMediaPath, mMediaCoord, mTimestamp);
                 }
             }
         }
-    }
-
-    @Override
-    public void orientationChanged(Event event) {
-        // do nothing
-    }
-
-    @Override
-    public void speedChanged(Event event) {
-        // do nothing
-    }
-
-    @Override
-    public String getReceiverName() {
-        return "TrackRecorder";
-    }
-
-    @Override
-    public Priority getPriority() {
-        return Priority.High;
     }
 }

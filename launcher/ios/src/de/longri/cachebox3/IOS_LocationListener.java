@@ -15,7 +15,7 @@
  */
 package de.longri.cachebox3;
 
-import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.locator.events.newT.GpsEventHelper;
 import org.robovm.apple.corelocation.*;
 import org.robovm.apple.dispatch.DispatchQueue;
 import org.robovm.apple.foundation.Foundation;
@@ -34,6 +34,7 @@ public class IOS_LocationListener {
     private static double HEADING_FILTER = 5;
 
     private CLLocationManager locationManager;
+    private final GpsEventHelper eventHelper = new GpsEventHelper();
 
 
     private void stopUpdatingLocation(String state) {
@@ -76,26 +77,11 @@ public class IOS_LocationListener {
             CLLocation newLocation = locations.last();
             CLLocationCoordinate2D coord = newLocation.getCoordinate();
 
-
-            de.longri.cachebox3.locator.Location.ProviderType provider = de.longri.cachebox3.locator.Location.ProviderType.NULL;
-
-            //FIXME set  GPS or Network provider
-//                if (location.getProvider().toLowerCase(new Locale("en")).contains("gps"))
-            provider = de.longri.cachebox3.locator.Location.ProviderType.GPS;
-//                if (location.getProvider().toLowerCase(new Locale("en")).contains("network"))
-//                    provider = de.longri.cachebox3.locator.Location.ProviderType.Network;
-
-            de.longri.cachebox3.locator.Location cbLocation =
-                    new de.longri.cachebox3.locator.Location(coord.getLatitude(),
-                            coord.getLongitude(), (float) newLocation.getHorizontalAccuracy());
-
-            cbLocation.setHasSpeed(newLocation.getSpeed() >= 0);
-            cbLocation.setSpeed((float) newLocation.getSpeed());
-            cbLocation.setHasBearing(newLocation.getCourse() >= 0);
-            cbLocation.setBearing((float) newLocation.getCourse());
-            cbLocation.setAltitude(newLocation.getAltitude());
-            cbLocation.setProvider(provider);
-            de.longri.cachebox3.locator.Locator.setNewLocation(cbLocation);
+            if (newLocation.getSpeed() >= 0) eventHelper.setSpeed(newLocation.getSpeed());
+            if (newLocation.getCourse() >= 0) eventHelper.setCourse(newLocation.getCourse());
+            eventHelper.setElevation(newLocation.getAltitude());
+            eventHelper.setAccuracy((float) newLocation.getHorizontalAccuracy());
+            eventHelper.newPos(coord.getLatitude(), coord.getLongitude(), true);
 
         }
 
@@ -106,10 +92,7 @@ public class IOS_LocationListener {
         @Override
         public void didUpdateHeading(CLLocationManager manager, CLHeading newHeading) {
             if (newHeading.getHeadingAccuracy() > 0) {
-                float value = (float) newHeading.getTrueHeading();
-                log.trace("Set True heading:" + value);
-                de.longri.cachebox3.locator.Locator.setHeading(value,
-                        Locator.CompassType.Magnetic);
+                eventHelper.setCourse(newHeading.getTrueHeading());
             }
         }
 

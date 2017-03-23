@@ -316,13 +316,13 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
             public boolean onItemClick(MenuItem item) {
                 switch (item.getMenuItemId()) {
                     case START:
-                        TrackRecorder.INSTANCE.StartRecording();
+                        TrackRecorder.INSTANCE.startRecording();
                         return true;
                     case PAUSE:
-                        TrackRecorder.INSTANCE.PauseRecording();
+                        TrackRecorder.INSTANCE.pauseRecording();
                         return true;
                     case STOP:
-                        TrackRecorder.INSTANCE.StopRecording();
+                        TrackRecorder.INSTANCE.stopRecording();
                         return true;
                 }
                 return false;

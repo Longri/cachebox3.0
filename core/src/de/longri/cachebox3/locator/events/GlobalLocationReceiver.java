@@ -18,8 +18,6 @@ package de.longri.cachebox3.locator.events;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.locator.GPS;
-import de.longri.cachebox3.locator.Location;
-import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -37,7 +35,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Longri
  */
-public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBackEvent {
+public class GlobalLocationReceiver implements  GPS_FallBackEvent {
     final static Logger log = LoggerFactory.getLogger(GlobalLocationReceiver.class);
     public final static boolean DEBUG_POSITION = true;
 
@@ -50,7 +48,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
 
     public GlobalLocationReceiver() {
 
-        PositionChangedEventList.add(this);
+
         GPS_FallBackEventList.Add(this);
         try {
             SoundCache.loadSounds();
@@ -62,7 +60,6 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
 
     private static boolean PlaySounds = false;
 
-    @Override
     public void positionChanged(Event event) {
 
         PlaySounds = !Config.GlobalVolume.getValue().Mute;
@@ -85,7 +82,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
                             if (EventHandler.getSelectedCache()!=null) {
                                 float distance = EventHandler.getSelectedCache().Distance(MathUtils.CalculationType.FAST, false);
                                 if (EventHandler.getSelectedWaypoint() != null) {
-                                    distance = EventHandler.getSelectedWaypoint().Distance();
+                                    distance = EventHandler.getSelectedWaypoint().distance();
                                 }
 
                                 if (!approachSoundCompleted && (distance < Config.SoundApproachDistance.getValue())) {
@@ -101,7 +98,7 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
                     }
 
                     try {
-                        if (!initialResortAfterFirstFixCompleted && Locator.getProvider() != Location.ProviderType.NULL) {
+                        if (!initialResortAfterFirstFixCompleted ) {
                             if (EventHandler.getSelectedCache() == null) {
                                 synchronized (Database.Data.Query) {
                                     CacheWithWP ret = Database.Data.Query.Resort(EventHandler.getSelectedCoord(), new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWaypoint()));
@@ -192,10 +189,6 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
 
     Thread newLocationThread;
 
-    @Override
-    public String getReceiverName() {
-        return "GlobalLocationReceiver";
-    }
 
     public static void resetApproach() {
 
@@ -213,38 +206,26 @@ public class GlobalLocationReceiver implements PositionChangedEvent, GPS_FallBac
 
     }
 
-    @Override
-    public void orientationChanged(Event event) {
-    }
-
-    @Override
-    public Priority getPriority() {
-        return Priority.High;
-    }
-
-    @Override
-    public void speedChanged(Event event) {
-    }
 
     @Override
     public void Fix() {
         PlaySounds = !Config.GlobalVolume.getValue().Mute;
 
-        try {
-
-            if (!initialFixSoundCompleted && Locator.isGPSprovided() && GPS.getFixedSats() > 3) {
-
-                log.debug("Play Fix");
-                if (PlaySounds)
-                    SoundCache.play(SoundCache.Sounds.GPS_fix);
-                initialFixSoundCompleted = true;
-                loseSoundCompleated = false;
-
-            }
-        } catch (Exception e) {
-            log.error("Global.PlaySound(GPS_Fix.ogg)", e);
-            e.printStackTrace();
-        }
+//        try {
+//
+//            if (!initialFixSoundCompleted && Locator.isGPSprovided() && GPS.getFixedSats() > 3) {
+//
+//                log.debug("Play Fix");
+//                if (PlaySounds)
+//                    SoundCache.play(SoundCache.Sounds.GPS_fix);
+//                initialFixSoundCompleted = true;
+//                loseSoundCompleated = false;
+//
+//            }
+//        } catch (Exception e) {
+//            log.error("Global.PlaySound(GPS_Fix.ogg)", e);
+//            e.printStackTrace();
+//        }
 
     }
 

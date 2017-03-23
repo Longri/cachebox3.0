@@ -45,7 +45,6 @@ import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
@@ -128,10 +127,10 @@ public class MapView extends AbstractView {
                 if (mapMode == MapMode.CAR) {
                     lastMapState.setMapMode(lastMapMode);
                     log.debug("Activate Carmode with last mapstate:" + lastMapState);
-                    float bearing = -Locator.getHeading();
+                    float bearing = -EventHandler.getHeading();
                     positionChangedHandler.setBearing(bearing);
                     mapOrientationButton.setOrientation(-bearing);
-                    positionChangedHandler.positionChanged(new Event());
+//                    positionChangedHandler.positionChanged(new Event());
                     setBuildingLayerEnabled(false);
 
                 } else if (lastMapMode == MapMode.CAR) {
@@ -149,7 +148,7 @@ public class MapView extends AbstractView {
                     mapPosition.setTilt(map.viewport().getMinTilt());
                     float ori = 0;
                     if (lastMapState.getMapOrientationMode() != MapOrientationMode.NORTH) {
-                        ori = Locator.getHeading();
+                        ori = EventHandler.getHeading();
                     }
 
                     mapPosition.setBearing(ori);
@@ -168,7 +167,7 @@ public class MapView extends AbstractView {
                     map.updateMap(true);
                 } else if (mapMode == MapMode.GPS) {
                     log.debug("Activate GPS Mode");
-                    positionChangedHandler.positionChanged(new Event());
+//                    positionChangedHandler.positionChanged(new Event());
                 } else if (mapMode == MapMode.WP) {
                     log.debug("Activate WP Mode");
                     if (event == selfEvent) {
@@ -177,7 +176,7 @@ public class MapView extends AbstractView {
                         mapPosition.setPosition(wpCoord.latitude, wpCoord.longitude);
                         float ori = 0;
                         if (!mapOrientationButton.isNorthOriented()) {
-                            ori = Locator.getHeading();
+                            ori = EventHandler.getHeading();
                         }
                         mapPosition.setBearing(ori);
 
@@ -201,7 +200,7 @@ public class MapView extends AbstractView {
                                 mapPosition.setPosition(wpCoord.latitude, wpCoord.longitude);
                                 float ori = 0;
                                 if (!mapOrientationButton.isNorthOriented()) {
-                                    ori = Locator.getHeading();
+                                    ori = EventHandler.getHeading();
                                 }
                                 mapPosition.setBearing(ori);
 
@@ -455,6 +454,8 @@ public class MapView extends AbstractView {
         //dispose actors
         mapOrientationButton.dispose();
         mapStateButton.dispose();
+
+        infoPanel.dispose();
 
     }
 

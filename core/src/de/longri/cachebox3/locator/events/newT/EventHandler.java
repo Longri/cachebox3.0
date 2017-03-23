@@ -3,6 +3,7 @@ package de.longri.cachebox3.locator.events.newT;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
@@ -17,10 +18,11 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     static final private Class[] allListener = new Class[]{PositionChangedListener.class,
             SelectedCacheChangedListener.class, SelectedWayPointChangedListener.class, PositionChangedListener.class,
-            DistanceChangedListener.class};
+            DistanceChangedListener.class, SpeedChangedListener.class, OrientationChangedListener.class};
     static final private ArrayMap<Class, Array<Object>> listenerMap = new ArrayMap<>();
 
     static final EventHandler INSTANCE = new EventHandler();
+
 
     public static void INIT() {
     }
@@ -75,7 +77,9 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     Cache selectedCache;
     Waypoint selectedWayPoint;
-    Coordinate selectedCoordinate, myPosition;
+    Coordinate selectedCoordinate;
+    CoordinateGPS myPosition;
+    private float heading;
 
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
@@ -162,4 +166,11 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
 
+    public static CoordinateGPS getCoordinate() {
+        return INSTANCE.myPosition;
+    }
+
+    public static float getHeading() {
+        return INSTANCE.heading;
+    }
 }

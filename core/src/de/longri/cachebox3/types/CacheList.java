@@ -18,7 +18,7 @@ package de.longri.cachebox3.types;
 
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.MoveableList;
 
@@ -79,7 +79,7 @@ public class CacheList extends MoveableList<Cache> {
         CacheWithWP retValue = null;
 
         this.ResortAtWork = true;
-        boolean LocatorValid = Locator.Valid();
+        boolean LocatorValid = EventHandler.getSelectedCoord() != null;
         // Alle Distanzen aktualisieren
         if (LocatorValid) {
             for (int i = 0, n = this.size(); i < n; i++) {
@@ -87,7 +87,7 @@ public class CacheList extends MoveableList<Cache> {
                 cache.Distance(MathUtils.CalculationType.FAST, true);
             }
         } else {
-            // sort after Distance from selected Cache
+            // sort after distance from selected Cache
             Coordinate fromPos = selectedCoord;
             // avoid "illegal waypoint"
             if (fromPos == null || (fromPos.getLatitude() == 0 && fromPos.getLongitude() == 0)) {

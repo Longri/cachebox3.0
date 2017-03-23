@@ -17,7 +17,7 @@ package de.longri.cachebox3.types;
 
 
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.utils.MathUtils;
 
 import java.io.Serializable;
@@ -96,13 +96,11 @@ public class Waypoint extends Coordinate implements Serializable {
         detail = new WaypointDetail();
     }
 
-    // / <summary>
-    // / Entfernung von der letzten gültigen Position
-    // / </summary>
-    public float Distance() {
-        Coordinate fromPos = Locator.getLocation().toCordinate();
-        float[] dist = new float[4];
 
+    public float distance() {
+        Coordinate fromPos = EventHandler.getCoordinate();
+        if (fromPos == null) return -1;
+        float[] dist = new float[4];
         MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, fromPos.getLatitude(), fromPos.getLongitude(), latitude, longitude, dist);
         return dist[0];
     }

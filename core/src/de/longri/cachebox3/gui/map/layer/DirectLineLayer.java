@@ -16,16 +16,8 @@
 package de.longri.cachebox3.gui.map.layer;
 
 import com.badlogic.gdx.utils.Disposable;
-import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.events.SelectedCacheEvent;
-import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.Locator;
-import de.longri.cachebox3.locator.events.PositionChangedEvent;
-import de.longri.cachebox3.locator.events.PositionChangedEventList;
-import de.longri.cachebox3.locator.events.newT.EventHandler;
-import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.locator.events.newT.*;
 import de.longri.cachebox3.utils.MathUtils;
 import org.oscim.backend.canvas.Color;
 import org.oscim.backend.canvas.Paint;
@@ -43,7 +35,7 @@ import org.oscim.theme.styles.LineStyle;
 /**
  * Created by Longri on 02.03.2017.
  */
-public class DirectLineLayer extends GenericLayer implements PositionChangedEvent, SelectedCacheEvent, Disposable {
+public class DirectLineLayer extends GenericLayer implements PositionChangedListener, SelectedCoordChangedListener, Disposable {
 
     private final DirectLineRenderer directLineRenderer;
     private Event lastEvent;
@@ -55,34 +47,9 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
         super(map, new DirectLineRenderer());
         directLineRenderer = (DirectLineRenderer) mRenderer;
         directLineRenderer.setLayer(this);
-        PositionChangedEventList.add(this);
-        SelectedCacheEventList.add(this);
+        EventHandler.add(this);
     }
 
-    @Override
-    public void positionChanged(Event event) {
-        redrawLine(event);
-    }
-
-    @Override
-    public void orientationChanged(Event event) {
-        redrawLine(event);
-    }
-
-    @Override
-    public void speedChanged(Event event) {
-        redrawLine(event);
-    }
-
-    @Override
-    public String getReceiverName() {
-        return "DirectLineLayer";
-    }
-
-    @Override
-    public Priority getPriority() {
-        return Priority.Normal;
-    }
 
     private void redrawLine(Event event) {
         if (!this.isEnabled()) return;
@@ -95,7 +62,7 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
             return;
         }
 
-        Coordinate ownPosition = Locator.getCoordinate();
+        Coordinate ownPosition = EventHandler.getCoordinate();
         if (ownPosition == null) {
             directLineRenderer.setInvalid();
             return;
@@ -104,15 +71,19 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedEven
     }
 
     @Override
-    public void selectedCacheChanged(Cache selectedCache, Waypoint waypoint, Cache LastSelectedCache, Waypoint LastWaypoint) {
+    public void dispose() {
+        EventHandler.remove(this);
+        this.directLineRenderer.dispose();
+    }
+
+    @Override
+    public void selectedCoordChanged(SelectedCoordChangedEvent event) {
         redrawLine(new Event());
     }
 
     @Override
-    public void dispose() {
-        PositionChangedEventList.remove(this);
-        SelectedCacheEventList.remove(this);
-        this.directLineRenderer.dispose();
+    public void positionChanged(PositionChangedEvent event) {
+        redrawLine(new Event());
     }
 
 

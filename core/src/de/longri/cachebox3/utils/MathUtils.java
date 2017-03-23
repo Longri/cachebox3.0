@@ -73,7 +73,7 @@ public class MathUtils {
 
     /**
      * Computes the approximate distance in meters between two locations, and optionally the initial and final bearings of the shortest path
-     * between them. Distance and bearing are defined using the WGS84 ellipsoid.
+     * between them. distance and bearing are defined using the WGS84 ellipsoid.
      * <p>
      * The computed distance is stored in results[0]. If results has length 2 or greater, the initial bearing is stored in results[1]. If
      * results has length 3 or greater, the final bearing is stored in results[2].
@@ -128,7 +128,7 @@ public class MathUtils {
 
         results[0] = (float) ((IntWGS84_MAJOR_AXIS) * Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos((lon2 - lon1))));
 
-        // results[0] = (float) Distance;
+        // results[0] = (float) distance;
 
         if (results.length > 1) {
 

@@ -15,30 +15,30 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
-import de.longri.cachebox3.locator.Locator;
 import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.locator.events.newT.SpeedChangedEvent;
+import de.longri.cachebox3.locator.events.newT.SpeedChangedListener;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
 
 /**
  * Created by Longri on 21.03.2017.
  */
-public class MapInfoPanel extends Table {
+public class MapInfoPanel extends Table implements SpeedChangedListener, Disposable {
 
     final MapInfoPanelStyle style;
     final Compass compass;
     final VisLabel distanceLabel, speedLabel, coordinateLabel1, coordinateLabel2;
 
     public MapInfoPanel() {
+        EventHandler.add(this);
         style = VisUI.getSkin().get("infoPanel", MapInfoPanelStyle.class);
         this.setBackground(style.background);
         this.setDebug(true);
@@ -81,7 +81,7 @@ public class MapInfoPanel extends Table {
         compass.setHeading(heading);
         coordinateLabel1.setText(UnitFormatter.FormatLatitudeDM(myPosition.getLatitude()));
         coordinateLabel2.setText(UnitFormatter.FormatLongitudeDM(myPosition.getLongitude()));
-        speedLabel.setText(Locator.SpeedString());
+
         setDistance(EventHandler.getSelectedCoord().Distance(MathUtils.CalculationType.ACCURATE));
     }
 
@@ -104,4 +104,13 @@ public class MapInfoPanel extends Table {
         }
     }
 
+    @Override
+    public void speedChanged(SpeedChangedEvent event) {
+        speedLabel.setText(UnitFormatter.SpeedString(event.speed));
+    }
+
+    @Override
+    public void dispose() {
+        EventHandler.remove(this);
+    }
 }

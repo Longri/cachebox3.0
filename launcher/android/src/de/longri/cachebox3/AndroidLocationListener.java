@@ -19,6 +19,7 @@ import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import de.longri.cachebox3.locator.events.newT.GpsEventHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +34,9 @@ public class AndroidLocationListener implements LocationListener, GpsStatus.List
 
     long lastTime;
     Location lastLocation;
+
+    final GpsEventHelper eventHelper = new GpsEventHelper();
+
 
     @Override
     public void onLocationChanged(Location location) {
@@ -50,25 +54,18 @@ public class AndroidLocationListener implements LocationListener, GpsStatus.List
             }
         }
         lastLocation = location;
-
-
-        de.longri.cachebox3.locator.Location.ProviderType provider = de.longri.cachebox3.locator.Location.ProviderType.NULL;
-
+        boolean isGpsProvided = false;
         if (location.getProvider().toLowerCase(new Locale("en")).contains("gps"))
-            provider = de.longri.cachebox3.locator.Location.ProviderType.GPS;
-        if (location.getProvider().toLowerCase(new Locale("en")).contains("network"))
-            provider = de.longri.cachebox3.locator.Location.ProviderType.Network;
+            isGpsProvided = true;
 
-        de.longri.cachebox3.locator.Location cbLocation = new de.longri.cachebox3.locator.Location(location.getLatitude(), location.getLongitude(), location.getAccuracy());
 
-        cbLocation.setHasSpeed(location.hasSpeed());
-        cbLocation.setSpeed(location.getSpeed());
-        cbLocation.setHasBearing(location.hasBearing());
-        cbLocation.setBearing(location.getBearing());
-        cbLocation.setAltitude(location.getAltitude());
-        cbLocation.setProvider(provider);
+        if (location.hasSpeed()) eventHelper.setSpeed(location.getSpeed());
+        if (location.hasBearing()) eventHelper.setCourse(location.getBearing());
+        if (location.hasAltitude()) eventHelper.setElevation(location.getAltitude());
+        if (location.hasAccuracy()) eventHelper.setAccuracy(location.getAccuracy());
+        eventHelper.newPos(location.getLatitude(), location.getLongitude(), isGpsProvided);
 
-        de.longri.cachebox3.locator.Locator.setNewLocation(cbLocation);
+
     }
 
     @Override
