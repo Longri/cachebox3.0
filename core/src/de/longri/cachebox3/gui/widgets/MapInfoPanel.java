@@ -82,7 +82,8 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
         coordinateLabel1.setText(UnitFormatter.FormatLatitudeDM(myPosition.getLatitude()));
         coordinateLabel2.setText(UnitFormatter.FormatLongitudeDM(myPosition.getLongitude()));
 
-        setDistance(EventHandler.getSelectedCoord().Distance(MathUtils.CalculationType.ACCURATE));
+        if (EventHandler.getSelectedCoord() != null)
+            setDistance(EventHandler.getSelectedCoord().distance(MathUtils.CalculationType.ACCURATE));
     }
 
     private float aktDistance = -1;

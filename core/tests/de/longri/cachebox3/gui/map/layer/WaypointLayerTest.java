@@ -19,11 +19,13 @@ import com.badlogic.gdx.backends.lwjgl.JUnitGdxTestApp;
 import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.kotcrab.vis.ui.VisUI;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.map.layer.renderer.WaypointLayerRenderer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.views.MapView;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.locator.events.newT.SelectedCacheChangedEvent;
+import de.longri.cachebox3.locator.events.newT.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheList;
@@ -98,7 +100,7 @@ class WaypointLayerTest {
 
         assertThat("itemList must empty", wpLayer.mItemList.size() == 0);
 
-        CB.setSelectedCache(null);
+        EventHandler.fire(new SelectedCacheChangedEvent(null));
         CacheListChangedEventList.Call();
 
         wait(500);// for CacheListChangedEvent is fired! (Will call in a separate Thread)
@@ -111,9 +113,9 @@ class WaypointLayerTest {
             assertThat("regions must have no overlay regions:", regions.length == 1);
         }
 
-        CB.setSelectedCache(testCache1);
+        EventHandler.fire(new SelectedCacheChangedEvent(testCache1));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache1.toString(), CB.getSelectedCache().equals(testCache1));
+        assertThat("Selected cache must:" + testCache1.toString(), EventHandler.getSelectedCache().equals(testCache1));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -138,9 +140,9 @@ class WaypointLayerTest {
         }
 
 
-        CB.setSelectedCache(testCache2);
+        EventHandler.fire(new SelectedCacheChangedEvent(testCache2));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache2.toString(), CB.getSelectedCache().equals(testCache2));
+        assertThat("Selected cache must:" + testCache2.toString(), EventHandler.getSelectedCache().equals(testCache2));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -164,9 +166,9 @@ class WaypointLayerTest {
             }
         }
 
-        CB.setSelectedCache(testCache3);
+        EventHandler.fire(new SelectedCacheChangedEvent(testCache3));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache3.toString(), CB.getSelectedCache().equals(testCache3));
+        assertThat("Selected cache must:" + testCache3.toString(), EventHandler.getSelectedCache().equals(testCache3));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -277,7 +279,7 @@ class WaypointLayerTest {
 
         assertThat("itemList must empty", wpLayer.mItemList.size() == 0);
 
-        CB.setSelectedCache(null);
+        EventHandler.fire(new SelectedCacheChangedEvent(null));
         CacheListChangedEventList.Call();
 
         wait(500);// for CacheListChangedEvent is fired! (Will call in a separate Thread)
@@ -290,10 +292,10 @@ class WaypointLayerTest {
             assertThat("regions must have no overlay regions:", regions.length == 1);
         }
 
-        CB.setSelectedWaypoint(testCache1, wp1);
+        EventHandler.fire(new SelectedWayPointChangedEvent(wp1));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
 
-        assertThat("Selected cache must:" + testCache1.toString(), CB.getSelectedCache().equals(testCache1));
+        assertThat("Selected cache must:" + testCache1.toString(), EventHandler.getSelectedCache().equals(testCache1));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -317,9 +319,9 @@ class WaypointLayerTest {
         }
 
 
-        CB.setSelectedCache(testCache3);
+        EventHandler.fire(new SelectedCacheChangedEvent(testCache3));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache3.toString(), CB.getSelectedCache().equals(testCache3));
+        assertThat("Selected cache must:" + testCache3.toString(), EventHandler.getSelectedCache().equals(testCache3));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -343,9 +345,9 @@ class WaypointLayerTest {
             }
         }
 
-        CB.setSelectedWaypoint(testCache2, wp3);
+        EventHandler.fire(new SelectedWayPointChangedEvent(wp3));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache2.toString(), CB.getSelectedCache().equals(testCache2));
+        assertThat("Selected cache must:" + testCache2.toString(), EventHandler.getSelectedCache().equals(testCache2));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -368,9 +370,9 @@ class WaypointLayerTest {
             }
         }
 
-        CB.setSelectedWaypoint(testCache2, wp2);
+        EventHandler.fire(new SelectedWayPointChangedEvent(wp2));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache2.toString(), CB.getSelectedCache().equals(testCache2));
+        assertThat("Selected cache must:" + testCache2.toString(), EventHandler.getSelectedCache().equals(testCache2));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -393,9 +395,9 @@ class WaypointLayerTest {
             }
         }
 
-        CB.setSelectedCache(testCache2);
+        EventHandler.fire(new SelectedCacheChangedEvent(testCache2));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache2.toString(), CB.getSelectedCache().equals(testCache2));
+        assertThat("Selected cache must:" + testCache2.toString(), EventHandler.getSelectedCache().equals(testCache2));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -420,9 +422,9 @@ class WaypointLayerTest {
         }
 
 
-        CB.setSelectedCache(testCache1);
+        EventHandler.fire(new SelectedCacheChangedEvent(testCache1));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache1.toString(), CB.getSelectedCache().equals(testCache1));
+        assertThat("Selected cache must:" + testCache1.toString(), EventHandler.getSelectedCache().equals(testCache1));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -446,10 +448,10 @@ class WaypointLayerTest {
             }
         }
 
-        CB.setSelectedWaypoint(testCache1, wp1);
+        EventHandler.fire(new SelectedWayPointChangedEvent(wp1));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
 
-        assertThat("Selected cache must:" + testCache1.toString(), CB.getSelectedCache().equals(testCache1));
+        assertThat("Selected cache must:" + testCache1.toString(), EventHandler.getSelectedCache().equals(testCache1));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {

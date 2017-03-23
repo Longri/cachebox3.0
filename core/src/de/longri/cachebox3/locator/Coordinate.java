@@ -166,7 +166,7 @@ public class Coordinate extends LatLong implements Serializable {
      * @param coord
      * @return
      */
-    public float Distance(Coordinate coord, CalculationType type) {
+    public float distance(Coordinate coord, CalculationType type) {
         // float[] dist = new float[1];
         MathUtils.computeDistanceAndBearing(type, getLatitude(), getLongitude(), coord.getLatitude(), coord.getLongitude(), mResults);
         return mResults[0];
@@ -177,9 +177,9 @@ public class Coordinate extends LatLong implements Serializable {
      *
      * @return
      */
-    public float Distance(CalculationType type) {
+    public float distance(CalculationType type) {
         float[] dist = new float[1];
-        Coordinate coord = EventHandler.getSelectedCoord();
+        Coordinate coord = EventHandler.getCoordinate();
         if (coord == null) return -1;
         MathUtils.computeDistanceAndBearing(type, getLatitude(), getLongitude(), coord.getLatitude(), coord.getLongitude(), dist);
         return dist[0];

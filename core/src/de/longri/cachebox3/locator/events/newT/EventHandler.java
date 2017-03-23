@@ -120,7 +120,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     private void fireDistanceChanged() {
         if (this.myPosition != null && this.selectedCoordinate != null) {
-            float distance = this.myPosition.Distance(this.selectedCoordinate, MathUtils.CalculationType.ACCURATE);
+            float distance = this.myPosition.distance(this.selectedCoordinate, MathUtils.CalculationType.ACCURATE);
             if (lastDistance != distance) {
                 lastDistance = distance;
                 fire(new DistanceChangedEvent(distance));
@@ -150,15 +150,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
     public static Coordinate getSelectedCoord() {
-        Coordinate ret = null;
-
-        if (INSTANCE.selectedWayPoint != null) {
-            ret = INSTANCE.selectedWayPoint;
-        } else if (INSTANCE.selectedWayPoint != null) {
-            ret = INSTANCE.selectedWayPoint;
-        }
-
-        return ret;
+        return INSTANCE.selectedCoordinate;
     }
 
     public String toString() {

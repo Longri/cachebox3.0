@@ -15,16 +15,10 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.skin.styles.CompassStyle;
@@ -42,8 +36,6 @@ public class Compass extends Group implements Layout {
     private final Matrix4 transform_arrow = new Matrix4();
     private final Matrix4 tmp = new Matrix4();
 
-    private float test = 0;
-
     public Compass(String style) {
         this.style = VisUI.getSkin().get(style, CompassStyle.class);
         rec_frame = new CB_RectF();
@@ -55,9 +47,9 @@ public class Compass extends Group implements Layout {
 
         validate();
 
-            applyTransform(batch, computeTransform());
-            drawBackground(batch, parentAlpha);
-            resetTransform(batch);
+        applyTransform(batch, computeTransform());
+        drawBackground(batch, parentAlpha);
+        resetTransform(batch);
     }
 
     private void drawBackground(Batch batch, float parentAlpha) {
@@ -90,8 +82,6 @@ public class Compass extends Group implements Layout {
 
         batch.setTransformMatrix(oldTransform);
         batch.setColor(color);
-        setBearing(test++);
-        setHeading(-test);
     }
 
     @Override
