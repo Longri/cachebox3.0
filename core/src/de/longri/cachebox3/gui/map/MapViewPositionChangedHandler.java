@@ -198,13 +198,15 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             return;// at CarMode ignore Network provided positions!
 
         this.myPosition = event.pos;
-
-
         if (getCenterGps())
             this.mapCenter = this.myPosition;
 
-
         this.accuracy = this.myPosition.getAccuracy();
+
+        if(this.mapStateButton.getMapMode() == MapMode.CAR){
+            this.mapBearing = (float) event.pos.getHeading();
+            this.arrowHeading = 0;
+        }
 
         assumeValues( false);
     }
@@ -222,8 +224,8 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         float bearing = -event.orientation;
 
         // at CarMode no orientation changes below 20kmh
-        if (this.mapStateButton.getMapMode() == MapMode.CAR && actSpeed < 20)
-            bearing = this.mapBearing;
+        if (this.mapStateButton.getMapMode() == MapMode.CAR )
+            return;
 
         if (this.mapOrientationButton.isUserRotate()) {
             this.mapBearing = userBearing;
