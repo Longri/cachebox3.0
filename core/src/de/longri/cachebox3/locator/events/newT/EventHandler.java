@@ -158,7 +158,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
 
-    public static CoordinateGPS getCoordinate() {
+    public static CoordinateGPS getMyPosition() {
         return INSTANCE.myPosition;
     }
 

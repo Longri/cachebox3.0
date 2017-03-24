@@ -23,7 +23,6 @@ import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.MathUtils.CalculationType;
 import de.longri.cachebox3.utils.converter.UTMConvert;
-import org.oscim.backend.canvas.Bitmap;
 
 public class Coordinate extends LatLong implements Serializable {
     private static final long serialVersionUID = 4288564255686705L;
@@ -179,7 +178,7 @@ public class Coordinate extends LatLong implements Serializable {
      */
     public float distance(CalculationType type) {
         float[] dist = new float[1];
-        Coordinate coord = EventHandler.getCoordinate();
+        Coordinate coord = EventHandler.getMyPosition();
         if (coord == null) return -1;
         MathUtils.computeDistanceAndBearing(type, getLatitude(), getLongitude(), coord.getLatitude(), coord.getLongitude(), dist);
         return dist[0];

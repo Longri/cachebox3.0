@@ -77,7 +77,7 @@ public class IOS_LocationListener {
             CLLocation newLocation = locations.last();
             CLLocationCoordinate2D coord = newLocation.getCoordinate();
 
-            if (newLocation.getSpeed() >= 0) eventHelper.setSpeed(newLocation.getSpeed());
+            if (newLocation.getSpeed() >= 0) eventHelper.setSpeed(newLocation.getSpeed() * 3.6);
             if (newLocation.getCourse() >= 0) eventHelper.setCourse(newLocation.getCourse());
             eventHelper.setElevation(newLocation.getAltitude());
             eventHelper.setAccuracy((float) newLocation.getHorizontalAccuracy());

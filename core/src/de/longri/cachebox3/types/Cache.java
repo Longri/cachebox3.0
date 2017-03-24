@@ -23,7 +23,6 @@ import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.lists.CB_List;
-import org.oscim.event.Event;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
@@ -425,7 +424,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
      * @return Entfernung zur uebergebenen User Position als Float
      */
     public float Distance(MathUtils.CalculationType type, boolean useFinal) {
-        return Distance(type, useFinal, EventHandler.getCoordinate());
+        return Distance(type, useFinal, EventHandler.getMyPosition());
     }
 
     float Distance(MathUtils.CalculationType type, boolean useFinal, Coordinate fromPos) {

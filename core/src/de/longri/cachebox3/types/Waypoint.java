@@ -98,7 +98,7 @@ public class Waypoint extends Coordinate implements Serializable {
 
 
     public float distance() {
-        Coordinate fromPos = EventHandler.getCoordinate();
+        Coordinate fromPos = EventHandler.getMyPosition();
         if (fromPos == null) return -1;
         float[] dist = new float[4];
         MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, fromPos.getLatitude(), fromPos.getLongitude(), latitude, longitude, dist);

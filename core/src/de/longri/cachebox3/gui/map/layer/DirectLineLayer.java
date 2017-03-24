@@ -38,7 +38,6 @@ import org.oscim.theme.styles.LineStyle;
 public class DirectLineLayer extends GenericLayer implements PositionChangedListener, SelectedCoordChangedListener, Disposable {
 
     private final DirectLineRenderer directLineRenderer;
-    private Event lastEvent;
 
     /**
      * @param map ...
@@ -51,10 +50,8 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedList
     }
 
 
-    private void redrawLine(Event event) {
+    private void redrawLine() {
         if (!this.isEnabled()) return;
-        if (lastEvent == event) return;
-        lastEvent = event;
 
         Coordinate selectedCoordinate = EventHandler.getSelectedCoord();
         if (selectedCoordinate == null) {
@@ -62,7 +59,7 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedList
             return;
         }
 
-        Coordinate ownPosition = EventHandler.getCoordinate();
+        Coordinate ownPosition = EventHandler.getMyPosition();
         if (ownPosition == null) {
             directLineRenderer.setInvalid();
             return;
@@ -78,12 +75,12 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedList
 
     @Override
     public void selectedCoordChanged(SelectedCoordChangedEvent event) {
-        redrawLine(new Event());
+        redrawLine();
     }
 
     @Override
     public void positionChanged(PositionChangedEvent event) {
-        redrawLine(new Event());
+        redrawLine();
     }
 
 

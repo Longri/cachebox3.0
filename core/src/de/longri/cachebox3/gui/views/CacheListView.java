@@ -18,7 +18,6 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.SnapshotArray;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
@@ -32,7 +31,6 @@ import de.longri.cachebox3.types.CacheWithWP;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
-import org.oscim.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,7 +101,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         Cache cache = Database.Data.Query.get(idx);
 
                         //get actPos and heading
-                        Coordinate position = EventHandler.getCoordinate();
+                        Coordinate position = EventHandler.getMyPosition();
                         float heading = EventHandler.getHeading();
 
 
