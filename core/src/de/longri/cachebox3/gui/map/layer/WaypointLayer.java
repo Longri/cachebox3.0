@@ -17,7 +17,8 @@ package de.longri.cachebox3.gui.map.layer;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
@@ -25,14 +26,10 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
-import de.longri.cachebox3.gui.events.SelectedCacheEvent;
-import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.map.layer.renderer.WaypointLayerRenderer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.events.newT.EventHandler;
-import de.longri.cachebox3.locator.events.newT.SelectedCacheChangedEvent;
-import de.longri.cachebox3.locator.events.newT.SelectedWayPointChangedEvent;
+import de.longri.cachebox3.locator.events.newT.*;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxDouble;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
@@ -64,7 +61,7 @@ import java.util.LinkedHashMap;
 /**
  * Created by Longri on 27.11.16.
  */
-public class WaypointLayer extends Layer implements GestureListener, CacheListChangedEventListener, Disposable, SelectedCacheEvent {
+public class WaypointLayer extends Layer implements GestureListener, CacheListChangedEventListener, Disposable, SelectedCacheChangedListener, SelectedWayPointChangedListener {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
     private static final String ERROR_MSG = "No de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle registered with name: ";
@@ -119,7 +116,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         CacheListChangedEvent();
 
         //register SelectedCacheChangedEvent
-        SelectedCacheEventList.add(this);
+        EventHandler.add(this);
 
         Settings.ShowAllWaypoints.addChangedEventListener(new IChanged() {
             @Override
@@ -136,7 +133,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
 
     private void populate(boolean resort) {
-        mClusterRenderer.populate(mItemList.size(),resort);
+        mClusterRenderer.populate(mItemList.size(), resort);
     }
 
     @Override
@@ -145,6 +142,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         clickedItems.clear();
         mClusterRenderer.dispose();
         clusterWorker.dispose();
+        EventHandler.remove(this);
 //        TODO dispose ClusterList and ThreadStack
     }
 
@@ -373,8 +371,8 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         return bitmap;
     }
 
-    @Override
-    public void selectedCacheChanged(Cache selectedCache, Waypoint selectedwaypoint, Cache lastSelectedCache, Waypoint lastWaypoint) {
+
+    public void selectedCacheWPChanged(Cache selectedCache, Waypoint selectedwaypoint, Cache lastSelectedCache, Waypoint lastWaypoint) {
 
         //reset selected state of last Cache/WP
         //set selected state to Cache/WP
@@ -440,6 +438,23 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
 
         populate(true);
+    }
+
+    Cache selectedCache;
+    Waypoint selectedWaypoint;
+
+    @Override
+    public void selectedCacheChanged(SelectedCacheChangedEvent event) {
+        selectedCacheWPChanged(event.cache, null, selectedCache, selectedWaypoint);
+        selectedCache = event.cache;
+        selectedWaypoint = null;
+    }
+
+    @Override
+    public void selectedWayPointChanged(SelectedWayPointChangedEvent event) {
+        selectedCacheWPChanged(EventHandler.getSelectedCache(), event.wayPoint, selectedCache, selectedWaypoint);
+        selectedCache = EventHandler.getSelectedCache();
+        selectedWaypoint = event.wayPoint;
     }
 
     public interface ActiveItem {
