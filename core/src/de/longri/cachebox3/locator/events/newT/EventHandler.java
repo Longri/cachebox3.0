@@ -101,7 +101,8 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
-        if (selectedCache == null || selectedCache.equals(event.cache)) {
+        if (selectedCache == null || !selectedCache.equals(event.cache)) {
+            log.debug("Set Global selected Cache: {}", event.cache);
             selectedCache = event.cache;
             fireSelectedCoordChanged(event.ID);
         }
@@ -109,7 +110,8 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     @Override
     public void selectedWayPointChanged(SelectedWayPointChangedEvent event) {
-        if (selectedWayPoint == null || selectedWayPoint.equals(event.wayPoint)) {
+        if (selectedWayPoint == null || !selectedWayPoint.equals(event.wayPoint)) {
+            log.debug("Set Global selected Cache: {}", event.wayPoint);
             selectedWayPoint = event.wayPoint;
             fireSelectedCoordChanged(event.ID);
         }
@@ -161,8 +163,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
     public static boolean isSelectedCache(Cache cache) {
-        if (INSTANCE.selectedCache != null && INSTANCE.selectedCache.equals(cache)) return true;
-        return false;
+        return (INSTANCE.selectedCache != null && INSTANCE.selectedCache.equals(cache));
     }
 
     public static Waypoint getSelectedWaypoint() {

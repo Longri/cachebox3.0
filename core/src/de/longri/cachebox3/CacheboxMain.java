@@ -160,6 +160,7 @@ public class CacheboxMain extends ApplicationAdapter {
             StageManager.draw();
         } catch (Exception e) {
             log.error("Draw StageManager", e);
+            e.printStackTrace();
         }
 
         if (CB.isTestVersion()) {

@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.map.layer;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.DataBuffer;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -92,6 +93,8 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     public WaypointLayer(Map map, LinkedHashMap<Object, TextureRegion> textureRegionMap) {
         super(map);
+        log.debug("Create new INSTANCE");
+
         mClusterRenderer = new WaypointLayerRenderer(this, null);
         mRenderer = mClusterRenderer;
         mItemList = new ClusteredList();
@@ -211,8 +214,9 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
 
         //add waypoints from selected Cache or all Waypoints if set
-        if (Settings.ShowAllWaypoints.getValue() || EventHandler.isSelectedCache(cache)) {
-            Waypoint selectedWaypoint = EventHandler.getSelectedWaypoint();
+        Waypoint selWp = null;
+        if (Settings.ShowAllWaypoints.getValue() || sel) {
+            selWp = selectedWaypoint = EventHandler.getSelectedWaypoint();
             for (Waypoint waypoint : cache.waypoints) {
                 try {
                     MapWayPointItem waypointCluster = getMapWayPointItem(waypoint, dis, selectedWaypoint != null && selectedWaypoint.equals(waypoint));
@@ -227,6 +231,15 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                     }
                     continue;
                 }
+            }
+        }
+        if (sel) {
+            if (selWp != null) {
+                selectedCache = null;
+                log.debug("set selected Waypoint {}", selectedWaypoint);
+            } else {
+                selectedCache = cache;
+                log.debug("set selected Cache {}", cache);
             }
         }
     }
@@ -414,25 +427,31 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         // new selected cache
         if (indexOfNewSelectedCache >= 0 && indexOfNewSelectedWp < 0) {
-            MapWayPointItem newItem = getMapWayPointItem(selectedCache, selectedCache.isArchived() || !selectedCache.isAvailable(), true);
+            MapWayPointItem newItem = getMapWayPointItem(selectedCache, selectedCache.isArchived()
+                    || !selectedCache.isAvailable(), true);
             mItemList.set(indexOfNewSelectedCache, newItem);
         }
 
         // last selected cache
         if (indexOfLastSelectedCache >= 0) {
-            MapWayPointItem lastItem = getMapWayPointItem(lastSelectedCache, lastSelectedCache.isArchived() || !lastSelectedCache.isAvailable(), false);
+            MapWayPointItem lastItem = getMapWayPointItem(lastSelectedCache, lastSelectedCache.isArchived()
+                    || !lastSelectedCache.isAvailable(), false);
             mItemList.set(indexOfLastSelectedCache, lastItem);
         }
 
         // new selected wp
         if (indexOfNewSelectedWp >= 0) {
-            MapWayPointItem newWp = getMapWayPointItem(selectedwaypoint, selectedCache.isArchived() || !selectedCache.isAvailable(), true);
+            Cache cacheForWp = Database.Data.Query.GetCacheById(selectedwaypoint.CacheId);
+            MapWayPointItem newWp = getMapWayPointItem(selectedwaypoint, cacheForWp.isArchived()
+                    || !cacheForWp.isAvailable(), true);
             mItemList.set(indexOfNewSelectedWp, newWp);
         }
 
         // last selected wp
         if (indexOfLastSelectedWp >= 0) {
-            MapWayPointItem lastWp = getMapWayPointItem(lastWaypoint, lastSelectedCache.isArchived() || !lastSelectedCache.isAvailable(), false);
+            Cache cacheForWp = Database.Data.Query.GetCacheById(lastWaypoint.CacheId);
+            MapWayPointItem lastWp = getMapWayPointItem(lastWaypoint, cacheForWp.isArchived()
+                    || !cacheForWp.isAvailable(), false);
             mItemList.set(indexOfLastSelectedWp, lastWp);
         }
 
@@ -469,7 +488,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             EventHandler.fire(new SelectedCacheChangedEvent((Cache) item.dataObject));
         } else if (item.dataObject instanceof Waypoint) {
             Waypoint wp = (Waypoint) item.dataObject;
-            Cache cache = CB.getCacheFromId(wp.CacheId);
             EventHandler.fire(new SelectedWayPointChangedEvent(wp));
         }
         return true;

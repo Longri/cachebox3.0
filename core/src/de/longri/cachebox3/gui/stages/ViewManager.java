@@ -36,9 +36,9 @@ import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
 import de.longri.cachebox3.gui.widgets.Slider;
-import de.longri.cachebox3.locator.events.newT.EventHandler;
-import de.longri.cachebox3.locator.events.newT.SelectedCacheChangedEvent;
-import de.longri.cachebox3.locator.events.newT.SelectedCacheChangedListener;
+import de.longri.cachebox3.locator.events.newT.*;
+import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 /**
  * Created by Longri on 20.07.2016.
  */
-public class ViewManager extends NamedStage implements SelectedCacheChangedListener {
+public class ViewManager extends NamedStage implements SelectedCacheChangedListener, SelectedWayPointChangedListener {
 
     final static Logger log = LoggerFactory.getLogger(ViewManager.class);
     final static CharSequence EMPTY = "";
@@ -237,15 +237,29 @@ public class ViewManager extends NamedStage implements SelectedCacheChangedListe
 
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
+        setCacheName(event.cache);
+    }
+
+    @Override
+    public void selectedWayPointChanged(SelectedWayPointChangedEvent event) {
+        setCacheName(Database.Data.Query.GetCacheById(event.wayPoint.CacheId));
+    }
+
+    Cache lastCache = null;
+
+    private void setCacheName(Cache cache) {
         // set Cache name to Slider
-        if (event.cache == null) {
+        if (cache == null) {
             slider.setCacheName(EMPTY);
         } else {
-            CharSequence text = CacheTypes.toShortString(event.cache)
-                    + terrDiffToShortString(event.cache.getDifficulty()) + "/"
-                    + terrDiffToShortString(event.cache.getTerrain()) + CacheSizes.toShortString(event.cache)
-                    + " " + event.cache.getName();
-            slider.setCacheName(text);
+            if (lastCache == null || !lastCache.equals(cache)) {
+                CharSequence text = CacheTypes.toShortString(cache)
+                        + terrDiffToShortString(cache.getDifficulty()) + "/"
+                        + terrDiffToShortString(cache.getTerrain()) + CacheSizes.toShortString(cache)
+                        + " " + cache.getName();
+                slider.setCacheName(text);
+                lastCache = cache;
+            }
         }
     }
 

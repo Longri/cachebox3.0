@@ -497,6 +497,8 @@ public class MapView extends AbstractView {
 
     protected void initLayers(boolean tileGrid) {
 
+        log.debug("Init layer");
+
         // load last saved BaseMap
         String baseMapName = Settings_Map.CurrentMapLayer.getValue()[0];
         BaseMapManager.INSTANCE.setMapFolder(Gdx.files.absolute(Settings_Map.MapPackFolder.getValue()));
