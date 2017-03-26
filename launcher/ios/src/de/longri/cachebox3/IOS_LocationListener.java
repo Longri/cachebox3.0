@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3;
 
+import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.locator.events.newT.GpsEventHelper;
 import org.robovm.apple.corelocation.*;
 import org.robovm.apple.dispatch.DispatchQueue;
@@ -77,11 +78,9 @@ public class IOS_LocationListener {
             CLLocation newLocation = locations.last();
             CLLocationCoordinate2D coord = newLocation.getCoordinate();
 
-            if (newLocation.getSpeed() >= 0) eventHelper.setSpeed(newLocation.getSpeed() * 3.6);
-            if (newLocation.getCourse() >= 0) eventHelper.setCourse(newLocation.getCourse());
-            eventHelper.setElevation(newLocation.getAltitude());
-            eventHelper.setAccuracy((float) newLocation.getHorizontalAccuracy());
-            eventHelper.newPos(coord.getLatitude(), coord.getLongitude(), true);
+            eventHelper.newGpsPos(coord.getLatitude(), coord.getLongitude(), true,
+                    newLocation.getAltitude(), newLocation.getSpeed()*3.6, newLocation.getCourse(),
+                    (float) newLocation.getHorizontalAccuracy());
 
         }
 

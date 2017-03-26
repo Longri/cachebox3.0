@@ -13,6 +13,11 @@ public class PositionChangedEvent extends AbstractEvent<CoordinateGPS> {
         this.pos = pos;
     }
 
+    public PositionChangedEvent(CoordinateGPS pos, short id) {
+        super(CoordinateGPS.class, id);
+        this.pos = pos;
+    }
+
     @Override
     Class getListenerClass() {
         return PositionChangedListener.class;

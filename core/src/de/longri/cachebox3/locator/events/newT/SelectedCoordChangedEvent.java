@@ -9,8 +9,8 @@ import de.longri.cachebox3.types.Waypoint;
 public class SelectedCoordChangedEvent extends AbstractEvent<Coordinate> {
     public final Coordinate coordinate;
 
-    public SelectedCoordChangedEvent(Coordinate coordinate) {
-        super(Coordinate.class);
+    public SelectedCoordChangedEvent(Coordinate coordinate, short id) {
+        super(Coordinate.class, id);
         this.coordinate = coordinate;
     }
 

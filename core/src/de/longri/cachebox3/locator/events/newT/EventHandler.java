@@ -27,6 +27,13 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     public static void INIT() {
     }
 
+
+    private static short lastID;
+
+    public static short getId() {
+        return lastID++;
+    }
+
     public static void add(Object listener) {
         for (Type type : listener.getClass().getGenericInterfaces()) {
             for (Class clazz : allListener) {
@@ -85,7 +92,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
         if (selectedCache == null || selectedCache.equals(event.cache)) {
             selectedCache = event.cache;
-            fireSelectedCoordChanged();
+            fireSelectedCoordChanged(event.ID);
         }
     }
 
@@ -93,17 +100,19 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     public void selectedWayPointChanged(SelectedWayPointChangedEvent event) {
         if (selectedWayPoint == null || selectedWayPoint.equals(event.wayPoint)) {
             selectedWayPoint = event.wayPoint;
-            fireSelectedCoordChanged();
+            fireSelectedCoordChanged(event.ID);
         }
     }
 
-    private void fireSelectedCoordChanged() {
+    private void fireSelectedCoordChanged(short id) {
         if (selectedCache == null) {
-            fireCoordChanged(new SelectedCoordChangedEvent(null));
+            fireCoordChanged(new SelectedCoordChangedEvent(null,id));
         } else if (selectedWayPoint == null) {
-            fireCoordChanged(new SelectedCoordChangedEvent(new Coordinate(selectedCache.getLatitude(), selectedCache.getLongitude())));
+            fireCoordChanged(new SelectedCoordChangedEvent(new Coordinate(selectedCache.getLatitude(),
+                    selectedCache.getLongitude()),id));
         } else {
-            fireCoordChanged(new SelectedCoordChangedEvent(new Coordinate(selectedWayPoint.getLatitude(), selectedWayPoint.getLongitude())));
+            fireCoordChanged(new SelectedCoordChangedEvent(new Coordinate(selectedWayPoint.getLatitude(),
+                    selectedWayPoint.getLongitude()),id));
         }
     }
 
@@ -112,18 +121,18 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (this.selectedCoordinate == null || !this.selectedCoordinate.equals(event.coordinate)) {
             this.selectedCoordinate = event.coordinate;
             fire(event);
-            fireDistanceChanged();
+            fireDistanceChanged(event.ID);
         }
     }
 
     private float lastDistance;
 
-    private void fireDistanceChanged() {
+    private void fireDistanceChanged(short id) {
         if (this.myPosition != null && this.selectedCoordinate != null) {
             float distance = this.myPosition.distance(this.selectedCoordinate, MathUtils.CalculationType.ACCURATE);
             if (lastDistance != distance) {
                 lastDistance = distance;
-                fire(new DistanceChangedEvent(distance));
+                fire(new DistanceChangedEvent(distance,id));
             }
         }
     }
@@ -132,7 +141,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     public void positionChanged(PositionChangedEvent event) {
         if ((this.myPosition == null && event.pos != null) || !this.myPosition.equals(event.pos)) {
             this.myPosition = event.pos;
-            fireDistanceChanged();
+            fireDistanceChanged(event.ID);
         }
     }
 

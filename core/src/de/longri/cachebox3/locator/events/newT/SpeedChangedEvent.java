@@ -11,6 +11,11 @@ public class SpeedChangedEvent extends AbstractEvent<Float> {
         this.speed = speed;
     }
 
+    public SpeedChangedEvent(float speed, short id) {
+        super(Float.class, id);
+        this.speed = speed;
+    }
+
     @Override
     Class getListenerClass() {
         return SpeedChangedListener.class;

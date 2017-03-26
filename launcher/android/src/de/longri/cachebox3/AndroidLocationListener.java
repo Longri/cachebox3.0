@@ -58,12 +58,9 @@ public class AndroidLocationListener implements LocationListener, GpsStatus.List
         if (location.getProvider().toLowerCase(new Locale("en")).contains("gps"))
             isGpsProvided = true;
 
-
-        if (location.hasSpeed()) eventHelper.setSpeed(location.getSpeed()*3.6);
-        if (location.hasBearing()) eventHelper.setCourse(location.getBearing());
-        if (location.hasAltitude()) eventHelper.setElevation(location.getAltitude());
-        if (location.hasAccuracy()) eventHelper.setAccuracy(location.getAccuracy());
-        eventHelper.newPos(location.getLatitude(), location.getLongitude(), isGpsProvided);
+        eventHelper.newGpsPos(location.getLatitude(), location.getLongitude(), isGpsProvided,
+                location.getAltitude(), location.getSpeed() * 3.6, location.getBearing(),
+                location.getAccuracy());
 
 
     }

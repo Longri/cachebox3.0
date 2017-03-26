@@ -8,8 +8,8 @@ import de.longri.cachebox3.locator.Coordinate;
 public class DistanceChangedEvent extends AbstractEvent<Float> {
     public final float distance;
 
-    public DistanceChangedEvent(float distance) {
-        super(Float.class);
+    public DistanceChangedEvent(float distance, short id) {
+        super(Float.class, id);
         this.distance = distance;
     }
 

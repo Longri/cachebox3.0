@@ -14,6 +14,11 @@ public class SelectedCacheChangedEvent extends AbstractEvent<Cache> {
         this.cache = cache;
     }
 
+    public SelectedCacheChangedEvent(Cache cache, short id) {
+        super(Cache.class, id);
+        this.cache = cache;
+    }
+
     @Override
     Class getListenerClass() {
         return SelectedCacheChangedListener.class;

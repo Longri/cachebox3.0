@@ -14,6 +14,11 @@ public class SelectedWayPointChangedEvent extends AbstractEvent<Waypoint> {
         this.wayPoint = wayPoint;
     }
 
+    public SelectedWayPointChangedEvent(Waypoint wayPoint, short id) {
+        super(Waypoint.class, id);
+        this.wayPoint = wayPoint;
+    }
+
     @Override
     Class getListenerClass() {
         return SelectedWayPointChangedListener.class;

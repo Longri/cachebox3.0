@@ -11,6 +11,11 @@ public class OrientationChangedEvent extends AbstractEvent<Float> {
         this.orientation = orientation;
     }
 
+    public OrientationChangedEvent(float orientation, short id) {
+        super(Float.class, id);
+        this.orientation = orientation;
+    }
+
     @Override
     Class getListenerClass() {
         return OrientationChangedListener.class;
