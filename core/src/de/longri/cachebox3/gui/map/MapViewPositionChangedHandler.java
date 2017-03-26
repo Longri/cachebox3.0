@@ -98,13 +98,15 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     private Timer timer;
 
     private double lastDynZoom;
+    private short lastEventID = -1;
 
     /**
      * Set the values to Map and position overlays
      */
-    private void assumeValues( boolean force) {
+    private void assumeValues(boolean force, final short eventID) {
 
-        if (map.isBlocked()) return;
+        if (lastEventID == eventID) return;
+        lastEventID = eventID;
 
         if (!force && this.map.animator().isActive()) {
             if (timer != null) return;
@@ -112,7 +114,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    assumeValues( true);
+                    assumeValues(true, eventID);
                 }
             };
             timer.schedule(timerTask, 500);
@@ -203,12 +205,12 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
         this.accuracy = this.myPosition.getAccuracy();
 
-        if(this.mapStateButton.getMapMode() == MapMode.CAR){
+        if (this.mapStateButton.getMapMode() == MapMode.CAR) {
             this.mapBearing = (float) event.pos.getHeading();
             this.arrowHeading = 0;
         }
 
-        assumeValues( false);
+        assumeValues(false, event.ID);
     }
 
 
@@ -224,7 +226,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         float bearing = -event.orientation;
 
         // at CarMode no orientation changes below 20kmh
-        if (this.mapStateButton.getMapMode() == MapMode.CAR )
+        if (this.mapStateButton.getMapMode() == MapMode.CAR)
             return;
 
         if (this.mapOrientationButton.isUserRotate()) {
@@ -240,6 +242,6 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
         //set orientation
         this.mapOrientationButton.setOrientation(-this.mapBearing);
-        assumeValues( false);
+        assumeValues(false, event.ID);
     }
 }
