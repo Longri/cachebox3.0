@@ -102,6 +102,10 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
                         //get actPos and heading
                         Coordinate position = EventHandler.getMyPosition();
+
+                        if (position == null)
+                            return; // can't update without an position
+
                         float heading = EventHandler.getHeading();
 
 
