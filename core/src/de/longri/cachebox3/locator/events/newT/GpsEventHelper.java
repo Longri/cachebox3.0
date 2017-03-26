@@ -30,12 +30,18 @@ public class GpsEventHelper {
             newPos.setIsGpsProvided(isGpsProvided);
             newPos.setAccuracy(accuracy);
             EventHandler.fire(new PositionChangedEvent(newPos,eventID));
-        }else{
-            // not a new position call other event's
+
             setSpeed(speed,eventID);
             setElevation(elevation,eventID);
-            setCourse(-bearing,eventID);
             setAccuracy(accuracy,eventID);
+            setCourse(-bearing,eventID);
+
+        }else{
+            // not a new position call other event's only
+            setSpeed(speed,eventID);
+            setElevation(elevation,eventID);
+            setAccuracy(accuracy,eventID);
+            setCourse(-bearing,eventID);
         }
     }
 

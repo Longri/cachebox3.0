@@ -210,6 +210,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             this.arrowHeading = 0;
         }
 
+        this.actSpeed = (float) event.pos.getSpeed();
         assumeValues(false, event.ID);
     }
 
@@ -219,6 +220,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     @Override
     public void speedChanged(SpeedChangedEvent event) {
         actSpeed = event.speed;
+        assumeValues(false, event.ID);
     }
 
     @Override
