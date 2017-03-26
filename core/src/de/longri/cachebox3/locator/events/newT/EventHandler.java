@@ -7,6 +7,8 @@ import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
@@ -15,6 +17,9 @@ import java.lang.reflect.Type;
  * Created by Longri on 23.03.2017.
  */
 public class EventHandler implements SelectedCacheChangedListener, SelectedWayPointChangedListener, PositionChangedListener {
+
+    static final Logger log = LoggerFactory.getLogger(EventHandler.class);
+
 
     static final private Class[] allListener = new Class[]{PositionChangedListener.class,
             SelectedCacheChangedListener.class, SelectedWayPointChangedListener.class, PositionChangedListener.class,
@@ -43,8 +48,10 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
                         list = new Array<>();
                         listenerMap.put(clazz, list);
                     }
-                    if (!list.contains(listener, true))
+                    if (!list.contains(listener, true)) {
+                        log.debug("Add {} Event listener: {}", clazz.getSimpleName(), listener.getClass().getSimpleName());
                         list.add(listener);
+                    }
                 }
             }
         }
@@ -56,6 +63,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
                 if (type == clazz) {
                     Array<Object> list = listenerMap.get(clazz);
                     if (list != null) {
+                        log.debug("Remove {} Event listener: {}", clazz.getSimpleName(), listener.getClass().getSimpleName());
                         list.removeValue(listener, true);
                     }
                 }
@@ -66,8 +74,11 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     public static void fire(AbstractEvent event) {
         Array<Object> list = listenerMap.get(event.getListenerClass());
         if (list != null) {
+            log.debug("Fire {} event {} to {} listener", event.getListenerClass().getSimpleName(), event.ID, list.size);
             for (int i = 0, n = list.size; i < n; i++) {
                 try {
+                    log.debug("Fire {} event {} to {} ", event.getListenerClass().getSimpleName(),
+                            event.ID, list.items[i].getClass().getSimpleName());
                     event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
@@ -106,13 +117,13 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     private void fireSelectedCoordChanged(short id) {
         if (selectedCache == null) {
-            fireCoordChanged(new SelectedCoordChangedEvent(null,id));
+            fireCoordChanged(new SelectedCoordChangedEvent(null, id));
         } else if (selectedWayPoint == null) {
             fireCoordChanged(new SelectedCoordChangedEvent(new Coordinate(selectedCache.getLatitude(),
-                    selectedCache.getLongitude()),id));
+                    selectedCache.getLongitude()), id));
         } else {
             fireCoordChanged(new SelectedCoordChangedEvent(new Coordinate(selectedWayPoint.getLatitude(),
-                    selectedWayPoint.getLongitude()),id));
+                    selectedWayPoint.getLongitude()), id));
         }
     }
 
@@ -132,7 +143,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             float distance = this.myPosition.distance(this.selectedCoordinate, MathUtils.CalculationType.ACCURATE);
             if (lastDistance != distance) {
                 lastDistance = distance;
-                fire(new DistanceChangedEvent(distance,id));
+                fire(new DistanceChangedEvent(distance, id));
             }
         }
     }
