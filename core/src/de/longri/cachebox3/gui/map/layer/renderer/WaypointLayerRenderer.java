@@ -309,10 +309,22 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
         public int compare(InternalItem a, InternalItem b) {
             if (a.item.selected) return -1;
             if (b.item.selected) return 1;
+            if (a.visible && b.visible) {
+                if (a.dy > b.dy) {
+                    return -1;
+                }
+                if (a.dy < b.dy) {
+                    return 1;
+                }
+            } else if (a.visible) {
+                return -1;
+            } else if (b.visible) {
+                return 1;
+            }
             return 0;
         }
     };
-
+    
     public static Point project(LatLong p, Point reuse) {
         if (reuse == null) {
             reuse = new Point();
