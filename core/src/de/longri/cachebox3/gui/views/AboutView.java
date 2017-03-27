@@ -54,7 +54,8 @@ public class AboutView extends AbstractView implements PositionChangedListener, 
 
     @Override
     public void dispose() {
-
+        //register as Location receiver
+        EventHandler.remove(this);
     }
 
     protected void boundsChanged(float x, float y, float width, float height) {

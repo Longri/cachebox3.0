@@ -74,7 +74,8 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     public static void fire(AbstractEvent event) {
         Array<Object> list = listenerMap.get(event.getListenerClass());
         if (list != null) {
-            log.debug("Fire {} event {} to {} listener", event.getListenerClass().getSimpleName(), event.ID, list.size);
+            if (list.size > 0)
+                log.debug("Fire {} event {} to {} listener", event.getListenerClass().getSimpleName(), event.ID, list.size);
             for (int i = 0, n = list.size; i < n; i++) {
                 try {
                     log.debug("Fire {} event {} to {} ", event.getListenerClass().getSimpleName(),
