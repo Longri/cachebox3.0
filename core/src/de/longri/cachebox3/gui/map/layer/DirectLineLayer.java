@@ -31,11 +31,15 @@ import org.oscim.renderer.BucketRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.bucket.LineBucket;
 import org.oscim.theme.styles.LineStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 02.03.2017.
  */
 public class DirectLineLayer extends GenericLayer implements PositionChangedListener, SelectedCoordChangedListener, Disposable {
+
+    private final static Logger log = LoggerFactory.getLogger(DirectLineLayer.class);
 
     private final DirectLineRenderer directLineRenderer;
 
@@ -56,14 +60,18 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedList
         Coordinate selectedCoordinate = EventHandler.getSelectedCoord();
         if (selectedCoordinate == null) {
             directLineRenderer.setInvalid();
+            log.debug("Direct line are invalid");
             return;
         }
 
         Coordinate ownPosition = EventHandler.getMyPosition();
         if (ownPosition == null) {
             directLineRenderer.setInvalid();
+            log.debug("Direct line are invalid");
             return;
         }
+
+        log.debug("Redraw direct line");
         directLineRenderer.setLine(selectedCoordinate, ownPosition);
     }
 

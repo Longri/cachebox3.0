@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
@@ -23,7 +24,8 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     static final private Class[] allListener = new Class[]{PositionChangedListener.class,
             SelectedCacheChangedListener.class, SelectedWayPointChangedListener.class, PositionChangedListener.class,
-            DistanceChangedListener.class, SpeedChangedListener.class, OrientationChangedListener.class};
+            DistanceChangedListener.class, SpeedChangedListener.class, OrientationChangedListener.class,
+            SelectedCoordChangedListener.class};
     static final private ArrayMap<Class, Array<Object>> listenerMap = new ArrayMap<>();
 
     static final EventHandler INSTANCE = new EventHandler();
@@ -105,6 +107,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (selectedCache == null || !selectedCache.equals(event.cache)) {
             log.debug("Set Global selected Cache: {}", event.cache);
             selectedCache = event.cache;
+            selectedWayPoint = null;
             fireSelectedCoordChanged(event.ID);
         }
     }
@@ -112,8 +115,9 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     @Override
     public void selectedWayPointChanged(SelectedWayPointChangedEvent event) {
         if (selectedWayPoint == null || !selectedWayPoint.equals(event.wayPoint)) {
-            log.debug("Set Global selected Cache: {}", event.wayPoint);
+            log.debug("Set Global selected Waypoint: {}", event.wayPoint);
             selectedWayPoint = event.wayPoint;
+            selectedCache = Database.Data.Query.GetCacheById(selectedWayPoint.CacheId);
             fireSelectedCoordChanged(event.ID);
         }
     }

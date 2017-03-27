@@ -324,7 +324,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
             return 0;
         }
     };
-    
+
     public static Point project(LatLong p, Point reuse) {
         if (reuse == null) {
             reuse = new Point();
