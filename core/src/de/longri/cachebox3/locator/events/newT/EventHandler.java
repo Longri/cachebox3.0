@@ -77,11 +77,9 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         Array<Object> list = listenerMap.get(event.getListenerClass());
         if (list != null) {
             if (list.size > 0)
-                log.debug("Fire {} event {} to {} listener", event.getListenerClass().getSimpleName(), event.ID, list.size);
+                log.debug("Fire {} event {} to {} listener: {}", event.getClass().getSimpleName(), event.ID, list.size, list.toString());
             for (int i = 0, n = list.size; i < n; i++) {
                 try {
-                    log.debug("Fire {} event {} to {} ", event.getListenerClass().getSimpleName(),
-                            event.ID, list.items[i].getClass().getSimpleName());
                     event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
