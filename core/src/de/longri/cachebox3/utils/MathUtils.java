@@ -100,6 +100,11 @@ public class MathUtils {
         }
     }
 
+    public static void clampToMinMax(float[] mBox, int offset, short maxValue) {
+        if (mBox[offset] < -maxValue) mBox[offset] = -maxValue;
+        else if (mBox[offset] > maxValue) mBox[offset] = maxValue;
+    }
+
     public enum CalculationType {
         FAST, ACCURATE
     }

@@ -47,6 +47,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
 
     public static final Logger log = LoggerFactory.getLogger(WaypointLayerRenderer.class);
     private static final PointF CENTER_OFFSET = new PointF(0.5f, 0.5f);
+    private final static short MAX_VALUE = (short) (Short.MAX_VALUE / MapRenderer.COORD_SCALE);
 
     private final Bitmap mDefaultBitmap;
 
@@ -163,16 +164,9 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
         //increase view to show items that are partially visible
 
         int mExtents = 100;
-//        mWaypointLayer.map().viewport().getMapExtents(mBox, mExtents);
-        short maxValue = (short) (Short.MAX_VALUE / MapRenderer.COORD_SCALE);
-        mBox[0] = maxValue;
-        mBox[1] = maxValue;
-        mBox[2] = -maxValue;
-        mBox[3] = maxValue;
-        mBox[4] = -maxValue;
-        mBox[5] = -maxValue;
-        mBox[6] = maxValue;
-        mBox[7] = -maxValue;
+        mWaypointLayer.map().viewport().getMapExtents(mBox, mExtents);
+        for (int i = 0, n = 8; i < n; i++)
+            MathUtils.clampToMinMax(mBox, i, MAX_VALUE);
 
         long flip = (long) (Tile.SIZE * v.pos.scale) >> 1;
 

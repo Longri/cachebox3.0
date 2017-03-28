@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 public class DirectLineLayer extends GenericLayer implements PositionChangedListener, SelectedCoordChangedListener, Disposable {
 
     private final static Logger log = LoggerFactory.getLogger(DirectLineLayer.class);
+    private final static short MAX_VALUE = (short) (Short.MAX_VALUE / MapRenderer.COORD_SCALE);
 
     private final DirectLineRenderer directLineRenderer;
 
@@ -117,17 +118,10 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedList
             }
 
             mMapPosition.copy(v.pos);
-            //v.getMapExtents(buffer, 100f);
+            v.getMapExtents(buffer, 100f);
+            for (int i = 0, n = 8; i < n; i++)
+                MathUtils.clampToMinMax(buffer, i, MAX_VALUE);
 
-            short maxValue = (short) (Short.MAX_VALUE / MapRenderer.COORD_SCALE);
-            buffer[0] = maxValue;
-            buffer[1] = maxValue;
-            buffer[2] = -maxValue;
-            buffer[3] = maxValue;
-            buffer[4] = -maxValue;
-            buffer[5] = -maxValue;
-            buffer[6] = maxValue;
-            buffer[7] = -maxValue;
 
             doubles[0] = v.pos.x;
             doubles[1] = v.pos.y;
