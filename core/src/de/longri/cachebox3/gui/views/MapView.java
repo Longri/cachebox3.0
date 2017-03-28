@@ -17,9 +17,6 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.GetName;
@@ -30,6 +27,7 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
+import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
@@ -54,6 +52,7 @@ import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.MapPosition;
+import org.oscim.core.MercatorProjection;
 import org.oscim.core.Tile;
 import org.oscim.event.Event;
 import org.oscim.gdx.GestureHandlerImpl;
@@ -87,16 +86,16 @@ import java.util.List;
  * Created by Longri on 24.07.16.
  */
 public class MapView extends AbstractView {
-    final static Logger log = LoggerFactory.getLogger(MapView.class);
+    private final static Logger log = LoggerFactory.getLogger(MapView.class);
 
     private InputMultiplexer mapInputHandler;
     private CacheboxMapAdapter map;
     private final CacheboxMain main;
     private MapScaleBarLayer mapScaleBarLayer;
-    private float myBearing;
     private final MapStateButton mapStateButton;
     private final MapCompass mapOrientationButton;
     private final ZoomButton zoomButton;
+    public final MapAnimator animator;
     private WaypointLayer wayPointLayer;
     private DirectLineLayer directLineLayer;
     private CenterCrossLayer ccl;
@@ -104,11 +103,11 @@ public class MapView extends AbstractView {
 
     private final MapState lastMapState = new MapState();
 
-    LocationAccuracyLayer myLocationAccuracy;
+    private LocationAccuracyLayer myLocationAccuracy;
 
     private LocationLayer myLocationLayer;
 
-    MapViewPositionChangedHandler positionChangedHandler;
+    private MapViewPositionChangedHandler positionChangedHandler;
 
 
     public MapView(CacheboxMain main) {
@@ -130,7 +129,6 @@ public class MapView extends AbstractView {
                     float bearing = -EventHandler.getHeading();
                     positionChangedHandler.setBearing(bearing);
                     mapOrientationButton.setOrientation(-bearing);
-//                    positionChangedHandler.positionChanged(new Event());
                     setBuildingLayerEnabled(false);
 
                 } else if (lastMapMode == MapMode.CAR) {
@@ -150,75 +148,23 @@ public class MapView extends AbstractView {
                     if (lastMapState.getMapOrientationMode() != MapOrientationMode.NORTH) {
                         ori = EventHandler.getHeading();
                     }
-
-                    mapPosition.setBearing(ori);
-                    mapPosition.setZoomLevel(lastMapState.getZoom());
-
-                    if (map.isBlocked()) {
-                        map.waitForAnimationEnd(new Runnable() {
-                            @Override
-                            public void run() {
-                                map.animateTo(mapPosition);
-                            }
-                        });
-                    } else {
-                        map.animateTo(mapPosition);
-                    }
+                    animator.rotate(ori);
+                    animator.scale(1 << lastMapState.getZoom());
                     map.updateMap(true);
                 } else if (mapMode == MapMode.GPS) {
                     log.debug("Activate GPS Mode");
-//                    positionChangedHandler.positionChanged(new Event());
+                    final Coordinate myPos = EventHandler.getMyPosition();
+                    animator.position(
+                            MercatorProjection.longitudeToX(myPos.longitude),
+                            MercatorProjection.latitudeToY(myPos.latitude)
+                    );
                 } else if (mapMode == MapMode.WP) {
                     log.debug("Activate WP Mode");
-                    if (event == selfEvent) {
-                        final MapPosition mapPosition = map.getMapPosition();
-                        final Coordinate wpCoord = EventHandler.getSelectedCoord();
-                        mapPosition.setPosition(wpCoord.latitude, wpCoord.longitude);
-                        float ori = 0;
-                        if (!mapOrientationButton.isNorthOriented()) {
-                            ori = EventHandler.getHeading();
-                        }
-                        mapPosition.setBearing(ori);
-
-                        if (map.isBlocked()) {
-                            map.waitForAnimationEnd(new Runnable() {
-                                @Override
-                                public void run() {
-                                    map.animateTo(mapPosition);
-                                }
-                            });
-                        } else {
-                            map.animateTo(mapPosition);
-                        }
-                        map.updateMap(true);
-                    } else {
-                        Gdx.app.postRunnable(new Runnable() {
-                            @Override
-                            public void run() {
-                                final MapPosition mapPosition = map.getMapPosition();
-                                final Coordinate wpCoord = EventHandler.getSelectedCoord();
-                                mapPosition.setPosition(wpCoord.latitude, wpCoord.longitude);
-                                float ori = 0;
-                                if (!mapOrientationButton.isNorthOriented()) {
-                                    ori = EventHandler.getHeading();
-                                }
-                                mapPosition.setBearing(ori);
-
-                                if (map.isBlocked()) {
-                                    map.waitForAnimationEnd(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            map.animateTo(mapPosition);
-                                        }
-                                    });
-                                } else {
-                                    map.animateTo(mapPosition);
-                                }
-                                map.updateMap(true);
-                            }
-                        });
-                    }
-                } else {
+                    final Coordinate wpCoord = EventHandler.getSelectedCoord();
+                    animator.position(
+                            MercatorProjection.longitudeToX(wpCoord.longitude),
+                            MercatorProjection.latitudeToY(wpCoord.latitude)
+                    );
 
                 }
                 if (event != selfEvent && mapMode != MapMode.CAR && lastMapMode != MapMode.CAR)
@@ -232,7 +178,7 @@ public class MapView extends AbstractView {
         this.addActor(infoPanel);
 
         map = createMap();
-
+        this.animator = new MapAnimator(map);
         this.addActor(mapStateButton);
         this.addActor(mapOrientationButton);
         this.setTouchable(Touchable.enabled);
@@ -248,8 +194,10 @@ public class MapView extends AbstractView {
                 else
                     value = value * 0.5;
 
-                mapPosition.setScale(value);
-                map.animateTo(mapPosition);
+                animator.scale(value);
+//                mapPosition.setScale(value);
+//                map.animateTo(mapPosition);
+
                 lastMapState.setZoom(FastMath.log2((int) value));
             }
         });
@@ -274,7 +222,7 @@ public class MapView extends AbstractView {
                             //check settings
                             l.setEnabled(Settings_Map.ShowMapCenterCross.getValue());
                         } else {
-                            l.setEnabled(enabled);
+                            l.setEnabled(false);
                         }
                     }
                 }
@@ -283,7 +231,7 @@ public class MapView extends AbstractView {
     }
 
 
-    public CacheboxMapAdapter createMap() {
+    private CacheboxMapAdapter createMap() {
 
 
         {//set map scale
@@ -292,16 +240,21 @@ public class MapView extends AbstractView {
             CanvasAdapter.dpi = 240 * scaleFactor;
             CanvasAdapter.textScale = scaleFactor;
             CanvasAdapter.scale = scaleFactor;
-//            PolygonBucket.enableTexture = CanvasAdapter.platform != Platform.IOS;//fixme if vtm can render polygon texture
-
             log.debug("Create new map instance with scale factor:" + Float.toString(scaleFactor));
             log.debug("Tile.SIZE:" + Integer.toString(Tile.SIZE));
             log.debug("Canvas.dpi:" + Float.toString(CanvasAdapter.dpi));
         }
 
 
-        main.drawMap = true;
+        CacheboxMain.drawMap = true;
         map = new CacheboxMapAdapter(mapOrientationButton) {
+
+            @Override
+            public void beginFrame() {
+                super.beginFrame();
+                animator.update(Gdx.graphics.getDeltaTime());
+            }
+
             @Override
             public void onMapEvent(Event e, final MapPosition mapPosition) {
                 super.onMapEvent(e, mapPosition);
@@ -335,17 +288,18 @@ public class MapView extends AbstractView {
 
 
         //add position changed handler
-        positionChangedHandler = MapViewPositionChangedHandler.getInstance
-                (map, myLocationLayer, myLocationAccuracy, mapOrientationButton, mapStateButton, infoPanel);
+        positionChangedHandler = new MapViewPositionChangedHandler(
+                this, map, myLocationLayer,
+                myLocationAccuracy, mapOrientationButton, mapStateButton, infoPanel);
 
         return map;
     }
 
     public static LinkedHashMap<Object, TextureRegion> createTextureAtlasRegions() {
         // create TextureRegions from all Bitmap symbols
-        LinkedHashMap<Object, TextureRegion> textureRegionMap = new LinkedHashMap<Object, TextureRegion>();
+        LinkedHashMap<Object, TextureRegion> textureRegionMap = new LinkedHashMap<>();
         ObjectMap<String, MapWayPointItemStyle> list = VisUI.getSkin().getAll(MapWayPointItemStyle.class);
-        Array<Bitmap> bitmapList = new Array<Bitmap>();
+        Array<Bitmap> bitmapList = new Array<>();
         for (MapWayPointItemStyle style : list.values()) {
             if (style.small != null) if (!bitmapList.contains(style.small, true)) bitmapList.add(style.small);
             if (style.middle != null) if (!bitmapList.contains(style.middle, true)) bitmapList.add(style.middle);
@@ -357,6 +311,7 @@ public class MapView extends AbstractView {
         try {
             mapArrowStyle = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
         } catch (Exception e) {
+            log.error("Get MapArrowStyle 'myLocation'", e);
         }
 
         if (mapArrowStyle != null) {
@@ -366,27 +321,27 @@ public class MapView extends AbstractView {
         }
 
 
-        LinkedHashMap<Object, Bitmap> input = new LinkedHashMap<Object, Bitmap>();
+        LinkedHashMap<Object, Bitmap> input = new LinkedHashMap<>();
         for (Bitmap bmp : bitmapList) {
             input.put(((GetName) bmp).getName(), bmp);
         }
-        ArrayList<TextureAtlas> atlasList = new ArrayList<TextureAtlas>();
+        ArrayList<TextureAtlas> atlasList = new ArrayList<>();
         boolean flipped = CanvasAdapter.platform == Platform.IOS;
         System.out.print("create MapTextureAtlas with flipped Y? " + flipped);
         TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, false,
                 flipped);
 
 
-        if (false) {//Debug write atlas Bitmap to tmp folder
-            int count = 0;
-            for (TextureAtlas atlas : atlasList) {
-                byte[] data = atlas.texture.bitmap.getPngEncodedData();
-                Pixmap pixmap = new Pixmap(data, 0, data.length);
-                FileHandle file = Gdx.files.absolute(CB.WorkPath + "/user/temp/testAtlas" + count++ + ".png");
-                PixmapIO.writePNG(file, pixmap);
-                pixmap.dispose();
-            }
-        }
+//        if (false) {//Debug write atlas Bitmap to tmp folder
+//            int count = 0;
+//            for (TextureAtlas atlas : atlasList) {
+//                byte[] data = atlas.texture.bitmap.getPngEncodedData();
+//                Pixmap pixmap = new Pixmap(data, 0, data.length);
+//                FileHandle file = Gdx.files.absolute(CB.WorkPath + "/user/temp/testAtlas" + count++ + ".png");
+//                PixmapIO.writePNG(file, pixmap);
+//                pixmap.dispose();
+//            }
+//        }
         return textureRegionMap;
     }
 
@@ -441,7 +396,7 @@ public class MapView extends AbstractView {
         mapInputHandler.clear();
         mapInputHandler = null;
 
-        main.drawMap = false;
+        CacheboxMain.drawMap = false;
         map.clearMap();
         map.destroy();
         TextureBucket.pool.clear();
@@ -495,7 +450,7 @@ public class MapView extends AbstractView {
     }
 
 
-    protected void initLayers(boolean tileGrid) {
+    private void initLayers(boolean tileGrid) {
 
         log.debug("Init layer");
 
@@ -581,7 +536,7 @@ public class MapView extends AbstractView {
 
     }
 
-    public void setMapScaleBarOffset(float xOffset, float yOffset) {
+    private void setMapScaleBarOffset(float xOffset, float yOffset) {
         if (mapScaleBarLayer == null) return;
         BitmapRenderer renderer = mapScaleBarLayer.getRenderer();
         renderer.setPosition(GLViewport.Position.BOTTOM_LEFT);
@@ -632,4 +587,5 @@ public class MapView extends AbstractView {
     public void setBaseMap(AbstractManagedMapLayer baseMap) {
         this.map.setNewBaseMap(baseMap);
     }
+
 }

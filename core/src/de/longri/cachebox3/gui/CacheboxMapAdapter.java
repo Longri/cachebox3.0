@@ -31,6 +31,7 @@ import org.oscim.event.Event;
 import org.oscim.event.Gesture;
 import org.oscim.event.MotionEvent;
 import org.oscim.layers.GroupLayer;
+import org.oscim.layers.MapEventLayer2;
 import org.oscim.layers.tile.TileLayer;
 import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
@@ -66,9 +67,6 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     private boolean mRenderRequest;
     private int width = Gdx.graphics.getWidth(), height = Gdx.graphics.getHeight(), xOffset, yOffset;
     private VectorTileLayer vectorTileLayer;
-    private MapPosition lastAnimationEndPosition;
-    private final AtomicBoolean block = new AtomicBoolean(false);
-    private Runnable waitForAnimationEndRunnable;
 
 
     @Override
@@ -164,13 +162,9 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
 
     @Override
     public void onMapEvent(Event e, MapPosition mapPosition) {
-        if (e == Map.ANIM_END) {
-            log.trace("Map.ANIM_END     " + DEBUG_SB.toString(mapPosition));
-            block.set(false);
-            if (waitForAnimationEndRunnable != null) {
-                waitForAnimationEndRunnable.run();
-                waitForAnimationEndRunnable = null;
-            }
+        if (e == Map.ANIM_START) {
+//            throw new RuntimeException("Use MapView animator instance of map.animator");
+            mAnimator.cancel();
         } else if (e == Map.POSITION_EVENT) {
             {// set yOffset at dependency of tilt
                 if (mapPosition.getTilt() > 0) {
@@ -235,52 +229,6 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
                 Config.AcceptChanges();
             }
         });
-    }
-
-
-    private void block() {
-        // block will release with animation end map event
-        block.set(true);
-        lastBlockTime = System.currentTimeMillis();
-    }
-
-    long lastBlockTime;
-
-    public boolean isBlocked() {
-        if (block.get()) {
-            if (System.currentTimeMillis() - lastBlockTime > 2000) {
-                // release Block, maybe animation end not fired
-                block.set(false);
-            }
-        }
-        return block.get();
-    }
-
-    public void animateTo(final MapPosition mapPosition) {
-        if (mapPosition == null || EQUALS.is(mapPosition, lastAnimationEndPosition)) return;
-
-        if (isBlocked()) {
-            log.trace("animation is blocked!");
-            return;
-        }
-        lastAnimationEndPosition = mapPosition;
-        block();
-        this.updateMap(false);
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                animator().animateTo(500, mapPosition);
-                log.trace("animate to: {}", DEBUG_SB.toString(mapPosition));
-                updateMap(true);
-            }
-        });
-
-    }
-
-
-    public void waitForAnimationEnd(Runnable runnable) {
-        if (waitForAnimationEndRunnable != null) return;
-        waitForAnimationEndRunnable = runnable;
     }
 
     public final class BuildingLabelLayer extends GroupLayer {

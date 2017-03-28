@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
+import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
@@ -26,6 +27,7 @@ import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.events.newT.*;
 import de.longri.cachebox3.settings.Settings_Map;
 import org.oscim.core.MapPosition;
+import org.oscim.core.MercatorProjection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,20 +52,9 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     private final MapCompass mapOrientationButton;
     private final AtomicBoolean isDisposed = new AtomicBoolean(false);
     private final MapStateButton mapStateButton;
+    private final MapView mapView;
 
-    public static MapViewPositionChangedHandler
-    getInstance(CacheboxMapAdapter map, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy
-            , MapCompass mapOrientationButton, MapStateButton mapStateButton, MapInfoPanel infoPanel) {
-        MapViewPositionChangedHandler handler =
-                new MapViewPositionChangedHandler(map, myLocationLayer, myLocationAccuracy, mapOrientationButton, mapStateButton, infoPanel);
-
-        //register this handler
-        EventHandler.add(handler);
-        return handler;
-    }
-
-
-    private MapViewPositionChangedHandler(CacheboxMapAdapter map, LocationLayer myLocationLayer,
+    public MapViewPositionChangedHandler(MapView mapView, CacheboxMapAdapter map, LocationLayer myLocationLayer,
                                           LocationAccuracyLayer myLocationAccuracy, MapCompass mapOrientationButton,
                                           MapStateButton mapStateButton, MapInfoPanel infoPanel) {
         this.map = map;
@@ -72,6 +63,8 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         this.mapOrientationButton = mapOrientationButton;
         this.mapStateButton = mapStateButton;
         this.infoPanel = infoPanel;
+        this.mapView = mapView;
+        EventHandler.add(this);
     }
 
     public void dispose() {
@@ -128,20 +121,22 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         infoPanel.setNewValues(myPosition, arrowHeading);
 
         // set map values
-        final MapPosition currentMapPosition = this.map.getMapPosition();
-        this.tilt = currentMapPosition.tilt;
-        if (this.mapCenter != null && getCenterGps())
-            currentMapPosition.setPosition(this.mapCenter.latitude, this.mapCenter.longitude);
-
+//        final MapPosition currentMapPosition = this.map.getMapPosition();
+//        this.tilt = currentMapPosition.tilt;
+        if (this.mapCenter != null && getCenterGps()) {
+            mapView.animator.position(
+                    MercatorProjection.longitudeToX(this.mapCenter.longitude),
+                    MercatorProjection.latitudeToY(this.mapCenter.latitude)
+            );
+        }
         //force full tilt on CarMode
         if (this.mapStateButton.getMapMode() == MapMode.CAR)
-            this.tilt = map.viewport().getMaxTilt();
+            mapView.animator.tilt(map.viewport().getMaxTilt());
 
 
         // heading for map must between -180 and 180
         if (mapBearing < -180) mapBearing += 360;
-        currentMapPosition.setBearing(mapBearing);
-        currentMapPosition.setTilt(this.tilt);
+        mapView.animator.rotate(mapBearing);
 
 
         if (this.mapStateButton.getMapMode() == MapMode.CAR && Settings_Map.dynamicZoom.getValue()) {
@@ -159,26 +154,15 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             if (dynZoom < minZoom)
                 dynZoom = minZoom;
 
-            currentMapPosition.setScale(dynZoom);
+            mapView.animator.scale(dynZoom);
             if (lastDynZoom != (dynZoom)) {
                 lastDynZoom = dynZoom;
 //                log.debug("SetDynamic scale to: " + lastDynZoom);
             }
         }
 
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-
-                map.animateTo(currentMapPosition);
-                myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
-                myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
-                map.updateMap(true);
-
-            }
-        });
-
-
+        myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
+        myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
     }
 
     public void tiltChangedFromMap(float newTilt) {
