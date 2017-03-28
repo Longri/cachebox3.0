@@ -49,7 +49,7 @@ public class DoubleAnimator {
         this.end = end;
         this.time = 0;
         finish = false;
-        Gdx.graphics.requestRendering();
+        if (Gdx.graphics != null) Gdx.graphics.requestRendering();
     }
 
     boolean update(float delta) {

@@ -25,24 +25,16 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class DoubleAnimatorTest {
 
-
     @Test
     void update() {
         DoubleAnimator animator = new DoubleAnimator(); // linear
-        animator.start(10, 0, 1);
+        animator.start(10, 0, 1, 0.001);
 
-        assertEquals(0.1, animator.update(1), 0.00001, "Value must 0.1");
-        assertEquals(0.2, animator.update(1), 0.00001, "Value must 0.2");
-        assertEquals(0.3, animator.update(1), 0.00001, "Value must 0.3");
-        assertEquals(0.4, animator.update(1), 0.00001, "Value must 0.4");
-        assertEquals(0.5, animator.update(1), 0.00001, "Value must 0.5");
-        assertEquals(0.6, animator.update(1), 0.00001, "Value must 0.6");
-        assertEquals(0.7, animator.update(1), 0.00001, "Value must 0.7");
-        assertEquals(0.8, animator.update(1), 0.00001, "Value must 0.8");
-        assertEquals(0.9, animator.update(1), 0.00001, "Value must 0.9");
-        assertEquals(1.0, animator.update(1), 0.00001, "Value must 1.0");
+        for (int i = 0, n = 10; i < n; i++) {
+            assertTrue(animator.update(1), "Must update");
+            assertEquals(((double) i + 1) / 10.0, animator.getAct(), 0.00001, "Value must " + (i + 1) / 10);
+        }
 
-
+        assertTrue(!animator.update(1), "Must not update is finish");
     }
-
 }
