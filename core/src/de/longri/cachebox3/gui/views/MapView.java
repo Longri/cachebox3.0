@@ -354,6 +354,7 @@ public class MapView extends AbstractView {
     @Override
     public void onShow() {
         addInputListener();
+        sizeChanged();
     }
 
     @Override

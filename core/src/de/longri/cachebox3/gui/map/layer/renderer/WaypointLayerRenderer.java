@@ -31,6 +31,7 @@ import org.oscim.core.PointF;
 import org.oscim.core.Tile;
 import org.oscim.renderer.BucketRenderer;
 import org.oscim.renderer.GLViewport;
+import org.oscim.renderer.MapRenderer;
 import org.oscim.renderer.atlas.TextureRegion;
 import org.oscim.renderer.bucket.SymbolBucket;
 import org.oscim.renderer.bucket.SymbolItem;
@@ -162,7 +163,16 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
         //increase view to show items that are partially visible
 
         int mExtents = 100;
-        mWaypointLayer.map().viewport().getMapExtents(mBox, mExtents);
+//        mWaypointLayer.map().viewport().getMapExtents(mBox, mExtents);
+        short maxValue = (short) (Short.MAX_VALUE / MapRenderer.COORD_SCALE);
+        mBox[0] = maxValue;
+        mBox[1] = maxValue;
+        mBox[2] = -maxValue;
+        mBox[3] = maxValue;
+        mBox[4] = -maxValue;
+        mBox[5] = -maxValue;
+        mBox[6] = maxValue;
+        mBox[7] = -maxValue;
 
         long flip = (long) (Tile.SIZE * v.pos.scale) >> 1;
 
@@ -300,7 +310,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
     private static TimSort<InternalItem> ZSORT = new TimSort<InternalItem>();
 
     public static void sort(InternalItem[] a) {
-        log.debug("Sort Items");
+//        log.debug("Sort Items");
         ZSORT.doSort(a, zComparator, 0, a.length);
     }
 

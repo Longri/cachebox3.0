@@ -29,6 +29,7 @@ import org.oscim.layers.Layer;
 import org.oscim.map.Map;
 import org.oscim.renderer.BucketRenderer;
 import org.oscim.renderer.GLViewport;
+import org.oscim.renderer.MapRenderer;
 import org.oscim.renderer.bucket.LineBucket;
 import org.oscim.theme.styles.LineStyle;
 import org.slf4j.Logger;
@@ -116,7 +117,17 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedList
             }
 
             mMapPosition.copy(v.pos);
-            v.getMapExtents(buffer, mMapPosition.tilt > 0 ? 100f : 0f);
+            //v.getMapExtents(buffer, 100f);
+
+            short maxValue = (short) (Short.MAX_VALUE / MapRenderer.COORD_SCALE);
+            buffer[0] = maxValue;
+            buffer[1] = maxValue;
+            buffer[2] = -maxValue;
+            buffer[3] = maxValue;
+            buffer[4] = -maxValue;
+            buffer[5] = -maxValue;
+            buffer[6] = maxValue;
+            buffer[7] = -maxValue;
 
             doubles[0] = v.pos.x;
             doubles[1] = v.pos.y;
@@ -133,9 +144,14 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedList
             buckets.set(ll);
             g.clear();
             g.startLine();
-            g.addPoint(buffer[8], buffer[9]);
+
             g.addPoint(buffer[10], buffer[11]);
+            g.addPoint(buffer[8], buffer[9]);
             ll.addLine(g);
+
+            log.debug("Buffer {}", buffer);
+            log.debug("Draw Line {},{} / {},{}", buffer[8], buffer[9], buffer[10], buffer[11]);
+
             compile();
         }
 
