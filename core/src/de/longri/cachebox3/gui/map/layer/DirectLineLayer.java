@@ -142,10 +142,6 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedList
             g.addPoint(buffer[10], buffer[11]);
             g.addPoint(buffer[8], buffer[9]);
             ll.addLine(g);
-
-            log.debug("Buffer {}", buffer);
-            log.debug("Draw Line {},{} / {},{}", buffer[8], buffer[9], buffer[10], buffer[11]);
-
             compile();
         }
 
