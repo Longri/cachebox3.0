@@ -774,15 +774,23 @@
     },
     "map_compass_1_arrow": {
       "path": "svg/compass_1_arrow.svg",
-      "scale": 0.22
+      "scale": 0.15
     },
     "map_compass_1_frame": {
       "path": "svg/compass_1_frame.svg",
-      "scale": 0.22
+      "scale": 0.15
     },
     "map_compass_1_scale": {
       "path": "svg/compass_1_scale.svg",
-      "scale": 0.22
+      "scale": 0.15
+    },
+    "map_compass_2_arrow": {
+      "path": "svg/compass_2_arrow.svg",
+      "scale": 0.15
+    },
+    "map_compass_2_scale": {
+      "path": "svg/compass_2_scale.svg",
+      "scale": 0.15
     },
     "mega": {
       "path": "svg/mega.svg",
@@ -1816,8 +1824,8 @@
     },
     "mapCompassStyle": {
       "frame": "map_compass_1_frame",
-      "scale": "map_compass_1_scale",
-      "arrow": "map_compass_1_arrow"
+      "scale": "map_compass_2_scale",
+      "arrow": "map_compass_2_arrow"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle": {

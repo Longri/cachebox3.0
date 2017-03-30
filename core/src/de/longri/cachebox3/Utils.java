@@ -248,21 +248,29 @@ public class Utils {
      * @return
      */
     public static String getMd5(FileHandle fileHandle) {
-
         try {
-            final MessageDigest md = MessageDigest.getInstance("MD5");
-            final byte[] bytes = new byte[2048];
-            int numBytes;
-            InputStream inputStream = fileHandle.read();
-            while ((numBytes = inputStream.read(bytes)) != -1) {
-                md.update(bytes, 0, numBytes);
+            InputStream fin = fileHandle.read();
+            java.security.MessageDigest md5er =
+                    MessageDigest.getInstance("MD5");
+            byte[] buffer = new byte[1024];
+            int read;
+            do {
+                read = fin.read(buffer);
+                if (read > 0)
+                    md5er.update(buffer, 0, read);
+            } while (read != -1);
+            fin.close();
+            byte[] digest = md5er.digest();
+            if (digest == null)
+                return null;
+            String strDigest = "0x";
+            for (int i = 0; i < digest.length; i++) {
+                strDigest += Integer.toString((digest[i] & 0xff)
+                        + 0x100, 16).substring(1).toUpperCase();
             }
-            inputStream.close();
-            return new String(Hex.encodeHex(md.digest()));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            return strDigest;
+        } catch (Exception e) {
+            log.error("create md5 hash", e);
         }
         return "";
     }
