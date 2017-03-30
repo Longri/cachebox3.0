@@ -337,8 +337,8 @@
       "scale": 0.2
     },
     "listIcon": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
+      "path": "svg/listIcon.svg",
+      "scale": 0.195
     },
     "list_background": {
       "path": "svg/list_background.svg",
@@ -977,8 +977,8 @@
       "scale": 1
     },
     "waypointListIcon": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
+      "path": "svg/waypointListIcon.svg",
+      "scale": 0.195
     },
     "whereigo": {
       "path": "svg/whereigo.svg",
@@ -1775,6 +1775,7 @@
       "compassIcon": "compas_icon",
       "creditsIcon": "cb",
       "fieldNoteList": "fieldnoteListIcon",
+      "logViewIcon": "listIcon",
       "mapIcon": "map",
       "noteIcon": "noteIcon",
       "solverIcon": "solver-icon",
@@ -1782,6 +1783,7 @@
       "imagesIcon": "images-icon",
       "cb": "cb",
       "tbListIcon": "tbListIcon",
+      "waypointListIcon": "waypointListIcon",
       "trackListIcon": "trackListIcon",
       "GC_Live": "gc_liveIcon",
       "prefWidth": -1,

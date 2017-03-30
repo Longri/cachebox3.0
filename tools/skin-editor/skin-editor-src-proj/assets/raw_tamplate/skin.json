@@ -772,6 +772,26 @@
       "path": "svg/mapWikipedia2.svg",
       "scale": 0.15
     },
+    "map_compass_1_arrow": {
+      "path": "svg/compass_1_arrow.svg",
+      "scale": 0.15
+    },
+    "map_compass_1_frame": {
+      "path": "svg/compass_1_frame.svg",
+      "scale": 0.15
+    },
+    "map_compass_1_scale": {
+      "path": "svg/compass_1_scale.svg",
+      "scale": 0.15
+    },
+    "map_compass_2_arrow": {
+      "path": "svg/compass_2_arrow.svg",
+      "scale": 0.15
+    },
+    "map_compass_2_scale": {
+      "path": "svg/compass_2_scale.svg",
+      "scale": 0.15
+    },
     "mega": {
       "path": "svg/mega.svg",
       "scale": 0.2
@@ -957,8 +977,8 @@
       "scale": 1
     },
     "waypointListIcon": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
+      "path": "svg/waypointListIcon.svg",
+      "scale": 0.195
     },
     "whereigo": {
       "path": "svg/whereigo.svg",
@@ -1762,6 +1782,7 @@
       "imagesIcon": "images-icon",
       "cb": "cb",
       "tbListIcon": "tbListIcon",
+      "waypointListIcon": "waypointListIcon",
       "trackListIcon": "trackListIcon",
       "GC_Live": "gc_liveIcon",
       "prefWidth": -1,
@@ -1803,14 +1824,20 @@
       "arrow": "compass_1_arrow"
     },
     "mapCompassStyle": {
-      "frame": "compass_1_frame",
-      "scale": "compass_1_scale",
-      "arrow": "compass_1_arrow"
+      "frame": "map_compass_1_frame",
+      "scale": "map_compass_2_scale",
+      "arrow": "map_compass_2_arrow"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle": {
     "infoPanel": {
-      "background": "activityBack_drawable"
+      "background": "activityBack_drawable",
+      "distanceLabel_Color": "font_color",
+      "speedLabel_Color": "font_color",
+      "coordinateLabel_Color": "font_color",
+      "distanceLabel_Font": "normal_font",
+      "speedLabel_Font": "normal_font",
+      "coordinateLabel_Font": "normal_font"
     }
   }
 }

@@ -1,13 +1,1 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="54.0621" height="51.557" viewBox="0 0 54.06 51.56" enable-background="new 0 0 54.06 51.56" xml:space="preserve">
-	<radialGradient id="SVGID_Fill1_" cx="39.3898" cy="47.7161" r="49.801" gradientUnits="userSpaceOnUse" gradientTransform="rotate(7.720271 39.389835 47.716148)">
-		<stop offset="0" stop-color="#8E1400" stop-opacity="1"/>
-		<stop offset="0.387213" stop-color="#882200" stop-opacity="1"/>
-		<stop offset="0.520927" stop-color="#823100" stop-opacity="1"/>
-		<stop offset="0.706977" stop-color="#E80000" stop-opacity="1"/>
-		<stop offset="0.916279" stop-color="#EE3100" stop-opacity="1"/>
-		<stop offset="0.986046" stop-color="#F46200" stop-opacity="1"/>
-	</radialGradient>
-	<path fill="url(#SVGID_Fill1_)" stroke-width="1.5" stroke-linejoin="round" stroke="#88006A" stroke-opacity="1" d="M 43.4019,50.6721L 37.073,31.589L 53.3121,19.7352L 33.2072,19.8573L 26.9517,0.750008L 20.8551,19.9086L 0.749995,19.9534L 17.0869,31.6719L 10.9167,50.8069L 27.1101,38.8908L 43.4019,50.6721 Z "/>
-</svg>
+<svg enable-background="new 0 0 54.06 51.56" height="51.557" viewBox="0 0 54.06 51.56" width="54.0621" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><radialGradient id="a" cx="39.3898" cy="47.7161" gradientTransform="matrix(.990935733959 .134336782613 -.134336782613 .990935733959 6.767073744747 -4.858991841639)" gradientUnits="userSpaceOnUse" r="49.801"><stop offset="0" stop-color="#8e1400"/><stop offset=".387213" stop-color="#820"/><stop offset=".520927" stop-color="#823100"/><stop offset=".706977" stop-color="#e80000"/><stop offset=".916279" stop-color="#ee3100"/><stop offset=".986046" stop-color="#f46200"/></radialGradient><path d="m43.4019 50.6721-6.3289-19.0831 16.2391-11.8538-20.1049.1221-6.2555-19.107292-6.0966 19.158592-20.105105.0448 16.336905 11.7185-6.1702 19.135 16.1934-11.9161z" fill="url(#a)" stroke="#88006a" stroke-linejoin="round" stroke-width="1.5"/></svg>
