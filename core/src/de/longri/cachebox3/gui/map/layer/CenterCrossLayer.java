@@ -75,8 +75,8 @@ public class CenterCrossLayer extends GenericLayer implements Disposable {
                 g1.addPoint(0.00001f, 0);
                 lc.addLine(g1);
 
-                float dist = style.width * 3;
-                float length = style.length - dist;
+                float dist = CB.getScaledFloat(style.width) * 4;
+                float length = CB.getScaledFloat(style.length) - dist;
 
                 g2.clear();
                 g2.startLine();
