@@ -1020,6 +1020,10 @@
     "dialog_background": {
       "a": 0.8
     },
+    "directLine": {
+      "r": 1,
+      "a": 0.78431374
+    },
     "font_color": {
       "a": 1
     },
@@ -1862,6 +1866,12 @@
       "speedLabel_Font": "normal_font",
       "speedUnitLabel_Font": "mapPanelUnit",
       "coordinateLabel_Font": "normal_font"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle": {
+    "directLine": {
+      "color": "directLine",
+      "width": 5.5
     }
   }
 }

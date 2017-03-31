@@ -356,6 +356,9 @@ public class OptionsPane extends Table {
 
                         MapInfoPanelStyle mapInfoPanelStyle = game.skinProject.get("infoPanel", MapInfoPanelStyle.class);
                         styles.put("infoPanel", mapInfoPanelStyle);
+
+                        DirectLineRendererStyle directLineRendererStyle = game.skinProject.get("directLine", DirectLineRendererStyle.class);
+                        styles.put("directline", directLineRendererStyle);
                     }
 
                     if (styles == null || styles.size == 0) {

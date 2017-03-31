@@ -16,7 +16,9 @@
 package de.longri.cachebox3.gui.map.layer;
 
 import com.badlogic.gdx.utils.Disposable;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.events.newT.*;
 import de.longri.cachebox3.utils.MathUtils;
@@ -32,6 +34,7 @@ import org.oscim.renderer.BucketRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
 import org.oscim.renderer.bucket.LineBucket;
+import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.theme.styles.LineStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,10 +99,24 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedList
 
 
     private static class DirectLineRenderer extends BucketRenderer {
+        DirectLineRendererStyle style = getStyle();
 
-        //TODO initial with style (Color, with, Cap, Texture)
+        private DirectLineRendererStyle getStyle() {
+            try {
+                style = VisUI.getSkin().get("directLine", DirectLineRendererStyle.class);
+            } catch (Exception e) {
+                style = new DirectLineRendererStyle();
+            }
+            return style;
+        }
+
+        TextureItem textureItem = style.texture == null ? null : new TextureItem(style.texture);
         LineBucket ll = buckets.addLineBucket(0,
-                new LineStyle(Color.fade(Color.RED, 0.8f), CB.getScaledFloat(5.5f), Paint.Cap.ROUND));
+                new LineStyle(0, "",
+                        Color.get(style.color.a, (int) (style.color.r * 255), (int) (style.color.g * 255), (int) (style.color.b * 255)),
+                        CB.getScaledFloat(style.width), style.cap, true, 0, 0, 0,
+                        -1, 0, false, textureItem, true)
+        );
 
         GeometryBuffer g = new GeometryBuffer(2, 1);
         private boolean invalidLine = true;

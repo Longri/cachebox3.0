@@ -80,6 +80,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.skin.styles.MapCenterCrossStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.CompassStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle.class);
 
         SvgSkinUtil.saveSkin(this, items, skinFile);
 
