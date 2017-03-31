@@ -473,41 +473,36 @@ public class MapView extends AbstractView {
 
         setBaseMap(baseMap);
 
-        //MyLocationLayer
-        myLocationAccuracy = new LocationAccuracyLayer(map);
-        myLocationAccuracy.setPosition(52.580400947530364, 13.385594096047232, 100);
-
-        myLocationLayer = new LocationLayer(map, CB.textureRegionMap);
-        myLocationLayer.setPosition(52.580400947530364, 13.385594096047232, 0);
-
-
-        GroupLayer layerGroup = new GroupLayer(map);
-
-
-        if (tileGrid)
-            layerGroup.layers.add(new TileGridLayer(map));
-
-
         DefaultMapScaleBar mapScaleBar = new DefaultMapScaleBar(map);
         mapScaleBar.setScaleBarMode(DefaultMapScaleBar.ScaleBarMode.BOTH);
         mapScaleBar.setDistanceUnitAdapter(MetricUnitAdapter.INSTANCE);
         mapScaleBar.setSecondaryDistanceUnitAdapter(ImperialUnitAdapter.INSTANCE);
         mapScaleBar.setScaleBarPosition(MapScaleBar.ScaleBarPosition.BOTTOM_LEFT);
 
+        directLineLayer = new DirectLineLayer(map);
         mapScaleBarLayer = new MapScaleBarLayer(map, mapScaleBar);
-        layerGroup.layers.add(mapScaleBarLayer);
-        layerGroup.layers.add(myLocationAccuracy);
-
-
         wayPointLayer = new WaypointLayer(map, CB.textureRegionMap);
-        layerGroup.layers.add(wayPointLayer);
-        layerGroup.layers.add(myLocationLayer);
+        myLocationAccuracy = new LocationAccuracyLayer(map);
+        myLocationLayer = new LocationLayer(map, CB.textureRegionMap);
 
         boolean showDirectLine = Settings_Map.ShowDirektLine.getValue();
         log.debug("Initial direct line layer and {}", showDirectLine ? "enable" : "disable");
-        directLineLayer = new DirectLineLayer(map);
-        layerGroup.layers.add(directLineLayer);
         directLineLayer.setEnabled(showDirectLine);
+        GroupLayer layerGroup = new GroupLayer(map);
+
+        ccl = new CenterCrossLayer(map);
+
+
+        if (tileGrid)
+            layerGroup.layers.add(new TileGridLayer(map));
+
+        layerGroup.layers.add(myLocationAccuracy);
+        layerGroup.layers.add(wayPointLayer);
+        layerGroup.layers.add(directLineLayer);
+        layerGroup.layers.add(myLocationLayer);
+        layerGroup.layers.add(mapScaleBarLayer);
+        layerGroup.layers.add(ccl);
+
         Settings_Map.ShowDirektLine.addChangedEventListener(new IChanged() {
             @Override
             public void isChanged() {
@@ -520,8 +515,7 @@ public class MapView extends AbstractView {
 
         boolean showCenterCross = Settings_Map.ShowMapCenterCross.getValue();
         log.debug("Initial center cross layer and {}", showCenterCross ? "enable" : "disable");
-        ccl = new CenterCrossLayer(map);
-        layerGroup.layers.add(ccl);
+
         ccl.setEnabled(showCenterCross);
         Settings_Map.ShowMapCenterCross.addChangedEventListener(new IChanged() {
             @Override
@@ -531,10 +525,7 @@ public class MapView extends AbstractView {
                 map.updateMap(true);
             }
         });
-
-
         map.layers().add(layerGroup);
-
     }
 
     private void setMapScaleBarOffset(float xOffset, float yOffset) {
