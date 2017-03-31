@@ -130,6 +130,7 @@ public class MapView extends AbstractView {
                     positionChangedHandler.setBearing(bearing);
                     mapOrientationButton.setOrientation(-bearing);
                     setBuildingLayerEnabled(false);
+                    setCenterCrossLayerEnabled(false);
 
                 } else if (lastMapMode == MapMode.CAR) {
                     log.debug("Disable Carmode! Activate last Mode:" + lastMapState);
@@ -158,6 +159,7 @@ public class MapView extends AbstractView {
                             MercatorProjection.longitudeToX(myPos.longitude),
                             MercatorProjection.latitudeToY(myPos.latitude)
                     );
+                    setCenterCrossLayerEnabled(false);
                 } else if (mapMode == MapMode.WP) {
                     log.debug("Activate WP Mode");
                     final Coordinate wpCoord = EventHandler.getSelectedCoord();
@@ -165,7 +167,11 @@ public class MapView extends AbstractView {
                             MercatorProjection.longitudeToX(wpCoord.longitude),
                             MercatorProjection.latitudeToY(wpCoord.latitude)
                     );
-
+                    setCenterCrossLayerEnabled(false);
+                } else if (mapMode == MapMode.LOCK) {
+                    setCenterCrossLayerEnabled(false);
+                } else if (mapMode == MapMode.FREE) {
+                    setCenterCrossLayerEnabled(true);
                 }
                 if (event != selfEvent && mapMode != MapMode.CAR && lastMapMode != MapMode.CAR)
                     setMapState(lastMapState);
@@ -205,6 +211,11 @@ public class MapView extends AbstractView {
         this.addActor(zoomButton);
 
 
+    }
+
+    private void setCenterCrossLayerEnabled(boolean enabled) {
+        enabled &= Settings_Map.ShowMapCenterCross.getValue();
+        ccl.setEnabled(enabled);
     }
 
     private void setBuildingLayerEnabled(boolean enabled) {
@@ -521,7 +532,7 @@ public class MapView extends AbstractView {
             @Override
             public void isChanged() {
                 log.debug("change center cross visibility to {}", Settings_Map.ShowMapCenterCross.getValue() ? "visible" : "invisible");
-                ccl.setEnabled(Settings_Map.ShowMapCenterCross.getValue());
+                setCenterCrossLayerEnabled(Settings_Map.ShowMapCenterCross.getValue());
                 map.updateMap(true);
             }
         });
