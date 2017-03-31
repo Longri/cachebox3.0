@@ -1580,7 +1580,7 @@
       "minusDown": "ZoomMinusPressed",
       "plusDisabled": "ZoomPlusDisabled",
       "minusDisabled": "ZoomMinusDisabled",
-      "alphaOff": 0.2,
+      "alphaOff": 0.5,
       "alphaOn": 1
     }
   },
