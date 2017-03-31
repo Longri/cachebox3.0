@@ -55,8 +55,8 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     private final MapView mapView;
 
     public MapViewPositionChangedHandler(MapView mapView, CacheboxMapAdapter map, LocationLayer myLocationLayer,
-                                          LocationAccuracyLayer myLocationAccuracy, MapCompass mapOrientationButton,
-                                          MapStateButton mapStateButton, MapInfoPanel infoPanel) {
+                                         LocationAccuracyLayer myLocationAccuracy, MapCompass mapOrientationButton,
+                                         MapStateButton mapStateButton, MapInfoPanel infoPanel) {
         this.map = map;
         this.myLocationLayer = myLocationLayer;
         this.myLocationAccuracy = myLocationAccuracy;
@@ -229,5 +229,9 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         //set orientation
         this.mapOrientationButton.setOrientation(-this.mapBearing);
         assumeValues(false, event.ID);
+    }
+
+    public String toString() {
+        return "MapViewPositionHandler";
     }
 }
