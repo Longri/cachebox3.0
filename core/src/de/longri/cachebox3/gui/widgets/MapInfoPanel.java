@@ -114,4 +114,8 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
     public void dispose() {
         EventHandler.remove(this);
     }
+
+    public String toString() {
+        return "MapInfoPanel";
+    }
 }
