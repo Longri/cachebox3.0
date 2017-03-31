@@ -22,6 +22,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.locator.events.newT.SpeedChangedEvent;
@@ -90,13 +91,16 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
     }
 
 
-    public void setNewValues(CoordinateGPS myPosition, float heading) {
-        compass.setHeading(heading);
+    public void setNewValues(CoordinateGPS myPosition, float bearing) {
+        compass.setBearing(bearing);
         coordinateLabel1.setText(UnitFormatter.formatLatitudeDM(myPosition.getLatitude()));
         coordinateLabel2.setText(UnitFormatter.formatLongitudeDM(myPosition.getLongitude()));
 
-        if (EventHandler.getSelectedCoord() != null)
-            setDistance(EventHandler.getSelectedCoord().distance(MathUtils.CalculationType.ACCURATE));
+        if (EventHandler.getSelectedCoord() != null) {
+            Coordinate targetCoordinate = EventHandler.getSelectedCoord();
+            setDistance(targetCoordinate.distance(MathUtils.CalculationType.ACCURATE));
+            compass.setHeading(myPosition.bearingTo(targetCoordinate, MathUtils.CalculationType.ACCURATE) - (360 - bearing));
+        }
     }
 
     private float aktDistance = -1;

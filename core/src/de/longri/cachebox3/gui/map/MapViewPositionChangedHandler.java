@@ -118,7 +118,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
         if (isDisposed.get()) return;
         myPosition = EventHandler.getMyPosition();
-        infoPanel.setNewValues(myPosition, arrowHeading);
+        infoPanel.setNewValues(myPosition, mapBearing);
 
         // set map values
 //        final MapPosition currentMapPosition = this.map.getMapPosition();
