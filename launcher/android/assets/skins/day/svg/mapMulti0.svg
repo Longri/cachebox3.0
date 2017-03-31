@@ -1,1 +1,22 @@
-<svg enable-background="new 0 0 54.50 37.62" height="37.6231" viewBox="0 0 54.5 37.62" width="54.5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientTransform="matrix(0 1 -1 0 .160216 -.890176)" gradientUnits="objectBoundingBox" x1=".525196" x2="2.25862" y1="-.36498" y2="-.36498"><stop offset="0" stop-color="#fffc00"/><stop offset=".418605" stop-color="#cecb02"/><stop offset=".488372" stop-color="#9d9b05"/><stop offset=".623256" stop-color="#4e4d02"/><stop offset="1"/></linearGradient><linearGradient id="b" gradientTransform="matrix(0 1 -1 0 .194881 -.806625)" gradientUnits="objectBoundingBox" x1=".500753" x2="2.12323" y1="-.305872" y2="-.305872"><stop offset="0" stop-color="#fffc00"/><stop offset=".418605" stop-color="#ece900"/><stop offset=".488372" stop-color="#d9d600"/><stop offset=".623256" stop-color="#cbc701"/><stop offset="1" stop-color="#bdb903"/></linearGradient><path d="m1.0625 1 38.5776.12305v5.25l-6.25.5v4.24995h20v7h-6v18.25l-26.5.25.25-13h-13.50004v-16.24995l-6.64006-.12305z" fill="url(#a)" stroke="#000" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="2"/><path d="m33.7234 11.3315-17.6667-.1667-.1667 5.1667 5.5267-.019-.1933 8.1855.0266 11.7312 25.9734-.2312.1666-17.5 6.11-.1022-.0833-7.0833z" fill="url(#b)" stroke="#000" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="2"/></svg>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="54.5" height="37.6231" viewBox="0 0 54.50 37.62" enable-background="new 0 0 54.50 37.62" xml:space="preserve">
+	<g>
+		<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.525196" y1="-0.36498" x2="2.25862" y2="-0.36498" gradientTransform="rotate(90.000000 0.525196 -0.364980)">
+			<stop offset="0" stop-color="#FFFC00" stop-opacity="1"/>
+			<stop offset="0.418605" stop-color="#CECB02" stop-opacity="1"/>
+			<stop offset="0.488372" stop-color="#9D9B05" stop-opacity="1"/>
+			<stop offset="0.623256" stop-color="#4E4D02" stop-opacity="1"/>
+			<stop offset="1" stop-color="#000000" stop-opacity="1"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill1_)" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 1.0625,1L 39.6401,1.12305L 39.6401,6.37305L 33.3901,6.87305L 33.3901,11.123L 53.3901,11.123L 53.3901,18.123L 47.3901,18.123L 47.3901,36.373L 20.8901,36.623L 21.1401,23.623L 7.64006,23.623L 7.64006,7.37305L 1,7.25L 1.0625,1 Z "/>
+		<linearGradient id="SVGID_Fill2_" gradientUnits="objectBoundingBox" x1="0.500753" y1="-0.305872" x2="2.12323" y2="-0.305872" gradientTransform="rotate(90.000000 0.500753 -0.305872)">
+			<stop offset="0" stop-color="#FFFC00" stop-opacity="1"/>
+			<stop offset="0.418605" stop-color="#ECE900" stop-opacity="1"/>
+			<stop offset="0.488372" stop-color="#D9D600" stop-opacity="1"/>
+			<stop offset="0.623256" stop-color="#CBC701" stop-opacity="1"/>
+			<stop offset="1" stop-color="#BDB903" stop-opacity="1"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill2_)" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 33.7234,11.3315L 16.0567,11.1648L 15.89,16.3315L 21.4167,16.3125L 21.2234,24.498L 21.25,36.2292L 47.2234,35.998L 47.39,18.498L 53.5,18.3958L 53.4167,11.3125L 33.7234,11.3315 Z "/>
+	</g>
+</svg>

@@ -1,1 +1,12 @@
-<svg enable-background="new 0 0 208.00 208.00" height="208" viewBox="0 0 208 208" width="208" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientTransform="matrix(0 -1 1 0 -.560354 1.560354)" gradientUnits="objectBoundingBox" x1=".5" x2="1.62071" y1="1.06035" y2="1.06035"><stop offset="0" stop-color="#052f73"/><stop offset="1" stop-color="#3883fc"/></linearGradient><path d="m44 3.99994h120c22.091 0 40 17.90856 40 40.00016v119.9999c0 22.092-17.909 40-40 40h-120c-22.0914 0-40-17.908-40-40v-119.9999c0-22.0916 17.9086-40.00016 40-40.00016z" fill="url(#a)" stroke="#1a5ec7" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="8"/><path d="m93.7451 121.756v42.667h-28.4444v-124.4448h43.7773c31.26 0 46.889 13.25 46.889 39.75 0 12.537-4.449 22.6758-13.347 30.4168s-20.782 11.611-35.653 11.611zm0-60.4444v39.1114h10.5559c14.296 0 21.444-6.593 21.444-19.7782 0-12.8889-7.148-19.3332-21.444-19.3332z" fill="#fff" stroke="#1a5ec7" stroke-linejoin="round" stroke-width="3"/></svg>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="208" height="208" viewBox="0 0 208.00 208.00" enable-background="new 0 0 208.00 208.00" xml:space="preserve">
+	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.5" y1="1.06035" x2="1.62071" y2="1.06035" gradientTransform="rotate(-90.000000 0.500000 1.060354)">
+		<stop offset="0" stop-color="#052F73" stop-opacity="1"/>
+		<stop offset="1" stop-color="#3883FC" stop-opacity="1"/>
+	</linearGradient>
+	<path fill="url(#SVGID_Fill1_)" stroke-width="8" stroke-linecap="square" stroke-linejoin="bevel" stroke="#1A5EC7" stroke-opacity="1" d="M 44,3.99994L 164,3.99994C 186.091,3.99994 204,21.9085 204,44.0001L 204,164C 204,186.092 186.091,204 164,204L 44,204C 21.9086,204 4,186.092 4,164L 4,44.0001C 4,21.9085 21.9086,3.99994 44,3.99994 Z "/>
+	<g>
+		<path fill="#FFFFFF" fill-opacity="1" stroke-width="3" stroke-linejoin="round" stroke="#1A5EC7" stroke-opacity="1" d="M 93.7451,121.756L 93.7451,164.423L 65.3007,164.423L 65.3007,39.9782L 109.078,39.9782C 140.338,39.9782 155.967,53.2282 155.967,79.7282C 155.967,92.2652 151.518,102.404 142.62,110.145C 133.722,117.886 121.838,121.756 106.967,121.756L 93.7451,121.756 Z M 93.7451,61.3116L 93.7451,100.423L 104.301,100.423C 118.597,100.423 125.745,93.83 125.745,80.6448C 125.745,67.7559 118.597,61.3116 104.301,61.3116L 93.7451,61.3116 Z "/>
+	</g>
+</svg>

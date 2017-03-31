@@ -372,6 +372,10 @@
       "path": "svg/map.svg",
       "scale": 0.19455253
     },
+    "map-info-panel-background": {
+      "path": "svg/map-info-panel-background.svg",
+      "scale": 0.75
+    },
     "mapCITO": {
       "path": "svg/cito.svg",
       "scale": 0.15
@@ -1075,6 +1079,10 @@
       "font": "fonts/DroidSans-Bold.ttf",
       "size": 24
     },
+    "mapPanelUnit": {
+      "font": "fonts/DroidSans.ttf",
+      "size": 14
+    },
     "normal_bold_font": {
       "font": "fonts/DroidSans-Bold.ttf",
       "size": 20
@@ -1235,6 +1243,17 @@
       "rightWidth": 5,
       "topHeight": 5,
       "bottomHeight": 5
+    },
+    "map-info-panel-background_9_Patch": {
+      "name": "map-info-panel-background",
+      "left": 8,
+      "right": 8,
+      "top": 8,
+      "bottom": 8,
+      "leftWidth": 8,
+      "rightWidth": 8,
+      "topHeight": 8,
+      "bottomHeight": 8
     },
     "menu_divider_drawable": {
       "name": "menu_divider",
@@ -1832,12 +1851,16 @@
   },
   "de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle": {
     "infoPanel": {
-      "background": "activityBack_drawable",
+      "background": "map-info-panel-background_9_Patch",
+      "distanceUnitLabel_Color": "font_color",
+      "speedUnitLabel_Color": "font_color",
       "distanceLabel_Color": "font_color",
       "speedLabel_Color": "font_color",
       "coordinateLabel_Color": "font_color",
-      "distanceLabel_Font": "normal_font",
+      "distanceLabel_Font": "coordinateValueFont",
+      "distanceUnitLabel_Font": "mapPanelUnit",
       "speedLabel_Font": "normal_font",
+      "speedUnitLabel_Font": "mapPanelUnit",
       "coordinateLabel_Font": "normal_font"
     }
   }

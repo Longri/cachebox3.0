@@ -82,7 +82,7 @@ public class AboutView extends AbstractView implements PositionChangedListener, 
         StringBuilder sb = new StringBuilder();
         sb.append(pos != null ? pos.formatCoordinateLineBreak() : "???");
         sb.append("\n");
-        sb.append(distance == -1 ? "???" : UnitFormatter.DistanceString(distance));
+        sb.append(distance == -1 ? "???" : UnitFormatter.distanceString(distance,false));
         coordinateLabel.setText(sb);
         CB.requestRendering();
     }

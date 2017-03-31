@@ -1,1 +1,21 @@
-<svg enable-background="new 0 0 50.00 50.00" height="50" viewBox="0 0 50 50" width="50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><radialGradient id="a" cx="25" cy="25" gradientUnits="userSpaceOnUse" r="24"><stop offset="0" stop-color="#fcd7d7"/><stop offset=".991379" stop-color="#f00"/></radialGradient><radialGradient id="b" cx="25" cy="-6.03446" gradientUnits="userSpaceOnUse" r="40"><stop offset="0" stop-color="#fff" stop-opacity=".486275"/><stop offset=".271552" stop-color="#fff1f1" stop-opacity=".486275"/><stop offset="1" stop-color="#f00" stop-opacity=".486275"/></radialGradient><radialGradient id="c" cx="25" cy="12.5862" gradientTransform="matrix(-1 0 0 -1 50.000004 25.172444)" gradientUnits="userSpaceOnUse" r="40"><stop offset=".116379" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#ffe700" stop-opacity=".513725"/></radialGradient><g stroke-linejoin="round"><ellipse cx="25" cy="25" fill="url(#a)" rx="22.5" ry="22.5" stroke="#000" stroke-width="2"/><g stroke-width=".2"><ellipse cx="25" cy="25" fill="url(#b)" rx="20" ry="20"/><ellipse cx="25" cy="25" fill="url(#c)" rx="20" ry="20"/><path d="m11.875 17.9896 6.125-5.875 6.9375 7.125 6.8125-7.25 6.1875 6.375-7 6.75 6.75 6.6875-6.0625 5.6875-6.4375-6-6.5625 6.4375-6.3125-6.125 6.625-6.1875z" fill="#fff"/></g></g></svg>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="50" height="50" viewBox="0 0 50.00 50.00" enable-background="new 0 0 50.00 50.00" xml:space="preserve">
+	<radialGradient id="SVGID_Fill1_" cx="25" cy="25" r="24" gradientUnits="userSpaceOnUse">
+		<stop offset="0" stop-color="#FCD7D7" stop-opacity="1"/>
+		<stop offset="0.991379" stop-color="#FF0000" stop-opacity="1"/>
+	</radialGradient>
+	<ellipse fill="url(#SVGID_Fill1_)" stroke-width="2" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" cx="25" cy="25" rx="22.5" ry="22.5"/>
+	<radialGradient id="SVGID_Fill2_" cx="25" cy="-6.03446" r="40" gradientUnits="userSpaceOnUse">
+		<stop offset="0" stop-color="#FFFFFF" stop-opacity="0.486275"/>
+		<stop offset="0.271552" stop-color="#FFF1F1" stop-opacity="0.486275"/>
+		<stop offset="1" stop-color="#FF0000" stop-opacity="0.486275"/>
+	</radialGradient>
+	<ellipse fill="url(#SVGID_Fill2_)" stroke-width="0.2" stroke-linejoin="round" cx="25" cy="25" rx="20" ry="20"/>
+	<radialGradient id="SVGID_Fill3_" cx="25" cy="12.5862" r="40" gradientUnits="userSpaceOnUse" gradientTransform="rotate(180.000000 25.000002 12.586222)">
+		<stop offset="0.116379" stop-color="#FFFFFF" stop-opacity="0"/>
+		<stop offset="1" stop-color="#FFE700" stop-opacity="0.513725"/>
+	</radialGradient>
+	<ellipse fill="url(#SVGID_Fill3_)" stroke-width="0.2" stroke-linejoin="round" cx="25" cy="25" rx="20" ry="20"/>
+	<path fill="#FFFFFF" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 11.875,17.9896L 18,12.1146L 24.9375,19.2396L 31.75,11.9896L 37.9375,18.3646L 30.9375,25.1146L 37.6875,31.8021L 31.625,37.4896L 25.1875,31.4896L 18.625,37.9271L 12.3125,31.8021L 18.9375,25.6146L 11.875,17.9896 Z "/>
+</svg>

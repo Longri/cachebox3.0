@@ -119,7 +119,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
 
                         //update item
-                        if (((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.DistanceString(result[0])))
+                        if (((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0],true)))
                             Gdx.graphics.requestRendering();
                     }
 

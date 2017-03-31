@@ -180,7 +180,7 @@ public class MapView extends AbstractView {
         map = createMap();
         this.animator = new MapAnimator(map);
         this.addActor(mapStateButton);
-        this.addActor(mapOrientationButton);
+//        this.addActor(mapOrientationButton);
         this.setTouchable(Touchable.enabled);
 
         this.zoomButton = new ZoomButton(new ZoomButton.ValueChangeListener() {
@@ -441,7 +441,7 @@ public class MapView extends AbstractView {
 
         infoPanel.setBounds(CB.scaledSizes.MARGIN,
                 getHeight() - (infoPanel.getHeight() + CB.scaledSizes.MARGIN),
-                mapStateButton.getX() - (CB.scaledSizes.MARGINx2), CB.getScaledFloat(100));
+                mapStateButton.getX() - (CB.scaledSizes.MARGINx2), infoPanel.getPrefHeight());
     }
 
 

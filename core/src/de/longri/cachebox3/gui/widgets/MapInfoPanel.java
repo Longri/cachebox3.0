@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.events.newT.EventHandler;
@@ -35,13 +36,13 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
 
     final MapInfoPanelStyle style;
     final Compass compass;
-    final VisLabel distanceLabel, speedLabel, coordinateLabel1, coordinateLabel2;
+    final VisLabel distanceLabel, speedLabel, distanceUnitLabel, speedUnitLabel, coordinateLabel1, coordinateLabel2;
 
     public MapInfoPanel() {
         EventHandler.add(this);
         style = VisUI.getSkin().get("infoPanel", MapInfoPanelStyle.class);
         this.setBackground(style.background);
-        this.setDebug(true);
+//        this.setDebug(true);
         compass = new Compass("mapCompassStyle");
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
@@ -55,22 +56,34 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
         speedLabel = new VisLabel("+++", labelStyle2);
 
         Label.LabelStyle labelStyle3 = new Label.LabelStyle();
-        labelStyle3.font = style.coordinateLabel_Font;
-        labelStyle3.fontColor = style.coordinateLabel_Color;
-        coordinateLabel1 = new VisLabel("------------", labelStyle3);
-        coordinateLabel2 = new VisLabel("============", labelStyle3);
+        labelStyle3.font = style.distanceUnitLabel_Font;
+        labelStyle3.fontColor = style.distanceUnitLabel_Color;
+        distanceUnitLabel = new VisLabel("km", labelStyle3);
+
+        Label.LabelStyle labelStyle4 = new Label.LabelStyle();
+        labelStyle4.font = style.speedUnitLabel_Font;
+        labelStyle4.fontColor = style.speedUnitLabel_Color;
+        speedUnitLabel = new VisLabel("kmh", labelStyle4);
+
+        Label.LabelStyle labelStyle5 = new Label.LabelStyle();
+        labelStyle5.font = style.coordinateLabel_Font;
+        labelStyle5.fontColor = style.coordinateLabel_Color;
+        coordinateLabel1 = new VisLabel("------------", labelStyle5);
+        coordinateLabel2 = new VisLabel("============", labelStyle5);
 
 
         // add controls to table
         this.add(compass).center();
 
         Table nestedTable = new Table();
-
-        nestedTable.add(distanceLabel).center();
-        nestedTable.add(coordinateLabel1).center();
+//        nestedTable.setDebug(true);
+        nestedTable.add(distanceLabel).right().bottom();
+        nestedTable.add(distanceUnitLabel).left().bottom().padLeft(CB.scaledSizes.MARGIN);
+        nestedTable.add(coordinateLabel1).center().bottom().padLeft(CB.scaledSizes.MARGINx2);
         nestedTable.row();
-        nestedTable.add(speedLabel).center();
-        nestedTable.add(coordinateLabel2).center();
+        nestedTable.add(speedLabel).right().bottom();
+        nestedTable.add(speedUnitLabel).left().bottom().padLeft(CB.scaledSizes.MARGIN);
+        nestedTable.add(coordinateLabel2).center().bottom().padLeft(CB.scaledSizes.MARGINx2);
         this.add(nestedTable).expandX();
 
         this.pack();
@@ -79,8 +92,8 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
 
     public void setNewValues(CoordinateGPS myPosition, float heading) {
         compass.setHeading(heading);
-        coordinateLabel1.setText(UnitFormatter.FormatLatitudeDM(myPosition.getLatitude()));
-        coordinateLabel2.setText(UnitFormatter.FormatLongitudeDM(myPosition.getLongitude()));
+        coordinateLabel1.setText(UnitFormatter.formatLatitudeDM(myPosition.getLatitude()));
+        coordinateLabel2.setText(UnitFormatter.formatLongitudeDM(myPosition.getLongitude()));
 
         if (EventHandler.getSelectedCoord() != null)
             setDistance(EventHandler.getSelectedCoord().distance(MathUtils.CalculationType.ACCURATE));
@@ -89,17 +102,21 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
     private float aktDistance = -1;
 
     private void setDistance(float distance) {
+        distance = Math.round(distance);
         if (distanceLabel == null)
             return;
         if (aktDistance == distance)
             return;
         aktDistance = distance;
         try {
-            if (distance == -1)
+            if (distance == -1) {
                 distanceLabel.setText("?");
-            else
-                distanceLabel.setText(UnitFormatter.DistanceString(distance));
-
+                distanceUnitLabel.setText("");
+            } else {
+                String[] strings = UnitFormatter.distanceString(distance, true).split(" ", 2);
+                distanceLabel.setText(strings[0]);
+                distanceUnitLabel.setText(strings[1]);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,7 +124,9 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
 
     @Override
     public void speedChanged(SpeedChangedEvent event) {
-        speedLabel.setText(UnitFormatter.SpeedString(event.speed));
+        String[] strings = UnitFormatter.speedString(event.speed, true).split(" ", 2);
+        speedLabel.setText(strings[0]);
+        speedUnitLabel.setText(strings[1]);
     }
 
     @Override
@@ -117,5 +136,9 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
 
     public String toString() {
         return "MapInfoPanel";
+    }
+
+    public float getPrefHeight() {
+        return compass.getPrefHeight() + CB.scaledSizes.MARGINx2;
     }
 }

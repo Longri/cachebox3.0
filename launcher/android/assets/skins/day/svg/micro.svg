@@ -1,1 +1,12 @@
-<svg enable-background="new 0 0 257.00 75.00" height="75" viewBox="0 0 257 75" width="257" xmlns="http://www.w3.org/2000/svg"><g stroke-width=".2"><path d="m10.7345 43.3647h16.9166v16.9167h-16.9166z" fill="#951919"/><path d="m80.3178 21.3647h38.6667v38.6667h-38.6667z" fill="#dadada"/><path d="m130.651 14.9981h45v45h-45z" fill="#dadada"/><path d="m188.651 9.28143h62.4667v56.7111h-62.4667z" fill="#bebdbd"/><path d="m39.2512 31.9981h28.4333v28.4333h-28.4333z" fill="#dadada"/></g><path d="m3.34884 6.36472h249.636v62.6667h-249.636z" fill="none" stroke="#ababab" stroke-width="6"/></svg>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="257" height="75" viewBox="0 0 257.00 75.00" enable-background="new 0 0 257.00 75.00" xml:space="preserve">
+	<g>
+		<rect x="10.7345" y="43.3647" fill="#951919" fill-opacity="1" stroke-width="0.2" stroke-linejoin="miter" width="16.9166" height="16.9167"/>
+		<rect x="80.3178" y="21.3647" fill="#DADADA" fill-opacity="1" stroke-width="0.2" stroke-linejoin="miter" width="38.6667" height="38.6667"/>
+		<rect x="130.651" y="14.9981" fill="#DADADA" fill-opacity="1" stroke-width="0.2" stroke-linejoin="miter" width="45" height="45"/>
+		<rect x="188.651" y="9.28143" fill="#BEBDBD" fill-opacity="1" stroke-width="0.2" stroke-linejoin="miter" width="62.4667" height="56.7111"/>
+		<rect x="39.2512" y="31.9981" fill="#DADADA" fill-opacity="1" stroke-width="0.2" stroke-linejoin="miter" width="28.4333" height="28.4333"/>
+		<rect x="3.34884" y="6.36472" fill="none" stroke-width="6" stroke-linejoin="miter" stroke="#ABABAB" stroke-opacity="1" width="249.636" height="62.6667"/>
+	</g>
+</svg>

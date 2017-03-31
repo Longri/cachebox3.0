@@ -1,1 +1,26 @@
-<svg enable-background="new 0 0 63.00 63.11" height="63.1084" viewBox="0 0 63 63.11" width="63" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="objectBoundingBox" x1="-.101111" x2="1.10113" y1=".499995" y2=".499995"><stop offset="0" stop-color="#1fa3ff"/><stop offset="1"/></linearGradient><linearGradient id="b" gradientUnits="objectBoundingBox" x1="0" x2=".999984" y1=".499997" y2=".499997"><stop offset="0" stop-color="#909ca4"/><stop offset="1"/></linearGradient><radialGradient id="c" cx="31.5" cy="31.1415" gradientUnits="userSpaceOnUse" r="33"><stop offset="0" stop-color="#909ca4"/><stop offset=".469828" stop-color="#768087"/><stop offset=".517774" stop-color="#626b71"/><stop offset=".547414" stop-color="#4e565b"/><stop offset=".570813" stop-color="#6b747b"/><stop offset=".62931" stop-color="#88939b"/><stop offset="1" stop-color="#88939b"/></radialGradient><g stroke-linecap="square" stroke-linejoin="bevel"><path d="m20.0212 7.91992h23.7334v5.52918l-4.3997 3.5275v20.3065l4.3997 3.2414v4.8623h-23.7334v-4.863l4.8004-3.4314v-20.1158l-4.8004-3.6221z" fill="url(#a)"/><path d="m30.8716 45.3868h1.9367l-.0583 16.6715-.95 1.0501-.9284-1.0834z" fill="url(#b)"/><path d="m24.95 60.7828c-13.4185-2.9882-23.44998-14.9641-23.44998-29.2828 0-16.5685 13.43148-30 29.99998-30s30 13.4315 30 30c0 13.8885-9.4378 25.5729-22.25 28.9894" fill="none" stroke="url(#c)" stroke-width="3"/></g></svg>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="63" height="63.1084" viewBox="0 0 63.00 63.11" enable-background="new 0 0 63.00 63.11" xml:space="preserve">
+	<g>
+		<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="-0.101111" y1="0.499995" x2="1.10113" y2="0.499995">
+			<stop offset="0" stop-color="#1FA3FF" stop-opacity="1"/>
+			<stop offset="1" stop-color="#000000" stop-opacity="1"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill1_)" stroke-linecap="square" stroke-linejoin="bevel" d="M 20.0212,7.91992L 43.7546,7.91992L 43.7546,13.4491L 39.3549,16.9766L 39.3549,37.2831L 43.7546,40.5245L 43.7546,45.3868L 20.0212,45.3868L 20.0212,40.5238L 24.8216,37.0924L 24.8216,16.9766L 20.0212,13.3545L 20.0212,7.91992 Z "/>
+		<linearGradient id="SVGID_Fill2_" gradientUnits="objectBoundingBox" x1="0" y1="0.499997" x2="0.999984" y2="0.499997">
+			<stop offset="0" stop-color="#909CA4" stop-opacity="1"/>
+			<stop offset="1" stop-color="#000000" stop-opacity="1"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill2_)" stroke-linecap="square" stroke-linejoin="bevel" d="M 30.8716,45.3868L 32.8083,45.3868L 32.75,62.0583L 31.8,63.1084L 30.8716,62.025L 30.8716,45.3868 Z "/>
+		<radialGradient id="SVGID_Stroke1_" cx="31.5" cy="31.1415" r="33" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#909CA4" stop-opacity="1"/>
+			<stop offset="0.469828" stop-color="#768087" stop-opacity="1"/>
+			<stop offset="0.517774" stop-color="#626B71" stop-opacity="1"/>
+			<stop offset="0.547414" stop-color="#4E565B" stop-opacity="1"/>
+			<stop offset="0.570813" stop-color="#6B747B" stop-opacity="1"/>
+			<stop offset="0.62931" stop-color="#88939B" stop-opacity="1"/>
+			<stop offset="1" stop-color="#88939B" stop-opacity="1"/>
+		</radialGradient>
+		<path fill="none" fill-rule="evenodd" stroke-width="3" stroke-linecap="square" stroke-linejoin="bevel" stroke="url(#SVGID_Stroke1_)" d="M 24.95,60.7828C 11.5315,57.7946 1.50002,45.8187 1.50002,31.5C 1.50002,14.9315 14.9315,1.5 31.5,1.5C 48.0685,1.5 61.5,14.9315 61.5,31.5C 61.5,45.3885 52.0622,57.0729 39.25,60.4894"/>
+	</g>
+</svg>

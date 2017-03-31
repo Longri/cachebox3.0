@@ -24,6 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
  */
 public class MapInfoPanelStyle {
     public Drawable background;
-    public Color distanceLabel_Color, speedLabel_Color, coordinateLabel_Color;
-    public BitmapFont distanceLabel_Font, speedLabel_Font, coordinateLabel_Font;
+    public Color distanceUnitLabel_Color, speedUnitLabel_Color, distanceLabel_Color, speedLabel_Color, coordinateLabel_Color;
+    public BitmapFont distanceLabel_Font, distanceUnitLabel_Font, speedLabel_Font, speedUnitLabel_Font, coordinateLabel_Font;
 }
