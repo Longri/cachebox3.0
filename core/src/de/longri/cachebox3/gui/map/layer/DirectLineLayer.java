@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.map.layer;
 
 import com.badlogic.gdx.utils.Disposable;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.events.newT.*;
 import de.longri.cachebox3.utils.MathUtils;
@@ -98,7 +99,7 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedList
 
         //TODO initial with style (Color, with, Cap, Texture)
         LineBucket ll = buckets.addLineBucket(0,
-                new LineStyle(Color.fade(Color.RED, 0.8f), 5.5f, Paint.Cap.ROUND));
+                new LineStyle(Color.fade(Color.RED, 0.8f), CB.getScaledFloat(5.5f), Paint.Cap.ROUND));
 
         GeometryBuffer g = new GeometryBuffer(2, 1);
         private boolean invalidLine = true;
