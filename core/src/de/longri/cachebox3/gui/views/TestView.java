@@ -36,7 +36,7 @@ public class TestView extends AbstractView {
     protected void create() {
         this.clear();
 
-        Coordinate coordinate = new Coordinate(53.0, 14.0);
+        Coordinate coordinate = new Coordinate(53.12345, 14.12345);
 
         CoordinateButton coordinateButton = new CoordinateButton(coordinate);
 

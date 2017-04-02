@@ -285,7 +285,7 @@ public class Coordinate extends LatLong implements Serializable {
 			}
 		}
 
-		text = text.replace("'", "");
+		text = text.replace("'", " ");
 		text = text.replace("\\U0022", "");
 		text = text.replace("\"", "");
 		text = text.replace("\r", "");

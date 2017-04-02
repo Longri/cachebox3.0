@@ -1066,7 +1066,7 @@
     "coordinateValues": {
       "font": "coordinateValueFont",
       "fontColor": "font_color",
-      "overFontColor": "coordinateValuesFocus",
+      "checkedFontColor": "coordinateValuesFocus",
       "up": "default_button_9_Patch",
       "down": "drawable_default_button_pressed"
     },
@@ -1327,7 +1327,7 @@
       "value": 12
     },
     "margin": {
-      "value": 10
+      "value": 5
     }
   },
   "de.longri.cachebox3.gui.skin.styles.IconsStyle": {
