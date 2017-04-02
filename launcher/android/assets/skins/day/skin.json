@@ -192,6 +192,10 @@
       "path": "svg/compass_1_scale.svg",
       "scale": 1
     },
+    "compass_2_frame": {
+      "path": "svg/compass_1_frame.svg",
+      "scale": 0.1
+    },
     "cursor": {
       "path": "svg/cursor.svg",
       "scale": 1
@@ -790,11 +794,11 @@
     },
     "map_compass_2_arrow": {
       "path": "svg/compass_2_arrow.svg",
-      "scale": 0.15
+      "scale": 0.1
     },
     "map_compass_2_scale": {
       "path": "svg/compass_2_scale.svg",
-      "scale": 0.15
+      "scale": 0.1
     },
     "mega": {
       "path": "svg/mega.svg",
@@ -1080,12 +1084,16 @@
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "coordinateValueFont": {
+      "font": "fonts/DroidSans.ttf",
+      "size": 17
+    },
+    "distanceValueFont": {
       "font": "fonts/DroidSans-Bold.ttf",
-      "size": 24
+      "size": 22
     },
     "mapPanelUnit": {
       "font": "fonts/DroidSans.ttf",
-      "size": 14
+      "size": 13
     },
     "normal_bold_font": {
       "font": "fonts/DroidSans-Bold.ttf",
@@ -1848,7 +1856,7 @@
       "arrow": "compass_1_arrow"
     },
     "mapCompassStyle": {
-      "frame": "map_compass_1_frame",
+      "frame": "compass_2_frame",
       "scale": "map_compass_2_scale",
       "arrow": "map_compass_2_arrow"
     }
@@ -1861,11 +1869,11 @@
       "distanceLabel_Color": "font_color",
       "speedLabel_Color": "font_color",
       "coordinateLabel_Color": "font_color",
-      "distanceLabel_Font": "coordinateValueFont",
+      "distanceLabel_Font": "distanceValueFont",
       "distanceUnitLabel_Font": "mapPanelUnit",
       "speedLabel_Font": "normal_font",
       "speedUnitLabel_Font": "mapPanelUnit",
-      "coordinateLabel_Font": "normal_font"
+      "coordinateLabel_Font": "coordinateValueFont"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle": {

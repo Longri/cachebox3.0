@@ -74,18 +74,18 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
 
 
         // add controls to table
-        this.add(compass).center();
+        this.add(compass).left();
 
         Table nestedTable = new Table();
 //        nestedTable.setDebug(true);
         nestedTable.add(distanceLabel).right().bottom();
         nestedTable.add(distanceUnitLabel).left().bottom().padLeft(CB.scaledSizes.MARGIN);
-        nestedTable.add(coordinateLabel1).center().bottom().padLeft(CB.scaledSizes.MARGINx2);
+        nestedTable.add(coordinateLabel1).expandX().right().bottom().padLeft(CB.scaledSizes.MARGINx2);
         nestedTable.row();
         nestedTable.add(speedLabel).right().bottom();
         nestedTable.add(speedUnitLabel).left().bottom().padLeft(CB.scaledSizes.MARGIN);
-        nestedTable.add(coordinateLabel2).center().bottom().padLeft(CB.scaledSizes.MARGINx2);
-        this.add(nestedTable).expandX();
+        nestedTable.add(coordinateLabel2).expandX().right().bottom().padLeft(CB.scaledSizes.MARGINx2);
+        this.add(nestedTable).fillX().expandX().padLeft(CB.scaledSizes.MARGINx2);
 
         this.pack();
     }

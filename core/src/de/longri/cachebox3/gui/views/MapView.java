@@ -450,9 +450,11 @@ public class MapView extends AbstractView {
 
         zoomButton.setPosition(getWidth() - (zoomButton.getWidth() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN);
 
+        float calculatedWidth = Math.min(infoPanel.getPrefWidth(), mapStateButton.getX() - (CB.scaledSizes.MARGINx2));
+
         infoPanel.setBounds(CB.scaledSizes.MARGIN,
                 getHeight() - (infoPanel.getHeight() + CB.scaledSizes.MARGIN),
-                mapStateButton.getX() - (CB.scaledSizes.MARGINx2), infoPanel.getPrefHeight());
+                calculatedWidth, infoPanel.getPrefHeight());
     }
 
 
