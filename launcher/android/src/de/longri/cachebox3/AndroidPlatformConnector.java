@@ -138,4 +138,9 @@ public class AndroidPlatformConnector extends PlatformConnector {
         return Environment.getExternalStorageDirectory().getAbsolutePath() + "/Cachebox3";
     }
 
+    @Override
+    protected String generateApiKey() {
+        return null;
+    }
+
 }

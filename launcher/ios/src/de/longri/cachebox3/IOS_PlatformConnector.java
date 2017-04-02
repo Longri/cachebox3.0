@@ -35,6 +35,13 @@ import java.io.InputStream;
 public class IOS_PlatformConnector extends PlatformConnector {
     final static Logger log = LoggerFactory.getLogger(IOS_PlatformConnector.class);
 
+    final IOS_Launcher ios_launcher;
+
+    public IOS_PlatformConnector(IOS_Launcher ios_launcher) {
+        super();
+        this.ios_launcher = ios_launcher;
+    }
+
     @Override
     protected boolean _isTorchAvailable() {
         AVCaptureDevice device = AVCaptureDevice.getDefaultDeviceForMediaType(AVMediaType.Video);
@@ -88,6 +95,23 @@ public class IOS_PlatformConnector extends PlatformConnector {
     @Override
     protected String _getWorkPath() {
         return _getSandBoxFileHandle("Cachebox3").file().getAbsolutePath();
+    }
+
+    @Override
+    protected String generateApiKey() {
+
+        log.debug("Show WebView");
+
+        try {
+            WebViewController controller = new WebViewController();
+            ios_launcher.
+                    getWindow().setRootViewController(controller);
+            ios_launcher.getWindow().makeKeyAndVisible();
+        } catch (Exception e) {
+            log.error("show web view", e);
+        }
+
+        return null;
     }
 
     @Override

@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,10 +91,20 @@ public class TestView extends AbstractView {
             }
         });
 
+        VisTextButton apiKey = new VisTextButton("createApiKey");
+        testFile.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+               String key= PlatformConnector.getApiKey();
+
+            }
+        });
+
         Table tbl = new Table();
         tbl.add(test);
         tbl.row();
         tbl.add(testFile);
+        tbl.row();
+        tbl.add(apiKey);
         tbl.setBounds(10, 10, 300, 300);
         this.addActor(tbl);
     }

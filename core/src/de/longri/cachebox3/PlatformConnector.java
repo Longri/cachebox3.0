@@ -50,6 +50,10 @@ public abstract class PlatformConnector {
 
     protected abstract void _switchTorch();
 
+    public static String getApiKey() {
+        return platformConnector.generateApiKey();
+    }
+
     // SVG implementations #############################################################################################
     public enum SvgScaleType {
         SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED, NONE, SCALED_TO_WIDTH_OR_HEIGHT
@@ -82,5 +86,7 @@ public abstract class PlatformConnector {
     }
 
     protected abstract String _getWorkPath();
+
+    protected abstract String generateApiKey();
 
 }

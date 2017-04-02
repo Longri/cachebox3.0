@@ -65,4 +65,9 @@ public class DesktopPlatformConnector extends PlatformConnector {
     protected String _getWorkPath() {
         return _getSandBoxFileHandle("Cachebox3").file().getAbsolutePath();
     }
+
+    @Override
+    protected String generateApiKey() {
+        return null;
+    }
 }
