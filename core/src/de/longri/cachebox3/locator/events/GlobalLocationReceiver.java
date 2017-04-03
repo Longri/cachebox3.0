@@ -17,8 +17,7 @@ package de.longri.cachebox3.locator.events;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.locator.GPS;
-import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;

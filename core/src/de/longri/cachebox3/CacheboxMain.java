@@ -26,7 +26,7 @@ import com.badlogic.gdx.math.Matrix4;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import org.oscim.backend.GL;
 import org.oscim.map.Map;

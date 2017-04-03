@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
-import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.MathUtils.CalculationType;
 import de.longri.cachebox3.utils.converter.UTMConvert;

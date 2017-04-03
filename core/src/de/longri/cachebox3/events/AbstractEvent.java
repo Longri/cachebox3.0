@@ -1,4 +1,4 @@
-package de.longri.cachebox3.locator.events.newT;
+package de.longri.cachebox3.events;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

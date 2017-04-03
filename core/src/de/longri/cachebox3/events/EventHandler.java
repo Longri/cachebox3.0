@@ -1,4 +1,4 @@
-package de.longri.cachebox3.locator.events.newT;
+package de.longri.cachebox3.events;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;

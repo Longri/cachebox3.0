@@ -24,9 +24,9 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
-import de.longri.cachebox3.locator.events.newT.EventHandler;
-import de.longri.cachebox3.locator.events.newT.SpeedChangedEvent;
-import de.longri.cachebox3.locator.events.newT.SpeedChangedListener;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SpeedChangedEvent;
+import de.longri.cachebox3.events.SpeedChangedListener;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
 

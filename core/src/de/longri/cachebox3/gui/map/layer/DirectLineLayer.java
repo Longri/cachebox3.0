@@ -20,13 +20,10 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.events.newT.*;
 import de.longri.cachebox3.utils.MathUtils;
 import org.oscim.backend.canvas.Color;
-import org.oscim.backend.canvas.Paint;
 import org.oscim.core.GeometryBuffer;
 import org.oscim.core.Tile;
-import org.oscim.event.Event;
 import org.oscim.layers.GenericLayer;
 import org.oscim.layers.Layer;
 import org.oscim.map.Map;
@@ -42,7 +39,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 02.03.2017.
  */
-public class DirectLineLayer extends GenericLayer implements PositionChangedListener, SelectedCoordChangedListener, Disposable {
+public class DirectLineLayer extends GenericLayer implements de.longri.cachebox3.events.PositionChangedListener, de.longri.cachebox3.events.SelectedCoordChangedListener, Disposable {
 
     private final static Logger log = LoggerFactory.getLogger(DirectLineLayer.class);
     private final static short MAX_VALUE = (short) (Short.MAX_VALUE / MapRenderer.COORD_SCALE);
@@ -56,21 +53,21 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedList
         super(map, new DirectLineRenderer());
         directLineRenderer = (DirectLineRenderer) mRenderer;
         directLineRenderer.setLayer(this);
-        EventHandler.add(this);
+        de.longri.cachebox3.events.EventHandler.add(this);
     }
 
 
     private void redrawLine() {
         if (!this.isEnabled()) return;
 
-        Coordinate selectedCoordinate = EventHandler.getSelectedCoord();
+        Coordinate selectedCoordinate = de.longri.cachebox3.events.EventHandler.getSelectedCoord();
         if (selectedCoordinate == null) {
             directLineRenderer.setInvalid();
             log.debug("Direct line are invalid");
             return;
         }
 
-        Coordinate ownPosition = EventHandler.getMyPosition();
+        Coordinate ownPosition = de.longri.cachebox3.events.EventHandler.getMyPosition();
         if (ownPosition == null) {
             directLineRenderer.setInvalid();
             log.debug("Direct line are invalid");
@@ -83,17 +80,17 @@ public class DirectLineLayer extends GenericLayer implements PositionChangedList
 
     @Override
     public void dispose() {
-        EventHandler.remove(this);
+        de.longri.cachebox3.events.EventHandler.remove(this);
         this.directLineRenderer.dispose();
     }
 
     @Override
-    public void selectedCoordChanged(SelectedCoordChangedEvent event) {
+    public void selectedCoordChanged(de.longri.cachebox3.events.SelectedCoordChangedEvent event) {
         redrawLine();
     }
 
     @Override
-    public void positionChanged(PositionChangedEvent event) {
+    public void positionChanged(de.longri.cachebox3.events.PositionChangedEvent event) {
         redrawLine();
     }
 

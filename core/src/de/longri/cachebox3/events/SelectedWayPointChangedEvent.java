@@ -1,6 +1,5 @@
-package de.longri.cachebox3.locator.events.newT;
+package de.longri.cachebox3.events;
 
-import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
 
 /**

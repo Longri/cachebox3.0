@@ -43,7 +43,7 @@ import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.settings.Settings_Map;

@@ -20,14 +20,13 @@ import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.events.newT.*;
 import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.UnitFormatter;
 
 /**
  * Created by Longri on 23.07.16.
  */
-public class AboutView extends AbstractView implements PositionChangedListener, DistanceChangedListener {
+public class AboutView extends AbstractView implements de.longri.cachebox3.events.PositionChangedListener, de.longri.cachebox3.events.DistanceChangedListener {
 
     VisLabel coordinateLabel, versionLabel;
 
@@ -48,14 +47,14 @@ public class AboutView extends AbstractView implements PositionChangedListener, 
         this.addActor(versionLabel);
 
         //register as Location receiver
-        EventHandler.add(this);
+        de.longri.cachebox3.events.EventHandler.add(this);
     }
 
 
     @Override
     public void dispose() {
         //register as Location receiver
-        EventHandler.remove(this);
+        de.longri.cachebox3.events.EventHandler.remove(this);
     }
 
     protected void boundsChanged(float x, float y, float width, float height) {
@@ -67,13 +66,13 @@ public class AboutView extends AbstractView implements PositionChangedListener, 
     float distance = -1;
 
     @Override
-    public void positionChanged(PositionChangedEvent event) {
+    public void positionChanged(de.longri.cachebox3.events.PositionChangedEvent event) {
         pos = event.pos;
         setText();
     }
 
     @Override
-    public void distanceChanged(DistanceChangedEvent event) {
+    public void distanceChanged(de.longri.cachebox3.events.DistanceChangedEvent event) {
         distance = event.distance;
         setText();
     }

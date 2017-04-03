@@ -1,6 +1,4 @@
-package de.longri.cachebox3.locator.events.newT;
-
-import de.longri.cachebox3.locator.Coordinate;
+package de.longri.cachebox3.events;
 
 /**
  * Created by Longri on 23.03.2017.

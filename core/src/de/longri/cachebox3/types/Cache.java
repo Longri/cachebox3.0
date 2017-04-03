@@ -17,7 +17,7 @@ package de.longri.cachebox3.types;
 
 
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;

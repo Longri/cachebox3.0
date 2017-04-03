@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.gui.map;
 
-import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
@@ -24,9 +23,7 @@ import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.locator.CoordinateGPS;
-import de.longri.cachebox3.locator.events.newT.*;
 import de.longri.cachebox3.settings.Settings_Map;
-import org.oscim.core.MapPosition;
 import org.oscim.core.MercatorProjection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Longri on 28.09.2016.
  */
-public class MapViewPositionChangedHandler implements PositionChangedListener, SpeedChangedListener, OrientationChangedListener {
+public class MapViewPositionChangedHandler implements de.longri.cachebox3.events.PositionChangedListener, de.longri.cachebox3.events.SpeedChangedListener, de.longri.cachebox3.events.OrientationChangedListener {
 
     private static Logger log = LoggerFactory.getLogger(MapViewPositionChangedHandler.class);
     private final MapInfoPanel infoPanel;
@@ -64,7 +61,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         this.mapStateButton = mapStateButton;
         this.infoPanel = infoPanel;
         this.mapView = mapView;
-        EventHandler.add(this);
+        de.longri.cachebox3.events.EventHandler.add(this);
     }
 
     public void dispose() {
@@ -72,7 +69,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         isDisposed.set(true);
 
         // unregister this handler
-        EventHandler.remove(this);
+        de.longri.cachebox3.events.EventHandler.remove(this);
 
     }
 
@@ -117,7 +114,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
 
         if (isDisposed.get()) return;
-        myPosition = EventHandler.getMyPosition();
+        myPosition = de.longri.cachebox3.events.EventHandler.getMyPosition();
         infoPanel.setNewValues(myPosition, mapBearing);
 
         // set map values
@@ -179,7 +176,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     }
 
     @Override
-    public void positionChanged(PositionChangedEvent event) {
+    public void positionChanged(de.longri.cachebox3.events.PositionChangedEvent event) {
         if (this.mapStateButton.getMapMode() == MapMode.CAR && !event.pos.isGPSprovided())
             return;// at CarMode ignore Network provided positions!
 
@@ -202,13 +199,13 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     float actSpeed;
 
     @Override
-    public void speedChanged(SpeedChangedEvent event) {
+    public void speedChanged(de.longri.cachebox3.events.SpeedChangedEvent event) {
         actSpeed = event.speed;
         assumeValues(false, event.ID);
     }
 
     @Override
-    public void orientationChanged(OrientationChangedEvent event) {
+    public void orientationChanged(de.longri.cachebox3.events.OrientationChangedEvent event) {
         float bearing = -event.orientation;
 
         // at CarMode no orientation changes below 20kmh

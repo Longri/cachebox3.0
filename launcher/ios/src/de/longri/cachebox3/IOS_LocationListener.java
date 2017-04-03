@@ -15,8 +15,7 @@
  */
 package de.longri.cachebox3;
 
-import de.longri.cachebox3.locator.events.newT.EventHandler;
-import de.longri.cachebox3.locator.events.newT.GpsEventHelper;
+import de.longri.cachebox3.events.GpsEventHelper;
 import org.robovm.apple.corelocation.*;
 import org.robovm.apple.dispatch.DispatchQueue;
 import org.robovm.apple.foundation.Foundation;
