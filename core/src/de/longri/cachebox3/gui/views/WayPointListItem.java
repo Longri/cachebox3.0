@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
+import de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Stars;
@@ -34,19 +34,19 @@ import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 
 /**
- * Created by Longri on 05.09.2016.
+ * Created by Longri on 03.04.2017.
  */
-public class CacheListItem extends ListViewItem implements Disposable {
+public class WayPointListItem extends ListViewItem implements Disposable {
 
-    public static ListViewItem getListItem(int listIndex, final Cache cache){
-        ListViewItem listViewItem = new CacheListItem(listIndex, cache.Type, cache.getName(),
+    public static ListViewItem getListItem(int listIndex, final Cache cache) {
+        ListViewItem listViewItem = new WayPointListItem(listIndex, cache.Type, cache.getName(),
                 (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
                 (int) Math.min(cache.Rating * 2, 5 * 2), cache.Size.ordinal());
         return listViewItem;
     }
 
 
-    private final CacheListItemStyle style;
+    private final WayPointListItemStyle style;
     private final CacheTypes type;
     private final CharSequence cacheName;
     private boolean needsLayout = true;
@@ -59,13 +59,13 @@ public class CacheListItem extends ListViewItem implements Disposable {
     private final int size;
 
 
-    public CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain, int vote, int size) {
+    public WayPointListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain, int vote, int size) {
         super(listIndex);
         this.difficulty = difficulty;
         this.terrain = terrain;
         this.vote = vote;
         this.size = size;
-        this.style = VisUI.getSkin().get("default", CacheListItemStyle.class);
+        this.style = VisUI.getSkin().get("default", WayPointListItemStyle.class);
         this.type = type;
         this.cacheName = cacheName;
     }
