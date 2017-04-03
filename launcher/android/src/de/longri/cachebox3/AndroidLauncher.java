@@ -21,13 +21,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
-import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.locator.events.newT.OrientationChangedEvent;
 import org.oscim.android.gl.AndroidGL;
 import org.oscim.backend.GLAdapter;
 import org.oscim.gdx.GdxAssets;
@@ -136,6 +136,7 @@ public class AndroidLauncher extends AndroidApplication {
     }
 
     private float compassHeading = -1;
+    private float lastCompassHeading;
 
     private final SensorEventListener mListener = new SensorEventListener() {
         @Override
@@ -143,7 +144,12 @@ public class AndroidLauncher extends AndroidApplication {
             try {
                 mCompassValues = event.values;
                 compassHeading = mCompassValues[0];
-                Locator.setHeading(compassHeading, Locator.CompassType.Magnetic);
+
+                if (Math.abs(lastCompassHeading - compassHeading) < 1) {
+                    return;
+                }
+                lastCompassHeading = compassHeading;
+                EventHandler.fire(new OrientationChangedEvent(compassHeading));
             } catch (Exception e) {
                 e.printStackTrace();
             }

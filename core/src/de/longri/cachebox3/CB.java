@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -20,19 +20,23 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.kotcrab.vis.ui.VisUI;
-import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.locator.track.Track;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Categories;
-import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.ScaledSizes;
 import de.longri.cachebox3.utils.SkinColor;
+import org.oscim.renderer.atlas.TextureRegion;
+import org.oscim.theme.IRenderTheme;
+import org.oscim.theme.ThemeFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.LinkedHashMap;
 
 /**
  * Static class
@@ -69,8 +73,7 @@ public class CB {
     public static final String AboutMsg = "Team Cachebox (2011-2016)" + br + "www.team-cachebox.de" + br + "Cache Icons Copyright 2009," + br + "Groundspeak Inc. Used with permission";
     public static final String splashMsg = AboutMsg + br + br + "POWERED BY:";
 
-    private static Cache selectedCache = null;
-    private static Waypoint selectedWaypoint = null;
+
     private static Cache nearestCache = null;
     private static boolean autoResort;
     public static boolean switchToCompassCompleted = false;
@@ -89,6 +92,11 @@ public class CB {
     private static SvgSkin actSkin;
     public static Color backgroundColor = new Color(0, 1, 0, 1);
     public static ScaledSizes scaledSizes;
+    public static Track actRoute;
+    public static int actRouteCount;
+    public static ThemeFile actThemeFile;
+    public static IRenderTheme actTheme;
+    public static LinkedHashMap<Object, TextureRegion> textureRegionMap;
 
     private CB() {
     }
@@ -197,11 +205,11 @@ public class CB {
 
     public static void callQuit() {
 
-        if (CB.isSetSelectedCache()) {
-            // speichere selektierten Cache, da nicht alles über die SelectedCacheEventList läuft
-            Config.LastSelectedCache.setValue(CB.getSelectedCache().getGcCode());
+        if (EventHandler.getSelectedCache() != null) {
+            //save selected Cache
+            Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGcCode());
             Config.AcceptChanges();
-            log.debug("LastSelectedCache = " + CB.getSelectedCache().getGcCode());
+            log.debug("LastSelectedCache = " + EventHandler.getSelectedCache().getGcCode());
         }
 
         Gdx.app.exit();
@@ -219,72 +227,6 @@ public class CB {
         Gdx.graphics.requestRendering();
     }
 
-    public static void setSelectedCache(Cache cache) {
-
-        selectedCache = cache;
-        if (cache == null){
-            log.debug("Set selected Cache to NULL");
-        }else{
-            log.debug("Set selected Cache: " + cache.toString());
-        }
-
-        //call selected cache changed event
-        SelectedCacheEventList.Call(selectedCache, null);
-
-    }
-
-    public static void setSelectedWaypoint(Cache cache, Waypoint waypoint) {
-        if (cache == null)
-            return;
-
-        setSelectedWaypoint(cache, waypoint, true);
-        if (waypoint == null) {
-            cacheHistory = cache.getGcCode() + "," + cacheHistory;
-            if (cacheHistory.length() > 120) {
-                cacheHistory = cacheHistory.substring(0, cacheHistory.lastIndexOf(","));
-            }
-        }else{
-            log.debug("Set selected WP: " + waypoint.toString());
-        }
-    }
-
-    /**
-     * if changeAutoResort == false -> do not change state of autoResort Flag
-     *
-     * @param cache
-     * @param waypoint
-     * @param changeAutoResort
-     */
-    public static void setSelectedWaypoint(Cache cache, Waypoint waypoint, boolean changeAutoResort) {
-
-        if (cache == null) {
-            log.info("[CB]setSelectedWaypoint: cache=null");
-            selectedCache = null;
-            selectedWaypoint = null;
-            return;
-        }
-
-        // remove Detail Info from old selectedCache
-        if ((selectedCache != cache) && (selectedCache != null) && (selectedCache.detail != null)) {
-            selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
-        }
-        selectedCache = cache;
-        log.info("[CB]setSelectedWaypoint: cache=" + cache.getGcCode());
-        selectedWaypoint = waypoint;
-
-        // load Detail Info if not available
-        if (selectedCache.detail == null) {
-            selectedCache.loadDetail();
-        }
-
-        SelectedCacheEventList.Call(selectedCache, selectedWaypoint);
-
-        if (changeAutoResort) {
-            // switch off auto select
-            setAutoResort(false);
-        }
-    }
-
 
     public static boolean getAutoResort() {
         return autoResort;
@@ -294,52 +236,14 @@ public class CB {
         autoResort = value;
     }
 
-    /**
-     * Returns true, if a Cache selected and this Cache object is valid.
-     *
-     * @return
-     */
-    public static boolean isSetSelectedCache() {
-        if (selectedCache == null)
-            return false;
-
-        if (selectedCache.getGcCode().length() == 0)
-            return false;
-
-        return true;
-    }
-
-    public static Cache getSelectedCache() {
-        return selectedCache;
-    }
-
-    public static boolean isSelectedCache(Cache cache) {
-        if (selectedCache != null && selectedCache.equals(cache)) return true;
-        return false;
-    }
 
     public static void setNearestCache(Cache Cache) {
         nearestCache = Cache;
     }
 
-    public static Coordinate getSelectedCoord() {
-        Coordinate ret = null;
-
-        if (selectedWaypoint != null) {
-            ret = selectedWaypoint;
-        } else if (selectedCache != null) {
-            ret = selectedCache;
-        }
-
-        return ret;
-    }
 
     public static Cache NearestCache() {
         return nearestCache;
-    }
-
-    public static Waypoint getSelectedWaypoint() {
-        return selectedWaypoint;
     }
 
 
@@ -367,5 +271,10 @@ public class CB {
 
     public static Cache getCacheFromId(long cacheId) {
         return Database.Data.Query.GetCacheById(cacheId);
+    }
+
+    public static void postAsync(Runnable runnable) {
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 }

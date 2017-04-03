@@ -15,8 +15,8 @@
  */
 package de.longri.cachebox3;
 
-import com.badlogic.gdx.Gdx;
-import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.locator.events.newT.GpsEventHelper;
 import org.robovm.apple.corelocation.*;
 import org.robovm.apple.dispatch.DispatchQueue;
 import org.robovm.apple.foundation.Foundation;
@@ -35,10 +35,11 @@ public class IOS_LocationListener {
     private static double HEADING_FILTER = 5;
 
     private CLLocationManager locationManager;
+    private final GpsEventHelper eventHelper = new GpsEventHelper();
 
 
     private void stopUpdatingLocation(String state) {
-        Gdx.app.log("locationManager stop", state);
+        log.debug("locationManager stop", state);
         locationManager.stopUpdatingLocation();
         locationManager.setDelegate(null);
     }
@@ -62,7 +63,7 @@ public class IOS_LocationListener {
                 // Once configured, the location manager must be "started".
                 locationManager.startUpdatingLocation();
                 locationManager.startUpdatingHeading();
-                Gdx.app.log("locationManager", "startet");
+                log.debug("locationManager started");
             }
         });
 
@@ -77,26 +78,9 @@ public class IOS_LocationListener {
             CLLocation newLocation = locations.last();
             CLLocationCoordinate2D coord = newLocation.getCoordinate();
 
-
-            de.longri.cachebox3.locator.Location.ProviderType provider = de.longri.cachebox3.locator.Location.ProviderType.NULL;
-
-            //FIXME set  GPS or Network provider
-//                if (location.getProvider().toLowerCase(new Locale("en")).contains("gps"))
-            provider = de.longri.cachebox3.locator.Location.ProviderType.GPS;
-//                if (location.getProvider().toLowerCase(new Locale("en")).contains("network"))
-//                    provider = de.longri.cachebox3.locator.Location.ProviderType.Network;
-
-            de.longri.cachebox3.locator.Location cbLocation =
-                    new de.longri.cachebox3.locator.Location(coord.getLatitude(),
-                            coord.getLongitude(), (float) newLocation.getHorizontalAccuracy());
-
-            cbLocation.setHasSpeed(newLocation.getSpeed() >= 0);
-            cbLocation.setSpeed((float) newLocation.getSpeed());
-            cbLocation.setHasBearing(newLocation.getCourse() >= 0);
-            cbLocation.setBearing((float) newLocation.getCourse());
-            cbLocation.setAltitude(newLocation.getAltitude());
-            cbLocation.setProvider(provider);
-            de.longri.cachebox3.locator.Locator.setNewLocation(cbLocation);
+            eventHelper.newGpsPos(coord.getLatitude(), coord.getLongitude(), true,
+                    newLocation.getAltitude(), newLocation.getSpeed()*3.6, newLocation.getCourse(),
+                    (float) newLocation.getHorizontalAccuracy());
 
         }
 
@@ -107,10 +91,7 @@ public class IOS_LocationListener {
         @Override
         public void didUpdateHeading(CLLocationManager manager, CLHeading newHeading) {
             if (newHeading.getHeadingAccuracy() > 0) {
-                float value = (float) newHeading.getTrueHeading();
-                log.debug("Set True heading:" + value);
-                de.longri.cachebox3.locator.Locator.setHeading(value,
-                        Locator.CompassType.Magnetic);
+                eventHelper.setCourse(newHeading.getTrueHeading());
             }
         }
 

@@ -16,19 +16,20 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.Locator;
-import de.longri.cachebox3.locator.events.PositionChangedEvent;
-import de.longri.cachebox3.locator.events.PositionChangedEventList;
+import de.longri.cachebox3.locator.events.newT.*;
+import de.longri.cachebox3.utils.BuildInfo;
+import de.longri.cachebox3.utils.UnitFormatter;
 
 /**
  * Created by Longri on 23.07.16.
  */
-public class AboutView extends AbstractView implements PositionChangedEvent {
+public class AboutView extends AbstractView implements PositionChangedListener, DistanceChangedListener {
 
-    VisLabel coordinateLabel;
+    VisLabel coordinateLabel, versionLabel;
 
     public AboutView() {
         super("AboutView");
@@ -41,44 +42,52 @@ public class AboutView extends AbstractView implements PositionChangedEvent {
         coordinateLabel.setPosition(10, 10);
         this.addActor(coordinateLabel);
 
+        versionLabel = new VisLabel("CB 3.0." + BuildInfo.getRevison() + "\n" + BuildInfo.getDetail());
+        versionLabel.setAlignment(Align.center);
+        versionLabel.setPosition(10, this.getHeight() / 2);
+        this.addActor(versionLabel);
+
         //register as Location receiver
-        PositionChangedEventList.Add(this);
+        EventHandler.add(this);
     }
 
 
     @Override
     public void dispose() {
-
-    }
-
-    @Override
-    public void PositionChanged() {
-        Coordinate coordinate = Locator.getCoordinate();
-        coordinateLabel.setText(coordinate.formatCoordinateLineBreak());
-        CB.requestRendering();
-    }
-
-    @Override
-    public void OrientationChanged() {
-
-    }
-
-    @Override
-    public void SpeedChanged() {
-
-    }
-
-    @Override
-    public String getReceiverName() {
-        return "AboutView";
-    }
-
-    @Override
-    public Priority getPriority() {
-        return Priority.Normal;
+        //register as Location receiver
+        EventHandler.remove(this);
     }
 
     protected void boundsChanged(float x, float y, float width, float height) {
         coordinateLabel.setBounds(0, 0, this.getWidth(), this.getHeight());
+    }
+
+
+    Coordinate pos;
+    float distance = -1;
+
+    @Override
+    public void positionChanged(PositionChangedEvent event) {
+        pos = event.pos;
+        setText();
+    }
+
+    @Override
+    public void distanceChanged(DistanceChangedEvent event) {
+        distance = event.distance;
+        setText();
+    }
+
+    private void setText() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(pos != null ? pos.formatCoordinateLineBreak() : "???");
+        sb.append("\n");
+        sb.append(distance == -1 ? "???" : UnitFormatter.distanceString(distance,false));
+        coordinateLabel.setText(sb);
+        CB.requestRendering();
+    }
+
+    public String toString() {
+        return "AboutView";
     }
 }

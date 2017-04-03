@@ -33,6 +33,7 @@ import de.longri.cachebox3.gui.help.GestureHelp;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.gui.skin.styles.GestureButtonStyle;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.SizeChangedEvent;
@@ -51,8 +52,8 @@ public class GestureButton extends Button {
 
 
     private static int idCounter = 0;
-    protected static Drawable menuDrawable;
-    protected static Drawable menuDrawableFiltered;
+//    protected static Drawable menuDrawable;
+//    protected static Drawable menuDrawableFiltered;
 
     private GestureButtonStyle style;
     private final ArrayList<ActionButton> buttonActions;
@@ -70,9 +71,6 @@ public class GestureButton extends Button {
         this.hasContextMenu = hasContextMenu;
     }
 
-    static public class GestureButtonStyle extends ButtonStyle {
-        public Drawable select;
-    }
 
     public GestureButton(String styleName) {
         style = VisUI.getSkin().get(styleName, GestureButtonStyle.class);
@@ -344,37 +342,20 @@ public class GestureButton extends Button {
     }
 
 
-    private static final CB_RectF menuIconDrawRec = new CB_RectF().add(new SizeChangedEvent() {
-        @Override
-        public void sizeChanged() {
-
-        }
-    });
-
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
         if (hasContextMenu && isChecked()) {
 
-            // draw Menu Sprite
-            if (menuDrawable == null || menuDrawableFiltered == null) {
-                menuDrawable = CB.getSkin().getIcon.cm_icon; //TODO replace with GestureButtonStyle
-                menuDrawableFiltered = CB.getSkin().getIcon.cm_icon_filterd;
-            }
-
             Vector2 stagePos = new Vector2();
             this.localToStageCoordinates(stagePos);
-            menuIconDrawRec.setPos(stagePos.x, stagePos.y);
-            // menuIconDrawRec.setPos(this.getX(), this.getY());
 
             boolean isFiltered = false; //TODO set filtered!
 
-            if (!isFiltered && menuDrawable != null)
-                menuDrawable.draw(batch, menuIconDrawRec.getX(), menuIconDrawRec.getY(),
-                        menuIconDrawRec.getWidth(), menuIconDrawRec.getHeight());
-            if (isFiltered && menuDrawableFiltered != null)
-                menuDrawableFiltered.draw(batch, menuIconDrawRec.getX(), menuIconDrawRec.getY(),
-                        menuIconDrawRec.getWidth(), menuIconDrawRec.getHeight());
+            if (!isFiltered && style.hasMenu != null)
+                style.hasMenu.draw(batch, stagePos.x, stagePos.y, this.getWidth(), this.getHeight());
+            if (isFiltered && style.hasFilteredMenu != null)
+                style.hasFilteredMenu.draw(batch, stagePos.x, stagePos.y, this.getWidth(), this.getHeight());
         }
     }
 }

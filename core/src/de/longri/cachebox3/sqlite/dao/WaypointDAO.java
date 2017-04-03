@@ -153,8 +153,8 @@ public class WaypointDAO {
     private int createCheckSum(Waypoint WP) {
         // for Replication
         String sCheckSum = WP.getGcCode();
-        sCheckSum += UnitFormatter.FormatLatitudeDM(WP.latitude);
-        sCheckSum += UnitFormatter.FormatLongitudeDM(WP.longitude);
+        sCheckSum += UnitFormatter.formatLatitudeDM(WP.latitude);
+        sCheckSum += UnitFormatter.formatLongitudeDM(WP.longitude);
         sCheckSum += WP.getDescription();
         sCheckSum += WP.Type.ordinal();
         sCheckSum += WP.getClue();

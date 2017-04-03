@@ -71,7 +71,7 @@ public class DesktopRealSvgBitmap extends AwtBitmap implements GetName {
 
                 SVGIcon icon = new SVGIcon();
                 icon.setAntiAlias(true);
-                icon.setPreferredSize(new Dimension((int) bitmapWidth, (int) bitmapHeight));
+                icon.setPreferredSize(new Dimension((int)Math.ceil( bitmapWidth),(int) Math.ceil( bitmapHeight)));
                 icon.setScaleToFit(true);
                 icon.setSvgURI(uri);
                 BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);

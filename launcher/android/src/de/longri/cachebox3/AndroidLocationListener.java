@@ -19,6 +19,9 @@ import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import de.longri.cachebox3.locator.events.newT.GpsEventHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Locale;
 
@@ -27,26 +30,39 @@ import java.util.Locale;
  */
 public class AndroidLocationListener implements LocationListener, GpsStatus.Listener, GpsStatus.NmeaListener {
 
+    private static Logger log = LoggerFactory.getLogger(AndroidLocationListener.class);
+
+    long lastTime;
+    Location lastLocation;
+
+    final GpsEventHelper eventHelper = new GpsEventHelper();
+
 
     @Override
     public void onLocationChanged(Location location) {
-        de.longri.cachebox3.locator.Location.ProviderType provider = de.longri.cachebox3.locator.Location.ProviderType.NULL;
 
+        if (location.getTime() < lastTime + 1000) {
+            return;
+        }
+        lastTime = location.getTime();
+
+        if (lastLocation != null) {
+            float dis = location.distanceTo(lastLocation);
+            if (dis < 10) {
+                System.out.print("distance to slow, skip");
+                return;
+            }
+        }
+        lastLocation = location;
+        boolean isGpsProvided = false;
         if (location.getProvider().toLowerCase(new Locale("en")).contains("gps"))
-            provider = de.longri.cachebox3.locator.Location.ProviderType.GPS;
-        if (location.getProvider().toLowerCase(new Locale("en")).contains("network"))
-            provider = de.longri.cachebox3.locator.Location.ProviderType.Network;
+            isGpsProvided = true;
 
-        de.longri.cachebox3.locator.Location cbLocation = new de.longri.cachebox3.locator.Location(location.getLatitude(), location.getLongitude(), location.getAccuracy());
+        eventHelper.newGpsPos(location.getLatitude(), location.getLongitude(), isGpsProvided,
+                location.getAltitude(), location.getSpeed() * 3.6, location.getBearing(),
+                location.getAccuracy());
 
-        cbLocation.setHasSpeed(location.hasSpeed());
-        cbLocation.setSpeed(location.getSpeed());
-        cbLocation.setHasBearing(location.hasBearing());
-        cbLocation.setBearing(location.getBearing());
-        cbLocation.setAltitude(location.getAltitude());
-        cbLocation.setProvider(provider);
 
-        de.longri.cachebox3.locator.Locator.setNewLocation(cbLocation);
     }
 
     @Override

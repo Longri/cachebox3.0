@@ -91,9 +91,11 @@ public class Splash extends NamedStage {
             InputStream stream = Gdx.files.internal("cb_logo.svg").read();
             float targetWidth = Gdx.graphics.getWidth() * 0.8f;
             Bitmap svgBitmap = PlatformConnector.getSvg("", stream, PlatformConnector.SvgScaleType.SCALED_TO_WIDTH, targetWidth);
-            CB_Logo = new Image(new Texture(Utils.getPixmapFromBitmap(svgBitmap)));
-            CB_Logo.setPosition((Gdx.graphics.getWidth() - svgBitmap.getWidth()) / 2, svgBitmap.getHeight() * 2);
-            this.addActor(CB_Logo);
+            if (svgBitmap != null) {
+                CB_Logo = new Image(new Texture(Utils.getPixmapFromBitmap(svgBitmap)));
+                CB_Logo.setPosition((Gdx.graphics.getWidth() - svgBitmap.getWidth()) / 2, svgBitmap.getHeight() * 2);
+                this.addActor(CB_Logo);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -191,7 +193,7 @@ public class Splash extends NamedStage {
 
     private void doneLoading() {
 
-        log.info("Add 3DModels");
+        log.info("add 3DModels");
 
         Model myLocationModel = assets.get("skins/day/3d_model/Pfeil.g3db", Model.class);
         myLocationModel.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));

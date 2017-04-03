@@ -17,7 +17,7 @@ package de.longri.cachebox3.types;
 
 
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.Locator;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;
@@ -259,7 +259,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
             }
             if (!found) {
                 // Waypoint not in List
-                // Add Waypoint to List
+                // add Waypoint to List
                 waypoints.add(wp);
             }
         }
@@ -424,7 +424,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
      * @return Entfernung zur uebergebenen User Position als Float
      */
     public float Distance(MathUtils.CalculationType type, boolean useFinal) {
-        return Distance(type, useFinal, Locator.getCoordinate());
+        return Distance(type, useFinal, EventHandler.getMyPosition());
     }
 
     float Distance(MathUtils.CalculationType type, boolean useFinal, Coordinate fromPos) {
@@ -531,7 +531,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
 //
 //            Waypoint aktWaypoint = this.findWaypointByGc(newWaypoint.getGcCode());
 //            if (aktWaypoint == null) {
-//                // this waypoint is new -> Add to list
+//                // this waypoint is new -> add to list
 //                this.waypoints.add(newWaypoint);
 //            } else {
 //                // this waypoint is already in our list -> Copy Informations
@@ -551,7 +551,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
 
     @Override
     public String toString() {
-        return "Cache:" + getGcCode();
+        return "Cache:" + getGcCode() + " " + super.toString();
     }
 
     void dispose() {

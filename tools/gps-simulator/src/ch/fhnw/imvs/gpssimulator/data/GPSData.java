@@ -49,7 +49,7 @@ public final class GPSData {
     private static Orientation ew;
     private static double speed;
     private static double altitude;
-    private static int course;
+    private static double course;
     private static int satellites;
     private static int quality;
     private static FixType fixType; // 3: 3D-fix, 2: 2D-fix, 1: no-fix
@@ -182,11 +182,11 @@ public final class GPSData {
         }
     }
 
-    public static int getCourse() {
+    public static double getCourse() {
         return course;
     }
 
-    public static void setCourse(int course) {
+    public static void setCourse(double course) {
         if (GPSData.course != course) {
             GPSData.course = course;
             notifyChange();

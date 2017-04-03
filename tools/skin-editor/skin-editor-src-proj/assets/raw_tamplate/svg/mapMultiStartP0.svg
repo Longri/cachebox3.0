@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="54.5" height="37.6231" viewBox="0 0 54.50 37.62" enable-background="new 0 0 54.50 37.62" xml:space="preserve">
+	<g>
+		<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.525196" y1="-0.36498" x2="2.25862" y2="-0.36498" gradientTransform="rotate(90.000000 0.525196 -0.364980)">
+			<stop offset="0" stop-color="#D56919" stop-opacity="1"/>
+			<stop offset="0.418605" stop-color="#C55D10" stop-opacity="1"/>
+			<stop offset="0.488372" stop-color="#B65207" stop-opacity="1"/>
+			<stop offset="0.623256" stop-color="#A44905" stop-opacity="1"/>
+			<stop offset="1" stop-color="#934004" stop-opacity="1"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill1_)" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 1.0625,1L 39.64,1.12305L 39.64,6.37305L 33.39,6.87305L 33.39,11.123L 53.39,11.123L 53.39,18.123L 47.39,18.123L 47.39,36.373L 20.8901,36.623L 21.1401,23.623L 7.64008,23.623L 7.64008,7.37305L 1,7.25L 1.0625,1 Z "/>
+		<linearGradient id="SVGID_Fill2_" gradientUnits="objectBoundingBox" x1="0.500754" y1="-0.305872" x2="2.12323" y2="-0.305872" gradientTransform="rotate(90.000000 0.500754 -0.305872)">
+			<stop offset="0" stop-color="#D56919" stop-opacity="1"/>
+			<stop offset="0.418605" stop-color="#C55D10" stop-opacity="1"/>
+			<stop offset="0.488372" stop-color="#B65207" stop-opacity="1"/>
+			<stop offset="0.623256" stop-color="#A44905" stop-opacity="1"/>
+			<stop offset="1" stop-color="#934004" stop-opacity="1"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill2_)" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 33.7234,11.3315L 16.0567,11.1648L 15.89,16.3315L 21.4167,16.3125L 21.2234,24.498L 21.25,36.2292L 47.2234,35.998L 47.39,18.498L 53.5,18.3958L 53.4167,11.3125L 33.7234,11.3315 Z "/>
+	</g>
+</svg>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 package de.longri.cachebox3.gui.menu;
-
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
 
 /**
  * Created by Longri on 15.08.2016.

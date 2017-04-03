@@ -82,7 +82,7 @@ public class CacheDetail implements Serializable {
 	public String Country = "";
 
 	/**
-	 * State des Caches
+	 * MapMode des Caches
 	 */
 	public String State = "";
 
@@ -354,7 +354,7 @@ return false;
 //				e.printStackTrace();
 //			}
 //
-//			// Add own taken photo
+//			// add own taken photo
 //			directory = Config.UserImageFolder.getValue();
 //			// Log.debug(log, "from UserImageFolder: " + directory);
 //			if (directory != null) {

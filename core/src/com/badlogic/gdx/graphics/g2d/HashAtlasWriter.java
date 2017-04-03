@@ -78,12 +78,6 @@ public class HashAtlasWriter {
             }
         }
         writer.close();
-
-        //write hash file
-        FileHandle hashFile = file.sibling(file.nameWithoutExtension() + ".hash");
-        Writer hashwriter = hashFile.writer(false);
-        hashwriter.write("hash: " + resultHashCode + "\n");
-        hashwriter.close();
     }
 
 
@@ -92,6 +86,7 @@ public class HashAtlasWriter {
         FileHandle hashFile = cachedAtlas.sibling(cachedAtlas.nameWithoutExtension() + ".hash");
         int hash = -1;
         BufferedReader reader = new BufferedReader(new InputStreamReader(hashFile.read()), 64);
+
         try {
             String line = reader.readLine();
             int colon = line.indexOf(':');
@@ -99,9 +94,21 @@ public class HashAtlasWriter {
             hash = Integer.parseInt(sValue);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 
+        int resultHashCode = getResultHashCode(svgs, skinFile);
+
+        return resultHashCode == hash;
+    }
+
+    public static int getResultHashCode(ArrayList<ScaledSvg> svgs, FileHandle skinFile) {
         final int prime = 31;
         int resultHashCode = 1;
         resultHashCode = resultHashCode * prime + Utils.getMd5(skinFile).hashCode();
@@ -109,10 +116,12 @@ public class HashAtlasWriter {
         FileHandle skinFolder = skinFile.parent();
 
         for (ScaledSvg svg : svgs) {
-            FileHandle fileHandle =skinFolder.child(svg.path);// Gdx.files.internal(svg.path);
+            FileHandle fileHandle = skinFolder.child(svg.path);// Gdx.files.internal(svg.path);
             resultHashCode = resultHashCode * prime + Utils.getMd5(fileHandle).hashCode();
-            resultHashCode = (resultHashCode * (int) (prime * svg.scale));
+            resultHashCode = (resultHashCode * (int) (prime * 2000 * svg.scale));
         }
-        return resultHashCode == hash;
+
+        resultHashCode *= prime * svgs.size();
+        return resultHashCode;
     }
 }

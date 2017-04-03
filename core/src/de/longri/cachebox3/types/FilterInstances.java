@@ -44,7 +44,6 @@ public class FilterInstances {
 		mCacheTypes[CacheTypes.Traditional.ordinal()] = true;
 		mCacheTypes[CacheTypes.Camera.ordinal()] = true;
 		mCacheTypes[CacheTypes.Earth.ordinal()] = true;
-		mCacheTypes[CacheTypes.Munzee.ordinal()] = true;
 		String tmp = String.valueOf(mCacheTypes[0]);
 		for (int i = 1; i < mCacheTypes.length; i++) {
 			tmp = tmp + "," + String.valueOf(mCacheTypes[i]);
@@ -103,7 +102,6 @@ public class FilterInstances {
 
 	// Drop off Travelbugs 4
 	private final static String sTBsCacheTypes() {
-		// "\"types\":\"true,false,false,false,false,false,false,false,false,false,false,true,false\"," + //
 		boolean[] mCacheTypes = new boolean[CacheTypes.values().length];
 		Arrays.fill(mCacheTypes, false);
 		mCacheTypes[CacheTypes.Traditional.ordinal()] = true;

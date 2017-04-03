@@ -15,18 +15,33 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import de.longri.cachebox3.gui.widgets.Compass;
+
 /**
  * Created by Longri on 24.07.16.
  */
 public class CompassView extends AbstractView {
 
+    private final Compass compass;
+
     public CompassView() {
         super("CompassView");
+        compass = new Compass("default");
+        this.addChild(compass);
+
+        compass.setBounds(10, 10, this.getWidth() - 20, this.getWidth() - 20);
     }
 
 
     @Override
     public void dispose() {
 
+    }
+
+    /**
+     * Called when the actor's size has been changed.
+     */
+    protected void sizeChanged() {
+        compass.setBounds(20, 100, this.getWidth() - 20, this.getWidth() - 20);
     }
 }

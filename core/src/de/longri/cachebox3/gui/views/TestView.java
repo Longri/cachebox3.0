@@ -15,9 +15,14 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import de.longri.cachebox3.gui.widgets.CoordinateButton;
-import de.longri.cachebox3.locator.Coordinate;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import de.longri.cachebox3.gui.activities.FileChooser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +31,9 @@ import org.slf4j.LoggerFactory;
  */
 public class TestView extends AbstractView {
     final static Logger log = LoggerFactory.getLogger(TestView.class);
+
+
+    static private FileChooser fileChooser = new FileChooser("select folder", FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES);
 
 
     public TestView() {
@@ -42,6 +50,7 @@ public class TestView extends AbstractView {
 
 
         this.addActor(coordinateButton);
+        tbl.row();
 
         coordinateButton.setBounds(20, 100, 300, 50);
 

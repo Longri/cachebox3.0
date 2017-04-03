@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,6 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.gui.actions.*;
 import de.longri.cachebox3.gui.actions.show_vies.*;
-import de.longri.cachebox3.gui.events.SelectedCacheEvent;
-import de.longri.cachebox3.gui.events.SelectedCacheEventList;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.ActionButton;
@@ -38,10 +36,11 @@ import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
 import de.longri.cachebox3.gui.widgets.Slider;
+import de.longri.cachebox3.locator.events.newT.*;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.Waypoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +49,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 /**
  * Created by Longri on 20.07.2016.
  */
-public class ViewManager extends NamedStage implements SelectedCacheEvent {
+public class ViewManager extends NamedStage implements SelectedCacheChangedListener, SelectedWayPointChangedListener {
 
     final static Logger log = LoggerFactory.getLogger(ViewManager.class);
     final static CharSequence EMPTY = "";
@@ -113,26 +112,12 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
 
 
         //register SelectedCacheChangedEvent
-        SelectedCacheEventList.Add(this);
+        EventHandler.add(this);
 
         //set selected Cache to slider
-        selectedCacheChanged(CB.getSelectedCache(), CB.getSelectedWaypoint(), null, null);
-
+        selectedCacheChanged(new SelectedCacheChangedEvent(EventHandler.getSelectedCache()));
     }
 
-    @Override
-    public void selectedCacheChanged(Cache selectedCache, Waypoint waypoint, Cache LastSelectedCache, Waypoint LastWaypoint) {
-        // set Cache name to Slider
-        if (selectedCache == null) {
-            slider.setCacheName(EMPTY);
-        } else {
-            CharSequence text = CacheTypes.toShortString(selectedCache)
-                    + terrDiffToShortString(selectedCache.getDifficulty()) + "/"
-                    + terrDiffToShortString(selectedCache.getTerrain()) + CacheSizes.toShortString(selectedCache)
-                    + " " + selectedCache.getName();
-            slider.setCacheName(text);
-        }
-    }
 
     private String terrDiffToShortString(float value) {
         int intValue = (int) value;
@@ -250,10 +235,38 @@ public class ViewManager extends NamedStage implements SelectedCacheEvent {
         return this.main;
     }
 
+    @Override
+    public void selectedCacheChanged(SelectedCacheChangedEvent event) {
+        setCacheName(event.cache);
+    }
+
+    @Override
+    public void selectedWayPointChanged(SelectedWayPointChangedEvent event) {
+        setCacheName(Database.Data.Query.GetCacheById(event.wayPoint.CacheId));
+    }
+
+    Cache lastCache = null;
+
+    private void setCacheName(Cache cache) {
+        // set Cache name to Slider
+        if (cache == null) {
+            slider.setCacheName(EMPTY);
+        } else {
+            if (lastCache == null || !lastCache.equals(cache)) {
+                CharSequence text = CacheTypes.toShortString(cache)
+                        + terrDiffToShortString(cache.getDifficulty()) + "/"
+                        + terrDiffToShortString(cache.getTerrain()) + CacheSizes.toShortString(cache)
+                        + " " + cache.getName();
+                slider.setCacheName(text);
+                lastCache = cache;
+            }
+        }
+    }
+
 
     // Toast pop up
     public enum ToastLength {
-        SHORT(1.0f), NORMAL(1.5f), LONG(3.5f);
+        SHORT(1.0f), NORMAL(1.5f), LONG(3.5f), EXTRA_LONG(6.0f);
 
         public final float value;
 

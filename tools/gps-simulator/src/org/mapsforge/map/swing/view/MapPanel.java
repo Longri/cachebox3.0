@@ -1,18 +1,9 @@
 package org.mapsforge.map.swing.view;
 
-import java.awt.Button;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
-
-import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-
-import de.longri.cachebox3.locator.Location;
-import de.longri.cachebox3.locator.Locator;
+import ch.fhnw.imvs.gpssimulator.SimulatorMain;
+import ch.fhnw.imvs.gpssimulator.data.GPSData;
+import ch.fhnw.imvs.gpssimulator.data.GPSDataListener;
+import de.longri.cachebox3.locator.events.newT.GpsEventHelper;
 import org.mapsforge.core.graphics.GraphicFactory;
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.awt.graphics.AwtGraphicFactory;
@@ -31,12 +22,16 @@ import org.mapsforge.map.model.MapViewPosition;
 import org.mapsforge.map.model.Model;
 import org.mapsforge.map.model.common.PreferencesFacade;
 import org.mapsforge.map.reader.MapFile;
-
-
-import ch.fhnw.imvs.gpssimulator.SimulatorMain;
-import ch.fhnw.imvs.gpssimulator.data.GPSData;
-import ch.fhnw.imvs.gpssimulator.data.GPSDataListener;
 import org.mapsforge.map.rendertheme.InternalRenderTheme;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 public class MapPanel extends JPanel implements ActionListener {
 
@@ -73,16 +68,15 @@ public class MapPanel extends JPanel implements ActionListener {
         model.mapViewPosition.setCenter(pos);
         model.mapViewPosition.setZoomLevel((byte) SimulatorMain.prefs.getInt("zoom", 16));
 
+
+        final GpsEventHelper eventHelper = new GpsEventHelper();
         GPSData.addChangeListener(new GPSDataListener() {
 
             @Override
             public void valueChanged() {
-                if (Locator.that != null) {
-                    LatLong pos = new LatLong(GPSData.getLatitude(), GPSData.getLongitude());
-                    model.mapViewPosition.setCenter(pos);
-                    Locator.setNewLocation(new Location(pos.getLatitude(), pos.getLongitude(), GPSData.getQuality(), true, (float) GPSData.getSpeed(), true, GPSData.getCourse(), GPSData.getAltitude(), Location.ProviderType.GPS));
-                }
-
+                eventHelper.newGpsPos(GPSData.getLatitude(), GPSData.getLongitude(), true,
+                        GPSData.getAltitude(), GPSData.getSpeed()*3.6, GPSData.getCourse(),
+                        (float) GPSData.getQuality());
             }
         });
     }

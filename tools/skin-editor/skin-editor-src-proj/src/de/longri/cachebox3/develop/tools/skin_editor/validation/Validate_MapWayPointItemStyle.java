@@ -103,7 +103,7 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
         //Check Cache, multi start
         Cache multiStartCache = new Cache(0, 0, "test", CacheTypes.Multi, "GCCODE");
         multiStartCache.setOwner("nicht meiner");
-        Waypoint wp = new Waypoint(0, 0, false);
+        Waypoint wp = new Waypoint("wp", CacheTypes.MultiStage, "", 0, 0, 100, "", "");
         wp.IsStart = true;
         multiStartCache.waypoints.add(wp);
         checkCache(multiStartCache);
@@ -111,11 +111,32 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
         //Check Cache, myst start
         Cache mystStartCache = new Cache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
         mystStartCache.setOwner("nicht meiner");
-        Waypoint wpm = new Waypoint(0, 0, false);
+        Waypoint wpm = new Waypoint("wp", CacheTypes.MultiStage, "", 0, 0, 100, "", "");
         wpm.IsStart = true;
         mystStartCache.waypoints.add(wpm);
         checkCache(mystStartCache);
 
+
+        {// check multiStageStart
+            Waypoint wpMS = new Waypoint("wp", CacheTypes.MultiStage, "", 0, 0, 100, "", "");
+            wpMS.IsStart = true;
+
+            MapWayPointItemStyle style = null;
+            try {
+                style = WaypointLayer.getClusterSymbolsByWaypoint(wpMS);
+            } catch (GdxRuntimeException e) {
+            }
+            String styleName = WaypointLayer.getMapIconName(wpMS);
+
+            if (style == null) {
+                missingSyles.append(styleName);
+                missingSyles.append("\n");
+            }else{
+                checkBitmap(style.small, styleName, Size.small);
+                checkBitmap(style.middle, styleName, Size.middle);
+                checkBitmap(style.large, styleName, Size.large);
+            }
+        }
 
         for (CacheTypes type : CacheTypes.values()) {
 

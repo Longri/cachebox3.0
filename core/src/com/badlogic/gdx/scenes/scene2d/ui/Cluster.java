@@ -27,7 +27,7 @@ public class Cluster extends MapWayPointItem {
     private Coordinate centerCoordinate;
 
     public Cluster(Coordinate pos, String name, Regions regions) {
-        super(pos, name, regions);
+        super(pos, name, regions,false);
     }
 
 

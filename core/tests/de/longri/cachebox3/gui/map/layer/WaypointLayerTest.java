@@ -15,23 +15,31 @@
  */
 package de.longri.cachebox3.gui.map.layer;
 
+import com.badlogic.gdx.backends.lwjgl.JUnitGdxTestApp;
 import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.kotcrab.vis.ui.VisUI;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
-import de.longri.cachebox3.gui.map.layer.cluster.ClusterRenderer;
+import de.longri.cachebox3.gui.map.layer.renderer.WaypointLayerRenderer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
+import de.longri.cachebox3.gui.views.MapView;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.locator.events.newT.SelectedCacheChangedEvent;
+import de.longri.cachebox3.locator.events.newT.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheList;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.oscim.awt.AwtGraphics;
 import org.oscim.awt.DesktopRealSvgBitmap;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.renderer.atlas.TextureRegion;
+import travis.EXCLUDE_FROM_TRAVIS;
+
+import java.util.LinkedHashMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -40,12 +48,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 class WaypointLayerTest {
 
+    @BeforeAll
+    static void beforeAll() {
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
+        // Initial JUnit GDX App
+        new JUnitGdxTestApp("TestHashWriter");
+    }
+
     /**
      * Will check if, after selection changed, the correct Symbol set!
      */
     @Test
     void selectedCacheChanged() {
-
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
         // create test Skin
         AwtGraphics.init();
         MapWayPointItemStyle styleSelectOverlay = new MapWayPointItemStyle();
@@ -71,8 +86,8 @@ class WaypointLayerTest {
         Database.Data.Query = new CacheList();
         if (VisUI.isLoaded()) VisUI.dispose();
         VisUI.load(skin);
-
-        WaypointLayer wpLayer = new WaypointLayer(null);
+        LinkedHashMap<Object, TextureRegion> textureRegionMap = MapView.createTextureAtlasRegions();
+        WaypointLayer wpLayer = new WaypointLayer(null, textureRegionMap);
         Cache testCache1 = new Cache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
         Cache testCache2 = new Cache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
         Cache testCache3 = new Cache(0.3, 0, "Cache3", CacheTypes.Traditional, "GC3");
@@ -81,11 +96,11 @@ class WaypointLayerTest {
         Database.Data.Query.add(testCache2);
         Database.Data.Query.add(testCache3);
 
-        ClusterRenderer renderer = (ClusterRenderer) wpLayer.getRenderer();
+        WaypointLayerRenderer renderer = (WaypointLayerRenderer) wpLayer.getRenderer();
 
         assertThat("itemList must empty", wpLayer.mItemList.size() == 0);
 
-        CB.setSelectedCache(null);
+        EventHandler.fire(new SelectedCacheChangedEvent(null));
         CacheListChangedEventList.Call();
 
         wait(500);// for CacheListChangedEvent is fired! (Will call in a separate Thread)
@@ -98,9 +113,9 @@ class WaypointLayerTest {
             assertThat("regions must have no overlay regions:", regions.length == 1);
         }
 
-        CB.setSelectedCache(testCache1);
+        EventHandler.fire(new SelectedCacheChangedEvent(testCache1));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache1.toString(), CB.getSelectedCache().equals(testCache1));
+        assertThat("Selected cache must:" + testCache1.toString(), EventHandler.getSelectedCache().equals(testCache1));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -113,7 +128,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(testCache1)) {
@@ -125,9 +140,9 @@ class WaypointLayerTest {
         }
 
 
-        CB.setSelectedCache(testCache2);
+        EventHandler.fire(new SelectedCacheChangedEvent(testCache2));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache2.toString(), CB.getSelectedCache().equals(testCache2));
+        assertThat("Selected cache must:" + testCache2.toString(), EventHandler.getSelectedCache().equals(testCache2));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -140,7 +155,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(testCache2)) {
@@ -151,9 +166,9 @@ class WaypointLayerTest {
             }
         }
 
-        CB.setSelectedCache(testCache3);
+        EventHandler.fire(new SelectedCacheChangedEvent(testCache3));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache3.toString(), CB.getSelectedCache().equals(testCache3));
+        assertThat("Selected cache must:" + testCache3.toString(), EventHandler.getSelectedCache().equals(testCache3));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -166,7 +181,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(testCache3)) {
@@ -185,7 +200,7 @@ class WaypointLayerTest {
      */
     @Test
     void selectedWaypointChanged() {
-
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
         // create test Skin
         AwtGraphics.init();
         MapWayPointItemStyle styleSelectOverlay = new MapWayPointItemStyle();
@@ -238,8 +253,9 @@ class WaypointLayerTest {
 
         if (VisUI.isLoaded()) VisUI.dispose();
         VisUI.load(skin);
+        LinkedHashMap<Object, TextureRegion> textureRegionMap = MapView.createTextureAtlasRegions();
 
-        WaypointLayer wpLayer = new WaypointLayer(null);
+        WaypointLayer wpLayer = new WaypointLayer(null, textureRegionMap);
         Cache testCache1 = new Cache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
         Cache testCache2 = new Cache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
         Cache testCache3 = new Cache(0.3, 0, "Cache3", CacheTypes.Traditional, "GC3");
@@ -259,11 +275,11 @@ class WaypointLayerTest {
         Database.Data.Query.add(testCache2);
         Database.Data.Query.add(testCache3);
 
-        ClusterRenderer renderer = (ClusterRenderer) wpLayer.getRenderer();
+        WaypointLayerRenderer renderer = (WaypointLayerRenderer) wpLayer.getRenderer();
 
         assertThat("itemList must empty", wpLayer.mItemList.size() == 0);
 
-        CB.setSelectedCache(null);
+        EventHandler.fire(new SelectedCacheChangedEvent(null));
         CacheListChangedEventList.Call();
 
         wait(500);// for CacheListChangedEvent is fired! (Will call in a separate Thread)
@@ -276,10 +292,10 @@ class WaypointLayerTest {
             assertThat("regions must have no overlay regions:", regions.length == 1);
         }
 
-        CB.setSelectedWaypoint(testCache1, wp1);
+        EventHandler.fire(new SelectedWayPointChangedEvent(wp1));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
 
-        assertThat("Selected cache must:" + testCache1.toString(), CB.getSelectedCache().equals(testCache1));
+        assertThat("Selected cache must:" + testCache1.toString(), EventHandler.getSelectedCache().equals(testCache1));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -292,7 +308,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(wp1)) {
@@ -303,9 +319,9 @@ class WaypointLayerTest {
         }
 
 
-        CB.setSelectedCache(testCache3);
+        EventHandler.fire(new SelectedCacheChangedEvent(testCache3));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache3.toString(), CB.getSelectedCache().equals(testCache3));
+        assertThat("Selected cache must:" + testCache3.toString(), EventHandler.getSelectedCache().equals(testCache3));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -318,7 +334,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(testCache3)) {
@@ -329,9 +345,9 @@ class WaypointLayerTest {
             }
         }
 
-        CB.setSelectedWaypoint(testCache2, wp3);
+        EventHandler.fire(new SelectedWayPointChangedEvent(wp3));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache2.toString(), CB.getSelectedCache().equals(testCache2));
+        assertThat("Selected cache must:" + testCache2.toString(), EventHandler.getSelectedCache().equals(testCache2));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -344,7 +360,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(wp3)) {
@@ -354,9 +370,9 @@ class WaypointLayerTest {
             }
         }
 
-        CB.setSelectedWaypoint(testCache2, wp2);
+        EventHandler.fire(new SelectedWayPointChangedEvent(wp2));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache2.toString(), CB.getSelectedCache().equals(testCache2));
+        assertThat("Selected cache must:" + testCache2.toString(), EventHandler.getSelectedCache().equals(testCache2));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -369,7 +385,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(wp2)) {
@@ -379,9 +395,9 @@ class WaypointLayerTest {
             }
         }
 
-        CB.setSelectedCache(testCache2);
+        EventHandler.fire(new SelectedCacheChangedEvent(testCache2));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache2.toString(), CB.getSelectedCache().equals(testCache2));
+        assertThat("Selected cache must:" + testCache2.toString(), EventHandler.getSelectedCache().equals(testCache2));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -394,7 +410,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(testCache2)) {
@@ -406,9 +422,9 @@ class WaypointLayerTest {
         }
 
 
-        CB.setSelectedCache(testCache1);
+        EventHandler.fire(new SelectedCacheChangedEvent(testCache1));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
-        assertThat("Selected cache must:" + testCache1.toString(), CB.getSelectedCache().equals(testCache1));
+        assertThat("Selected cache must:" + testCache1.toString(), EventHandler.getSelectedCache().equals(testCache1));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -421,7 +437,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(testCache1)) {
@@ -432,10 +448,10 @@ class WaypointLayerTest {
             }
         }
 
-        CB.setSelectedWaypoint(testCache1, wp1);
+        EventHandler.fire(new SelectedWayPointChangedEvent(wp1));
         wait(500);// for SelectedCacheChangedEvent is fired! (Will call in a separate Thread)
 
-        assertThat("Selected cache must:" + testCache1.toString(), CB.getSelectedCache().equals(testCache1));
+        assertThat("Selected cache must:" + testCache1.toString(), EventHandler.getSelectedCache().equals(testCache1));
 
         //check if only the selected item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -448,7 +464,7 @@ class WaypointLayerTest {
                 assertThat("regions must have no overlay regions:", regions.length == 1);
             }
         }
-        for (ClusterRenderer.InternalItem item : renderer.mItems) {
+        for (WaypointLayerRenderer.InternalItem item : renderer.mItems) {
             TextureRegion[] renderItemRegions = item.item.getMapSymbol(7);
 
             if (item.item.dataObject.equals(wp1)) {

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="63" height="63.1084" viewBox="0 0 63.00 63.11" enable-background="new 0 0 63.00 63.11" xml:space="preserve">
+	<g>
+		<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="-0.101111" y1="0.499995" x2="1.10113" y2="0.499995">
+			<stop offset="0" stop-color="#1FA3FF" stop-opacity="1"/>
+			<stop offset="1" stop-color="#000000" stop-opacity="1"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill1_)" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" d="M 20.0227,7.91992L 43.7561,7.91992L 43.7561,13.4491L 39.3564,16.9766L 39.3564,37.2831L 43.7562,40.5245L 43.7561,45.3868L 20.0227,45.3868L 20.0227,40.5238L 24.8231,37.0924L 24.8231,16.9766L 20.0227,13.3545L 20.0227,7.91992 Z "/>
+		<linearGradient id="SVGID_Fill2_" gradientUnits="objectBoundingBox" x1="0" y1="0.5" x2="0.999984" y2="0.5">
+			<stop offset="0" stop-color="#909CA4" stop-opacity="1"/>
+			<stop offset="1" stop-color="#000000" stop-opacity="1"/>
+		</linearGradient>
+		<path fill="url(#SVGID_Fill2_)" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" d="M 30.8731,45.3857L 32.8098,45.3857L 32.7515,62.0574L 31.8015,63.1074L 30.8731,62.024L 30.8731,45.3857 Z "/>
+		<radialGradient id="SVGID_Stroke1_" cx="31.5015" cy="31.1403" r="33.0001" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#909CA4" stop-opacity="1"/>
+			<stop offset="0.469828" stop-color="#768087" stop-opacity="1"/>
+			<stop offset="0.517774" stop-color="#626B71" stop-opacity="1"/>
+			<stop offset="0.547414" stop-color="#4E565B" stop-opacity="1"/>
+			<stop offset="0.570813" stop-color="#6B747B" stop-opacity="1"/>
+			<stop offset="0.62931" stop-color="#88939B" stop-opacity="1"/>
+			<stop offset="1" stop-color="#88939B" stop-opacity="1"/>
+		</radialGradient>
+		<path fill="none" fill-rule="evenodd" stroke-width="3" stroke-linecap="square" stroke-linejoin="bevel" stroke="url(#SVGID_Stroke1_)" d="M 24.9514,60.7819C 11.5329,57.7936 1.50139,45.8177 1.50139,31.4989C 1.50139,14.9303 14.933,1.4989 31.5015,1.4989C 48.0701,1.4989 61.5016,14.9303 61.5016,31.4989C 61.5016,45.3876 52.0637,57.0719 39.2515,60.4884"/>
+	</g>
+</svg>

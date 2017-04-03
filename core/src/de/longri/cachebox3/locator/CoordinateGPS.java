@@ -32,6 +32,9 @@ public class CoordinateGPS extends Coordinate implements Serializable {
      * Die Genauigkeit dieser Coordinate! Wird beim Messen benutzt
      */
     protected int Accuracy = -1;
+    private double speed;
+    private double heading;
+    private boolean isGPSprovided;
 
     public CoordinateGPS(double latitude, double longitude) {
         super(latitude, longitude);
@@ -67,7 +70,7 @@ public class CoordinateGPS extends Coordinate implements Serializable {
     }
 
     public CoordinateGPS(MapPosition mapPosition) {
-        super(mapPosition.getLatitude(),mapPosition.getLongitude());
+        super(mapPosition.getLatitude(), mapPosition.getLongitude());
     }
 
     public boolean hasAccuracy() {
@@ -104,4 +107,27 @@ public class CoordinateGPS extends Coordinate implements Serializable {
         Accuracy = (int) accuracy;
     }
 
+    public boolean isGPSprovided() {
+        return this.isGPSprovided;
+    }
+
+    public double getHeading() {
+        return this.heading;
+    }
+
+    public double getSpeed() {
+        return this.speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public void setHeading(double heading) {
+        this.heading = heading;
+    }
+
+    public void setIsGpsProvided(boolean isGpsProvided) {
+        this.isGPSprovided = isGpsProvided;
+    }
 }

@@ -87,7 +87,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
         // Get the location manager
         locationManager = (LocationManager) this.application.getSystemService(Context.LOCATION_SERVICE);
 
-        final int updateTime = 500; //500ms
+        final int updateTime = 1000; // 1s
 
         //TODO get gps updateTime from settings
 //            int updateTime = Config.gpsUpdateTime.getValue();
@@ -105,7 +105,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
             @Override
             public void run() {
                 try {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 1, locationListener);
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 5, locationListener);
                     if (ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application, Manifest.permission.ACCESS_FINE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED &&
                             ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application, Manifest.permission.ACCESS_COARSE_LOCATION)

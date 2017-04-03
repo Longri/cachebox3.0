@@ -39,9 +39,9 @@ public class CB_RectF {
      * [4] = halfWidth <br>
      * [5] = halfHeight <br>
      * [6] = crossPos.x <br>
-     * [7] = crossPos.x <br>
+     * [7] = crossPos.y <br>
      * [8] = centerPos.x <br>
-     * [9] = centerPos.x <br>
+     * [9] = centerPos.y <br>
      */
     protected float member[] = new float[]{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 

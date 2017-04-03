@@ -25,6 +25,8 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.SelectDB_Activity;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.locator.events.newT.SelectedCacheChangedEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheListDAO;
@@ -62,11 +64,11 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
     @Override
     public void execute() {
 
-        if (CB.isSetSelectedCache()) {
+        if (EventHandler.getSelectedCache() != null) {
             // speichere selektierten Cache, da nicht alles über die SelectedCacheEventList läuft
-            Config.LastSelectedCache.setValue(CB.getSelectedCache().getGcCode());
+            Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGcCode());
             Config.AcceptChanges();
-            log.debug("LastSelectedCache = " + CB.getSelectedCache().getGcCode());
+            log.debug("LastSelectedCache = " + EventHandler.getSelectedCache().getGcCode());
         }
 
 
@@ -152,7 +154,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
                     try {
                         log.debug("returnFromSelectDB:Set selectedCache to " + c.getGcCode() + " from lastSaved.");
                         c.loadDetail();
-                        CB.setSelectedCache(c);
+                        EventHandler.fire(new SelectedCacheChangedEvent(c));
                     } catch (Exception e) {
                         log.error("set last selected Cache", e);
                     }
@@ -161,9 +163,9 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             }
         }
         // Wenn noch kein Cache Selected ist dann einfach den ersten der Liste aktivieren
-        if ((CB.getSelectedCache() == null) && (Database.Data.Query.size() > 0)) {
+        if ((EventHandler.getSelectedCache() == null) && (Database.Data.Query.size() > 0)) {
             log.debug("Set selectedCache to " + Database.Data.Query.get(0).getGcCode() + " from firstInDB");
-            CB.setSelectedCache(Database.Data.Query.get(0));
+            EventHandler.fire(new SelectedCacheChangedEvent(Database.Data.Query.get(0)));
         }
     }
 }

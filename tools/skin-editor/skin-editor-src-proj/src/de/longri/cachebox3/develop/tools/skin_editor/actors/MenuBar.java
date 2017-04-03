@@ -147,6 +147,9 @@ public class MenuBar extends Table {
 
         });
 
+        CreateNightSkinButton buttonCreateNightSkin = new CreateNightSkinButton(game, game.skin);
+        add(buttonCreateNightSkin).pad(5);
+
         TextButton buttonValidate = new TextButton("Validate Skin", game.skin);
         buttonValidate.addListener(new ChangeListener() {
 

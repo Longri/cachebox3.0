@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class FileList extends Array<File> implements Comparator<File> {
-    private static final long serialVersionUID = 2454564654L;
 
     public FileList(String path, String extension) {
         ini(path, extension, false);

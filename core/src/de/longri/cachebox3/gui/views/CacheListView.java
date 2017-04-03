@@ -18,16 +18,13 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.SnapshotArray;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.Locator;
-import de.longri.cachebox3.locator.events.PositionChangedEvent;
-import de.longri.cachebox3.locator.events.PositionChangedEventList;
+import de.longri.cachebox3.locator.events.newT.*;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheWithWP;
@@ -40,9 +37,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 24.07.16.
  */
-public class CacheListView extends AbstractView implements CacheListChangedEventListener, PositionChangedEvent {
+public class CacheListView extends AbstractView implements CacheListChangedEventListener, PositionChangedListener, OrientationChangedListener {
     final static Logger log = LoggerFactory.getLogger(CacheListView.class);
     private ListView listView;
+
 
     public CacheListView() {
         super("CacheListView CacheCount: " + Database.Data.Query.size());
@@ -51,7 +49,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         CacheListChangedEventList.Add(this);
 
         //register as positionChanged eventListener
-        PositionChangedEventList.Add(this);
+        EventHandler.add(this);
     }
 
     public synchronized void layout() {
@@ -64,10 +62,13 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     public void resort() {
         log.debug("resort Query");
         synchronized (Database.Data.Query) {
-            CacheWithWP nearstCacheWp = Database.Data.Query.Resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
+            CacheWithWP nearstCacheWp = Database.Data.Query.Resort(EventHandler.getSelectedCoord(),
+                    new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWaypoint()));
 
-            if (nearstCacheWp != null)
-                CB.setSelectedWaypoint(nearstCacheWp.getCache(), nearstCacheWp.getWaypoint());
+            if (nearstCacheWp != null) {
+                EventHandler.fire(new SelectedCacheChangedEvent(nearstCacheWp.getCache()));
+                EventHandler.fire(new SelectedWayPointChangedEvent(nearstCacheWp.getWaypoint()));
+            }
         }
         log.debug("Finish resort Query");
     }
@@ -100,8 +101,12 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         Cache cache = Database.Data.Query.get(idx);
 
                         //get actPos and heading
-                        Coordinate position = Locator.getCoordinate();
-                        float heading = Locator.getHeading();
+                        Coordinate position = EventHandler.getMyPosition();
+
+                        if (position == null)
+                            return; // can't update without an position
+
+                        float heading = EventHandler.getHeading();
 
 
                         // get coordinate from Cache or from Final Waypoint
@@ -114,7 +119,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
 
                         //update item
-                        if (((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.DistanceString(result[0])))
+                        if (((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0],true)))
                             Gdx.graphics.requestRendering();
                     }
 
@@ -128,7 +133,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     disposeListView();
                 }
 
-                CacheListView.this.listView = new ListView(listViewAdapter,false,true);
+                CacheListView.this.listView = new ListView(listViewAdapter, false, true);
                 synchronized (CacheListView.this.listView) {
                     listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
                     addActor(listView);
@@ -147,13 +152,13 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         Cache cache = Database.Data.Query.get(selectedItemListIndex);
                         log.debug("Cache selection changed to: " + cache.toString());
                         //set selected Cache global
-                        CB.setSelectedCache(cache);
+                        EventHandler.fire(new SelectedCacheChangedEvent(cache));
                     }
                 });
 
                 int selectedIndex = 0;
                 for (Cache cache : Database.Data.Query) {
-                    if (cache.equals(CB.getSelectedCache())) {
+                    if (cache.equals(EventHandler.getSelectedCache())) {
                         break;
                     }
                     selectedIndex++;
@@ -191,7 +196,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     public void dispose() {
         disposeListView();
         CacheListChangedEventList.Remove(this);
-        PositionChangedEventList.Remove(this);
+        EventHandler.remove(this);
         if (listView != null) listView.dispose();
         listView = null;
     }
@@ -211,15 +216,6 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         listView.dataSetChanged();
     }
 
-    @Override
-    public void PositionChanged() {
-        setChangedFlagToAllItems();
-    }
-
-    @Override
-    public void OrientationChanged() {
-        setChangedFlagToAllItems();
-    }
 
     private void setChangedFlagToAllItems() {
         if (listView == null) return;
@@ -233,10 +229,6 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         Gdx.graphics.requestRendering();
     }
 
-    @Override
-    public void SpeedChanged() {
-        //do nothing
-    }
 
     @Override
     public void onHide() {
@@ -244,14 +236,13 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     }
 
-
     @Override
-    public String getReceiverName() {
-        return "CacheListView";
+    public void positionChanged(PositionChangedEvent event) {
+        setChangedFlagToAllItems();
     }
 
     @Override
-    public Priority getPriority() {
-        return Priority.Normal;
+    public void orientationChanged(OrientationChangedEvent event) {
+        setChangedFlagToAllItems();
     }
 }

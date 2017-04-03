@@ -211,7 +211,7 @@ public class CacheDAO {
         args.put("Type", cache.Type.ordinal());
         args.put("Owner", cache.getOwner());
         args.put("Country", cache.getCountry());
-        args.put("State", cache.getState());
+        args.put("MapMode", cache.getState());
         DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             String firstimported = iso8601Format.format(new Date());
@@ -307,7 +307,7 @@ public class CacheDAO {
         args.put("PlacedBy", cache.getPlacedBy());
         args.put("Owner", cache.getOwner());
         args.put("Country", cache.getCountry());
-        args.put("State", cache.getState());
+        args.put("MapMode", cache.getState());
         DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             String stimestamp = iso8601Format.format(cache.getDateHidden());

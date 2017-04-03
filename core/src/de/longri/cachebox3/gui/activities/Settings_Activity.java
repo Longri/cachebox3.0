@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -34,11 +35,14 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
+import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
@@ -461,9 +465,9 @@ public class Settings_Activity extends ActivityBase {
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingFloat) {
             return getFloatView(listIndex, (de.longri.cachebox3.settings.types.SettingFloat) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingFolder) {
-            return getFolderView((de.longri.cachebox3.settings.types.SettingFolder) setting);
+            return getFolderView(listIndex, (de.longri.cachebox3.settings.types.SettingFolder) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingFile) {
-            return getFileView((de.longri.cachebox3.settings.types.SettingFile) setting);
+            return getFileView(listIndex, (de.longri.cachebox3.settings.types.SettingFile) setting);
 
 //            }  else if (setting instanceof de.longri.cachebox3.settings.types.SettingEnum<?>) {
 //                return getEnumView((de.longri.cachebox3.settings.types.SettingEnum<?>) setting);
@@ -502,12 +506,107 @@ public class Settings_Activity extends ActivityBase {
         return null;
     }
 
-    private ListViewItem getFileView(de.longri.cachebox3.settings.types.SettingFile setting) {
+    private ListViewItem getFileView(int listIndex, de.longri.cachebox3.settings.types.SettingFile setting) {
         return null;
     }
 
-    private ListViewItem getFolderView(de.longri.cachebox3.settings.types.SettingFolder setting) {
-        return null;
+    private ListViewItem getFolderView(int listIndex, final de.longri.cachebox3.settings.types.SettingFolder setting) {
+        ListViewItem table = new ListViewItem(listIndex) {
+            @Override
+            public void dispose() {
+            }
+        };
+
+        // add label with category name, align left
+        table.left();
+        VisLabel label = new VisLabel(Translation.Get(setting.getName()), nameStyle);
+        label.setWrap(true);
+        label.setAlignment(Align.left);
+        table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        FileChooserStyle style = VisUI.getSkin().get(FileChooserStyle.class);
+
+        Image folderIcon = new Image(style.folderIcon);
+        table.add(folderIcon).width(folderIcon.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+
+        // add description line if description exist
+        String description = Translation.Get("Desc_" + setting.getName());
+        if (!description.contains("$ID:")) {
+            table.row();
+            VisLabel desclabel = new VisLabel(description, descStyle);
+            desclabel.setWrap(true);
+            desclabel.setAlignment(Align.left);
+            table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        }
+
+        // add valualue line
+
+        table.row();
+        final VisLabel valuelabel = new VisLabel("Value: " + String.valueOf(setting.getValue()), valueStyle);
+        valuelabel.setWrap(true);
+        valuelabel.setAlignment(Align.left);
+        table.add(valuelabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        if (setting.isDefault()) {
+            valuelabel.setText("Default");
+        }
+
+
+        // add defaultValue line
+        table.row();
+        VisLabel desclabel = new VisLabel("default: " + String.valueOf(setting.getDefaultValue()), defaultValuStyle);
+        desclabel.setWrap(true);
+        desclabel.setAlignment(Align.left);
+        table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        // add clicklistener
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.getType() == InputEvent.Type.touchUp) {
+                    Menu selectClearMenu = new Menu("selectClear");
+                    selectClearMenu.addItem(MenuID.MI_SELECT_PATH, "select_folder");
+                    selectClearMenu.addItem(MenuID.MI_CLEAR_PATH, "ClearPath");
+                    selectClearMenu.setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public boolean onItemClick(MenuItem item) {
+                            switch (item.getMenuItemId()) {
+                                case MenuID.MI_SELECT_PATH:
+                                    FileChooser folderChooser = new FileChooser(Translation.Get("selectFolder"),
+                                            FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES);
+                                    folderChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
+                                        @Override
+                                        public void selected(FileHandle fileHandle) {
+                                            if (fileHandle == null) return;
+                                            // check WriteProtection
+                                            String path = fileHandle.file().getAbsolutePath();
+                                            if (setting.needWritePermission() && !Utils.checkWritePermission(path)) {
+                                                String WriteProtectionMsg = Translation.Get("NoWriteAcces");
+                                                CB.viewmanager.toast(WriteProtectionMsg, ViewManager.ToastLength.EXTRA_LONG);
+                                            } else {
+                                                setting.setValue(path);
+                                                valuelabel.setText("Value: " + String.valueOf(setting.getValue()));
+                                            }
+                                        }
+                                    });
+                                    folderChooser.setDirectory(Gdx.files.absolute(setting.getValue()));
+                                    folderChooser.show();
+                                    return true;
+
+                                case MenuID.MI_CLEAR_PATH:
+                                    setting.setValue(setting.getDefaultValue());
+                                    valuelabel.setText("Default");
+                                    return true;
+                            }
+                            return true;
+                        }
+                    });
+                    selectClearMenu.show();
+                }
+            }
+        });
+
+
+        return table;
     }
 
     private ListViewItem getFloatView(int listIndex, final de.longri.cachebox3.settings.types.SettingFloat setting) {

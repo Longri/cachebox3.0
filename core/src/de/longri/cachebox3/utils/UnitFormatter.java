@@ -47,11 +47,11 @@ public class UnitFormatter {
     // / </summary>
     // / <param name="distance"></param>
     // / <returns></returns>
-    public static String DistanceString(float distance) {
+    public static String distanceString(float distance, boolean ceil) {
         if (mUseImperialUnits)
-            return DistanceStringImperial(distance);
+            return distanceStringImperial(distance, ceil);
         else
-            return DistanceStringMetric(distance);
+            return distanceStringMetric(distance, ceil);
     }
 
     // / <summary>
@@ -59,15 +59,17 @@ public class UnitFormatter {
     // / </summary>
     // / <param name="distance"></param>
     // / <returns></returns>
-    public static String DistanceStringMetric(float distance) {
+    private static String distanceStringMetric(float distance, boolean ceil) {
 
-        if (distance <= 500)
-            return String.format("%.0f", distance) + " m";
-
-        if (distance < 10000)
-            return String.format("%.2f", distance / 1000) + " km";
-
-        return String.format("%.0f", distance / 1000) + " km";
+        if (distance <= 500) {
+            return String.format("%.0f", ceil ? Math.ceil(distance) : distance) + " m";
+        }
+        if (distance < 10000) {
+            distance /= 1000;
+            return String.format(ceil ? "%.1f" : "%.2f", distance) + " km";
+        }
+        distance /= 1000;
+        return String.format("%.0f", ceil ? Math.ceil(distance) : distance) + " km";
     }
 
     // / <summary>
@@ -75,53 +77,53 @@ public class UnitFormatter {
     // / </summary>
     // / <param name="distance"></param>
     // / <returns></returns>
-    public static String DistanceStringImperial(float distance) {
+    private static String distanceStringImperial(float distance, boolean ceil) {
 
         float yards = distance / 0.9144f;
         float miles = yards / 1760;
 
-        if (yards < 1000)
-            return String.format("%.0f", yards) + " yd";
-
+        if (yards < 1000) {
+            return String.format(ceil ? "%.0f" : "%.0f", ceil ? Math.ceil(yards) : yards) + " yd";
+        }
         if (miles < 10)
-            return String.format("%.2f", miles) + " mi";
+            return String.format(ceil ? "%.1f" : "%.2f", miles) + " mi";
 
-        return String.format("%.1f", miles) + " mi";
+        return String.format(ceil ? "%.0f" : "%.1f", ceil ? Math.ceil(miles) : miles) + " mi";
 
     }
 
-    public static String AltString(float distance) {
+    public static String altString(float distance) {
         if (mUseImperialUnits)
-            return AltStringImperial(distance);
+            return altStringImperial(distance);
         else
-            return AltStringMetric(distance);
+            return altStringMetric(distance);
     }
 
-    public static String AltStringMetric(float alt) {
+    private static String altStringMetric(float alt) {
         return String.format("%.0f", alt) + " m";
     }
 
-    public static String AltStringImperial(float alt) {
+    private static String altStringImperial(float alt) {
         float yards = alt / 0.9144f;
         return String.format("%.0f", yards) + " yd";
     }
 
-    public static String SpeedString(float kmh) {
+    public static String speedString(float kmh, boolean ceil) {
         if (mUseImperialUnits)
-            return SpeedStringImperial(kmh);
+            return speedStringImperial(kmh, ceil);
         else
-            return SpeedStringMetric(kmh);
+            return speedStringMetric(kmh, ceil);
     }
 
-    public static String SpeedStringMetric(float kmh) {
-        return String.format("%.2f km/h", kmh);
+    private static String speedStringMetric(float kmh, boolean ceil) {
+        return String.format(ceil ? "%.0f km/h" : "%.2f km/h", ceil ? Math.ceil(kmh) : kmh);
     }
 
-    public static String SpeedStringImperial(float kmh) {
-        return String.format("%.2f mph", kmh / 1.6093f);
+    private static String speedStringImperial(float kmh, boolean ceil) {
+        return String.format(ceil ? "%.0f mph" : "%.2f mph", ceil ? Math.ceil(kmh / 1.6093f) : kmh / 1.6093f);
     }
 
-    private static String FormatDM(double coord, String positiveDirection, String negativeDirection) {
+    private static String formatDM(double coord, String positiveDirection, String negativeDirection) {
         int deg = (int) coord;
         double frac = coord - deg;
         double min = frac * 60;
@@ -138,15 +140,15 @@ public class UnitFormatter {
         return result;
     }
 
-    public static String FormatLatitudeDM(double latitude) {
-        return FormatDM(latitude, "N", "S");
+    public static String formatLatitudeDM(double latitude) {
+        return formatDM(latitude, "N", "S");
     }
 
-    public static String FormatLongitudeDM(double longitude) {
-        return FormatDM(longitude, "E", "W");
+    public static String formatLongitudeDM(double longitude) {
+        return formatDM(longitude, "E", "W");
     }
 
-    public static String Rot13(String message) {
+    public static String rot13(String message) {
         String result = "";
         for (int i = 0; i < message.length(); i++) {
             String curChar = message.substring(i, i + 1);

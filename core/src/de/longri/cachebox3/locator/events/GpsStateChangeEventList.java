@@ -1,6 +1,5 @@
 package de.longri.cachebox3.locator.events;
 
-import de.longri.cachebox3.locator.Locator;
 
 import java.util.ArrayList;
 
@@ -36,9 +35,9 @@ public class GpsStateChangeEventList {
 			minEventTime = Math.min(minEventTime, System.currentTimeMillis() - lastTime);
 			lastTime = System.currentTimeMillis();
 
-			if (lastChanged != 0 && lastChanged > System.currentTimeMillis() - Locator.getMinUpdateTime()) {
-				return;
-			}
+//			if (lastChanged != 0 && lastChanged > System.currentTimeMillis() - Locator.getMinUpdateTime()) {
+//				return;
+//			}
 			lastChanged = System.currentTimeMillis();
 
 			try {
@@ -65,7 +64,7 @@ public class GpsStateChangeEventList {
 
 	private static void FireEvent(GpsStateChangeEvent event) {
 		event.GpsStateChanged();
-		// Log.d("CACHEBOX", "GPS State Change called " + event.toString());
+		// Log.d("CACHEBOX", "GPS MapMode Change called " + event.toString());
 	}
 
 }

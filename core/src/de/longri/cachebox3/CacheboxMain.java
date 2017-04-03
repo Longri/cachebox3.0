@@ -26,11 +26,13 @@ import com.badlogic.gdx.math.Matrix4;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.locator.events.newT.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import org.oscim.backend.GL;
 import org.oscim.map.Map;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
+import org.oscim.theme.ThemeLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,9 +44,12 @@ public class CacheboxMain extends ApplicationAdapter {
 
     static {
         Map.NEW_GESTURES = true;
+        ThemeLoader.POT_TEXTURES = true;
+        ThemeLoader.USE_ATLAS = true;
+        EventHandler.INIT();
     }
 
-     static Logger log = LoggerFactory.getLogger(CacheboxMain.class);
+    static Logger log = LoggerFactory.getLogger(CacheboxMain.class);
 
     Runtime runtime = Runtime.getRuntime();
     NumberFormat format = NumberFormat.getInstance();
@@ -151,13 +156,19 @@ public class CacheboxMain extends ApplicationAdapter {
         gl.frontFace(GL.CCW);
 
 
-        StageManager.draw();
+        try {
+            StageManager.draw();
+        } catch (Exception e) {
+            log.error("Draw StageManager", e);
+            e.printStackTrace();
+        }
 
         if (CB.isTestVersion()) {
             float FpsInfoSize = CB.getScaledFloat(4f);
             if (FpsInfoSprite != null) {
                 batch = StageManager.getBatch();
-                batch.begin();
+                if (!batch.isDrawing())
+                    batch.begin();
                 Color lastColor = batch.getColor();
                 batch.setColor(1.0f, 0.0f, 0.0f, 1.0f);
                 batch.draw(FpsInfoSprite, FpsInfoPos, 2, FpsInfoSize, FpsInfoSize);
@@ -197,7 +208,7 @@ public class CacheboxMain extends ApplicationAdapter {
     @Override
     public void resume() {
         checkLogger();
-      log.debug("on resume", "reopen databases");
+        log.debug("on resume", "reopen databases");
 //        //open databases
 //        if (Database.Data != null) Database.Data.Open();
 //        if (Database.Settings != null) Database.Settings.Open();

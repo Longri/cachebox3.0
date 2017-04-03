@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.utils;
 
+import org.oscim.core.Point;
+
 /**
  * Implements some static methods!
  *
@@ -71,7 +73,7 @@ public class MathUtils {
 
     /**
      * Computes the approximate distance in meters between two locations, and optionally the initial and final bearings of the shortest path
-     * between them. Distance and bearing are defined using the WGS84 ellipsoid.
+     * between them. distance and bearing are defined using the WGS84 ellipsoid.
      * <p>
      * The computed distance is stored in results[0]. If results has length 2 or greater, the initial bearing is stored in results[1]. If
      * results has length 3 or greater, the final bearing is stored in results[2].
@@ -96,6 +98,11 @@ public class MathUtils {
                 computeDistanceAndBearingFast(startLatitude, startLongitude, endLatitude, endLongitude, results);
                 break;
         }
+    }
+
+    public static void clampToMinMax(float[] mBox, int offset, short maxValue) {
+        if (mBox[offset] < -maxValue) mBox[offset] = -maxValue;
+        else if (mBox[offset] > maxValue) mBox[offset] = maxValue;
     }
 
     public enum CalculationType {
@@ -126,7 +133,7 @@ public class MathUtils {
 
         results[0] = (float) ((IntWGS84_MAJOR_AXIS) * Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos((lon2 - lon1))));
 
-        // results[0] = (float) Distance;
+        // results[0] = (float) distance;
 
         if (results.length > 1) {
 
@@ -231,4 +238,81 @@ public class MathUtils {
         return ((value - min) * range2 / range1) + min2;
     }
 
+
+    public static boolean lineIntersect(float[] p, int p1, int p2, int p3, int p4, int intersect, int threeFloatTmp) {
+
+        p[threeFloatTmp] = (p[p4 + 1] - p[p3 + 1]) * (p[p2] - p[p1]) - (p[p4] - p[p3]) * (p[p2 + 1] - p[p1 + 1]);
+        if (p[threeFloatTmp] == 0.0) { // Lines are parallel.
+            return false;
+        }
+        p[threeFloatTmp + 1] = ((p[p4] - p[p3]) * (p[p1 + 1] - p[p3 + 1]) - (p[p4 + 1] - p[p3 + 1]) * (p[p1] - p[p3])) / p[threeFloatTmp];
+        p[threeFloatTmp + 2] = ((p[p2] - p[p1]) * (p[p1 + 1] - p[p3 + 1]) - (p[p2 + 1] - p[p1 + 1]) * (p[p1] - p[p3])) / p[threeFloatTmp];
+        if (p[threeFloatTmp + 1] >= 0.0f && p[threeFloatTmp + 1] <= 1.0f && p[threeFloatTmp + 2] >= 0.0f && p[threeFloatTmp + 2] <= 1.0f) {
+            // Set the intersection point.
+            p[intersect + 0] = p[p1] + p[threeFloatTmp + 1] * (p[p2] - p[p1]);
+            p[intersect + 1] = p[p1 + 1] + p[threeFloatTmp + 1] * (p[p2 + 1] - p[p1 + 1]);
+
+            // check if on the line 1 and 2
+            if (!(Math.min(p[p1], p[p2]) <= p[intersect + 0]
+                    && p[intersect + 0] <= Math.max(p[p1], p[p2]))) return false;
+            if (!(Math.min(p[p1 + 1], p[p2 + 1]) <= p[intersect + 1]
+                    && p[intersect + 1] <= Math.max(p[p1 + 1], p[p2 + 1]))) return false;
+            if (!(Math.min(p[p3], p[p4]) <= p[intersect + 0]
+                    && p[intersect + 0] <= Math.max(p[p3], p[p4]))) return false;
+            if (!(Math.min(p[p3 + 1], p[p4 + 1]) <= p[intersect + 1]
+                    && p[intersect + 1] <= Math.max(p[p3 + 1], p[p4 + 1]))) return false;
+
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns 0 if line outside!
+     * Returns -1 if line inside
+     * Returns 1 or 2 if line intersect
+     *
+     * @param r
+     * @param offRec
+     * @param offLine
+     * @return
+     */
+    public static int clampLineToIntersectRect(float[] r, int offRec, int offLine, int intersectionPointOffset, int threeFloatTmp) {
+        // if line completed into rec or outside
+
+        boolean point1Inside = org.oscim.utils.geom.GeometryUtils.pointInPoly(r[0 + offLine], r[1 + offLine], r, 8, offRec);
+        boolean point2Inside = org.oscim.utils.geom.GeometryUtils.pointInPoly(r[2 + offLine], r[3 + offLine], r, 8, offRec);
+        boolean bothOutside = !point1Inside && !point2Inside;
+        if (point1Inside && point2Inside) {
+            return -1;
+        }
+
+        int intersectCount = 0;
+        for (int i = 0; i < 8; i += 2) {
+            if (lineIntersect(r, i, i > 4 ? 0 : i + 2, offLine, offLine + 2, intersectionPointOffset, threeFloatTmp)) {
+                intersectCount++;
+                if (!bothOutside) {
+                    // can only one line intersect
+                    if (point2Inside) {
+                        r[offLine] = r[intersectionPointOffset + 0];
+                        r[offLine + 1] = r[intersectionPointOffset + 1];
+                    } else {
+                        r[offLine + 2] = r[intersectionPointOffset + 0];
+                        r[offLine + 3] = r[intersectionPointOffset + 1];
+                    }
+                    return 1;
+                }
+                if (intersectCount == 2) {
+                    r[offLine] = r[intersectionPointOffset + 0];
+                    r[offLine + 1] = r[intersectionPointOffset + 1];
+                    r[offLine + 2] = r[intersectionPointOffset + 2];
+                    r[offLine + 3] = r[intersectionPointOffset + 3];
+                    return 2;
+                }
+                r[intersectionPointOffset + 2] = r[intersectionPointOffset + 0];
+                r[intersectionPointOffset + 3] = r[intersectionPointOffset + 1];
+            }
+        }
+        return 0;
+    }
 }

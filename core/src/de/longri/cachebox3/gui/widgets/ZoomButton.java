@@ -124,7 +124,7 @@ public class ZoomButton extends Group {
 
     public static class ZoomButtonStyle {
        public Drawable plus, minus, plusDown, minusDown, plusDisabled, minusDisabled;
-       public float alphaOff = 0.2f, alphaOn = 1.0f;
+       public float alphaOff = 0.5f, alphaOn = 1.0f;
     }
 
     public void setDisabledPlus(boolean disabeld) {

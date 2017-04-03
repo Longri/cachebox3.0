@@ -24,6 +24,11 @@ import de.longri.cachebox3.CB;
 public class MenuIconStyle extends AbstractIconStyle {
 
 
+    public Drawable baseMapOnlineVector;
+    public Drawable baseMapOnlineBitmap;
+    public Drawable baseMapMapsforge;
+    public Drawable baseMapFreizeitkarte;
+
     @Override
     protected int getPrefWidth() {
         return (int) CB.scaledSizes.ICON_WIDTH;
