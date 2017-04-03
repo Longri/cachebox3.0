@@ -87,7 +87,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
                     @Override
                     public ListViewItem getView(int index) {
-                        return getCacheItem(index, Database.Data.Query.get(index));
+                        return CacheListItem.getListItem(index, Database.Data.Query.get(index));
                     }
 
                     @Override
@@ -184,12 +184,6 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         disposeThread.start();
     }
 
-    private ListViewItem getCacheItem(int listIndex, final Cache cache) {
-        ListViewItem listViewItem = new CacheListItem(listIndex, cache.Type, cache.getName(),
-                (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
-                (int) Math.min(cache.Rating * 2, 5 * 2), cache.Size.ordinal());
-        return listViewItem;
-    }
 
     @Override
     public void dispose() {

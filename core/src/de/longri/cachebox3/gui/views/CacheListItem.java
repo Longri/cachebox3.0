@@ -29,12 +29,21 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Stars;
+import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 
 /**
  * Created by Longri on 05.09.2016.
  */
 public class CacheListItem extends ListViewItem implements Disposable {
+
+    public static ListViewItem getListItem(int listIndex, final Cache cache){
+        ListViewItem listViewItem = new CacheListItem(listIndex, cache.Type, cache.getName(),
+                (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
+                (int) Math.min(cache.Rating * 2, 5 * 2), cache.Size.ordinal());
+        return listViewItem;
+    }
+
 
     private final CacheListItemStyle style;
     private final CacheTypes type;
