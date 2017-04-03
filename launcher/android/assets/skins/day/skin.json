@@ -192,10 +192,6 @@
       "path": "svg/compass_1_scale.svg",
       "scale": 1
     },
-    "compass_2_frame": {
-      "path": "svg/compass_1_frame.svg",
-      "scale": 0.1
-    },
     "cursor": {
       "path": "svg/cursor.svg",
       "scale": 1
@@ -794,11 +790,11 @@
     },
     "map_compass_2_arrow": {
       "path": "svg/compass_2_arrow.svg",
-      "scale": 0.1
+      "scale": 0.15
     },
     "map_compass_2_scale": {
       "path": "svg/compass_2_scale.svg",
-      "scale": 0.1
+      "scale": 0.15
     },
     "mega": {
       "path": "svg/mega.svg",
@@ -1084,16 +1080,12 @@
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "coordinateValueFont": {
-      "font": "fonts/DroidSans.ttf",
-      "size": 17
-    },
-    "distanceValueFont": {
       "font": "fonts/DroidSans-Bold.ttf",
-      "size": 22
+      "size": 24
     },
     "mapPanelUnit": {
       "font": "fonts/DroidSans.ttf",
-      "size": 13
+      "size": 14
     },
     "normal_bold_font": {
       "font": "fonts/DroidSans-Bold.ttf",
@@ -1415,7 +1407,7 @@
     "coordinateValues": {
       "font": "coordinateValueFont",
       "fontColor": "font_color",
-      "overFontColor": "coordinateValuesFocus",
+      "checkedFontColor": "coordinateValuesFocus",
       "up": "default_button_9_Patch",
       "down": "drawable_default_button_pressed"
     },
@@ -1856,7 +1848,7 @@
       "arrow": "compass_1_arrow"
     },
     "mapCompassStyle": {
-      "frame": "compass_2_frame",
+      "frame": "map_compass_1_frame",
       "scale": "map_compass_2_scale",
       "arrow": "map_compass_2_arrow"
     }
@@ -1869,11 +1861,11 @@
       "distanceLabel_Color": "font_color",
       "speedLabel_Color": "font_color",
       "coordinateLabel_Color": "font_color",
-      "distanceLabel_Font": "distanceValueFont",
+      "distanceLabel_Font": "coordinateValueFont",
       "distanceUnitLabel_Font": "mapPanelUnit",
       "speedLabel_Font": "normal_font",
       "speedUnitLabel_Font": "mapPanelUnit",
-      "coordinateLabel_Font": "coordinateValueFont"
+      "coordinateLabel_Font": "normal_font"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle": {

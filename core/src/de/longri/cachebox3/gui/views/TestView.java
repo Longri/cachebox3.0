@@ -23,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.gui.activities.FileChooser;
+import de.longri.cachebox3.gui.widgets.CoordinateButton;
+import de.longri.cachebox3.locator.Coordinate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +52,6 @@ public class TestView extends AbstractView {
 
 
         this.addActor(coordinateButton);
-        tbl.row();
 
         coordinateButton.setBounds(20, 100, 300, 50);
 
