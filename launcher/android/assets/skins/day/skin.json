@@ -92,22 +92,6 @@
       "path": "svg/arrow_help_90.svg",
       "scale": 0.28
     },
-    "baseMapFreizeitkarte": {
-      "path": "svg/baseMapFreizeitkarte.svg",
-      "scale": 0.19
-    },
-    "baseMapMapsforge": {
-      "path": "svg/baseMapMapsforge.svg",
-      "scale": 0.19
-    },
-    "baseMapOnlineBitmap": {
-      "path": "svg/baseMapOnlineBitmap.svg",
-      "scale": 0.19
-    },
-    "baseMapOnlineVector": {
-      "path": "svg/baseMapOnlineVector.svg",
-      "scale": 0.19
-    },
     "button_bar_back": {
       "path": "svg/button_bar_back.svg",
       "scale": 1
@@ -172,29 +156,9 @@
       "path": "svg/cm_icon_filterd.svg",
       "scale": 0.72
     },
-    "compas_icon": {
-      "path": "svg/compas_icon.svg",
-      "scale": 0.319
-    },
     "compass": {
       "path": "svg/missingIcon.svg",
       "scale": 1
-    },
-    "compass_1_arrow": {
-      "path": "svg/compass_1_arrow.svg",
-      "scale": 1
-    },
-    "compass_1_frame": {
-      "path": "svg/compass_1_frame.svg",
-      "scale": 1
-    },
-    "compass_1_scale": {
-      "path": "svg/compass_1_scale.svg",
-      "scale": 1
-    },
-    "compass_2_frame": {
-      "path": "svg/compass_1_frame.svg",
-      "scale": 0.1
     },
     "cursor": {
       "path": "svg/cursor.svg",
@@ -226,10 +190,6 @@
     },
     "default_button": {
       "path": "svg/default_button.svg",
-      "scale": 0.5
-    },
-    "default_button_disabled": {
-      "path": "svg/default_button_disabled.svg",
       "scale": 0.5
     },
     "default_button_pressed": {
@@ -284,14 +244,6 @@
       "path": "svg/fieldnoteListIcon.svg",
       "scale": 0.195
     },
-    "file": {
-      "path": "svg/file.svg",
-      "scale": 1
-    },
-    "filebackIcon": {
-      "path": "svg/backIcon.svg",
-      "scale": 0.3
-    },
     "filter": {
       "path": "svg/missingIcon.svg",
       "scale": 1
@@ -302,10 +254,6 @@
     },
     "finger_click": {
       "path": "svg/finger_click.svg",
-      "scale": 1
-    },
-    "folder": {
-      "path": "svg/folder.svg",
       "scale": 1
     },
     "gc_liveIcon": {
@@ -341,8 +289,8 @@
       "scale": 0.2
     },
     "listIcon": {
-      "path": "svg/listIcon.svg",
-      "scale": 0.195
+      "path": "svg/missingIcon.svg",
+      "scale": 1
     },
     "list_background": {
       "path": "svg/list_background.svg",
@@ -376,81 +324,17 @@
       "path": "svg/map.svg",
       "scale": 0.19455253
     },
-    "map-info-panel-background": {
-      "path": "svg/map-info-panel-background.svg",
-      "scale": 0.75
-    },
     "mapCITO": {
       "path": "svg/cito.svg",
-      "scale": 0.15
-    },
-    "mapCITO0": {
-      "path": "svg/mapCITO0.svg",
-      "scale": 0.2
-    },
-    "mapCITO1": {
-      "path": "svg/mapCITO1.svg",
-      "scale": 0.09
-    },
-    "mapCITO2": {
-      "path": "svg/mapCITO2.svg",
-      "scale": 0.15
-    },
-    "mapCache0": {
-      "path": "svg/mapCache0.svg",
-      "scale": 0.2
-    },
-    "mapCache1": {
-      "path": "svg/mapCache1.svg",
-      "scale": 0.09
-    },
-    "mapCache2": {
-      "path": "svg/mapCache2.svg",
-      "scale": 0.15
-    },
-    "mapCamera0": {
-      "path": "svg/mapCamera0.svg",
-      "scale": 0.2
-    },
-    "mapCamera1": {
-      "path": "svg/mapCamera1.svg",
-      "scale": 0.09
-    },
-    "mapCamera2": {
-      "path": "svg/mapCamera2.svg",
       "scale": 0.15
     },
     "mapEarth": {
       "path": "svg/earth.svg",
       "scale": 0.15
     },
-    "mapEarth0": {
-      "path": "svg/mapEarth0.svg",
-      "scale": 0.2
-    },
-    "mapEarth1": {
-      "path": "svg/mapEarth1.svg",
-      "scale": 0.09
-    },
-    "mapEarth2": {
-      "path": "svg/mapEarth2.svg",
-      "scale": 0.15
-    },
     "mapEvent": {
       "path": "svg/event.svg",
       "scale": 0.15
-    },
-    "mapEvent1": {
-      "path": "svg/mapEvent1.svg",
-      "scale": 0.09
-    },
-    "mapEvent2": {
-      "path": "svg/mapEvent2.svg",
-      "scale": 0.15
-    },
-    "mapFile": {
-      "path": "svg/mapFile.svg",
-      "scale": 1
     },
     "mapFinal": {
       "path": "svg/final.svg",
@@ -480,52 +364,8 @@
       "path": "svg/mapFound2.svg",
       "scale": 0.15
     },
-    "mapGiga0": {
-      "path": "svg/mapGiga0.svg",
-      "scale": 0.2
-    },
-    "mapGiga1": {
-      "path": "svg/mapGiga1.svg",
-      "scale": 0.09
-    },
-    "mapGiga2": {
-      "path": "svg/mapGiga2.svg",
-      "scale": 0.15
-    },
-    "mapLabCache0": {
-      "path": "svg/mapLabCache0.svg",
-      "scale": 0.2
-    },
-    "mapLabCache1": {
-      "path": "svg/mapLabCache1.svg",
-      "scale": 0.09
-    },
-    "mapLabCache2": {
-      "path": "svg/mapLabCache2.svg",
-      "scale": 0.15
-    },
     "mapLetterbox": {
       "path": "svg/letterbox.svg",
-      "scale": 0.15
-    },
-    "mapLetterbox0": {
-      "path": "svg/mapLetterbox0.svg",
-      "scale": 0.2
-    },
-    "mapLetterbox1": {
-      "path": "svg/mapLetterbox1.svg",
-      "scale": 0.09
-    },
-    "mapLetterbox2": {
-      "path": "svg/mapLetterbox2.svg",
-      "scale": 0.15
-    },
-    "mapMegaEvent1": {
-      "path": "svg/mapMegaEvent1.svg",
-      "scale": 0.09
-    },
-    "mapMegaEvent2": {
-      "path": "svg/mapMegaEvent2.svg",
       "scale": 0.15
     },
     "mapMulti": {
@@ -564,49 +404,9 @@
       "path": "svg/multiStage.svg",
       "scale": 0.13
     },
-    "mapMultiStage0": {
-      "path": "svg/mapMultiStage0.svg",
-      "scale": 0.2
-    },
-    "mapMultiStage1": {
-      "path": "svg/mapMultiStage1.svg",
-      "scale": 0.09
-    },
-    "mapMultiStage2": {
-      "path": "svg/mapMultiStage2.svg",
-      "scale": 0.15
-    },
     "mapMultiStageStartP": {
       "path": "svg/multiStageStartP.svg",
       "scale": 0.13
-    },
-    "mapMultiStageStartP0": {
-      "path": "svg/mapMultiStageStartP0.svg",
-      "scale": 0.2
-    },
-    "mapMultiStageStartP1": {
-      "path": "svg/mapMultiStageStartP1.svg",
-      "scale": 0.09
-    },
-    "mapMultiStageStartP2": {
-      "path": "svg/mapMultiStageStartP2.svg",
-      "scale": 0.15
-    },
-    "mapMultiStartP0": {
-      "path": "svg/mapMultiStartP0.svg",
-      "scale": 0.2
-    },
-    "mapMultiStartP1": {
-      "path": "svg/mapMultiStartP1.svg",
-      "scale": 0.09
-    },
-    "mapMultiStartP2": {
-      "path": "svg/mapMultiStartP2.svg",
-      "scale": 0.15
-    },
-    "mapMyParking": {
-      "path": "svg/mapMyParking.svg",
-      "scale": 0.15
     },
     "mapMystery": {
       "path": "svg/myterie.svg",
@@ -622,18 +422,6 @@
     },
     "mapMystery2": {
       "path": "svg/mapMystery2.svg",
-      "scale": 0.15
-    },
-    "mapMysteryStartP0": {
-      "path": "svg/mapMysteryStartP0.svg",
-      "scale": 0.2
-    },
-    "mapMysteryStartP1": {
-      "path": "svg/mapMysteryStartP1.svg",
-      "scale": 0.09
-    },
-    "mapMysteryStartP2": {
-      "path": "svg/mapMysteryStartP2.svg",
       "scale": 0.15
     },
     "mapParkingArea": {
@@ -728,77 +516,9 @@
       "path": "svg/mapTrailhead2.svg",
       "scale": 0.15
     },
-    "mapUndefined0": {
-      "path": "svg/mapUndefined0.svg",
-      "scale": 0.2
-    },
-    "mapUndefined1": {
-      "path": "svg/mapUndefined1.svg",
-      "scale": 0.09
-    },
-    "mapUndefined2": {
-      "path": "svg/mapUndefined2.svg",
-      "scale": 0.15
-    },
-    "mapVirtual0": {
-      "path": "svg/mapVirtual0.svg",
-      "scale": 0.2
-    },
-    "mapVirtual1": {
-      "path": "svg/mapVirtual1.svg",
-      "scale": 0.09
-    },
-    "mapVirtual2": {
-      "path": "svg/mapVirtual2.svg",
-      "scale": 0.15
-    },
     "mapWherigo": {
       "path": "svg/whereigo.svg",
       "scale": 0.15
-    },
-    "mapWherigo0": {
-      "path": "svg/mapWherigo0.svg",
-      "scale": 0.2
-    },
-    "mapWherigo1": {
-      "path": "svg/mapWherigo1.svg",
-      "scale": 0.09
-    },
-    "mapWherigo2": {
-      "path": "svg/mapWherigo2.svg",
-      "scale": 0.15
-    },
-    "mapWikipedia0": {
-      "path": "svg/mapWikipedia0.svg",
-      "scale": 0.2
-    },
-    "mapWikipedia1": {
-      "path": "svg/mapWikipedia1.svg",
-      "scale": 0.09
-    },
-    "mapWikipedia2": {
-      "path": "svg/mapWikipedia2.svg",
-      "scale": 0.15
-    },
-    "map_compass_1_arrow": {
-      "path": "svg/compass_1_arrow.svg",
-      "scale": 0.15
-    },
-    "map_compass_1_frame": {
-      "path": "svg/compass_1_frame.svg",
-      "scale": 0.15
-    },
-    "map_compass_1_scale": {
-      "path": "svg/compass_1_scale.svg",
-      "scale": 0.15
-    },
-    "map_compass_2_arrow": {
-      "path": "svg/compass_2_arrow.svg",
-      "scale": 0.1
-    },
-    "map_compass_2_scale": {
-      "path": "svg/compass_2_scale.svg",
-      "scale": 0.1
     },
     "mega": {
       "path": "svg/mega.svg",
@@ -835,18 +555,6 @@
     "multi": {
       "path": "svg/multi.svg",
       "scale": 0.2
-    },
-    "myLocation": {
-      "path": "svg/myLocation.svg",
-      "scale": 0.3
-    },
-    "myLocationCar": {
-      "path": "svg/myLocationCar.svg",
-      "scale": 0.3
-    },
-    "myLocationTransparent": {
-      "path": "svg/myLocationTransparent.svg",
-      "scale": 0.3
     },
     "myterie": {
       "path": "svg/myterie.svg",
@@ -985,8 +693,8 @@
       "scale": 1
     },
     "waypointListIcon": {
-      "path": "svg/waypointListIcon.svg",
-      "scale": 0.195
+      "path": "svg/missingIcon.svg",
+      "scale": 1
     },
     "whereigo": {
       "path": "svg/whereigo.svg",
@@ -998,23 +706,11 @@
       "r": 1,
       "a": 1
     },
-    "back_font_color": {
-      "r": 0.5411765,
-      "g": 0.49019608,
-      "b": 0.49019608,
-      "a": 1
-    },
     "background": {
       "r": 1,
       "g": 1,
       "b": 1,
       "a": 1
-    },
-    "centerCrossColor": {
-      "r": 0.05882353,
-      "g": 0.12156863,
-      "b": 0.05490196,
-      "a": 0.7764706
     },
     "coordinateValuesFocus": {
       "r": 0.07450981,
@@ -1023,10 +719,6 @@
     },
     "dialog_background": {
       "a": 0.8
-    },
-    "directLine": {
-      "r": 1,
-      "a": 0.78431374
     },
     "font_color": {
       "a": 1
@@ -1084,16 +776,8 @@
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "coordinateValueFont": {
-      "font": "fonts/DroidSans.ttf",
-      "size": 17
-    },
-    "distanceValueFont": {
       "font": "fonts/DroidSans-Bold.ttf",
-      "size": 22
-    },
-    "mapPanelUnit": {
-      "font": "fonts/DroidSans.ttf",
-      "size": 13
+      "size": 24
     },
     "normal_bold_font": {
       "font": "fonts/DroidSans-Bold.ttf",
@@ -1130,17 +814,6 @@
     },
     "default_button_9_Patch": {
       "name": "default_button",
-      "left": 8,
-      "right": 8,
-      "top": 8,
-      "bottom": 8,
-      "leftWidth": 8,
-      "rightWidth": 8,
-      "topHeight": 8,
-      "bottomHeight": 8
-    },
-    "default_button_disabled_9_Patch": {
-      "name": "default_button_disabled",
       "left": 8,
       "right": 8,
       "top": 8,
@@ -1256,17 +929,6 @@
       "topHeight": 5,
       "bottomHeight": 5
     },
-    "map-info-panel-background_9_Patch": {
-      "name": "map-info-panel-background",
-      "left": 8,
-      "right": 8,
-      "top": 8,
-      "bottom": 8,
-      "leftWidth": 8,
-      "rightWidth": 8,
-      "topHeight": 8,
-      "bottomHeight": 8
-    },
     "menu_divider_drawable": {
       "name": "menu_divider",
       "left": 20,
@@ -1360,39 +1022,29 @@
       "background": "button_bar_back"
     }
   },
-  "de.longri.cachebox3.gui.skin.styles.GestureButtonStyle": {
+  "de.longri.cachebox3.gui.widgets.GestureButton$GestureButtonStyle": {
     "cache": {
       "select": "cache_selected",
-      "hasMenu": "cm_icon",
-      "hasFilteredMenu": "cm_icon_filterd",
       "up": "cache",
       "down": "cache_pressed"
     },
     "db": {
       "select": "db_selected",
-      "hasMenu": "cm_icon",
-      "hasFilteredMenu": "cm_icon_filterd",
       "up": "db",
       "down": "db_pressed"
     },
     "misc": {
       "select": "misc_selected",
-      "hasMenu": "cm_icon",
-      "hasFilteredMenu": "cm_icon_filterd",
       "up": "misc",
       "down": "misc_pressed"
     },
     "nav": {
       "select": "nav_selected",
-      "hasMenu": "cm_icon",
-      "hasFilteredMenu": "cm_icon_filterd",
       "up": "nav",
       "down": "nav_pressed"
     },
     "tool": {
       "select": "tool_selected",
-      "hasMenu": "cm_icon",
-      "hasFilteredMenu": "cm_icon_filterd",
       "up": "tool",
       "down": "tool_pressed"
     }
@@ -1409,13 +1061,12 @@
       "font": "normal_bold_font",
       "fontColor": "font_color",
       "up": "drawable_default_button",
-      "down": "drawable_default_button_pressed",
-      "disabled": "default_button_disabled_9_Patch"
+      "down": "drawable_default_button_pressed"
     },
     "coordinateValues": {
       "font": "coordinateValueFont",
       "fontColor": "font_color",
-      "overFontColor": "coordinateValuesFocus",
+      "checkedFontColor": "coordinateValuesFocus",
       "up": "default_button_9_Patch",
       "down": "drawable_default_button_pressed"
     },
@@ -1423,8 +1074,7 @@
       "font": "normal_font",
       "fontColor": "font_color",
       "up": "drawable_default_button",
-      "down": "drawable_default_button_pressed",
-      "disabled": "default_button_disabled_9_Patch"
+      "down": "drawable_default_button_pressed"
     },
     "toggle": {
       "font": "normal_font",
@@ -1592,7 +1242,7 @@
       "minusDown": "ZoomMinusPressed",
       "plusDisabled": "ZoomPlusDisabled",
       "minusDisabled": "ZoomMinusDisabled",
-      "alphaOff": 0.5,
+      "alphaOff": 0.2,
       "alphaOn": 1
     }
   },
@@ -1601,31 +1251,6 @@
       "small": "disabledOverlay0",
       "middle": "disabledOverlay1",
       "large": "disabledOverlay2"
-    },
-    "mapCITO": {
-      "small": "mapCITO0",
-      "middle": "mapCITO1",
-      "large": "mapCITO2"
-    },
-    "mapCache": {
-      "small": "mapCache0",
-      "middle": "mapCache1",
-      "large": "mapCache2"
-    },
-    "mapCamera": {
-      "small": "mapCamera0",
-      "middle": "mapCamera1",
-      "large": "mapCamera2"
-    },
-    "mapEarth": {
-      "small": "mapEarth0",
-      "middle": "mapEarth1",
-      "large": "mapEarth2"
-    },
-    "mapEvent": {
-      "small": "mapGiga0",
-      "middle": "mapEvent1",
-      "large": "mapEvent2"
     },
     "mapFinal": {
       "small": "mapFinal0",
@@ -1637,26 +1262,6 @@
       "middle": "mapFound1",
       "large": "mapFound2"
     },
-    "mapGiga": {
-      "small": "mapGiga0",
-      "middle": "mapGiga1",
-      "large": "mapGiga2"
-    },
-    "mapLabCache": {
-      "small": "mapLabCache0",
-      "middle": "mapLabCache1",
-      "large": "mapLabCache2"
-    },
-    "mapLetterbox": {
-      "small": "mapLetterbox0",
-      "middle": "mapLetterbox1",
-      "large": "mapLetterbox2"
-    },
-    "mapMegaEvent": {
-      "small": "mapGiga0",
-      "middle": "mapMegaEvent1",
-      "large": "mapMegaEvent2"
-    },
     "mapMulti": {
       "small": "mapMulti0",
       "middle": "mapMulti1",
@@ -1667,35 +1272,10 @@
       "middle": "mapMultiQuestion1",
       "large": "mapMultiQuestion2"
     },
-    "mapMultiStage": {
-      "small": "mapMultiStage0",
-      "middle": "mapMultiStage1",
-      "large": "mapMultiStage2"
-    },
-    "mapMultiStageStartP": {
-      "small": "mapMultiStageStartP0",
-      "middle": "mapMultiStageStartP1",
-      "large": "mapMultiStageStartP2"
-    },
-    "mapMultiStartP": {
-      "small": "mapMultiStartP0",
-      "middle": "mapMultiStartP1",
-      "large": "mapMultiStartP2"
-    },
-    "mapMyParking": {
-      "small": "mapMyParking",
-      "middle": "mapMyParking",
-      "large": "mapMyParking"
-    },
     "mapMystery": {
       "small": "mapMystery0",
       "middle": "mapMystery1",
       "large": "mapMystery2"
-    },
-    "mapMysteryStartP": {
-      "small": "mapMysteryStartP0",
-      "middle": "mapMysteryStartP1",
-      "large": "mapMysteryStartP2"
     },
     "mapParkingArea": {
       "small": "mapParkingArea0",
@@ -1726,26 +1306,6 @@
       "small": "mapTrailhead0",
       "middle": "mapTrailhead1",
       "large": "mapTrailhead2"
-    },
-    "mapUndefined": {
-      "small": "mapUndefined0",
-      "middle": "mapUndefined1",
-      "large": "mapUndefined2"
-    },
-    "mapVirtual": {
-      "small": "mapVirtual0",
-      "middle": "mapVirtual1",
-      "large": "mapVirtual2"
-    },
-    "mapWherigo": {
-      "small": "mapWherigo0",
-      "middle": "mapWherigo1",
-      "large": "mapWherigo2"
-    },
-    "mapWikipedia": {
-      "small": "mapWikipedia0",
-      "middle": "mapWikipedia1",
-      "large": "mapWikipedia2"
     },
     "selectOverlay": {
       "small": "selectOverlay",
@@ -1792,10 +1352,6 @@
   },
   "de.longri.cachebox3.gui.skin.styles.MenuIconStyle": {
     "default": {
-      "baseMapOnlineVector": "baseMapOnlineVector",
-      "baseMapOnlineBitmap": "baseMapOnlineBitmap",
-      "baseMapMapsforge": "baseMapMapsforge",
-      "baseMapFreizeitkarte": "baseMapFreizeitkarte",
       "addCacheIcon": "addCacheIcon",
       "deleteIcon": "deleteIcon",
       "sortIcon": "sortIcon",
@@ -1803,10 +1359,8 @@
       "addWp": "add-wp",
       "fieldNote": "FieldNote",
       "settingsIcon": "settings_icon",
-      "compassIcon": "compas_icon",
       "creditsIcon": "cb",
       "fieldNoteList": "fieldnoteListIcon",
-      "logViewIcon": "listIcon",
       "mapIcon": "map",
       "noteIcon": "noteIcon",
       "solverIcon": "solver-icon",
@@ -1814,72 +1368,10 @@
       "imagesIcon": "images-icon",
       "cb": "cb",
       "tbListIcon": "tbListIcon",
-      "waypointListIcon": "waypointListIcon",
       "trackListIcon": "trackListIcon",
       "GC_Live": "gc_liveIcon",
       "prefWidth": -1,
       "prefHeight": -1
-    }
-  },
-  "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
-    "mapUndefined": {},
-    "myLocation": {
-      "myLocation": "myLocation",
-      "myLocationTransparent": "myLocationTransparent",
-      "myLocationCar": "myLocationCar"
-    }
-  },
-  "de.longri.cachebox3.gui.skin.styles.FileChooserStyle": {
-    "default": {
-      "itemNameFont": "normal_font",
-      "backItemNameFont": "normal_font",
-      "itemNameFontColor": "font_color",
-      "backItemNameFontColor": "back_font_color",
-      "backIcon": "filebackIcon",
-      "folderIcon": "folder",
-      "fileIcon": "file",
-      "mapFileIcon": "mapFile",
-      "background": "activityBack_drawable"
-    }
-  },
-  "de.longri.cachebox3.gui.skin.styles.MapCenterCrossStyle": {
-    "centerCross": {
-      "color": "centerCrossColor",
-      "width": 2,
-      "length": 100
-    }
-  },
-  "de.longri.cachebox3.gui.skin.styles.CompassStyle": {
-    "default": {
-      "frame": "compass_1_frame",
-      "scale": "compass_1_scale",
-      "arrow": "compass_1_arrow"
-    },
-    "mapCompassStyle": {
-      "frame": "compass_2_frame",
-      "scale": "map_compass_2_scale",
-      "arrow": "map_compass_2_arrow"
-    }
-  },
-  "de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle": {
-    "infoPanel": {
-      "background": "map-info-panel-background_9_Patch",
-      "distanceUnitLabel_Color": "font_color",
-      "speedUnitLabel_Color": "font_color",
-      "distanceLabel_Color": "font_color",
-      "speedLabel_Color": "font_color",
-      "coordinateLabel_Color": "font_color",
-      "distanceLabel_Font": "distanceValueFont",
-      "distanceUnitLabel_Font": "mapPanelUnit",
-      "speedLabel_Font": "normal_font",
-      "speedUnitLabel_Font": "mapPanelUnit",
-      "coordinateLabel_Font": "coordinateValueFont"
-    }
-  },
-  "de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle": {
-    "directLine": {
-      "color": "directLine",
-      "width": 5.5
     }
   }
 }
