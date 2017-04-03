@@ -47,13 +47,13 @@ public class DesktopLauncher {
 
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.resizable = false;
-//        config.useHDPI = false;
-//        config.samples = 1;
+        config.useHDPI = false;
+        config.samples = 1;
         config.width = 223;
         config.height = 397;
         config.title = "Cachebox 3.0";
 
-//        config.stencil = 8;
+        config.stencil = 8;
         config.foregroundFPS = 60;
         config.backgroundFPS = 10;
 
