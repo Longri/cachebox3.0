@@ -32,42 +32,32 @@ import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.Waypoint;
 
 /**
  * Created by Longri on 03.04.2017.
  */
 public class WayPointListItem extends ListViewItem implements Disposable {
 
-    public static ListViewItem getListItem(int listIndex, final Cache cache) {
-        ListViewItem listViewItem = new WayPointListItem(listIndex, cache.Type, cache.getName(),
-                (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
-                (int) Math.min(cache.Rating * 2, 5 * 2), cache.Size.ordinal());
+    public static ListViewItem getListItem(int listIndex, final Waypoint waypoint) {
+        ListViewItem listViewItem = new WayPointListItem(listIndex, waypoint.Type, waypoint.getGcCode());
         return listViewItem;
     }
 
 
     private final WayPointListItemStyle style;
     private final CacheTypes type;
-    private final CharSequence cacheName;
+    private final CharSequence wayPointName;
     private boolean needsLayout = true;
     private Image arrowImage;
     private VisLabel distanceLabel;
     private boolean distanceOrBearingChanged = true;
-    private final int difficulty;
-    private final int terrain;
-    private final int vote;
-    private final int size;
 
-
-    public WayPointListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain, int vote, int size) {
+    public WayPointListItem(int listIndex, CacheTypes type, CharSequence wayPointName) {
         super(listIndex);
-        this.difficulty = difficulty;
-        this.terrain = terrain;
-        this.vote = vote;
-        this.size = size;
         this.style = VisUI.getSkin().get("default", WayPointListItemStyle.class);
         this.type = type;
-        this.cacheName = cacheName;
+        this.wayPointName = wayPointName;
     }
 
 
@@ -92,7 +82,7 @@ public class WayPointListItem extends ListViewItem implements Disposable {
         Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
         nameLabelStyle.font = this.style.nameFont;
         nameLabelStyle.fontColor = this.style.nameFontColor;
-        VisLabel nameLabel = new VisLabel(cacheName, nameLabelStyle);
+        VisLabel nameLabel = new VisLabel(wayPointName, nameLabelStyle);
 //        VisLabel nameLabel = new VisLabel("ITEM: " + this.listIndex, nameLabelStyle);
         nameLabel.setWrap(true);
         this.add(nameLabel).top().expandX().fillX();
@@ -112,38 +102,6 @@ public class WayPointListItem extends ListViewItem implements Disposable {
         arrowTable.row();
         arrowTable.add(distanceLabel).padTop(CB.scaledSizes.MARGIN);
         this.add(arrowTable).right();
-
-        this.row();
-
-        VisTable line1 = new VisTable();
-        VisLabel dLabel = new VisLabel("D", distanceLabelStyle);
-        line1.left();
-        line1.add(dLabel);
-        Stars difficultyStars = new Stars(this.difficulty);
-        line1.add(difficultyStars);
-        VisLabel sLabel = new VisLabel("S", distanceLabelStyle);
-        line1.add(sLabel).padLeft(CB.scaledSizes.MARGIN);
-        CacheSizeWidget sizeWidget = new CacheSizeWidget(this.size);
-        line1.add(sizeWidget).padLeft(CB.scaledSizes.MARGIN_HALF);
-
-
-        this.add(line1).colspan(3).align(Align.left);
-        this.row();
-
-        VisTable line2 = new VisTable();
-        VisLabel tLabel = new VisLabel("T", distanceLabelStyle);
-        line2.left();
-        line2.add(tLabel);
-        Stars terrainStars = new Stars(this.terrain);
-        line2.add(terrainStars);
-
-        VisLabel vLabel = new VisLabel("GcV", distanceLabelStyle);
-        line2.add(vLabel).padLeft(CB.scaledSizes.MARGIN);
-        Stars vStars = new Stars(this.vote);
-        line2.add(vStars);
-
-        this.add(line2).colspan(3).align(Align.left);
-
         super.layout();
         needsLayout = false;
     }

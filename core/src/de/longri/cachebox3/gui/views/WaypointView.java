@@ -85,7 +85,7 @@ public class WaypointView extends AbstractView {
                         if (index == 0) {
                             return CacheListItem.getListItem(index, actCache);
                         } else {
-                            return null;
+                            return WayPointListItem.getListItem(index, actCache.waypoints.get(index - 1));
                         }
                     }
 
@@ -95,29 +95,30 @@ public class WaypointView extends AbstractView {
                         //get index from item
                         int idx = view.getListIndex();
 
-                        // get Cache
-                        Cache cache = Database.Data.Query.get(idx);
-
-                        //get actPos and heading
-                        Coordinate position = de.longri.cachebox3.events.EventHandler.getMyPosition();
-
-                        if (position == null)
+                        Coordinate myPosition = EventHandler.getMyPosition();
+                        if (myPosition == null)
                             return; // can't update without an position
 
                         float heading = de.longri.cachebox3.events.EventHandler.getHeading();
 
-
-                        // get coordinate from Cache or from Final Waypoint
-                        Waypoint finalWp = cache.GetFinalWaypoint();
-                        Coordinate finalCoord = finalWp != null ? finalWp : cache;
+                        // get coordinate from Cache or from Waypoint
+                        Coordinate targetCoord = idx == 0 ? actCache : actCache.waypoints.get(idx - 1);
 
                         //calculate distance and bearing
                         float result[] = new float[4];
-                        MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, position.getLatitude(), position.getLongitude(), finalCoord.getLatitude(), finalCoord.getLongitude(), result);
+                        MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST,
+                                myPosition.getLatitude(), myPosition.getLongitude(),
+                                targetCoord.getLatitude(), targetCoord.getLongitude(), result);
 
 
                         //update item
-                        if (((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0], true)))
+                        boolean changed;
+                        if (idx == 0) {
+                            changed = ((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0], true));
+                        } else {
+                            changed = ((WayPointListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0], true));
+                        }
+                        if (changed)
                             Gdx.graphics.requestRendering();
                     }
 
