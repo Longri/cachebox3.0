@@ -100,9 +100,8 @@ public class AndroidLauncher extends AndroidApplication {
     }
 
     protected void onStart() {
-        log.debug("onStart()");
         super.onStart();
-
+        log.debug("onStart()");
         if (android.os.Build.VERSION.SDK_INT >= 23) {
             AndroidPermissionCheck.checkNeededPermissions(this);
         }

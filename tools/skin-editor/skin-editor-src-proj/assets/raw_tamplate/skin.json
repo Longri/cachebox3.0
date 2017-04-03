@@ -1407,7 +1407,7 @@
     "coordinateValues": {
       "font": "coordinateValueFont",
       "fontColor": "font_color",
-      "overFontColor": "coordinateValuesFocus",
+      "checkedFontColor": "coordinateValuesFocus",
       "up": "default_button_9_Patch",
       "down": "drawable_default_button_pressed"
     },
