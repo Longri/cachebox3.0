@@ -69,8 +69,8 @@ public class SvgSkinUtil {
         // max texture size are 2048x2048
         int pageWidth = 2048;
         int pageHeight = 2048;
-        int padding = 2;
-        boolean duplicateBorder = false;
+        int padding = 4;
+        boolean duplicateBorder = true;
 
         PixmapPacker packer = new PixmapPacker(pageWidth, pageHeight, Pixmap.Format.RGBA8888, padding, duplicateBorder);
 
