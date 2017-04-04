@@ -16,6 +16,7 @@
 package de.longri.cachebox3.types;
 
 
+import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.events.EventHandler;
@@ -153,9 +154,6 @@ public class CacheList extends MoveableList<Cache> {
 
             retValue = new CacheWithWP(nextCache, waypoint);
         }
-
-        CacheListChangedEventList.Call();
-
         // vorhandenen Parkplatz Cache nach oben schieben
         Cache park = this.GetCacheByGcCode("CBPark");
         if (park != null) {
@@ -164,6 +162,14 @@ public class CacheList extends MoveableList<Cache> {
 
         // Cursor.Current = Cursors.Default;
         this.ResortAtWork = false;
+
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+//                CacheListChangedEventList.Call();
+            }
+        });
+
         return retValue;
     }
 

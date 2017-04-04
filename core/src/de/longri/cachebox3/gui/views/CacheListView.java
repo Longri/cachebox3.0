@@ -118,7 +118,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
 
                         //update item
-                        if (((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0],true)))
+                        if (((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0], true)))
                             Gdx.graphics.requestRendering();
                     }
 
@@ -222,6 +222,11 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         Gdx.graphics.requestRendering();
     }
 
+    @Override
+    public void onShow() {
+        super.onShow();
+        resort();
+    }
 
     @Override
     public void onHide() {
@@ -237,5 +242,9 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     @Override
     public void orientationChanged(de.longri.cachebox3.events.OrientationChangedEvent event) {
         setChangedFlagToAllItems();
+    }
+
+    public String toString() {
+        return "CacheListView";
     }
 }

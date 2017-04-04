@@ -2,6 +2,8 @@ package de.longri.cachebox3.events;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.async.AsyncExecutor;
+import com.badlogic.gdx.utils.async.AsyncTask;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.sqlite.Database;
@@ -28,8 +30,8 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             SelectedCoordChangedListener.class};
     static final private ArrayMap<Class, Array<Object>> listenerMap = new ArrayMap<>();
 
-    static final EventHandler INSTANCE = new EventHandler();
-
+    private static final EventHandler INSTANCE = new EventHandler();
+    private static final AsyncExecutor asyncExecutor=new AsyncExecutor(20);
 
     public static void INIT() {
     }
@@ -73,20 +75,29 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         }
     }
 
-    public static void fire(AbstractEvent event) {
-        Array<Object> list = listenerMap.get(event.getListenerClass());
+    public static void fire(final AbstractEvent event) {
+
+        final Array<Object> list = listenerMap.get(event.getListenerClass());
         if (list != null) {
             if (list.size > 0)
                 log.debug("Fire {} event {} to {} listener: {}", event.getClass().getSimpleName(), event.ID, list.size, list.toString());
-            for (int i = 0, n = list.size; i < n; i++) {
-                try {
-                    event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
+
+
+            asyncExecutor.submit(new AsyncTask<Void>() {
+                @Override
+                public Void call() throws Exception {
+                    for (int i = 0, n = list.size; i < n; i++) {
+                        try {
+                            event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            log.error("Fire event to" + list.items[i].getClass().getSimpleName(), e.getCause());
+                        }
+                    }
+                    return null;
                 }
-            }
+            });
         }
     }
 
@@ -115,8 +126,12 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (selectedWayPoint == null || !selectedWayPoint.equals(event.wayPoint)) {
             log.debug("Set Global selected Waypoint: {}", event.wayPoint);
             selectedWayPoint = event.wayPoint;
-            selectedCache = Database.Data.Query.GetCacheById(selectedWayPoint.CacheId);
-            fireSelectedCoordChanged(event.ID);
+            synchronized (Database.Data.Query){
+                if(selectedWayPoint!=null){
+                    selectedCache = Database.Data.Query.GetCacheById(selectedWayPoint.CacheId);
+                    fireSelectedCoordChanged(event.ID);
+                }
+            }
         }
     }
 
