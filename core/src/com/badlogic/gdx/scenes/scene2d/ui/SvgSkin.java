@@ -272,9 +272,10 @@ public class SvgSkin extends Skin {
             private void readNamedObjects(Json json, Class type, JsonValue valueMap) {
                 Class addType = type == TintedDrawable.class ? Drawable.class : type;
                 for (JsonValue valueEntry = valueMap.child; valueEntry != null; valueEntry = valueEntry.next) {
-                    Object object = json.readValue(type, valueEntry);
-                    if (object == null) continue;
                     try {
+                        Object object = json.readValue(type, valueEntry);
+                        if (object == null) continue;
+
                         add(valueEntry.name, object, addType);
                         if (addType != Drawable.class && ClassReflection.isAssignableFrom(Drawable.class, addType))
                             add(valueEntry.name, object, Drawable.class);

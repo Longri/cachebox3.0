@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 
 import java.util.ArrayList;
 
@@ -47,8 +48,7 @@ public enum CacheTypes {
     Cache(true), // = 19,
     MyParking(true), // = 20
     Giga(true), // 22
-    LabCache(true)
-    ;
+    LabCache(true);
 
     private boolean isCache;
 
@@ -143,79 +143,79 @@ public enum CacheTypes {
 
     }
 
-    public CacheWidget getCacheWidget() {
-        return new CacheWidget(this);
+    public CacheWidget getCacheWidget(CacheTypeStyle style) {
+        return new CacheWidget(this, style);
     }
 
-    public Drawable getDrawable() { // TODO replace with Skin Style
+    public Drawable getDrawable(CacheTypeStyle style) { // TODO replace with Skin Style
         Drawable drawable;
 
         switch (this) {
             case Traditional:
-                drawable = VisUI.getSkin().getDrawable("traddi");
+                drawable = style.traditional;
                 break;
             case Multi:
-                drawable = VisUI.getSkin().getDrawable("multi");
+                drawable = style.multi;
                 break;
             case Mystery:
-                drawable = VisUI.getSkin().getDrawable("myterie");
+                drawable = style.mystery;
                 break;
             case Camera:
-                drawable = VisUI.getSkin().getDrawable("camera");
+                drawable = style.camera;
                 break;
             case Earth:
-                drawable = VisUI.getSkin().getDrawable("earth");
+                drawable = style.earth;
                 break;
             case Event:
-                drawable = VisUI.getSkin().getDrawable("event");
+                drawable = style.event;
                 break;
             case MegaEvent:
-                drawable = VisUI.getSkin().getDrawable("mega");
+                drawable = style.megaEvent;
                 break;
             case CITO:
-                drawable = VisUI.getSkin().getDrawable("cito");
+                drawable = style.cito;
                 break;
             case Virtual:
-                drawable = VisUI.getSkin().getDrawable("virtual");
+                drawable = style.virtual;
                 break;
             case Letterbox:
-                drawable = VisUI.getSkin().getDrawable("letterbox");
+                drawable = style.letterbox;
                 break;
             case Wherigo:
-                drawable = VisUI.getSkin().getDrawable("whereigo");
+                drawable = style.wherigo;
                 break;
             case ReferencePoint:
-                drawable = null;
+                drawable = style.referencePoint;
                 break;
             case Wikipedia:
-                drawable = null;
+                drawable = style.wikipedia;
                 break;
             case Undefined:
-                drawable = null;
+                drawable = style.undefined;
                 break;
             case MultiStage:
-                drawable = null;
+                drawable = style.multiStage;
                 break;
             case MultiQuestion:
-                drawable = null;
+                drawable = style.multiQuestion;
                 break;
             case Trailhead:
-                drawable = null;
+                drawable = style.trailhead;
                 break;
             case ParkingArea:
-                drawable = null;
+                drawable = style.parkingArea;
                 break;
             case Final:
-                drawable = null;
+                drawable = style.Final;
                 break;
             case Cache:
-                drawable = null;
+                drawable = style.cache;
                 break;
             case MyParking:
-                drawable = null;
+                drawable = style.myParking;
                 break;
             case Giga:
-                drawable = VisUI.getSkin().getDrawable("giga");
+                drawable = style.giga;
                 break;
             default:
                 drawable = null;
@@ -227,8 +227,8 @@ public enum CacheTypes {
         private final Drawable drawable;
         private boolean needsLayout = true;
 
-        public CacheWidget(CacheTypes cacheType) {
-            drawable = cacheType.getDrawable();
+        public CacheWidget(CacheTypes cacheType, CacheTypeStyle style) {
+            drawable = cacheType.getDrawable(style);
         }
 
         private float x, y, imageWidth, imageHeight, scaleX, scaleY;

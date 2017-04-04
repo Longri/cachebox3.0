@@ -13,4 +13,5 @@ public class CacheListItemStyle {
     public Drawable arrow;
     public BitmapFont distanceFont;
     public Color distanceFontColor;
+    public CacheTypeStyle typeStyle;
 }

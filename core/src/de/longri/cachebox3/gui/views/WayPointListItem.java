@@ -26,6 +26,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
@@ -55,7 +56,7 @@ public class WayPointListItem extends ListViewItem implements Disposable {
 
     public WayPointListItem(int listIndex, CacheTypes type, CharSequence wayPointName) {
         super(listIndex);
-        this.style = VisUI.getSkin().get("default", WayPointListItemStyle.class);
+        this.style = VisUI.getSkin().get("WayPointListItems", WayPointListItemStyle.class);
         this.type = type;
         this.wayPointName = wayPointName;
     }
@@ -71,7 +72,7 @@ public class WayPointListItem extends ListViewItem implements Disposable {
         this.clear();
 
         VisTable iconTable = new VisTable();
-        iconTable.add(type.getCacheWidget());
+        iconTable.add(type.getCacheWidget(style.typeStyle));
 
         iconTable.pack();
         iconTable.layout();

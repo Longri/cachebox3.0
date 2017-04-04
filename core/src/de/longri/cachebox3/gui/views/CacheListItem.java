@@ -27,6 +27,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
+import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Stars;
@@ -65,7 +66,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
         this.terrain = terrain;
         this.vote = vote;
         this.size = size;
-        this.style = VisUI.getSkin().get("default", CacheListItemStyle.class);
+        this.style = VisUI.getSkin().get("cacheListItems", CacheListItemStyle.class);
         this.type = type;
         this.cacheName = cacheName;
     }
@@ -81,7 +82,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
         this.clear();
 
         VisTable iconTable = new VisTable();
-        iconTable.add(type.getCacheWidget());
+        iconTable.add(type.getCacheWidget(style.typeStyle));
 
         iconTable.pack();
         iconTable.layout();
@@ -93,7 +94,6 @@ public class CacheListItem extends ListViewItem implements Disposable {
         nameLabelStyle.font = this.style.nameFont;
         nameLabelStyle.fontColor = this.style.nameFontColor;
         VisLabel nameLabel = new VisLabel(cacheName, nameLabelStyle);
-//        VisLabel nameLabel = new VisLabel("ITEM: " + this.listIndex, nameLabelStyle);
         nameLabel.setWrap(true);
         this.add(nameLabel).top().expandX().fillX();
 
