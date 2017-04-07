@@ -1071,9 +1071,7 @@
       "b": 0.5,
       "a": 0.7
     },
-    "transparent_color": {
-      "a": 1
-    }
+    "transparent_color": {}
   },
   "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
     "dialog_stage_background": {

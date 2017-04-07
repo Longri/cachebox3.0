@@ -295,15 +295,6 @@ public class SvgSkin extends Skin {
             }
         });
 
-
-        json.setSerializer(ColorDrawable.class, new Json.ReadOnlySerializer<ColorDrawable>() {
-            public ColorDrawable read(Json json, JsonValue jsonData, Class type) {
-                Color color = json.readValue("color", Color.class, jsonData);
-                ColorDrawable drawable = new ColorDrawable(color);
-                return drawable;
-            }
-        });
-
         json.setSerializer(ListView.ListViewStyle.class, new Json.ReadOnlySerializer<ListView.ListViewStyle>() {
             public ListView.ListViewStyle read(Json json, JsonValue jsonData, Class type) {
                 ListView.ListViewStyle style = new ListView.ListViewStyle();
@@ -443,7 +434,7 @@ public class SvgSkin extends Skin {
                 float r = json.readValue("r", float.class, 0f, jsonData);
                 float g = json.readValue("g", float.class, 0f, jsonData);
                 float b = json.readValue("b", float.class, 0f, jsonData);
-                float a = json.readValue("a", float.class, 1f, jsonData);
+                float a = json.readValue("a", float.class, 0f, jsonData);
                 SkinColor c = new SkinColor(r, g, b, a);
                 c.skinName = jsonData.name;
                 return c;
