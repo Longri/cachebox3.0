@@ -253,7 +253,7 @@ public class WaypointView extends AbstractView {
 
     }
 
-    private void addWP() {
+    public void addWP() {
         String newGcCode = "";
         try {
             newGcCode = Database.CreateFreeGcCode(EventHandler.getSelectedCache().getGcCode());
@@ -269,7 +269,7 @@ public class WaypointView extends AbstractView {
                 , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().Id, "", newGcCode);
 
 
-        EditWaypoint editWaypoint = new EditWaypoint(newWP);
+        EditWaypoint editWaypoint = new EditWaypoint(newWP,true);
         editWaypoint.show();
     }
 

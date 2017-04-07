@@ -593,4 +593,8 @@ public class MapView extends AbstractView {
         this.map.setNewBaseMap(baseMap);
     }
 
+    public Coordinate getMapCenter() {
+        MapPosition mp = this.map.getMapPosition();
+        return new Coordinate(mp.getLatitude(), mp.getLongitude());
+    }
 }

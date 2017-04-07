@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.*;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
@@ -45,11 +46,13 @@ public class EditWaypoint extends ActivityBase {
     private final VisTable contentTable;
     private final CoordinateButton coordinateButton;
     private final VisCheckBox startCheckBox;
+    private final boolean showCoordsOnShow;
 
-    public EditWaypoint(Waypoint waypoint) {
+    public EditWaypoint(Waypoint waypoint, boolean showCoordsOnShow) {
         super("EditWaypoint");
         style = null;
         this.waypoint = waypoint;
+        this.showCoordsOnShow = showCoordsOnShow;
 //        style = VisUI.getSkin().get("default", EditWaypointStyle.class);
 
         btnOk = new VisTextButton(Translation.Get("save"));
@@ -89,6 +92,18 @@ public class EditWaypoint extends ActivityBase {
         contentTable.add(clueTextArea).colspan(2);
 
         create();
+    }
+
+    @Override
+    public void onShow() {
+        if (this.showCoordsOnShow) {
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    Utils.triggerButtonClicked(coordinateButton);
+                }
+            });
+        }
     }
 
     private void create() {

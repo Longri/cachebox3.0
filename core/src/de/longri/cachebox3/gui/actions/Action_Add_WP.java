@@ -18,7 +18,16 @@ package de.longri.cachebox3.gui.actions;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.views.MapView;
+import de.longri.cachebox3.gui.views.WaypointView;
+import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.Waypoint;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -35,17 +44,41 @@ public class Action_Add_WP extends AbstractAction {
 
     @Override
     public void execute() {
-        CB.viewmanager.toast("add WP not implemented");
+        if (CB.viewmanager.getActView() instanceof WaypointView) {
+            // if wayPointView visible, create new waypoint with waypointViewFunction
+            WaypointView wpv = (WaypointView) CB.viewmanager.getActView();
+            wpv.addWP();
+            return;
+        }
 
-//        // wenn MapView sichtbar und im Modus Free, dann nehme Koordinaten vom Mittelpunkt der Karte
-//        // ansonsten mit den aktuellen Koordinaten!
-//        if (MapView.that != null && MapView.that.isVisible()) {
-//            MapView.that.createWaypointAtCenter();
-//            return;
-//        }
-//
-//        if ((TabMainView.waypointView == null))
-//            TabMainView.waypointView = new WaypointView(TabMainView.leftTab.getContentRec(), "WaypointView");
-//        WaypointView.that.addWP();
+        Coordinate coord = null;
+        if (CB.viewmanager.getActView() instanceof MapView) {
+            // if map view visible, create new waypoint at center of map
+            MapView mv = (MapView) CB.viewmanager.getActView();
+            coord = mv.getMapCenter();
+        }
+
+        String newGcCode = "";
+        try {
+            newGcCode = Database.CreateFreeGcCode(EventHandler.getSelectedCache().getGcCode());
+        } catch (Exception e) {
+            return;
+        }
+        if (coord == null) {
+            coord = EventHandler.getSelectedCoord();
+            if (coord == null)
+                coord = EventHandler.getMyPosition();
+            if ((coord == null) || (!coord.isValid()))
+                coord = EventHandler.getSelectedCache();
+        }
+
+        Waypoint newWP = new Waypoint(newGcCode, CacheTypes.ReferencePoint, ""
+                , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().Id, "", newGcCode);
+
+
+        EditWaypoint editWaypoint = new EditWaypoint(newWP, false);
+        editWaypoint.show();
+
+
     }
 }
