@@ -29,6 +29,7 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
@@ -253,7 +254,22 @@ public class WaypointView extends AbstractView {
     }
 
     private void addWP() {
-        EditWaypoint editWaypoint = new EditWaypoint();
+        String newGcCode = "";
+        try {
+            newGcCode = Database.CreateFreeGcCode(EventHandler.getSelectedCache().getGcCode());
+        } catch (Exception e) {
+            return;
+        }
+        Coordinate coord = EventHandler.getSelectedCoord();
+        if (coord == null)
+            coord = EventHandler.getMyPosition();
+        if ((coord == null) || (!coord.isValid()))
+            coord = EventHandler.getSelectedCache();
+        Waypoint newWP = new Waypoint(newGcCode, CacheTypes.ReferencePoint, ""
+                , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().Id, "", newGcCode);
+
+
+        EditWaypoint editWaypoint = new EditWaypoint(newWP);
         editWaypoint.show();
     }
 
