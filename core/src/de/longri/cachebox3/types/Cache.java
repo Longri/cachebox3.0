@@ -430,6 +430,10 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
     float Distance(MathUtils.CalculationType type, boolean useFinal, Coordinate fromPos) {
         if (isDisposed)
             return 0;
+
+        if (fromPos == null)
+            return -1;
+
         Waypoint waypoint = null;
         if (useFinal)
             waypoint = this.GetFinalWaypoint();
