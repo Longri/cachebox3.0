@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -252,7 +253,8 @@ public class WaypointView extends AbstractView {
     }
 
     private void addWP() {
-
+        EditWaypoint editWaypoint = new EditWaypoint();
+        editWaypoint.show();
     }
 
 }
