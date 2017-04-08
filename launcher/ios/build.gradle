@@ -22,6 +22,11 @@ task copyNatives() {
             }
         }
     }
+    //override Svggh lib
+    copy {
+        from file("svggh/")
+        into file("build/native/")
+    }
 }
 
 launchIPhoneSimulator.dependsOn build
