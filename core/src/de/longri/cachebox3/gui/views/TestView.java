@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.activities.FileChooser;
+import de.longri.cachebox3.gui.widgets.CoordinateButton;
+import de.longri.cachebox3.locator.Coordinate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +35,6 @@ import org.slf4j.LoggerFactory;
 public class TestView extends AbstractView {
     final static Logger log = LoggerFactory.getLogger(TestView.class);
 
-    VisTextButton test;
 
     static private FileChooser fileChooser = new FileChooser("select folder", FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES);
 

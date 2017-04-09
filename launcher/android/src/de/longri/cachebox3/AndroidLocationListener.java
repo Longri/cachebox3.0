@@ -19,7 +19,7 @@ import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import de.longri.cachebox3.locator.events.newT.GpsEventHelper;
+import de.longri.cachebox3.events.GpsEventHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

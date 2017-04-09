@@ -28,7 +28,9 @@ import com.badlogic.gdx.utils.reflect.Field;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
+import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Paint;
 import org.slf4j.Logger;
@@ -69,8 +71,8 @@ public class SvgSkinUtil {
         // max texture size are 2048x2048
         int pageWidth = 2048;
         int pageHeight = 2048;
-        int padding = 2;
-        boolean duplicateBorder = false;
+        int padding = 4;
+        boolean duplicateBorder = true;
 
         PixmapPacker packer = new PixmapPacker(pageWidth, pageHeight, Pixmap.Format.RGBA8888, padding, duplicateBorder);
 
@@ -177,7 +179,7 @@ public class SvgSkinUtil {
             for (String style : styles) {
                 Object object = typeResources.get(style);
 
-                if (item.equals(MapWayPointItemStyle.class)) {
+                if (!item.equals(BitmapFont.class)) {
                     if (!item.equals(object.getClass())) continue;
                 }
 
@@ -291,6 +293,9 @@ public class SvgSkinUtil {
                                 // Don't store.
                             } else if (valueObject instanceof GetName) {
                                 json.writeValue(field.getName(), ((GetName) valueObject).getName());
+                            } else if (valueObject instanceof CacheTypeStyle) {
+                                String objName = resolveObjectName(skin, CacheTypeStyle.class, valueObject);
+                                json.writeValue(field.getName(), objName);
                             } else {
                                 throw new IllegalArgumentException("resource object type is unknown: " + valueObject.getClass().getCanonicalName());
                             }

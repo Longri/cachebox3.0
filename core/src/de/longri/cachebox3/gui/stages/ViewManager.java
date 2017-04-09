@@ -36,7 +36,6 @@ import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
 import de.longri.cachebox3.gui.widgets.Slider;
-import de.longri.cachebox3.locator.events.newT.*;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheSizes;
@@ -49,7 +48,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 /**
  * Created by Longri on 20.07.2016.
  */
-public class ViewManager extends NamedStage implements SelectedCacheChangedListener, SelectedWayPointChangedListener {
+public class ViewManager extends NamedStage implements de.longri.cachebox3.events.SelectedCacheChangedListener, de.longri.cachebox3.events.SelectedWayPointChangedListener {
 
     final static Logger log = LoggerFactory.getLogger(ViewManager.class);
     final static CharSequence EMPTY = "";
@@ -112,10 +111,10 @@ public class ViewManager extends NamedStage implements SelectedCacheChangedListe
 
 
         //register SelectedCacheChangedEvent
-        EventHandler.add(this);
+        de.longri.cachebox3.events.EventHandler.add(this);
 
         //set selected Cache to slider
-        selectedCacheChanged(new SelectedCacheChangedEvent(EventHandler.getSelectedCache()));
+        selectedCacheChanged(new de.longri.cachebox3.events.SelectedCacheChangedEvent(de.longri.cachebox3.events.EventHandler.getSelectedCache()));
     }
 
 
@@ -236,13 +235,15 @@ public class ViewManager extends NamedStage implements SelectedCacheChangedListe
     }
 
     @Override
-    public void selectedCacheChanged(SelectedCacheChangedEvent event) {
+    public void selectedCacheChanged(de.longri.cachebox3.events.SelectedCacheChangedEvent event) {
         setCacheName(event.cache);
     }
 
     @Override
-    public void selectedWayPointChanged(SelectedWayPointChangedEvent event) {
-        setCacheName(Database.Data.Query.GetCacheById(event.wayPoint.CacheId));
+    public void selectedWayPointChanged(de.longri.cachebox3.events.SelectedWayPointChangedEvent event) {
+        synchronized (Database.Data.Query) {
+            if (event.wayPoint != null) setCacheName(Database.Data.Query.GetCacheById(event.wayPoint.CacheId));
+        }
     }
 
     Cache lastCache = null;

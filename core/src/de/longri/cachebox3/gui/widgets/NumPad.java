@@ -40,7 +40,7 @@ public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposa
     }
 
     public enum OptionalButton {
-        OK, CANCEL, DOT
+        OK, CANCEL, DOT, DelBack, none
     }
 
     public interface IKeyEventListener {
@@ -62,7 +62,7 @@ public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposa
     private final IKeyEventListener keyEventListener;
 
 
-    private final boolean hasOk, hasCancel, hasDot;
+    private final boolean hasOk, hasCancel, hasDot, hasDelBack;
     private final VisTextButton btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnOk, btnCancel, btnDel, btnBack, btnDot, btnLeft, btnRight;
     private float targetWidth;
 
@@ -76,7 +76,7 @@ public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposa
         this.targetWidth = Gdx.graphics.getWidth();
         this.keyEventListener = keyEventListener;
 
-        boolean ok = false, cancel = false, dot = false;
+        boolean ok = false, cancel = false, dot = false, delBack = false;
 
 
         for (OptionalButton option : options) {
@@ -91,12 +91,16 @@ public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposa
                 case DOT:
                     dot = true;
                     break;
+                case DelBack:
+                    delBack = true;
+                    break;
             }
         }
 
         hasOk = ok;
         hasCancel = cancel;
         hasDot = dot;
+        hasDelBack= delBack;
 
         btn0 = new VisTextButton("0");
         btn1 = new VisTextButton("1");
@@ -193,8 +197,10 @@ public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposa
         this.add(new Actor()).pad(pad);
         this.add(btn0).pad(pad).width(buttonWidth);
         this.add(hasDot ? btnDot : new Actor()).pad(pad).width(buttonWidth);
-        this.add(btnDel).pad(pad).width(buttonWidth);
-        this.add(btnBack).pad(pad).width(buttonWidth);
+        if(hasDelBack) {
+            this.add(btnDel).pad(pad).width(buttonWidth);
+            this.add(btnBack).pad(pad).width(buttonWidth);
+        }
         this.row();
 
         //row 5

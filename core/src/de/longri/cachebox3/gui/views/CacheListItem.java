@@ -26,15 +26,26 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
+import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Stars;
+import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 
 /**
  * Created by Longri on 05.09.2016.
  */
 public class CacheListItem extends ListViewItem implements Disposable {
+
+    public static ListViewItem getListItem(int listIndex, final Cache cache){
+        ListViewItem listViewItem = new CacheListItem(listIndex, cache.Type, cache.getName(),
+                (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
+                (int) Math.min(cache.Rating * 2, 5 * 2), cache.Size.ordinal());
+        return listViewItem;
+    }
+
 
     private final CacheListItemStyle style;
     private final CacheTypes type;
@@ -55,7 +66,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
         this.terrain = terrain;
         this.vote = vote;
         this.size = size;
-        this.style = VisUI.getSkin().get("default", CacheListItemStyle.class);
+        this.style = VisUI.getSkin().get("cacheListItems", CacheListItemStyle.class);
         this.type = type;
         this.cacheName = cacheName;
     }
@@ -71,7 +82,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
         this.clear();
 
         VisTable iconTable = new VisTable();
-        iconTable.add(type.getCacheWidget());
+        iconTable.add(type.getCacheWidget(style.typeStyle));
 
         iconTable.pack();
         iconTable.layout();
@@ -83,7 +94,6 @@ public class CacheListItem extends ListViewItem implements Disposable {
         nameLabelStyle.font = this.style.nameFont;
         nameLabelStyle.fontColor = this.style.nameFontColor;
         VisLabel nameLabel = new VisLabel(cacheName, nameLabelStyle);
-//        VisLabel nameLabel = new VisLabel("ITEM: " + this.listIndex, nameLabelStyle);
         nameLabel.setWrap(true);
         this.add(nameLabel).top().expandX().fillX();
 
@@ -167,14 +177,4 @@ public class CacheListItem extends ListViewItem implements Disposable {
         }
         distanceLabel = null;
     }
-
-
-    public static class CacheListItemStyle {
-        public BitmapFont nameFont;
-        public Color nameFontColor;
-        public Drawable arrow;
-        public BitmapFont distanceFont;
-        public Color distanceFontColor;
-    }
-
 }

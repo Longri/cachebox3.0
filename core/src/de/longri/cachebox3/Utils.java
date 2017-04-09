@@ -19,8 +19,15 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pools;
+import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.utils.converter.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.oscim.backend.canvas.Bitmap;
@@ -383,6 +390,19 @@ public class Utils {
         runnable.run();
         long runningTime = System.currentTimeMillis() - start;
         log.info(("Time for " + name + ": " + Long.toString(runningTime)));
+    }
+
+    public static void triggerButtonClicked(Button button) {
+
+        log.debug("Perform click event on {}", button);
+
+        Array<EventListener> listeners = button.getListeners();
+        for(int i=0;i<listeners.size;i++)
+        {
+            if(listeners.get(i) instanceof ClickListener){
+                ((ClickListener)listeners.get(i)).clicked(null, 0, 0);
+            }
+        }
     }
 
     // for use copy method

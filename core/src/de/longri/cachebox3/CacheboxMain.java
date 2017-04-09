@@ -26,7 +26,7 @@ import com.badlogic.gdx.math.Matrix4;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import org.oscim.backend.GL;
 import org.oscim.map.Map;
@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import java.text.NumberFormat;
 
 import static org.oscim.backend.GLAdapter.gl;
+import static org.oscim.renderer.MapRenderer.COORD_SCALE;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -46,6 +47,7 @@ public class CacheboxMain extends ApplicationAdapter {
         Map.NEW_GESTURES = true;
         ThemeLoader.POT_TEXTURES = true;
         ThemeLoader.USE_ATLAS = true;
+        COORD_SCALE = 1;
         EventHandler.INIT();
     }
 

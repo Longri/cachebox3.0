@@ -66,7 +66,6 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(com.kotcrab.vis.ui.widget.VisTextField.VisTextFieldStyle.class);
         items.add(de.longri.cachebox3.gui.activities.SelectDB_Activity.SelectDbStyle.class);
         items.add(com.kotcrab.vis.ui.widget.VisCheckBox.VisCheckBoxStyle.class);
-        items.add(de.longri.cachebox3.gui.views.CacheListItem.CacheListItemStyle.class);
         items.add(de.longri.cachebox3.gui.widgets.Slider.SliderStyle.class);
         items.add(de.longri.cachebox3.gui.widgets.QuickButtonList.QuickButtonListStyle.class);
         items.add(de.longri.cachebox3.gui.widgets.MapStateButton.MapStateButtonStyle.class);
@@ -81,6 +80,9 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.skin.styles.CompassStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.CacheTypeStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.CacheListItemStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle.class);
 
         SvgSkinUtil.saveSkin(this, items, skinFile);
 

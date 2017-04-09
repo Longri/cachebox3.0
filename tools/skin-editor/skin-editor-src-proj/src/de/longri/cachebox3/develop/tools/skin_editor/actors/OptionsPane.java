@@ -361,6 +361,16 @@ public class OptionsPane extends Table {
                         styles.put("directline", directLineRendererStyle);
                     }
 
+                    if (widgetStyle.equals("de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle")) {
+
+                        CacheListItemStyle cacheListItemStyle = game.skinProject.get("cacheListItems", CacheListItemStyle.class);
+                        styles.put("cacheListItems", cacheListItemStyle);
+
+                        WayPointListItemStyle wayPointListItemStyle = game.skinProject.get("WayPointListItems", WayPointListItemStyle.class);
+                        styles.put("WayPointListItems", wayPointListItemStyle);
+
+                    }
+
                     if (styles == null || styles.size == 0) {
                         Gdx.app.error("OptionsPane", "No styles defined for this widget type");
 

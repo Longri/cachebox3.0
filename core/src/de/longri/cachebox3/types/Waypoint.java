@@ -17,7 +17,7 @@ package de.longri.cachebox3.types;
 
 
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.utils.MathUtils;
 
 import java.io.Serializable;

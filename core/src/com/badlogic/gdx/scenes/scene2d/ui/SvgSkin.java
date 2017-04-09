@@ -272,9 +272,10 @@ public class SvgSkin extends Skin {
             private void readNamedObjects(Json json, Class type, JsonValue valueMap) {
                 Class addType = type == TintedDrawable.class ? Drawable.class : type;
                 for (JsonValue valueEntry = valueMap.child; valueEntry != null; valueEntry = valueEntry.next) {
-                    Object object = json.readValue(type, valueEntry);
-                    if (object == null) continue;
                     try {
+                        Object object = json.readValue(type, valueEntry);
+                        if (object == null) continue;
+
                         add(valueEntry.name, object, addType);
                         if (addType != Drawable.class && ClassReflection.isAssignableFrom(Drawable.class, addType))
                             add(valueEntry.name, object, Drawable.class);
@@ -291,15 +292,6 @@ public class SvgSkin extends Skin {
 //                Color color = json.readValue("color", Color.class, jsonData);
 //                ColorDrawable drawable = new ColorDrawable(color);
                 return null;
-            }
-        });
-
-
-        json.setSerializer(ColorDrawable.class, new Json.ReadOnlySerializer<ColorDrawable>() {
-            public ColorDrawable read(Json json, JsonValue jsonData, Class type) {
-                Color color = json.readValue("color", Color.class, jsonData);
-                ColorDrawable drawable = new ColorDrawable(color);
-                return drawable;
             }
         });
 
@@ -442,7 +434,7 @@ public class SvgSkin extends Skin {
                 float r = json.readValue("r", float.class, 0f, jsonData);
                 float g = json.readValue("g", float.class, 0f, jsonData);
                 float b = json.readValue("b", float.class, 0f, jsonData);
-                float a = json.readValue("a", float.class, 1f, jsonData);
+                float a = json.readValue("a", float.class, 0f, jsonData);
                 SkinColor c = new SkinColor(r, g, b, a);
                 c.skinName = jsonData.name;
                 return c;

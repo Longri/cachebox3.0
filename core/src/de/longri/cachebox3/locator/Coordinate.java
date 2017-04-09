@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
-import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.MathUtils.CalculationType;
 import de.longri.cachebox3.utils.converter.UTMConvert;
@@ -27,7 +27,7 @@ import de.longri.cachebox3.utils.converter.UTMConvert;
 public class Coordinate extends LatLong implements Serializable {
     private static final long serialVersionUID = 4288564255686705L;
 
-    public static final String br = System.getProperty("line.separator");
+    static final String br = System.getProperty("line.separator");
 
     protected boolean valid;
 
@@ -178,9 +178,8 @@ public class Coordinate extends LatLong implements Serializable {
      */
     public float distance(CalculationType type) {
         float[] dist = new float[1];
-        Coordinate coord = EventHandler.getMyPosition();
-        if (coord == null) return -1;
-        MathUtils.computeDistanceAndBearing(type, getLatitude(), getLongitude(), coord.getLatitude(), coord.getLongitude(), dist);
+        LatLong myPos = EventHandler.getMyPosition();
+        MathUtils.computeDistanceAndBearing(type, getLatitude(), getLongitude(), myPos.latitude, myPos.longitude, dist);
         return dist[0];
     }
 
@@ -286,7 +285,7 @@ public class Coordinate extends LatLong implements Serializable {
             }
         }
 
-        text = text.replace("'", "");
+        text = text.replace("'", " ");
         text = text.replace("\\U0022", "");
         text = text.replace("\"", "");
         text = text.replace("\r", "");

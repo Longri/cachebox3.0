@@ -3,7 +3,7 @@ package org.mapsforge.map.swing.view;
 import ch.fhnw.imvs.gpssimulator.SimulatorMain;
 import ch.fhnw.imvs.gpssimulator.data.GPSData;
 import ch.fhnw.imvs.gpssimulator.data.GPSDataListener;
-import de.longri.cachebox3.locator.events.newT.GpsEventHelper;
+import de.longri.cachebox3.events.GpsEventHelper;
 import org.mapsforge.core.graphics.GraphicFactory;
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.awt.graphics.AwtGraphicFactory;

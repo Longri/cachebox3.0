@@ -44,6 +44,10 @@
       "path": "svg/missingIcon.svg",
       "scale": 1
     },
+    "Wikipedia": {
+      "path": "svg/mapWikipedia1.svg",
+      "scale": 0.18
+    },
     "ZoomMinus": {
       "path": "svg/minus.svg",
       "scale": 0.5
@@ -128,6 +132,10 @@
       "path": "svg/cache_selected.svg",
       "scale": 0.72
     },
+    "camera": {
+      "path": "svg/camera.svg",
+      "scale": 0.2
+    },
     "cb": {
       "path": "svg/cb.svg",
       "scale": 0.097
@@ -191,10 +199,6 @@
     "compass_1_scale": {
       "path": "svg/compass_1_scale.svg",
       "scale": 1
-    },
-    "compass_2_frame": {
-      "path": "svg/compass_1_frame.svg",
-      "scale": 0.1
     },
     "cursor": {
       "path": "svg/cursor.svg",
@@ -794,11 +798,11 @@
     },
     "map_compass_2_arrow": {
       "path": "svg/compass_2_arrow.svg",
-      "scale": 0.1
+      "scale": 0.15
     },
     "map_compass_2_scale": {
       "path": "svg/compass_2_scale.svg",
-      "scale": 0.1
+      "scale": 0.15
     },
     "mega": {
       "path": "svg/mega.svg",
@@ -1067,9 +1071,7 @@
       "b": 0.5,
       "a": 0.7
     },
-    "transparent_color": {
-      "a": 1
-    }
+    "transparent_color": {}
   },
   "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
     "dialog_stage_background": {
@@ -1084,16 +1086,12 @@
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "coordinateValueFont": {
-      "font": "fonts/DroidSans.ttf",
-      "size": 17
-    },
-    "distanceValueFont": {
       "font": "fonts/DroidSans-Bold.ttf",
-      "size": 22
+      "size": 24
     },
     "mapPanelUnit": {
       "font": "fonts/DroidSans.ttf",
-      "size": 13
+      "size": 14
     },
     "normal_bold_font": {
       "font": "fonts/DroidSans-Bold.ttf",
@@ -1415,7 +1413,7 @@
     "coordinateValues": {
       "font": "coordinateValueFont",
       "fontColor": "font_color",
-      "overFontColor": "coordinateValuesFocus",
+      "checkedFontColor": "coordinateValuesFocus",
       "up": "default_button_9_Patch",
       "down": "drawable_default_button_pressed"
     },
@@ -1549,15 +1547,6 @@
       "tick": "check_on",
       "font": "normal_font",
       "fontColor": "font_color"
-    }
-  },
-  "de.longri.cachebox3.gui.views.CacheListItem$CacheListItemStyle": {
-    "default": {
-      "nameFont": "normal_font",
-      "nameFontColor": "font_color",
-      "arrow": "arrow-compass",
-      "distanceFont": "settings_default_value_font",
-      "distanceFontColor": "font_color"
     }
   },
   "de.longri.cachebox3.gui.widgets.Slider$SliderStyle": {
@@ -1856,7 +1845,7 @@
       "arrow": "compass_1_arrow"
     },
     "mapCompassStyle": {
-      "frame": "compass_2_frame",
+      "frame": "map_compass_1_frame",
       "scale": "map_compass_2_scale",
       "arrow": "map_compass_2_arrow"
     }
@@ -1869,17 +1858,64 @@
       "distanceLabel_Color": "font_color",
       "speedLabel_Color": "font_color",
       "coordinateLabel_Color": "font_color",
-      "distanceLabel_Font": "distanceValueFont",
+      "distanceLabel_Font": "coordinateValueFont",
       "distanceUnitLabel_Font": "mapPanelUnit",
       "speedLabel_Font": "normal_font",
       "speedUnitLabel_Font": "mapPanelUnit",
-      "coordinateLabel_Font": "coordinateValueFont"
+      "coordinateLabel_Font": "normal_font"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle": {
     "directLine": {
       "color": "directLine",
       "width": 5.5
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle": {
+    "cacheList": {
+      "traditional": "traddi",
+      "multi": "multi",
+      "mystery": "mapMystery",
+      "camera": "camera",
+      "earth": "earth",
+      "event": "event",
+      "megaEvent": "mega",
+      "cito": "cito",
+      "virtual": "virtual",
+      "letterbox": "letterbox",
+      "wherigo": "whereigo",
+      "referencePoint": "mapReferencePoint",
+      "wikipedia": "Wikipedia",
+      "undefined": "mapUndefined1",
+      "multiStage": "mapMultiStage",
+      "multiQuestion": "mapMultiQuestion",
+      "trailhead": "mapTrailhead",
+      "parkingArea": "mapParkingArea",
+      "Final": "mapFinal",
+      "cache": "mapCache1",
+      "myParking": "mapMyParking",
+      "giga": "giga",
+      "labCache": "mapLabCache1"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.CacheListItemStyle": {
+    "cacheListItems": {
+      "nameFont": "normal_font",
+      "nameFontColor": "font_color",
+      "arrow": "arrow-compass",
+      "distanceFont": "settings_default_value_font",
+      "distanceFontColor": "font_color",
+      "typeStyle": "cacheList"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle": {
+    "WayPointListItems": {
+      "nameFont": "normal_font",
+      "nameFontColor": "font_color",
+      "arrow": "arrow-compass",
+      "distanceFont": "settings_default_value_font",
+      "distanceFontColor": "font_color",
+      "typeStyle": "cacheList"
     }
   }
 }

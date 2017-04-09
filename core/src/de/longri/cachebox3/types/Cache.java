@@ -17,7 +17,7 @@ package de.longri.cachebox3.types;
 
 
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;
@@ -430,6 +430,10 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
     float Distance(MathUtils.CalculationType type, boolean useFinal, Coordinate fromPos) {
         if (isDisposed)
             return 0;
+
+        if (fromPos == null)
+            return -1;
+
         Waypoint waypoint = null;
         if (useFinal)
             waypoint = this.GetFinalWaypoint();

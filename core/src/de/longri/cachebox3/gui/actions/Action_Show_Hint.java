@@ -18,7 +18,7 @@ package de.longri.cachebox3.gui.actions;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.locator.events.newT.EventHandler;
+import de.longri.cachebox3.events.EventHandler;
 
 /**
  * Created by Longri on 14.09.2016.

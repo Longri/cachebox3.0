@@ -239,6 +239,13 @@ widgets/Button
   orig: 48, 48
   offset: 0, 0
   index: -1
+widgets/CacheTypes
+  rotate: false
+  xy: 1, 171
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
 widgets/GestureButton
   rotate: false
   xy: 1, 171
