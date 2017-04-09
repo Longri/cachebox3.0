@@ -25,9 +25,6 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.activities.FileChooser;
-import de.longri.cachebox3.gui.widgets.CoordinateButton;
-import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.settings.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

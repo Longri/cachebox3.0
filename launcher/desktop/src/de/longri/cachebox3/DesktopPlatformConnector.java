@@ -16,10 +16,9 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.GenerateApiKeyWebView;
 import com.badlogic.gdx.files.FileHandle;
-import de.longri.cachebox3.api.CB_Api;
 import de.longri.cachebox3.callbacks.GenericCallBack;
-import de.longri.cachebox3.settings.Config;
 import org.oscim.awt.DesktopRealSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -74,6 +73,6 @@ public class DesktopPlatformConnector extends PlatformConnector {
 
     @Override
     protected void generateApiKey(GenericCallBack<String> callBack) {
-
+        GenerateApiKeyWebView webView = new GenerateApiKeyWebView(callBack);
     }
 }
