@@ -16,6 +16,7 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.files.FileHandle;
 import org.oscim.backend.canvas.Bitmap;
 import org.robovm.apple.avfoundation.AVCaptureDevice;
@@ -104,14 +105,13 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
         try {
             WebViewController controller = new WebViewController();
-            ios_launcher.
-                    getWindow().setRootViewController(controller);
-            ios_launcher.getWindow().makeKeyAndVisible();
+            ((IOSApplication)Gdx.app).getUIWindow().setRootViewController(controller);
+            ((IOSApplication)Gdx.app).getUIWindow().makeKeyAndVisible();
         } catch (Exception e) {
             log.error("show web view", e);
         }
 
-        return null;
+        return "Test API";
     }
 
     @Override

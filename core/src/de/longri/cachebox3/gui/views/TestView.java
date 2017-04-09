@@ -46,7 +46,7 @@ public class TestView extends AbstractView {
 
     protected void create() {
         this.clear();
-        test = new VisTextButton("SelectFolder");
+        VisTextButton test = new VisTextButton("SelectFolder");
         test.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 
@@ -93,9 +93,11 @@ public class TestView extends AbstractView {
         });
 
         VisTextButton apiKey = new VisTextButton("createApiKey");
-        testFile.addListener(new ClickListener() {
+        apiKey.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-               String key= PlatformConnector.getApiKey();
+               log.debug("Create Api Key clicked");
+                String key= PlatformConnector.getApiKey();
+                log.debug("return create ApiKey :{}",key);
 
             }
         });
