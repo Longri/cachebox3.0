@@ -17,8 +17,13 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.api.CB_Api;
+import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.settings.Config;
 import org.oscim.awt.DesktopRealSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +33,7 @@ import java.io.InputStream;
  */
 public class DesktopPlatformConnector extends PlatformConnector {
 
+    private final static Logger log = LoggerFactory.getLogger(DesktopPlatformConnector.class);
 
     @Override
     protected boolean _isTorchAvailable() {
@@ -67,7 +73,7 @@ public class DesktopPlatformConnector extends PlatformConnector {
     }
 
     @Override
-    protected String generateApiKey() {
-        return null;
+    protected void generateApiKey(GenericCallBack<String> callBack) {
+
     }
 }
