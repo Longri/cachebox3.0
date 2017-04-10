@@ -30,6 +30,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name="de.longri.cachebox3.GenerateApiKeyWebView" android:screenOrientation="behind"  />
+
     </application>
 
 </manifest>

@@ -62,8 +62,6 @@ public class GenerateApiKeyWebView extends Window {
 
         super(null); // creates a window with no Frame as owner
 
-
-//        setBounds(Display.getX(), Display.getY(), Display.getWidth(), Display.getHeight());
         setVisible(true);
         Thread t = new Thread(new Runnable() {
             @Override
@@ -94,7 +92,7 @@ public class GenerateApiKeyWebView extends Window {
         this.add(jfxPanel);
 
         iniitialWebView();
-
+        this.setAutoRequestFocus(true);
 
     }
 
@@ -107,6 +105,8 @@ public class GenerateApiKeyWebView extends Window {
             public void run() {
                 GenerateApiKeyWebView.this.setBounds(Display.getX(), Display.getY() + 22, Display.getWidth(), Display.getHeight());
                 GenerateApiKeyWebView.this.setAlwaysOnTop(true);
+                GenerateApiKeyWebView.this.setFocusable(true);
+//                log.debug("loop");
                 loopBounds();
             }
         });
@@ -117,6 +117,8 @@ public class GenerateApiKeyWebView extends Window {
         this.callBack.callBack(key);
         this.setVisible(false);
     }
+
+    private boolean secondLoad = false;
 
     private void iniitialWebView() {
         Platform.runLater(new Runnable() {
@@ -133,6 +135,7 @@ public class GenerateApiKeyWebView extends Window {
 
                             }
                         });
+                secondLoad = false;
                 engine.getLoadWorker().workDoneProperty()
                         .addListener(new ChangeListener<Number>() {
                             @Override
@@ -142,7 +145,38 @@ public class GenerateApiKeyWebView extends Window {
                                 SwingUtilities.invokeLater(new Runnable() {
                                     @Override
                                     public void run() {
+                                        String loadedUrl = engine.getLocation();
+                                        log.debug("DidFinishHtmlLoad {}", loadedUrl);
 
+                                        if (loadedUrl.startsWith("http://oauth.team-cachebox.de/")
+                                                || loadedUrl.startsWith("http://staging.oauth.team-cachebox.de/")) {
+
+                                            if (!secondLoad) {
+                                                secondLoad = true;
+                                                return;
+                                            }
+
+                                            Platform.runLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    //parse content of oauth result
+                                                    String content = (String) engine.executeScript("document.documentElement.outerHTML");
+
+                                                    String search = "Access token: ";
+                                                    String accessToken = "ERROR";
+                                                    int pos = content.indexOf(search);
+                                                    if (pos > -1) {
+                                                        int pos2 = content.indexOf("</span>", pos);
+                                                        if (pos2 > pos) {
+                                                            // between pos und pos2 is the valid AccessToken!!!
+                                                            accessToken = content.substring(pos + search.length(), pos2);
+                                                        }
+                                                    }
+                                                    log.debug("pos: {}, AccesToken= {}", pos, accessToken);
+                                                    callBack(accessToken);
+                                                }
+                                            });
+                                        }
                                     }
                                 });
                             }

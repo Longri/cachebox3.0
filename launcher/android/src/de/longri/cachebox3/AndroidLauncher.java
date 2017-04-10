@@ -40,6 +40,7 @@ import java.io.File;
 
 public class AndroidLauncher extends AndroidApplication {
     private final static Logger log = LoggerFactory.getLogger(AndroidLauncher.class);
+    public static AndroidLauncher androidLauncher;
 
     static {
         try {
@@ -61,7 +62,7 @@ public class AndroidLauncher extends AndroidApplication {
     protected void onCreate(Bundle savedInstanceState) {
         log.debug("onStart()");
         super.onCreate(savedInstanceState);
-
+        androidLauncher = this;
 
         // Don't change this LogLevel
         // Cachebox use the slf4j implematation for LibGdx as Log engine.
