@@ -23,8 +23,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.activities.FileChooser;
+import de.longri.cachebox3.settings.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,31 +102,36 @@ public class TestView extends AbstractView {
                     public void callBack(String accessToken) {
                         log.debug("return create ApiKey :{}",accessToken);
 
-//                        GroundspeakAPI.CacheStatusValid = false;
-//                        GroundspeakAPI.CacheStatusLiteValid = false;
-//
-//                        // store the encrypted AccessToken in the Config file
-//                        // wir bekommen den Key schon verschlüsselt, deshalb muss er
-//                        // nicht noch einmal verschlüsselt werden!
-//                        if (Config.StagingAPI.getValue()) {
-//                            Config.GcAPIStaging.setEncryptedValue(accessToken);
-//                        } else {
-//                            Config.GcAPI.setEncryptedValue(accessToken);
-//                        }
-//
-//                        Config.AcceptChanges();
-//
-//                        String act = Config.GetAccessToken();
-//                        if (act.length() > 0) {
-//                            int status = GroundspeakAPI.GetMembershipType(null);
-//                            if (status >= 0) {
-//
-//                                Config.GcLogin.setValue(GroundspeakAPI.MemberName);
-//                                Config.AcceptChanges();
-//
-//                            }
-//
-//                        }
+                        GroundspeakAPI.CacheStatusValid = false;
+                        GroundspeakAPI.CacheStatusLiteValid = false;
+
+                        // store the encrypted AccessToken in the Config file
+                        // wir bekommen den Key schon verschlüsselt, deshalb muss er
+                        // nicht noch einmal verschlüsselt werden!
+                        if (Config.StagingAPI.getValue()) {
+                            Config.GcAPIStaging.setEncryptedValue(accessToken);
+                        } else {
+                            Config.GcAPI.setEncryptedValue(accessToken);
+                        }
+
+                        Config.AcceptChanges();
+
+                        String act = GroundspeakAPI.GetAccessToken();
+                        if (act.length() > 0) {
+                             GroundspeakAPI.GetMembershipType(new GenericCallBack<Integer>() {
+                                 @Override
+                                 public void callBack(Integer status) {
+                                     if (status >= 0) {
+
+                                         Config.GcLogin.setValue(GroundspeakAPI.MemberName);
+                                         Config.AcceptChanges();
+
+                                     }
+                                 }
+                             });
+
+
+                        }
 
 
                     }
