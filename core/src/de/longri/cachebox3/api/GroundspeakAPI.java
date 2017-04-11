@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GroundspeakAPI {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(GroundspeakAPI.class);
@@ -282,7 +283,6 @@ public class GroundspeakAPI {
 
         String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
-//        try {
         String requestString = "";
         requestString = "{";
         requestString += "\"AccessToken\":\"" + GetAccessToken() + "\",";
@@ -301,7 +301,6 @@ public class GroundspeakAPI {
         httpPost.setContent(requestString);
         httpPost.setIncludeCredentials(true);
 
-        String result = "";
         Gdx.net.sendHttpRequest(httpPost, new Net.HttpResponseListener() {
             public void handleHttpResponse(Net.HttpResponse httpResponse) {
                 String result = httpResponse.getResultAsString();
@@ -310,157 +309,61 @@ public class GroundspeakAPI {
                     return;
                 }
                 int status = getApiStatus(result);
+
+                if (status == 0) {
+                    (new JsonReader() {
+                        protected void number(String name, long value, String stringValue) {
+                            super.number(name, value, stringValue);
+                            if (name.equals("MemberTypeId")) {
+                                membershipType = (int) value;
+                            }
+                        }
+
+                        protected void string(String name, String value) {
+                            super.string(name, value);
+                            if (name.equals("UserName")) {
+                                MemberName = value;
+                            }
+                        }
+
+                    }).parse(result);
+                    API_isCheked = true;
+                    callBack.callBack(membershipType);
+                } else if (status == 2 || status == 3 || status == 141) {
+                    API_isCheked = false;
+                    callBack.callBack(API_ERROR);
+                } else {
+                    log.warn("GetMembershipType API-Error: " + result);
+                    API_isCheked = false;
+                    callBack.callBack(API_ERROR);
+                }
             }
 
             public void failed(Throwable t) {
                 log.error("GetMembershipType", t);
+                callBack.callBack(API_IS_UNAVAILABLE);
             }
 
             @Override
             public void cancelled() {
                 log.error("cancelled GetMembershipType");
+                callBack.callBack(API_IS_UNAVAILABLE);
             }
         });
-
-//            httppost.setEntity(new ByteArrayEntity(requestString.getBytes("UTF8")));
-//
-//            // set time outs
-//            HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
-//            HttpUtils.socketTimeout = Config.socket_timeout.getValue();
-//
-//            // Execute HTTP Post Request
-//            HttpUtils.Execute(httppost, icancel);
-
-
-//            try
-//            // Parse JSON Result
-//            {
-////                JSONTokener tokener = new JSONTokener(result);
-////                JSONObject json = (JSONObject) tokener.nextValue();
-//
-//                if (status == 0) {
-//                    result = "";
-//                    JSONObject profile = json.getJSONObject("Profile");
-//                    JSONObject user = profile.getJSONObject("User");
-//                    JSONObject memberType = user.getJSONObject("MemberType");
-//                    int memberTypeId = memberType.getInt("MemberTypeId");
-//                    MemberName = user.getString("UserName");
-//                    membershipType = memberTypeId;
-//                    API_isCheked = true;
-//                    // Zurücksetzen, falls ein anderer User gewählt wurde
-//                    return memberTypeId;
-//                } else if (status == 2 || status == 3 || status == 141) {
-//                    API_isCheked = false;
-//                    return API_ERROR;
-//
-//                } else {
-//                    logger.warn("GetMembershipType API-Error: " + result);
-//                    API_isCheked = false;
-//                    return API_ERROR;
-//                }
-//
-//            } catch (Exception e) {
-//                logger.error("GetMembershipType JSONException", e);
-//                API_isCheked = false;
-//                return API_ERROR;
-//            }
-
-//        } catch (ConnectTimeoutException e) {
-//            logger.error("GetMembershipType ConnectTimeoutException", e);
-//            API_isCheked = false;
-//            return CONNECTION_TIMEOUT;
-//        } catch (UnsupportedEncodingException e) {
-//            logger.error("GetMembershipType UnsupportedEncodingException", e);
-//            API_isCheked = false;
-//            return ERROR;
-//        } catch (ClientProtocolException e) {
-//            logger.error("GetMembershipType ClientProtocolException", e);
-//            API_isCheked = false;
-//            return ERROR;
-//        } catch (IOException e) {
-//            if (e.toString().contains("UnknownHostException")) {
-//                logger.error("GetMembershipType ConnectTimeoutException", e);
-//                API_isCheked = false;
-//                return CONNECTION_TIMEOUT;
-//            }
-//            logger.error("GetMembershipType IOException", e);
-//            API_isCheked = false;
-//            return ERROR;
-//        }
-
     }
 
 
     public static int getApiStatus(String result) {
-
-//        try {
-        JsonReader reader = new JsonReader() {
-            protected void startObject(String name) {
-                super.startObject(name);
-            }
-
-            protected void string(String name, String value) {
-                super.string(name, value);
-            }
-
-            protected void number(String name, double value, String stringValue) {
-                super.number(name, value, stringValue);
-            }
-
+        final AtomicInteger st = new AtomicInteger(-1);
+        (new JsonReader() {
             protected void number(String name, long value, String stringValue) {
                 super.number(name, value, stringValue);
+                if (name.equals("StatusCode")) {
+                    st.set((int) value);
+                }
             }
-
-        };
-
-        JsonValue json = reader.parse(result);
-        JsonValue status = json.getChild("Status");
-       
-        int intStatus = status.getInt("StatusCode");
-
-//            JSONTokener tokener = new JSONTokener(result);
-//            JSONObject json = (JSONObject) tokener.nextValue();
-//            JSONObject jsonStatus = json.getJSONObject("Status");
-//            int status = jsonStatus.getInt("StatusCode");
-//            String statusMessage = jsonStatus.getString("StatusMessage");
-//            String exceptionDetails = jsonStatus.getString("ExceptionDetails");
-//
-//            String logString = "StatusCode = " + status + "\n" + statusMessage + "\n" + exceptionDetails;
-//
-//            if (status == 0)
-//                return status;
-//
-//            if (status == 2) {
-//                // Not authorized
-//                API_ErrorEventHandlerList.callInvalidApiKey(API_ErrorEventHandlerList.API_ERROR.INVALID);
-//                log.warn("API-Error: " + logString);
-//                return status;
-//            }
-//
-//            if (status == 3) {
-//                // API Key expired
-//                API_ErrorEventHandlerList.callInvalidApiKey(API_ErrorEventHandlerList.API_ERROR.EXPIRED);
-//                logger.warn("API-Error: " + logString);
-//                return status;
-//            }
-//
-//            if (status == 141) {
-//                // / {"Status":{"StatusCode":141,"StatusMessage":"The AccessToken provided is not valid"
-//                API_ErrorEventHandlerList.callInvalidApiKey(API_ErrorEventHandlerList.API_ERROR.INVALID);
-//                logger.warn("API-Error: " + logString);
-//                return status;
-//            }
-//
-//            // unknown
-//            API_ErrorEventHandlerList.callInvalidApiKey(API_ErrorEventHandlerList.API_ERROR.INVALID);
-//            logger.warn("API-Error: " + logString);
-//            return status;
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-
-        return -1;
+        }).parse(result);
+        return st.get();
     }
 
     //

@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
@@ -96,11 +97,11 @@ public class TestView extends AbstractView {
         VisTextButton apiKey = new VisTextButton("createApiKey");
         apiKey.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-               log.debug("Create Api Key clicked");
-               PlatformConnector.getApiKey(new GenericCallBack<String>() {
+                log.debug("Create Api Key clicked");
+                PlatformConnector.getApiKey(new GenericCallBack<String>() {
                     @Override
                     public void callBack(String accessToken) {
-                        log.debug("return create ApiKey :{}",accessToken);
+                        log.debug("return create ApiKey :{}", accessToken);
 
                         GroundspeakAPI.CacheStatusValid = false;
                         GroundspeakAPI.CacheStatusLiteValid = false;
@@ -118,26 +119,23 @@ public class TestView extends AbstractView {
 
                         String act = GroundspeakAPI.GetAccessToken();
                         if (act.length() > 0) {
-                             GroundspeakAPI.GetMembershipType(new GenericCallBack<Integer>() {
-                                 @Override
-                                 public void callBack(Integer status) {
-                                     if (status >= 0) {
-
-                                         Config.GcLogin.setValue(GroundspeakAPI.MemberName);
-                                         Config.AcceptChanges();
-
-                                     }
-                                 }
-                             });
-
-
+                            GroundspeakAPI.GetMembershipType(new GenericCallBack<Integer>() {
+                                @Override
+                                public void callBack(Integer status) {
+                                    if (status >= 0) {
+                                        log.debug("Read User Name/State {}/{}", GroundspeakAPI.MemberName, status);
+                                        Config.GcLogin.setValue(GroundspeakAPI.MemberName);
+                                        Config.AcceptChanges();
+                                        CB.viewmanager.toast("Welcome : " + GroundspeakAPI.MemberName);
+                                    } else {
+                                        CB.viewmanager.toast("Welcome : " + GroundspeakAPI.MemberName);
+                                        log.debug("Can't read UserName State: {}", GroundspeakAPI.MemberName, status);
+                                    }
+                                }
+                            });
                         }
-
-
                     }
                 });
-
-
             }
         });
 
