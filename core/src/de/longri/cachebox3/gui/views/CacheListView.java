@@ -206,7 +206,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     @Override
     public void CacheListChangedEvent() {
         log.debug("Cachelist changed, reload listView");
-        listView.dataSetChanged();
+        listView = null;
+        layout();
     }
 
 

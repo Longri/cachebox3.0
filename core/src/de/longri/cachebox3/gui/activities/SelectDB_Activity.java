@@ -17,10 +17,14 @@ package de.longri.cachebox3.gui.activities;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.sql.SQLiteGdxDatabase;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
+import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
@@ -120,9 +124,6 @@ public class SelectDB_Activity extends ActivityBase {
                 NewDB_InputBox inputBox = new NewDB_InputBox(new OnMsgBoxClickListener() {
                     @Override
                     public boolean onClick(int which, Object data) {
-
-
-                        // Behandle das Ergebnis
                         switch (which) {
                             case ButtonDialog.BUTTON_POSITIVE: // ok clicked
                                 Object[] dataObjects = (Object[]) data;
@@ -131,9 +132,16 @@ public class SelectDB_Activity extends ActivityBase {
                                 String NewDB_Name = (String) dataObjects[1];
 
                                 FilterInstances.setLastFilter(new FilterProperties(Config.FilterNew.getValue()));
-
-                                Config.DatabaseName.setValue(NewDB_Name + ".db3");
-
+                                FileHandle dbFile = Gdx.files.absolute(CB.WorkPath + "/" + NewDB_Name + ".db3");
+                                try {
+                                    SQLiteGdxDatabase db = SQLiteGdxDatabaseFactory.getNewDatabase(dbFile);
+                                    db.openOrCreateDatabase();
+                                    Database.Data.Close();
+                                    Database.Data.StartUp(dbFile);
+                                } catch (SQLiteGdxException e) {
+                                    log.error("Create new DB", e);
+                                    return true;
+                                }
                                 // OwnRepository?
                                 if (ownRepository) {
                                     String folder = "?/" + NewDB_Name + "/";
@@ -165,15 +173,9 @@ public class SelectDB_Activity extends ActivityBase {
                                                         Config.TileCacheFolderLocal.getValue()//
                                         );
                                 }
-
                                 Config.AcceptChanges();
-
-                                if (!Utils.createDirectory(CB.WorkPath + "/User"))
-                                    return true;
-
-                                Config.AcceptChanges();
-                                selectDB();
-
+                                Config.DatabaseName.setValue(NewDB_Name + ".db3");
+                                finish();
                                 break;
                             case ButtonDialog.BUTTON_NEUTRAL: // cancel clicked
 
@@ -187,8 +189,6 @@ public class SelectDB_Activity extends ActivityBase {
                     }
                 });
                 inputBox.show();
-
-                //TODO  NewDB_InputBox.Show(WrapType.SINGLELINE, Translation.Get("NewDB"), Translation.Get("InsNewDBName"), "NewDB", mDialogListenerNewDB);
             }
         });
 
@@ -240,7 +240,7 @@ public class SelectDB_Activity extends ActivityBase {
                 stopTimer();
         }
         setAutoStartText();
-        readCountatThread();
+        readCountAtThread();
     }
 
 
@@ -298,9 +298,10 @@ public class SelectDB_Activity extends ActivityBase {
     public void sizeChanged() {
         needsLayout = true;
         layout();
+        lvFiles.dataSetChanged();
     }
 
-    private void readCountatThread() {
+    private void readCountAtThread() {
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -313,7 +314,6 @@ public class SelectDB_Activity extends ActivityBase {
                     fileInfos[index] = cacheCount + " Caches  " + fileSize + "    last use " + lastModified;
                     index++;
                 }
-                lvFiles.setAdapter(lvAdapter);
                 Gdx.graphics.requestRendering();
             }
         };
@@ -322,7 +322,16 @@ public class SelectDB_Activity extends ActivityBase {
 
     @Override
     public void onShow() {
-        lvFiles.setSelectedItemVisible();
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    lvFiles.setSelectedItemVisible();
+                } catch (Exception e) {
+                    log.error("Set selected Item Visible with onShow SelectDbActivity", e);
+                }
+            }
+        });
     }
 
     protected void selectDB() {
@@ -339,7 +348,6 @@ public class SelectDB_Activity extends ActivityBase {
         Config.DatabaseName.setValue(name);
         Config.AcceptChanges();
 
-        //TODO ManagerBase.Manager.initMapPacks();
         finish();
     }
 
@@ -390,11 +398,15 @@ public class SelectDB_Activity extends ActivityBase {
         @Override
         public ListViewItem getView(int listIndex) {
             SelectDBItem v = new SelectDBItem(listIndex, files.get(listIndex), fileInfos[listIndex], VisUI.getSkin().get("default", SelectDbStyle.class));
+            v.pack();
+            v.layout();
             return v;
         }
 
         @Override
         public void update(ListViewItem view) {
+            SelectDBItem dbItem = (SelectDBItem) view;
+            dbItem.updateFileInfoe(fileInfos[view.getListIndex()]);
         }
 
         @Override

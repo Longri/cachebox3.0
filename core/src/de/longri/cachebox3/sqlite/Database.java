@@ -154,7 +154,7 @@ public class Database {
                 return true;
             }
             log.debug("Database is changed! close " + Utils.GetFileName(this.databasePath));
-            if (myDB.isOpen()) myDB.closeDatabase();
+            if (myDB != null && myDB.isOpen()) myDB.closeDatabase();
             myDB = null;
         }
 
@@ -913,6 +913,7 @@ public class Database {
     }
 
     public void Close() {
+        if (myDB == null) return;
         try {
             myDB.closeDatabase();
         } catch (SQLiteGdxException e) {
@@ -929,7 +930,7 @@ public class Database {
             tempDB.openOrCreateDatabase();
             SQLiteGdxDatabaseCursor result = tempDB.rawQuery("SELECT COUNT(*) FROM caches", null);
             result.moveToFirst();
-            int count = result.getInt(1);
+            int count = result.getInt(0);
             result.close();
             tempDB.closeDatabase();
             return count;

@@ -27,6 +27,7 @@ import java.io.File;
 public class SelectDBItem extends ListViewItem {
 
     private final String fileName;
+    private final VisLabel lblName, lblInfo;
 
     public SelectDBItem(int listIndex, File file, String fileInfo, SelectDB_Activity.SelectDbStyle style) {
 
@@ -40,8 +41,8 @@ public class SelectDBItem extends ListViewItem {
         infoStyle.fontColor = style.infoColor;
 
         fileName = file.getName();
-        VisLabel lblName = new VisLabel(fileName, nameStyle);
-        VisLabel lblInfo = new VisLabel(fileInfo, infoStyle);
+        lblName = new VisLabel(fileName, nameStyle);
+        lblInfo = new VisLabel(fileInfo, infoStyle);
         this.add(lblName).left().fillX();
         this.row();
         this.add(lblInfo).left().fillX();
@@ -54,5 +55,9 @@ public class SelectDBItem extends ListViewItem {
     @Override
     public void dispose() {
 
+    }
+
+    public void updateFileInfoe(String fileInfo) {
+        lblInfo.setText(fileInfo);
     }
 }

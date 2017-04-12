@@ -76,12 +76,13 @@ public class StageManager {
             }
         } else {
             {// handle MapView on ViewManagerStage
-                ViewManager viewManager = (ViewManager) mainStage;
-                if (viewManager.getActView() instanceof MapView) {
-                    MapView mapView = (MapView) viewManager.getActView();
-                    mapView.setInputListener(false);
+                if (mainStage instanceof ViewManager) {
+                    ViewManager viewManager = (ViewManager) mainStage;
+                    if (viewManager.getActView() instanceof MapView) {
+                        MapView mapView = (MapView) viewManager.getActView();
+                        mapView.setInputListener(false);
+                    }
                 }
-
             }
         }
 
@@ -118,6 +119,7 @@ public class StageManager {
     }
 
     public static void removeAllWithActStage() {
+        if (stageList.size == 0) return;
         NamedStage stage = stageList.pop();
 
         log.debug("remove Stage: " + stage.getName());
