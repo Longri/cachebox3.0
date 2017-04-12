@@ -16,7 +16,9 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
@@ -36,6 +38,8 @@ public class ApiButton extends VisTextButton {
 
     private final Logger log = LoggerFactory.getLogger(ApiButton.class);
     private final ApiButtonStyle style;
+    private final com.badlogic.gdx.scenes.scene2d.ui.Image image;
+    private final float preferedHight;
 
     public ApiButton() {
         super(Translation.Get("getApiKey"));
@@ -47,6 +51,44 @@ public class ApiButton extends VisTextButton {
         btnStyle.font = style.font;
         btnStyle.fontColor = style.fontColor;
         this.setStyle(btnStyle);
+        this.getLabel().setAlignment(Align.center | Align.left);
+        image = new Image(style.unchecked);
+        this.addActor(image);
+        preferedHight = style.unchecked.getMinHeight() + CB.scaledSizes.MARGINx2;
+        setIcon();
+    }
+
+    @Override
+    public void layout() {
+        this.getLabel().setHeight(this.getHeight());
+        this.getCell(this.getLabel()).spaceLeft(CB.scaledSizes.MARGINx2);
+        image.setBounds(this.getWidth() - (style.unchecked.getMinHeight() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN, style.unchecked.getMinHeight(), style.unchecked.getMinHeight());
+        super.layout();
+    }
+
+    @Override
+    public float getPrefHeight() {
+        return this.preferedHight;
+    }
+
+    private void setIcon() {
+        boolean Entry = false;
+        if (Config.StagingAPI.getValue()) {
+            if (!Config.GcAPIStaging.getValue().equals(""))
+                Entry = true;
+        } else {
+            if (!Config.GcAPI.getValue().equals(""))
+                Entry = true;
+        }
+
+        if (Entry) {
+            image.setDrawable(style.check);
+        } else {
+            image.setDrawable(style.unchecked);
+        }
+
+        //TODO set icon for invalid and expired
+
     }
 
 
@@ -90,5 +132,4 @@ public class ApiButton extends VisTextButton {
             });
         }
     };
-
 }

@@ -1922,6 +1922,8 @@
     "ApiButton": {
       "up": "default_button_9_Patch",
       "down": "drawable_default_button_pressed",
+      "check": "check_on",
+      "unchecked": "check_disabled",
       "font": "normal_font",
       "fontColor": "font_color"
     }

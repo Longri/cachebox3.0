@@ -19,14 +19,11 @@ package de.longri.cachebox3.api;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.BuildInfo;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
