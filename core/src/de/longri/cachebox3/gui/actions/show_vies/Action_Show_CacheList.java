@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.actions.ShowImportMenu;
 import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings;
 import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
 import de.longri.cachebox3.gui.activities.EditCache;
@@ -60,7 +61,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 
     @Override
     public Menu getContextMenu() {
-        Menu cm = new Menu("CacheListContextMenu");
+        final Menu cm = new Menu("CacheListContextMenu");
 
 
         if (!(CB.viewmanager.getActView() instanceof CacheListView))
@@ -95,8 +96,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 
                         return true;
                     case MenuID.MI_IMPORT:
-                        CB.viewmanager.toast("Show Import NOT IMPLEMENTED NOW");
-                        // TabMainView.actionShowImportMenu.CallExecute();
+                        // do nothing, will show mor menu
                         return true;
                     case MenuID.MI_SYNC:
                         CB.viewmanager.toast("Sync NOT IMPLEMENTED NOW");
@@ -176,7 +176,8 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
         cm.addItem(MenuID.MI_FilterSet, "filter", CB.getSkin().getMenuIcon.filterIcon);
         cm.addItem(MenuID.MI_RESET_FILTER, "MI_RESET_FILTER", CB.getSkin().getMenuIcon.resetFilterIcon);
         cm.addItem(MenuID.MI_SEARCH_LIST, "search", CB.getSkin().getMenuIcon.searchIcon);
-        cm.addItem(MenuID.MI_IMPORT, "importExport", CB.getSkin().getMenuIcon.importIcon);
+        mi = cm.addItem(MenuID.MI_IMPORT, "importExport", CB.getSkin().getMenuIcon.importIcon);
+        mi.setMoreMenu(new ShowImportMenu());
 //        if (SyncActivity.RELEASED)
 //            cm.addItem(MenuID.MI_SYNC, "sync", CB.getSprite(IconNames.importIcon.name()));
         mi = cm.addItem(MenuID.MI_MANAGE_DB, "manage", "  (" + DBName + ")", CB.getSkin().getMenuIcon.manageDB);
