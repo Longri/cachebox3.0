@@ -16,6 +16,7 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import org.oscim.backend.canvas.Bitmap;
 
 import java.io.IOException;
@@ -50,6 +51,10 @@ public abstract class PlatformConnector {
 
     protected abstract void _switchTorch();
 
+    public static void getApiKey(GenericCallBack<String> callBack) {
+         platformConnector.generateApiKey(callBack);
+    }
+
     // SVG implementations #############################################################################################
     public enum SvgScaleType {
         SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED, NONE, SCALED_TO_WIDTH_OR_HEIGHT
@@ -82,5 +87,7 @@ public abstract class PlatformConnector {
     }
 
     protected abstract String _getWorkPath();
+
+    protected abstract void generateApiKey(GenericCallBack<String> callBack);
 
 }

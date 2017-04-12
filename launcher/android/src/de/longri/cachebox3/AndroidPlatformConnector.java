@@ -18,6 +18,7 @@ package de.longri.cachebox3;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Environment;
@@ -25,6 +26,7 @@ import android.support.v4.app.ActivityCompat;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,11 +40,13 @@ import java.io.InputStream;
  */
 public class AndroidPlatformConnector extends PlatformConnector {
     final static Logger log = LoggerFactory.getLogger(AndroidPlatformConnector.class);
+    private static final int REQUEST_CODE_GET_API_KEY = 987654321;
     private final AndroidApplication application;
-
+    public static AndroidPlatformConnector platformConnector;
 
     public AndroidPlatformConnector(AndroidApplication app) {
         this.application = app;
+        platformConnector = this;
     }
 
 
@@ -138,4 +142,17 @@ public class AndroidPlatformConnector extends PlatformConnector {
         return Environment.getExternalStorageDirectory().getAbsolutePath() + "/Cachebox3";
     }
 
+    public GenericCallBack<String> callBack;
+
+    @Override
+    protected void generateApiKey(GenericCallBack<String> callBack) {
+        this.callBack = callBack;
+        Intent intent = new Intent().setClass(application, GenerateApiKeyWebView.class);
+        if (intent.resolveActivity(application.getPackageManager()) != null) {
+            application.startActivityForResult(intent, REQUEST_CODE_GET_API_KEY);
+        } else {
+            log.error(intent.getAction() + " not installed.");
+        }
+
+    }
 }

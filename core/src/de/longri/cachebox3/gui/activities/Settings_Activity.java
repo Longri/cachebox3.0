@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -46,8 +47,9 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.ApiButton;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.settings.types.SettingBase;
+import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -419,6 +421,11 @@ public class Settings_Activity extends ActivityBase {
             }
         }
 
+        if (category == SettingCategory.Login) {
+            SettingsListGetApiButton<?> lgIn = new SettingsListGetApiButton<Object>(category.name(), SettingCategory.Button, SettingMode.Normal, SettingStoreType.Global, SettingUsage.ACB);
+            categorySettingsList.add(lgIn);
+        }
+
         // show new ListView for this category
 
         Adapter listViewAdapter = new Adapter() {
@@ -475,8 +482,8 @@ public class Settings_Activity extends ActivityBase {
             return getStringView((de.longri.cachebox3.settings.types.SettingString) setting);
 //        } else if (setting instanceof SettingsListCategoryButton) {
 //            return getButtonView((SettingsListCategoryButton<?>) setting);
-//        } else if (setting instanceof SettingsListGetApiButton) {
-//            return getApiKeyButtonView((SettingsListGetApiButton<?>) setting);
+        } else if (setting instanceof SettingsListGetApiButton) {
+            return getApiKeyButtonView(listIndex, (SettingsListGetApiButton<?>) setting);
 //        } else if (setting instanceof SettingsListButtonLangSpinner) {
 //            return getLangSpinnerView((SettingsListButtonLangSpinner<?>) setting);
 //        } else if (setting instanceof SettingsListButtonSkinSpinner) {
@@ -486,8 +493,21 @@ public class Settings_Activity extends ActivityBase {
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingColor) {
             return getColorView((de.longri.cachebox3.settings.types.SettingColor) setting);
         }
-
         return null;
+    }
+
+    private ListViewItem getApiKeyButtonView(int listIndex, SettingsListGetApiButton<?> setting) {
+        ListViewItem table = new ListViewItem(listIndex) {
+            @Override
+            public void dispose() {
+            }
+        };
+
+        float buttonWidth = this.getWidth() - (CB.scaledSizes.MARGINx2 * 2);
+
+        ApiButton apiButton = new ApiButton();
+        table.add(apiButton).width(new Value.Fixed(buttonWidth)).center();
+        return table;
     }
 
     private ListViewItem getColorView(de.longri.cachebox3.settings.types.SettingColor setting) {

@@ -16,12 +16,17 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
+import de.longri.cachebox3.settings.Config;
 import org.oscim.backend.canvas.Bitmap;
 import org.robovm.apple.avfoundation.AVCaptureDevice;
 import org.robovm.apple.avfoundation.AVCaptureTorchMode;
 import org.robovm.apple.avfoundation.AVMediaType;
 import org.robovm.apple.foundation.NSErrorException;
+import org.robovm.apple.uikit.UIViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +39,13 @@ import java.io.InputStream;
  */
 public class IOS_PlatformConnector extends PlatformConnector {
     final static Logger log = LoggerFactory.getLogger(IOS_PlatformConnector.class);
+
+    final IOS_Launcher ios_launcher;
+
+    public IOS_PlatformConnector(IOS_Launcher ios_launcher) {
+        super();
+        this.ios_launcher = ios_launcher;
+    }
 
     @Override
     protected boolean _isTorchAvailable() {
@@ -88,6 +100,27 @@ public class IOS_PlatformConnector extends PlatformConnector {
     @Override
     protected String _getWorkPath() {
         return _getSandBoxFileHandle("Cachebox3").file().getAbsolutePath();
+    }
+
+
+    @Override
+    protected void generateApiKey(GenericCallBack<String> callBack) {
+
+        log.debug("Show WebView");
+        log.debug("Set Stagging URL");
+        Config.StagingAPI.setValue(true);
+
+        try {
+           UIViewController mainViewController= ((IOSApplication) Gdx.app).getUIWindow().getRootViewController();
+
+            GenerateApiKeyWebViewController controller = new GenerateApiKeyWebViewController(callBack,mainViewController);
+
+            ((IOSApplication) Gdx.app).getUIWindow().setRootViewController(controller);
+            ((IOSApplication) Gdx.app).getUIWindow().makeKeyAndVisible();
+        } catch (Exception e) {
+            log.error("show web view", e);
+        }
+
     }
 
     @Override

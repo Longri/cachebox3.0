@@ -22,9 +22,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.api.GroundspeakAPI;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.activities.FileChooser;
-import de.longri.cachebox3.gui.widgets.CoordinateButton;
-import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.settings.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,17 +48,105 @@ public class TestView extends AbstractView {
 
     protected void create() {
         this.clear();
+        VisTextButton test = new VisTextButton("SelectFolder");
+        test.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
 
-        Coordinate coordinate = new Coordinate(53.12345, 14.12345);
+                FileHandle directory = Gdx.files.absolute("./");
+                fileChooser.setDirectory(directory);
 
-        CoordinateButton coordinateButton = new CoordinateButton(coordinate);
+                fileChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
+                    @Override
+                    public void selected(FileHandle fileHandle) {
+                        log.debug("Selected Folder: " + fileHandle);
+                    }
+                });
+
+                //displaying chooser with fade in animation
+                fileChooser.show();
+                // getStage().addActor(fileChooser.fadeIn());
 
 
-        this.addActor(coordinateButton);
+            }
+        });
 
-        coordinateButton.setBounds(20, 100, 300, 50);
+        VisTextButton testFile = new VisTextButton("SelectFile");
+        testFile.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
 
+                FileChooser fileChooser = new FileChooser("select file", FileChooser.Mode.OPEN,
+                        FileChooser.SelectionMode.FILES, "map");
 
+                FileHandle directory = Gdx.files.absolute("./");
+                fileChooser.setDirectory(directory);
+
+                fileChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
+                    @Override
+                    public void selected(FileHandle fileHandle) {
+                        log.debug("Selected file: " + fileHandle);
+                    }
+                });
+
+                //displaying chooser with fade in animation
+                fileChooser.show();
+                // getStage().addActor(fileChooser.fadeIn());
+
+            }
+        });
+
+        VisTextButton apiKey = new VisTextButton("createApiKey");
+        apiKey.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                log.debug("Create Api Key clicked");
+                PlatformConnector.getApiKey(new GenericCallBack<String>() {
+                    @Override
+                    public void callBack(String accessToken) {
+                        log.debug("return create ApiKey :{}", accessToken);
+
+                        GroundspeakAPI.CacheStatusValid = false;
+                        GroundspeakAPI.CacheStatusLiteValid = false;
+
+                        // store the encrypted AccessToken in the Config file
+                        // wir bekommen den Key schon verschlüsselt, deshalb muss er
+                        // nicht noch einmal verschlüsselt werden!
+                        if (Config.StagingAPI.getValue()) {
+                            Config.GcAPIStaging.setEncryptedValue(accessToken);
+                        } else {
+                            Config.GcAPI.setEncryptedValue(accessToken);
+                        }
+
+                        Config.AcceptChanges();
+
+                        String act = GroundspeakAPI.GetAccessToken();
+                        if (act.length() > 0) {
+                            GroundspeakAPI.GetMembershipType(new GenericCallBack<Integer>() {
+                                @Override
+                                public void callBack(Integer status) {
+                                    if (status >= 0) {
+                                        log.debug("Read User Name/State {}/{}", GroundspeakAPI.MemberName, status);
+                                        Config.GcLogin.setValue(GroundspeakAPI.MemberName);
+                                        Config.AcceptChanges();
+                                        CB.viewmanager.toast("Welcome : " + GroundspeakAPI.MemberName);
+                                    } else {
+                                        CB.viewmanager.toast("Welcome : " + GroundspeakAPI.MemberName);
+                                        log.debug("Can't read UserName State: {}", GroundspeakAPI.MemberName, status);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+        Table tbl = new Table();
+        tbl.add(test);
+        tbl.row();
+        tbl.add(testFile);
+        tbl.row();
+        tbl.add(apiKey);
+        tbl.setBounds(10, 10, 300, 300);
+        this.addActor(tbl);
     }
 
 

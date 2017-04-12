@@ -54,5 +54,6 @@
         <framework>AudioToolbox</framework>
         <framework>AVFoundation</framework>
         <framework>CoreLocation</framework>
+        <framework>WebKit</framework>
     </frameworks>
 </config>
