@@ -371,6 +371,11 @@ public class OptionsPane extends Table {
 
                     }
 
+                    if (widgetStyle.equals("com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle")) {
+                        ApiButtonStyle apiButtonStyle = game.skinProject.get("ApiButton", ApiButtonStyle.class);
+                        styles.put("ApiButton", apiButtonStyle);
+                    }
+
                     if (styles == null || styles.size == 0) {
                         Gdx.app.error("OptionsPane", "No styles defined for this widget type");
 

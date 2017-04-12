@@ -1917,5 +1917,13 @@
       "distanceFontColor": "font_color",
       "typeStyle": "cacheList"
     }
+  },
+  "de.longri.cachebox3.gui.skin.styles.ApiButtonStyle": {
+    "ApiButton": {
+      "up": "default_button_9_Patch",
+      "down": "drawable_default_button_pressed",
+      "font": "normal_font",
+      "fontColor": "font_color"
+    }
   }
 }

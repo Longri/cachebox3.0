@@ -17,11 +17,13 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.gui.skin.styles.ApiButtonStyle;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;
@@ -33,10 +35,18 @@ import org.slf4j.LoggerFactory;
 public class ApiButton extends VisTextButton {
 
     private final Logger log = LoggerFactory.getLogger(ApiButton.class);
+    private final ApiButtonStyle style;
 
     public ApiButton() {
         super(Translation.Get("getApiKey"));
         this.addListener(clickListener);
+        this.style = VisUI.getSkin().get("ApiButton", ApiButtonStyle.class);
+        TextButtonStyle btnStyle = new VisTextButtonStyle();
+        btnStyle.up = style.up;
+        btnStyle.down = style.down;
+        btnStyle.font = style.font;
+        btnStyle.fontColor = style.fontColor;
+        this.setStyle(btnStyle);
     }
 
 
