@@ -286,8 +286,6 @@ public class ImportGcPos extends ActivityBase {
         Config.AcceptChanges();
 
         bOK.setDisabled(true);
-
-
         importRuns = true;
 
         //TODO replace with async worker

@@ -25,7 +25,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.*;
 import android.widget.LinearLayout;
-import de.longri.cachebox3.api.CB_Api;
+import de.longri.cachebox3.apis.cachebox_api.CB_Api;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 

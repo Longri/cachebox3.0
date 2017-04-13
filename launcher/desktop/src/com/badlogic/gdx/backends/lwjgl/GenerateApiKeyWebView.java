@@ -16,7 +16,7 @@
 package com.badlogic.gdx.backends.lwjgl;
 
 import com.badlogic.gdx.Gdx;
-import de.longri.cachebox3.api.CB_Api;
+import de.longri.cachebox3.apis.cachebox_api.CB_Api;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 import javafx.application.Platform;

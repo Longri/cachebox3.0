@@ -3,7 +3,6 @@ package de.longri.cachebox3.api;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by Longri on 10.04.2017.
@@ -55,7 +54,7 @@ class GroundspeakAPITest {
 
     @Test
     void getApiStatus() {
-        int status = GroundspeakAPI.getApiStatus(API_RESULT_JSON);
+        int status = de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI.getApiStatus(API_RESULT_JSON);
 
         assertThat("Status should be 0", status == 0);
 
