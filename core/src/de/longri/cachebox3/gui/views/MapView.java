@@ -88,6 +88,12 @@ import java.util.List;
 public class MapView extends AbstractView {
     private final static Logger log = LoggerFactory.getLogger(MapView.class);
 
+    private static double lastCenterPosLat, lastCenterPosLon;
+
+    public static Coordinate getLastCenterPos() {
+        return new Coordinate(lastCenterPosLat, lastCenterPosLon);
+    }
+
     private InputMultiplexer mapInputHandler;
     private CacheboxMapAdapter map;
     private final CacheboxMain main;
@@ -282,6 +288,9 @@ public class MapView extends AbstractView {
                     if (positionChangedHandler != null)
                         positionChangedHandler.rotateChangedFromUser(mapPosition.getBearing());
                 }
+
+                lastCenterPosLat = mapPosition.getLatitude();
+                lastCenterPosLon = mapPosition.getLongitude();
             }
         };
         main.mMapRenderer = new MapRenderer(map);

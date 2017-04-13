@@ -56,4 +56,7 @@ public class CoordinateButton extends VisTextButton {
 
     };
 
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
+    }
 }
