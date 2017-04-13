@@ -15,10 +15,13 @@
  */
 package de.longri.cachebox3.gui.activities;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextArea;
@@ -39,18 +42,17 @@ import de.longri.cachebox3.translation.Translation;
  */
 public class ImportGcPos extends ActivityBase {
 
-    private VisTextButton bOK, bCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap;
-    private VisLabel lblTitle, lblRadius, lblRadiusEinheit, lblMarkerPos, lblExcludeFounds, lblOnlyAvailable, lblExcludeHides;
-    private Image gsLogo;
-    private CoordinateButton coordBtn;
-    private VisCheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
-    private VisTextArea Radius;
-    private float lineHeight;
+    private final VisTextButton bOK, bCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap;
+    private final VisLabel lblTitle, lblRadius, lblRadiusEinheit, lblMarkerPos;
+    private final Image gsLogo;
+    private final CoordinateButton coordBtn;
+    private final VisCheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
+    private final VisTextArea textAreaRadius;
     private Coordinate actSearchPos;
     private volatile Thread thread;
-    private WidgetGroup box;
     private boolean importRuns = false;
     private boolean isCanceld = false;
+    private boolean needLayout = true;
 
     /**
      * 0=GPS, 1= Map, 2= Manuell
@@ -60,30 +62,86 @@ public class ImportGcPos extends ActivityBase {
 
     public ImportGcPos() {
         super("searchOverPosActivity");
-        lineHeight = CB.scaledSizes.BUTTON_HEIGHT;
+        bOK = new VisTextButton(Translation.Get("import"));
+        bCancel = new VisTextButton(Translation.Get("cancel"));
+        gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
+        lblTitle = new VisLabel(Translation.Get("importCachesOverPosition"));
+        lblRadius = new VisLabel(Translation.Get(Translation.Get("Radius")));
+        textAreaRadius = new VisTextArea();
+        lblRadiusEinheit = new VisLabel(Config.ImperialUnits.getValue() ? "mi" : "km");
+        btnMinus = new VisTextButton("-");
+        btnPlus = new VisTextButton("+");
+        checkBoxOnlyAvailable = new VisCheckBox(Translation.Get("SearchOnlyAvailable"));
+        checkBoxExcludeHides = new VisCheckBox(Translation.Get("SearchWithoutOwns"));
+        checkBoxExcludeFounds = new VisCheckBox(Translation.Get("SearchWithoutFounds"));
+        lblMarkerPos = new VisLabel(Translation.Get("CurentMarkerPos"));
+        coordBtn = new CoordinateButton(EventHandler.getMyPosition());
+        tglBtnGPS = new VisTextButton(Translation.Get("FromGps"), "toggle");
+        tglBtnMap = new VisTextButton(Translation.Get("FromMap"), "toggle");
 
         createOkCancelBtn();
-        createBox();
-        createTitleLine();
-        createRadiusLine();
-        createChkBoxLines();
         createToggleButtonLine();
-        createCoordButton();
 
         initialContent();
+
+//        this.setDebug(true, true);
+    }
+
+    @Override
+    public void layout() {
+        if (!needLayout) {
+            super.layout();
+            return;
+        }
+
+        SnapshotArray<Actor> actors = this.getChildren();
+        for (Actor actor : actors)
+            this.removeActor(actor);
+
+        this.setFillParent(true);
+        this.defaults().pad(CB.scaledSizes.MARGIN);
+
+        this.add(lblTitle).colspan(3).center();
+        this.add(gsLogo).colspan(2).center();
+        this.row().padTop(new Value.Fixed(CB.scaledSizes.MARGINx2 * 2));
+        this.add(lblRadius);
+        this.add(textAreaRadius);
+        this.add(lblRadiusEinheit).left();
+        this.add(btnMinus).width(new Value.Fixed(textAreaRadius.getPrefHeight()));
+        this.add(btnPlus).width(new Value.Fixed(textAreaRadius.getPrefHeight()));
+        this.row().left();
+        this.add(checkBoxOnlyAvailable).colspan(5).left();
+        this.row();
+        this.add(checkBoxExcludeHides).colspan(5).left();
+        this.row();
+        this.add(checkBoxExcludeFounds).colspan(5).left();
+        this.row();
+        Table nestedTable1 = new Table();
+        nestedTable1.defaults().pad(CB.scaledSizes.MARGIN);
+        nestedTable1.add(tglBtnGPS);
+        nestedTable1.add(tglBtnMap);
+        this.add(nestedTable1).colspan(5).expandX().fillX();
+        this.row().expandY().fillY().bottom();
+        this.add();
+        this.row();
+        Table nestedTable2 = new Table();
+        nestedTable2.defaults().pad(CB.scaledSizes.MARGIN).bottom();
+        nestedTable2.add(bOK).bottom();
+        nestedTable2.add(bCancel).bottom();
+        this.add(nestedTable2).colspan(5);
+
+        super.layout();
+        needLayout = false;
     }
 
     private void createOkCancelBtn() {
-        bOK = new VisTextButton(Translation.Get("import"));
-        bCancel = new VisTextButton(Translation.Get("cancel"));
 
-        this.addActor(bOK);
+
         bOK.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 ImportNow();
             }
         });
-        this.addActor(bCancel);
 
         bCancel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -96,69 +154,14 @@ public class ImportGcPos extends ActivityBase {
         });
     }
 
-    private void createBox() {
-        box = new WidgetGroup();
-        this.addActor(box);
-
-    }
-
-    private void createTitleLine() {
-        gsLogo = new Image();
-        gsLogo.setDrawable(CB.getSkin().getIcon.GC_Live);
-        this.addActor(gsLogo);
-
-        lblTitle = new VisLabel(Translation.Get("importCachesOverPosition"));
-        this.addActor(lblTitle);
-
-    }
-
-    private void createRadiusLine() {
-        lblRadius = new VisLabel(Translation.Get("Radius"));
-        box.addActor(lblRadius);
-
-        Radius = new VisTextArea();
-        box.addActor(Radius);
-
-        lblRadiusEinheit = new VisLabel(Config.ImperialUnits.getValue() ? "mi" : "km");
-        box.addActor(lblRadiusEinheit);
-
-        btnMinus = new VisTextButton("-");
-        box.addActor(btnMinus);
-
-        btnPlus = new VisTextButton("+");
-        box.addActor(btnPlus);
-    }
-
-    private void createChkBoxLines() {
-        checkBoxOnlyAvailable = new VisCheckBox(Translation.Get("SearchOnlyAvailable"));
-        box.addActor(checkBoxOnlyAvailable);
-
-        checkBoxExcludeHides = new VisCheckBox(Translation.Get("SearchWithoutOwns"));
-        box.addActor(checkBoxExcludeHides);
-
-        checkBoxExcludeFounds = new VisCheckBox(Translation.Get("SearchWithoutFounds"));
-        box.addActor(checkBoxExcludeFounds);
-    }
 
     private void createToggleButtonLine() {
-
-        tglBtnGPS = new VisTextButton(Translation.Get("FromGps"));
-        tglBtnMap = new VisTextButton(Translation.Get("FromMap"));
-        box.addActor(tglBtnGPS);
-        box.addActor(tglBtnMap);
-
         //TODO disable with no actual MapCenterPos
 //        if (MapView.that == null)
 //            tglBtnMap.disable();
 
     }
 
-    private void createCoordButton() {
-        lblMarkerPos = new VisLabel(Translation.Get("CurentMarkerPos"));
-        box.addActor(lblMarkerPos);
-        coordBtn = new CoordinateButton(EventHandler.getMyPosition());
-        box.addActor(coordBtn);
-    }
 
     private void initialContent() {
         btnPlus.addListener(new ClickListener() {
@@ -182,7 +185,7 @@ public class ImportGcPos extends ActivityBase {
 
         tglBtnMap.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Coordinate mapCenterPos= MapView.getLastCenterPos();
+                Coordinate mapCenterPos = MapView.getLastCenterPos();
                 if (mapCenterPos == null) {
                     actSearchPos = new CoordinateGPS(Config.MapInitLatitude.getValue(), Config.MapInitLongitude.getValue());
                 } else {
@@ -195,7 +198,7 @@ public class ImportGcPos extends ActivityBase {
         checkBoxExcludeFounds.setChecked(Config.SearchWithoutFounds.getValue());
         checkBoxOnlyAvailable.setChecked(Config.SearchOnlyAvailable.getValue());
         checkBoxExcludeHides.setChecked(Config.SearchWithoutOwns.getValue());
-        Radius.setText(String.valueOf(Config.lastSearchRadius.getValue()));
+        textAreaRadius.setText(String.valueOf(Config.lastSearchRadius.getValue()));
 
         setToggleBtnState();
 
@@ -208,7 +211,7 @@ public class ImportGcPos extends ActivityBase {
                 actSearchPos = EventHandler.getMyPosition();
                 break;
             case 1:
-                Coordinate mapCenterPos= MapView.getLastCenterPos();
+                Coordinate mapCenterPos = MapView.getLastCenterPos();
                 if (mapCenterPos == null) {
                     actSearchPos = new CoordinateGPS(Config.MapInitLatitude.getValue(), Config.MapInitLongitude.getValue());
                 } else {
@@ -221,7 +224,7 @@ public class ImportGcPos extends ActivityBase {
 
     private void incrementRadius(int value) {
         try {
-            int ist = Integer.parseInt(Radius.getText().toString());
+            int ist = Integer.parseInt(textAreaRadius.getText().toString());
             ist += value;
 
             if (ist > 100)
@@ -229,7 +232,7 @@ public class ImportGcPos extends ActivityBase {
             if (ist < 1)
                 ist = 1;
 
-            Radius.setText(String.valueOf(ist));
+            textAreaRadius.setText(String.valueOf(ist));
         } catch (NumberFormatException e) {
 
         }
@@ -271,7 +274,7 @@ public class ImportGcPos extends ActivityBase {
 
         int radius = 0;
         try {
-            radius = Integer.parseInt(Radius.getText().toString());
+            radius = Integer.parseInt(textAreaRadius.getText().toString());
         } catch (NumberFormatException e) {
             // Kein Integer
             e.printStackTrace();
@@ -413,9 +416,9 @@ public class ImportGcPos extends ActivityBase {
 //        if (checkBoxExcludeHides != null)
 //            checkBoxExcludeHides.dispose();
 //        checkBoxExcludeHides = null;
-//        if (Radius != null)
-//            Radius.dispose();
-//        Radius = null;
+//        if (textAreaRadius != null)
+//            textAreaRadius.dispose();
+//        textAreaRadius = null;
 //        if (tglBtnGPS != null)
 //            tglBtnGPS.dispose();
 //        tglBtnGPS = null;

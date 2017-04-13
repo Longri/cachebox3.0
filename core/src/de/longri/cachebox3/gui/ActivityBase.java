@@ -69,4 +69,15 @@ public class ActivityBase extends Window implements Disposable, Showable {
     public static class ActivityBaseStyle {
         public Drawable background;
     }
+
+    @Override
+    public float getPrefWidth() {
+        return Gdx.graphics.getWidth();
+    }
+
+    @Override
+    public float getPrefHeight() {
+        return Gdx.graphics.getHeight();
+    }
+
 }
