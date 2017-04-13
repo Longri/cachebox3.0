@@ -30,8 +30,8 @@ public class CoordinateButton extends VisTextButton {
     private Coordinate coordinate;
 
     public CoordinateButton(Coordinate coordinate) {
-        super(coordinate.FormatCoordinate(), VisUI.getSkin().get("coordinate", VisTextButtonStyle.class));
-
+        super(coordinate == null ? new Coordinate(0, 0).FormatCoordinate() :
+                coordinate.FormatCoordinate(), VisUI.getSkin().get("coordinate", VisTextButtonStyle.class));
         this.coordinate = coordinate;
         this.addListener(clickListener);
     }
