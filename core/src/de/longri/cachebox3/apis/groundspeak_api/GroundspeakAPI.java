@@ -16,22 +16,13 @@
 package de.longri.cachebox3.apis.groundspeak_api;
 
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
-import com.badlogic.gdx.utils.JsonReader;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.utils.BuildInfo;
-import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class GroundspeakAPI {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(GroundspeakAPI.class);
-    public static final String GS_LIVE_URL = "https://api.groundspeak.com/LiveV6/geocaching.svc/";
-    public static final String STAGING_GS_LIVE_URL = "https://staging.api.groundspeak.com/Live/V6Beta/geocaching.svc/";
 
     public static final int IO = 0;
     private static final int ERROR = -1;
@@ -48,21 +39,27 @@ public class GroundspeakAPI {
     public static int CachesLeftLite = -1;
     public static int CurrentCacheCountLite = -1;
     public static int MaxCacheCountLite = -1;
-    public static String MemberName = ""; // this will be filled by
+    public static String memberName = ""; // this will be filled by
     private static boolean DownloadLimit = false;
     private static boolean API_isCheked = false;
+
+    /**
+     * 0: Guest??? 1: Basic 2: Charter??? 3: Premium
+     */
+    private static int membershipType = -1;
+
 
     /**
      * Read the encrypted AccessToken from the config and check whether it is correct for Android CB
      *
      * @return
      */
-    public static String GetAccessToken() {
-        return GetAccessToken(false);
+    public static String getAccessToken() {
+        return getAccessToken(false);
     }
 
 
-    public static String GetAccessToken(boolean Url_Codiert) {
+    public static String getAccessToken(boolean Url_Codiert) {
         String act = "";
         if (Config.StagingAPI.getValue()) {
             act = Config.GcAPIStaging.getValue();
@@ -86,11 +83,6 @@ public class GroundspeakAPI {
         return result;
     }
 
-
-    /**
-     * 0: Guest??? 1: Basic 2: Charter??? 3: Premium
-     */
-    private static int membershipType = -1;
 
 //
 //    public static boolean IsPremiumMember() {
@@ -127,7 +119,7 @@ public class GroundspeakAPI {
 //	    HttpPost httppost = new HttpPost(URL + "CreateFieldNoteAndPublish?format=json");
 //	    String requestString = "";
 //	    requestString = "{";
-//	    requestString += "\"AccessToken\":\"" + GetAccessToken() + "\",";
+//	    requestString += "\"AccessToken\":\"" + getAccessToken() + "\",";
 //	    requestString += "\"CacheCode\":\"" + cacheCode + "\",";
 //	    requestString += "\"WptLogTypeId\":" + String.valueOf(wptLogTypeId) + ",";
 //	    requestString += "\"UTCDateLogged\":\"" + GetUTCDate(dateLogged) + "\",";
@@ -208,7 +200,7 @@ public class GroundspeakAPI {
 //	    HttpPost httppost = new HttpPost(URL + "GetYourUserProfile?format=json");
 //	    String requestString = "";
 //	    requestString = "{";
-//	    requestString += "\"AccessToken\":\"" + GetAccessToken() + "\",";
+//	    requestString += "\"AccessToken\":\"" + getAccessToken() + "\",";
 //	    requestString += "\"ProfileOptions\":{";
 //	    requestString += "}" + ",";
 //	    requestString += getDeviceInfoRequestString();
@@ -272,96 +264,22 @@ public class GroundspeakAPI {
     /**
      * Loads the Membership type -1: Error 0: Guest??? 1: Basic 2: Charter??? 3: Premium
      */
-    public static void GetMembershipType(final GenericCallBack<Integer> callBack) {
+    public static void getMembershipType(final GenericCallBack<Integer> callBack) {
         if (API_isCheked) {
             callBack.callBack(membershipType);
             return;
         }
-
-        String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-
-        String requestString = "";
-        requestString = "{";
-        requestString += "\"AccessToken\":\"" + GetAccessToken() + "\",";
-        requestString += "\"ProfileOptions\":{";
-        requestString += "}" + ",";
-        requestString += getDeviceInfoRequestString();
-        requestString += "}";
-
-
-        Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
-        httpPost.setUrl(URL + "GetYourUserProfile?format=json");
-        httpPost.setHeader("format", "json");
-        httpPost.setHeader("Accept", "application/json");
-        httpPost.setHeader("Content-type", "application/json");
-
-        httpPost.setContent(requestString);
-        httpPost.setIncludeCredentials(true);
-
-        Gdx.net.sendHttpRequest(httpPost, new Net.HttpResponseListener() {
-            public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                String result = httpResponse.getResultAsString();
-                if (result.contains("The service is unavailable")) {
-                    callBack.callBack(API_IS_UNAVAILABLE);
-                    return;
-                }
-                int status = getApiStatus(result);
-
-                if (status == 0) {
-                    (new JsonReader() {
-                        protected void number(String name, long value, String stringValue) {
-                            super.number(name, value, stringValue);
-                            if (name.equals("MemberTypeId")) {
-                                membershipType = (int) value;
-                            }
-                        }
-
-                        protected void string(String name, String value) {
-                            super.string(name, value);
-                            if (name.equals("UserName")) {
-                                MemberName = value;
-                            }
-                        }
-
-                    }).parse(result);
-                    API_isCheked = true;
-                    callBack.callBack(membershipType);
-                } else if (status == 2 || status == 3 || status == 141) {
-                    API_isCheked = false;
-                    callBack.callBack(API_ERROR);
-                } else {
-                    log.warn("GetMembershipType API-Error: " + result);
-                    API_isCheked = false;
-                    callBack.callBack(API_ERROR);
-                }
-            }
-
-            public void failed(Throwable t) {
-                log.error("GetMembershipType", t);
-                callBack.callBack(API_IS_UNAVAILABLE);
-            }
-
+        final GetYourUserProfile getYourUserProfile = new GetYourUserProfile(getAccessToken());
+        getYourUserProfile.post(new GenericCallBack<Integer>() {
             @Override
-            public void cancelled() {
-                log.error("cancelled GetMembershipType");
-                callBack.callBack(API_IS_UNAVAILABLE);
+            public void callBack(Integer value) {
+                membershipType = getYourUserProfile.getMembershipType();
+                memberName = getYourUserProfile.getMemberName();
             }
         });
+
     }
 
-
-    public static int getApiStatus(String result) {
-        final AtomicInteger st = new AtomicInteger(-1);
-        (new JsonReader() {
-            protected void number(String name, long value, String stringValue) {
-                super.number(name, value, stringValue);
-                if (name.equals("StatusCode")) {
-                    st.set((int) value);
-                }
-            }
-        }).parse(result);
-        return st.get();
-    }
 
     //
 //    /**
@@ -394,7 +312,7 @@ public class GroundspeakAPI {
 //	    HttpPost httppost = new HttpPost(URL + "GetGeocacheStatus?format=json");
 //	    String requestString = "";
 //	    requestString = "{";
-//	    requestString += "\"AccessToken\":\"" + GetAccessToken() + "\",";
+//	    requestString += "\"AccessToken\":\"" + getAccessToken() + "\",";
 //	    requestString += "\"CacheCodes\":[";
 //
 //	    int i = 0;
@@ -521,7 +439,7 @@ public class GroundspeakAPI {
 //	{
 //	    try {
 //		String requestString = "";
-//		requestString += "&AccessToken=" + GetAccessToken();
+//		requestString += "&AccessToken=" + getAccessToken();
 //		requestString += "&CacheCode=" + cache.getGcCode();
 //		requestString += "&StartIndex=" + start;
 //		requestString += "&MaxPerPage=" + count;
@@ -630,7 +548,7 @@ public class GroundspeakAPI {
 //	    HttpPost httppost = new HttpPost(URL + "SearchForGeocaches?format=json");
 //	    try {
 //		JSONObject request = new JSONObject();
-//		request.put("AccessToken", GetAccessToken());
+//		request.put("AccessToken", getAccessToken());
 //		request.put("IsLight", false);
 //		request.put("StartIndex", 0);
 //		request.put("MaxPerPage", 1);
@@ -713,78 +631,7 @@ public class GroundspeakAPI {
 //	}
 //    }
 //
-//    static int getCacheSize(int containerTypeId) {
-//	switch (containerTypeId) {
-//	case 1:
-//	    return 0; // Unknown
-//	case 2:
-//	    return 1; // Micro
-//	case 3:
-//	    return 3; // Regular
-//	case 4:
-//	    return 4; // Large
-//	case 5:
-//	    return 5; // Virtual
-//	case 6:
-//	    return 0; // Other
-//	case 8:
-//	    return 2;
-//	default:
-//	    return 0;
-//
-//	}
-//    }
-//
-//    static CacheTypes getCacheType(int apiTyp) {
-//	switch (apiTyp) {
-//	case 2:
-//	    return CacheTypes.Traditional;
-//	case 3:
-//	    return CacheTypes.Multi;
-//	case 4:
-//	    return CacheTypes.Virtual;
-//	case 5:
-//	    return CacheTypes.Letterbox;
-//	case 6:
-//	    return CacheTypes.Event;
-//	case 8:
-//	    return CacheTypes.Mystery;
-//	case 9:
-//	    return CacheTypes.Cache; // Project APE Cache???
-//	case 11:
-//	    return CacheTypes.Camera;
-//	case 12:
-//	    return CacheTypes.Cache; // Locationless (Reverse) Cache
-//	case 13:
-//	    return CacheTypes.CITO; // Cache In Trash Out Event
-//	case 137:
-//	    return CacheTypes.Earth;
-//	case 453:
-//	    return CacheTypes.MegaEvent;
-//	case 452:
-//	    return CacheTypes.ReferencePoint;
-//	case 1304:
-//	    return CacheTypes.Cache; // GPS Adventures Exhibit
-//	case 1858:
-//	    return CacheTypes.Wherigo;
-//
-//	case 217:
-//	    return CacheTypes.ParkingArea;
-//	case 220:
-//	    return CacheTypes.Final;
-//	case 219:
-//	    return CacheTypes.MultiStage;
-//	case 221:
-//	    return CacheTypes.Trailhead;
-//	case 218:
-//	    return CacheTypes.MultiQuestion;
-//	case 7005:
-//	    return CacheTypes.Giga;
-//
-//	default:
-//	    return CacheTypes.Undefined;
-//
-//	}
+
 //    }
 //
 //    /**
@@ -820,7 +667,7 @@ public class GroundspeakAPI {
 //			"CollectionOnly":true
 //		*/
 //		JSONObject request = new JSONObject();
-//		request.put("AccessToken", GetAccessToken());
+//		request.put("AccessToken", getAccessToken());
 //		request.put("MaxPerPage", 30);
 //
 //		String requestString = request.toString();
@@ -907,7 +754,7 @@ public class GroundspeakAPI {
 //	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 //
 //	try {
-//	    HttpGet httppost = new HttpGet(URL + "GetTrackablesByTrackingNumber?AccessToken=" + GetAccessToken(true) + "&trackingNumber=" + TrackingCode + "&format=json");
+//	    HttpGet httppost = new HttpGet(URL + "GetTrackablesByTrackingNumber?AccessToken=" + getAccessToken(true) + "&trackingNumber=" + TrackingCode + "&format=json");
 //
 //	    // set time outs
 //	    HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
@@ -989,7 +836,7 @@ public class GroundspeakAPI {
 //	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 //
 //	try {
-//	    HttpGet httppost = new HttpGet(URL + "GetTrackablesByTBCode?AccessToken=" + GetAccessToken(true) + "&tbCode=" + TrackingNumber + "&format=json");
+//	    HttpGet httppost = new HttpGet(URL + "GetTrackablesByTBCode?AccessToken=" + getAccessToken(true) + "&tbCode=" + TrackingNumber + "&format=json");
 //
 //	    // set time outs
 //	    HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
@@ -1071,7 +918,7 @@ public class GroundspeakAPI {
 //	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 //
 //	try {
-//	    HttpGet httppost = new HttpGet(URL + "GetImagesForGeocache?AccessToken=" + GetAccessToken() + "&CacheCode=" + cacheCode + "&format=json");
+//	    HttpGet httppost = new HttpGet(URL + "GetImagesForGeocache?AccessToken=" + getAccessToken() + "&CacheCode=" + cacheCode + "&format=json");
 //
 //	    // set time outs
 //	    HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
@@ -1149,7 +996,7 @@ public class GroundspeakAPI {
 //	if (list == null)
 //	    list = new HashMap<String, URI>();
 //	try {
-//	    HttpGet httppost = new HttpGet(URL + "GetImagesForGeocache?AccessToken=" + GetAccessToken(true) + "&CacheCode=" + cacheCode + "&format=json");
+//	    HttpGet httppost = new HttpGet(URL + "GetImagesForGeocache?AccessToken=" + getAccessToken(true) + "&CacheCode=" + cacheCode + "&format=json");
 //
 //	    // set time outs
 //	    HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
@@ -1365,24 +1212,7 @@ public class GroundspeakAPI {
 //
 //    }
 //
-    private static String getDeviceInfoRequestString() {
-        String string = "\"DeviceInfo\":{";
 
-        string += "\"ApplicationCurrentMemoryUsage\":\"" + String.valueOf(2147483647) + "\",";
-        string += "\"ApplicationPeakMemoryUsage\":\"" + String.valueOf(2147483647) + "\",";
-        string += "\"ApplicationSoftwareVersion\":\"" + BuildInfo.getRevison() + "\",";
-        string += "\"DeviceManufacturer\":\"" + "?\"" + ",";
-        string += "\"DeviceName\":\"" + "?\"" + ",";
-        string += "\"DeviceOperatingSystem\":\"ANDROID\"" + ",";
-        string += "\"DeviceTotalMemoryInMB\":\"" + String.valueOf(1.26743233E+15) + "\",";
-        string += "\"DeviceUniqueId\":\"" + "?\"" + ",";
-        string += "\"MobileHardwareVersion\":\"" + "?\"" + ",";
-        string += "\"WebBrowserVersion\":\"" + "?\"";
-
-        string += "}";
-
-        return string;
-    }
 //
 
 //
@@ -1405,7 +1235,7 @@ public class GroundspeakAPI {
 //	    return isValid ? 0 : 1;
 //	}
 //	int ret = 0;
-//	if (GetAccessToken().length() > 0) {
+//	if (getAccessToken().length() > 0) {
 //
 //	    if (!isValid) {
 //		ret = GetMembershipType(null);
@@ -1483,7 +1313,7 @@ public class GroundspeakAPI {
 //	    HttpPost httppost = new HttpPost(URL + "CreateTrackableLog?format=json");
 //	    String requestString = "";
 //	    requestString = "{";
-//	    requestString += "\"AccessToken\":\"" + GetAccessToken() + "\",";
+//	    requestString += "\"AccessToken\":\"" + getAccessToken() + "\",";
 //	    requestString += "\"CacheCode\":\"" + cacheCode + "\",";
 //	    requestString += "\"LogType\":" + String.valueOf(LogTypeId) + ",";
 //	    requestString += "\"UTCDateLogged\":\"" + GetUTCDate(dateLogged) + "\",";

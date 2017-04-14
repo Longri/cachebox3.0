@@ -15,56 +15,46 @@
  */
 package de.longri.cachebox3.apis.groundspeak_api.search;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
+import com.badlogic.gdx.backends.lwjgl.LwjglNet;
+import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
-import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.ImageEntry;
-import de.longri.cachebox3.types.LogEntry;
+import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.lists.CB_List;
-import org.apache.commons.codec.Charsets;
 import org.junit.jupiter.api.Test;
 import travis.EXCLUDE_FROM_TRAVIS;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static travis.EXCLUDE_FROM_TRAVIS.LONGRI_HOME_COORDS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Created by longri on 14.04.17.
+ * Created by Longri on 14.04.17.
  */
 class SearchGCTest {
+
+    static {
+        BuildInfo.setTestBuildInfo("JUnitTest");
+        Gdx.net = new LwjglNet();
+    }
 
     final String apiKey = EXCLUDE_FROM_TRAVIS.GcAPI;
     final boolean isDummy = apiKey.equals(EXCLUDE_FROM_TRAVIS.DUMMY_API_KEY);
 
     @Test
     void getRequest() throws IOException {
-        File file = new File("testsResources/SearchGc_request.txt");
-        FileInputStream stream = new FileInputStream(file);
-
-
-        byte[] b = new byte[(int) file.length()];
-        int len = b.length;
-        int total = 0;
-
-        while (total < len) {
-            int result = stream.read(b, total, len - total);
-            if (result == -1) {
-                break;
-            }
-            total += result;
-        }
-        String expected = new String(b, Charsets.UTF_8);
-
-        if (!isDummy) {
-            expected = expected.replace("\"AccessToken\":\"+DummyKEY\"",
-                    "\"AccessToken\":\"" + apiKey + "\"");
-        }
-
+        String expected = TestUtils.getResourceRequestString("testsResources/SearchGc_request.txt",
+                isDummy ? null : apiKey);
         SearchGC searchGC = new SearchGC(apiKey, "GC1T33T");
 
         StringWriter writer = new StringWriter();
@@ -76,8 +66,77 @@ class SearchGCTest {
         assertEquals(expected, actual, "Should be equals");
     }
 
+
     @Test
     void parseJsonResult() throws IOException {
+        final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGc_result.txt");
+        final SearchGC searchGC = new SearchGC(apiKey, "GC1T33T");
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
+        final CB_List<Cache> cacheList = new CB_List<>();
+        final CB_List<LogEntry> logList = new CB_List<>();
+        final CB_List<ImageEntry> imageList = new CB_List<>();
+        final long gpxFilenameId = 10;
+
+        searchGC.setLists(cacheList, logList, imageList, gpxFilenameId);
+
+        Net.HttpResponse response = new Net.HttpResponse() {
+            @Override
+            public byte[] getResult() {
+                return new byte[0];
+            }
+
+            @Override
+            public String getResultAsString() {
+                return null;
+            }
+
+            @Override
+            public InputStream getResultAsStream() {
+                return resultStream;
+            }
+
+            @Override
+            public HttpStatus getStatus() {
+                return null;
+            }
+
+            @Override
+            public String getHeader(String name) {
+                return null;
+            }
+
+            @Override
+            public Map<String, List<String>> getHeaders() {
+                return null;
+            }
+        };
+
+        searchGC.handleHttpResponse(response, new GenericCallBack<Integer>() {
+            @Override
+            public void callBack(Integer value) {
+
+                assertEquals(cacheList.size(), 1, "CacheList.size must be 1");
+                Cache cache = cacheList.pop();
+
+                assertEquals(false, cache.isArchived(), "cache.isArchived() must be false");
+                assertEquals(true, cache.isAvailable(), "cache.isAvailable() must be true");
+                assertEquals("GC1T33T", cache.getGcCode(), "cache.getGcCode() must be GC1T33T");
+                assertEquals(0, cache.waypoints.size(), "cache.waypoints.size() must be 0");
+                assertEquals(CacheTypes.Traditional, cache.Type, "cache.Type must be Traditional");
+                assertEquals(CacheSizes.other, cache.Size);
+                assertEquals("Germany", cache.getCountry());
+
+                WAIT.set(false);
+            }
+        });
+
+        while (WAIT.get()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
@@ -85,15 +144,29 @@ class SearchGCTest {
     void testOnline() {
         if (isDummy) return;
 
-        SearchGC searchGC = new SearchGC(apiKey, "GC1T33T");
+        final SearchGC searchGC = new SearchGC(apiKey, "GC1T33T");
 
         //results
-        CB_List<Cache> cacheList = new CB_List<>();
-        CB_List<LogEntry> logList = new CB_List<>();
-        CB_List<ImageEntry> imageList = new CB_List<>();
-        long gpxFilenameId = 10;
+        final CB_List<Cache> cacheList = new CB_List<>();
+        final CB_List<LogEntry> logList = new CB_List<>();
+        final CB_List<ImageEntry> imageList = new CB_List<>();
+        final long gpxFilenameId = 10;
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
 
-        searchGC.postRequest(cacheList, logList, imageList, gpxFilenameId);
+        searchGC.postRequest(new GenericCallBack<Integer>() {
+            @Override
+            public void callBack(Integer value) {
+                WAIT.set(false);
+            }
+        }, cacheList, logList, imageList, gpxFilenameId);
+
+        while (WAIT.get()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

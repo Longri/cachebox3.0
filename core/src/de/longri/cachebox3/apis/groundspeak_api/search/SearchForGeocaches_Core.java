@@ -71,7 +71,7 @@ public class SearchForGeocaches_Core {
 //
 //            JSONObject request = new JSONObject();
 //            try {
-//                request.put("AccessToken", GroundspeakAPI.GetAccessToken());
+//                request.put("AccessToken", GroundspeakAPI.getAccessToken());
 //                request.put("IsLight", false);
 //                request.put("StartIndex", startIndex);
 //                request.put("MaxPerPage", 1);
@@ -96,7 +96,7 @@ public class SearchForGeocaches_Core {
 //        } else if (search instanceof SearchGCName) {
 //            SearchGCName searchC = (SearchGCName) search;
 //            requestString = "{";
-//            requestString += "\"AccessToken\":\"" + GroundspeakAPI.GetAccessToken() + "\",";
+//            requestString += "\"AccessToken\":\"" + GroundspeakAPI.getAccessToken() + "\",";
 //            if (isLite)
 //                requestString += "\"IsLite\":true,"; // only lite
 //            else
@@ -121,7 +121,7 @@ public class SearchForGeocaches_Core {
 //        } else if (search instanceof SearchGCOwner) {
 //            SearchGCOwner searchC = (SearchGCOwner) search;
 //            requestString = "{";
-//            requestString += "\"AccessToken\":\"" + GroundspeakAPI.GetAccessToken() + "\",";
+//            requestString += "\"AccessToken\":\"" + GroundspeakAPI.getAccessToken() + "\",";
 //
 //            requestString += "\"HiddenByUsers\":{";
 //            requestString += "\"UserNames\":[\"" + searchC.OwnerName + "\"]},";
@@ -150,7 +150,7 @@ public class SearchForGeocaches_Core {
 //            SearchCoordinate searchC = (SearchCoordinate) search;
 //
 //            requestString = "{";
-//            requestString += "\"AccessToken\":\"" + GroundspeakAPI.GetAccessToken() + "\",";
+//            requestString += "\"AccessToken\":\"" + GroundspeakAPI.getAccessToken() + "\",";
 //            if (isLite)
 //                requestString += "\"IsLite\":true,"; // only lite
 //            else
@@ -253,7 +253,7 @@ public class SearchForGeocaches_Core {
 //                startIndex += searchNumber;
 //
 //                requestString = "{";
-//                requestString += "\"AccessToken\":\"" + GroundspeakAPI.GetAccessToken() + "\",";
+//                requestString += "\"AccessToken\":\"" + GroundspeakAPI.getAccessToken() + "\",";
 //
 //                if (isLite)
 //                    requestString += "\"IsLite\":true,"; // only lite
@@ -665,7 +665,7 @@ public class SearchForGeocaches_Core {
 //
 //    /**
 //     * @param aktCache
-//     * @param accessToken Config.GetAccessToken();
+//     * @param accessToken Config.getAccessToken();
 //     * @return
 //     */
 //    public Cache LoadApiDetails(Cache aktCache, ICancel icancel) {

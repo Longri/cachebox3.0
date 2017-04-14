@@ -40,7 +40,14 @@ public class SearchGC extends Search {
 
     @Override
     protected void getRequest(Json json) {
-        json.writeObjectStart();
+
+        boolean hasStart = false;
+
+        try {
+            json.writeObjectStart();
+        } catch (IllegalStateException e) {
+            hasStart = true;
+        }
 
         //write GC codes
         json.writeObjectStart("CacheCode");
@@ -52,7 +59,7 @@ public class SearchGC extends Search {
         json.writeObjectEnd();
 
         super.getRequest(json);
-        json.writeObjectEnd();
+        if (!hasStart) json.writeObjectEnd();
     }
 
 }

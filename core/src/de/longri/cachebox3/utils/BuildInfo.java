@@ -47,4 +47,13 @@ public class BuildInfo {
         rev = info.substring(0, pos);
         detail = info.substring(pos);
     }
+
+    /**
+     * Set only from JUnit test
+     *
+     * @param testBuildInfo
+     */
+    public static void setTestBuildInfo(String testBuildInfo) {
+        rev = testBuildInfo;
+    }
 }
