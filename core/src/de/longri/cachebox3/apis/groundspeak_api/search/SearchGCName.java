@@ -16,7 +16,7 @@
 package de.longri.cachebox3.apis.groundspeak_api.search;
 
 
-import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.Json;
 import de.longri.cachebox3.locator.Coordinate;
 
 /**
@@ -26,14 +26,14 @@ import de.longri.cachebox3.locator.Coordinate;
 public class SearchGCName extends SearchCoordinate {
     public String gcName;
 
-    public SearchGCName(int number, Coordinate pos, float distanceInMeters, String gcName) {
-        super(number, pos, distanceInMeters);
+    public SearchGCName(String gcApiKey, int number, Coordinate pos, float distanceInMeters, String gcName) {
+        super(gcApiKey, number, pos, distanceInMeters);
         this.gcName = gcName;
     }
 
     @Override
-    protected void getRequest(JsonWriter writer) {
-        super.getRequest(writer);
+    protected void getRequest(Json json) {
+        super.getRequest(json);
         //TODO change to JsonWriter
 //		JSONObject jgc = new JSONObject();
 //		jgc.put("GeocacheName", gcName);

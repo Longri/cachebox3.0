@@ -15,7 +15,12 @@
  */
 package de.longri.cachebox3.apis.groundspeak_api.search;
 
-import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.Json;
+import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.ImageEntry;
+import de.longri.cachebox3.types.LogEntry;
+import de.longri.cachebox3.utils.lists.CB_List;
 
 /**
  * Search Definitions
@@ -24,52 +29,64 @@ import com.badlogic.gdx.utils.JsonWriter;
  * @author Longri
  */
 public class Search {
+    public final String gcApiKey;
     public int number;
     public boolean excludeHides = false;
     public boolean excludeFounds = false;
-    public boolean available = true;
+    public boolean available = false;
     int geocacheLogCount = 10;
     int trackableLogCount = 10;
     private boolean isLite;
 
-    Search(int number) {
+    Search(String gcApiKey, int number) {
+        this.gcApiKey = gcApiKey;
         this.number = number;
     }
 
-    protected void getRequest(JsonWriter writer) {
+    /**
+     * see https://api.groundspeak.com/LiveV6/geocaching.svc/help/operations/SearchForGeocaches
+     *
+     * @param json
+     */
+    protected void getRequest(Json json) {
+        json.writeValue("AccessToken", this.gcApiKey);
+        json.writeValue("MaxPerPage", this.number);
+        json.writeValue("StartIndex", 0);
+        json.writeValue("IsLite", this.isLite);
+        json.writeValue("TrackableLogCount", this.trackableLogCount);
+        json.writeValue("GeocacheLogCount", this.geocacheLogCount);
 
-        //TODO change to JsonWriter
+        if (this.available) {
+            json.writeObjectStart("GeocacheExclusions");
+            json.writeValue("Archived", false);
+            json.writeValue("Available", true);
+            json.writeObjectEnd();
+        }
+        if (this.excludeHides) {
+            json.writeObjectStart("NotHiddenByUsers");
+            json.writeArrayStart("UserNames");
+            json.writeValue(Config.GcLogin.getValue());
+            json.writeArrayEnd();
+            json.writeObjectEnd();
+        }
 
-//		writer.json("IsLite", this.isLite);
-//		request.put("StartIndex", 0);
-//		request.put("MaxPerPage", this.number);
-//		request.put("GeocacheLogCount", this.geocacheLogCount);
-//		request.put("TrackableLogCount", this.trackableLogCount);
-//		if (this.available) {
-//			JSONObject excl = new JSONObject();
-//			excl.put("Archived", false);
-//			excl.put("Available", true);
-//			request.put("GeocacheExclusions", excl);
-//
-//		}
-//		if (this.excludeHides) {
-//			JSONObject excl = new JSONObject();
-//			JSONArray jarr = new JSONArray();
-//			jarr.put(CB_Core_Settings.GcLogin.getValue());
-//			excl.put("UserNames", jarr);
-//			request.put("NotHiddenByUsers", excl);
-//		}
-//
-//		if (this.excludeFounds) {
-//			JSONObject excl = new JSONObject();
-//			JSONArray jarr = new JSONArray();
-//			jarr.put(CB_Core_Settings.GcLogin.getValue());
-//			excl.put("UserNames", jarr);
-//			request.put("NotFoundByUsers", excl);
-//		}
+        if (this.excludeFounds) {
+            json.writeObjectStart("NotFoundByUsers");
+            json.writeArrayStart("UserNames");
+            json.writeValue(Config.GcLogin.getValue());
+            json.writeArrayEnd();
+            json.writeObjectEnd();
+        }
     }
 
     public void setIsLite(boolean isLite) {
         this.isLite = isLite;
     }
+
+
+  public void postRequest(CB_List<Cache> cacheList, CB_List<LogEntry> logList,
+                                     CB_List<ImageEntry> imageList, long gpxFilenameId) {
+
+  }
+
 }

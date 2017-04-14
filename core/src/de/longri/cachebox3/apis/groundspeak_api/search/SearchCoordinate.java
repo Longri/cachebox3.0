@@ -16,7 +16,7 @@
 package de.longri.cachebox3.apis.groundspeak_api.search;
 
 
-import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.Json;
 import de.longri.cachebox3.locator.Coordinate;
 
 /**
@@ -27,15 +27,15 @@ public class SearchCoordinate extends Search {
     public Coordinate pos;
     public float distanceInMeters;
 
-    public SearchCoordinate(int number, Coordinate pos, float distanceInMeters) {
-        super(number);
+    public SearchCoordinate(String gcApiKey, int number, Coordinate pos, float distanceInMeters) {
+        super(gcApiKey, number);
         this.pos = pos;
         this.distanceInMeters = distanceInMeters;
     }
 
     @Override
-    protected void getRequest(JsonWriter writer) {
-        super.getRequest(writer);
+    protected void getRequest(Json json) {
+        super.getRequest(json);
         //TODO change to JsonWriter
 //		JSONObject jpr = new JSONObject();
 //		jpr.put("DistanceInMeters", String.valueOf((int) distanceInMeters));

@@ -15,7 +15,7 @@
  */
 package de.longri.cachebox3.apis.groundspeak_api.search;
 
-import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.Json;
 
 import java.util.ArrayList;
 
@@ -26,29 +26,33 @@ import java.util.ArrayList;
 public class SearchGC extends Search {
     ArrayList<String> gcCodes;
 
-    public SearchGC(String gcCode) {
-        super(1);
+    public SearchGC(String gcApiKey, String gcCode) {
+        super(gcApiKey, 1);
         // einzelner Cache wird immer voll geladen
         this.gcCodes = new ArrayList<String>();
         this.gcCodes.add(gcCode);
     }
 
-    public SearchGC(ArrayList<String> gcCodes) {
-        super(gcCodes.size());
+    public SearchGC(String gcApiKey, ArrayList<String> gcCodes) {
+        super(gcApiKey, gcCodes.size());
         this.gcCodes = gcCodes;
     }
 
     @Override
-    protected void getRequest(JsonWriter writer) {
-        super.getRequest(writer);
-        //TODO change to JsonWriter
-//		JSONObject requestcc = new JSONObject();
-//		JSONArray requesta = new JSONArray();
-//		for (String gcCode : gcCodes) {
-//			requesta.put(gcCode);
-//		}
-//		requestcc.put("CacheCodes", requesta);
-//		request.put("CacheCode", requestcc);
+    protected void getRequest(Json json) {
+        json.writeObjectStart();
+
+        //write GC codes
+        json.writeObjectStart("CacheCode");
+        json.writeArrayStart("CacheCodes");
+        for (String gcCode : gcCodes) {
+            json.writeValue(gcCode);
+        }
+        json.writeArrayEnd();
+        json.writeObjectEnd();
+
+        super.getRequest(json);
+        json.writeObjectEnd();
     }
 
 }

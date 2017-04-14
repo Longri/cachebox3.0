@@ -16,7 +16,7 @@
 package de.longri.cachebox3.apis.groundspeak_api.search;
 
 
-import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.Json;
 import de.longri.cachebox3.locator.Coordinate;
 
 /**
@@ -26,14 +26,14 @@ import de.longri.cachebox3.locator.Coordinate;
 public class SearchGCOwner extends SearchCoordinate {
     public String OwnerName;
 
-    public SearchGCOwner(int number, Coordinate pos, float distanceInMeters, String ownerName) {
-        super(number, pos, distanceInMeters);
+    public SearchGCOwner(String gcApiKey, int number, Coordinate pos, float distanceInMeters, String ownerName) {
+        super(gcApiKey, number, pos, distanceInMeters);
         this.OwnerName = ownerName;
     }
 
     @Override
-    protected void getRequest(JsonWriter writer) {
-        super.getRequest(writer);
+    protected void getRequest(Json json) {
+        super.getRequest(json);
         //TODO change to JsonWriter
 //		JSONObject jhidden = new JSONObject();
 //		JSONArray jusers = new JSONArray();
