@@ -111,19 +111,19 @@ public class ApiButton extends VisTextButton {
                     }
 
                     Config.AcceptChanges();
-                    String act = GroundspeakAPI.GetAccessToken();
+                    String act = GroundspeakAPI.getAccessToken();
                     if (act.length() > 0) {
-                        GroundspeakAPI.GetMembershipType(new GenericCallBack<Integer>() {
+                        GroundspeakAPI.getMembershipType(new GenericCallBack<Integer>() {
                             @Override
                             public void callBack(Integer status) {
                                 if (status >= 0) {
-                                    log.debug("Read User Name/State {}/{}", GroundspeakAPI.MemberName, status);
-                                    Config.GcLogin.setValue(GroundspeakAPI.MemberName);
+                                    log.debug("Read User Name/State {}/{}", GroundspeakAPI.memberName, status);
+                                    Config.GcLogin.setValue(GroundspeakAPI.memberName);
                                     Config.AcceptChanges();
-                                    CB.viewmanager.toast("Welcome : " + GroundspeakAPI.MemberName);
+                                    CB.viewmanager.toast("Welcome : " + GroundspeakAPI.memberName);
                                 } else {
-                                    CB.viewmanager.toast("Welcome : " + GroundspeakAPI.MemberName);
-                                    log.debug("Can't read UserName State: {}", GroundspeakAPI.MemberName, status);
+                                    CB.viewmanager.toast("Welcome : " + GroundspeakAPI.memberName);
+                                    log.debug("Can't read UserName State: {}", GroundspeakAPI.memberName, status);
                                 }
                             }
                         });
