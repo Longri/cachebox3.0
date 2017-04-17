@@ -27,8 +27,13 @@ public class SearchCoordinate extends Search {
     public Coordinate pos;
     public float distanceInMeters;
 
-    public SearchCoordinate(String gcApiKey, int number, Coordinate pos, float distanceInMeters) {
-        super(gcApiKey, number);
+    /**
+     * @param gcApiKey valid encrypted Api-Key
+     * @param number   MaxPerPage size for this request
+     * @param apiState 0 = unknown, 1 = Basic Member, 2 = Premium Member
+     */
+    public SearchCoordinate(String gcApiKey, int number, Coordinate pos, float distanceInMeters, byte apiState) {
+        super(gcApiKey, number, apiState);
         this.pos = pos;
         this.distanceInMeters = distanceInMeters;
     }

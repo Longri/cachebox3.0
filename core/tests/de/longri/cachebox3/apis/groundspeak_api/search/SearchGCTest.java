@@ -32,11 +32,12 @@ import travis.EXCLUDE_FROM_TRAVIS;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Created by Longri on 14.04.17.
@@ -118,13 +119,52 @@ class SearchGCTest {
                 assertEquals(cacheList.size(), 1, "CacheList.size must be 1");
                 Cache cache = cacheList.pop();
 
-                assertEquals(false, cache.isArchived(), "cache.isArchived() must be false");
-                assertEquals(true, cache.isAvailable(), "cache.isAvailable() must be true");
-                assertEquals("GC1T33T", cache.getGcCode(), "cache.getGcCode() must be GC1T33T");
-                assertEquals(0, cache.waypoints.size(), "cache.waypoints.size() must be 0");
-                assertEquals(CacheTypes.Traditional, cache.Type, "cache.Type must be Traditional");
+                assertEquals(false, cache.isArchived());
+                assertEquals(true, cache.isAvailable());
+                assertEquals("GC1T33T", cache.getGcCode());
+                assertEquals(0, cache.waypoints.size());
+                assertEquals(CacheTypes.Traditional, cache.Type);
                 assertEquals(CacheSizes.other, cache.Size);
                 assertEquals("Germany", cache.getCountry());
+                assertEquals(new Date(1243753200000L), cache.getDateHidden());
+                assertEquals(3f, cache.getDifficulty());
+                assertEquals("", cache.getHint());
+                assertEquals(12, cache.getFaviritPoints());
+                assertEquals(true, cache.isFound());
+                assertEquals("1260177", cache.getGcId());
+                assertTrue(cache.getLongDescription().startsWith("<div style=\"text-align:center;\">Eine Hunderunde gedreht und mal "));
+                assertEquals("Nur ein Berg", cache.getName());
+                assertEquals("Wurzellisel", cache.getOwner());
+                assertEquals("Wurzellisel", cache.getPlacedBy());
+                assertEquals("\r\n", cache.getShortDescription());
+                assertEquals(2f, cache.getTerrain());
+                assertEquals("http://coord.info/GC1T33T", cache.getUrl());
+                assertEquals(2, cache.getApiState());
+                assertEquals(52.579267, cache.getLatitude());
+                assertEquals(13.381983, cache.getLongitude());
+
+                // Attribute Tests
+
+                ArrayList<Attributes> positiveList = new ArrayList<>();
+                ArrayList<Attributes> negativeList = new ArrayList<>();
+
+                {
+                    positiveList.add(Attributes.Dogs);
+                    positiveList.add(Attributes.Recommended_for_kids);
+                    positiveList.add(Attributes.Available_at_all_times);
+                    positiveList.add(Attributes.Available_during_winter);
+                    positiveList.add(Attributes.Ticks);
+                    positiveList.add(Attributes.Bicycles);
+                    positiveList.add(Attributes.Stealth_required);
+
+                    negativeList.add(Attributes.Wheelchair_accessible);
+                    negativeList.add(Attributes.Horses);
+                    negativeList.add(Attributes.Campfires);
+
+                }
+
+                TestUtils.assetCacheAttributes(cache, positiveList, negativeList);
+
 
                 WAIT.set(false);
             }
@@ -139,6 +179,8 @@ class SearchGCTest {
         }
 
     }
+
+
 
     @Test
     void testOnline() {

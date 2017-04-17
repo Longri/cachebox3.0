@@ -16,19 +16,18 @@
 package de.longri.cachebox3.apis.groundspeak_api.search;
 
 import com.badlogic.gdx.Net;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
 import de.longri.cachebox3.apis.groundspeak_api.PostRequest;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.lists.CB_List;
-import de.longri.cachebox3.utils.lists.CB_Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 /**
  * Search Definitions
@@ -37,6 +36,8 @@ import org.slf4j.LoggerFactory;
  * @author Longri
  */
 public abstract class Search extends PostRequest {
+    static Logger log = LoggerFactory.getLogger(Search.class);
+
     public int number;
     public boolean excludeHides = false;
     public boolean excludeFounds = false;
@@ -49,9 +50,20 @@ public abstract class Search extends PostRequest {
     private CB_List<ImageEntry> imageList;
     private long gpxFilenameId;
 
-    Search(String gcApiKey, int number) {
+    /**
+     * 0 = unknown, 1 = Basic Member, 2 = Premium Member
+     */
+    private byte apiState;
+
+    /**
+     * @param gcApiKey valid encrypted Api-Key
+     * @param number   MaxPerPage size for this request
+     * @param apiState 0 = unknown, 1 = Basic Member, 2 = Premium Member
+     */
+    Search(String gcApiKey, int number, byte apiState) {
         super(gcApiKey);
         this.number = number;
+        this.apiState = apiState;
     }
 
     @Override
@@ -59,6 +71,7 @@ public abstract class Search extends PostRequest {
         return "SearchForGeocaches?format=json";
     }
 
+    private double actLat, actLon;
     private Cache actCache;
     private LogEntry actLog;
     private Array<Attributes> attributes;
@@ -68,6 +81,8 @@ public abstract class Search extends PostRequest {
     private final String LOGS = "GeocacheLogs";
     private final String WAYPOINTS = "AdditionalWaypoints";
     private final String ATTRIBUTES = "Attributes";
+    private final String OWNER = "Owner";
+
     private final String ATTRIBUTE_ID = "AttributeTypeID";
     private final String IS_ON = "IsOn";
     private final String NEW_CACHE = "NEW_CACHE";
@@ -75,6 +90,21 @@ public abstract class Search extends PostRequest {
     private final String CACHE_TYPE = "CacheType";
     private final String CACHE_TYPE_ID = "GeocacheTypeId";
     private final String COUNTRY = "Country";
+    private final String DATE_HIDDEN = "DateCreated";
+    private final String DIFFICULTY = "Difficulty";
+    private final String HINT = "EncodedHints";
+    private final String FAVRITE_POINTS = "FavoritePoints";
+    private final String FOUND = "HasbeenFoundbyUser";
+    private final String ID = "ID";
+    private final String LONG_DESC = "LongDescription";
+    private final String NAME = "Name";
+    private final String USER_NAME = "UserName";
+    private final String PLACED_BY = "PlacedBy";
+    private final String SHORT_DESC = "ShortDescription";
+    private final String TERRAIN = "Terrain";
+    private final String URL = "Url";
+    private final String LAT = "Latitude";
+    private final String LON = "Longitude";
 
 
     private boolean startCacheArray = false;
@@ -129,7 +159,10 @@ public abstract class Search extends PostRequest {
 
                 if (name != null && name.equals(NEW_CACHE)) {
                     //store cache
-                    cacheList.add(actCache);
+                    actCache.setApiState(apiState);
+
+                    //add final Cache instance
+                    cacheList.add(new Cache(actLat, actLon, actCache));
                     actCache = null;
                 } else if (arrayStack.size > 0 && arrayStack.peek().equals(ATTRIBUTES)) {
                     actAttribute = Attributes.getAttributeEnumByGcComId(atributeID);
@@ -146,15 +179,42 @@ public abstract class Search extends PostRequest {
             protected void string(String name, String value) {
                 super.string(name, value);
 
-                if (CODE.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
+                if (LONG_DESC.equals(name)) {
+                    actCache.setLongDescription(value);
+                } else if (CODE.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
                     actCache.setGcCode(value);
                 } else if (COUNTRY.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
                     actCache.setCountry(value);
+                } else if (DATE_HIDDEN.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
+                    actCache.setDateHidden(getDateFromLongString(value));
+                } else if (HINT.equals(name)) {
+                    actCache.setHint(value);
+                } else if (ID.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
+                    actCache.setGcId(value);
+                } else if (NAME.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
+                    actCache.setName(value);
+                } else if (USER_NAME.equals(name) && objectStack.size > 0 && objectStack.peek().equals(OWNER)) {
+                    actCache.setOwner(value);
+                } else if (PLACED_BY.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
+                    actCache.setPlacedBy(value);
+                } else if (SHORT_DESC.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
+                    actCache.setShortDescription(value);
+                } else if (URL.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
+                    actCache.setUrl(value);
                 }
             }
 
             protected void number(String name, double value, String stringValue) {
                 super.number(name, value, stringValue);
+                if (DIFFICULTY.equals(name)) {
+                    actCache.setDifficulty((float) value);
+                } else if (TERRAIN.equals(name)) {
+                    actCache.setTerrain((float) value);
+                } else if (LAT.equals(name)) {
+                    actLat = value;
+                } else if (LON.equals(name)) {
+                    actLon = value;
+                }
             }
 
             protected void number(String name, long value, String stringValue) {
@@ -163,6 +223,14 @@ public abstract class Search extends PostRequest {
                     atributeID = (int) value;
                 } else if (CACHE_TYPE_ID.equals(name)) {
                     actCache.Type = getCacheType((int) value);
+                } else if (DIFFICULTY.equals(name)) {
+                    actCache.setDifficulty((float) value);
+                } else if (TERRAIN.equals(name)) {
+                    actCache.setTerrain((float) value);
+                } else if (FAVRITE_POINTS.equals(name)) {
+                    actCache.setFavoritePoints((int) value);
+                } else if (ID.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
+                    actCache.setGcId(Long.toString(value));
                 }
             }
 
@@ -170,6 +238,8 @@ public abstract class Search extends PostRequest {
                 super.bool(name, value);
                 if (arrayStack.size > 0 && arrayStack.peek().equals(ATTRIBUTES)) {
                     isOn = value;
+                } else if (FOUND.equals(name)) {
+                    actCache.setFound(value);
                 }
             }
 
@@ -305,5 +375,18 @@ public abstract class Search extends PostRequest {
             default:
                 return CacheTypes.Undefined;
         }
+    }
+
+    static Date getDateFromLongString(String value) {
+        Date date = new Date();
+        try {
+            int date1 = value.indexOf("/Date(");
+            int date2 = value.indexOf("-");
+            String dateString = (String) value.subSequence(date1 + 6, date2);
+            date = new Date(Long.valueOf(dateString));
+        } catch (Exception exc) {
+            log.error("ParseDate", exc);
+        }
+        return date;
     }
 }

@@ -15,9 +15,15 @@
  */
 package de.longri.cachebox3;
 
+import de.longri.cachebox3.types.Attributes;
+import de.longri.cachebox3.types.Cache;
 import org.apache.commons.codec.Charsets;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Created by longri on 14.04.17.
@@ -52,5 +58,51 @@ public class TestUtils {
         FileInputStream stream = new FileInputStream(file);
 
         return stream;
+    }
+
+    public static void assetCacheAttributes(Cache cache, ArrayList<Attributes> positiveList, ArrayList<Attributes> negativeList) {
+        Iterator<Attributes> positiveIterator = positiveList.iterator();
+        Iterator<Attributes> negativeIterator = negativeList.iterator();
+
+        while (positiveIterator.hasNext()) {
+            assertThat("Attribute wrong", cache.isAttributePositiveSet((Attributes) positiveIterator.next()));
+        }
+
+        while (negativeIterator.hasNext()) {
+            Attributes tmp = negativeIterator.next();
+            assertThat(tmp.name() + " negative Attribute wrong", cache.isAttributeNegativeSet((tmp)));
+        }
+
+        // f�lle eine Liste mit allen Attributen
+        ArrayList<Attributes> attributes = new ArrayList<Attributes>();
+        Attributes[] tmp = Attributes.values();
+        for (Attributes item : tmp) {
+            attributes.add(item);
+        }
+
+        // L�sche die vergebenen Atribute aus der Kommplett Liste
+        positiveIterator = positiveList.iterator();
+        negativeIterator = negativeList.iterator();
+
+        while (positiveIterator.hasNext()) {
+            attributes.remove(positiveIterator.next());
+        }
+
+        while (negativeIterator.hasNext()) {
+            attributes.remove(negativeIterator.next());
+        }
+
+        attributes.remove(Attributes.getAttributeEnumByGcComId(64));
+        attributes.remove(Attributes.getAttributeEnumByGcComId(65));
+        attributes.remove(Attributes.getAttributeEnumByGcComId(66));
+
+        // Teste ob die �brig gebliebenen Atributte auch nicht vergeben wurden.
+        Iterator<Attributes> RestInterator = attributes.iterator();
+
+        while (RestInterator.hasNext()) {
+            Attributes attr = (Attributes) RestInterator.next();
+            assertThat(attr.name() + "Attribute wrong", !cache.isAttributePositiveSet(attr));
+            assertThat(attr.name() + "Attribute wrong", !cache.isAttributeNegativeSet(attr));
+        }
     }
 }

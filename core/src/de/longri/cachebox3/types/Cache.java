@@ -154,6 +154,8 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
      */
     public int NumTravelbugs = 0;
 
+    private int favoritePoints = 0;
+
     /**
      * Falls keine erneute Distanzberechnung noetig ist nehmen wir diese Distanz
      */
@@ -197,11 +199,39 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         this.setTerrain(0);
         this.Size = CacheSizes.other;
         this.setAvailable(true);
-        ;
-        waypoints = new CB_List<Waypoint>();
-
+        waypoints = new CB_List<>();
     }
 
+    /**
+     * Copy constructor
+     *
+     * @param Latitude
+     * @param Longitude
+     * @param other
+     */
+    public Cache(double Latitude, double Longitude, Cache other) {
+        super(Latitude, Longitude);
+        gcLogin = other.gcLogin;
+        GcCode = other.GcCode;
+        Name = other.Name;
+        GcId = other.GcId;
+        myCache = other.myCache;
+        isSearchVisible = other.isSearchVisible;
+        isDisposed = other.isDisposed;
+        solver1Changed = other.solver1Changed;
+        BitFlags = other.BitFlags;
+        DifficultyTerrain = other.DifficultyTerrain;
+        Owner = other.Owner;
+        detail = other.detail;
+        Id = other.Id;
+        Rating = other.Rating;
+        Size = other.Size;
+        Type = other.Type;
+        NumTravelbugs = other.NumTravelbugs;
+        favoritePoints = other.favoritePoints;
+        cachedDistance = other.cachedDistance;
+        waypoints = other.waypoints;
+    }
 
     /**
      * Delete Detail Information to save memory
@@ -859,17 +889,17 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
     public final static byte ISLITE = 1;
     public final static byte NOTLITE = 2;
 
-    public byte getApiStatus() {
+    public byte getApiState() {
         if (detail != null) {
-            return detail.ApiStatus;
+            return detail.apiState;
         } else {
             return NOTLIVE;
         }
     }
 
-    public void setApiStatus(byte value) {
+    public void setApiState(byte value) {
         if (detail != null) {
-            detail.ApiStatus = value;
+            detail.apiState = value;
         }
     }
 
@@ -1105,4 +1135,11 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         return false;
     }
 
+    public void setFavoritePoints(int value) {
+        this.favoritePoints = value;
+    }
+
+    public int getFaviritPoints() {
+        return this.favoritePoints;
+    }
 }

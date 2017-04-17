@@ -43,11 +43,11 @@ public class CacheDetail implements Serializable {
 	 */
 	public Date DateHidden;
 	/**
-	 * ApiStatus 0: Cache wurde nicht per Api hinzugefuegt 
+	 * apiState 0: Cache wurde nicht per Api hinzugefuegt
 	 *           1: Cache wurde per GC Api hinzugefuegt und ist noch nicht komplett geladen (IsLite = true) 
 	 *           2: Cache wurde per GC Api hinzugefuegt und ist komplett geladen (IsLite = false)
 	 */
-	public byte ApiStatus;
+	public byte apiState;
 
 	/**
 	 * for Replication

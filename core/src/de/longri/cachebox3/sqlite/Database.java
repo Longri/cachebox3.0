@@ -446,7 +446,7 @@ public class Database {
 
                     }
                     if (lastDatabaseSchemeVersion < 1016) {
-                        execSQL("ALTER TABLE [CACHES] ADD [ApiStatus] smallint NULL default 0;");
+                        execSQL("ALTER TABLE [CACHES] ADD [apiState] smallint NULL default 0;");
                     }
                     if (lastDatabaseSchemeVersion < 1017) {
                         execSQL("CREATE TABLE [Trackable] ([Id] integer not null primary key autoincrement, [Archived] bit NULL, [GcCode] nvarchar (12) NULL, [CacheId] bigint NULL, [CurrentGoal] ntext, [CurrentOwnerName] nvarchar (255) NULL, [DateCreated] datetime NULL, [Description] ntext, [IconUrl] nvarchar (255) NULL, [ImageUrl] nvarchar (255) NULL, [path] nvarchar (255) NULL, [OwnerName] nvarchar (255), [Url] nvarchar (255) NULL);");

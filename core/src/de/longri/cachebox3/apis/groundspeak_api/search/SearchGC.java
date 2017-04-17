@@ -26,15 +26,18 @@ import java.util.ArrayList;
 public class SearchGC extends Search {
     ArrayList<String> gcCodes;
 
+    /**
+     * @param gcApiKey valid encrypted Api-Key
+     */
     public SearchGC(String gcApiKey, String gcCode) {
-        super(gcApiKey, 1);
-        // einzelner Cache wird immer voll geladen
+        super(gcApiKey, 1, (byte) 2);
+        // single Cache will full loaded
         this.gcCodes = new ArrayList<String>();
         this.gcCodes.add(gcCode);
     }
 
-    public SearchGC(String gcApiKey, ArrayList<String> gcCodes) {
-        super(gcApiKey, gcCodes.size());
+    public SearchGC(String gcApiKey, ArrayList<String> gcCodes, byte apiState) {
+        super(gcApiKey, gcCodes.size(), apiState);
         this.gcCodes = gcCodes;
     }
 

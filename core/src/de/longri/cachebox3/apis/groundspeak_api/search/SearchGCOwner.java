@@ -26,8 +26,8 @@ import de.longri.cachebox3.locator.Coordinate;
 public class SearchGCOwner extends SearchCoordinate {
     public String OwnerName;
 
-    public SearchGCOwner(String gcApiKey, int number, Coordinate pos, float distanceInMeters, String ownerName) {
-        super(gcApiKey, number, pos, distanceInMeters);
+    public SearchGCOwner(String gcApiKey, int number, Coordinate pos, float distanceInMeters, String ownerName, byte apiState) {
+        super(gcApiKey, number, pos, distanceInMeters, apiState);
         this.OwnerName = ownerName;
     }
 

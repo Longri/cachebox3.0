@@ -26,8 +26,8 @@ import de.longri.cachebox3.locator.Coordinate;
 public class SearchGCName extends SearchCoordinate {
     public String gcName;
 
-    public SearchGCName(String gcApiKey, int number, Coordinate pos, float distanceInMeters, String gcName) {
-        super(gcApiKey, number, pos, distanceInMeters);
+    public SearchGCName(String gcApiKey, int number, Coordinate pos, float distanceInMeters, String gcName, byte apiState) {
+        super(gcApiKey, number, pos, distanceInMeters, apiState);
         this.gcName = gcName;
     }
 

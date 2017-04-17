@@ -209,7 +209,7 @@ public class SearchForGeocaches_Core {
 //        }
 //
 //        // chk api result
-//        if (GroundspeakAPI.getApiStatus(result) != 0)
+//        if (GroundspeakAPI.getApiState(result) != 0)
 //            return "";
 //        if (result.contains("The service is unavailable"))
 //            return "The service is unavailable";
@@ -451,7 +451,7 @@ public class SearchForGeocaches_Core {
 //                        }
 //                    }
 //                    cache.setUrl(jCache.getString("Url"));
-//                    cache.setApiStatus(apiStatus);
+//                    cache.setApiState(apiStatus);
 //
 //                    // Ein evtl. in der Datenbank vorhandenen "Favorit" nicht überschreiben
 //                    Boolean fav = LoadBooleanValueFromDB("select favorit from Caches where GcCode = \"" + gcCode + "\"");

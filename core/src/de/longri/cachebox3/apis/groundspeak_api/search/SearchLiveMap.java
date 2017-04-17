@@ -28,7 +28,8 @@ import de.longri.cachebox3.locator.Coordinate;
 public class SearchLiveMap extends SearchCoordinate {
 
     public SearchLiveMap(String gcApiKey, int number, Coordinate coordinate, float distanceInMeters) {
-        super(gcApiKey, number, coordinate, distanceInMeters);
+        super(gcApiKey, number, coordinate, distanceInMeters, (byte) 1);
+        // live Caches will be loaded as Lite version
         geocacheLogCount = 0;
         trackableLogCount = 0;
         setIsLite(true);

@@ -16,11 +16,13 @@
 package de.longri.cachebox3.apis.groundspeak_api;
 
 
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GroundspeakAPI {
 
@@ -1387,4 +1389,33 @@ public class GroundspeakAPI {
         DownloadLimit = true;
     }
 
+    public static boolean isPremiumMember() {
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
+
+        if (membershipType < 0)
+            getMembershipType(new GenericCallBack<Integer>() {
+                @Override
+                public void callBack(Integer value) {
+                    membershipType = value;
+                    WAIT.set(false);
+                }
+            });
+        else WAIT.set(false);
+
+        if (CB.isMainThread())
+            throw new RuntimeException("Call isPremiumMember() not on Main Thread, this will block for wait on a online result");
+        while (WAIT.get()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return membershipType == 3;
+    }
+
+    public static void setTestMembershipType(int value) {
+        membershipType = value;
+    }
 }

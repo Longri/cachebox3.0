@@ -15,18 +15,12 @@
  */
 package de.longri.cachebox3.apis.groundspeak_api.search;
 
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
-import org.apache.commons.codec.Charsets;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import org.junit.jupiter.api.Test;
 import travis.EXCLUDE_FROM_TRAVIS;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static travis.EXCLUDE_FROM_TRAVIS.LONGRI_HOME_COORDS;
 
 /**
@@ -39,7 +33,20 @@ class SearchCoordinateTest {
 
     @Test
     void getRequest() throws IOException {
-        SearchCoordinate searchCoordinate = new SearchCoordinate(apiKey,50, LONGRI_HOME_COORDS, 50000);
+
+        //set MembershipType for tests to 3
+        GroundspeakAPI.setTestMembershipType(3);
+
+        byte apiState;
+        if (GroundspeakAPI.isPremiumMember()) {
+            apiState = 2;
+        } else {
+            apiState = 1;
+        }
+
+
+        SearchCoordinate searchCoordinate = new SearchCoordinate(apiKey, 50
+                , LONGRI_HOME_COORDS, 50000, apiState);
 
 
     }

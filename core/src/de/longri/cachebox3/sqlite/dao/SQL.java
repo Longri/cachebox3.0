@@ -28,7 +28,7 @@ public class SQL {
 
     static final String SQL_BY_ID = "FROM `Caches` `c` WHERE id = ?";
     static final String SQL_BY_GC_CODE = "FROM `Caches` `c` WHERE GCCode = ?";
-    static final String SQL_DETAILS = "`PlacedBy`, `DateHidden`, `Url`, `TourName`, `GpxFilename_ID`, `ApiStatus`, `AttributesPositive`, `AttributesPositiveHigh`, `AttributesNegative`, `AttributesNegativeHigh`, `Hint` ";
+    static final String SQL_DETAILS = "`PlacedBy`, `DateHidden`, `Url`, `TourName`, `GpxFilename_ID`, `apiState`, `AttributesPositive`, `AttributesPositiveHigh`, `AttributesNegative`, `AttributesNegativeHigh`, `Hint` ";
     static final String SQL_GET_DETAIL_WITH_DESCRIPTION = "Description, Solver, Notes, ShortDescription ";
     static final String SQL_GET_DETAIL_FROM_ID = "SELECT " + SQL_DETAILS + SQL_BY_ID;
     static final String SQL_EXIST_CACHE = "SELECT `Id` FROM `Caches` WHERE Id = ?";

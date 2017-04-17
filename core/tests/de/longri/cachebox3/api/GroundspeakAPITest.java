@@ -54,7 +54,7 @@ class GroundspeakAPITest {
 
     @Test
     void getApiStatus() {
-//        int status = de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI.getApiStatus(API_RESULT_JSON);
+//        int status = de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI.getApiState(API_RESULT_JSON);
         int status =0;
         assertThat("Status should be 0", status == 0);
 

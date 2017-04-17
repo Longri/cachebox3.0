@@ -151,9 +151,9 @@ public class CacheDAO {
         detail.PlacedBy = reader.getString(readerOffset + 0).trim();
 
         if (reader.isNull(readerOffset + 5))
-            detail.ApiStatus = Cache.NOTLIVE;
+            detail.apiState = Cache.NOTLIVE;
         else
-            detail.ApiStatus = (byte) reader.getInt(readerOffset + 5);
+            detail.apiState = (byte) reader.getInt(readerOffset + 5);
 
         String sDate = reader.getString(readerOffset + 1);
         DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -242,7 +242,7 @@ public class CacheDAO {
             // write detail information if existing
             args.put("GcId", cache.getGcId());
             args.put("PlacedBy", cache.getPlacedBy());
-            args.put("ApiStatus", cache.getApiStatus());
+            args.put("apiState", cache.getApiState());
             try {
                 String stimestamp = iso8601Format.format(cache.getDateHidden());
                 args.put("DateHidden", stimestamp);
@@ -340,7 +340,7 @@ public class CacheDAO {
         // args.put("ListingCheckSum", cache.);
         args.put("GPXFilename_Id", cache.getGPXFilename_ID());
         args.put("Favorit", cache.isFavorite() ? 1 : 0);
-        args.put("ApiStatus", cache.getApiStatus());
+        args.put("apiState", cache.getApiState());
         args.put("CorrectedCoordinates", cache.hasCorrectedCoordinates() ? 1 : 0);
         args.put("TourName", cache.getTourName());
 
