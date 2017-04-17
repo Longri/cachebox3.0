@@ -166,6 +166,27 @@ class SearchGCTest {
                 TestUtils.assetCacheAttributes(cache, positiveList, negativeList);
 
 
+                //check Logs
+                assertEquals(10, logList.size());
+                LogEntry logEntry = logList.first();
+
+                assertEquals(Cache.GenerateCacheId(cache.getGcCode()), logEntry.CacheId);
+                assertEquals(677446155, logEntry.Id);
+                assertEquals(LogTypes.found, logEntry.Type);
+                assertTrue(logEntry.Comment.startsWith("Heute fand das Event  GC73332 Eiergolf"));
+                assertEquals(new Date(1492196400000L), logEntry.Timestamp);
+                assertEquals("TeamReitenwolfgang",logEntry.Finder);
+
+                logEntry = logList.last();
+
+                assertEquals(Cache.GenerateCacheId(cache.getGcCode()), logEntry.CacheId);
+                assertEquals(663746391, logEntry.Id);
+                assertEquals(LogTypes.found, logEntry.Type);
+                assertTrue(logEntry.Comment.startsWith("Ein freundliches Hallo an Wurzellisel,"));
+                assertEquals(new Date(1486497600000L), logEntry.Timestamp);
+                assertEquals("kerbholz",logEntry.Finder);
+
+
                 WAIT.set(false);
             }
         });

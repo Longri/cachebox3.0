@@ -87,6 +87,7 @@ public abstract class Search extends PostRequest {
     private final String ATTRIBUTE_ID = "AttributeTypeID";
     private final String IS_ON = "IsOn";
     private final String NEW_CACHE = "NEW_CACHE";
+    private final String NEW_LOG = "NEW_LOG";
     private final String CODE = "Code";
     private final String CACHE_TYPE = "CacheType";
     private final String CACHE_TYPE_ID = "GeocacheTypeId";
@@ -107,6 +108,9 @@ public abstract class Search extends PostRequest {
     private final String LAT = "Latitude";
     private final String LON = "Longitude";
     private final String CACHE_LIMITS = "CacheLimits";
+    private final String LOG_TEXT = "LogText";
+    private final String VISIT_DATE = "VisitDate";
+    private final String LOG_TYPE_ID = "WptLogTypeId";
 
 
     int attributeID;
@@ -152,16 +156,19 @@ public abstract class Search extends PostRequest {
                 arrayStack.pop();
 
                 if (arrayStack.size > 0) {
-                    if (ATTRIBUTES.equals(arrayStack.peek())) {
+
+                    String actArray = arrayStack.peek();
+
+                    if (ATTRIBUTES.equals(actArray)) {
                         attributes = new Array<>();
                         SWITCH = ATTRIBUTE_ARRAY;
-                    } else if (GEOCACHES.equals(arrayStack.peek())) {
+                    } else if (GEOCACHES.equals(actArray)) {
                         SWITCH = CACHE_ARRAY;
-                    } else if (CACHE_LIMITS.equals(name)) {
+                    } else if (CACHE_LIMITS.equals(actArray)) {
                         SWITCH = CACHE_LIMITS_ARRAY;
-                    } else if (LOGS.equals(name)) {
+                    } else if (LOGS.equals(actArray)) {
                         SWITCH = LOG_ARRAY;
-                    } else if (IMAGES.equals(name)) {
+                    } else if (IMAGES.equals(actArray)) {
                         SWITCH = IMAGE_ARRAY;
                     }
                 } else {
@@ -187,7 +194,12 @@ public abstract class Search extends PostRequest {
 
                         break;
                     case LOG_ARRAY:
-
+                        if (actLog == null) {
+                            System.out.println("NEW_LOG_ENTRY");
+                            actLog = new LogEntry();
+                            actLog.CacheId = actCache.Id;
+                            name = NEW_LOG;
+                        }
                         break;
                 }
 
@@ -203,7 +215,7 @@ public abstract class Search extends PostRequest {
 
                 switch (SWITCH) {
                     case CACHE_ARRAY:
-                        if (name != null && name.equals(NEW_CACHE)) {
+                        if (name.equals(NEW_CACHE)) {
                             //store cache
                             actCache.setApiState(apiState);
 
@@ -223,11 +235,13 @@ public abstract class Search extends PostRequest {
                         }
                         break;
                     case LOG_ARRAY:
-
+                        if (name.equals(NEW_LOG)) {
+                            System.out.println("add Log entry ");
+                            logList.add(actLog);
+                            actLog = null;
+                        }
                         break;
                 }
-
-
             }
 
             protected void string(String name, String value) {
@@ -239,6 +253,7 @@ public abstract class Search extends PostRequest {
                             actCache.setLongDescription(value);
                         } else if (CODE.equals(name)) {
                             actCache.setGcCode(value);
+                            actCache.Id = Cache.GenerateCacheId(actCache.getGcCode());
                         } else if (COUNTRY.equals(name)) {
                             actCache.setCountry(value);
                         } else if (DATE_HIDDEN.equals(name)) {
@@ -263,6 +278,13 @@ public abstract class Search extends PostRequest {
 
                         break;
                     case LOG_ARRAY:
+                        if (LOG_TEXT.equals(name)) {
+                            actLog.Comment = value;
+                        } else if (USER_NAME.equals(name)) {
+                            actLog.Finder = value;
+                        } else if (VISIT_DATE.equals(name)) {
+                            actLog.Timestamp = getDateFromLongString(value);
+                        }
 
                         break;
                 }
@@ -318,6 +340,11 @@ public abstract class Search extends PostRequest {
 
                         break;
                     case LOG_ARRAY:
+                        if (ID.equals(name)) {
+                            actLog.Id = value;
+                        } else if (LOG_TYPE_ID.equals(name)) {
+                            actLog.Type = LogTypes.GC2CB_LogType((int) value);
+                        }
 
                         break;
                 }
