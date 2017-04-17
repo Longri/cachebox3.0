@@ -218,6 +218,62 @@ class SearchGCTest {
         searchGC.postRequest(new GenericCallBack<Integer>() {
             @Override
             public void callBack(Integer value) {
+
+                assertEquals(1, cacheList.size());
+                Cache cache = cacheList.pop();
+
+                assertEquals(false, cache.isArchived());
+                assertEquals(true, cache.isAvailable());
+                assertEquals("GC1T33T", cache.getGcCode());
+                assertEquals(0, cache.waypoints.size());
+                assertEquals(CacheTypes.Traditional, cache.Type);
+                assertEquals(CacheSizes.other, cache.Size);
+                assertEquals("Germany", cache.getCountry());
+                assertEquals(new Date(1243753200000L), cache.getDateHidden());
+                assertEquals(3f, cache.getDifficulty());
+                assertEquals("", cache.getHint());
+                assertEquals(12, cache.getFaviritPoints());
+                assertEquals(true, cache.isFound());
+                assertEquals("1260177", cache.getGcId());
+                assertTrue(cache.getLongDescription().startsWith("<div style=\"text-align:center;\">Eine Hunderunde gedreht und mal "));
+                assertEquals("Nur ein Berg", cache.getName());
+                assertEquals("Wurzellisel", cache.getOwner());
+                assertEquals("Wurzellisel", cache.getPlacedBy());
+                assertEquals("\r\n", cache.getShortDescription());
+                assertEquals(2f, cache.getTerrain());
+                assertEquals("http://coord.info/GC1T33T", cache.getUrl());
+                assertEquals(2, cache.getApiState());
+                assertEquals(52.579267, cache.getLatitude());
+                assertEquals(13.381983, cache.getLongitude());
+
+                // Attribute Tests
+
+                ArrayList<Attributes> positiveList = new ArrayList<>();
+                ArrayList<Attributes> negativeList = new ArrayList<>();
+
+                {
+                    positiveList.add(Attributes.Dogs);
+                    positiveList.add(Attributes.Recommended_for_kids);
+                    positiveList.add(Attributes.Available_at_all_times);
+                    positiveList.add(Attributes.Available_during_winter);
+                    positiveList.add(Attributes.Ticks);
+                    positiveList.add(Attributes.Bicycles);
+                    positiveList.add(Attributes.Stealth_required);
+
+                    negativeList.add(Attributes.Wheelchair_accessible);
+                    negativeList.add(Attributes.Horses);
+                    negativeList.add(Attributes.Campfires);
+
+                }
+
+                TestUtils.assetCacheAttributes(cache, positiveList, negativeList);
+
+
+
+
+
+
+
                 WAIT.set(false);
             }
         }, cacheList, logList, imageList, gpxFilenameId);

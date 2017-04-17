@@ -133,7 +133,7 @@ public abstract class Search extends PostRequest {
             @Override
             protected void startArray(String name) {
                 super.startArray(name);
-                System.out.println("Start array " + name);
+               // System.out.println("Start array " + name);
                 arrayStack.add(name);
                 objectStack.add(name);
                 if (ATTRIBUTES.equals(name)) {
@@ -152,7 +152,7 @@ public abstract class Search extends PostRequest {
 
             @Override
             public void endArray(String name) {
-                System.out.println("End array " + name);
+               // System.out.println("End array " + name);
                 arrayStack.pop();
 
                 if (arrayStack.size > 0) {
@@ -180,12 +180,12 @@ public abstract class Search extends PostRequest {
 
             protected void startObject(String name) {
                 super.startObject(name);
-                System.out.println("Start Object " + name);
+               // System.out.println("Start Object " + name);
 
                 switch (SWITCH) {
                     case CACHE_ARRAY:
                         if (actCache == null) {
-                            System.out.println("NEW_CACHE");
+                           // System.out.println("NEW_CACHE");
                             actCache = new Cache(0, 0, true);
                             name = NEW_CACHE;
                         }
@@ -195,7 +195,7 @@ public abstract class Search extends PostRequest {
                         break;
                     case LOG_ARRAY:
                         if (actLog == null) {
-                            System.out.println("NEW_LOG_ENTRY");
+                           // System.out.println("NEW_LOG_ENTRY");
                             actLog = new LogEntry();
                             actLog.CacheId = actCache.Id;
                             name = NEW_LOG;
@@ -210,7 +210,7 @@ public abstract class Search extends PostRequest {
             protected void pop() {
                 super.pop();
                 String name = objectStack.pop();
-                System.out.println("pop " + name);
+               // System.out.println("pop " + name);
 
 
                 switch (SWITCH) {
@@ -227,16 +227,16 @@ public abstract class Search extends PostRequest {
                     case ATTRIBUTE_ARRAY:
                         actAttribute = Attributes.getAttributeEnumByGcComId(attributeID);
                         if (isOn) {
-                            System.out.println("add positive Attribute: " + actAttribute);
+                           // System.out.println("add positive Attribute: " + actAttribute);
                             actCache.addAttributePositive(actAttribute);
                         } else {
-                            System.out.println("add negative Attribute: " + actAttribute);
+                           // System.out.println("add negative Attribute: " + actAttribute);
                             actCache.addAttributeNegative(actAttribute);
                         }
                         break;
                     case LOG_ARRAY:
                         if (name.equals(NEW_LOG)) {
-                            System.out.println("add Log entry ");
+                           // System.out.println("add Log entry ");
                             logList.add(actLog);
                             actLog = null;
                         }
