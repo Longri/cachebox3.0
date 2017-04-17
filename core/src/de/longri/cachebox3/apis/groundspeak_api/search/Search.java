@@ -82,6 +82,7 @@ public abstract class Search extends PostRequest {
     private final String WAYPOINTS = "AdditionalWaypoints";
     private final String ATTRIBUTES = "Attributes";
     private final String OWNER = "Owner";
+    private final String IMAGES = "Images";
 
     private final String ATTRIBUTE_ID = "AttributeTypeID";
     private final String IS_ON = "IsOn";
@@ -105,16 +106,21 @@ public abstract class Search extends PostRequest {
     private final String URL = "Url";
     private final String LAT = "Latitude";
     private final String LON = "Longitude";
+    private final String CACHE_LIMITS = "CacheLimits";
 
 
-    private boolean startCacheArray = false;
-    private boolean startLogArray = false;
-    private boolean startWaypoints = false;
-    int atributeID;
+    int attributeID;
     boolean isOn;
 
     private Array<String> arrayStack = new Array<>();
     private Array<String> objectStack = new Array<>();
+
+    private int SWITCH = 0;
+    private final int CACHE_ARRAY = 1;
+    private final int ATTRIBUTE_ARRAY = 2;
+    private final int LOG_ARRAY = 3;
+    private final int CACHE_LIMITS_ARRAY = 4;
+    private final int IMAGE_ARRAY = 5;
 
     @Override
     protected void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<Integer> readyCallBack) {
@@ -128,6 +134,15 @@ public abstract class Search extends PostRequest {
                 objectStack.add(name);
                 if (ATTRIBUTES.equals(name)) {
                     attributes = new Array<>();
+                    SWITCH = ATTRIBUTE_ARRAY;
+                } else if (GEOCACHES.equals(name)) {
+                    SWITCH = CACHE_ARRAY;
+                } else if (CACHE_LIMITS.equals(name)) {
+                    SWITCH = CACHE_LIMITS_ARRAY;
+                } else if (LOGS.equals(name)) {
+                    SWITCH = LOG_ARRAY;
+                } else if (IMAGES.equals(name)) {
+                    SWITCH = IMAGE_ARRAY;
                 }
             }
 
@@ -135,112 +150,201 @@ public abstract class Search extends PostRequest {
             public void endArray(String name) {
                 System.out.println("End array " + name);
                 arrayStack.pop();
+
+                if (arrayStack.size > 0) {
+                    if (ATTRIBUTES.equals(arrayStack.peek())) {
+                        attributes = new Array<>();
+                        SWITCH = ATTRIBUTE_ARRAY;
+                    } else if (GEOCACHES.equals(arrayStack.peek())) {
+                        SWITCH = CACHE_ARRAY;
+                    } else if (CACHE_LIMITS.equals(name)) {
+                        SWITCH = CACHE_LIMITS_ARRAY;
+                    } else if (LOGS.equals(name)) {
+                        SWITCH = LOG_ARRAY;
+                    } else if (IMAGES.equals(name)) {
+                        SWITCH = IMAGE_ARRAY;
+                    }
+                } else {
+                    SWITCH = 0;
+                }
+
+
             }
 
             protected void startObject(String name) {
                 super.startObject(name);
                 System.out.println("Start Object " + name);
 
-                if (arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES) && actCache == null) {
-                    System.out.println("NEW_CACHE");
-                    actCache = new Cache(0, 0, true);
-                    name = NEW_CACHE;
+                switch (SWITCH) {
+                    case CACHE_ARRAY:
+                        if (actCache == null) {
+                            System.out.println("NEW_CACHE");
+                            actCache = new Cache(0, 0, true);
+                            name = NEW_CACHE;
+                        }
+                        break;
+                    case ATTRIBUTE_ARRAY:
+
+                        break;
+                    case LOG_ARRAY:
+
+                        break;
                 }
+
+
                 objectStack.add(name);
             }
 
-
             protected void pop() {
                 super.pop();
-
                 String name = objectStack.pop();
-
                 System.out.println("pop " + name);
 
-                if (name != null && name.equals(NEW_CACHE)) {
-                    //store cache
-                    actCache.setApiState(apiState);
 
-                    //add final Cache instance
-                    cacheList.add(new Cache(actLat, actLon, actCache));
-                    actCache = null;
-                } else if (arrayStack.size > 0 && arrayStack.peek().equals(ATTRIBUTES)) {
-                    actAttribute = Attributes.getAttributeEnumByGcComId(atributeID);
-                    if (isOn) {
-                        System.out.println("add positive Attribute: " + actAttribute);
-                        actCache.addAttributePositive(actAttribute);
-                    } else {
-                        System.out.println("add negative Attribute: " + actAttribute);
-                        actCache.addAttributeNegative(actAttribute);
-                    }
+                switch (SWITCH) {
+                    case CACHE_ARRAY:
+                        if (name != null && name.equals(NEW_CACHE)) {
+                            //store cache
+                            actCache.setApiState(apiState);
+
+                            //add final Cache instance
+                            cacheList.add(new Cache(actLat, actLon, actCache));
+                            actCache = null;
+                        }
+                        break;
+                    case ATTRIBUTE_ARRAY:
+                        actAttribute = Attributes.getAttributeEnumByGcComId(attributeID);
+                        if (isOn) {
+                            System.out.println("add positive Attribute: " + actAttribute);
+                            actCache.addAttributePositive(actAttribute);
+                        } else {
+                            System.out.println("add negative Attribute: " + actAttribute);
+                            actCache.addAttributeNegative(actAttribute);
+                        }
+                        break;
+                    case LOG_ARRAY:
+
+                        break;
                 }
+
+
             }
 
             protected void string(String name, String value) {
                 super.string(name, value);
 
-                if (LONG_DESC.equals(name)) {
-                    actCache.setLongDescription(value);
-                } else if (CODE.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
-                    actCache.setGcCode(value);
-                } else if (COUNTRY.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
-                    actCache.setCountry(value);
-                } else if (DATE_HIDDEN.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
-                    actCache.setDateHidden(getDateFromLongString(value));
-                } else if (HINT.equals(name)) {
-                    actCache.setHint(value);
-                } else if (ID.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
-                    actCache.setGcId(value);
-                } else if (NAME.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
-                    actCache.setName(value);
-                } else if (USER_NAME.equals(name) && objectStack.size > 0 && objectStack.peek().equals(OWNER)) {
-                    actCache.setOwner(value);
-                } else if (PLACED_BY.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
-                    actCache.setPlacedBy(value);
-                } else if (SHORT_DESC.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
-                    actCache.setShortDescription(value);
-                } else if (URL.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
-                    actCache.setUrl(value);
+                switch (SWITCH) {
+                    case CACHE_ARRAY:
+                        if (LONG_DESC.equals(name)) {
+                            actCache.setLongDescription(value);
+                        } else if (CODE.equals(name)) {
+                            actCache.setGcCode(value);
+                        } else if (COUNTRY.equals(name)) {
+                            actCache.setCountry(value);
+                        } else if (DATE_HIDDEN.equals(name)) {
+                            actCache.setDateHidden(getDateFromLongString(value));
+                        } else if (HINT.equals(name)) {
+                            actCache.setHint(value);
+                        } else if (ID.equals(name)) {
+                            actCache.setGcId(value);
+                        } else if (NAME.equals(name)) {
+                            actCache.setName(value);
+                        } else if (USER_NAME.equals(name)) {
+                            actCache.setOwner(value);
+                        } else if (PLACED_BY.equals(name)) {
+                            actCache.setPlacedBy(value);
+                        } else if (SHORT_DESC.equals(name)) {
+                            actCache.setShortDescription(value);
+                        } else if (URL.equals(name)) {
+                            actCache.setUrl(value);
+                        }
+                        break;
+                    case ATTRIBUTE_ARRAY:
+
+                        break;
+                    case LOG_ARRAY:
+
+                        break;
                 }
+
+
             }
 
             protected void number(String name, double value, String stringValue) {
                 super.number(name, value, stringValue);
-                if (DIFFICULTY.equals(name)) {
-                    actCache.setDifficulty((float) value);
-                } else if (TERRAIN.equals(name)) {
-                    actCache.setTerrain((float) value);
-                } else if (LAT.equals(name)) {
-                    actLat = value;
-                } else if (LON.equals(name)) {
-                    actLon = value;
+
+                switch (SWITCH) {
+                    case CACHE_ARRAY:
+                        if (DIFFICULTY.equals(name)) {
+                            actCache.setDifficulty((float) value);
+                        } else if (TERRAIN.equals(name)) {
+                            actCache.setTerrain((float) value);
+                        } else if (LAT.equals(name)) {
+                            actLat = value;
+                        } else if (LON.equals(name)) {
+                            actLon = value;
+                        }
+                        break;
+                    case ATTRIBUTE_ARRAY:
+
+                        break;
+                    case LOG_ARRAY:
+
+                        break;
                 }
             }
 
             protected void number(String name, long value, String stringValue) {
                 super.number(name, value, stringValue);
-                if (arrayStack.size > 0 && arrayStack.peek().equals(ATTRIBUTES)) {
-                    atributeID = (int) value;
-                } else if (CACHE_TYPE_ID.equals(name)) {
-                    actCache.Type = getCacheType((int) value);
-                } else if (DIFFICULTY.equals(name)) {
-                    actCache.setDifficulty((float) value);
-                } else if (TERRAIN.equals(name)) {
-                    actCache.setTerrain((float) value);
-                } else if (FAVRITE_POINTS.equals(name)) {
-                    actCache.setFavoritePoints((int) value);
-                } else if (ID.equals(name) && arrayStack.size > 0 && arrayStack.peek().equals(GEOCACHES)) {
-                    actCache.setGcId(Long.toString(value));
+
+                switch (SWITCH) {
+                    case CACHE_ARRAY:
+                        if (CACHE_TYPE_ID.equals(name)) {
+                            actCache.Type = getCacheType((int) value);
+                        } else if (DIFFICULTY.equals(name)) {
+                            actCache.setDifficulty((float) value);
+                        } else if (TERRAIN.equals(name)) {
+                            actCache.setTerrain((float) value);
+                        } else if (FAVRITE_POINTS.equals(name)) {
+                            actCache.setFavoritePoints((int) value);
+                        } else if (ID.equals(name)) {
+                            actCache.setGcId(Long.toString(value));
+                        }
+                        break;
+                    case ATTRIBUTE_ARRAY:
+                        if (ATTRIBUTE_ID.equals(name)) {
+                            attributeID = (int) value;
+                        }
+
+                        break;
+                    case LOG_ARRAY:
+
+                        break;
                 }
+
+
             }
 
             protected void bool(String name, boolean value) {
                 super.bool(name, value);
-                if (arrayStack.size > 0 && arrayStack.peek().equals(ATTRIBUTES)) {
-                    isOn = value;
-                } else if (FOUND.equals(name)) {
-                    actCache.setFound(value);
+
+                switch (SWITCH) {
+                    case CACHE_ARRAY:
+                        if (FOUND.equals(name)) {
+                            actCache.setFound(value);
+                        }
+                        break;
+                    case ATTRIBUTE_ARRAY:
+                        if (IS_ON.equals(name)) {
+                            isOn = value;
+                        }
+                        break;
+                    case LOG_ARRAY:
+
+                        break;
                 }
+
+
             }
 
         }).parse(httpResponse.getResultAsStream());

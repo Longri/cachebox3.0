@@ -116,7 +116,7 @@ class SearchGCTest {
             @Override
             public void callBack(Integer value) {
 
-                assertEquals(cacheList.size(), 1, "CacheList.size must be 1");
+                assertEquals(1, cacheList.size());
                 Cache cache = cacheList.pop();
 
                 assertEquals(false, cache.isArchived());
@@ -179,7 +179,6 @@ class SearchGCTest {
         }
 
     }
-
 
 
     @Test
