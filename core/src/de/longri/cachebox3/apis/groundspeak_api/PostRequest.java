@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 import org.slf4j.LoggerFactory;
@@ -45,43 +46,49 @@ public abstract class PostRequest {
 
     protected abstract void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<Integer> readyCallBack);
 
-    public void post(final GenericCallBack<Integer> readyCallBack) {
-        String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-
-        StringWriter writer = new StringWriter();
-        Json json = new Json(JsonWriter.OutputType.json);
-        json.setWriter(writer);
-
-        json.writeObjectStart();
-        getRequest(json);
-        json.writeObjectEnd();
-
-        Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
-        httpPost.setUrl(URL + getCallUrl());
-        httpPost.setHeader("format", "json");
-        httpPost.setHeader("Accept", "application/json");
-        httpPost.setHeader("Content-type", "application/json");
-
-        httpPost.setContent(writer.toString());
-        httpPost.setIncludeCredentials(true);
-
-        log.debug("Send Post request");
-        Gdx.net.sendHttpRequest(httpPost, new Net.HttpResponseListener() {
+    protected void post(final GenericCallBack<Integer> readyCallBack) {
+        CB.postAsync(new Runnable() {
             @Override
-            public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                PostRequest.this.handleHttpResponse(httpResponse, readyCallBack);
-            }
+            public void run() {
+                String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
-            @Override
-            public void failed(Throwable t) {
-                log.error("Request failed", t);
-                readyCallBack.callBack(ERROR);
-            }
+                StringWriter writer = new StringWriter();
+                Json json = new Json(JsonWriter.OutputType.json);
+                json.setWriter(writer);
 
-            @Override
-            public void cancelled() {
-                log.debug("Request cancelled");
-                readyCallBack.callBack(CANCELED);
+                json.writeObjectStart();
+                getRequest(json);
+                json.writeObjectEnd();
+
+                Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
+                httpPost.setUrl(URL + getCallUrl());
+                httpPost.setHeader("format", "json");
+                httpPost.setHeader("Accept", "application/json");
+                httpPost.setHeader("Content-type", "application/json");
+
+                httpPost.setContent(writer.toString());
+                httpPost.setIncludeCredentials(true);
+
+                log.debug("Send Post request");
+                Gdx.net.sendHttpRequest(httpPost, new Net.HttpResponseListener() {
+                    @Override
+                    public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                        log.debug("Handle Response");
+                        PostRequest.this.handleHttpResponse(httpResponse, readyCallBack);
+                    }
+
+                    @Override
+                    public void failed(Throwable t) {
+                        log.error("Request failed", t);
+                        readyCallBack.callBack(ERROR);
+                    }
+
+                    @Override
+                    public void cancelled() {
+                        log.debug("Request cancelled");
+                        readyCallBack.callBack(CANCELED);
+                    }
+                });
             }
         });
     }

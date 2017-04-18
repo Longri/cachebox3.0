@@ -527,62 +527,6 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         return null;
     }
 
-//    // copy all Informations from cache into this
-//    // this is used after actualization of cache with API
-//    public void copyFrom(Cache cache) {
-//        // this.MapX = cache.MapX;
-//        // this.MapY = cache.MapY;
-//        this.Name = cache.Name;
-//        this.Pos = cache.Pos;
-//        this.Rating = cache.Rating;
-//        this.Size = cache.Size;
-//        this.setDifficulty(cache.getDifficulty());
-//        this.setTerrain(cache.getTerrain());
-//        this.setArchived(cache.isArchived());
-//        this.setAvailable(cache.isAvailable());
-//        // this.favorite = false;
-//        // this.noteCheckSum = 0;
-//        // this.solverCheckSum = 0;
-//        // this.hasUserData = false;
-//        // this.CorrectedCoordinates = false;
-//        // only change the found status when it is true in the loaded cache
-//        // This will prevent ACB from overriding a found cache which is still not found in GC
-//        if (cache.isFound())
-//            this.setFound(cache.isFound());
-//        // this.TourName = "";
-//        // this.GPXFilename_ID = 0;
-//        this.Type = cache.Type;
-//        // this.PlacedBy = cache.PlacedBy;
-//        this.Owner = cache.Owner;
-//        // this.listingChanged = true; // so that spoiler download will be done again
-//        this.NumTravelbugs = cache.NumTravelbugs;
-//        // this.cachedDistance = 0;
-//        // do not copy waypoints List directly because actual user defined Waypoints would be deleted
-//        // this.waypoints = new ArrayList<Waypoint>();
-//
-//        for (int i = 0, n = cache.waypoints.size(); i < n; i++) {
-//            Waypoint newWaypoint = cache.waypoints.get(i);
-//
-//            Waypoint aktWaypoint = this.findWaypointByGc(newWaypoint.getGcCode());
-//            if (aktWaypoint == null) {
-//                // this waypoint is new -> add to list
-//                this.waypoints.add(newWaypoint);
-//            } else {
-//                // this waypoint is already in our list -> Copy Informations
-//                aktWaypoint.setDescription(newWaypoint.getDescription());
-//                aktWaypoint.Pos = newWaypoint.Pos;
-//                aktWaypoint.setTitle(newWaypoint.getTitle());
-//                aktWaypoint.Type = newWaypoint.Type;
-//            }
-//        }
-//        // this.spoilerRessources = null;
-//        // copy Detail Information
-//        this.detail = cache.detail;
-//        this.myCache = cache.myCache;
-//        // this.gcLogin = null;
-//
-//    }
-
     @Override
     public String toString() {
         return "Cache:" + getGcCode() + " " + super.toString();

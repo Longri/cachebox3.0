@@ -19,6 +19,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
+import com.badlogic.gdx.utils.async.AsyncExecutor;
+import com.badlogic.gdx.utils.async.AsyncTask;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -62,6 +64,7 @@ public class CB {
     private static boolean displayOff = false;
     public static Categories Categories;
     public static float stateTime;
+    private static final AsyncExecutor asyncExecutor = new AsyncExecutor(20);
 
 
     final static float PPI_DEFAULT = 163;
@@ -273,8 +276,13 @@ public class CB {
         return Database.Data.Query.GetCacheById(cacheId);
     }
 
-    public static void postAsync(Runnable runnable) {
-        Thread thread = new Thread(runnable);
-        thread.start();
+    public static void postAsync(final Runnable runnable) {
+        asyncExecutor.submit(new AsyncTask<Void>() {
+            @Override
+            public Void call() throws Exception {
+                runnable.run();
+                return null;
+            }
+        });
     }
 }

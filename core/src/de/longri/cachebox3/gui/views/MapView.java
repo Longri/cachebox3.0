@@ -161,10 +161,12 @@ public class MapView extends AbstractView {
                 } else if (mapMode == MapMode.GPS) {
                     log.debug("Activate GPS Mode");
                     final Coordinate myPos = EventHandler.getMyPosition();
-                    animator.position(
-                            MercatorProjection.longitudeToX(myPos.longitude),
-                            MercatorProjection.latitudeToY(myPos.latitude)
-                    );
+                    if (myPos != null) {
+                        animator.position(
+                                MercatorProjection.longitudeToX(myPos.longitude),
+                                MercatorProjection.latitudeToY(myPos.latitude)
+                        );
+                    }
                     setCenterCrossLayerEnabled(false);
                 } else if (mapMode == MapMode.WP) {
                     log.debug("Activate WP Mode");

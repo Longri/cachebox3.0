@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -158,12 +159,26 @@ class GetYourUserProfileTest {
     void onlineTest() {
         if (isDummy) return;
         final GetYourUserProfile getYourUserProfile = new GetYourUserProfile(apiKey);
+
+       final AtomicBoolean WAIT = new AtomicBoolean(true);
+
         getYourUserProfile.post(new GenericCallBack<Integer>() {
             @Override
             public void callBack(Integer value) {
                 assertThat("Type should be 3", getYourUserProfile.getMembershipType() == 3);
                 assertEquals(getYourUserProfile.getMemberName(), "Katipa", "Name should be Katipa");
+                WAIT.set(false);
             }
         });
+
+
+        while (WAIT.get()){
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }

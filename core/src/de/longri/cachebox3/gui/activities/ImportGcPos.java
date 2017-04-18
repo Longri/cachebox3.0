@@ -27,6 +27,9 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextArea;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.apis.groundspeak_api.search.SearchCoordinate;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.views.MapView;
@@ -35,12 +38,18 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.utils.lists.CB_List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Created by Longri on 12.04.2017.
  */
 public class ImportGcPos extends ActivityBase {
+
+    private static final Logger log = LoggerFactory.getLogger(ImportGcPos.class);
 
     private final VisTextButton bOK, bCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap;
     private final VisLabel lblTitle, lblRadius, lblRadiusEinheit, lblMarkerPos;
@@ -139,7 +148,12 @@ public class ImportGcPos extends ActivityBase {
 
         bOK.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                ImportNow();
+                CB.postAsync(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImportNow();
+                    }
+                });
             }
         });
 
@@ -288,47 +302,60 @@ public class ImportGcPos extends ActivityBase {
         bOK.setDisabled(true);
         importRuns = true;
 
+
+        if (actSearchPos != null) {
+            final CB_List<Cache> cacheList = new CB_List<>();
+            final CB_List<LogEntry> logList = new CB_List<>();
+            final CB_List<ImageEntry> imageList = new CB_List<>();
+            Category category = CB.Categories.getCategory("API-Import");
+            if (category != null) // should not happen!!!
+            {
+                GpxFilename gpxFilename = category.addGpxFilename("API-Import");
+                if (gpxFilename != null) {
+
+                    log.debug("Ask for API state");
+                    byte apiState;
+                    if (GroundspeakAPI.isPremiumMember()) {
+                        apiState = 2;
+                    } else {
+                        apiState = 1;
+                    }
+
+                    log.debug("Api state = {}", apiState);
+                    log.debug("Search at Coordinate:{}", actSearchPos);
+                    SearchCoordinate searchC = new SearchCoordinate(GroundspeakAPI.getAccessToken(),
+                            50, actSearchPos, Config.lastSearchRadius.getValue() * 1000,
+                            apiState);
+                    searchC.excludeFounds = Config.SearchWithoutFounds.getValue();
+                    searchC.excludeHides = Config.SearchWithoutOwns.getValue();
+                    searchC.available = Config.SearchOnlyAvailable.getValue();
+
+                    log.debug("Request Groundspeak API");
+                    searchC.postRequest(new GenericCallBack<Integer>() {
+                        @Override
+                        public void callBack(Integer value) {
+                            if (cacheList.size() > 0) {
+                                try {
+                                    log.debug("Write Import to DB C:{} L:{} I:{}", cacheList.size(), logList.size(), imageList.size());
+                                    GroundspeakAPI.WriteCachesLogsImages_toDB(cacheList, logList, imageList);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }, cacheList, logList, imageList, gpxFilename.Id);
+                }
+            }
+        }
+
+
         //TODO replace with async worker
 //        thread = new Thread(new Runnable() {
 //            @Override
 //            public void run() {
 //                boolean threadCanceld = false;
 //
-//                try {
-//                    if (actSearchPos != null) {
 //
-//                        // alle per API importierten Caches landen in der Category und
-//                        // GpxFilename
-//                        // API-Import
-//                        // Category suchen, die dazu gehört
-//                        Category category = CoreSettingsForward.Categories.getCategory("API-Import");
-//                        if (category != null) // should not happen!!!
-//                        {
-//                            GpxFilename gpxFilename = category.addGpxFilename("API-Import");
-//                            if (gpxFilename != null) {
-//                                CB_List<Cache> apiCaches = new CB_List<Cache>();
-//                                ArrayList<LogEntry> apiLogs = new ArrayList<LogEntry>();
-//                                ArrayList<ImageEntry> apiImages = new ArrayList<ImageEntry>();
-//                                SearchCoordinate searchC = new SearchCoordinate(50, actSearchPos, Config.lastSearchRadius.getValue() * 1000);
-//
-//                                searchC.excludeFounds = Config.SearchWithoutFounds.getValue();
-//                                searchC.excludeHides = Config.SearchWithoutOwns.getValue();
-//                                searchC.available = Config.SearchOnlyAvailable.getValue();
-//
-//                                dis.setAnimationType(AnimationType.Download);
-//                                CB_UI.SearchForGeocaches.getInstance().SearchForGeocachesJSON(searchC, apiCaches, apiLogs, apiImages, gpxFilename.Id, icancel);
-//                                dis.setAnimationType(AnimationType.Work);
-//                                if (apiCaches.size() > 0) {
-//                                    GroundspeakAPI.WriteCachesLogsImages_toDB(apiCaches, apiLogs, apiImages);
-//                                }
-//
-//                            }
-//                        }
-//                    }
-//                } catch (InterruptedException e) {
-//                    // Thread abgebrochen!
-//                    threadCanceld = true;
-//                }
 //
 //                if (!threadCanceld) {
 //                    CacheListChangedEventList.Call();

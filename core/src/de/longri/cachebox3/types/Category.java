@@ -15,98 +15,128 @@
  */
 package de.longri.cachebox3.types;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import de.longri.cachebox3.sqlite.Database;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Category extends ArrayList<GpxFilename> implements Comparable<Category>
-{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7257078663021910097L;
-	public long Id;
-	public String GpxFilename;
-	public boolean pinned;
-	public boolean Checked;
+public class Category extends ArrayList<GpxFilename> implements Comparable<Category> {
+    /**
+     *
+     */
+    private static final long serialVersionUID = -7257078663021910097L;
+    public long Id;
+    public String GpxFilename;
+    public boolean pinned;
+    public boolean Checked;
 
-	public Category()
-	{
+    public Category() {
+    }
 
-	}
+    /**
+     * Does not check if filename not already exists in this category
+     *
+     * @param path
+     * @return
+     */
+    public GpxFilename addGpxFilename(String path) {
 
-	public int CacheCount()
-	{
-		int result = 0;
-		for (GpxFilename gpx : this)
-			result += gpx.CacheCount;
-		return result;
-	}
+        String filename = Gdx.files.absolute(path).name();
 
-	public Date LastImported()
-	{
-		if (size() == 0) return new Date();
-		return this.get(this.size() - 1).Imported;
-	}
+        Database.Parameters args = new Database.Parameters();
+        args.put("GPXFilename", filename);
+        args.put("CategoryId", this.Id);
+        DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String stimestamp = iso8601Format.format(new Date());
+        args.put("Imported", stimestamp);
+        try {
+            Database.Data.insert("GpxFilenames", args);
+        } catch (Exception exc) {
+            //Log.err(log, "CreateNewGpxFilename", filename, exc);
+        }
 
-	public String GpxFilenameWoNumber()
-	{
-		// Nummer der PQ weglassen, wenn dahinter noch eine Bezeichnung kommt.
-		String name = GpxFilename;
-		int pos = name.indexOf('_');
-		if (pos < 0) return name;
-		String part = name.substring(0, pos);
-		if (part.length() < 7) return name;
-		try
-		{
-			// Vorderen Teil nur dann weglassen, wenn dies eine Zahl ist.
-			Integer.valueOf(part);
-		}
-		catch (Exception exc)
-		{
-			return name;
-		}
+        long GPXFilename_ID = 0;
 
-		name = name.substring(pos + 1, name.length());
+        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("Select max(ID) from GpxFilenames", null);
+        reader.moveToFirst();
+        if (!reader.isAfterLast()) {
+            GPXFilename_ID = reader.getLong(0);
+        }
+        reader.close();
+        GpxFilename result = new GpxFilename(GPXFilename_ID, filename, this.Id);
+        this.add(result);
+        return result;
+    }
 
-		if (name.toLowerCase().indexOf(".gpx") == name.length() - 4) name = name.substring(0, name.length() - 4);
-		return name;
-	}
 
-	@Override
-	public int compareTo(Category o)
-	{
-		if (o.Id > this.Id) return 1;
-		else if (o.Id < this.Id) return -1;
-		else
-			return 0;
-	}
+    public int CacheCount() {
+        int result = 0;
+        for (GpxFilename gpx : this)
+            result += gpx.CacheCount;
+        return result;
+    }
 
-	/**
-	 * gibt den chk status der enthaltenen GpxFiles zur�ck </br> 0 = keins
-	 * ausgew�hlt </br> 1 = alle ausgew�hlt </br> -1 = nicht alle, aber
-	 * mindestens eins ausgew�hlt
-	 * 
-	 * @return
-	 */
-	public int getChek()
-	{
-		int result = 0;
+    public Date LastImported() {
+        if (size() == 0) return new Date();
+        return this.get(this.size() - 1).Imported;
+    }
 
-		int chkCounter = 0;
-		int counter = 0;
-		for (GpxFilename gpx : this)
-		{
-			if (gpx.Checked) chkCounter++;
+    public String GpxFilenameWoNumber() {
+        // Nummer der PQ weglassen, wenn dahinter noch eine Bezeichnung kommt.
+        String name = GpxFilename;
+        int pos = name.indexOf('_');
+        if (pos < 0) return name;
+        String part = name.substring(0, pos);
+        if (part.length() < 7) return name;
+        try {
+            // Vorderen Teil nur dann weglassen, wenn dies eine Zahl ist.
+            Integer.valueOf(part);
+        } catch (Exception exc) {
+            return name;
+        }
 
-			counter++;
-		}
+        name = name.substring(pos + 1, name.length());
 
-		if (chkCounter == 0) result = 0;
-		else if (chkCounter == counter) result = 1;
-		else
-			result = -1;
+        if (name.toLowerCase().indexOf(".gpx") == name.length() - 4) name = name.substring(0, name.length() - 4);
+        return name;
+    }
 
-		return result;
-	}
+    @Override
+    public int compareTo(Category o) {
+        if (o.Id > this.Id) return 1;
+        else if (o.Id < this.Id) return -1;
+        else
+            return 0;
+    }
+
+    /**
+     * gibt den chk status der enthaltenen GpxFiles zur�ck </br> 0 = keins
+     * ausgew�hlt </br> 1 = alle ausgew�hlt </br> -1 = nicht alle, aber
+     * mindestens eins ausgew�hlt
+     *
+     * @return
+     */
+    public int getChek() {
+        int result = 0;
+
+        int chkCounter = 0;
+        int counter = 0;
+        for (GpxFilename gpx : this) {
+            if (gpx.Checked) chkCounter++;
+
+            counter++;
+        }
+
+        if (chkCounter == 0) result = 0;
+        else if (chkCounter == counter) result = 1;
+        else
+            result = -1;
+
+        return result;
+    }
 
 }

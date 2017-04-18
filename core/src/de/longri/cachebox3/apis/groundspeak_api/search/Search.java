@@ -491,6 +491,12 @@ public abstract class Search extends PostRequest {
     }
 
     public void setLists(CB_List<Cache> cacheList, CB_List<LogEntry> logList, CB_List<ImageEntry> imageList, long gpxFilenameId) {
+
+        if (cacheList == null) throw new RuntimeException("CacheList can't be NULL");
+        if (logList == null) throw new RuntimeException("CacheList can't be NULL");
+        if (imageList == null) throw new RuntimeException("CacheList can't be NULL");
+
+
         this.cacheList = cacheList;
         this.logList = logList;
         this.imageList = imageList;

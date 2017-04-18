@@ -58,7 +58,7 @@ public class GetYourUserProfile extends PostRequest {
                 }
 
             }).parse(result);
-
+            log.debug("ready parse result Type:{} Name:{}", membershipType, memberName);
             readyCallBack.callBack(NO_ERROR);
         }
     }
@@ -76,7 +76,8 @@ public class GetYourUserProfile extends PostRequest {
     @Override
     protected void getRequest(Json json) {
         json.writeValue("AccessToken", this.gcApiKey);
-        json.writeValue("ProfileOptions", "{}");
+        json.writeObjectStart("ProfileOptions");
+        json.writeObjectEnd();
         json.writeObjectStart("DeviceInfo");
         json.writeValue("ApplicationSoftwareVersion", BuildInfo.getRevison());
         json.writeValue("DeviceOperatingSystem", getDeviceOperatingSystem());
@@ -108,14 +109,19 @@ public class GetYourUserProfile extends PostRequest {
 
     public static int getApiStatus(String result) {
         final AtomicInteger st = new AtomicInteger(-1);
-        (new JsonReader() {
-            protected void number(String name, long value, String stringValue) {
-                super.number(name, value, stringValue);
-                if (name.equals("StatusCode")) {
-                    st.set((int) value);
+        try {
+            (new JsonReader() {
+                protected void number(String name, long value, String stringValue) {
+                    super.number(name, value, stringValue);
+                    if (name.equals("StatusCode")) {
+                        st.set((int) value);
+                    }
                 }
-            }
-        }).parse(result);
+            }).parse(result);
+        } catch (Exception e) {
+            log.error("Ask for Api state! Result:{}", result);
+            e.printStackTrace();
+        }
         return st.get();
     }
 
