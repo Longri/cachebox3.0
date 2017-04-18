@@ -211,7 +211,7 @@ public class CacheDAO {
         args.put("Type", cache.Type.ordinal());
         args.put("Owner", cache.getOwner());
         args.put("Country", cache.getCountry());
-        args.put("MapMode", cache.getState());
+        args.put("State", cache.getState());
         DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             String firstimported = iso8601Format.format(new Date());
@@ -242,7 +242,7 @@ public class CacheDAO {
             // write detail information if existing
             args.put("GcId", cache.getGcId());
             args.put("PlacedBy", cache.getPlacedBy());
-            args.put("apiState", cache.getApiState());
+            args.put("ApiStatus", cache.getApiState());
             try {
                 String stimestamp = iso8601Format.format(cache.getDateHidden());
                 args.put("DateHidden", stimestamp);
@@ -307,7 +307,7 @@ public class CacheDAO {
         args.put("PlacedBy", cache.getPlacedBy());
         args.put("Owner", cache.getOwner());
         args.put("Country", cache.getCountry());
-        args.put("MapMode", cache.getState());
+        args.put("State", cache.getState());
         DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             String stimestamp = iso8601Format.format(cache.getDateHidden());
@@ -340,7 +340,7 @@ public class CacheDAO {
         // args.put("ListingCheckSum", cache.);
         args.put("GPXFilename_Id", cache.getGPXFilename_ID());
         args.put("Favorit", cache.isFavorite() ? 1 : 0);
-        args.put("apiState", cache.getApiState());
+        args.put("ApiStatus", cache.getApiState());
         args.put("CorrectedCoordinates", cache.hasCorrectedCoordinates() ? 1 : 0);
         args.put("TourName", cache.getTourName());
 

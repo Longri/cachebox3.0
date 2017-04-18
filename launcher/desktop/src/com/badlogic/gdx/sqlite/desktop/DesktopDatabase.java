@@ -299,6 +299,8 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             return st.execute() ? 0 : 1;
 
         } catch (SQLException e) {
+            log.error("INSERT", e);
+
             return 0;
         } finally {
             try {
