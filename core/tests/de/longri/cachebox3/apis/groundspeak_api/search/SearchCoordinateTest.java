@@ -15,12 +15,17 @@
  */
 package de.longri.cachebox3.apis.groundspeak_api.search;
 
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
+import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import org.junit.jupiter.api.Test;
 import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.io.IOException;
+import java.io.StringWriter;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static travis.EXCLUDE_FROM_TRAVIS.LONGRI_HOME_COORDS;
 
 /**
@@ -34,6 +39,10 @@ class SearchCoordinateTest {
     @Test
     void getRequest() throws IOException {
 
+        String expected = TestUtils.getResourceRequestString("testsResources/SearchGcCoordinate_request.txt",
+                isDummy ? null : apiKey);
+
+
         //set MembershipType for tests to 3
         GroundspeakAPI.setTestMembershipType(3);
 
@@ -44,9 +53,16 @@ class SearchCoordinateTest {
             apiState = 1;
         }
 
-
         SearchCoordinate searchCoordinate = new SearchCoordinate(apiKey, 50
                 , LONGRI_HOME_COORDS, 50000, apiState);
+
+        StringWriter writer = new StringWriter();
+        Json json = new Json(JsonWriter.OutputType.json);
+        json.setWriter(writer);
+        searchCoordinate.getRequest(json);
+
+        String actual = writer.toString();
+        assertEquals(expected, actual);
 
 
     }

@@ -147,6 +147,7 @@ class SearchGcOwnerTest {
                 assertEquals(CacheTypes.Final, userWaypoint.Type);
                 assertEquals(52.616666666666667, userWaypoint.getLatitude());
                 assertEquals(13.366666666666667, userWaypoint.getLongitude());
+                assertEquals(true, userWaypoint.IsUserWaypoint);
 
                 assertEquals(CacheTypes.Traditional, cache.Type);
                 assertEquals(CacheSizes.other, cache.Size);
@@ -252,7 +253,7 @@ class SearchGcOwnerTest {
                         assertEquals(false, cache.isArchived());
                         assertEquals(true, cache.isAvailable());
                         assertEquals("GC18JGX", cache.getGcCode());
-                        assertEquals(1, cache.waypoints.size());
+                        assertEquals(2, cache.waypoints.size());
 
                         Waypoint waypoint = cache.waypoints.first();
                         assertEquals("PA18JGX", waypoint.getGcCode());
