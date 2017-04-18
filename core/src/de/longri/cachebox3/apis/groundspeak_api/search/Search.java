@@ -73,6 +73,7 @@ public abstract class Search extends PostRequest {
 
     private double actLat, actLon;
     private Cache actCache;
+    private Waypoint actWayPoint;
     private LogEntry actLog;
     private Array<Attributes> attributes;
     private Attributes actAttribute;
@@ -88,6 +89,7 @@ public abstract class Search extends PostRequest {
     private final String IS_ON = "IsOn";
     private final String NEW_CACHE = "NEW_CACHE";
     private final String NEW_LOG = "NEW_LOG";
+    private final String NEW_WAY_POINT = "NEW_WAY_POINT";
     private final String CODE = "Code";
     private final String CACHE_TYPE = "CacheType";
     private final String CACHE_TYPE_ID = "GeocacheTypeId";
@@ -103,6 +105,7 @@ public abstract class Search extends PostRequest {
     private final String USER_NAME = "UserName";
     private final String PLACED_BY = "PlacedBy";
     private final String SHORT_DESC = "ShortDescription";
+    private final String DESC = "Description";
     private final String TERRAIN = "Terrain";
     private final String URL = "Url";
     private final String LAT = "Latitude";
@@ -111,6 +114,9 @@ public abstract class Search extends PostRequest {
     private final String LOG_TEXT = "LogText";
     private final String VISIT_DATE = "VisitDate";
     private final String LOG_TYPE_ID = "WptLogTypeId";
+    private final String ADDITIONAL_WAYPOINTS = "AdditionalWaypoints";
+    private final String COMMENT = "Comment";
+    private final String WAYPOINT_TYPE_ID = "WptTypeID";
 
 
     int attributeID;
@@ -125,15 +131,16 @@ public abstract class Search extends PostRequest {
     private final int LOG_ARRAY = 3;
     private final int CACHE_LIMITS_ARRAY = 4;
     private final int IMAGE_ARRAY = 5;
+    private final int WAY_POINT_ARRAY = 6;
 
     @Override
-    protected void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<Integer> readyCallBack) {
+    protected void handleHttpResponse(Net.HttpResponse httpResponse, final GenericCallBack<Integer> readyCallBack) {
         (new JsonReader() {
 
             @Override
             protected void startArray(String name) {
                 super.startArray(name);
-               // System.out.println("Start array " + name);
+                // System.out.println("Start array " + name);
                 arrayStack.add(name);
                 objectStack.add(name);
                 if (ATTRIBUTES.equals(name)) {
@@ -147,12 +154,14 @@ public abstract class Search extends PostRequest {
                     SWITCH = LOG_ARRAY;
                 } else if (IMAGES.equals(name)) {
                     SWITCH = IMAGE_ARRAY;
+                } else if (ADDITIONAL_WAYPOINTS.equals(name)) {
+                    SWITCH = WAY_POINT_ARRAY;
                 }
             }
 
             @Override
             public void endArray(String name) {
-               // System.out.println("End array " + name);
+                // System.out.println("End array " + name);
                 arrayStack.pop();
 
                 if (arrayStack.size > 0) {
@@ -170,6 +179,8 @@ public abstract class Search extends PostRequest {
                         SWITCH = LOG_ARRAY;
                     } else if (IMAGES.equals(actArray)) {
                         SWITCH = IMAGE_ARRAY;
+                    } else if (ADDITIONAL_WAYPOINTS.equals(name)) {
+                        SWITCH = WAY_POINT_ARRAY;
                     }
                 } else {
                     SWITCH = 0;
@@ -180,12 +191,12 @@ public abstract class Search extends PostRequest {
 
             protected void startObject(String name) {
                 super.startObject(name);
-               // System.out.println("Start Object " + name);
+                // System.out.println("Start Object " + name);
 
                 switch (SWITCH) {
                     case CACHE_ARRAY:
                         if (actCache == null) {
-                           // System.out.println("NEW_CACHE");
+                            // System.out.println("NEW_CACHE");
                             actCache = new Cache(0, 0, true);
                             name = NEW_CACHE;
                         }
@@ -195,10 +206,17 @@ public abstract class Search extends PostRequest {
                         break;
                     case LOG_ARRAY:
                         if (actLog == null) {
-                           // System.out.println("NEW_LOG_ENTRY");
+                            // System.out.println("NEW_LOG_ENTRY");
                             actLog = new LogEntry();
                             actLog.CacheId = actCache.Id;
                             name = NEW_LOG;
+                        }
+                        break;
+                    case WAY_POINT_ARRAY:
+                        if (actWayPoint == null) {
+                            //System.out.println("NEW_WayPoint");
+                            actWayPoint = new Waypoint(0, 0, true);
+                            name = NEW_WAY_POINT;
                         }
                         break;
                 }
@@ -210,7 +228,7 @@ public abstract class Search extends PostRequest {
             protected void pop() {
                 super.pop();
                 String name = objectStack.pop();
-               // System.out.println("pop " + name);
+                // System.out.println("pop " + name);
 
 
                 switch (SWITCH) {
@@ -227,18 +245,27 @@ public abstract class Search extends PostRequest {
                     case ATTRIBUTE_ARRAY:
                         actAttribute = Attributes.getAttributeEnumByGcComId(attributeID);
                         if (isOn) {
-                           // System.out.println("add positive Attribute: " + actAttribute);
+                            // System.out.println("add positive Attribute: " + actAttribute);
                             actCache.addAttributePositive(actAttribute);
                         } else {
-                           // System.out.println("add negative Attribute: " + actAttribute);
+                            // System.out.println("add negative Attribute: " + actAttribute);
                             actCache.addAttributeNegative(actAttribute);
                         }
                         break;
                     case LOG_ARRAY:
                         if (NEW_LOG.equals(name)) {
-                           // System.out.println("add Log entry ");
+                            // System.out.println("add Log entry ");
                             logList.add(actLog);
                             actLog = null;
+                        }
+                        break;
+                    case WAY_POINT_ARRAY:
+                        if (NEW_WAY_POINT.equals(name)) {
+                            // System.out.println("add Waypoiint ");
+                            actWayPoint.CacheId = actCache.Id;
+                            //add final Waypointg instance
+                            actCache.waypoints.add(new Waypoint(actLat, actLon, actWayPoint));
+                            actWayPoint = null;
                         }
                         break;
                 }
@@ -285,8 +312,15 @@ public abstract class Search extends PostRequest {
                         } else if (VISIT_DATE.equals(name)) {
                             actLog.Timestamp = getDateFromLongString(value);
                         }
-
                         break;
+                    case WAY_POINT_ARRAY:
+                        if (CODE.equals(name)) {
+                            actWayPoint.setGcCode(value);
+                        } else if (DESC.equals(name)) {
+                            actWayPoint.setTitle(value);
+                        } else if (COMMENT.equals(name)) {
+                            actWayPoint.setDescription(value);
+                        }
                 }
 
 
@@ -308,10 +342,15 @@ public abstract class Search extends PostRequest {
                         }
                         break;
                     case ATTRIBUTE_ARRAY:
-
                         break;
                     case LOG_ARRAY:
-
+                        break;
+                    case WAY_POINT_ARRAY:
+                        if (LAT.equals(name)) {
+                            actLat = value;
+                        } else if (LON.equals(name)) {
+                            actLon = value;
+                        }
                         break;
                 }
             }
@@ -345,8 +384,11 @@ public abstract class Search extends PostRequest {
                         } else if (LOG_TYPE_ID.equals(name)) {
                             actLog.Type = LogTypes.GC2CB_LogType((int) value);
                         }
-
                         break;
+                    case WAY_POINT_ARRAY:
+                        if (WAYPOINT_TYPE_ID.equals(name)) {
+                            actWayPoint.Type = getCacheType((int) value);
+                        }
                 }
 
 
@@ -375,7 +417,15 @@ public abstract class Search extends PostRequest {
             }
 
         }).parse(httpResponse.getResultAsStream());
-        readyCallBack.callBack(NO_ERROR);
+
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                readyCallBack.callBack(NO_ERROR);
+            }
+        });
+        thread.start();
     }
 
     /**

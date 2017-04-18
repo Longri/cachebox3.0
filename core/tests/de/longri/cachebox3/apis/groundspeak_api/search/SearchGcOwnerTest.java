@@ -130,7 +130,16 @@ class SearchGcOwnerTest {
                 assertEquals(false, cache.isArchived());
                 assertEquals(true, cache.isAvailable());
                 assertEquals("GC18JGX", cache.getGcCode());
-                assertEquals(0, cache.waypoints.size());
+                assertEquals(1, cache.waypoints.size());
+
+                Waypoint waypoint = cache.waypoints.first();
+                assertEquals("PA18JGX", waypoint.getGcCode());
+                assertEquals("Parkmöglichkeit", waypoint.getDescription());
+                assertEquals("Parking", waypoint.getTitle());
+                assertEquals(CacheTypes.ParkingArea, waypoint.Type);
+                assertEquals(52.633667, waypoint.getLatitude());
+                assertEquals(13.375917, waypoint.getLongitude());
+
                 assertEquals(CacheTypes.Traditional, cache.Type);
                 assertEquals(CacheSizes.other, cache.Size);
                 assertEquals("Germany", cache.getCountry());
@@ -150,6 +159,8 @@ class SearchGcOwnerTest {
                 assertEquals(2, cache.getApiState());
                 assertEquals(52.62965, cache.getLatitude());
                 assertEquals(13.372317, cache.getLongitude());
+
+                assertEquals(1, cache.waypoints.size());
 
                 // Attribute Tests
 
@@ -221,65 +232,83 @@ class SearchGcOwnerTest {
         final long gpxFilenameId = 10;
         final AtomicBoolean WAIT = new AtomicBoolean(true);
 
-        searchGC.postRequest(new GenericCallBack<Integer>() {
-            @Override
-            public void callBack(Integer value) {
+        try {
+            searchGC.postRequest(new GenericCallBack<Integer>() {
+                @Override
+                public void callBack(Integer value) {
 
-                assertEquals(23, cacheList.size());
-                Cache cache = cacheList.first();
+                    try {
+                        assertEquals(23, cacheList.size());
+                        Cache cache = cacheList.first();
 
-                assertEquals(false, cache.isArchived());
-                assertEquals(true, cache.isAvailable());
-                assertEquals("GC18JGX", cache.getGcCode());
-                assertEquals(0, cache.waypoints.size());
-                assertEquals(CacheTypes.Traditional, cache.Type);
-                assertEquals(CacheSizes.other, cache.Size);
-                assertEquals("Germany", cache.getCountry());
-                assertEquals(new Date(1200211200000L), cache.getDateHidden());
-                assertEquals(1.5f, cache.getDifficulty());
-                assertEquals("bücken!", cache.getHint());
-                assertEquals(0, cache.getFaviritPoints());
-                assertEquals(false, cache.isFound());
-                assertEquals("768551", cache.getGcId());
-                assertTrue(cache.getLongDescription().startsWith("Vom empfohlenen Parkplatz beträgt die Wegstrecke etwa 500 m. Der Cac"));
-                assertEquals("Weideblick", cache.getName());
-                assertEquals("bros", cache.getOwner());
-                assertEquals("bros", cache.getPlacedBy());
-                assertEquals("Ein weiterer Cache im Tegeler Fließtal", cache.getShortDescription());
-                assertEquals(2f, cache.getTerrain());
-                assertEquals("http://coord.info/GC18JGX", cache.getUrl());
-                assertEquals(2, cache.getApiState());
-                assertEquals(52.62965, cache.getLatitude());
-                assertEquals(13.372317, cache.getLongitude());
+                        assertEquals(false, cache.isArchived());
+                        assertEquals(true, cache.isAvailable());
+                        assertEquals("GC18JGX", cache.getGcCode());
+                        assertEquals(1, cache.waypoints.size());
 
-                // Attribute Tests
+                        Waypoint waypoint = cache.waypoints.first();
+                        assertEquals("PA18JGX", waypoint.getGcCode());
+                        assertEquals("Parkmöglichkeit", waypoint.getDescription());
+                        assertEquals("Parking", waypoint.getTitle());
+                        assertEquals(CacheTypes.ParkingArea, waypoint.Type);
+                        assertEquals(52.633667, waypoint.getLatitude());
+                        assertEquals(13.375917, waypoint.getLongitude());
 
-                ArrayList<Attributes> positiveList = new ArrayList<>();
-                ArrayList<Attributes> negativeList = new ArrayList<>();
+                        assertEquals(CacheTypes.Traditional, cache.Type);
+                        assertEquals(CacheSizes.other, cache.Size);
+                        assertEquals("Germany", cache.getCountry());
+                        assertEquals(new Date(1200211200000L), cache.getDateHidden());
+                        assertEquals(1.5f, cache.getDifficulty());
+                        assertEquals("bücken!", cache.getHint());
+                        assertEquals(0, cache.getFaviritPoints());
+                        assertEquals(false, cache.isFound());
+                        assertEquals("768551", cache.getGcId());
+                        assertTrue(cache.getLongDescription().startsWith("Vom empfohlenen Parkplatz beträgt die Wegstrecke etwa 500 m. Der Cac"));
+                        assertEquals("Weideblick", cache.getName());
+                        assertEquals("bros", cache.getOwner());
+                        assertEquals("bros", cache.getPlacedBy());
+                        assertEquals("Ein weiterer Cache im Tegeler Fließtal", cache.getShortDescription());
+                        assertEquals(2f, cache.getTerrain());
+                        assertEquals("http://coord.info/GC18JGX", cache.getUrl());
+                        assertEquals(2, cache.getApiState());
+                        assertEquals(52.62965, cache.getLatitude());
+                        assertEquals(13.372317, cache.getLongitude());
 
-                {
-                    positiveList.add(Attributes.Dogs);
-                    positiveList.add(Attributes.Recommended_for_kids);
-                    positiveList.add(Attributes.Takes_less_than_an_hour);
-                    positiveList.add(Attributes.Scenic_view);
-                    positiveList.add(Attributes.Public_transportation);
-                    positiveList.add(Attributes.Bicycles);
+                        // Attribute Tests
+
+                        ArrayList<Attributes> positiveList = new ArrayList<>();
+                        ArrayList<Attributes> negativeList = new ArrayList<>();
+
+                        {
+                            positiveList.add(Attributes.Dogs);
+                            positiveList.add(Attributes.Recommended_for_kids);
+                            positiveList.add(Attributes.Takes_less_than_an_hour);
+                            positiveList.add(Attributes.Scenic_view);
+                            positiveList.add(Attributes.Public_transportation);
+                            positiveList.add(Attributes.Bicycles);
+                        }
+
+                        TestUtils.assetCacheAttributes(cache, positiveList, negativeList);
+
+
+                        //check Logs
+                        assertEquals(230, logList.size());
+                        LogEntry logEntry = logList.first();
+
+                        assertEquals(Cache.GenerateCacheId(cache.getGcCode()), logEntry.CacheId);
+                        logEntry = logList.last();
+
+                        assertEquals(Cache.GenerateCacheId("GC3FHRP"), logEntry.CacheId);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    WAIT.set(false);
                 }
-
-                TestUtils.assetCacheAttributes(cache, positiveList, negativeList);
-
-
-                //check Logs
-                assertEquals(230, logList.size());
-                LogEntry logEntry = logList.first();
-
-                assertEquals(Cache.GenerateCacheId(cache.getGcCode()), logEntry.CacheId);
-                logEntry = logList.last();
-
-                assertEquals(Cache.GenerateCacheId("GC3FHRP"), logEntry.CacheId);
-                WAIT.set(false);
-            }
-        }, cacheList, logList, imageList, gpxFilenameId);
+            }, cacheList, logList, imageList, gpxFilenameId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            WAIT.set(false);
+        }
 
         while (WAIT.get()) {
             try {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -94,6 +94,25 @@ public class Waypoint extends Coordinate implements Serializable {
         setTitle(title);
         IsStart = false;
         detail = new WaypointDetail();
+    }
+
+    /**
+     * Copy constructor
+     *
+     * @param latitude
+     * @param longitude
+     * @param other
+     */
+    public Waypoint(double latitude, double longitude, Waypoint other) {
+        super(latitude, longitude);
+        this.CacheId = other.CacheId;
+        this.GcCode = other.GcCode;
+        this.Title = other.Title;
+        this.Type = other.Type;
+        this.IsUserWaypoint = other.IsUserWaypoint;
+        this.IsSyncExcluded = other.IsSyncExcluded;
+        this.IsStart = other.IsStart;
+        this.detail = other.detail;
     }
 
 
