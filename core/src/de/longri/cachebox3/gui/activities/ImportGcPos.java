@@ -43,6 +43,8 @@ import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
+
 
 /**
  * Created by Longri on 12.04.2017.
@@ -281,6 +283,7 @@ public class ImportGcPos extends ActivityBase {
     }
 
     private void ImportNow() {
+        final Date ImportStart = new Date();
         isCanceld = false;
         Config.SearchWithoutFounds.setValue(checkBoxExcludeFounds.isChecked());
         Config.SearchOnlyAvailable.setValue(checkBoxOnlyAvailable.isChecked());
@@ -338,6 +341,21 @@ public class ImportGcPos extends ActivityBase {
                                 try {
                                     log.debug("Write Import to DB C:{} L:{} I:{}", cacheList.size(), logList.size(), imageList.size());
                                     GroundspeakAPI.WriteCachesLogsImages_toDB(cacheList, logList, imageList);
+
+                                    String Msg;
+                                    if (ImportStart != null) {
+                                        Date Importfin = new Date();
+                                        long ImportZeit = Importfin.getTime() - ImportStart.getTime();
+                                        Msg = "Import " + String.valueOf(cacheList.size()) + "C " + String.valueOf(logList.size()) + "L in " + String.valueOf(ImportZeit);
+                                    } else {
+                                        Msg = "Import canceld";
+                                    }
+
+                                    log.debug(Msg);
+                                    CB.viewmanager.toast(Msg);
+
+                                    //close Dialog
+                                    finish();
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -347,46 +365,6 @@ public class ImportGcPos extends ActivityBase {
                 }
             }
         }
-
-
-        //TODO replace with async worker
-//        thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                boolean threadCanceld = false;
-//
-//
-//
-//                if (!threadCanceld) {
-//                    CacheListChangedEventList.Call();
-//                    if (dis != null) {
-//                        SearchOverPosition.this.removeChildsDirekt(dis);
-//                        dis.dispose();
-//                        dis = null;
-//                    }
-//                    bOK.enable();
-//                    finish();
-//                } else {
-//
-//                    // Notify Map
-//                    if (MapView.that != null)
-//                        MapView.that.setNewSettings(MapView.INITIAL_WP_LIST);
-//                    if (dis != null) {
-//                        SearchOverPosition.this.removeChildsDirekt(dis);
-//                        dis.dispose();
-//                        dis = null;
-//                    }
-//                    bOK.enable();
-//                }
-//                importRuns = false;
-//            }
-//
-//        });
-//
-//                thread.setPriority(Thread.MAX_PRIORITY);
-//                thread.start();
-//
-//            }}}
     }
 
     @Override
