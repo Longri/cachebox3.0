@@ -130,7 +130,7 @@ class SearchGcOwnerTest {
                 assertEquals(false, cache.isArchived());
                 assertEquals(true, cache.isAvailable());
                 assertEquals("GC18JGX", cache.getGcCode());
-                assertEquals(1, cache.waypoints.size());
+                assertEquals(2, cache.waypoints.size());
 
                 Waypoint waypoint = cache.waypoints.first();
                 assertEquals("PA18JGX", waypoint.getGcCode());
@@ -139,6 +139,14 @@ class SearchGcOwnerTest {
                 assertEquals(CacheTypes.ParkingArea, waypoint.Type);
                 assertEquals(52.633667, waypoint.getLatitude());
                 assertEquals(13.375917, waypoint.getLongitude());
+
+                Waypoint userWaypoint = cache.waypoints.last();
+                assertEquals("CO18JGX", userWaypoint.getGcCode());
+                assertEquals("", userWaypoint.getDescription());
+                assertEquals("Corrected Coordinates (API)", userWaypoint.getTitle());
+                assertEquals(CacheTypes.Final, userWaypoint.Type);
+                assertEquals(52.616666666666667, userWaypoint.getLatitude());
+                assertEquals(13.366666666666667, userWaypoint.getLongitude());
 
                 assertEquals(CacheTypes.Traditional, cache.Type);
                 assertEquals(CacheSizes.other, cache.Size);
@@ -160,7 +168,7 @@ class SearchGcOwnerTest {
                 assertEquals(52.62965, cache.getLatitude());
                 assertEquals(13.372317, cache.getLongitude());
 
-                assertEquals(1, cache.waypoints.size());
+                assertEquals(2, cache.waypoints.size());
 
                 // Attribute Tests
 

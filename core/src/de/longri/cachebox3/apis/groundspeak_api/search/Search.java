@@ -71,7 +71,7 @@ public abstract class Search extends PostRequest {
         return "SearchForGeocaches?format=json";
     }
 
-    private double actLat, actLon;
+    private double actLat, actLon, actWpLat, actWpLon;
     private Cache actCache;
     private Waypoint actWayPoint;
     private LogEntry actLog;
@@ -115,6 +115,7 @@ public abstract class Search extends PostRequest {
     private final String VISIT_DATE = "VisitDate";
     private final String LOG_TYPE_ID = "WptLogTypeId";
     private final String ADDITIONAL_WAYPOINTS = "AdditionalWaypoints";
+    private final String USER_WAYPOINTS = "UserWaypoints";
     private final String COMMENT = "Comment";
     private final String WAYPOINT_TYPE_ID = "WptTypeID";
 
@@ -132,6 +133,7 @@ public abstract class Search extends PostRequest {
     private final int CACHE_LIMITS_ARRAY = 4;
     private final int IMAGE_ARRAY = 5;
     private final int WAY_POINT_ARRAY = 6;
+    private boolean isUserWaypoint = false;
 
     @Override
     protected void handleHttpResponse(Net.HttpResponse httpResponse, final GenericCallBack<Integer> readyCallBack) {
@@ -156,6 +158,9 @@ public abstract class Search extends PostRequest {
                     SWITCH = IMAGE_ARRAY;
                 } else if (ADDITIONAL_WAYPOINTS.equals(name)) {
                     SWITCH = WAY_POINT_ARRAY;
+                } else if (USER_WAYPOINTS.equals(name)) {
+                    SWITCH = WAY_POINT_ARRAY;
+                    isUserWaypoint = true;
                 }
             }
 
@@ -163,7 +168,7 @@ public abstract class Search extends PostRequest {
             public void endArray(String name) {
                 // System.out.println("End array " + name);
                 arrayStack.pop();
-
+                isUserWaypoint = false;
                 if (arrayStack.size > 0) {
 
                     String actArray = arrayStack.peek();
@@ -180,6 +185,8 @@ public abstract class Search extends PostRequest {
                     } else if (IMAGES.equals(actArray)) {
                         SWITCH = IMAGE_ARRAY;
                     } else if (ADDITIONAL_WAYPOINTS.equals(name)) {
+                        SWITCH = WAY_POINT_ARRAY;
+                    } else if (USER_WAYPOINTS.equals(name)) {
                         SWITCH = WAY_POINT_ARRAY;
                     }
                 } else {
@@ -263,8 +270,16 @@ public abstract class Search extends PostRequest {
                         if (NEW_WAY_POINT.equals(name)) {
                             // System.out.println("add Waypoiint ");
                             actWayPoint.CacheId = actCache.Id;
+                            if (isUserWaypoint) {
+                                actWayPoint.IsUserWaypoint = true;
+                                actWayPoint.setTitle("Corrected Coordinates (API)");
+                                actWayPoint.setDescription("");
+                                actWayPoint.Type = CacheTypes.Final;
+                                actWayPoint.setGcCode("CO" + actCache.getGcCode().substring(2, actCache.getGcCode().length()));
+                            }
+
                             //add final Waypointg instance
-                            actCache.waypoints.add(new Waypoint(actLat, actLon, actWayPoint));
+                            actCache.waypoints.add(new Waypoint(actWpLat, actWpLon, actWayPoint));
                             actWayPoint = null;
                         }
                         break;
@@ -347,9 +362,9 @@ public abstract class Search extends PostRequest {
                         break;
                     case WAY_POINT_ARRAY:
                         if (LAT.equals(name)) {
-                            actLat = value;
+                            actWpLat = value;
                         } else if (LON.equals(name)) {
-                            actLon = value;
+                            actWpLon = value;
                         }
                         break;
                 }
