@@ -54,15 +54,13 @@ public class ImportGcPos extends ActivityBase {
     private static final Logger log = LoggerFactory.getLogger(ImportGcPos.class);
 
     private final VisTextButton bOK, bCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap;
-    private final VisLabel lblTitle, lblRadius, lblRadiusEinheit, lblMarkerPos;
+    private final VisLabel lblTitle, lblRadius, lblRadiusEinheit;
     private final Image gsLogo;
     private final CoordinateButton coordBtn;
     private final VisCheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
     private final VisTextArea textAreaRadius;
     private Coordinate actSearchPos;
-    private volatile Thread thread;
     private boolean importRuns = false;
-    private boolean isCanceld = false;
     private boolean needLayout = true;
 
     /**
@@ -85,7 +83,6 @@ public class ImportGcPos extends ActivityBase {
         checkBoxOnlyAvailable = new VisCheckBox(Translation.Get("SearchOnlyAvailable"));
         checkBoxExcludeHides = new VisCheckBox(Translation.Get("SearchWithoutOwns"));
         checkBoxExcludeFounds = new VisCheckBox(Translation.Get("SearchWithoutFounds"));
-        lblMarkerPos = new VisLabel(Translation.Get("CurentMarkerPos"));
         coordBtn = new CoordinateButton(EventHandler.getMyPosition());
         tglBtnGPS = new VisTextButton(Translation.Get("FromGps"), "toggle");
         tglBtnMap = new VisTextButton(Translation.Get("FromMap"), "toggle");
@@ -162,7 +159,7 @@ public class ImportGcPos extends ActivityBase {
         bCancel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (importRuns) {
-                    isCanceld = true;
+
                 } else {
                     finish();
                 }
@@ -284,7 +281,6 @@ public class ImportGcPos extends ActivityBase {
 
     private void ImportNow() {
         final Date ImportStart = new Date();
-        isCanceld = false;
         Config.SearchWithoutFounds.setValue(checkBoxExcludeFounds.isChecked());
         Config.SearchOnlyAvailable.setValue(checkBoxOnlyAvailable.isChecked());
         Config.SearchWithoutOwns.setValue(checkBoxExcludeHides.isChecked());

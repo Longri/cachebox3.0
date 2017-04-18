@@ -18,15 +18,19 @@ package de.longri.cachebox3.apis.groundspeak_api.search;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonParser;
 import com.badlogic.gdx.utils.JsonReader;
 import de.longri.cachebox3.apis.groundspeak_api.PostRequest;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.utils.converter.Base64;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 
 /**
@@ -135,12 +139,15 @@ public abstract class Search extends PostRequest {
     private final int WAY_POINT_ARRAY = 6;
     private boolean isUserWaypoint = false;
 
+
     @Override
     protected void handleHttpResponse(Net.HttpResponse httpResponse, final GenericCallBack<Integer> readyCallBack) {
-        (new JsonReader() {
+        final InputStream stream = httpResponse.getResultAsStream();
+
+        JsonParser parser = new JsonReader() {
 
             @Override
-            protected void startArray(String name) {
+            public void startArray(String name) {
                 super.startArray(name);
                 // System.out.println("Start array " + name);
                 arrayStack.add(name);
@@ -196,7 +203,7 @@ public abstract class Search extends PostRequest {
 
             }
 
-            protected void startObject(String name) {
+            public void startObject(String name) {
                 super.startObject(name);
                 // System.out.println("Start Object " + name);
 
@@ -232,7 +239,7 @@ public abstract class Search extends PostRequest {
                 objectStack.add(name);
             }
 
-            protected void pop() {
+            public void pop() {
                 super.pop();
                 String name = objectStack.pop();
                 // System.out.println("pop " + name);
@@ -247,6 +254,10 @@ public abstract class Search extends PostRequest {
                             //add final Cache instance
                             cacheList.add(new Cache(actLat, actLon, actCache));
                             actCache = null;
+
+                            log.debug("Stream parse new Cache StreamAvailable:{}/{}");
+
+
                         }
                         break;
                     case ATTRIBUTE_ARRAY:
@@ -286,7 +297,7 @@ public abstract class Search extends PostRequest {
                 }
             }
 
-            protected void string(String name, String value) {
+            public void string(String name, String value) {
                 super.string(name, value);
 
                 switch (SWITCH) {
@@ -341,7 +352,7 @@ public abstract class Search extends PostRequest {
 
             }
 
-            protected void number(String name, double value, String stringValue) {
+            public void number(String name, double value, String stringValue) {
                 super.number(name, value, stringValue);
 
                 switch (SWITCH) {
@@ -370,7 +381,7 @@ public abstract class Search extends PostRequest {
                 }
             }
 
-            protected void number(String name, long value, String stringValue) {
+            public void number(String name, long value, String stringValue) {
                 super.number(name, value, stringValue);
 
                 switch (SWITCH) {
@@ -409,7 +420,7 @@ public abstract class Search extends PostRequest {
 
             }
 
-            protected void bool(String name, boolean value) {
+            public void bool(String name, boolean value) {
                 super.bool(name, value);
 
                 switch (SWITCH) {
@@ -431,8 +442,8 @@ public abstract class Search extends PostRequest {
 
             }
 
-        }).parse(httpResponse.getResultAsStream());
-
+        };
+        parser.parse(stream);
 
         Thread thread = new Thread(new Runnable() {
             @Override

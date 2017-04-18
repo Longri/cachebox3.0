@@ -35,7 +35,7 @@ import com.badlogic.gdx.utils.JsonValue.ValueType;
  *
  * @author Nathan Sweet
  */
-public class JsonReader implements BaseJsonReader {
+public class JsonReader implements BaseJsonReader,JsonParser {
     public JsonValue parse(String json) {
         char[] data = json.toCharArray();
         return parse(data, 0, data.length);
@@ -571,9 +571,6 @@ public class JsonReader implements BaseJsonReader {
         return root;
     }
 
-    public void endArray(String name) {
-
-    }
 
     // line 548 "JsonReader.java"
     private static byte[] init__json_actions_0() {
@@ -691,39 +688,43 @@ public class JsonReader implements BaseJsonReader {
             root = current;
     }
 
-    protected void startObject(String name) {
+    public void startObject(String name) {
         JsonValue value = new JsonValue(ValueType.object);
         if (current != null) addChild(name, value);
         elements.add(value);
         current = value;
     }
 
-    protected void startArray(String name) {
+    public void startArray(String name) {
         JsonValue value = new JsonValue(ValueType.array);
         if (current != null) addChild(name, value);
         elements.add(value);
         current = value;
     }
 
-    protected void pop() {
+    public void endArray(String name) {
+
+    }
+
+    public void pop() {
         root = elements.pop();
         if (current.size > 0) lastChild.pop();
         current = elements.size > 0 ? elements.peek() : null;
     }
 
-    protected void string(String name, String value) {
+    public void string(String name, String value) {
         addChild(name, new JsonValue(value));
     }
 
-    protected void number(String name, double value, String stringValue) {
+    public void number(String name, double value, String stringValue) {
         addChild(name, new JsonValue(value, stringValue));
     }
 
-    protected void number(String name, long value, String stringValue) {
+    public void number(String name, long value, String stringValue) {
         addChild(name, new JsonValue(value, stringValue));
     }
 
-    protected void bool(String name, boolean value) {
+    public void bool(String name, boolean value) {
         addChild(name, new JsonValue(value));
     }
 

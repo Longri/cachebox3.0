@@ -43,14 +43,14 @@ public class GetYourUserProfile extends PostRequest {
 
         if (status == 0) {
             (new JsonReader() {
-                protected void number(String name, long value, String stringValue) {
+                public void number(String name, long value, String stringValue) {
                     super.number(name, value, stringValue);
                     if (name.equals("MemberTypeId")) {
                         membershipType = (int) value;
                     }
                 }
 
-                protected void string(String name, String value) {
+                public void string(String name, String value) {
                     super.string(name, value);
                     if (name.equals("UserName")) {
                         memberName = value;
@@ -111,7 +111,7 @@ public class GetYourUserProfile extends PostRequest {
         final AtomicInteger st = new AtomicInteger(-1);
         try {
             (new JsonReader() {
-                protected void number(String name, long value, String stringValue) {
+                public void number(String name, long value, String stringValue) {
                     super.number(name, value, stringValue);
                     if (name.equals("StatusCode")) {
                         st.set((int) value);
