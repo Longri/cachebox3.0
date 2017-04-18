@@ -34,6 +34,8 @@ public abstract class PostRequest {
     final static String STAGING_GS_LIVE_URL = "https://staging.api.groundspeak.com/Live/V6Beta/geocaching.svc/";
 
     protected final static int NO_ERROR = 0;
+    protected final static int ERROR = -1;
+    protected final static int CANCELED = -2;
 
     protected final String gcApiKey;
 
@@ -73,11 +75,13 @@ public abstract class PostRequest {
             @Override
             public void failed(Throwable t) {
                 log.error("Request failed", t);
+                readyCallBack.callBack(ERROR);
             }
 
             @Override
             public void cancelled() {
                 log.debug("Request cancelled");
+                readyCallBack.callBack(CANCELED);
             }
         });
     }

@@ -375,10 +375,7 @@ public abstract class Search extends PostRequest {
             }
 
         }).parse(httpResponse.getResultAsStream());
-
         readyCallBack.callBack(NO_ERROR);
-
-
     }
 
     /**

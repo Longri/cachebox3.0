@@ -72,9 +72,9 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 4,
+      "CurrentDetailsCount": 73,
       "DateCreated": "\/Date(1200211200000-0800)\/",
-      "DateLastUpdate": "\/Date(1492433419747-0700)\/",
+      "DateLastUpdate": "\/Date(1492467866460-0700)\/",
       "DateLastVisited": "\/Date(1492455600000-0700)\/",
       "Difficulty": 1.5,
       "EncodedHints": "bücken!",
@@ -126,10 +126,50 @@
         {
           "CacheCode": "GC18JGX",
           "CannotDelete": false,
+          "Code": "GLQPH8X8",
+          "Finder": {
+            "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/d53f497d-a993-4020-bb62-0cc39a744975.jpg",
+            "FindCount": 970,
+            "GalleryImageCount": null,
+            "HideCount": 1,
+            "HomeCoordinates": null,
+            "Id": 6456600,
+            "IsAdmin": false,
+            "MemberType": {
+              "MemberTypeId": 3,
+              "MemberTypeName": "Premium"
+            },
+            "PublicGuid": "cf066d71-fa97-47e8-b075-7516df87ad5e",
+            "UserName": "domi_digitus"
+          },
+          "Guid": "38b75fbd-684d-44d7-a612-8ae77c8f5992",
+          "ID": 678891826,
+          "Images": [],
+          "IsApproved": false,
+          "IsArchived": false,
+          "LogIsEncoded": false,
+          "LogText": "Kurzaufenthalt und Schildow und noch ein Loch in der 366er-Tages-Matrix sowie viele Leute auf einem Haufen. Da kommt die Gelegenheit für einen kleinen Nachtspaziergang gerade recht (auch wenn der dann länger war, als ursprünglich geplant).\u000d\u000a\u000d\u000aWeide gab es zu später Stunde wenig zu sehen, obwohl es doch bemerkenswert hell war, dafür aber viel Stille, nur unterbrochen von der Nachtigall, die ihr Liedchen zwitscherte.\u000d\u000a\u000d\u000aDie Dose habe ich dann nach einigem Suchen (war ja Dunkel) dann doch gefunden - danke fürs Verstecken!\u000d\u000a\u000d\u000aIn: Geolympix-Lenyard\u000d\u000a\u000d\u000a#970 \/ 16.04.2017, 23:00",
+          "LogType": {
+            "AdminActionable": false,
+            "ImageName": "icon_smile",
+            "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_smile.gif",
+            "OwnerActionable": false,
+            "WptLogTypeId": 2,
+            "WptLogTypeName": "Found it"
+          },
+          "UTCCreateDate": "\/Date(1492493066422)\/",
+          "UpdatedLatitude": null,
+          "UpdatedLongitude": null,
+          "Url": "http:\/\/coord.info\/GLQPH8X8",
+          "VisitDate": "\/Date(1492369200000-0700)\/"
+        },
+        {
+          "CacheCode": "GC18JGX",
+          "CannotDelete": false,
           "Code": "GLQNXXQC",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/934d60de-c517-4e6b-a5df-4bcdd5185420.jpg",
-            "FindCount": 9396,
+            "FindCount": 9407,
             "GalleryImageCount": null,
             "HideCount": 6,
             "HomeCoordinates": null,
@@ -289,7 +329,7 @@
           "Code": "GLQE6CE2",
           "Finder": {
             "AvatarUrl": "http:\/\/www.geocaching.com\/images\/default_avatar.jpg",
-            "FindCount": 113,
+            "FindCount": 114,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -329,7 +369,7 @@
           "Code": "GLQE6CET",
           "Finder": {
             "AvatarUrl": "http:\/\/www.geocaching.com\/images\/default_avatar.jpg",
-            "FindCount": 157,
+            "FindCount": 158,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -409,7 +449,7 @@
           "Code": "GLQ1MQMX",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/93457487-fd80-4628-9d2d-730bdd00aef8.jpg",
-            "FindCount": 1658,
+            "FindCount": 1661,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -441,46 +481,6 @@
           "UpdatedLatitude": null,
           "UpdatedLongitude": null,
           "Url": "http:\/\/coord.info\/GLQ1MQMX",
-          "VisitDate": "\/Date(1483819200000-0800)\/"
-        },
-        {
-          "CacheCode": "GC18JGX",
-          "CannotDelete": false,
-          "Code": "GLQ1JQBJ",
-          "Finder": {
-            "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/cf2edb79-37b2-43c6-9d6f-c875e427fd23.jpg",
-            "FindCount": 2877,
-            "GalleryImageCount": null,
-            "HideCount": 3,
-            "HomeCoordinates": null,
-            "Id": 8916926,
-            "IsAdmin": false,
-            "MemberType": {
-              "MemberTypeId": 3,
-              "MemberTypeName": "Premium"
-            },
-            "PublicGuid": "7201b0c2-6e4c-4012-9e80-a26caa5efa37",
-            "UserName": "DonBerty"
-          },
-          "Guid": "2a95473b-7a22-4490-988c-a9876d3e087b",
-          "ID": 659541574,
-          "Images": [],
-          "IsApproved": false,
-          "IsArchived": false,
-          "LogIsEncoded": false,
-          "LogText": "heut wurde die Gegend um Birkenwerder ein wenig ein wenig erkundet und erlaufen\u000d\u000abei dieser Gelegenheit wurde die eine und die andere Dose eingesammelt\u000d\u000adas Wetter sorgte für ein nahezu muggelfreien Ablauf\u000d\u000adas Logbuch war fix lokalisiert und signiert, dann wieder versteckt wie vorgefunden wund weiter ging es",
-          "LogType": {
-            "AdminActionable": false,
-            "ImageName": "icon_smile",
-            "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_smile.gif",
-            "OwnerActionable": false,
-            "WptLogTypeId": 2,
-            "WptLogTypeName": "Found it"
-          },
-          "UTCCreateDate": "\/Date(1483836287473)\/",
-          "UpdatedLatitude": null,
-          "UpdatedLongitude": null,
-          "Url": "http:\/\/coord.info\/GLQ1JQBJ",
           "VisitDate": "\/Date(1483819200000-0800)\/"
         }
       ],
@@ -521,7 +521,7 @@
       "Name": "Weideblick",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -603,7 +603,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 5,
+      "CurrentDetailsCount": 74,
       "DateCreated": "\/Date(1392451200000-0800)\/",
       "DateLastUpdate": "\/Date(1490789406083-0700)\/",
       "DateLastVisited": "\/Date(1484164800000-0800)\/",
@@ -620,7 +620,7 @@
           "Code": "GLQ3TT10",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-            "FindCount": 3734,
+            "FindCount": 3735,
             "GalleryImageCount": null,
             "HideCount": 42,
             "HomeCoordinates": null,
@@ -660,7 +660,7 @@
           "Code": "GLQ250VP",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/ea13c61e-954d-42a5-85b1-2827a01b0936.png",
-            "FindCount": 1343,
+            "FindCount": 1346,
             "GalleryImageCount": null,
             "HideCount": 5,
             "HomeCoordinates": null,
@@ -700,7 +700,7 @@
           "Code": "GLQ24WX3",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-            "FindCount": 3734,
+            "FindCount": 3735,
             "GalleryImageCount": null,
             "HideCount": 42,
             "HomeCoordinates": null,
@@ -860,7 +860,7 @@
           "Code": "GLNW4C2Q",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/445589fb-23a3-48a0-89dd-2df233054dda.jpg",
-            "FindCount": 4858,
+            "FindCount": 4864,
             "GalleryImageCount": null,
             "HideCount": 10,
             "HomeCoordinates": null,
@@ -980,7 +980,7 @@
           "Code": "GLNBA15R",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/8fe84b4d-f893-4dbb-ae38-f972483049b8.png",
-            "FindCount": 1941,
+            "FindCount": 1959,
             "GalleryImageCount": null,
             "HideCount": 13,
             "HomeCoordinates": null,
@@ -1033,7 +1033,7 @@
       "Name": "Der Leuchtturm von Schildow",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -1111,7 +1111,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 6,
+      "CurrentDetailsCount": 75,
       "DateCreated": "\/Date(1298966400000-0800)\/",
       "DateLastUpdate": "\/Date(1492358578383-0700)\/",
       "DateLastVisited": "\/Date(1492369200000-0700)\/",
@@ -1128,7 +1128,7 @@
           "Code": "GLQNV3JD",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bf147bee-ef4a-4dee-b8ce-a69974c9ae50.jpg",
-            "FindCount": 7115,
+            "FindCount": 7122,
             "GalleryImageCount": null,
             "HideCount": 15,
             "HomeCoordinates": null,
@@ -1168,7 +1168,7 @@
           "Code": "GLQ3VK1H",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/ea13c61e-954d-42a5-85b1-2827a01b0936.png",
-            "FindCount": 1343,
+            "FindCount": 1346,
             "GalleryImageCount": null,
             "HideCount": 5,
             "HomeCoordinates": null,
@@ -1208,7 +1208,7 @@
           "Code": "GLPTH6VH",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/cf2edb79-37b2-43c6-9d6f-c875e427fd23.jpg",
-            "FindCount": 2877,
+            "FindCount": 2879,
             "GalleryImageCount": null,
             "HideCount": 3,
             "HomeCoordinates": null,
@@ -1248,7 +1248,7 @@
           "Code": "GLPTWR1H",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/93457487-fd80-4628-9d2d-730bdd00aef8.jpg",
-            "FindCount": 1658,
+            "FindCount": 1661,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -1288,7 +1288,7 @@
           "Code": "GLPT3VA8",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-            "FindCount": 3734,
+            "FindCount": 3735,
             "GalleryImageCount": null,
             "HideCount": 42,
             "HomeCoordinates": null,
@@ -1368,7 +1368,7 @@
           "Code": "GLPDV7W5",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-            "FindCount": 3734,
+            "FindCount": 3735,
             "GalleryImageCount": null,
             "HideCount": 42,
             "HomeCoordinates": null,
@@ -1408,7 +1408,7 @@
           "Code": "GLPAXCFA",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/33da0f43-cf57-4882-9d61-4db0770429e2.jpg",
-            "FindCount": 3209,
+            "FindCount": 3213,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -1541,7 +1541,7 @@
       "Name": "Giselas Bücherschrank Bonus",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -1634,7 +1634,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bf147bee-ef4a-4dee-b8ce-a69974c9ae50.jpg",
-                "FindCount": 7115,
+                "FindCount": 7122,
                 "GalleryImageCount": null,
                 "HideCount": 15,
                 "HomeCoordinates": null,
@@ -1669,7 +1669,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bf147bee-ef4a-4dee-b8ce-a69974c9ae50.jpg",
-                "FindCount": 7115,
+                "FindCount": 7122,
                 "GalleryImageCount": null,
                 "HideCount": 15,
                 "HomeCoordinates": null,
@@ -1704,7 +1704,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bf147bee-ef4a-4dee-b8ce-a69974c9ae50.jpg",
-                "FindCount": 7115,
+                "FindCount": 7122,
                 "GalleryImageCount": null,
                 "HideCount": 15,
                 "HomeCoordinates": null,
@@ -1739,7 +1739,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bf147bee-ef4a-4dee-b8ce-a69974c9ae50.jpg",
-                "FindCount": 7115,
+                "FindCount": 7122,
                 "GalleryImageCount": null,
                 "HideCount": 15,
                 "HomeCoordinates": null,
@@ -1809,7 +1809,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bf147bee-ef4a-4dee-b8ce-a69974c9ae50.jpg",
-                "FindCount": 7115,
+                "FindCount": 7122,
                 "GalleryImageCount": null,
                 "HideCount": 15,
                 "HomeCoordinates": null,
@@ -1844,7 +1844,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bf147bee-ef4a-4dee-b8ce-a69974c9ae50.jpg",
-                "FindCount": 7115,
+                "FindCount": 7122,
                 "GalleryImageCount": null,
                 "HideCount": 15,
                 "HomeCoordinates": null,
@@ -2111,7 +2111,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 7,
+      "CurrentDetailsCount": 76,
       "DateCreated": "\/Date(1068969600000-0800)\/",
       "DateLastUpdate": "\/Date(1490790855223-0700)\/",
       "DateLastVisited": "\/Date(1485093761683-0800)\/",
@@ -2128,7 +2128,7 @@
           "Code": "GLQ3VJB9",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/ea13c61e-954d-42a5-85b1-2827a01b0936.png",
-            "FindCount": 1343,
+            "FindCount": 1346,
             "GalleryImageCount": null,
             "HideCount": 5,
             "HomeCoordinates": null,
@@ -2168,7 +2168,7 @@
           "Code": "GLPTH64C",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/cf2edb79-37b2-43c6-9d6f-c875e427fd23.jpg",
-            "FindCount": 2877,
+            "FindCount": 2879,
             "GalleryImageCount": null,
             "HideCount": 3,
             "HomeCoordinates": null,
@@ -2208,7 +2208,7 @@
           "Code": "GLPTWVMN",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/93457487-fd80-4628-9d2d-730bdd00aef8.jpg",
-            "FindCount": 1658,
+            "FindCount": 1661,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -2267,7 +2267,7 @@
           "IsApproved": false,
           "IsArchived": false,
           "LogIsEncoded": false,
-          "LogText": "Bevor es mich heute in die Gegend verschlug, hatte ich mir natürlich noch das eine oder andere Döschen herausgesucht für eine ausgedehnte nachmittägliche Wanderung. Diese hier sollte die erste sein. Im Prinzip sind die Stationen auch alle gut zu finden, nur an S5 verließ mich das Glück. Die Filmdose war einfach nicht aufzufinden, obwohl eindeutige Spuren ziemlich offensichtlich machten, wo man hier suchen sollte. Vielleicht habe auch etwas ganz grundsätzlich übersehen? (Das Vorlog hatte ich im Feld nicht dabei; kann sein, dass das schon des Rätsels Lösung ist.) Aufgeben wollte ich aber trotzdem nicht so schnell, also hielt ich mich eng an die Cachebeschreibung, schlenderte geradewegs in die dort beschriebene Richtung weiter und ließ den Blick schweifen. Plausible Versteckstellen gibt's hier ja einige und bei einem Regular sollte es doch wohl möglich sein ??! Ich habe hier einen beträchtlichen Teil des Nachmittags auf sumpfigen Wiesen verbracht und wollte schließlich doch aufgeben. Na gut ? da hinten könnte ich ja auch noch mal schauen; darauf kommt's jetzt auch nicht mehr an. Und was soll ich sagen ? am Ende wurde es doch noch ein Smiley!\u000d\u000a\u000d\u000aVielen Dank für's Verstecken.",
+          "LogText": "Bevor es mich heute in die Gegend verschlug, hatte ich mir natürlich noch das eine oder andere Döschen herausgesucht für eine ausgedehnte nachmittägliche Wanderung. Diese hier sollte die erste sein. Im Prinzip sind die Stationen auch alle gut zu finden, nur an S5 verließ mich das Glück. Die Filmdose war einfach nicht aufzufinden, obwohl eindeutige Spuren ziemlich offensichtlich machten, wo man hier suchen sollte. Vielleicht habe auch etwas ganz grundsätzlich übersehen? (Das Vorlog hatte ich im Feld nicht dabei; kann sein, dass das schon des Rätsels Lösung ist.) Aufgeben wollte ich aber trotzdem nicht so schnell, also hielt ich mich eng an die Cachebeschreibung, schlenderte geradewegs in die dort beschriebene Richtung weiter und ließ den Blick schweifen. Plausible Versteckstellen gibt's hier ja einige und bei einem Regular sollte es doch wohl möglich sein …?! Ich habe hier einen beträchtlichen Teil des Nachmittags auf sumpfigen Wiesen verbracht und wollte schließlich doch aufgeben. Na gut – da hinten könnte ich ja auch noch mal schauen; darauf kommt's jetzt auch nicht mehr an. Und was soll ich sagen – am Ende wurde es doch noch ein Smiley!\u000d\u000a\u000d\u000aVielen Dank für's Verstecken.",
           "LogType": {
             "AdminActionable": false,
             "ImageName": "icon_smile",
@@ -2288,7 +2288,7 @@
           "Code": "GLP6GEMM",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-            "FindCount": 3734,
+            "FindCount": 3735,
             "GalleryImageCount": null,
             "HideCount": 42,
             "HomeCoordinates": null,
@@ -2448,7 +2448,7 @@
           "Code": "GLN87N1X",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/fbef9e0c-0728-4b16-8f51-2c314a676b10.jpg",
-            "FindCount": 1885,
+            "FindCount": 1899,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -2551,7 +2551,7 @@
       "Name": "Haferberg",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -2653,10 +2653,10 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 8,
+      "CurrentDetailsCount": 77,
       "DateCreated": "\/Date(1290844800000-0800)\/",
-      "DateLastUpdate": "\/Date(1492358478827-0700)\/",
-      "DateLastVisited": "\/Date(1492369200000-0700)\/",
+      "DateLastUpdate": "\/Date(1492447543040-0700)\/",
+      "DateLastVisited": "\/Date(1492455600000-0700)\/",
       "Difficulty": 1.5,
       "EncodedHints": "Am Zaun in Brusthoehe",
       "FavoritePoints": 63,
@@ -2667,10 +2667,50 @@
         {
           "CacheCode": "GC2JT2F",
           "CannotDelete": false,
+          "Code": "GLQPBWW6",
+          "Finder": {
+            "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4dcbc447-d93b-4588-9521-a927d1102619.jpg",
+            "FindCount": 5298,
+            "GalleryImageCount": null,
+            "HideCount": 144,
+            "HomeCoordinates": null,
+            "Id": 3066064,
+            "IsAdmin": false,
+            "MemberType": {
+              "MemberTypeId": 3,
+              "MemberTypeName": "Premium"
+            },
+            "PublicGuid": "bbbd5e46-f485-4c88-b86a-434330bd7855",
+            "UserName": "Bernd2010"
+          },
+          "Guid": "70aa78f9-2ef2-45c5-b10d-528f632fb1df",
+          "ID": 678731306,
+          "Images": [],
+          "IsApproved": false,
+          "IsArchived": false,
+          "LogIsEncoded": false,
+          "LogText": "Gemeinsam mit quietscheente ging es heute auf Tour.\u000d\u000aEs standen drei Events auf dem Schirm.\u000d\u000aDie Zeit dazwischen wurde genutzt um Dosen zu suchen.\u000d\u000aDas Wetter war zwar nicht ganz so perfekt, aber das muss es ja auch nicht immer sein!\u000d\u000aSo wurde auch diese Dose gefunden.\u000d\u000aEine coole Idee!\u000d\u000aDer Schlüssel war schnell gefunden und auch das Final war schnell geöffnet, doch leider haben wir vergessen die Bonus-Koords zu notieren.\u000d\u000aSo ein Mist!\u000d\u000a\u000d\u000aTFTC sagt Bernd2010.",
+          "LogType": {
+            "AdminActionable": false,
+            "ImageName": "icon_smile",
+            "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_smile.gif",
+            "OwnerActionable": false,
+            "WptLogTypeId": 2,
+            "WptLogTypeName": "Found it"
+          },
+          "UTCCreateDate": "\/Date(1492472742924)\/",
+          "UpdatedLatitude": null,
+          "UpdatedLongitude": null,
+          "Url": "http:\/\/coord.info\/GLQPBWW6",
+          "VisitDate": "\/Date(1492455600000-0700)\/"
+        },
+        {
+          "CacheCode": "GC2JT2F",
+          "CannotDelete": false,
           "Code": "GLQNV2J6",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bf147bee-ef4a-4dee-b8ce-a69974c9ae50.jpg",
-            "FindCount": 7115,
+            "FindCount": 7122,
             "GalleryImageCount": null,
             "HideCount": 15,
             "HomeCoordinates": null,
@@ -2710,7 +2750,7 @@
           "Code": "GLQ3VJTW",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/ea13c61e-954d-42a5-85b1-2827a01b0936.png",
-            "FindCount": 1343,
+            "FindCount": 1346,
             "GalleryImageCount": null,
             "HideCount": 5,
             "HomeCoordinates": null,
@@ -2790,7 +2830,7 @@
           "Code": "GLPTH3PB",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/cf2edb79-37b2-43c6-9d6f-c875e427fd23.jpg",
-            "FindCount": 2877,
+            "FindCount": 2879,
             "GalleryImageCount": null,
             "HideCount": 3,
             "HomeCoordinates": null,
@@ -2830,7 +2870,7 @@
           "Code": "GLPTWQHX",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/93457487-fd80-4628-9d2d-730bdd00aef8.jpg",
-            "FindCount": 1658,
+            "FindCount": 1661,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -2870,7 +2910,7 @@
           "Code": "GLPAX73B",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/33da0f43-cf57-4882-9d61-4db0770429e2.jpg",
-            "FindCount": 3209,
+            "FindCount": 3213,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -3019,7 +3059,7 @@
           "IsApproved": false,
           "IsArchived": false,
           "LogIsEncoded": false,
-          "LogText": "Dank der aktuellen Vorarbeit des Owners und einem kleinen Zuruf von der Terrasse, konnte die erste Station dann gefunden werden.\u000d\u000aDer Weg zur 2. Station war dann nicht mehr weit und ich staunte ob des Füllstandes nicht schlecht.\u000d\u000aSo viele gut erhaltene Exemplare - die Büx ist randvoll...\u000d\u000aWer also für die Ferienzeit noch einen Schmöker benötigt ist hier richtig.\u000d\u000aDa ich selbst kein Buch mit hatte, plaziere ich eben ein Exemplar meines heutigen Weges mit ins Listing... :)\u000d\u000a\u000d\u000a??? 4431 and counting (slowly) ? TFTC ? bros ? der-michel :) ???",
+          "LogText": "Dank der aktuellen Vorarbeit des Owners und einem kleinen Zuruf von der Terrasse, konnte die erste Station dann gefunden werden.\u000d\u000aDer Weg zur 2. Station war dann nicht mehr weit und ich staunte ob des Füllstandes nicht schlecht.\u000d\u000aSo viele gut erhaltene Exemplare - die Büx ist randvoll...\u000d\u000aWer also für die Ferienzeit noch einen Schmöker benötigt ist hier richtig.\u000d\u000aDa ich selbst kein Buch mit hatte, plaziere ich eben ein Exemplar meines heutigen Weges mit ins Listing... :)\u000d\u000a\u000d\u000a••• 4431 and counting (slowly) • TFTC • bros • der-michel :) •••",
           "LogType": {
             "AdminActionable": false,
             "ImageName": "icon_smile",
@@ -3033,46 +3073,6 @@
           "UpdatedLongitude": null,
           "Url": "http:\/\/coord.info\/GLNTVCJY",
           "VisitDate": "\/Date(1470250800000-0700)\/"
-        },
-        {
-          "CacheCode": "GC2JT2F",
-          "CannotDelete": false,
-          "Code": "GLNAXFWW",
-          "Finder": {
-            "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/9747c7b9-84e9-48ee-ae61-538c5b0ac3c9.png",
-            "FindCount": 3564,
-            "GalleryImageCount": null,
-            "HideCount": 5,
-            "HomeCoordinates": null,
-            "Id": 5909854,
-            "IsAdmin": false,
-            "MemberType": {
-              "MemberTypeId": 3,
-              "MemberTypeName": "Premium"
-            },
-            "PublicGuid": "70e848b5-5ed4-4cb7-885c-6823e1133b49",
-            "UserName": "ChrAnJu"
-          },
-          "Guid": "12c4336a-c955-43ee-a874-347aacf48dc5",
-          "ID": 610885688,
-          "Images": [],
-          "IsApproved": false,
-          "IsArchived": false,
-          "LogIsEncoded": false,
-          "LogText": "Da der \"Chr\" von den \" ChrAnJu's \" zusammen mit Herrn \" Amelie2401\" in der Gegend ein paar Dosen gesucht haben, konnte ich mir diese nicht entgehen lassen. Sehr schöne Idee. Den Owner noch kurz kennengelernt. Und weiter ging es...  Danke sagen die: \"ChrAnJu's\"\u000d\u000a(Chris-Berlin \/ Annemii \/ Junior)",
-          "LogType": {
-            "AdminActionable": false,
-            "ImageName": "icon_smile",
-            "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_smile.gif",
-            "OwnerActionable": false,
-            "WptLogTypeId": 2,
-            "WptLogTypeName": "Found it"
-          },
-          "UTCCreateDate": "\/Date(1466366390376)\/",
-          "UpdatedLatitude": null,
-          "UpdatedLongitude": null,
-          "Url": "http:\/\/coord.info\/GLNAXFWW",
-          "VisitDate": "\/Date(1466190000000-0700)\/"
         }
       ],
       "GeocacheNote": null,
@@ -3093,7 +3093,7 @@
       "Name": "Giselas Bücherschrank",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -3187,7 +3187,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 9,
+      "CurrentDetailsCount": 78,
       "DateCreated": "\/Date(1307430000000-0700)\/",
       "DateLastUpdate": "\/Date(1492434423070-0700)\/",
       "DateLastVisited": "\/Date(1492455600000-0700)\/",
@@ -3244,7 +3244,7 @@
           "Code": "GLQN0WFT",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/b630619f-a5d1-4661-a6ab-a25f6c37b51a.jpg",
-            "FindCount": 487,
+            "FindCount": 488,
             "GalleryImageCount": null,
             "HideCount": 3,
             "HomeCoordinates": null,
@@ -3364,7 +3364,7 @@
           "Code": "GLQKQVNB",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/24639085-7e44-41ba-914a-d38d7dac6dd9.jpg",
-            "FindCount": 632,
+            "FindCount": 633,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -3404,7 +3404,7 @@
           "Code": "GLQKK5DX",
           "Finder": {
             "AvatarUrl": "http:\/\/www.geocaching.com\/images\/default_avatar.jpg",
-            "FindCount": 250,
+            "FindCount": 254,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -3484,7 +3484,7 @@
           "Code": "GLQHQB24",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/0fa7013a-785d-4071-a240-cd79f6b6561d.jpg",
-            "FindCount": 846,
+            "FindCount": 852,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -3524,7 +3524,7 @@
           "Code": "GLQHGF6K",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/7439c2d7-d196-4e4a-9b37-14afe4b70721.jpg",
-            "FindCount": 61,
+            "FindCount": 62,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -3617,7 +3617,7 @@
       "Name": "Löwenzahn-Trail #7",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -3683,7 +3683,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 10,
+      "CurrentDetailsCount": 79,
       "DateCreated": "\/Date(1384156800000-0800)\/",
       "DateLastUpdate": "\/Date(1491162068963-0700)\/",
       "DateLastVisited": "\/Date(1491159600000-0700)\/",
@@ -3700,7 +3700,7 @@
           "Code": "GLQHQXFC",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/0fa7013a-785d-4071-a240-cd79f6b6561d.jpg",
-            "FindCount": 846,
+            "FindCount": 852,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -3740,7 +3740,7 @@
           "Code": "GLQG4V1Y",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-            "FindCount": 3734,
+            "FindCount": 3735,
             "GalleryImageCount": null,
             "HideCount": 42,
             "HomeCoordinates": null,
@@ -3780,7 +3780,7 @@
           "Code": "GLQFG6F8",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/7febbd52-3d6a-4b7f-a22f-cab3fc616c9c.jpg",
-            "FindCount": 1203,
+            "FindCount": 1208,
             "GalleryImageCount": null,
             "HideCount": 1,
             "HomeCoordinates": null,
@@ -3820,7 +3820,7 @@
           "Code": "GLQ1MWKF",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/ea13c61e-954d-42a5-85b1-2827a01b0936.png",
-            "FindCount": 1343,
+            "FindCount": 1346,
             "GalleryImageCount": null,
             "HideCount": 5,
             "HomeCoordinates": null,
@@ -4113,7 +4113,7 @@
       "Name": "Der Fernsehturm von Schildow",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -4298,7 +4298,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 11,
+      "CurrentDetailsCount": 80,
       "DateCreated": "\/Date(1373785200000-0700)\/",
       "DateLastUpdate": "\/Date(1491941489220-0700)\/",
       "DateLastVisited": "\/Date(1490554800000-0700)\/",
@@ -4355,7 +4355,7 @@
           "Code": "GLPXTJD0",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/f8a39994-36c6-4459-93e5-b9d938de04c2.jpg",
-            "FindCount": 4441,
+            "FindCount": 4442,
             "GalleryImageCount": null,
             "HideCount": 25,
             "HomeCoordinates": null,
@@ -4395,7 +4395,7 @@
           "Code": "GLPXACTF",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/5afbc2f6-f1b6-466d-8ba8-229b15af8639.jpeg",
-            "FindCount": 4893,
+            "FindCount": 4909,
             "GalleryImageCount": null,
             "HideCount": 7,
             "HomeCoordinates": null,
@@ -4435,7 +4435,7 @@
           "Code": "GLPJA5HM",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4b92f193-6290-4745-a136-9237261fcbc8.jpg",
-            "FindCount": 4548,
+            "FindCount": 4549,
             "GalleryImageCount": null,
             "HideCount": 1,
             "HomeCoordinates": null,
@@ -4555,7 +4555,7 @@
           "Code": "GLNJR3AM",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-            "FindCount": 3734,
+            "FindCount": 3735,
             "GalleryImageCount": null,
             "HideCount": 42,
             "HomeCoordinates": null,
@@ -4738,7 +4738,7 @@
       "Name": "Katharinensee",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -4832,7 +4832,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 12,
+      "CurrentDetailsCount": 81,
       "DateCreated": "\/Date(1394866800000-0700)\/",
       "DateLastUpdate": "\/Date(1492193362477-0700)\/",
       "DateLastVisited": "\/Date(1492196400000-0700)\/",
@@ -4849,7 +4849,7 @@
           "Code": "GLQN0YCT",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/b630619f-a5d1-4661-a6ab-a25f6c37b51a.jpg",
-            "FindCount": 487,
+            "FindCount": 488,
             "GalleryImageCount": null,
             "HideCount": 3,
             "HomeCoordinates": null,
@@ -4929,7 +4929,7 @@
           "Code": "GLQHQF0W",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/0fa7013a-785d-4071-a240-cd79f6b6561d.jpg",
-            "FindCount": 846,
+            "FindCount": 852,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -4969,7 +4969,7 @@
           "Code": "GLQF87PN",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/dac8a76a-b93a-424b-8146-118fa84d1e49.jpg",
-            "FindCount": 5763,
+            "FindCount": 5764,
             "GalleryImageCount": null,
             "HideCount": 23,
             "HomeCoordinates": null,
@@ -5009,7 +5009,7 @@
           "Code": "GLQF6ZME",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/445589fb-23a3-48a0-89dd-2df233054dda.jpg",
-            "FindCount": 4858,
+            "FindCount": 4864,
             "GalleryImageCount": null,
             "HideCount": 10,
             "HomeCoordinates": null,
@@ -5089,7 +5089,7 @@
           "Code": "GLQBFY1Q",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/19eb2dc1-90f5-44b4-88fc-bea4f059a105.jpeg",
-            "FindCount": 943,
+            "FindCount": 975,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -5129,7 +5129,7 @@
           "Code": "GLQBB1HK",
           "Finder": {
             "AvatarUrl": "http:\/\/www.geocaching.com\/images\/default_avatar.jpg",
-            "FindCount": 4528,
+            "FindCount": 4530,
             "GalleryImageCount": null,
             "HideCount": 3,
             "HomeCoordinates": null,
@@ -5262,7 +5262,7 @@
       "Name": "Löwenzahn-Trail-Bonus",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -5344,7 +5344,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 13,
+      "CurrentDetailsCount": 82,
       "DateCreated": "\/Date(1307430000000-0700)\/",
       "DateLastUpdate": "\/Date(1492429835507-0700)\/",
       "DateLastVisited": "\/Date(1492455600000-0700)\/",
@@ -5441,7 +5441,7 @@
           "Code": "GLQN0JK3",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/b630619f-a5d1-4661-a6ab-a25f6c37b51a.jpg",
-            "FindCount": 487,
+            "FindCount": 488,
             "GalleryImageCount": null,
             "HideCount": 3,
             "HomeCoordinates": null,
@@ -5561,7 +5561,7 @@
           "Code": "GLQKQVQH",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/24639085-7e44-41ba-914a-d38d7dac6dd9.jpg",
-            "FindCount": 632,
+            "FindCount": 633,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -5601,7 +5601,7 @@
           "Code": "GLQKK6BV",
           "Finder": {
             "AvatarUrl": "http:\/\/www.geocaching.com\/images\/default_avatar.jpg",
-            "FindCount": 250,
+            "FindCount": 254,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -5681,7 +5681,7 @@
           "Code": "GLQHQBP1",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/0fa7013a-785d-4071-a240-cd79f6b6561d.jpg",
-            "FindCount": 846,
+            "FindCount": 852,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -5721,7 +5721,7 @@
           "Code": "GLQHG4RQ",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/7439c2d7-d196-4e4a-9b37-14afe4b70721.jpg",
-            "FindCount": 61,
+            "FindCount": 62,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -5774,7 +5774,7 @@
       "Name": "Löwenzahn-Trail #8",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -5840,10 +5840,10 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 14,
+      "CurrentDetailsCount": 83,
       "DateCreated": "\/Date(1096700400000-0700)\/",
-      "DateLastUpdate": "\/Date(1491731283597-0700)\/",
-      "DateLastVisited": "\/Date(1491764400000-0700)\/",
+      "DateLastUpdate": "\/Date(1492447350527-0700)\/",
+      "DateLastVisited": "\/Date(1492455600000-0700)\/",
       "Difficulty": 1,
       "EncodedHints": "umgestürzter Baum",
       "FavoritePoints": 1,
@@ -5851,6 +5851,46 @@
       "FoundDateOfFoundByUser": null,
       "GUID": "2ead125b-083a-47af-8c6d-1d3c33f9a75d",
       "GeocacheLogs": [
+        {
+          "CacheCode": "GCKPH0",
+          "CannotDelete": false,
+          "Code": "GLQPBTJR",
+          "Finder": {
+            "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4dcbc447-d93b-4588-9521-a927d1102619.jpg",
+            "FindCount": 5298,
+            "GalleryImageCount": null,
+            "HideCount": 144,
+            "HomeCoordinates": null,
+            "Id": 3066064,
+            "IsAdmin": false,
+            "MemberType": {
+              "MemberTypeId": 3,
+              "MemberTypeName": "Premium"
+            },
+            "PublicGuid": "bbbd5e46-f485-4c88-b86a-434330bd7855",
+            "UserName": "Bernd2010"
+          },
+          "Guid": "7931f951-a60c-4bec-b70c-dc613455353a",
+          "ID": 678729123,
+          "Images": [],
+          "IsApproved": false,
+          "IsArchived": false,
+          "LogIsEncoded": false,
+          "LogText": "Gemeinsam mit quietscheente ging es heute auf Tour.\u000d\u000aEs standen drei Events auf dem Schirm.\u000d\u000aDie Zeit dazwischen wurde genutzt um Dosen zu suchen.\u000d\u000aDas Wetter war zwar nicht ganz so perfekt, aber das muss es ja auch nicht immer sein!\u000d\u000aSo wurde auch diese Dose gefunden.\u000d\u000aEine alte Dose in einer schönen Umgebung, sehr schön!\u000d\u000aDas Döschen war schnell gefunden und das Logbuch signiert.\u000d\u000a\u000d\u000aTFTC sagt Bernd2010.",
+          "LogType": {
+            "AdminActionable": false,
+            "ImageName": "icon_smile",
+            "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_smile.gif",
+            "OwnerActionable": false,
+            "WptLogTypeId": 2,
+            "WptLogTypeName": "Found it"
+          },
+          "UTCCreateDate": "\/Date(1492472550442)\/",
+          "UpdatedLatitude": null,
+          "UpdatedLongitude": null,
+          "Url": "http:\/\/coord.info\/GLQPBTJR",
+          "VisitDate": "\/Date(1492455600000-0700)\/"
+        },
         {
           "CacheCode": "GCKPH0",
           "CannotDelete": false,
@@ -5987,9 +6027,9 @@
           "Code": "GLQER0KP",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/7e7f4a75-266e-4028-a44f-38af98145e23.jpg",
-            "FindCount": 2143,
+            "FindCount": 2151,
             "GalleryImageCount": null,
-            "HideCount": 10,
+            "HideCount": 11,
             "HomeCoordinates": null,
             "Id": 11969702,
             "IsAdmin": false,
@@ -6157,7 +6197,7 @@
           "Code": "GLPN1ECT",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/18394544-2b8c-4c54-a1fd-343a5fc42953.jpg",
-            "FindCount": 973,
+            "FindCount": 976,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -6197,7 +6237,7 @@
           "Code": "GLPM2192",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/a7a4704a-f624-480a-be29-c215385d3f73.jpg",
-            "FindCount": 1354,
+            "FindCount": 1357,
             "GalleryImageCount": null,
             "HideCount": 2,
             "HomeCoordinates": null,
@@ -6230,46 +6270,6 @@
           "UpdatedLongitude": null,
           "Url": "http:\/\/coord.info\/GLPM2192",
           "VisitDate": "\/Date(1477854000000-0700)\/"
-        },
-        {
-          "CacheCode": "GCKPH0",
-          "CannotDelete": false,
-          "Code": "GLP41G9H",
-          "Finder": {
-            "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/ba736b61-f86c-4543-83cf-b96bc82df3ca.jpg",
-            "FindCount": 4075,
-            "GalleryImageCount": null,
-            "HideCount": 1,
-            "HomeCoordinates": null,
-            "Id": 2871714,
-            "IsAdmin": false,
-            "MemberType": {
-              "MemberTypeId": 3,
-              "MemberTypeName": "Premium"
-            },
-            "PublicGuid": "38db192d-02ff-4cb2-ae0a-e98b197e640b",
-            "UserName": "mauliz"
-          },
-          "Guid": "347348d0-fa7b-4cba-af6a-fc660fa09e62",
-          "ID": 633169749,
-          "Images": [],
-          "IsApproved": false,
-          "IsArchived": false,
-          "LogIsEncoded": false,
-          "LogText": "Alte Caches reizen uns immer wieder, da sie ja logischerweise vom aussterben bedroht sind. Also hin und ins Logbuch eintragen, bevor es zu spät ist.\u000d\u000aDfdC von mauliz (# 3585)",
-          "LogType": {
-            "AdminActionable": false,
-            "ImageName": "icon_smile",
-            "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_smile.gif",
-            "OwnerActionable": false,
-            "WptLogTypeId": 2,
-            "WptLogTypeName": "Found it"
-          },
-          "UTCCreateDate": "\/Date(1472555742364)\/",
-          "UpdatedLatitude": null,
-          "UpdatedLongitude": null,
-          "Url": "http:\/\/coord.info\/GLP41G9H",
-          "VisitDate": "\/Date(1471546800000-0700)\/"
         }
       ],
       "GeocacheNote": null,
@@ -6290,7 +6290,7 @@
       "Name": "Uhlenhorst",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -6311,416 +6311,8 @@
       "State": "Brandenburg",
       "StateID": 138,
       "Terrain": 2,
-      "TrackableCount": 1,
-      "Trackables": [
-        {
-          "AllowedToBeCollected": null,
-          "Archived": false,
-          "BugTypeID": 1,
-          "Code": "TB54HFE",
-          "CurrentGeocacheCode": "GCKPH0",
-          "CurrentGoal": "<h2>This TB owner says no to TB-prisons. Discover in TB-prisons is not allowed.<\/h2>",
-          "CurrentOwner": {
-            "AvatarUrl": "http:\/\/www.geocaching.com\/images\/default_avatar.jpg",
-            "FindCount": null,
-            "GalleryImageCount": null,
-            "HideCount": null,
-            "HomeCoordinates": null,
-            "Id": null,
-            "IsAdmin": false,
-            "MemberType": null,
-            "PublicGuid": "00000000-0000-0000-0000-000000000000",
-            "UserName": null
-          },
-          "DateCreated": "\/Date(1335996386593-0700)\/",
-          "Description": "<p><img alt=\"Vomar Racer 16\" src=\"http:\/\/img.geocaching.com\/1bdd9f6e-9ea6-4783-afd2-96412a8e8e7a.jpg\" title=\"Vomar Racer 16\" style=\"border-right:5px;border:2px solid #000;float:left;height:200px;width:300px;\" \/><\/p>\u000d\u000a\u000d\u000a<div style=\"background:#a58;color:white;width:350px;float:right;border:2px solid #000;padding:5px 10px;\">Please do not use the visit option to make took it to logs. only:\u000d\u000a<ul>\u000d\u000a\u0009<li>discover<\/li>\u000d\u000a\u0009<li>drop<\/li>\u000d\u000a\u0009<li>retrieve<\/li>\u000d\u000a<\/ul>\u000d\u000aGrab only when necessary. <strong>Thank you!<\/strong><\/div>",
-          "IconUrl": "http:\/\/www.geocaching.com\/images\/wpttypes\/21.gif",
-          "Id": 4342465,
-          "Images": [
-            {
-              "DateCreated": "\/Date(-62135568000000-0800)\/",
-              "Description": "",
-              "ImageGuid": "1bdd9f6e-9ea6-4783-afd2-96412a8e8e7a",
-              "MobileUrl": "http:\/\/img.geocaching.com\/track\/large\/1bdd9f6e-9ea6-4783-afd2-96412a8e8e7a.jpg",
-              "Name": "Vomar Racer - Ariel",
-              "ThumbUrl": "http:\/\/img.geocaching.com\/track\/thumb\/1bdd9f6e-9ea6-4783-afd2-96412a8e8e7a.jpg",
-              "Url": "http:\/\/img.geocaching.com\/track\/1bdd9f6e-9ea6-4783-afd2-96412a8e8e7a.jpg"
-            }
-          ],
-          "InCollection": false,
-          "Name": "Vomar Racer #  16 - Ariel",
-          "OriginalOwner": {
-            "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/9b983f6f-bfc7-4ac4-9b53-953f29253a91.jpg",
-            "FindCount": null,
-            "GalleryImageCount": null,
-            "HideCount": null,
-            "HomeCoordinates": null,
-            "Id": 2236963,
-            "IsAdmin": false,
-            "MemberType": null,
-            "PublicGuid": "5f389f3d-8e40-4021-a488-2100a3291936",
-            "UserName": "Twentse Mug"
-          },
-          "TBTypeName": "Travel Bug Dog Tags",
-          "TBTypeNameSingular": "Travel Bug Dog Tag",
-          "TrackableLogs": [
-            {
-              "CacheID": 176578,
-              "Code": "TLPCCVVG",
-              "ID": 640895754,
-              "Images": [],
-              "IsArchived": false,
-              "LogGuid": "8a8b0c03-e036-4170-bcb8-83dd6d608f1f",
-              "LogIsEncoded": false,
-              "LogText": "",
-              "LogType": {
-                "AdminActionable": false,
-                "ImageName": "dropped_off",
-                "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/dropped_off.gif",
-                "OwnerActionable": false,
-                "WptLogTypeId": 14,
-                "WptLogTypeName": "Dropped Off"
-              },
-              "LoggedBy": {
-                "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/8b8c9ccd-1857-456a-bb1d-cad31abeb7e4.jpeg",
-                "FindCount": 47,
-                "GalleryImageCount": null,
-                "HideCount": 9,
-                "HomeCoordinates": null,
-                "Id": 16572842,
-                "IsAdmin": false,
-                "MemberType": null,
-                "PublicGuid": "e97b3baf-cc2b-4ce1-9fbe-83d8c8cb0642",
-                "UserName": "Lunochod II"
-              },
-              "UTCCreateDate": "\/Date(1489950000000)\/",
-              "UpdatedLatitude": 52.64383,
-              "UpdatedLongitude": 13.34655,
-              "Url": "http:\/\/coord.info\/TLPCCVVG",
-              "VisitDate": "\/Date(1489931561357-0700)\/"
-            },
-            {
-              "CacheID": 5838090,
-              "Code": "TLMXEPMQ",
-              "ID": 598469347,
-              "Images": [],
-              "IsArchived": false,
-              "LogGuid": "17c7f08c-4693-4184-959c-5e767ba9e3fc",
-              "LogIsEncoded": false,
-              "LogText": "Im Rahmen von ''Vorfreude auf Halloween'' (GC6QQTD) mitgenommen.",
-              "LogType": {
-                "AdminActionable": false,
-                "ImageName": "picked_up",
-                "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/picked_up.gif",
-                "OwnerActionable": false,
-                "WptLogTypeId": 13,
-                "WptLogTypeName": "Retrieve It from a Cache"
-              },
-              "LoggedBy": {
-                "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/8b8c9ccd-1857-456a-bb1d-cad31abeb7e4.jpeg",
-                "FindCount": 47,
-                "GalleryImageCount": null,
-                "HideCount": 9,
-                "HomeCoordinates": null,
-                "Id": 16572842,
-                "IsAdmin": false,
-                "MemberType": null,
-                "PublicGuid": "e97b3baf-cc2b-4ce1-9fbe-83d8c8cb0642",
-                "UserName": "Lunochod II"
-              },
-              "UTCCreateDate": "\/Date(1477854000000)\/",
-              "UpdatedLatitude": null,
-              "UpdatedLongitude": null,
-              "Url": "http:\/\/coord.info\/TLMXEPMQ",
-              "VisitDate": "\/Date(1477765873273-0700)\/"
-            },
-            {
-              "CacheID": null,
-              "Code": "TLMXAVQG",
-              "ID": 598354113,
-              "Images": [],
-              "IsArchived": false,
-              "LogGuid": "1798424d-1288-4223-ad41-1d604f64000d",
-              "LogIsEncoded": false,
-              "LogText": "Im Geodät gesehen",
-              "LogType": {
-                "AdminActionable": false,
-                "ImageName": "icon_discovered",
-                "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_discovered.gif",
-                "OwnerActionable": false,
-                "WptLogTypeId": 48,
-                "WptLogTypeName": "Discovered It"
-              },
-              "LoggedBy": {
-                "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/5a56e230-3058-49f7-a77d-c81907e7603b.jpg",
-                "FindCount": 6985,
-                "GalleryImageCount": null,
-                "HideCount": 20,
-                "HomeCoordinates": null,
-                "Id": 2146318,
-                "IsAdmin": false,
-                "MemberType": null,
-                "PublicGuid": "cf5a98fa-2f2e-4779-82f4-3352640aba1f",
-                "UserName": "mayas03"
-              },
-              "UTCCreateDate": "\/Date(1477767600000)\/",
-              "UpdatedLatitude": null,
-              "UpdatedLongitude": null,
-              "Url": "http:\/\/coord.info\/TLMXAVQG",
-              "VisitDate": "\/Date(1477753013963-0700)\/"
-            },
-            {
-              "CacheID": 190812,
-              "Code": "TLMXC6NY",
-              "ID": 598394426,
-              "Images": [],
-              "IsArchived": false,
-              "LogGuid": "04c5a434-7b26-48c8-88de-b213f445ab98",
-              "LogIsEncoded": false,
-              "LogText": "Den haben wir mal mitgenommen",
-              "LogType": {
-                "AdminActionable": false,
-                "ImageName": "picked_up",
-                "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/picked_up.gif",
-                "OwnerActionable": false,
-                "WptLogTypeId": 13,
-                "WptLogTypeName": "Retrieve It from a Cache"
-              },
-              "LoggedBy": {
-                "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/8345150a-28fc-4b61-be01-cbf14262cd78.jpg",
-                "FindCount": 6257,
-                "GalleryImageCount": null,
-                "HideCount": 6,
-                "HomeCoordinates": null,
-                "Id": 6372215,
-                "IsAdmin": false,
-                "MemberType": null,
-                "PublicGuid": "a210c1c2-a3b5-495b-bf16-92463939fdb3",
-                "UserName": "Nitawa"
-              },
-              "UTCCreateDate": "\/Date(1477767600000)\/",
-              "UpdatedLatitude": null,
-              "UpdatedLongitude": null,
-              "Url": "http:\/\/coord.info\/TLMXC6NY",
-              "VisitDate": "\/Date(1477758193603-0700)\/"
-            },
-            {
-              "CacheID": 5838090,
-              "Code": "TLMXC8HK",
-              "ID": 598396214,
-              "Images": [],
-              "IsArchived": false,
-              "LogGuid": "a5c048fc-de7d-4c33-b906-7eb241577e59",
-              "LogIsEncoded": false,
-              "LogText": "",
-              "LogType": {
-                "AdminActionable": false,
-                "ImageName": "dropped_off",
-                "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/dropped_off.gif",
-                "OwnerActionable": false,
-                "WptLogTypeId": 14,
-                "WptLogTypeName": "Dropped Off"
-              },
-              "LoggedBy": {
-                "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/8345150a-28fc-4b61-be01-cbf14262cd78.jpg",
-                "FindCount": 6257,
-                "GalleryImageCount": null,
-                "HideCount": 6,
-                "HomeCoordinates": null,
-                "Id": 6372215,
-                "IsAdmin": false,
-                "MemberType": null,
-                "PublicGuid": "a210c1c2-a3b5-495b-bf16-92463939fdb3",
-                "UserName": "Nitawa"
-              },
-              "UTCCreateDate": "\/Date(1477767600000)\/",
-              "UpdatedLatitude": 52.58077,
-              "UpdatedLongitude": 13.30265,
-              "Url": "http:\/\/coord.info\/TLMXC8HK",
-              "VisitDate": "\/Date(1477758411037-0700)\/"
-            },
-            {
-              "CacheID": 190812,
-              "Code": "TLMWQA8Z",
-              "ID": 597802048,
-              "Images": [],
-              "IsArchived": false,
-              "LogGuid": "d7fe48d1-3cab-4e0f-8c65-cc8fd4309bca",
-              "LogIsEncoded": false,
-              "LogText": "",
-              "LogType": {
-                "AdminActionable": false,
-                "ImageName": "dropped_off",
-                "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/dropped_off.gif",
-                "OwnerActionable": false,
-                "WptLogTypeId": 14,
-                "WptLogTypeName": "Dropped Off"
-              },
-              "LoggedBy": {
-                "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/b8dea09e-56b0-4dd4-8105-e8c13cfe1a11.jpeg",
-                "FindCount": 1871,
-                "GalleryImageCount": null,
-                "HideCount": 2,
-                "HomeCoordinates": null,
-                "Id": 12343104,
-                "IsAdmin": false,
-                "MemberType": null,
-                "PublicGuid": "05bbabfd-a4ee-4634-a7fd-28b92486c98b",
-                "UserName": "Sabeter"
-              },
-              "UTCCreateDate": "\/Date(1477594800000)\/",
-              "UpdatedLatitude": 52.5015,
-              "UpdatedLongitude": 13.39117,
-              "Url": "http:\/\/coord.info\/TLMWQA8Z",
-              "VisitDate": "\/Date(1477583909627-0700)\/"
-            },
-            {
-              "CacheID": null,
-              "Code": "TLMWQPK6",
-              "ID": 597813897,
-              "Images": [],
-              "IsArchived": false,
-              "LogGuid": "5604ac1a-d20c-438a-9c61-407930ff7548",
-              "LogIsEncoded": false,
-              "LogText": "In den Händen von Sabeter gesehen.",
-              "LogType": {
-                "AdminActionable": false,
-                "ImageName": "icon_discovered",
-                "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_discovered.gif",
-                "OwnerActionable": false,
-                "WptLogTypeId": 48,
-                "WptLogTypeName": "Discovered It"
-              },
-              "LoggedBy": {
-                "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/393ba30f-59cc-4347-8a93-430a145d16a1.jpg",
-                "FindCount": 2335,
-                "GalleryImageCount": null,
-                "HideCount": 2,
-                "HomeCoordinates": null,
-                "Id": 10134180,
-                "IsAdmin": false,
-                "MemberType": null,
-                "PublicGuid": "c67d094f-009b-4d40-89f6-8e18dc945777",
-                "UserName": "Kurtinator72"
-              },
-              "UTCCreateDate": "\/Date(1477508400000)\/",
-              "UpdatedLatitude": null,
-              "UpdatedLongitude": null,
-              "Url": "http:\/\/coord.info\/TLMWQPK6",
-              "VisitDate": "\/Date(1477587028040-0700)\/"
-            },
-            {
-              "CacheID": 5900510,
-              "Code": "TLMWJZ4C",
-              "ID": 597672171,
-              "Images": [],
-              "IsArchived": false,
-              "LogGuid": "5e7c3dea-5845-42a3-b5df-4c88b00bb93e",
-              "LogIsEncoded": false,
-              "LogText": "Zur Weiterreise aus der Tiergartenring-Letterbox mitgenommen.",
-              "LogType": {
-                "AdminActionable": false,
-                "ImageName": "picked_up",
-                "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/picked_up.gif",
-                "OwnerActionable": false,
-                "WptLogTypeId": 13,
-                "WptLogTypeName": "Retrieve It from a Cache"
-              },
-              "LoggedBy": {
-                "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/b8dea09e-56b0-4dd4-8105-e8c13cfe1a11.jpeg",
-                "FindCount": 1871,
-                "GalleryImageCount": null,
-                "HideCount": 2,
-                "HomeCoordinates": null,
-                "Id": 12343104,
-                "IsAdmin": false,
-                "MemberType": null,
-                "PublicGuid": "05bbabfd-a4ee-4634-a7fd-28b92486c98b",
-                "UserName": "Sabeter"
-              },
-              "UTCCreateDate": "\/Date(1477508400000)\/",
-              "UpdatedLatitude": null,
-              "UpdatedLongitude": null,
-              "Url": "http:\/\/coord.info\/TLMWJZ4C",
-              "VisitDate": "\/Date(1477521985800-0700)\/"
-            },
-            {
-              "CacheID": 5900510,
-              "Code": "TLMV7W1D",
-              "ID": 596417974,
-              "Images": [],
-              "IsArchived": false,
-              "LogGuid": "ee6f5b6d-1e0b-49d3-8874-c9d49f085161",
-              "LogIsEncoded": false,
-              "LogText": "",
-              "LogType": {
-                "AdminActionable": false,
-                "ImageName": "dropped_off",
-                "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/dropped_off.gif",
-                "OwnerActionable": false,
-                "WptLogTypeId": 14,
-                "WptLogTypeName": "Dropped Off"
-              },
-              "LoggedBy": {
-                "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bb796dfa-633c-434b-b92f-2275c7d4f127.jpg",
-                "FindCount": 7402,
-                "GalleryImageCount": null,
-                "HideCount": 12,
-                "HomeCoordinates": null,
-                "Id": 3667217,
-                "IsAdmin": false,
-                "MemberType": null,
-                "PublicGuid": "b2246c03-3098-4da1-b378-5dd0774a7827",
-                "UserName": "Belemi"
-              },
-              "UTCCreateDate": "\/Date(1477249200000)\/",
-              "UpdatedLatitude": 52.5401,
-              "UpdatedLongitude": 13.37988,
-              "Url": "http:\/\/coord.info\/TLMV7W1D",
-              "VisitDate": "\/Date(1477238650297-0700)\/"
-            },
-            {
-              "CacheID": 3412812,
-              "Code": "TLMR9X0H",
-              "ID": 594631448,
-              "Images": [],
-              "IsArchived": false,
-              "LogGuid": "353e1f3d-fd1f-4ce8-9ab2-0b9afbd9de47",
-              "LogIsEncoded": false,
-              "LogText": "Da ADN jetzt erstmal in die Winterpause gegangen ist, habe ich den kleinen Renner aus der Dose genommen.",
-              "LogType": {
-                "AdminActionable": false,
-                "ImageName": "picked_up",
-                "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/picked_up.gif",
-                "OwnerActionable": false,
-                "WptLogTypeId": 13,
-                "WptLogTypeName": "Retrieve It from a Cache"
-              },
-              "LoggedBy": {
-                "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bb796dfa-633c-434b-b92f-2275c7d4f127.jpg",
-                "FindCount": 7402,
-                "GalleryImageCount": null,
-                "HideCount": 12,
-                "HomeCoordinates": null,
-                "Id": 3667217,
-                "IsAdmin": false,
-                "MemberType": null,
-                "PublicGuid": "b2246c03-3098-4da1-b378-5dd0774a7827",
-                "UserName": "Belemi"
-              },
-              "UTCCreateDate": "\/Date(1476730800000)\/",
-              "UpdatedLatitude": null,
-              "UpdatedLongitude": null,
-              "Url": "http:\/\/coord.info\/TLMR9X0H",
-              "VisitDate": "\/Date(1476789480367-0700)\/"
-            }
-          ],
-          "TrackingCode": null,
-          "Url": "http:\/\/coord.info\/TB54HFE",
-          "UserCount": null,
-          "WptTypeID": 21
-        }
-      ],
+      "TrackableCount": 0,
+      "Trackables": [],
       "UTCPlaceDate": "\/Date(1096700400000-0700)\/",
       "UpgradeMessage": null,
       "Url": "http:\/\/coord.info\/GCKPH0",
@@ -6776,7 +6368,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 15,
+      "CurrentDetailsCount": 84,
       "DateCreated": "\/Date(1307430000000-0700)\/",
       "DateLastUpdate": "\/Date(1492430287450-0700)\/",
       "DateLastVisited": "\/Date(1492455600000-0700)\/",
@@ -6873,7 +6465,7 @@
           "Code": "GLQN0K5C",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/b630619f-a5d1-4661-a6ab-a25f6c37b51a.jpg",
-            "FindCount": 487,
+            "FindCount": 488,
             "GalleryImageCount": null,
             "HideCount": 3,
             "HomeCoordinates": null,
@@ -7033,7 +6625,7 @@
           "Code": "GLQKQVRZ",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/24639085-7e44-41ba-914a-d38d7dac6dd9.jpg",
-            "FindCount": 632,
+            "FindCount": 633,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -7113,7 +6705,7 @@
           "Code": "GLQJA9QE",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-            "FindCount": 3734,
+            "FindCount": 3735,
             "GalleryImageCount": null,
             "HideCount": 42,
             "HomeCoordinates": null,
@@ -7153,7 +6745,7 @@
           "Code": "GLQHQCP5",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/0fa7013a-785d-4071-a240-cd79f6b6561d.jpg",
-            "FindCount": 846,
+            "FindCount": 852,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -7206,7 +6798,7 @@
       "Name": "Löwenzahn-Trail #9",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -7316,7 +6908,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 16,
+      "CurrentDetailsCount": 85,
       "DateCreated": "\/Date(1307430000000-0700)\/",
       "DateLastUpdate": "\/Date(1492432383870-0700)\/",
       "DateLastVisited": "\/Date(1492455600000-0700)\/",
@@ -7373,7 +6965,7 @@
           "Code": "GLQN0THF",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/b630619f-a5d1-4661-a6ab-a25f6c37b51a.jpg",
-            "FindCount": 487,
+            "FindCount": 488,
             "GalleryImageCount": null,
             "HideCount": 3,
             "HomeCoordinates": null,
@@ -7493,7 +7085,7 @@
           "Code": "GLQKQVJW",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/24639085-7e44-41ba-914a-d38d7dac6dd9.jpg",
-            "FindCount": 632,
+            "FindCount": 633,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -7533,7 +7125,7 @@
           "Code": "GLQKK0PX",
           "Finder": {
             "AvatarUrl": "http:\/\/www.geocaching.com\/images\/default_avatar.jpg",
-            "FindCount": 250,
+            "FindCount": 254,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -7613,7 +7205,7 @@
           "Code": "GLQHQAM4",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/0fa7013a-785d-4071-a240-cd79f6b6561d.jpg",
-            "FindCount": 846,
+            "FindCount": 852,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -7653,7 +7245,7 @@
           "Code": "GLQHGDRD",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/7439c2d7-d196-4e4a-9b37-14afe4b70721.jpg",
-            "FindCount": 61,
+            "FindCount": 62,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -7703,7 +7295,7 @@
           "Code": "GLQGHBP0",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/44fa662b-5838-49cc-86f6-d254a30f22ab.jpg",
-            "FindCount": 468,
+            "FindCount": 469,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -7776,7 +7368,7 @@
       "Name": "Löwenzahn-Trail #4",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -7854,7 +7446,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 17,
+      "CurrentDetailsCount": 86,
       "DateCreated": "\/Date(1076745600000-0800)\/",
       "DateLastUpdate": "\/Date(1492339494773-0700)\/",
       "DateLastVisited": "\/Date(1492339472513-0700)\/",
@@ -7911,7 +7503,7 @@
           "Code": "GLQN0Q51",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/b630619f-a5d1-4661-a6ab-a25f6c37b51a.jpg",
-            "FindCount": 487,
+            "FindCount": 488,
             "GalleryImageCount": null,
             "HideCount": 3,
             "HomeCoordinates": null,
@@ -8071,7 +7663,7 @@
           "Code": "GLQKQV51",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/24639085-7e44-41ba-914a-d38d7dac6dd9.jpg",
-            "FindCount": 632,
+            "FindCount": 633,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -8151,7 +7743,7 @@
           "Code": "GLQKJT92",
           "Finder": {
             "AvatarUrl": "http:\/\/www.geocaching.com\/images\/default_avatar.jpg",
-            "FindCount": 250,
+            "FindCount": 254,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -8191,7 +7783,7 @@
           "Code": "GLQHQ2VQ",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/0fa7013a-785d-4071-a240-cd79f6b6561d.jpg",
-            "FindCount": 846,
+            "FindCount": 852,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -8231,7 +7823,7 @@
           "Code": "GLQHGAT2",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/7439c2d7-d196-4e4a-9b37-14afe4b70721.jpg",
-            "FindCount": 61,
+            "FindCount": 62,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -8294,7 +7886,7 @@
       "Name": "Reiherwarte",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -8377,7 +7969,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/7439c2d7-d196-4e4a-9b37-14afe4b70721.jpg",
-                "FindCount": 61,
+                "FindCount": 62,
                 "GalleryImageCount": null,
                 "HideCount": 0,
                 "HomeCoordinates": null,
@@ -8412,7 +8004,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/7439c2d7-d196-4e4a-9b37-14afe4b70721.jpg",
-                "FindCount": 61,
+                "FindCount": 62,
                 "GalleryImageCount": null,
                 "HideCount": 0,
                 "HomeCoordinates": null,
@@ -8482,7 +8074,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/2305b7cc-44a8-4752-b79c-366f33a59d0b.jpg",
-                "FindCount": 2076,
+                "FindCount": 2079,
                 "GalleryImageCount": null,
                 "HideCount": 14,
                 "HomeCoordinates": null,
@@ -8517,7 +8109,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/2305b7cc-44a8-4752-b79c-366f33a59d0b.jpg",
-                "FindCount": 2076,
+                "FindCount": 2079,
                 "GalleryImageCount": null,
                 "HideCount": 14,
                 "HomeCoordinates": null,
@@ -8552,7 +8144,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/2305b7cc-44a8-4752-b79c-366f33a59d0b.jpg",
-                "FindCount": 2076,
+                "FindCount": 2079,
                 "GalleryImageCount": null,
                 "HideCount": 14,
                 "HomeCoordinates": null,
@@ -8587,7 +8179,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/2305b7cc-44a8-4752-b79c-366f33a59d0b.jpg",
-                "FindCount": 2076,
+                "FindCount": 2079,
                 "GalleryImageCount": null,
                 "HideCount": 14,
                 "HomeCoordinates": null,
@@ -8622,7 +8214,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/2305b7cc-44a8-4752-b79c-366f33a59d0b.jpg",
-                "FindCount": 2076,
+                "FindCount": 2079,
                 "GalleryImageCount": null,
                 "HideCount": 14,
                 "HomeCoordinates": null,
@@ -8657,7 +8249,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/2305b7cc-44a8-4752-b79c-366f33a59d0b.jpg",
-                "FindCount": 2076,
+                "FindCount": 2079,
                 "GalleryImageCount": null,
                 "HideCount": 14,
                 "HomeCoordinates": null,
@@ -8692,7 +8284,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/2305b7cc-44a8-4752-b79c-366f33a59d0b.jpg",
-                "FindCount": 2076,
+                "FindCount": 2079,
                 "GalleryImageCount": null,
                 "HideCount": 14,
                 "HomeCoordinates": null,
@@ -8821,7 +8413,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 18,
+      "CurrentDetailsCount": 87,
       "DateCreated": "\/Date(1307430000000-0700)\/",
       "DateLastUpdate": "\/Date(1492431088857-0700)\/",
       "DateLastVisited": "\/Date(1492455600000-0700)\/",
@@ -8878,7 +8470,7 @@
           "Code": "GLQN0NM6",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/b630619f-a5d1-4661-a6ab-a25f6c37b51a.jpg",
-            "FindCount": 487,
+            "FindCount": 488,
             "GalleryImageCount": null,
             "HideCount": 3,
             "HomeCoordinates": null,
@@ -9038,7 +8630,7 @@
           "Code": "GLQKQWX8",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/24639085-7e44-41ba-914a-d38d7dac6dd9.jpg",
-            "FindCount": 632,
+            "FindCount": 633,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -9078,7 +8670,7 @@
           "Code": "GLQKQVGP",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/24639085-7e44-41ba-914a-d38d7dac6dd9.jpg",
-            "FindCount": 632,
+            "FindCount": 633,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -9158,7 +8750,7 @@
           "Code": "GLQKJV6Q",
           "Finder": {
             "AvatarUrl": "http:\/\/www.geocaching.com\/images\/default_avatar.jpg",
-            "FindCount": 250,
+            "FindCount": 254,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -9198,7 +8790,7 @@
           "Code": "GLQHQ9WJ",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/0fa7013a-785d-4071-a240-cd79f6b6561d.jpg",
-            "FindCount": 846,
+            "FindCount": 852,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -9270,7 +8862,7 @@
       "Name": "Löwenzahn-Trail #1",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -9344,7 +8936,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 19,
+      "CurrentDetailsCount": 88,
       "DateCreated": "\/Date(1450425600000-0800)\/",
       "DateLastUpdate": "\/Date(1490789142193-0700)\/",
       "DateLastVisited": "\/Date(1490727600000-0700)\/",
@@ -9361,7 +8953,7 @@
           "Code": "GLQGH91G",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/44fa662b-5838-49cc-86f6-d254a30f22ab.jpg",
-            "FindCount": 468,
+            "FindCount": 469,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -9651,7 +9243,7 @@
           "Code": "GLPV0J94",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/445589fb-23a3-48a0-89dd-2df233054dda.jpg",
-            "FindCount": 4858,
+            "FindCount": 4864,
             "GalleryImageCount": null,
             "HideCount": 10,
             "HomeCoordinates": null,
@@ -9731,7 +9323,7 @@
           "Code": "GLNWVB6J",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/05ae5957-7340-44c0-9ff7-28acd94211f7.jpg",
-            "FindCount": 6278,
+            "FindCount": 6283,
             "GalleryImageCount": null,
             "HideCount": 12,
             "HomeCoordinates": null,
@@ -9784,7 +9376,7 @@
       "Name": "Das nasse Logbuch",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -9892,7 +9484,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 20,
+      "CurrentDetailsCount": 89,
       "DateCreated": "\/Date(1143360000000-0700)\/",
       "DateLastUpdate": "\/Date(1490790596183-0700)\/",
       "DateLastVisited": "\/Date(1489232781000-0800)\/",
@@ -9989,7 +9581,7 @@
           "Code": "GLKHY91Y",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/f8a39994-36c6-4459-93e5-b9d938de04c2.jpg",
-            "FindCount": 4441,
+            "FindCount": 4442,
             "GalleryImageCount": null,
             "HideCount": 25,
             "HomeCoordinates": null,
@@ -10029,7 +9621,7 @@
           "Code": "GLKHVNDV",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/5afbc2f6-f1b6-466d-8ba8-229b15af8639.jpeg",
-            "FindCount": 4893,
+            "FindCount": 4909,
             "GalleryImageCount": null,
             "HideCount": 7,
             "HomeCoordinates": null,
@@ -10109,7 +9701,7 @@
           "Code": "GLK2YZ0F",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-            "FindCount": 3734,
+            "FindCount": 3735,
             "GalleryImageCount": null,
             "HideCount": 42,
             "HomeCoordinates": null,
@@ -10229,7 +9821,7 @@
           "Code": "GLGF0N0R",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/65ff914e-2c61-4f95-8ca0-549c2c411abf.jpg",
-            "FindCount": 1286,
+            "FindCount": 1301,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -10387,7 +9979,7 @@
       "Name": "Feldheim",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -10477,7 +10069,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 21,
+      "CurrentDetailsCount": 90,
       "DateCreated": "\/Date(1214118000000-0700)\/",
       "DateLastUpdate": "\/Date(1490790425750-0700)\/",
       "DateLastVisited": "\/Date(1486843200000-0800)\/",
@@ -10574,7 +10166,7 @@
           "Code": "GLPVW6HT",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/d53f497d-a993-4020-bb62-0cc39a744975.jpg",
-            "FindCount": 960,
+            "FindCount": 970,
             "GalleryImageCount": null,
             "HideCount": 1,
             "HomeCoordinates": null,
@@ -10624,7 +10216,7 @@
           "Code": "GLPV0JAC",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/445589fb-23a3-48a0-89dd-2df233054dda.jpg",
-            "FindCount": 4858,
+            "FindCount": 4864,
             "GalleryImageCount": null,
             "HideCount": 10,
             "HomeCoordinates": null,
@@ -10723,7 +10315,7 @@
           "IsApproved": false,
           "IsArchived": false,
           "LogIsEncoded": false,
-          "LogText": "Heute ging es zum Abschluss noch nach Mühlenbeck, wo ich die eine oder andere Dose besuchen wollte.\u000d\u000aSo landete ich auch hier. \u000d\u000aDieser Multi ließ sich sehr gut lösen und nach kurzer Rechnung standen die Finalkoordinaten fest.\u000d\u000aDer Weg war schnell beschritten und so konnte ich mich auch in diesem Logbuch verewigen.\u000d\u000a\u000d\u000a..........(0 0)\u000d\u000a.---oOO-- (_)-----.\u000d\u000a????????????????????????????????\u000d\u000a? Vielen Dank fürs Herlocken und Verstecken! ?\u000d\u000a????????????????????????????????\u000d\u000a'----------------------oOO\u000d\u000a........|__|__|\u000d\u000a.......... || ||\u000d\u000a....... ooO Ooo",
+          "LogText": "Heute ging es zum Abschluss noch nach Mühlenbeck, wo ich die eine oder andere Dose besuchen wollte.\u000d\u000aSo landete ich auch hier. \u000d\u000aDieser Multi ließ sich sehr gut lösen und nach kurzer Rechnung standen die Finalkoordinaten fest.\u000d\u000aDer Weg war schnell beschritten und so konnte ich mich auch in diesem Logbuch verewigen.\u000d\u000a\u000d\u000a..........(0 0)\u000d\u000a.---oOO-- (_)-----.\u000d\u000a+------------------------------+\u000d\u000a¦ Vielen Dank fürs Herlocken und Verstecken! ¦\u000d\u000a+------------------------------+\u000d\u000a'----------------------oOO\u000d\u000a........|__|__|\u000d\u000a.......... || ||\u000d\u000a....... ooO Ooo",
           "LogType": {
             "AdminActionable": false,
             "ImageName": "icon_smile",
@@ -10834,7 +10426,7 @@
           "Code": "GLP73PGZ",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/3e9382d6-fa86-4cc0-a268-339141dc817c.jpg",
-            "FindCount": 1467,
+            "FindCount": 1471,
             "GalleryImageCount": null,
             "HideCount": 6,
             "HomeCoordinates": null,
@@ -10939,14 +10531,14 @@
       "IsPublished": true,
       "IsRecommended": false,
       "Latitude": 52.66455,
-      "LongDescription": "Der reguläre Betrieb auf dieser Strecke wurde Anfang der 1960er Jahre als Folge des Berliner Mauerbaus eingestellt. Seit 1997 führen die Berliner Eisenbahnfreunde http:\/\/www.berliner-eisenbahnfreunde.de mehrmals im Jahr Museumsbahnbetrieb durch (nächster Termin: 6.7.08 ?Teddybärtag?). Seit Jahren gibt es Diskussionen um die Reaktivierung der Strecke incl. Anbindung an den Bahnhof Berlin-Gesundbrunnen.\u000d\u000a\u000d\u000aDas Bahnhofsgebäude des ehemaligen Bahnhofs Mühlenbeck wird derzeit als Gaststätte und Wohnung genutzt. Leider ist der Zugang zum eigentlichen Bahnhofsgelände von hier aus nicht erwünscht, aber man kann von der Südseite her die Reste der Bahnsteige besichtigen. \u000d\u000a\u000d\u000aBei diesem Multi-Cache sind 3 Stationen in beliebiger Reihenfolge anzulaufen und jeweils Zahlen zu ermitteln, aus denen sich die Koordinaten des Finales errechnen. Die 3 Stationen sind jeweils in Richtung und Entfernung von den Startkoordinaten aus angegeben.\u000d\u000a\u000d\u000aBahnhof: 159 m Richtung 275° wahr\u000d\u000aWelche Hausnummer hat das Bahnhofsgebäude? (A)\u000d\u000a\u000d\u000aBahnübergang: 131 m 299° wahr\u000d\u000aWelche Zahl steht oben auf dem Bahn-Kilometerstein? (B)\u000d\u000aWelche Zahl steht unten auf dem Bahn-Kilometerstein? (C)\u000d\u000a\u000d\u000aNeben dem Bahnsteig: 120 m 273° wahr\u000d\u000aFinde ein blaues Schild gemäß Foto unten (SchildStation3). Welche Zahl ist auf dem Bild gelb verdeckt? (D)\u000d\u000a\u000d\u000aFinale: Die Final-Koordinaten lauten N52° 39.X' E13° 23.Y'. Die dreistelligen Milliminuten X und Y errechnen sich wie folgt:\u000d\u000aX = C*(A*B*C+ A+ 1)\u000d\u000aY = A*B*D - A*C*C - C\u000d\u000a\u000d\u000aBitte geht zum Finale nicht über das Feld, es führt ein Weg dorthin, vorbei an den Startkoordinaten.\u000d\u000a\u000d\u000aAls Erstinhalt des Caches haben wir u. a. den passenden TB ?RAILBUG Nr. 2? hineingelegt.",
+      "LongDescription": "Der reguläre Betrieb auf dieser Strecke wurde Anfang der 1960er Jahre als Folge des Berliner Mauerbaus eingestellt. Seit 1997 führen die Berliner Eisenbahnfreunde http:\/\/www.berliner-eisenbahnfreunde.de mehrmals im Jahr Museumsbahnbetrieb durch (nächster Termin: 6.7.08 „Teddybärtag“). Seit Jahren gibt es Diskussionen um die Reaktivierung der Strecke incl. Anbindung an den Bahnhof Berlin-Gesundbrunnen.\u000d\u000a\u000d\u000aDas Bahnhofsgebäude des ehemaligen Bahnhofs Mühlenbeck wird derzeit als Gaststätte und Wohnung genutzt. Leider ist der Zugang zum eigentlichen Bahnhofsgelände von hier aus nicht erwünscht, aber man kann von der Südseite her die Reste der Bahnsteige besichtigen. \u000d\u000a\u000d\u000aBei diesem Multi-Cache sind 3 Stationen in beliebiger Reihenfolge anzulaufen und jeweils Zahlen zu ermitteln, aus denen sich die Koordinaten des Finales errechnen. Die 3 Stationen sind jeweils in Richtung und Entfernung von den Startkoordinaten aus angegeben.\u000d\u000a\u000d\u000aBahnhof: 159 m Richtung 275° wahr\u000d\u000aWelche Hausnummer hat das Bahnhofsgebäude? (A)\u000d\u000a\u000d\u000aBahnübergang: 131 m 299° wahr\u000d\u000aWelche Zahl steht oben auf dem Bahn-Kilometerstein? (B)\u000d\u000aWelche Zahl steht unten auf dem Bahn-Kilometerstein? (C)\u000d\u000a\u000d\u000aNeben dem Bahnsteig: 120 m 273° wahr\u000d\u000aFinde ein blaues Schild gemäß Foto unten (SchildStation3). Welche Zahl ist auf dem Bild gelb verdeckt? (D)\u000d\u000a\u000d\u000aFinale: Die Final-Koordinaten lauten N52° 39.X' E13° 23.Y'. Die dreistelligen Milliminuten X und Y errechnen sich wie folgt:\u000d\u000aX = C*(A*B*C+ A+ 1)\u000d\u000aY = A*B*D - A*C*C - C\u000d\u000a\u000d\u000aBitte geht zum Finale nicht über das Feld, es führt ein Weg dorthin, vorbei an den Startkoordinaten.\u000d\u000a\u000d\u000aAls Erstinhalt des Caches haben wir u. a. den passenden TB “RAILBUG Nr. 2“ hineingelegt.",
       "LongDescriptionIsHtml": false,
       "Longitude": 13.3913,
       "MaxDetailCount": 6000,
       "Name": "Hauptbahnhof Mühlenbeck",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -10961,7 +10553,7 @@
       },
       "PlacedBy": "bros",
       "PublishDateUtc": null,
-      "ShortDescription": "Dieser Cache soll an die ?Heidekrautbahn?-Linie von Basdorf über Mühlenbeck nach Berlin-Wilhelmsruh erinnern.\u000d\u000aAchtung! Listing am 8.11.2011 geändert.",
+      "ShortDescription": "Dieser Cache soll an die „Heidekrautbahn“-Linie von Basdorf über Mühlenbeck nach Berlin-Wilhelmsruh erinnern.\u000d\u000aAchtung! Listing am 8.11.2011 geändert.",
       "ShortDescriptionIsHtml": false,
       "StagesCount": 1,
       "State": "Brandenburg",
@@ -11119,7 +10711,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 22,
+      "CurrentDetailsCount": 91,
       "DateCreated": "\/Date(1391932800000-0800)\/",
       "DateLastUpdate": "\/Date(1490789495143-0700)\/",
       "DateLastVisited": "\/Date(1488657600000-0800)\/",
@@ -11256,7 +10848,7 @@
           "Code": "GLQ07DAM",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/24639085-7e44-41ba-914a-d38d7dac6dd9.jpg",
-            "FindCount": 632,
+            "FindCount": 633,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -11549,7 +11141,7 @@
       "Name": "Kranichberg@night reloaded",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -11647,10 +11239,10 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 23,
+      "CurrentDetailsCount": 92,
       "DateCreated": "\/Date(1162713600000-0700)\/",
-      "DateLastUpdate": "\/Date(1492356836687-0700)\/",
-      "DateLastVisited": "\/Date(1492356817350-0700)\/",
+      "DateLastUpdate": "\/Date(1492483193227-0700)\/",
+      "DateLastVisited": "\/Date(1492424790000-0700)\/",
       "Difficulty": 1.5,
       "EncodedHints": "siehe Spoilerfoto",
       "FavoritePoints": 5,
@@ -11658,6 +11250,46 @@
       "FoundDateOfFoundByUser": null,
       "GUID": "cc10d0a3-e29b-49a9-b70d-89b84c9e8e02",
       "GeocacheLogs": [
+        {
+          "CacheCode": "GCZ7AJ",
+          "CannotDelete": false,
+          "Code": "GLQPJ1RM",
+          "Finder": {
+            "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/607aab3a-91aa-41f4-81ca-d14252a511a8.png",
+            "FindCount": 185,
+            "GalleryImageCount": null,
+            "HideCount": 0,
+            "HomeCoordinates": null,
+            "Id": 2342724,
+            "IsAdmin": false,
+            "MemberType": {
+              "MemberTypeId": 3,
+              "MemberTypeName": "Premium"
+            },
+            "PublicGuid": "ca6e0689-eba1-43ca-9e86-ea1a2e23303f",
+            "UserName": "mountybounty"
+          },
+          "Guid": "80d269bc-721e-4349-a372-4d521b1e1962",
+          "ID": 678914778,
+          "Images": [],
+          "IsApproved": false,
+          "IsArchived": false,
+          "LogIsEncoded": false,
+          "LogText": "Weiter mit unserem Spaziergang und auch diesen Cache schnell entdeckt.",
+          "LogType": {
+            "AdminActionable": false,
+            "ImageName": "icon_smile",
+            "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_smile.gif",
+            "OwnerActionable": false,
+            "WptLogTypeId": 2,
+            "WptLogTypeName": "Found it"
+          },
+          "UTCCreateDate": "\/Date(1492508393140)\/",
+          "UpdatedLatitude": null,
+          "UpdatedLongitude": null,
+          "Url": "http:\/\/coord.info\/GLQPJ1RM",
+          "VisitDate": "\/Date(1492424790000-0700)\/"
+        },
         {
           "CacheCode": "GCZ7AJ",
           "CannotDelete": false,
@@ -11704,7 +11336,7 @@
           "Code": "GLQN0361",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bbbf03d4-589d-4106-9e8e-93b1d2e2561b.jpg",
-            "FindCount": 5631,
+            "FindCount": 5634,
             "GalleryImageCount": null,
             "HideCount": 6,
             "HomeCoordinates": null,
@@ -12017,46 +11649,6 @@
           "UpdatedLongitude": null,
           "Url": "http:\/\/coord.info\/GLQ9CKJC",
           "VisitDate": "\/Date(1488065955560-0800)\/"
-        },
-        {
-          "CacheCode": "GCZ7AJ",
-          "CannotDelete": false,
-          "Code": "GLQ5RANF",
-          "Finder": {
-            "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/0962c05c-b33d-4243-9d24-9dfd78840dae.jpg",
-            "FindCount": 3814,
-            "GalleryImageCount": null,
-            "HideCount": 1,
-            "HomeCoordinates": null,
-            "Id": 5996148,
-            "IsAdmin": false,
-            "MemberType": {
-              "MemberTypeId": 3,
-              "MemberTypeName": "Premium"
-            },
-            "PublicGuid": "855b0de8-45ee-4851-a6d5-b516e8383ae3",
-            "UserName": "Hasihippie70"
-          },
-          "Guid": "2e38c835-68d0-4863-b8b8-8f867c790b32",
-          "ID": 663402218,
-          "Images": [],
-          "IsApproved": false,
-          "IsArchived": false,
-          "LogIsEncoded": false,
-          "LogText": "Auch wenn das Wetter heute etwas zu wünschen übrig ließ, wollten wir doch etwas an die Luft. [^] Bei schönem Wetter kann ja jeder. [:P] Eine kleine Tour wurde vorbereitet. [:)] Leider haben wir den Parklatz etwas verpasst und standen weiter weg am Waldrand, aber das ging auch gut. [:I] Unterwegs gab es nur ein paar Pferdeausreitmuggel und zum Schluss trafen wir nette Gleichgesinnte, Team_CDorop. Liebe Grüße noch an dieser Stelle. [:X] Uns hat die Runde sehr gut gefallen. Tolle Ideen und gut gewartete Caches. Hut ab. Gut, dass es jetzt keine Mücken gibt. [;)] Bis auf einen Cache konnten wir alle gut finden und so war es ein erfolgreicher Tag. [:D] [:D] [:D] \u000d\u000aDanke für das Herführen und das Legen und Pflegen.\u000d\u000a\u000d\u000aDie große gut gefüllte Büx war gleich entdeckt.",
-          "LogType": {
-            "AdminActionable": false,
-            "ImageName": "icon_smile",
-            "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_smile.gif",
-            "OwnerActionable": false,
-            "WptLogTypeId": 2,
-            "WptLogTypeName": "Found it"
-          },
-          "UTCCreateDate": "\/Date(1486337426980)\/",
-          "UpdatedLatitude": null,
-          "UpdatedLongitude": null,
-          "Url": "http:\/\/coord.info\/GLQ5RANF",
-          "VisitDate": "\/Date(1486324800000-0800)\/"
         }
       ],
       "GeocacheNote": null,
@@ -12105,7 +11697,7 @@
       "Name": "Buchhorst",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -12198,7 +11790,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bbbf03d4-589d-4106-9e8e-93b1d2e2561b.jpg",
-                "FindCount": 5631,
+                "FindCount": 5634,
                 "GalleryImageCount": null,
                 "HideCount": 6,
                 "HomeCoordinates": null,
@@ -12233,7 +11825,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bbbf03d4-589d-4106-9e8e-93b1d2e2561b.jpg",
-                "FindCount": 5631,
+                "FindCount": 5634,
                 "GalleryImageCount": null,
                 "HideCount": 6,
                 "HomeCoordinates": null,
@@ -12268,7 +11860,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bbbf03d4-589d-4106-9e8e-93b1d2e2561b.jpg",
-                "FindCount": 5631,
+                "FindCount": 5634,
                 "GalleryImageCount": null,
                 "HideCount": 6,
                 "HomeCoordinates": null,
@@ -12303,7 +11895,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bbbf03d4-589d-4106-9e8e-93b1d2e2561b.jpg",
-                "FindCount": 5631,
+                "FindCount": 5634,
                 "GalleryImageCount": null,
                 "HideCount": 6,
                 "HomeCoordinates": null,
@@ -12338,7 +11930,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bbbf03d4-589d-4106-9e8e-93b1d2e2561b.jpg",
-                "FindCount": 5631,
+                "FindCount": 5634,
                 "GalleryImageCount": null,
                 "HideCount": 6,
                 "HomeCoordinates": null,
@@ -12373,7 +11965,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bbbf03d4-589d-4106-9e8e-93b1d2e2561b.jpg",
-                "FindCount": 5631,
+                "FindCount": 5634,
                 "GalleryImageCount": null,
                 "HideCount": 6,
                 "HomeCoordinates": null,
@@ -12443,7 +12035,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bbbf03d4-589d-4106-9e8e-93b1d2e2561b.jpg",
-                "FindCount": 5631,
+                "FindCount": 5634,
                 "GalleryImageCount": null,
                 "HideCount": 6,
                 "HomeCoordinates": null,
@@ -12458,6 +12050,41 @@
               "UpdatedLongitude": null,
               "Url": "http:\/\/coord.info\/TLPQVE0H",
               "VisitDate": "\/Date(1492147275633-0700)\/"
+            },
+            {
+              "CacheID": 4030481,
+              "Code": "TLPQ2ZXY",
+              "ID": 650760494,
+              "Images": [],
+              "IsArchived": false,
+              "LogGuid": "bcc18637-00f5-4e0e-8cca-3c01e6e9d901",
+              "LogIsEncoded": false,
+              "LogText": "",
+              "LogType": {
+                "AdminActionable": false,
+                "ImageName": "icon_visited",
+                "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_visited.gif",
+                "OwnerActionable": false,
+                "WptLogTypeId": 75,
+                "WptLogTypeName": "Visited"
+              },
+              "LoggedBy": {
+                "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/46fa649e-84f3-4fa1-8284-cbe0f2de9bc0.jpg",
+                "FindCount": 7294,
+                "GalleryImageCount": null,
+                "HideCount": 9,
+                "HomeCoordinates": null,
+                "Id": 4409046,
+                "IsAdmin": false,
+                "MemberType": null,
+                "PublicGuid": "c343d395-679a-4ea0-b1da-9012b9228602",
+                "UserName": "Socke11"
+              },
+              "UTCCreateDate": "\/Date(1492023600000)\/",
+              "UpdatedLatitude": 51.46852,
+              "UpdatedLongitude": 6.740733,
+              "Url": "http:\/\/coord.info\/TLPQ2ZXY",
+              "VisitDate": "\/Date(1492018181487-0700)\/"
             },
             {
               "CacheID": 4422886,
@@ -12493,41 +12120,6 @@
               "UpdatedLongitude": 6.741667,
               "Url": "http:\/\/coord.info\/TLPQ30AZ",
               "VisitDate": "\/Date(1492018240583-0700)\/"
-            },
-            {
-              "CacheID": 4463317,
-              "Code": "TLPQ30KV",
-              "ID": 650761173,
-              "Images": [],
-              "IsArchived": false,
-              "LogGuid": "90fdea54-78be-4b6f-bc2d-3bb431d1cffd",
-              "LogIsEncoded": false,
-              "LogText": "",
-              "LogType": {
-                "AdminActionable": false,
-                "ImageName": "icon_visited",
-                "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_visited.gif",
-                "OwnerActionable": false,
-                "WptLogTypeId": 75,
-                "WptLogTypeName": "Visited"
-              },
-              "LoggedBy": {
-                "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/46fa649e-84f3-4fa1-8284-cbe0f2de9bc0.jpg",
-                "FindCount": 7294,
-                "GalleryImageCount": null,
-                "HideCount": 9,
-                "HomeCoordinates": null,
-                "Id": 4409046,
-                "IsAdmin": false,
-                "MemberType": null,
-                "PublicGuid": "c343d395-679a-4ea0-b1da-9012b9228602",
-                "UserName": "Socke11"
-              },
-              "UTCCreateDate": "\/Date(1492023600000)\/",
-              "UpdatedLatitude": 51.47167,
-              "UpdatedLongitude": 6.743333,
-              "Url": "http:\/\/coord.info\/TLPQ30KV",
-              "VisitDate": "\/Date(1492018289897-0700)\/"
             }
           ],
           "TrackingCode": null,
@@ -12605,7 +12197,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/1f492e8b-3504-4f94-89dd-4ca0993515ef.jpeg",
-                "FindCount": 1636,
+                "FindCount": 1644,
                 "GalleryImageCount": null,
                 "HideCount": 3,
                 "HomeCoordinates": null,
@@ -12710,7 +12302,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/39e5c9a1-f9aa-4c87-b79d-9c741d0740de.jpg",
-                "FindCount": 3815,
+                "FindCount": 3816,
                 "GalleryImageCount": null,
                 "HideCount": 11,
                 "HomeCoordinates": null,
@@ -12745,7 +12337,7 @@
               },
               "LoggedBy": {
                 "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/d7b36d27-f996-4f40-82b5-ba9057b52aba.jpg",
-                "FindCount": 8404,
+                "FindCount": 8407,
                 "GalleryImageCount": null,
                 "HideCount": 170,
                 "HomeCoordinates": null,
@@ -12994,7 +12586,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 24,
+      "CurrentDetailsCount": 93,
       "DateCreated": "\/Date(1257667200000-0800)\/",
       "DateLastUpdate": "\/Date(1489235058463-0800)\/",
       "DateLastVisited": "\/Date(1489235043000-0800)\/",
@@ -13101,7 +12693,7 @@
           "Code": "GLPV2E00",
           "Finder": {
             "AvatarUrl": "http:\/\/www.geocaching.com\/images\/default_avatar.jpg",
-            "FindCount": 1344,
+            "FindCount": 1348,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -13141,7 +12733,7 @@
           "Code": "GLPV89CR",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bf0758f2-b3cb-4b57-b1b6-a753e22f1f75.jpg",
-            "FindCount": 152,
+            "FindCount": 153,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -13181,7 +12773,7 @@
           "Code": "GLPQAPRT",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-            "FindCount": 3734,
+            "FindCount": 3735,
             "GalleryImageCount": null,
             "HideCount": 42,
             "HomeCoordinates": null,
@@ -13341,7 +12933,7 @@
           "Code": "GLP96V0T",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/44fa662b-5838-49cc-86f6-d254a30f22ab.jpg",
-            "FindCount": 468,
+            "FindCount": 469,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -13434,7 +13026,7 @@
       "Name": "Am toten See",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -13512,7 +13104,7 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 25,
+      "CurrentDetailsCount": 94,
       "DateCreated": "\/Date(1448438400000-0800)\/",
       "DateLastUpdate": "\/Date(1491983219043-0700)\/",
       "DateLastVisited": "\/Date(1490554800000-0700)\/",
@@ -13588,7 +13180,7 @@
           "IsApproved": false,
           "IsArchived": false,
           "LogIsEncoded": false,
-          "LogText": "#1.510\u000d\u000a11:30 Uhr ? Heute war ich mal wieder mit Freggel76 und BugsBunny unterwegs, um ein paar Caches einzusammeln. Dieser war einer davon. Das Rästel hatte BugsBunny bereits ausgearbeitet. Vor Ort war der Kleine dann auch gleich ausgemacht und BugsBunny hatte genau das richtige Tool dabei, um diese Dose zu holen. Das war aber gar nicht so einfach. Für diese tolle Idee lasse ich gerne ein blaues Herzchen da.\u000d\u000a\u000d\u000aVielen Dank\u000d\u000aTeam koppi&co",
+          "LogText": "#1.510\u000d\u000a11:30 Uhr – Heute war ich mal wieder mit Freggel76 und BugsBunny unterwegs, um ein paar Caches einzusammeln. Dieser war einer davon. Das Rästel hatte BugsBunny bereits ausgearbeitet. Vor Ort war der Kleine dann auch gleich ausgemacht und BugsBunny hatte genau das richtige Tool dabei, um diese Dose zu holen. Das war aber gar nicht so einfach. Für diese tolle Idee lasse ich gerne ein blaues Herzchen da.\u000d\u000a\u000d\u000aVielen Dank\u000d\u000aTeam koppi&co",
           "LogType": {
             "AdminActionable": false,
             "ImageName": "icon_smile",
@@ -13609,7 +13201,7 @@
           "Code": "GLQG24JX",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/9e9d5694-4956-4222-b65d-257f17cdd7c7.jpg",
-            "FindCount": 11618,
+            "FindCount": 11627,
             "GalleryImageCount": null,
             "HideCount": 28,
             "HomeCoordinates": null,
@@ -13649,9 +13241,9 @@
           "Code": "GLQ9VED1",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/cd980bbb-b0f5-40d8-ab7b-cba01ed8a7a2.jpg",
-            "FindCount": 3144,
+            "FindCount": 3149,
             "GalleryImageCount": null,
-            "HideCount": 9,
+            "HideCount": 10,
             "HomeCoordinates": null,
             "Id": 2363666,
             "IsAdmin": false,
@@ -13689,7 +13281,7 @@
           "Code": "GLQ9PN8H",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/ea128f67-57e2-4a80-9395-dfd6ada5aa28.jpg",
-            "FindCount": 3238,
+            "FindCount": 3245,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -13729,7 +13321,7 @@
           "Code": "GLPPM4XP",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/dac8a76a-b93a-424b-8146-118fa84d1e49.jpg",
-            "FindCount": 5763,
+            "FindCount": 5764,
             "GalleryImageCount": null,
             "HideCount": 23,
             "HomeCoordinates": null,
@@ -13809,7 +13401,7 @@
           "Code": "GLP7H55F",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/b630619f-a5d1-4661-a6ab-a25f6c37b51a.jpg",
-            "FindCount": 487,
+            "FindCount": 488,
             "GalleryImageCount": null,
             "HideCount": 3,
             "HomeCoordinates": null,
@@ -13889,7 +13481,7 @@
           "Code": "GLNXFTA4",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/bb796dfa-633c-434b-b92f-2275c7d4f127.jpg",
-            "FindCount": 7402,
+            "FindCount": 7456,
             "GalleryImageCount": null,
             "HideCount": 12,
             "HomeCoordinates": null,
@@ -13942,7 +13534,7 @@
       "Name": "Baumschaukel refurbished",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -14020,9 +13612,9 @@
       },
       "Country": "Germany",
       "CountryID": 79,
-      "CurrentDetailsCount": 26,
+      "CurrentDetailsCount": 95,
       "DateCreated": "\/Date(1332831600000-0700)\/",
-      "DateLastUpdate": "\/Date(1492423367407-0700)\/",
+      "DateLastUpdate": "\/Date(1492456030800-0700)\/",
       "DateLastVisited": "\/Date(1492455600000-0700)\/",
       "Difficulty": 1.5,
       "EncodedHints": "",
@@ -14031,6 +13623,46 @@
       "FoundDateOfFoundByUser": null,
       "GUID": "56b4e4d2-8007-42c5-8bb1-4db2389e0e3b",
       "GeocacheLogs": [
+        {
+          "CacheCode": "GC3FHRP",
+          "CannotDelete": false,
+          "Code": "GLQPERFG",
+          "Finder": {
+            "AvatarUrl": "http:\/\/www.geocaching.com\/images\/default_avatar.jpg",
+            "FindCount": 5,
+            "GalleryImageCount": null,
+            "HideCount": 0,
+            "HomeCoordinates": null,
+            "Id": 19865052,
+            "IsAdmin": false,
+            "MemberType": {
+              "MemberTypeId": 1,
+              "MemberTypeName": "Basic"
+            },
+            "PublicGuid": "9a3baf8a-ce09-4f30-a67a-c70d4c31a7de",
+            "UserName": "JAYJAYjunior"
+          },
+          "Guid": "ae969bcf-025c-4ce2-86c3-82459bbd1174",
+          "ID": 678817434,
+          "Images": [],
+          "IsApproved": false,
+          "IsArchived": false,
+          "LogIsEncoded": false,
+          "LogText": "Sonne,Regen,Hagel vermutlich deshalb ziemlich Muggelfrei mit ProtterBerlin gefunden und geloggt!",
+          "LogType": {
+            "AdminActionable": false,
+            "ImageName": "icon_smile",
+            "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_smile.gif",
+            "OwnerActionable": false,
+            "WptLogTypeId": 2,
+            "WptLogTypeName": "Found it"
+          },
+          "UTCCreateDate": "\/Date(1492481230773)\/",
+          "UpdatedLatitude": null,
+          "UpdatedLongitude": null,
+          "Url": "http:\/\/coord.info\/GLQPERFG",
+          "VisitDate": "\/Date(1492455600000-0700)\/"
+        },
         {
           "CacheCode": "GC3FHRP",
           "CannotDelete": false,
@@ -14077,7 +13709,7 @@
           "Code": "GLQJWEGT",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/3fbbab40-2271-42de-a377-95d5a8f23492.jpg",
-            "FindCount": 4755,
+            "FindCount": 4757,
             "GalleryImageCount": null,
             "HideCount": 12,
             "HomeCoordinates": null,
@@ -14117,7 +13749,7 @@
           "Code": "GLQHH52B",
           "Finder": {
             "AvatarUrl": "http:\/\/www.geocaching.com\/images\/default_avatar.jpg",
-            "FindCount": 197,
+            "FindCount": 196,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -14197,7 +13829,7 @@
           "Code": "GLQH3ZF8",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/47711fc9-ae06-452a-8b29-1f0eec248d87.jpg",
-            "FindCount": 467,
+            "FindCount": 473,
             "GalleryImageCount": null,
             "HideCount": 2,
             "HomeCoordinates": null,
@@ -14277,7 +13909,7 @@
           "Code": "GLQG6QXC",
           "Finder": {
             "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/7439c2d7-d196-4e4a-9b37-14afe4b70721.jpg",
-            "FindCount": 61,
+            "FindCount": 62,
             "GalleryImageCount": null,
             "HideCount": 0,
             "HomeCoordinates": null,
@@ -14400,46 +14032,6 @@
           "UpdatedLongitude": null,
           "Url": "http:\/\/coord.info\/GLQ6FA32",
           "VisitDate": "\/Date(1486756800000-0800)\/"
-        },
-        {
-          "CacheCode": "GC3FHRP",
-          "CannotDelete": false,
-          "Code": "GLQ4661J",
-          "Finder": {
-            "AvatarUrl": "http:\/\/www.geocaching.com\/images\/default_avatar.jpg",
-            "FindCount": 153,
-            "GalleryImageCount": null,
-            "HideCount": 0,
-            "HomeCoordinates": null,
-            "Id": 19174591,
-            "IsAdmin": false,
-            "MemberType": {
-              "MemberTypeId": 3,
-              "MemberTypeName": "Premium"
-            },
-            "PublicGuid": "ceb9efb0-1e4f-4fce-9558-bbbb22293cf9",
-            "UserName": "Diedell"
-          },
-          "Guid": "5a71e5bf-a64d-4fa8-b6b6-d900390e6ba6",
-          "ID": 661937998,
-          "Images": [],
-          "IsApproved": false,
-          "IsArchived": false,
-          "LogIsEncoded": false,
-          "LogText": "#31\u000aBei meiner Fahrradtour von Birkenwerder nach Oranienburg wollte ich noch einen weiteres Döschen finden.\u000aHat auch relativ schnell geklappt.\u000aDFDC ",
-          "LogType": {
-            "AdminActionable": false,
-            "ImageName": "icon_smile",
-            "ImageURL": "http:\/\/www.geocaching.com\/images\/icons\/icon_smile.gif",
-            "OwnerActionable": false,
-            "WptLogTypeId": 2,
-            "WptLogTypeName": "Found it"
-          },
-          "UTCCreateDate": "\/Date(1485482822573)\/",
-          "UpdatedLatitude": null,
-          "UpdatedLongitude": null,
-          "Url": "http:\/\/coord.info\/GLQ4661J",
-          "VisitDate": "\/Date(1485454004591-0800)\/"
         }
       ],
       "GeocacheNote": null,
@@ -14460,7 +14052,7 @@
       "Name": "Bei Neptun",
       "Owner": {
         "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/4ccd7dfb-f803-4bce-af0f-f6473e1ac7d1.jpg",
-        "FindCount": 3734,
+        "FindCount": 3735,
         "GalleryImageCount": null,
         "HideCount": 42,
         "HomeCoordinates": null,
@@ -14492,8 +14084,8 @@
   "PQCount": 0,
   "CacheCodes": [],
   "CacheLimits": {
-    "CachesLeft": 5974,
-    "CurrentCacheCount": 26,
+    "CachesLeft": 5905,
+    "CurrentCacheCount": 95,
     "MaxCacheCount": 6000
   },
   "TotalMatchingCaches": 23
