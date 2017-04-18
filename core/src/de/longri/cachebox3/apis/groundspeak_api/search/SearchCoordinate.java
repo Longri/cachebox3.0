@@ -40,8 +40,34 @@ public class SearchCoordinate extends Search {
 
     @Override
     protected void getRequest(Json json) {
+        // add Coordinate info
+        //        "PointRadius":{
+        //            "DistanceInMeters":9223372036854775807,
+        //                    "Point":{
+        //                "Latitude":1.26743233E+15,
+        //                        "Longitude":1.26743233E+15
+        //            }
+        //        },
+
+        boolean hasStart = false;
+
+        try {
+            json.writeObjectStart();
+        } catch (IllegalStateException e) {
+            hasStart = true;
+        }
+
+        json.writeObjectStart("PointRadius");
+        json.writeValue("DistanceInMeters",this.distanceInMeters);
+        json.writeObjectStart("Point");
+        json.writeValue("Latitude",pos.getLatitude());
+        json.writeValue("Longitude",pos.getLongitude());
+        json.writeObjectEnd();
+        json.writeObjectEnd();
+
         super.getRequest(json);
-        //TODO change to JsonWriter
+        if (!hasStart) json.writeObjectEnd();
+
 //		JSONObject jpr = new JSONObject();
 //		jpr.put("DistanceInMeters", String.valueOf((int) distanceInMeters));
 //		JSONObject jpt = new JSONObject();

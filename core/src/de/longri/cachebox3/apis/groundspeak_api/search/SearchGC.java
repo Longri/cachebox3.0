@@ -32,7 +32,7 @@ public class SearchGC extends Search {
     public SearchGC(String gcApiKey, String gcCode) {
         super(gcApiKey, 1, (byte) 2);
         // single Cache will full loaded
-        this.gcCodes = new ArrayList<String>();
+        this.gcCodes = new ArrayList<>();
         this.gcCodes.add(gcCode);
     }
 

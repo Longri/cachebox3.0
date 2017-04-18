@@ -33,12 +33,26 @@ public class SearchGCOwner extends SearchCoordinate {
 
     @Override
     protected void getRequest(Json json) {
+        // add info for User
+        //        "HiddenByUsers":{
+        //            "UserNames":["String content"]
+        //        },
+
+        boolean hasStart = false;
+
+        try {
+            json.writeObjectStart();
+        } catch (IllegalStateException e) {
+            hasStart = true;
+        }
+
+        json.writeObjectStart("HiddenByUsers");
+        json.writeArrayStart("UserNames");
+        json.writeValue(OwnerName);
+        json.writeArrayEnd();
+        json.writeObjectEnd();
+
         super.getRequest(json);
-        //TODO change to JsonWriter
-//		JSONObject jhidden = new JSONObject();
-//		JSONArray jusers = new JSONArray();
-//		jusers.put(OwnerName);
-//		jhidden.put("UserNames", jusers);
-//		request.put("HiddenByUsers", jhidden);
+        if (!hasStart) json.writeObjectEnd();
     }
 }

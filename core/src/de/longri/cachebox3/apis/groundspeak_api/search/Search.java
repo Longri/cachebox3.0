@@ -215,7 +215,7 @@ public abstract class Search extends PostRequest {
 
                 switch (SWITCH) {
                     case CACHE_ARRAY:
-                        if (name.equals(NEW_CACHE)) {
+                        if (NEW_CACHE.equals(name)) {
                             //store cache
                             actCache.setApiState(apiState);
 
@@ -235,7 +235,7 @@ public abstract class Search extends PostRequest {
                         }
                         break;
                     case LOG_ARRAY:
-                        if (name.equals(NEW_LOG)) {
+                        if (NEW_LOG.equals(name)) {
                            // System.out.println("add Log entry ");
                             logList.add(actLog);
                             actLog = null;
