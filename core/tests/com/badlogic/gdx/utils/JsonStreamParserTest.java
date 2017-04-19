@@ -16,11 +16,14 @@
 package com.badlogic.gdx.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
+import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
 import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.converter.Base64;
 import org.junit.jupiter.api.Test;
+import org.slf4j.impl.DummyLogApplication;
 import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.io.FileNotFoundException;
@@ -36,6 +39,9 @@ class JsonStreamParserTest {
     static {
         BuildInfo.setTestBuildInfo("JUnitTest");
         Gdx.net = new LwjglNet();
+        Gdx.files = new LwjglFiles();
+        Gdx.app = new DummyLogApplication();
+        Gdx.app.setApplicationLogger(new LwjglApplicationLogger());
     }
 
     final String apiKey = EXCLUDE_FROM_TRAVIS.GcAPI;
@@ -80,7 +86,7 @@ class JsonStreamParserTest {
             }
         }.parse(stream);
 
-
+        stream = TestUtils.getResourceRequestStream("testsResources/GetYourUserProfile_request.txt");
         final StringBuilder sb2 = new StringBuilder();
         new JsonStreamParser() {
             public void startArray(String name) {
@@ -117,7 +123,7 @@ class JsonStreamParserTest {
         }.parse(stream);
 
 
-        // assertEquals(sb.toString(), sb2.toString());
+        assertEquals(sb.toString(), sb2.toString());
 
     }
 
