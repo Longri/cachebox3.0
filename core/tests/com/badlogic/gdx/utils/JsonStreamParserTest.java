@@ -23,6 +23,7 @@ import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.converter.Base64;
 import org.junit.jupiter.api.Test;
+import org.slf4j.*;
 import org.slf4j.impl.DummyLogApplication;
 import travis.EXCLUDE_FROM_TRAVIS;
 
@@ -46,48 +47,84 @@ class JsonStreamParserTest {
 
     final String apiKey = EXCLUDE_FROM_TRAVIS.GcAPI;
     final boolean isDummy = apiKey.equals(EXCLUDE_FROM_TRAVIS.DUMMY_API_KEY);
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(JsonStreamParserTest.class);
 
     @Test
     void parse() throws FileNotFoundException {
 
-        InputStream stream = TestUtils.getResourceRequestStream("testsResources/GetYourUserProfile_request.txt");
-        final StringBuilder sb = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
+        String file = "testsResources/GetYourUserProfile_request.txt";
+        parse(file, sb, sb2);
+        assertEquals(sb.toString(), sb2.toString());
+
+        sb2 = new StringBuilder();
+        sb = new StringBuilder();
+        file = "testsResources/SearchGcCoordinate_request.txt";
+        parse(file, sb, sb2);
+        assertEquals(sb.toString(), sb2.toString());
+
+
+//        sb2 = new StringBuilder();
+//        sb = new StringBuilder();
+//        file = "testsResources/SearchGcOwner_result.json";
+//        parse(file, sb, sb2);
+//        assertEquals(sb.toString(), sb2.toString());
+
+    }
+
+    private void parse(String file, final StringBuilder sb, final StringBuilder sb2) throws FileNotFoundException {
+        long start = System.currentTimeMillis();
+
+        InputStream stream = TestUtils.getResourceRequestStream(file);
+
         new JsonReader() {
             public void startArray(String name) {
+                super.startArray(name);
                 sb.appendLine("startArray " + name);
             }
 
             public void endArray(String name) {
+                super.endArray(name);
                 sb.appendLine("endArray " + name);
             }
 
             public void startObject(String name) {
+                super.startObject(name);
                 sb.appendLine("startObject " + name);
             }
 
             public void pop() {
+                super.pop();
                 sb.appendLine("pop ");
             }
 
             public void string(String name, String value) {
+                super.string(name, value);
                 sb.appendLine("string " + name + "  " + value);
             }
 
             public void number(String name, double value, String stringValue) {
+                super.number(name, value, stringValue);
                 sb.appendLine("number(Double) " + name + "  " + value);
             }
 
             public void number(String name, long value, String stringValue) {
+                super.number(name, value, stringValue);
                 sb.appendLine("number(Long) " + name + "  " + value);
             }
 
             public void bool(String name, boolean value) {
+                super.bool(name, value);
                 sb.appendLine("bool " + name + "  " + value);
             }
         }.parse(stream);
 
-        stream = TestUtils.getResourceRequestStream("testsResources/GetYourUserProfile_request.txt");
-        final StringBuilder sb2 = new StringBuilder();
+        log.debug("Parse time JsonParser: {}", System.currentTimeMillis() - start);
+
+        start = System.currentTimeMillis();
+        stream = TestUtils.getResourceRequestStream(file);
+
         new JsonStreamParser() {
             public void startArray(String name) {
                 sb2.appendLine("startArray " + name);
@@ -122,9 +159,7 @@ class JsonStreamParserTest {
             }
         }.parse(stream);
 
-
-        assertEquals(sb.toString(), sb2.toString());
-
+        log.debug("Parse time JsonStreamParser: {}", System.currentTimeMillis() - start);
     }
 
 }

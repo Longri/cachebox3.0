@@ -30,19 +30,21 @@ import java.util.Arrays;
 public class JsonStreamParser implements JsonParser {
 
     private static final Logger log = LoggerFactory.getLogger(JsonStreamParser.class);
-    private static final int BUFFER_LENGTH = 50;// 1024;
+    private static final int BUFFER_LENGTH = 1024;
     Reader reader;
     char[] buf = new char[BUFFER_LENGTH];
     char[] tmp = new char[BUFFER_LENGTH];
     float percent = 0;
     int lastNameStart = -1;
 
+    private final boolean DEBUG = false;
+
 
     @Override
     public JsonValue parse(final InputStream input) {
         this.reader = new InputStreamReader(input);
 
-        log.debug("Start parsing");
+        if (DEBUG) log.debug("Start parsing");
 
         try {
             float available = input.available();
@@ -58,8 +60,8 @@ public class JsonStreamParser implements JsonParser {
                     readed += length;
 
                 percent = (float) readed / available * 100.0f;
-                log.debug("Read Buffer: available {}/{} = {}%", readed, available, percent);
-                log.debug(new String(buf));
+                if (DEBUG) log.debug("Read Buffer: available {}/{} = {}%", readed, available, percent);
+                if (DEBUG) log.debug(new String(buf));
 
                 int lastOffset = parse(buf);
                 offset = BUFFER_LENGTH - lastOffset;
@@ -75,7 +77,7 @@ public class JsonStreamParser implements JsonParser {
                     System.arraycopy(tmp, 0, buf, 0, offset);
                 }
 
-                log.debug("Last Offset: {}", lastOffset);
+                if (DEBUG) log.debug("Last Offset: {}", lastOffset);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,18 +100,22 @@ public class JsonStreamParser implements JsonParser {
         while (offset < data.length) {
             int peek = searchPeek(data, offset);
 //            if (!isEndPeek(data, peek)) {
-                int nameStart = searchNameBefore(data, peek);
-                if (nameStart == -1)
-                    actName = null;
-                else {
-                    actName = getName(data, nameStart);
-                    String valueString = getValue(data, nameStart + actName.length(), peek);
-                    if (valueString != null) {
+            int nameStart = searchNameBefore(data, peek);
+            if (nameStart == -1)
+                actName = null;
+            else {
+                actName = getName(data, nameStart);
+                String valueString = getValue(data, nameStart + actName.length(), peek);
+                if (valueString != null) {
+                    try {
                         handleValue(actName, valueString);
-                        offset = peek + 1;
-//                        continue;
+                    } catch (Exception e) {
+                        log.error("Error with parse value near {} value;'{}'", actName, valueString);
                     }
+                    offset = peek + 1;
+//                        continue;
                 }
+            }
 //            }
 
             if (peek >= 0) {
@@ -153,8 +159,13 @@ public class JsonStreamParser implements JsonParser {
             string(actName, valueString.substring(1, valueString.length() - 1));
         } else if (valueString.contains(".")) {
             // parse double
+            number(actName, Double.valueOf(valueString), valueString);
+        } else if (valueString.toLowerCase().equals("true") || valueString.toLowerCase().equals("false")) {
+            bool(actName, valueString.toLowerCase().equals("true"));
         } else {
             //parse long
+            long value = Long.valueOf(valueString);
+            number(actName, value, valueString);
         }
     }
 
@@ -175,7 +186,7 @@ public class JsonStreamParser implements JsonParser {
             } catch (Exception e) {
                 log.error("found: {} end: {}", found, end, e);
             }
-            log.debug("Found Value: {}", value);
+            if (DEBUG) log.debug("Found Value: {}", value);
             return value;
         }
         return null;
@@ -193,7 +204,7 @@ public class JsonStreamParser implements JsonParser {
         }
         if (found > nameStart) {
             String name = new String(data, nameStart + 1, found - nameStart - 1);
-            log.debug("Found Name: {}", name);
+            if (DEBUG) log.debug("Found Name: {}", name);
             return name;
         }
         return null;
