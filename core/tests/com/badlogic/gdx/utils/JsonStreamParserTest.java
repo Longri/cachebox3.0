@@ -53,14 +53,16 @@ class JsonStreamParserTest {
     void parse() throws FileNotFoundException {
 
         String[] testFiles = new String[]{
+                "testsResources/LongValueString.json",
+                "testsResources/ArrayTest.json",
                 "testsResources/GetYourUserProfile_request.json",
                 "testsResources/GetYourUserProfile_request.txt",
                 "testsResources/JsonArrayTest.json",
                 "testsResources/JsonArrayTestExtended.json",
                 "testsResources/SearchGc_request.txt",
                 "testsResources/SearchGc_request.json",
-//                "testsResources/SearchGc_result.json",
-//                "testsResources/SearchGc_result.txt",
+                "testsResources/SearchGc_result.json",
+                "testsResources/SearchGc_result.txt",
                 "testsResources/SearchGcCoordinate_request.txt",
                 "testsResources/SearchGcOwner_request.txt",
 //                "testsResources/SearchGcOwner_result.json",
@@ -77,35 +79,6 @@ class JsonStreamParserTest {
             assertEquals(sb.toString(), sb2.toString());
             log.debug(" --------------------------- ");
         }
-
-
-//        String file = "testsResources/GetYourUserProfile_request.txt";
-//        parse(file, sb, sb2);
-//        assertEquals(sb.toString(), sb2.toString());
-//
-//        sb2 = new StringBuilder();
-//        sb = new StringBuilder();
-//        file = "testsResources/SearchGcCoordinate_request.txt";
-//        parse(file, sb, sb2);
-//        assertEquals(sb.toString(), sb2.toString());
-//
-//        sb2 = new StringBuilder();
-//        sb = new StringBuilder();
-//        file = "testsResources/JsonArrayTest.json";
-//        parse(file, sb, sb2);
-//        assertEquals(sb.toString(), sb2.toString());
-//
-//        sb2 = new StringBuilder();
-//        sb = new StringBuilder();
-//        file = "testsResources/JsonArrayTestExtended.json";
-//        parse(file, sb, sb2);
-//        assertEquals(sb.toString(), sb2.toString());
-//
-//        sb2 = new StringBuilder();
-//        sb = new StringBuilder();
-//        file = "testsResources/SearchGcOwner_result.json";
-//        parse(file, sb, sb2);
-//        assertEquals(sb.toString(), sb2.toString());
 
     }
 

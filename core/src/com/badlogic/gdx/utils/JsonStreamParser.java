@@ -15,8 +15,8 @@
  */
 package com.badlogic.gdx.utils;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,13 +30,15 @@ import java.util.Arrays;
 public class JsonStreamParser implements JsonParser {
 
     private static final Logger log = LoggerFactory.getLogger(JsonStreamParser.class);
-    private static final int BUFFER_LENGTH = 1024;
-    Reader reader;
-    char[] buf = new char[BUFFER_LENGTH];
-    char[] tmp = new char[BUFFER_LENGTH];
-    float percent = 0;
-    int lastNameStart = -1;
-    Array<String> arrayNameStack = new Array<>();
+    private static final int DEFAULT_BUFFER_LENGTH = 512;
+
+    private int actBufferLength = DEFAULT_BUFFER_LENGTH;
+    private Reader reader;
+    private char[] buf = new char[actBufferLength];
+    private char[] tmp = new char[actBufferLength];
+    private float percent = 0;
+    private int lastNameStart = -1;
+    private Array<String> arrayNameStack = new Array<>();
 
     private final boolean DEBUG = false;
     private int lastPeek;
@@ -54,7 +56,25 @@ public class JsonStreamParser implements JsonParser {
             int offset = 0;
             while (true) {
 
-                int length = reader.read(buf, offset, BUFFER_LENGTH - offset);
+                if (offset < actBufferLength && actBufferLength > DEFAULT_BUFFER_LENGTH && offset < DEFAULT_BUFFER_LENGTH) {
+                    actBufferLength = actBufferLength >> 1;
+                    log.debug("can decrease buffer to {}", actBufferLength);
+                    buf = new char[actBufferLength];
+                    System.arraycopy(tmp, 0, buf, 0, offset);
+                    tmp = new char[actBufferLength];
+                }
+
+                if (offset == actBufferLength) {
+                    //must increase buffer size!
+                    actBufferLength = actBufferLength << 1;
+                    log.debug("increase buffer to {}", actBufferLength);
+                    buf = new char[actBufferLength];
+                    System.arraycopy(tmp, 0, buf, 0, offset);
+                    tmp = new char[actBufferLength];
+                }
+
+
+                int length = reader.read(buf, offset, actBufferLength - offset);
                 if (length == -1) break;
                 if (length == 0) {
 
@@ -66,7 +86,7 @@ public class JsonStreamParser implements JsonParser {
                 if (DEBUG) log.debug(new String(buf));
 
                 int lastOffset = parse(buf);
-                offset = BUFFER_LENGTH - lastOffset;
+                offset = actBufferLength - lastOffset;
 
                 if (offset == 0) {
                     // clear buffer
@@ -127,7 +147,6 @@ public class JsonStreamParser implements JsonParser {
                     offset = peek + 1;
                 }
             }
-
 
             if (peek >= 0) {
                 switch (data[peek]) {
