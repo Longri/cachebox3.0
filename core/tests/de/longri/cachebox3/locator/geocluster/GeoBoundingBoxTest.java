@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.locator.geocluster;
 
+import de.longri.cachebox3.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.oscim.core.Box;
 import org.oscim.core.GeoPoint;
@@ -26,6 +27,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Created by Longri on 04.01.17.
  */
 class GeoBoundingBoxTest {
+
+    static {
+        TestUtils.initialGdx();
+    }
 
     @Test
     void constructor() {

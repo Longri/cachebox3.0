@@ -15,9 +15,15 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
+import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
+import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.utils.BuildInfo;
 import org.apache.commons.codec.Charsets;
+import org.slf4j.impl.DummyLogApplication;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -29,6 +35,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Created by longri on 14.04.17.
  */
 public class TestUtils {
+
+    public static void initialGdx() {
+        if (Gdx.net != null) return;
+        BuildInfo.setTestBuildInfo("JUnitTest");
+        Gdx.net = new LwjglNet();
+        Gdx.files = new LwjglFiles();
+        Gdx.app = new DummyLogApplication();
+        Gdx.app.setApplicationLogger(new LwjglApplicationLogger());
+    }
+
 
     public static String getResourceRequestString(String path, String apiKey) throws IOException {
         File file = new File(path);

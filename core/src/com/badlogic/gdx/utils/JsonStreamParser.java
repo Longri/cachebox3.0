@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * Created by Longri on 18.04.2017.
@@ -30,18 +31,18 @@ import java.util.Arrays;
 public class JsonStreamParser implements JsonParser {
 
     private static final Logger log = LoggerFactory.getLogger(JsonStreamParser.class);
-    private static final int DEFAULT_BUFFER_LENGTH = 512;
+    private static final int DEFAULT_BUFFER_LENGTH = 512;//1024;
+    private final static String NULL = "null";
 
     private int actBufferLength = DEFAULT_BUFFER_LENGTH;
     private Reader reader;
     private char[] buf = new char[actBufferLength];
     private char[] tmp = new char[actBufferLength];
     private float percent = 0;
-    private int lastNameStart = -1;
     private Array<String> arrayNameStack = new Array<>();
-
     private final boolean DEBUG = false;
     private int lastPeek;
+    private int lastNameStart = -1;
 
 
     @Override
@@ -58,7 +59,8 @@ public class JsonStreamParser implements JsonParser {
 
                 if (offset < actBufferLength && actBufferLength > DEFAULT_BUFFER_LENGTH && offset < DEFAULT_BUFFER_LENGTH) {
                     actBufferLength = actBufferLength >> 1;
-                    if (DEBUG)log.debug("can decrease buffer to {}", actBufferLength);
+                    if (DEBUG)
+                        log.debug("can decrease buffer to {}", actBufferLength);
                     buf = new char[actBufferLength];
                     System.arraycopy(tmp, 0, buf, 0, offset);
                     tmp = new char[actBufferLength];
@@ -67,7 +69,8 @@ public class JsonStreamParser implements JsonParser {
                 if (offset == actBufferLength) {
                     //must increase buffer size!
                     actBufferLength = actBufferLength << 1;
-                    if (DEBUG) log.debug("increase buffer to {}", actBufferLength);
+                    if (DEBUG)
+                        log.debug("increase buffer to {}", actBufferLength);
                     buf = new char[actBufferLength];
                     System.arraycopy(tmp, 0, buf, 0, offset);
                     tmp = new char[actBufferLength];
@@ -118,7 +121,7 @@ public class JsonStreamParser implements JsonParser {
     private int parse(char[] data) {
         String actName = null;
         lastNameStart = -1;
-        lastPeek = 0;
+        lastPeek = -1;
         int offset = 0;
         while (offset < data.length) {
             int peek = searchPeek(data, offset);
@@ -137,14 +140,17 @@ public class JsonStreamParser implements JsonParser {
                     noValue = true;
             }
             if (!noValue) {
-                String valueString = getValue(data, nameStart + (actName != null ? actName.length() : lastPeek + 2), peek);
-                if (valueString != null) {
-                    try {
-                        handleValue(actName, valueString);
-                    } catch (Exception e) {
-                        log.error("Error with parse value near {} value;'{}'", actName, valueString);
+
+                if (!(actName == null && lastPeek == -1)) {
+                    String valueString = getValue(data, nameStart + (actName != null ? actName.length() : lastPeek + 2), peek);
+                    if (valueString != null) {
+                        try {
+                            handleValue(actName, valueString);
+                        } catch (Exception e) {
+                            log.error("Error with parse value near {} value;'{}'", actName, valueString);
+                        }
+                        offset = peek + 1;
                     }
-                    offset = peek + 1;
                 }
             }
 
@@ -185,10 +191,9 @@ public class JsonStreamParser implements JsonParser {
         return false;
     }
 
-    private final String NULL = "null";
 
     private void handleValue(String actName, String valueString) {
-        valueString = valueString.trim();
+        valueString = unescape(valueString.trim());
 
         if (NULL.equals(valueString)) {
             string(actName, NULL);
@@ -197,13 +202,25 @@ public class JsonStreamParser implements JsonParser {
         } else if (valueString.contains(".")) {
             // parse double
             number(actName, Double.valueOf(valueString), valueString);
-        } else if (valueString.toLowerCase().equals("true") || valueString.toLowerCase().equals("false")) {
-            bool(actName, valueString.toLowerCase().equals("true"));
+        } else if (valueString.toLowerCase(Locale.ENGLISH).equals("true") || valueString.toLowerCase(Locale.ENGLISH).equals("false")) {
+            bool(actName, valueString.toLowerCase(Locale.ENGLISH).equals("true"));
         } else {
             //parse long
             long value = Long.valueOf(valueString);
             number(actName, value, valueString);
         }
+    }
+
+    private String removeNullChar(String value) {
+        int length = value.length();
+        StringBuilder buffer = new StringBuilder(length + 16);
+        for (int i = 0; i < length; ) {
+            char c = value.charAt(i++);
+            if (c != '\0') {
+                buffer.append(c);
+            }
+        }
+        return buffer.toString();
     }
 
     /**
@@ -276,13 +293,13 @@ public class JsonStreamParser implements JsonParser {
                 log.error("found: {} end: {}", found, end, e);
             }
             if (DEBUG) log.debug("Found Value: {}", value);
-            return value;
+            return removeNullChar(value);
         }
 
         //try to trimmed value
         if (end - start > 0) {
             String value = new String(data, start, end - start).trim();
-            if (value.startsWith("\"") && value.endsWith("\"")) return value;
+            if (value.startsWith("\"") && value.endsWith("\"")) return removeNullChar(value);
         }
         return null;
     }

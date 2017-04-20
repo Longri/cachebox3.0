@@ -38,11 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class JsonStreamParserTest {
 
     static {
-        BuildInfo.setTestBuildInfo("JUnitTest");
-        Gdx.net = new LwjglNet();
-        Gdx.files = new LwjglFiles();
-        Gdx.app = new DummyLogApplication();
-        Gdx.app.setApplicationLogger(new LwjglApplicationLogger());
+        TestUtils.initialGdx();
     }
 
     final String apiKey = EXCLUDE_FROM_TRAVIS.GcAPI;
@@ -53,6 +49,7 @@ class JsonStreamParserTest {
     void parse() throws FileNotFoundException {
 
         String[] testFiles = new String[]{
+                "testsResources/Error-with-parse-value-near-OwnerActionable.txt",
                 "testsResources/LongValueString.json",
                 "testsResources/ArrayTest.json",
                 "testsResources/GetYourUserProfile_request.json",

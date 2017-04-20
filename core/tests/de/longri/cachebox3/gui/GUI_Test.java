@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui;
 
+import de.longri.cachebox3.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,6 +24,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Created by Longri on 28.01.17.
  */
 class GUI_Test {
+
+    static {
+        TestUtils.initialGdx();
+    }
 
     @Test
     void getDrawableTest() {

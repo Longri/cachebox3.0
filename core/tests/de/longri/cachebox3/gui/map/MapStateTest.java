@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.map;
 
+import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +25,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Created by Longri on 08.03.2017.
  */
 class MapStateTest {
+
+    static {
+        TestUtils.initialGdx();
+    }
+
     @Test
     void setMapMode() {
 

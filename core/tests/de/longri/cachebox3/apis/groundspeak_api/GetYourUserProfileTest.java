@@ -44,8 +44,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GetYourUserProfileTest {
 
     static {
-        BuildInfo.setTestBuildInfo("JUnitTest");
-        Gdx.net = new LwjglNet();
+        TestUtils.initialGdx();
     }
 
     final String apiKey = EXCLUDE_FROM_TRAVIS.GcAPI;

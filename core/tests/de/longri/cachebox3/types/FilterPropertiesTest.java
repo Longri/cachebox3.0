@@ -16,6 +16,7 @@
 package de.longri.cachebox3.types;
 
 
+import de.longri.cachebox3.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,7 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Created by Longri on 19.02.17.
  */
 class FilterPropertiesTest {
-
+    static {
+        TestUtils.initialGdx();
+    }
 
     @Test
     void checkPresetALL() {

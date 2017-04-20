@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.animations.map;
 
+import de.longri.cachebox3.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,6 +25,10 @@ import static org.junit.jupiter.api.Assertions.*;
  * Created by Longri on 28.03.2017.
  */
 class DoubleAnimatorTest {
+
+    static {
+        TestUtils.initialGdx();
+    }
 
     @Test
     void update() {

@@ -17,6 +17,7 @@ package de.longri.cachebox3.locator.new_geocluster;
 
 import com.badlogic.gdx.scenes.scene2d.ui.ClusteredList;
 import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
+import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.utils.lists.CB_List;
@@ -31,6 +32,10 @@ import static org.hamcrest.Matchers.equalTo;
  * Created by Longri on 25.12.16.
  */
 public class SquareTest {
+
+    static {
+        TestUtils.initialGdx();
+    }
 
     static final int arraySize = 100;//5;
     static final double distance = 10;

@@ -33,6 +33,10 @@ import static travis.EXCLUDE_FROM_TRAVIS.LONGRI_HOME_COORDS;
  */
 class SearchCoordinateTest {
 
+    static {
+        TestUtils.initialGdx();
+    }
+
     final String apiKey = EXCLUDE_FROM_TRAVIS.GcAPI;
     final boolean isDummy = apiKey.equals(EXCLUDE_FROM_TRAVIS.DUMMY_API_KEY);
 

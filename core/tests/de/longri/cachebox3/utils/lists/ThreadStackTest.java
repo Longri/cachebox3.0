@@ -16,6 +16,7 @@
 package de.longri.cachebox3.utils.lists;
 
 import com.badlogic.gdx.utils.StringBuilder;
+import de.longri.cachebox3.TestUtils;
 import org.junit.jupiter.api.Test;
 import travis.EXCLUDE_FROM_TRAVIS;
 
@@ -28,6 +29,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Created by Longri on 06.01.2017.
  */
 class ThreadStackTest {
+
+    static {
+        TestUtils.initialGdx();
+    }
 
     AtomicBoolean TestIsRunning = new AtomicBoolean(false);
 

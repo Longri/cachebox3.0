@@ -19,17 +19,15 @@ import com.badlogic.gdx.Net;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonParser;
-import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonStreamParser;
 import de.longri.cachebox3.apis.groundspeak_api.PostRequest;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.*;
-import de.longri.cachebox3.utils.converter.Base64;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
@@ -144,7 +142,7 @@ public abstract class Search extends PostRequest {
     protected void handleHttpResponse(Net.HttpResponse httpResponse, final GenericCallBack<Integer> readyCallBack) {
         final InputStream stream = httpResponse.getResultAsStream();
 
-        JsonParser parser = new JsonReader() {
+        JsonParser parser = new JsonStreamParser() {
 
             @Override
             public void startArray(String name) {
@@ -203,6 +201,7 @@ public abstract class Search extends PostRequest {
 
             }
 
+            @Override
             public void startObject(String name) {
                 super.startObject(name);
                 // System.out.println("Start Object " + name);
@@ -239,6 +238,7 @@ public abstract class Search extends PostRequest {
                 objectStack.add(name);
             }
 
+            @Override
             public void pop() {
                 super.pop();
                 String name = objectStack.pop();
@@ -297,6 +297,7 @@ public abstract class Search extends PostRequest {
                 }
             }
 
+            @Override
             public void string(String name, String value) {
                 super.string(name, value);
 
@@ -352,6 +353,7 @@ public abstract class Search extends PostRequest {
 
             }
 
+            @Override
             public void number(String name, double value, String stringValue) {
                 super.number(name, value, stringValue);
 
@@ -381,6 +383,7 @@ public abstract class Search extends PostRequest {
                 }
             }
 
+            @Override
             public void number(String name, long value, String stringValue) {
                 super.number(name, value, stringValue);
 
@@ -420,6 +423,7 @@ public abstract class Search extends PostRequest {
 
             }
 
+            @Override
             public void bool(String name, boolean value) {
                 super.bool(name, value);
 
@@ -587,15 +591,18 @@ public abstract class Search extends PostRequest {
         }
     }
 
-    static Date getDateFromLongString(String value) {
+    private static final String DATE_START = "Date(";
+
+    private synchronized Date getDateFromLongString(String value) {
         Date date = new Date();
         try {
-            int date1 = value.indexOf("/Date(");
+            int date1 = value.indexOf(DATE_START);
             int date2 = value.indexOf("-");
-            String dateString = (String) value.subSequence(date1 + 6, date2);
+            String dateString = value.substring(date1 + DATE_START.length(), date2);
+            if (dateString.startsWith("\"")) dateString = dateString.substring(1);
             date = new Date(Long.valueOf(dateString));
         } catch (Exception exc) {
-            log.error("ParseDate", exc);
+            log.error("ParseDate from value:'{}'", value, exc);
         }
         return date;
     }

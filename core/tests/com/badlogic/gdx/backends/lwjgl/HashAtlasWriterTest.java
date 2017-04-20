@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SvgSkinUtil;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.utils.SkinColor;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,6 +26,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Created by Longri on 27.02.2017.
  */
 class HashAtlasWriterTest {
+
+    static {
+        TestUtils.initialGdx();
+    }
 
     static FileHandle testFolder;
     static FileHandle skinFile;

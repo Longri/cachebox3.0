@@ -17,6 +17,8 @@ package de.longri.cachebox3.apis.groundspeak_api.search;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
+import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
 import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.utils.Json;
@@ -27,6 +29,7 @@ import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.junit.jupiter.api.Test;
+import org.slf4j.impl.DummyLogApplication;
 import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.io.IOException;
@@ -45,8 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class SearchGCTest {
 
     static {
-        BuildInfo.setTestBuildInfo("JUnitTest");
-        Gdx.net = new LwjglNet();
+        TestUtils.initialGdx();
     }
 
     final String apiKey = EXCLUDE_FROM_TRAVIS.GcAPI;
