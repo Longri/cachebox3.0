@@ -58,7 +58,7 @@ public class JsonStreamParser implements JsonParser {
 
                 if (offset < actBufferLength && actBufferLength > DEFAULT_BUFFER_LENGTH && offset < DEFAULT_BUFFER_LENGTH) {
                     actBufferLength = actBufferLength >> 1;
-                    log.debug("can decrease buffer to {}", actBufferLength);
+                    if (DEBUG)log.debug("can decrease buffer to {}", actBufferLength);
                     buf = new char[actBufferLength];
                     System.arraycopy(tmp, 0, buf, 0, offset);
                     tmp = new char[actBufferLength];
@@ -67,7 +67,7 @@ public class JsonStreamParser implements JsonParser {
                 if (offset == actBufferLength) {
                     //must increase buffer size!
                     actBufferLength = actBufferLength << 1;
-                    log.debug("increase buffer to {}", actBufferLength);
+                    if (DEBUG) log.debug("increase buffer to {}", actBufferLength);
                     buf = new char[actBufferLength];
                     System.arraycopy(tmp, 0, buf, 0, offset);
                     tmp = new char[actBufferLength];
@@ -280,8 +280,10 @@ public class JsonStreamParser implements JsonParser {
         }
 
         //try to trimmed value
-        String value = new String(data, start, end - start).trim();
-        if (value.startsWith("\"") && value.endsWith("\"")) return value;
+        if (end - start > 0) {
+            String value = new String(data, start, end - start).trim();
+            if (value.startsWith("\"") && value.endsWith("\"")) return value;
+        }
         return null;
     }
 

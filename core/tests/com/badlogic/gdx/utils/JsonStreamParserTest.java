@@ -65,8 +65,18 @@ class JsonStreamParserTest {
                 "testsResources/SearchGc_result.txt",
                 "testsResources/SearchGcCoordinate_request.txt",
                 "testsResources/SearchGcOwner_request.txt",
-//                "testsResources/SearchGcOwner_result.json",
-//                "testsResources/SearchGcOwner_result.txt",
+                "testsResources/SearchGcOwner_result.json",
+                "testsResources/SearchGcOwner_result.txt",
+                "testsResources/5378.txt",
+                "testsResources/5379.txt",
+                "testsResources/88065379.txt",
+                "testsResources/88065380.txt",
+                "testsResources/88075378.txt",
+                "testsResources/88075379.txt",
+                "testsResources/88075380.txt",
+                "testsResources/88085378.txt",
+                "testsResources/88085379.txt",
+                "testsResources/88085380.txt",
         };
 
         for (String path : testFiles) {
