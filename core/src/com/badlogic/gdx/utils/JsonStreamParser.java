@@ -36,8 +36,10 @@ public class JsonStreamParser implements JsonParser {
     char[] tmp = new char[BUFFER_LENGTH];
     float percent = 0;
     int lastNameStart = -1;
+    Array<String> arrayNameStack = new Array<>();
 
     private final boolean DEBUG = false;
+    private int lastPeek;
 
 
     @Override
@@ -96,16 +98,26 @@ public class JsonStreamParser implements JsonParser {
     private int parse(char[] data) {
         String actName = null;
         lastNameStart = -1;
+        lastPeek = 0;
         int offset = 0;
         while (offset < data.length) {
             int peek = searchPeek(data, offset);
-//            if (!isEndPeek(data, peek)) {
+            if (peek == -1) return offset;
             int nameStart = searchNameBefore(data, peek);
             if (nameStart == -1)
                 actName = null;
             else {
                 actName = getName(data, nameStart);
-                String valueString = getValue(data, nameStart + actName.length(), peek);
+            }
+
+            boolean noValue = false;
+            switch (data[peek]) {
+                case '{':
+                case '[':
+                    noValue = true;
+            }
+            if (!noValue) {
+                String valueString = getValue(data, nameStart + (actName != null ? actName.length() : lastPeek + 2), peek);
                 if (valueString != null) {
                     try {
                         handleValue(actName, valueString);
@@ -113,10 +125,9 @@ public class JsonStreamParser implements JsonParser {
                         log.error("Error with parse value near {} value;'{}'", actName, valueString);
                     }
                     offset = peek + 1;
-//                        continue;
                 }
             }
-//            }
+
 
             if (peek >= 0) {
                 switch (data[peek]) {
@@ -125,17 +136,19 @@ public class JsonStreamParser implements JsonParser {
                         break;
                     case '[':
                         startArray(actName);
+                        arrayNameStack.add(actName);
                         break;
                     case '}':
                         pop();
                         break;
                     case ']':
-                        endArray(actName);
                         pop();
+                        endArray(arrayNameStack.pop());
                         break;
                     case ',':
                 }
                 offset = peek + 1;
+                lastPeek = peek;
             } else {
                 break;
             }
@@ -153,10 +166,15 @@ public class JsonStreamParser implements JsonParser {
         return false;
     }
 
+    private final String NULL = "null";
+
     private void handleValue(String actName, String valueString) {
-        // is String?
-        if (valueString.startsWith("\"")) {
-            string(actName, valueString.substring(1, valueString.length() - 1));
+        valueString = valueString.trim();
+
+        if (NULL.equals(valueString)) {
+            string(actName, NULL);
+        } else if (valueString.startsWith("\"")) {
+            string(actName, unescape(valueString.substring(1, valueString.length() - 1)));
         } else if (valueString.contains(".")) {
             // parse double
             number(actName, Double.valueOf(valueString), valueString);
@@ -169,8 +187,60 @@ public class JsonStreamParser implements JsonParser {
         }
     }
 
+    /**
+     * Unescape function from com.badlogic.gdx.utils.JsonReader!
+     *
+     * @param value
+     * @return
+     * @author Nathan Sweet
+     */
+    private String unescape(String value) {
+        int length = value.length();
+        StringBuilder buffer = new StringBuilder(length + 16);
+        for (int i = 0; i < length; ) {
+            char c = value.charAt(i++);
+            if (c != '\\') {
+                buffer.append(c);
+                continue;
+            }
+            if (i == length) break;
+            c = value.charAt(i++);
+            if (c == 'u') {
+                buffer.append(Character.toChars(Integer.parseInt(value.substring(i, i + 4), 16)));
+                i += 4;
+                continue;
+            }
+            switch (c) {
+                case '"':
+                case '\\':
+                case '/':
+                    break;
+                case 'b':
+                    c = '\b';
+                    break;
+                case 'f':
+                    c = '\f';
+                    break;
+                case 'n':
+                    c = '\n';
+                    break;
+                case 'r':
+                    c = '\r';
+                    break;
+                case 't':
+                    c = '\t';
+                    break;
+                default:
+                    throw new SerializationException("Illegal escaped character: \\" + c);
+            }
+            buffer.append(c);
+        }
+        return buffer.toString();
+    }
+
     private String getValue(char[] data, int start, int end) {
         int found = -1;
+        if (start < 0) return null;
         for (int i = start; i < end; i++) {
             switch (data[i]) {
                 case ':':
@@ -189,6 +259,10 @@ public class JsonStreamParser implements JsonParser {
             if (DEBUG) log.debug("Found Value: {}", value);
             return value;
         }
+
+        //try to trimmed value
+        String value = new String(data, start, end - start).trim();
+        if (value.startsWith("\"") && value.endsWith("\"")) return value;
         return null;
     }
 
@@ -214,13 +288,33 @@ public class JsonStreamParser implements JsonParser {
         int found = -1;
         boolean first = true;
         boolean end = true;
+        boolean isString = false;
         for (int i = peek; i >= 0; i--) {
+            if (isString) {
+                switch (data[i]) {
+                    case '"':
+                        // check if escaped
+                        if (data[i - 1] == '\\')
+                            continue;
+                        isString = false;
+                        break;
+                }
+                continue;
+            }
+
+
             switch (data[i]) {
                 case ':':
                     end = false;
                     break;
                 case '"':
-                    if (end) break;
+                    if (end) {
+                        // check if escaped
+                        if (data[i - 1] == '\\')
+                            continue;
+                        isString = true;
+                        break;
+                    }
                     if (first) {
                         first = false;
                     } else {
@@ -237,8 +331,28 @@ public class JsonStreamParser implements JsonParser {
 
     private int searchPeek(char[] data, int offset) {
 
+        boolean isString = false;
+
         for (int i = offset, n = data.length; i < n; i++) {
+            if (isString) {
+                switch (data[i]) {
+                    case '"':
+                        // check if escaped
+                        if (i > 1 && data[i - 1] == '\\')
+                            continue;
+                        isString = false;
+                        break;
+                }
+                continue;
+            }
+
             switch (data[i]) {
+                case '"':
+                    // check if escaped
+                    if (i > 1 && data[i - 1] == '\\')
+                        continue;
+                    isString = true;
+                    break;
                 case '{':
                 case '}':
                 case '[':

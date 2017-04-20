@@ -52,19 +52,55 @@ class JsonStreamParserTest {
     @Test
     void parse() throws FileNotFoundException {
 
-        StringBuilder sb2 = new StringBuilder();
-        StringBuilder sb = new StringBuilder();
-        String file = "testsResources/GetYourUserProfile_request.txt";
-        parse(file, sb, sb2);
-        assertEquals(sb.toString(), sb2.toString());
+        String[] testFiles = new String[]{
+                "testsResources/GetYourUserProfile_request.json",
+                "testsResources/GetYourUserProfile_request.txt",
+                "testsResources/JsonArrayTest.json",
+                "testsResources/JsonArrayTestExtended.json",
+                "testsResources/SearchGc_request.txt",
+                "testsResources/SearchGc_request.json",
+//                "testsResources/SearchGc_result.json",
+//                "testsResources/SearchGc_result.txt",
+                "testsResources/SearchGcCoordinate_request.txt",
+                "testsResources/SearchGcOwner_request.txt",
+//                "testsResources/SearchGcOwner_result.json",
+//                "testsResources/SearchGcOwner_result.txt",
+        };
 
-        sb2 = new StringBuilder();
-        sb = new StringBuilder();
-        file = "testsResources/SearchGcCoordinate_request.txt";
-        parse(file, sb, sb2);
-        assertEquals(sb.toString(), sb2.toString());
+        for (String path : testFiles) {
+            if (path == null || path.isEmpty()) continue;
+
+            log.debug(" ---Parse file " + path);
+            StringBuilder sb2 = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
+            parse(path, sb, sb2);
+            assertEquals(sb.toString(), sb2.toString());
+            log.debug(" --------------------------- ");
+        }
 
 
+//        String file = "testsResources/GetYourUserProfile_request.txt";
+//        parse(file, sb, sb2);
+//        assertEquals(sb.toString(), sb2.toString());
+//
+//        sb2 = new StringBuilder();
+//        sb = new StringBuilder();
+//        file = "testsResources/SearchGcCoordinate_request.txt";
+//        parse(file, sb, sb2);
+//        assertEquals(sb.toString(), sb2.toString());
+//
+//        sb2 = new StringBuilder();
+//        sb = new StringBuilder();
+//        file = "testsResources/JsonArrayTest.json";
+//        parse(file, sb, sb2);
+//        assertEquals(sb.toString(), sb2.toString());
+//
+//        sb2 = new StringBuilder();
+//        sb = new StringBuilder();
+//        file = "testsResources/JsonArrayTestExtended.json";
+//        parse(file, sb, sb2);
+//        assertEquals(sb.toString(), sb2.toString());
+//
 //        sb2 = new StringBuilder();
 //        sb = new StringBuilder();
 //        file = "testsResources/SearchGcOwner_result.json";
