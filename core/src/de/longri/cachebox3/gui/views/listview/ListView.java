@@ -418,6 +418,9 @@ public class ListView extends WidgetGroup {
     public void draw(Batch batch, float parentAlpha) {
 
         synchronized (indexList) {
+
+            if (scrollPane == null) return;
+
             drawedIndexList.clear();
 
             if (this.backgroundDrawable != null) {
