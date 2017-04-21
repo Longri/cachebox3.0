@@ -73,14 +73,23 @@ class SearchGCTest {
     @Test
     void parseJsonResult() throws IOException {
         final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGc_result.txt");
-        final SearchGC searchGC = new SearchGC(apiKey, "GC1T33T");
-        final AtomicBoolean WAIT = new AtomicBoolean(true);
         final CB_List<Cache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();
-        final long gpxFilenameId = 10;
+        final SearchGC searchGC = new SearchGC(apiKey, "GC1T33T"){
+            protected void writeLogToDB(final LogEntry logEntry) {
+                logList.add(logEntry);
+            }
 
-        searchGC.setLists(cacheList, logList, imageList, gpxFilenameId);
+            protected void writeImagEntryToDB(final ImageEntry imageEntry) {
+                imageList.add(imageEntry);
+            }
+
+            protected void writeCacheToDB(final Cache cache) {
+                cacheList.add(cache);
+            }
+        };
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
 
         Net.HttpResponse response = new Net.HttpResponse() {
             @Override
@@ -207,13 +216,24 @@ class SearchGCTest {
     @Test
     void testOnline() {
         if (isDummy) return;
-
-        final SearchGC searchGC = new SearchGC(apiKey, "GC1T33T");
-
-        //results
         final CB_List<Cache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();
+        final SearchGC searchGC = new SearchGC(apiKey, "GC1T33T"){
+            protected void writeLogToDB(final LogEntry logEntry) {
+                logList.add(logEntry);
+            }
+
+            protected void writeImagEntryToDB(final ImageEntry imageEntry) {
+                imageList.add(imageEntry);
+            }
+
+            protected void writeCacheToDB(final Cache cache) {
+                cacheList.add(cache);
+            }
+        };
+
+        //results
         final long gpxFilenameId = 10;
         final AtomicBoolean WAIT = new AtomicBoolean(true);
 
@@ -278,7 +298,7 @@ class SearchGCTest {
 
                 WAIT.set(false);
             }
-        }, cacheList, logList, imageList, gpxFilenameId);
+        }, gpxFilenameId);
 
         while (WAIT.get()) {
             try {

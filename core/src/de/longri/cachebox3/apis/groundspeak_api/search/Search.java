@@ -455,11 +455,13 @@ public abstract class Search extends PostRequest {
         };
         parser.parse(stream);
 
-        Database.Data.setTransactionSuccessful();
-        Database.Data.endTransaction();
-        Database.Data.GPXFilenameUpdateCacheCount();
+        if( Database.Data!=null){ // maybe NULL with JUnit
+            Database.Data.setTransactionSuccessful();
+            Database.Data.endTransaction();
+            Database.Data.GPXFilenameUpdateCacheCount();
+            CacheListChangedEventList.Call();
+        }
 
-        CacheListChangedEventList.Call();
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -513,7 +515,8 @@ public abstract class Search extends PostRequest {
 
     public void postRequest(GenericCallBack<Integer> callBack, long gpxFilenameId) {
         this.gpxFilenameId = gpxFilenameId;
-        Database.Data.beginTransaction();
+        if(Database.Data!=null)//Maybe NULL with JUnit
+            Database.Data.beginTransaction();
         this.post(callBack);
     }
 
@@ -607,17 +610,17 @@ public abstract class Search extends PostRequest {
         return date;
     }
 
-    private void writeLogToDB(final LogEntry logEntry) {
+    protected void writeLogToDB(final LogEntry logEntry) {
         importedLogs++;
         logDAO.WriteToDatabase(logEntry);
     }
 
-    private void writeImagEntryToDB(final ImageEntry imageEntry) {
+    protected void writeImagEntryToDB(final ImageEntry imageEntry) {
         imageDAO.WriteToDatabase(imageEntry, false);
         //TODO start download ?
     }
 
-    private void writeCacheToDB(final Cache cache) {
+    protected void writeCacheToDB(final Cache cache) {
         importedCaches++;
 
         Cache aktCache = Database.Data.Query.GetCacheById(cache.Id);
