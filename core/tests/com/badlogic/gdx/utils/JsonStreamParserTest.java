@@ -178,4 +178,33 @@ class JsonStreamParserTest {
         log.debug("Parse time JsonStreamParser: {}", System.currentTimeMillis() - start);
     }
 
+
+    @Test
+    void handleValue() throws FileNotFoundException {
+        String valueString = "\"Mit Team Kreuz haben wir hier eine kleine Berlin-Heimwegrunde gemacht. Wir konnten uns schnell und ohne Muggelaufmerksamkeit loggen. Das Rätsel löste eine Cacherfreundin.\\u000d\\u000a\\u000d\\u000aDanke und Happy Hunting sagen die\\u000d\\u000a\\u000d\\u000a............\\\\|\\/............\\u000d\\u000a..........@@............\\u000d\\u000a...o00.(_°_).00o...\\u000d\\u000a..CiAZuCCHiNi's..\"";
+        final String[] result = new String[]{""};
+
+        JsonStreamParser parser = new JsonStreamParser() {
+            @Override
+            public void string(String name, String value) {
+                result[0] = value;
+            }
+
+        };
+
+        parser.handleValue(null, valueString);
+
+        String expected="Mit Team Kreuz haben wir hier eine kleine Berlin-Heimwegrunde gemacht. Wir konnten uns schnell und ohne Muggelaufmerksamkeit loggen. Das Rätsel löste eine Cacherfreundin.\r\n" +
+                "\r\n" +
+                "Danke und Happy Hunting sagen die\r\n" +
+                "\r\n" +
+                "............\\|/............\r\n" +
+                "..........@@............\r\n" +
+                "...o00.(_°_).00o...\r\n" +
+                "..CiAZuCCHiNi's..";
+
+        assertEquals(expected, result[0]);
+
+    }
+
 }

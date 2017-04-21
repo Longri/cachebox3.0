@@ -199,7 +199,7 @@ public class JsonStreamParser implements JsonParser {
     }
 
 
-    private void handleValue(String actName, String valueString) {
+    void handleValue(String actName, String valueString) {
         valueString = unescape(valueString.trim());
 
         if (NULL.equals(valueString)) {
@@ -262,7 +262,7 @@ public class JsonStreamParser implements JsonParser {
                     c = '\t';
                     break;
                 default:
-                    throw new SerializationException("Illegal escaped character: \\" + c);
+                    buffer.append('\\');
             }
             buffer.append(c);
         }
