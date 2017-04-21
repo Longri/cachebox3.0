@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
@@ -84,33 +85,39 @@ public class ScrollLabel extends Label {
 
     public void setText(CharSequence newText) {
         super.setText(newText);
-        super.layout();
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
 
-        //remove maybe running animations
-        animationActor.removeAction(animationSequens);
+                ScrollLabel.this.layout();
 
-        GlyphLayout layout = super.getGlyphLayout();
-        if (layout.width > this.getWidth()) {
-            super.getParent().addActor(animationActor);
-            super.setAlignment(Align.left);
+                //remove maybe running animations
+                animationActor.removeAction(animationSequens);
 
-            float animationWidth = layout.width - this.getWidth();
-            float animationTime = CB.getScaledFloat(0.03f) * animationWidth;
+                GlyphLayout layout = ScrollLabel.this.getGlyphLayout();
+                if (layout.width > ScrollLabel.this.getWidth()) {
+                    ScrollLabel.this.getParent().addActor(animationActor);
+                    ScrollLabel.this.setAlignment(Align.left);
 
-            animationSequens = Actions.forever(Actions.sequence(
-                    Actions.moveTo(0, 0),
-                    Actions.delay(1),
-                    Actions.moveTo(-animationWidth, 0, animationTime),
-                    Actions.delay(1)));
+                    float animationWidth = layout.width - ScrollLabel.this.getWidth();
+                    float animationTime = CB.getScaledFloat(0.03f) * animationWidth;
 
-            animationActor.addAction(animationSequens);
-        } else {
-            super.getParent().removeActor(animationActor);
-            super.setAlignment(Align.center);
-        }
+                    animationSequens = Actions.forever(Actions.sequence(
+                            Actions.moveTo(0, 0),
+                            Actions.delay(1),
+                            Actions.moveTo(-animationWidth, 0, animationTime),
+                            Actions.delay(1)));
 
-        // reset last scroll position
-        scrollPosition = 0;
+                    animationActor.addAction(animationSequens);
+                } else {
+                    ScrollLabel.this.getParent().removeActor(animationActor);
+                    ScrollLabel.this.setAlignment(Align.center);
+                }
+
+                // reset last scroll position
+                scrollPosition = 0;
+            }
+        });
     }
 
     private float scrollPosition = 0;
