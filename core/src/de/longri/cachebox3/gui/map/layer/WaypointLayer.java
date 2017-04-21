@@ -134,7 +134,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
 
     private void populate(boolean resort) {
-        mClusterRenderer.populate(mItemList.size(), resort);
+        mClusterRenderer.populate(mItemList.size, resort);
     }
 
     @Override
@@ -160,7 +160,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
                     //add WayPoint items
 
-                    CB_List<String> missingIconList = new CB_List<String>(0);
+                    CB_List<String> missingIconList = new CB_List<>();
                     boolean hasSelectedWP = de.longri.cachebox3.events.EventHandler.getSelectedWaypoint() != null;
 
                     //set selected Cache at front
@@ -172,7 +172,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                     WaypointLayer.this.populate(true);
 
 
-                    if (!missingIconList.isEmpty()) {
+                    if (missingIconList.size != 0) {
                         StringBuilder msg = new StringBuilder("\n\n" + ERROR_MSG + "\n");
                         int count = 0;
                         for (String name : missingIconList) {
@@ -202,7 +202,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         } catch (GdxRuntimeException e) {
             if (e.getMessage().startsWith(ERROR_MSG)) {
                 String iconName = e.getMessage().replace(ERROR_MSG, "");
-                if (!missingIconList.contains(iconName))
+                if (!missingIconList.contains(iconName, false))
                     missingIconList.add(iconName);
             } else {
                 e.printStackTrace();
@@ -222,7 +222,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                 } catch (GdxRuntimeException e) {
                     if (e.getMessage().startsWith(ERROR_MSG)) {
                         String iconName = e.getMessage().replace(ERROR_MSG, "");
-                        if (!missingIconList.contains(iconName))
+                        if (!missingIconList.contains(iconName,false))
                             missingIconList.add(iconName);
                     } else {
                         e.printStackTrace();
@@ -299,7 +299,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         if (forceReduce) {
             task = ClusterRunnable.Task.reduce;
         } else if (distance == 0) {
-            if (mItemList.size() < mItemList.getAllSize()) {
+            if (mItemList.size < mItemList.getAllSize()) {
                 lastDistance = distance;
                 task = ClusterRunnable.Task.expand;
                 all = true;
@@ -406,7 +406,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         int indexOfLastSelectedWp = lastWaypoint == null ? -2 : -1;
         int indexOfNewSelectedWp = selectedwaypoint == null ? -2 : -1;
 
-        for (int i = 0, n = mItemList.size(); i < n; i++) {
+        for (int i = 0, n = mItemList.size; i < n; i++) {
             MapWayPointItem item = mItemList.get(i);
             if (indexOfNewSelectedCache == -1 && item.dataObject.equals(selectedCache)) indexOfNewSelectedCache = i;
             if (indexOfLastSelectedCache == -1 && item.dataObject.equals(lastSelectedCache))
@@ -531,7 +531,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
      */
     private boolean activateSelectedItems(MotionEvent event, ActiveItem task) {
         // no click detection without items
-        if (mItemList.size() == 0)
+        if (mItemList.size == 0)
             return false;
 
         //add MapView drawing offset to event point
@@ -551,7 +551,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         // search item inside click bounding box
         clickedItems.clear();
-        for (int i = 0, n = mItemList.size(); i < n; i++) {
+        for (int i = 0, n = mItemList.size; i < n; i++) {
             MapWayPointItem item = mItemList.get(i);
 
             double lat, lon;
@@ -569,15 +569,15 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             clickedItems.add(item);
         }
 
-        if (!clickedItems.isEmpty()) {
+        if (clickedItems.size!=0) {
             MapWayPointItem clickedItem = null;
             //if more then one item so search nearest
-            if (clickedItems.size() == 1) {
+            if (clickedItems.size == 1) {
                 clickedItem = clickedItems.get(0);
             } else {
                 Coordinate clickCoord = new Coordinate(clickLon, clickLat);
                 double minDistance = Double.MAX_VALUE;
-                for (int i = 0, n = clickedItems.size(); i < n; i++) {
+                for (int i = 0, n = clickedItems.size; i < n; i++) {
                     MapWayPointItem item = clickedItems.get(i);
                     Coordinate pos;
                     if (item instanceof Cluster) {

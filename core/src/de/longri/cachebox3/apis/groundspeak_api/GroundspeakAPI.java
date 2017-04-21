@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014 team-cachebox.de
+ * Copyright (C) 2014 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -1111,7 +1111,7 @@ public class GroundspeakAPI {
         ImageDAO imageDAO = new ImageDAO();
         WaypointDAO waypointDAO = new WaypointDAO();
 
-        for (int c = 0; c < apiCaches.size(); c++) {
+        for (int c = 0; c < apiCaches.size; c++) {
             Cache cache = apiCaches.get(c);
             Cache aktCache = Database.Data.Query.GetCacheById(cache.Id);
 
@@ -1185,7 +1185,7 @@ public class GroundspeakAPI {
                 imageDAO.WriteToDatabase(image, false);
             }
 
-            for (int i = 0, n = cache.waypoints.size(); i < n; i++) {
+            for (int i = 0, n = cache.waypoints.size; i < n; i++) {
                 // must Cast to Full Waypoint. If Waypoint, is wrong createt!
                 Waypoint waypoint = cache.waypoints.get(i);
                 boolean update = true;
@@ -1193,7 +1193,7 @@ public class GroundspeakAPI {
                 // dont refresh wp if aktCache.wp is user changed
                 if (aktCache != null) {
                     if (aktCache.waypoints != null) {
-                        for (int j = 0, m = aktCache.waypoints.size(); j < m; j++) {
+                        for (int j = 0, m = aktCache.waypoints.size; j < m; j++) {
                             Waypoint wp = aktCache.waypoints.get(j);
                             if (wp.getGcCode().equalsIgnoreCase(waypoint.getGcCode())) {
                                 if (wp.IsUserWaypoint)
@@ -1217,7 +1217,7 @@ public class GroundspeakAPI {
                 Database.Data.Query.add(cache);
                 // cacheDAO.WriteToDatabase(cache);
             } else {
-                Database.Data.Query.remove(Database.Data.Query.GetCacheById(cache.Id));
+                Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.Id),false);
                 Database.Data.Query.add(cache);
                 // cacheDAO.UpdateDatabase(cache);
             }

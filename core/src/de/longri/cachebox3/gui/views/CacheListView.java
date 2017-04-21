@@ -42,7 +42,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
 
     public CacheListView() {
-        super("CacheListView CacheCount: " + Database.Data.Query.size());
+        super("CacheListView CacheCount: " + Database.Data.Query.size);
 
         //register as cacheListChanged eventListener
         CacheListChangedEventList.Add(this);
@@ -82,7 +82,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                 Adapter listViewAdapter = new Adapter() {
                     @Override
                     public int getCount() {
-                        return Database.Data.Query.size();
+                        return Database.Data.Query.size;
                     }
 
                     @Override

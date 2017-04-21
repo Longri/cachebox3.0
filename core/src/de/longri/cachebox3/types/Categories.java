@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public class Categories extends MoveableList<Category> {
 
     public Category getCategory(String filename) {
         filename = Gdx.files.local(filename).file().getName();
-        for (int i = 0, n = this.size(); i < n; i++) {
+        for (int i = 0, n = this.size; i < n; i++) {
             Category category = this.get(i);
             if (filename.toUpperCase().equals(category.GpxFilename.toUpperCase())) {
                 return category;
@@ -86,7 +86,7 @@ public class Categories extends MoveableList<Category> {
     }
 
     private void checkAll() {
-        for (int i = 0, n = this.size(); i < n; i++) {
+        for (int i = 0, n = this.size; i < n; i++) {
             Category cat = this.get(i);
             cat.Checked = false;
             for (GpxFilename gpx : cat) {

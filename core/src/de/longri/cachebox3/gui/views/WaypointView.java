@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ public class WaypointView extends AbstractView {
                     @Override
                     public int getCount() {
                         if (actCache == null) return 0;
-                        return actCache.waypoints.size() + 1;
+                        return actCache.waypoints.size + 1;
                     }
 
                     @Override

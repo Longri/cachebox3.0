@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -138,7 +138,7 @@ public class CacheDetail implements Serializable {
 		}
 
 		if (spoilerRessources != null) {
-			for (int i = 0, n = spoilerRessources.size(); i < n; i++) {
+			for (int i = 0, n = spoilerRessources.size; i < n; i++) {
 				ImageEntry entry = spoilerRessources.get(i);
 				entry.dispose();
 			}
@@ -290,7 +290,7 @@ public class CacheDetail implements Serializable {
 return false;
 
 //				loadSpoilerRessources(cache);
-			return spoilerRessources.size() > 0;
+			return spoilerRessources.size > 0;
 		} catch (Exception e) {
 			return false;
 		}

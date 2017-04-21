@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -138,7 +138,7 @@ public class GlobalLocationReceiver implements  GPS_FallBackEvent {
                                         }
                                         float nearestDistance = CB.NearestCache().Distance(MathUtils.CalculationType.FAST, true);
 
-                                        for (int i = 0, n = Database.Data.Query.size(); i < n; i++) {
+                                        for (int i = 0, n = Database.Data.Query.size; i < n; i++) {
                                             Cache cache = Database.Data.Query.get(i);
                                             z++;
                                             if (z >= 50) {

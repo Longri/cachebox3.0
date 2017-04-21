@@ -60,14 +60,14 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
 
     public void addChangedEventListener(IChanged listener) {
         synchronized (ChangedEventList) {
-            if (!ChangedEventList.contains(listener))
+            if (!ChangedEventList.contains(listener, true))
                 ChangedEventList.add(listener);
         }
     }
 
     public void removeChangedEventListener(IChanged listener) {
         synchronized (ChangedEventList) {
-            ChangedEventList.remove(listener);
+            ChangedEventList.removeValue(listener, true);
         }
     }
 
@@ -120,7 +120,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
             Thread th = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    for (int i = 0, n = ChangedEventList.size(); i < n; i++) {
+                    for (int i = 0, n = ChangedEventList.size; i < n; i++) {
                         IChanged event = ChangedEventList.get(i);
                         event.isChanged();
                     }

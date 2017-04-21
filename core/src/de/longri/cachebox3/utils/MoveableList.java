@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2011 team-cachebox.de
+ * Copyright (C) 2011 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -21,72 +21,23 @@ import de.longri.cachebox3.utils.lists.CB_List;
 import java.util.Iterator;
 
 
-/// <summary>
-/// Diese klasse ist von DynamicList(Of T) abgeleitet und implementiert Methoden zum bewegen der elemente in einer DynamicList(Of T)
-/// </summary>
-/// 
-/// 
-///  <example>
-///  <para><b>Der Aufruf folgender Methoden l�sen ein Changed Event aus:</b></para>
-/// 
-/// <para>
-///  add /
-///  AddRange / 
-///  Clear / 
-///  Insert / 
-///  InsertRange / 
-///  remove /
-///  RemoveAll / 
-///  RemoveAt / 
-///  RemoveRange / (geerbt von DynamicList(Of T)
-///  </para>
-/// 
-/// 
-/// <para><b>Neu implementierte Methoden, welche ein Changed Event aus l�sen:</b></para>
-/// <para >
-///  MoveItem /
-///  MoveItemFirst /
-///  MoveItemLast /
-///  MoveItemsLeft /
-///  MoveItemsRight /
-/// 
-/// </para>
-/// 
-/// <code lang="VB" title=" Kompletter Code dieser Klasse: " source="C:\@Work\Longri_Sammlung\coc_VB01\MoveableDynamicList.vb"/>
-/// 
-/// 
-/// </example>
-/// 
-/// 
-/// <typeparam name="T">Der Typ der Elemente in der Liste. </typeparam>
-/// <remarks>
-/// 
-/// Auf Elemente in dieser Auflistung kann mithilfe eines ganzzahligen Index zugegriffen werden. Diese Auflistung verwendet nullbasierte Indizes. 
-/// 
-///
-///</remarks>
-
 /**
  * @author Longri
  */
 public class MoveableList<T> extends CB_List<T> {
 
-	private static final long serialVersionUID = -3030926604332765746L;
-	protected CB_List<IChanged> ChangedEventList = new CB_List<IChanged>();
+	protected CB_List<IChanged> ChangedEventList = new CB_List<>();
 
 	public MoveableList() {
 		super();
 	}
 
-	public MoveableList(MoveableList<T> list) {
-		super(list);
-	}
 
 	protected void fireChangedEvent() {
 		if (dontFireEvent)
 			return;
 		synchronized (ChangedEventList) {
-			for (int i = 0, n = ChangedEventList.size(); i < n; i++) {
+			for (int i = 0, n = ChangedEventList.size; i < n; i++) {
 				IChanged event = ChangedEventList.get(i);
 				event.isChanged();
 			}
@@ -96,22 +47,22 @@ public class MoveableList<T> extends CB_List<T> {
 
 	public void addChangedEventListener(IChanged listener) {
 		synchronized (ChangedEventList) {
-			if (!ChangedEventList.contains(listener))
+			if (!ChangedEventList.contains(listener,true))
 				ChangedEventList.add(listener);
 		}
 	}
 
 	public void removeChangedEventListener(IChanged listener) {
 		synchronized (ChangedEventList) {
-			ChangedEventList.remove(listener);
+			ChangedEventList.removeValue(listener,true);
 		}
 	}
 
-	private void PrivateMoveItem(int CutItem, int InsertItem) {
+	private void PrivateMoveItem(int CutItem, int index) {
 		T CutItemInfo = this.get(CutItem);
 
 		this.remove(CutItem);
-		this.add(InsertItem, CutItemInfo);
+		this.insert(index, CutItemInfo);
 
 		fireChangedEvent();
 
@@ -128,30 +79,29 @@ public class MoveableList<T> extends CB_List<T> {
 		fireChangedEvent();
 	}
 
-	@Override
-	public int add(T t) {
-		int ID = super.add(t);
+	public void add(T t) {
+		 super.add(t);
 		fireChangedEvent();
-		return ID;
+
 	}
 
-	@Override
-	public void add(int index, T t) {
-		super.add(index, t);
-		fireChangedEvent();
-	}
+//	@Override
+//	public void add(int index, T t) {
+//		super.add(index, t);
+//		fireChangedEvent();
+//	}
 
-	@Override
-	public void addAll(CB_List<T> t) {
-		super.addAll(t);
-		fireChangedEvent();
-	}
 
-	@Override
-	public void addAll(int index, CB_List<T> t) {
-		super.addAll(index, t);
-		fireChangedEvent();
-	}
+//	public void addAll(CB_List<T> t) {
+//		super.addAll(t);
+//		fireChangedEvent();
+//	}
+//
+//
+//	public void addAll(int index, CB_List<T> t) {
+//		super.addAll(index, t);
+//		fireChangedEvent();
+//	}
 
 	@Override
 	public void clear() {
@@ -159,20 +109,20 @@ public class MoveableList<T> extends CB_List<T> {
 		fireChangedEvent();
 	}
 
-	@Override
+
 	public T remove(int index) {
-		T t = super.remove(index);
+		T t = super.removeIndex(index);
 		fireChangedEvent();
 		return t;
 	}
 
 	public void MoveItemsLeft() {
-		PrivateMoveItem(0, this.size() - 1);
+		PrivateMoveItem(0, this.size - 1);
 		_MoveResultIndex = -1;
 	}
 
 	public void MoveItemsRight() {
-		PrivateMoveItem(this.size() - 1, 0);
+		PrivateMoveItem(this.size - 1, 0);
 		_MoveResultIndex = -1;
 	}
 
@@ -183,8 +133,8 @@ public class MoveableList<T> extends CB_List<T> {
 	}
 
 	public void MoveItemLast(int index) {
-		PrivateMoveItem(index, this.size() - 1);
-		_MoveResultIndex = this.size() - 1;
+		PrivateMoveItem(index, this.size - 1);
+		_MoveResultIndex = this.size - 1;
 
 	}
 
@@ -214,14 +164,14 @@ public class MoveableList<T> extends CB_List<T> {
 	}
 
 	private int ChkNewPos(int Pos, boolean Negative) {
-		if (((Pos < this.size()) & (Pos >= 0)))
+		if (((Pos < this.size) & (Pos >= 0)))
 			return Pos;
 
 		if (Negative) {
-			Pos += this.size();
+			Pos += this.size;
 			Pos = ChkNewPos(Pos, true);
 		} else {
-			Pos -= this.size();
+			Pos -= this.size;
 			Pos = ChkNewPos(Pos);
 		}
 		return Pos;
@@ -248,7 +198,7 @@ public class MoveableList<T> extends CB_List<T> {
 		final MoveableList<T> that = this;
 
 		Iterator<T> iterator = new Iterator<T>() {
-			int aktItem = that.size() - 1;
+			int aktItem = that.size - 1;
 
 			@Override
 			public boolean hasNext() {
@@ -259,7 +209,7 @@ public class MoveableList<T> extends CB_List<T> {
 
 			@Override
 			public T next() {
-				if (that.size() == 0 || that.size() < aktItem) {
+				if (that.size == 0 || that.size < aktItem) {
 					aktItem = -1;
 					return null;
 				}
@@ -279,11 +229,11 @@ public class MoveableList<T> extends CB_List<T> {
 	}
 
 	public void remove(MoveableList<T> items) {
-		super.removeAll(items);
+		super.removeAll(items,true);
 	}
 
 	public void dispose() {
-		super.dispose();
+
 	}
 
 }

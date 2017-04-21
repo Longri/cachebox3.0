@@ -104,7 +104,7 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
 
 
         int menuID = 0;
-        for (int i = 0, n = BaseMapManager.INSTANCE.size(); i < n; i++) {
+        for (int i = 0, n = BaseMapManager.INSTANCE.size; i < n; i++) {
 
             AbstractManagedMapLayer baseMap = BaseMapManager.INSTANCE.get(i);
 

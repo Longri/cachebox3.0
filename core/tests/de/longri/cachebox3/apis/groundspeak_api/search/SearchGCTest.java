@@ -118,13 +118,13 @@ class SearchGCTest {
             @Override
             public void callBack(Integer value) {
 
-                assertEquals(1, cacheList.size());
+                assertEquals(1, cacheList.size);
                 Cache cache = cacheList.pop();
 
                 assertEquals(false, cache.isArchived());
                 assertEquals(true, cache.isAvailable());
                 assertEquals("GC1T33T", cache.getGcCode());
-                assertEquals(0, cache.waypoints.size());
+                assertEquals(0, cache.waypoints.size);
                 assertEquals(CacheTypes.Traditional, cache.Type);
                 assertEquals(CacheSizes.other, cache.Size);
                 assertEquals("Germany", cache.getCountry());
@@ -169,7 +169,7 @@ class SearchGCTest {
 
 
                 //check Logs
-                assertEquals(10, logList.size());
+                assertEquals(10, logList.size);
                 LogEntry logEntry = logList.first();
 
                 assertEquals(Cache.GenerateCacheId(cache.getGcCode()), logEntry.CacheId);
@@ -221,13 +221,13 @@ class SearchGCTest {
             @Override
             public void callBack(Integer value) {
 
-                assertEquals(1, cacheList.size());
+                assertEquals(1, cacheList.size);
                 Cache cache = cacheList.pop();
 
                 assertEquals(false, cache.isArchived());
                 assertEquals(true, cache.isAvailable());
                 assertEquals("GC1T33T", cache.getGcCode());
-                assertEquals(0, cache.waypoints.size());
+                assertEquals(0, cache.waypoints.size);
                 assertEquals(CacheTypes.Traditional, cache.Type);
                 assertEquals(CacheSizes.other, cache.Size);
                 assertEquals("Germany", cache.getCountry());

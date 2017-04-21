@@ -281,7 +281,7 @@ public class Menu extends Window {
         Adapter listViewAdapter = new Adapter() {
             @Override
             public int getCount() {
-                return mItems.size();
+                return mItems.size;
             }
 
             @Override
@@ -351,7 +351,7 @@ public class Menu extends Window {
     }
 
     public void reorganizeListIndexes() {
-        for (int i = 0; i < mItems.size(); i++) {
+        for (int i = 0; i < mItems.size; i++) {
             mItems.get(i).setNewIndex(i);
         }
     }

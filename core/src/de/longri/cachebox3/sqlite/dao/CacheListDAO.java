@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -112,7 +112,7 @@ public class CacheListDAO {
 
         }
         reader.close();
-        log.debug(wpList.size() + " Waypoints readed!");
+        log.debug(wpList.size + " Waypoints readed!");
         log.debug("ReadCacheList 2.Caches");
         try {
             if (fullDetails) {
@@ -145,7 +145,7 @@ public class CacheListDAO {
                 if (FilterInstances.hasCorrectedCoordinates != 0) {
                     if (waypoints.containsKey(cache.Id)) {
                         CB_List<Waypoint> tmpwaypoints = waypoints.get(cache.Id);
-                        for (int i = 0, n = tmpwaypoints.size(); i < n; i++) {
+                        for (int i = 0, n = tmpwaypoints.size; i < n; i++) {
                             cache.waypoints.add(tmpwaypoints.get(i));
                         }
                     }
@@ -166,7 +166,7 @@ public class CacheListDAO {
                     if (waypoints.containsKey(cache.Id)) {
                         CB_List<Waypoint> tmpwaypoints = waypoints.get(cache.Id);
 
-                        for (int i = 0, n = tmpwaypoints.size(); i < n; i++) {
+                        for (int i = 0, n = tmpwaypoints.size; i < n; i++) {
                             cache.waypoints.add(tmpwaypoints.get(i));
                         }
 
@@ -211,7 +211,7 @@ public class CacheListDAO {
                 if (FilterInstances.hasCorrectedCoordinates != 0) {
                     if (waypoints.containsKey(cache.Id)) {
                         CB_List<Waypoint> tmpwaypoints = waypoints.get(cache.Id);
-                        for (int i = 0, n = tmpwaypoints.size(); i < n; i++) {
+                        for (int i = 0, n = tmpwaypoints.size; i < n; i++) {
                             cache.waypoints.add(tmpwaypoints.get(i));
                         }
                     }
@@ -232,7 +232,7 @@ public class CacheListDAO {
                     if (waypoints.containsKey(cache.Id)) {
                         CB_List<Waypoint> tmpwaypoints = waypoints.get(cache.Id);
 
-                        for (int i = 0, n = tmpwaypoints.size(); i < n; i++) {
+                        for (int i = 0, n = tmpwaypoints.size; i < n; i++) {
                             cache.waypoints.add(tmpwaypoints.get(i));
                         }
 
@@ -328,7 +328,7 @@ public class CacheListDAO {
         ReadCacheList(list, where, false, false);
         ArrayList<String> StrList = new ArrayList<String>();
 
-        for (int i = 0, n = list.size(); i < n; i++) {
+        for (int i = 0, n = list.size; i < n; i++) {
             StrList.add(list.get(i).getGcCode());
         }
         list.dispose();

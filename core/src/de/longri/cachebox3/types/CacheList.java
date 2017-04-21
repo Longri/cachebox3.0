@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014 team-cachebox.de
+ * Copyright (C) 2014 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ public class CacheList extends MoveableList<Cache> {
     public boolean ResortAtWork = false;
 
     public Cache GetCacheByGcCode(String GcCode) {
-        for (int i = 0, n = this.size(); i < n; i++) {
+        for (int i = 0, n = this.size; i < n; i++) {
             Cache cache = this.get(i);
             if (cache.getGcCode().equalsIgnoreCase(GcCode))
                 return cache;
@@ -43,7 +43,7 @@ public class CacheList extends MoveableList<Cache> {
     }
 
     public Cache GetCacheById(long cacheId) {
-        for (int i = 0, n = this.size(); i < n; i++) {
+        for (int i = 0, n = this.size; i < n; i++) {
             Cache cache = this.get(i);
             if (cache.Id == cacheId)
                 return cache;
@@ -83,7 +83,7 @@ public class CacheList extends MoveableList<Cache> {
         boolean LocatorValid = EventHandler.getSelectedCoord() != null;
         // Alle Distanzen aktualisieren
         if (LocatorValid) {
-            for (int i = 0, n = this.size(); i < n; i++) {
+            for (int i = 0, n = this.size; i < n; i++) {
                 Cache cache = this.get(i);
                 cache.Distance(MathUtils.CalculationType.FAST, true);
             }
@@ -99,7 +99,7 @@ public class CacheList extends MoveableList<Cache> {
                 this.ResortAtWork = false;
                 return retValue;
             }
-            for (int i = 0, n = this.size(); i < n; i++) {
+            for (int i = 0, n = this.size; i < n; i++) {
                 Cache cache = this.get(i);
                 cache.Distance(MathUtils.CalculationType.FAST, true, fromPos);
             }
@@ -108,9 +108,9 @@ public class CacheList extends MoveableList<Cache> {
         this.sort();
 
         // Nächsten Cache auswählen
-        if (this.size() > 0) {
+        if (this.size > 0) {
             Cache nextCache = this.get(0); // or null ...
-            for (int i = 0; i < this.size(); i++) {
+            for (int i = 0; i < this.size; i++) {
                 nextCache = this.get(i);
                 if (!nextCache.isArchived()) {
                     if (nextCache.isAvailable()) {
@@ -157,7 +157,7 @@ public class CacheList extends MoveableList<Cache> {
         // vorhandenen Parkplatz Cache nach oben schieben
         Cache park = this.GetCacheByGcCode("CBPark");
         if (park != null) {
-            this.MoveItemFirst(this.indexOf(park));
+            this.MoveItemFirst(this.indexOf(park,false));
         }
 
         // Cursor.Current = Cursors.Default;
@@ -179,7 +179,7 @@ public class CacheList extends MoveableList<Cache> {
      */
     @Override
     public void clear() {
-        for (int i = 0, n = this.size(); i < n; i++) {
+        for (int i = 0, n = this.size; i < n; i++) {
             Cache cache = this.get(i);
             if (!cache.isLive())
                 cache.dispose(); // don't dispose LiveCaches
@@ -197,19 +197,19 @@ public class CacheList extends MoveableList<Cache> {
 
     public ArrayList<String> getGcCodes() {
         ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0, n = this.size(); i < n; i++) {
+        for (int i = 0, n = this.size; i < n; i++) {
             list.add(this.get(i).getGcCode());
         }
         return list;
     }
 
-    @Override
-    public int add(Cache ca) {
+
+    public void add(Cache ca) {
         if (ca == null)
-            return -1;
+            return ;
 
         int index = -1;
-        for (int i = 0, n = this.size(); i < n; i++) {
+        for (int i = 0, n = this.size; i < n; i++) {
 
             Cache cache = get(i);
             if (cache.Id == ca.Id) {
@@ -222,13 +222,12 @@ public class CacheList extends MoveableList<Cache> {
             if (get(index).isLive()) {
                 if (!ca.isLive()) {
                     this.replace(ca, index);
-                    return index;
+                    return ;
                 }
             }
 
         }
-
-        return super.add(ca);
+        super.add(ca);
     }
 
 }

@@ -483,7 +483,7 @@ public class MapView extends AbstractView {
         String baseMapName = Settings_Map.CurrentMapLayer.getValue()[0];
         BaseMapManager.INSTANCE.setMapFolder(Gdx.files.absolute(Settings_Map.MapPackFolder.getValue()));
         AbstractManagedMapLayer baseMap = null;
-        for (int i = 0, n = BaseMapManager.INSTANCE.size(); i < n; i++) {
+        for (int i = 0, n = BaseMapManager.INSTANCE.size; i < n; i++) {
             AbstractManagedMapLayer map = BaseMapManager.INSTANCE.get(i);
             if (baseMapName.equals(map.name)) {
                 baseMap = map;

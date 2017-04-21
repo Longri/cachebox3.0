@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -180,7 +180,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         this.setTerrain(0);
         this.Size = CacheSizes.other;
         this.setAvailable(true);
-        waypoints = new CB_List<Waypoint>();
+        waypoints = new CB_List<>();
         if (withDetails) {
             detail = new CacheDetail();
         }
@@ -244,7 +244,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         // remove all Detail Information from Waypoints
         // remove all Waypoints != Start and Final
         if ((waypoints != null) && (!showAllWaypoints)) {
-            for (int i = 0; i < waypoints.size(); i++) {
+            for (int i = 0; i < waypoints.size; i++) {
                 Waypoint wp = waypoints.get(i);
                 if (wp.IsStart || wp.Type == CacheTypes.Final) {
 
@@ -256,7 +256,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
                         wp.detail.dispose();
                         wp.detail = null;
                     }
-                    waypoints.remove(i);
+                    waypoints.removeIndex(i);
                     i--;
                 }
             }
@@ -276,10 +276,10 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         // load all Waypoints with full Details
         WaypointDAO wdao = new WaypointDAO();
         CB_List<Waypoint> wpts = wdao.getWaypointsFromCacheID(Id, true);
-        for (int i = 0; i < wpts.size(); i++) {
+        for (int i = 0; i < wpts.size; i++) {
             Waypoint wp = wpts.get(i);
             boolean found = false;
-            for (int j = 0; j < waypoints.size(); j++) {
+            for (int j = 0; j < waypoints.size; j++) {
                 Waypoint wp2 = waypoints.get(j);
                 if (wp.getGcCode().equals(wp2.getGcCode())) {
                     found = true;
@@ -331,13 +331,13 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         if (this.Type != CacheTypes.Mystery)
             return false;
 
-        if (this.waypoints == null || this.waypoints.size() == 0)
+        if (this.waypoints == null || this.waypoints.size == 0)
             return false;
 
         boolean x;
         x = false;
 
-        for (int i = 0, n = waypoints.size(); i < n; i++) {
+        for (int i = 0, n = waypoints.size; i < n; i++) {
             Waypoint wp = waypoints.get(i);
             if (wp.Type == CacheTypes.Final) {
                 if (!(wp.latitude == 0 && wp.longitude == 0))
@@ -361,10 +361,10 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
     public Waypoint GetFinalWaypoint() {
         if (this.Type != CacheTypes.Mystery)
             return null;
-        if (waypoints == null || waypoints.size() == 0)
+        if (waypoints == null || waypoints.size == 0)
             return null;
 
-        for (int i = 0, n = waypoints.size(); i < n; i++) {
+        for (int i = 0, n = waypoints.size; i < n; i++) {
             Waypoint wp = waypoints.get(i);
             if (wp.Type == CacheTypes.Final) {
                 // do not activate final waypoint with invalid coordinates
@@ -396,10 +396,10 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         if ((this.Type != CacheTypes.Multi) && (this.Type != CacheTypes.Mystery))
             return null;
 
-        if (waypoints == null || waypoints.size() == 0)
+        if (waypoints == null || waypoints.size == 0)
             return null;
 
-        for (int i = 0, n = waypoints.size(); i < n; i++) {
+        for (int i = 0, n = waypoints.size; i < n; i++) {
             Waypoint wp = waypoints.get(i);
             if ((wp.Type == CacheTypes.MultiStage) && (wp.IsStart)) {
                 return wp;
@@ -518,7 +518,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
     private Waypoint findWaypointByGc(String gc) {
         if (isDisposed)
             return null;
-        for (int i = 0, n = waypoints.size(); i < n; i++) {
+        for (int i = 0, n = waypoints.size; i < n; i++) {
             Waypoint wp = waypoints.get(i);
             if (wp.getGcCode().equals(gc)) {
                 return wp;
@@ -546,7 +546,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         Owner = null;
 
         if (waypoints != null) {
-            for (int i = 0, n = waypoints.size(); i < n; i++) {
+            for (int i = 0, n = waypoints.size; i < n; i++) {
                 Waypoint entry = waypoints.get(i);
                 entry.dispose();
             }
