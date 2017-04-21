@@ -28,6 +28,7 @@ import com.kotcrab.vis.ui.widget.VisTextArea;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.apis.groundspeak_api.PostRequest;
 import de.longri.cachebox3.apis.groundspeak_api.search.SearchCoordinate;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
@@ -303,9 +304,6 @@ public class ImportGcPos extends ActivityBase {
 
 
         if (actSearchPos != null) {
-            final CB_List<Cache> cacheList = new CB_List<>();
-            final CB_List<LogEntry> logList = new CB_List<>();
-            final CB_List<ImageEntry> imageList = new CB_List<>();
             Category category = CB.Categories.getCategory("API-Import");
             if (category != null) // should not happen!!!
             {
@@ -322,8 +320,8 @@ public class ImportGcPos extends ActivityBase {
 
                     log.debug("Api state = {}", apiState);
                     log.debug("Search at Coordinate:{}", actSearchPos);
-                    SearchCoordinate searchC = new SearchCoordinate(GroundspeakAPI.getAccessToken(),
-                            50, actSearchPos, Config.lastSearchRadius.getValue() * 1000,
+                   final SearchCoordinate searchC = new SearchCoordinate(GroundspeakAPI.getAccessToken(),
+                            100, actSearchPos, Config.lastSearchRadius.getValue() * 1000,
                             apiState);
                     searchC.excludeFounds = Config.SearchWithoutFounds.getValue();
                     searchC.excludeHides = Config.SearchWithoutOwns.getValue();
@@ -333,31 +331,25 @@ public class ImportGcPos extends ActivityBase {
                     searchC.postRequest(new GenericCallBack<Integer>() {
                         @Override
                         public void callBack(Integer value) {
-                            if (cacheList.size > 0) {
-                                try {
-                                    log.debug("Write Import to DB C:{} L:{} I:{}", cacheList.size, logList.size, imageList.size);
-                                    GroundspeakAPI.WriteCachesLogsImages_toDB(cacheList, logList, imageList);
+                            if (value == PostRequest.NO_ERROR) {
 
-                                    String Msg;
-                                    if (ImportStart != null) {
-                                        Date Importfin = new Date();
-                                        long ImportZeit = Importfin.getTime() - ImportStart.getTime();
-                                        Msg = "Import " + String.valueOf(cacheList.size) + "C " + String.valueOf(logList.size) + "L in " + String.valueOf(ImportZeit);
-                                    } else {
-                                        Msg = "Import canceld";
-                                    }
-
-                                    log.debug(Msg);
-                                    CB.viewmanager.toast(Msg);
-
-                                    //close Dialog
-                                    finish();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
+                                String Msg;
+                                if (ImportStart != null) {
+                                    Date Importfin = new Date();
+                                    long ImportZeit = Importfin.getTime() - ImportStart.getTime();
+                                    Msg = "Import " + String.valueOf(searchC.importedCaches) + "C " + String.valueOf(searchC.importedLogs) + "L in " + String.valueOf(ImportZeit);
+                                } else {
+                                    Msg = "Import canceld";
                                 }
+
+                                log.debug(Msg);
+                                CB.viewmanager.toast(Msg);
+
+                                //close Dialog
+                                finish();
                             }
                         }
-                    }, cacheList, logList, imageList, gpxFilename.Id);
+                    }, gpxFilename.Id);
                 }
             }
         }

@@ -35,9 +35,9 @@ public abstract class PostRequest {
     final static String GS_LIVE_URL = "https://api.groundspeak.com/LiveV6/geocaching.svc/";
     final static String STAGING_GS_LIVE_URL = "https://staging.api.groundspeak.com/Live/V6Beta/geocaching.svc/";
 
-    protected final static int NO_ERROR = 0;
-    protected final static int ERROR = -1;
-    protected final static int CANCELED = -2;
+    public final static int NO_ERROR = 0;
+    public final static int ERROR = -1;
+    public final static int CANCELED = -2;
 
     protected final String gcApiKey;
 

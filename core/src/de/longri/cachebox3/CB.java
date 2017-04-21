@@ -64,7 +64,7 @@ public class CB {
     private static boolean displayOff = false;
     public static Categories Categories;
     public static float stateTime;
-    private static final AsyncExecutor asyncExecutor = new AsyncExecutor(20);
+    private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
 
 
     final static float PPI_DEFAULT = 163;
