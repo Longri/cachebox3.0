@@ -76,19 +76,26 @@ public class JsonStreamParser implements JsonParser {
                     tmp = new char[actBufferLength];
                 }
 
+                int canReadLength = actBufferLength - offset;
+                int readedLength = 0;
+                boolean fillBuffer = canReadLength > 0;
+                while (fillBuffer) {
+                    readedLength = reader.read(buf, offset, canReadLength);
+                    if (readedLength < canReadLength && readedLength > -1) {
+                        offset += readedLength;
+                        canReadLength = actBufferLength - offset;
+                        if (canReadLength <= 0) fillBuffer = false;
+                    } else fillBuffer = false;
+                }
 
-                int length = reader.read(buf, offset, actBufferLength - offset);
-                if (length == -1) break;
-                if (length == 0) {
-
-                } else
-                    readed += length;
+                readed += readedLength;
 
                 percent = (float) readed / available * 100.0f;
                 if (DEBUG) log.debug("Read Buffer: available {}/{} = {}%", readed, available, percent);
                 if (DEBUG) log.debug(new String(buf));
 
                 int lastOffset = parse(buf);
+                if (readedLength == -1) break;
                 offset = actBufferLength - lastOffset;
 
                 if (offset == 0) {
@@ -211,18 +218,6 @@ public class JsonStreamParser implements JsonParser {
         }
     }
 
-    private String removeNullChar(String value) {
-        int length = value.length();
-        StringBuilder buffer = new StringBuilder(length + 16);
-        for (int i = 0; i < length; ) {
-            char c = value.charAt(i++);
-            if (c != '\0') {
-                buffer.append(c);
-            }
-        }
-        return buffer.toString();
-    }
-
     /**
      * Unescape function from com.badlogic.gdx.utils.JsonReader!
      *
@@ -293,13 +288,13 @@ public class JsonStreamParser implements JsonParser {
                 log.error("found: {} end: {}", found, end, e);
             }
             if (DEBUG) log.debug("Found Value: {}", value);
-            return removeNullChar(value);
+            return value;
         }
 
         //try to trimmed value
         if (end - start > 0) {
             String value = new String(data, start, end - start).trim();
-            if (value.startsWith("\"") && value.endsWith("\"")) return removeNullChar(value);
+            if (value.startsWith("\"") && value.endsWith("\"")) return value;
         }
         return null;
     }
