@@ -70,7 +70,7 @@ public class ClusteredList extends CB_List<MapWayPointItem> {
             //search all cluster inside
             ClusteredList inside = new ClusteredList();
 
-            for (int i = index + 1; i < this.size(); i++) {
+            for (int i = index + 1; i < this.size; i++) {
 
                 if (cancel.get()) {
                     break;
@@ -83,8 +83,8 @@ public class ClusteredList extends CB_List<MapWayPointItem> {
                 }
             }
 
-            if (inside.size() > 0) {
-                this.removeAll(inside);
+            if (inside.size > 0) {
+                this.removeAll(inside,true);
                 Cluster newCluster = new Cluster(cluster, "New Cluster", null);
                 newCluster.add(cluster);
                 newCluster.addAll(inside);
@@ -116,7 +116,7 @@ public class ClusteredList extends CB_List<MapWayPointItem> {
                     break;
                 }
 
-                if (includedCluster == null || this.contains(includedCluster)) {
+                if (includedCluster == null || this.contains(includedCluster,true)) {
                     continue;
                 }
 
@@ -138,7 +138,7 @@ public class ClusteredList extends CB_List<MapWayPointItem> {
             outsideList.addAll(clusterOutList);
         }
         this.addAll(outsideList);
-        this.removeAll(emptyList);
+        this.removeAll(emptyList,true);
         if (!all) this.reduce(distance); //don't reduce with show all
     }
 

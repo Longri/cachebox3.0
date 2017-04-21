@@ -84,7 +84,7 @@ public class SquareTest {
                         a.sphericalDistance(c), closeTo(distance, tolerance));
             }
         }
-        assertThat("all List length", allPoints.size(), equalTo(arraySize * arraySize));
+        assertThat("all List length", allPoints.size, equalTo(arraySize * arraySize));
     }
 
     @Test
@@ -101,26 +101,26 @@ public class SquareTest {
                     new Coordinate(point.getLatitude(), point.getLongitude()), Integer.toString(index++), null,false));
         }
 
-        assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
+        assertThat("cluster size", allCluster.size, equalTo(allPoints.size));
 
 
         allCluster.clusterByDistance(distance - 2, null, ClusterRunnable.Task.reduce, false);
-        assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
+        assertThat("cluster size", allCluster.size, equalTo(allPoints.size));
 
 
         allCluster.clusterByDistance(distance * 2, null, ClusterRunnable.Task.reduce, false);
-        assertThat("cluster size", allCluster.size(), equalTo(4));
+        assertThat("cluster size", allCluster.size, equalTo(4));
 
         allCluster.clusterByDistance(distance * 4, null, ClusterRunnable.Task.reduce, false);
-        assertThat("cluster size", allCluster.size(), equalTo(2));
+        assertThat("cluster size", allCluster.size, equalTo(2));
 
 
         allCluster.clusterByDistance(distance * 2, null, ClusterRunnable.Task.expand, false);
-        assertThat("cluster size", allCluster.size(), equalTo(4));
+        assertThat("cluster size", allCluster.size, equalTo(4));
 
 
         allCluster.clusterByDistance(distance - 2, null, ClusterRunnable.Task.expand, false);
-        assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
+        assertThat("cluster size", allCluster.size, equalTo(allPoints.size));
 
 
     }
@@ -139,26 +139,26 @@ public class SquareTest {
                     new Coordinate(point.getLatitude(), point.getLongitude()), Integer.toString(index++), null,false));
         }
 
-        assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
+        assertThat("cluster size", allCluster.size, equalTo(allPoints.size));
 
 
         allCluster.clusterByDistance(distance - 2, null, ClusterRunnable.Task.reduce, false);
-        assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
+        assertThat("cluster size", allCluster.size, equalTo(allPoints.size));
 
 
         allCluster.clusterByDistance(distance * 2, null, ClusterRunnable.Task.reduce, false);
-        assertThat("cluster size", allCluster.size(), equalTo(2550));
+        assertThat("cluster size", allCluster.size, equalTo(2550));
 
         allCluster.clusterByDistance(distance * 4, null, ClusterRunnable.Task.reduce, false);
-        assertThat("cluster size", allCluster.size(), equalTo(650));
+        assertThat("cluster size", allCluster.size, equalTo(650));
 
 
         allCluster.clusterByDistance(distance * 2, null, ClusterRunnable.Task.expand, false);
-        assertThat("cluster size", allCluster.size(), equalTo(2550));
+        assertThat("cluster size", allCluster.size, equalTo(2550));
 
 
         allCluster.clusterByDistance(distance - 2, null, ClusterRunnable.Task.expand, false);
-        assertThat("cluster size", allCluster.size(), equalTo(allPoints.size()));
+        assertThat("cluster size", allCluster.size, equalTo(allPoints.size));
 
 
     }

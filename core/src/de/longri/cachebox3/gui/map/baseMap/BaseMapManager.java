@@ -18,7 +18,6 @@ package de.longri.cachebox3.gui.map.baseMap;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.utils.lists.CB_List;
-import de.longri.cachebox3.utils.lists.CB_StringList;
 
 import java.io.File;
 import java.io.FileFilter;

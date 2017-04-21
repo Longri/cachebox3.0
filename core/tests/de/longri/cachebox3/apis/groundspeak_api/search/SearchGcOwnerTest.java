@@ -123,13 +123,13 @@ class SearchGcOwnerTest {
             @Override
             public void callBack(Integer value) {
 
-                assertEquals(23, cacheList.size());
+                assertEquals(23, cacheList.size);
                 Cache cache = cacheList.first();
 
                 assertEquals(false, cache.isArchived());
                 assertEquals(true, cache.isAvailable());
                 assertEquals("GC18JGX", cache.getGcCode());
-                assertEquals(2, cache.waypoints.size());
+                assertEquals(2, cache.waypoints.size);
 
                 Waypoint waypoint = cache.waypoints.first();
                 assertEquals("PA18JGX", waypoint.getGcCode());
@@ -168,7 +168,7 @@ class SearchGcOwnerTest {
                 assertEquals(52.62965, cache.getLatitude());
                 assertEquals(13.372317, cache.getLongitude());
 
-                assertEquals(2, cache.waypoints.size());
+                assertEquals(2, cache.waypoints.size);
 
                 // Attribute Tests
 
@@ -193,7 +193,7 @@ class SearchGcOwnerTest {
 
 
                 //check Logs
-                assertEquals(230, logList.size());
+                assertEquals(230, logList.size);
                 LogEntry logEntry = logList.first();
 
                 assertEquals(Cache.GenerateCacheId(cache.getGcCode()), logEntry.CacheId);
@@ -246,13 +246,13 @@ class SearchGcOwnerTest {
                 public void callBack(Integer value) {
 
                     try {
-                        assertEquals(23, cacheList.size());
+                        assertEquals(23, cacheList.size);
                         Cache cache = cacheList.first();
 
                         assertEquals(false, cache.isArchived());
                         assertEquals(true, cache.isAvailable());
                         assertEquals("GC18JGX", cache.getGcCode());
-                        assertEquals(2, cache.waypoints.size());
+                        assertEquals(2, cache.waypoints.size);
 
                         Waypoint waypoint = cache.waypoints.first();
                         assertEquals("PA18JGX", waypoint.getGcCode());
@@ -300,7 +300,7 @@ class SearchGcOwnerTest {
 
 
                         //check Logs
-                        assertEquals(230, logList.size());
+                        assertEquals(230, logList.size);
                         LogEntry logEntry = logList.first();
 
                         assertEquals(Cache.GenerateCacheId(cache.getGcCode()), logEntry.CacheId);

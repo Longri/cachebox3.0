@@ -63,10 +63,10 @@ public class ClusterRunnable implements CancelRunable {
     @Override
     public void run() {
         log.debug("Runnable started with " + task);
-        int lastSize = workList.size();
+        int lastSize = workList.size;
         try {
             workList.clusterByDistance(distance, boundingBox, task, all);
-            log.debug(task + "from " + lastSize + " to " + workList.size() + "[" + workList.getAllSize() + "]");
+            log.debug(task + "from " + lastSize + " to " + workList.size + "[" + workList.getAllSize() + "]");
             callBack.callBack();
         } catch (Exception e) {
             log.error("Runnable exception", e);

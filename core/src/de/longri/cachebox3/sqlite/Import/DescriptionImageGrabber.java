@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -173,7 +173,7 @@ public class DescriptionImageGrabber {
 
         int delta = 0;
 
-        for (int i = 0, n = imgTags.size(); i < n; i++) {
+        for (int i = 0, n = imgTags.size; i < n; i++) {
             Segment img = imgTags.get(i);
             int srcIdx = img.text.toLowerCase().indexOf("src=");
             int srcStart = img.text.indexOf('"', srcIdx + 4);
@@ -320,7 +320,7 @@ public class DescriptionImageGrabber {
 
         imgTags.addAll(Segmentize(Cache.getLongDescription(), "<img", ">"));
 
-        for (int i = 0, n = imgTags.size(); i < n; i++) {
+        for (int i = 0, n = imgTags.size; i < n; i++) {
             Segment img = imgTags.get(i);
             int srcStart = -1;
             int srcEnd = -1;
@@ -358,7 +358,7 @@ public class DescriptionImageGrabber {
 
         CB_List<Segment> imgTags = Segmentize(html, "<img", ">");
 
-        for (int i = 0, n = imgTags.size(); i < n; i++) {
+        for (int i = 0, n = imgTags.size; i < n; i++) {
             Segment img = imgTags.get(i);
             int srcStart = -1;
             int srcEnd = -1;

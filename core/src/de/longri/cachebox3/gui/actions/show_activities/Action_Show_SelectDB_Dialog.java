@@ -141,13 +141,13 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             log.debug("Read CacheList");
             CacheListDAO cacheListDAO = new CacheListDAO();
             cacheListDAO.ReadCacheList(Database.Data.Query, sqlWhere, false, Config.ShowAllWaypoints.getValue());
-            log.debug("Readed " + Database.Data.Query.size() + "Caches into CacheList");
+            log.debug("Readed " + Database.Data.Query.size + "Caches into CacheList");
         }
 
         // set selectedCache from last selected Cache
         String sGc = Config.LastSelectedCache.getValue();
         if (sGc != null && !sGc.equals("")) {
-            for (int i = 0, n = Database.Data.Query.size(); i < n; i++) {
+            for (int i = 0, n = Database.Data.Query.size; i < n; i++) {
                 Cache c = Database.Data.Query.get(i);
 
                 if (c.getGcCode().equalsIgnoreCase(sGc)) {
@@ -163,7 +163,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             }
         }
         // Wenn noch kein Cache Selected ist dann einfach den ersten der Liste aktivieren
-        if ((EventHandler.getSelectedCache() == null) && (Database.Data.Query.size() > 0)) {
+        if ((EventHandler.getSelectedCache() == null) && (Database.Data.Query.size > 0)) {
             log.debug("Set selectedCache to " + Database.Data.Query.get(0).getGcCode() + " from firstInDB");
             EventHandler.fire(new SelectedCacheChangedEvent(Database.Data.Query.get(0)));
         }

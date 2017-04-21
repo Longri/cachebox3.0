@@ -333,16 +333,16 @@ public class ImportGcPos extends ActivityBase {
                     searchC.postRequest(new GenericCallBack<Integer>() {
                         @Override
                         public void callBack(Integer value) {
-                            if (cacheList.size() > 0) {
+                            if (cacheList.size > 0) {
                                 try {
-                                    log.debug("Write Import to DB C:{} L:{} I:{}", cacheList.size(), logList.size(), imageList.size());
+                                    log.debug("Write Import to DB C:{} L:{} I:{}", cacheList.size, logList.size, imageList.size);
                                     GroundspeakAPI.WriteCachesLogsImages_toDB(cacheList, logList, imageList);
 
                                     String Msg;
                                     if (ImportStart != null) {
                                         Date Importfin = new Date();
                                         long ImportZeit = Importfin.getTime() - ImportStart.getTime();
-                                        Msg = "Import " + String.valueOf(cacheList.size()) + "C " + String.valueOf(logList.size()) + "L in " + String.valueOf(ImportZeit);
+                                        Msg = "Import " + String.valueOf(cacheList.size) + "C " + String.valueOf(logList.size) + "L in " + String.valueOf(ImportZeit);
                                     } else {
                                         Msg = "Import canceld";
                                     }

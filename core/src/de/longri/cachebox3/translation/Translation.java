@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2013-2016 team-cachebox.de
+ * Copyright (C) 2013-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -274,7 +274,7 @@ public class Translation {
             retString = "$ID: " + StringId;// "No translation found";
 
             MissingTranslation notFound = new MissingTranslation(StringId, "??");
-            if (!mMissingStringList.contains(notFound)) {
+            if (!mMissingStringList.contains(notFound, false)) {
                 mMissingStringList.add(notFound);
                 log.debug("MissingTranslation: " + notFound.toString());
             }
@@ -289,7 +289,7 @@ public class Translation {
             return "Translation  not initial";
 
         String retString = "";
-        for (int i = 0, n = mStringList.size(); i < n; i++) {
+        for (int i = 0, n = mStringList.size; i < n; i++) {
             Translations tmp = mStringList.get(i);
             if (tmp.getIdString() == Id) {
                 retString = tmp.getTranslation();
@@ -298,7 +298,7 @@ public class Translation {
         }
 
         if (retString == "") {
-            for (int i = 0, n = mRefTranslation.size(); i < n; i++) {
+            for (int i = 0, n = mRefTranslation.size; i < n; i++) {
                 Translations tmp = mRefTranslation.get(i);
                 if (tmp.getIdString() == Id) {
                     retString = tmp.getTranslation();

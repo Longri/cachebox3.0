@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -194,7 +194,7 @@ public class WaypointDAO {
     // Damit kann bei der Definition eines neuen Start-Waypoints vorher der alte entfernt werden damit sichergestellt ist dass ein Cache nur
     // 1 Start-Waypoint hat
     public void ResetStartWaypoint(Cache cache, Waypoint except) {
-        for (int i = 0, n = cache.waypoints.size(); i < n; i++) {
+        for (int i = 0, n = cache.waypoints.size; i < n; i++) {
             Waypoint wp = cache.waypoints.get(i);
             if (except == wp)
                 continue;

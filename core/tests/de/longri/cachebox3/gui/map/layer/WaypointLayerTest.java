@@ -98,14 +98,14 @@ class WaypointLayerTest {
 
         WaypointLayerRenderer renderer = (WaypointLayerRenderer) wpLayer.getRenderer();
 
-        assertThat("itemList must empty", wpLayer.mItemList.size() == 0);
+        assertThat("itemList must empty", wpLayer.mItemList.size == 0);
 
         EventHandler.fire(new SelectedCacheChangedEvent(null));
         CacheListChangedEventList.Call();
 
         wait(500);// for CacheListChangedEvent is fired! (Will call in a separate Thread)
 
-        assertThat("itemList must have 3 items", wpLayer.mItemList.size() == 3);
+        assertThat("itemList must have 3 items", wpLayer.mItemList.size == 3);
 
         //check if no item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {
@@ -277,14 +277,14 @@ class WaypointLayerTest {
 
         WaypointLayerRenderer renderer = (WaypointLayerRenderer) wpLayer.getRenderer();
 
-        assertThat("itemList must empty", wpLayer.mItemList.size() == 0);
+        assertThat("itemList must empty", wpLayer.mItemList.size == 0);
 
         EventHandler.fire(new SelectedCacheChangedEvent(null));
         CacheListChangedEventList.Call();
 
         wait(500);// for CacheListChangedEvent is fired! (Will call in a separate Thread)
 
-        assertThat("itemList must have 6 items", wpLayer.mItemList.size() == 6);
+        assertThat("itemList must have 6 items", wpLayer.mItemList.size == 6);
 
         //check if no item has a Overlay
         for (MapWayPointItem item : wpLayer.mItemList) {

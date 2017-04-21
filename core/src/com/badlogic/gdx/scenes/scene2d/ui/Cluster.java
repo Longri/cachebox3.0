@@ -27,7 +27,7 @@ public class Cluster extends MapWayPointItem {
     private Coordinate centerCoordinate;
 
     public Cluster(Coordinate pos, String name, Regions regions) {
-        super(pos, name, regions,false);
+        super(pos, name, regions, false);
     }
 
 
@@ -61,17 +61,17 @@ public class Cluster extends MapWayPointItem {
     }
 
     void removeAll(ClusteredList list) {
-        this.includedClusters.removeAll(list);
+        this.includedClusters.removeAll(list, true);
         centerCoordinate = null;
     }
 
     public int size() {
-        return includedClusters.size();
+        return includedClusters.size;
     }
 
     @Override
     public String toString() {
-        return "Cluster [" + this.includedClusters.size() + "]: ";
+        return "Cluster [" + this.includedClusters.size + "]: ";
     }
 
     /**
@@ -90,8 +90,8 @@ public class Cluster extends MapWayPointItem {
             avLat += cluster.latitude;
             avLon += cluster.longitude;
         }
-        centerCoordinate = new Coordinate(avLat / this.includedClusters.size(),
-                avLon / this.includedClusters.size());
+        centerCoordinate = new Coordinate(avLat / this.includedClusters.size,
+                avLon / this.includedClusters.size);
 
         return centerCoordinate;
     }

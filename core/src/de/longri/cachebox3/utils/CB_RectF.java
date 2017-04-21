@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2011-2016 team-cachebox.de
+ * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -241,7 +241,7 @@ public class CB_RectF {
         return ret;
     }
 
-    private CB_List<SizeChangedEvent> list = new CB_List<SizeChangedEvent>(1);
+    private CB_List<SizeChangedEvent> list = new CB_List<>();
 
     public CB_RectF add(SizeChangedEvent event) {
         synchronized (list) {
@@ -256,7 +256,7 @@ public class CB_RectF {
         synchronized (list) {
             if (list == null)
                 return; // is disposed
-            list.remove(event);
+            list.removeValue(event,true);
         }
     }
 
@@ -267,8 +267,8 @@ public class CB_RectF {
 
             resize(this.member[2], this.member[3]);
 
-            if (list.size() > 0) {
-                for (int i = 0, n = list.size(); i < n; i++) {
+            if (list.size > 0) {
+                for (int i = 0, n = list.size; i < n; i++) {
                     list.get(i).sizeChanged();
                 }
             }
@@ -385,18 +385,18 @@ public class CB_RectF {
     public Vector2 getIntersection(Vector2 P1, Vector2 P2, int first) {
 
         // Array mit Geraden Nummern füllen
-        if (Geraden.size() < 4) {
+        if (Geraden.size < 4) {
             Geraden.add(1);
             Geraden.add(2);
             Geraden.add(3);
             Geraden.add(4);
         }
 
-        Geraden.MoveItemFirst(Geraden.indexOf(first));
+        Geraden.MoveItemFirst(Geraden.indexOf(first,false));
 
         Vector2 ret = new Vector2();
 
-        for (int i = 0, n = Geraden.size(); i < n; i++) {
+        for (int i = 0, n = Geraden.size; i < n; i++) {
             switch (Geraden.get(i)) {
                 case 1:
 

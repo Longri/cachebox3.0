@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2011-2016 team-cachebox.de
+ * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -104,10 +104,10 @@ public enum QuickActions {
 
             String ActionsString = "";
             int counter = 0;
-            for (int i = 0, n = retList.size(); i < n; i++) {
+            for (int i = 0, n = retList.size; i < n; i++) {
                 QuickButtonItem tmp = retList.get(i);
                 ActionsString += String.valueOf(tmp.getAction().ordinal());
-                if (counter < retList.size() - 1) {
+                if (counter < retList.size - 1) {
                     ActionsString += ",";
                 }
                 counter++;

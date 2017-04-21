@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014 team-cachebox.de
+ * Copyright (C) 2014 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -53,12 +53,12 @@ public class CacheListChangedEventList {
             Cache cache = Database.Data.Query.GetCacheByGcCode("CBPark");
 
             if (cache != null)
-                Database.Data.Query.remove(cache);
+                Database.Data.Query.removeValue(cache,false);
 
             // add Parking Cache
             if (Config.ParkingLatitude.getValue() != 0) {
                 cache = new Cache(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
-                Database.Data.Query.add(0, cache);
+                Database.Data.Query.insert(0, cache);
             }
 
             //TODO add Live Caches
