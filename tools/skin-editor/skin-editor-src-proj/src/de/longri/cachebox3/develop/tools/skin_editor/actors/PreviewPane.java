@@ -26,10 +26,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Keys;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
+import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
+import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -316,6 +319,14 @@ public class PreviewPane extends Table {
 
                         w.expandAll();
                         add(w).pad(10).width(200).height(200).padBottom(20).expandX().fillX().row();
+                    } else if (widget.equals("Animation")) { // Animation
+                        FrameAnimationStyle frameAnimationStyle = game.skinProject.get(key, FrameAnimationStyle.class);
+                        FrameAnimationDrawable drawable = new FrameAnimationDrawable(frameAnimationStyle);
+                        Image image = new Image(drawable);
+                        float width = frameAnimationStyle.frames.first().getRegionWidth();
+                        float height = frameAnimationStyle.frames.first().getRegionHeight();
+                        add(image).pad(10).padBottom(20).width(width).height(height).row();
+
                     } else {
                         add(new Label("Unknown widget type!", game.skin, "error")).pad(10).padBottom(20).row();
                     }

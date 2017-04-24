@@ -15,35 +15,135 @@
  */
 package de.longri.cachebox3.gui.drawables;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.Layout;
+import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
 
 /**
  * Created by longri on 22.04.17.
  */
-public class FrameAnimationDrawable extends AbstractAnimationDrawable {
+public class FrameAnimationDrawable extends AbstractAnimationDrawable implements Layout {
 
 
     private Animation<TextureRegion> animation;
     private FrameAnimationStyle style;
+    private float prefHeight = -1, prefWidth = -1;
 
     public FrameAnimationDrawable(FrameAnimationStyle style) {
         this.style = style;
     }
 
+    private final AtomicBoolean taskSchudled = new AtomicBoolean(false);
 
     @Override
     public void drawAnimation(Batch batch, float x, float y, float width, float height) {
         if (animation == null) {
             if (style != null) {
-                if(style.frames==null || style.frames.size==0)return;
+                if (style.frames == null || style.frames.size == 0) return;
                 animation = new Animation(style.frameDuration, style.frames, style.playMode);
+                Gdx.graphics.requestRendering();
             }
         } else {
-            batch.draw(animation.getKeyFrame(animationTime), x, y, width, height);
+            TextureRegion region = animation.getKeyFrame(animationTime);
+            if (region != null) batch.draw(region, x, y, width, height);
+            if (animation.getPlayMode().ordinal() > 1 || !animation.isAnimationFinished(animationTime)) {
+                if(!taskSchudled.get()){
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            taskSchudled.set(false);
+                            Gdx.graphics.requestRendering();
+                        }
+                    }, animation.getFrameDuration());
+                    taskSchudled.set(true);
+                }
+            }
         }
+    }
+
+    @Override
+    public void layout() {
+        setPrefSize();
+    }
+
+    private void setPrefSize() {
+        if (prefWidth != -1 || style.frames == null || style.frames.size == 0) return;
+        prefWidth = style.frames.first().getRegionWidth();
+        prefHeight = style.frames.first().getRegionWidth();
+    }
+
+    @Override
+    public void invalidate() {
+
+    }
+
+    @Override
+    public void invalidateHierarchy() {
+
+    }
+
+    @Override
+    public void validate() {
+
+    }
+
+    @Override
+    public void pack() {
+
+    }
+
+    @Override
+    public void setFillParent(boolean fillParent) {
+
+    }
+
+    @Override
+    public void setLayoutEnabled(boolean enabled) {
+
+    }
+
+    @Override
+    public float getPrefWidth() {
+        setPrefSize();
+        return prefWidth;
+    }
+
+    @Override
+    public float getPrefHeight() {
+        setPrefSize();
+        return prefHeight;
+    }
+
+    @Override
+    public float getMaxWidth() {
+        setPrefSize();
+        return prefWidth * 2;
+    }
+
+    @Override
+    public float getMaxHeight() {
+        setPrefSize();
+        return prefHeight * 2;
+    }
+
+    @Override
+    public float getMinWidth() {
+        setPrefSize();
+        return prefWidth;
+    }
+
+    @Override
+    public float getMinHeight() {
+        setPrefSize();
+        return prefHeight;
     }
 
 }

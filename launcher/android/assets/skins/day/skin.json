@@ -276,6 +276,26 @@
       "path": "svg/missingIcon.svg",
       "scale": 1
     },
+    "download-1": {
+      "path": "svg/download-1.svg",
+      "scale": 0.3
+    },
+    "download-2": {
+      "path": "svg/download-2.svg",
+      "scale": 0.3
+    },
+    "download-3": {
+      "path": "svg/download-3.svg",
+      "scale": 0.3
+    },
+    "download-4": {
+      "path": "svg/download-4.svg",
+      "scale": 0.3
+    },
+    "download-5": {
+      "path": "svg/download-5.svg",
+      "scale": 0.3
+    },
     "earth": {
       "path": "svg/earth.svg",
       "scale": 0.2
@@ -1918,14 +1938,17 @@
       "typeStyle": "cacheList"
     }
   },
-  "de.longri.cachebox3.gui.skin.styles.ApiButtonStyle": {
-    "ApiButton": {
-      "up": "default_button_9_Patch",
-      "down": "drawable_default_button_pressed",
-      "check": "check_on",
-      "unchecked": "check_disabled",
-      "font": "normal_font",
-      "fontColor": "font_color"
+  "de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle": {
+    "download-animation": {
+      "frames": [
+        "download-1",
+        "download-2",
+        "download-3",
+        "download-4",
+        "download-5"
+      ],
+      "frameDuration": 0.15,
+      "playMode": "LOOP"
     }
   }
 }

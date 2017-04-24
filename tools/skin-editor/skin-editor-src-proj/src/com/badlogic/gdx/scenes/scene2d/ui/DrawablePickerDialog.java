@@ -19,12 +19,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.reflect.Field;
@@ -63,6 +65,7 @@ public class DrawablePickerDialog extends Dialog {
     private final boolean callSelectedSvg;
     static private FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
     static private SvgFileIconProvider svgFileIconProvider;
+    private final int arrayIndex;
 
     TextButton togglShowNinePatch;
     TextButton togglShowDrawable;
@@ -90,13 +93,14 @@ public class DrawablePickerDialog extends Dialog {
         fileChooser.setIconProvider(svgFileIconProvider);
     }
 
-    public DrawablePickerDialog(final SkinEditorGame game, final Field field, boolean disableNinePatch, Stage stage) {
+    public DrawablePickerDialog(final SkinEditorGame game, final Field field, int arrayIndex, boolean disableNinePatch, Stage stage) {
         super("Drawable Picker", game.skin);
         this.game = game;
         this.field = field;
         this.disableNinePatch = disableNinePatch;
         this.stage = stage;
         this.callSelectedSvg = false;
+        this.arrayIndex = arrayIndex;
         initializeSelf();
     }
 
@@ -107,6 +111,7 @@ public class DrawablePickerDialog extends Dialog {
         this.disableNinePatch = true;
         this.stage = stage;
         this.callSelectedSvg = true;
+        this.arrayIndex = -1;
         initializeSelf();
     }
 
@@ -579,7 +584,12 @@ public class DrawablePickerDialog extends Dialog {
                         // field back
                         game.screenMain.paneOptions.refreshSelection();
 
-                        if (field.getType() == Bitmap.class) {
+                        if (field.getType() == Array.class) {
+                            Object value = field.get(game.screenMain.paneOptions.currentStyle);
+                            Array<TextureAtlas.AtlasRegion> array = (Array<TextureAtlas.AtlasRegion>) value;
+                            array.set(arrayIndex,(TextureAtlas.AtlasRegion) ((TextureRegionDrawable) items.get(key).drawable).getRegion());
+                            field.set(game.screenMain.paneOptions.currentStyle, array);
+                        } else if (field.getType() == Bitmap.class) {
                             Bitmap bmp = game.skinProject.get(key, Bitmap.class);
                             field.set(game.screenMain.paneOptions.currentStyle, bmp);
                         } else {

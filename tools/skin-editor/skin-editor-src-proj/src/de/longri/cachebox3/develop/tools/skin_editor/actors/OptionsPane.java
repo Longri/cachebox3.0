@@ -21,28 +21,29 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Keys;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.kitfox.svg.A;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.utils.SkinColor;
-import org.mapsforge.core.graphics.Cap;
 import org.oscim.backend.canvas.Bitmap;
-import org.oscim.backend.canvas.Paint;
 
 import java.util.Iterator;
 
@@ -453,387 +454,27 @@ public class OptionsPane extends Table {
                 String name = field.getType().getSimpleName();
                 Object obj = field.get(currentStyle);
 
-                if (name.equals("Drawable")) {
-
-                    /**
-                     * Handle Drawable object
-                     */
-
-                    Drawable drawable = (Drawable) field.get(currentStyle);
-                    String resourceName = "";
-                    ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
-                            game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
-
-                    if (drawable != null) {
-                        resourceName = SvgSkinUtil.resolveObjectName(game.skinProject, Drawable.class, drawable);
-                        if (resourceName == null) {
-                            resourceName = SvgSkinUtil.resolveObjectName(game.skinProject, TextureRegion.class, drawable);
-                        }
-
-                        if (drawable instanceof SvgNinePatchDrawable) {
-                            //override pref width and height
-                            ((SvgNinePatchDrawable) drawable).setAdditionalPrefWidth(50);
-                            ((SvgNinePatchDrawable) drawable).setAdditionalPrefHeight(50);
-                        }
-
-                        buttonStyle.imageUp = drawable;
-                    } else {
-                        buttonStyle.up = game.skin.getDrawable("default-rect");
-                        buttonStyle.checked = game.skin.getDrawable("default-rect");
-                    }
-
-                    actor = new ImageTextButton(resourceName, buttonStyle);
-                    ((ImageTextButton) actor).setClip(false);
-                    actor.addListener(new ChangeListener() {
-
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-                            showDrawableDialog(field, false);
-
-                        }
-
-                    });
-
+                if (name.equals("Array")) {
+                    actor = getArrayActor(field, obj);
+                } else if (name.equals("Drawable")) {
+                    actor = getDrawableActor(field, -1, null);
                 } else if (name.equals("Bitmap")) {
-
-                    /**
-                     * Handle Bitmap object
-                     */
-
-                    Bitmap bitmap = (Bitmap) field.get(currentStyle);
-                    byte[] bytes = null;
-                    if (bitmap != null) bytes = bitmap.getPngEncodedData();
-                    Drawable drawable = bitmap != null ?
-                            new TextureRegionDrawable(new TextureRegion(new Texture(new Pixmap(bytes, 0, bytes.length))))
-                            : null;
-
-                    String resourceName = "";
-                    ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
-                            game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
-
-                    if (drawable != null) {
-                        resourceName = ((GetName) bitmap).getName();
-                        buttonStyle.imageUp = drawable;
-                    } else {
-                        buttonStyle.up = game.skin.getDrawable("default-rect");
-                        buttonStyle.checked = game.skin.getDrawable("default-rect");
-                    }
-
-                    actor = new ImageTextButton(resourceName, buttonStyle);
-                    ((ImageTextButton) actor).setClip(true);
-                    actor.addListener(new ChangeListener() {
-
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-                            showDrawableDialog(field, true);
-
-                        }
-
-                    });
-
+                    actor = getBitmapActor(field);
                 } else if (name.equals("Color")) {
-
-                    /**
-                     * Handle Color object
-                     */
-                    Color color = (Color) field.get(currentStyle);
-                    ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
-                            game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
-
-                    String resourceName = "";
-                    if (color != null) {
-
-                        if (color instanceof SkinColor) {
-                            resourceName = ((SkinColor) color).skinName;
-                        } else {
-                            resourceName = SvgSkinUtil.resolveObjectName(game.skinProject, SkinColor.class, color);
-                        }
-
-                        resourceName += " (" + color.toString() + ")";
-
-                        // Create drawable on the fly
-                        Pixmap pixmap = new Pixmap(18, 18, Pixmap.Format.RGBA8888);
-                        pixmap.setColor(color);
-                        pixmap.fill();
-                        pixmap.setColor(Color.BLACK);
-                        pixmap.drawRectangle(0, 0, 18, 18);
-                        Texture texture = new Texture(pixmap);
-                        buttonStyle.imageUp = new SpriteDrawable(new Sprite(texture));
-                        pixmap.dispose();
-                    } else {
-                        buttonStyle.up = game.skin.getDrawable("default-rect");
-                        buttonStyle.checked = game.skin.getDrawable("default-rect");
-                    }
-
-                    actor = new ImageTextButton(resourceName, buttonStyle);
-                    ((ImageTextButton) actor).setClip(true);
-                    actor.addListener(new ChangeListener() {
-
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-                            showColorPickerDialog(field);
-
-                        }
-
-                    });
-
+                    actor = getColorActor(field);
                 } else if (name.equals("BitmapFont")) {
-
-                    /**
-                     * Handle BitmapFont object
-                     */
-
-                    BitmapFont font = (BitmapFont) field.get(currentStyle);
-                    String resourceName = "";
-                    ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
-                            game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
-
-                    if (font != null) {
-                        resourceName = SvgSkinUtil.resolveObjectName(game.skinProject, BitmapFont.class, font);
-                        buttonStyle.font = font;
-                    } else {
-                        buttonStyle.up = game.skin.getDrawable("default-rect");
-                        buttonStyle.checked = game.skin.getDrawable("default-rect");
-                    }
-
-                    actor = new ImageTextButton(resourceName, buttonStyle);
-                    ((ImageTextButton) actor).setClip(true);
-
-                    actor.addListener(new ChangeListener() {
-
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-                            showFontPickerDialog(field);
-
-                        }
-
-                    });
-
+                    actor = getBitmapFontActor(field);
                 } else if (name.equals("float")) {
-
-                    /**
-                     * Handle Float object
-                     */
-
-                    Float value = (Float) field.get(currentStyle);
-                    String resourceName = "";
-
-                    ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
-                            game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
-
-                    if ((value != null) && (value != 0)) {
-                        resourceName = String.valueOf(value);
-                    } else {
-                        buttonStyle.up = game.skin.getDrawable("default-rect");
-                        buttonStyle.checked = game.skin.getDrawable("default-rect");
-                    }
-
-                    actor = new ImageTextButton(resourceName, buttonStyle);
-                    ((ImageTextButton) actor).setClip(true);
-                    actor.addListener(new ChangeListener() {
-
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-                            showFloatInputDialog(field);
-
-                        }
-
-                    });
-
+                    actor = getFloatActor(field);
                 } else if (name.equals("ListStyle")) {
-
-                    /**
-                     * Handle ListStyle object
-                     */
-                    ListStyle listStyle = (ListStyle) field.get(currentStyle);
-
-                    actor = new SelectBox<String>(game.skin, "default");
-                    Array<String> items = new Array<String>();
-
-                    final ObjectMap<String, ListStyle> values = game.skinProject.getAll(ListStyle.class);
-                    Iterator<String> it = values.keys().iterator();
-                    String selection = null;
-
-                    while (it.hasNext()) {
-                        String key = it.next();
-                        items.add(key);
-
-                        if (listStyle == values.get(key)) {
-                            selection = key;
-                        }
-                    }
-
-                    ((SelectBox) actor).setItems(items);
-
-                    if (selection != null) {
-                        ((SelectBox) actor).setSelected(selection);
-                    }
-
-                    actor.addListener(new ChangeListener() {
-
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-
-                            String selection = (String) ((SelectBox) actor).getSelected();
-                            try {
-                                field.set(currentStyle, values.get(selection));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            game.screenMain.saveToSkin();
-                            refresh(true);
-                            game.screenMain.paneOptions.updateSelectedTableFields();
-                            game.screenMain.panePreview.refresh();
-                        }
-
-                    });
-
-
+                    actor = getListStyleActor(field);
                 } else if (name.equals("ScrollPaneStyle")) {
-
-                    /**
-                     * Handle ScrollPaneStyle object
-                     */
-                    ScrollPaneStyle scrollStyle = (ScrollPaneStyle) field.get(currentStyle);
-
-                    actor = new SelectBox<String>(game.skin, "default");
-                    Array<String> items = new Array<String>();
-
-                    final ObjectMap<String, ScrollPaneStyle> values = game.skinProject.getAll(ScrollPaneStyle.class);
-                    Iterator<String> it = values.keys().iterator();
-                    String selection = null;
-
-                    while (it.hasNext()) {
-                        String key = it.next();
-                        items.add(key);
-
-                        if (scrollStyle == values.get(key)) {
-                            selection = key;
-                        }
-                    }
-
-                    ((SelectBox) actor).setItems(items);
-
-                    if (selection != null) {
-                        ((SelectBox) actor).setSelected(selection);
-                    }
-
-                    actor.addListener(new ChangeListener() {
-
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-
-                            String selection = (String) ((SelectBox) actor).getSelected();
-                            try {
-                                field.set(currentStyle, values.get(selection));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            game.screenMain.saveToSkin();
-                            refresh(true);
-                            game.screenMain.paneOptions.updateSelectedTableFields();
-                            game.screenMain.panePreview.refresh();
-                        }
-
-                    });
-
+                    actor = getScrollPaneStyleActor(field);
                 } else if (name.equals("boolean")) {
-
-                    /**
-                     * Handle boolean object
-                     */
-
-                    final Boolean[] value = new Boolean[]{(Boolean) field.get(currentStyle)};
-                    String resourceName = "";
-
-                    ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
-                            game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
-
-                    if ((value != null)) {
-                        resourceName = String.valueOf(value[0]);
-                    } else {
-                        buttonStyle.up = game.skin.getDrawable("default-rect");
-                        buttonStyle.checked = game.skin.getDrawable("default-rect");
-                    }
-
-                    actor = new ImageTextButton(resourceName, buttonStyle);
-                    ((ImageTextButton) actor).setClip(true);
-                    actor.addListener(new ChangeListener() {
-
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-                            value[0] = !value[0];
-                            try {
-                                field.set(currentStyle, value[0]);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            game.screenMain.saveToSkin();
-                            ((ImageTextButton) actor).setText(String.valueOf(value[0]));
-                        }
-
-                    });
-
+                    actor = getBooleanActor(field);
                 } else if (field.getType().isEnum()) {
-                    /**
-                     * Handle ENUM object
-                     */
-                    String resourceName = "";
-                    final Object[] enumValues = field.getType().getEnumConstants();
-
-                    //Enum's should be not NULL, so set to first
-                    if (obj == null) {
-                        field.set(currentStyle, enumValues[0]);
-                        game.screenMain.saveToSkin();
-                        resourceName = enumValues[0].toString();
-                    } else {
-                        resourceName = obj.toString();
-                    }
-
-                    actor = new SelectBox<String>(game.skin, "default");
-                    final Array<String> items = new Array<String>();
-
-                    for (Object object : enumValues) {
-                        items.add(object.toString());
-                    }
-
-                    ((SelectBox) actor).setItems(items);
-
-
-                    ((SelectBox) actor).setSelected(resourceName);
-
-                    actor.addListener(new ChangeListener() {
-
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-
-                            String selection = (String) ((SelectBox) actor).getSelected();
-                            try {
-
-                                Object selectionObject = null;
-                                for (Object object : enumValues) {
-                                    if (selection.equals(object.toString())) {
-                                        selectionObject = object;
-                                        break;
-                                    }
-                                }
-                                field.set(currentStyle, selectionObject);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            game.screenMain.saveToSkin();
-                            refresh(true);
-                            game.screenMain.paneOptions.updateSelectedTableFields();
-                            game.screenMain.panePreview.refresh();
-                        }
-
-                    });
-
+                    actor = getEnumActor(field, obj);
                 } else {
-
                     Gdx.app.log("OptionsPane", "Unknown type: " + name);
                     if (!(currentStyle instanceof AbstractIconStyle)) {
                         actor = new Label("Unknown Type", game.skin);
@@ -854,7 +495,8 @@ public class OptionsPane extends Table {
                         tableFields.add(new Label(field.getName(), game.skin, "default")).left();
 
                     }
-                    tableFields.add(actor).left().height(64).padRight(24).expandX().fillX();
+//                    tableFields.add(actor).left().height(64).padRight(24).expandX().fillX();
+                    tableFields.add(actor).left().padBottom(12).padRight(24).expandX().fillX();
                     tableFields.row();
                 }
 
@@ -867,6 +509,446 @@ public class OptionsPane extends Table {
             previewPane.selectedStyleChanged();
         }
 
+    }
+
+    private Actor getArrayActor(final Field field, Object obj) throws ReflectionException {
+        Table table = new Table();
+        Object value = field.get(currentStyle);
+
+        final Array<TextureAtlas.AtlasRegion> array = (Array<TextureAtlas.AtlasRegion>) value;
+
+        VisTextButton minus = new VisTextButton("-");
+        VisTextButton plus = new VisTextButton("+");
+        plus.addListener(new ClickListener() {
+
+            public void clicked(InputEvent event, float x, float y) {
+                int newSize = (array != null ? array.size : 0) + 1;
+                Array<TextureAtlas.AtlasRegion> newArray = new Array<TextureAtlas.AtlasRegion>(newSize);
+                for (int i = 0, n = array.size; i < n; i++) {
+                    newArray.add(array.get(i));
+                }
+                newArray.add(null);
+                try {
+                    field.set(game.screenMain.paneOptions.currentStyle, newArray);
+                } catch (ReflectionException e) {
+                    e.printStackTrace();
+                }
+                game.screenMain.saveToSkin();
+                game.screenMain.panePreview.refresh();
+                game.screenMain.paneOptions.updateSelectedTableFields();
+            }
+        });
+
+        minus.addListener(new ClickListener() {
+
+            public void clicked(InputEvent event, float x, float y) {
+                int newSize = (array != null ? array.size : 0) -1;
+                Array<TextureAtlas.AtlasRegion> newArray = new Array<TextureAtlas.AtlasRegion>(newSize);
+                for (int i = 0, n = newSize; i < n; i++) {
+                    newArray.add(array.get(i));
+                }
+                try {
+                    field.set(game.screenMain.paneOptions.currentStyle, newArray);
+                } catch (ReflectionException e) {
+                    e.printStackTrace();
+                }
+                game.screenMain.saveToSkin();
+                game.screenMain.panePreview.refresh();
+                game.screenMain.paneOptions.updateSelectedTableFields();
+            }
+        });
+
+
+        VisLabel sizeLabel = new VisLabel(Integer.toString(array != null ? array.size : 0));
+        table.add(minus).pad(5);
+        table.add(sizeLabel).pad(5);
+        table.add(plus).pad(5);
+        table.row();
+
+        if (array != null) {
+            for (int i = 0, n = array.size; i < n; i++) {
+                table.add(getDrawableActor(field, i, array.get(i))).colspan(3);
+                table.row();
+            }
+        }
+        return table;
+    }
+
+    private Actor getEnumActor(final Field field, Object obj) throws ReflectionException {
+        Actor actor;
+        String resourceName = "";
+        final Object[] enumValues = field.getType().getEnumConstants();
+
+        //Enum's should be not NULL, so set to first
+        if (obj == null) {
+            field.set(currentStyle, enumValues[0]);
+            game.screenMain.saveToSkin();
+            resourceName = enumValues[0].toString();
+        } else {
+            resourceName = obj.toString();
+        }
+
+        actor = new SelectBox<String>(game.skin, "default");
+        final Array<String> items = new Array<String>();
+
+        for (Object object : enumValues) {
+            items.add(object.toString());
+        }
+
+        ((SelectBox) actor).setItems(items);
+
+
+        ((SelectBox) actor).setSelected(resourceName);
+
+        actor.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                String selection = (String) ((SelectBox) actor).getSelected();
+                try {
+
+                    Object selectionObject = null;
+                    for (Object object : enumValues) {
+                        if (selection.equals(object.toString())) {
+                            selectionObject = object;
+                            break;
+                        }
+                    }
+                    field.set(currentStyle, selectionObject);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                game.screenMain.saveToSkin();
+                refresh(true);
+                game.screenMain.paneOptions.updateSelectedTableFields();
+                game.screenMain.panePreview.refresh();
+            }
+
+        });
+        return actor;
+    }
+
+    private Actor getBooleanActor(final Field field) throws ReflectionException {
+        Actor actor;
+        final Boolean[] value = new Boolean[]{(Boolean) field.get(currentStyle)};
+        String resourceName = "";
+
+        ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
+                game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
+
+        if ((value != null)) {
+            resourceName = String.valueOf(value[0]);
+        } else {
+            buttonStyle.up = game.skin.getDrawable("default-rect");
+            buttonStyle.checked = game.skin.getDrawable("default-rect");
+        }
+
+        actor = new ImageTextButton(resourceName, buttonStyle);
+        ((ImageTextButton) actor).setClip(true);
+        actor.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                value[0] = !value[0];
+                try {
+                    field.set(currentStyle, value[0]);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                game.screenMain.saveToSkin();
+                ((ImageTextButton) actor).setText(String.valueOf(value[0]));
+            }
+
+        });
+        return actor;
+    }
+
+    private Actor getScrollPaneStyleActor(final Field field) throws ReflectionException {
+        Actor actor;
+        ScrollPaneStyle scrollStyle = (ScrollPaneStyle) field.get(currentStyle);
+
+        actor = new SelectBox<String>(game.skin, "default");
+        Array<String> items = new Array<String>();
+
+        final ObjectMap<String, ScrollPaneStyle> values = game.skinProject.getAll(ScrollPaneStyle.class);
+        Iterator<String> it = values.keys().iterator();
+        String selection = null;
+
+        while (it.hasNext()) {
+            String key = it.next();
+            items.add(key);
+
+            if (scrollStyle == values.get(key)) {
+                selection = key;
+            }
+        }
+
+        ((SelectBox) actor).setItems(items);
+
+        if (selection != null) {
+            ((SelectBox) actor).setSelected(selection);
+        }
+
+        actor.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                String selection = (String) ((SelectBox) actor).getSelected();
+                try {
+                    field.set(currentStyle, values.get(selection));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                game.screenMain.saveToSkin();
+                refresh(true);
+                game.screenMain.paneOptions.updateSelectedTableFields();
+                game.screenMain.panePreview.refresh();
+            }
+
+        });
+        return actor;
+    }
+
+    private Actor getListStyleActor(final Field field) throws ReflectionException {
+        Actor actor;
+        ListStyle listStyle = (ListStyle) field.get(currentStyle);
+
+        actor = new SelectBox<String>(game.skin, "default");
+        Array<String> items = new Array<String>();
+
+        final ObjectMap<String, ListStyle> values = game.skinProject.getAll(ListStyle.class);
+        Iterator<String> it = values.keys().iterator();
+        String selection = null;
+
+        while (it.hasNext()) {
+            String key = it.next();
+            items.add(key);
+
+            if (listStyle == values.get(key)) {
+                selection = key;
+            }
+        }
+
+        ((SelectBox) actor).setItems(items);
+
+        if (selection != null) {
+            ((SelectBox) actor).setSelected(selection);
+        }
+
+        actor.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                String selection = (String) ((SelectBox) actor).getSelected();
+                try {
+                    field.set(currentStyle, values.get(selection));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                game.screenMain.saveToSkin();
+                refresh(true);
+                game.screenMain.paneOptions.updateSelectedTableFields();
+                game.screenMain.panePreview.refresh();
+            }
+
+        });
+        return actor;
+    }
+
+    private Actor getFloatActor(final Field field) throws ReflectionException {
+        Actor actor;
+        Float value = (Float) field.get(currentStyle);
+        String resourceName = "";
+
+        ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
+                game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
+
+        if ((value != null) && (value != 0)) {
+            resourceName = String.valueOf(value);
+        } else {
+            buttonStyle.up = game.skin.getDrawable("default-rect");
+            buttonStyle.checked = game.skin.getDrawable("default-rect");
+        }
+
+        actor = new ImageTextButton(resourceName, buttonStyle);
+        ((ImageTextButton) actor).setClip(true);
+        actor.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showFloatInputDialog(field);
+
+            }
+
+        });
+        return actor;
+    }
+
+    private Actor getBitmapFontActor(final Field field) throws ReflectionException {
+        Actor actor;
+        BitmapFont font = (BitmapFont) field.get(currentStyle);
+        String resourceName = "";
+        ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
+                game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
+
+        if (font != null) {
+            resourceName = SvgSkinUtil.resolveObjectName(game.skinProject, BitmapFont.class, font);
+            buttonStyle.font = font;
+        } else {
+            buttonStyle.up = game.skin.getDrawable("default-rect");
+            buttonStyle.checked = game.skin.getDrawable("default-rect");
+        }
+
+        actor = new ImageTextButton(resourceName, buttonStyle);
+        ((ImageTextButton) actor).setClip(true);
+
+        actor.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showFontPickerDialog(field);
+
+            }
+
+        });
+        return actor;
+    }
+
+    private Actor getColorActor(final Field field) throws ReflectionException {
+        Actor actor;
+        Color color = (Color) field.get(currentStyle);
+        ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
+                game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
+
+        String resourceName = "";
+        if (color != null) {
+
+            if (color instanceof SkinColor) {
+                resourceName = ((SkinColor) color).skinName;
+            } else {
+                resourceName = SvgSkinUtil.resolveObjectName(game.skinProject, SkinColor.class, color);
+            }
+
+            resourceName += " (" + color.toString() + ")";
+
+            // Create drawable on the fly
+            Pixmap pixmap = new Pixmap(18, 18, Pixmap.Format.RGBA8888);
+            pixmap.setColor(color);
+            pixmap.fill();
+            pixmap.setColor(Color.BLACK);
+            pixmap.drawRectangle(0, 0, 18, 18);
+            Texture texture = new Texture(pixmap);
+            buttonStyle.imageUp = new SpriteDrawable(new Sprite(texture));
+            pixmap.dispose();
+        } else {
+            buttonStyle.up = game.skin.getDrawable("default-rect");
+            buttonStyle.checked = game.skin.getDrawable("default-rect");
+        }
+
+        actor = new ImageTextButton(resourceName, buttonStyle);
+        ((ImageTextButton) actor).setClip(true);
+        actor.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showColorPickerDialog(field);
+
+            }
+
+        });
+        return actor;
+    }
+
+    private Actor getBitmapActor(final Field field) throws ReflectionException {
+        Actor actor;
+        Bitmap bitmap = (Bitmap) field.get(currentStyle);
+        byte[] bytes = null;
+        if (bitmap != null) bytes = bitmap.getPngEncodedData();
+        Drawable drawable = bitmap != null ?
+                new TextureRegionDrawable(new TextureRegion(new Texture(new Pixmap(bytes, 0, bytes.length))))
+                : null;
+
+        String resourceName = "";
+        ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
+                game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
+
+        if (drawable != null) {
+            resourceName = ((GetName) bitmap).getName();
+            buttonStyle.imageUp = drawable;
+        } else {
+            buttonStyle.up = game.skin.getDrawable("default-rect");
+            buttonStyle.checked = game.skin.getDrawable("default-rect");
+        }
+
+        actor = new ImageTextButton(resourceName, buttonStyle);
+        ((ImageTextButton) actor).setClip(true);
+        actor.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showDrawableDialog(field, true, -1);
+
+            }
+
+        });
+        return actor;
+    }
+
+    private Actor getDrawableActor(final Field field, final int arrayIndex, TextureAtlas.AtlasRegion region) throws ReflectionException {
+        Actor actor;
+
+        Drawable drawable = null;
+        String resourceName = null;
+        if (field.get(currentStyle) instanceof Array) {
+            if(region!=null){
+                drawable = new TextureRegionDrawable(region);
+                resourceName = region.name;
+            }
+        } else {
+            drawable = (Drawable) field.get(currentStyle);
+        }
+
+        ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
+                game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
+
+        if (drawable != null) {
+            if (resourceName == null) {
+                resourceName = SvgSkinUtil.resolveObjectName(game.skinProject, Drawable.class, drawable);
+                if (resourceName == null) {
+                    resourceName = SvgSkinUtil.resolveObjectName(game.skinProject, TextureRegion.class, drawable);
+                }
+            }
+
+            if (drawable instanceof SvgNinePatchDrawable) {
+                //override pref width and height
+                ((SvgNinePatchDrawable) drawable).setAdditionalPrefWidth(50);
+                ((SvgNinePatchDrawable) drawable).setAdditionalPrefHeight(50);
+            }
+
+            buttonStyle.imageUp = drawable;
+        } else {
+            buttonStyle.up = game.skin.getDrawable("default-rect");
+            buttonStyle.checked = game.skin.getDrawable("default-rect");
+        }
+
+        actor = new ImageTextButton(resourceName, buttonStyle);
+        ((ImageTextButton) actor).setClip(false);
+        actor.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showDrawableDialog(field, false, arrayIndex);
+
+            }
+
+        });
+        return actor;
     }
 
     /**
@@ -942,9 +1024,9 @@ public class OptionsPane extends Table {
      *
      * @param field
      */
-    public void showDrawableDialog(final Field field, boolean disableNinePatch) {
+    public void showDrawableDialog(final Field field, boolean disableNinePatch, int arrayIndex) {
 
-        DrawablePickerDialog dlg = new DrawablePickerDialog(game, field, disableNinePatch, getStage());
+        DrawablePickerDialog dlg = new DrawablePickerDialog(game, field, arrayIndex, disableNinePatch, getStage());
         dlg.show(getStage());
     }
 

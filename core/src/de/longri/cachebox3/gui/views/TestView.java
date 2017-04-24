@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -145,10 +146,9 @@ public class TestView extends AbstractView {
         });
 
 
-        FrameAnimationStyle style = new FrameAnimationStyle();
+        FrameAnimationStyle style = VisUI.getSkin().get("download-animation",FrameAnimationStyle.class);
         FrameAnimationDrawable drawable = new FrameAnimationDrawable(style);
         Image image = new Image(drawable);
-
 
         Table tbl = new Table();
         tbl.setFillParent(true);

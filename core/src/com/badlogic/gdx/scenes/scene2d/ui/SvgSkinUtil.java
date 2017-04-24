@@ -296,6 +296,18 @@ public class SvgSkinUtil {
                             } else if (valueObject instanceof CacheTypeStyle) {
                                 String objName = resolveObjectName(skin, CacheTypeStyle.class, valueObject);
                                 json.writeValue(field.getName(), objName);
+                            } else if (valueObject instanceof Array) {
+                                String arrayName = field.getName();
+                                json.writeArrayStart(arrayName);
+                                Array<?> array = (Array<?>) valueObject;
+                                for (int i = 0, n = array.size; i < n; i++) {
+                                    Object obj = array.get(i);
+                                    String objName = resolveObjectName(skin, TextureRegion.class, obj);
+                                    json.writeValue(objName);
+                                }
+                                ;
+                                json.writeArrayEnd();
+
                             } else {
                                 throw new IllegalArgumentException("resource object type is unknown: " + valueObject.getClass().getCanonicalName());
                             }
@@ -315,6 +327,7 @@ public class SvgSkinUtil {
         settings.singleLineColumns = 1; // wrap all
         fileHandle.writeString(json.prettyPrint(jsonText.toString(), settings), false);
     }
+
 
     /**
      * Retrieve the textual name of an object
