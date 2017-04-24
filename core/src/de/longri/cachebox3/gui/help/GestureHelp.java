@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.help;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -34,7 +33,7 @@ import de.longri.cachebox3.gui.animations.actor_animations.Blink;
 import de.longri.cachebox3.gui.animations.actor_animations.GestureHelpAnimation;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.ActionButton;
-import de.longri.cachebox3.gui.widgets.ColorDrawable;
+import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CB_RectF;

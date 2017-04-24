@@ -237,7 +237,7 @@ public class SvgSkinUtil {
                                 if ((Float) valueObject != 0.0f) {
                                     json.writeValue(field.getName(), valueObject);
                                 }
-                            } else if (valueObject instanceof Paint.Cap) {
+                            } else if (valueObject.getClass().isEnum()) {
                                 if (valueObject.equals(field.get(ClassReflection.newInstance(typeResources.get(style).getClass())))) {
                                     // skip if default value
                                 } else {

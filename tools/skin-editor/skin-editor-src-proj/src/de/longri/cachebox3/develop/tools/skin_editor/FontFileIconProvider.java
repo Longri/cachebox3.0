@@ -16,19 +16,16 @@
 package de.longri.cachebox3.develop.tools.skin_editor;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.SkinFont;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.widgets.EmptyDrawable;
+import de.longri.cachebox3.gui.drawables.EmptyDrawable;
 
 /**
  * Created by Longri on 18.01.2017.

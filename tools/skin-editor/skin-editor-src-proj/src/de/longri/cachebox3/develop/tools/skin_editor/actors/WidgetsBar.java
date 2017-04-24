@@ -16,13 +16,9 @@
 package de.longri.cachebox3.develop.tools.skin_editor.actors;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.mobidevelop.maps.editor.ui.utils.Tooltips;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.utils.SkinColor;
@@ -71,6 +67,7 @@ public class WidgetsBar extends Table {
             final ImageButton button = new ImageButton(style);
             button.setUserObject(widget);
 
+
             Tooltips tooltip = new Tooltips(styleTooltip, getStage());
             tooltip.registerTooltip(button, (String) button.getUserObject());
 
@@ -104,7 +101,9 @@ public class WidgetsBar extends Table {
             });
 
             group.add(button);
-            add(button).pad(5);
+
+            float buttonSize = 30;
+            add(button).pad(2.5f).width(new Value.Fixed(buttonSize)).height(new Value.Fixed(buttonSize));
         }
 
 

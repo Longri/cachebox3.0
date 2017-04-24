@@ -19,14 +19,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.activities.FileChooser;
+import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
+import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.settings.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +47,7 @@ public class TestView extends AbstractView {
 
     public TestView() {
         super("TestView");
+        this.setDebug(true, true);
 
     }
 
@@ -139,13 +144,26 @@ public class TestView extends AbstractView {
             }
         });
 
+
+        FrameAnimationStyle style = new FrameAnimationStyle();
+        FrameAnimationDrawable drawable = new FrameAnimationDrawable(style);
+        Image image = new Image(drawable);
+
+
         Table tbl = new Table();
+        tbl.setFillParent(true);
+        tbl.defaults().pad(CB.scaledSizes.MARGIN);
+
+        tbl.add(image);
+        tbl.row();
+
         tbl.add(test);
         tbl.row();
         tbl.add(testFile);
         tbl.row();
         tbl.add(apiKey);
-        tbl.setBounds(10, 10, 300, 300);
+        tbl.row().expandY().fillY().bottom();
+
         this.addActor(tbl);
     }
 

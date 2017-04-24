@@ -1073,7 +1073,7 @@
     },
     "transparent_color": {}
   },
-  "de.longri.cachebox3.gui.widgets.ColorDrawable$ColorDrawableStyle": {
+  "de.longri.cachebox3.gui.skin.styles.ColorDrawableStyle": {
     "dialog_stage_background": {
       "color": "dialog_background"
     },

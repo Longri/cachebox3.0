@@ -693,7 +693,7 @@ public class OptionsPane extends Table {
                 } else if (name.equals("ScrollPaneStyle")) {
 
                     /**
-                     * Handle ListStyle object
+                     * Handle ScrollPaneStyle object
                      */
                     ScrollPaneStyle scrollStyle = (ScrollPaneStyle) field.get(currentStyle);
 
@@ -776,41 +776,58 @@ public class OptionsPane extends Table {
 
                     });
 
-                } else if (name.equals("Cap")) {
-
+                } else if (field.getType().isEnum()) {
                     /**
-                     * Handle Paint.Cap object
+                     * Handle ENUM object
                      */
-
-                    final Paint.Cap[] value = new Paint.Cap[]{(Paint.Cap) field.get(currentStyle)};
                     String resourceName = "";
+                    final Object[] enumValues = field.getType().getEnumConstants();
 
-                    ImageTextButton.ImageTextButtonStyle buttonStyle = new ImageTextButton.ImageTextButtonStyle(game.skin.getDrawable("default-round"),
-                            game.skin.getDrawable("default-round-down"), game.skin.getDrawable("default-round"), game.skin.getFont("default-font"));
-
-                    if ((value != null)) {
-                        resourceName = String.valueOf(value[0]);
+                    //Enum's should be not NULL, so set to first
+                    if (obj == null) {
+                        field.set(currentStyle, enumValues[0]);
+                        game.screenMain.saveToSkin();
+                        resourceName = enumValues[0].toString();
                     } else {
-                        buttonStyle.up = game.skin.getDrawable("default-rect");
-                        buttonStyle.checked = game.skin.getDrawable("default-rect");
+                        resourceName = obj.toString();
                     }
 
-                    actor = new ImageTextButton(resourceName, buttonStyle);
-                    ((ImageTextButton) actor).setClip(true);
+                    actor = new SelectBox<String>(game.skin, "default");
+                    final Array<String> items = new Array<String>();
+
+                    for (Object object : enumValues) {
+                        items.add(object.toString());
+                    }
+
+                    ((SelectBox) actor).setItems(items);
+
+
+                    ((SelectBox) actor).setSelected(resourceName);
+
                     actor.addListener(new ChangeListener() {
 
                         @Override
                         public void changed(ChangeEvent event, Actor actor) {
-                            int ordinal = value[0].ordinal() + 1;
-                            if (ordinal > Paint.Cap.values().length - 1) ordinal = 0;
-                            value[0] = Paint.Cap.values()[ordinal];
+
+                            String selection = (String) ((SelectBox) actor).getSelected();
                             try {
-                                field.set(currentStyle, value[0]);
+
+                                Object selectionObject = null;
+                                for (Object object : enumValues) {
+                                    if (selection.equals(object.toString())) {
+                                        selectionObject = object;
+                                        break;
+                                    }
+                                }
+                                field.set(currentStyle, selectionObject);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+
                             game.screenMain.saveToSkin();
-                            ((ImageTextButton) actor).setText(String.valueOf(value[0]));
+                            refresh(true);
+                            game.screenMain.paneOptions.updateSelectedTableFields();
+                            game.screenMain.panePreview.refresh();
                         }
 
                     });
