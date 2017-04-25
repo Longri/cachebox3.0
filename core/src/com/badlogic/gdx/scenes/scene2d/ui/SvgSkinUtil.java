@@ -28,7 +28,9 @@ import com.badlogic.gdx.utils.reflect.Field;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
+import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.utils.SkinColor;
@@ -262,8 +264,15 @@ public class SvgSkinUtil {
                                     // Skip drawable if it is from tinted drawable
                                 } else {
                                     String value = null;
-                                    value = resolveObjectName(skin, Drawable.class, valueObject);
-//
+
+                                    if (valueObject instanceof FrameAnimationDrawable) {
+                                        FrameAnimationDrawable fad = (FrameAnimationDrawable) valueObject;
+                                        FrameAnimationStyle st = fad.getStyle();
+                                        value = resolveObjectName(skin, FrameAnimationStyle.class, st);
+                                    }else{
+                                        value = resolveObjectName(skin, Drawable.class, valueObject);
+                                    }
+
                                     if (value != null) {
                                         json.writeValue(field.getName(), value);
                                     }

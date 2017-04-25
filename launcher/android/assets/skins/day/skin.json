@@ -1344,6 +1344,19 @@
       "bottomHeight": 13
     }
   },
+  "de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle": {
+    "download-animation": {
+      "frames": [
+        "download-1",
+        "download-2",
+        "download-3",
+        "download-4",
+        "download-5"
+      ],
+      "frameDuration": 0.15,
+      "playMode": "LOOP"
+    }
+  },
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
     "default": {
       "up": "drawable_default_button",
@@ -1936,19 +1949,6 @@
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",
       "typeStyle": "cacheList"
-    }
-  },
-  "de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle": {
-    "download-animation": {
-      "frames": [
-        "download-1",
-        "download-2",
-        "download-3",
-        "download-4",
-        "download-5"
-      ],
-      "frameDuration": 0.15,
-      "playMode": "LOOP"
     }
   }
 }

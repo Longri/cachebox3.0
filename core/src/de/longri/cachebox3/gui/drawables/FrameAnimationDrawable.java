@@ -55,7 +55,7 @@ public class FrameAnimationDrawable extends AbstractAnimationDrawable implements
             TextureRegion region = animation.getKeyFrame(animationTime);
             if (region != null) batch.draw(region, x, y, width, height);
             if (animation.getPlayMode().ordinal() > 1 || !animation.isAnimationFinished(animationTime)) {
-                if(!taskSchudled.get()){
+                if (!taskSchudled.get()) {
                     Timer.schedule(new Timer.Task() {
                         @Override
                         public void run() {
@@ -146,4 +146,7 @@ public class FrameAnimationDrawable extends AbstractAnimationDrawable implements
         return prefHeight;
     }
 
+    public FrameAnimationStyle getStyle() {
+        return style;
+    }
 }
