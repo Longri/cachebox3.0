@@ -77,15 +77,32 @@ class SearchGcOwnerTest {
     void parseJsonResult() throws IOException {
         final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGcOwner_result.txt");
         Coordinate searchCoord = new CoordinateGPS(52.581892, 13.398128); // Home of Katipa(like Longri)
-        SearchGCOwner searchGC = new SearchGCOwner(apiKey, 30, searchCoord, 50000, "bros", (byte) 2);
 
-        final AtomicBoolean WAIT = new AtomicBoolean(true);
+
         final CB_List<Cache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();
-        final long gpxFilenameId = 10;
+        final  SearchGCOwner searchGC = new SearchGCOwner(apiKey, 30, searchCoord, 50000, "bros", (byte) 2){
+            protected void writeLogToDB(final LogEntry logEntry) {
+                logList.add(logEntry);
+            }
 
-        searchGC.setLists(cacheList, logList, imageList, gpxFilenameId);
+            protected void writeImagEntryToDB(final ImageEntry imageEntry) {
+                imageList.add(imageEntry);
+            }
+
+            protected void writeCacheToDB(final Cache cache) {
+                cacheList.add(cache);
+            }
+        };
+
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
+//        final CB_List<Cache> cacheList = new CB_List<>();
+//        final CB_List<LogEntry> logList = new CB_List<>();
+//        final CB_List<ImageEntry> imageList = new CB_List<>();
+//        final long gpxFilenameId = 10;
+//
+//        searchGC.setLists(cacheList, logList, imageList, gpxFilenameId);
 
         Net.HttpResponse response = new Net.HttpResponse() {
             @Override
@@ -231,12 +248,24 @@ class SearchGcOwnerTest {
     void testOnline() {
         if (isDummy) return;
         Coordinate searchCoord = new CoordinateGPS(52.581892, 13.398128); // Home of Katipa(like Longri)
-        SearchGCOwner searchGC = new SearchGCOwner(apiKey, 30, searchCoord, 50000, "bros", (byte) 2);
-
-        //results
         final CB_List<Cache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();
+        final SearchGCOwner searchGC = new SearchGCOwner(apiKey, 30, searchCoord, 50000, "bros", (byte) 2){
+            protected void writeLogToDB(final LogEntry logEntry) {
+                logList.add(logEntry);
+            }
+
+            protected void writeImagEntryToDB(final ImageEntry imageEntry) {
+                imageList.add(imageEntry);
+            }
+
+            protected void writeCacheToDB(final Cache cache) {
+                cacheList.add(cache);
+            }
+        };
+
+        //results
         final long gpxFilenameId = 10;
         final AtomicBoolean WAIT = new AtomicBoolean(true);
 
@@ -312,7 +341,7 @@ class SearchGcOwnerTest {
                     }
                     WAIT.set(false);
                 }
-            }, cacheList, logList, imageList, gpxFilenameId);
+            }, gpxFilenameId);
         } catch (Exception e) {
             e.printStackTrace();
             WAIT.set(false);

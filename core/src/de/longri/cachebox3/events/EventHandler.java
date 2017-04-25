@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2017 team-cachebox.de
+ *
+ * Licensed under the : GNU General Public License (GPL);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.gnu.org/licenses/gpl.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.longri.cachebox3.events;
 
 import com.badlogic.gdx.utils.Array;
@@ -27,11 +42,11 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     static final private Class[] allListener = new Class[]{PositionChangedListener.class,
             SelectedCacheChangedListener.class, SelectedWayPointChangedListener.class, PositionChangedListener.class,
             DistanceChangedListener.class, SpeedChangedListener.class, OrientationChangedListener.class,
-            SelectedCoordChangedListener.class};
+            SelectedCoordChangedListener.class, ImportProgressChangedListener.class};
     static final private ArrayMap<Class, Array<Object>> listenerMap = new ArrayMap<>();
 
     private static final EventHandler INSTANCE = new EventHandler();
-    private static final AsyncExecutor asyncExecutor=new AsyncExecutor(20);
+    private static final AsyncExecutor asyncExecutor = new AsyncExecutor(20);
 
     public static void INIT() {
     }
@@ -91,7 +106,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
                             event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
-                        } catch (InvocationTargetException e) {
+                        } catch (Exception e) {
                             log.error("Fire event to" + list.items[i].getClass().getSimpleName(), e.getCause());
                         }
                     }
@@ -126,8 +141,8 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (selectedWayPoint == null || !selectedWayPoint.equals(event.wayPoint)) {
             log.debug("Set Global selected Waypoint: {}", event.wayPoint);
             selectedWayPoint = event.wayPoint;
-            synchronized (Database.Data.Query){
-                if(selectedWayPoint!=null){
+            synchronized (Database.Data.Query) {
+                if (selectedWayPoint != null) {
                     selectedCache = Database.Data.Query.GetCacheById(selectedWayPoint.CacheId);
                     fireSelectedCoordChanged(event.ID);
                 }

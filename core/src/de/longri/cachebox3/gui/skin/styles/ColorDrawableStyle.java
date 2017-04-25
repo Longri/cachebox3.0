@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.events;
+package de.longri.cachebox3.gui.skin.styles;
+
+import com.badlogic.gdx.graphics.Color;
 
 /**
- * Created by Longri on 23.03.2017.
+ * Created by longri on 22.04.17.
  */
-public interface OrientationChangedListener {
-    void orientationChanged(OrientationChangedEvent event);
+public class ColorDrawableStyle {
+    public Color color;
 }

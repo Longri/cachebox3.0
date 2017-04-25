@@ -20,9 +20,18 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonParser;
 import com.badlogic.gdx.utils.JsonStreamParser;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.PostRequest;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.ImportProgresChangedEvent;
+import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.CacheDAO;
+import de.longri.cachebox3.sqlite.dao.ImageDAO;
+import de.longri.cachebox3.sqlite.dao.LogDAO;
+import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
@@ -44,35 +53,12 @@ public abstract class Search extends PostRequest {
     public boolean excludeHides = false;
     public boolean excludeFounds = false;
     public boolean available = false;
-    int geocacheLogCount = 10;
-    int trackableLogCount = 10;
+    public int cacheCount;
+    int waypointCount;
+    public int logCount;
+    int imageCount;
     private boolean isLite;
-    private CB_List<Cache> cacheList;
-    private CB_List<LogEntry> logList;
-    private CB_List<ImageEntry> imageList;
     private long gpxFilenameId;
-
-    /**
-     * 0 = unknown, 1 = Basic Member, 2 = Premium Member
-     */
-    private byte apiState;
-
-    /**
-     * @param gcApiKey valid encrypted Api-Key
-     * @param number   MaxPerPage size for this request
-     * @param apiState 0 = unknown, 1 = Basic Member, 2 = Premium Member
-     */
-    Search(String gcApiKey, int number, byte apiState) {
-        super(gcApiKey);
-        this.number = number;
-        this.apiState = apiState;
-    }
-
-    @Override
-    protected String getCallUrl() {
-        return "SearchForGeocaches?format=json";
-    }
-
     private double actLat, actLon, actWpLat, actWpLon;
     private Cache actCache;
     private Waypoint actWayPoint;
@@ -121,9 +107,17 @@ public abstract class Search extends PostRequest {
     private final String COMMENT = "Comment";
     private final String WAYPOINT_TYPE_ID = "WptTypeID";
 
+    private final CacheDAO cacheDAO = new CacheDAO();
+    private final LogDAO logDAO = new LogDAO();
+    private final ImageDAO imageDAO = new ImageDAO();
+    private final WaypointDAO waypointDAO = new WaypointDAO();
 
-    int attributeID;
-    boolean isOn;
+    protected int geocacheLogCount = 10;
+    protected int trackableLogCount = 10;
+
+
+    private int attributeID;
+    private boolean isOn;
 
     private Array<String> arrayStack = new Array<>();
     private Array<String> objectStack = new Array<>();
@@ -137,10 +131,35 @@ public abstract class Search extends PostRequest {
     private final int WAY_POINT_ARRAY = 6;
     private boolean isUserWaypoint = false;
 
+    /**
+     * 0 = unknown, 1 = Basic Member, 2 = Premium Member
+     */
+    private byte apiState;
+
+    /**
+     * @param gcApiKey valid encrypted Api-Key
+     * @param number   MaxPerPage size for this request
+     * @param apiState 0 = unknown, 1 = Basic Member, 2 = Premium Member
+     */
+    Search(String gcApiKey, int number, byte apiState) {
+        super(gcApiKey);
+
+        if (number > 50)
+            throw new RuntimeException("Max CacheCount per Page is 50, " + number + "will produce a API Error");
+
+        this.number = number;
+        this.apiState = apiState;
+    }
+
+    @Override
+    protected String getCallUrl() {
+        return "SearchForGeocaches?format=json";
+    }
 
     @Override
     protected void handleHttpResponse(Net.HttpResponse httpResponse, final GenericCallBack<Integer> readyCallBack) {
         final InputStream stream = httpResponse.getResultAsStream();
+        long length = Long.parseLong(httpResponse.getHeader("Content-Length"));
 
         JsonParser parser = new JsonStreamParser() {
 
@@ -252,12 +271,18 @@ public abstract class Search extends PostRequest {
                             actCache.setApiState(apiState);
 
                             //add final Cache instance
-                            cacheList.add(new Cache(actLat, actLon, actCache));
+                            writeCacheToDB(new Cache(actLat, actLon, actCache));
+
+                            ImportProgresChangedEvent.ImportProgress progress = new ImportProgresChangedEvent.ImportProgress();
+                            progress.progress = this.getProgress();
+                            progress.caches = ++cacheCount;
+                            progress.wayPoints = waypointCount;
+                            progress.logs = logCount;
+                            progress.images = imageCount;
+                            EventHandler.fire(new ImportProgresChangedEvent(progress));
+
                             actCache = null;
-
                             log.debug("Stream parse new Cache StreamAvailable:{}/{}");
-
-
                         }
                         break;
                     case ATTRIBUTE_ARRAY:
@@ -273,7 +298,8 @@ public abstract class Search extends PostRequest {
                     case LOG_ARRAY:
                         if (NEW_LOG.equals(name)) {
                             // System.out.println("add Log entry ");
-                            logList.add(actLog);
+                            writeLogToDB(actLog);
+                            logCount++;
                             actLog = null;
                         }
                         break;
@@ -291,6 +317,7 @@ public abstract class Search extends PostRequest {
 
                             //add final Waypointg instance
                             actCache.waypoints.add(new Waypoint(actWpLat, actWpLon, actWayPoint));
+                            waypointCount++;
                             actWayPoint = null;
                         }
                         break;
@@ -447,7 +474,15 @@ public abstract class Search extends PostRequest {
             }
 
         };
-        parser.parse(stream);
+        parser.parse(stream,length);
+
+        if (Database.Data != null) { // maybe NULL with JUnit
+            Database.Data.setTransactionSuccessful();
+            Database.Data.endTransaction();
+            Database.Data.GPXFilenameUpdateCacheCount();
+            CacheListChangedEventList.Call();
+        }
+
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -468,8 +503,8 @@ public abstract class Search extends PostRequest {
         json.writeValue("MaxPerPage", this.number);
         json.writeValue("StartIndex", 0);
         json.writeValue("IsLite", this.isLite);
-        json.writeValue("TrackableLogCount", this.trackableLogCount);
-        json.writeValue("GeocacheLogCount", this.geocacheLogCount);
+        json.writeValue("TrackableLogCount", trackableLogCount);
+        json.writeValue("GeocacheLogCount", geocacheLogCount);
 
         if (this.available) {
             json.writeObjectStart("GeocacheExclusions");
@@ -499,24 +534,13 @@ public abstract class Search extends PostRequest {
     }
 
 
-    public void postRequest(GenericCallBack<Integer> callBack, CB_List<Cache> cacheList, CB_List<LogEntry> logList,
-                            CB_List<ImageEntry> imageList, long gpxFilenameId) {
-        setLists(cacheList, logList, imageList, gpxFilenameId);
+    public void postRequest(GenericCallBack<Integer> callBack, long gpxFilenameId) {
+        this.gpxFilenameId = gpxFilenameId;
+        if (Database.Data != null)//Maybe NULL with JUnit
+            Database.Data.beginTransaction();
         this.post(callBack);
     }
 
-    public void setLists(CB_List<Cache> cacheList, CB_List<LogEntry> logList, CB_List<ImageEntry> imageList, long gpxFilenameId) {
-
-        if (cacheList == null) throw new RuntimeException("CacheList can't be NULL");
-        if (logList == null) throw new RuntimeException("CacheList can't be NULL");
-        if (imageList == null) throw new RuntimeException("CacheList can't be NULL");
-
-
-        this.cacheList = cacheList;
-        this.logList = logList;
-        this.imageList = imageList;
-        this.gpxFilenameId = gpxFilenameId;
-    }
 
     static int getCacheSize(int containerTypeId) {
         switch (containerTypeId) {
@@ -606,4 +630,232 @@ public abstract class Search extends PostRequest {
         }
         return date;
     }
+
+    protected void writeLogToDB(final LogEntry logEntry) {
+        logDAO.WriteToDatabase(logEntry);
+    }
+
+    protected void writeImagEntryToDB(final ImageEntry imageEntry) {
+        imageDAO.WriteToDatabase(imageEntry, false);
+        //TODO start download ?
+    }
+
+    protected void writeCacheToDB(final Cache cache) {
+        Cache aktCache = Database.Data.Query.GetCacheById(cache.Id);
+
+        if (aktCache != null && aktCache.isLive())
+            aktCache = null;
+
+        if (aktCache == null) {
+            aktCache = cacheDAO.getFromDbByCacheId(cache.Id);
+        }
+        // Read Detail Info of Cache if not available
+        if ((aktCache != null) && (aktCache.detail == null)) {
+            aktCache.loadDetail();
+        }
+        // If Cache into DB, extract saved rating
+        if (aktCache != null) {
+            cache.Rating = aktCache.Rating;
+        }
+
+        // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
+        if (!cacheDAO.UpdateDatabase(cache)) {
+            cacheDAO.WriteToDatabase(cache);
+        }
+
+        // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
+        if (cache.getTmpNote() != null) {
+            String oldNote = Database.GetNote(cache.Id);
+            String newNote = "";
+            if (oldNote == null) {
+                oldNote = "";
+            }
+            String begin = "<Import from Geocaching.com>";
+            String end = "</Import from Geocaching.com>";
+            int iBegin = oldNote.indexOf(begin);
+            int iEnd = oldNote.indexOf(end);
+            if ((iBegin >= 0) && (iEnd > iBegin)) {
+                // Note from Groundspeak already in Database
+                // -> Replace only this part in whole Note
+                newNote = oldNote.substring(0, iBegin - 1) + System.getProperty("line.separator"); // Copy the old part of Note before
+                // the beginning of the groundspeak
+                // block
+                newNote += begin + System.getProperty("line.separator");
+                newNote += cache.getTmpNote();
+                newNote += System.getProperty("line.separator") + end;
+                newNote += oldNote.substring(iEnd + end.length(), oldNote.length());
+            } else {
+                newNote = oldNote + System.getProperty("line.separator");
+                newNote += begin + System.getProperty("line.separator");
+                newNote += cache.getTmpNote();
+                newNote += System.getProperty("line.separator") + end;
+            }
+            cache.setTmpNote(newNote);
+            Database.SetNote(cache.Id, cache.getTmpNote());
+        }
+
+        // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
+        cache.setLongDescription("");
+
+
+        for (int i = 0, n = cache.waypoints.size; i < n; i++) {
+            // must Cast to Full Waypoint. If Waypoint, is wrong createt!
+            Waypoint waypoint = cache.waypoints.get(i);
+            boolean update = true;
+
+            // dont refresh wp if aktCache.wp is user changed
+            if (aktCache != null) {
+                if (aktCache.waypoints != null) {
+                    for (int j = 0, m = aktCache.waypoints.size; j < m; j++) {
+                        Waypoint wp = aktCache.waypoints.get(j);
+                        if (wp.getGcCode().equalsIgnoreCase(waypoint.getGcCode())) {
+                            if (wp.IsUserWaypoint)
+                                update = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (update) {
+                // do not store replication information when importing caches with GC api
+                if (!waypointDAO.UpdateDatabase(waypoint, false)) {
+                    waypointDAO.WriteToDatabase(waypoint, false); // do not store replication information here
+                }
+            }
+
+        }
+
+        if (aktCache == null) {
+            Database.Data.Query.add(cache);
+        } else {
+            Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.Id), false);
+            Database.Data.Query.add(cache);
+        }
+    }
+
+
+//TODO try ASYNC write to DB
+
+//    private void writeLogToDB(final LogEntry logEntry) {
+//        CB.postAsync(new Runnable() {
+//            @Override
+//            public void run() {
+//                importedLogs++;
+//                logDAO.WriteToDatabase(logEntry);
+//            }
+//        });
+//    }
+//
+//    private void writeImagEntryToDB(final ImageEntry imageEntry) {
+//        CB.postAsync(new Runnable() {
+//            @Override
+//            public void run() {
+//                imageDAO.WriteToDatabase(imageEntry, false);
+//                //TODO start download ?
+//            }
+//        });
+//    }
+//
+//    private void writeCacheToDB(final Cache cache) {
+//
+//        CB.postAsync(new Runnable() {
+//            @Override
+//            public void run() {
+//                importedCaches++;
+//
+//                Cache aktCache = Database.Data.Query.GetCacheById(cache.Id);
+//
+//                if (aktCache != null && aktCache.isLive())
+//                    aktCache = null;
+//
+//                if (aktCache == null) {
+//                    aktCache = cacheDAO.getFromDbByCacheId(cache.Id);
+//                }
+//                // Read Detail Info of Cache if not available
+//                if ((aktCache != null) && (aktCache.detail == null)) {
+//                    aktCache.loadDetail();
+//                }
+//                // If Cache into DB, extract saved rating
+//                if (aktCache != null) {
+//                    cache.Rating = aktCache.Rating;
+//                }
+//
+//                // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
+//                if (!cacheDAO.UpdateDatabase(cache)) {
+//                    cacheDAO.WriteToDatabase(cache);
+//                }
+//
+//                // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
+//                if (cache.getTmpNote() != null) {
+//                    String oldNote = Database.GetNote(cache.Id);
+//                    String newNote = "";
+//                    if (oldNote == null) {
+//                        oldNote = "";
+//                    }
+//                    String begin = "<Import from Geocaching.com>";
+//                    String end = "</Import from Geocaching.com>";
+//                    int iBegin = oldNote.indexOf(begin);
+//                    int iEnd = oldNote.indexOf(end);
+//                    if ((iBegin >= 0) && (iEnd > iBegin)) {
+//                        // Note from Groundspeak already in Database
+//                        // -> Replace only this part in whole Note
+//                        newNote = oldNote.substring(0, iBegin - 1) + System.getProperty("line.separator"); // Copy the old part of Note before
+//                        // the beginning of the groundspeak
+//                        // block
+//                        newNote += begin + System.getProperty("line.separator");
+//                        newNote += cache.getTmpNote();
+//                        newNote += System.getProperty("line.separator") + end;
+//                        newNote += oldNote.substring(iEnd + end.length(), oldNote.length());
+//                    } else {
+//                        newNote = oldNote + System.getProperty("line.separator");
+//                        newNote += begin + System.getProperty("line.separator");
+//                        newNote += cache.getTmpNote();
+//                        newNote += System.getProperty("line.separator") + end;
+//                    }
+//                    cache.setTmpNote(newNote);
+//                    Database.SetNote(cache.Id, cache.getTmpNote());
+//                }
+//
+//                // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
+//                cache.setLongDescription("");
+//
+//
+//                for (int i = 0, n = cache.waypoints.size; i < n; i++) {
+//                    // must Cast to Full Waypoint. If Waypoint, is wrong createt!
+//                    Waypoint waypoint = cache.waypoints.get(i);
+//                    boolean update = true;
+//
+//                    // dont refresh wp if aktCache.wp is user changed
+//                    if (aktCache != null) {
+//                        if (aktCache.waypoints != null) {
+//                            for (int j = 0, m = aktCache.waypoints.size; j < m; j++) {
+//                                Waypoint wp = aktCache.waypoints.get(j);
+//                                if (wp.getGcCode().equalsIgnoreCase(waypoint.getGcCode())) {
+//                                    if (wp.IsUserWaypoint)
+//                                        update = false;
+//                                    break;
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                    if (update) {
+//                        // do not store replication information when importing caches with GC api
+//                        if (!waypointDAO.UpdateDatabase(waypoint, false)) {
+//                            waypointDAO.WriteToDatabase(waypoint, false); // do not store replication information here
+//                        }
+//                    }
+//
+//                }
+//
+//                if (aktCache == null) {
+//                    Database.Data.Query.add(cache);
+//                } else {
+//                    Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.Id), false);
+//                    Database.Data.Query.add(cache);
+//                }
+//            }
+//        });
+//    }
 }

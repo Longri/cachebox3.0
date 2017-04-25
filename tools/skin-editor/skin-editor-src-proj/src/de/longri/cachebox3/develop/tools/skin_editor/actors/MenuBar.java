@@ -67,7 +67,7 @@ public class MenuBar extends Table {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
-                DrawablePickerDialog dlg = new DrawablePickerDialog(game, null, false, getStage());
+                DrawablePickerDialog dlg = new DrawablePickerDialog(game, null,-1, false, getStage());
                 dlg.show(game.screenMain.stage);
 
             }

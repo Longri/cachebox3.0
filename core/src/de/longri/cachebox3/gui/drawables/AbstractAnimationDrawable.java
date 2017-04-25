@@ -13,11 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.events;
+package de.longri.cachebox3.gui.drawables;
+
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 /**
- * Created by Longri on 23.03.2017.
+ * Created by longri on 22.04.17.
  */
-public interface OrientationChangedListener {
-    void orientationChanged(OrientationChangedEvent event);
+public abstract class AbstractAnimationDrawable extends EmptyDrawable {
+
+    protected float animationTime = 0;
+
+    @Override
+    public void draw(Batch batch, float x, float y, float width, float height) {
+        animationTime += Gdx.graphics.getDeltaTime();
+        drawAnimation(batch, x, y, width, height);
+    }
+
+    public abstract void drawAnimation(Batch batch, float x, float y, float width, float height);
 }

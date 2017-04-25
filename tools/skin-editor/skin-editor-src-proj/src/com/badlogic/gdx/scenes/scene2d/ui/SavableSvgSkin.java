@@ -45,9 +45,10 @@ public class SavableSvgSkin extends SvgSkin {
         //items for cachebox 3.0 skin
         items.add(com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg.class);
         items.add(de.longri.cachebox3.utils.SkinColor.class);
-        items.add(de.longri.cachebox3.gui.widgets.ColorDrawable.ColorDrawableStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.ColorDrawableStyle.class);
         items.add(com.badlogic.gdx.graphics.g2d.BitmapFont.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle.class);
         items.add(de.longri.cachebox3.gui.widgets.ButtonBar.ButtonBarStyle.class);
@@ -84,6 +85,8 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.skin.styles.CacheListItemStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.ApiButtonStyle.class);
+        items.add(ProgressBar.ProgressBarStyle.class);
+        items.add(com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle.class);
 
         SvgSkinUtil.saveSkin(this, items, skinFile);
 

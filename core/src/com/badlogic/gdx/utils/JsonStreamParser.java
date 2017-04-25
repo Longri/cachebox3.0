@@ -46,13 +46,13 @@ public class JsonStreamParser implements JsonParser {
 
 
     @Override
-    public JsonValue parse(final InputStream input) {
+    public JsonValue parse(final InputStream input, long length) {
         this.reader = new InputStreamReader(input);
 
         if (DEBUG) log.debug("Start parsing");
 
         try {
-            float available = input.available();
+
             int readed = 0;
             int offset = 0;
             while (true) {
@@ -90,8 +90,8 @@ public class JsonStreamParser implements JsonParser {
 
                 readed += readedLength;
 
-                percent = (float) readed / available * 100.0f;
-                if (DEBUG) log.debug("Read Buffer: available {}/{} = {}%", readed, available, percent);
+                percent = (float) readed / length * 100.0f;
+                if (DEBUG) log.debug("Read Buffer: available {}/{} = {}%", readed, length, percent);
                 if (DEBUG) log.debug(new String(buf));
 
                 int lastOffset = parse(buf);
@@ -436,5 +436,9 @@ public class JsonStreamParser implements JsonParser {
     @Override
     public void bool(String name, boolean value) {
 
+    }
+
+    public int getProgress() {
+        return (int) percent;
     }
 }

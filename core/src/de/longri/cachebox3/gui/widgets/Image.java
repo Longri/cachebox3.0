@@ -23,8 +23,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.building.utilities.Alignment;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.animations.AnimationBase;
-import de.longri.cachebox3.gui.animations.WorkAnimation;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.ImageLoader;
 import org.slf4j.Logger;
@@ -40,7 +38,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Image extends CB_View_Base {
     final static Logger log = LoggerFactory.getLogger(Image.class);
-    private AnimationBase Wait;
     private ImageLoader imageLoader;
 
     private Color mColor = new Color(1, 1, 1, 1);
@@ -126,11 +123,6 @@ public class Image extends CB_View_Base {
         batch.setColor(mColor);
         try {
             if (!imageLoader.isDrawableNULL()) {
-                if (Wait != null) {
-                    this.removeActor(Wait, true);
-                    Wait.remove();
-                    Wait = null;
-                }
                 imageLoader.inLoad = false;
                 float drawwidth = getWidth();
                 float drawHeight = getHeight();
@@ -172,21 +164,13 @@ public class Image extends CB_View_Base {
                     isAsRenderViewRegisted.set(true);
                 }
             } else if (imageLoader.inLoad & !imageLoader.ImageLoadError) {
-                if (Wait == null) {
-                    CB_RectF animationRec = new CB_RectF(0, 0, this.getWidth(), this.getHeight());
-                    Wait = new WorkAnimation();
-                    //GL.that.addRenderView(Wait, GL.FRAME_RATE_ACTION);
-                    this.addChild(Wait);
-                }
+               //TODO add work animation
             } else if (imageLoader.ImageLoadError) {
-                if (Wait != null) {
-                    this.removeChild(Wait);
 
                     //set error image
                     //Fixme use style
                     this.setSprite(CB.getSkin().getSprite("error"), false);
 
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();

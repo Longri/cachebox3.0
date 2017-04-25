@@ -15,26 +15,30 @@
  */
 package de.longri.cachebox3.events;
 
-import de.longri.cachebox3.types.Waypoint;
-
 /**
  * Created by Longri on 23.03.2017.
  */
-public class SelectedWayPointChangedEvent extends AbstractEvent<Waypoint> {
-    public final Waypoint wayPoint;
+public class ImportProgresChangedEvent extends AbstractEvent<ImportProgresChangedEvent.ImportProgress> {
 
-    public SelectedWayPointChangedEvent(Waypoint wayPoint) {
-        super(Waypoint.class);
-        this.wayPoint = wayPoint;
+    public static class ImportProgress {
+        public int progress, caches, wayPoints, logs, images;
     }
 
-    public SelectedWayPointChangedEvent(Waypoint wayPoint, short id) {
-        super(Waypoint.class, id);
-        this.wayPoint = wayPoint;
+
+    public final ImportProgresChangedEvent.ImportProgress progress;
+
+    public ImportProgresChangedEvent(ImportProgresChangedEvent.ImportProgress progress) {
+        super(ImportProgresChangedEvent.ImportProgress.class);
+        this.progress = progress;
+    }
+
+    public ImportProgresChangedEvent(ImportProgresChangedEvent.ImportProgress progress, short id) {
+        super(ImportProgresChangedEvent.ImportProgress.class, id);
+        this.progress = progress;
     }
 
     @Override
     Class getListenerClass() {
-        return SelectedWayPointChangedListener.class;
+        return ImportProgressChangedListener.class;
     }
 }

@@ -28,7 +28,9 @@ import com.badlogic.gdx.utils.reflect.Field;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
+import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.utils.SkinColor;
@@ -237,7 +239,7 @@ public class SvgSkinUtil {
                                 if ((Float) valueObject != 0.0f) {
                                     json.writeValue(field.getName(), valueObject);
                                 }
-                            } else if (valueObject instanceof Paint.Cap) {
+                            } else if (valueObject.getClass().isEnum()) {
                                 if (valueObject.equals(field.get(ClassReflection.newInstance(typeResources.get(style).getClass())))) {
                                     // skip if default value
                                 } else {
@@ -262,8 +264,15 @@ public class SvgSkinUtil {
                                     // Skip drawable if it is from tinted drawable
                                 } else {
                                     String value = null;
-                                    value = resolveObjectName(skin, Drawable.class, valueObject);
-//
+
+                                    if (valueObject instanceof FrameAnimationDrawable) {
+                                        FrameAnimationDrawable fad = (FrameAnimationDrawable) valueObject;
+                                        FrameAnimationStyle st = fad.getStyle();
+                                        value = resolveObjectName(skin, FrameAnimationStyle.class, st);
+                                    }else{
+                                        value = resolveObjectName(skin, Drawable.class, valueObject);
+                                    }
+
                                     if (value != null) {
                                         json.writeValue(field.getName(), value);
                                     }
@@ -296,6 +305,18 @@ public class SvgSkinUtil {
                             } else if (valueObject instanceof CacheTypeStyle) {
                                 String objName = resolveObjectName(skin, CacheTypeStyle.class, valueObject);
                                 json.writeValue(field.getName(), objName);
+                            } else if (valueObject instanceof Array) {
+                                String arrayName = field.getName();
+                                json.writeArrayStart(arrayName);
+                                Array<?> array = (Array<?>) valueObject;
+                                for (int i = 0, n = array.size; i < n; i++) {
+                                    Object obj = array.get(i);
+                                    String objName = resolveObjectName(skin, TextureRegion.class, obj);
+                                    json.writeValue(objName);
+                                }
+                                ;
+                                json.writeArrayEnd();
+
                             } else {
                                 throw new IllegalArgumentException("resource object type is unknown: " + valueObject.getClass().getCanonicalName());
                             }
@@ -315,6 +336,7 @@ public class SvgSkinUtil {
         settings.singleLineColumns = 1; // wrap all
         fileHandle.writeString(json.prettyPrint(jsonText.toString(), settings), false);
     }
+
 
     /**
      * Retrieve the textual name of an object

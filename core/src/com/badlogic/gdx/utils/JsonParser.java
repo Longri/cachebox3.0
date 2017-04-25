@@ -22,7 +22,7 @@ import java.io.InputStream;
  */
 public interface JsonParser {
 
-    public JsonValue parse(InputStream input);
+    public JsonValue parse(InputStream input, long length);
 
     void startArray(String name);
 

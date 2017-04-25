@@ -23,6 +23,8 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import org.oscim.awt.AwtBitmap;
 import org.oscim.backend.canvas.Bitmap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -34,6 +36,8 @@ import java.net.URI;
  * Created by Longri on 19.07.16.
  */
 public class DesktopRealSvgBitmap extends AwtBitmap implements GetName {
+
+    private final static Logger log = LoggerFactory.getLogger(DesktopRealSvgBitmap.class);
 
     public String name;
 
@@ -78,6 +82,9 @@ public class DesktopRealSvgBitmap extends AwtBitmap implements GetName {
                 try {
                     icon.paintIcon(null, bufferedImage.createGraphics(), 0, 0);
                 } catch (Exception e) {
+
+                    log.error("Create SVG ",e);
+
                     //return empty image
                     bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
                 }
