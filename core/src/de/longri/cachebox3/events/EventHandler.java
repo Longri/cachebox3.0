@@ -42,11 +42,11 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     static final private Class[] allListener = new Class[]{PositionChangedListener.class,
             SelectedCacheChangedListener.class, SelectedWayPointChangedListener.class, PositionChangedListener.class,
             DistanceChangedListener.class, SpeedChangedListener.class, OrientationChangedListener.class,
-            SelectedCoordChangedListener.class};
+            SelectedCoordChangedListener.class, ImportProgressChangedListener.class};
     static final private ArrayMap<Class, Array<Object>> listenerMap = new ArrayMap<>();
 
     private static final EventHandler INSTANCE = new EventHandler();
-    private static final AsyncExecutor asyncExecutor=new AsyncExecutor(20);
+    private static final AsyncExecutor asyncExecutor = new AsyncExecutor(20);
 
     public static void INIT() {
     }
@@ -106,7 +106,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
                             event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
-                        } catch (InvocationTargetException e) {
+                        } catch (Exception e) {
                             log.error("Fire event to" + list.items[i].getClass().getSimpleName(), e.getCause());
                         }
                     }
@@ -141,8 +141,8 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (selectedWayPoint == null || !selectedWayPoint.equals(event.wayPoint)) {
             log.debug("Set Global selected Waypoint: {}", event.wayPoint);
             selectedWayPoint = event.wayPoint;
-            synchronized (Database.Data.Query){
-                if(selectedWayPoint!=null){
+            synchronized (Database.Data.Query) {
+                if (selectedWayPoint != null) {
                     selectedCache = Database.Data.Query.GetCacheById(selectedWayPoint.CacheId);
                     fireSelectedCoordChanged(event.ID);
                 }

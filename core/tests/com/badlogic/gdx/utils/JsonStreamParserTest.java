@@ -15,16 +15,9 @@
  */
 package com.badlogic.gdx.utils;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
-import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
-import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import de.longri.cachebox3.TestUtils;
-import de.longri.cachebox3.utils.BuildInfo;
-import de.longri.cachebox3.utils.converter.Base64;
 import org.junit.jupiter.api.Test;
 import org.slf4j.*;
-import org.slf4j.impl.DummyLogApplication;
 import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.io.FileNotFoundException;
@@ -134,7 +127,7 @@ class JsonStreamParserTest {
                 super.bool(name, value);
                 sb.appendLine("bool " + name + "  " + value);
             }
-        }.parse(stream);
+        }.parse(stream, length);
 
         log.debug("Parse time JsonParser: {}", System.currentTimeMillis() - start);
 
@@ -173,7 +166,7 @@ class JsonStreamParserTest {
             public void bool(String name, boolean value) {
                 sb2.appendLine("bool " + name + "  " + value);
             }
-        }.parse(stream);
+        }.parse(stream, length);
 
         log.debug("Parse time JsonStreamParser: {}", System.currentTimeMillis() - start);
     }

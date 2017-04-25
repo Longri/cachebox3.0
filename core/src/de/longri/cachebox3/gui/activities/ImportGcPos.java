@@ -322,12 +322,12 @@ public class ImportGcPos extends ActivityBase {
 
         final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
             @Override
-            public void progressChanged(ImportProgresChangedEvent.ImportProgress event) {
-                progressBar.setValue(event.progress);
-                lblCaches.setText("Imported Caches: " + event.caches);
-                lblWaypoints.setText("Imported Waypoints: " + event.wayPoints);
-                lblLogs.setText("Imported Logs: " + event.logs);
-                lblImages.setText("Imported Caches: " + event.images);
+            public void progressChanged(ImportProgresChangedEvent event) {
+                progressBar.setValue(event.progress.progress);
+                lblCaches.setText("Imported Caches: " + event.progress.caches);
+                lblWaypoints.setText("Imported Waypoints: " + event.progress.wayPoints);
+                lblLogs.setText("Imported Logs: " + event.progress.logs);
+                lblImages.setText("Imported Caches: " + event.progress.images);
             }
         };
         EventHandler.add(progressListener);
@@ -372,7 +372,7 @@ public class ImportGcPos extends ActivityBase {
                     log.debug("Api state = {}", apiState);
                     log.debug("Search at Coordinate:{}", actSearchPos);
                     final SearchCoordinate searchC = new SearchCoordinate(GroundspeakAPI.getAccessToken(),
-                            100, actSearchPos, Config.lastSearchRadius.getValue() * 1000,
+                            50, actSearchPos, Config.lastSearchRadius.getValue() * 1000,
                             apiState);
                     searchC.excludeFounds = Config.SearchWithoutFounds.getValue();
                     searchC.excludeHides = Config.SearchWithoutOwns.getValue();

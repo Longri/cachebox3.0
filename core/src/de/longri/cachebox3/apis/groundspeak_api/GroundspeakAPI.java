@@ -16,6 +16,7 @@
 package de.longri.cachebox3.apis.groundspeak_api;
 
 
+import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
@@ -1217,7 +1218,7 @@ public class GroundspeakAPI {
                 Database.Data.Query.add(cache);
                 // cacheDAO.WriteToDatabase(cache);
             } else {
-                Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.Id),false);
+                Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.Id), false);
                 Database.Data.Query.add(cache);
                 // cacheDAO.UpdateDatabase(cache);
             }
@@ -1414,7 +1415,16 @@ public class GroundspeakAPI {
                 public void callBack(Integer value) {
                     membershipType = value;
                     log.debug("result for ask Member Type:{}", value);
-                    WAIT.set(false);
+
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            //wait 2 sec! We can call the Groundspeak API only every 2 seconds
+                            WAIT.set(false);
+                        }
+                    }, 2);
+
+
                 }
             });
         else WAIT.set(false);

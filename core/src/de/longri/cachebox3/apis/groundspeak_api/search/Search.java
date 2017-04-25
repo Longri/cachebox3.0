@@ -143,6 +143,10 @@ public abstract class Search extends PostRequest {
      */
     Search(String gcApiKey, int number, byte apiState) {
         super(gcApiKey);
+
+        if (number > 50)
+            throw new RuntimeException("Max CacheCount per Page is 50, " + number + "will produce a API Error");
+
         this.number = number;
         this.apiState = apiState;
     }
@@ -155,6 +159,7 @@ public abstract class Search extends PostRequest {
     @Override
     protected void handleHttpResponse(Net.HttpResponse httpResponse, final GenericCallBack<Integer> readyCallBack) {
         final InputStream stream = httpResponse.getResultAsStream();
+        long length = Long.parseLong(httpResponse.getHeader("Content-Length"));
 
         JsonParser parser = new JsonStreamParser() {
 
@@ -269,7 +274,7 @@ public abstract class Search extends PostRequest {
                             writeCacheToDB(new Cache(actLat, actLon, actCache));
 
                             ImportProgresChangedEvent.ImportProgress progress = new ImportProgresChangedEvent.ImportProgress();
-                            progress.progress = 50;
+                            progress.progress = this.getProgress();
                             progress.caches = ++cacheCount;
                             progress.wayPoints = waypointCount;
                             progress.logs = logCount;
@@ -469,7 +474,7 @@ public abstract class Search extends PostRequest {
             }
 
         };
-        parser.parse(stream);
+        parser.parse(stream,length);
 
         if (Database.Data != null) { // maybe NULL with JUnit
             Database.Data.setTransactionSuccessful();

@@ -35,10 +35,16 @@ import com.badlogic.gdx.utils.JsonValue.ValueType;
  *
  * @author Nathan Sweet
  */
-public class JsonReader implements BaseJsonReader,JsonParser {
+public class JsonReader implements BaseJsonReader, JsonParser {
     public JsonValue parse(String json) {
         char[] data = json.toCharArray();
         return parse(data, 0, data.length);
+    }
+
+    @Override
+    public JsonValue parse(InputStream input, long length) {
+        InputStreamReader reader = new InputStreamReader(input);
+        return parse(reader);
     }
 
     public JsonValue parse(Reader reader) {
@@ -694,6 +700,7 @@ public class JsonReader implements BaseJsonReader,JsonParser {
         elements.add(value);
         current = value;
     }
+
 
     public void startArray(String name) {
         JsonValue value = new JsonValue(ValueType.array);
