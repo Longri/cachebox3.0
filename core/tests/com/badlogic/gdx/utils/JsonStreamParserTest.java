@@ -86,7 +86,7 @@ class JsonStreamParserTest {
         long start = System.currentTimeMillis();
 
         InputStream stream = TestUtils.getResourceRequestStream(file);
-
+        long dummyLength = 1;
         new JsonReader() {
             public void startArray(String name) {
                 super.startArray(name);
@@ -127,7 +127,7 @@ class JsonStreamParserTest {
                 super.bool(name, value);
                 sb.appendLine("bool " + name + "  " + value);
             }
-        }.parse(stream, length);
+        }.parse(stream, dummyLength);
 
         log.debug("Parse time JsonParser: {}", System.currentTimeMillis() - start);
 
@@ -166,7 +166,7 @@ class JsonStreamParserTest {
             public void bool(String name, boolean value) {
                 sb2.appendLine("bool " + name + "  " + value);
             }
-        }.parse(stream, length);
+        }.parse(stream, dummyLength);
 
         log.debug("Parse time JsonStreamParser: {}", System.currentTimeMillis() - start);
     }
@@ -187,7 +187,7 @@ class JsonStreamParserTest {
 
         parser.handleValue(null, valueString);
 
-        String expected="Mit Team Kreuz haben wir hier eine kleine Berlin-Heimwegrunde gemacht. Wir konnten uns schnell und ohne Muggelaufmerksamkeit loggen. Das Rätsel löste eine Cacherfreundin.\r\n" +
+        String expected = "Mit Team Kreuz haben wir hier eine kleine Berlin-Heimwegrunde gemacht. Wir konnten uns schnell und ohne Muggelaufmerksamkeit loggen. Das Rätsel löste eine Cacherfreundin.\r\n" +
                 "\r\n" +
                 "Danke und Happy Hunting sagen die\r\n" +
                 "\r\n" +

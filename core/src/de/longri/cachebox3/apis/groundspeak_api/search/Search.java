@@ -159,7 +159,12 @@ public abstract class Search extends PostRequest {
     @Override
     protected void handleHttpResponse(Net.HttpResponse httpResponse, final GenericCallBack<Integer> readyCallBack) {
         final InputStream stream = httpResponse.getResultAsStream();
-        long length = Long.parseLong(httpResponse.getHeader("Content-Length"));
+        long length = 0;
+        try {
+            length = Long.parseLong(httpResponse.getHeader("Content-Length"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
 
         JsonParser parser = new JsonStreamParser() {
 
