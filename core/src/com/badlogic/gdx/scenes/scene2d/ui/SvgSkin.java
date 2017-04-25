@@ -24,10 +24,13 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
+import de.longri.cachebox3.gui.skin.styles.ColorDrawableStyle;
+import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.IconsStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.widgets.ColorDrawable;
+import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.*;
@@ -166,7 +169,7 @@ public class SvgSkin extends Skin {
         } catch (GdxRuntimeException ignored) {
         }
 
-        // Check for explicit registration of ninepatch, sprite, or tiled drawable.
+        // Check for explicit registration of ninepatch, sprite, FrameAnimationDrawable or tiled drawable.
         if (drawable == null) {
             NinePatch patch = optional(name, NinePatch.class);
             if (patch != null)
@@ -176,12 +179,17 @@ public class SvgSkin extends Skin {
                 if (sprite != null)
                     drawable = new SpriteDrawable(sprite);
                 else {
-                    ColorDrawable.ColorDrawableStyle colorDrawableStyle = optional(name, ColorDrawable.ColorDrawableStyle.class);
+                    ColorDrawableStyle colorDrawableStyle = optional(name, ColorDrawableStyle.class);
                     if (colorDrawableStyle != null) {
                         drawable = new ColorDrawable(colorDrawableStyle);
-                    } else
-                        throw new GdxRuntimeException(
-                                "No Drawable, NinePatch, TextureRegion, Texture, or Sprite registered with path: " + name);
+                    } else {
+                        FrameAnimationStyle frameAnimationStyle = optional(name, FrameAnimationStyle.class);
+                        if (frameAnimationStyle != null) {
+                            drawable = new FrameAnimationDrawable(frameAnimationStyle);
+                        } else
+                            throw new GdxRuntimeException(
+                                    "No Drawable, NinePatch, TextureRegion, Texture, or Sprite registered with path: " + name);
+                    }
                 }
             }
         }

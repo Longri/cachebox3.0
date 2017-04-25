@@ -19,12 +19,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.reflect.Field;
@@ -35,6 +37,9 @@ import com.mobidevelop.maps.editor.ui.utils.Tooltips;
 import de.longri.cachebox3.develop.tools.skin_editor.NinePatchEditorDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.develop.tools.skin_editor.SvgFileIconProvider;
+import de.longri.cachebox3.gui.animations.FrameAnimation;
+import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
+import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -63,6 +68,7 @@ public class DrawablePickerDialog extends Dialog {
     private final boolean callSelectedSvg;
     static private FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
     static private SvgFileIconProvider svgFileIconProvider;
+    private final int arrayIndex;
 
     TextButton togglShowNinePatch;
     TextButton togglShowDrawable;
@@ -90,13 +96,14 @@ public class DrawablePickerDialog extends Dialog {
         fileChooser.setIconProvider(svgFileIconProvider);
     }
 
-    public DrawablePickerDialog(final SkinEditorGame game, final Field field, boolean disableNinePatch, Stage stage) {
+    public DrawablePickerDialog(final SkinEditorGame game, final Field field, int arrayIndex, boolean disableNinePatch, Stage stage) {
         super("Drawable Picker", game.skin);
         this.game = game;
         this.field = field;
         this.disableNinePatch = disableNinePatch;
         this.stage = stage;
         this.callSelectedSvg = false;
+        this.arrayIndex = arrayIndex;
         initializeSelf();
     }
 
@@ -107,6 +114,7 @@ public class DrawablePickerDialog extends Dialog {
         this.disableNinePatch = true;
         this.stage = stage;
         this.callSelectedSvg = true;
+        this.arrayIndex = -1;
         initializeSelf();
     }
 
@@ -373,6 +381,7 @@ public class DrawablePickerDialog extends Dialog {
 
         ObjectMap<String, ScaledSvg> svgItems = game.skinProject.getAll(ScaledSvg.class);
         ObjectMap<String, SvgNinePatchDrawable> svg9PatchItems = game.skinProject.getAll(SvgNinePatchDrawable.class);
+        ObjectMap<String, FrameAnimationStyle> frameAnimationsItems = game.skinProject.getAll(FrameAnimationStyle.class);
 
 
 //        ObjectMap<String, Drawable> itemsDrawables = game.skinProject.getAll(Drawable.class);
@@ -382,6 +391,27 @@ public class DrawablePickerDialog extends Dialog {
 
         boolean showDrawables = togglShowDrawable.isChecked();
         boolean show9Patch = togglShowNinePatch.isChecked() && !disableNinePatch;
+
+        if (true) {
+            Iterator<String> it = frameAnimationsItems.keys().iterator();
+            while (it.hasNext()) {
+                String key = it.next();
+
+                // key filter
+                String filter = filterField.getText();
+                if (!filter.isEmpty()) {
+                    if (!key.toLowerCase().contains(filter.toLowerCase())) {
+                        continue;
+                    }
+                }
+
+                FrameAnimationStyle style = frameAnimationsItems.get(key);
+
+                FrameAnimationDrawable drw = new FrameAnimationDrawable(style);
+                items.put(key, new InternalItem(drw, drw));
+
+            }
+        }
 
 
         if (showDrawables) {
@@ -579,7 +609,12 @@ public class DrawablePickerDialog extends Dialog {
                         // field back
                         game.screenMain.paneOptions.refreshSelection();
 
-                        if (field.getType() == Bitmap.class) {
+                        if (field.getType() == Array.class) {
+                            Object value = field.get(game.screenMain.paneOptions.currentStyle);
+                            Array<TextureAtlas.AtlasRegion> array = (Array<TextureAtlas.AtlasRegion>) value;
+                            array.set(arrayIndex, (TextureAtlas.AtlasRegion) ((TextureRegionDrawable) items.get(key).drawable).getRegion());
+                            field.set(game.screenMain.paneOptions.currentStyle, array);
+                        } else if (field.getType() == Bitmap.class) {
                             Bitmap bmp = game.skinProject.get(key, Bitmap.class);
                             field.set(game.screenMain.paneOptions.currentStyle, bmp);
                         } else {
@@ -603,7 +638,7 @@ public class DrawablePickerDialog extends Dialog {
             boolean isNinePatch = itemObject.drawable instanceof SvgNinePatchDrawable;
 
 
-            String info;
+            String info = "";
             if (isNinePatch) {
                 SvgNinePatchDrawable.SvgNinePatchDrawableUnScaledValues values =
                         ((SvgNinePatchDrawable) itemObject.drawable).values;
@@ -611,9 +646,11 @@ public class DrawablePickerDialog extends Dialog {
                         values.left, values.right, values.top, values.bottom,
                         values.leftWidth, values.rightWidth, values.topHeight, values.bottomHeight);
             } else {
-                info = "scale: " + Float.toString(((ScaledSvg) itemObject.skinInfo).scale) +
-                        "\n  w: " + itemObject.drawable.getMinWidth() +
-                        " /  h: " + itemObject.drawable.getMinHeight();
+                if (itemObject.skinInfo instanceof ScaledSvg) {
+                    info = "scale: " + Float.toString(((ScaledSvg) itemObject.skinInfo).scale) +
+                            "\n  w: " + itemObject.drawable.getMinWidth() +
+                            " /  h: " + itemObject.drawable.getMinHeight();
+                }
             }
 
 

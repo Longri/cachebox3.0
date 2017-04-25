@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package de.longri.cachebox3.gui.widgets;
+package de.longri.cachebox3.gui.drawables;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;

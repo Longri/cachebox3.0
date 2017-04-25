@@ -180,6 +180,9 @@ abstract public class Gradient extends FillElement
             {
                 val = stopFractions[idx - 1];
             }
+            if(idx != 0 && val == stopFractions[idx - 1]){
+                val+=0.000001f;
+            }
             stopFractions[idx++] = val;
         }
 
