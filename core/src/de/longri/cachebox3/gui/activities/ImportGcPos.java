@@ -21,17 +21,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTextArea;
-import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.*;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.apis.groundspeak_api.PostRequest;
 import de.longri.cachebox3.apis.groundspeak_api.search.SearchCoordinate;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.ImportProgresChangedEvent;
+import de.longri.cachebox3.events.ImportProgressChangedListener;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
@@ -55,7 +56,7 @@ public class ImportGcPos extends ActivityBase {
     private static final Logger log = LoggerFactory.getLogger(ImportGcPos.class);
 
     private final VisTextButton bOK, bCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap;
-    private final VisLabel lblTitle, lblRadius, lblRadiusEinheit;
+    private final VisLabel lblTitle, lblRadius, lblRadiusEinheit, lblCaches, lblWaypoints, lblLogs, lblImages;
     private final Image gsLogo;
     private final CoordinateButton coordBtn;
     private final VisCheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
@@ -63,6 +64,8 @@ public class ImportGcPos extends ActivityBase {
     private Coordinate actSearchPos;
     private boolean importRuns = false;
     private boolean needLayout = true;
+    private final Image workAnimation;
+    private final VisProgressBar progressBar;
 
     /**
      * 0=GPS, 1= Map, 2= Manuell
@@ -77,7 +80,11 @@ public class ImportGcPos extends ActivityBase {
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
         lblTitle = new VisLabel(Translation.Get("importCachesOverPosition"));
         lblRadius = new VisLabel(Translation.Get(Translation.Get("Radius")));
-        textAreaRadius = new VisTextArea();
+        lblCaches = new VisLabel("Imported Caches: 0");
+        lblWaypoints = new VisLabel("Imported Waypoints: 0");
+        lblLogs = new VisLabel("Imported Log's: 0");
+        lblImages = new VisLabel("Imported Images: 0");
+        textAreaRadius = new VisTextArea("default");
         lblRadiusEinheit = new VisLabel(Config.ImperialUnits.getValue() ? "mi" : "km");
         btnMinus = new VisTextButton("-");
         btnPlus = new VisTextButton("+");
@@ -88,12 +95,17 @@ public class ImportGcPos extends ActivityBase {
         tglBtnGPS = new VisTextButton(Translation.Get("FromGps"), "toggle");
         tglBtnMap = new VisTextButton(Translation.Get("FromMap"), "toggle");
 
+        Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
+        workAnimation = new Image(animationDrawable);
+        progressBar = new VisProgressBar(0, 100, 1, false, "default");
+
+
         createOkCancelBtn();
         createToggleButtonLine();
 
         initialContent();
-
-//        this.setDebug(true, true);
+        setWorkAnimationVisible(false);
+        this.setDebug(true, true);
     }
 
     @Override
@@ -114,7 +126,7 @@ public class ImportGcPos extends ActivityBase {
         this.add(gsLogo).colspan(2).center();
         this.row().padTop(new Value.Fixed(CB.scaledSizes.MARGINx2 * 2));
         this.add(lblRadius);
-        this.add(textAreaRadius);
+        this.add(textAreaRadius).height(textAreaRadius.getStyle().font.getLineHeight() + CB.scaledSizes.MARGINx2);
         this.add(lblRadiusEinheit).left();
         this.add(btnMinus).width(new Value.Fixed(textAreaRadius.getPrefHeight()));
         this.add(btnPlus).width(new Value.Fixed(textAreaRadius.getPrefHeight()));
@@ -130,6 +142,19 @@ public class ImportGcPos extends ActivityBase {
         nestedTable1.add(tglBtnGPS);
         nestedTable1.add(tglBtnMap);
         this.add(nestedTable1).colspan(5).expandX().fillX();
+        this.row();
+        this.add(workAnimation).colspan(5).center();
+        this.row();
+        this.add();
+        this.add(progressBar).colspan(3).center().expandX().fillX();
+        this.row();
+        this.add(lblCaches).colspan(5).left();
+        this.row();
+        this.add(lblWaypoints).colspan(5).left();
+        this.row();
+        this.add(lblLogs).colspan(5).left();
+        this.row();
+        this.add(lblImages).colspan(5).left();
         this.row().expandY().fillY().bottom();
         this.add();
         this.row();
@@ -142,6 +167,17 @@ public class ImportGcPos extends ActivityBase {
         super.layout();
         needLayout = false;
     }
+
+
+    private void setWorkAnimationVisible(boolean visible) {
+        workAnimation.setVisible(visible);
+        progressBar.setVisible(visible);
+        lblCaches.setVisible(visible);
+        lblWaypoints.setVisible(visible);
+        lblLogs.setVisible(visible);
+        lblImages.setVisible(visible);
+    }
+
 
     private void createOkCancelBtn() {
 
@@ -281,6 +317,21 @@ public class ImportGcPos extends ActivityBase {
     }
 
     private void ImportNow() {
+
+        setWorkAnimationVisible(true);
+
+        final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
+            @Override
+            public void progressChanged(ImportProgresChangedEvent.ImportProgress event) {
+                progressBar.setValue(event.progress);
+                lblCaches.setText("Imported Caches: " + event.caches);
+                lblWaypoints.setText("Imported Waypoints: " + event.wayPoints);
+                lblLogs.setText("Imported Logs: " + event.logs);
+                lblImages.setText("Imported Caches: " + event.images);
+            }
+        };
+        EventHandler.add(progressListener);
+
         final Date ImportStart = new Date();
         Config.SearchWithoutFounds.setValue(checkBoxExcludeFounds.isChecked());
         Config.SearchOnlyAvailable.setValue(checkBoxOnlyAvailable.isChecked());
@@ -320,7 +371,7 @@ public class ImportGcPos extends ActivityBase {
 
                     log.debug("Api state = {}", apiState);
                     log.debug("Search at Coordinate:{}", actSearchPos);
-                   final SearchCoordinate searchC = new SearchCoordinate(GroundspeakAPI.getAccessToken(),
+                    final SearchCoordinate searchC = new SearchCoordinate(GroundspeakAPI.getAccessToken(),
                             100, actSearchPos, Config.lastSearchRadius.getValue() * 1000,
                             apiState);
                     searchC.excludeFounds = Config.SearchWithoutFounds.getValue();
@@ -337,13 +388,16 @@ public class ImportGcPos extends ActivityBase {
                                 if (ImportStart != null) {
                                     Date Importfin = new Date();
                                     long ImportZeit = Importfin.getTime() - ImportStart.getTime();
-                                    Msg = "Import " + String.valueOf(searchC.importedCaches) + "C " + String.valueOf(searchC.importedLogs) + "L in " + String.valueOf(ImportZeit);
+                                    Msg = "Import " + String.valueOf(searchC.cacheCount) + "C " + String.valueOf(searchC.logCount) + "L in " + String.valueOf(ImportZeit);
                                 } else {
                                     Msg = "Import canceld";
                                 }
 
                                 log.debug(Msg);
                                 CB.viewmanager.toast(Msg);
+
+                                //remove Progress handler
+                                EventHandler.remove(progressListener);
 
                                 //close Dialog
                                 finish();

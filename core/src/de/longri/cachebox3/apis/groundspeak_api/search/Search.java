@@ -23,6 +23,8 @@ import com.badlogic.gdx.utils.JsonStreamParser;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.PostRequest;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.ImportProgresChangedEvent;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -51,8 +53,10 @@ public abstract class Search extends PostRequest {
     public boolean excludeHides = false;
     public boolean excludeFounds = false;
     public boolean available = false;
-    int geocacheLogCount = 10;
-    int trackableLogCount = 10;
+    public int cacheCount;
+    int waypointCount;
+    public int logCount;
+    int imageCount;
     private boolean isLite;
     private long gpxFilenameId;
     private double actLat, actLon, actWpLat, actWpLon;
@@ -108,6 +112,9 @@ public abstract class Search extends PostRequest {
     private final ImageDAO imageDAO = new ImageDAO();
     private final WaypointDAO waypointDAO = new WaypointDAO();
 
+    protected int geocacheLogCount = 10;
+    protected int trackableLogCount = 10;
+
 
     private int attributeID;
     private boolean isOn;
@@ -128,8 +135,6 @@ public abstract class Search extends PostRequest {
      * 0 = unknown, 1 = Basic Member, 2 = Premium Member
      */
     private byte apiState;
-    public int importedCaches;
-    public int importedLogs;
 
     /**
      * @param gcApiKey valid encrypted Api-Key
@@ -262,6 +267,15 @@ public abstract class Search extends PostRequest {
 
                             //add final Cache instance
                             writeCacheToDB(new Cache(actLat, actLon, actCache));
+
+                            ImportProgresChangedEvent.ImportProgress progress = new ImportProgresChangedEvent.ImportProgress();
+                            progress.progress = 50;
+                            progress.caches = ++cacheCount;
+                            progress.wayPoints = waypointCount;
+                            progress.logs = logCount;
+                            progress.images = imageCount;
+                            EventHandler.fire(new ImportProgresChangedEvent(progress));
+
                             actCache = null;
                             log.debug("Stream parse new Cache StreamAvailable:{}/{}");
                         }
@@ -280,6 +294,7 @@ public abstract class Search extends PostRequest {
                         if (NEW_LOG.equals(name)) {
                             // System.out.println("add Log entry ");
                             writeLogToDB(actLog);
+                            logCount++;
                             actLog = null;
                         }
                         break;
@@ -297,6 +312,7 @@ public abstract class Search extends PostRequest {
 
                             //add final Waypointg instance
                             actCache.waypoints.add(new Waypoint(actWpLat, actWpLon, actWayPoint));
+                            waypointCount++;
                             actWayPoint = null;
                         }
                         break;
@@ -455,7 +471,7 @@ public abstract class Search extends PostRequest {
         };
         parser.parse(stream);
 
-        if( Database.Data!=null){ // maybe NULL with JUnit
+        if (Database.Data != null) { // maybe NULL with JUnit
             Database.Data.setTransactionSuccessful();
             Database.Data.endTransaction();
             Database.Data.GPXFilenameUpdateCacheCount();
@@ -482,8 +498,8 @@ public abstract class Search extends PostRequest {
         json.writeValue("MaxPerPage", this.number);
         json.writeValue("StartIndex", 0);
         json.writeValue("IsLite", this.isLite);
-        json.writeValue("TrackableLogCount", this.trackableLogCount);
-        json.writeValue("GeocacheLogCount", this.geocacheLogCount);
+        json.writeValue("TrackableLogCount", trackableLogCount);
+        json.writeValue("GeocacheLogCount", geocacheLogCount);
 
         if (this.available) {
             json.writeObjectStart("GeocacheExclusions");
@@ -515,7 +531,7 @@ public abstract class Search extends PostRequest {
 
     public void postRequest(GenericCallBack<Integer> callBack, long gpxFilenameId) {
         this.gpxFilenameId = gpxFilenameId;
-        if(Database.Data!=null)//Maybe NULL with JUnit
+        if (Database.Data != null)//Maybe NULL with JUnit
             Database.Data.beginTransaction();
         this.post(callBack);
     }
@@ -611,7 +627,6 @@ public abstract class Search extends PostRequest {
     }
 
     protected void writeLogToDB(final LogEntry logEntry) {
-        importedLogs++;
         logDAO.WriteToDatabase(logEntry);
     }
 
@@ -621,8 +636,6 @@ public abstract class Search extends PostRequest {
     }
 
     protected void writeCacheToDB(final Cache cache) {
-        importedCaches++;
-
         Cache aktCache = Database.Data.Query.GetCacheById(cache.Id);
 
         if (aktCache != null && aktCache.isLive())
@@ -714,7 +727,7 @@ public abstract class Search extends PostRequest {
             Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.Id), false);
             Database.Data.Query.add(cache);
         }
-}
+    }
 
 
 //TODO try ASYNC write to DB

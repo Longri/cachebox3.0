@@ -37,7 +37,6 @@ import com.mobidevelop.maps.editor.ui.utils.Tooltips;
 import de.longri.cachebox3.develop.tools.skin_editor.NinePatchEditorDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.develop.tools.skin_editor.SvgFileIconProvider;
-import de.longri.cachebox3.gui.animations.FrameAnimation;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.utils.SkinColor;

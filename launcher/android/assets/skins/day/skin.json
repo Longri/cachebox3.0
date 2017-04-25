@@ -278,23 +278,23 @@
     },
     "download-1": {
       "path": "svg/download-1.svg",
-      "scale": 0.3
+      "scale": 0.17
     },
     "download-2": {
       "path": "svg/download-2.svg",
-      "scale": 0.3
+      "scale": 0.17
     },
     "download-3": {
       "path": "svg/download-3.svg",
-      "scale": 0.3
+      "scale": 0.17
     },
     "download-4": {
       "path": "svg/download-4.svg",
-      "scale": 0.3
+      "scale": 0.17
     },
     "download-5": {
       "path": "svg/download-5.svg",
-      "scale": 0.3
+      "scale": 0.17
     },
     "earth": {
       "path": "svg/earth.svg",
@@ -900,6 +900,14 @@
       "path": "svg/other.svg",
       "scale": 0.25
     },
+    "progress_back": {
+      "path": "svg/progress_back.svg",
+      "scale": 1
+    },
+    "progress_foreground": {
+      "path": "svg/progress_foreground.svg",
+      "scale": 1
+    },
     "regular": {
       "path": "svg/regular.svg",
       "scale": 0.25
@@ -1291,6 +1299,20 @@
       "right": 20,
       "top": 5,
       "bottom": 5
+    },
+    "progress_back_9_Patch": {
+      "name": "progress_back",
+      "left": 10,
+      "right": 10,
+      "top": 10,
+      "bottom": 10
+    },
+    "progress_foreground_9_Patch": {
+      "name": "progress_foreground",
+      "left": 10,
+      "right": 10,
+      "top": 10,
+      "bottom": 10
     },
     "slider_drawable": {
       "name": "slider",
@@ -1949,6 +1971,20 @@
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",
       "typeStyle": "cacheList"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle": {
+    "default": {
+      "background": "progress_back_9_Patch",
+      "knob": "progress_foreground_9_Patch",
+      "knobBefore": "progress_foreground_9_Patch"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
+    "default": {
+      "font": "normal_font",
+      "fontColor": "font_color",
+      "cursor": "cursor"
     }
   }
 }
