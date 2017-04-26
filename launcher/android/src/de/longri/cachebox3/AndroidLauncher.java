@@ -23,6 +23,9 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.OrientationChangedEvent;
@@ -49,13 +52,13 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
     private SensorManager mSensorManager;
     private Sensor mSensor;
     private float[] mCompassValues;
+    private AndroidLauncherfragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 6. Finally, replace the AndroidLauncher activity content with the Libgdx Fragment.
-        AndroidLauncherfragment fragment = new AndroidLauncherfragment();
+        fragment = new AndroidLauncherfragment();
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         trans.replace(android.R.id.content, fragment);
         trans.commit();
@@ -64,16 +67,12 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 
+
     }
 
     protected void onStart() {
         super.onStart();
         log.debug("onStart()");
-
-
-        //initialize platform connector
-        PlatformConnector.init(new AndroidPlatformConnector(this));
-
 
         if (android.os.Build.VERSION.SDK_INT >= 23) {
             AndroidPermissionCheck.checkNeededPermissions(this);
@@ -127,5 +126,10 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
     @Override
     public void exit() {
 
+    }
+
+    public void show(AndroidDescriptionView descriptionView) {
+        ViewGroup.LayoutParams params = new RelativeLayout.LayoutParams(200, 200);
+        fragment.getActivity().addContentView(descriptionView, params);
     }
 }

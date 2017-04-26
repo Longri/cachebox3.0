@@ -47,7 +47,13 @@ public class AndroidLauncherfragment extends AndroidFragmentApplication {
         config.numSamples = 2;
         new SharedLibraryLoader().load("vtm-jni");
 
-        return initializeForView(new CacheboxMain(), config);
+        View view = initializeForView(new CacheboxMain(), config);
+
+        //initialize platform connector
+        PlatformConnector.init(new AndroidPlatformConnector(this));
+
+        return view;
     }
+
 
 }
