@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,19 @@
  */
 package de.longri.cachebox3;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+
+import java.util.ArrayList;
 
 /**
  * Created by Longri on 11.05.2016.
  */
 public class AndroidPermissionCheck {
 
-    public static final int MY_PERMISSIONS_REQUEST = 11052016;
+    public static final int MY_PERMISSIONS_REQUEST = 11052;
 
     static final String ACCESS_FINE_LOCATION = "android.permission.ACCESS_FINE_LOCATION";
     static final String ACCESS_COARSE_LOCATION = "android.permission.ACCESS_COARSE_LOCATION";
@@ -40,21 +40,21 @@ public class AndroidPermissionCheck {
     static final String WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
     static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
 
-    static final String[] NEEDED_PERMISSIONS = new String[] { ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, WAKE_LOCK, INTERNET, ACCESS_NETWORK_STATE, RECORD_AUDIO, CAMERA, VIBRATE, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE };
+    static final String[] NEEDED_PERMISSIONS = new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, WAKE_LOCK, INTERNET, ACCESS_NETWORK_STATE, RECORD_AUDIO, CAMERA, VIBRATE, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE};
 
     public static void checkNeededPermissions(Activity context) {
-	ArrayList<String> DENIED_List = new ArrayList<String>();
+        ArrayList<String> DENIED_List = new ArrayList<String>();
 
-	for (String permission : NEEDED_PERMISSIONS) {
-	    if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-		DENIED_List.add(permission);
-	    }
-	}
+        for (String permission : NEEDED_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                DENIED_List.add(permission);
+            }
+        }
 
-	if (!DENIED_List.isEmpty()) {
-	    String[] ar = DENIED_List.toArray(new String[DENIED_List.size()]);
-	    ActivityCompat.requestPermissions(context, ar, MY_PERMISSIONS_REQUEST);
-	}
+        if (!DENIED_List.isEmpty()) {
+            String[] ar = DENIED_List.toArray(new String[DENIED_List.size()]);
+            ActivityCompat.requestPermissions(context, ar, MY_PERMISSIONS_REQUEST);
+        }
 
     }
 

@@ -111,15 +111,25 @@ public class IOS_PlatformConnector extends PlatformConnector {
         Config.StagingAPI.setValue(true);
 
         try {
-           UIViewController mainViewController= ((IOSApplication) Gdx.app).getUIWindow().getRootViewController();
+            UIViewController mainViewController = ((IOSApplication) Gdx.app).getUIWindow().getRootViewController();
 
-            GenerateApiKeyWebViewController controller = new GenerateApiKeyWebViewController(callBack,mainViewController);
+            GenerateApiKeyWebViewController controller = new GenerateApiKeyWebViewController(callBack, mainViewController);
 
             ((IOSApplication) Gdx.app).getUIWindow().setRootViewController(controller);
             ((IOSApplication) Gdx.app).getUIWindow().makeKeyAndVisible();
         } catch (Exception e) {
             log.error("show web view", e);
         }
+
+    }
+
+    @Override
+    protected PlatformDescriptionView getPlatformDescriptionView() {
+        return null;
+    }
+
+    @Override
+    protected void descriptionViewToNull() {
 
     }
 

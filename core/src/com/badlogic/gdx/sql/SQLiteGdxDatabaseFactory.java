@@ -35,6 +35,10 @@ public class SQLiteGdxDatabaseFactory {
 
     private static SQLiteGdxDatabaseManager databaseManager = null;
 
+    public static void setDatabaseManager(SQLiteGdxDatabaseManager manager) {
+        databaseManager = manager;
+    }
+
     /**
      * This is a factory method that will return a reference to an existing or a not-yet-created database. You will need to
      * manually call methods on the {@link SQLiteGdxDatabase} object to setup, open/create or close the database. See {@link SQLiteGdxDatabase} for

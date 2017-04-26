@@ -46,7 +46,7 @@ public class GenerateApiKeyWebView extends Window {
         //apply -Dprism.order=j2d (set VM options)
         Properties props = System.getProperties();
         props.setProperty("com.sun.prism.order", "j2d");
-//TODO that dosen't work
+//TODO that dosn't work
     }
 
     private static final Logger log = LoggerFactory.getLogger(GenerateApiKeyWebView.class);

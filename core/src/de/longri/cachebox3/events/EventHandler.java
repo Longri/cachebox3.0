@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
@@ -129,9 +130,19 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
         if (selectedCache == null || !selectedCache.equals(event.cache)) {
+
+            //unload details from last selected Cache
+            if (selectedCache != null) selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
+
             log.debug("Set Global selected Cache: {}", event.cache);
             selectedCache = event.cache;
             selectedWayPoint = null;
+
+            // and load details of new selected Cache
+            if (!selectedCache.isDetailLoaded()) {
+                selectedCache.loadDetail();
+            }
+
             fireSelectedCoordChanged(event.ID);
         }
     }
@@ -143,7 +154,17 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             selectedWayPoint = event.wayPoint;
             synchronized (Database.Data.Query) {
                 if (selectedWayPoint != null) {
-                    selectedCache = Database.Data.Query.GetCacheById(selectedWayPoint.CacheId);
+                    Cache newCache = Database.Data.Query.GetCacheById(selectedWayPoint.CacheId);
+                    if (!newCache.equals(selectedCache)) {
+                        //unload details from last selected Cache
+                        if (selectedCache != null) selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
+                        selectedCache = newCache;
+                        // and load details of new selected Cache
+                        if (!selectedCache.isDetailLoaded()) {
+                            selectedCache.loadDetail();
+                        }
+                    }
+
                     fireSelectedCoordChanged(event.ID);
                 }
             }

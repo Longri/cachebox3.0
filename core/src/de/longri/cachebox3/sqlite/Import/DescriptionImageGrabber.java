@@ -131,38 +131,32 @@ public class DescriptionImageGrabber {
     }
 
     /**
-     * @param Cache
+     * @param cache
      * @param html
      * @param suppressNonLocalMedia
      * @param NonLocalImages
      * @param NonLocalImagesUrl
      * @return
      */
-    public static String ResolveImages(Cache Cache, String html, boolean suppressNonLocalMedia, LinkedList<String> NonLocalImages, LinkedList<String> NonLocalImagesUrl) {
+    public static String resolveImages(Cache cache, String html, boolean suppressNonLocalMedia, LinkedList<String> NonLocalImages, LinkedList<String> NonLocalImagesUrl) {
         /*
          * NonLocalImages = new List<string>(); NonLocalImagesUrl = new List<string>();
 		 */
 
         URI baseUri;
         try {
-            baseUri = URI.create(Cache.getUrl());
+            baseUri = URI.create(cache.getUrl());
         } catch (Exception exc) {
-            /*
-			 * #if DEBUG Global.AddLog( "DescriptionImageGrabber.ResolveImages: failed to resolve '" + Cache.Url + "': " + exc.ToString());
-			 * #endif
-			 */
+            log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", cache.getUrl(), exc);
             baseUri = null;
         }
 
         if (baseUri == null) {
-            Cache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + Cache.getGcCode());
+            cache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + cache.getGcCode());
             try {
-                baseUri = URI.create(Cache.getUrl());
+                baseUri = URI.create(cache.getUrl());
             } catch (Exception exc) {
-				/*
-				 * #if DEBUG Global.AddLog( "DescriptionImageGrabber.ResolveImages: failed to resolve '" + Cache.Url + "': " +
-				 * exc.ToString()); #endif
-				 */
+                log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", cache.getUrl(), exc);
                 return html;
             }
         }
@@ -186,7 +180,7 @@ public class DescriptionImageGrabber {
                 try {
                     URI imgUri = URI.create(/* baseUri, */src); // NICHT
                     // ORGINAL!!!!!!!!!
-                    String localFile = BuildImageFilename(Cache.getGcCode(), imgUri);
+                    String localFile = BuildImageFilename(cache.getGcCode(), imgUri);
 
                     if (Utils.FileExistsNotEmpty(localFile)) {
                         int idx = 0;
@@ -218,7 +212,7 @@ public class DescriptionImageGrabber {
                     }
                 } catch (Exception exc) {
 					/*
-					 * #if DEBUG Global.AddLog( "DescriptionImageGrabber.ResolveImages: failed to resolve relative uri. Base '" + baseUri +
+					 * #if DEBUG Global.AddLog( "DescriptionImageGrabber.resolveImages: failed to resolve relative uri. Base '" + baseUri +
 					 * "', relative '" + src + "': " + exc.ToString()); #endif
 					 */
                 }

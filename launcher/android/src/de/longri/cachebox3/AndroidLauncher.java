@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -21,24 +21,16 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.android.AndroidApplication;
-import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.SharedLibraryLoader;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.OrientationChangedEvent;
-import org.oscim.android.gl.AndroidGL;
-import org.oscim.backend.GLAdapter;
-import org.oscim.gdx.GdxAssets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.impl.LibgdxLogger;
 import org.sqldroid.SQLDroidDriver;
 
-import java.io.File;
-
-public class AndroidLauncher extends AndroidApplication {
+public class AndroidLauncher extends FragmentActivity implements AndroidFragmentApplication.Callbacks {
     private final static Logger log = LoggerFactory.getLogger(AndroidLauncher.class);
     public static AndroidLauncher androidLauncher;
 
@@ -60,60 +52,32 @@ public class AndroidLauncher extends AndroidApplication {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        log.debug("onStart()");
         super.onCreate(savedInstanceState);
+
+        // 6. Finally, replace the AndroidLauncher activity content with the Libgdx Fragment.
+        AndroidLauncherfragment fragment = new AndroidLauncherfragment();
+        FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+        trans.replace(android.R.id.content, fragment);
+        trans.commit();
+
         androidLauncher = this;
-
-        // Don't change this LogLevel
-        // Cachebox use the slf4j implematation for LibGdx as Log engine.
-        // so set LogLevel on CB.class if you wont (USED_LOG_LEVEL)
-        this.setLogLevel(LOG_DEBUG);
-
-        //initialize platform bitmap factory
-        org.oscim.android.canvas.AndroidGraphics.init();
-
-        //initialize platform connector
-        PlatformConnector.init(new AndroidPlatformConnector(this));
-
-        GdxAssets.init("");
-        GLAdapter.init(new AndroidGL());
-
-        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        config.stencil = 8;
-        config.numSamples = 2;
-        new SharedLibraryLoader().load("vtm-jni");
-        initialize(new CacheboxMain(), config);
-
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 
-        setApplicationLogger(new Android_ApplicationLogger());
-
-        //    ## INITIAL LOGGER ##                ################################
-        File filesDir = getExternalFilesDir(null);
-        FileHandle loggerConfig = Gdx.files.absolute(filesDir.getAbsolutePath())
-                .child(LibgdxLogger.CONFIGURATION_FILE_XML);
-        LibgdxLogger.initial(loggerConfig);
-
-        //create private path for Log and properties file
-        // => /data/user/0/de.longri.cachebox3/files
-        loggerConfig.parent().mkdirs();
     }
 
     protected void onStart() {
         super.onStart();
         log.debug("onStart()");
+
+
+        //initialize platform connector
+        PlatformConnector.init(new AndroidPlatformConnector(this));
+
+
         if (android.os.Build.VERSION.SDK_INT >= 23) {
             AndroidPermissionCheck.checkNeededPermissions(this);
         }
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-
-            }
-        });
     }
 
 
@@ -160,4 +124,8 @@ public class AndroidLauncher extends AndroidApplication {
         }
     };
 
+    @Override
+    public void exit() {
+
+    }
 }

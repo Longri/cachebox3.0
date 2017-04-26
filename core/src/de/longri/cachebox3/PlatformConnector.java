@@ -52,8 +52,18 @@ public abstract class PlatformConnector {
     protected abstract void _switchTorch();
 
     public static void getApiKey(GenericCallBack<String> callBack) {
-         platformConnector.generateApiKey(callBack);
+        platformConnector.generateApiKey(callBack);
     }
+
+    public static PlatformDescriptionView getDescriptionView() {
+        return platformConnector.getPlatformDescriptionView();
+    }
+
+    public static void setDescriptionViewToNULL() {
+        platformConnector.descriptionViewToNull();
+    }
+
+    protected abstract void descriptionViewToNull();
 
     // SVG implementations #############################################################################################
     public enum SvgScaleType {
@@ -89,5 +99,7 @@ public abstract class PlatformConnector {
     protected abstract String _getWorkPath();
 
     protected abstract void generateApiKey(GenericCallBack<String> callBack);
+
+    protected abstract PlatformDescriptionView getPlatformDescriptionView();
 
 }

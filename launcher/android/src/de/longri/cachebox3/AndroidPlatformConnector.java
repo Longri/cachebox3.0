@@ -23,9 +23,11 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
+import com.badlogic.gdx.sqlite.android.AndroidDatabaseManager;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -41,12 +43,13 @@ import java.io.InputStream;
 public class AndroidPlatformConnector extends PlatformConnector {
     final static Logger log = LoggerFactory.getLogger(AndroidPlatformConnector.class);
     private static final int REQUEST_CODE_GET_API_KEY = 987654321;
-    private final AndroidApplication application;
+    private final FragmentActivity application;
     public static AndroidPlatformConnector platformConnector;
 
-    public AndroidPlatformConnector(AndroidApplication app) {
+    public AndroidPlatformConnector(FragmentActivity app) {
         this.application = app;
         platformConnector = this;
+        SQLiteGdxDatabaseFactory.setDatabaseManager(new AndroidDatabaseManager());
     }
 
 
@@ -64,6 +67,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
     protected void _switchTorch() {
 //TODO implement tourch
     }
+
 
     @Override
     public Bitmap getRealScaledSVG(String name, InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
@@ -153,6 +157,16 @@ public class AndroidPlatformConnector extends PlatformConnector {
         } else {
             log.error(intent.getAction() + " not installed.");
         }
+
+    }
+
+    @Override
+    protected PlatformDescriptionView getPlatformDescriptionView() {
+        return null;
+    }
+
+    @Override
+    protected void descriptionViewToNull() {
 
     }
 }

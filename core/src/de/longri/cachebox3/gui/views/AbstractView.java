@@ -36,6 +36,7 @@ public abstract class AbstractView extends CB_View_Base {
         create();
     }
 
+
     protected void create() {
         // create a Label with name for default
         nameLabel = new VisLabel(this.NAME);
@@ -49,10 +50,12 @@ public abstract class AbstractView extends CB_View_Base {
         this.addActor(nameLabel);
     }
 
+    @Override
     protected void sizeChanged() {
         super.sizeChanged();
         boundsChanged(this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
+
 
     protected void boundsChanged(float x, float y, float width, float height) {
         if (colorWidget != null) colorWidget.setBounds(0, 0, this.getWidth(), this.getHeight());

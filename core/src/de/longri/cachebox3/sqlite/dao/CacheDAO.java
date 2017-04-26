@@ -49,7 +49,7 @@ public class CacheDAO {
         return description;
     }
 
-    public static String GetDescription(Cache cache) {
+    public static String getDescription(Cache cache) {
         String description = "";
         SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select Description from Caches where Id=?", new String[]{Long.toString(cache.Id)});
         if (reader == null)

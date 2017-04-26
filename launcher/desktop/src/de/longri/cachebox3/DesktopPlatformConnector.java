@@ -16,6 +16,7 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.DesktopDescriptionView;
 import com.badlogic.gdx.backends.lwjgl.GenerateApiKeyWebView;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
@@ -49,6 +50,7 @@ public class DesktopPlatformConnector extends PlatformConnector {
         // is not implemented, do nothing
     }
 
+
     @Override
     public Bitmap getRealScaledSVG(String name, InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {
         DesktopRealSvgBitmap bmp = new DesktopRealSvgBitmap(stream, scaleType, scaleValue);
@@ -74,5 +76,18 @@ public class DesktopPlatformConnector extends PlatformConnector {
     @Override
     protected void generateApiKey(GenericCallBack<String> callBack) {
         GenerateApiKeyWebView webView = new GenerateApiKeyWebView(callBack);
+    }
+
+    private DesktopDescriptionView descriptionView;
+
+    @Override
+    protected PlatformDescriptionView getPlatformDescriptionView() {
+        if (descriptionView == null) descriptionView = new DesktopDescriptionView();
+        return descriptionView;
+    }
+
+    @Override
+    protected void descriptionViewToNull() {
+        descriptionView.close();
     }
 }

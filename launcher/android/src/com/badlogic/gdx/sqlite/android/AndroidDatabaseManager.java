@@ -21,6 +21,7 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabase;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseManager;
+import de.longri.cachebox3.AndroidLauncherfragment;
 
 /**
  * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
@@ -31,15 +32,14 @@ public class AndroidDatabaseManager implements SQLiteGdxDatabaseManager {
     private Context context;
 
     public AndroidDatabaseManager() {
-        AndroidApplication app = (AndroidApplication) Gdx.app;
-        context = app.getApplicationContext();
+        AndroidLauncherfragment app = (AndroidLauncherfragment) Gdx.app;
+        context = app.getActivity();
     }
 
     @Override
     public SQLiteGdxDatabase getNewDatabase(FileHandle dbfileHandle) {
         return new AndroidDatabase(this.context, dbfileHandle);
     }
-
 
 
 }
