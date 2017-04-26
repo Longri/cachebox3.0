@@ -124,8 +124,9 @@ public class IOS_PlatformConnector extends PlatformConnector {
     }
 
     @Override
-    protected PlatformDescriptionView getPlatformDescriptionView() {
-        return null;
+    protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
+
+
     }
 
     @Override

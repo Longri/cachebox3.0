@@ -55,8 +55,8 @@ public abstract class PlatformConnector {
         platformConnector.generateApiKey(callBack);
     }
 
-    public static PlatformDescriptionView getDescriptionView() {
-        return platformConnector.getPlatformDescriptionView();
+    public static void getDescriptionView(GenericCallBack<PlatformDescriptionView> callBack) {
+         platformConnector.getPlatformDescriptionView(callBack);
     }
 
     public static void setDescriptionViewToNULL() {
@@ -100,6 +100,6 @@ public abstract class PlatformConnector {
 
     protected abstract void generateApiKey(GenericCallBack<String> callBack);
 
-    protected abstract PlatformDescriptionView getPlatformDescriptionView();
+    protected abstract void getPlatformDescriptionView(GenericCallBack<PlatformDescriptionView> callBack);
 
 }

@@ -32,8 +32,6 @@ import org.lwjgl.opengl.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javafx.scene.control.ScrollPane;
-
 import java.awt.*;
 import java.util.Properties;
 import java.util.Set;
@@ -169,33 +167,35 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
 
     @Override
     public void setScrollPosition(float x, float y) {
-        if (vScrollbar == null) {
-            vScrollbar = getVScrollBar(webView, Orientation.VERTICAL);
-        }
-
-        if (hScrollbar == null) {
-            hScrollbar = getVScrollBar(webView, Orientation.HORIZONTAL);
-        }
-
-        vScrollbar.setValue(10);
-        hScrollbar.setValue(x);
+//        if (vScrollbar == null) {
+//            vScrollbar = getVScrollBar(webView, Orientation.VERTICAL);
+//        }
+//
+//        if (hScrollbar == null) {
+//            hScrollbar = getVScrollBar(webView, Orientation.HORIZONTAL);
+//        }
+//
+//        vScrollbar.setValue(10);
+//        hScrollbar.setValue(x);
 
     }
 
     @Override
     public float getScrollPositionX() {
-        if (hScrollbar == null) {
-            hScrollbar = getVScrollBar(webView, Orientation.HORIZONTAL);
-        }
-        return (float) hScrollbar.getValue();
+//        if (hScrollbar == null) {
+//            hScrollbar = getVScrollBar(webView, Orientation.HORIZONTAL);
+//        }
+//        return (float) hScrollbar.getValue();
+        return 0;
     }
 
     @Override
     public float getScrollPositionY() {
-        if (vScrollbar == null) {
-            vScrollbar = getVScrollBar(webView, Orientation.VERTICAL);
-        }
-        return (float) vScrollbar.getValue();
+//        if (vScrollbar == null) {
+//            vScrollbar = getVScrollBar(webView, Orientation.VERTICAL);
+//        }
+//        return (float) vScrollbar.getValue();
+        return 0;
     }
 
     /**

@@ -81,9 +81,9 @@ public class DesktopPlatformConnector extends PlatformConnector {
     private DesktopDescriptionView descriptionView;
 
     @Override
-    protected PlatformDescriptionView getPlatformDescriptionView() {
+    protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
         if (descriptionView == null) descriptionView = new DesktopDescriptionView();
-        return descriptionView;
+        callBack.callBack(descriptionView);
     }
 
     @Override
