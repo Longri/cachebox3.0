@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
@@ -56,4 +57,17 @@ public class AndroidLauncherfragment extends AndroidFragmentApplication {
     }
 
 
+    public void show(AndroidDescriptionView descriptionView) {
+        ViewGroup.LayoutParams params = new RelativeLayout.LayoutParams(800, 800);
+        this.getApplicationWindow().addContentView(descriptionView, params);
+    }
+
+    public void removeView(final AndroidDescriptionView descriptionView) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ((ViewGroup) descriptionView.getParent()).removeView(descriptionView);
+            }
+        });
+    }
 }

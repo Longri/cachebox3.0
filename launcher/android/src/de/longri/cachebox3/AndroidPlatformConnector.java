@@ -160,20 +160,26 @@ public class AndroidPlatformConnector extends PlatformConnector {
 
     }
 
+    private AndroidDescriptionView descriptionView;
+
     @Override
     protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
 
         this.application.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                AndroidDescriptionView descriptionView = new AndroidDescriptionView(AndroidPlatformConnector.this.application.getContext());
+                descriptionView = new AndroidDescriptionView(AndroidPlatformConnector.this.application.getContext());
                 callBack.callBack(descriptionView);
+                AndroidPlatformConnector.this.application.show(descriptionView);
             }
         });
     }
 
     @Override
     protected void descriptionViewToNull() {
-
+        if (descriptionView != null) {
+            AndroidPlatformConnector.this.application.removeView(descriptionView);
+        }
+        descriptionView = null;
     }
 }
