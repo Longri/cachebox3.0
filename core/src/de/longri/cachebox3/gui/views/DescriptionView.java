@@ -152,9 +152,11 @@ public class DescriptionView extends AbstractView {
 
     @Override
     public void onHide() {
-        lastCacheId = EventHandler.getSelectedCache().Id;
-        lastX = view.getScrollPositionX();
-        lastY = view.getScrollPositionY();
-        view.close();
+        if(EventHandler.getSelectedCache()!=null){
+            lastCacheId = EventHandler.getSelectedCache().Id;
+            lastX = view.getScrollPositionX();
+            lastY = view.getScrollPositionY();
+            view.close();
+        }
     }
 }

@@ -25,8 +25,10 @@ import org.oscim.backend.canvas.Bitmap;
 import org.robovm.apple.avfoundation.AVCaptureDevice;
 import org.robovm.apple.avfoundation.AVCaptureTorchMode;
 import org.robovm.apple.avfoundation.AVMediaType;
+import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.foundation.NSErrorException;
 import org.robovm.apple.uikit.UIViewController;
+import org.robovm.apple.uikit.UIWebView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,27 +107,30 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     protected void generateApiKey(GenericCallBack<String> callBack) {
-
-        log.debug("Show WebView");
-        log.debug("Set Stagging URL");
-        Config.StagingAPI.setValue(true);
-
+        log.debug("Show WebView for get API key");
         try {
             UIViewController mainViewController = ((IOSApplication) Gdx.app).getUIWindow().getRootViewController();
-
             GenerateApiKeyWebViewController controller = new GenerateApiKeyWebViewController(callBack, mainViewController);
-
             ((IOSApplication) Gdx.app).getUIWindow().setRootViewController(controller);
             ((IOSApplication) Gdx.app).getUIWindow().makeKeyAndVisible();
         } catch (Exception e) {
             log.error("show web view", e);
         }
-
     }
 
     @Override
     protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
+        log.debug("Show WebView as descriptionView");
+        try {
+            UIViewController mainViewController = ((IOSApplication) Gdx.app).getUIWindow().getRootViewController();
+            IOS_DescriptionView view = new IOS_DescriptionView(mainViewController);
 
+
+            callBack.callBack(view);
+
+        } catch (Exception e) {
+            log.error("show web view", e);
+        }
 
     }
 
