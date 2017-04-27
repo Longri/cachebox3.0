@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -32,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -43,6 +45,19 @@ public class DescriptionView extends AbstractView {
     private PlatformDescriptionView view;
     private final LinkedList<String> nonLocalImages = new LinkedList<String>();
     private final LinkedList<String> nonLocalImagesUrl = new LinkedList<String>();
+
+    private final AtomicBoolean FIRST = new AtomicBoolean(true);
+    private final GenericCallBack<String> shouldOverrideUrlLoadingCallBack = new GenericCallBack<String>() {
+        @Override
+        public void callBack(String url) {
+            log.debug("Load Url callback: {}", url);
+            if (FIRST.get()) {
+                FIRST.set(false);
+                boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());
+            }
+        }
+    };
+
 
     public DescriptionView() {
         super("DescriptionView");
@@ -75,6 +90,7 @@ public class DescriptionView extends AbstractView {
                         // add 2 empty lines so that the last line of description can be selected with the markers
                         html += "</br></br>";
                     }
+                    view.setShouldOverrideUrlLoadingCallBack(shouldOverrideUrlLoadingCallBack);
                     view.display();
                     view.setHtml(html);
 
@@ -128,7 +144,7 @@ public class DescriptionView extends AbstractView {
 
     @Override
     protected void boundsChanged(float x, float y, float width, float height) {
-        if (view != null) view.setBounding(x, y, width, height);
+        if (view != null) view.setBounding(x, y, width, height, Gdx.graphics.getHeight());
     }
 
     private static long lastCacheId;

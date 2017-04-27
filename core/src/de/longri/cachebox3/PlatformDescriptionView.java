@@ -15,14 +15,14 @@
  */
 package de.longri.cachebox3;
 
-import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 
 /**
  * Created by Longri on 26.04.2017.
  */
 public interface PlatformDescriptionView {
 
-    void setBounding(float x, float y, float width, float height);
+    void setBounding(float x, float y, float width, float height, int screenHeight);
 
     void setScrollPosition(float x, float y);
 
@@ -35,4 +35,6 @@ public interface PlatformDescriptionView {
     void display();
 
     void close();
+
+    void setShouldOverrideUrlLoadingCallBack(GenericCallBack<String> shouldOverrideUrlLoadingCallBack);
 }

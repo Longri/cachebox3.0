@@ -34,8 +34,9 @@ public class AndroidLauncherfragment extends AndroidFragmentApplication {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+
+        this.setLogLevel(100);
 
         //initialize platform bitmap factory
         org.oscim.android.canvas.AndroidGraphics.init();

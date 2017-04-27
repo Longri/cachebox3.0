@@ -16,9 +16,16 @@
 package de.longri.cachebox3;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import de.longri.cachebox3.callbacks.GenericCallBack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.AndroidLauncher.androidLauncher;
 
@@ -27,17 +34,17 @@ import static de.longri.cachebox3.AndroidLauncher.androidLauncher;
  */
 public class AndroidDescriptionView extends WebView implements PlatformDescriptionView {
 
+    private final static Logger log = LoggerFactory.getLogger(AndroidDescriptionView.class);
+
+
     final String mimeType = "text/html";
     final String encoding = "utf-8";
+    private GenericCallBack<String> shouldOverrideUrlLoadingCallBack;
 
 
     public AndroidDescriptionView(Context context) {
         super(AndroidLauncher.androidLauncher, null, android.R.attr.webViewStyle);
         this.setDrawingCacheEnabled(false);
-        this.setAlwaysDrawnWithCacheEnabled(false);
-
-        // this.getSettings().setJavaScriptEnabled(true);
-        this.getSettings().setLightTouchEnabled(false);
         this.getSettings().setLoadWithOverviewMode(true);
         this.getSettings().setSupportZoom(true);
         this.getSettings().setBuiltInZoomControls(true);
@@ -48,8 +55,36 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     }
 
     WebViewClient clint = new WebViewClient() {
+
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            String url = request.getUrl().getPath();
+            shouldOverrideUrlLoadingCallBack.callBack(url);
+            log.debug("shouldOverrideUrlLoading: {}", url);
+            return true;
+        }
+
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            log.debug("onPageStarted");
+        }
+
+        public void onPageFinished(WebView view, String url) {
+            log.debug("onPageFinished URL: {}",url);
+        }
+
+        public void onLoadResource(WebView view, String url) {
+            log.debug("onLoadResource URL: {}",url);
+        }
+
+        public void onPageCommitVisible(WebView view, String url) {
+            log.debug("onPageCommitVisible URL: {}",url);
+            shouldOverrideUrlLoadingCallBack.callBack(url);
+        }
+
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            log.debug("shouldOverrideUrlLoading URL: {}",url);
+            shouldOverrideUrlLoadingCallBack.callBack(url);
             if (url.contains("fake://fake.de/Attr")) {
 //                int pos = url.indexOf("+");
 //                if (pos < 0)
@@ -125,24 +160,30 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
                 return true;
             } else if (url.startsWith("http://")) {
                 // Load Url in ext Browser
-              //TODO PlatformConnector.callUrl(url);
+                //TODO PlatformConnector.callUrl(url);
                 return true;
             }
             view.loadUrl(url);
             return true;
         }
 
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            super.onPageFinished(view, url);
-//TODO msg to core descriptionView
-        }
-
     };
 
     @Override
-    public void setBounding(float x, float y, float width, float height) {
-
+    public void setBounding(final float x, final float y, final float width, final float height, final int screenHeight) {
+        androidLauncher.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                FrameLayout.LayoutParams paramsLeft = (FrameLayout.LayoutParams) AndroidDescriptionView.this.getLayoutParams();
+                if (paramsLeft != null) {
+                    paramsLeft.width = (int) width;
+                    paramsLeft.height = (int) height;
+                    AndroidDescriptionView.this.setLayoutParams(paramsLeft);
+                    AndroidDescriptionView.this.setX(x);
+                    AndroidDescriptionView.this.setY(screenHeight - height - y);
+                }
+            }
+        });
     }
 
     @Override
@@ -182,6 +223,11 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     @Override
     public void close() {
 
+    }
+
+    @Override
+    public void setShouldOverrideUrlLoadingCallBack(GenericCallBack<String> shouldOverrideUrlLoadingCallBack) {
+        this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
     }
 
     private Point scrollPos = new Point(0, 0);
