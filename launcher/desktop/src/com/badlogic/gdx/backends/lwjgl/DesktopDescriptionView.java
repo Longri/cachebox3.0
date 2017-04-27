@@ -17,6 +17,7 @@ package com.badlogic.gdx.backends.lwjgl;
 
 import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.PlatformDescriptionView;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -58,6 +59,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
     Thread t;
     boolean cancelThread = false;
     private ScrollBar vScrollbar, hScrollbar;
+    private GenericCallBack<String> shouldOverrideUrlLoadingCallBack;
 
     public DesktopDescriptionView() {
         super(null); // creates a window with no Frame as owner
@@ -152,7 +154,12 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
     }
 
     @Override
-    public void setBounding(final float x, final float y, final float width, final float height) {
+    public void setShouldOverrideUrlLoadingCallBack(GenericCallBack<String> shouldOverrideUrlLoadingCallBack) {
+        this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
+    }
+
+    @Override
+    public void setBounding(final float x, final float y, final float width, final float height, final int screenHeight) {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
@@ -164,6 +171,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
         });
 
     }
+
 
     @Override
     public void setScrollPosition(float x, float y) {
