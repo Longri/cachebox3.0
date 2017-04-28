@@ -35,6 +35,7 @@ import org.oscim.renderer.MapRenderer;
 import org.oscim.theme.ThemeLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.impl.LibgdxLoggerFactory;
 
 import java.text.NumberFormat;
 
@@ -49,6 +50,11 @@ public class CacheboxMain extends ApplicationAdapter {
         ThemeLoader.USE_ATLAS = true;
         COORD_SCALE = 1;
         EventHandler.INIT();
+
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
+        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
+
     }
 
     static Logger log = LoggerFactory.getLogger(CacheboxMain.class);
@@ -62,7 +68,6 @@ public class CacheboxMain extends ApplicationAdapter {
     protected int FpsInfoPos = 0;
 
     private Sprite FpsInfoSprite;
-    private final Matrix4 NORMAL_MATRIX = new Matrix4().toNormalMatrix();
     public static boolean drawMap = false;
 
     // public CacheboxMapAdapter mMap;

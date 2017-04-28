@@ -20,6 +20,6 @@ package de.longri.cachebox3.events;
  */
 public interface ImportProgressChangedListener {
 
-    void progressChanged(ImportProgresChangedEvent event);
+    void progressChanged(ImportProgressChangedEvent event);
 
 }

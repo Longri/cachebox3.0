@@ -31,9 +31,10 @@ import de.longri.cachebox3.apis.groundspeak_api.PostRequest;
 import de.longri.cachebox3.apis.groundspeak_api.search.SearchCoordinate;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.ImportProgresChangedEvent;
+import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.events.ImportProgressChangedListener;
 import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.locator.Coordinate;
@@ -41,7 +42,6 @@ import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
-import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -317,12 +317,21 @@ public class ImportGcPos extends ActivityBase {
     }
 
     private void ImportNow() {
-
-        setWorkAnimationVisible(true);
+        workAnimation.setVisible(true);
 
         final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
             @Override
-            public void progressChanged(ImportProgresChangedEvent event) {
+            public void progressChanged(ImportProgressChangedEvent event) {
+
+                if(event.progress.msg.equals("Start parsing result")){
+                    progressBar.setVisible(true);
+                    lblCaches.setVisible(true);
+                    lblWaypoints.setVisible(true);
+                    lblLogs.setVisible(true);
+                    lblImages.setVisible(true);
+                }
+
+
                 progressBar.setValue(event.progress.progress);
                 lblCaches.setText("Imported Caches: " + event.progress.caches);
                 lblWaypoints.setText("Imported Waypoints: " + event.progress.wayPoints);
@@ -341,7 +350,6 @@ public class ImportGcPos extends ActivityBase {
         try {
             radius = Integer.parseInt(textAreaRadius.getText().toString());
         } catch (NumberFormatException e) {
-            // Kein Integer
             e.printStackTrace();
         }
 
@@ -401,6 +409,9 @@ public class ImportGcPos extends ActivityBase {
 
                                 //close Dialog
                                 finish();
+
+                                //fire CacheList changed event
+                                CacheListChangedEventList.Call();
                             }
                         }
                     }, gpxFilename.Id);
