@@ -480,15 +480,6 @@ public abstract class Search extends PostRequest {
 
         };
         parser.parse(stream,length);
-
-        if (Database.Data != null) { // maybe NULL with JUnit
-            Database.Data.setTransactionSuccessful();
-            Database.Data.endTransaction();
-            Database.Data.GPXFilenameUpdateCacheCount();
-            CacheListChangedEventList.Call();
-        }
-
-
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -541,8 +532,6 @@ public abstract class Search extends PostRequest {
 
     public void postRequest(GenericCallBack<Integer> callBack, long gpxFilenameId) {
         this.gpxFilenameId = gpxFilenameId;
-        if (Database.Data != null)//Maybe NULL with JUnit
-            Database.Data.beginTransaction();
         this.post(callBack);
     }
 
