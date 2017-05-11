@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -41,7 +42,7 @@ public class AboutView extends AbstractView implements de.longri.cachebox3.event
         coordinateLabel.setPosition(10, 10);
         this.addActor(coordinateLabel);
 
-        versionLabel = new VisLabel("CB 3.0." + BuildInfo.getRevison() + "\n" + BuildInfo.getDetail());
+        versionLabel = new VisLabel("CB 3.0." + BuildInfo.getRevision() + "\n" );
         versionLabel.setAlignment(Align.center);
         versionLabel.setPosition(10, this.getHeight() / 2);
         this.addActor(versionLabel);
@@ -78,12 +79,17 @@ public class AboutView extends AbstractView implements de.longri.cachebox3.event
     }
 
     private void setText() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(pos != null ? pos.formatCoordinateLineBreak() : "???");
-        sb.append("\n");
-        sb.append(distance == -1 ? "???" : UnitFormatter.distanceString(distance,false));
-        coordinateLabel.setText(sb);
-        CB.requestRendering();
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                StringBuilder sb = new StringBuilder();
+                sb.append(pos != null ? pos.formatCoordinateLineBreak() : "???");
+                sb.append("\n");
+                sb.append(distance == -1 ? "???" : UnitFormatter.distanceString(distance,false));
+                coordinateLabel.setText(sb);
+                CB.requestRendering();
+            }
+        });
     }
 
     public String toString() {

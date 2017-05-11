@@ -1003,7 +1003,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
     public String getLongDescription() {
         if (detail != null) {
             if (detail.getLongDescription() == null || detail.getLongDescription().length() == 0) {
-                return CacheDAO.GetDescription(this);
+                return CacheDAO.getDescription(this);
             }
             return detail.getLongDescription();
         } else {

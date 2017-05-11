@@ -185,7 +185,7 @@ public class CacheInfoList {
 //            }
 
             // handling logs
-            String stringForListingCheckSum = CacheDAO.GetDescription(cache);
+            String stringForListingCheckSum = CacheDAO.getDescription(cache);
             String recentOwnerLogString = "";
 
 //            CB_List<LogEntry> cleanLogs = new CB_List<LogEntry>();
@@ -308,7 +308,7 @@ public class CacheInfoList {
      */
     public static void putNewInfo(Cache cache) {
         CacheInfo info = new CacheInfo(cache.Id, cache.getGPXFilename_ID());
-        String stringForListingCheckSum = CacheDAO.GetDescription(cache);
+        String stringForListingCheckSum = CacheDAO.getDescription(cache);
         String recentOwnerLogString = "";
 
 //        CB_List<LogEntry> cleanLogs = new CB_List<LogEntry>();

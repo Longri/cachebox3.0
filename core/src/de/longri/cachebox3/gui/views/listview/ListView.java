@@ -409,7 +409,11 @@ public class ListView extends WidgetGroup {
                     //add ClickListener
                     item.addListener(onListItemClickListener);
                 }
-                adapter.update(item);
+                try {
+                    adapter.update(item);
+                } catch (Exception e) {
+                    log.error("Update:",e);
+                }
             }
         }
     };
@@ -418,6 +422,13 @@ public class ListView extends WidgetGroup {
     public void draw(Batch batch, float parentAlpha) {
 
         synchronized (indexList) {
+
+            if (listCount != adapter.getCount()) {
+                //adapter has changed!
+                log.debug("List count has changed! set Adapter new!");
+                setAdapter(this.adapter);
+            }
+
 
             if (scrollPane == null) return;
 

@@ -23,9 +23,11 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
+import com.badlogic.gdx.sqlite.android.AndroidDatabaseManager;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -40,13 +42,14 @@ import java.io.InputStream;
  */
 public class AndroidPlatformConnector extends PlatformConnector {
     final static Logger log = LoggerFactory.getLogger(AndroidPlatformConnector.class);
-    private static final int REQUEST_CODE_GET_API_KEY = 987654321;
-    private final AndroidApplication application;
+    private static final int REQUEST_CODE_GET_API_KEY = 987;
+    private final AndroidLauncherfragment application;
     public static AndroidPlatformConnector platformConnector;
 
-    public AndroidPlatformConnector(AndroidApplication app) {
+    public AndroidPlatformConnector(AndroidLauncherfragment app) {
         this.application = app;
         platformConnector = this;
+        SQLiteGdxDatabaseFactory.setDatabaseManager(new AndroidDatabaseManager());
     }
 
 
@@ -64,6 +67,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
     protected void _switchTorch() {
 //TODO implement tourch
     }
+
 
     @Override
     public Bitmap getRealScaledSVG(String name, InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
@@ -89,7 +93,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
 
         // GPS
         // Get the location manager
-        locationManager = (LocationManager) this.application.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) this.application.getContext().getSystemService(Context.LOCATION_SERVICE);
 
         final int updateTime = 1000; // 1s
 
@@ -110,9 +114,9 @@ public class AndroidPlatformConnector extends PlatformConnector {
             public void run() {
                 try {
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 5, locationListener);
-                    if (ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application, Manifest.permission.ACCESS_FINE_LOCATION)
+                    if (ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application.getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application, Manifest.permission.ACCESS_COARSE_LOCATION)
+                            ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
                                     != PackageManager.PERMISSION_GRANTED) {
                         return;
                     }
@@ -131,7 +135,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
 
     @Override
     public FileHandle _getSandBoxFileHandle(String fileName) {
-        File dir = this.application.getFilesDir();
+        File dir = this.application.getContext().getFilesDir();
         File file = new File(dir, fileName);
         return Gdx.files.absolute(file.getAbsolutePath());
     }
@@ -147,12 +151,35 @@ public class AndroidPlatformConnector extends PlatformConnector {
     @Override
     protected void generateApiKey(GenericCallBack<String> callBack) {
         this.callBack = callBack;
-        Intent intent = new Intent().setClass(application, GenerateApiKeyWebView.class);
-        if (intent.resolveActivity(application.getPackageManager()) != null) {
+        Intent intent = new Intent().setClass(application.getContext(), GenerateApiKeyWebView.class);
+        if (intent.resolveActivity(application.getContext().getPackageManager()) != null) {
             application.startActivityForResult(intent, REQUEST_CODE_GET_API_KEY);
         } else {
             log.error(intent.getAction() + " not installed.");
         }
 
+    }
+
+    private AndroidDescriptionView descriptionView;
+
+    @Override
+    protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
+
+        this.application.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                descriptionView = new AndroidDescriptionView(AndroidPlatformConnector.this.application.getContext());
+                callBack.callBack(descriptionView);
+                AndroidPlatformConnector.this.application.show(descriptionView);
+            }
+        });
+    }
+
+    @Override
+    protected void descriptionViewToNull() {
+        if (descriptionView != null) {
+            AndroidPlatformConnector.this.application.removeView(descriptionView);
+        }
+        descriptionView = null;
     }
 }

@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -223,8 +224,13 @@ public class Slider extends WidgetGroup {
             this.addActor(nameLabel);
         }
 
-        private void setCacheName(CharSequence name) {
-            nameLabel.setText(name);
+        private void setCacheName(final CharSequence name) {
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    nameLabel.setText(name);
+                }
+            });
         }
 
         @Override

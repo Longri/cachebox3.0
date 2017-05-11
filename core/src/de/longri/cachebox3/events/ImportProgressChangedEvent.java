@@ -18,22 +18,23 @@ package de.longri.cachebox3.events;
 /**
  * Created by Longri on 23.03.2017.
  */
-public class ImportProgresChangedEvent extends AbstractEvent<ImportProgresChangedEvent.ImportProgress> {
+public class ImportProgressChangedEvent extends AbstractEvent<ImportProgressChangedEvent.ImportProgress> {
 
     public static class ImportProgress {
         public int progress, caches, wayPoints, logs, images;
+        public String msg = "";
     }
 
 
-    public final ImportProgresChangedEvent.ImportProgress progress;
+    public final ImportProgressChangedEvent.ImportProgress progress;
 
-    public ImportProgresChangedEvent(ImportProgresChangedEvent.ImportProgress progress) {
-        super(ImportProgresChangedEvent.ImportProgress.class);
+    public ImportProgressChangedEvent(ImportProgressChangedEvent.ImportProgress progress) {
+        super(ImportProgressChangedEvent.ImportProgress.class);
         this.progress = progress;
     }
 
-    public ImportProgresChangedEvent(ImportProgresChangedEvent.ImportProgress progress, short id) {
-        super(ImportProgresChangedEvent.ImportProgress.class, id);
+    public ImportProgressChangedEvent(ImportProgressChangedEvent.ImportProgress progress, short id) {
+        super(ImportProgressChangedEvent.ImportProgress.class, id);
         this.progress = progress;
     }
 
