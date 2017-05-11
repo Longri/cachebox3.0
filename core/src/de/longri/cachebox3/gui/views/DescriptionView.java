@@ -70,6 +70,11 @@ public class DescriptionView extends AbstractView {
                 if (actCache != null) {
                     nonLocalImages.clear();
                     nonLocalImagesUrl.clear();
+
+                    if (!actCache.isDetailLoaded()) {
+                        log.warn("Details not loaded for Cache: {}", actCache);
+                    }
+
                     String cacheHtml = actCache.getLongDescription() + actCache.getShortDescription();
                     String html = "";
                     if (actCache.getApiState() == 1)// GC.com API lite
@@ -152,7 +157,7 @@ public class DescriptionView extends AbstractView {
 
     @Override
     public void onHide() {
-        if(EventHandler.getSelectedCache()!=null){
+        if (EventHandler.getSelectedCache() != null) {
             lastCacheId = EventHandler.getSelectedCache().Id;
             lastX = view.getScrollPositionX();
             lastY = view.getScrollPositionY();
