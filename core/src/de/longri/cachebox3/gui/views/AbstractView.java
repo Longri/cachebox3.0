@@ -15,7 +15,7 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
@@ -33,7 +33,6 @@ public abstract class AbstractView extends CB_View_Base {
 
     public AbstractView(String name) {
         super(name);
-        create();
     }
 
 
@@ -43,7 +42,7 @@ public abstract class AbstractView extends CB_View_Base {
         nameLabel.setAlignment(Align.center);
         nameLabel.setPosition(10, 10);
 
-        colorWidget = new ColorWidget(CB.getSkin().get("abstract_background",SkinColor.class));
+        colorWidget = new ColorWidget(CB.getSkin().get("abstract_background", SkinColor.class));
         colorWidget.setBounds(0, 0, this.getWidth(), this.getHeight());
 
         this.addActor(colorWidget);

@@ -58,4 +58,24 @@ public class BuildInfo {
     public static void setTestBuildInfo(String testBuildInfo) {
         rev = testBuildInfo;
     }
+
+    public static String getVersion() {
+        if (rev == null) readInfo();
+        return ver;
+    }
+
+    public static String getSHA() {
+        if (rev == null) readInfo();
+        return sha;
+    }
+
+    public static String getBranch() {
+        if (rev == null) readInfo();
+        return bra;
+    }
+
+    public static String getBuildDate() {
+        if (rev == null) readInfo();
+        return dat;
+    }
 }

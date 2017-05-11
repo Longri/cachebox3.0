@@ -18,6 +18,7 @@ package de.longri.cachebox3;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
@@ -100,6 +101,8 @@ public class CB {
     public static ThemeFile actThemeFile;
     public static IRenderTheme actTheme;
     public static LinkedHashMap<Object, TextureRegion> textureRegionMap;
+    public static Image CB_Logo;
+    public static Image backgroundImage;
 
     private CB() {
     }

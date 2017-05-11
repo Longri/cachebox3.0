@@ -105,7 +105,7 @@ public class ImportGcPos extends ActivityBase {
 
         initialContent();
         setWorkAnimationVisible(false);
-        this.setDebug(true, true);
+//        this.setDebug(true, true);
     }
 
     @Override

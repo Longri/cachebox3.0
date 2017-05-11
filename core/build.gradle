@@ -38,7 +38,7 @@ task saveBuildInfo {
         // get the current git branch, if any
         def git_ver_tag = new ByteArrayOutputStream()
         exec {
-            commandLine 'git', 'describe', '--tags', '--abbrev=0', '--match','V*'
+            commandLine 'git', 'describe', '--tags', '--abbrev=0', '--match', 'V*'
             standardOutput = git_ver_tag
             // ignore error output as we might not be on a branch
             ignoreExitValue = true
@@ -64,8 +64,8 @@ task saveBuildInfo {
         def build_time = new Date().toString()
 
         // save the combined build info into assets/build.info file
-        def result_line =git_ver_tag.toString().trim() + "#" + git_revison + "#" + git_branch_or_tag + "#" + git_version + " (" +
-                build_time + ")\n"
+        def result_line = git_ver_tag.toString().trim() + "#" + git_revison + "#" + git_branch_or_tag + "#" + git_version + "#" +
+                build_time
         def assetsDir = "$projectDir/../launcher/android/assets"
         def buildInfoFile = new File(assetsDir, 'build.info').getAbsolutePath()
         new File(buildInfoFile).write(result_line)

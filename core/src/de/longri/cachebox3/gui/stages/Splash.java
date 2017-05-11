@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.stages.initial_tasks.*;
@@ -62,7 +63,7 @@ public class Splash extends NamedStage {
 
 
     VisProgressBar progress;
-    Image CB_Logo, OSM_Logo, Route_Logo, Mapsforge_Logo, LibGdx_Logo, GC_Logo;
+    Image  OSM_Logo, Route_Logo, Mapsforge_Logo, LibGdx_Logo, GC_Logo;
 
     Label descTextView;
 
@@ -76,10 +77,10 @@ public class Splash extends NamedStage {
         super("splash");
         this.loadReadyHandler = loadReadyHandler;
         Texture backgroundTexture = new Texture("splash-back.jpg");
-        Image background = new Image(backgroundTexture);
-        background.setWidth(Gdx.graphics.getWidth());
-        background.setHeight(Gdx.graphics.getHeight());
-        this.addActor(background);
+        CB.backgroundImage = new Image(backgroundTexture);
+        CB.backgroundImage.setWidth(Gdx.graphics.getWidth());
+        CB.backgroundImage.setHeight(Gdx.graphics.getHeight());
+        this.addActor(CB.backgroundImage);
         InitialView();
     }
 
@@ -92,9 +93,9 @@ public class Splash extends NamedStage {
             float targetWidth = Gdx.graphics.getWidth() * 0.8f;
             Bitmap svgBitmap = PlatformConnector.getSvg("", stream, PlatformConnector.SvgScaleType.SCALED_TO_WIDTH, targetWidth);
             if (svgBitmap != null) {
-                CB_Logo = new Image(new Texture(Utils.getPixmapFromBitmap(svgBitmap)));
-                CB_Logo.setPosition((Gdx.graphics.getWidth() - svgBitmap.getWidth()) / 2, svgBitmap.getHeight() * 2);
-                this.addActor(CB_Logo);
+                CB.CB_Logo = new Image(new Texture(Utils.getPixmapFromBitmap(svgBitmap)));
+                CB.CB_Logo.setPosition((Gdx.graphics.getWidth() - svgBitmap.getWidth()) / 2, svgBitmap.getHeight() * 2);
+                this.addActor(CB.CB_Logo);
             }
         } catch (Exception e) {
             e.printStackTrace();
