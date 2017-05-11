@@ -42,7 +42,7 @@ public class AboutView extends AbstractView implements de.longri.cachebox3.event
         coordinateLabel.setPosition(10, 10);
         this.addActor(coordinateLabel);
 
-        versionLabel = new VisLabel("CB 3.0." + BuildInfo.getRevison() + "\n" + BuildInfo.getDetail());
+        versionLabel = new VisLabel("CB 3.0." + BuildInfo.getRevision() + "\n" );
         versionLabel.setAlignment(Align.center);
         versionLabel.setPosition(10, this.getHeight() / 2);
         this.addActor(versionLabel);

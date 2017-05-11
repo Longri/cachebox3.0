@@ -26,26 +26,28 @@ public class BuildInfo {
     private BuildInfo() {
     }
 
+    private static String ver;
     private static String rev;
-    private static String detail;
+    private static String bra;
+    private static String sha;
+    private static String dat;
 
-    public static String getRevison() {
+    public static String getRevision() {
         if (rev == null) readInfo();
         return rev;
-    }
-
-    public static String getDetail() {
-        if (detail == null) readInfo();
-        return detail;
     }
 
     private static void readInfo() {
         FileHandle fileHandle = Gdx.files.internal("build.info");
         String info = fileHandle.readString("utf-8");
 
-        int pos = info.indexOf(" ");
-        rev = info.substring(0, pos);
-        detail = info.substring(pos);
+        String[] sections = info.split("#");
+
+        ver = sections[0].replace("V", "").replace("x", "");
+        rev = sections[1];
+        bra = sections[2];
+        sha = sections[3];
+        dat = sections[4];
     }
 
     /**

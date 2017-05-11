@@ -79,7 +79,7 @@ public class GetYourUserProfile extends PostRequest {
         json.writeObjectStart("ProfileOptions");
         json.writeObjectEnd();
         json.writeObjectStart("DeviceInfo");
-        json.writeValue("ApplicationSoftwareVersion", BuildInfo.getRevison());
+        json.writeValue("ApplicationSoftwareVersion", BuildInfo.getRevision());
         json.writeValue("DeviceOperatingSystem", getDeviceOperatingSystem());
         json.writeObjectEnd();
     }
