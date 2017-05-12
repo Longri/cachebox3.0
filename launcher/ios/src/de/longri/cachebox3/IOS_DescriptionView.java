@@ -69,31 +69,32 @@ public class IOS_DescriptionView extends UIViewController implements UIWebViewDe
     @Override
     public void setBounding(float x, float y, float width, float height, int screenHeight) {
 
-       log.debug("SetBounds x,y width,height {},{} {},{}",x,y,width,height);
+        log.debug("SetBounds x,y width,height {},{} {},{}", x, y, width, height);
 
-        CGRect rect = new CGRect(x, y, width/2, height/2);
+        CGRect rect = new CGRect(x, y, width / 2, height / 2);
 //        webView.setAccessibilityFrame(rect);
         webView.setBounds(rect);
 
-        float versatz= (screenHeight-height)/2-y;
+        float versatz = (screenHeight - height) / 2 - y;
 
-        CGPoint point=new CGPoint(width/4,(screenHeight/4)+(versatz/2));
+        CGPoint point = new CGPoint(width / 4, (screenHeight / 4) + (versatz / 2));
         webView.setCenter(point);
     }
 
     @Override
     public void setScrollPosition(float x, float y) {
-
+        CGPoint point = new CGPoint(x, y);
+        webView.getScrollView().setContentOffset(point);
     }
 
     @Override
     public float getScrollPositionX() {
-        return 0;
+        return (float) webView.getScrollView().getContentOffset().getX();
     }
 
     @Override
     public float getScrollPositionY() {
-        return 0;
+        return (float) webView.getScrollView().getContentOffset().getY();
     }
 
     @Override
