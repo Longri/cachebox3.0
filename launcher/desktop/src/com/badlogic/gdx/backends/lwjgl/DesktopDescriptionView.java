@@ -36,6 +36,8 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static javafx.concurrent.Worker.State.FAILED;
 
@@ -177,36 +179,57 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
 
 
     @Override
-    public void setScrollPosition(float x, float y) {
-//        if (vScrollbar == null) {
-//            vScrollbar = getVScrollBar(webView, Orientation.VERTICAL);
-//        }
-//
-//        if (hScrollbar == null) {
-//            hScrollbar = getVScrollBar(webView, Orientation.HORIZONTAL);
-//        }
-//
-//        vScrollbar.setValue(10);
-//        hScrollbar.setValue(x);
-
+    public void setScrollPosition(final float x, final float y) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                webView.getEngine().executeScript("window.scrollTo(" + x + ", " + y + ")");
+            }
+        });
     }
 
     @Override
     public float getScrollPositionX() {
-//        if (hScrollbar == null) {
-//            hScrollbar = getVScrollBar(webView, Orientation.HORIZONTAL);
-//        }
-//        return (float) hScrollbar.getValue();
-        return 0;
+        final AtomicBoolean wait = new AtomicBoolean(true);
+        final AtomicInteger value = new AtomicInteger(0);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                value.set((int) webView.getEngine().executeScript("document.body.scrollLeft"));
+                wait.set(false);
+            }
+        });
+
+        while (wait.get()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return (float) value.get();
     }
 
     @Override
     public float getScrollPositionY() {
-//        if (vScrollbar == null) {
-//            vScrollbar = getVScrollBar(webView, Orientation.VERTICAL);
-//        }
-//        return (float) vScrollbar.getValue();
-        return 0;
+        final AtomicBoolean wait = new AtomicBoolean(true);
+        final AtomicInteger value = new AtomicInteger(0);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                value.set((int) webView.getEngine().executeScript("document.body.scrollTop"));
+                wait.set(false);
+            }
+        });
+
+        while (wait.get()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return (float) value.get();
     }
 
     /**
