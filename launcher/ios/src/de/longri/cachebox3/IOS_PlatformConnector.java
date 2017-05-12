@@ -27,6 +27,8 @@ import org.robovm.apple.avfoundation.AVCaptureTorchMode;
 import org.robovm.apple.avfoundation.AVMediaType;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.foundation.NSErrorException;
+import org.robovm.apple.foundation.NSURL;
+import org.robovm.apple.uikit.UIApplication;
 import org.robovm.apple.uikit.UIViewController;
 import org.robovm.apple.uikit.UIWebView;
 import org.slf4j.Logger;
@@ -141,7 +143,7 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     public void openUrlExtern(String link) {
-        //TODO openUrlExtern
+        UIApplication.getSharedApplication().openURL(new NSURL(link));
     }
 
     @Override
