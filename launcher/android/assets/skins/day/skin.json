@@ -1113,6 +1113,10 @@
     }
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "AboutInfo": {
+      "font": "fonts/DroidSans-Italic.ttf",
+      "size": 10
+    },
     "coordinateValueFont": {
       "font": "fonts/DroidSans-Bold.ttf",
       "size": 24
@@ -1390,6 +1394,10 @@
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+    "AboutViewVersionInfoStyle": {
+      "font": "AboutInfo",
+      "fontColor": "font_color"
+    },
     "default": {
       "font": "normal_font",
       "fontColor": "font_color"
