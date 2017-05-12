@@ -42,7 +42,9 @@ public class DescriptionView extends AbstractView {
 
     private static final Logger log = LoggerFactory.getLogger(DescriptionView.class);
 
-    private PlatformDescriptionView view;
+    private static long lastCacheId;
+    private static float lastX, lastY;
+
     private final LinkedList<String> nonLocalImages = new LinkedList<String>();
     private final LinkedList<String> nonLocalImagesUrl = new LinkedList<String>();
 
@@ -59,9 +61,52 @@ public class DescriptionView extends AbstractView {
     };
 
 
+    private PlatformDescriptionView view;
+
+
     public DescriptionView() {
         super("DescriptionView");
+    }
 
+    private String getAttributesHtml(Cache cache) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            Iterator<Attributes> attrs = cache.getAttributes().iterator();
+
+            if (attrs == null || !attrs.hasNext())
+                return "";
+
+            do {
+                Attributes attribute = attrs.next();
+                File result = new File(CB.WorkPath + "/data/Attributes/" + attribute.getImageName() + ".png");
+                sb.append("<form action=\"Attr\">");
+                sb.append("<input name=\"Button\" type=\"image\" src=\"file://" + result.getAbsolutePath() + "\" value=\" " + attribute.getImageName() + " \">");
+            } while (attrs.hasNext());
+
+            sb.append("</form>");
+
+            if (sb.length() > 0)
+                sb.append("<br>");
+            return sb.toString();
+        } catch (Exception ex) {
+            // TODO Handle Exception
+            return "";
+        }
+    }
+
+    @Override
+    public void dispose() {
+        PlatformConnector.setDescriptionViewToNULL();
+    }
+
+    @Override
+    protected void boundsChanged(float x, float y, float width, float height) {
+        if (view != null) view.setBounding(x, y, width, height, Gdx.graphics.getHeight());
+    }
+
+
+    @Override
+    public void onShow() {
         PlatformConnector.getDescriptionView(new GenericCallBack<PlatformDescriptionView>() {
             @Override
             public void callBack(PlatformDescriptionView descriptionView) {
@@ -112,48 +157,7 @@ public class DescriptionView extends AbstractView {
                 boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());
             }
         });
-
-
     }
-
-    private String getAttributesHtml(Cache cache) {
-        StringBuilder sb = new StringBuilder();
-        try {
-            Iterator<Attributes> attrs = cache.getAttributes().iterator();
-
-            if (attrs == null || !attrs.hasNext())
-                return "";
-
-            do {
-                Attributes attribute = attrs.next();
-                File result = new File(CB.WorkPath + "/data/Attributes/" + attribute.getImageName() + ".png");
-                sb.append("<form action=\"Attr\">");
-                sb.append("<input name=\"Button\" type=\"image\" src=\"file://" + result.getAbsolutePath() + "\" value=\" " + attribute.getImageName() + " \">");
-            } while (attrs.hasNext());
-
-            sb.append("</form>");
-
-            if (sb.length() > 0)
-                sb.append("<br>");
-            return sb.toString();
-        } catch (Exception ex) {
-            // TODO Handle Exception
-            return "";
-        }
-    }
-
-    @Override
-    public void dispose() {
-        PlatformConnector.setDescriptionViewToNULL();
-    }
-
-    @Override
-    protected void boundsChanged(float x, float y, float width, float height) {
-        if (view != null) view.setBounding(x, y, width, height, Gdx.graphics.getHeight());
-    }
-
-    private static long lastCacheId;
-    private static float lastX, lastY;
 
     @Override
     public void onHide() {
