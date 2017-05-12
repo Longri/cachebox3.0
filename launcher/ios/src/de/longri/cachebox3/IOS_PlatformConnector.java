@@ -21,6 +21,7 @@ import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.translation.Translation;
 import org.oscim.backend.canvas.Bitmap;
 import org.robovm.apple.avfoundation.AVCaptureDevice;
 import org.robovm.apple.avfoundation.AVCaptureTorchMode;
@@ -143,7 +144,14 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     public void openUrlExtern(String link) {
-        UIApplication.getSharedApplication().openURL(new NSURL(link));
+        log.debug("Open URL @Safari: {}",link);
+        if (link.startsWith("www.")) {
+            link = "http://" + link;
+        }
+       if(! UIApplication.getSharedApplication().openURL(new NSURL(link))){
+           log.error(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
+           CB.viewmanager.toast(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
+       }
     }
 
     @Override
