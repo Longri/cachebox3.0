@@ -27,11 +27,15 @@ import com.badlogic.gdx.utils.SharedLibraryLoader;
 import org.oscim.android.gl.AndroidGL;
 import org.oscim.backend.GLAdapter;
 import org.oscim.gdx.GdxAssets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 26.04.2017.
  */
 public class AndroidLauncherfragment extends AndroidFragmentApplication {
+
+    final static Logger log = LoggerFactory.getLogger(AndroidLauncherfragment.class);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,17 +64,24 @@ public class AndroidLauncherfragment extends AndroidFragmentApplication {
 
 
     public void show(AndroidDescriptionView descriptionView) {
-        ViewGroup.LayoutParams params = new RelativeLayout.LayoutParams(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2);
+        ViewGroup.LayoutParams params = new RelativeLayout.LayoutParams(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 2);
         descriptionView.setX(0);
-        descriptionView.setY(Gdx.graphics.getHeight()/4);
+        descriptionView.setY(Gdx.graphics.getHeight() / 4);
         this.getApplicationWindow().addContentView(descriptionView, params);
+        log.debug("add description view to application window");
     }
 
     public void removeView(final AndroidDescriptionView descriptionView) {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ((ViewGroup) descriptionView.getParent()).removeView(descriptionView);
+                ViewGroup parent = ((ViewGroup) descriptionView.getParent());
+                if (parent != null) {
+                    log.debug("remove description view to application window");
+                    parent.removeView(descriptionView);
+                } else {
+                    log.error("description view has no parent, so can't remove from application window");
+                }
             }
         });
     }

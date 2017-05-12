@@ -151,7 +151,7 @@ public class DescriptionView extends AbstractView {
                             public void run() {
                                 view.setScrollPosition(lastX, lastY);
                             }
-                        }, 0.5f);
+                        }, 0.15f);
                     }
                 }
                 boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());

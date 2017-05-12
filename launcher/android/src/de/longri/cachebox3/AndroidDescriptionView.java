@@ -68,22 +68,22 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
         }
 
         public void onPageFinished(WebView view, String url) {
-            log.debug("onPageFinished URL: {}",url);
+            log.debug("onPageFinished URL: {}", url);
         }
 
         public void onLoadResource(WebView view, String url) {
-            log.debug("onLoadResource URL: {}",url);
+            log.debug("onLoadResource URL: {}", url);
         }
 
         public void onPageCommitVisible(WebView view, String url) {
-            log.debug("onPageCommitVisible URL: {}",url);
+            log.debug("onPageCommitVisible URL: {}", url);
             shouldOverrideUrlLoadingCallBack.callBack(url);
         }
 
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            log.debug("shouldOverrideUrlLoading URL: {}",url);
+            log.debug("shouldOverrideUrlLoading URL: {}", url);
             shouldOverrideUrlLoadingCallBack.callBack(url);
             if (url.contains("fake://fake.de/Attr")) {
 //                int pos = url.indexOf("+");
@@ -217,12 +217,22 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
     @Override
     public void display() {
-
+        androidLauncher.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                androidLauncher.show(AndroidDescriptionView.this);
+            }
+        });
     }
 
     @Override
     public void close() {
-
+        androidLauncher.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                androidLauncher.removeView(AndroidDescriptionView.this);
+            }
+        });
     }
 
     @Override
