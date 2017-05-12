@@ -21,14 +21,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sqlite.android.AndroidDatabaseManager;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.translation.Translation;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,5 +185,30 @@ public class AndroidPlatformConnector extends PlatformConnector {
             AndroidPlatformConnector.this.application.removeView(descriptionView);
         }
         descriptionView = null;
+    }
+
+    @Override
+    public void openUrlExtern(String link) {
+        try {
+            link = link.trim();
+            if (link.startsWith("www.")) {
+                link = "http://" + link;
+            }
+            Uri uri = Uri.parse(link);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+            intent.setDataAndType(uri, "text/html");
+            if (intent.resolveActivity(application.getContext().getPackageManager()) != null) {
+                log.info("Start activity for " + uri.toString());
+                application.startActivity(intent);
+            } else {
+                log.error("Activity for " + link + " not installed.");
+                CB.viewmanager.toast(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
+            }
+        } catch (Exception exc) {
+            log.error(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")", exc);
+            CB.viewmanager.toast(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
+        }
     }
 }

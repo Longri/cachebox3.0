@@ -136,7 +136,12 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     protected void descriptionViewToNull() {
+//TODO set descriptionViewToNull
+    }
 
+    @Override
+    public void openUrlExtern(String link) {
+        //TODO openUrlExtern
     }
 
     @Override

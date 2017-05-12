@@ -56,7 +56,7 @@ public abstract class PlatformConnector {
     }
 
     public static void getDescriptionView(GenericCallBack<PlatformDescriptionView> callBack) {
-         platformConnector.getPlatformDescriptionView(callBack);
+        platformConnector.getPlatformDescriptionView(callBack);
     }
 
     public static void setDescriptionViewToNULL() {
@@ -64,6 +64,12 @@ public abstract class PlatformConnector {
     }
 
     protected abstract void descriptionViewToNull();
+
+    public static void _openUrlExtern(String link) {
+        platformConnector.openUrlExtern(link);
+    }
+
+    public abstract void openUrlExtern(String link);
 
     // SVG implementations #############################################################################################
     public enum SvgScaleType {

@@ -25,6 +25,7 @@ import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -89,5 +90,32 @@ public class DesktopPlatformConnector extends PlatformConnector {
     @Override
     protected void descriptionViewToNull() {
         descriptionView.close();
+    }
+
+    @Override
+    public void openUrlExtern(String link) {
+        java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+
+        if (!desktop.isSupported(java.awt.Desktop.Action.BROWSE)) {
+
+            System.err.println("Desktop doesn't support the browse action (fatal)");
+            System.exit(1);
+        }
+
+        try {
+            java.net.URI uri = null;
+            if (link.startsWith("file://")) {
+                File f = new File(link.replace("file://", ""));
+                uri = f.toURI();
+            } else {
+                uri = new java.net.URI(link);
+            }
+
+            desktop.browse(uri);
+
+        } catch (Exception e) {
+
+            System.err.println(e.getMessage());
+        }
     }
 }

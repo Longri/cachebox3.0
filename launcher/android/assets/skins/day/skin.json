@@ -1026,6 +1026,12 @@
     }
   },
   "de.longri.cachebox3.utils.SkinColor": {
+    "LinColor": {
+      "r": 0.02745098,
+      "g": 0.02745098,
+      "b": 0.6784314,
+      "a": 1
+    },
     "abstract_background": {
       "r": 1,
       "a": 1
@@ -1115,7 +1121,11 @@
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "AboutInfo": {
       "font": "fonts/DroidSans-Italic.ttf",
-      "size": 10
+      "size": 12
+    },
+    "AboutSmall": {
+      "font": "fonts/DroidSans.ttf",
+      "size": 18
     },
     "coordinateValueFont": {
       "font": "fonts/DroidSans-Bold.ttf",
@@ -1394,6 +1404,14 @@
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+    "AboutLinkLabel": {
+      "font": "AboutSmall",
+      "fontColor": "LinColor"
+    },
+    "AboutSmall": {
+      "font": "AboutInfo",
+      "fontColor": "font_color"
+    },
     "AboutViewVersionInfoStyle": {
       "font": "AboutInfo",
       "fontColor": "font_color"

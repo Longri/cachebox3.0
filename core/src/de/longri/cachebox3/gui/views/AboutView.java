@@ -16,14 +16,17 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.UnitFormatter;
@@ -33,7 +36,10 @@ import de.longri.cachebox3.utils.UnitFormatter;
  */
 public class AboutView extends AbstractTableView implements de.longri.cachebox3.events.PositionChangedListener, de.longri.cachebox3.events.DistanceChangedListener {
 
-    VisLabel coordinateLabel, versionLabel;
+
+    public static final String aboutMsg1 = "Team Cachebox (2011-2017)";
+    public static final String teamLink = "www.team-cachebox.de";
+    public static final String aboutMsg2 = "Cache Icons Copyright 2009,\nGroundspeak Inc. Used with permission";
 
 
     public AboutView() {
@@ -43,10 +49,10 @@ public class AboutView extends AbstractTableView implements de.longri.cachebox3.
 
     @Override
     protected void create() {
-        contentTable.setDebug(true, true);
+//        contentTable.setDebug(true, true);
         contentTable.setBackground(CB.backgroundImage.getDrawable());
 
-        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx2*3));
+        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx2 * 3));
         contentTable.row();
         contentTable.add(CB.CB_Logo).center();
         contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx2));
@@ -67,16 +73,44 @@ public class AboutView extends AbstractTableView implements de.longri.cachebox3.
         contentTable.add(versionInfoLabel).center();
         contentTable.row();
 
+        Label.LabelStyle aboutStyle = null;
+        try {
+            aboutStyle = VisUI.getSkin().get("AboutSmall", Label.LabelStyle.class);
+        } catch (Exception e) {
+        }
+
+        VisLabel aboutLabel1 = new VisLabel(aboutMsg1, aboutStyle == null ? VisUI.getSkin().get(Label.LabelStyle.class) : aboutStyle);
+        contentTable.add(aboutLabel1).center();
+        contentTable.row();
+
+
+        Label.LabelStyle linkStyle = null;
+        try {
+            linkStyle = VisUI.getSkin().get("AboutLinkLabel", Label.LabelStyle.class);
+        } catch (Exception e) {
+        }
+
+        VisLabel teamLinkLabel = new VisLabel(teamLink, linkStyle == null ? VisUI.getSkin().get(Label.LabelStyle.class) : linkStyle);
+        contentTable.add(teamLinkLabel).center();
+        contentTable.row();
+
+        teamLinkLabel.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                PlatformConnector._openUrlExtern(teamLink);
+            }
+        });
+
+
+        VisLabel aboutLabel2 = new VisLabel(aboutMsg2, aboutStyle == null ? VisUI.getSkin().get(Label.LabelStyle.class) : aboutStyle);
+        aboutLabel2.setAlignment(Align.center);
+        contentTable.add(aboutLabel2).center();
+        contentTable.row();
+
+
         // bottom fill
         contentTable.row().expandY().fillY().bottom();
         contentTable.add();
         contentTable.row();
-
-
-        coordinateLabel = new VisLabel(this.NAME);
-        coordinateLabel.setAlignment(Align.center);
-        coordinateLabel.setPosition(10, 10);
-        this.addActor(coordinateLabel);
 
 
         //register as Location receiver
@@ -90,10 +124,10 @@ public class AboutView extends AbstractTableView implements de.longri.cachebox3.
         de.longri.cachebox3.events.EventHandler.remove(this);
     }
 
-    protected void boundsChanged(float x, float y, float width, float height) {
-        super.boundsChanged(x, y, width, height);
-        coordinateLabel.setBounds(0, 0, this.getWidth(), this.getHeight());
-    }
+//    protected void boundsChanged(float x, float y, float width, float height) {
+//        super.boundsChanged(x, y, width, height);
+//
+//    }
 
 
     Coordinate pos;
@@ -102,27 +136,13 @@ public class AboutView extends AbstractTableView implements de.longri.cachebox3.
     @Override
     public void positionChanged(de.longri.cachebox3.events.PositionChangedEvent event) {
         pos = event.pos;
-        setText();
+
     }
 
     @Override
     public void distanceChanged(de.longri.cachebox3.events.DistanceChangedEvent event) {
         distance = event.distance;
-        setText();
-    }
 
-    private void setText() {
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                StringBuilder sb = new StringBuilder();
-                sb.append(pos != null ? pos.formatCoordinateLineBreak() : "???");
-                sb.append("\n");
-                sb.append(distance == -1 ? "???" : UnitFormatter.distanceString(distance, false));
-                coordinateLabel.setText(sb);
-                CB.requestRendering();
-            }
-        });
     }
 
     public String toString() {

@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
@@ -59,7 +60,9 @@ public class AndroidLauncherfragment extends AndroidFragmentApplication {
 
 
     public void show(AndroidDescriptionView descriptionView) {
-        ViewGroup.LayoutParams params = new RelativeLayout.LayoutParams(800, 800);
+        ViewGroup.LayoutParams params = new RelativeLayout.LayoutParams(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2);
+        descriptionView.setX(0);
+        descriptionView.setY(Gdx.graphics.getHeight()/4);
         this.getApplicationWindow().addContentView(descriptionView, params);
     }
 
