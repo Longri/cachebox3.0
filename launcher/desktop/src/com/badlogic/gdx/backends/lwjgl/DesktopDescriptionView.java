@@ -71,8 +71,11 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
+
+                int yPos = (int) (Gdx.graphics.getHeight() - height);
+
                 DesktopDescriptionView.this.setBounds((int) (Display.getX() + x)
-                        , (int) (Display.getY() + 22 + y)
+                        , (int) (Display.getY() + yPos - (y - 20))
                         , (int) width, (int) height);
                 DesktopDescriptionView.this.setAlwaysOnTop(true);
                 DesktopDescriptionView.this.setFocusable(true);

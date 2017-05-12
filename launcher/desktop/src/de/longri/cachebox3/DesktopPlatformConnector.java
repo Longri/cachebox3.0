@@ -90,6 +90,7 @@ public class DesktopPlatformConnector extends PlatformConnector {
     @Override
     protected void descriptionViewToNull() {
         descriptionView.close();
+        descriptionView=null;
     }
 
     @Override
