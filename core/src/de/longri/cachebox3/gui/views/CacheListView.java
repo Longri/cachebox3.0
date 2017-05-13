@@ -64,10 +64,10 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
             CacheWithWP nearstCacheWp = Database.Data.Query.Resort(de.longri.cachebox3.events.EventHandler.getSelectedCoord(),
                     new CacheWithWP(de.longri.cachebox3.events.EventHandler.getSelectedCache(), de.longri.cachebox3.events.EventHandler.getSelectedWaypoint()));
 
-            if (nearstCacheWp != null) {
-                de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedCacheChangedEvent(nearstCacheWp.getCache()));
-                de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedWayPointChangedEvent(nearstCacheWp.getWaypoint()));
-            }
+//            if (nearstCacheWp != null) {
+//                de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedCacheChangedEvent(nearstCacheWp.getCache()));
+//                de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedWayPointChangedEvent(nearstCacheWp.getWaypoint()));
+//            }
         }
         log.debug("Finish resort Query");
     }
@@ -155,17 +155,24 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     }
                 });
 
-                int selectedIndex = 0;
-                for (Cache cache : Database.Data.Query) {
-                    if (cache.equals(de.longri.cachebox3.events.EventHandler.getSelectedCache())) {
-                        break;
-                    }
-                    selectedIndex++;
-                }
 
-                listView.setSelectedItem(selectedIndex);
-                listView.setSelectedItemVisible();
-                log.debug("Finish Thread add new listView");
+
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        int selectedIndex = 0;
+                        for (Cache cache : Database.Data.Query) {
+                            if (cache.equals(de.longri.cachebox3.events.EventHandler.getSelectedCache())) {
+                                break;
+                            }
+                            selectedIndex++;
+                        }
+                        listView.setSelection(selectedIndex);
+                        listView.setSelectedItemVisible();
+                        log.debug("Finish Thread add new listView");
+                    }
+                });
+
             }
         });
         thread.start();
@@ -210,7 +217,6 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         layout();
     }
 
-
     private void setChangedFlagToAllItems() {
         if (listView == null) return;
         SnapshotArray<ListViewItem> allItems = listView.items();
@@ -247,5 +253,9 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     public String toString() {
         return "CacheListView";
+    }
+
+    private void setSelectedCacheVisible(){
+
     }
 }

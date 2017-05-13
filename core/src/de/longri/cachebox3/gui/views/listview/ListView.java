@@ -108,9 +108,9 @@ public class ListView extends WidgetGroup {
     //##################################################################
 
 
-    public void setSelectedItem(int selectedIndex) {
-        if (itemViews != null && itemViews.size > 0) selectedItemList.add(itemViews.get(selectedIndex));
-    }
+//    public void setSelectedItem(int selectedIndex) {
+//        if (itemViews != null && itemViews.size > 0) selectedItemList.add(itemViews.get(selectedIndex));
+//    }
 
     public synchronized void dispose() {
 
@@ -412,7 +412,7 @@ public class ListView extends WidgetGroup {
                 try {
                     adapter.update(item);
                 } catch (Exception e) {
-                    log.error("Update:",e);
+                    log.error("Update:", e);
                 }
             }
         }
@@ -579,16 +579,18 @@ public class ListView extends WidgetGroup {
         ListViewItem item = this.selectedItemList.size == 0 ? null : this.selectedItemList.get(0);
         float scrollPos = 0;
         if (item != null) {
-            int index = item.getListIndex();
-            scrollPos = completeHeight - (itemYPos.get(index) + item.getHeight());
+            int index = item.getListIndex() - 1;
+            scrollPos = index < 0 ? 0 : completeHeight - (itemYPos.get(index) + item.getHeight());
         }
         this.setScrollPos(scrollPos);
+        log.debug("Scroll to selected item {} at position {}", item.getListIndex(), scrollPos);
     }
 
     public void setSelection(int index) {
         if (this.selectionType == NONE) return;
+        log.debug("Set selected item to index {}", index);
         this.selectedItemList.clear();
-        ListViewItem item = itemViews.get(index);
+        ListViewItem item = adapter.getView(index);
         this.selectedItemList.add(item);
         Gdx.graphics.requestRendering();
     }

@@ -147,13 +147,20 @@ public class WaypointView extends AbstractView {
                 listView.addSelectionChangedEventListner(new ListView.SelectionChangedEvent() {
                     @Override
                     public void selectionChanged() {
-                        CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
-                        int selectedItemListIndex = selectedItem.getListIndex();
 
-                        Cache cache = Database.Data.Query.get(selectedItemListIndex);
-                        log.debug("Cache selection changed to: " + cache.toString());
-                        //set selected Cache global
-                        de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedCacheChangedEvent(cache));
+                        if (listView.getSelectedItem() instanceof WayPointListItem) {
+
+                            //TODO set selected Waypoint
+
+                        } else {
+                            CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
+                            int selectedItemListIndex = selectedItem.getListIndex();
+
+                            Cache cache = Database.Data.Query.get(selectedItemListIndex);
+                            log.debug("Cache selection changed to: " + cache.toString());
+                            //set selected Cache global
+                            de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedCacheChangedEvent(cache));
+                        }
                     }
                 });
 
@@ -165,7 +172,7 @@ public class WaypointView extends AbstractView {
                     selectedIndex++;
                 }
 
-                listView.setSelectedItem(selectedIndex);
+                listView.setSelection(selectedIndex);
                 listView.setSelectedItemVisible();
                 log.debug("Finish Thread add new listView");
             }
@@ -269,7 +276,7 @@ public class WaypointView extends AbstractView {
                 , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().Id, "", newGcCode);
 
 
-        EditWaypoint editWaypoint = new EditWaypoint(newWP,true);
+        EditWaypoint editWaypoint = new EditWaypoint(newWP, true);
         editWaypoint.show();
     }
 
