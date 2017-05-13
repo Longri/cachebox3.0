@@ -17,15 +17,22 @@ package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
+import de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +78,19 @@ public class EditWaypoint extends ActivityBase {
         coordinateButton = new CoordinateButton(waypoint);
         startCheckBox = new VisCheckBox("");
 
-        contentTable.add(cacheTitelLabel).colspan(2);
+
+        WayPointListItemStyle waypointStyle = VisUI.getSkin().get("WayPointListItems", WayPointListItemStyle.class);
+        Array<Drawable> itemList = new Array<>();
+        itemList.add(CacheTypes.ReferencePoint.getDrawable(waypointStyle.typeStyle));
+        itemList.add(CacheTypes.MultiStage.getDrawable(waypointStyle.typeStyle));
+        itemList.add(CacheTypes.MultiQuestion.getDrawable(waypointStyle.typeStyle));
+        itemList.add(CacheTypes.Trailhead.getDrawable(waypointStyle.typeStyle));
+        itemList.add(CacheTypes.ParkingArea.getDrawable(waypointStyle.typeStyle));
+        itemList.add(CacheTypes.Final.getDrawable(waypointStyle.typeStyle));
+
+
+        contentTable.setDebug(true, true);
+        contentTable.add(cacheTitelLabel).colspan(2).expandX().fillX();
         contentTable.row();
         contentTable.add(coordinateButton).colspan(2);
         contentTable.row();
@@ -79,17 +98,22 @@ public class EditWaypoint extends ActivityBase {
         contentTable.row();
         contentTable.add(null, startCheckBox);
         contentTable.row();
-        contentTable.add(titleLabel);
+        contentTable.add(titleLabel).left();
         contentTable.row();
-        contentTable.add(titleTextArea).colspan(2);
+        contentTable.add(titleTextArea).colspan(2).left();
         contentTable.row();
-        contentTable.add(descriptionLabel);
+        contentTable.add(descriptionLabel).left();
         contentTable.row();
-        contentTable.add(descriptionTextArea).colspan(2);
+        contentTable.add(descriptionTextArea).colspan(2).left();
         contentTable.row();
-        contentTable.add(clueLabel);
+        contentTable.add(clueLabel).left();
         contentTable.row();
-        contentTable.add(clueTextArea).colspan(2);
+        contentTable.add(clueTextArea).colspan(2).left();
+
+        // bottom fill
+        contentTable.row().expandY().fillY().bottom();
+        contentTable.add();
+        contentTable.row();
 
         create();
     }
@@ -142,6 +166,9 @@ public class EditWaypoint extends ActivityBase {
         y += CB.scaledSizes.MARGIN + btnCancel.getHeight();
 
         scrollPane.setBounds(x, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGINx2));
+        contentTable.setBounds(x, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGINx2));
+
+        contentTable.layout();
 
     }
 }

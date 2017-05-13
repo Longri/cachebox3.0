@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
 import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 
 import java.util.ArrayList;
 
-public enum CacheTypes {
+public enum CacheTypes implements SelectBoxItem {
     Traditional(true), // = 0,
     Multi(true), // = 1,
     Mystery(true), // = 2,
@@ -145,6 +146,20 @@ public enum CacheTypes {
 
     public CacheWidget getCacheWidget(CacheTypeStyle style) {
         return new CacheWidget(this, style);
+    }
+
+    public String getName() {
+        return this.name();
+    }
+
+
+    static CacheTypeStyle cacheListTypeStyle;
+
+    @Override
+    public Drawable getDrawable() {
+        // for select Box interface, use 'cacheList' style
+        if (cacheListTypeStyle == null) cacheListTypeStyle = VisUI.getSkin().get("cacheList", CacheTypeStyle.class);
+        return getDrawable(cacheListTypeStyle);
     }
 
     public Drawable getDrawable(CacheTypeStyle style) { // TODO replace with Skin Style
