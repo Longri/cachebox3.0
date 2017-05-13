@@ -37,14 +37,6 @@ public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap implement
         return name;
     }
 
-
-    //TODO check direct upload of texture on iOS
-    // http://stackoverflow.com/a/9704392/5478780
-    // or use upload of buffered byte array if not internal
-
-
-
-
     private static UIImage getUIImage(InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) {
         String svg = getStringFromInputStream(inputStream);
         SVGRenderer renderer = new SVGRenderer(svg);

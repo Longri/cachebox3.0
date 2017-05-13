@@ -136,4 +136,8 @@ public class WayPointListItem extends ListViewItem implements Disposable {
         }
         distanceLabel = null;
     }
+
+    public String getWaypointName(){
+        return wayPointName.toString();
+    }
 }

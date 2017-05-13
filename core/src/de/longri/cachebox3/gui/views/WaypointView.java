@@ -18,6 +18,8 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedCacheChangedEvent;
+import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
@@ -149,8 +151,13 @@ public class WaypointView extends AbstractView {
                     public void selectionChanged() {
 
                         if (listView.getSelectedItem() instanceof WayPointListItem) {
+                            WayPointListItem selectedItem = (WayPointListItem) listView.getSelectedItem();
+                            int index = selectedItem.getListIndex() - 1;
+                            Waypoint wp = actCache.waypoints.get(index);
 
-                            //TODO set selected Waypoint
+                            log.debug("Waypoint selection changed to: " + wp.toString());
+                            //set selected Waypoint global
+                            EventHandler.fire(new SelectedWayPointChangedEvent(wp));
 
                         } else {
                             CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
@@ -159,14 +166,40 @@ public class WaypointView extends AbstractView {
                             Cache cache = Database.Data.Query.get(selectedItemListIndex);
                             log.debug("Cache selection changed to: " + cache.toString());
                             //set selected Cache global
-                            de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedCacheChangedEvent(cache));
+                            EventHandler.fire(new SelectedCacheChangedEvent(cache));
                         }
                     }
                 });
 
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        Waypoint wp = EventHandler.getSelectedWaypoint();
+                        if (wp == null) {
+                            //select Cache
+                            listView.setSelection(0);
+                            listView.setSelectedItemVisible();
+                        } else {
+                            int index = 0;
+                            for (ListViewItem item : listView.items()) {
+                                if (index == 0) {
+                                    index++;
+                                    continue;
+                                }
+                                WayPointListItem wayPointListItem = (WayPointListItem) item;
+                                if (wayPointListItem.getWaypointName().equals(wp.getGcCode())) {
+                                    listView.setSelection(index);
+                                    listView.setSelectedItemVisible();
+                                    break;
+                                }
+                                index++;
+                            }
+                        }
+                    }
+                });
                 int selectedIndex = 0;
                 for (Cache cache : Database.Data.Query) {
-                    if (cache.equals(de.longri.cachebox3.events.EventHandler.getSelectedCache())) {
+                    if (cache.equals(EventHandler.getSelectedCache())) {
                         break;
                     }
                     selectedIndex++;
