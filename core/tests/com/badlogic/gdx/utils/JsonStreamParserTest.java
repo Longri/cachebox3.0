@@ -87,7 +87,7 @@ class JsonStreamParserTest {
 
         InputStream stream = TestUtils.getResourceRequestStream(file);
         long dummyLength = 1;
-        new JsonReader() {
+        new GdxJsonReader() {
             public void startArray(String name) {
                 super.startArray(name);
                 sb.appendLine("startArray " + name);

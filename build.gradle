@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.1'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.1'
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M3'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4'
     }
 }
 
@@ -57,7 +57,7 @@ project(":desktop") {
 
         //vtm
         compile "org.mapsforge:vtm-gdx:$vtmVersion"
-        compile ("org.mapsforge:vtm-desktop:$vtmVersion"){
+        compile("org.mapsforge:vtm-desktop:$vtmVersion") {
             exclude group: 'com.metsci.ext.com.kitfox.svg'
         }
         compile "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
@@ -79,7 +79,7 @@ project(":gps-simulator") {
         compile 'org.mapsforge:mapsforge-themes:0.7.0'
         compile 'org.mapsforge:mapsforge-map:0.7.0'
         compile 'org.mapsforge:mapsforge-map-reader:0.7.0'
-        compile ("org.mapsforge:mapsforge-map-awt:0.7.0")
+        compile("org.mapsforge:mapsforge-map-awt:0.7.0")
         compile 'com.kitfox.svg:svg-salamander:1.0'
         compile 'net.sf.kxml:kxml2:2.3.0'
 
@@ -190,7 +190,7 @@ project(":ios") {
 //        compile fileTree(dir: 'libs', include: ['*.jar'])
 
         //vtm
-        compile( "org.mapsforge:vtm-ios:$vtmVersion"){
+        compile("org.mapsforge:vtm-ios:$vtmVersion") {
             exclude group: 'org.slf4j', module: 'slf4j-simple'
         }
         natives "org.mapsforge:vtm-ios:$vtmVersion:natives"
@@ -201,9 +201,11 @@ project(":core") {
     apply plugin: "java"
     apply plugin: 'org.junit.platform.gradle.plugin'
 
-    junitPlatform {
-        platformVersion = "1.0.0-M3"
-    }
+
+    ext.junit4Version        = '4.12'
+    ext.junitVintageVersion  = '4.12.0-M4'
+    ext.junitPlatformVersion = '1.0.0-M4'
+    ext.junitJupiterVersion  = '5.0.0-M4'
 
 
     dependencies {
@@ -226,12 +228,12 @@ project(":core") {
 
 
         testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
-        testCompile("org.junit.jupiter:junit-jupiter-api:5.0.0-M3")
+        testCompile("org.junit.jupiter:junit-jupiter-api:5.0.0-M4")
         testCompile "org.mapsforge:vtm-desktop:$vtmVersion"
         testCompile "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
         testCompile "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
         testCompile "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
-        testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0-M3")
+        testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0-M4")
         testCompile 'com.kitfox.svg:svg-salamander:1.0'
         testCompile project(":desktop")
     }
