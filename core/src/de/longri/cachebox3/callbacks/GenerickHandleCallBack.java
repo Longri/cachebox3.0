@@ -16,8 +16,8 @@
 package de.longri.cachebox3.callbacks;
 
 /**
- * Created by longri on 09.04.17.
+ * Created by longri on 14.05.17.
  */
-public interface GenericCallBack<T> {
-    void callBack(T value);
+public interface GenerickHandleCallBack<T> {
+    boolean callBack(T value);
 }

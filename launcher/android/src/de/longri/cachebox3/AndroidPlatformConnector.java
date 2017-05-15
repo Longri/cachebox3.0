@@ -194,11 +194,12 @@ public class AndroidPlatformConnector extends PlatformConnector {
             Uri uri = Uri.parse(link);
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addCategory(Intent.CATEGORY_BROWSABLE);
             intent.setDataAndType(uri, "text/html");
             if (intent.resolveActivity(application.getContext().getPackageManager()) != null) {
                 log.info("Start activity for " + uri.toString());
-                application.startActivity(intent);
+                application.getActivity().startActivity(intent);
             } else {
                 log.error("Activity for " + link + " not installed.");
                 CB.viewmanager.toast(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");

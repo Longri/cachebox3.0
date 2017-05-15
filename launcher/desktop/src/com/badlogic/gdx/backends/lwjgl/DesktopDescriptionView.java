@@ -17,7 +17,7 @@ package com.badlogic.gdx.backends.lwjgl;
 
 import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.PlatformDescriptionView;
-import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.callbacks.GenerickHandleCallBack;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -61,7 +61,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
     Thread t;
     boolean cancelThread = false;
     private ScrollBar vScrollbar, hScrollbar;
-    private GenericCallBack<String> shouldOverrideUrlLoadingCallBack;
+    private GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
 
     public DesktopDescriptionView() {
         super(null); // creates a window with no Frame as owner
@@ -159,7 +159,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
     }
 
     @Override
-    public void setShouldOverrideUrlLoadingCallBack(GenericCallBack<String> shouldOverrideUrlLoadingCallBack) {
+    public void setShouldOverrideUrlLoadingCallBack(GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack) {
         this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
     }
 
@@ -232,25 +232,25 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
         return (float) value.get();
     }
 
-    /**
-     * Returns the vertical scrollbar of the webview.
-     *
-     * @param webView webview
-     * @return vertical scrollbar of the webview or {@code null} if no vertical
-     * scrollbar exists
-     */
-    private ScrollBar getVScrollBar(WebView webView, Orientation orientation) {
-
-        Set<Node> scrolls = webView.lookupAll(".scroll");
-        for (Node scrollNode : scrolls) {
-
-            if (ScrollBar.class.isInstance(scrollNode)) {
-                ScrollBar scroll = (ScrollBar) scrollNode;
-                if (scroll.getOrientation() == orientation) {
-                    return scroll;
-                }
-            }
-        }
-        return null;
-    }
+//    /**
+//     * Returns the vertical scrollbar of the webview.
+//     *
+//     * @param webView webview
+//     * @return vertical scrollbar of the webview or {@code null} if no vertical
+//     * scrollbar exists
+//     */
+//    private ScrollBar getVScrollBar(WebView webView, Orientation orientation) {
+//
+//        Set<Node> scrolls = webView.lookupAll(".scroll");
+//        for (Node scrollNode : scrolls) {
+//
+//            if (ScrollBar.class.isInstance(scrollNode)) {
+//                ScrollBar scroll = (ScrollBar) scrollNode;
+//                if (scroll.getOrientation() == orientation) {
+//                    return scroll;
+//                }
+//            }
+//        }
+//        return null;
+//    }
 }

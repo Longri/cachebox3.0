@@ -21,6 +21,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.PlatformDescriptionView;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.callbacks.GenerickHandleCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
@@ -49,14 +50,98 @@ public class DescriptionView extends AbstractView {
     private final LinkedList<String> nonLocalImagesUrl = new LinkedList<String>();
 
     private final AtomicBoolean FIRST = new AtomicBoolean(true);
-    private final GenericCallBack<String> shouldOverrideUrlLoadingCallBack = new GenericCallBack<String>() {
+    private final GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack = new GenerickHandleCallBack<String>() {
         @Override
-        public void callBack(String url) {
+        public boolean callBack(String url) {
             log.debug("Load Url callback: {}", url);
             if (FIRST.get()) {
                 FIRST.set(false);
                 boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());
             }
+
+            if (url.contains("fake://fake.de/Attr")) {
+//                int pos = url.indexOf("+");
+//                if (pos < 0)
+//                    return true;
+//
+//                final String attr = url.substring(pos + 1, url.length() - 1);
+//
+//                MessageBox.Show(Translation.Get(attr));
+                log.debug("Attribute icon clicked, don't load URL");
+                return true;
+            } else if (url.contains("fake://fake.de?Button")) {
+//                int pos = url.indexOf("+");
+//                if (pos < 0)
+//                    return true;
+//
+//                final String attr = url.substring(pos + 1, url.length() - 1);
+//
+//                MessageBox.Show(Translation.Get(attr));
+                log.debug("Attribute icon clicked, don't load URL");
+                return true;
+            } else if (url.contains("fake://fake.de/download")) {
+
+//                Thread thread = new Thread() {
+//                    @Override
+//                    public void run() {
+//
+//                        if (!CB_Core.Api.GroundspeakAPI.CacheStatusValid) {
+//                            int result = CB_Core.Api.GroundspeakAPI.GetCacheLimits(null);
+//                            if (result != 0) {
+//                                onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(1));
+//                                return;
+//                            }
+//
+//                            if (result == GroundspeakAPI.CONNECTION_TIMEOUT) {
+//                                GL.that.Toast(ConnectionError.INSTANCE);
+//                                return;
+//                            }
+//                            if (result == GroundspeakAPI.API_IS_UNAVAILABLE) {
+//                                GL.that.Toast(ApiUnavailable.INSTANCE);
+//                                return;
+//                            }
+//                        }
+//                        if (CB_Core.Api.GroundspeakAPI.CachesLeft <= 0) {
+//                            String s = "Download limit is reached!\n";
+//                            s += "You have downloaded the full cache details of " + CB_Core.Api.GroundspeakAPI.MaxCacheCount + " caches in the last 24 hours.\n";
+//                            if (CB_Core.Api.GroundspeakAPI.MaxCacheCount < 10)
+//                                s += "If you want to download the full cache details of 6000 caches per day you can upgrade to Premium Member at \nwww.geocaching.com!";
+//
+//                            message = s;
+//
+//                            onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(2));
+//
+//                            return;
+//                        }
+//
+//                        if (!CB_Core.Api.GroundspeakAPI.IsPremiumMember()) {
+//                            String s = "Download Details of this cache?\n";
+//                            s += "Full Downloads left: " + CB_Core.Api.GroundspeakAPI.CachesLeft + "\n";
+//                            s += "Actual Downloads: " + CB_Core.Api.GroundspeakAPI.CurrentCacheCount + "\n";
+//                            s += "Max. Downloads in 24h: " + CB_Core.Api.GroundspeakAPI.MaxCacheCount;
+//                            message = s;
+//                            onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(3));
+//                            return;
+//                        } else {
+//                            // call the download directly
+//                            onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(4));
+//                            return;
+//                        }
+//                    }
+//                };
+//                pd = ProgressDialog.show(getContext(), "", "Download Description", true);
+//
+//                thread.start();
+                log.debug("Get Basic Member description clicked, don't load URL");
+                return true;
+            } else if (url.startsWith("http://")) {
+                // Load Url in ext Browser
+                //TODO PlatformConnector.callUrl(url);
+                log.debug("Link clicked, don't load URL! Show on ext browser");
+                PlatformConnector._openUrlExtern(url);
+                return true;
+            }
+            return false;
         }
     };
 

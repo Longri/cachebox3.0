@@ -22,8 +22,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
-import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.callbacks.GenerickHandleCallBack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +38,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
     final String mimeType = "text/html";
     final String encoding = "utf-8";
-    private GenericCallBack<String> shouldOverrideUrlLoadingCallBack;
+    private GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
 
 
     public AndroidDescriptionView(Context context) {
@@ -58,9 +57,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             String url = request.getUrl().getPath();
-            shouldOverrideUrlLoadingCallBack.callBack(url);
-            log.debug("shouldOverrideUrlLoading: {}", url);
-            return true;
+            return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, url);
         }
 
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -83,91 +80,18 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            log.debug("shouldOverrideUrlLoading URL: {}", url);
-            shouldOverrideUrlLoadingCallBack.callBack(url);
-            if (url.contains("fake://fake.de/Attr")) {
-//                int pos = url.indexOf("+");
-//                if (pos < 0)
-//                    return true;
-//
-//                final String attr = url.substring(pos + 1, url.length() - 1);
-//
-//                MessageBox.Show(Translation.Get(attr));
-                return true;
-            } else if (url.contains("fake://fake.de?Button")) {
-//                int pos = url.indexOf("+");
-//                if (pos < 0)
-//                    return true;
-//
-//                final String attr = url.substring(pos + 1, url.length() - 1);
-//
-//                MessageBox.Show(Translation.Get(attr));
-                return true;
-            } else if (url.contains("fake://fake.de/download")) {
+            return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, url);
+        }
+    };
 
-//                Thread thread = new Thread() {
-//                    @Override
-//                    public void run() {
-//
-//                        if (!CB_Core.Api.GroundspeakAPI.CacheStatusValid) {
-//                            int result = CB_Core.Api.GroundspeakAPI.GetCacheLimits(null);
-//                            if (result != 0) {
-//                                onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(1));
-//                                return;
-//                            }
-//
-//                            if (result == GroundspeakAPI.CONNECTION_TIMEOUT) {
-//                                GL.that.Toast(ConnectionError.INSTANCE);
-//                                return;
-//                            }
-//                            if (result == GroundspeakAPI.API_IS_UNAVAILABLE) {
-//                                GL.that.Toast(ApiUnavailable.INSTANCE);
-//                                return;
-//                            }
-//                        }
-//                        if (CB_Core.Api.GroundspeakAPI.CachesLeft <= 0) {
-//                            String s = "Download limit is reached!\n";
-//                            s += "You have downloaded the full cache details of " + CB_Core.Api.GroundspeakAPI.MaxCacheCount + " caches in the last 24 hours.\n";
-//                            if (CB_Core.Api.GroundspeakAPI.MaxCacheCount < 10)
-//                                s += "If you want to download the full cache details of 6000 caches per day you can upgrade to Premium Member at \nwww.geocaching.com!";
-//
-//                            message = s;
-//
-//                            onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(2));
-//
-//                            return;
-//                        }
-//
-//                        if (!CB_Core.Api.GroundspeakAPI.IsPremiumMember()) {
-//                            String s = "Download Details of this cache?\n";
-//                            s += "Full Downloads left: " + CB_Core.Api.GroundspeakAPI.CachesLeft + "\n";
-//                            s += "Actual Downloads: " + CB_Core.Api.GroundspeakAPI.CurrentCacheCount + "\n";
-//                            s += "Max. Downloads in 24h: " + CB_Core.Api.GroundspeakAPI.MaxCacheCount;
-//                            message = s;
-//                            onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(3));
-//                            return;
-//                        } else {
-//                            // call the download directly
-//                            onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(4));
-//                            return;
-//                        }
-//                    }
-//                };
-//                pd = ProgressDialog.show(getContext(), "", "Download Description", true);
-//
-//                thread.start();
-
-                return true;
-            } else if (url.startsWith("http://")) {
-                // Load Url in ext Browser
-                //TODO PlatformConnector.callUrl(url);
-                return true;
-            }
+    private boolean shouldOverrideUrlLoading(WebView view, String url) {
+        if (!shouldOverrideUrlLoadingCallBack.callBack(url)) {
             view.loadUrl(url);
+            return false;
+        } else {
             return true;
         }
-
-    };
+    }
 
     @Override
     public void setBounding(final float x, final float y, final float width, final float height, final int screenHeight) {
@@ -236,7 +160,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     }
 
     @Override
-    public void setShouldOverrideUrlLoadingCallBack(GenericCallBack<String> shouldOverrideUrlLoadingCallBack) {
+    public void setShouldOverrideUrlLoadingCallBack(GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack) {
         this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
     }
 

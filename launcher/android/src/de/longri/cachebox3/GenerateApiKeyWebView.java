@@ -127,15 +127,6 @@ public class GenerateApiKeyWebView extends Activity {
 
         }
 
-        View titleView = getWindow().findViewById(android.R.id.title);
-//        if (titleView != null) {
-//            ViewParent parent = titleView.getParent();
-//            if (parent != null && (parent instanceof View)) {
-//                View parentView = (View) parent;
-//                parentView.setBackgroundColor(Global.getColor(R.attr.TitleBarBackColor));
-//            }
-//        }
-
         WebControl.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -153,13 +144,11 @@ public class GenerateApiKeyWebView extends Activity {
                     });
 
                 }
-
                 super.onPageStarted(view, url, favicon);
             }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
                 view.loadUrl(url);
                 return true;
             }

@@ -17,14 +17,15 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
-import de.longri.cachebox3.apis.cachebox_api.CB_Api;
-import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.callbacks.GenerickHandleCallBack;
 import org.robovm.apple.coregraphics.CGPoint;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.foundation.NSError;
-import org.robovm.apple.foundation.NSURL;
 import org.robovm.apple.foundation.NSURLRequest;
-import org.robovm.apple.uikit.*;
+import org.robovm.apple.uikit.UIViewController;
+import org.robovm.apple.uikit.UIWebView;
+import org.robovm.apple.uikit.UIWebViewDelegate;
+import org.robovm.apple.uikit.UIWebViewNavigationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +39,7 @@ public class IOS_DescriptionView extends UIViewController implements UIWebViewDe
 
     private final UIWebView webView;
     private final UIViewController mainViewController;
+    private GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
 
     public IOS_DescriptionView(UIViewController mainViewController) {
         webView = new UIWebView(getView().getFrame());
@@ -48,7 +50,8 @@ public class IOS_DescriptionView extends UIViewController implements UIWebViewDe
 
     @Override
     public boolean shouldStartLoad(UIWebView uiWebView, NSURLRequest nsurlRequest, UIWebViewNavigationType uiWebViewNavigationType) {
-        return true;
+        String url = nsurlRequest.getURL().getAbsoluteString();
+        return shouldOverrideUrlLoadingCallBack.callBack(url);
     }
 
     @Override
@@ -118,8 +121,8 @@ public class IOS_DescriptionView extends UIViewController implements UIWebViewDe
     }
 
     @Override
-    public void setShouldOverrideUrlLoadingCallBack(GenericCallBack<String> shouldOverrideUrlLoadingCallBack) {
-
+    public void setShouldOverrideUrlLoadingCallBack(GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack) {
+        this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
     }
 
 }
