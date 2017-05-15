@@ -136,7 +136,6 @@ public class DescriptionView extends AbstractView {
                 return true;
             } else if (url.startsWith("http://")) {
                 // Load Url in ext Browser
-                //TODO PlatformConnector.callUrl(url);
                 log.debug("Link clicked, don't load URL! Show on ext browser");
                 PlatformConnector._openUrlExtern(url);
                 return true;

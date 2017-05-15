@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import org.oscim.backend.canvas.Bitmap;
@@ -65,8 +66,17 @@ public abstract class PlatformConnector {
 
     protected abstract void descriptionViewToNull();
 
-    public static void _openUrlExtern(String link) {
-        platformConnector.openUrlExtern(link);
+    public static void _openUrlExtern(final String link) {
+        if(CB.isMainThread()){
+            platformConnector.openUrlExtern(link);
+        }else{
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    platformConnector.openUrlExtern(link);
+                }
+            });
+        }
     }
 
     public abstract void openUrlExtern(String link);
