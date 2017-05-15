@@ -140,7 +140,7 @@ class JsonStreamParserTest {
             }
 
             public void endArray(String name) {
-                sb2.appendLine("endArray " + name);
+               // will not call on original JasonParser sb2.appendLine("endArray " + name);
             }
 
             public void startObject(String name) {
