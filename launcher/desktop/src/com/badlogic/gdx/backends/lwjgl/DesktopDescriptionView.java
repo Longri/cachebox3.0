@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.net.URI;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -117,6 +118,23 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
                                 }
                             }
                         });
+                // this change listener will trigger when our secondary popupHandlerEngine starts to load the url ...
+                engine.locationProperty().addListener(new ChangeListener<String>() {
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, String location) {
+                        if (!location.isEmpty()) {
+                            if(shouldOverrideUrlLoadingCallBack.callBack(location)){
+                                Platform.runLater(new Runnable() {
+                                    public void run() {
+                                        engine.getLoadWorker().cancel();
+                                        // engine.loadContent(lastValue); // stop loading and unload the url
+                                        // -> does this internally: popupHandlerEngine.getLoadWorker().cancelAndReset();
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                });
 
                 Scene scene = new Scene(webView);
                 jfxPanel.setScene(scene);
@@ -125,8 +143,12 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
         isInitial = true;
     }
 
+
+    String lastValue;
+
     @Override
     public void setHtml(final String html) {
+        lastValue = html;
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
