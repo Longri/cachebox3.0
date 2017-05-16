@@ -149,6 +149,8 @@ public class SkinEditorGame extends Game {
             return "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle";
         } else if (widget.equals("Animation")) {
             return "de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle";
+        } else if (widget.equals("SelectBox")) {
+            return "de.longri.cachebox3.gui.skin.styles.SelectBoxStyle";
         } else {
             return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
         }

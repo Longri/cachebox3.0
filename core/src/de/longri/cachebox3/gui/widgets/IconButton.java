@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
@@ -31,9 +32,14 @@ public class IconButton extends VisTextButton {
 
     public IconButton(String text) {
         super(text);
+        setStyle(getVisTextButtonStyle());
         image = new com.badlogic.gdx.scenes.scene2d.ui.Image(new ColorDrawable(new HSV_Color(0)));
         this.getLabel().setAlignment(Align.center | Align.left);
         this.addActor(image);
+    }
+
+    private VisTextButtonStyle getVisTextButtonStyle() {
+        return VisUI.getSkin().get(VisTextButtonStyle.class);
     }
 
     @Override
@@ -42,7 +48,10 @@ public class IconButton extends VisTextButton {
         this.getCell(this.getLabel()).spaceLeft(CB.scaledSizes.MARGINx2);
         Drawable imageDrawable = image.getDrawable();
         if (imageDrawable != null)
-            image.setBounds(this.getWidth() - (imageDrawable.getMinHeight() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN, imageDrawable.getMinHeight(), imageDrawable.getMinHeight());
+            image.setBounds(this.getWidth() - (imageDrawable.getMinHeight() + CB.scaledSizes.MARGIN),
+                    (this.getHeight() - imageDrawable.getMinHeight()) / 2,
+                    imageDrawable.getMinHeight(),
+                    imageDrawable.getMinHeight());
         super.layout();
     }
 
