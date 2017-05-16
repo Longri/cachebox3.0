@@ -53,7 +53,7 @@ public class Menu extends Window {
     public final static float MORE_MENU_ANIMATION_TIME = 0.3f;
 
     CB_List<ListViewItem> mItems = new CB_List();
-    MenuStyle style;
+    public MenuStyle style;
     final String name;
     ListView listView;
     OnItemClickListener onItemClickListener;
