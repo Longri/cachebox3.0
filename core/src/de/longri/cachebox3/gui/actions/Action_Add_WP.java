@@ -15,17 +15,18 @@
  */
 package de.longri.cachebox3.gui.actions;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.views.WaypointView;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 
@@ -76,9 +77,21 @@ public class Action_Add_WP extends AbstractAction {
                 , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().Id, "", newGcCode);
 
 
-        EditWaypoint editWaypoint = new EditWaypoint(newWP, false);
+        EditWaypoint editWaypoint = new EditWaypoint(newWP, false, new GenericCallBack<Waypoint>() {
+            @Override
+            public void callBack(Waypoint value) {
+                if (value != null) {
+                    EventHandler.fire(new SelectedWayPointChangedEvent(value));
+                    final WaypointDAO waypointDAO = new WaypointDAO();
+                    if (value.IsStart) {
+                        //It must be ensured here that this waypoint is the only one of these Cache,
+                        //which is defined as starting point !!!
+                        waypointDAO.ResetStartWaypoint(EventHandler.getSelectedCache(), value);
+                    }
+                    waypointDAO.WriteToDatabase(value);
+                }
+            }
+        });
         editWaypoint.show();
-
-
     }
 }

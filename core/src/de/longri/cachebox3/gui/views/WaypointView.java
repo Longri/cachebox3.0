@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
@@ -30,6 +31,7 @@ import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
@@ -309,7 +311,23 @@ public class WaypointView extends AbstractView {
                 , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().Id, "", newGcCode);
 
 
-        EditWaypoint editWaypoint = new EditWaypoint(newWP, true);
+        EditWaypoint editWaypoint = new EditWaypoint(newWP, true, new GenericCallBack<Waypoint>() {
+            @Override
+            public void callBack(Waypoint value) {
+                if (value != null) {
+                    actCache.waypoints.add(value);
+                    listView = null;
+                    EventHandler.fire(new SelectedWayPointChangedEvent(value));
+                    final WaypointDAO waypointDAO = new WaypointDAO();
+                    if (value.IsStart) {
+                        //It must be ensured here that this waypoint is the only one of these Cache,
+                        //which is defined as starting point !!!
+                        waypointDAO.ResetStartWaypoint(EventHandler.getSelectedCache(), value);
+                    }
+                    waypointDAO.WriteToDatabase(value);
+                }
+            }
+        });
         editWaypoint.show();
     }
 

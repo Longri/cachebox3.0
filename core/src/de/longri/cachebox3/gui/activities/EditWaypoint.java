@@ -21,15 +21,15 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
-import de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.gui.widgets.SelectBox;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.CacheTypes;
@@ -55,12 +55,14 @@ public class EditWaypoint extends ActivityBase {
     private final VisCheckBox startCheckBox;
     private final SelectBox<CacheTypes> selectBox;
     private final boolean showCoordsOnShow;
+    private final GenericCallBack<Waypoint> callBack;
 
-    public EditWaypoint(Waypoint waypoint, boolean showCoordsOnShow) {
+    public EditWaypoint(Waypoint waypoint, boolean showCoordsOnShow, GenericCallBack<Waypoint> callBack) {
         super("EditWaypoint");
         style = null;
         this.waypoint = waypoint;
         this.showCoordsOnShow = showCoordsOnShow;
+        this.callBack = callBack;
 
         btnOk = new VisTextButton(Translation.Get("save"));
         btnCancel = new VisTextButton(Translation.Get("cancel"));
@@ -96,26 +98,28 @@ public class EditWaypoint extends ActivityBase {
         });
         selectBox.set(itemList);
 
-        contentTable.setDebug(true, true);
+        contentTable.setTransform(true);
+//        contentTable.setDebug(true, true);
         contentTable.add(cacheTitelLabel).colspan(2).expandX().fillX();
         contentTable.row();
         contentTable.add(coordinateButton).colspan(2);
         contentTable.row();
         contentTable.add(typeLabel, startLabel);
         contentTable.row();
-        contentTable.add(selectBox, startCheckBox);
+        contentTable.add(selectBox).expandX().fillX().padRight(CB.scaledSizes.MARGIN);
+        contentTable.add(startCheckBox).padLeft(CB.scaledSizes.MARGIN);
         contentTable.row();
         contentTable.add(titleLabel).left();
         contentTable.row();
-        contentTable.add(titleTextArea).colspan(2).left();
+        contentTable.add(titleTextArea).colspan(2).expandX().fillX();
         contentTable.row();
         contentTable.add(descriptionLabel).left();
         contentTable.row();
-        contentTable.add(descriptionTextArea).colspan(2).left();
+        contentTable.add(descriptionTextArea).colspan(2).expandX().fillX();
         contentTable.row();
         contentTable.add(clueLabel).left();
         contentTable.row();
-        contentTable.add(clueTextArea).colspan(2).left();
+        contentTable.add(clueTextArea).colspan(2).expandX().fillX();
 
         // bottom fill
         contentTable.row().expandY().fillY().bottom();
@@ -123,7 +127,25 @@ public class EditWaypoint extends ActivityBase {
         contentTable.row();
 
         create();
+        titleTextArea.setPrefRows(1.2f);
+        titleTextArea.setText((waypoint.getTitle() == null) ? "" : waypoint.getTitle());
+        descriptionTextArea.addListener(textAreaChangeListener);
+        clueTextArea.addListener(textAreaChangeListener);
     }
+
+
+    ChangeListener textAreaChangeListener = new ChangeListener() {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            VisTextArea textArea = (VisTextArea) actor;
+            int lines = textArea.getLines();
+            if (lines > 6) lines = 5;
+            textArea.setPrefRows(lines + 1.5f);
+            textArea.invalidate();
+            contentTable.invalidate();
+        }
+    };
+
 
     private void showCbStartPoint(boolean visible) {
         startCheckBox.setVisible(visible);
@@ -149,14 +171,20 @@ public class EditWaypoint extends ActivityBase {
 
         btnOk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-
+                Coordinate coor = coordinateButton.getCoordinate();
+                Waypoint newWaypoint = new Waypoint(coor.latitude, coor.longitude, waypoint);
+                newWaypoint.setTitle(titleTextArea.getText());
+                newWaypoint.setDescription(descriptionTextArea.getText());
+                newWaypoint.setClue(clueTextArea.getText());
+                newWaypoint.IsStart = startCheckBox.isChecked();
+                callBack.callBack(newWaypoint);
                 finish();
             }
         });
 
         btnCancel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-
+                callBack.callBack(null);
                 finish();
             }
         });
