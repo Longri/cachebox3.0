@@ -74,10 +74,8 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
         public void onPageCommitVisible(WebView view, String url) {
             log.debug("onPageCommitVisible URL: {}", url);
-            shouldOverrideUrlLoadingCallBack.callBack(url);
         }
-
-
+        
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, url);
@@ -85,12 +83,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     };
 
     private boolean shouldOverrideUrlLoading(WebView view, String url) {
-        if (!shouldOverrideUrlLoadingCallBack.callBack(url)) {
-            view.loadUrl(url);
-            return false;
-        } else {
-            return true;
-        }
+        return shouldOverrideUrlLoadingCallBack.callBack(url);
     }
 
     @Override
