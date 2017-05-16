@@ -75,7 +75,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
         public void onPageCommitVisible(WebView view, String url) {
             log.debug("onPageCommitVisible URL: {}", url);
         }
-        
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, url);

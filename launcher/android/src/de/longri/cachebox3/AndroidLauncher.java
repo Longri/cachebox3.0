@@ -125,7 +125,7 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
 
     @Override
     public void exit() {
-
+        finish();
     }
 
     public void show(AndroidDescriptionView descriptionView) {
