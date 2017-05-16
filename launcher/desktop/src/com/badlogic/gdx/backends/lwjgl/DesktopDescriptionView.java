@@ -17,14 +17,12 @@ package com.badlogic.gdx.backends.lwjgl;
 
 import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.PlatformDescriptionView;
-import de.longri.cachebox3.callbacks.GenerickHandleCallBack;
+import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker.State;
 import javafx.embed.swing.JFXPanel;
-import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.web.WebEngine;
@@ -34,9 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.net.URI;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -62,7 +58,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
     Thread t;
     boolean cancelThread = false;
     private ScrollBar vScrollbar, hScrollbar;
-    private GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
+    private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
 
     public DesktopDescriptionView() {
         super(null); // creates a window with no Frame as owner
@@ -181,7 +177,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
     }
 
     @Override
-    public void setShouldOverrideUrlLoadingCallBack(GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack) {
+    public void setShouldOverrideUrlLoadingCallBack(GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack) {
         this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
     }
 

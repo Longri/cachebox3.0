@@ -15,8 +15,7 @@
  */
 package de.longri.cachebox3;
 
-import de.longri.cachebox3.callbacks.GenericCallBack;
-import de.longri.cachebox3.callbacks.GenerickHandleCallBack;
+import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 
 /**
  * Created by Longri on 26.04.2017.
@@ -37,5 +36,5 @@ public interface PlatformDescriptionView {
 
     void close();
 
-    void setShouldOverrideUrlLoadingCallBack(GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack);
+    void setShouldOverrideUrlLoadingCallBack(GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack);
 }

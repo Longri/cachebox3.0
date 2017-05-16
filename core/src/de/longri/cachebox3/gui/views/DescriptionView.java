@@ -21,7 +21,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.PlatformDescriptionView;
 import de.longri.cachebox3.callbacks.GenericCallBack;
-import de.longri.cachebox3.callbacks.GenerickHandleCallBack;
+import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
@@ -50,7 +50,7 @@ public class DescriptionView extends AbstractView {
     private final LinkedList<String> nonLocalImagesUrl = new LinkedList<String>();
 
     private final AtomicBoolean FIRST = new AtomicBoolean(true);
-    private final GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack = new GenerickHandleCallBack<String>() {
+    private final GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack = new GenericHandleCallBack<String>() {
         @Override
         public boolean callBack(String url) {
             log.debug("Load Url callback: {}", url);

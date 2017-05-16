@@ -22,7 +22,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-import de.longri.cachebox3.callbacks.GenerickHandleCallBack;
+import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
     final String mimeType = "text/html";
     final String encoding = "utf-8";
-    private GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
+    private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
 
 
     public AndroidDescriptionView(Context context) {
@@ -160,7 +160,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     }
 
     @Override
-    public void setShouldOverrideUrlLoadingCallBack(GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack) {
+    public void setShouldOverrideUrlLoadingCallBack(GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack) {
         this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
     }
 

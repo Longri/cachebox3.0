@@ -17,7 +17,7 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
-import de.longri.cachebox3.callbacks.GenerickHandleCallBack;
+import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import org.robovm.apple.coregraphics.CGPoint;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.foundation.NSError;
@@ -39,7 +39,7 @@ public class IOS_DescriptionView extends UIViewController implements UIWebViewDe
 
     private final UIWebView webView;
     private final UIViewController mainViewController;
-    private GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
+    private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
 
     public IOS_DescriptionView(UIViewController mainViewController) {
         webView = new UIWebView(getView().getFrame());
@@ -121,7 +121,7 @@ public class IOS_DescriptionView extends UIViewController implements UIWebViewDe
     }
 
     @Override
-    public void setShouldOverrideUrlLoadingCallBack(GenerickHandleCallBack<String> shouldOverrideUrlLoadingCallBack) {
+    public void setShouldOverrideUrlLoadingCallBack(GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack) {
         this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
     }
 
