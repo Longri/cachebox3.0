@@ -199,16 +199,6 @@ public class WaypointView extends AbstractView {
                         }
                     }
                 });
-                int selectedIndex = 0;
-                for (Cache cache : Database.Data.Query) {
-                    if (cache.equals(EventHandler.getSelectedCache())) {
-                        break;
-                    }
-                    selectedIndex++;
-                }
-
-                listView.setSelection(selectedIndex);
-                listView.setSelectedItemVisible();
                 log.debug("Finish Thread add new listView");
             }
         });
