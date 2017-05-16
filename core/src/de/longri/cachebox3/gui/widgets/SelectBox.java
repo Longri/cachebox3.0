@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.widgets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
@@ -38,7 +39,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
     private Array<T> entries;
     private SelectBoxStyle style;
     private final com.badlogic.gdx.scenes.scene2d.ui.Image selectIcon = new com.badlogic.gdx.scenes.scene2d.ui.Image();
-    private SelectBoxItem selectedItem;
+    private T selectedItem;
 
     public SelectBox() {
         super("");
@@ -116,6 +117,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
 
     public void set(Array<T> list) {
         this.entries = list;
+        select(0);
     }
 
     public void setStyle(SelectBoxStyle style) {
@@ -157,6 +159,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
         this.setIcon(selectedItem.getDrawable());
         this.setSelectIcon(style.selectIcon);
         this.layout();
+        this.fire(new ChangeListener.ChangeEvent());
     }
 
     public void select(T item) {
@@ -165,6 +168,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
         this.setIcon(item.getDrawable());
         this.setSelectIcon(style.selectIcon);
         this.layout();
+        this.fire(new ChangeListener.ChangeEvent());
     }
 
     private void setSelectIcon(Drawable drawable) {
@@ -187,4 +191,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
         return Math.max(super.getPrefHeight(), style.selectIcon.getMinHeight() + CB.scaledSizes.MARGINx2 * 2);
     }
 
+    public T getSelected() {
+        return selectedItem;
+    }
 }

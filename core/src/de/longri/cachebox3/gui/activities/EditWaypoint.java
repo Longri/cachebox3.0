@@ -16,11 +16,10 @@
 package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
@@ -30,6 +29,7 @@ import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
 import de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
+import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.CacheTypes;
@@ -53,6 +53,7 @@ public class EditWaypoint extends ActivityBase {
     private final VisTable contentTable;
     private final CoordinateButton coordinateButton;
     private final VisCheckBox startCheckBox;
+    private final SelectBox<CacheTypes> selectBox;
     private final boolean showCoordsOnShow;
 
     public EditWaypoint(Waypoint waypoint, boolean showCoordsOnShow) {
@@ -60,7 +61,6 @@ public class EditWaypoint extends ActivityBase {
         style = null;
         this.waypoint = waypoint;
         this.showCoordsOnShow = showCoordsOnShow;
-//        style = VisUI.getSkin().get("default", EditWaypointStyle.class);
 
         btnOk = new VisTextButton(Translation.Get("save"));
         btnCancel = new VisTextButton(Translation.Get("cancel"));
@@ -69,7 +69,7 @@ public class EditWaypoint extends ActivityBase {
         titleLabel = new VisLabel(Translation.Get("Title"));
         descriptionLabel = new VisLabel(Translation.Get("Description"));
         clueLabel = new VisLabel(Translation.Get("Clue"));
-        startLabel = new VisLabel(Translation.Get("Start"));
+        startLabel = new VisLabel(Translation.Get("start"));
         titleTextArea = new VisTextArea();
         descriptionTextArea = new VisTextArea();
         clueTextArea = new VisTextArea();
@@ -78,16 +78,23 @@ public class EditWaypoint extends ActivityBase {
         coordinateButton = new CoordinateButton(waypoint);
         startCheckBox = new VisCheckBox("");
 
+        Array<CacheTypes> itemList = new Array<>();
+        itemList.add(CacheTypes.ReferencePoint);
+        itemList.add(CacheTypes.MultiStage);
+        itemList.add(CacheTypes.MultiQuestion);
+        itemList.add(CacheTypes.Trailhead);
+        itemList.add(CacheTypes.ParkingArea);
+        itemList.add(CacheTypes.Final);
 
-        WayPointListItemStyle waypointStyle = VisUI.getSkin().get("WayPointListItems", WayPointListItemStyle.class);
-        Array<Drawable> itemList = new Array<>();
-        itemList.add(CacheTypes.ReferencePoint.getDrawable(waypointStyle.typeStyle));
-        itemList.add(CacheTypes.MultiStage.getDrawable(waypointStyle.typeStyle));
-        itemList.add(CacheTypes.MultiQuestion.getDrawable(waypointStyle.typeStyle));
-        itemList.add(CacheTypes.Trailhead.getDrawable(waypointStyle.typeStyle));
-        itemList.add(CacheTypes.ParkingArea.getDrawable(waypointStyle.typeStyle));
-        itemList.add(CacheTypes.Final.getDrawable(waypointStyle.typeStyle));
-
+        selectBox = new SelectBox();
+        selectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                EditWaypoint.this.waypoint.Type = selectBox.getSelected();
+                showCbStartPoint(EditWaypoint.this.waypoint.Type == CacheTypes.MultiStage);
+            }
+        });
+        selectBox.set(itemList);
 
         contentTable.setDebug(true, true);
         contentTable.add(cacheTitelLabel).colspan(2).expandX().fillX();
@@ -96,7 +103,7 @@ public class EditWaypoint extends ActivityBase {
         contentTable.row();
         contentTable.add(typeLabel, startLabel);
         contentTable.row();
-        contentTable.add(null, startCheckBox);
+        contentTable.add(selectBox, startCheckBox);
         contentTable.row();
         contentTable.add(titleLabel).left();
         contentTable.row();
@@ -116,6 +123,11 @@ public class EditWaypoint extends ActivityBase {
         contentTable.row();
 
         create();
+    }
+
+    private void showCbStartPoint(boolean visible) {
+        startCheckBox.setVisible(visible);
+        startLabel.setVisible(visible);
     }
 
     @Override
