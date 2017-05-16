@@ -48,6 +48,7 @@ import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.ApiButton;
+import de.longri.cachebox3.gui.widgets.IconButton;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Translation;
@@ -505,7 +506,7 @@ public class Settings_Activity extends ActivityBase {
 
         float buttonWidth = this.getWidth() - (CB.scaledSizes.MARGINx2 * 2);
 
-        ApiButton apiButton = new ApiButton();
+        IconButton apiButton = new ApiButton();
         table.add(apiButton).width(new Value.Fixed(buttonWidth)).center();
         return table;
     }

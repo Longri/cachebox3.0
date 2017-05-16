@@ -35,14 +35,14 @@ public class MenuItem extends ListViewItem {
     private MenuItemStyle style;
 
     private final String name;
-    private Label mLabel;
-    private Image checkImage;
-    private Drawable mIcon;
-    private float imageScaleValue = 1;
+    protected Label mLabel;
+    protected Image checkImage;
+    protected Drawable mIcon;
+    protected float imageScaleValue = 1;
 
 
-    private String mTitle;
-    private boolean mIsEnabled = true;
+    protected String mTitle;
+    protected boolean mIsEnabled = true;
 
     protected boolean mIsCheckable = false;
     protected boolean mIsChecked = false;
@@ -54,8 +54,8 @@ public class MenuItem extends ListViewItem {
     private Image iconImage;
     private Object data;
 
-    private Menu moreMenu;
-    private final Menu parentMenu;
+    protected Menu moreMenu;
+    protected final Menu parentMenu;
 
     private OnItemClickListener onItemClickListener;
 
@@ -63,7 +63,7 @@ public class MenuItem extends ListViewItem {
         this.onItemClickListener = onItemClickListener;
     }
 
-    ClickListener clickListener = new ClickListener() {
+    protected ClickListener clickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             if (MenuItem.this.onItemClickListener != null && event.getType() == InputEvent.Type.touchUp) {
                 MenuItem.this.onItemClickListener.onItemClick(MenuItem.this);

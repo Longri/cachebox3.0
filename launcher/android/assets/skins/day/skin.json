@@ -896,6 +896,14 @@
       "path": "svg/noteIcon.svg",
       "scale": 0.195
     },
+    "option_0": {
+      "path": "svg/option_0.svg",
+      "scale": 1
+    },
+    "option_1": {
+      "path": "svg/option_1.svg",
+      "scale": 1
+    },
     "other": {
       "path": "svg/other.svg",
       "scale": 0.25
@@ -915,6 +923,10 @@
     "selectOverlay": {
       "path": "svg/selectOverlay.svg",
       "scale": 0.15
+    },
+    "select_box": {
+      "path": "svg/select_box.svg",
+      "scale": 1
     },
     "settings_icon": {
       "path": "svg/settings_icon.svg",
@@ -1121,7 +1133,7 @@
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "AboutInfo": {
       "font": "fonts/DroidSans-Italic.ttf",
-      "size": 12
+      "size": 10
     },
     "AboutSmall": {
       "font": "fonts/DroidSans.ttf",
@@ -1405,11 +1417,11 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
     "AboutLinkLabel": {
-      "font": "AboutSmall",
+      "font": "AboutInfo",
       "fontColor": "LinColor"
     },
     "AboutSmall": {
-      "font": "AboutInfo",
+      "font": "AboutSmall",
       "fontColor": "font_color"
     },
     "AboutViewVersionInfoStyle": {
@@ -2023,6 +2035,17 @@
       "font": "normal_font",
       "fontColor": "font_color",
       "cursor": "cursor"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.SelectBoxStyle": {
+    "default": {
+      "font": "normal_font",
+      "up": "default_button_9_Patch",
+      "down": "drawable_default_button_pressed",
+      "selectIcon": "select_box",
+      "option_back": "option_0",
+      "option_select": "option_1",
+      "fontColor": "font_color"
     }
   }
 }

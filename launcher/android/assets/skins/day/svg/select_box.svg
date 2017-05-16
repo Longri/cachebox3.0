@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="20.7617" height="30" viewBox="0 0 20.76 30.00" enable-background="new 0 0 20.76 30.00" xml:space="preserve">
+	<radialGradient id="SVGID_Fill1_" cx="10.4105" cy="6.93367" r="10.3512" gradientUnits="userSpaceOnUse">
+		<stop offset="0" stop-color="#103815" stop-opacity="1"/>
+		<stop offset="1" stop-color="#011804" stop-opacity="1"/>
+	</radialGradient>
+	<path fill="url(#SVGID_Fill1_)" stroke-linejoin="round" d="M 20.7617,13.8268L 10.3809,0L 0.0592918,13.7478L 20.7313,13.8673L 20.7617,13.8268 Z "/>
+	<radialGradient id="SVGID_Fill2_" cx="10.3656" cy="23.0471" r="10.3656" gradientUnits="userSpaceOnUse">
+		<stop offset="0" stop-color="#103815" stop-opacity="1"/>
+		<stop offset="1" stop-color="#011804" stop-opacity="1"/>
+	</radialGradient>
+	<path fill="url(#SVGID_Fill2_)" stroke-linejoin="round" d="M 0.0592918,16.0943L 0,16.1732L 10.3809,30L 20.7313,16.2138L 0.0592918,16.0943 Z "/>
+</svg>

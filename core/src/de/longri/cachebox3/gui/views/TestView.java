@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
@@ -32,7 +32,9 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
+import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.types.CacheTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,7 +148,16 @@ public class TestView extends AbstractView {
         });
 
 
-        FrameAnimationStyle style = VisUI.getSkin().get("download-animation",FrameAnimationStyle.class);
+        SelectBox<CacheTypes> selectBox = new SelectBox();
+        Array<CacheTypes> list = new Array<>();
+        list.add(CacheTypes.ParkingArea);
+        list.add(CacheTypes.ReferencePoint);
+        list.add(CacheTypes.Trailhead);
+
+        selectBox.set(list);
+        selectBox.select(CacheTypes.ReferencePoint);
+
+        FrameAnimationStyle style = VisUI.getSkin().get("download-animation", FrameAnimationStyle.class);
         FrameAnimationDrawable drawable = new FrameAnimationDrawable(style);
         Image image = new Image(drawable);
 
@@ -162,6 +173,8 @@ public class TestView extends AbstractView {
         tbl.add(testFile);
         tbl.row();
         tbl.add(apiKey);
+        tbl.row();
+        tbl.add(selectBox);
         tbl.row().expandY().fillY().bottom();
 
         this.addActor(tbl);
@@ -170,7 +183,7 @@ public class TestView extends AbstractView {
 
     @Override
     public void onShow() {
-
+        create();
     }
 
 

@@ -16,11 +16,9 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
@@ -34,12 +32,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 11.04.2017.
  */
-public class ApiButton extends VisTextButton {
+public class ApiButton extends IconButton {
 
     private final Logger log = LoggerFactory.getLogger(ApiButton.class);
     private final ApiButtonStyle style;
-    private final com.badlogic.gdx.scenes.scene2d.ui.Image image;
-    private final float preferedHight;
 
     public ApiButton() {
         super(Translation.Get("getApiKey"));
@@ -51,10 +47,7 @@ public class ApiButton extends VisTextButton {
         btnStyle.font = style.font;
         btnStyle.fontColor = style.fontColor;
         this.setStyle(btnStyle);
-        this.getLabel().setAlignment(Align.center | Align.left);
-        image = new Image(style.unchecked);
-        this.addActor(image);
-        preferedHight = style.unchecked.getMinHeight() + CB.scaledSizes.MARGINx2;
+        preferredHeight = style.unchecked.getMinHeight() + CB.scaledSizes.MARGINx2;
         setIcon();
     }
 
@@ -66,12 +59,7 @@ public class ApiButton extends VisTextButton {
         super.layout();
     }
 
-    @Override
-    public float getPrefHeight() {
-        return this.preferedHight;
-    }
-
-    private void setIcon() {
+    protected void setIcon() {
         boolean Entry = false;
         if (Config.StagingAPI.getValue()) {
             if (!Config.GcAPIStaging.getValue().equals(""))
@@ -90,7 +78,6 @@ public class ApiButton extends VisTextButton {
         //TODO set icon for invalid and expired
 
     }
-
 
     private final ClickListener clickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
