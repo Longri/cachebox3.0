@@ -16,6 +16,7 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import org.oscim.backend.canvas.Bitmap;
@@ -118,4 +119,16 @@ public abstract class PlatformConnector {
 
     protected abstract void getPlatformDescriptionView(GenericCallBack<PlatformDescriptionView> callBack);
 
+
+
+    //Text Input
+    public static void getSinglelineTextInput(Input.TextInputListener listener,String title,String text, String hint){
+        Gdx.input.getTextInput(listener, title, text, hint);
+    }
+
+    public abstract void _getMultilineTextInput(Input.TextInputListener listener,String title,String text, String hint);
+
+    public static void getMultilineTextInput(Input.TextInputListener listener,String title,String text, String hint){
+        platformConnector._getMultilineTextInput(listener, title, text, hint);
+    }
 }

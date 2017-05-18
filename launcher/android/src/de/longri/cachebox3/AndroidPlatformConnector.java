@@ -17,16 +17,26 @@ package de.longri.cachebox3;
 
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.text.InputType;
+import android.view.Gravity;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.backends.android.AndroidInput;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sqlite.android.AndroidDatabaseManager;
@@ -49,11 +59,15 @@ public class AndroidPlatformConnector extends PlatformConnector {
     private static final int REQUEST_CODE_GET_API_KEY = 987;
     private final AndroidLauncherfragment application;
     public static AndroidPlatformConnector platformConnector;
+    private final Handler handle;
+    private final Context context;
 
     public AndroidPlatformConnector(AndroidLauncherfragment app) {
         this.application = app;
+        this.context = app.getContext();
         platformConnector = this;
         SQLiteGdxDatabaseFactory.setDatabaseManager(new AndroidDatabaseManager());
+        this.handle = new Handler();
     }
 
 
@@ -208,5 +222,61 @@ public class AndroidPlatformConnector extends PlatformConnector {
             log.error(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")", exc);
             CB.viewmanager.toast(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
         }
+    }
+
+    @Override
+    public void _getMultilineTextInput(final Input.TextInputListener listener, final String title, final String text,
+                                       final String hint) {
+        this.handle.post(new Runnable() {
+            public void run() {
+                AlertDialog.Builder alert = new AlertDialog.Builder(AndroidPlatformConnector.this.context);
+
+                //set custom title
+                TextView myMsg = new TextView(context);
+                myMsg.setText(title);
+                myMsg.setGravity(Gravity.CENTER_HORIZONTAL);
+                myMsg.setTextSize(16);
+                alert.setCustomTitle(myMsg);
+
+
+                final EditText input = new EditText(AndroidPlatformConnector.this.context);
+                input.setHint(hint);
+                input.setText(text);
+                input.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                input.setSingleLine(false);
+                input.setLines(5);
+                input.setMaxLines(8);
+                input.setGravity(Gravity.LEFT | Gravity.TOP);
+                alert.setView(input);
+                alert.setPositiveButton(AndroidPlatformConnector.this.context.getString(17039370), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Gdx.app.postRunnable(new Runnable() {
+                            public void run() {
+                                listener.input(input.getText().toString());
+                            }
+                        });
+                    }
+                });
+                alert.setNegativeButton(AndroidPlatformConnector.this.context.getString(17039360), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Gdx.app.postRunnable(new Runnable() {
+                            public void run() {
+                                listener.canceled();
+                            }
+                        });
+                    }
+                });
+//                alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//                    public void onCancel(DialogInterface arg0) {
+//                        Gdx.app.postRunnable(new Runnable() {
+//                            public void run() {
+//                                listener.canceled();
+//                            }
+//                        });
+//                    }
+//                });
+                alert.show();
+            }
+        });
     }
 }

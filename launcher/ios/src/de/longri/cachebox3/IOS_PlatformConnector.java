@@ -16,6 +16,7 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
@@ -26,12 +27,14 @@ import org.oscim.backend.canvas.Bitmap;
 import org.robovm.apple.avfoundation.AVCaptureDevice;
 import org.robovm.apple.avfoundation.AVCaptureTorchMode;
 import org.robovm.apple.avfoundation.AVMediaType;
+import org.robovm.apple.coregraphics.CGPoint;
 import org.robovm.apple.coregraphics.CGRect;
+import org.robovm.apple.coregraphics.CGSize;
 import org.robovm.apple.foundation.NSErrorException;
+import org.robovm.apple.foundation.NSRange;
 import org.robovm.apple.foundation.NSURL;
-import org.robovm.apple.uikit.UIApplication;
-import org.robovm.apple.uikit.UIViewController;
-import org.robovm.apple.uikit.UIWebView;
+import org.robovm.apple.uikit.*;
+import org.robovm.objc.block.VoidBlock1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,18 +147,141 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     public void openUrlExtern(String link) {
-        log.debug("Open URL @Safari: {}",link);
+        log.debug("Open URL @Safari: {}", link);
         if (link.startsWith("www.")) {
             link = "http://" + link;
         }
-       if(! UIApplication.getSharedApplication().openURL(new NSURL(link))){
-           log.error(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
-           CB.viewmanager.toast(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
-       }
+        if (!UIApplication.getSharedApplication().openURL(new NSURL(link))) {
+            log.error(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
+            CB.viewmanager.toast(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
+        }
     }
 
     @Override
     public FileHandle _getSandBoxFileHandle(String fileName) {
         return new FileHandle(new File(System.getenv("HOME"), "Library/local/" + fileName).getAbsolutePath());
+    }
+
+    @Override
+    public void _getMultilineTextInput(Input.TextInputListener listener, String title, String text, String hint) {
+        buildUIAlertView(listener, title, text, hint);
+    }
+
+    // Issue 773 indicates this may solve a premature GC issue
+    UIAlertViewDelegate delegate;
+
+    /**
+     * Builds an {@link UIAlertView} with an added {@link UITextField} for inputting text.
+     *
+     * @param listener Text input listener
+     * @param title    Dialog title
+     * @param text     Text for text field
+     * @return UiAlertView
+     */
+    private UIAlertView buildUIAlertView(final Input.TextInputListener listener, String title, String text, String placeholder) {
+
+
+        UIAlertController allertControler = new UIAlertController(title, "\n\n\n\n\n", UIAlertControllerStyle.Alert);
+
+
+        allertControler.addTextField(new VoidBlock1<UITextField>() {
+            @Override
+            public void invoke(UITextField uiTextField) {
+                uiTextField.setText("fake");
+            }
+        });
+
+        CGRect rect = new CGRect(0, 50, 270, 130);
+        UITextView textView = new UITextView(rect);
+
+        textView.setFont(UIFont.getFont("Helvetica", 15));
+        textView.setTextColor(UIColor.lightGray());
+        textView.setBackgroundColor(UIColor.white());
+        textView.getLayer().setBorderColor(UIColor.lightGray().getCGColor());
+        textView.getLayer().setBorderWidth(1.0);
+        textView.setText(text);
+        textView.setUserInteractionEnabled(true);
+
+//        allertControler.setModalPresentationStyle(UIModalPresentationStyle.FullScreen);
+        allertControler.getView().addSubview(textView);
+
+
+
+        UIAlertAction  cancel = new UIAlertAction( "Cancel", UIAlertActionStyle.Cancel, null);
+        UIAlertAction  action =  new UIAlertAction("Ok", UIAlertActionStyle.Default, new VoidBlock1<UIAlertAction>() {
+            @Override
+            public void invoke(UIAlertAction uiAlertAction) {
+
+            }
+        });
+
+
+        allertControler.addAction(cancel);
+        allertControler.addAction(action);
+
+
+//        ((IOSApplication) Gdx.app).getUIWindow().makeKeyAndVisible();
+
+
+//        NSLayoutConstraint constraint=new NSLayoutConstraint(allertControler.getView(),NSLayoutAttribute.Height,NSLayoutRelation.Equal,null,NSLayoutAttribute.NotAnAttribute,1,10);
+//        allertControler.getView().addConstraint(constraint);
+
+
+        allertControler.setPreferredContentSize(new CGSize(100,400));
+
+
+        ((IOSApplication) Gdx.app).getUIWindow().getRootViewController().presentViewController(allertControler, false, new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+
+        allertControler.setPreferredContentSize(new CGSize(100,400));
+
+//        CGRect allertRect = new CGRect(15, 50, 240, 100);
+//        allertControler.getView().setFrame(allertRect);
+
+
+
+//        delegate = new UIAlertViewDelegateAdapter() {
+//            @Override
+//            public void clicked(UIAlertView view, long clicked) {
+//                if (clicked == 0) {
+//                    // user clicked "Cancel" button
+//                    listener.canceled();
+//                } else if (clicked == 1) {
+//                    // user clicked "Ok" button
+//                    UITextField textField = view.getTextField(0);
+//                    listener.input(textField.getText());
+//                }
+//                delegate = null;
+//            }
+//
+//            @Override
+//            public void cancel(UIAlertView view) {
+//                listener.canceled();
+//                delegate = null;
+//            }
+//        };
+//
+//        // build the view
+//        final UIAlertView uiAlertView = new UIAlertView();
+//        uiAlertView.setTitle(title);
+//        uiAlertView.addButton("Cancel");
+//        uiAlertView.addButton("Ok");
+//        uiAlertView.setAlertViewStyle(UIAlertViewStyle.PlainTextInput);
+//        uiAlertView.setDelegate(delegate);
+//
+//
+//        UITextField textField = uiAlertView.getTextField(0);
+//        textField.setPlaceholder(placeholder);
+//        textField.setText(text);
+//
+//        uiAlertView.show();
+//        CGRect allertRect = new CGRect(15, 50, 240, 500);
+//        uiAlertView.setBounds(allertRect);
+
+        return null;
     }
 }

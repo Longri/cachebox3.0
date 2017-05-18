@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -74,7 +75,6 @@ public class TestView extends AbstractView {
                 fileChooser.show();
                 // getStage().addActor(fileChooser.fadeIn());
 
-
             }
         });
 
@@ -102,48 +102,22 @@ public class TestView extends AbstractView {
             }
         });
 
-        VisTextButton apiKey = new VisTextButton("createApiKey");
+        VisTextButton apiKey = new VisTextButton("TextInput");
         apiKey.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 log.debug("Create Api Key clicked");
-                PlatformConnector.getApiKey(new GenericCallBack<String>() {
+//                PlatformConnector.getSinglelineTextInput(new Input.TextInputListener() {
+                PlatformConnector.getMultilineTextInput(new Input.TextInputListener() {
                     @Override
-                    public void callBack(String accessToken) {
-                        log.debug("return create ApiKey :{}", accessToken);
+                    public void input(String text) {
 
-                        GroundspeakAPI.CacheStatusValid = false;
-                        GroundspeakAPI.CacheStatusLiteValid = false;
-
-                        // store the encrypted AccessToken in the Config file
-                        // wir bekommen den Key schon verschlüsselt, deshalb muss er
-                        // nicht noch einmal verschlüsselt werden!
-                        if (Config.StagingAPI.getValue()) {
-                            Config.GcAPIStaging.setEncryptedValue(accessToken);
-                        } else {
-                            Config.GcAPI.setEncryptedValue(accessToken);
-                        }
-
-                        Config.AcceptChanges();
-
-                        String act = GroundspeakAPI.getAccessToken();
-                        if (act.length() > 0) {
-                            GroundspeakAPI.getMembershipType(new GenericCallBack<Integer>() {
-                                @Override
-                                public void callBack(Integer status) {
-                                    if (status >= 0) {
-                                        log.debug("Read User Name/State {}/{}", GroundspeakAPI.memberName, status);
-                                        Config.GcLogin.setValue(GroundspeakAPI.memberName);
-                                        Config.AcceptChanges();
-                                        CB.viewmanager.toast("Welcome : " + GroundspeakAPI.memberName);
-                                    } else {
-                                        CB.viewmanager.toast("Welcome : " + GroundspeakAPI.memberName);
-                                        log.debug("Can't read UserName State: {}", GroundspeakAPI.memberName, status);
-                                    }
-                                }
-                            });
-                        }
                     }
-                });
+
+                    @Override
+                    public void canceled() {
+
+                    }
+                }, "Platform Title", "MultiLine \nText ", "hinweis");
             }
         });
 

@@ -16,6 +16,7 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl.DesktopDescriptionView;
 import com.badlogic.gdx.backends.lwjgl.GenerateApiKeyWebView;
 import com.badlogic.gdx.files.FileHandle;
@@ -25,6 +26,14 @@ import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -90,7 +99,7 @@ public class DesktopPlatformConnector extends PlatformConnector {
     @Override
     protected void descriptionViewToNull() {
         descriptionView.close();
-        descriptionView=null;
+        descriptionView = null;
     }
 
     @Override
@@ -118,5 +127,99 @@ public class DesktopPlatformConnector extends PlatformConnector {
 
             System.err.println(e.getMessage());
         }
+    }
+
+    @Override
+    public void _getMultilineTextInput(final Input.TextInputListener listener, final String title,
+                                       final String text, final String hint) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JPanel panel = new JPanel(new FlowLayout());
+
+                JPanel textPanel = new JPanel() {
+                    public boolean isOptimizedDrawingEnabled() {
+                        return false;
+                    }
+                };
+
+                textPanel.setLayout(new OverlayLayout(textPanel));
+
+                final JScrollPane scrollPane = new JScrollPane(textPanel);
+                panel.add(scrollPane);
+
+                final JTextArea textField = new JTextArea(30, 40);
+                textField.setText(text);
+                textField.setAlignmentX(0.0f);
+                textPanel.add(textField);
+
+                final JLabel placeholderLabel = new JLabel(hint);
+                placeholderLabel.setForeground(Color.GRAY);
+                placeholderLabel.setAlignmentX(0.0f);
+                textPanel.add(placeholderLabel, 0);
+
+                textField.getDocument().addDocumentListener(new DocumentListener() {
+
+                    @Override
+                    public void removeUpdate(DocumentEvent arg0) {
+                        this.updated();
+                    }
+
+                    @Override
+                    public void insertUpdate(DocumentEvent arg0) {
+                        this.updated();
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent arg0) {
+                        this.updated();
+                    }
+
+                    private void updated() {
+                        if (textField.getText().length() == 0)
+                            placeholderLabel.setVisible(true);
+                        else
+                            placeholderLabel.setVisible(false);
+                    }
+                });
+
+                JOptionPane pane = new JOptionPane(panel, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, null,
+                        null);
+
+                pane.setInitialValue(null);
+                pane.setComponentOrientation(JOptionPane.getRootFrame().getComponentOrientation());
+
+                Border border = textField.getBorder();
+                placeholderLabel.setBorder(new EmptyBorder(border.getBorderInsets(textField)));
+
+                JDialog dialog = pane.createDialog(null, title);
+                pane.selectInitialValue();
+
+                dialog.addWindowFocusListener(new WindowFocusListener() {
+
+                    @Override
+                    public void windowLostFocus(WindowEvent arg0) {
+                    }
+
+                    @Override
+                    public void windowGainedFocus(WindowEvent arg0) {
+                        textField.requestFocusInWindow();
+                    }
+                });
+
+                dialog.setVisible(true);
+                dialog.dispose();
+
+                Object selectedValue = pane.getValue();
+
+                if (selectedValue != null && (selectedValue instanceof Integer)
+                        && ((Integer) selectedValue).intValue() == JOptionPane.OK_OPTION) {
+                    listener.input(textField.getText());
+                } else {
+                    listener.canceled();
+                }
+
+            }
+        });
     }
 }
