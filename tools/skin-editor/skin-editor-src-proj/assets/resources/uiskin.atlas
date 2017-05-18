@@ -274,35 +274,42 @@ widgets/Compass
   orig: 48, 48
   offset: 0, 0
   index: -1
-widgets/FileChooser
+widgets/EditText
   rotate: false
   xy: 846, 1377
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+widgets/Label
+  rotate: false
+  xy: 846, 1377
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+widgets/FileChooser
+  rotate: false
+  xy: 1, 122
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 widgets/Tree
   rotate: false
-  xy: 846, 1377
+  xy: 1, 122
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 widgets/Icons
   rotate: false
-  xy: 1, 122
+  xy: 50, 171
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 widgets/MenuIcons
-  rotate: false
-  xy: 1, 122
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: -1
-widgets/Label
   rotate: false
   xy: 50, 171
   size: 48, 48

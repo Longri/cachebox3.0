@@ -33,6 +33,7 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
+import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.CacheTypes;
@@ -136,6 +137,9 @@ public class TestView extends AbstractView {
         Image image = new Image(drawable);
 
         Table tbl = new Table();
+
+
+//        tbl.setDebug(true, true);
         tbl.setFillParent(true);
         tbl.defaults().pad(CB.scaledSizes.MARGIN);
 
@@ -149,6 +153,20 @@ public class TestView extends AbstractView {
         tbl.add(apiKey);
         tbl.row();
         tbl.add(selectBox);
+
+        float maxWidth = (Gdx.graphics.getWidth() / 2) - CB.scaledSizes.MARGINx2;
+
+        EditTextBox editTextBox = new EditTextBox(false, "Hallo TextBox");
+        editTextBox.setMaxWidth(maxWidth);
+        tbl.add(editTextBox);
+
+        tbl.row();
+        EditTextBox editTextBoxMu = new EditTextBox(true);
+        editTextBoxMu.setText("Hallo TextBox\n Line2\n Line3\n Line4\n Line5\n Line6\n Line7\n Line8");
+        editTextBoxMu.setMaxWidth(maxWidth);
+        tbl.add(editTextBoxMu).fillX();
+
+
         tbl.row().expandY().fillY().bottom();
 
         this.addActor(tbl);

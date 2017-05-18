@@ -908,6 +908,10 @@
       "path": "svg/other.svg",
       "scale": 0.25
     },
+    "pencil": {
+      "path": "svg/pencil.svg",
+      "scale": 0.12
+    },
     "progress_back": {
       "path": "svg/progress_back.svg",
       "scale": 1
@@ -2045,6 +2049,14 @@
       "selectIcon": "select_box",
       "option_back": "option_0",
       "option_select": "option_1",
+      "fontColor": "font_color"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.EditTextStyle": {
+    "default": {
+      "background": "listrec_first_drawable",
+      "editIcon": "pencil",
+      "font": "normal_font",
       "fontColor": "font_color"
     }
   }
