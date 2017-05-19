@@ -63,11 +63,18 @@ public class WaypointView extends AbstractView {
     }
 
     @Override
+    public void onShow() {
+        Gdx.graphics.requestRendering();
+        log.debug("onShow");
+    }
+
+    @Override
     public void layout() {
         log.debug("Layout");
         super.layout();
         if (listView == null) addNewListView();
         log.debug("Finish Layout");
+        Gdx.graphics.requestRendering();
     }
 
     /**
@@ -220,6 +227,7 @@ public class WaypointView extends AbstractView {
                     }
                 });
                 log.debug("Finish Thread add new listView");
+                Gdx.graphics.requestRendering();
             }
         });
         thread.start();
@@ -328,8 +336,13 @@ public class WaypointView extends AbstractView {
             @Override
             public void callBack(Waypoint value) {
                 if (value != null) {
-                    if (!actCache.waypoints.contains(value, false))
+                    if (actCache.waypoints.contains(value, false)) {
+                        int index = actCache.waypoints.indexOf(value, false);
+                        actCache.waypoints.set(index, value);
+                    } else {
                         actCache.waypoints.add(value);
+                    }
+
                     addNewListView();
                     EventHandler.fire(new SelectedWayPointChangedEvent(value));
                     final WaypointDAO waypointDAO = new WaypointDAO();
@@ -339,6 +352,7 @@ public class WaypointView extends AbstractView {
                         waypointDAO.ResetStartWaypoint(EventHandler.getSelectedCache(), value);
                     }
                     waypointDAO.WriteToDatabase(value);
+                    Gdx.graphics.requestRendering();
                 }
             }
         });

@@ -117,7 +117,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
 
     public void set(Array<T> list) {
         this.entries = list;
-        select(0);
+        select(0, false);
     }
 
     public void setStyle(SelectBoxStyle style) {
@@ -154,12 +154,16 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
     }
 
     public void select(int index) {
+        select(index, true);
+    }
+
+    private void select(int index, boolean fire) {
         selectedItem = entries.get(index);
         this.setText(selectedItem.getName());
         this.setIcon(selectedItem.getDrawable());
         this.setSelectIcon(style.selectIcon);
         this.layout();
-        this.fire(new ChangeListener.ChangeEvent());
+        if (fire) this.fire(new ChangeListener.ChangeEvent());
     }
 
     public void select(T item) {

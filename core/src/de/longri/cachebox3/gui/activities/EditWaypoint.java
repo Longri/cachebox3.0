@@ -134,6 +134,7 @@ public class EditWaypoint extends ActivityBase {
         titleTextArea.setText((waypoint.getTitle() == null) ? "" : waypoint.getTitle());
         descriptionTextArea.setText(waypoint.getDescription() == null ? "" : waypoint.getDescription());
         clueTextArea.setText(waypoint.getClue() == null ? "" : waypoint.getClue());
+        selectBox.select(waypoint.Type);
     }
 
 
