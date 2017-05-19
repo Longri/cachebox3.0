@@ -144,7 +144,7 @@ public class GestureButton extends Button {
 
 
     //TODO inital with longPressDuration from settings
-    //    ActorGestureListener(float halfTapSquareSize, float tapCountInterval, float longPressDuration, float maxFlingDelay)
+    //   use ClickLongClickListener!!!
     ActorGestureListener gestureListener = new ActorGestureListener() {
 
         @Override

@@ -18,7 +18,6 @@ package de.longri.cachebox3.settings.types;
 import org.slf4j.Logger;
 
 /**
- * TODO document
  *
  * @author Longri  2016
  */

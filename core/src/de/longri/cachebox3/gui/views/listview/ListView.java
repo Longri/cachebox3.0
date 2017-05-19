@@ -184,7 +184,6 @@ public class ListView extends WidgetGroup {
 
     public void setSelectable(SelectableType selectionType) {
         this.selectionType = selectionType;
-        // TODO: add clicklistener
     }
 
     public void setBackground(Drawable background) {
