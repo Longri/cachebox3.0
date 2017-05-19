@@ -15,23 +15,15 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
-import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
-import de.longri.cachebox3.gui.widgets.Stars;
-import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 
@@ -40,8 +32,8 @@ import de.longri.cachebox3.types.Waypoint;
  */
 public class WayPointListItem extends ListViewItem implements Disposable {
 
-    public static ListViewItem getListItem(int listIndex, final Waypoint waypoint) {
-        ListViewItem listViewItem = new WayPointListItem(listIndex, waypoint.Type, waypoint.getGcCode());
+    public static WayPointListItem getListItem(int listIndex, final Waypoint waypoint) {
+        WayPointListItem listViewItem = new WayPointListItem(listIndex, waypoint.Type, waypoint.getGcCode());
         return listViewItem;
     }
 
@@ -137,7 +129,7 @@ public class WayPointListItem extends ListViewItem implements Disposable {
         distanceLabel = null;
     }
 
-    public String getWaypointName(){
+    public String getWaypointName() {
         return wayPointName.toString();
     }
 }

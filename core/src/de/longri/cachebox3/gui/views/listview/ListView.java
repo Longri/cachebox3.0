@@ -21,14 +21,18 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.*;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.utils.ClickLongClickListener;
+import de.longri.cachebox3.settings.Config;
 import org.slf4j.LoggerFactory;
 
+import static com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.actor;
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.NONE;
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.SINGLE;
 
@@ -536,7 +540,7 @@ public class ListView extends WidgetGroup {
     }
 
 
-    ClickListener onListItemClickListener = new ClickListener() {
+    ClickLongClickListener onListItemClickListener = new ClickLongClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             if (event.getType() == InputEvent.Type.touchUp) {
                 if (selectionType != NONE) {
@@ -560,11 +564,19 @@ public class ListView extends WidgetGroup {
                     for (int i = 0, n = changedEventListeners.size; i < n; i++) {
                         changedEventListeners.get(i).selectionChanged();
                     }
+
+                    if (item.singleClickListener != null) item.singleClickListener.click(item);
                 }
             }
         }
-    };
 
+        @Override
+        public boolean longClicked(Actor actor, float x, float y) {
+            ListViewItem item = (ListViewItem) actor;
+            if (item.longClickListener != null) item.longClickListener.click(item);
+            return true;
+        }
+    };
 
     public float getScrollPos() {
         return scrollPane.getScrollY();

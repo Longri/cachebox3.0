@@ -22,6 +22,7 @@ public class ScaledSizes {
     public final float WINDOW_WIDTH;
     public final float WINDOW_HEIGHT;
     public final float WINDOW_MARGIN;
+    public final float MARGINx4;
 
 
     public ScaledSizes(float button_width, float button_height, float button_width_wide, float margin,
@@ -31,6 +32,7 @@ public class ScaledSizes {
         BUTTON_WIDTH_WIDE = button_width_wide;
         MARGIN = margin;
         MARGINx2 = MARGIN * 2;
+        MARGINx4 = MARGIN * 2;
         MARGIN_HALF = MARGIN / 2;
         CHECK_BOX_HEIGHT = check_box_height;
         WINDOW_MARGIN = window_margin;

@@ -159,7 +159,10 @@ public class EditTextBox extends WidgetGroup {
 
     @Override
     public float getMinHeight() {
-        return textLabel.getMinHeight() + style.background.getMinHeight();
+        float min = (textLabel.getStyle().font.getLineHeight() * minLineCount) + style.background.getMinHeight();
+        float max = (textLabel.getStyle().font.getLineHeight() * maxLineCount) + style.background.getMinHeight();
+        if (min > max) return min;
+        return min;
     }
 
     @Override
@@ -189,4 +192,7 @@ public class EditTextBox extends WidgetGroup {
     }
 
 
+    public String getText() {
+        return this.text;
+    }
 }

@@ -28,6 +28,7 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
+import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
@@ -48,8 +49,7 @@ public class EditWaypoint extends ActivityBase {
     private final Waypoint waypoint;
     private final VisTextButton btnOk, btnCancel;
     private final VisLabel cacheTitelLabel, titleLabel, typeLabel, descriptionLabel, clueLabel, startLabel;
-    private final VisTextArea titleTextArea, descriptionTextArea, clueTextArea;
-    private final VisScrollPane scrollPane;
+    private final EditTextBox titleTextArea, descriptionTextArea, clueTextArea;
     private final VisTable contentTable;
     private final CoordinateButton coordinateButton;
     private final VisCheckBox startCheckBox;
@@ -72,11 +72,10 @@ public class EditWaypoint extends ActivityBase {
         descriptionLabel = new VisLabel(Translation.Get("Description"));
         clueLabel = new VisLabel(Translation.Get("Clue"));
         startLabel = new VisLabel(Translation.Get("start"));
-        titleTextArea = new VisTextArea();
-        descriptionTextArea = new VisTextArea();
-        clueTextArea = new VisTextArea();
+        titleTextArea = new EditTextBox(false);
+        descriptionTextArea = new EditTextBox(true);
+        clueTextArea = new EditTextBox(true);
         contentTable = new VisTable();
-        scrollPane = new VisScrollPane(contentTable);
         coordinateButton = new CoordinateButton(waypoint);
         startCheckBox = new VisCheckBox("");
 
@@ -127,24 +126,15 @@ public class EditWaypoint extends ActivityBase {
         contentTable.row();
 
         create();
-        titleTextArea.setPrefRows(1.2f);
+        descriptionTextArea.setMinLineCount(4);
+        clueTextArea.setMinLineCount(4);
+        //TODO calculate max line count
+        descriptionTextArea.setMaxLineCount(8);
+        clueTextArea.setMaxLineCount(8);
         titleTextArea.setText((waypoint.getTitle() == null) ? "" : waypoint.getTitle());
-        descriptionTextArea.addListener(textAreaChangeListener);
-        clueTextArea.addListener(textAreaChangeListener);
+        descriptionTextArea.setText(waypoint.getDescription() == null ? "" : waypoint.getDescription());
+        clueTextArea.setText(waypoint.getClue() == null ? "" : waypoint.getClue());
     }
-
-
-    ChangeListener textAreaChangeListener = new ChangeListener() {
-        @Override
-        public void changed(ChangeEvent event, Actor actor) {
-            VisTextArea textArea = (VisTextArea) actor;
-            int lines = textArea.getLines();
-            if (lines > 6) lines = 5;
-            textArea.setPrefRows(lines + 1.5f);
-            textArea.invalidate();
-            contentTable.invalidate();
-        }
-    };
 
 
     private void showCbStartPoint(boolean visible) {
@@ -167,7 +157,7 @@ public class EditWaypoint extends ActivityBase {
     private void create() {
         this.addActor(btnOk);
         this.addActor(btnCancel);
-        this.addActor(scrollPane);
+        this.addActor(contentTable);
 
         btnOk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -205,9 +195,12 @@ public class EditWaypoint extends ActivityBase {
         x = CB.scaledSizes.MARGIN;
         y += CB.scaledSizes.MARGIN + btnCancel.getHeight();
 
-        scrollPane.setBounds(x, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGINx2));
-        contentTable.setBounds(x, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGINx2));
+        float maxWidth = Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx4;
+        titleTextArea.setMaxWidth(maxWidth);
+        descriptionTextArea.setMaxWidth(maxWidth);
+        clueTextArea.setMaxWidth(maxWidth);
 
+        contentTable.setBounds(x, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGINx2));
         contentTable.layout();
 
     }

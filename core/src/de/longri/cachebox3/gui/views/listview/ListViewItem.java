@@ -26,6 +26,19 @@ public abstract class ListViewItem extends VisTable implements Disposable {
 
     protected int listIndex;
 
+    public interface ItemClickListener {
+        void click(ListViewItem item);
+    }
+
+    public ItemClickListener singleClickListener, longClickListener;
+
+    public void setSingleCLickListener(ItemClickListener listener) {
+        this.singleClickListener = listener;
+    }
+
+    public void setLongCLickListener(ItemClickListener listener) {
+        this.longClickListener = listener;
+    }
 
     public ListViewItem(int listIndex) {
         this.listIndex = listIndex;
