@@ -557,7 +557,7 @@ public class ListView extends WidgetGroup {
                             selectedItemList.add(item);
                         }
                     }
-                    Gdx.graphics.requestRendering();
+                   CB.requestRendering();
 
                     //call selection changed event
                     for (int i = 0, n = changedEventListeners.size; i < n; i++) {
@@ -583,6 +583,7 @@ public class ListView extends WidgetGroup {
 
     public void setScrollPos(float scrollPos) {
         if (scrollPane != null) scrollPane.setScrollY(scrollPos);
+       CB.requestRendering();
     }
 
     public void setSelectedItemVisible() {
@@ -603,7 +604,7 @@ public class ListView extends WidgetGroup {
         this.selectedItemList.clear();
         ListViewItem item = adapter.getView(index);
         this.selectedItemList.add(item);
-        Gdx.graphics.requestRendering();
+       CB.requestRendering();
     }
 
     public ListViewItem getSelectedItem() {
@@ -613,7 +614,7 @@ public class ListView extends WidgetGroup {
 
     public void dataSetChanged() {
         layout(true);
-        Gdx.graphics.requestRendering();
+       CB.requestRendering();
     }
 
 

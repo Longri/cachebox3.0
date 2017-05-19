@@ -230,7 +230,12 @@ public class CB {
     }
 
     public static void requestRendering() {
-        Gdx.graphics.requestRendering();
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                Gdx.graphics.requestRendering();
+            }
+        });
     }
 
 

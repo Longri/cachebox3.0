@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
@@ -74,7 +75,12 @@ public class WaypointView extends AbstractView {
         super.layout();
         if (listView == null) addNewListView();
         log.debug("Finish Layout");
-        Gdx.graphics.requestRendering();
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                Gdx.graphics.requestRendering();
+            }
+        });
     }
 
     /**
@@ -149,8 +155,14 @@ public class WaypointView extends AbstractView {
                         } else {
                             changed = ((WayPointListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0], true));
                         }
-                        if (changed)
-                            Gdx.graphics.requestRendering();
+                        if (changed){
+                            Gdx.app.postRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Gdx.graphics.requestRendering();
+                                }
+                            });
+                        }
                     }
 
                     @Override
@@ -169,7 +181,7 @@ public class WaypointView extends AbstractView {
                     addActor(listView);
                     listView.setCullingArea(new Rectangle(0, 0, WaypointView.this.getWidth(), WaypointView.this.getHeight()));
                     listView.setSelectable(ListView.SelectableType.SINGLE);
-                    Gdx.graphics.requestRendering();
+                    CB.requestRendering();
                 }
 
                 // add selection changed event listener
@@ -227,11 +239,11 @@ public class WaypointView extends AbstractView {
                     }
                 });
                 log.debug("Finish Thread add new listView");
-                Gdx.graphics.requestRendering();
+              CB.requestRendering();
             }
         });
         thread.start();
-        Gdx.graphics.requestRendering();
+        CB.requestRendering();
     }
 
     private void disposeListView() {
@@ -248,6 +260,10 @@ public class WaypointView extends AbstractView {
     @Override
     public void dispose() {
 //TODO dispose WaypointView
+        this.actCache = null;
+        this.actWaypoint = null;
+        disposeListView();
+        this.listView = null;
     }
 
     public Menu getContextMenu() {
@@ -352,7 +368,7 @@ public class WaypointView extends AbstractView {
                         waypointDAO.ResetStartWaypoint(EventHandler.getSelectedCache(), value);
                     }
                     waypointDAO.WriteToDatabase(value);
-                    Gdx.graphics.requestRendering();
+                    CB.requestRendering();
                 }
             }
         });

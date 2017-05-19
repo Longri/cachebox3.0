@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.SnapshotArray;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
@@ -119,7 +120,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
                         //update item
                         if (((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0], true)))
-                            Gdx.graphics.requestRendering();
+                            CB.requestRendering();
                     }
 
                     @Override
@@ -138,7 +139,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     addActor(listView);
                     listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
                     listView.setSelectable(ListView.SelectableType.SINGLE);
-                    Gdx.graphics.requestRendering();
+                    CB.requestRendering();
                 }
 
                 // add selection changed event listener
@@ -172,16 +173,15 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         log.debug("Finish Thread add new listView");
                     }
                 });
-
+                CB.requestRendering();
             }
         });
         thread.start();
-        Gdx.graphics.requestRendering();
+        CB.requestRendering();
     }
 
     private void disposeListView() {
         final ListView disposeListView = CacheListView.this.listView;
-
         Thread disposeThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -226,19 +226,20 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
             item.posOrBearingChanged();
         }
         allItems.end();
-        Gdx.graphics.requestRendering();
+        CB.requestRendering();
     }
 
     @Override
     public void onShow() {
         super.onShow();
         resort();
+        CB.requestRendering();
     }
 
     @Override
     public void onHide() {
         super.onHide();
-
+        CB.requestRendering();
     }
 
     @Override
@@ -255,7 +256,4 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         return "CacheListView";
     }
 
-    private void setSelectedCacheVisible(){
-
-    }
 }
