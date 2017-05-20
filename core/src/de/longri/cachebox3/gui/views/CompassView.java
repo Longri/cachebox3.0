@@ -15,6 +15,10 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisSplitPane;
 import de.longri.cachebox3.gui.widgets.Compass;
 
 /**
@@ -23,11 +27,28 @@ import de.longri.cachebox3.gui.widgets.Compass;
 public class CompassView extends AbstractView {
 
     private final Compass compass;
+    private final VisSplitPane splitPane;
 
     public CompassView() {
         super("CompassView");
+
+
+        Table topTable = new Table();
+        Table botomTable = new Table();
+
+        SplitPane.SplitPaneStyle splitPaneStyle = VisUI.getSkin().get("default-vertical", SplitPane.SplitPaneStyle.class);
+        VisSplitPane.VisSplitPaneStyle visSplitPaneStyle = new VisSplitPane.VisSplitPaneStyle();
+        visSplitPaneStyle.handle = splitPaneStyle.handle;
+        splitPane = new VisSplitPane(topTable, botomTable, true, visSplitPaneStyle);
+        this.addChild(splitPane);
+
         compass = new Compass("default");
-        this.addChild(compass);
+        botomTable.add(compass);
+    }
+
+    @Override
+    public void layout() {
+        splitPane.setBounds(0, 0, this.getWidth(), this.getWidth());
 
         compass.setBounds(10, 10, this.getWidth() - 20, this.getWidth() - 20);
     }

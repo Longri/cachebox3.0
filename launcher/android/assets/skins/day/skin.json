@@ -2059,5 +2059,10 @@
       "font": "normal_font",
       "fontColor": "font_color"
     }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle": {
+    "default-vertical": {
+      "handle": "sliderKnob"
+    }
   }
 }

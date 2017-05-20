@@ -89,6 +89,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.SelectBoxStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.EditTextStyle.class);
+        items.add(SplitPane.SplitPaneStyle.class);
 
         SvgSkinUtil.saveSkin(this, items, skinFile);
 
