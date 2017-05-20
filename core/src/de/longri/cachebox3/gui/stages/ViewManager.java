@@ -36,6 +36,7 @@ import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
 import de.longri.cachebox3.gui.widgets.Slider;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheSizes;
@@ -88,7 +89,8 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         };
         slider.setBounds(0, 0, width, height);
         this.addActor(slider);
-
+        if (Config.quickButtonLastShow.getValue())
+            slider.setQuickButtonVisible();
 
         db_button = new GestureButton("db");
         cache_button = new GestureButton("cache");

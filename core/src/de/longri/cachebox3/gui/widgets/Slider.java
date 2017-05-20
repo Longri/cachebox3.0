@@ -158,7 +158,7 @@ public class Slider extends WidgetGroup {
     }
 
     private void checkSlideBack() {
-        boolean quickButtonShow = Config.quickButtonShow.getValue();
+        boolean quickButtonShow = Config.quickButtonLastShow.getValue();
 
         quickButtonShow = true;
 
@@ -193,6 +193,11 @@ public class Slider extends WidgetGroup {
 
     private void startAnimationTo(float targetPos) {
         nameWidget.addAction(Actions.moveTo(0, targetPos, ANIMATION_TIME, Interpolation.exp10Out));
+    }
+
+    public void setQuickButtonVisible() {
+        quickButtonHeight = quickButtonMaxHeight;
+        nameWidget.setPosition(0, getHeight() - nameWidgetHeight - quickButtonHeight);
     }
 
 
