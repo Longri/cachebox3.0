@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -33,24 +34,46 @@ import de.longri.cachebox3.types.Waypoint;
 public class WayPointListItem extends ListViewItem implements Disposable {
 
     public static WayPointListItem getListItem(int listIndex, final Waypoint waypoint) {
-        WayPointListItem listViewItem = new WayPointListItem(listIndex, waypoint.Type, waypoint.getGcCode());
+        WayPointListItem listViewItem = new WayPointListItem(listIndex, waypoint.Type,
+                waypoint.getGcCode(), waypoint.getTitle(), waypoint.getDescription(), waypoint.FormatCoordinate());
         return listViewItem;
     }
 
 
     private final WayPointListItemStyle style;
     private final CacheTypes type;
-    private final CharSequence wayPointName;
+    private final String wayPointGcCode;
     private boolean needsLayout = true;
-    private Image arrowImage;
-    private VisLabel distanceLabel;
+    final private Image arrowImage;
+    final private VisLabel distanceLabel, descriptionLabel, coordLabel, nameLabel;
     private boolean distanceOrBearingChanged = true;
 
-    public WayPointListItem(int listIndex, CacheTypes type, CharSequence wayPointName) {
+    public WayPointListItem(int listIndex, CacheTypes type, String wayPointGcCode, String wayPointTitle,
+                            String description, String coord) {
         super(listIndex);
         this.style = VisUI.getSkin().get("WayPointListItems", WayPointListItemStyle.class);
         this.type = type;
-        this.wayPointName = wayPointName;
+        this.wayPointGcCode = wayPointGcCode;
+
+        Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
+        nameLabelStyle.font = this.style.nameFont;
+        nameLabelStyle.fontColor = this.style.nameFontColor;
+
+        nameLabel = new VisLabel(wayPointGcCode + ": " + wayPointTitle, nameLabelStyle);
+        descriptionLabel = description == null ? null : new VisLabel(description, nameLabelStyle);
+        coordLabel = new VisLabel(coord, nameLabelStyle);
+
+        nameLabel.setWrap(true);
+        descriptionLabel.setWrap(true);
+        coordLabel.setWrap(true);
+
+        arrowImage = new Image(this.style.arrow);
+
+        Label.LabelStyle distanceLabelStyle = new Label.LabelStyle();
+        distanceLabelStyle.font = this.style.distanceFont;
+        distanceLabelStyle.fontColor = this.style.distanceFontColor;
+
+        distanceLabel = new VisLabel("---- --", distanceLabelStyle);
     }
 
 
@@ -69,27 +92,22 @@ public class WayPointListItem extends ListViewItem implements Disposable {
         iconTable.pack();
         iconTable.layout();
 
-        this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGIN);
+        this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGINx4);
 
+        Table contentTable = new Table();
+        contentTable.add(nameLabel).left().expandX().fillX();
+        contentTable.row();
+        contentTable.add(descriptionLabel).left().expandX().fillX();
+        contentTable.row();
+        contentTable.add(coordLabel).left().expandX().fillX();
 
-        Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
-        nameLabelStyle.font = this.style.nameFont;
-        nameLabelStyle.fontColor = this.style.nameFontColor;
-        VisLabel nameLabel = new VisLabel(wayPointName, nameLabelStyle);
-//        VisLabel nameLabel = new VisLabel("ITEM: " + this.listIndex, nameLabelStyle);
-        nameLabel.setWrap(true);
-        this.add(nameLabel).top().expandX().fillX();
-
+        this.add(contentTable).top().expandX().fillX();
 
         VisTable arrowTable = new VisTable();
 
-        arrowImage = new Image(this.style.arrow);
+
         arrowImage.setOrigin(this.style.arrow.getMinWidth() / 2, this.style.arrow.getMinHeight() / 2);
 
-        Label.LabelStyle distanceLabelStyle = new Label.LabelStyle();
-        distanceLabelStyle.font = this.style.distanceFont;
-        distanceLabelStyle.fontColor = this.style.distanceFontColor;
-        distanceLabel = new VisLabel("---- --", distanceLabelStyle);
 
         arrowTable.add(arrowImage);
         arrowTable.row();
@@ -120,16 +138,14 @@ public class WayPointListItem extends ListViewItem implements Disposable {
             arrowImage.setDrawable(null);
             arrowImage.clear();
         }
-        arrowImage = null;
 
         if (distanceLabel != null) {
             distanceLabel.setText(null);
             distanceLabel.clear();
         }
-        distanceLabel = null;
     }
 
-    public String getWaypointName() {
-        return wayPointName.toString();
+    public String getWaypointGcCode() {
+        return this.wayPointGcCode;
     }
 }

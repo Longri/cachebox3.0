@@ -478,7 +478,7 @@
     },
     "mapFinal": {
       "path": "svg/final.svg",
-      "scale": 0.13
+      "scale": 0.25
     },
     "mapFinal0": {
       "path": "svg/mapFinal0.svg",
@@ -570,7 +570,7 @@
     },
     "mapMultiQuestion": {
       "path": "svg/multiQuestion.svg",
-      "scale": 0.13
+      "scale": 0.25
     },
     "mapMultiQuestion0": {
       "path": "svg/mapMultiQuestion0.svg",
@@ -586,7 +586,7 @@
     },
     "mapMultiStage": {
       "path": "svg/multiStage.svg",
-      "scale": 0.13
+      "scale": 0.25
     },
     "mapMultiStage0": {
       "path": "svg/mapMultiStage0.svg",
@@ -662,7 +662,7 @@
     },
     "mapParkingArea": {
       "path": "svg/mapParkingArea.svg",
-      "scale": 0.15
+      "scale": 0.26
     },
     "mapParkingArea0": {
       "path": "svg/mapParkingArea.svg",
@@ -678,7 +678,7 @@
     },
     "mapReferencePoint": {
       "path": "svg/mapReferencePoint.svg",
-      "scale": 0.13
+      "scale": 0.23
     },
     "mapReferencePoint0": {
       "path": "svg/mapReferencePoint0.svg",
@@ -738,7 +738,7 @@
     },
     "mapTrailhead": {
       "path": "svg/mapTrailhead.svg",
-      "scale": 0.13
+      "scale": 0.21
     },
     "mapTrailhead0": {
       "path": "svg/mapTrailhead0.svg",

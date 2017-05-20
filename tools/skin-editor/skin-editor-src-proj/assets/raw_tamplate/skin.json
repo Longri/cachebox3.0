@@ -478,7 +478,7 @@
     },
     "mapFinal": {
       "path": "svg/final.svg",
-      "scale": 0.13
+      "scale": 0.25
     },
     "mapFinal0": {
       "path": "svg/mapFinal0.svg",
@@ -570,7 +570,7 @@
     },
     "mapMultiQuestion": {
       "path": "svg/multiQuestion.svg",
-      "scale": 0.13
+      "scale": 0.25
     },
     "mapMultiQuestion0": {
       "path": "svg/mapMultiQuestion0.svg",
@@ -586,7 +586,7 @@
     },
     "mapMultiStage": {
       "path": "svg/multiStage.svg",
-      "scale": 0.13
+      "scale": 0.25
     },
     "mapMultiStage0": {
       "path": "svg/mapMultiStage0.svg",
@@ -662,7 +662,7 @@
     },
     "mapParkingArea": {
       "path": "svg/mapParkingArea.svg",
-      "scale": 0.15
+      "scale": 0.26
     },
     "mapParkingArea0": {
       "path": "svg/mapParkingArea.svg",
@@ -678,7 +678,7 @@
     },
     "mapReferencePoint": {
       "path": "svg/mapReferencePoint.svg",
-      "scale": 0.13
+      "scale": 0.23
     },
     "mapReferencePoint0": {
       "path": "svg/mapReferencePoint0.svg",
@@ -738,7 +738,7 @@
     },
     "mapTrailhead": {
       "path": "svg/mapTrailhead.svg",
-      "scale": 0.13
+      "scale": 0.21
     },
     "mapTrailhead0": {
       "path": "svg/mapTrailhead0.svg",
@@ -896,9 +896,21 @@
       "path": "svg/noteIcon.svg",
       "scale": 0.195
     },
+    "option_0": {
+      "path": "svg/option_0.svg",
+      "scale": 1
+    },
+    "option_1": {
+      "path": "svg/option_1.svg",
+      "scale": 1
+    },
     "other": {
       "path": "svg/other.svg",
       "scale": 0.25
+    },
+    "pencil": {
+      "path": "svg/pencil.svg",
+      "scale": 0.12
     },
     "progress_back": {
       "path": "svg/progress_back.svg",
@@ -915,6 +927,10 @@
     "selectOverlay": {
       "path": "svg/selectOverlay.svg",
       "scale": 0.15
+    },
+    "select_box": {
+      "path": "svg/select_box.svg",
+      "scale": 1
     },
     "settings_icon": {
       "path": "svg/settings_icon.svg",
@@ -1026,6 +1042,12 @@
     }
   },
   "de.longri.cachebox3.utils.SkinColor": {
+    "LinColor": {
+      "r": 0.02745098,
+      "g": 0.02745098,
+      "b": 0.6784314,
+      "a": 1
+    },
     "abstract_background": {
       "r": 1,
       "a": 1
@@ -1113,6 +1135,14 @@
     }
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "AboutInfo": {
+      "font": "fonts/DroidSans-Italic.ttf",
+      "size": 10
+    },
+    "AboutSmall": {
+      "font": "fonts/DroidSans.ttf",
+      "size": 18
+    },
     "coordinateValueFont": {
       "font": "fonts/DroidSans-Bold.ttf",
       "size": 24
@@ -1390,6 +1420,18 @@
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+    "AboutLinkLabel": {
+      "font": "AboutInfo",
+      "fontColor": "LinColor"
+    },
+    "AboutSmall": {
+      "font": "AboutSmall",
+      "fontColor": "font_color"
+    },
+    "AboutViewVersionInfoStyle": {
+      "font": "AboutInfo",
+      "fontColor": "font_color"
+    },
     "default": {
       "font": "normal_font",
       "fontColor": "font_color"
@@ -1997,6 +2039,25 @@
       "font": "normal_font",
       "fontColor": "font_color",
       "cursor": "cursor"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.SelectBoxStyle": {
+    "default": {
+      "font": "normal_font",
+      "up": "default_button_9_Patch",
+      "down": "drawable_default_button_pressed",
+      "selectIcon": "select_box",
+      "option_back": "option_0",
+      "option_select": "option_1",
+      "fontColor": "font_color"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.EditTextStyle": {
+    "default": {
+      "background": "listrec_first_drawable",
+      "editIcon": "pencil",
+      "font": "normal_font",
+      "fontColor": "font_color"
     }
   }
 }
