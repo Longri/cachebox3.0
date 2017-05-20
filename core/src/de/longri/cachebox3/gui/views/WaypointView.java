@@ -22,7 +22,12 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
+import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.EditWaypoint;
+import de.longri.cachebox3.gui.dialogs.ButtonDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -33,6 +38,7 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
@@ -148,7 +154,7 @@ public class WaypointView extends AbstractView {
                         } else {
                             changed = ((WayPointListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0], true));
                         }
-                        if (changed){
+                        if (changed) {
                             Gdx.app.postRunnable(new Runnable() {
                                 @Override
                                 public void run() {
@@ -232,7 +238,7 @@ public class WaypointView extends AbstractView {
                     }
                 });
                 log.debug("Finish Thread add new listView");
-              CB.requestRendering();
+                CB.requestRendering();
             }
         });
         thread.start();
@@ -314,7 +320,25 @@ public class WaypointView extends AbstractView {
     }
 
     private void deleteWP() {
-
+        //Name, msg, title, buttons, icon, OnMsgBoxClickListener
+        Window dialog = new ButtonDialog("delete Waypoint",
+                Translation.Get("?DelWP") + "\n[" + actWaypoint.getTitle() + "]\n",
+                Translation.Get("!DelWP"), MessageBoxButtons.YesNo, MessageBoxIcon.Question,
+                new OnMsgBoxClickListener() {
+                    @Override
+                    public boolean onClick(int which, Object data) {
+                        if (which == ButtonDialog.BUTTON_POSITIVE) {
+                            log.debug("Delete Waypoint");
+                            // Yes button clicked
+                            final WaypointDAO dao = new WaypointDAO();
+                            dao.delete(actWaypoint);
+                            actCache.waypoints.removeValue(actWaypoint,false);
+                            listView.setSelection(0);// select Cache
+                        }
+                        return true;
+                    }
+                });
+        dialog.show();
     }
 
     private void editWP(boolean show) {

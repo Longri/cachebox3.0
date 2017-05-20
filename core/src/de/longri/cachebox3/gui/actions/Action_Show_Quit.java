@@ -43,7 +43,7 @@ public class Action_Show_Quit extends AbstractAction {
         String Title = Translation.Get("Quit?");
 
         //Name, msg, title, buttons, icon, OnMsgBoxClickListener
-        Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.OKCancel, MessageBoxIcon.Stop, new OnMsgBoxClickListener() {
+        Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop, new OnMsgBoxClickListener() {
             @Override
             public boolean onClick(int which, Object data) {
                 if (which == ButtonDialog.BUTTON_POSITIVE) {

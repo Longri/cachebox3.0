@@ -26,8 +26,11 @@ import de.longri.cachebox3.types.Replication;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.UnitFormatter;
 import de.longri.cachebox3.utils.lists.CB_List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WaypointDAO {
+    private static final Logger log = LoggerFactory.getLogger(WaypointDAO.class);
 
     public static final String SQL_WP = "select GcCode, CacheId, Latitude, Longitude, Type, SyncExclude, UserWaypoint, Title, isStart from Waypoint";
     public static final String SQL_WP_FULL = "select GcCode, CacheId, Latitude, Longitude, Type, SyncExclude, UserWaypoint, Title, isStart, Description, Clue from Waypoint";
@@ -254,4 +257,11 @@ public class WaypointDAO {
         return wpList;
     }
 
+    public void delete(Waypoint waypoint) {
+        try {
+            Database.Data.delete("Waypoint", "GcCode='" + waypoint.getGcCode() + "'", null);
+        } catch (Exception exc) {
+            log.error("delete from dataBase", exc);
+        }
+    }
 }
