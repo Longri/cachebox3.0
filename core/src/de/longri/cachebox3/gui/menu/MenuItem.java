@@ -177,7 +177,7 @@ public class MenuItem extends ListViewItem {
      */
     public MenuItem setTitle(String title) {
         mTitle = title;
-        //  initial();
+        initial();
         return this;
     }
 
@@ -207,28 +207,29 @@ public class MenuItem extends ListViewItem {
             imageScaleValue = 1f;
         }
         mIcon = icon;
+        initial();
         return this;
     }
 
 
     public void setEnabled(boolean enabled) {
         mIsEnabled = enabled;
-
     }
 
 
     public boolean isEnabled() {
+        initial();
         return mIsEnabled;
     }
 
     public void setCheckable(boolean isCheckable) {
         mIsCheckable = isCheckable;
-
+        initial();
     }
 
     public void setChecked(boolean checked) {
         mIsChecked = checked;
-
+        initial();
     }
 
     public boolean isChecked() {
@@ -241,7 +242,7 @@ public class MenuItem extends ListViewItem {
 
     public void setLeft(boolean value) {
         mLeft = value;
-
+        initial();
     }
 
     @Override
@@ -260,6 +261,7 @@ public class MenuItem extends ListViewItem {
 
     public void setMoreMenu(Menu moreMenu) {
         this.moreMenu = moreMenu;
+        initial();
     }
 
     public boolean hasMoreMenu() {

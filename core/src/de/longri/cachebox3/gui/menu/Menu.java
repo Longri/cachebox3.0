@@ -60,12 +60,14 @@ public class Menu extends Window {
     private VisLabel titleLabel, parentTitleLabel;
     protected Menu parentMenu;
     private WidgetGroup titleGroup;
+    protected boolean hideWithItemClick;
 
     public Menu(String name) {
         super(name);
         this.style = VisUI.getSkin().get("default", MenuStyle.class);
         this.name = name;
         this.setStageBackground(style.stageBackground);
+        hideWithItemClick = true;
     }
 
     public Menu(String name, MenuStyle style) {
@@ -73,6 +75,7 @@ public class Menu extends Window {
         this.style = style;
         this.name = name;
         this.setStageBackground(style.stageBackground);
+        hideWithItemClick = true;
     }
 
     public Menu(String name, String styleName) {
@@ -272,7 +275,7 @@ public class Menu extends Window {
                     return true;
                 }
                 //close Menu with sub menu's
-                hide(ALL);
+                if (hideWithItemClick) hide(ALL);
                 return onItemClickListener.onItemClick(item);
             }
         };
