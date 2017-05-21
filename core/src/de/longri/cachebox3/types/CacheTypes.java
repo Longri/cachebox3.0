@@ -363,8 +363,8 @@ public enum CacheTypes implements SelectBoxItem {
         return super.toString();
     }
 
-    public static String toShortString(Cache cache) {
-        switch (cache.Type) {
+    public  String toShortString() {
+        switch (this) {
             case CITO:
                 return "X";
             case Cache:

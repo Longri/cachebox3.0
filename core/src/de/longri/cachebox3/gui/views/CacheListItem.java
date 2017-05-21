@@ -15,11 +15,8 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
@@ -27,7 +24,6 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
-import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Stars;
@@ -39,10 +35,10 @@ import de.longri.cachebox3.types.CacheTypes;
  */
 public class CacheListItem extends ListViewItem implements Disposable {
 
-    public static ListViewItem getListItem(int listIndex, final Cache cache){
+    public static ListViewItem getListItem(int listIndex, final Cache cache) {
         ListViewItem listViewItem = new CacheListItem(listIndex, cache.Type, cache.getName(),
                 (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
-                (int) Math.min(cache.Rating * 2, 5 * 2), cache.Size.ordinal());
+                (int) Math.min(cache.Rating * 2, 5 * 2), cache.Size.ordinal(), cache.Size.toShortString());
         return listViewItem;
     }
 
@@ -58,14 +54,16 @@ public class CacheListItem extends ListViewItem implements Disposable {
     private final int terrain;
     private final int vote;
     private final int size;
+    private final String shortSizeString;
 
 
-    public CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain, int vote, int size) {
+    public CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain, int vote, int size, String shortSizeString) {
         super(listIndex);
         this.difficulty = difficulty;
         this.terrain = terrain;
         this.vote = vote;
         this.size = size;
+        this.shortSizeString = shortSizeString;
         this.style = VisUI.getSkin().get("cacheListItems", CacheListItemStyle.class);
         this.type = type;
         this.cacheName = cacheName;
@@ -121,7 +119,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
         line1.add(dLabel);
         Stars difficultyStars = new Stars(this.difficulty);
         line1.add(difficultyStars);
-        VisLabel sLabel = new VisLabel("S", distanceLabelStyle);
+        VisLabel sLabel = new VisLabel(shortSizeString, distanceLabelStyle);
         line1.add(sLabel).padLeft(CB.scaledSizes.MARGIN);
         CacheSizeWidget sizeWidget = new CacheSizeWidget(this.size);
         line1.add(sizeWidget).padLeft(CB.scaledSizes.MARGIN_HALF);

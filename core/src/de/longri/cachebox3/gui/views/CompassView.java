@@ -21,11 +21,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSplitPane;
+import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
+import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Compass;
+import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
@@ -119,6 +123,31 @@ public class CompassView extends AbstractView {
             if (showGcCode) {
                 lineTable.add(new Label(actCache.getGcCode(), infoStyle));
             }
+            topTable.add(lineTable).left();
+            topTable.row();
+        }
+
+        if (showSDT) {
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            VisLabel dLabel = new VisLabel("D", infoStyle);
+            lineTable.left();
+            lineTable.add(dLabel);
+            Stars difficultyStars = new Stars((int) (actCache.getDifficulty() * 2));
+            lineTable.add(difficultyStars);
+            VisLabel sLabel = new VisLabel(actCache.Size.toShortString(), infoStyle);
+            lineTable.add(sLabel).padLeft(CB.scaledSizes.MARGIN);
+            CacheSizeWidget sizeWidget = new CacheSizeWidget(actCache.Size.ordinal());
+            lineTable.add(sizeWidget).padLeft(CB.scaledSizes.MARGIN_HALF);
+            VisLabel tLabel = new VisLabel("T", infoStyle);
+            lineTable.left();
+            lineTable.add(tLabel);
+            Stars terrainStars = new Stars((int) (actCache.getTerrain()*2));
+            lineTable.add(terrainStars);
+            VisLabel vLabel = new VisLabel("GcV", infoStyle);
+            lineTable.add(vLabel).padLeft(CB.scaledSizes.MARGIN);
+            Stars vStars = new Stars((int) Math.min(actCache.Rating * 2, 5 * 2));
+            lineTable.add(vStars);
             topTable.add(lineTable).left();
             topTable.row();
         }
