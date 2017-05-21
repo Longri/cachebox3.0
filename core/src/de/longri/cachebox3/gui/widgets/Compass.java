@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.skin.styles.CompassStyle;
@@ -27,7 +28,7 @@ import de.longri.cachebox3.utils.CB_RectF;
 /**
  * Created by Longri on 21.03.2017.
  */
-public class Compass extends Group implements Layout {
+public class Compass extends WidgetGroup implements Layout {
 
     private final CompassStyle style;
     private final CB_RectF rec_frame, rec_scale, rec_arrow;
@@ -37,10 +38,25 @@ public class Compass extends Group implements Layout {
     private final Matrix4 tmp = new Matrix4();
 
     public Compass(String style) {
-        this.style = VisUI.getSkin().get(style, CompassStyle.class);
+        this(VisUI.getSkin().get(style, CompassStyle.class));
+    }
+
+    public Compass(CompassStyle style) {
+        this.style = style;
         rec_frame = new CB_RectF();
         rec_scale = new CB_RectF();
         rec_arrow = new CB_RectF();
+        calcSizes();
+    }
+
+    private float minSize, prefSize, maxSize, scaleRatio, arrowRatio;
+
+    private void calcSizes() {
+        prefSize = style.frame.getMinWidth();
+        minSize = prefSize * 0.6f;
+        maxSize = prefSize * 1.3f;
+        scaleRatio = style.scale.getMinWidth() / prefSize;
+        arrowRatio = style.arrow.getMinWidth() / prefSize;
     }
 
     public void draw(Batch batch, float parentAlpha) {
@@ -53,7 +69,6 @@ public class Compass extends Group implements Layout {
     }
 
     private void drawBackground(Batch batch, float parentAlpha) {
-
 
         Color color = batch.getColor();
         batch.setColor(1, 1, 1, 1);
@@ -89,85 +104,52 @@ public class Compass extends Group implements Layout {
         layout();
     }
 
-    @Override
-    protected void positionChanged() {
-        layout();
-    }
-
     public void layout() {
-        rec_frame.setPos(0, 0);
-        rec_frame.setSize(style.frame.getMinWidth(), style.frame.getMinHeight());
+        float size = Math.min(this.getWidth(), this.getHeight());
+        rec_frame.setSize(size, size);
+        //set to center pos
+        rec_frame.setPos(this.getWidth() / 2 - size / 2, this.getHeight() / 2 - size / 2);
 
         float centerX = rec_frame.getCenterPosX();
         float centerY = rec_frame.getCenterPosY();
 
-        rec_scale.setSize(style.scale.getMinWidth(), style.scale.getMinHeight());
+        rec_scale.setSize(size * scaleRatio, size * scaleRatio);
         rec_scale.setX(centerX - rec_scale.getHalfWidth());
         rec_scale.setY(centerY - rec_scale.getHalfHeight());
 
-        rec_arrow.setSize(style.arrow.getMinWidth(), style.arrow.getMinHeight());
+        rec_arrow.setSize(size * arrowRatio, size * arrowRatio);
         rec_arrow.setX(centerX - rec_arrow.getHalfWidth());
         rec_arrow.setY(centerY - rec_arrow.getHalfHeight());
     }
 
     @Override
-    public void invalidate() {
-
-    }
-
-    @Override
-    public void invalidateHierarchy() {
-
-    }
-
-    @Override
-    public void validate() {
-
-    }
-
-    @Override
-    public void pack() {
-
-    }
-
-    @Override
-    public void setFillParent(boolean fillParent) {
-
-    }
-
-    @Override
-    public void setLayoutEnabled(boolean enabled) {
-
-    }
-
-    @Override
     public float getMinWidth() {
-        return rec_frame.getWidth();
+        return minSize;
     }
 
     @Override
     public float getMinHeight() {
-        return rec_frame.getHeight();
+        return minSize;
     }
 
     @Override
     public float getPrefWidth() {
-        return rec_frame.getWidth();
+        return prefSize;
     }
 
     @Override
     public float getPrefHeight() {
-        return rec_frame.getHeight();
+        return prefSize;
     }
 
     @Override
     public float getMaxWidth() {
-        return rec_frame.getWidth();
+        return maxSize;
     }
 
     @Override
     public float getMaxHeight() {
-        return rec_frame.getHeight();
+        return maxSize;
     }
 
 

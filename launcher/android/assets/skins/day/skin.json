@@ -1936,11 +1936,6 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.CompassStyle": {
-    "default": {
-      "frame": "compass_1_frame",
-      "scale": "compass_1_scale",
-      "arrow": "compass_1_arrow"
-    },
     "mapCompassStyle": {
       "frame": "map_compass_1_frame",
       "scale": "map_compass_2_scale",
@@ -2063,6 +2058,22 @@
   "com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle": {
     "default-vertical": {
       "handle": "sliderKnob"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.CompassViewStyle": {
+    "compassViewStyle": {
+      "splitHandle": "sliderKnob",
+      "splitBackground": "activityBack_drawable",
+      "distanceBackground": "map-info-panel-background_9_Patch",
+      "distnaceFont": "normal_bold_font",
+      "accurateFont": "mapPanelUnit",
+      "infoFont": "normal_font",
+      "distanceColor": "font_color",
+      "accurateColor": "font_color",
+      "infoColor": "font_color",
+      "frame": "compass_1_frame",
+      "scale": "compass_1_scale",
+      "arrow": "compass_1_arrow"
     }
   }
 }

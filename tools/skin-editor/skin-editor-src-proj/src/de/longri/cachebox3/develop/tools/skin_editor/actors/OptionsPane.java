@@ -377,6 +377,11 @@ public class OptionsPane extends Table {
                         styles.put("ApiButton", apiButtonStyle);
                     }
 
+                    if (widgetStyle.equals("de.longri.cachebox3.gui.skin.styles.CompassStyle")) {
+                        CompassViewStyle compassViewStyle = game.skinProject.get("compassViewStyle", CompassViewStyle.class);
+                        styles.put("compassViewStyle", compassViewStyle);
+                    }
+
                     if (styles == null || styles.size == 0) {
                         Gdx.app.error("OptionsPane", "No styles defined for this widget type");
 

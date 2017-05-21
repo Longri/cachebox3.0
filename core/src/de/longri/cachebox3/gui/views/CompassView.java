@@ -19,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisSplitPane;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
 import de.longri.cachebox3.gui.widgets.Compass;
 
 /**
@@ -28,29 +30,38 @@ public class CompassView extends AbstractView {
 
     private final Compass compass;
     private final VisSplitPane splitPane;
+    private final Table topTable, botomTable;
 
     public CompassView() {
         super("CompassView");
 
+        CompassViewStyle style = VisUI.getSkin().get("compassViewStyle", CompassViewStyle.class);
 
-        Table topTable = new Table();
-        Table botomTable = new Table();
 
-        SplitPane.SplitPaneStyle splitPaneStyle = VisUI.getSkin().get("default-vertical", SplitPane.SplitPaneStyle.class);
+        topTable = new Table();
+        botomTable = new Table();
+
+        topTable.setDebug(true, true);
+        botomTable.setDebug(true, true);
+
+        topTable.setBackground(style.splitBackground);
+        botomTable.setBackground(style.splitBackground);
+
+
         VisSplitPane.VisSplitPaneStyle visSplitPaneStyle = new VisSplitPane.VisSplitPaneStyle();
-        visSplitPaneStyle.handle = splitPaneStyle.handle;
+        visSplitPaneStyle.handle = style.splitHandle;
         splitPane = new VisSplitPane(topTable, botomTable, true, visSplitPaneStyle);
         this.addChild(splitPane);
 
-        compass = new Compass("default");
-        botomTable.add(compass);
+        compass = new Compass(style);
+        botomTable.add(compass).expand().fill().center();
+
     }
 
     @Override
     public void layout() {
-        splitPane.setBounds(0, 0, this.getWidth(), this.getWidth());
-
-        compass.setBounds(10, 10, this.getWidth() - 20, this.getWidth() - 20);
+        super.layout();
+        splitPane.setBounds(0, 0, this.getWidth(), this.getHeight());
     }
 
 
@@ -63,6 +74,6 @@ public class CompassView extends AbstractView {
      * Called when the actor's size has been changed.
      */
     protected void sizeChanged() {
-        compass.setBounds(20, 100, this.getWidth() - 20, this.getWidth() - 20);
+        super.sizeChanged();
     }
 }
