@@ -150,10 +150,13 @@ public class StageManager {
                     descriptionView.onShow();
                     log.debug("Call DescriptionView.onShow() for restore view");
                 }
+
+                viewManager.getActView().onShow();
             }
         }
         log.debug("InputProzessors:" + inputMultiplexer.getProcessors().toString());
         if (debug) writeDrawSequence = true;
+
     }
 
     public static void setMainStage(NamedStage stage) {
