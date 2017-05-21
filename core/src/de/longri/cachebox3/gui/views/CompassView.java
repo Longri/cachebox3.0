@@ -137,12 +137,12 @@ public class CompassView extends AbstractView {
             lineTable.add(difficultyStars);
             VisLabel sLabel = new VisLabel(actCache.Size.toShortString(), infoStyle);
             lineTable.add(sLabel).padLeft(CB.scaledSizes.MARGIN);
-            CacheSizeWidget sizeWidget = new CacheSizeWidget(actCache.Size.ordinal());
+            CacheSizeWidget sizeWidget = new CacheSizeWidget(actCache.Size);
             lineTable.add(sizeWidget).padLeft(CB.scaledSizes.MARGIN_HALF);
             VisLabel tLabel = new VisLabel("T", infoStyle);
             lineTable.left();
             lineTable.add(tLabel);
-            Stars terrainStars = new Stars((int) (actCache.getTerrain()*2));
+            Stars terrainStars = new Stars((int) (actCache.getTerrain() * 2));
             lineTable.add(terrainStars);
             VisLabel vLabel = new VisLabel("GcV", infoStyle);
             lineTable.add(vLabel).padLeft(CB.scaledSizes.MARGIN);

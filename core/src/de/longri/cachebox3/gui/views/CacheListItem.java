@@ -28,6 +28,7 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 
 /**
@@ -38,7 +39,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
     public static ListViewItem getListItem(int listIndex, final Cache cache) {
         ListViewItem listViewItem = new CacheListItem(listIndex, cache.Type, cache.getName(),
                 (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
-                (int) Math.min(cache.Rating * 2, 5 * 2), cache.Size.ordinal(), cache.Size.toShortString());
+                (int) Math.min(cache.Rating * 2, 5 * 2), cache.Size, cache.Size.toShortString());
         return listViewItem;
     }
 
@@ -53,11 +54,11 @@ public class CacheListItem extends ListViewItem implements Disposable {
     private final int difficulty;
     private final int terrain;
     private final int vote;
-    private final int size;
+    private final CacheSizes size;
     private final String shortSizeString;
 
 
-    public CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain, int vote, int size, String shortSizeString) {
+    public CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain, int vote, CacheSizes size, String shortSizeString) {
         super(listIndex);
         this.difficulty = difficulty;
         this.terrain = terrain;

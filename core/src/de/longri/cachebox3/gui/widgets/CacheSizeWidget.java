@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.types.CacheSizes;
 
 /**
  * Created by Longri on 08.09.2016.
@@ -28,24 +29,24 @@ import com.kotcrab.vis.ui.VisUI;
 public class CacheSizeWidget extends Widget {
     private final Drawable sizeDrawable;
 
-    public CacheSizeWidget(int size) {
+    public CacheSizeWidget(CacheSizes size) {
         Skin skin = VisUI.getSkin();
 
         switch (size) {
-            case 0:
+            case other:
+                sizeDrawable = skin.getDrawable("other");
+                break;
+            case micro:
                 sizeDrawable = skin.getDrawable("micro");
                 break;
-            case 1:
+            case small:
                 sizeDrawable = skin.getDrawable("small");
                 break;
-            case 2:
+            case regular:
                 sizeDrawable = skin.getDrawable("regular");
                 break;
-            case 3:
+            case large:
                 sizeDrawable = skin.getDrawable("large");
-                break;
-            case 4:
-                sizeDrawable = skin.getDrawable("other");
                 break;
             default:
                 sizeDrawable = skin.getDrawable("other"); // unknown
