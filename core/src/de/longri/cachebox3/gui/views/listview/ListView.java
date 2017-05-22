@@ -557,7 +557,7 @@ public class ListView extends WidgetGroup {
                             selectedItemList.add(item);
                         }
                     }
-                   CB.requestRendering();
+                    CB.requestRendering();
 
                     //call selection changed event
                     for (int i = 0, n = changedEventListeners.size; i < n; i++) {
@@ -583,13 +583,15 @@ public class ListView extends WidgetGroup {
 
     public void setScrollPos(float scrollPos) {
         if (scrollPane != null) scrollPane.setScrollY(scrollPos);
-       CB.requestRendering();
+        CB.requestRendering();
     }
 
     public void setSelectedItemVisible() {
         //get pos of first selected
         ListViewItem item = this.selectedItemList.size == 0 ? null : this.selectedItemList.get(0);
         float scrollPos = 0;
+        if (itemYPos.size < adapter.getCount())
+            layout();
         if (item != null) {
             int index = item.getListIndex() - 1;
             scrollPos = index < 0 ? 0 : completeHeight - (itemYPos.get(index) + item.getHeight());
@@ -604,7 +606,7 @@ public class ListView extends WidgetGroup {
         this.selectedItemList.clear();
         ListViewItem item = adapter.getView(index);
         this.selectedItemList.add(item);
-       CB.requestRendering();
+        CB.requestRendering();
     }
 
     public ListViewItem getSelectedItem() {
@@ -614,7 +616,7 @@ public class ListView extends WidgetGroup {
 
     public void dataSetChanged() {
         layout(true);
-       CB.requestRendering();
+        CB.requestRendering();
     }
 
 
