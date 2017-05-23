@@ -92,6 +92,8 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
 
 
     public void setNewValues(CoordinateGPS myPosition, float bearing) {
+        if (myPosition == null) return;
+
         compass.setBearing(bearing);
         coordinateLabel1.setText(UnitFormatter.formatLatitudeDM(myPosition.getLatitude()));
         coordinateLabel2.setText(UnitFormatter.formatLongitudeDM(myPosition.getLongitude()));

@@ -39,8 +39,6 @@ import de.longri.cachebox3.gui.widgets.Slider;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.CacheSizes;
-import de.longri.cachebox3.types.CacheTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,6 +60,16 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
     private Slider slider;
     private float sliderPos = 0;
     private final CacheboxMain main;
+    private final Action_Show_DescriptionView action_show_descriptionView = new Action_Show_DescriptionView();
+    private final Action_Show_WaypointView action_show_waypointView = new Action_Show_WaypointView();
+    private final Action_Show_LogView action_show_logView = new Action_Show_LogView();
+    private final Action_Show_MapView action_show_mapView = new Action_Show_MapView();
+    private final Action_Show_CompassView action_show_compassView = new Action_Show_CompassView();
+    private final Action_Show_CacheList action_show_cacheList = new Action_Show_CacheList();
+    private final Action_Show_TrackListView action_show_trackListView = new Action_Show_TrackListView();
+    private final Action_Show_SpoilerView action_show_spoilerView = new Action_Show_SpoilerView();
+    private final Action_Show_TrackableListView action_show_trackableListView = new Action_Show_TrackableListView();
+    private final Action_Show_NoteView action_show_noteView = new Action_Show_NoteView();
 
     public ViewManager(final CacheboxMain main) {
         super("ViewManager");
@@ -181,20 +189,20 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
     private void initialActionButtons() {
         // assign the actions to the buttons
 
-        db_button.addAction(new ActionButton(new Action_Show_CacheList(), true, GestureDirection.Up));
-        db_button.addAction(new ActionButton(new Action_Show_TrackableListView(), false, GestureDirection.Right));
-        db_button.addAction(new ActionButton(new Action_Show_TrackListView(), false, GestureDirection.Down));
+        db_button.addAction(new ActionButton(action_show_cacheList, true, GestureDirection.Up));
+        db_button.addAction(new ActionButton(action_show_trackableListView, false, GestureDirection.Right));
+        db_button.addAction(new ActionButton(action_show_trackListView, false, GestureDirection.Down));
 
-        cache_button.addAction(new ActionButton(new Action_Show_DescriptionView(), true, GestureDirection.Up));
-        cache_button.addAction(new ActionButton(new Action_Show_WaypointView(), false, GestureDirection.Right));
-        cache_button.addAction(new ActionButton(new Action_Show_LogView(), false, GestureDirection.Down));
+        cache_button.addAction(new ActionButton(action_show_descriptionView, true, GestureDirection.Up));
+        cache_button.addAction(new ActionButton(action_show_waypointView, false, GestureDirection.Right));
+        cache_button.addAction(new ActionButton(action_show_logView, false, GestureDirection.Down));
 //        cache_button.addAction(new ActionButton(actionShowHint, false));
 //        cache_button.addAction(new ActionButton(actionShowDescExt, false));
-        cache_button.addAction(new ActionButton(new Action_Show_SpoilerView(), false));
-        cache_button.addAction(new ActionButton(new Action_Show_NoteView(), false));
+        cache_button.addAction(new ActionButton(action_show_spoilerView, false));
+        cache_button.addAction(new ActionButton(action_show_noteView, false));
 
-        navButton.addAction(new ActionButton(new Action_Show_MapView(), true, GestureDirection.Up));
-        navButton.addAction(new ActionButton(new Action_Show_CompassView(), false, GestureDirection.Right));
+        navButton.addAction(new ActionButton(action_show_mapView, true, GestureDirection.Up));
+        navButton.addAction(new ActionButton(action_show_compassView, false, GestureDirection.Right));
         navButton.addAction(new ActionButton(new Action_NavigateExt(), false, GestureDirection.Down));
         navButton.addAction(new ActionButton(new Action_NavigateInt(), false, GestureDirection.Left));
         if (CB.isTestVersion())
@@ -264,6 +272,58 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
                 lastCache = cache;
             }
         }
+    }
+
+    public AbstractAction getAction_Show_DescriptionView() {
+        return action_show_descriptionView;
+    }
+
+    public AbstractAction getAction_Show_WaypointView() {
+        return action_show_waypointView;
+    }
+
+    public AbstractAction getAction_Show_LogView() {
+        return action_show_logView;
+    }
+
+    public AbstractAction getAction_Show_MapView() {
+        return action_show_mapView;
+    }
+
+    public AbstractAction getAction_Show_CompassView() {
+        return action_show_compassView;
+    }
+
+    public AbstractAction getAction_Show_CacheList() {
+        return action_show_cacheList;
+    }
+
+    public AbstractAction getAction_Show_TrackListView() {
+        return action_show_trackListView;
+    }
+
+    public AbstractAction getAction_Show_SolverView() {
+        return null;
+    }
+
+    public AbstractAction getAction_Show_SpoilerView() {
+        return action_show_spoilerView;
+    }
+
+    public AbstractAction getAction_Show_FieldNotesView() {
+        return null;
+    }
+
+    public AbstractAction getAction_Show_TrackableListView() {
+        return action_show_trackableListView;
+    }
+
+    public AbstractAction getAction_Show_SolverView2() {
+        return null;
+    }
+
+    public AbstractAction getAction_Show_NoteView() {
+        return action_show_noteView;
     }
 
 

@@ -149,7 +149,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
         }
 
         if (showTargetDirection) {
-            targetdirectionLabel = new Label("", infoStyle);
+            targetdirectionLabel = new Label(Translation.Get("waiting_for_fix"), infoStyle);
             topTable.add(targetdirectionLabel).left();
             topTable.row();
         }

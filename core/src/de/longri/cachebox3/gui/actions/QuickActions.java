@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.actions;
 
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings;
 import de.longri.cachebox3.gui.actions.show_vies.*;
 import de.longri.cachebox3.gui.widgets.QuickButtonItem;
@@ -131,19 +132,19 @@ public enum QuickActions {
     public static AbstractAction getActionEnumById(int id) {
         switch (id) {
             case 0:
-                return new Action_Show_DescriptionView();
+                return CB.viewmanager.getAction_Show_DescriptionView();
             case 1:
-                return new Action_Show_WaypointView();
+                return CB.viewmanager.getAction_Show_WaypointView();
             case 2:
-                return new Action_Show_LogView();
+                return CB.viewmanager.getAction_Show_LogView();
             case 3:
-                return new Action_Show_MapView();
+                return CB.viewmanager.getAction_Show_MapView();
             case 4:
-                return new Action_Show_CompassView();
+                return CB.viewmanager.getAction_Show_CompassView();
             case 5:
-                return new Action_Show_CacheList();
+                return CB.viewmanager.getAction_Show_CacheList();
             case 6:
-                return new Action_Show_TrackListView();
+                return CB.viewmanager.getAction_Show_TrackListView();
             case 7:
                 return new Action_TakePhoto();
             case 8:
@@ -157,9 +158,9 @@ public enum QuickActions {
             case 12:
                 return new Action_Switch_Autoresort();
             case 13:
-                return new Action_Show_SolverView();
+                return CB.viewmanager.getAction_Show_SolverView();
             case 14:
-                return new Action_Show_SpoilerView();
+                return CB.viewmanager.getAction_Show_SpoilerView();
             case 15:
                 return new Action_Show_Hint();
             case 16:
@@ -167,17 +168,17 @@ public enum QuickActions {
             case 17:
                 return new Action_Toggle_Day_Night();
             case 18:
-                return new Action_Show_FieldNotesView();
+                return CB.viewmanager.getAction_Show_FieldNotesView();
             case 19:
                 return new Action_QuickFieldNote();
             case 20:
-                return new Action_Show_TrackableListView();
+                return CB.viewmanager.getAction_Show_TrackableListView();
             case 21:
                 return new Action_Add_WP();
             case 22:
-                return new Action_Show_SolverView2();
+                return CB.viewmanager.getAction_Show_SolverView2();
             case 23:
-                return new Action_Show_NoteView();
+                return CB.viewmanager.getAction_Show_NoteView();
             case 24:
                 return new Action_Upload_Fieldnotes();
             case 25:
