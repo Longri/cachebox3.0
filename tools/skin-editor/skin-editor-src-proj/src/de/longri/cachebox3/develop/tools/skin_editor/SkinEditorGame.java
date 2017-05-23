@@ -42,7 +42,7 @@ public class SkinEditorGame extends Game {
     }
 
     public final static String[] widgets = {"MapWayPointItem", "Sizes", "Icons", "MenuIcons", "Label", "EditText", "Button",
-            "GestureButton", "TextButton", "FileChooser", "Compass", "CacheTypes", "CheckBox", "TextField", "ListView",
+            "GestureButton", "TextButton", "FileChooser", "Compass", "CacheTypes","AttributeTypes", "CheckBox", "TextField", "ListView",
             "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree", "Animation"};
 
     public SpriteBatch batch;
@@ -153,6 +153,8 @@ public class SkinEditorGame extends Game {
             return "de.longri.cachebox3.gui.skin.styles.SelectBoxStyle";
         } else if (widget.equals("EditText")) {
             return "de.longri.cachebox3.gui.skin.styles.EditTextStyle";
+        } else if (widget.equals("AttributeTypes")) {
+            return "de.longri.cachebox3.gui.skin.styles.AttributesStyle";
         } else {
             return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
         }

@@ -15,16 +15,16 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSplitPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Compass;
@@ -32,12 +32,16 @@ import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 
 /**
  * Created by Longri on 24.07.16.
@@ -53,6 +57,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
     private CoordinateGPS actCoord;
     private float actHeading = 0;
+    private Label targetdirectionLabel, ownPositionLabel;
 
     private boolean resetLayout, showMap, showName, showIcon, showAtt, showGcCode, showCoords, showWpDesc, showSatInfos, showSunMoon, showAnyContent, showTargetDirection, showSDT, showLastFound;
 
@@ -137,6 +142,18 @@ public class CompassView extends AbstractView implements PositionChangedListener
             topTable.row();
         }
 
+        if (showSatInfos) {
+            ownPositionLabel = new Label(Translation.Get("waiting_for_fix"), infoStyle);
+            topTable.add(ownPositionLabel).left();
+            topTable.row();
+        }
+
+        if (showTargetDirection) {
+            targetdirectionLabel = new Label("", infoStyle);
+            topTable.add(targetdirectionLabel).left();
+            topTable.row();
+        }
+
         if (showSDT) {
             Table lineTable = new Table();
             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
@@ -160,6 +177,38 @@ public class CompassView extends AbstractView implements PositionChangedListener
             lineTable.add(vStars);
             topTable.add(lineTable).left();
             topTable.row();
+        }
+
+        // add Attribute
+        if (showAtt) {
+            AttributesStyle attStyle = VisUI.getSkin().get("CompassView", AttributesStyle.class);
+            ArrayList<Attributes> attList = actCache.getAttributes();
+            float iconWidth = 0, iconHeight = 0;
+            int lineBreak = 0, lineBreakStep = 0;
+            Table lineTable = null;
+            for (int i = 0, n = attList.size(); i < n; i++) {
+                Drawable attDrawable = attList.get(i).getDrawable(attStyle);
+                if (attDrawable != null) {
+                    if (iconWidth == 0) {
+                        iconWidth = attDrawable.getMinWidth();
+                        iconHeight = attDrawable.getMinHeight();
+                        lineBreakStep = lineBreak = (int) (this.getWidth() / (iconWidth + CB.scaledSizes.MARGINx2));
+                        lineTable = new Table();
+                        lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+                    }
+                    lineTable.add(new Image(attDrawable)).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
+                    if (i >= lineBreak) {
+                        topTable.add(lineTable).left();
+                        topTable.row();
+                        lineTable = new Table();
+                        lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+                        lineBreak += lineBreakStep;
+                    }
+                }
+            }
+            topTable.add(lineTable).left();
+            topTable.row();
+
         }
         resetLayout = false;
     }
@@ -240,6 +289,11 @@ public class CompassView extends AbstractView implements PositionChangedListener
             return;
         }
 
+        if (ownPositionLabel != null) {
+            ownPositionLabel.setText(actCoord.FormatCoordinate());
+        }
+
+
         Cache actCache = null;
         Waypoint actWaypoint = null;
 
@@ -264,6 +318,18 @@ public class CompassView extends AbstractView implements PositionChangedListener
         float bearing = result[1];
 
         compassPanel.setInfo(distance, actHeading, bearing, actCoord.getAccuracy());
+
+        if (targetdirectionLabel != null) {
+            double directionToTarget = 0;
+            if (bearing < 0)
+                directionToTarget = 360 + bearing;
+            else
+                directionToTarget = bearing;
+
+            String sBearing = Translation.Get("directionToTarget") + " : " +
+                    String.format("%.0f", directionToTarget) + "°";
+            targetdirectionLabel.setText(sBearing);
+        }
 
         CB.requestRendering();
     }

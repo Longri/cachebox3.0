@@ -92,6 +92,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.skin.styles.EditTextStyle.class);
         items.add(SplitPane.SplitPaneStyle.class);
         items.add(CompassViewStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.AttributesStyle.class);
 
         SvgSkinUtil.saveSkin(this, items, skinFile);
 
