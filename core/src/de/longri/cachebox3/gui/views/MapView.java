@@ -377,6 +377,9 @@ public class MapView extends AbstractView {
     public void onShow() {
         addInputListener();
         sizeChanged();
+
+        //set initial direction
+        infoPanel.setNewValues(EventHandler.getMyPosition(), EventHandler.getHeading());
     }
 
     @Override

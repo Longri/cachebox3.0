@@ -23,26 +23,36 @@ import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSplitPane;
-import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.Stars;
+import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.utils.UnitFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 24.07.16.
  */
-public class CompassView extends AbstractView {
+public class CompassView extends AbstractView implements PositionChangedListener, OrientationChangedListener {
+
+    private static final Logger log = LoggerFactory.getLogger(CompassView.class);
 
     private final CompassPanel compassPanel;
     private final VisSplitPane splitPane;
     private final Table topTable, bottomTable;
     private final CompassViewStyle style;
+
+    private CoordinateGPS actCoord;
+    private float actHeading = 0;
 
     private boolean resetLayout, showMap, showName, showIcon, showAtt, showGcCode, showCoords, showWpDesc, showSatInfos, showSunMoon, showAnyContent, showTargetDirection, showSDT, showLastFound;
 
@@ -158,8 +168,13 @@ public class CompassView extends AbstractView {
     public void onShow() {
         if (resetLayout)
             readSettings();
+        EventHandler.add(this);
     }
 
+    @Override
+    public void onHide() {
+        EventHandler.remove(this);
+    }
 
     private void readSettings() {
         showMap = Config.CompassShowMap.getValue();
@@ -178,6 +193,11 @@ public class CompassView extends AbstractView {
         showAnyContent = showMap || showName || showIcon || showAtt || showGcCode || showCoords || showWpDesc || showSatInfos || showSunMoon || showTargetDirection || showSDT || showLastFound;
 
         layoutInfoPanel();
+
+        // get last Coord and set values
+        actCoord = EventHandler.getMyPosition();
+        actHeading = EventHandler.getHeading();
+        refreshOrientationInfo();
     }
 
 
@@ -190,11 +210,62 @@ public class CompassView extends AbstractView {
 
     @Override
     public void dispose() {
-
+        EventHandler.remove(this);
     }
 
     public void resetLayout() {
         resetLayout = true;
+    }
+
+    @Override
+    public void positionChanged(PositionChangedEvent event) {
+        actCoord = event.pos;
+        refreshOrientationInfo();
+    }
+
+    @Override
+    public void orientationChanged(OrientationChangedEvent event) {
+        actHeading = event.orientation;
+        refreshOrientationInfo();
+    }
+
+    private void refreshOrientationInfo() {
+
+        if (actCoord == null) {
+            actCoord = EventHandler.getMyPosition();
+        }
+
+        if (actCoord == null) {
+            log.debug("No own position, return refresh Compass ");
+            return;
+        }
+
+        Cache actCache = null;
+        Waypoint actWaypoint = null;
+
+        if (EventHandler.getSelectedWaypoint() == null) {
+            actCache = EventHandler.getSelectedCache();
+        } else {
+            actWaypoint = EventHandler.getSelectedWaypoint();
+        }
+        Coordinate dest = actWaypoint != null ? actWaypoint : actCache;
+
+        float result[] = new float[4];
+
+        try {
+            MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.ACCURATE, actCoord.getLatitude(),
+                    actCoord.getLongitude(), dest.getLatitude(), dest.getLongitude(), result);
+        } catch (Exception e) {
+            log.error("Compute distance and bearing", e);
+            return;
+        }
+
+        float distance = result[0];
+        float bearing = result[1];
+
+        compassPanel.setInfo(distance, actHeading, bearing, actCoord.getAccuracy());
+
+        CB.requestRendering();
     }
 
     // holds the Compass, the distance label and the Sun/Moon drawables
@@ -238,7 +309,15 @@ public class CompassView extends AbstractView {
             accurate.setBounds(CB.scaledSizes.MARGIN, yPos, this.getWidth() - CB.scaledSizes.MARGINx2, height);
         }
 
+        public void setInfo(float distance, float heading, float bearing, float accurate) {
+            this.distance.setText(UnitFormatter.distanceString(distance, false));
+            this.accurate.setText("  +/- " + UnitFormatter.distanceString(accurate, true));
+            compass.setBearing(heading);
+            compass.setHeading(bearing - (360 - heading));
+        }
     }
 
-
+    public String toString() {
+        return "CompassView";
+    }
 }

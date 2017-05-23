@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.map;
 
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
@@ -114,7 +115,7 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
 
 
         if (isDisposed.get()) return;
-        myPosition = de.longri.cachebox3.events.EventHandler.getMyPosition();
+        myPosition = EventHandler.getMyPosition();
         infoPanel.setNewValues(myPosition, mapBearing);
 
         // set map values

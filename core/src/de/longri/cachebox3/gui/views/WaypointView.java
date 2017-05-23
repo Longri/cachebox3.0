@@ -258,7 +258,6 @@ public class WaypointView extends AbstractView {
 
     @Override
     public void dispose() {
-//TODO dispose WaypointView
         this.actCache = null;
         this.actWaypoint = null;
         disposeListView();

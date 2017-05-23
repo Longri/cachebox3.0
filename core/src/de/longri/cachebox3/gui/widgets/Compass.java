@@ -36,6 +36,7 @@ public class Compass extends WidgetGroup implements Layout {
     private final Matrix4 transform_scale = new Matrix4();
     private final Matrix4 transform_arrow = new Matrix4();
     private final Matrix4 tmp = new Matrix4();
+    private float lastBearing, lastHeadiong;
 
     public Compass(String style) {
         this(VisUI.getSkin().get(style, CompassStyle.class));
@@ -102,6 +103,10 @@ public class Compass extends WidgetGroup implements Layout {
     @Override
     protected void sizeChanged() {
         layout();
+
+        //set matrix new
+        setBearing(lastBearing);
+        setHeading(lastHeadiong);
     }
 
     public void layout() {
@@ -154,6 +159,7 @@ public class Compass extends WidgetGroup implements Layout {
 
 
     public void setBearing(float bearing) {
+        lastBearing = bearing;
         transform_scale.idt();
         transform_scale.translate(rec_scale.getHalfWidth() + rec_scale.getX(), rec_scale.getHalfHeight() + rec_scale.getY(), 0);
         transform_scale.rotate(0, 0, 1, -bearing);
@@ -161,6 +167,7 @@ public class Compass extends WidgetGroup implements Layout {
     }
 
     public void setHeading(float heading) {
+        lastHeadiong = heading;
         transform_arrow.idt();
         transform_arrow.translate(rec_arrow.getHalfWidth() + rec_arrow.getX(), rec_arrow.getHalfHeight() + rec_arrow.getY(), 0);
         transform_arrow.rotate(0, 0, 1, -heading);
