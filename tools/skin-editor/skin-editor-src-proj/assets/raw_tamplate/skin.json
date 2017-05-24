@@ -96,6 +96,14 @@
       "path": "svg/arrow_help_90.svg",
       "scale": 0.28
     },
+    "att_Available_at_all_times_0": {
+      "path": "svg/att_Available_at_all_times_0.svg",
+      "scale": 0.5
+    },
+    "att_Available_at_all_times_1": {
+      "path": "svg/att_Available_at_all_times_1.svg",
+      "scale": 0.5
+    },
     "att_Dogs_0": {
       "path": "svg/att_Dogs_0.svg",
       "scale": 0.5
@@ -2096,8 +2104,10 @@
     "CompassView": {
       "att_Dogs_0": "att_Dogs_0",
       "att_Recommended_for_kids_0": "att_Recommended_for_kids_0",
+      "att_Available_at_all_times_0": "att_Available_at_all_times_0",
       "att_Dogs_1": "att_Dogs_1",
-      "att_Recommended_for_kids_1": "att_Recommended_for_kids_1"
+      "att_Recommended_for_kids_1": "att_Recommended_for_kids_1",
+      "att_Available_at_all_times_1": "att_Available_at_all_times_1"
     }
   }
 }
