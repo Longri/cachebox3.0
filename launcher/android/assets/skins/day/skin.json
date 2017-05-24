@@ -96,6 +96,22 @@
       "path": "svg/arrow_help_90.svg",
       "scale": 0.28
     },
+    "att_Dogs_0": {
+      "path": "svg/att_Dogs_0.svg",
+      "scale": 0.5
+    },
+    "att_Dogs_1": {
+      "path": "svg/att_Dogs_1.svg",
+      "scale": 0.5
+    },
+    "att_Recommended_for_kids_0": {
+      "path": "svg/att_Recommended_for_kids_0.svg",
+      "scale": 0.5
+    },
+    "att_Recommended_for_kids_1": {
+      "path": "svg/att_Recommended_for_kids_1.svg",
+      "scale": 0.5
+    },
     "baseMapFreizeitkarte": {
       "path": "svg/baseMapFreizeitkarte.svg",
       "scale": 0.19
@@ -2077,6 +2093,11 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.AttributesStyle": {
-    "CompassView": {}
+    "CompassView": {
+      "att_Dogs_0": "att_Dogs_0",
+      "att_Recommended_for_kids_0": "att_Recommended_for_kids_0",
+      "att_Dogs_1": "att_Dogs_1",
+      "att_Recommended_for_kids_1": "att_Recommended_for_kids_1"
+    }
   }
 }
