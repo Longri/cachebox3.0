@@ -382,14 +382,14 @@ public class SvgSkin extends Skin {
                 TextureRegion textureRegion = getRegion(name);
 
                 //scale nine patch regions
-                left = CB.getScaledInt(left);
-                right = CB.getScaledInt(right);
-                top = CB.getScaledInt(top);
-                bottom = CB.getScaledInt(bottom);
-                leftWidth = leftWidth == 0 ? left : CB.getScaledInt(leftWidth);
-                rightWidth = rightWidth == 0 ? right : CB.getScaledInt(rightWidth);
-                topHeight = topHeight == 0 ? top : CB.getScaledInt(topHeight);
-                bottomHeight = bottomHeight == 0 ? bottom : CB.getScaledInt(bottomHeight);
+                if (left > 0)left = CB.getScaledInt(left);
+                if (right > 0)right = CB.getScaledInt(right);
+                if (top > 0)top = CB.getScaledInt(top);
+                if (bottom > 0)bottom = CB.getScaledInt(bottom);
+                if (leftWidth >= 0)leftWidth = leftWidth == 0 ? left : CB.getScaledInt(leftWidth);
+                if (rightWidth >= 0)rightWidth = rightWidth == 0 ? right : CB.getScaledInt(rightWidth);
+                if (topHeight >= 0)topHeight = topHeight == 0 ? top : CB.getScaledInt(topHeight);
+                if (bottomHeight >= 0)bottomHeight = bottomHeight == 0 ? bottom : CB.getScaledInt(bottomHeight);
 
 
                 // if any value < 0 set to half width or height!
