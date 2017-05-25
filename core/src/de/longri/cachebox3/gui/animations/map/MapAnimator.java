@@ -18,11 +18,15 @@ package de.longri.cachebox3.gui.animations.map;
 import com.badlogic.gdx.Gdx;
 import org.oscim.core.MapPosition;
 import org.oscim.map.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 28.03.2017.
  */
 public class MapAnimator {
+
+    private static final Logger log = LoggerFactory.getLogger(MapAnimator.class);
 
     private final double POS_PRECISION = 1e-6;
     private final double SCALE_PRECISION = 1;
@@ -100,7 +104,22 @@ public class MapAnimator {
     }
 
     public void rotate(float duration, double value) {
-        this.rotate.start(duration, mapPosition.getBearing(), value, ROTATE_PRECISION);
+        float mr = -mapPosition.getBearing();
+        if (mr < 0) mr += 360;
+        if (mr > 360) mr -= 360;
+
+        float delta = (float) Math.abs(value - mr);
+
+        if (delta > 270) {
+            //Delta to big, rotate other direction"
+            if (value - mr < 0) {
+                mr -= 360;
+            } else {
+                mr += 360;
+            }
+        }
+//        log.debug("Start rotate animation to: {}  from {}/ {}", value, mr, mapPosition.getBearing());
+        this.rotate.start(duration, mr, value, ROTATE_PRECISION);
     }
 
     public void tilt(double value) {
