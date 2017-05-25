@@ -25,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.show_vies.Abstract_Action_ShowView;
@@ -35,8 +34,6 @@ import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.GestureButtonStyle;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.utils.CB_RectF;
-import de.longri.cachebox3.utils.SizeChangedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

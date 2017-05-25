@@ -19,8 +19,6 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
-import com.badlogic.gdx.backends.iosrobovm.IOSFileHandle;
-import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GLAdapter;
 import org.oscim.gdx.GdxAssets;
 import org.oscim.ios.backend.IosGL;
@@ -31,9 +29,7 @@ import org.robovm.apple.glkit.GLKViewDrawableStencilFormat;
 import org.robovm.apple.uikit.UIApplication;
 import org.robovm.apple.uikit.UIApplicationLaunchOptions;
 import org.robovm.apple.uikit.UIDevice;
-import org.robovm.apple.uikit.UIScreen;
 import org.slf4j.impl.LibgdxLogger;
-import org.slf4j.impl.LibgdxLoggerFactory;
 
 public class IOS_Launcher extends IOSApplication.Delegate {
 
@@ -50,16 +46,17 @@ public class IOS_Launcher extends IOSApplication.Delegate {
     @Override
     protected IOSApplication createApplication() {
 
-         final String appDir = System.getenv("HOME");
-         final String localPath = appDir + "/Library/local/";
+        CB.setGlobalScale(0.8f);
 
-        LibgdxLogger.PROPERTIES_FILE_HANDLE=new LibgdxLoggerIosFileHandle(localPath, Files.FileType.Absolute).child(LibgdxLogger.CONFIGURATION_FILE_XML);
+        final String appDir = System.getenv("HOME");
+        final String localPath = appDir + "/Library/local/";
+
+        LibgdxLogger.PROPERTIES_FILE_HANDLE = new LibgdxLoggerIosFileHandle(localPath, Files.FileType.Absolute).child(LibgdxLogger.CONFIGURATION_FILE_XML);
         LibgdxLogger.initial(LibgdxLogger.PROPERTIES_FILE_HANDLE);
 
 
         //initialize platform bitmap factory
         IosGraphics.init();
-
 
 
         //initialize platform connector
