@@ -1103,9 +1103,15 @@
       "a": 1
     },
     "background": {
-      "r": 1,
-      "g": 1,
-      "b": 1,
+      "r": 0.78431374,
+      "g": 0.8235294,
+      "b": 0.6862745,
+      "a": 1
+    },
+    "background_color": {
+      "r": 0.788,
+      "g": 0.827,
+      "b": 0.69,
       "a": 1
     },
     "centerCrossColor": {
@@ -1168,6 +1174,9 @@
     "transparent_color": {}
   },
   "de.longri.cachebox3.gui.skin.styles.ColorDrawableStyle": {
+    "color_background_drawable": {
+      "color": "background_color"
+    },
     "dialog_stage_background": {
       "color": "dialog_background"
     },
@@ -1379,7 +1388,11 @@
       "left": 34,
       "right": 34,
       "top": -1,
-      "bottom": -1
+      "bottom": -1,
+      "leftWidth": 34,
+      "rightWidth": 34,
+      "topHeight": -1,
+      "bottomHeight": -1
     },
     "progress_back_9_Patch": {
       "name": "progress_back",
@@ -2112,6 +2125,7 @@
   "de.longri.cachebox3.gui.skin.styles.CompassViewStyle": {
     "compassViewStyle": {
       "splitHandle": "pane_slider_vertical_9_Patch",
+      "background": "color_background_drawable",
       "splitBackground": "activityBack_drawable",
       "distanceBackground": "map-info-panel-background_9_Patch",
       "distnaceFont": "normal_bold_font",

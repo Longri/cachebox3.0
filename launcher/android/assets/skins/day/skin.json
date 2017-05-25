@@ -1387,12 +1387,12 @@
       "name": "pane_slider_vertical",
       "left": 34,
       "right": 34,
-      "top": 18,
-      "bottom": 6,
+      "top": -1,
+      "bottom": -1,
       "leftWidth": 34,
       "rightWidth": 34,
-      "topHeight": 18,
-      "bottomHeight": 6
+      "topHeight": -1,
+      "bottomHeight": -1
     },
     "progress_back_9_Patch": {
       "name": "progress_back",

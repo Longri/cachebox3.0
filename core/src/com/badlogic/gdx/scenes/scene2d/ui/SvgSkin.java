@@ -24,16 +24,16 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.skin.styles.ColorDrawableStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.IconsStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
-import org.slf4j.*;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -382,21 +382,21 @@ public class SvgSkin extends Skin {
                 TextureRegion textureRegion = getRegion(name);
 
                 //scale nine patch regions
-                if (left > 0)left = CB.getScaledInt(left);
-                if (right > 0)right = CB.getScaledInt(right);
-                if (top > 0)top = CB.getScaledInt(top);
-                if (bottom > 0)bottom = CB.getScaledInt(bottom);
-                if (leftWidth >= 0)leftWidth = leftWidth == 0 ? left : CB.getScaledInt(leftWidth);
-                if (rightWidth >= 0)rightWidth = rightWidth == 0 ? right : CB.getScaledInt(rightWidth);
-                if (topHeight >= 0)topHeight = topHeight == 0 ? top : CB.getScaledInt(topHeight);
-                if (bottomHeight >= 0)bottomHeight = bottomHeight == 0 ? bottom : CB.getScaledInt(bottomHeight);
+                if (left > 0) left = CB.getScaledInt(left);
+                if (right > 0) right = CB.getScaledInt(right);
+                if (top > 0) top = CB.getScaledInt(top);
+                if (bottom > 0) bottom = CB.getScaledInt(bottom);
+                if (leftWidth >= 0) leftWidth = leftWidth == 0 ? left : CB.getScaledInt(leftWidth);
+                if (rightWidth >= 0) rightWidth = rightWidth == 0 ? right : CB.getScaledInt(rightWidth);
+                if (topHeight >= 0) topHeight = topHeight == 0 ? top : CB.getScaledInt(topHeight);
+                if (bottomHeight >= 0) bottomHeight = bottomHeight == 0 ? bottom : CB.getScaledInt(bottomHeight);
 
 
                 // if any value < 0 set to half width or height!
                 if (left < 0) left = textureRegion.getRegionWidth() / 2;
                 if (right < 0) right = textureRegion.getRegionWidth() / 2;
-                if (top < 0) top = textureRegion.getRegionHeight() / 2;
-                if (bottom < 0) bottom = textureRegion.getRegionHeight() / 2;
+                if (top < 0) top = (textureRegion.getRegionHeight() / 2);
+                if (bottom < 0) bottom = (textureRegion.getRegionHeight() / 2);
                 if (leftWidth < 0) leftWidth = textureRegion.getRegionWidth() / 2;
                 if (rightWidth < 0) rightWidth = textureRegion.getRegionWidth() / 2;
                 if (topHeight < 0) topHeight = textureRegion.getRegionHeight() / 2;
