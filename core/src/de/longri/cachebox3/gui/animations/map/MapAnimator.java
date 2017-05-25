@@ -61,7 +61,7 @@ public class MapAnimator {
         }
         if (rotate.update(delta)) {
             changed = true;
-            mapPosition.setBearing((float) rotate.getAct());
+            mapPosition.setBearing((float) -rotate.getAct());
         }
         if (tilt.update(delta)) {
             changed = true;
