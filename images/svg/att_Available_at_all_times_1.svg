@@ -13,10 +13,10 @@
 	<g>
 		<radialGradient id="SVGID_Fill1_" cx="-17.8772" cy="8.4397" r="118.103" gradientUnits="userSpaceOnUse">
 			<stop offset="0" stop-color="#FFFFFF" stop-opacity="0.388235"/>
-			<stop offset="0.90991" stop-color="#FFFFFF" stop-opacity="0.156863"/>
+			<stop offset="0.909912" stop-color="#FFFFFF" stop-opacity="0.156863"/>
 			<stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
 		</radialGradient>
-		<path fill="url(#SVGID_Fill1_)" stroke-linejoin="round" d="M 14.5,2.00073L 78.5,2.00073C 84.5751,2.00073 89.5,6.92554 89.5,13.0007L 89.5,76.0002C 89.5,82.0754 84.5751,87.0002 78.5,87.0002L 14.5,87.0002C 8.42485,87.0002 3.49998,82.0754 3.49998,76.0002L 3.49998,13.0007C 3.49998,6.92554 8.42485,2.00073 14.5,2.00073 Z "/>
+		<path fill="url(#SVGID_Fill1_)" stroke-width="0.2" stroke-linejoin="round" d="M 14.5,2.00073L 78.5,2.00073C 84.5751,2.00073 89.5,6.92554 89.5,13.0007L 89.5,76.0002C 89.5,82.0754 84.5751,87.0002 78.5,87.0002L 14.5,87.0002C 8.42485,87.0002 3.49998,82.0754 3.49998,76.0002L 3.49998,13.0007C 3.49998,6.92554 8.42485,2.00073 14.5,2.00073 Z "/>
 		<radialGradient id="SVGID_Stroke1_" cx="71.5196" cy="46.0012" r="669.951" gradientUnits="userSpaceOnUse">
 			<stop offset="0.869369" stop-color="#F1F1F1" stop-opacity="0"/>
 			<stop offset="1" stop-color="#EEEEEE" stop-opacity="0.376471"/>

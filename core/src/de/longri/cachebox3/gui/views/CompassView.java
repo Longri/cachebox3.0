@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
@@ -192,7 +193,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
                     if (iconWidth == 0) {
                         iconWidth = attDrawable.getMinWidth();
                         iconHeight = attDrawable.getMinHeight();
-                        lineBreakStep = lineBreak = (int) (this.getWidth() / (iconWidth + CB.scaledSizes.MARGINx2));
+                        lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + CB.scaledSizes.MARGINx2));
                         lineTable = new Table();
                         lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
                     }
