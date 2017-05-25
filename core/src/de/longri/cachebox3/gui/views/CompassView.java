@@ -395,7 +395,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
             this.distance.setText(UnitFormatter.distanceString(distance, false));
             this.accurate.setText("  +/- " + UnitFormatter.distanceString(accurate, true));
             compass.setBearing(heading);
-            compass.setHeading(bearing - (360 - heading));
+            compass.setHeading(bearing - heading);
         }
     }
 

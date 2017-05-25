@@ -133,7 +133,7 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
 
 
         // heading for map must between -180 and 180
-        if (mapBearing < -180) mapBearing += 360;
+//        if (mapBearing < -180) mapBearing += 360;
         mapView.animator.rotate(mapBearing);
 
 
@@ -207,7 +207,7 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
 
     @Override
     public void orientationChanged(de.longri.cachebox3.events.OrientationChangedEvent event) {
-        float bearing = -event.orientation;
+        float bearing = event.orientation;
 
         // at CarMode no orientation changes below 20kmh
         if (this.mapStateButton.getMapMode() == MapMode.CAR)

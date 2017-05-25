@@ -162,7 +162,7 @@ public class Compass extends WidgetGroup implements Layout {
         lastBearing = bearing;
         transform_scale.idt();
         transform_scale.translate(rec_scale.getHalfWidth() + rec_scale.getX(), rec_scale.getHalfHeight() + rec_scale.getY(), 0);
-        transform_scale.rotate(0, 0, 1, -bearing);
+        transform_scale.rotate(0, 0, 1, bearing);
         transform_scale.translate(-(rec_scale.getHalfWidth() + rec_scale.getX()), -(rec_scale.getHalfHeight() + rec_scale.getY()), 0);
     }
 

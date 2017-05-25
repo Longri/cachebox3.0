@@ -101,7 +101,7 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
         if (EventHandler.getSelectedCoord() != null) {
             Coordinate targetCoordinate = EventHandler.getSelectedCoord();
             setDistance(targetCoordinate.distance(MathUtils.CalculationType.ACCURATE));
-            compass.setHeading(myPosition.bearingTo(targetCoordinate, MathUtils.CalculationType.ACCURATE) - (360 - bearing));
+            compass.setHeading(myPosition.bearingTo(targetCoordinate, MathUtils.CalculationType.ACCURATE) -  bearing);
         }
     }
 
