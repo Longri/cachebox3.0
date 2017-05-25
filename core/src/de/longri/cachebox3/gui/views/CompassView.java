@@ -28,6 +28,7 @@ import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
+import de.longri.cachebox3.gui.widgets.ColorWidget;
 import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.locator.Coordinate;
@@ -38,6 +39,7 @@ import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.utils.SkinColor;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +57,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
     private final VisSplitPane splitPane;
     private final Table topTable, bottomTable;
     private final CompassViewStyle style;
+    private final Image backgroundWidget;
 
     private CoordinateGPS actCoord;
     private float actHeading = 0;
@@ -67,11 +70,17 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
         style = VisUI.getSkin().get("compassViewStyle", CompassViewStyle.class);
 
+        //background
+        backgroundWidget = new Image(style.background);
+        backgroundWidget.setBounds(0, 0, this.getWidth(), this.getHeight());
+        this.addActor(backgroundWidget);
+
+
         topTable = new Table();
         bottomTable = new Table();
 
-        topTable.setDebug(true, true);
-        bottomTable.setDebug(true, true);
+//        topTable.setDebug(true, true);
+//        bottomTable.setDebug(true, true);
 
         topTable.setBackground(style.splitBackground);
         bottomTable.setBackground(style.splitBackground);
@@ -333,6 +342,12 @@ public class CompassView extends AbstractView implements PositionChangedListener
         }
 
         CB.requestRendering();
+    }
+
+    @Override
+    public void sizeChanged() {
+        super.sizeChanged();
+        backgroundWidget.setBounds(0, 0, this.getWidth(), this.getHeight());
     }
 
     // holds the Compass, the distance label and the Sun/Moon drawables
