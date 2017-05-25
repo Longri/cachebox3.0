@@ -11,16 +11,16 @@
 		<path fill="#FFFFFF" fill-opacity="1" stroke-linejoin="round" stroke="#FFFFFF" stroke-opacity="0.545098" d="M 61.8631,20.2839L 45.7606,70.7429L 42.1831,70.7429L 58.2331,20.2839L 61.8631,20.2839 Z "/>
 	</g>
 	<g>
-		<path fill="none" stroke-width="3" stroke-linejoin="round" stroke="#FF0000" stroke-opacity="1" d="M 13.7363,4.0896L 77.403,4.0896C 82.9258,4.0896 87.403,8.56714 87.403,14.0898L 87.403,78.0828C 87.403,83.6057 82.9258,88.083 77.403,88.083L 13.7363,88.083C 8.21347,88.083 3.73631,83.6057 3.73631,78.0828L 3.73631,14.0898C 3.73631,8.56714 8.21347,4.0896 13.7363,4.0896 Z "/>
+		<path fill="none" stroke-width="3" stroke-linejoin="round" stroke="#FF0000" stroke-opacity="1" d="M 13.7364,4.0896L 77.4033,4.0896C 82.9261,4.0896 87.4033,8.56714 87.4033,14.0898L 87.4033,78.0828C 87.4033,83.6057 82.9261,88.083 77.4033,88.083L 13.7364,88.083C 8.21359,88.083 3.73642,83.6057 3.73642,78.0828L 3.73642,14.0898C 3.73642,8.56714 8.21359,4.0896 13.7364,4.0896 Z "/>
 		<line fill="none" stroke-width="3" stroke-linejoin="round" stroke="#FF0000" stroke-opacity="1" x1="6.23631" y1="7.08374" x2="84.903" y2="85.0837"/>
 	</g>
 	<g>
 		<radialGradient id="SVGID_Fill1_" cx="-17.8772" cy="8.4397" r="118.103" gradientUnits="userSpaceOnUse">
 			<stop offset="0" stop-color="#FFFFFF" stop-opacity="0.388235"/>
-			<stop offset="0.90991" stop-color="#FFFFFF" stop-opacity="0.156863"/>
+			<stop offset="0.909912" stop-color="#FFFFFF" stop-opacity="0.156863"/>
 			<stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
 		</radialGradient>
-		<path fill="url(#SVGID_Fill1_)" stroke-linejoin="round" d="M 14.5,2.00073L 78.5,2.00073C 84.5751,2.00073 89.5,6.92554 89.5,13.0007L 89.5,76.0002C 89.5,82.0754 84.5751,87.0002 78.5,87.0002L 14.5,87.0002C 8.42485,87.0002 3.49998,82.0754 3.49998,76.0002L 3.49998,13.0007C 3.49998,6.92554 8.42485,2.00073 14.5,2.00073 Z "/>
+		<path fill="url(#SVGID_Fill1_)" stroke-width="0.2" stroke-linejoin="round" d="M 14.5,2.00073L 78.5,2.00073C 84.5751,2.00073 89.5,6.92554 89.5,13.0007L 89.5,76.0002C 89.5,82.0754 84.5751,87.0002 78.5,87.0002L 14.5,87.0002C 8.42485,87.0002 3.49998,82.0754 3.49998,76.0002L 3.49998,13.0007C 3.49998,6.92554 8.42485,2.00073 14.5,2.00073 Z "/>
 		<radialGradient id="SVGID_Stroke1_" cx="71.5196" cy="46.0012" r="669.951" gradientUnits="userSpaceOnUse">
 			<stop offset="0.869369" stop-color="#F1F1F1" stop-opacity="0"/>
 			<stop offset="1" stop-color="#EEEEEE" stop-opacity="0.376471"/>

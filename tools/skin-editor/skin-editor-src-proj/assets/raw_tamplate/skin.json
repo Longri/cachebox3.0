@@ -112,12 +112,28 @@
       "path": "svg/att_Dogs_1.svg",
       "scale": 0.5
     },
+    "att_Parking_available_0": {
+      "path": "svg/att_Parking_available_0.svg",
+      "scale": 0.5
+    },
+    "att_Parking_available_1": {
+      "path": "svg/att_Parking_available_1.svg",
+      "scale": 0.5
+    },
     "att_Recommended_for_kids_0": {
       "path": "svg/att_Recommended_for_kids_0.svg",
       "scale": 0.5
     },
     "att_Recommended_for_kids_1": {
       "path": "svg/att_Recommended_for_kids_1.svg",
+      "scale": 0.5
+    },
+    "att_Takes_less_than_an_hour_0": {
+      "path": "svg/att_Takes_less_than_an_hour_0.svg",
+      "scale": 0.5
+    },
+    "att_Takes_less_than_an_hour_1": {
+      "path": "svg/att_Takes_less_than_an_hour_1.svg",
       "scale": 0.5
     },
     "baseMapFreizeitkarte": {
@@ -932,6 +948,10 @@
       "path": "svg/other.svg",
       "scale": 0.25
     },
+    "pane_slider_vertical": {
+      "path": "svg/pane_slider_vertical.svg",
+      "scale": 0.5
+    },
     "pencil": {
       "path": "svg/pencil.svg",
       "scale": 0.12
@@ -1353,6 +1373,13 @@
       "right": 20,
       "top": 5,
       "bottom": 5
+    },
+    "pane_slider_vertical_9_Patch": {
+      "name": "pane_slider_vertical",
+      "left": 34,
+      "right": 34,
+      "top": -1,
+      "bottom": -1
     },
     "progress_back_9_Patch": {
       "name": "progress_back",
@@ -2080,13 +2107,11 @@
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle": {
-    "default-vertical": {
-      "handle": "sliderKnob"
-    }
+    "default-vertical": {}
   },
   "de.longri.cachebox3.gui.skin.styles.CompassViewStyle": {
     "compassViewStyle": {
-      "splitHandle": "sliderKnob",
+      "splitHandle": "pane_slider_vertical_9_Patch",
       "splitBackground": "activityBack_drawable",
       "distanceBackground": "map-info-panel-background_9_Patch",
       "distnaceFont": "normal_bold_font",
@@ -2104,10 +2129,14 @@
     "CompassView": {
       "att_Dogs_0": "att_Dogs_0",
       "att_Recommended_for_kids_0": "att_Recommended_for_kids_0",
+      "att_Takes_less_than_an_hour_0": "att_Takes_less_than_an_hour_0",
       "att_Available_at_all_times_0": "att_Available_at_all_times_0",
+      "att_Parking_available_0": "att_Parking_available_0",
       "att_Dogs_1": "att_Dogs_1",
       "att_Recommended_for_kids_1": "att_Recommended_for_kids_1",
-      "att_Available_at_all_times_1": "att_Available_at_all_times_1"
+      "att_Takes_less_than_an_hour_1": "att_Takes_less_than_an_hour_1",
+      "att_Available_at_all_times_1": "att_Available_at_all_times_1",
+      "att_Parking_available_1": "att_Parking_available_1"
     }
   }
 }
