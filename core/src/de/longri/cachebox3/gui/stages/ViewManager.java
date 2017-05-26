@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
@@ -148,6 +149,12 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
             this.getRoot().removeActor(actView);
             actView.onHide();
             actView.dispose();
+
+            SnapshotArray<Actor> childs = actView.getChildren();
+            for (int i = 0, n = childs.size-1; i < n; i++) {
+                actView.removeChild(childs.get(i));
+            }
+            childs.clear();
         }
 
         this.actView = view;
