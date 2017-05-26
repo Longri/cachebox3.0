@@ -16,12 +16,15 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisSplitPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.*;
@@ -88,7 +91,10 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
         VisSplitPane.VisSplitPaneStyle visSplitPaneStyle = new VisSplitPane.VisSplitPaneStyle();
         visSplitPaneStyle.handle = style.splitHandle;
-        splitPane = new VisSplitPane(topTable, bottomTable, true, visSplitPaneStyle);
+
+        VisScrollPane scrollPane = new VisScrollPane(topTable);
+
+        splitPane = new VisSplitPane(scrollPane, bottomTable, true, visSplitPaneStyle);
         this.addChild(splitPane);
 
         compassPanel = new CompassPanel(style);
@@ -273,6 +279,13 @@ public class CompassView extends AbstractView implements PositionChangedListener
     @Override
     public void dispose() {
         EventHandler.remove(this);
+        targetdirectionLabel = null;
+        ownPositionLabel = null;
+        SnapshotArray<Actor> childs = this.getChildren();
+        for (int i = 0, n = childs.size-1; i < n; i++) {
+            this.removeChild(childs.get(i));
+        }
+        childs.clear();
     }
 
     public void resetLayout() {
