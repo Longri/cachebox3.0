@@ -104,6 +104,8 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
         splitPane.setMinSplitAmount(0.25f);
         splitPane.setMaxSplitAmount(0.59f);
+
+
     }
 
     private void layoutInfoPanel() {
@@ -237,11 +239,14 @@ public class CompassView extends AbstractView implements PositionChangedListener
         if (resetLayout)
             readSettings();
         EventHandler.add(this);
+        splitPane.setSplitAmount(Config.CompassViewSplit.getValue());
     }
 
     @Override
     public void onHide() {
         EventHandler.remove(this);
+        Config.CompassViewSplit.setValue(splitPane.getSplit());
+        Config.AcceptChanges();
     }
 
     private void readSettings() {
@@ -282,7 +287,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
         targetdirectionLabel = null;
         ownPositionLabel = null;
         SnapshotArray<Actor> childs = this.getChildren();
-        for (int i = 0, n = childs.size-1; i < n; i++) {
+        for (int i = 0, n = childs.size - 1; i < n; i++) {
             this.removeChild(childs.get(i));
         }
         childs.clear();

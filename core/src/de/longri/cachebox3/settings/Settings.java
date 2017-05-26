@@ -193,7 +193,7 @@ public class Settings extends Settings_Skin {
     public static final SettingFile Sel_LanguagePath = (SettingFile) SettingsList.addSetting(new SettingFile("Sel_LanguagePath", SettingCategory.Folder, NEVER, "lang/en-GB/strings.ini", SettingStoreType.Platform, SettingUsage.ALL, "lan"));
     public static final SettingFolder LanguagePath = (SettingFolder) SettingsList.addSetting(new SettingFolder("LanguagePath", SettingCategory.Folder, NEVER, "lang", SettingStoreType.Global, SettingUsage.ALL, true));
 
-
+    public static final SettingFloat CompassViewSplit = (SettingFloat) SettingsList.addSetting(new SettingFloat("CompassViewSplit", SettingCategory.Compass, NEVER, 0.5f, SettingStoreType.Global, SettingUsage.ACB));
 
 
     //    public static final SettingEnum<Live_Cache_Time> LiveCacheTime = new SettingEnum<Live_Cache_Time>("LiveCacheTime", SettingCategory.LiveMap, NORMAL, Live_Cache_Time.h_6, SettingStoreType.Global, SettingUsage.ACB, Live_Cache_Time.h_6);
