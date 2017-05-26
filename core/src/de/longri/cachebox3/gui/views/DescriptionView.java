@@ -139,6 +139,9 @@ public class DescriptionView extends AbstractView {
                 log.debug("Link clicked, don't load URL! Show on ext browser");
                 PlatformConnector._openUrlExtern(url);
                 return true;
+            }else if (url.equals("about:blank")) {
+                // Load description
+                return true;
             }
             return false;
         }
