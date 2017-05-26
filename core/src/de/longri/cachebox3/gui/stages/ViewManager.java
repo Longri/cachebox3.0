@@ -151,7 +151,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
             actView.dispose();
 
             SnapshotArray<Actor> childs = actView.getChildren();
-            for (int i = 0, n = childs.size-1; i < n; i++) {
+            for (int i = 0, n = childs.size - 1; i < n; i++) {
                 actView.removeChild(childs.get(i));
             }
             childs.clear();
@@ -175,7 +175,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         for (Button button : mainButtonBar.getButtons()) {
             GestureButton gestureButton = (GestureButton) button;
             gestureButton.setChecked(false);
-
+            gestureButton.aktActionView = null;
             if (!buttonFound) {
                 for (ActionButton actionButton : gestureButton.getButtonActions()) {
                     if (actionButton.getAction() instanceof Abstract_Action_ShowView) {
@@ -183,7 +183,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
                         if (viewAction.viewTypeEquals(this.actView)) {
                             gestureButton.setChecked(true);
                             gestureButton.setHasContextMenu(viewAction.hasContextMenu());
-
+                            gestureButton.aktActionView = viewAction;
                             buttonFound = true;
                             break;
                         }

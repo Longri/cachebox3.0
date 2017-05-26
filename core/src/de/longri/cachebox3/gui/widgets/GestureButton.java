@@ -55,7 +55,7 @@ public class GestureButton extends Button {
     private GestureButtonStyle style;
     private final ArrayList<ActionButton> buttonActions;
     private final int ID;
-    private Abstract_Action_ShowView aktActionView;
+     public Abstract_Action_ShowView aktActionView;
     private boolean hasContextMenu;
     private GestureHelp gestureHelper;
     private Drawable gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
