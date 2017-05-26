@@ -95,6 +95,9 @@ public class CompassView extends AbstractView implements PositionChangedListener
         bottomTable.add(compassPanel).expand().fill().center();
 
         readSettings();
+
+        splitPane.setMinSplitAmount(0.25f);
+        splitPane.setMaxSplitAmount(0.59f);
     }
 
     private void layoutInfoPanel() {
@@ -386,7 +389,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
             float height = distance.getPrefHeight();
             float yPos = this.getHeight() - height - CB.scaledSizes.MARGIN;
-            compass.setBounds(0, 0, this.getWidth(), this.getHeight() - height + CB.scaledSizes.MARGINx4);
+            compass.setBounds(0, CB.scaledSizes.MARGIN, this.getWidth(), this.getHeight() - height + CB.scaledSizes.MARGINx4);
             distance.setBounds(CB.scaledSizes.MARGIN, yPos, this.getWidth() - CB.scaledSizes.MARGINx2, height);
             accurate.setBounds(CB.scaledSizes.MARGIN, yPos, this.getWidth() - CB.scaledSizes.MARGINx2, height);
         }
@@ -396,6 +399,10 @@ public class CompassView extends AbstractView implements PositionChangedListener
             this.accurate.setText("  +/- " + UnitFormatter.distanceString(accurate, true));
             compass.setBearing(heading);
             compass.setHeading(bearing - heading);
+        }
+
+        public float getMinHeight() {
+            return compass.getMinHeight() + distance.getMinHeight() - CB.scaledSizes.MARGINx4;
         }
     }
 
