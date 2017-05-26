@@ -17,6 +17,8 @@ package de.longri.cachebox3.settings;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.settings.types.*;
+import de.longri.cachebox3.translation.Lang;
+import de.longri.cachebox3.translation.Language;
 import de.longri.cachebox3.utils.HSV_Color;
 
 /**
@@ -190,8 +192,8 @@ public class Settings extends Settings_Skin {
 
     public static final SettingBool SettingsShowExpert = (SettingBool) SettingsList.addSetting(new SettingBool("SettingsShowExpert", SettingCategory.Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool SettingsShowAll = (SettingBool) SettingsList.addSetting(new SettingBool("SettingsShowAll", SettingCategory.Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingFile Sel_LanguagePath = (SettingFile) SettingsList.addSetting(new SettingFile("Sel_LanguagePath", SettingCategory.Folder, NEVER, "lang/en-GB/strings.ini", SettingStoreType.Platform, SettingUsage.ALL, "lan"));
-    public static final SettingFolder LanguagePath = (SettingFolder) SettingsList.addSetting(new SettingFolder("LanguagePath", SettingCategory.Folder, NEVER, "lang", SettingStoreType.Global, SettingUsage.ALL, true));
+
+    public static final SettingEnum<Language> localisation = (SettingEnum<Language>) SettingsList.addSetting(new SettingEnum("localisation", SettingCategory.Locale, NORMAL, Language.en_GB, SettingStoreType.Global, SettingUsage.ALL, Language.en_GB));
 
     public static final SettingFloat CompassViewSplit = (SettingFloat) SettingsList.addSetting(new SettingFloat("CompassViewSplit", SettingCategory.Compass, NEVER, 0.5f, SettingStoreType.Global, SettingUsage.ACB));
 

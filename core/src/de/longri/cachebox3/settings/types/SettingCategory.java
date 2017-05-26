@@ -20,7 +20,7 @@ package de.longri.cachebox3.settings.types;
  */
 public enum SettingCategory {
     Login("Login"), QuickList("QuickList"), Map("Map"), LiveMap("LiveMap"), Gps("Gps"), Compass("Compass"), Misc("Misc"), Sounds("Sounds"), Skin("Skin"), API("API"), Folder("Folder"), Templates("Templates"), Fieldnotes("Fieldnotes"), Internal(
-            "Internal"), CarMode("CarMode"), RememberAsk("RememberAsk"), Debug("Debug"), Button("Button"), Positions("Positions"), CBS("CBS"),;
+            "Internal"), CarMode("CarMode"), RememberAsk("RememberAsk"), Debug("Debug"), Button("Button"), Positions("Positions"), CBS("CBS"), Locale("Locale");
 
     private String langString;
 

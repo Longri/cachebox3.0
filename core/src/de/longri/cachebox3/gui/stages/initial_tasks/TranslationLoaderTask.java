@@ -37,7 +37,7 @@ public final class TranslationLoaderTask extends AbstractInitTask {
         loadTranslation();
 
         // add settings change handler
-        Config.Sel_LanguagePath.addChangedEventListener(new IChanged() {
+        Config.localisation.addChangedEventListener(new IChanged() {
             @Override
             public void isChanged() {
                 loadTranslation();
@@ -47,10 +47,10 @@ public final class TranslationLoaderTask extends AbstractInitTask {
 
     private void loadTranslation() {
         try {
-            Translation.LoadTranslation(Config.Sel_LanguagePath.getValue());
+            Translation.LoadTranslation(Config.localisation.getEnumValue().toString());
         } catch (Exception e) {
             try {
-                Translation.LoadTranslation(Config.Sel_LanguagePath.getDefaultValue());
+                Translation.LoadTranslation(Config.localisation.getEnumDefaultValue().toString());
             } catch (IOException e1) {
                 e1.printStackTrace();
             }

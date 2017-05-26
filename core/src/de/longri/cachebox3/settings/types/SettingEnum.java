@@ -66,6 +66,7 @@ public class SettingEnum<EnumTyp extends Enum<?>> extends SettingString {
         setDirty();
     }
 
+
     public EnumTyp getEnumValue() {
         return getEnumFromString(value);
     }
