@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
@@ -33,6 +32,7 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.GestureButtonStyle;
+import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.settings.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +55,7 @@ public class GestureButton extends Button {
     private GestureButtonStyle style;
     private final ArrayList<ActionButton> buttonActions;
     private final int ID;
-     public Abstract_Action_ShowView aktActionView;
+    public Abstract_Action_ShowView aktActionView;
     private boolean hasContextMenu;
     private GestureHelp gestureHelper;
     private Drawable gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
@@ -139,13 +139,10 @@ public class GestureButton extends Button {
         }
     }
 
-
-    //TODO inital with longPressDuration from settings
-    //   use ClickLongClickListener!!!
-    ActorGestureListener gestureListener = new ActorGestureListener() {
+    ClickLongClickListener gestureListener = new ClickLongClickListener() {
 
         @Override
-        public void tap(InputEvent event, float x, float y, int count, int button) {
+        public void clicked(InputEvent event, float x, float y) {
             log.debug("on click");
 
 
@@ -231,7 +228,7 @@ public class GestureButton extends Button {
         }
 
         @Override
-        public boolean longPress(Actor actor, float x, float y) {
+        public boolean longClicked(Actor actor, float x, float y) {
             log.debug("onLongClick");
             // GL_MsgBox.Show("Button " + Me.getName() + " recivet a LongClick Event");
             // Wenn diesem Button mehrere Actions zugeordnet sind dann wird nach einem Lang-Click ein Menü angezeigt aus dem eine dieser
