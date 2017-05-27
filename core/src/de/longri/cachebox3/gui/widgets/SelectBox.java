@@ -40,6 +40,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
     private SelectBoxStyle style;
     private final com.badlogic.gdx.scenes.scene2d.ui.Image selectIcon = new com.badlogic.gdx.scenes.scene2d.ui.Image();
     private T selectedItem;
+    private boolean heideWithItemClick = true;
 
     public SelectBox() {
         super("");
@@ -54,20 +55,29 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
         });
     }
 
-    private void showMenu() {
-        Menu menu = new Menu(Translation.Get("select"));
-        for (int i = 0, n = entries.size; i < n; i++) {
-            menu.addItem(getMenuItem(i, entries.get(i)));
-        }
-        menu.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public boolean onItemClick(MenuItem item) {
-                T entry = (T) item.getData();
-                select(entry);
-                return true;
+    public SelectBox(SelectBoxStyle style) {
+        super("");
+        setStyle(style);
+        this.addActor(selectIcon);
+        setSize(getPrefWidth(), getPrefHeight());
+        this.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                //show select menu
+                showMenu();
             }
         });
-        menu.show();
+    }
+
+    public SelectBox(SelectBoxStyle style, ClickListener clickListener) {
+        super("");
+        setStyle(style);
+        this.addActor(selectIcon);
+        setSize(getPrefWidth(), getPrefHeight());
+        if (clickListener != null) this.addListener(clickListener);
+    }
+
+    private void showMenu() {
+        getMenu().show();
     }
 
     private MenuItem getMenuItem(int index, T entry) {
@@ -140,6 +150,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
     @Override
     public void layout() {
         super.layout();
+
         Drawable imageDrawable = image.getDrawable();
         if (imageDrawable != null) {
             float x = this.getWidth() - (imageDrawable.getMinHeight() + CB.scaledSizes.MARGINx2 + style.selectIcon.getMinWidth());
@@ -159,7 +170,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
 
     private void select(int index, boolean fire) {
         selectedItem = entries.get(index);
-        this.setText(selectedItem.getName());
+        if (selectedItem.getName() != null) this.setText(selectedItem.getName());
         this.setIcon(selectedItem.getDrawable());
         this.setSelectIcon(style.selectIcon);
         this.layout();
@@ -168,7 +179,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
 
     public void select(T item) {
         selectedItem = item;
-        this.setText(item.getName());
+        if (item.getName() != null) this.setText(item.getName());
         this.setIcon(item.getDrawable());
         this.setSelectIcon(style.selectIcon);
         this.layout();
@@ -197,5 +208,26 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
 
     public T getSelected() {
         return selectedItem;
+    }
+
+    public Menu getMenu() {
+        Menu menu = new Menu(Translation.Get("select"));
+        for (int i = 0, n = entries.size; i < n; i++) {
+            menu.addItem(getMenuItem(i, entries.get(i)));
+        }
+        menu.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public boolean onItemClick(MenuItem item) {
+                T entry = (T) item.getData();
+                select(entry);
+                return true;
+            }
+        });
+        menu.setHideWithItemClick(this.heideWithItemClick);
+        return menu;
+    }
+
+    public void setHideWithItemClick(boolean hideWithItemClick) {
+        this.heideWithItemClick = hideWithItemClick;
     }
 }

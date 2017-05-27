@@ -359,11 +359,19 @@ public class Menu extends Window {
         }
     }
 
+    public ListView getListview() {
+        if (listView == null) initialLayout();
+        return listView;
+    }
+
+    public void setHideWithItemClick(boolean heideWithItemClick) {
+        this.hideWithItemClick = heideWithItemClick;
+    }
+
     public static class MenuStyle {
         public BitmapFont font;
         public Color fontColor;
         public Drawable background, stageBackground, menu_back, menu_for, divider;
-
     }
 
 }

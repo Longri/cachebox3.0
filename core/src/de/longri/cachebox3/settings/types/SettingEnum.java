@@ -88,12 +88,21 @@ public class SettingEnum<EnumTyp extends Enum<?>> extends SettingString {
         return ret;
     }
 
-    public void setEnumValue(EnumTyp value) {
+//    public void setEnumValue(EnumTyp value) {
+//        if (this.myEnum == value)
+//            return;
+//        this.value = value.name();
+//        myEnum = value;
+//        setDirty();
+//    }
+
+    public void setEnumValue( Enum<?> value) {
         if (this.myEnum == value)
             return;
         this.value = value.name();
-        myEnum = value;
+        myEnum = getEnumFromString(this.value);
         setDirty();
     }
+
 
 }

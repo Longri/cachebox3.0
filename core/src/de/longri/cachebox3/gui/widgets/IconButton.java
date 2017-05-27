@@ -67,8 +67,13 @@ public class IconButton extends VisTextButton {
 
     protected void setIcon(Drawable drawableIcon) {
         image.setDrawable(drawableIcon);
-        this.preferredHeight = drawableIcon.getMinHeight() + CB.scaledSizes.MARGINx2;
-        this.preferredWidth = super.getPrefWidth() + this.preferredHeight;
+        if (drawableIcon != null) {
+            this.preferredHeight = drawableIcon.getMinHeight() + CB.scaledSizes.MARGINx2;
+            this.preferredWidth = super.getPrefWidth() + this.preferredHeight;
+        } else {
+            this.preferredHeight = 0;
+            this.preferredWidth = 0;
+        }
     }
 
 }

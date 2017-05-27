@@ -305,6 +305,7 @@ public class MenuItem extends ListViewItem {
     public static class MenuItemStyle {
         public BitmapFont font;
         public Color fontColor;
+        public Drawable option_select, option_back;
     }
 
     @Override

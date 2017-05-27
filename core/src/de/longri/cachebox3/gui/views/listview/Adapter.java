@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 package de.longri.cachebox3.gui.views.listview;
-
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
-import com.kotcrab.vis.ui.widget.VisTable;
 
 /**
  * Created by Longri on 30.08.2016.
@@ -39,7 +36,6 @@ public interface Adapter {
     ListViewItem getView(int index);
 
     /**
-     *
      * @param view
      */
     void update(ListViewItem view);

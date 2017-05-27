@@ -17,7 +17,6 @@ package de.longri.cachebox3.settings;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.settings.types.*;
-import de.longri.cachebox3.translation.Lang;
 import de.longri.cachebox3.translation.Language;
 import de.longri.cachebox3.utils.HSV_Color;
 

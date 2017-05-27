@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
@@ -43,17 +44,21 @@ import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
+import de.longri.cachebox3.gui.skin.styles.SelectBoxStyle;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.ApiButton;
 import de.longri.cachebox3.gui.widgets.IconButton;
+import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 24.08.2016.
@@ -356,7 +361,7 @@ public class Settings_Activity extends ActivityBase {
 
     }
 
-    private ListViewItem getCategoryItem(int listIndex, final de.longri.cachebox3.settings.types.SettingCategory category) {
+    private ListViewItem getCategoryItem(int listIndex, final SettingCategory category) {
         ListViewItem table = new ListViewItem(listIndex) {
             @Override
             public void dispose() {
@@ -365,6 +370,14 @@ public class Settings_Activity extends ActivityBase {
 
         // add label with category name, align left
         table.left();
+
+        String labelText = null;
+        if (category == SettingCategory.Locale) {
+            labelText = Translation.Get("selectedLang") + Translation.getLangId();
+        } else {
+            labelText = category.name();
+        }
+
         VisLabel label = new VisLabel(category.name());
         label.setAlignment(Align.left);
         table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -384,9 +397,10 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private void showCategory(de.longri.cachebox3.settings.types.SettingCategory category, boolean animate) {
+    private void showCategory(SettingCategory category, boolean animate) {
         log.debug("Show settings categoriy: " + category.name());
 
+        Adapter listViewAdapter;
 
         //get all settings items of this category if the category mode correct
 
@@ -429,7 +443,7 @@ public class Settings_Activity extends ActivityBase {
 
         // show new ListView for this category
 
-        Adapter listViewAdapter = new Adapter() {
+        listViewAdapter = new Adapter() {
             @Override
             public int getCount() {
                 return categorySettingsList.size;
@@ -476,9 +490,8 @@ public class Settings_Activity extends ActivityBase {
             return getFolderView(listIndex, (de.longri.cachebox3.settings.types.SettingFolder) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingFile) {
             return getFileView(listIndex, (de.longri.cachebox3.settings.types.SettingFile) setting);
-
-//            }  else if (setting instanceof de.longri.cachebox3.settings.types.SettingEnum<?>) {
-//                return getEnumView((de.longri.cachebox3.settings.types.SettingEnum<?>) setting);
+        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingEnum<?>) {
+            return getEnumView(listIndex, (SettingEnum<?>) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingString) {
             return getStringView((de.longri.cachebox3.settings.types.SettingString) setting);
 //        } else if (setting instanceof SettingsListCategoryButton) {
@@ -523,8 +536,63 @@ public class Settings_Activity extends ActivityBase {
         return null;
     }
 
-    private ListViewItem getEnumView(de.longri.cachebox3.settings.types.SettingEnum<?> setting) {
-        return null;
+    private ListViewItem getEnumView(int listIndex, final SettingEnum<?> setting) {
+
+        Array<Enum<?>> itemList = new Array<>();
+        Enum<?> selectedItem = setting.getEnumValue();
+
+        Class<?> declaringClass = selectedItem.getDeclaringClass();
+        Object[] oo = declaringClass.getEnumConstants();
+        int selectIndex = 0;
+        int index = 0;
+        for (Object o : oo) {
+            itemList.add((Enum<?>) o);
+            if (o == selectedItem) selectIndex = index;
+            index++;
+        }
+
+        SelectBoxStyle style = VisUI.getSkin().get("default", SelectBoxStyle.class);
+        style.up = null;
+        style.down = null;
+
+        final AtomicBoolean callBackClick = new AtomicBoolean(false);
+        final SelectBox selectBox = new SelectBox(style, null);
+        ClickListener clickListener = new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                //show select menu
+                Menu menu = selectBox.getMenu();
+                showListView(menu.getListview(), "select item", true);
+                callBackClick.set(true);
+            }
+        };
+
+        selectBox.addListener(clickListener);
+
+        selectBox.set(itemList);
+        selectBox.select(selectIndex);
+
+        selectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Enum<?> selected = (Enum<?>) selectBox.getSelected();
+                setting.setEnumValue(selected);
+                if (event.getStage() == null || callBackClick.get()) {
+                    callBackClick.set(false);
+                    backClick();
+                }
+            }
+        });
+        selectBox.setHideWithItemClick(false);
+        ListViewItem table = new ListViewItem(listIndex) {
+            @Override
+            public void dispose() {
+            }
+        };
+
+        float buttonWidth = this.getWidth() - (CB.scaledSizes.MARGINx2 * 2);
+
+        table.add(selectBox).width(new Value.Fixed(buttonWidth)).center();
+        return table;
     }
 
     private ListViewItem getFileView(int listIndex, de.longri.cachebox3.settings.types.SettingFile setting) {
@@ -845,10 +913,9 @@ public class Settings_Activity extends ActivityBase {
 
 
     public static class SettingsActivityStyle extends ActivityBaseStyle {
-        public Drawable nextIcon, backIcon;
+        public Drawable nextIcon, backIcon, option_select, option_back;
         public BitmapFont nameFont, descFont, defaultValueFont, valueFont;
         public Color nameFontColor, descFontColor, defaultValueFontColor, valueFontColor;
-
     }
 
 

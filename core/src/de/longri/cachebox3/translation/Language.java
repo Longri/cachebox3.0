@@ -15,12 +15,16 @@
  */
 package de.longri.cachebox3.translation;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
+import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 
 /**
  * Created by longri on 26.05.17.
  */
-public enum Language {
+public enum Language implements SelectBoxItem {
     cs, de, en_GB, fr, hu, nl, pl, pt_PT;
 
 
@@ -31,6 +35,18 @@ public enum Language {
         sb.append("/strings.ini");
 
         return sb.toString().replaceAll("_", "-");
+    }
+
+    public String getName() {
+        return this.name();
+    }
+
+    @Override
+    public Drawable getDrawable() {
+//        // for select Box interface, use 'cacheList' style
+//        if (cacheListTypeStyle == null) cacheListTypeStyle = VisUI.getSkin().get("cacheList", CacheTypeStyle.class);
+//        return getDrawable(cacheListTypeStyle);
+        return null;
     }
 }
 
