@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -84,7 +84,6 @@ public class Database {
         if (myDB.isOpen()) return true;
         return false;
     }
-
 
     public enum DatabaseType {
         CacheBox, FieldNotes, Settings
@@ -912,14 +911,24 @@ public class Database {
         return myDB.insertWithConflictIgnore(tablename, val);
     }
 
-    public void Close() {
+    public void close() {
         if (myDB == null) return;
         try {
             myDB.closeDatabase();
         } catch (SQLiteGdxException e) {
-            e.printStackTrace();
+            log.error("Close Database {}", databaseType, e);
         }
     }
+
+    public void open() {
+        if (myDB == null) return;
+        try {
+            myDB.openOrCreateDatabase();
+        } catch (SQLiteGdxException e) {
+            log.error("Open Database {}", databaseType, e);
+        }
+    }
+
 
     // Static methods ##############################################################################################
 

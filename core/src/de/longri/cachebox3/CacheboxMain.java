@@ -22,12 +22,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Matrix4;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
 import org.oscim.backend.GL;
 import org.oscim.map.Map;
 import org.oscim.renderer.GLState;
@@ -205,21 +205,32 @@ public class CacheboxMain extends ApplicationAdapter {
     @Override
     public void pause() {
         checkLogger();
-        log.debug("close databases");
+
+        if (EventHandler.getSelectedCache() != null) {
+            //save selected Cache
+            Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGcCode());
+            Config.AcceptChanges();
+            log.debug("Store LastSelectedCache = " + EventHandler.getSelectedCache().getGcCode());
+        }
+
+        log.debug("App on pause close databases");
         //close databases
-//        if (Database.Data != null) Database.Data.Close();
-//        if (Database.Settings != null) Database.Settings.Close();
-//        if (Database.FieldNotes != null) Database.FieldNotes.Close();
+        if (Database.Data != null) Database.Data.close();
+        if (Database.Settings != null) Database.Settings.close();
+        if (Database.FieldNotes != null) Database.FieldNotes.close();
+
+
     }
 
     @Override
     public void resume() {
         checkLogger();
-        log.debug("on resume", "reopen databases");
+        log.debug("App on resume reopen databases");
 //        //open databases
-//        if (Database.Data != null) Database.Data.Open();
-//        if (Database.Settings != null) Database.Settings.Open();
-//        if (Database.FieldNotes != null) Database.FieldNotes.Open();
+        if (Database.Data != null) Database.Data.open();
+        if (Database.Settings != null) Database.Settings.open();
+        if (Database.FieldNotes != null) Database.FieldNotes.open();
+
     }
 
     public String getMemory() {

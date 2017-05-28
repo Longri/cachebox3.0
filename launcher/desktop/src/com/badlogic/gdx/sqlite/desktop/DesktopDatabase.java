@@ -150,6 +150,8 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
 
     @Override
     public void setAutoCommit(boolean autoCommit) {
+        if (myDB == null)
+            return;
         try {
             myDB.setAutoCommit(autoCommit);
         } catch (SQLException e) {

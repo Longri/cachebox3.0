@@ -25,9 +25,7 @@ import com.badlogic.gdx.utils.async.AsyncTask;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.track.Track;
-import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Categories;
@@ -210,14 +208,6 @@ public class CB {
     }
 
     public static void callQuit() {
-
-        if (EventHandler.getSelectedCache() != null) {
-            //save selected Cache
-            Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGcCode());
-            Config.AcceptChanges();
-            log.debug("LastSelectedCache = " + EventHandler.getSelectedCache().getGcCode());
-        }
-
         Gdx.app.exit();
     }
 

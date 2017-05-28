@@ -21,12 +21,12 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.SelectDB_Activity;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheListDAO;
@@ -116,7 +116,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
     public void loadSelectedDB() {
         if (Database.Data != null) {
             if (Database.Data.Query != null) Database.Data.Query.clear();
-            if (Database.Data.isStarted()) Database.Data.Close();
+            if (Database.Data.isStarted()) Database.Data.close();
         }
 
         FileHandle fileHandle = Gdx.files.absolute(CB.WorkPath + "/" + Config.DatabaseName.getValue());
@@ -146,6 +146,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
 
         // set selectedCache from last selected Cache
         String sGc = Config.LastSelectedCache.getValue();
+        Cache lastSelectedCache = null;
         if (sGc != null && !sGc.equals("")) {
             for (int i = 0, n = Database.Data.Query.size; i < n; i++) {
                 Cache c = Database.Data.Query.get(i);
@@ -155,6 +156,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
                         log.debug("returnFromSelectDB:Set selectedCache to " + c.getGcCode() + " from lastSaved.");
                         c.loadDetail();
                         EventHandler.fire(new SelectedCacheChangedEvent(c));
+                        lastSelectedCache = c;
                     } catch (Exception e) {
                         log.error("set last selected Cache", e);
                     }
@@ -163,7 +165,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             }
         }
         // Wenn noch kein Cache Selected ist dann einfach den ersten der Liste aktivieren
-        if ((EventHandler.getSelectedCache() == null) && (Database.Data.Query.size > 0)) {
+        if ((lastSelectedCache == null) && (Database.Data.Query.size > 0)) {
             log.debug("Set selectedCache to " + Database.Data.Query.get(0).getGcCode() + " from firstInDB");
             EventHandler.fire(new SelectedCacheChangedEvent(Database.Data.Query.get(0)));
         }
