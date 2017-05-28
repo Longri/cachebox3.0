@@ -19,6 +19,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.OrientationChangedListener;
+import de.longri.cachebox3.events.PositionChangedListener;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
@@ -37,9 +39,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 24.07.16.
  */
-public class CacheListView extends AbstractView implements CacheListChangedEventListener, de.longri.cachebox3.events.PositionChangedListener, de.longri.cachebox3.events.OrientationChangedListener {
+public class CacheListView extends AbstractView implements CacheListChangedEventListener, PositionChangedListener, OrientationChangedListener {
     final static Logger log = LoggerFactory.getLogger(CacheListView.class);
     private ListView listView;
+    private final  float result[] = new float[4];
 
 
     public CacheListView() {
@@ -114,7 +117,6 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         Coordinate finalCoord = finalWp != null ? finalWp : cache;
 
                         //calculate distance and bearing
-                        float result[] = new float[4];
                         MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, position.getLatitude(), position.getLongitude(), finalCoord.getLatitude(), finalCoord.getLongitude(), result);
 
 
