@@ -42,8 +42,8 @@ public class SkinEditorGame extends Game {
     }
 
     public final static String[] widgets = {"MapWayPointItem", "Sizes", "Icons", "MenuIcons", "Label", "EditText", "Button",
-            "GestureButton", "TextButton", "FileChooser", "Compass", "CacheTypes","AttributeTypes", "CheckBox", "TextField", "ListView",
-            "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree", "Animation"};
+            "GestureButton", "TextButton", "FileChooser", "Compass", "CacheTypes", "AttributeTypes", "CheckBox", "TextField", "ListView",
+            "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree", "Animation", "Language"};
 
     public SpriteBatch batch;
     public SavableSvgSkin skin;
@@ -155,13 +155,15 @@ public class SkinEditorGame extends Game {
             return "de.longri.cachebox3.gui.skin.styles.EditTextStyle";
         } else if (widget.equals("AttributeTypes")) {
             return "de.longri.cachebox3.gui.skin.styles.AttributesStyle";
+        } else if (widget.equals("Language")) {
+            return "de.longri.cachebox3.gui.skin.styles.LanguageStyle";
         } else {
             return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
         }
     }
 
 
-//
+//Language
 
     /**
      * Display a dialog with a notice

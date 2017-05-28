@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
-import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
+import de.longri.cachebox3.gui.skin.styles.LanguageStyle;
 
 /**
  * Created by longri on 26.05.17.
@@ -33,7 +33,6 @@ public enum Language implements SelectBoxItem {
         StringBuilder sb = new StringBuilder("lang/");
         sb.append(super.toString());
         sb.append("/strings.ini");
-
         return sb.toString().replaceAll("_", "-");
     }
 
@@ -43,9 +42,28 @@ public enum Language implements SelectBoxItem {
 
     @Override
     public Drawable getDrawable() {
-//        // for select Box interface, use 'cacheList' style
-//        if (cacheListTypeStyle == null) cacheListTypeStyle = VisUI.getSkin().get("cacheList", CacheTypeStyle.class);
-//        return getDrawable(cacheListTypeStyle);
+        LanguageStyle style = VisUI.getSkin().get("settings",LanguageStyle.class);
+
+        switch (this){
+
+            case cs:
+                return style.cs;
+            case de:
+                return style.de;
+            case en_GB:
+                return style.en_GB;
+            case fr:
+                return style.fr;
+            case hu:
+                return style.hu;
+            case nl:
+                return style.nl;
+            case pl:
+                return style.pl;
+            case pt_PT:
+                return style.pt_PT;
+        }
+        
         return null;
     }
 }

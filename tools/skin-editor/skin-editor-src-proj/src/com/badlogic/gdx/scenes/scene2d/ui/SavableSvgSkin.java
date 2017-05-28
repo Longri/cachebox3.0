@@ -18,6 +18,8 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
+import de.longri.cachebox3.gui.skin.styles.LanguageStyle;
+import de.longri.cachebox3.translation.Language;
 
 /**
  * Created by Longri on 12.01.2017.
@@ -93,6 +95,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(SplitPane.SplitPaneStyle.class);
         items.add(CompassViewStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.AttributesStyle.class);
+        items.add(LanguageStyle.class);
 
         SvgSkinUtil.saveSkin(this, items, skinFile);
 

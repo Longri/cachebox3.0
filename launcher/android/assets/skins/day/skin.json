@@ -244,6 +244,10 @@
       "path": "svg/cursor.svg",
       "scale": 1
     },
+    "cz": {
+      "path": "svg/cz.svg",
+      "scale": 0.08
+    },
     "db": {
       "path": "svg/db.svg",
       "scale": 0.72
@@ -267,6 +271,10 @@
     "db_selected_filter_active": {
       "path": "svg/db_selected_filter_active.svg",
       "scale": 0.72
+    },
+    "de": {
+      "path": "svg/de.svg",
+      "scale": 0.08
     },
     "default_button": {
       "path": "svg/default_button.svg",
@@ -372,6 +380,18 @@
       "path": "svg/folder.svg",
       "scale": 1
     },
+    "fr": {
+      "path": "svg/fr.svg",
+      "scale": 0.08
+    },
+    "gb": {
+      "path": "svg/gb.svg",
+      "scale": 0.08
+    },
+    "gb-eng": {
+      "path": "svg/gb-eng.svg",
+      "scale": 0.08
+    },
     "gc_liveIcon": {
       "path": "svg/gc_liveIcon.svg",
       "scale": 1
@@ -383,6 +403,10 @@
     "helpIcon": {
       "path": "svg/helpIcon.svg",
       "scale": 1
+    },
+    "hu": {
+      "path": "svg/hu.svg",
+      "scale": 0.08
     },
     "images-icon": {
       "path": "svg/images-icon.svg",
@@ -932,6 +956,10 @@
       "path": "svg/missingIcon.svg",
       "scale": 1
     },
+    "nl": {
+      "path": "svg/nl.svg",
+      "scale": 0.08
+    },
     "noteIcon": {
       "path": "svg/noteIcon.svg",
       "scale": 0.195
@@ -956,6 +984,10 @@
       "path": "svg/pencil.svg",
       "scale": 0.12
     },
+    "pl": {
+      "path": "svg/pl.svg",
+      "scale": 0.08
+    },
     "progress_back": {
       "path": "svg/progress_back.svg",
       "scale": 1
@@ -963,6 +995,10 @@
     "progress_foreground": {
       "path": "svg/progress_foreground.svg",
       "scale": 1
+    },
+    "pt": {
+      "path": "svg/pt.svg",
+      "scale": 0.08
     },
     "regular": {
       "path": "svg/regular.svg",
@@ -2151,6 +2187,18 @@
       "att_Takes_less_than_an_hour_1": "att_Takes_less_than_an_hour_1",
       "att_Available_at_all_times_1": "att_Available_at_all_times_1",
       "att_Parking_available_1": "att_Parking_available_1"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.LanguageStyle": {
+    "settings": {
+      "cs": "cz",
+      "de": "de",
+      "en_GB": "gb",
+      "fr": "fr",
+      "hu": "hu",
+      "nl": "nl",
+      "pl": "pl",
+      "pt_PT": "pt"
     }
   }
 }
