@@ -35,7 +35,7 @@ import java.lang.reflect.Type;
 /**
  * Created by Longri on 23.03.2017.
  */
-public class EventHandler implements SelectedCacheChangedListener, SelectedWayPointChangedListener, PositionChangedListener {
+public class EventHandler implements SelectedCacheChangedListener, SelectedWayPointChangedListener, PositionChangedListener, OrientationChangedListener {
 
     static final Logger log = LoggerFactory.getLogger(EventHandler.class);
 
@@ -239,5 +239,10 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     public static float getHeading() {
         return INSTANCE.heading;
+    }
+
+    @Override
+    public void orientationChanged(OrientationChangedEvent event) {
+        INSTANCE.heading = event.orientation;
     }
 }

@@ -51,7 +51,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         CacheListChangedEventList.Add(this);
 
         //register as positionChanged eventListener
-        de.longri.cachebox3.events.EventHandler.add(this);
+         EventHandler.add(this);
     }
 
     public synchronized void layout() {
@@ -103,12 +103,12 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         Cache cache = Database.Data.Query.get(idx);
 
                         //get actPos and heading
-                        Coordinate position = de.longri.cachebox3.events.EventHandler.getMyPosition();
+                        Coordinate position =  EventHandler.getMyPosition();
 
                         if (position == null)
                             return; // can't update without an position
 
-                        float heading = de.longri.cachebox3.events.EventHandler.getHeading();
+                        float heading = EventHandler.getHeading();
 
 
                         // get coordinate from Cache or from Final Waypoint
@@ -120,6 +120,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
 
                         //update item
+                        if(cache.getName().contains("ein Berg"))
+                            log.debug("Ein Berg result:{} heading:{} bearing:{}",result[2],heading,-(result[2] - heading));
                         if (((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0], true)))
                             CB.requestRendering();
                     }
@@ -153,7 +155,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         Cache cache = Database.Data.Query.get(selectedItemListIndex);
                         log.debug("Cache selection changed to: " + cache.toString());
                         //set selected Cache global
-                        de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedCacheChangedEvent(cache));
+                         EventHandler.fire(new  SelectedCacheChangedEvent(cache));
                     }
                 });
 
@@ -164,7 +166,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     public void run() {
                         int selectedIndex = 0;
                         for (Cache cache : Database.Data.Query) {
-                            if (cache.equals(de.longri.cachebox3.events.EventHandler.getSelectedCache())) {
+                            if (cache.equals( EventHandler.getSelectedCache())) {
                                 break;
                             }
                             selectedIndex++;
@@ -197,7 +199,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     public void dispose() {
         disposeListView();
         CacheListChangedEventList.Remove(this);
-        de.longri.cachebox3.events.EventHandler.remove(this);
+         EventHandler.remove(this);
         if (listView != null) listView.dispose();
         listView = null;
     }
@@ -244,12 +246,12 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     }
 
     @Override
-    public void positionChanged(de.longri.cachebox3.events.PositionChangedEvent event) {
+    public void positionChanged( PositionChangedEvent event) {
         setChangedFlagToAllItems();
     }
 
     @Override
-    public void orientationChanged(de.longri.cachebox3.events.OrientationChangedEvent event) {
+    public void orientationChanged( OrientationChangedEvent event) {
         setChangedFlagToAllItems();
     }
 

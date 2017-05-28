@@ -61,6 +61,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
     private final Table topTable, bottomTable;
     private final CompassViewStyle style;
     private final Image backgroundWidget;
+    private final float result[] = new float[4];
 
     private CoordinateGPS actCoord;
     private float actHeading = 0;
@@ -334,8 +335,6 @@ public class CompassView extends AbstractView implements PositionChangedListener
             actWaypoint = EventHandler.getSelectedWaypoint();
         }
         Coordinate dest = actWaypoint != null ? actWaypoint : actCache;
-
-        float result[] = new float[4];
 
         try {
             MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.ACCURATE, actCoord.getLatitude(),
