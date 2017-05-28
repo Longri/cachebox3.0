@@ -75,11 +75,11 @@ project(":gps-simulator") {
 
     dependencies {
         compile project(":core")
-        compile 'org.mapsforge:mapsforge-core:0.7.0'
-        compile 'org.mapsforge:mapsforge-themes:0.7.0'
-        compile 'org.mapsforge:mapsforge-map:0.7.0'
-        compile 'org.mapsforge:mapsforge-map-reader:0.7.0'
-        compile("org.mapsforge:mapsforge-map-awt:0.7.0")
+        compile 'org.mapsforge:mapsforge-core:0.8.0'
+        compile 'org.mapsforge:mapsforge-themes:0.8.0'
+        compile 'org.mapsforge:mapsforge-map:0.8.0'
+        compile 'org.mapsforge:mapsforge-map-reader:0.8.0'
+        compile("org.mapsforge:mapsforge-map-awt:0.8.0")
         compile 'com.kitfox.svg:svg-salamander:1.0'
         compile 'net.sf.kxml:kxml2:2.3.0'
 

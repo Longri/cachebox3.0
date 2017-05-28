@@ -19,8 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.events.OrientationChangedListener;
-import de.longri.cachebox3.events.PositionChangedListener;
+import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
@@ -65,13 +64,13 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     public void resort() {
         log.debug("resort Query");
         synchronized (Database.Data.Query) {
-            CacheWithWP nearstCacheWp = Database.Data.Query.Resort(de.longri.cachebox3.events.EventHandler.getSelectedCoord(),
-                    new CacheWithWP(de.longri.cachebox3.events.EventHandler.getSelectedCache(), de.longri.cachebox3.events.EventHandler.getSelectedWaypoint()));
+            CacheWithWP nearstCacheWp = Database.Data.Query.Resort(EventHandler.getSelectedCoord(),
+                    new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWaypoint()));
 
-//            if (nearstCacheWp != null) {
-//                de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedCacheChangedEvent(nearstCacheWp.getCache()));
-//                de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedWayPointChangedEvent(nearstCacheWp.getWaypoint()));
-//            }
+            if (nearstCacheWp != null) {
+                EventHandler.fire(new SelectedCacheChangedEvent(nearstCacheWp.getCache()));
+                EventHandler.fire(new SelectedWayPointChangedEvent(nearstCacheWp.getWaypoint()));
+            }
         }
         log.debug("Finish resort Query");
     }
