@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
@@ -45,6 +46,7 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
         this.setBackground(style.background);
 //        this.setDebug(true);
         compass = new Compass("mapCompassStyle", true);
+
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = style.distanceLabel_Font;
@@ -101,7 +103,7 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
         if (EventHandler.getSelectedCoord() != null) {
             Coordinate targetCoordinate = EventHandler.getSelectedCoord();
             setDistance(targetCoordinate.distance(MathUtils.CalculationType.ACCURATE));
-            compass.setHeading(myPosition.bearingTo(targetCoordinate, MathUtils.CalculationType.ACCURATE) -  bearing);
+            compass.setHeading(myPosition.bearingTo(targetCoordinate, MathUtils.CalculationType.ACCURATE) - bearing);
         }
     }
 
@@ -146,5 +148,17 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
 
     public float getPrefHeight() {
         return compass.getPrefHeight() + CB.scaledSizes.MARGINx2;
+    }
+
+    public void setMapOrientationMode(MapOrientationMode state) {
+        compass.setState(state);
+    }
+
+    public MapOrientationMode getOrientationState() {
+        return compass.getState();
+    }
+
+    public void setStateChangedListener(Compass.StateChanged listener) {
+        compass.setStateChangedListener(listener);
     }
 }

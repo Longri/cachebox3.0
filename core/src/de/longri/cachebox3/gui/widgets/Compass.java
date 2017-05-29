@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.gui.skin.styles.CompassStyle;
 import de.longri.cachebox3.utils.CB_RectF;
 
@@ -33,8 +34,8 @@ import de.longri.cachebox3.utils.CB_RectF;
  */
 public class Compass extends WidgetGroup implements Layout {
 
-    public enum State {
-        CompassAlign, UserRotate, NorthOrient
+    public interface StateChanged {
+        void stateChanged(MapOrientationMode state);
     }
 
     private final CompassStyle style;
@@ -46,7 +47,8 @@ public class Compass extends WidgetGroup implements Layout {
     private float lastBearing, lastHeading;
     private final boolean useState;
 
-    private State state = State.NorthOrient;
+    private MapOrientationMode state = MapOrientationMode.NORTH;
+    private StateChanged stateChangedListener;
 
     public Compass(String style) {
         this(VisUI.getSkin().get(style, CompassStyle.class));
@@ -77,14 +79,35 @@ public class Compass extends WidgetGroup implements Layout {
                     if (ordinal > 2)
                         ordinal = 0;
 
-                    state = State.values()[ordinal];
-                    CB.requestRendering();
+                    setState(MapOrientationMode.values()[ordinal]);
                 }
             });
         }
     }
 
     private float minSize, prefSize, maxSize, scaleRatio, arrowRatio;
+
+    public void setState(MapOrientationMode state) {
+        setState(state, true);
+    }
+
+    public void setState(MapOrientationMode state, boolean fireEvent) {
+        if (this.state == state) return;
+
+        this.state = state;
+        CB.requestRendering();
+        if (fireEvent && this.stateChangedListener != null) {
+            this.stateChangedListener.stateChanged(this.state);
+        }
+    }
+
+    public MapOrientationMode getState() {
+        return this.state;
+    }
+
+    public void setStateChangedListener(StateChanged listener) {
+        this.stateChangedListener = listener;
+    }
 
     private void calcSizes() {
         prefSize = style.frameNorthOrient.getMinWidth();
@@ -110,13 +133,13 @@ public class Compass extends WidgetGroup implements Layout {
         //draw frame
         Drawable frame = null;
         switch (state) {
-            case CompassAlign:
+            case COMPASS:
                 frame = style.frameCompasAlign;
                 break;
-            case UserRotate:
+            case USER:
                 frame = style.frameUserRotate;
                 break;
-            case NorthOrient:
+            case NORTH:
                 frame = style.frameNorthOrient;
                 break;
         }

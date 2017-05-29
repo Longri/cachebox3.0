@@ -20,7 +20,10 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
+import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
+import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
+import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.locator.CoordinateGPS;
@@ -59,17 +62,21 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
         this.myLocationAccuracy = myLocationAccuracy;
         this.mapStateButton = mapStateButton;
         this.infoPanel = infoPanel;
+        this.infoPanel.setStateChangedListener(new Compass.StateChanged() {
+            @Override
+            public void stateChanged(MapOrientationMode state) {
+                CB.viewmanager.toast("Change Map orientation Mode to:" + state.name());
+                assumeValues(false, (short) (lastEventID - 1));
+            }
+        });
         this.mapView = mapView;
         de.longri.cachebox3.events.EventHandler.add(this);
     }
 
     public void dispose() {
-
         isDisposed.set(true);
-
         // unregister this handler
         de.longri.cachebox3.events.EventHandler.remove(this);
-
     }
 
     /**
@@ -114,7 +121,6 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
 
         if (isDisposed.get()) return;
         myPosition = EventHandler.getMyPosition();
-        infoPanel.setNewValues(myPosition, mapBearing);
 
         // set map values
 //        final MapPosition currentMapPosition = this.map.getMapPosition();
@@ -128,12 +134,6 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
         //force full tilt on CarMode
         if (this.mapStateButton.getMapMode() == MapMode.CAR)
             mapView.animator.tilt(map.viewport().getMaxTilt());
-
-
-        // heading for map must between -180 and 180
-//        if (mapBearing < -180) mapBearing += 360;
-        mapView.animator.rotate(mapBearing);
-
 
         if (this.mapStateButton.getMapMode() == MapMode.CAR && Settings_Map.dynamicZoom.getValue()) {
             // calculate dynamic Zoom
@@ -153,10 +153,32 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
             mapView.animator.scale(dynZoom);
             if (lastDynZoom != (dynZoom)) {
                 lastDynZoom = dynZoom;
-//                log.debug("SetDynamic scale to: " + lastDynZoom);
             }
         }
 
+        float bearing = EventHandler.getHeading();
+        if (this.mapStateButton.getMapMode() == MapMode.CAR) {
+            this.infoPanel.setMapOrientationMode(MapOrientationMode.COMPASS);
+        }
+
+        switch (this.infoPanel.getOrientationState()) {
+            case NORTH:
+                this.mapBearing = 0;
+                this.arrowHeading = bearing;
+                mapView.animator.rotate(mapBearing);
+                break;
+            case COMPASS:
+                this.mapBearing = bearing;
+                this.arrowHeading = 0;
+                mapView.animator.rotate(mapBearing);
+                break;
+            case USER:
+                this.mapBearing = userBearing;
+                this.arrowHeading = userBearing + bearing;
+                break;
+        }
+
+        infoPanel.setNewValues(myPosition, mapBearing);
         myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
         myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
         CB.requestRendering();
@@ -167,7 +189,9 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
     }
 
     public void rotateChangedFromUser(float bearing) {
-        userBearing = bearing;
+        userBearing = -bearing;
+        this.infoPanel.setMapOrientationMode(MapOrientationMode.USER);
+        assumeValues(false, (short) (lastEventID - 1));
     }
 
     public void setBearing(float bearing) {
@@ -210,17 +234,6 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
         // at CarMode no orientation changes below 20kmh
         if (this.mapStateButton.getMapMode() == MapMode.CAR)
             return;
-
-       /* if (this.mapOrientationButton.isUserRotate()) {
-            this.mapBearing = userBearing;
-            this.arrowHeading = bearing;
-        } else */if (/*!this.mapOrientationButton.isNorthOriented() ||*/ this.mapStateButton.getMapMode() == MapMode.CAR) {
-            this.mapBearing = bearing;
-            this.arrowHeading = 0;
-        } else {
-            this.mapBearing = 0;
-            this.arrowHeading = bearing;
-        }
 
         assumeValues(false, event.ID);
     }

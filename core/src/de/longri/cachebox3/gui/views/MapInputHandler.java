@@ -68,10 +68,12 @@ public class MapInputHandler implements InputProcessor {
             case Input.Keys.LEFT:
                 mViewport.rotateMap(-0.0490873852, 0, 0);
                 map.updateMap(true);
+                map.events.fire(Map.ROTATE_EVENT, map.getMapPosition());
                 break;
             case Input.Keys.RIGHT:
                 mViewport.rotateMap(0.0490873852, 0, 0);
                 map.updateMap(true);
+                map.events.fire(Map.ROTATE_EVENT, map.getMapPosition());
                 break;
             case Input.Keys.M:
                 mViewport.scaleMap(1.05f, 0, 0);

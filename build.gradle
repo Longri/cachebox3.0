@@ -27,7 +27,7 @@ allprojects {
         aiVersion = '1.8.0'
         visUiVersion = '1.4.0-SNAPSHOT'
         vtmVersion = 'master-SNAPSHOT'
-        slf4jLibgdxVersion = '1.9.6-SNAPSHOT'
+        slf4jLibgdxVersion = '1.9.7-SNAPSHOT'
     }
 
 

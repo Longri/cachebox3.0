@@ -188,7 +188,6 @@ public class MapView extends AbstractView {
         map = createMap();
         this.animator = new MapAnimator(map);
         this.addActor(mapStateButton);
-//        this.addActor(mapOrientationButton);
         this.setTouchable(Touchable.enabled);
 
         this.zoomButton = new ZoomButton(new ZoomButton.ValueChangeListener() {
@@ -203,9 +202,6 @@ public class MapView extends AbstractView {
                     value = value * 0.5;
 
                 animator.scale(value);
-//                mapPosition.setScale(value);
-//                map.animateTo(mapPosition);
-
                 lastMapState.setZoom(FastMath.log2((int) value));
             }
         });
