@@ -44,7 +44,7 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
         style = VisUI.getSkin().get("infoPanel", MapInfoPanelStyle.class);
         this.setBackground(style.background);
 //        this.setDebug(true);
-        compass = new Compass("mapCompassStyle");
+        compass = new Compass("mapCompassStyle", true);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = style.distanceLabel_Font;

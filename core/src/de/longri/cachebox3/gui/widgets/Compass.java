@@ -18,10 +18,13 @@ package de.longri.cachebox3.gui.widgets;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.CompassStyle;
 import de.longri.cachebox3.utils.CB_RectF;
 
@@ -30,24 +33,55 @@ import de.longri.cachebox3.utils.CB_RectF;
  */
 public class Compass extends WidgetGroup implements Layout {
 
+    public enum State {
+        CompassAlign, UserRotate, NorthOrient
+    }
+
     private final CompassStyle style;
     private final CB_RectF rec_frame, rec_scale, rec_arrow;
     private final Matrix4 oldTransform = new Matrix4();
     private final Matrix4 transform_scale = new Matrix4();
     private final Matrix4 transform_arrow = new Matrix4();
     private final Matrix4 tmp = new Matrix4();
-    private float lastBearing, lastHeadiong;
+    private float lastBearing, lastHeading;
+    private final boolean useState;
+
+    private State state = State.NorthOrient;
 
     public Compass(String style) {
         this(VisUI.getSkin().get(style, CompassStyle.class));
     }
 
+    public Compass(String style, boolean useState) {
+        this(VisUI.getSkin().get(style, CompassStyle.class), useState);
+    }
+
     public Compass(CompassStyle style) {
+        this(style, false);
+    }
+
+    public Compass(CompassStyle style, boolean useState) {
         this.style = style;
+        this.useState = useState;
         rec_frame = new CB_RectF();
         rec_scale = new CB_RectF();
         rec_arrow = new CB_RectF();
         calcSizes();
+
+        if (useState) {
+            this.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    // change state
+                    int ordinal = state.ordinal();
+                    ordinal++;
+                    if (ordinal > 2)
+                        ordinal = 0;
+
+                    state = State.values()[ordinal];
+                    CB.requestRendering();
+                }
+            });
+        }
     }
 
     private float minSize, prefSize, maxSize, scaleRatio, arrowRatio;
@@ -74,8 +108,21 @@ public class Compass extends WidgetGroup implements Layout {
         Color color = batch.getColor();
         batch.setColor(1, 1, 1, 1);
         //draw frame
-        if (style.frameNorthOrient != null) {
-            style.frameNorthOrient.draw(batch, rec_frame.getX(), rec_frame.getY(), rec_frame.getWidth(), rec_frame.getHeight());
+        Drawable frame = null;
+        switch (state) {
+            case CompassAlign:
+                frame = style.frameCompasAlign;
+                break;
+            case UserRotate:
+                frame = style.frameUserRotate;
+                break;
+            case NorthOrient:
+                frame = style.frameNorthOrient;
+                break;
+        }
+
+        if (frame != null) {
+            frame.draw(batch, rec_frame.getX(), rec_frame.getY(), rec_frame.getWidth(), rec_frame.getHeight());
         }
 
         oldTransform.set(batch.getTransformMatrix());
@@ -106,7 +153,7 @@ public class Compass extends WidgetGroup implements Layout {
 
         //set matrix new
         setBearing(lastBearing);
-        setHeading(lastHeadiong);
+        setHeading(lastHeading);
     }
 
     public void layout() {
@@ -167,7 +214,7 @@ public class Compass extends WidgetGroup implements Layout {
     }
 
     public void setHeading(float heading) {
-        lastHeadiong = heading;
+        lastHeading = heading;
         transform_arrow.idt();
         transform_arrow.translate(rec_arrow.getHalfWidth() + rec_arrow.getX(), rec_arrow.getHalfHeight() + rec_arrow.getY(), 0);
         transform_arrow.rotate(0, 0, 1, -heading);
