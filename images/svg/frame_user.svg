@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="401" height="401" viewBox="0 0 401.00 401.00" enable-background="new 0 0 401.00 401.00" xml:space="preserve">
+	<radialGradient id="SVGID_Fill1_" cx="200.5" cy="200.5" r="401" gradientUnits="userSpaceOnUse">
+		<stop offset="0.439331" stop-color="#D1FF3C" stop-opacity="1"/>
+		<stop offset="0.468619" stop-color="#52803A" stop-opacity="1"/>
+		<stop offset="0.506276" stop-color="#090E06" stop-opacity="0.996078"/>
+		<stop offset="1" stop-color="#2C650F" stop-opacity="1"/>
+	</radialGradient>
+	<ellipse fill="url(#SVGID_Fill1_)" stroke-linejoin="round" stroke="#161F11" stroke-opacity="1" cx="200.5" cy="200.5" rx="200" ry="200"/>
+</svg>

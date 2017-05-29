@@ -53,7 +53,7 @@ public class Compass extends WidgetGroup implements Layout {
     private float minSize, prefSize, maxSize, scaleRatio, arrowRatio;
 
     private void calcSizes() {
-        prefSize = style.frame.getMinWidth();
+        prefSize = style.frameNorthOrient.getMinWidth();
         minSize = prefSize * 0.6f;
         maxSize = prefSize * 1.3f;
         scaleRatio = style.scale.getMinWidth() / prefSize;
@@ -74,8 +74,8 @@ public class Compass extends WidgetGroup implements Layout {
         Color color = batch.getColor();
         batch.setColor(1, 1, 1, 1);
         //draw frame
-        if (style.frame != null) {
-            style.frame.draw(batch, rec_frame.getX(), rec_frame.getY(), rec_frame.getWidth(), rec_frame.getHeight());
+        if (style.frameNorthOrient != null) {
+            style.frameNorthOrient.draw(batch, rec_frame.getX(), rec_frame.getY(), rec_frame.getWidth(), rec_frame.getHeight());
         }
 
         oldTransform.set(batch.getTransformMatrix());

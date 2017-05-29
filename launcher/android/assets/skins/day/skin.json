@@ -1,13 +1,5 @@
 {
   "com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg": {
-    "DayNight": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
-    },
-    "FieldNote": {
-      "path": "svg/FieldNote.svg",
-      "scale": 0.19
-    },
     "Mapstate.car": {
       "path": "svg/map-state-car.svg",
       "scale": 0.75
@@ -31,18 +23,6 @@
     "MapstateOverdraw": {
       "path": "svg/map-state-overdraw.svg",
       "scale": 0.75
-    },
-    "TORCHOFF": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
-    },
-    "TORCHON": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
-    },
-    "UPLOADFIELDNOTE": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
     },
     "Wikipedia": {
       "path": "svg/mapWikipedia1.svg",
@@ -224,10 +204,6 @@
       "path": "svg/compas_icon.svg",
       "scale": 0.319
     },
-    "compass": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
-    },
     "compass_1_arrow": {
       "path": "svg/compass_1_arrow.svg",
       "scale": 1
@@ -320,10 +296,6 @@
       "path": "svg/disabledOverlay2.svg",
       "scale": 0.15
     },
-    "docIcon": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
-    },
     "download-1": {
       "path": "svg/download-1.svg",
       "scale": 0.17
@@ -364,10 +336,6 @@
       "path": "svg/backIcon.svg",
       "scale": 0.3
     },
-    "filter": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
-    },
     "finger": {
       "path": "svg/finger.svg",
       "scale": 1
@@ -383,6 +351,14 @@
     "fr": {
       "path": "svg/fr.svg",
       "scale": 0.08
+    },
+    "frame_align": {
+      "path": "svg/frame_align.svg",
+      "scale": 0.15
+    },
+    "frame_user": {
+      "path": "svg/frame_user.svg",
+      "scale": 0.15
     },
     "gb": {
       "path": "svg/gb.svg",
@@ -411,10 +387,6 @@
     "images-icon": {
       "path": "svg/images-icon.svg",
       "scale": 0.195
-    },
-    "importIcon": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
     },
     "infoIcon": {
       "path": "svg/infoIcon.svg",
@@ -446,18 +418,6 @@
     },
     "listrec_selected": {
       "path": "svg/listrec_selected.svg",
-      "scale": 1
-    },
-    "log10icon": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
-    },
-    "lupe": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
-    },
-    "manageDb": {
-      "path": "svg/missingIcon.svg",
       "scale": 1
     },
     "map": {
@@ -952,10 +912,6 @@
       "path": "svg/nav_selected.svg",
       "scale": 0.72
     },
-    "navigate": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
-    },
     "nl": {
       "path": "svg/nl.svg",
       "scale": 0.08
@@ -1092,25 +1048,13 @@
       "path": "svg/traddi.svg",
       "scale": 0.2
     },
-    "videoIcon": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
-    },
     "virtual": {
       "path": "svg/virtual.svg",
       "scale": 0.2
     },
-    "voiceRecIcon": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
-    },
     "warning": {
       "path": "svg/warning.svg",
       "scale": 1.2
-    },
-    "warningIcon": {
-      "path": "svg/missingIcon.svg",
-      "scale": 1
     },
     "waypointListIcon": {
       "path": "svg/waypointListIcon.svg",
@@ -1987,7 +1931,6 @@
       "sortIcon": "sortIcon",
       "cacheListIcon": "cacheListIcon",
       "addWp": "add-wp",
-      "fieldNote": "FieldNote",
       "settingsIcon": "settings_icon",
       "compassIcon": "compas_icon",
       "creditsIcon": "cb",
@@ -2037,7 +1980,9 @@
   },
   "de.longri.cachebox3.gui.skin.styles.CompassStyle": {
     "mapCompassStyle": {
-      "frame": "map_compass_1_frame",
+      "frameCompasAlign": "frame_align",
+      "frameUserRotate": "frame_user",
+      "frameNorthOrient": "map_compass_1_frame",
       "scale": "map_compass_2_scale",
       "arrow": "map_compass_2_arrow"
     }
@@ -2170,7 +2115,7 @@
       "distanceColor": "font_color",
       "accurateColor": "font_color",
       "infoColor": "font_color",
-      "frame": "compass_1_frame",
+      "frameNorthOrient": "compass_1_frame",
       "scale": "compass_1_scale",
       "arrow": "compass_1_arrow"
     }
