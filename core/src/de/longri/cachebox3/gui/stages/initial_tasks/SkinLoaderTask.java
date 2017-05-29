@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.stages.initial_tasks;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.settings.Settings;
@@ -32,8 +31,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class SkinLoaderTask extends AbstractInitTask {
 
     private static final String INTERNAL_SKIN_DEFAULT_NAME = "internalDefault";
-
-    public static Model myLocationModel, compassModel, compassGrayModel, compassYellowModel;
 
     public SkinLoaderTask(String name, int percent) {
         super(name, percent);
@@ -119,13 +116,6 @@ public final class SkinLoaderTask extends AbstractInitTask {
             } catch (InterruptedException e) {
             }
         }
-
-        //add myLocationModel to skin
-        SvgSkin skin = CB.getSkin();
-        skin.add("MyLocationModel", myLocationModel, Model.class);
-        skin.add("compassModel", compassModel, Model.class);
-        skin.add("compassGrayModel", compassGrayModel, Model.class);
-        skin.add("compassYellowModel", compassYellowModel, Model.class);
     }
 
 

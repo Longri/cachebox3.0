@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,8 @@ import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
 import de.longri.cachebox3.gui.map.baseMap.AbstractVectorLayer;
-import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
-import de.longri.cachebox3.utils.DEBUG_SB;
 import de.longri.cachebox3.utils.EQUALS;
 import de.longri.cachebox3.utils.MathUtils;
 import org.oscim.core.MapPosition;
@@ -31,7 +29,6 @@ import org.oscim.event.Event;
 import org.oscim.event.Gesture;
 import org.oscim.event.MotionEvent;
 import org.oscim.layers.GroupLayer;
-import org.oscim.layers.MapEventLayer2;
 import org.oscim.layers.tile.TileLayer;
 import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
@@ -44,7 +41,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.AbstractList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 08.09.2016.
@@ -53,13 +49,11 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
 
 
     private final static Logger log = LoggerFactory.getLogger(CacheboxMapAdapter.class);
-    private final MapCompass mapOrientationButton;
 
-    public CacheboxMapAdapter(MapCompass mapOrientationButton) {
+    public CacheboxMapAdapter() {
         super();
         events.bind(this); //register Update listener
         this.viewport().setMaxTilt(65f);
-        this.mapOrientationButton = mapOrientationButton;
     }
 
 
@@ -171,13 +165,8 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
                     float offset = MathUtils.linearInterpolation
                             (viewport().getMinTilt(), viewport().getMaxTilt(), 0, 0.8f, mapPosition.getTilt());
                     viewport().setMapScreenCenter(offset);
-
-                    float buttonTilt = MathUtils.linearInterpolation
-                            (viewport().getMinTilt(), viewport().getMaxTilt(), 0, -60f, mapPosition.getTilt());
-                    mapOrientationButton.setTilt(buttonTilt);
                 } else {
                     viewport().setMapScreenCenter(0);
-                    mapOrientationButton.setTilt(0);
                 }
             }
         }

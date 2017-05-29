@@ -38,7 +38,6 @@ import de.longri.cachebox3.gui.map.layer.*;
 import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
-import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
@@ -99,7 +98,6 @@ public class MapView extends AbstractView {
     private final CacheboxMain main;
     private MapScaleBarLayer mapScaleBarLayer;
     private final MapStateButton mapStateButton;
-    private final MapCompass mapOrientationButton;
     private final ZoomButton zoomButton;
     public final MapAnimator animator;
     private WaypointLayer wayPointLayer;
@@ -134,7 +132,6 @@ public class MapView extends AbstractView {
                     log.debug("Activate Carmode with last mapstate:" + lastMapState);
                     float bearing = -EventHandler.getHeading();
                     positionChangedHandler.setBearing(bearing);
-                    mapOrientationButton.setOrientation(-bearing);
                     setBuildingLayerEnabled(false);
                     setCenterCrossLayerEnabled(false);
 
@@ -149,7 +146,6 @@ public class MapView extends AbstractView {
                         mapPosition.setPosition(wpCoord.latitude, wpCoord.longitude);
                     }
                     mapStateButton.setMapMode(lastMapState.getMapMode(), true, selfEvent);
-                    mapOrientationButton.setMode(lastMapState.getMapOrientationMode());
                     mapPosition.setTilt(map.viewport().getMinTilt());
                     float ori = 0;
                     if (lastMapState.getMapOrientationMode() != MapOrientationMode.NORTH) {
@@ -185,8 +181,6 @@ public class MapView extends AbstractView {
                     setMapState(lastMapState);
             }
         });
-        this.mapOrientationButton = new MapCompass(mapStateButton.getWidth(), mapStateButton.getHeight());
-
         infoPanel = new MapInfoPanel();
         infoPanel.setBounds(10, 100, 200, 100);
         this.addActor(infoPanel);
@@ -266,7 +260,7 @@ public class MapView extends AbstractView {
 
 
         CacheboxMain.drawMap = true;
-        map = new CacheboxMapAdapter(mapOrientationButton) {
+        map = new CacheboxMapAdapter() {
 
             @Override
             public void beginFrame() {
@@ -312,7 +306,7 @@ public class MapView extends AbstractView {
         //add position changed handler
         positionChangedHandler = new MapViewPositionChangedHandler(
                 this, map, myLocationLayer,
-                myLocationAccuracy, mapOrientationButton, mapStateButton, infoPanel);
+                myLocationAccuracy, mapStateButton, infoPanel);
 
         return map;
     }
@@ -433,7 +427,6 @@ public class MapView extends AbstractView {
         map = null;
 
         //dispose actors
-        mapOrientationButton.dispose();
         mapStateButton.dispose();
 
         infoPanel.dispose();
@@ -442,7 +435,7 @@ public class MapView extends AbstractView {
 
     private void setMapState(MapState state) {
         state.setMapMode(mapStateButton.getMapMode());
-        state.setMapOrientationMode(mapOrientationButton.getMode());
+//        state.setMapOrientationMode(mapOrientationButton.getMode());
         state.setZoom(this.map.getMapPosition().getZoomLevel());
     }
 
@@ -458,9 +451,6 @@ public class MapView extends AbstractView {
 
         mapStateButton.setPosition(getWidth() - (mapStateButton.getWidth() + CB.scaledSizes.MARGIN),
                 getHeight() - (mapStateButton.getHeight() + CB.scaledSizes.MARGIN));
-
-        mapOrientationButton.setPosition(CB.scaledSizes.MARGIN,
-                getHeight() - (mapOrientationButton.getHeight() + CB.scaledSizes.MARGIN));
 
         zoomButton.setPosition(getWidth() - (zoomButton.getWidth() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN);
 
@@ -592,11 +582,11 @@ public class MapView extends AbstractView {
     }
 
     public boolean getAlignToCompass() {
-        return mapOrientationButton.isNorthOriented();
+        return false;//mapOrientationButton.isNorthOriented();
     }
 
     public void setAlignToCompass(boolean align) {
-        mapOrientationButton.setMode(align ? MapOrientationMode.NORTH : MapOrientationMode.COMPASS);
+//        mapOrientationButton.setMode(align ? MapOrientationMode.NORTH : MapOrientationMode.COMPASS);
     }
 
     public void setNewSettings() {

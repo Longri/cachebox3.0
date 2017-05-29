@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,7 @@ package de.longri.cachebox3.gui.stages;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
@@ -63,7 +59,7 @@ public class Splash extends NamedStage {
 
 
     VisProgressBar progress;
-    Image  OSM_Logo, Route_Logo, Mapsforge_Logo, LibGdx_Logo, GC_Logo;
+    Image OSM_Logo, Route_Logo, Mapsforge_Logo, LibGdx_Logo, GC_Logo;
 
     Label descTextView;
 
@@ -149,12 +145,6 @@ public class Splash extends NamedStage {
                 new AssetManager(new ClasspathFileHandleResolver())
                 : new AssetManager();
 
-        assets.load("skins/day/3d_model/Pfeil.g3db", Model.class);
-        assets.load("skins/day/3d_model/compass.g3db", Model.class);
-        assets.load("skins/day/3d_model/compass_gray.g3db", Model.class);
-        assets.load("skins/day/3d_model/compass_yellow.g3db", Model.class);
-        loading = true;
-
         Gdx.graphics.requestRendering();
     }
 
@@ -163,14 +153,8 @@ public class Splash extends NamedStage {
     public void draw() {
 
         Gdx.graphics.requestRendering();
-
-
-        if (loading && assets.update())
-            doneLoading();
         super.draw();
-
-
-        if (!loading && !threadStarted) {
+        if (!threadStarted) {
             //Run Loader Tasks at separate threads
             Thread runThread = new Thread(new Runnable() {
                 @Override
@@ -188,37 +172,6 @@ public class Splash extends NamedStage {
 
     }
 
-
-    boolean loading;
     AssetManager assets;
-
-    private void doneLoading() {
-
-        log.info("add 3DModels");
-
-        Model myLocationModel = assets.get("skins/day/3d_model/Pfeil.g3db", Model.class);
-        myLocationModel.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));
-        myLocationModel.nodes.get(0).parts.get(0).material.set(FloatAttribute.createAlphaTest(0.1f));
-        SkinLoaderTask.myLocationModel = myLocationModel;
-
-        Model compassModel = assets.get("skins/day/3d_model/compass.g3db", Model.class);
-//        compassModel.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));
-//        compassModel.nodes.get(0).parts.get(0).material.set(FloatAttribute.createAlphaTest(0.1f));
-        SkinLoaderTask.compassModel = compassModel;
-
-        Model compassGrayModel = assets.get("skins/day/3d_model/compass_gray.g3db", Model.class);
-//        compassGrayModel.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_COLOR, GL20.GL_ONE_MINUS_SRC_COLOR));
-//        compassGrayModel.nodes.get(0).parts.get(0).material.set(FloatAttribute.createAlphaTest(0.1f));
-        SkinLoaderTask.compassGrayModel = compassGrayModel;
-
-        Model compassYellowModel = assets.get("skins/day/3d_model/compass_yellow.g3db", Model.class);
-//        compassYellowModel.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));
-//        compassYellowModel.nodes.get(0).parts.get(0).material.set(FloatAttribute.createAlphaTest(0.1f));
-        SkinLoaderTask.compassYellowModel = compassYellowModel;
-
-
-        loading = false;
-    }
-
 
 }

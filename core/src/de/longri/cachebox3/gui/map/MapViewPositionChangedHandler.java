@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 -2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 package de.longri.cachebox3.gui.map;
 
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.views.MapView;
-import de.longri.cachebox3.gui.widgets.MapCompass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.locator.CoordinateGPS;
@@ -47,18 +47,16 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
     private final CacheboxMapAdapter map;
     private final LocationAccuracyLayer myLocationAccuracy;
     private final LocationLayer myLocationLayer;
-    private final MapCompass mapOrientationButton;
     private final AtomicBoolean isDisposed = new AtomicBoolean(false);
     private final MapStateButton mapStateButton;
     private final MapView mapView;
 
     public MapViewPositionChangedHandler(MapView mapView, CacheboxMapAdapter map, LocationLayer myLocationLayer,
-                                         LocationAccuracyLayer myLocationAccuracy, MapCompass mapOrientationButton,
+                                         LocationAccuracyLayer myLocationAccuracy,
                                          MapStateButton mapStateButton, MapInfoPanel infoPanel) {
         this.map = map;
         this.myLocationLayer = myLocationLayer;
         this.myLocationAccuracy = myLocationAccuracy;
-        this.mapOrientationButton = mapOrientationButton;
         this.mapStateButton = mapStateButton;
         this.infoPanel = infoPanel;
         this.mapView = mapView;
@@ -161,6 +159,7 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
 
         myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
         myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
+        CB.requestRendering();
     }
 
     public void tiltChangedFromMap(float newTilt) {
@@ -168,7 +167,6 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
     }
 
     public void rotateChangedFromUser(float bearing) {
-        this.mapOrientationButton.setUserRotation();
         userBearing = bearing;
     }
 
@@ -213,10 +211,10 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
         if (this.mapStateButton.getMapMode() == MapMode.CAR)
             return;
 
-        if (this.mapOrientationButton.isUserRotate()) {
+       /* if (this.mapOrientationButton.isUserRotate()) {
             this.mapBearing = userBearing;
             this.arrowHeading = bearing;
-        } else if (!this.mapOrientationButton.isNorthOriented() || this.mapStateButton.getMapMode() == MapMode.CAR) {
+        } else */if (/*!this.mapOrientationButton.isNorthOriented() ||*/ this.mapStateButton.getMapMode() == MapMode.CAR) {
             this.mapBearing = bearing;
             this.arrowHeading = 0;
         } else {
@@ -224,8 +222,6 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
             this.arrowHeading = bearing;
         }
 
-        //set orientation
-        this.mapOrientationButton.setOrientation(-this.mapBearing);
         assumeValues(false, event.ID);
     }
 
