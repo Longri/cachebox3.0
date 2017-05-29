@@ -50,7 +50,7 @@ public class IconButton extends VisTextButton {
         if (imageDrawable != null)
             image.setBounds(this.getWidth() - (imageDrawable.getMinHeight() + CB.scaledSizes.MARGIN),
                     (this.getHeight() - imageDrawable.getMinHeight()) / 2,
-                    imageDrawable.getMinHeight(),
+                    imageDrawable.getMinWidth(),
                     imageDrawable.getMinHeight());
         super.layout();
     }

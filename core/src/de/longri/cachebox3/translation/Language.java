@@ -21,6 +21,8 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
 import de.longri.cachebox3.gui.skin.styles.LanguageStyle;
 
+import java.io.IOException;
+
 /**
  * Created by longri on 26.05.17.
  */
@@ -37,14 +39,20 @@ public enum Language implements SelectBoxItem {
     }
 
     public String getName() {
-        return this.name();
+        String name = null;
+        try {
+            name = Translation.getLangNameFromFile(this.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return name == null ? this.name() : name;
     }
 
     @Override
     public Drawable getDrawable() {
-        LanguageStyle style = VisUI.getSkin().get("settings",LanguageStyle.class);
+        LanguageStyle style = VisUI.getSkin().get("settings", LanguageStyle.class);
 
-        switch (this){
+        switch (this) {
 
             case cs:
                 return style.cs;
@@ -63,7 +71,7 @@ public enum Language implements SelectBoxItem {
             case pt_PT:
                 return style.pt_PT;
         }
-        
+
         return null;
     }
 }

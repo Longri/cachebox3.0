@@ -569,6 +569,9 @@ public class Settings_Activity extends ActivityBase {
         selectBox.addListener(clickListener);
 
         selectBox.set(itemList);
+        if (setting == Config.localisation) {
+            selectBox.setPrefix(Translation.Get("SelectLanguage") + ":  ");
+        }
         selectBox.select(selectIndex);
 
         selectBox.addListener(new ChangeListener() {
@@ -583,6 +586,7 @@ public class Settings_Activity extends ActivityBase {
             }
         });
         selectBox.setHideWithItemClick(false);
+
         ListViewItem table = new ListViewItem(listIndex) {
             @Override
             public void dispose() {

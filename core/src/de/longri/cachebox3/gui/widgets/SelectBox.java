@@ -41,6 +41,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
     private final com.badlogic.gdx.scenes.scene2d.ui.Image selectIcon = new com.badlogic.gdx.scenes.scene2d.ui.Image();
     private T selectedItem;
     private boolean heideWithItemClick = true;
+    private String prefix;
 
     public SelectBox() {
         super("");
@@ -88,7 +89,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
             protected synchronized void initial() {
                 this.reset();
                 this.removeListener(clickListener);
-
+                this.defaults().pad(CB.scaledSizes.MARGINx2);
 
                 boolean hasIcon = (mIcon != null);
                 if (hasIcon) {
@@ -150,12 +151,11 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
     @Override
     public void layout() {
         super.layout();
-
         Drawable imageDrawable = image.getDrawable();
         if (imageDrawable != null) {
-            float x = this.getWidth() - (imageDrawable.getMinHeight() + CB.scaledSizes.MARGINx2 + style.selectIcon.getMinWidth());
+            float x = this.getWidth() - (imageDrawable.getMinWidth() + CB.scaledSizes.MARGINx2 + style.selectIcon.getMinWidth());
             float y = (this.getHeight() - imageDrawable.getMinHeight()) / 2;
-            image.setBounds(x, y, imageDrawable.getMinHeight(), imageDrawable.getMinHeight());
+            image.setBounds(x, y, imageDrawable.getMinWidth(), imageDrawable.getMinHeight());
         }
         selectIcon.setBounds(this.getWidth() - (style.selectIcon.getMinWidth() + CB.scaledSizes.MARGIN),
                 (this.getHeight() - style.selectIcon.getMinHeight()) / 2,
@@ -170,7 +170,9 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
 
     private void select(int index, boolean fire) {
         selectedItem = entries.get(index);
-        if (selectedItem.getName() != null) this.setText(selectedItem.getName());
+        if (selectedItem.getName() != null) {
+            this.setText(selectedItem.getName());
+        }
         this.setIcon(selectedItem.getDrawable());
         this.setSelectIcon(style.selectIcon);
         this.layout();
@@ -179,7 +181,9 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
 
     public void select(T item) {
         selectedItem = item;
-        if (item.getName() != null) this.setText(item.getName());
+        if (item.getName() != null) {
+            this.setText(item.getName());
+        }
         this.setIcon(item.getDrawable());
         this.setSelectIcon(style.selectIcon);
         this.layout();
@@ -188,6 +192,18 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
 
     private void setSelectIcon(Drawable drawable) {
         selectIcon.setDrawable(drawable);
+    }
+
+    @Override
+    public void setText(String text) {
+        if (prefix != null && prefix.length() > 0) {
+            text = prefix + text;
+        }
+        super.setText(text);
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 
     @Override

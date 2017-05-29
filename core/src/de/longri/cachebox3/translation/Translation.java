@@ -35,7 +35,7 @@ public class Translation {
 
     public static Translation that;
 
-    private final String BR;
+    private static final String BR="\n";
     private final CB_List<Translations> mStringList;
     private final CB_List<Translations> mRefTranslation;
     public final CB_List<MissingTranslation> mMissingStringList;
@@ -51,10 +51,9 @@ public class Translation {
     public Translation(String WorkPath) {
         that = this;
         mWorkPath = WorkPath;
-        BR = "\n"; // System.getProperty("line.separator");
-        mStringList = new CB_List<Translations>();
-        mRefTranslation = new CB_List<Translations>();
-        mMissingStringList = new CB_List<MissingTranslation>();
+        mStringList = new CB_List<>();
+        mRefTranslation = new CB_List<>();
+        mMissingStringList = new CB_List<>();
     }
 
     // #######################################################################
@@ -150,7 +149,7 @@ public class Translation {
     // Private access
     // #######################################################################
 
-    private String getLangNameFromFile(String path) throws IOException {
+    static String getLangNameFromFile(String path) throws IOException {
 
         FileHandle lang = Gdx.files.internal(path);
         String langRead = lang.readString();
