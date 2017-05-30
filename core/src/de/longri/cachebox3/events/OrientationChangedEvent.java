@@ -19,7 +19,7 @@ package de.longri.cachebox3.events;
  * Created by Longri on 23.03.2017.
  */
 public class OrientationChangedEvent extends AbstractEvent<Float> {
-    public final float orientation;
+    private final float orientation;
 
     public OrientationChangedEvent(float orientation) {
         super(Float.class);
@@ -34,5 +34,9 @@ public class OrientationChangedEvent extends AbstractEvent<Float> {
     @Override
     Class getListenerClass() {
         return OrientationChangedListener.class;
+    }
+
+    public float getOrientation() {
+        return this.orientation;
     }
 }

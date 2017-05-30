@@ -23,8 +23,6 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractEvent<T> {
 
-    private final Logger log;
-
     private final Class clazz;
     public final short ID;
 
@@ -35,7 +33,6 @@ public abstract class AbstractEvent<T> {
     public AbstractEvent(Class<T> clazz, short eventID) {
         this.clazz = clazz;
         this.ID = eventID;
-        log = LoggerFactory.getLogger(clazz);
     }
 
     abstract Class getListenerClass();

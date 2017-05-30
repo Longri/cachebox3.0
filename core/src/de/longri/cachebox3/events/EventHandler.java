@@ -243,6 +243,6 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     @Override
     public void orientationChanged(OrientationChangedEvent event) {
-        INSTANCE.heading = event.orientation;
+        INSTANCE.heading = event.getOrientation();
     }
 }

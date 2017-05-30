@@ -306,7 +306,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
     @Override
     public void orientationChanged(OrientationChangedEvent event) {
-        actHeading = event.orientation;
+        actHeading = event.getOrientation();
         refreshOrientationInfo();
     }
 

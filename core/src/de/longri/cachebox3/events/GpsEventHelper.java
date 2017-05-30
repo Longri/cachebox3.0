@@ -16,11 +16,15 @@
 package de.longri.cachebox3.events;
 
 import de.longri.cachebox3.locator.CoordinateGPS;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 23.03.2017.
  */
 public class GpsEventHelper {
+
+    private static Logger log = LoggerFactory.getLogger(GpsEventHelper.class);
 
     private double lastLat, lastLon, lastSpeed, lastEle, lastHeading;
     private float lastAccuracy;
@@ -44,49 +48,50 @@ public class GpsEventHelper {
             newPos.setHeading(-bearing);
             newPos.setIsGpsProvided(isGpsProvided);
             newPos.setAccuracy(accuracy);
-            EventHandler.fire(new PositionChangedEvent(newPos,eventID));
+            log.debug("Send new Position from GPS Bearing:{}", newPos.getHeading());
+            EventHandler.fire(new PositionChangedEvent(newPos, eventID));
 
-            setSpeed(speed,eventID);
-            setElevation(elevation,eventID);
-            setAccuracy(accuracy,eventID);
-            setCourse(-bearing,eventID);
+            setSpeed(speed, eventID);
+            setElevation(elevation, eventID);
+            setAccuracy(accuracy, eventID);
+            setCourse(-bearing, eventID);
 
-        }else{
+        } else {
             // not a new position call other event's only
-            setSpeed(speed,eventID);
-            setElevation(elevation,eventID);
-            setAccuracy(accuracy,eventID);
-            setCourse(-bearing,eventID);
+            setSpeed(speed, eventID);
+            setElevation(elevation, eventID);
+            setAccuracy(accuracy, eventID);
+            setCourse(-bearing, eventID);
         }
     }
 
     public void setElevation(double altitude) {
-       this.setElevation(altitude,EventHandler.getId());
+        this.setElevation(altitude, EventHandler.getId());
     }
 
-    public void setElevation(double altitude,short id) {
+    public void setElevation(double altitude, short id) {
         lastEle = altitude;
         //TODO add EventHandler
     }
 
     public void setSpeed(double speed) {
-        this.setSpeed(speed,EventHandler.getId());
+        this.setSpeed(speed, EventHandler.getId());
     }
 
-    public void setSpeed(double speed,short id) {
+    public void setSpeed(double speed, short id) {
         if (lastSpeed != speed) {
-            EventHandler.fire(new SpeedChangedEvent((float) speed,id));
+            EventHandler.fire(new SpeedChangedEvent((float) speed, id));
             lastSpeed = speed;
         }
     }
 
     public void setCourse(double heading) {
-        this.setCourse(heading,EventHandler.getId());
+        this.setCourse(heading, EventHandler.getId());
     }
 
-    public void setCourse(double heading,short id) {
+    public void setCourse(double heading, short id) {
         if (lastHeading != heading) {
-            EventHandler.fire(new OrientationChangedEvent((float) heading,id));
+            EventHandler.fire(new OrientationChangedEvent((float) heading, id));
             lastHeading = heading;
         }
     }
@@ -95,7 +100,7 @@ public class GpsEventHelper {
         this.setAccuracy(accuracy, EventHandler.getId());
     }
 
-    public void setAccuracy(float accuracy,short id) {
+    public void setAccuracy(float accuracy, short id) {
         this.lastAccuracy = accuracy;
     }
 }

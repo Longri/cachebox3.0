@@ -63,15 +63,16 @@ public class MapAnimator {
             changed = true;
             mapPosition.setScale(scale.getAct());
         }
-        if (rotate.update(delta)) {
+        if (true || rotate.update(delta)) {
             changed = true;
-            mapPosition.setBearing((float) -rotate.getAct());
+            mapPosition.setBearing((float) rotate.getAct());
         }
         if (tilt.update(delta)) {
             changed = true;
             mapPosition.setTilt((float) tilt.getAct());
         }
         if (changed) {
+            log.debug("setMapPosition Bearing {}", mapPosition.bearing);
             map.setMapPosition(mapPosition);
             Gdx.app.postRunnable(new Runnable() {
                 @Override
@@ -100,11 +101,12 @@ public class MapAnimator {
     }
 
     public void rotate(double value) {
+        log.debug("Rotate Map to {}", value);
         this.rotate(DEFAULT_DURATION, value);
     }
 
     public void rotate(float duration, double value) {
-        float mr = -mapPosition.getBearing();
+        float mr = -mapPosition.bearing;
         if (mr < 0) mr += 360;
         if (mr > 360) mr -= 360;
 
@@ -113,14 +115,17 @@ public class MapAnimator {
         if (delta > 270) {
             //Delta to big, rotate other direction"
             if (value - mr < 0) {
-                mr -= 360;
-            } else {
                 mr += 360;
+            } else {
+                mr -= 360;
             }
         }
-//        log.debug("Start rotate animation to: {}  from {}/ {}", value, mr, mapPosition.getBearing());
-        this.rotate.start(duration, mr, value, ROTATE_PRECISION);
+        log.debug("Start rotate animation to: {}  from {}/ {}", value, mr, mapPosition.bearing);
+//        this.rotate.start(duration, mr, -value, ROTATE_PRECISION);
+
+        this.rotate.setDebugAct(value);
     }
+
 
     public void tilt(double value) {
         this.tilt(DEFAULT_DURATION, value);

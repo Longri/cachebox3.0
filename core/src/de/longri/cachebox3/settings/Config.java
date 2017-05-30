@@ -44,6 +44,9 @@ public class Config extends Settings {
         Database Data = Database.Data;
         Database SettingsDB = Database.Settings;
 
+        if (Data == null || SettingsDB == null || !Data.isStarted() || !SettingsDB.isStarted())
+            return false;
+
         try {
             if (Data != null)
                 Data.beginTransaction();

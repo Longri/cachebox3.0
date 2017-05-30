@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -35,12 +36,15 @@ import org.oscim.renderer.MapRenderer;
 import org.oscim.theme.ThemeLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.impl.LibgdxLogger;
 import org.slf4j.impl.LibgdxLoggerFactory;
 
 import java.text.NumberFormat;
 
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
+import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
+import static org.slf4j.impl.LibgdxLoggerFactory.INCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -51,9 +55,17 @@ public class CacheboxMain extends ApplicationAdapter {
         COORD_SCALE = 1;
         EventHandler.INIT();
 
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
-        LibgdxLoggerFactory.EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
+//        INCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
+//        INCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
+//        INCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
+
+        EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
+        EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
+        EXCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
+
+        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
+        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
 
     }
 

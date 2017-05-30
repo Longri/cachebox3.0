@@ -92,4 +92,8 @@ public class DoubleAnimator {
     }
 
 
+    public void setDebugAct(double value) {
+        this.act = value;
+        finish = true;
+    }
 }
