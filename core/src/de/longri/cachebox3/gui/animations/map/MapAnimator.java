@@ -106,21 +106,26 @@ public class MapAnimator {
     }
 
     public void rotate(float duration, double value) {
+        map.viewport().getMapPosition(mapPosition);
         float mr = mapPosition.bearing;
         if (mr < 0) mr += 360;
         if (mr > 360) mr -= 360;
 
         float delta = (float) Math.abs(value - mr);
 
-        if (delta > 270) {
+        while (delta > 270) {
             //Delta to big, rotate other direction"
+            log.debug("Rotation delta to big   delta:{} to{} from {}", delta, value, mr);
             if (value - mr < 0) {
                 value += 360;
             } else {
                 value -= 360;
             }
+            delta = (float) Math.abs(value - mr);
         }
-        log.debug("Start rotate animation to: {}  from {}/ {}", value, mr, mapPosition.bearing);
+        log.debug("Start rotate animation to: {}  from: {}", value, mr);
+
+
         this.rotate.start(duration, mr, value, ROTATE_PRECISION);
 //        this.rotate.setDebugAct(value);
     }
