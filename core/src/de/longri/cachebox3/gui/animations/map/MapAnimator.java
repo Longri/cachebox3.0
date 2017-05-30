@@ -63,7 +63,7 @@ public class MapAnimator {
             changed = true;
             mapPosition.setScale(scale.getAct());
         }
-        if (true || rotate.update(delta)) {
+        if (rotate.update(delta)) {
             changed = true;
             mapPosition.setBearing((float) rotate.getAct());
         }
@@ -106,7 +106,7 @@ public class MapAnimator {
     }
 
     public void rotate(float duration, double value) {
-        float mr = -mapPosition.bearing;
+        float mr = mapPosition.bearing;
         if (mr < 0) mr += 360;
         if (mr > 360) mr -= 360;
 
@@ -115,15 +115,14 @@ public class MapAnimator {
         if (delta > 270) {
             //Delta to big, rotate other direction"
             if (value - mr < 0) {
-                mr += 360;
+                value += 360;
             } else {
-                mr -= 360;
+                value -= 360;
             }
         }
         log.debug("Start rotate animation to: {}  from {}/ {}", value, mr, mapPosition.bearing);
-//        this.rotate.start(duration, mr, -value, ROTATE_PRECISION);
-
-        this.rotate.setDebugAct(value);
+        this.rotate.start(duration, mr, value, ROTATE_PRECISION);
+//        this.rotate.setDebugAct(value);
     }
 
 
