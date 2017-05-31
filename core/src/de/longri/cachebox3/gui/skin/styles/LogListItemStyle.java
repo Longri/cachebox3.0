@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.views.listview;
+package de.longri.cachebox3.gui.skin.styles;
 
-import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.views.AbstractView;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 /**
- * Created by Longri on 14.09.2016.
+ * Created by Longri on 03.04.2017.
  */
-public class LogView extends AbstractView {
-    public LogView() {
-        super("LogView");
-    }
-
-    @Override
-    public void dispose() {
-
-    }
-
-    public Menu getContextMenu(){
-        return null; //TODO
-    }
-
+public class LogListItemStyle {
+    public BitmapFont headerFont;
+    public Color headerFontColor;
+    public BitmapFont descriptionFont;
+    public Color descriptionFontColor;
+    public LogTypesStyle typeStyle;
 }

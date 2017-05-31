@@ -162,7 +162,7 @@ public enum CacheTypes implements SelectBoxItem {
         return getDrawable(cacheListTypeStyle);
     }
 
-    public Drawable getDrawable(CacheTypeStyle style) { // TODO replace with Skin Style
+    public Drawable getDrawable(CacheTypeStyle style) {
         Drawable drawable;
 
         switch (this) {

@@ -21,13 +21,15 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabase;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.Utils;
-import de.longri.cachebox3.types.CacheList;
-import de.longri.cachebox3.types.Categories;
-import de.longri.cachebox3.types.Category;
+import de.longri.cachebox3.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -83,6 +85,53 @@ public class Database {
         if (myDB == null) return false;
         if (myDB.isOpen()) return true;
         return false;
+    }
+
+    public static Array<LogEntry> getLogs(Cache cache) {
+        Array<LogEntry> result = new Array<LogEntry>();
+            if (cache == null) // if no cache is selected!
+                return result;
+            SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId=@cacheid order by Timestamp desc", new String[] { Long.toString(cache.Id) });
+            reader.moveToFirst();
+            while (!reader.isAfterLast()) {
+                LogEntry logent = getLogEntry(cache, reader, true);
+                if (logent != null)
+                    result.add(logent);
+                reader.moveToNext();
+            }
+            reader.close();
+            return result;
+    }
+
+    private static LogEntry getLogEntry(Cache cache, SQLiteGdxDatabaseCursor reader, boolean filterBbCode) {
+        int intLogType = reader.getInt(3);
+        if (intLogType < 0 || intLogType > 13)
+            return null;
+
+        LogEntry retLogEntry = new LogEntry();
+        retLogEntry.CacheId = reader.getLong(0);
+        String sDate = reader.getString(1);
+        DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            retLogEntry.Timestamp = iso8601Format.parse(sDate);
+        } catch (ParseException e) {
+        }
+        retLogEntry.Finder = reader.getString(2);
+        retLogEntry.Type = LogTypes.values()[reader.getInt(3)];
+        // retLogEntry.TypeIcon = reader.getInt(3);
+        retLogEntry.Comment = reader.getString(4);
+        retLogEntry.Id = reader.getLong(5);
+
+        if (filterBbCode) {
+            int lIndex;
+            while ((lIndex = retLogEntry.Comment.indexOf('[')) >= 0) {
+                int rIndex = retLogEntry.Comment.indexOf(']', lIndex);
+                if (rIndex == -1)
+                    break;
+                retLogEntry.Comment = retLogEntry.Comment.substring(0, lIndex) + retLogEntry.Comment.substring(rIndex + 1);
+            }
+        }
+        return retLogEntry;
     }
 
     public enum DatabaseType {

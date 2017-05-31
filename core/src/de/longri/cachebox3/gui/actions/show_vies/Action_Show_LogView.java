@@ -20,7 +20,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.listview.LogView;
+import de.longri.cachebox3.gui.views.LogListView;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -37,8 +37,8 @@ public class Action_Show_LogView extends Abstract_Action_ShowView {
 
     @Override
     public Menu getContextMenu() {
-        if (CB.viewmanager.getActView() instanceof LogView) {
-            LogView logView = (LogView) CB.viewmanager.getActView();
+        if (CB.viewmanager.getActView() instanceof LogListView) {
+            LogListView logView = (LogListView) CB.viewmanager.getActView();
             return logView.getContextMenu();
         }
         return null;
@@ -46,18 +46,18 @@ public class Action_Show_LogView extends Abstract_Action_ShowView {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof LogView;
+        return CB.viewmanager.getActView() instanceof LogListView;
     }
 
     @Override
     public boolean viewTypeEquals(AbstractView actView) {
-        return actView.getClass().getName().equals(LogView.class.getName());
+        return actView.getClass().getName().equals(LogListView.class.getName());
     }
 
     @Override
     public void execute() {
         if (isActVisible()) return;
-        LogView view = new LogView();
+        LogListView view = new LogListView();
         CB.viewmanager.showView(view);
     }
 

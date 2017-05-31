@@ -31,6 +31,7 @@ import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
+import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.utils.SkinColor;
@@ -304,6 +305,9 @@ public class SvgSkinUtil {
                                 json.writeValue(field.getName(), ((GetName) valueObject).getName());
                             } else if (valueObject instanceof CacheTypeStyle) {
                                 String objName = resolveObjectName(skin, CacheTypeStyle.class, valueObject);
+                                json.writeValue(field.getName(), objName);
+                            } else if (valueObject instanceof LogTypesStyle) {
+                                String objName = resolveObjectName(skin, LogTypesStyle.class, valueObject);
                                 json.writeValue(field.getName(), objName);
                             } else if (valueObject instanceof Array) {
                                 String arrayName = field.getName();

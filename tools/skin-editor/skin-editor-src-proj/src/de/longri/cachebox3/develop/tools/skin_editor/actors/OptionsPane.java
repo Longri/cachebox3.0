@@ -370,6 +370,9 @@ public class OptionsPane extends Table {
                         WayPointListItemStyle wayPointListItemStyle = game.skinProject.get("WayPointListItems", WayPointListItemStyle.class);
                         styles.put("WayPointListItems", wayPointListItemStyle);
 
+                        LogListItemStyle logListItemStyle = game.skinProject.get("logListItems", LogListItemStyle.class);
+                        styles.put("logListItems", logListItemStyle);
+
                     }
 
                     if (widgetStyle.equals("com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle")) {

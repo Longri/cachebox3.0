@@ -19,6 +19,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
 import de.longri.cachebox3.gui.skin.styles.LanguageStyle;
+import de.longri.cachebox3.gui.skin.styles.LogListItemStyle;
+import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
 import de.longri.cachebox3.translation.Language;
 
 /**
@@ -96,6 +98,9 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(CompassViewStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.AttributesStyle.class);
         items.add(LanguageStyle.class);
+        items.add(LogTypesStyle.class);
+        items.add(LogListItemStyle.class);
+
 
         SvgSkinUtil.saveSkin(this, items, skinFile);
 

@@ -78,7 +78,7 @@ public class IOS_LocationListener {
             CLLocationCoordinate2D coord = newLocation.getCoordinate();
 
             eventHelper.newGpsPos(coord.getLatitude(), coord.getLongitude(), true,
-                    newLocation.getAltitude(), newLocation.getSpeed()*3.6, newLocation.getCourse(),
+                    newLocation.getAltitude(), newLocation.getSpeed()*3.6, -newLocation.getCourse(),
                     (float) newLocation.getHorizontalAccuracy());
 
         }

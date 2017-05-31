@@ -348,6 +348,10 @@
       "path": "svg/folder.svg",
       "scale": 1
     },
+    "found": {
+      "path": "svg/log0icon.svg",
+      "scale": 0.15
+    },
     "fr": {
       "path": "svg/fr.svg",
       "scale": 0.08
@@ -916,9 +920,17 @@
       "path": "svg/nl.svg",
       "scale": 0.08
     },
+    "notFound": {
+      "path": "svg/log1icon.svg",
+      "scale": 0.15
+    },
     "noteIcon": {
       "path": "svg/noteIcon.svg",
-      "scale": 0.195
+      "scale": 0.19
+    },
+    "noteIconType": {
+      "path": "svg/noteIcon.svg",
+      "scale": 0.15
     },
     "option_0": {
       "path": "svg/option_0.svg",
@@ -2053,7 +2065,8 @@
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",
       "typeStyle": "cacheList"
-    }
+    },
+    "logListItems": {}
   },
   "de.longri.cachebox3.gui.skin.styles.ApiButtonStyle": {
     "ApiButton": {
@@ -2144,6 +2157,22 @@
       "nl": "nl",
       "pl": "pl",
       "pt_PT": "pt"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.LogTypesStyle": {
+    "logViewLogStyles": {
+      "found": "found",
+      "didnt_find": "notFound",
+      "note": "noteIconType"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.LogListItemStyle": {
+    "logListItems": {
+      "headerFont": "normal_bold_font",
+      "headerFontColor": "font_color",
+      "descriptionFont": "normal_font",
+      "descriptionFontColor": "font_color",
+      "typeStyle": "logViewLogStyles"
     }
   }
 }
