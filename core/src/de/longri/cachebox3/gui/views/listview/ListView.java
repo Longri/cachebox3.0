@@ -21,18 +21,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.*;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
-import de.longri.cachebox3.settings.Config;
 import org.slf4j.LoggerFactory;
 
-import static com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.actor;
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.NONE;
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.SINGLE;
 
@@ -597,7 +593,7 @@ public class ListView extends WidgetGroup {
             scrollPos = index < 0 ? 0 : completeHeight - (itemYPos.get(index) + item.getHeight());
         }
         this.setScrollPos(scrollPos);
-        log.debug("Scroll to selected item {} at position {}", item.getListIndex(), scrollPos);
+        if (item != null) log.debug("Scroll to selected item {} at position {}", item.getListIndex(), scrollPos);
     }
 
     public void setSelection(int index) {

@@ -19,7 +19,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
@@ -31,7 +30,6 @@ import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
-import de.longri.cachebox3.gui.widgets.ColorWidget;
 import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.locator.Coordinate;
@@ -42,7 +40,6 @@ import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
-import de.longri.cachebox3.utils.SkinColor;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,8 +122,10 @@ public class CompassView extends AbstractView implements PositionChangedListener
             actWaypoint = EventHandler.getSelectedWaypoint();
         }
 
+        boolean actCacheNotNull = actCache != null;
+        boolean actWpNotNull = actWaypoint != null;
         //1. line
-        if (showName || showIcon) {
+        if (actCacheNotNull && (showName || showIcon)) {
             Table lineTable = new Table();
             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
             Image icon = null;
@@ -147,7 +146,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
             topTable.row();
         }
 
-        if (showGcCode || showCoords) {
+        if (actCacheNotNull && (showGcCode || showCoords)) {
             Table lineTable = new Table();
             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
             if (showCoords) {
@@ -176,7 +175,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
             topTable.row();
         }
 
-        if (showSDT) {
+        if (actCacheNotNull && showSDT) {
             Table lineTable = new Table();
             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
             VisLabel dLabel = new VisLabel("D", infoStyle);
@@ -202,7 +201,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
         }
 
         // add Attribute
-        if (showAtt) {
+        if (actCacheNotNull && showAtt) {
             AttributesStyle attStyle = VisUI.getSkin().get("CompassView", AttributesStyle.class);
             ArrayList<Attributes> attList = actCache.getAttributes();
             float iconWidth = 0, iconHeight = 0;

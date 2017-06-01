@@ -85,6 +85,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
                     @Override
                     public ListViewItem getView(int index) {
+                        if (Database.Data.Query.size == 0) return null;
                         return CacheListItem.getListItem(index, Database.Data.Query.get(index));
                     }
 

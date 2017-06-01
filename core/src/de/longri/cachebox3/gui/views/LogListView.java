@@ -46,7 +46,7 @@ public class LogListView extends AbstractView {
     public void onShow() {
         if (actGcCode == null || !actGcCode.equals(EventHandler.getSelectedCache().getGcCode())) {
             Array<LogEntry> logEntries = Database.getLogs(EventHandler.getSelectedCache());
-            actGcCode = EventHandler.getSelectedCache().getGcCode();
+            actGcCode = EventHandler.getSelectedCache() == null ? "" : EventHandler.getSelectedCache().getGcCode();
             if (items != null)
                 items.clear();
             else

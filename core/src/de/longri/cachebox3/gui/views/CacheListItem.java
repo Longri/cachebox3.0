@@ -37,6 +37,7 @@ import de.longri.cachebox3.types.CacheTypes;
 public class CacheListItem extends ListViewItem implements Disposable {
 
     public static ListViewItem getListItem(int listIndex, final Cache cache) {
+        if (cache == null) return null;
         ListViewItem listViewItem = new CacheListItem(listIndex, cache.Type, cache.getName(),
                 (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
                 (int) Math.min(cache.Rating * 2, 5 * 2), cache.Size, cache.Size.toShortString());
