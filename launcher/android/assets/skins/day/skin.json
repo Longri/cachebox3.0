@@ -224,6 +224,10 @@
       "path": "svg/cz.svg",
       "scale": 0.08
     },
+    "database": {
+      "path": "svg/database.svg",
+      "scale": 0.24
+    },
     "db": {
       "path": "svg/db.svg",
       "scale": 0.72
@@ -1955,6 +1959,7 @@
       "sortIcon": "sortIcon",
       "cacheListIcon": "cacheListIcon",
       "addWp": "add-wp",
+      "manageDB": "database",
       "settingsIcon": "settings_icon",
       "compassIcon": "compas_icon",
       "creditsIcon": "cb",
