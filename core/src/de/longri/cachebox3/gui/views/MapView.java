@@ -88,6 +88,7 @@ public class MapView extends AbstractView {
     private final static Logger log = LoggerFactory.getLogger(MapView.class);
 
     private static double lastCenterPosLat, lastCenterPosLon;
+    private static MapMode lastMapMode = MapMode.FREE;
 
     public static Coordinate getLastCenterPos() {
         return new Coordinate(lastCenterPosLat, lastCenterPosLon);
@@ -269,7 +270,7 @@ public class MapView extends AbstractView {
                 super.onMapEvent(e, mapPosition);
                 if (e == Map.MOVE_EVENT) {
 //                    log.debug("Map.MOVE_EVENT");
-                    if (mapStateButton.getMapMode() != MapMode.FREE)
+                    if (CB.mapMode != MapMode.FREE)
                         mapStateButton.setMapMode(MapMode.FREE, new Event());
                 } else if (e == Map.TILT_EVENT) {
 //                    log.debug("Map.TILT_EVENT");
@@ -370,11 +371,14 @@ public class MapView extends AbstractView {
 
         //set initial direction
         infoPanel.setNewValues(EventHandler.getMyPosition(), EventHandler.getHeading());
+        CB.mapMode = lastMapMode;
     }
 
     @Override
     public void onHide() {
         removeInputListener();
+        lastMapMode = CB.mapMode;
+        CB.mapMode = MapMode.NONE;
     }
 
 
@@ -430,7 +434,7 @@ public class MapView extends AbstractView {
     }
 
     private void setMapState(MapState state) {
-        state.setMapMode(mapStateButton.getMapMode());
+        state.setMapMode(CB.mapMode);
 //        state.setMapOrientationMode(mapOrientationButton.getMode());
         state.setZoom(this.map.getMapPosition().getZoomLevel());
     }

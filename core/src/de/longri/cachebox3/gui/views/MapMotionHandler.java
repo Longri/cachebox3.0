@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import org.oscim.gdx.MotionHandler;
@@ -34,7 +35,7 @@ public class MapMotionHandler extends MotionHandler {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (mapStateButton.getMapMode() == MapMode.CAR || mapStateButton.getMapMode() == MapMode.LOCK) return true;
+        if (CB.mapMode == MapMode.CAR || CB.mapMode == MapMode.LOCK) return true;
         return super.touchDragged(screenX, screenY, pointer);
     }
 }

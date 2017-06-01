@@ -30,6 +30,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.settings.Config;
 import org.oscim.event.Event;
@@ -48,7 +49,6 @@ public class MapStateButton extends Widget implements Disposable {
     }
 
     private MapStateButtonStyle style;
-    private MapMode mapMode = MapMode.FREE;
     private final DoubleClickListener clickListener;
     private final ActorGestureListener gestureListener;
     private final StateChangedListener stateChangedListener;
@@ -70,7 +70,7 @@ public class MapStateButton extends Widget implements Disposable {
                     isLongPressed = false;
                     return;
                 }
-                int intState = mapMode.ordinal();
+                int intState = CB.mapMode.ordinal();
                 intState++;
                 if (intState > mapStateLength - 3) {// last mapMode is Mapstate.Lock. Activated with double click
                     intState = 0;
@@ -114,8 +114,8 @@ public class MapStateButton extends Widget implements Disposable {
     }
 
     public void setMapMode(MapMode mapMode, boolean programmatic, Event event) {
-        MapMode lastMode = this.mapMode;
-        this.mapMode = mapMode;
+        MapMode lastMode = CB.mapMode;
+        CB.mapMode = mapMode;
         log.debug("Set to Mode: {} from last Mode {} / fireEvet:{}", mapMode, lastMode, !programmatic);
         if (!programmatic && this.stateChangedListener != null)
             this.stateChangedListener.stateChanged(mapMode, lastMode, event);
@@ -139,7 +139,7 @@ public class MapStateButton extends Widget implements Disposable {
 
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        switch (mapMode) {
+        switch (CB.mapMode) {
             case FREE:
                 style.stateFree.draw(batch, getX(), getY(), getWidth(), getHeight());
                 break;
@@ -171,14 +171,8 @@ public class MapStateButton extends Widget implements Disposable {
         return clickListener.isVisualPressed();
     }
 
-    public MapMode getMapMode() {
-        return this.mapMode;
-    }
-
     public void dispose() {
         style = null;
-        mapMode = null;
-
         //remove the listener
         this.removeListener(clickListener);
         this.removeListener(gestureListener);

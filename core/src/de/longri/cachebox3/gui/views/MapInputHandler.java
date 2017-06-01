@@ -3,6 +3,7 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import org.oscim.layers.GenericLayer;
@@ -176,7 +177,7 @@ public class MapInputHandler implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (mapStateButton.getMapMode() == MapMode.CAR || mapStateButton.getMapMode() == MapMode.LOCK) return true;
+        if (CB.mapMode == MapMode.CAR || CB.mapMode == MapMode.LOCK) return true;
         boolean changed = false;
 
         if (!(mActiveScale || mActiveRotate || mActiveTilt))

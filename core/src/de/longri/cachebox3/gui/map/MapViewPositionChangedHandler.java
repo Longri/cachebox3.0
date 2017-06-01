@@ -17,6 +17,9 @@ package de.longri.cachebox3.gui.map;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.OrientationChangedListener;
+import de.longri.cachebox3.events.PositionChangedListener;
+import de.longri.cachebox3.events.SpeedChangedListener;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
@@ -39,7 +42,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Longri on 28.09.2016.
  */
-public class MapViewPositionChangedHandler implements de.longri.cachebox3.events.PositionChangedListener, de.longri.cachebox3.events.SpeedChangedListener, de.longri.cachebox3.events.OrientationChangedListener {
+public class MapViewPositionChangedHandler implements PositionChangedListener, SpeedChangedListener, OrientationChangedListener {
 
     private static Logger log = LoggerFactory.getLogger(MapViewPositionChangedHandler.class);
     private final MapInfoPanel infoPanel;
@@ -89,7 +92,7 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
      * @return Boolean
      */
     private boolean getCenterGps() {
-        return this.mapStateButton.getMapMode() != MapMode.FREE && this.mapStateButton.getMapMode() != MapMode.WP;
+        return CB.mapMode != MapMode.FREE && CB.mapMode != MapMode.WP;
     }
 
     private Timer timer;
@@ -131,10 +134,10 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
             );
         }
         //force full tilt on CarMode
-        if (this.mapStateButton.getMapMode() == MapMode.CAR)
+        if (CB.mapMode == MapMode.CAR)
             mapView.animator.tilt(map.viewport().getMaxTilt());
 
-        if (this.mapStateButton.getMapMode() == MapMode.CAR && Settings_Map.dynamicZoom.getValue()) {
+        if (CB.mapMode == MapMode.CAR && Settings_Map.dynamicZoom.getValue()) {
             // calculate dynamic Zoom
 
             double maxSpeed = Settings_Map.MoveMapCenterMaxSpeed.getValue();
@@ -157,7 +160,7 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
 
         float bearing = -EventHandler.getHeading();
         log.debug("Eventhandler bearing: {}", bearing);
-        if (this.mapStateButton.getMapMode() == MapMode.CAR) {
+        if (CB.mapMode == MapMode.CAR) {
             this.infoPanel.setMapOrientationMode(MapOrientationMode.COMPASS);
         }
 
@@ -202,7 +205,7 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
 
     @Override
     public void positionChanged(de.longri.cachebox3.events.PositionChangedEvent event) {
-        if (this.mapStateButton.getMapMode() == MapMode.CAR && !event.pos.isGPSprovided())
+        if (CB.mapMode == MapMode.CAR && !event.pos.isGPSprovided())
             return;// at CarMode ignore Network provided positions!
 
         this.myPosition = event.pos;
@@ -211,7 +214,7 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
 
         this.accuracy = this.myPosition.getAccuracy();
 
-        if (this.mapStateButton.getMapMode() == MapMode.CAR) {
+        if (CB.mapMode == MapMode.CAR) {
             this.mapBearing = (float) event.pos.getHeading();
             this.arrowHeading = 0;
         }
@@ -234,7 +237,7 @@ public class MapViewPositionChangedHandler implements de.longri.cachebox3.events
     @Override
     public void orientationChanged(de.longri.cachebox3.events.OrientationChangedEvent event) {
         // at CarMode no orientation changes below 20kmh
-        if (this.mapStateButton.getMapMode() == MapMode.CAR)
+        if (CB.mapMode == MapMode.CAR)
             return;
         log.debug("AssumeValues orientationChanged Event eventID:{}", event.ID);
         assumeValues(false, event.ID);

@@ -20,7 +20,7 @@ package de.longri.cachebox3.gui.map;
  */
 public enum MapMode {
 
-    FREE, GPS, WP, LOCK, CAR;
+    FREE, GPS, WP, LOCK, CAR, NONE;
 
     public static MapMode fromOrdinal(int ordinal) {
         for (MapMode mapMode : MapMode.values())

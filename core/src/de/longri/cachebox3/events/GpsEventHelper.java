@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.events;
 
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +47,7 @@ public class GpsEventHelper {
             //set additional info's
             newPos.setElevation(elevation);
             newPos.setSpeed(speed);
-            newPos.setHeading(-bearing);
+            newPos.setHeading(bearing);
             newPos.setIsGpsProvided(isGpsProvided);
             newPos.setAccuracy(accuracy);
             log.debug("Send new Position from GPS Bearing:{}", newPos.getHeading());
@@ -54,14 +56,14 @@ public class GpsEventHelper {
             setSpeed(speed, eventID);
             setElevation(elevation, eventID);
             setAccuracy(accuracy, eventID);
-            setCourse(-bearing, eventID);
+            setCourse(bearing, eventID);
 
         } else {
             // not a new position call other event's only
             setSpeed(speed, eventID);
             setElevation(elevation, eventID);
             setAccuracy(accuracy, eventID);
-            setCourse(-bearing, eventID);
+            setCourse(bearing, eventID);
         }
     }
 
@@ -78,18 +80,19 @@ public class GpsEventHelper {
         this.setSpeed(speed, EventHandler.getId());
     }
 
-    public void setSpeed(double speed, short id) {
+    private void setSpeed(double speed, short id) {
         if (lastSpeed != speed) {
             EventHandler.fire(new SpeedChangedEvent((float) speed, id));
             lastSpeed = speed;
         }
     }
 
-    public void setCourse(double heading) {
+    public void setMagneticCompassHeading(double heading) {
+        if (CB.mapMode == MapMode.CAR) return; //Don't use Compass heading on Car mode!!!
         this.setCourse(heading, EventHandler.getId());
     }
 
-    public void setCourse(double heading, short id) {
+    private void setCourse(double heading, short id) {
         if (lastHeading != heading) {
             EventHandler.fire(new OrientationChangedEvent((float) heading, id));
             lastHeading = heading;

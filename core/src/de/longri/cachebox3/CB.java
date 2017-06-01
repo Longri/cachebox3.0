@@ -23,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.events.GpsEventHelper;
+import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.locator.track.Track;
@@ -65,6 +67,8 @@ public class CB {
     public static float stateTime;
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
 
+    public static MapMode mapMode = MapMode.FREE;
+    public final static GpsEventHelper eventHelper = new GpsEventHelper();
 
     final static float PPI_DEFAULT = 163;
     private static float globalScale = 1;

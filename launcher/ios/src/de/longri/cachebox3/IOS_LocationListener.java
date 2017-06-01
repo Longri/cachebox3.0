@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3;
 
-import de.longri.cachebox3.events.GpsEventHelper;
 import org.robovm.apple.corelocation.*;
 import org.robovm.apple.dispatch.DispatchQueue;
 import org.robovm.apple.foundation.Foundation;
@@ -34,7 +33,7 @@ public class IOS_LocationListener {
     private static double HEADING_FILTER = 5;
 
     private CLLocationManager locationManager;
-    private final GpsEventHelper eventHelper = new GpsEventHelper();
+
 
 
     private void stopUpdatingLocation(String state) {
@@ -77,8 +76,8 @@ public class IOS_LocationListener {
             CLLocation newLocation = locations.last();
             CLLocationCoordinate2D coord = newLocation.getCoordinate();
 
-            eventHelper.newGpsPos(coord.getLatitude(), coord.getLongitude(), true,
-                    newLocation.getAltitude(), newLocation.getSpeed()*3.6, -newLocation.getCourse(),
+            CB.eventHelper.newGpsPos(coord.getLatitude(), coord.getLongitude(), true,
+                    newLocation.getAltitude(), newLocation.getSpeed()*3.6, newLocation.getCourse(),
                     (float) newLocation.getHorizontalAccuracy());
 
         }
@@ -90,7 +89,7 @@ public class IOS_LocationListener {
         @Override
         public void didUpdateHeading(CLLocationManager manager, CLHeading newHeading) {
             if (newHeading.getHeadingAccuracy() > 0) {
-                eventHelper.setCourse(newHeading.getTrueHeading());
+                CB.eventHelper.setMagneticCompassHeading(newHeading.getTrueHeading());
             }
         }
 

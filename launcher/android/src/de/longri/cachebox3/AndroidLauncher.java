@@ -23,12 +23,9 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
-import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.OrientationChangedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sqldroid.SQLDroidDriver;
@@ -107,12 +104,8 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
             try {
                 mCompassValues = event.values;
                 compassHeading = mCompassValues[0];
-
-                if (Math.abs(lastCompassHeading - compassHeading) < 1) {
-                    return;
-                }
                 lastCompassHeading = compassHeading;
-                EventHandler.fire(new OrientationChangedEvent(compassHeading));
+                CB.eventHelper.setMagneticCompassHeading(compassHeading);
             } catch (Exception e) {
                 e.printStackTrace();
             }
