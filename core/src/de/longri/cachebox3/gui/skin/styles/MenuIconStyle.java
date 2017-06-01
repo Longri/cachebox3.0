@@ -55,7 +55,8 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable fieldNote;
     public Drawable videoIcon;
     public Drawable voiceRecIcon;
-    public Drawable hintIcon;
+    public Drawable hintIconOn;
+    public Drawable hintIconOff;
     public Drawable my_parking;
     public Drawable autoSortOffIcon;
     public Drawable torchOn;

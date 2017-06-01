@@ -203,7 +203,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         cache_button.addAction(new ActionButton(action_show_descriptionView, true, GestureDirection.Up));
         cache_button.addAction(new ActionButton(action_show_waypointView, false, GestureDirection.Right));
         cache_button.addAction(new ActionButton(action_show_logView, false, GestureDirection.Down));
-//        cache_button.addAction(new ActionButton(actionShowHint, false));
+        cache_button.addAction(new ActionButton(new Action_Show_Hint(), false));
 //        cache_button.addAction(new ActionButton(actionShowDescExt, false));
         cache_button.addAction(new ActionButton(action_show_spoilerView, false));
         cache_button.addAction(new ActionButton(action_show_noteView, false));

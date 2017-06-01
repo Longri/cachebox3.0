@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.actions;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.dialogs.HintDialog;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.events.EventHandler;
 
@@ -31,15 +32,14 @@ public class Action_Show_Hint extends AbstractAction {
 
     @Override
     public void execute() {
-        CB.viewmanager.toast("Show Hint dialog not implemented");
-
-//        if (getEnabled())
-//            HintDialog.show();
+        if (getEnabled()) {
+            new HintDialog().show();
+        }
     }
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.hintIcon;
+        return getEnabled() ? CB.getSkin().getMenuIcon.hintIconOn : CB.getSkin().getMenuIcon.hintIconOff;
     }
 
     @Override
@@ -48,8 +48,6 @@ public class Action_Show_Hint extends AbstractAction {
         if (EventHandler.getSelectedCache() == null)
             return false;
         String hintText = EventHandler.getSelectedCache().getHint();
-        if ((hintText == null) || (hintText.length() == 0))
-            return false;
-        return true;
+        return !((hintText == null) || (hintText.length() == 0));
     }
 }

@@ -24,7 +24,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedCacheChangedEvent;
+import de.longri.cachebox3.events.SelectedCacheChangedListener;
 import de.longri.cachebox3.gui.actions.AbstractAction;
+import de.longri.cachebox3.gui.actions.Action_Show_Hint;
 import de.longri.cachebox3.gui.actions.QuickActions;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 
@@ -43,17 +47,14 @@ public class QuickButtonItem extends ListViewItem {
     private int hintState = -1;
     private int torchState = -1;
     private boolean needsLayout = true;
-    private final float imageMargin;
+    private Drawable spriteDrawable;
 
-    public QuickButtonItem(int listIndex, Drawable background, AbstractAction action, String Desc, QuickActions type) {
+    public QuickButtonItem(int listIndex, Drawable background, final AbstractAction action, String Desc, QuickActions type) {
         super(listIndex);
         this.background = background;
         quickActionsEnum = type;
         mAction = action;
         mActionDesc = Desc;
-        imageMargin = CB.scaledSizes.MARGIN_HALF;
-        Drawable spriteDrawable = null;
-
         try {
             spriteDrawable = action.getIcon();
         } catch (Exception e) {
@@ -63,6 +64,18 @@ public class QuickButtonItem extends ListViewItem {
         mButtonIcon = new Image(spriteDrawable);
         this.addActor(mButtonIcon);
         this.addListener(clickListener);
+
+        if (action instanceof Action_Show_Hint) {
+            EventHandler.add(new SelectedCacheChangedListener() {
+                @Override
+                public void selectedCacheChanged(SelectedCacheChangedEvent event) {
+                    spriteDrawable = action.getIcon();
+                    mButtonIcon.setDrawable(spriteDrawable);
+                    needsLayout = true;
+                    QuickButtonItem.this.invalidate();
+                }
+            });
+        }
     }
 
     ClickListener clickListener = new ClickListener() {
@@ -77,7 +90,14 @@ public class QuickButtonItem extends ListViewItem {
     @Override
     public void layout() {
         if (needsLayout || super.needsLayout()) {
-            mButtonIcon.setBounds(imageMargin, imageMargin, getWidth() - (2 * imageMargin), getHeight() - (2 * imageMargin));
+            if (spriteDrawable != null) {
+                float ratio = spriteDrawable.getMinWidth() / spriteDrawable.getMinHeight();
+                float imageHeight = getHeight() - CB.scaledSizes.MARGINx4;
+                float imageWidth = imageHeight * ratio;
+                float x = (getWidth() - imageWidth) / 2;
+                float y = (getHeight() - imageHeight) / 2;
+                mButtonIcon.setBounds(x, y, imageWidth, imageHeight);
+            }
         }
         needsLayout = false;
     }
@@ -100,10 +120,10 @@ public class QuickButtonItem extends ListViewItem {
 
     @Override
     public void dispose() {
-        mAction=null;
-        mButtonIcon=null;
-        mActionDesc=null;
-        mButton=null;
-        quickActionsEnum=null;
+        mAction = null;
+        mButtonIcon = null;
+        mActionDesc = null;
+        mButton = null;
+        quickActionsEnum = null;
     }
 }
