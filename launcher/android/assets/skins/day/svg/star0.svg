@@ -9,5 +9,5 @@
 		<stop offset="0.916279" stop-color="#DFEAEA" stop-opacity="1"/>
 		<stop offset="0.986046" stop-color="#E1EDED" stop-opacity="1"/>
 	</radialGradient>
-	<path fill="url(#SVGID_Fill1_)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#C9CFCF" stroke-opacity="1" d="M 26.9518,0.749992L 20.8552,19.9086L 0.75,19.9534L 17.0869,31.6719L 10.9167,50.807L 27.1101,38.8908L 43.4019,50.6721L 37.073,31.589L 53.3121,19.7352L 33.2072,19.8573L 26.9518,0.749992"/>
+	<path fill="url(#SVGID_Fill1_)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#2F3B3B" stroke-opacity="1" d="M 26.9518,0.749992L 20.8552,19.9086L 0.75,19.9534L 17.0869,31.6719L 10.9167,50.807L 27.1101,38.8908L 43.4019,50.6721L 37.073,31.589L 53.3121,19.7352L 33.2072,19.8573L 26.9518,0.749992"/>
 </svg>

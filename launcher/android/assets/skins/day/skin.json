@@ -320,6 +320,10 @@
       "path": "svg/earth.svg",
       "scale": 0.2
     },
+    "enabled": {
+      "path": "svg/enabled.svg",
+      "scale": 0.17
+    },
     "event": {
       "path": "svg/event.svg",
       "scale": 0.2
@@ -968,6 +972,10 @@
       "path": "svg/pt.svg",
       "scale": 0.08
     },
+    "published": {
+      "path": "svg/published.svg",
+      "scale": 0.17
+    },
     "regular": {
       "path": "svg/regular.svg",
       "scale": 0.25
@@ -1023,6 +1031,10 @@
     "tbListIcon": {
       "path": "svg/tbListIcon.svg",
       "scale": 0.19455253
+    },
+    "tempDisabled": {
+      "path": "svg/tempDisabled.svg",
+      "scale": 0.17
     },
     "toast_background": {
       "path": "svg/toast_background.svg",
@@ -2163,7 +2175,10 @@
     "logViewLogStyles": {
       "found": "found",
       "didnt_find": "notFound",
-      "note": "noteIconType"
+      "note": "noteIconType",
+      "published": "published",
+      "enabled": "enabled",
+      "temporarily_disabled": "tempDisabled"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LogListItemStyle": {

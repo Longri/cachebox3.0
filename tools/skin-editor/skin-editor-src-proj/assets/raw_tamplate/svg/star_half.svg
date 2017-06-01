@@ -10,7 +10,7 @@
 			<stop offset="0.916279" stop-color="#EE3100" stop-opacity="1"/>
 			<stop offset="0.986046" stop-color="#F46200" stop-opacity="1"/>
 		</radialGradient>
-		<path fill="url(#SVGID_Fill1_)" fill-rule="evenodd" stroke-width="1.5" stroke-linejoin="round" stroke="#88006A" stroke-opacity="1" d="M 26.9518,0.749992L 20.8552,19.9086L 0.75,19.9534L 17.0869,31.6719L 10.9167,50.807L 27.1101,38.8908"/>
+		<path fill="url(#SVGID_Fill1_)" fill-rule="evenodd" stroke-width="1.5" stroke-linejoin="round" stroke="#2F3B3B" stroke-opacity="1" d="M 26.9518,0.749992L 20.8552,19.9086L 0.75,19.9534L 17.0869,31.6719L 10.9167,50.807L 27.1101,38.8908"/>
 		<radialGradient id="SVGID_Fill2_" cx="39.4231" cy="47.7245" r="44.3225" gradientUnits="userSpaceOnUse" gradientTransform="rotate(15.087542 39.423141 47.724495)">
 			<stop offset="0" stop-color="#CCD3D3" stop-opacity="1"/>
 			<stop offset="0.387213" stop-color="#CAD1D1" stop-opacity="1"/>
@@ -19,6 +19,6 @@
 			<stop offset="0.916279" stop-color="#DFEAEA" stop-opacity="1"/>
 			<stop offset="0.986046" stop-color="#E1EDED" stop-opacity="1"/>
 		</radialGradient>
-		<path fill="url(#SVGID_Fill2_)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#C9CFCF" stroke-opacity="1" d="M 27.1434,38.8992L 43.4352,50.6804L 37.1063,31.5973L 53.3454,19.7435L 33.2406,19.8656L 26.9851,0.758339"/>
+		<path fill="url(#SVGID_Fill2_)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#2F3B3B" stroke-opacity="1" d="M 27.1434,38.8992L 43.4352,50.6804L 37.1063,31.5973L 53.3454,19.7435L 33.2406,19.8656L 26.9851,0.758339"/>
 	</g>
 </svg>
