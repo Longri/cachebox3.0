@@ -36,8 +36,8 @@ public class QuickButtonList extends Group {
     private void readQuickButtonItemsList() {
         if (quickButtonList == null) {
             String configActionList = Config.quickButtonList.getValue();
-
-            configActionList = "5,0,1,21,3,2,4,7,8,9";
+//TODO make quick buttons configurable att SettingsView
+            configActionList = "5,0,1,21,3,2,4,15,25";
 
             String[] configList = configActionList.split(",");
             quickButtonList = QuickActions.getListFromConfig(configList, CB.scaledSizes.BUTTON_HEIGHT, style.button);
