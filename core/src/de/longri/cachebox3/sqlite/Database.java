@@ -89,18 +89,24 @@ public class Database {
 
     public static Array<LogEntry> getLogs(Cache cache) {
         Array<LogEntry> result = new Array<LogEntry>();
-            if (cache == null) // if no cache is selected!
-                return result;
-            SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId=@cacheid order by Timestamp desc", new String[] { Long.toString(cache.Id) });
-            reader.moveToFirst();
-            while (!reader.isAfterLast()) {
-                LogEntry logent = getLogEntry(cache, reader, true);
-                if (logent != null)
-                    result.add(logent);
-                reader.moveToNext();
-            }
-            reader.close();
+        if (cache == null) // if no cache is selected!
             return result;
+
+
+        //TODO Qerry with args not working on iOS
+//      SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId=@cacheid order by Timestamp desc", new String[]{Long.toString(cache.Id)});
+        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(cache.Id) + "\"", null);
+
+
+        reader.moveToFirst();
+        while (!reader.isAfterLast()) {
+            LogEntry logent = getLogEntry(cache, reader, true);
+            if (logent != null)
+                result.add(logent);
+            reader.moveToNext();
+        }
+        reader.close();
+        return result;
     }
 
     private static LogEntry getLogEntry(Cache cache, SQLiteGdxDatabaseCursor reader, boolean filterBbCode) {
