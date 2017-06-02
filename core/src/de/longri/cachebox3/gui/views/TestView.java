@@ -22,9 +22,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisScrollPane;
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -32,13 +37,19 @@ import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
+import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.CacheTypes;
+import org.oscim.utils.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Longri on 27.07.16.
@@ -53,129 +64,74 @@ public class TestView extends AbstractView {
     public TestView() {
         super("TestView");
         this.setDebug(true, true);
-
+        create();
     }
+
+    VisScrollPane scrollPane;
 
     protected void create() {
         this.clear();
-        VisTextButton test = new VisTextButton("SelectFolder");
-        test.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
+        VisTable attTable = new VisTable();
+        attTable.setDebug(true);
+        scrollPane = new VisScrollPane(attTable);
 
-                FileHandle directory = Gdx.files.absolute("./");
-                fileChooser.setDirectory(directory);
 
-                fileChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
-                    @Override
-                    public void selected(FileHandle fileHandle) {
-                        log.debug("Selected Folder: " + fileHandle);
-                    }
-                });
+        AttributesStyle attStyle = VisUI.getSkin().get("CompassView", AttributesStyle.class);
 
-                //displaying chooser with fade in animation
-                fileChooser.show();
-                // getStage().addActor(fileChooser.fadeIn());
+        Attributes[] valuesPos = Attributes.values();
 
+        ArrayList<Attributes> attList = new ArrayList<>();
+
+        for (int i = 0, n = valuesPos.length - 1; i < n; i++) {
+            Attributes pos = valuesPos[i];
+            Attributes neg = valuesPos[i];
+            attList.add(pos);
+            attList.add(neg);
+        }
+
+        float iconWidth = 0, iconHeight = 0;
+        int lineBreak = 0, lineBreakStep = 0;
+        Table lineTable = null;
+        for (int i = 0, n = attList.size(); i < n; i++) {
+            Attributes att = attList.get(i);
+            if ((i % 2) != 0) {
+                att.setNegative();
             }
-        });
 
-        VisTextButton testFile = new VisTextButton("SelectFile");
-        testFile.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
+            Drawable attDrawable = att.getDrawable(attStyle);
 
-                FileChooser fileChooser = new FileChooser("select file", FileChooser.Mode.OPEN,
-                        FileChooser.SelectionMode.FILES, "map");
-
-                FileHandle directory = Gdx.files.absolute("./");
-                fileChooser.setDirectory(directory);
-
-                fileChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
-                    @Override
-                    public void selected(FileHandle fileHandle) {
-                        log.debug("Selected file: " + fileHandle);
-                    }
-                });
-
-                //displaying chooser with fade in animation
-                fileChooser.show();
-                // getStage().addActor(fileChooser.fadeIn());
-
+            if (iconWidth == 0) {
+                iconWidth = 41;//attDrawable.getMinWidth();
+                iconHeight = 41;// attDrawable.getMinHeight();
+                lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + CB.scaledSizes.MARGINx4));
+                lineTable = new Table();
+                lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
             }
-        });
 
-        VisTextButton apiKey = new VisTextButton("TextInput");
-        apiKey.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                log.debug("Create Api Key clicked");
-//                PlatformConnector.getSinglelineTextInput(new Input.TextInputListener() {
-                PlatformConnector.getMultilineTextInput(new Input.TextInputListener() {
-                    @Override
-                    public void input(String text) {
-
-                    }
-
-                    @Override
-                    public void canceled() {
-
-                    }
-                }, "Platform Title", "MultiLine \nText ", "hinweis");
+            if (attDrawable != null) {
+                lineTable.add(new Image(attDrawable)).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
+            } else {
+                lineTable.add(new VisLabel(Integer.toString(i / 2))).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
             }
-        });
 
 
-        SelectBox<CacheTypes> selectBox = new SelectBox();
-        Array<CacheTypes> list = new Array<>();
-        list.add(CacheTypes.ParkingArea);
-        list.add(CacheTypes.ReferencePoint);
-        list.add(CacheTypes.Trailhead);
+            if (i >= lineBreak) {
+                attTable.add(lineTable).left();
+                attTable.row();
+                lineTable = new Table();
+                lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+                lineBreak += lineBreakStep + 1;
+            }
 
-        selectBox.set(list);
-        selectBox.select(CacheTypes.ReferencePoint);
+        }
 
-        FrameAnimationStyle style = VisUI.getSkin().get("download-animation", FrameAnimationStyle.class);
-        FrameAnimationDrawable drawable = new FrameAnimationDrawable(style);
-        Image image = new Image(drawable);
-
-        Table tbl = new Table();
-
-
-//        tbl.setDebug(true, true);
-        tbl.setFillParent(true);
-        tbl.defaults().pad(CB.scaledSizes.MARGIN);
-
-        tbl.add(image);
-        tbl.row();
-
-        tbl.add(test);
-        tbl.row();
-        tbl.add(testFile);
-        tbl.row();
-        tbl.add(apiKey);
-        tbl.row();
-        tbl.add(selectBox);
-
-        float maxWidth = (Gdx.graphics.getWidth() / 2) - CB.scaledSizes.MARGINx2;
-
-        EditTextBox editTextBox = new EditTextBox(false, "Hallo TextBox");
-        editTextBox.setMaxWidth(maxWidth);
-        tbl.add(editTextBox);
-
-        tbl.row();
-        EditTextBox editTextBoxMu = new EditTextBox(true);
-        editTextBoxMu.setText("Hallo TextBox\n Line2\n Line3\n Line4\n Line5\n Line6\n Line7\n Line8");
-        editTextBoxMu.setMaxWidth(maxWidth);
-        tbl.add(editTextBoxMu).fillX();
-
-
-        tbl.row().expandY().fillY().bottom();
-
-        this.addActor(tbl);
+        this.addActor(scrollPane);
     }
 
 
     @Override
     public void onShow() {
-        create();
+        sizeChanged();
     }
 
 
@@ -191,6 +147,6 @@ public class TestView extends AbstractView {
 
     @Override
     protected void sizeChanged() {
-        // create();
+        scrollPane.setBounds(0, 0, this.getWidth(), this.getHeight());
     }
 }

@@ -783,4 +783,12 @@ public enum Attributes {
         }
         return null;
     }
+
+    public void setPositive() {
+        this.negative = false;
+    }
+
+    public void setNegative() {
+        this.negative = true;
+    }
 }
