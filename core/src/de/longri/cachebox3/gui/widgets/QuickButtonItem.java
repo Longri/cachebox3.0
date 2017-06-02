@@ -63,7 +63,6 @@ public class QuickButtonItem extends ListViewItem {
 
         mButtonIcon = new Image(spriteDrawable);
         this.addActor(mButtonIcon);
-        this.addListener(clickListener);
 
         if (action instanceof Action_Show_Hint) {
             EventHandler.add(new SelectedCacheChangedListener() {
@@ -78,14 +77,9 @@ public class QuickButtonItem extends ListViewItem {
         }
     }
 
-    ClickListener clickListener = new ClickListener() {
-
-        public void clicked(InputEvent event, float x, float y) {
-            mAction.execute();
-        }
-
-    };
-
+    public void clicked() {
+        mAction.execute();
+    }
 
     @Override
     public void layout() {

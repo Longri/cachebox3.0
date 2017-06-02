@@ -2,25 +2,37 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.QuickActions;
+import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.MoveableList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 09.09.16.
  */
 public class QuickButtonList extends Group {
 
+    private final static Logger log = LoggerFactory.getLogger(QuickButtonList.class);
+
+
     final QuickButtonListStyle style;
     final ScrollPane scrollPane;
     final Group scrollPaneContent = new Group();
     MoveableList<QuickButtonItem> quickButtonList;
+
+    final CB_RectF tempClickRec = new CB_RectF();
 
     public QuickButtonList() {
         style = VisUI.getSkin().get("default", QuickButtonListStyle.class);
@@ -30,6 +42,29 @@ public class QuickButtonList extends Group {
         this.addActor(scrollPane);
         readQuickButtonItemsList();
         this.setTouchable(Touchable.childrenOnly);
+
+        scrollPaneContent.addCaptureListener(new ClickLongClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                log.debug("QuickButton clicked on x:{}  y:{}", x, y);
+                SnapshotArray<Actor> childs = scrollPaneContent.getChildren();
+                for (int i = 0, n = childs.size; i < n; i++) {
+                    QuickButtonItem item = (QuickButtonItem) childs.get(i);
+                    tempClickRec.set(item.getX(), item.getY(), item.getWidth(), item.getHeight());
+                    if (tempClickRec.contains(x, y)) {
+                        // item Clicked
+                        log.debug("QuickButtonItem {} clicked", i);
+                        item.clicked();
+                        return;
+                    }
+                }
+            }
+
+            @Override
+            public boolean longClicked(Actor actor, float x, float y) {
+                return true;
+            }
+        });
     }
 
 
