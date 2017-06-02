@@ -186,7 +186,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
         this.application.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                descriptionView = new AndroidDescriptionView(AndroidPlatformConnector.this.application.getContext());
+                if (descriptionView == null) descriptionView = new AndroidDescriptionView(AndroidPlatformConnector.this.application.getContext());
                 callBack.callBack(descriptionView);
 
             }

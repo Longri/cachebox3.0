@@ -123,6 +123,8 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
 
     public void show(AndroidDescriptionView descriptionView) {
         ViewGroup.LayoutParams params = new RelativeLayout.LayoutParams(200, 200);
+        if (descriptionView.getParent() != null)
+            removeView(descriptionView);
         fragment.getActivity().addContentView(descriptionView, params);
     }
 

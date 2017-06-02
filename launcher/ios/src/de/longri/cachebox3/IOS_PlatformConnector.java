@@ -124,15 +124,17 @@ public class IOS_PlatformConnector extends PlatformConnector {
         }
     }
 
+    IOS_DescriptionView descriptionView;
+
     @Override
     protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
         log.debug("Show WebView as descriptionView");
         try {
-            UIViewController mainViewController = ((IOSApplication) Gdx.app).getUIWindow().getRootViewController();
-            IOS_DescriptionView view = new IOS_DescriptionView(mainViewController);
-
-
-            callBack.callBack(view);
+            if (descriptionView == null) {
+                UIViewController mainViewController = ((IOSApplication) Gdx.app).getUIWindow().getRootViewController();
+                descriptionView = new IOS_DescriptionView(mainViewController);
+            }
+            callBack.callBack(descriptionView);
 
         } catch (Exception e) {
             log.error("show web view", e);
@@ -206,9 +208,8 @@ public class IOS_PlatformConnector extends PlatformConnector {
         allertControler.getView().addSubview(textView);
 
 
-
-        UIAlertAction  cancel = new UIAlertAction( "Cancel", UIAlertActionStyle.Cancel, null);
-        UIAlertAction  action =  new UIAlertAction("Ok", UIAlertActionStyle.Default, new VoidBlock1<UIAlertAction>() {
+        UIAlertAction cancel = new UIAlertAction("Cancel", UIAlertActionStyle.Cancel, null);
+        UIAlertAction action = new UIAlertAction("Ok", UIAlertActionStyle.Default, new VoidBlock1<UIAlertAction>() {
             @Override
             public void invoke(UIAlertAction uiAlertAction) {
 
@@ -227,7 +228,7 @@ public class IOS_PlatformConnector extends PlatformConnector {
 //        allertControler.getView().addConstraint(constraint);
 
 
-        allertControler.setPreferredContentSize(new CGSize(100,400));
+        allertControler.setPreferredContentSize(new CGSize(100, 400));
 
 
         ((IOSApplication) Gdx.app).getUIWindow().getRootViewController().presentViewController(allertControler, false, new Runnable() {
@@ -237,11 +238,10 @@ public class IOS_PlatformConnector extends PlatformConnector {
             }
         });
 
-        allertControler.setPreferredContentSize(new CGSize(100,400));
+        allertControler.setPreferredContentSize(new CGSize(100, 400));
 
 //        CGRect allertRect = new CGRect(15, 50, 240, 100);
 //        allertControler.getView().setFrame(allertRect);
-
 
 
 //        delegate = new UIAlertViewDelegateAdapter() {
