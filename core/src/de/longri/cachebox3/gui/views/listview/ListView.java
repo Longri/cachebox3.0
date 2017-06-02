@@ -18,15 +18,19 @@ package de.longri.cachebox3.gui.views.listview;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.*;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
+import de.longri.cachebox3.gui.widgets.QuickButtonItem;
+import de.longri.cachebox3.utils.CB_RectF;
 import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.NONE;
@@ -40,7 +44,7 @@ public class ListView extends WidgetGroup {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(ListView.class);
 
     private final static int OVERLOAD = 5;
-
+    final CB_RectF tempClickRec = new CB_RectF();
     private final ListView.ListViewStyle style;
     private final Array<ListViewItem> selectedItemList = new Array<ListViewItem>();
     private final SnapshotArray<ListViewItem> itemViews = new SnapshotArray<ListViewItem>();
@@ -102,15 +106,63 @@ public class ListView extends WidgetGroup {
         this.dontDisposeItems = dontDisposeItems;
         this.itemsHaveSameHeight = itemsHaveSameHeight;
         setLayoutEnabled(true);
+
+        itemGroup.addCaptureListener(captureListener);
     }
 
+    final ClickLongClickListener captureListener = new ClickLongClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            log.debug("ListView clicked on x:{}  y:{}", x, y);
+            SnapshotArray<Actor> childs = itemGroup.getChildren();
+            for (int i = 0, n = childs.size; i < n; i++) {
+                ListViewItem item = (ListViewItem) childs.get(i);
+                tempClickRec.set(item.getX(), item.getY(), item.getWidth(), item.getHeight());
+                if (tempClickRec.contains(x, y)) {
+                    // item Clicked
+                    log.debug("ListViewItem {} clicked", item.getListIndex());
 
-    //##################################################################
+                    Array<EventListener> listeners = item.getListeners();
+                    for (int j = 0, m = listeners.size; j < m; j++) {
+                        EventListener listener = listeners.get(j);
 
+                        //change Event Actor
+                        event.setListenerActor(item);
 
-//    public void setSelectedItem(int selectedIndex) {
-//        if (itemViews != null && itemViews.size > 0) selectedItemList.add(itemViews.get(selectedIndex));
-//    }
+                        if (listener instanceof ClickLongClickListener) {
+                            ((ClickLongClickListener) listener).clicked(event, x, y);
+                        } else if (listener instanceof ClickListener) {
+                            ((ClickListener) listener).clicked(event, x, y);
+                        }
+                    }
+                    return;
+                }
+            }
+        }
+
+        @Override
+        public boolean longClicked(Actor actor, float x, float y) {
+            log.debug("ListView LongClicked on x:{}  y:{}", x, y);
+            SnapshotArray<Actor> childs = itemGroup.getChildren();
+            for (int i = 0, n = childs.size; i < n; i++) {
+                ListViewItem item = (ListViewItem) childs.get(i);
+                tempClickRec.set(item.getX(), item.getY(), item.getWidth(), item.getHeight());
+                if (tempClickRec.contains(x, y)) {
+                    // item Clicked
+                    log.debug("ListViewItem {} LongClicked", item.getListIndex());
+                    Array<EventListener> listeners = item.getListeners();
+                    for (int j = 0, m = listeners.size; j < m; j++) {
+                        EventListener listener = listeners.get(j);
+                        if (listener instanceof ClickLongClickListener) {
+                            return ((ClickLongClickListener) listener).longClicked(item, x, y);
+                        }
+                    }
+                    return false;
+                }
+            }
+            return false;
+        }
+    };
 
     public synchronized void dispose() {
 
@@ -261,7 +313,7 @@ public class ListView extends WidgetGroup {
         itemGroup.setHeight(completeHeight);
         itemGroup.setPrefWidth(this.getWidth());
         itemGroup.setPrefHeight(completeHeight);
-
+        itemGroup.addCaptureListener(captureListener);
         float yPos = completeHeight;
 
         Actor[] actors = itemGroup.getChildren().items;
