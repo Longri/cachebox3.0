@@ -92,6 +92,14 @@
       "path": "svg/att_Available_at_all_times_1.svg",
       "scale": 0.5
     },
+    "att_Boat_0": {
+      "path": "svg/att_Boat_0.svg",
+      "scale": 0.5
+    },
+    "att_Boat_1": {
+      "path": "svg/att_Boat_1.svg",
+      "scale": 0.5
+    },
     "att_Climbing_gear_0": {
       "path": "svg/att_Climbing_gear_0.svg",
       "scale": 0.5
@@ -122,6 +130,22 @@
     },
     "att_Recommended_for_kids_1": {
       "path": "svg/att_Recommended_for_kids_1.svg",
+      "scale": 0.5
+    },
+    "att_Scenic_view_0": {
+      "path": "svg/att_Scenic_view_0.svg",
+      "scale": 0.5
+    },
+    "att_Scenic_view_1": {
+      "path": "svg/att_Scenic_view_1.svg",
+      "scale": 0.5
+    },
+    "att_Scuba_gear_0": {
+      "path": "svg/att_Scuba_gear_0.svg",
+      "scale": 0.5
+    },
+    "att_Scuba_gear_1": {
+      "path": "svg/att_Scuba_gear_1.svg",
       "scale": 0.5
     },
     "att_Takes_less_than_an_hour_0": {
@@ -2181,15 +2205,21 @@
       "att_Dogs_0": "att_Dogs_0",
       "att_Access_or_parking_fee_0": "att_Access_or_parking_fee_0",
       "att_Climbing_gear_0": "att_Climbing_gear_0",
+      "att_Boat_0": "att_Boat_0",
+      "att_Scuba_gear_0": "att_Scuba_gear_0",
       "att_Recommended_for_kids_0": "att_Recommended_for_kids_0",
       "att_Takes_less_than_an_hour_0": "att_Takes_less_than_an_hour_0",
+      "att_Scenic_view_0": "att_Scenic_view_0",
       "att_Available_at_all_times_0": "att_Available_at_all_times_0",
       "att_Parking_available_0": "att_Parking_available_0",
       "att_Dogs_1": "att_Dogs_1",
       "att_Access_or_parking_fee_1": "att_Access_or_parking_fee_1",
       "att_Climbing_gear_1": "att_Climbing_gear_1",
+      "att_Boat_1": "att_Boat_1",
+      "att_Scuba_gear_1": "att_Scuba_gear_1",
       "att_Recommended_for_kids_1": "att_Recommended_for_kids_1",
       "att_Takes_less_than_an_hour_1": "att_Takes_less_than_an_hour_1",
+      "att_Scenic_view_1": "att_Scenic_view_1",
       "att_Available_at_all_times_1": "att_Available_at_all_times_1",
       "att_Parking_available_1": "att_Parking_available_1"
     }

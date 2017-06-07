@@ -101,8 +101,8 @@ public class TestView extends AbstractView {
             Drawable attDrawable = att.getDrawable(attStyle);
 
             if (iconWidth == 0) {
-                iconWidth = 41;//attDrawable.getMinWidth();
-                iconHeight = 41;// attDrawable.getMinHeight();
+                iconWidth = CB.getScaledFloat(47);//attDrawable.getMinWidth();
+                iconHeight = CB.getScaledFloat(47);// attDrawable.getMinHeight();
                 lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + CB.scaledSizes.MARGINx4));
                 lineTable = new Table();
                 lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
