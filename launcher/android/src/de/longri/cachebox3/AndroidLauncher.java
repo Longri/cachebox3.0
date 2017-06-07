@@ -47,8 +47,9 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
 
     // Compass
     private SensorManager mSensorManager;
-    private Sensor mSensor;
-    private float[] mCompassValues;
+    private Sensor accelerometer;
+    private Sensor magnetometer;
+
     private AndroidLauncherfragment fragment;
 
     @Override
@@ -62,9 +63,8 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
 
         androidLauncher = this;
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-
-
+        accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
     }
 
     protected void onStart() {
@@ -81,8 +81,10 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
     protected void onResume() {
         log.debug("onResume()");
         super.onResume();
-        if (mSensorManager != null)
-            mSensorManager.registerListener(mListener, mSensor, SensorManager.SENSOR_DELAY_UI);
+        if (mSensorManager != null) {
+            mSensorManager.registerListener(mListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(mListener, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     @Override
@@ -92,22 +94,37 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
 
         if (mSensorManager != null)
             mSensorManager.unregisterListener(mListener);
-
     }
 
-    private float compassHeading = -1;
-    private float lastCompassHeading;
 
     private final SensorEventListener mListener = new SensorEventListener() {
+        float[] gravity;
+        float[] geomagnetic;
+        final float orientationValues[] = new float[3];
+        final float R[] = new float[9];
+        final float I[] = new float[9];
+        final float minChange = 1f;
+        private float orientation;
+        private float lastOrientation;
+
         @Override
         public void onSensorChanged(SensorEvent event) {
-            try {
-                mCompassValues = event.values;
-                compassHeading = mCompassValues[0];
-                lastCompassHeading = compassHeading;
-                CB.eventHelper.setMagneticCompassHeading(compassHeading);
-            } catch (Exception e) {
-                e.printStackTrace();
+            synchronized (CB.eventHelper) {
+                if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+                    gravity = event.values;
+                if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){
+                    geomagnetic = event.values;
+                    if (gravity != null && geomagnetic != null) {
+                        if (SensorManager.getRotationMatrix(R, I, gravity, geomagnetic)) {
+                            SensorManager.getOrientation(R, orientationValues);
+                            orientation = (float) Math.toDegrees(orientationValues[0]);
+                            if (Math.abs(lastOrientation - orientation) > minChange) {
+                                CB.eventHelper.setMagneticCompassHeading(orientation);
+                                lastOrientation = orientation;
+                            }
+                        }
+                    }
+                }
             }
         }
 

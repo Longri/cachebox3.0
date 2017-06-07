@@ -56,14 +56,13 @@ public class GpsEventHelper {
             setSpeed(speed, eventID);
             setElevation(elevation, eventID);
             setAccuracy(accuracy, eventID);
-            setCourse(bearing, eventID);
+            if (speed > 5) setCourse(bearing, eventID);
 
         } else {
             // not a new position call other event's only
             setSpeed(speed, eventID);
             setElevation(elevation, eventID);
             setAccuracy(accuracy, eventID);
-            setCourse(bearing, eventID);
         }
     }
 
