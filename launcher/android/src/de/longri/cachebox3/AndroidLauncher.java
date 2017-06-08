@@ -26,6 +26,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
+import de.longri.cachebox3.utils.RingBufferFloat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sqldroid.SQLDroidDriver;
@@ -98,12 +99,13 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
 
 
     private final SensorEventListener mListener = new SensorEventListener() {
-        float[] gravity;
-        float[] geomagnetic;
-        final float orientationValues[] = new float[3];
-        final float R[] = new float[9];
-        final float I[] = new float[9];
-        final float minChange = 1f;
+        private float[] gravity;
+        private float[] geomagnetic;
+        private final float orientationValues[] = new float[3];
+        private final float R[] = new float[9];
+        private final float I[] = new float[9];
+        private final float minChange = 1f;
+        private final RingBufferFloat ringBuffer = new RingBufferFloat(20);
         private float orientation;
         private float lastOrientation;
 
@@ -112,14 +114,15 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
             synchronized (CB.eventHelper) {
                 if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
                     gravity = event.values;
-                if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){
+                if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
                     geomagnetic = event.values;
                     if (gravity != null && geomagnetic != null) {
                         if (SensorManager.getRotationMatrix(R, I, gravity, geomagnetic)) {
                             SensorManager.getOrientation(R, orientationValues);
-                            orientation = (float) Math.toDegrees(orientationValues[0]);
+                            orientation = ringBuffer.add((float) Math.toDegrees(orientationValues[0]));
                             if (Math.abs(lastOrientation - orientation) > minChange) {
                                 CB.eventHelper.setMagneticCompassHeading(orientation);
+                                log.debug("orientation: {}", orientation);
                                 lastOrientation = orientation;
                             }
                         }
