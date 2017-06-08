@@ -57,7 +57,7 @@ public class EditWaypoint extends ActivityBase {
     private final boolean showCoordsOnShow;
     private final GenericCallBack<Waypoint> callBack;
 
-    public EditWaypoint(Waypoint waypoint, boolean showCoordsOnShow, GenericCallBack<Waypoint> callBack) {
+    public EditWaypoint(final Waypoint waypoint, boolean showCoordsOnShow, GenericCallBack<Waypoint> callBack) {
         super("EditWaypoint");
         style = null;
         this.waypoint = waypoint;
@@ -88,6 +88,7 @@ public class EditWaypoint extends ActivityBase {
         itemList.add(CacheTypes.Final);
 
         selectBox = new SelectBox();
+        selectBox.setHideWithItemClick(false);
         selectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

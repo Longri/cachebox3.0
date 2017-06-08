@@ -45,7 +45,7 @@ public class QuickButtonList extends Group {
 
         scrollPaneContent.addCaptureListener(new ClickLongClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public boolean clicked(InputEvent event, float x, float y) {
                 log.debug("QuickButton clicked on x:{}  y:{}", x, y);
                 SnapshotArray<Actor> childs = scrollPaneContent.getChildren();
                 for (int i = 0, n = childs.size; i < n; i++) {
@@ -55,9 +55,10 @@ public class QuickButtonList extends Group {
                         // item Clicked
                         log.debug("QuickButtonItem {} clicked", i);
                         item.clicked();
-                        return;
+                        return true;
                     }
                 }
+                return false;
             }
 
             @Override

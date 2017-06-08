@@ -17,10 +17,9 @@ package de.longri.cachebox3.gui.menu;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
@@ -44,9 +43,9 @@ public class MenuItem extends ListViewItem {
     protected String mTitle;
     protected boolean mIsEnabled = true;
 
-    protected boolean mIsCheckable = false;
+    private boolean mIsCheckable = false;
     protected boolean mIsChecked = false;
-    protected boolean mLeft = false;
+    private boolean mLeft = false;
 
     private final int mID;
 
@@ -54,22 +53,9 @@ public class MenuItem extends ListViewItem {
     private Image iconImage;
     private Object data;
 
-    protected Menu moreMenu;
-    protected final Menu parentMenu;
+    private Menu moreMenu;
+    private final Menu parentMenu;
 
-    private OnItemClickListener onItemClickListener;
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
-    protected ClickListener clickListener = new ClickListener() {
-        public void clicked(InputEvent event, float x, float y) {
-            if (MenuItem.this.onItemClickListener != null && event.getType() == InputEvent.Type.touchUp) {
-                MenuItem.this.onItemClickListener.onItemClick(MenuItem.this);
-            }
-        }
-    };
 
     public MenuItem(SizeF size, int Index, int ID, String name, Menu parentMenu) {
         super(Index);
@@ -103,12 +89,6 @@ public class MenuItem extends ListViewItem {
         return mID;
     }
 
-    public void toggleCheck() {
-        if (isCheckable()) {
-            mIsChecked = !mIsChecked;
-            //  initial();
-        }
-    }
 
     @Override
     public void pack() {
@@ -120,11 +100,14 @@ public class MenuItem extends ListViewItem {
 
     }
 
+    @Override
+    public boolean addListener(EventListener listener) {
+        return super.addListener(listener);
+    }
+
 
     protected synchronized void initial() {
         this.reset();
-        this.removeListener(clickListener);
-
 
         boolean hasIcon = (mIcon != null);
         if (hasIcon) {
@@ -163,9 +146,6 @@ public class MenuItem extends ListViewItem {
         if (!mIsEnabled) {
             //TODO
         }
-
-
-        this.addListener(clickListener);
     }
 
 
@@ -289,7 +269,6 @@ public class MenuItem extends ListViewItem {
 
     @Override
     public void dispose() {
-        clickListener = null;
         style = null;
         mLabel = null;
         checkImage = null;
@@ -298,8 +277,6 @@ public class MenuItem extends ListViewItem {
         iconImage = null;
         data = null;
         moreMenu = null;
-        onItemClickListener = null;
-
     }
 
     public static class MenuItemStyle {

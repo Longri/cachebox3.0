@@ -30,7 +30,7 @@ public abstract class ClickLongClickListener extends ActorGestureListener {
         this.getGestureDetector().setLongPressSeconds((Config.LongClicktime.getValue() / 1000f));
     }
 
-    public abstract void clicked(InputEvent event, float x, float y);
+    public abstract boolean clicked(InputEvent event, float x, float y);
 
     public abstract boolean longClicked(Actor actor, float x, float y);
 

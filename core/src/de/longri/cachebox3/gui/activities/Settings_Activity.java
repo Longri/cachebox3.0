@@ -442,7 +442,7 @@ public class Settings_Activity extends ActivityBase {
         }
 
         // show new ListView for this category
-
+        final Array<ListViewItem> listViewItems = new Array<>();
         listViewAdapter = new Adapter() {
             @Override
             public int getCount() {
@@ -451,8 +451,11 @@ public class Settings_Activity extends ActivityBase {
 
             @Override
             public ListViewItem getView(int index) {
-                final SettingBase<?> setting = categorySettingsList.get(index);
-                return getSettingItem(index, setting);
+               if(listViewItems.size<=index){
+                   final SettingBase<?> setting = categorySettingsList.get(index);
+                   listViewItems.add(  getSettingItem(index, setting));
+               }
+                return listViewItems.get(index);
             }
 
             @Override
@@ -566,7 +569,6 @@ public class Settings_Activity extends ActivityBase {
             }
         };
 
-        selectBox.addListener(clickListener);
 
         selectBox.set(itemList);
         if (setting == Config.localisation) {
@@ -592,7 +594,7 @@ public class Settings_Activity extends ActivityBase {
             public void dispose() {
             }
         };
-
+        table.addListener(clickListener);
         float buttonWidth = this.getWidth() - (CB.scaledSizes.MARGINx2 * 2);
 
         table.add(selectBox).width(new Value.Fixed(buttonWidth)).center();
@@ -851,6 +853,7 @@ public class Settings_Activity extends ActivityBase {
                     } else {
                         checkImage[0].setDrawable(new SpriteDrawable(CB.getSprite("check_off")));
                     }
+                    event.cancel();
                 }
             }
         });
