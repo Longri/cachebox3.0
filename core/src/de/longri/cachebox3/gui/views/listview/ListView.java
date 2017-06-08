@@ -115,9 +115,9 @@ public class ListView extends WidgetGroup {
                 tempClickRec.set(item.getX(), item.getY(), item.getWidth(), item.getHeight());
                 if (tempClickRec.contains(x, y)) {
                     // item Clicked
-                    log.debug("ListViewItem {} clicked", item.getListIndex());
-
                     Array<EventListener> listeners = item.getListeners();
+                    log.debug("ListViewItem {} clicked | Item has {} listener", item.getListIndex(),listeners.size);
+
                     for (int j = 0, m = listeners.size; j < m; j++) {
                         EventListener listener = listeners.get(j);
 
@@ -262,14 +262,14 @@ public class ListView extends WidgetGroup {
 
         if (adapter == null) return;
         log.debug("Start Layout Items");
-        this.clear();
+        this.clearChildren();
         itemHeights.clear();
         itemYPos.clear();
         itemViews.clear();
 
 
         itemGroup.setWidth(this.getWidth());
-        itemGroup.clear();
+        itemGroup.clearChildren();
 
         padLeft = CB.getScaledFloat(style.padLeft > 0 ? style.padLeft : style.pad);
         padRight = CB.getScaledFloat(style.padRight > 0 ? style.padRight : style.pad);

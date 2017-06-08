@@ -566,7 +566,7 @@ public class Settings_Activity extends ActivityBase {
             }
         };
 
-        selectBox.addListener(clickListener);
+
 
         selectBox.set(itemList);
         if (setting == Config.localisation) {
@@ -592,7 +592,7 @@ public class Settings_Activity extends ActivityBase {
             public void dispose() {
             }
         };
-
+        table.addListener(clickListener);
         float buttonWidth = this.getWidth() - (CB.scaledSizes.MARGINx2 * 2);
 
         table.add(selectBox).width(new Value.Fixed(buttonWidth)).center();
