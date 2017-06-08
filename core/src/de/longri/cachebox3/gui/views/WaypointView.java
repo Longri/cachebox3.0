@@ -17,6 +17,9 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
@@ -32,6 +35,7 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
@@ -91,6 +95,11 @@ public class WaypointView extends AbstractView {
         }
     }
 
+    @Override
+    public boolean removeListener(EventListener listener) {
+        return super.removeListener(listener);
+    }
+
     private void addNewListView() {
 
         log.debug("Start Thread add new listView");
@@ -110,23 +119,16 @@ public class WaypointView extends AbstractView {
                         if (index == 0) {
                             return CacheListItem.getListItem(index, actCache);
                         } else {
-                            WayPointListItem item = WayPointListItem.getListItem(index, actCache.waypoints.get(index - 1));
-
-                            item.setLongCLickListener(new ListViewItem.ItemClickListener() {
-                                @Override
-                                public void click(ListViewItem item) {
-                                    actWaypoint = actCache.waypoints.get(item.getListIndex() - 1);
-                                    if (WaypointView.this.listView != null)
-                                        WaypointView.this.listView.setSelection(item.getListIndex());
-                                    getContextMenu().show();
-                                }
-                            });
+                            final WayPointListItem item = WayPointListItem.getListItem(index, actCache.waypoints.get(index - 1));
                             return item;
                         }
                     }
 
                     @Override
-                    public void update(ListViewItem view) {
+                    public void update(final ListViewItem view) {
+                        // set listener on Update, because Item is remove all listener with Layout
+                        view.addListener(clickLongClickListener);
+
 
                         //get index from item
                         int idx = view.getListIndex();
@@ -245,6 +247,31 @@ public class WaypointView extends AbstractView {
         CB.requestRendering();
     }
 
+    private final ClickLongClickListener clickLongClickListener = new ClickLongClickListener() {
+        @Override
+        public boolean clicked(InputEvent event, float x, float y) {
+            return false;
+        }
+
+        @Override
+        public boolean longClicked(Actor actor, float x, float y) {
+
+            int listIndex = ((ListViewItem) actor).getListIndex();
+
+            actWaypoint = actCache.waypoints.get(listIndex - 1);
+            if (WaypointView.this.listView != null)
+                WaypointView.this.listView.setSelection(listIndex);
+            final Menu contextMenu = getContextMenu();
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    contextMenu.show();
+                }
+            });
+            return true;
+        }
+    };
+
     private void disposeListView() {
         final ListView disposeListView = this.listView;
         Thread disposeThread = new Thread(new Runnable() {
@@ -331,7 +358,7 @@ public class WaypointView extends AbstractView {
                             // Yes button clicked
                             final WaypointDAO dao = new WaypointDAO();
                             dao.delete(actWaypoint);
-                            actCache.waypoints.removeValue(actWaypoint,false);
+                            actCache.waypoints.removeValue(actWaypoint, false);
                             listView.setSelection(0);// select Cache
                         }
                         return true;

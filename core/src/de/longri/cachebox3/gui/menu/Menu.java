@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -34,6 +35,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.stages.StageManager;
+import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
@@ -61,6 +63,8 @@ public class Menu extends Window {
     protected Menu parentMenu;
     private WidgetGroup titleGroup;
     protected boolean hideWithItemClick;
+    private WidgetGroup mainMenuWidgetGroup;
+    private boolean isShowing = false;
 
     public Menu(String name) {
         super(name);
@@ -89,7 +93,29 @@ public class Menu extends Window {
         return item;
     }
 
-    public void addItem(MenuItem menuItem) {
+    public void addItem(final MenuItem menuItem) {
+
+        menuItem.addListener(new ClickLongClickListener() {
+            @Override
+            public boolean clicked(InputEvent event, float x, float y) {
+
+                // have the clicked item a moreMenu, just show it
+                if (menuItem.hasMoreMenu()) {
+                    menuItem.getMoreMenu(Menu.this).show();
+                    return true;
+                }
+                //close Menu with sub menu's
+                if (hideWithItemClick) hide(ALL);
+                else hide(false);
+                return onItemClickListener.onItemClick(menuItem);
+            }
+
+            @Override
+            public boolean longClicked(Actor actor, float x, float y) {
+                return false;
+            }
+        });
+
         mItems.add(menuItem);
     }
 
@@ -165,9 +191,6 @@ public class Menu extends Window {
         log.debug("Show menu: " + this.name);
     }
 
-
-    protected WidgetGroup mainMenuWidgetGroup;
-
     private void showWidgetGroup() {
         clearActions();
         pack();
@@ -185,6 +208,8 @@ public class Menu extends Window {
 
         if (this.parentMenu == null)
             addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
+
+        isShowing = true;
     }
 
 
@@ -198,6 +223,8 @@ public class Menu extends Window {
         mainMenuWidgetGroup.setPosition(nextXPos, 0);
         mainMenuWidgetGroup.addAction(Actions.moveTo(0, 0, MORE_MENU_ANIMATION_TIME));
         log.debug("Show child menu: " + this.name);
+
+        isShowing = true;
     }
 
     public void hide() {
@@ -205,6 +232,7 @@ public class Menu extends Window {
     }
 
     public void hide(boolean all) {
+        if (!isShowing) return;
         if (this.parentMenu != null) {
             if (all) {
                 StageManager.removeAllWithActStage();
@@ -217,6 +245,7 @@ public class Menu extends Window {
             super.hide();
         }
         log.debug("Hide menu: " + this.name);
+        isShowing = false;
     }
 
 
@@ -265,22 +294,6 @@ public class Menu extends Window {
 
         this.addActor(titleGroup);
 
-        final OnItemClickListener clickListener = new OnItemClickListener() {
-            @Override
-            public boolean onItemClick(final MenuItem item) {
-
-                // have the clicked item a moreMenu, just show it
-                if (item.hasMoreMenu()) {
-                    item.getMoreMenu(Menu.this).show();
-                    return true;
-                }
-                //close Menu with sub menu's
-                if (hideWithItemClick) hide(ALL);
-                return onItemClickListener.onItemClick(item);
-            }
-        };
-
-
         Adapter listViewAdapter = new Adapter() {
             @Override
             public int getCount() {
@@ -289,9 +302,7 @@ public class Menu extends Window {
 
             @Override
             public ListViewItem getView(int index) {
-                MenuItem item = (MenuItem) mItems.get(index);
-                item.setOnItemClickListener(clickListener);
-                return item;
+                return mItems.get(index);
             }
 
             @Override

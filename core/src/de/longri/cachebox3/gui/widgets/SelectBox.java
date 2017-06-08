@@ -88,7 +88,6 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
         MenuItem menuItem = new MenuItem(index, null) {
             protected synchronized void initial() {
                 this.reset();
-                this.removeListener(clickListener);
                 this.defaults().pad(CB.scaledSizes.MARGINx2);
 
                 boolean hasIcon = (mIcon != null);
@@ -114,7 +113,6 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
                     checkImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(style.option_back);
                 }
                 this.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
-                this.addListener(clickListener);
             }
         };
 

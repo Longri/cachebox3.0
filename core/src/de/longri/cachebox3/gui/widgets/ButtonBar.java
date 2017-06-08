@@ -29,6 +29,7 @@ import java.util.ArrayList;
  */
 public class ButtonBar extends WidgetGroup {
 
+    private boolean needsLayout = true;
 
     public static class ButtonBarStyle {
         public Drawable background;
@@ -62,6 +63,7 @@ public class ButtonBar extends WidgetGroup {
     }
 
     public void layout() {
+        if (!needsLayout) return;
         float completeWidth = 0;
         for (Button button : buttonList) {
             completeWidth += button.getWidth();
@@ -77,6 +79,7 @@ public class ButtonBar extends WidgetGroup {
             this.addActor(button);
             xPos += button.getWidth() + margin;
         }
+        needsLayout = false;
     }
 
     public float getPrefHeight() {

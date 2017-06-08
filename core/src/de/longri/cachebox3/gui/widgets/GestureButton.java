@@ -81,7 +81,7 @@ public class GestureButton extends Button {
         for (EventListener listener : listeners) {
             this.removeListener(listener);
         }
-        this.addListener(gestureListener);
+        this.addCaptureListener(gestureListener);
         this.pack();
     }
 
@@ -142,7 +142,7 @@ public class GestureButton extends Button {
     ClickLongClickListener gestureListener = new ClickLongClickListener() {
 
         @Override
-        public void clicked(InputEvent event, float x, float y) {
+        public boolean clicked(InputEvent event, float x, float y) {
             log.debug("on click");
 
 
@@ -199,7 +199,7 @@ public class GestureButton extends Button {
                                 compoundMenu.setOnItemClickListener(bothItemClickListener);
                                 compoundMenu.reorganizeListIndexes();
                                 compoundMenu.show();
-                                return;
+                                return true;
                             }
                         }
                     }
@@ -225,6 +225,7 @@ public class GestureButton extends Button {
             if (!actionExecuted) {
                 longPress(event.getTarget(), x, y);
             }
+            return true;
         }
 
         @Override
@@ -279,11 +280,10 @@ public class GestureButton extends Button {
         }
     };
 
-
     private Menu getLongClickMenu() {
-        Menu cm = new Menu("Name");
+        Menu longClickMenu = new Menu("Name");
 
-        cm.setOnItemClickListener(new OnItemClickListener() {
+        longClickMenu.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public boolean onItemClick(MenuItem item) {
                 int mId = item.getMenuItemId();
@@ -326,13 +326,13 @@ public class GestureButton extends Button {
             AbstractAction action = ba.getAction();
             if (action == null)
                 continue;
-            MenuItem mi = cm.addItem(action.getId(), action.getName(), action.getNameExtention());
+            MenuItem mi = longClickMenu.addItem(action.getId(), action.getName(), action.getNameExtention());
             mi.setEnabled(action.getEnabled());
             mi.setCheckable(action.getIsCheckable());
             mi.setChecked(action.getIsChecked());
             mi.setIcon(action.getIcon());
         }
-        return cm;
+        return longClickMenu;
     }
 
 

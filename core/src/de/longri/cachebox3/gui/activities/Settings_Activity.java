@@ -851,6 +851,7 @@ public class Settings_Activity extends ActivityBase {
                     } else {
                         checkImage[0].setDrawable(new SpriteDrawable(CB.getSprite("check_off")));
                     }
+                    event.cancel();
                 }
             }
         });

@@ -29,7 +29,6 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
-import de.longri.cachebox3.gui.widgets.QuickButtonItem;
 import de.longri.cachebox3.utils.CB_RectF;
 import org.slf4j.LoggerFactory;
 
@@ -72,11 +71,6 @@ public class ListView extends WidgetGroup {
         return itemViews;
     }
 
-    //##################################################################
-    //
-    // Constructors
-    //
-    //##################################################################
     public ListView() {
         this(false);
     }
@@ -112,9 +106,10 @@ public class ListView extends WidgetGroup {
 
     final ClickLongClickListener captureListener = new ClickLongClickListener() {
         @Override
-        public void clicked(InputEvent event, float x, float y) {
+        public boolean clicked(InputEvent event, float x, float y) {
             log.debug("ListView clicked on x:{}  y:{}", x, y);
             SnapshotArray<Actor> childs = itemGroup.getChildren();
+
             for (int i = 0, n = childs.size; i < n; i++) {
                 ListViewItem item = (ListViewItem) childs.get(i);
                 tempClickRec.set(item.getX(), item.getY(), item.getWidth(), item.getHeight());
@@ -130,14 +125,19 @@ public class ListView extends WidgetGroup {
                         event.setListenerActor(item);
 
                         if (listener instanceof ClickLongClickListener) {
-                            ((ClickLongClickListener) listener).clicked(event, x, y);
+                            if(((ClickLongClickListener) listener).clicked(event, x, y)){
+                                break;
+                            }
                         } else if (listener instanceof ClickListener) {
                             ((ClickListener) listener).clicked(event, x, y);
                         }
                     }
-                    return;
+                    event.reset();
+                    event.cancel();
+                    return true;
                 }
             }
+            return false;
         }
 
         @Override
@@ -357,7 +357,7 @@ public class ListView extends WidgetGroup {
         }
     }
 
-    private void addItemThreadSave(final int index, boolean reAdd, final float yPos) {
+    protected void addItemThreadSave(final int index, boolean reAdd, final float yPos) {
 
         synchronized (indexList) {
 
@@ -380,7 +380,7 @@ public class ListView extends WidgetGroup {
 
             //set on drawListner
             view.setOnDrawListener(onDrawListener);
-            view.addListener(onListItemClickListener);
+//            view.addListener(onListItemClickListener);
             view.setPrefWidth(this.getWidth() - (padLeft + padRight));
             view.pack();
             view.layout();
@@ -588,7 +588,7 @@ public class ListView extends WidgetGroup {
 
 
     ClickLongClickListener onListItemClickListener = new ClickLongClickListener() {
-        public void clicked(InputEvent event, float x, float y) {
+        public boolean clicked(InputEvent event, float x, float y) {
             if (event.getType() == InputEvent.Type.touchUp) {
                 if (selectionType != NONE) {
                     ListViewItem item = ((ListViewItem) event.getListenerActor());
@@ -611,17 +611,14 @@ public class ListView extends WidgetGroup {
                     for (int i = 0, n = changedEventListeners.size; i < n; i++) {
                         changedEventListeners.get(i).selectionChanged();
                     }
-
-                    if (item.singleClickListener != null) item.singleClickListener.click(item);
                 }
             }
+            return false;
         }
 
         @Override
         public boolean longClicked(Actor actor, float x, float y) {
-            ListViewItem item = (ListViewItem) actor;
-            if (item.longClickListener != null) item.longClickListener.click(item);
-            return true;
+            return false;
         }
     };
 
@@ -666,7 +663,6 @@ public class ListView extends WidgetGroup {
         layout(true);
         CB.requestRendering();
     }
-
 
     public static class ListViewStyle extends ScrollPane.ScrollPaneStyle {
         public Drawable firstItem, secondItem, selectedItem;
