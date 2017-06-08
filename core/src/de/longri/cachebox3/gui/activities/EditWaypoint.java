@@ -129,8 +129,6 @@ public class EditWaypoint extends ActivityBase {
         create();
         descriptionTextArea.setMinLineCount(4);
         clueTextArea.setMinLineCount(4);
-        //TODO calculate max line count
-
         float lineHeight = descriptionTextArea.getStyle().font.getLineHeight();
         float space = Gdx.graphics.getHeight() / 1.7f;
         int lineCount = (int) ((space / lineHeight) / 2);
