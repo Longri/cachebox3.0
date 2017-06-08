@@ -160,7 +160,7 @@ public class GestureButton extends Button {
 
                                 // Menu zusammen stellen!
                                 // zuerst das View Context Menu
-                                Menu compoundMenu = new Menu("compoundMenu");
+                                final Menu compoundMenu = new Menu(" ");
 
                                 final OnItemClickListener bothListener[] = new OnItemClickListener[2];
                                 final OnItemClickListener bothItemClickListener = new OnItemClickListener() {
@@ -182,7 +182,7 @@ public class GestureButton extends Button {
                                 };
 
 
-                                Menu viewContextMenu = aktActionView.getContextMenu();
+                                final Menu viewContextMenu = aktActionView.getContextMenu();
                                 if (viewContextMenu != null) {
                                     compoundMenu.addItems(viewContextMenu.getItems());
                                     bothListener[0] = viewContextMenu.getOnItemClickListeners();
@@ -198,6 +198,15 @@ public class GestureButton extends Button {
                                 }
                                 compoundMenu.setOnItemClickListener(bothItemClickListener);
                                 compoundMenu.reorganizeListIndexes();
+
+                                Menu.OnHideListener onHideListener = new Menu.OnHideListener() {
+                                    @Override
+                                    public void onHide() {
+                                        compoundMenu.hide();
+                                    }
+                                };
+                                if (viewContextMenu != null) viewContextMenu.addOnHideListener(onHideListener);
+                                if (longClickMenu != null) longClickMenu.addOnHideListener(onHideListener);
                                 compoundMenu.show();
                                 return true;
                             }

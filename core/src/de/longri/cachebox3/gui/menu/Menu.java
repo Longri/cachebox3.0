@@ -54,6 +54,10 @@ public class Menu extends Window {
     final static boolean ALL = true;
     public final static float MORE_MENU_ANIMATION_TIME = 0.3f;
 
+    public interface OnHideListener {
+        void onHide();
+    }
+
     CB_List<ListViewItem> mItems = new CB_List();
     public MenuStyle style;
     final String name;
@@ -65,6 +69,7 @@ public class Menu extends Window {
     protected boolean hideWithItemClick;
     private WidgetGroup mainMenuWidgetGroup;
     private boolean isShowing = false;
+    private OnHideListener onHideListener;
 
     public Menu(String name) {
         super(name);
@@ -208,7 +213,6 @@ public class Menu extends Window {
 
         if (this.parentMenu == null)
             addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
-
         isShowing = true;
     }
 
@@ -232,6 +236,9 @@ public class Menu extends Window {
     }
 
     public void hide(boolean all) {
+        if (this.onHideListener != null) {
+            this.onHideListener.onHide();
+        }
         if (!isShowing) return;
         if (this.parentMenu != null) {
             if (all) {
@@ -248,6 +255,9 @@ public class Menu extends Window {
         isShowing = false;
     }
 
+    public void addOnHideListener(OnHideListener listener) {
+        this.onHideListener = listener;
+    }
 
     private void initialLayout() {
 
