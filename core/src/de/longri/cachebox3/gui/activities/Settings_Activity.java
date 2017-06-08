@@ -442,7 +442,7 @@ public class Settings_Activity extends ActivityBase {
         }
 
         // show new ListView for this category
-
+        final Array<ListViewItem> listViewItems = new Array<>();
         listViewAdapter = new Adapter() {
             @Override
             public int getCount() {
@@ -451,8 +451,11 @@ public class Settings_Activity extends ActivityBase {
 
             @Override
             public ListViewItem getView(int index) {
-                final SettingBase<?> setting = categorySettingsList.get(index);
-                return getSettingItem(index, setting);
+               if(listViewItems.size<=index){
+                   final SettingBase<?> setting = categorySettingsList.get(index);
+                   listViewItems.add(  getSettingItem(index, setting));
+               }
+                return listViewItems.get(index);
             }
 
             @Override
@@ -565,7 +568,6 @@ public class Settings_Activity extends ActivityBase {
                 callBackClick.set(true);
             }
         };
-
 
 
         selectBox.set(itemList);
