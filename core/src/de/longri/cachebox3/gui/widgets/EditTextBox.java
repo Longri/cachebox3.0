@@ -57,7 +57,7 @@ public class EditTextBox extends WidgetGroup {
         this.setStyle(VisUI.getSkin().get("default", EditTextStyle.class));
         this.setText(text);
 
-        editButton.addListener(new ClickListener() {
+        ClickListener clickListener = new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 
                 Input.TextInputListener listener = new Input.TextInputListener() {
@@ -79,7 +79,10 @@ public class EditTextBox extends WidgetGroup {
                     PlatformConnector.getMultilineTextInput(listener, "", EditTextBox.this.text, "");
                 }
             }
-        });
+        };
+
+        editButton.addListener(clickListener);
+        this.addListener(clickListener);
     }
 
     public void setStyle(EditTextStyle style) {
