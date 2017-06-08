@@ -130,8 +130,12 @@ public class EditWaypoint extends ActivityBase {
         descriptionTextArea.setMinLineCount(4);
         clueTextArea.setMinLineCount(4);
         //TODO calculate max line count
-        descriptionTextArea.setMaxLineCount(8);
-        clueTextArea.setMaxLineCount(8);
+
+        float lineHeight = descriptionTextArea.getStyle().font.getLineHeight();
+        float space = Gdx.graphics.getHeight() / 1.7f;
+        int lineCount = (int) ((space / lineHeight) / 2);
+        descriptionTextArea.setMaxLineCount(lineCount);
+        clueTextArea.setMaxLineCount(lineCount);
         titleTextArea.setText((waypoint.getTitle() == null) ? "" : waypoint.getTitle());
         descriptionTextArea.setText(waypoint.getDescription() == null ? "" : waypoint.getDescription());
         clueTextArea.setText(waypoint.getClue() == null ? "" : waypoint.getClue());

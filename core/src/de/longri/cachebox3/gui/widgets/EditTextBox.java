@@ -124,35 +124,6 @@ public class EditTextBox extends WidgetGroup {
                 style.editIcon.getMinWidth(), style.editIcon.getMinHeight());
     }
 
-//    @Override
-//    public void invalidate() {
-//
-//    }
-//
-//    @Override
-//    public void invalidateHierarchy() {
-//
-//    }
-//
-//    @Override
-//    public void validate() {
-//
-//    }
-//
-//    @Override
-//    public void pack() {
-//
-//    }
-//
-//    @Override
-//    public void setFillParent(boolean fillParent) {
-//
-//    }
-//
-//    @Override
-//    public void setLayoutEnabled(boolean enabled) {
-//
-//    }
 
     @Override
     public float getMinWidth() {
@@ -176,7 +147,10 @@ public class EditTextBox extends WidgetGroup {
 
     @Override
     public float getPrefHeight() {
-        return (textLabel.getStyle().font.getLineHeight() * minLineCount) + style.background.getMinHeight();
+        if(textLabel.getPrefHeight()+ style.background.getMinHeight()>getMaxHeight()){
+            return getMaxHeight();
+        }
+        return textLabel.getPrefHeight()+ style.background.getMinHeight();
     }
 
     @Override
@@ -197,5 +171,9 @@ public class EditTextBox extends WidgetGroup {
 
     public String getText() {
         return this.text;
+    }
+
+    public EditTextStyle getStyle() {
+       return this.style;
     }
 }
