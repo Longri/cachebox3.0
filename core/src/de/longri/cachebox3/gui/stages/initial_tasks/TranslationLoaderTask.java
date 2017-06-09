@@ -16,8 +16,11 @@
 package de.longri.cachebox3.gui.stages.initial_tasks;
 
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.translation.Language;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.IChanged;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -25,6 +28,10 @@ import java.io.IOException;
  * Created by Longri on 02.08.16.
  */
 public final class TranslationLoaderTask extends AbstractInitTask {
+
+    private final static Logger log = LoggerFactory.getLogger(TranslationLoaderTask.class);
+
+    private Language loadedLang;
 
     public TranslationLoaderTask(String name, int percent) {
         super(name, percent);
@@ -46,14 +53,19 @@ public final class TranslationLoaderTask extends AbstractInitTask {
     }
 
     private void loadTranslation() {
+        if (Config.localisation.getEnumValue() == loadedLang) return;
         try {
             Translation.LoadTranslation(Config.localisation.getEnumValue().toString());
+            loadedLang = Config.localisation.getEnumValue();
         } catch (Exception e) {
             try {
+                log.error("can't load lang: {}", Config.localisation.getEnumValue(), e);
                 Translation.LoadTranslation(Config.localisation.getEnumDefaultValue().toString());
+                loadedLang = Config.localisation.getEnumDefaultValue();
             } catch (IOException e1) {
-                e1.printStackTrace();
+                log.error("can't load default lang", e1);
             }
         }
+        log.debug("Loaded lang: {}", loadedLang);
     }
 }

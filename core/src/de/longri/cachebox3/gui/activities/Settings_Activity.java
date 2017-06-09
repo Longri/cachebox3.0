@@ -121,13 +121,13 @@ public class Settings_Activity extends ActivityBase {
                     public boolean onItemClick(MenuItem item) {
                         switch (item.getMenuItemId()) {
                             case MenuID.MI_SHOW_EXPERT:
-                                Config.SettingsShowExpert.setValue(!Config.SettingsShowExpert.getValue());
+                                Config.SettingsShowExpert.setValue(true);
                                 Config.SettingsShowAll.setValue(false);
                                 layoutActListView(true);
                                 return true;
 
                             case MenuID.MI_SHOW_ALL:
-                                Config.SettingsShowAll.setValue(!Config.SettingsShowAll.getValue());
+                                Config.SettingsShowAll.setValue(true);
                                 Config.SettingsShowExpert.setValue(false);
                                 layoutActListView(true);
                                 return true;
@@ -141,11 +141,7 @@ public class Settings_Activity extends ActivityBase {
                     }
                 });
 
-                if (Config.SettingsShowAll.getValue())
-                    Config.SettingsShowExpert.setValue(false);
-
                 boolean normal = !Config.SettingsShowAll.getValue() && !Config.SettingsShowExpert.getValue();
-
                 icm.addCheckableItem(MenuID.MI_SHOW_Normal, "Settings_Normal", normal);
                 icm.addCheckableItem(MenuID.MI_SHOW_EXPERT, "Settings_Expert", Config.SettingsShowExpert.getValue());
                 icm.addCheckableItem(MenuID.MI_SHOW_ALL, "Settings_All", Config.SettingsShowAll.getValue());
@@ -169,8 +165,6 @@ public class Settings_Activity extends ActivityBase {
 //                    counter++;
 //                }
 //                Config.quickButtonList.setValue(ActionsString);
-
-                Config.SaveToLastValue();
                 Config.AcceptChanges();
                 finish();
             }
@@ -215,7 +209,10 @@ public class Settings_Activity extends ActivityBase {
         de.longri.cachebox3.settings.types.SettingCategory[] tmp = de.longri.cachebox3.settings.types.SettingCategory.values();
         for (de.longri.cachebox3.settings.types.SettingCategory item : tmp) {
             if (item != de.longri.cachebox3.settings.types.SettingCategory.Button) {
-                settingCategories.add(item);
+
+                //add only non empty
+                if (getSettingsOfCategory(item).size > 0)
+                    settingCategories.add(item);
             }
         }
 
@@ -371,14 +368,8 @@ public class Settings_Activity extends ActivityBase {
         // add label with category name, align left
         table.left();
 
-        String labelText = null;
-        if (category == SettingCategory.Locale) {
-            labelText = Translation.Get("selectedLang") + Translation.getLangId();
-        } else {
-            labelText = category.name();
-        }
 
-        VisLabel label = new VisLabel(category.name());
+        VisLabel label = new VisLabel(Translation.Get(category.name()));
         label.setAlignment(Align.left);
         table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
@@ -401,40 +392,8 @@ public class Settings_Activity extends ActivityBase {
         log.debug("Show settings categoriy: " + category.name());
 
         Adapter listViewAdapter;
+        final Array<SettingBase<?>> categorySettingsList = getSettingsOfCategory(category);
 
-        //get all settings items of this category if the category mode correct
-
-        final Array<SettingBase<?>> categorySettingsList = new Array<SettingBase<?>>();
-
-        boolean expert = Config.SettingsShowAll.getValue() || Config.SettingsShowExpert.getValue();
-        boolean developer = Config.SettingsShowAll.getValue();
-
-        for (SettingBase<?> setting : de.longri.cachebox3.settings.types.SettingsList.that) {
-            if (setting.getCategory() == category) {
-                boolean show = false;
-
-                switch (setting.getMode()) {
-
-                    case DEVELOPER:
-                        show = developer;
-                        break;
-                    case Normal:
-                        show = true;
-                        break;
-                    case Expert:
-                        show = expert;
-                        break;
-                    case Never:
-                        show = developer;
-                        break;
-                }
-
-                if (show) {
-                    categorySettingsList.add(setting);
-                    log.debug("    with setting for: " + setting.getName());
-                }
-            }
-        }
 
         if (category == SettingCategory.Login) {
             SettingsListGetApiButton<?> lgIn = new SettingsListGetApiButton<Object>(category.name(), SettingCategory.Button, SettingMode.Normal, SettingStoreType.Global, SettingUsage.ACB);
@@ -451,10 +410,10 @@ public class Settings_Activity extends ActivityBase {
 
             @Override
             public ListViewItem getView(int index) {
-               if(listViewItems.size<=index){
-                   final SettingBase<?> setting = categorySettingsList.get(index);
-                   listViewItems.add(  getSettingItem(index, setting));
-               }
+                if (listViewItems.size <= index) {
+                    final SettingBase<?> setting = categorySettingsList.get(index);
+                    listViewItems.add(getSettingItem(index, setting));
+                }
                 return listViewItems.get(index);
             }
 
@@ -472,6 +431,40 @@ public class Settings_Activity extends ActivityBase {
         ListView newListView = new ListView(listViewAdapter);
         newListView.setUserObject(category);
         showListView(newListView, category.name(), animate);
+    }
+
+    private Array<SettingBase<?>> getSettingsOfCategory(SettingCategory category) {
+        //get all settings items of this category if the category mode correct
+        final Array<SettingBase<?>> categorySettingsList = new Array<SettingBase<?>>();
+        boolean expert = Config.SettingsShowAll.getValue() || Config.SettingsShowExpert.getValue();
+        boolean developer = Config.SettingsShowAll.getValue();
+
+        for (SettingBase<?> setting : SettingsList.that) {
+            if (setting.getCategory() == category) {
+                boolean show = false;
+
+                switch (setting.getMode()) {
+                    case DEVELOPER:
+                        show = developer;
+                        break;
+                    case Normal:
+                        show = true;
+                        break;
+                    case Expert:
+                        show = expert;
+                        break;
+                    case Never:
+                        show = false;
+                        break;
+                }
+
+                if (show) {
+                    categorySettingsList.add(setting);
+                    log.debug("with setting for: " + setting.getName());
+                }
+            }
+        }
+        return categorySettingsList;
     }
 
     private ListViewItem getSettingItem(int listIndex, SettingBase<?> setting) {

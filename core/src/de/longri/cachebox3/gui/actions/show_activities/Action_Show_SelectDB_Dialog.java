@@ -134,7 +134,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
 
         FilterInstances.setLastFilter(new FilterProperties(Config.FilterNew.getValue()));
 
-        String sqlWhere = FilterInstances.getLastFilter().getSqlWhere(Config.GcLogin.getValue());
+        String sqlWhere = FilterInstances.getLastFilter().getSqlWhere(Config.GcLoginName.getValue());
         Database.Data.GPXFilenameUpdateCacheCount();
 
         synchronized (Database.Data.Query) {

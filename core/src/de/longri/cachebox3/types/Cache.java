@@ -296,7 +296,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
     }
 
     public boolean ImTheOwner() {
-        String userName = Config.GcLogin.getValue().toLowerCase(Locale.getDefault());
+        String userName = Config.GcLoginName.getValue().toLowerCase(Locale.getDefault());
         if (myCache == 0)
             return false;
         if (myCache == 1)

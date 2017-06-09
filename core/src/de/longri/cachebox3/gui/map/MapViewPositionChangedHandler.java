@@ -137,7 +137,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         if (CB.mapMode == MapMode.CAR)
             mapView.animator.tilt(map.viewport().getMaxTilt());
 
-        if (CB.mapMode == MapMode.CAR && Settings_Map.dynamicZoom.getValue()) {
+        if (CB.mapMode == MapMode.CAR /*&& Settings_Map.dynamicZoom.getValue()*/) {
             // calculate dynamic Zoom
 
             double maxSpeed = Settings_Map.MoveMapCenterMaxSpeed.getValue();

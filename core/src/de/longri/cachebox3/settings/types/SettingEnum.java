@@ -97,8 +97,6 @@ public class SettingEnum<EnumTyp extends Enum<?>> extends SettingString {
 //    }
 
     public void setEnumValue( Enum<?> value) {
-        if (this.myEnum == value)
-            return;
         this.value = value.name();
         myEnum = getEnumFromString(this.value);
         setDirty();

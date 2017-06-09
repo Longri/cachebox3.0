@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -105,7 +104,7 @@ public class ApiButton extends IconButton {
                             public void callBack(Integer status) {
                                 if (status >= 0) {
                                     log.debug("Read User Name/State {}/{}", GroundspeakAPI.memberName, status);
-                                    Config.GcLogin.setValue(GroundspeakAPI.memberName);
+                                    Config.GcLoginName.setValue(GroundspeakAPI.memberName);
                                     Config.AcceptChanges();
                                     CB.viewmanager.toast("Welcome : " + GroundspeakAPI.memberName);
                                 } else {
