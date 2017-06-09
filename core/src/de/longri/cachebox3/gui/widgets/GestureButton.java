@@ -33,7 +33,9 @@ import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.GestureButtonStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
+import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -184,6 +186,7 @@ public class GestureButton extends Button {
 
                                 final Menu viewContextMenu = aktActionView.getContextMenu();
                                 if (viewContextMenu != null) {
+                                    viewContextMenu.setCompoundMenu(compoundMenu);
                                     compoundMenu.addItems(viewContextMenu.getItems());
                                     bothListener[0] = viewContextMenu.getOnItemClickListeners();
 
@@ -193,6 +196,7 @@ public class GestureButton extends Button {
 
                                 Menu longClickMenu = getLongClickMenu();
                                 if (longClickMenu != null) {
+                                    longClickMenu.setCompoundMenu(compoundMenu);
                                     compoundMenu.addItems(longClickMenu.getItems());
                                     bothListener[1] = longClickMenu.getOnItemClickListeners();
                                 }

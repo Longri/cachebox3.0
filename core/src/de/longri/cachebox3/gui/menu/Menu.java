@@ -53,6 +53,11 @@ public class Menu extends Window {
     final static Logger log = LoggerFactory.getLogger(Menu.class);
     final static boolean ALL = true;
     public final static float MORE_MENU_ANIMATION_TIME = 0.3f;
+    private Menu compoundMenu;
+
+    public void setCompoundMenu(Menu compoundMenu) {
+        this.compoundMenu = compoundMenu;
+    }
 
     public interface OnHideListener {
         void onHide();
@@ -106,7 +111,7 @@ public class Menu extends Window {
 
                 // have the clicked item a moreMenu, just show it
                 if (menuItem.hasMoreMenu()) {
-                    menuItem.getMoreMenu(Menu.this).show();
+                    menuItem.getMoreMenu(Menu.this.compoundMenu != null ? Menu.this.compoundMenu : Menu.this).show();
                     return true;
                 }
                 //close Menu with sub menu's
