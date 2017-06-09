@@ -31,17 +31,12 @@ public class Action_Show_Settings extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_Show_Settings.class);
 
     public Action_Show_Settings() {
-        super("settings", MenuID.AID_SHOW_SETTINGS);
+        super(IMPLEMENTED, "settings", MenuID.AID_SHOW_SETTINGS);
     }
 
     @Override
     public void execute() {
         new Settings_Activity().show();
-    }
-
-    @Override
-    public boolean getEnabled() {
-        return true;
     }
 
     @Override

@@ -37,7 +37,7 @@ import de.longri.cachebox3.translation.Translation;
  */
 public class Action_Show_DescriptionView extends Abstract_Action_ShowView {
     public Action_Show_DescriptionView() {
-        super("Description", MenuID.AID_SHOW_DESCRIPTION);
+        super(IMPLEMENTED,"Description", MenuID.AID_SHOW_DESCRIPTION);
     }
 
     @Override

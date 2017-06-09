@@ -32,7 +32,7 @@ public class Action_Show_Credits extends Abstract_Action_ShowView {
     final static Logger log = LoggerFactory.getLogger(Action_Show_Credits.class);
 
     public Action_Show_Credits() {
-        super("Credits", MenuID.AID_SHOW_CREDITS);
+        super(NOT_IMPLEMENTED, "Credits", MenuID.AID_SHOW_CREDITS);
     }
 
     @Override
@@ -40,11 +40,6 @@ public class Action_Show_Credits extends Abstract_Action_ShowView {
         if (isActVisible()) return;
         CreditsView view = new CreditsView();
         CB.viewmanager.showView(view);
-    }
-
-    @Override
-    public boolean getEnabled() {
-        return true;
     }
 
     @Override

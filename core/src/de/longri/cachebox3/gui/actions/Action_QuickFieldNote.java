@@ -25,7 +25,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
 public class Action_QuickFieldNote extends AbstractAction {
 
     public Action_QuickFieldNote() {
-        super("QuickFieldNote", MenuID.AID_QUICK_FIELDNOTE);
+        super(NOT_IMPLEMENTED, "QuickFieldNote", MenuID.AID_QUICK_FIELDNOTE);
     }
 
     @Override

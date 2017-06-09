@@ -25,12 +25,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
  */
 public class Action_Switch_Torch extends AbstractAction {
     public Action_Switch_Torch() {
-        super("Torch", MenuID.AID_TORCH);
-    }
-
-    @Override
-    public boolean getEnabled() {
-        return PlatformConnector.isTorchAvailable();
+        super(!PlatformConnector.isTorchAvailable(), "Torch", MenuID.AID_TORCH);
     }
 
     @Override

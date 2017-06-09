@@ -24,12 +24,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
 public class Action_ShowFilterSettings extends AbstractAction {
 
     public Action_ShowFilterSettings() {
-        super("filter", MenuID.AID_SHOW_FILTER_DIALOG);
-    }
-
-    @Override
-    public boolean getEnabled() {
-        return true;
+        super(NOT_IMPLEMENTED, "filter", MenuID.AID_SHOW_FILTER_DIALOG);
     }
 
     @Override

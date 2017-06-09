@@ -25,7 +25,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
 public class Action_RecVoice extends AbstractAction {
 
     public Action_RecVoice() {
-        super("recVoice", MenuID.AID_VOICE_REC);
+        super(NOT_IMPLEMENTED, "recVoice", MenuID.AID_VOICE_REC);
     }
 
     @Override

@@ -37,7 +37,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 
 
     public Action_Show_CacheList() {
-        super("cacheList", "  (" + String.valueOf(Database.Data.Query.size) + ")", MenuID.AID_SHOW_CACHELIST);
+        super(IMPLEMENTED, "cacheList", "  (" + String.valueOf(Database.Data.Query.size) + ")", MenuID.AID_SHOW_CACHELIST);
     }
 
 

@@ -29,7 +29,7 @@ public class Action_NavigateExt extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_NavigateExt.class);
 
     public Action_NavigateExt() {
-        super("NavigateTo", MenuID.AID_NAVIGATE_TO);
+        super(NOT_IMPLEMENTED, "NavigateTo", MenuID.AID_NAVIGATE_TO);
     }
 
     @Override
@@ -38,10 +38,6 @@ public class Action_NavigateExt extends AbstractAction {
 
     }
 
-    @Override
-    public boolean getEnabled() {
-        return true;
-    }
 
     @Override
     public Drawable getIcon() {

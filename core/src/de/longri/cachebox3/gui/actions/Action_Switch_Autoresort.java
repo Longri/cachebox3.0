@@ -25,7 +25,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
 public class Action_Switch_Autoresort extends AbstractAction {
 
     public Action_Switch_Autoresort() {
-        super("AutoResort", MenuID.AID_AUTO_RESORT);
+        super(NOT_IMPLEMENTED, "AutoResort", MenuID.AID_AUTO_RESORT);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Action_Switch_Autoresort extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.autoSortOffIcon ;
+        return CB.getSkin().getMenuIcon.autoSortOffIcon;
     }
 
 }

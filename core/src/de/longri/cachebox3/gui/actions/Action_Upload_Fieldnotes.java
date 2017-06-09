@@ -25,7 +25,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
 public class Action_Upload_Fieldnotes extends AbstractAction {
 
     public Action_Upload_Fieldnotes() {
-        super("uploadFieldNotes", MenuID.AID_UPLOAD_FIELD_NOTE);
+        super(NOT_IMPLEMENTED, "uploadFieldNotes", MenuID.AID_UPLOAD_FIELD_NOTE);
     }
 
     @Override

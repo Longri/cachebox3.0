@@ -27,23 +27,22 @@ import de.longri.cachebox3.events.EventHandler;
 public class Action_Show_Hint extends AbstractAction {
 
     public Action_Show_Hint() {
-        super("hint", MenuID.AID_SHOW_HINT);
+        super(IMPLEMENTED, "hint", MenuID.AID_SHOW_HINT);
     }
 
     @Override
     public void execute() {
-        if (getEnabled()) {
+        if (hasHint()) {
             new HintDialog().show();
         }
     }
 
     @Override
     public Drawable getIcon() {
-        return getEnabled() ? CB.getSkin().getMenuIcon.hintIconOn : CB.getSkin().getMenuIcon.hintIconOff;
+        return hasHint() ? CB.getSkin().getMenuIcon.hintIconOn : CB.getSkin().getMenuIcon.hintIconOff;
     }
 
-    @Override
-    public boolean getEnabled() {
+    public boolean hasHint() {
         // return true if any Cache selected and this Cache has a Hint
         if (EventHandler.getSelectedCache() == null)
             return false;

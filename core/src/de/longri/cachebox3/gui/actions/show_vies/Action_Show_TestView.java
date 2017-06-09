@@ -28,7 +28,7 @@ import de.longri.cachebox3.gui.views.TestView;
 public class Action_Show_TestView extends Abstract_Action_ShowView {
 
     public Action_Show_TestView() {
-        super("TestView", MenuID.AID_TEST_VIEW);
+        super(IMPLEMENTED, "TestView", MenuID.AID_TEST_VIEW);
     }
 
 

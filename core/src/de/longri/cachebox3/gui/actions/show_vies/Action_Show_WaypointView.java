@@ -27,7 +27,7 @@ import de.longri.cachebox3.gui.views.WaypointView;
  */
 public class Action_Show_WaypointView extends Abstract_Action_ShowView {
     public Action_Show_WaypointView() {
-        super("Waypoints", MenuID.AID_SHOW_WAYPOINTS);
+        super(IMPLEMENTED, "Waypoints", MenuID.AID_SHOW_WAYPOINTS);
     }
 
     @Override

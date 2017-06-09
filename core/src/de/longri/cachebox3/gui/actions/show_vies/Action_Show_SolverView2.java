@@ -27,7 +27,7 @@ import de.longri.cachebox3.gui.views.SolverView2;
  */
 public class Action_Show_SolverView2 extends Abstract_Action_ShowView {
     public Action_Show_SolverView2() {
-        super("Solver v2", MenuID.AID_SHOW_SOLVER2);
+        super(NOT_IMPLEMENTED, "Solver v2", MenuID.AID_SHOW_SOLVER2);
     }
 
     @Override

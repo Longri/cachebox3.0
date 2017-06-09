@@ -42,7 +42,7 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
     private MapView mapViewInstance;
 
     public Action_Show_MapView() {
-        super("Map", MenuID.AID_SHOW_MAP);
+        super(IMPLEMENTED, "Map", MenuID.AID_SHOW_MAP);
     }
 
     @Override

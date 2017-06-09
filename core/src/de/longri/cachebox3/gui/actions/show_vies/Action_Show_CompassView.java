@@ -28,7 +28,7 @@ import de.longri.cachebox3.settings.types.SettingBool;
  */
 public class Action_Show_CompassView extends Abstract_Action_ShowView {
     public Action_Show_CompassView() {
-        super("Compass", MenuID.AID_SHOW_COMPASS);
+        super(IMPLEMENTED, "Compass", MenuID.AID_SHOW_COMPASS);
     }
 
     @Override
@@ -134,49 +134,49 @@ public class Action_Show_CompassView extends Abstract_Action_ShowView {
                     showOtionMenu();
                     return true;
                 case MenuID.MI_COMPASS_SHOW_MAP:
-                    toggleSetting(Config.CompassShowMap,item);
+                    toggleSetting(Config.CompassShowMap, item);
                     return true;
 
                 case MenuID.MI_COMPASS_SHOW_NAME:
-                    toggleSetting(Config.CompassShowWP_Name,item);
+                    toggleSetting(Config.CompassShowWP_Name, item);
                     return true;
 
                 case MenuID.MI_COMPASS_SHOW_ICON:
-                    toggleSetting(Config.CompassShowWP_Icon,item);
+                    toggleSetting(Config.CompassShowWP_Icon, item);
                     return true;
 
                 case MenuID.MI_COMPASS_SHOW_ATTRIBUTES:
-                    toggleSetting(Config.CompassShowAttributes,item);
+                    toggleSetting(Config.CompassShowAttributes, item);
                     return true;
 
                 case MenuID.MI_COMPASS_SHOW_GC_CODE:
-                    toggleSetting(Config.CompassShowGcCode,item);
+                    toggleSetting(Config.CompassShowGcCode, item);
                     return true;
 
                 case MenuID.MI_COMPASS_SHOW_COORDS:
-                    toggleSetting(Config.CompassShowCoords,item);
+                    toggleSetting(Config.CompassShowCoords, item);
                     return true;
 
                 case MenuID.MI_COMPASS_SHOW_WP_DESC:
-                    toggleSetting(Config.CompassShowWpDesc,item);
+                    toggleSetting(Config.CompassShowWpDesc, item);
                     return true;
 
                 case MenuID.MI_COMPASS_SHOW_SAT_INFO:
-                    toggleSetting(Config.CompassShowSatInfos,item);
+                    toggleSetting(Config.CompassShowSatInfos, item);
                     return true;
 
                 case MenuID.MI_COMPASS_SHOW_SUN_MOON:
-                    toggleSetting(Config.CompassShowSunMoon,item);
+                    toggleSetting(Config.CompassShowSunMoon, item);
                     return true;
 
                 case MenuID.MI_COMPASS_SHOW_TARGET_DIRECTION:
-                    toggleSetting(Config.CompassShowTargetDirection,item);
+                    toggleSetting(Config.CompassShowTargetDirection, item);
                     return true;
                 case MenuID.MI_COMPASS_SHOW_S_D_T:
-                    toggleSetting(Config.CompassShowSDT,item);
+                    toggleSetting(Config.CompassShowSDT, item);
                     return true;
                 case MenuID.MI_COMPASS_SHOW_LAST_FOUND:
-                    toggleSetting(Config.CompassShowLastFound,item);
+                    toggleSetting(Config.CompassShowLastFound, item);
                     return true;
             }
             return false;
@@ -189,8 +189,8 @@ public class Action_Show_CompassView extends Abstract_Action_ShowView {
         item.setChecked(newValue);
         Config.AcceptChanges();
 
-        if(isActVisible()){
-            CompassView compassView= (CompassView) CB.viewmanager.getActView();
+        if (isActVisible()) {
+            CompassView compassView = (CompassView) CB.viewmanager.getActView();
             compassView.resetLayout();
         }
     }

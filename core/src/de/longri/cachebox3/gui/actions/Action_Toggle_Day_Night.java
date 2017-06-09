@@ -29,7 +29,7 @@ public class Action_Toggle_Day_Night extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_Toggle_Day_Night.class);
 
     public Action_Toggle_Day_Night() {
-        super("DayNight", MenuID.AID_DAY_NIGHT);
+        super(NOT_IMPLEMENTED, "DayNight", MenuID.AID_DAY_NIGHT);
     }
 
     @Override
@@ -38,10 +38,6 @@ public class Action_Toggle_Day_Night extends AbstractAction {
 
     }
 
-    @Override
-    public boolean getEnabled() {
-        return true;
-    }
 
     @Override
     public Drawable getIcon() {

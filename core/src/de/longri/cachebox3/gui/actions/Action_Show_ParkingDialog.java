@@ -26,18 +26,13 @@ import de.longri.cachebox3.gui.menu.MenuID;
  */
 public class Action_Show_ParkingDialog extends AbstractAction {
     public Action_Show_ParkingDialog() {
-        super("MyParking", MenuID.AID_SHOW_PARKING_DIALOG);
+        super(IMPLEMENTED, "MyParking", MenuID.AID_SHOW_PARKING_DIALOG);
     }
 
     @Override
     public void execute() {
         ParkingDialog d = new ParkingDialog();
         d.show();
-    }
-
-    @Override
-    public boolean getEnabled() {
-        return true;
     }
 
     @Override

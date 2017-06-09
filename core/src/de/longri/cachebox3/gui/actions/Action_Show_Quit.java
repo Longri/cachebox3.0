@@ -33,7 +33,7 @@ public class Action_Show_Quit extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_Show_Quit.class);
 
     public Action_Show_Quit() {
-        super("quit", MenuID.AID_SHOW_QUIT);
+        super(IMPLEMENTED, "quit", MenuID.AID_SHOW_QUIT);
     }
 
     @Override
@@ -54,11 +54,6 @@ public class Action_Show_Quit extends AbstractAction {
             }
         });
         dialog.show();
-    }
-
-    @Override
-    public boolean getEnabled() {
-        return true;
     }
 
     @Override

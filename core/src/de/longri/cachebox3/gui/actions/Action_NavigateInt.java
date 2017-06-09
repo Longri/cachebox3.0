@@ -30,7 +30,7 @@ public class Action_NavigateInt extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_NavigateInt.class);
 
     public Action_NavigateInt() {
-        super("GenerateRoute", MenuID.AID_GENERATE_ROUTE);
+        super(NOT_IMPLEMENTED, "GenerateRoute", MenuID.AID_GENERATE_ROUTE);
     }
 
     @Override
@@ -39,10 +39,6 @@ public class Action_NavigateInt extends AbstractAction {
 
     }
 
-    @Override
-    public boolean getEnabled() {
-        return true;
-    }
 
     @Override
     public Drawable getIcon() {

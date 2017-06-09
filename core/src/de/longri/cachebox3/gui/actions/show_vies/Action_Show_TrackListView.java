@@ -27,7 +27,7 @@ import de.longri.cachebox3.gui.views.TrackListView;
  */
 public class Action_Show_TrackListView extends Abstract_Action_ShowView {
     public Action_Show_TrackListView() {
-        super("Tracks", MenuID.AID_SHOW_TRACKLIST);
+        super(NOT_IMPLEMENTED, "Tracks", MenuID.AID_SHOW_TRACKLIST);
     }
 
     @Override

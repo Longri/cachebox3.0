@@ -25,7 +25,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
 public class Action_RecVideo extends AbstractAction {
 
     public Action_RecVideo() {
-        super("recVideos", MenuID.AID_VIDEO_REC);
+        super(NOT_IMPLEMENTED, "recVideos", MenuID.AID_VIDEO_REC);
     }
 
     @Override

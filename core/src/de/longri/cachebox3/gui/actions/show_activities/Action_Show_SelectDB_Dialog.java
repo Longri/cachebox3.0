@@ -47,13 +47,8 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
     private final ViewMode viewMode;
 
     public Action_Show_SelectDB_Dialog(ViewMode viewMode) {
-        super("manageDB", MenuID.AID_SHOW_SELECT_DB_DIALOG);
+        super(IMPLEMENTED, "manageDB", MenuID.AID_SHOW_SELECT_DB_DIALOG);
         this.viewMode = viewMode;
-    }
-
-    @Override
-    public boolean getEnabled() {
-        return true;
     }
 
     @Override

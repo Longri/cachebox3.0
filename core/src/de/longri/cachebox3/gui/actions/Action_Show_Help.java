@@ -29,7 +29,7 @@ public class Action_Show_Help extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_Show_Help.class);
 
     public Action_Show_Help() {
-        super("Help Online", MenuID.AID_HELP);
+        super(IMPLEMENTED, "Help Online", MenuID.AID_HELP);
     }
 
     @Override
@@ -37,10 +37,6 @@ public class Action_Show_Help extends AbstractAction {
         //PlatformConnector.callUrl("http://www.team-cachebox.de/index.php/de/kurzanleitung");
     }
 
-    @Override
-    public boolean getEnabled() {
-        return true;
-    }
 
     @Override
     public Drawable getIcon() {

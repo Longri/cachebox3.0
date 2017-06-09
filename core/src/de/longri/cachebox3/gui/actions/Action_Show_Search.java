@@ -25,7 +25,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
 public class Action_Show_Search extends AbstractAction {
 
     public Action_Show_Search() {
-        super("search", MenuID.AID_SEARCH);
+        super(NOT_IMPLEMENTED, "search", MenuID.AID_SEARCH);
     }
 
     @Override

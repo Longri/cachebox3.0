@@ -25,7 +25,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
 public class Action_TakePhoto extends AbstractAction {
 
     public Action_TakePhoto() {
-        super("takePhoto", MenuID.AID_TAKE_PHOTO);
+        super(NOT_IMPLEMENTED, "takePhoto", MenuID.AID_TAKE_PHOTO);
     }
 
     @Override

@@ -24,12 +24,12 @@ import de.longri.cachebox3.gui.views.AbstractView;
  * Created by Longri on 16.08.2016.
  */
 public abstract class Abstract_Action_ShowView extends AbstractAction {
-    public Abstract_Action_ShowView(String name, int id) {
-        super(name, id);
+    public Abstract_Action_ShowView(boolean disabled, String name, int id) {
+        super(disabled, name, id);
     }
 
-    public Abstract_Action_ShowView(String name, String nameExtention, int id) {
-        super(name, nameExtention, id);
+    public Abstract_Action_ShowView(boolean disabled, String name, String nameExtention, int id) {
+        super(disabled, name, nameExtention, id);
     }
 
     public abstract boolean hasContextMenu();
