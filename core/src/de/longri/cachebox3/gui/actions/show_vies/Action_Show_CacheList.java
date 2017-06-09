@@ -173,20 +173,20 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 
         MenuItem mi;
         cm.addItem(MenuID.MI_RESORT, "ResortList", CB.getSkin().getMenuIcon.sortIcon);
-        cm.addItem(MenuID.MI_FilterSet, "filter", CB.getSkin().getMenuIcon.filterIcon);
-        cm.addItem(MenuID.MI_RESET_FILTER, "MI_RESET_FILTER", CB.getSkin().getMenuIcon.resetFilterIcon);
-        cm.addItem(MenuID.MI_SEARCH_LIST, "search", CB.getSkin().getMenuIcon.searchIcon);
+        //ISSUE (#114 add FilterView)   cm.addItem(MenuID.MI_FilterSet, "filter", CB.getSkin().getMenuIcon.filterIcon);
+        //ISSUE (#114 add FilterView)  cm.addItem(MenuID.MI_RESET_FILTER, "MI_RESET_FILTER", CB.getSkin().getMenuIcon.resetFilterIcon);
+        //ISSUE (#115 Add search Dialog for ListView) cm.addItem(MenuID.MI_SEARCH_LIST, "search", CB.getSkin().getMenuIcon.searchIcon);
         mi = cm.addItem(MenuID.MI_IMPORT, "importExport", CB.getSkin().getMenuIcon.importIcon);
         mi.setMoreMenu(new ShowImportMenu());
-//        if (SyncActivity.RELEASED)
-//            cm.addItem(MenuID.MI_SYNC, "sync", CB.getSprite(IconNames.importIcon.name()));
-        mi = cm.addItem(MenuID.MI_MANAGE_DB, "manage", "  (" + DBName + ")", CB.getSkin().getMenuIcon.manageDB);
-        mi = cm.addItem(MenuID.MI_AUTO_RESORT, "AutoResort");
-        mi.setCheckable(true);
-        //    mi.setChecked(CB.getAutoResort());
-        cm.addItem(MenuID.MI_CHK_STATE_API, "chkState", CB.getSkin().getMenuIcon.GC_Live);
-        cm.addItem(MenuID.MI_NEW_CACHE, "MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon);
-        cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSkin().getMenuIcon.deleteIcon);
+        cm.addItem(MenuID.MI_MANAGE_DB, "manage", "  (" + DBName + ")", CB.getSkin().getMenuIcon.manageDB);
+        //ISSUE (#116 addAutoResort)  mi = cm.addItem(MenuID.MI_AUTO_RESORT, "AutoResort");
+        // mi.setCheckable(true);
+        // mi.setChecked(CB.getAutoResort());
+
+
+        //ISSUE (#117 add check state) cm.addItem(MenuID.MI_CHK_STATE_API, "chkState", CB.getSkin().getMenuIcon.GC_Live);
+        //ISSUE (#118 add new Cache) cm.addItem(MenuID.MI_NEW_CACHE, "MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon);
+        //ISSUE (#119 add delete Cache Dialog) cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSkin().getMenuIcon.deleteIcon);
 
         return cm;
     }

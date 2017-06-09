@@ -84,14 +84,11 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
         Menu icm = new Menu("menu_mapviewgl");
 
         icm.addItem(MenuID.MI_LAYER, "Layer");
-        icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
-        icm.addCheckableItem(MenuID.MI_ALIGN_TO_COMPSS, "AlignToCompass", mapViewInstance.getAlignToCompass());
-        icm.addItem(MenuID.MI_CENTER_WP, "CenterWP");
-        // icm.addItem(MenuID.MI_SETTINGS, "settings", Sprites.getSprite(IconName.settings.name()));
-        // icm.addItem(MenuID.MI_SEARCH, "search", SpriteCache.Icons.get(27));
+     //ISSUE (#110 add MapView Overlays) icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
+     //ISSUE (#111 MapView create WP at center)    icm.addItem(MenuID.MI_CENTER_WP, "CenterWP");
         icm.addItem(MenuID.MI_MAPVIEW_VIEW, "view");
-        icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
-        icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
+     //ISSUE (#112 Record Track)   icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
+     //ISSUE (#113 Add Map download)   icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
 
         icm.setOnItemClickListener(onItemClickListener);
         return icm;
@@ -255,9 +252,6 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
                     return true;
                 case MenuID.MI_MAPVIEW_VIEW:
                     showMapViewLayerMenu();
-                    return true;
-                case MenuID.MI_ALIGN_TO_COMPSS:
-                    mapViewInstance.setAlignToCompass(!mapViewInstance.getAlignToCompass());
                     return true;
                 case MenuID.MI_SHOW_ALL_WAYPOINTS:
                     toggleSetting(Settings_Map.ShowAllWaypoints);

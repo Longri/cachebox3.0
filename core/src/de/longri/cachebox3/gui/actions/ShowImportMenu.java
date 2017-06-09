@@ -29,16 +29,16 @@ public class ShowImportMenu extends Menu {
         super("ImportMenu");
         this.setOnItemClickListener(clickListener);
 
-        addItem(MenuID.MI_IMPORT_GPX, "GPX_IMPORT");
-        addItem(MenuID.MI_EXPORT_RUN, "export");
+        //ISSUE (#120 add GPX import)  addItem(MenuID.MI_IMPORT_GPX, "GPX_IMPORT");
+        //ISSUE (#121 add GPX export)  addItem(MenuID.MI_EXPORT_RUN, "export");
 
         addItem(MenuID.MI_IMPORT_GS, "API_IMPORT").setMoreMenu(getGcImportMenu());
 
 //        if (!StringH.isEmpty(Config.CBS_IP.getValue()))
 //            addItem(MenuID.MI_IMPORT_CBS, "CB-Server");
 
-        addItem(MenuID.MI_IMPORT_GCV, "GC_Vote");
-        addItem(MenuID.MI_IMPORT, "moreImport");
+        //ISSUE (#122 add GC_Vote import)   addItem(MenuID.MI_IMPORT_GCV, "GC_Vote");
+        //ISSUE (#123 add More Import)   addItem(MenuID.MI_IMPORT, "moreImport");
 
     }
 
@@ -78,9 +78,9 @@ public class ShowImportMenu extends Menu {
                 return true;
             }
         });
-        menu.addItem(MenuID.MI_IMPORT_GS_PQ, "API_PocketQuery");
+        //ISSUE (#124 add Import of PQ)  menu.addItem(MenuID.MI_IMPORT_GS_PQ, "API_PocketQuery");
         menu.addItem(MenuID.MI_IMPORT_GS_API_POSITION, "API_IMPORT_OVER_POSITION");
-        menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");
+        //ISSUE (#125 add Import over Name, owner code) menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");
 
         return menu;
     }

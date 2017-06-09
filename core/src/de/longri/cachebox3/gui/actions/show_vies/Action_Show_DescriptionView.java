@@ -88,23 +88,24 @@ public class Action_Show_DescriptionView extends Abstract_Action_ShowView {
 
         boolean isSelected = (EventHandler.getSelectedCache()!=null);
 
-        mi = cm.addItem(MenuID.MI_FAVORIT, "Favorite", CB.getSkin().getMenuIcon.favorit);
-        mi.setCheckable(true);
-        if (isSelected) {
-            mi.setChecked(EventHandler.getSelectedCache().isFavorite());
-        } else {
-            mi.setEnabled(false);
-        }
+      //ISSUE (#126 handle own favorites)  mi = cm.addItem(MenuID.MI_FAVORIT, "Favorite", CB.getSkin().getMenuIcon.favorit);
+//        mi.setCheckable(true);
+//        if (isSelected) {
+//            mi.setChecked(EventHandler.getSelectedCache().isFavorite());
+//        } else {
+//            mi.setEnabled(false);
+//        }
 
         boolean selectedCacheIsNoGC = false;
 
-        if (isSelected)
-            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().startsWith("GC");
-        mi = cm.addItem(MenuID.MI_RELOAD_CACHE, "ReloadCacheAPI", CB.getSkin().getIcon.GC_Live);
-        if (!isSelected)
-            mi.setEnabled(false);
-        if (selectedCacheIsNoGC)
-            mi.setEnabled(false);
+        //ISSUE (#127 Reload selected Cache)
+//        if (isSelected)
+//            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().startsWith("GC");
+//        mi = cm.addItem(MenuID.MI_RELOAD_CACHE, "ReloadCacheAPI", CB.getSkin().getIcon.GC_Live);
+//        if (!isSelected)
+//            mi.setEnabled(false);
+//        if (selectedCacheIsNoGC)
+//            mi.setEnabled(false);
 
         return cm;
     }

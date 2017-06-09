@@ -329,10 +329,12 @@ public class WaypointView extends AbstractView {
         cm.addItem(MenuID.MI_ADD, "AddWaypoint");
         if ((actWaypoint != null) && (actWaypoint.IsUserWaypoint))
             cm.addItem(MenuID.MI_DELETE, "delete");
-        if (actWaypoint != null || actCache != null)
-            cm.addItem(MenuID.MI_PROJECTION, "Projection");
 
-        cm.addItem(MenuID.MI_FROM_GPS, "FromGps");
+        //ISSUE (#128 Add Waypoint projection)
+//        if (actWaypoint != null || actCache != null)
+//            cm.addItem(MenuID.MI_PROJECTION, "Projection");
+
+        //ISSUE (#129 add measure WP from GPS)  cm.addItem(MenuID.MI_FROM_GPS, "FromGps");
 
         return cm;
     }
