@@ -32,10 +32,8 @@ import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
-import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
-import de.longri.cachebox3.gui.views.listview.ListView;
+import de.longri.cachebox3.gui.stages.initial_tasks.AbstractInitTask;
 import de.longri.cachebox3.utils.SkinColor;
-import org.oscim.backend.canvas.Paint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +42,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 11.01.17.
@@ -57,27 +56,51 @@ public class SvgSkinUtil {
     public final static String TMP_UI_ATLAS_PATH = "/user/temp/";
     public final static String TMP_UI_ATLAS = "_ui_tmp.atlas";
 
-    public static TextureAtlas createTextureAtlasFromImages(boolean forceNew, String skinName, ArrayList<ScaledSvg> scaledSvgList,
+    public static TextureAtlas createTextureAtlasFromImages(AbstractInitTask.WorkCallback callback, boolean forceNew, String skinName, ArrayList<ScaledSvg> scaledSvgList,
                                                             FileHandle skinFile) {
         FileHandle cachedTexturatlasFileHandle = null;
         if (!forceNew) {
             cachedTexturatlasFileHandle = Gdx.files.absolute(CB.WorkPath + TMP_UI_ATLAS_PATH + skinName + TMP_UI_ATLAS);
             if (cachedTexturatlasFileHandle.exists()) {
                 if (HashAtlasWriter.hashEquals(cachedTexturatlasFileHandle, scaledSvgList, skinFile)) {
-                    log.debug("Load cached TextureAtlas");
-                    return new TextureAtlas(cachedTexturatlasFileHandle);
+                    log.debug("load Skin | Load cached TextureAtlas");
+                    if (callback != null) callback.taskNameChange("load Skin | Load cached TextureAtlas");
+                    final AtomicBoolean wait = new AtomicBoolean(true);
+                    final TextureAtlas[] atlas = new TextureAtlas[1];
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    final FileHandle finalCachedTexturatlasFileHandle = cachedTexturatlasFileHandle;
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            atlas[0] = new TextureAtlas(finalCachedTexturatlasFileHandle);
+                            wait.set(false);
+                        }
+                    });
+
+                    while (wait.get()) {
+                        try {
+                            Thread.sleep(20);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return atlas[0];
                 }
             }
         }
         log.debug("Create new TextureAtlas");
-
+        if (callback != null) callback.taskNameChange("load Skin | Create new TextureAtlas");
         // max texture size are 2048x2048
         int pageWidth = 2048;
         int pageHeight = 2048;
         int padding = 4;
         boolean duplicateBorder = true;
 
-        PixmapPacker packer = new PixmapPacker(pageWidth, pageHeight, Pixmap.Format.RGBA8888, padding, duplicateBorder);
+        final PixmapPacker packer = new PixmapPacker(pageWidth, pageHeight, Pixmap.Format.RGBA8888, padding, duplicateBorder);
 
 
         for (ScaledSvg scaledSvg : scaledSvgList) {
@@ -86,7 +109,8 @@ public class SvgSkinUtil {
             String name = null;
 //            skinFile.parent().child(scaledSvg.path);
             FileHandle fileHandle = skinFile.parent().child(scaledSvg.path);
-
+            if (callback != null)
+                callback.taskNameChange("load Skin | Create new TextureAtlas \npack:" + scaledSvg.path);
             try {
                 name = scaledSvg.getRegisterName();
                 pixmap = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(name, fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale));
@@ -109,8 +133,30 @@ public class SvgSkinUtil {
         pixmap.fill();
         packer.pack("color", pixmap);
 
-        TextureAtlas atlas = packer.generateTextureAtlas(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.MipMapNearestNearest, true);
+        callback.taskNameChange("load Skin | Create new TextureAtlas \nGenerate Texture Atlas");
 
+        final AtomicBoolean wait = new AtomicBoolean(true);
+        final TextureAtlas[] atlas = new TextureAtlas[1];
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                atlas[0] = packer.generateTextureAtlas(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.MipMapNearestNearest, true);
+                wait.set(false);
+            }
+        });
+
+        while (wait.get()) {
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         PixmapPackerIO.SaveParameters parameters = new PixmapPackerIO.SaveParameters();
         parameters.magFilter = Texture.TextureFilter.MipMapNearestNearest;
         parameters.minFilter = Texture.TextureFilter.MipMapNearestNearest;
@@ -139,7 +185,7 @@ public class SvgSkinUtil {
 
         packer.dispose();
         pixmap.dispose();
-        return atlas;
+        return atlas[0];
     }
 
 
@@ -270,7 +316,7 @@ public class SvgSkinUtil {
                                         FrameAnimationDrawable fad = (FrameAnimationDrawable) valueObject;
                                         FrameAnimationStyle st = fad.getStyle();
                                         value = resolveObjectName(skin, FrameAnimationStyle.class, st);
-                                    }else{
+                                    } else {
                                         value = resolveObjectName(skin, Drawable.class, valueObject);
                                     }
 

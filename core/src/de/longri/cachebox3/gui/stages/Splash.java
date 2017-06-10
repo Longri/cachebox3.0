@@ -18,10 +18,8 @@ package de.longri.cachebox3.gui.stages;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
@@ -140,7 +138,7 @@ public class Splash extends NamedStage {
         String path = "skins/day/fonts/DroidSans.ttf";
         labelStyle.fontColor = Color.BLACK;
         labelStyle.font = new SkinFont(path, Gdx.files.internal(path), 20);
-        workLabel = new Label("", labelStyle);
+        workLabel = new Label(" \n ", labelStyle);
         workLabel.setBounds(margin, margin + progress.getPrefHeight() + margin, progressWidth, workLabel.getPrefHeight());
         this.addActor(workLabel);
 

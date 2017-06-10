@@ -15,6 +15,7 @@
  */
 package com.badlogic.gdx.scenes.scene2d.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -30,6 +31,7 @@ import de.longri.cachebox3.gui.skin.styles.ColorDrawableStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.IconsStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
+import de.longri.cachebox3.gui.stages.initial_tasks.AbstractInitTask;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
@@ -38,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 20.07.2016.
@@ -48,7 +51,7 @@ public class SvgSkin extends Skin {
     private boolean forceCreateNewAtlas = false;
     public IconsStyle getIcon;
     public MenuIconStyle getMenuIcon;
-
+    private final AbstractInitTask.WorkCallback callback;
 
     public enum StorageType {
         LOCAL, INTERNAL
@@ -63,6 +66,7 @@ public class SvgSkin extends Skin {
         this.storageType = null;
         this.name = null;
         this.skinFolder = null;
+        this.callback = null;
     }
 
     public SvgSkin(String name) {
@@ -70,6 +74,7 @@ public class SvgSkin extends Skin {
         this.storageType = null;
         this.name = name;
         this.skinFolder = null;
+        this.callback = null;
     }
 
 
@@ -78,6 +83,7 @@ public class SvgSkin extends Skin {
         this.storageType = null;
         this.name = null;
         this.skinFolder = null;
+        this.callback = null;
     }
 
 
@@ -89,8 +95,9 @@ public class SvgSkin extends Skin {
      * @param storageType LOCAL or INTERNAL
      * @param skinFolder  {@link FileHandle} to the folder of this skin
      */
-    public SvgSkin(boolean forceCreateNewAtlas, String name, StorageType storageType, FileHandle skinFolder) {
+    public SvgSkin(AbstractInitTask.WorkCallback callback, boolean forceCreateNewAtlas, String name, StorageType storageType, FileHandle skinFolder) {
         super();
+        this.callback = callback;
         this.storageType = storageType;
         this.name = name;
         this.forceCreateNewAtlas = forceCreateNewAtlas;
@@ -210,7 +217,6 @@ public class SvgSkin extends Skin {
 
 
         final Skin skin = this;
-
         final Json json = new Json() {
             public <T> T readValue(Class<T> type, Class elementType, JsonValue jsonData) {
 
@@ -273,7 +279,7 @@ public class SvgSkin extends Skin {
                 }
 
                 //create and register atlas
-                SvgSkin.this.addRegions(SvgSkinUtil.createTextureAtlasFromImages(forceCreateNewAtlas, SvgSkin.this.name, registerdSvgs, skinFile));
+                SvgSkin.this.addRegions(SvgSkinUtil.createTextureAtlasFromImages(callback, forceCreateNewAtlas, SvgSkin.this.name, registerdSvgs, skinFile));
             }
 
 
@@ -414,16 +420,38 @@ public class SvgSkin extends Skin {
 
         json.setSerializer(BitmapFont.class, new Json.ReadOnlySerializer<BitmapFont>() {
             public BitmapFont read(Json json, JsonValue jsonData, Class type) {
-                String path = json.readValue("font", String.class, jsonData);
-                int scaledSize = json.readValue("size", int.class, -1, jsonData);
+                final String path = json.readValue("font", String.class, jsonData);
+                final int scaledSize = json.readValue("size", int.class, -1, jsonData);
 
-                FileHandle fontFile = skinFile.parent().child(path);
-//                if (!fontFile.exists()) fontFile = Gdx.files.internal(path);
+                final FileHandle fontFile = skinFile.parent().child(path);
                 if (!fontFile.exists()) throw new SerializationException("Font file not found: " + fontFile);
 
                 try {
-                    SkinFont font = new SkinFont(path, fontFile, scaledSize);
-                    return font;
+                    callback.taskNameChange("Generate Fonts");
+
+                    final AtomicBoolean wait = new AtomicBoolean(true);
+                    final SkinFont[] font = new SkinFont[1];
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            font[0] = new SkinFont(path, fontFile, scaledSize);
+                            wait.set(false);
+                        }
+                    });
+
+                    while (wait.get()) {
+                        try {
+                            Thread.sleep(20);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return font[0];
                 } catch (RuntimeException ex) {
                     throw new SerializationException("Error loading bitmap font: " + fontFile, ex);
                 }
