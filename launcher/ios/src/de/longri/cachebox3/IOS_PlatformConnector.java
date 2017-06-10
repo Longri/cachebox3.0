@@ -164,14 +164,42 @@ public class IOS_PlatformConnector extends PlatformConnector {
         return new FileHandle(new File(System.getenv("HOME"), "Library/local/" + fileName).getAbsolutePath());
     }
 
-    @Override
-    public void _getMultilineTextInput(Input.TextInputListener listener, String title, String text, String hint) {
+    IOS_TextInputView textInputView;
 
-        IOS_TextInputView textInputView = new IOS_TextInputView(((IOSApplication) Gdx.app).getUIWindow()
-                .getRootViewController(), text);
+    @Override
+    public void _getMultilineTextInput(final Input.TextInputListener listener, String title, String text, String hint) {
+
+        textInputView = new IOS_TextInputView(((IOSApplication) Gdx.app).getUIWindow()
+                .getRootViewController(), text, new IOS_TextInputView.Callback() {
+            @Override
+            public void okClicked(String text) {
+                listener.input(text);
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        disposeInputView();
+                    }
+                });
+            }
+
+            @Override
+            public void cancelClicked() {
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        disposeInputView();
+                    }
+                });
+            }
+        });
 
 
         // buildUIAlertView(listener, title, text, hint);
+    }
+
+    private void disposeInputView(){
+        textInputView.dispose();
+        textInputView=null;
     }
 
     // Issue 773 indicates this may solve a premature GC issue

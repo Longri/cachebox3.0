@@ -10,10 +10,17 @@ import org.robovm.apple.uikit.*;
  */
 public class IOS_TextInputView extends UIView {
 
+    public interface Callback {
+        void okClicked(String text);
+
+        void cancelClicked();
+    }
+
+
     UIViewController mainViewController;
     final UIButton okButton, cancelButton;
 
-    public IOS_TextInputView(UIViewController mainViewController, String text) {
+    public IOS_TextInputView(UIViewController mainViewController, String text, final Callback callback) {
         this.mainViewController = mainViewController;
         ((IOSApplication) Gdx.app).getUIWindow().addSubview(this);
 
@@ -70,6 +77,22 @@ public class IOS_TextInputView extends UIView {
 
         rect = new CGRect(0, 0, width, height);
         this.setFrame(rect);
+
+        this.okButton.addOnTouchUpInsideListener(new UIControl.OnTouchUpInsideListener() {
+            @Override
+            public void onTouchUpInside(UIControl uiControl, UIEvent uiEvent) {
+                callback.okClicked(textView.getText());
+                IOS_TextInputView.this.removeFromSuperview();
+            }
+        });
+
+        this.cancelButton.addOnTouchUpInsideListener(new UIControl.OnTouchUpInsideListener() {
+            @Override
+            public void onTouchUpInside(UIControl uiControl, UIEvent uiEvent) {
+                callback.cancelClicked();
+                IOS_TextInputView.this.removeFromSuperview();
+            }
+        });
     }
 
 
