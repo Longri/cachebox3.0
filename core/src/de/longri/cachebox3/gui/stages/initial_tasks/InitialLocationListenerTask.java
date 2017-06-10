@@ -27,7 +27,7 @@ public final class InitialLocationListenerTask extends AbstractInitTask {
     }
 
     @Override
-    public void runnable() {
+    public void runnable(WorkCallback callback) {
         PlatformConnector.initLocationListener();
     }
 }

@@ -38,9 +38,9 @@ public final class TranslationLoaderTask extends AbstractInitTask {
     }
 
     @Override
-    public void runnable() {
+    public void runnable(WorkCallback callback) {
         new Translation("lang");
-
+        callback.taskNameChange("Load Translation");
         loadTranslation();
 
         // add settings change handler

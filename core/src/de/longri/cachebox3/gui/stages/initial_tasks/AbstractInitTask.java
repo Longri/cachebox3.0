@@ -20,6 +20,10 @@ package de.longri.cachebox3.gui.stages.initial_tasks;
  */
 public abstract class AbstractInitTask {
 
+    public interface WorkCallback {
+        void taskNameChange(String text);
+    }
+
     public final String name;
     public final int percent;
 
@@ -28,7 +32,7 @@ public abstract class AbstractInitTask {
         this.percent = percent;
     }
 
-    public abstract void runnable();
+    public abstract void runnable(WorkCallback callback);
 
 }
 

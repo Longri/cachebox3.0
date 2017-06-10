@@ -41,7 +41,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
     }
 
     @Override
-    public void runnable() {
+    public void runnable(WorkCallback callback) {
 
         CB.WorkPath = PlatformConnector.getWorkPath();
 
@@ -52,6 +52,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
         // initial Database on user path
         ini_Dir(CB.WorkPath + "/user", false);
 
+        callback.taskNameChange("open/create settings DB");
         try {
             FileHandle configFileHandle = Gdx.files.absolute(CB.WorkPath + "/user/config.db3");
             Database.Settings = new Database(Database.DatabaseType.Settings);
@@ -71,6 +72,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
 
 
         //load settings
+        callback.taskNameChange("load settings");
         Config.ReadFromDB();
 
 
@@ -90,6 +92,8 @@ public class InitialWorkPathTask extends AbstractInitTask {
 
         //copy attributes*.png to data folder
         //this png files are used on description view, as Html image
+
+        callback.taskNameChange("generate attributes images");
         FileHandle attFileHandle = dataFileHandle.child("Attributes");
         attFileHandle.mkdirs();
 
@@ -103,6 +107,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
 
 //DEBUG SKIN set for debug
 //        Config.daySkinName.setValue("testDay");
+        callback.taskNameChange("load skin");
         Config.daySkinName.loadDefault();
 
     }

@@ -30,7 +30,8 @@ public final class GdxInitialTask extends AbstractInitTask {
     }
 
     @Override
-    public void runnable() {
+    public void runnable(WorkCallback callback) {
+        callback.taskNameChange("Initial openGL");
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         StageManager.setInputMultiplexer(inputMultiplexer);
         Gdx.input.setInputProcessor(inputMultiplexer);

@@ -18,10 +18,14 @@ package de.longri.cachebox3.gui.stages;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.SkinFont;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -59,6 +63,7 @@ public class Splash extends NamedStage {
 
 
     VisProgressBar progress;
+    Label workLabel;
     Image OSM_Logo, Route_Logo, Mapsforge_Logo, LibGdx_Logo, GC_Logo;
 
     Label descTextView;
@@ -129,8 +134,15 @@ public class Splash extends NamedStage {
         progress.setBounds(margin, margin, progressWidth, margin);
         this.addActor(progress);
 
-
         progress.setValue(0);
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        String path = "skins/day/fonts/DroidSans.ttf";
+        labelStyle.fontColor = Color.BLACK;
+        labelStyle.font = new SkinFont(path, Gdx.files.internal(path), 20);
+        workLabel = new Label("", labelStyle);
+        workLabel.setBounds(margin, margin + progress.getPrefHeight() + margin, progressWidth, workLabel.getPrefHeight());
+        this.addActor(workLabel);
 
         // Init loader tasks
         initTaskList.add(new InitialWorkPathTask("InitialWorkPAth", 5));
@@ -160,7 +172,12 @@ public class Splash extends NamedStage {
                 @Override
                 public void run() {
                     for (AbstractInitTask task : initTaskList) {
-                        task.runnable();
+                        task.runnable(new AbstractInitTask.WorkCallback() {
+                            @Override
+                            public void taskNameChange(String text) {
+                                workLabel.setText(text);
+                            }
+                        });
                         progress.setValue(progress.getValue() + task.percent);
                     }
                     loadReadyHandler.ready();
@@ -173,5 +190,4 @@ public class Splash extends NamedStage {
     }
 
     AssetManager assets;
-
 }

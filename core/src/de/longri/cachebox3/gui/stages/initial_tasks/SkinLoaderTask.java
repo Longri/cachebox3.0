@@ -37,7 +37,7 @@ public final class SkinLoaderTask extends AbstractInitTask {
     }
 
     @Override
-    public void runnable() {
+    public void runnable(WorkCallback callback) {
 
         //initial sizes
         DevicesSizes ui = new DevicesSizes();
@@ -101,6 +101,7 @@ public final class SkinLoaderTask extends AbstractInitTask {
         final String finalSkinName = skinName;
         final SvgSkin.StorageType finalType = storageType;
         final FileHandle finalSkinFileHandle = skinFileHandle;
+        callback.taskNameChange("load " + finalSkinName + " Skin");
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {

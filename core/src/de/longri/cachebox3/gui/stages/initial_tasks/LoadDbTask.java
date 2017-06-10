@@ -21,7 +21,7 @@ public class LoadDbTask extends AbstractInitTask {
     }
 
     @Override
-    public void runnable() {
+    public void runnable(WorkCallback callback) {
 
         Gdx.app.postRunnable(new Runnable() {
             @Override
@@ -42,14 +42,11 @@ public class LoadDbTask extends AbstractInitTask {
                     selectDbDialog.execute();
                     //TODO wait for return;
                 } else {
-
                     if (fileList.size == 0) {
                         Config.DatabaseName.setValue("cachebox.db3");
                     } else {
                         Config.DatabaseName.setValue(Utils.GetFileName(fileList.get(0).getName()));
                     }
-
-
                     selectDbDialog.loadSelectedDB();
                 }
             }
