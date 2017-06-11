@@ -80,42 +80,46 @@ public class ApiButton extends IconButton {
 
     private final ClickListener clickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
-            log.debug("Create Api Key clicked");
-            PlatformConnector.getApiKey(new GenericCallBack<String>() {
-                @Override
-                public void callBack(String accessToken) {
-                    log.debug("return create ApiKey :{}", accessToken);
-
-                    GroundspeakAPI.CacheStatusValid = false;
-                    GroundspeakAPI.CacheStatusLiteValid = false;
-
-                    // store the encrypted AccessToken in the Config file
-                    if (Config.StagingAPI.getValue()) {
-                        Config.GcAPIStaging.setEncryptedValue(accessToken);
-                    } else {
-                        Config.GcAPI.setEncryptedValue(accessToken);
-                    }
-
-                    Config.AcceptChanges();
-                    String act = GroundspeakAPI.getAccessToken();
-                    if (act.length() > 0) {
-                        GroundspeakAPI.getMembershipType(new GenericCallBack<Integer>() {
-                            @Override
-                            public void callBack(Integer status) {
-                                if (status >= 0) {
-                                    log.debug("Read User Name/State {}/{}", GroundspeakAPI.memberName, status);
-                                    Config.GcLoginName.setValue(GroundspeakAPI.memberName);
-                                    Config.AcceptChanges();
-                                    CB.viewmanager.toast("Welcome : " + GroundspeakAPI.memberName);
-                                } else {
-                                    CB.viewmanager.toast("Welcome : " + GroundspeakAPI.memberName);
-                                    log.debug("Can't read UserName State: {}", GroundspeakAPI.memberName, status);
-                                }
-                            }
-                        });
-                    }
-                }
-            });
+            generateKey();
         }
     };
+
+    public void generateKey() {
+        log.debug("Create Api Key clicked");
+        PlatformConnector.getApiKey(new GenericCallBack<String>() {
+            @Override
+            public void callBack(String accessToken) {
+                log.debug("return create ApiKey :{}", accessToken);
+
+                GroundspeakAPI.CacheStatusValid = false;
+                GroundspeakAPI.CacheStatusLiteValid = false;
+
+                // store the encrypted AccessToken in the Config file
+                if (Config.StagingAPI.getValue()) {
+                    Config.GcAPIStaging.setEncryptedValue(accessToken);
+                } else {
+                    Config.GcAPI.setEncryptedValue(accessToken);
+                }
+
+                Config.AcceptChanges();
+                String act = GroundspeakAPI.getAccessToken();
+                if (act.length() > 0) {
+                    GroundspeakAPI.getMembershipType(new GenericCallBack<Integer>() {
+                        @Override
+                        public void callBack(Integer status) {
+                            if (status >= 0) {
+                                log.debug("Read User Name/State {}/{}", GroundspeakAPI.memberName, status);
+                                Config.GcLoginName.setValue(GroundspeakAPI.memberName);
+                                Config.AcceptChanges();
+                                CB.viewmanager.toast("Welcome : " + GroundspeakAPI.memberName);
+                            } else {
+                                CB.viewmanager.toast("Welcome : " + GroundspeakAPI.memberName);
+                                log.debug("Can't read UserName State: {}", GroundspeakAPI.memberName, status);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
 }

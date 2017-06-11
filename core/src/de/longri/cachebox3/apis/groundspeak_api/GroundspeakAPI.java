@@ -289,6 +289,7 @@ public class GroundspeakAPI {
             callBack.callBack(membershipType);
             return;
         }
+        log.debug(("API is not checked, call API check"));
         final GetYourUserProfile getYourUserProfile = new GetYourUserProfile(getAccessToken());
         getYourUserProfile.post(new GenericCallBack<Integer>() {
             @Override

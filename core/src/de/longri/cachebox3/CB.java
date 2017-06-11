@@ -23,12 +23,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.GpsEventHelper;
+import de.longri.cachebox3.gui.dialogs.GetApiKeyQuestionDialog;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.locator.track.Track;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.utils.ScaledSizes;
@@ -40,6 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Static class
@@ -282,9 +288,64 @@ public class CB {
         asyncExecutor.submit(new AsyncTask<Void>() {
             @Override
             public Void call() throws Exception {
-                runnable.run();
+                try {
+                    runnable.run();
+                } catch (final Exception e) {
+                    // throw on main thread, async executor will catch them
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            throw e;
+                        }
+                    });
+                }
                 return null;
             }
         });
+    }
+
+    public static boolean checkApiKeyNeeded() {
+        if (Config.GcAPI.getValue() == null || Config.GcAPI.getValue().isEmpty()) {
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    new GetApiKeyQuestionDialog().show();
+                }
+            });
+            return true;
+        }
+
+        //check if expired
+        final AtomicBoolean expired = new AtomicBoolean(false);
+        final AtomicBoolean wait = new AtomicBoolean(true);
+        GroundspeakAPI.getMembershipType(new GenericCallBack<Integer>() {
+            @Override
+            public void callBack(Integer value) {
+                if (value == -3) expired.set(true);
+                wait.set(false);
+            }
+        });
+
+
+        while (wait.get()) {
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (expired.get()) {
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    String msg = Translation.Get("apiKeyExpired") + "\n\n"
+                            + Translation.Get("wantApi");
+                    new GetApiKeyQuestionDialog(msg).show();
+                }
+            });
+            return true;
+        }
+        return false;
     }
 }

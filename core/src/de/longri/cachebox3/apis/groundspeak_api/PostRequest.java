@@ -31,7 +31,7 @@ import java.io.StringWriter;
  * Created by Longri on 14.04.17.
  */
 public abstract class PostRequest {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(GroundspeakAPI.class);
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(PostRequest.class);
     final static String GS_LIVE_URL = "https://api.groundspeak.com/LiveV6/geocaching.svc/";
     final static String STAGING_GS_LIVE_URL = "https://staging.api.groundspeak.com/Live/V6Beta/geocaching.svc/";
 
@@ -42,6 +42,7 @@ public abstract class PostRequest {
     protected final String gcApiKey;
 
     public PostRequest(String gcApiKey) {
+        if (gcApiKey == null || gcApiKey.isEmpty()) throw new RuntimeException("ApiKey is empty, can't get any result");
         this.gcApiKey = gcApiKey;
     }
 

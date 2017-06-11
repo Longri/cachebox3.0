@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.actions;
 
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.activities.ImportGcPos;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
@@ -68,7 +69,9 @@ public class ShowImportMenu extends Menu {
 //                        imp.show();
                         return true;
                     case MenuID.MI_IMPORT_GS_API_POSITION:
-                        new ImportGcPos().show();
+                        if (!CB.checkApiKeyNeeded()) {
+                            new ImportGcPos().show();
+                        }
                         return true;
                     case MenuID.MI_IMPORT_GS_API_SEARCH:
 //                        SearchOverNameOwnerGcCode.ShowInstanz();

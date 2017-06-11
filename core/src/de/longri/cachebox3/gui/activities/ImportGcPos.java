@@ -323,14 +323,13 @@ public class ImportGcPos extends ActivityBase {
             @Override
             public void progressChanged(ImportProgressChangedEvent event) {
 
-                if(event.progress.msg.equals("Start parsing result")){
+                if (event.progress.msg.equals("Start parsing result")) {
                     progressBar.setVisible(true);
                     lblCaches.setVisible(true);
                     lblWaypoints.setVisible(true);
                     lblLogs.setVisible(true);
                     lblImages.setVisible(true);
                 }
-
 
                 progressBar.setValue(event.progress.progress);
                 lblCaches.setText("Imported Caches: " + event.progress.caches);
@@ -403,6 +402,20 @@ public class ImportGcPos extends ActivityBase {
 
                                 log.debug(Msg);
                                 CB.viewmanager.toast(Msg);
+
+                                //remove Progress handler
+                                EventHandler.remove(progressListener);
+
+                                //close Dialog
+                                finish();
+
+                                //fire CacheList changed event
+                                CacheListChangedEventList.Call();
+                            }
+                            {
+                                //Error
+                                log.debug("ERROR");
+                                CB.viewmanager.toast("ERROR");
 
                                 //remove Progress handler
                                 EventHandler.remove(progressListener);
