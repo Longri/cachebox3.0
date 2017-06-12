@@ -280,6 +280,35 @@ public class CB {
         });
     }
 
+    public static void setMainThread(Thread mainThread) {
+        MAIN_THREAD = mainThread;
+    }
+
+    public static void postOnMainThread(final Runnable runnable, boolean wait) {
+        if (isMainThread()) {
+            runnable.run();
+            return;
+        }
+        final AtomicBoolean WAIT = new AtomicBoolean(wait);
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                runnable.run();
+                WAIT.set(false);
+            }
+        });
+
+        while (WAIT.get()) {
+            Gdx.graphics.requestRendering();
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return;
+    }
+
     public static Cache getCacheFromId(long cacheId) {
         return Database.Data.Query.GetCacheById(cacheId);
     }

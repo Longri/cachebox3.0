@@ -427,7 +427,7 @@ public class SvgSkin extends Skin {
                 if (!fontFile.exists()) throw new SerializationException("Font file not found: " + fontFile);
 
                 try {
-                    callback.taskNameChange("Generate Fonts");
+                    if (callback != null) callback.taskNameChange("Generate Fonts");
 
                     final AtomicBoolean wait = new AtomicBoolean(true);
                     final SkinFont[] font = new SkinFont[1];
@@ -436,21 +436,13 @@ public class SvgSkin extends Skin {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            font[0] = new SkinFont(path, fontFile, scaledSize);
-                            wait.set(false);
-                        }
-                    });
 
-                    while (wait.get()) {
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                   CB.postOnMainThread(new Runnable() {
+                       @Override
+                       public void run() {
+                           font[0] = new SkinFont(path, fontFile, scaledSize);
+                       }
+                   },true);
                     return font[0];
                 } catch (RuntimeException ex) {
                     throw new SerializationException("Error loading bitmap font: " + fontFile, ex);

@@ -65,7 +65,6 @@ public class SvgSkinUtil {
                 if (HashAtlasWriter.hashEquals(cachedTexturatlasFileHandle, scaledSvgList, skinFile)) {
                     log.debug("load Skin | Load cached TextureAtlas");
                     if (callback != null) callback.taskNameChange("load Skin | Load cached TextureAtlas");
-                    final AtomicBoolean wait = new AtomicBoolean(true);
                     final TextureAtlas[] atlas = new TextureAtlas[1];
                     try {
                         Thread.sleep(50);
@@ -73,21 +72,12 @@ public class SvgSkinUtil {
                         e.printStackTrace();
                     }
                     final FileHandle finalCachedTexturatlasFileHandle = cachedTexturatlasFileHandle;
-                    Gdx.app.postRunnable(new Runnable() {
+                    CB.postOnMainThread(new Runnable() {
                         @Override
                         public void run() {
                             atlas[0] = new TextureAtlas(finalCachedTexturatlasFileHandle);
-                            wait.set(false);
                         }
-                    });
-
-                    while (wait.get()) {
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    },true);
                     return atlas[0];
                 }
             }
@@ -109,8 +99,13 @@ public class SvgSkinUtil {
             String name = null;
 //            skinFile.parent().child(scaledSvg.path);
             FileHandle fileHandle = skinFile.parent().child(scaledSvg.path);
-            if (callback != null)
+
+            if(!fileHandle.exists())continue;
+            if (callback != null){
                 callback.taskNameChange("load Skin | Create new TextureAtlas \npack:" + scaledSvg.path);
+            }
+
+
             try {
                 name = scaledSvg.getRegisterName();
                 pixmap = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(name, fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale));
@@ -133,30 +128,22 @@ public class SvgSkinUtil {
         pixmap.fill();
         packer.pack("color", pixmap);
 
-        callback.taskNameChange("load Skin | Create new TextureAtlas \nGenerate Texture Atlas");
+        if (callback != null) callback.taskNameChange("load Skin | Create new TextureAtlas \nGenerate Texture Atlas");
 
-        final AtomicBoolean wait = new AtomicBoolean(true);
         final TextureAtlas[] atlas = new TextureAtlas[1];
         try {
             Thread.sleep(50);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Gdx.app.postRunnable(new Runnable() {
+
+        CB.postOnMainThread(new Runnable() {
             @Override
             public void run() {
                 atlas[0] = packer.generateTextureAtlas(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.MipMapNearestNearest, true);
-                wait.set(false);
             }
-        });
+        },true);
 
-        while (wait.get()) {
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
         PixmapPackerIO.SaveParameters parameters = new PixmapPackerIO.SaveParameters();
         parameters.magFilter = Texture.TextureFilter.MipMapNearestNearest;
         parameters.minFilter = Texture.TextureFilter.MipMapNearestNearest;

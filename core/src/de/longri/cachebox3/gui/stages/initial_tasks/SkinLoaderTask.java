@@ -94,8 +94,6 @@ public final class SkinLoaderTask extends AbstractInitTask {
             }
         }
 
-
-        // the SvgSkin must create in a OpenGL context. so we post a runnable and wait!
         final AtomicBoolean wait = new AtomicBoolean(true);
 
         final String finalSkinName = skinName;

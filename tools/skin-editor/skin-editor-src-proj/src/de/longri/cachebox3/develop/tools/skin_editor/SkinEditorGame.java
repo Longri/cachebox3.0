@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SavableSvgSkin;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.WelcomeScreen;
 
@@ -64,6 +65,7 @@ public class SkinEditorGame extends Game {
     @Override
     public void create() {
 
+        CB.setMainThread(Thread.currentThread());
 
         opt = new OptionalChecker();
 

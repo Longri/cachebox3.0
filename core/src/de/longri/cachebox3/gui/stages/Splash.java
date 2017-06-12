@@ -172,8 +172,13 @@ public class Splash extends NamedStage {
                     for (AbstractInitTask task : initTaskList) {
                         task.runnable(new AbstractInitTask.WorkCallback() {
                             @Override
-                            public void taskNameChange(String text) {
-                                workLabel.setText(text);
+                            public void taskNameChange(final String text) {
+                                Gdx.app.postRunnable(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        workLabel.setText(text);
+                                    }
+                                });
                             }
                         });
                         progress.setValue(progress.getValue() + task.percent);

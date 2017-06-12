@@ -33,7 +33,7 @@ public class SavableSvgSkin extends SvgSkin {
     }
 
     public SavableSvgSkin(boolean forceCreateNewAtlas, String name, StorageType storageType, FileHandle skinFolder) {
-        super(forceCreateNewAtlas, name, storageType, skinFolder);
+        super(null,forceCreateNewAtlas, name, storageType, skinFolder);
     }
 
 
