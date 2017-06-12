@@ -183,8 +183,10 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         log.debug("OrientationState {}| MapBearing {}| ArrowHeading {}", this.infoPanel.getOrientationState(), mapBearing, arrowHeading);
 
         infoPanel.setNewValues(myPosition, -mapBearing);
-        myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
-        myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
+        if (myPosition != null) {
+            myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
+            myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
+        }
         CB.requestRendering();
     }
 

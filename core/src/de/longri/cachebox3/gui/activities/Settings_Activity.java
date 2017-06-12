@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -37,6 +38,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
@@ -489,7 +491,7 @@ public class Settings_Activity extends ActivityBase {
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingEnum<?>) {
             return getEnumView(listIndex, (SettingEnum<?>) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingString) {
-            return getStringView((de.longri.cachebox3.settings.types.SettingString) setting);
+            return getStringView(listIndex, (SettingString) setting);
 //        } else if (setting instanceof SettingsListCategoryButton) {
 //            return getButtonView((SettingsListCategoryButton<?>) setting);
         } else if (setting instanceof SettingsListGetApiButton) {
@@ -528,8 +530,67 @@ public class Settings_Activity extends ActivityBase {
         return null;
     }
 
-    private ListViewItem getStringView(de.longri.cachebox3.settings.types.SettingString setting) {
-        return null;
+    private ListViewItem getStringView(int listIndex, final SettingString setting) {
+        ListViewItem table = new ListViewItem(listIndex) {
+            @Override
+            public void dispose() {
+            }
+        };
+
+        // add label with category name, align left
+        table.left();
+        VisLabel label = new VisLabel(Translation.Get(setting.getName()), nameStyle);
+        label.setWrap(true);
+        label.setAlignment(Align.left);
+        table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        // add value label
+        table.row();
+        final VisLabel valuelabel = new VisLabel("Value: " + setting.getValue(), valueStyle);
+        valuelabel.setWrap(true);
+        valuelabel.setAlignment(Align.left);
+        table.add(valuelabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        // add description line if description exist
+        String description = Translation.Get("Desc_" + setting.getName());
+        if (!description.contains("$ID:")) {
+            table.row();
+            VisLabel desclabel = new VisLabel(description, descStyle);
+            desclabel.setWrap(true);
+            desclabel.setAlignment(Align.left);
+            table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        }
+
+        // add defaultValue line
+
+        table.row();
+        VisLabel desclabel = new VisLabel("default: " + String.valueOf(setting.getDefaultValue()), defaultValuStyle);
+        desclabel.setWrap(true);
+        desclabel.setAlignment(Align.left);
+        table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        // add clickListener
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.getType() == InputEvent.Type.touchUp) {
+                    // show multi line input dialog
+                    PlatformConnector.getMultilineTextInput(new Input.TextInputListener() {
+                        @Override
+                        public void input(String text) {
+                            setting.setValue(text);
+                            valuelabel.setText("Value: " + setting.getValue());
+                            CB.requestRendering();
+                        }
+
+                        @Override
+                        public void canceled() {
+
+                        }
+                    }, Translation.Get(setting.getName()), setting.getValue(), "");
+                }
+            }
+        });
+        return table;
     }
 
     private ListViewItem getEnumView(int listIndex, final SettingEnum<?> setting) {
