@@ -132,6 +132,22 @@
       "path": "svg/att_Dogs_1.svg",
       "scale": 0.5
     },
+    "att_May_require_swimming_0": {
+      "path": "svg/att_May_require_swimming_0.svg",
+      "scale": 0.5
+    },
+    "att_May_require_swimming_1": {
+      "path": "svg/att_May_require_swimming_1.svg",
+      "scale": 0.5
+    },
+    "att_May_require_wading_0": {
+      "path": "svg/att_May_require_wading_0.svg",
+      "scale": 0.5
+    },
+    "att_May_require_wading_1": {
+      "path": "svg/att_May_require_wading_1.svg",
+      "scale": 0.5
+    },
     "att_Parking_available_0": {
       "path": "svg/att_Parking_available_0.svg",
       "scale": 0.5
@@ -2235,6 +2251,8 @@
       "att_Takes_less_than_an_hour_0": "att_Takes_less_than_an_hour_0",
       "att_Scenic_view_0": "att_Scenic_view_0",
       "att_Difficult_climbing_0": "att_Difficult_climbing_0",
+      "att_May_require_wading_0": "att_May_require_wading_0",
+      "att_May_require_swimming_0": "att_May_require_swimming_0",
       "att_Available_at_all_times_0": "att_Available_at_all_times_0",
       "att_Recommended_at_night_0": "att_Recommended_at_night_0",
       "att_Available_during_winter_0": "att_Available_during_winter_0",
@@ -2248,6 +2266,8 @@
       "att_Takes_less_than_an_hour_1": "att_Takes_less_than_an_hour_1",
       "att_Scenic_view_1": "att_Scenic_view_1",
       "att_Difficult_climbing_1": "att_Difficult_climbing_1",
+      "att_May_require_wading_1": "att_May_require_wading_1",
+      "att_May_require_swimming_1": "att_May_require_swimming_1",
       "att_Available_at_all_times_1": "att_Available_at_all_times_1",
       "att_Recommended_at_night_1": "att_Recommended_at_night_1",
       "att_Available_during_winter_1": "att_Available_during_winter_1",
