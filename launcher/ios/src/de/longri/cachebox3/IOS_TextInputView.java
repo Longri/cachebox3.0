@@ -38,13 +38,19 @@ public class IOS_TextInputView extends UIView {
         ((IOSApplication) Gdx.app).getUIWindow().addSubview(this);
 
 
-        this.setBackgroundColor(UIColor.red());
+        this.setBackgroundColor(UIColor.fromRGBA(0.75, 0.75, 0.8, 1.0));
 
         this.okButton = new UIButton(UIButtonType.System);
         this.cancelButton = new UIButton(UIButtonType.RoundedRect);
 
-        this.okButton.setBackgroundColor(UIColor.lightGray());
-        this.cancelButton.setBackgroundColor(UIColor.lightGray());
+
+        UIColor buttonColor = UIColor.fromRGBA(0.55, 0.55, 0.57, 1.0);
+
+        this.okButton.setBackgroundColor(buttonColor);
+        this.cancelButton.setBackgroundColor(buttonColor);
+
+        this.okButton.setTitleColor(UIColor.black(), UIControlState.Normal);
+        this.cancelButton.setTitleColor(UIColor.black(), UIControlState.Normal);
 
 
         this.okButton.setTitle("ok", UIControlState.Normal);
@@ -89,13 +95,7 @@ public class IOS_TextInputView extends UIView {
         textView.setDelegate(new UITextViewDelegateAdapter() {
             @Override
             public void didChange(UITextView uiTextView) {
-                CGRect currentRect = getSize(uiTextView.getText());
-                if (previousRect != CGRect.Zero()) {
-                    if (currentRect != previousRect) {
-                        textView.setFrame(currentRect);
-                        scrollView.setContentSize(currentRect.getSize());
-                    }
-                }
+                CGRect currentRect = setContentSize(textView, scrollView);
                 log.debug("Current Size:{}", currentRect);
                 previousRect = currentRect;
             }
@@ -122,6 +122,24 @@ public class IOS_TextInputView extends UIView {
                 IOS_TextInputView.this.removeFromSuperview();
             }
         });
+
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                setContentSize(textView, scrollView);
+            }
+        });
+    }
+
+    private CGRect setContentSize(UITextView textView, UIScrollView scrollView) {
+        CGRect currentRect = getSize(textView.getText());
+        if (previousRect != CGRect.Zero()) {
+            if (currentRect != previousRect) {
+                textView.setFrame(currentRect);
+                scrollView.setContentSize(currentRect.getSize());
+            }
+        }
+        return currentRect;
     }
 
 
@@ -136,7 +154,9 @@ public class IOS_TextInputView extends UIView {
 
         double ext = (uiFont.getLineHeight() * 2);
 
-        return new CGRect(0, 0, bounding.getWidth() + ext, bounding.getHeight() + ext);
+        double height = Math.max(bounding.getHeight() + ext, this.getBounds().getHeight() - this.okButton.getBounds().getHeight());
+
+        return new CGRect(0, 0, bounding.getWidth() + ext, height);
     }
 
 }
