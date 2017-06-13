@@ -164,9 +164,42 @@ public class IOS_PlatformConnector extends PlatformConnector {
         return new FileHandle(new File(System.getenv("HOME"), "Library/local/" + fileName).getAbsolutePath());
     }
 
+    IOS_TextInputView textInputView;
+
     @Override
-    public void _getMultilineTextInput(Input.TextInputListener listener, String title, String text, String hint) {
-        buildUIAlertView(listener, title, text, hint);
+    public void _getMultilineTextInput(final Input.TextInputListener listener, String title, String text, String hint) {
+
+        textInputView = new IOS_TextInputView(((IOSApplication) Gdx.app).getUIWindow()
+                .getRootViewController(), text, new IOS_TextInputView.Callback() {
+            @Override
+            public void okClicked(String text) {
+                listener.input(text);
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        disposeInputView();
+                    }
+                });
+            }
+
+            @Override
+            public void cancelClicked() {
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        disposeInputView();
+                    }
+                });
+            }
+        });
+
+
+        // buildUIAlertView(listener, title, text, hint);
+    }
+
+    private void disposeInputView(){
+        textInputView.dispose();
+        textInputView=null;
     }
 
     // Issue 773 indicates this may solve a premature GC issue
@@ -194,10 +227,10 @@ public class IOS_PlatformConnector extends PlatformConnector {
         });
 
         CGRect rect = new CGRect(0, 50, 270, 130);
-        UITextView textView = new UITextView(rect);
+        final UITextView textView = new UITextView(rect);
 
         textView.setFont(UIFont.getFont("Helvetica", 15));
-        textView.setTextColor(UIColor.lightGray());
+        textView.setTextColor(UIColor.black());
         textView.setBackgroundColor(UIColor.white());
         textView.getLayer().setBorderColor(UIColor.lightGray().getCGColor());
         textView.getLayer().setBorderWidth(1.0);
@@ -212,7 +245,8 @@ public class IOS_PlatformConnector extends PlatformConnector {
         UIAlertAction action = new UIAlertAction("Ok", UIAlertActionStyle.Default, new VoidBlock1<UIAlertAction>() {
             @Override
             public void invoke(UIAlertAction uiAlertAction) {
-
+                listener.input(textView.getText());
+                CB.requestRendering();
             }
         });
 
@@ -228,7 +262,7 @@ public class IOS_PlatformConnector extends PlatformConnector {
 //        allertControler.getView().addConstraint(constraint);
 
 
-        allertControler.setPreferredContentSize(new CGSize(100, 400));
+        allertControler.setPreferredContentSize(new CGSize(Gdx.graphics.getWidth(), 400));
 
 
         ((IOSApplication) Gdx.app).getUIWindow().getRootViewController().presentViewController(allertControler, false, new Runnable() {
@@ -237,8 +271,8 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
             }
         });
-
-        allertControler.setPreferredContentSize(new CGSize(100, 400));
+//
+//        allertControler.setPreferredContentSize(new CGSize(100, 400));
 
 //        CGRect allertRect = new CGRect(15, 50, 240, 100);
 //        allertControler.getView().setFrame(allertRect);

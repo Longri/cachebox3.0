@@ -91,7 +91,11 @@ public class TestView extends AbstractView {
 
         float iconWidth = 0, iconHeight = 0;
         int lineBreak = 0, lineBreakStep = 0;
-        Table lineTable = null;
+        Table lineTable = new Table();
+        lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+        lineTable.add(new EditTextBox(true, "Test\nText rect = new CGRect(0, 0, width * 2, height - buttonHeight);"));
+        attTable.add(lineTable).left().expandX().fillX();
+        attTable.row();
         for (int i = 0, n = attList.size(); i < n; i++) {
             Attributes att = attList.get(i);
             if ((i % 2) != 0) {
