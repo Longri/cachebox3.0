@@ -108,6 +108,14 @@
       "path": "svg/att_Boat_1.svg",
       "scale": 0.5
     },
+    "att_Cactus_0": {
+      "path": "svg/att_Cactus_0.svg",
+      "scale": 0.5
+    },
+    "att_Cactus_1": {
+      "path": "svg/att_Cactus_1.svg",
+      "scale": 0.5
+    },
     "att_Climbing_gear_0": {
       "path": "svg/att_Climbing_gear_0.svg",
       "scale": 0.5
@@ -2265,6 +2273,7 @@
       "att_Available_at_all_times_0": "att_Available_at_all_times_0",
       "att_Recommended_at_night_0": "att_Recommended_at_night_0",
       "att_Available_during_winter_0": "att_Available_during_winter_0",
+      "att_Cactus_0": "att_Cactus_0",
       "att_Parking_available_0": "att_Parking_available_0",
       "att_Dogs_1": "att_Dogs_1",
       "att_Access_or_parking_fee_1": "att_Access_or_parking_fee_1",
@@ -2281,6 +2290,7 @@
       "att_Available_at_all_times_1": "att_Available_at_all_times_1",
       "att_Recommended_at_night_1": "att_Recommended_at_night_1",
       "att_Available_during_winter_1": "att_Available_during_winter_1",
+      "att_Cactus_1": "att_Cactus_1",
       "att_Parking_available_1": "att_Parking_available_1"
     }
   },
