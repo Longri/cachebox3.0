@@ -4,11 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import org.robovm.apple.coregraphics.CGPoint;
 import org.robovm.apple.coregraphics.CGRect;
+import org.robovm.apple.coregraphics.CGSize;
 import org.robovm.apple.foundation.NSRange;
+import org.robovm.apple.foundation.NSString;
 import org.robovm.apple.foundation.NSURL;
 import org.robovm.apple.uikit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by longri on 09.06.17.
@@ -32,6 +36,7 @@ public class IOS_TextInputView extends UIView {
     public IOS_TextInputView(UIViewController mainViewController, String text, final Callback callback) {
         this.mainViewController = mainViewController;
         ((IOSApplication) Gdx.app).getUIWindow().addSubview(this);
+
 
         this.setBackgroundColor(UIColor.red());
 
@@ -70,7 +75,7 @@ public class IOS_TextInputView extends UIView {
         scrollView.setScrollEnabled(true);
 
 
-        rect = new CGRect(0, 0, width * 2, height - buttonHeight);
+        rect = getSize(text);
         scrollView.setContentSize(rect.getSize());
         final UITextView textView = new UITextView(rect);
         textView.setFont(UIFont.getFont("Helvetica", 15));
@@ -81,139 +86,20 @@ public class IOS_TextInputView extends UIView {
         textView.setText(text);
         textView.setScrollEnabled(false);
 
-
-        
-//        final UITextViewDelegate delegate = textView.getDelegate();
-//
-//        textView.setDelegate(new UITextViewDelegate() {
-//            @Override
-//            public boolean shouldBeginEditing(UITextView uiTextView) {
-//                return delegate.shouldBeginEditing(uiTextView);
-//            }
-//
-//            @Override
-//            public boolean shouldEndEditing(UITextView uiTextView) {
-//                return delegate.shouldEndEditing(uiTextView);
-//            }
-//
-//            @Override
-//            public void didBeginEditing(UITextView uiTextView) {
-//                delegate.didBeginEditing(uiTextView);
-//            }
-//
-//            @Override
-//            public void didEndEditing(UITextView uiTextView) {
-//                delegate.didEndEditing(uiTextView);
-//            }
-//
-//            @Override
-//            public boolean shouldChangeCharacters(UITextView uiTextView, NSRange nsRange, String s) {
-//                return delegate.shouldChangeCharacters(uiTextView, nsRange, s);
-//            }
-//
-//            @Override
-//            public void didChange(UITextView uiTextView) {
-//                delegate.didChange(uiTextView);
-//                UITextPosition pos = uiTextView.getEndOfDocument();
-//                CGRect currentRect = uiTextView.getCaretRect(pos);
-//                if (previousRect != CGRect.Zero()) {
-//                    if (currentRect.getOrigin().getY() > previousRect.getOrigin().getY()) {
-//                        log.debug("Line wrap");
-//                    }
-//                }
-//                previousRect = currentRect;
-//            }
-//
-//            @Override
-//            public void didChangeSelection(UITextView uiTextView) {
-//                delegate.didChangeSelection(uiTextView);
-//            }
-//
-//            @Override
-//            public boolean shouldInteractWithURL(UITextView uiTextView, NSURL nsurl, NSRange nsRange, UITextItemInteraction uiTextItemInteraction) {
-//                return delegate.shouldInteractWithURL(uiTextView, nsurl, nsRange, uiTextItemInteraction);
-//            }
-//
-//            @Override
-//            public boolean shouldInteractWithTextAttachment(UITextView uiTextView, NSTextAttachment nsTextAttachment, NSRange nsRange, UITextItemInteraction uiTextItemInteraction) {
-//                return delegate.shouldInteractWithTextAttachment(uiTextView, nsTextAttachment, nsRange, uiTextItemInteraction);
-//            }
-//
-//            @Override
-//            public boolean shouldInteractWithURL(UITextView uiTextView, NSURL nsurl, NSRange nsRange) {
-//                return delegate.shouldInteractWithURL(uiTextView, nsurl, nsRange);
-//            }
-//
-//            @Override
-//            public boolean shouldInteractWithTextAttachment(UITextView uiTextView, NSTextAttachment nsTextAttachment, NSRange nsRange) {
-//                return delegate.shouldInteractWithTextAttachment(uiTextView, nsTextAttachment, nsRange);
-//            }
-//
-//            @Override
-//            public void didScroll(UIScrollView uiScrollView) {
-//                delegate.didScroll(uiScrollView);
-//            }
-//
-//            @Override
-//            public void didZoom(UIScrollView uiScrollView) {
-//                delegate.didZoom(uiScrollView);
-//            }
-//
-//            @Override
-//            public void willBeginDragging(UIScrollView uiScrollView) {
-//                delegate.willBeginDragging(uiScrollView);
-//            }
-//
-//            @Override
-//            public void willEndDragging(UIScrollView uiScrollView, CGPoint cgPoint, CGPoint cgPoint1) {
-//                delegate.willEndDragging(uiScrollView, cgPoint, cgPoint1);
-//            }
-//
-//            @Override
-//            public void didEndDragging(UIScrollView uiScrollView, boolean b) {
-//                delegate.didEndDragging(uiScrollView, b);
-//            }
-//
-//            @Override
-//            public void willBeginDecelerating(UIScrollView uiScrollView) {
-//                delegate.willBeginDecelerating(uiScrollView);
-//            }
-//
-//            @Override
-//            public void didEndDecelerating(UIScrollView uiScrollView) {
-//                delegate.didEndDecelerating(uiScrollView);
-//            }
-//
-//            @Override
-//            public void didEndScrollingAnimation(UIScrollView uiScrollView) {
-//                delegate.didEndScrollingAnimation(uiScrollView);
-//            }
-//
-//            @Override
-//            public UIView getViewForZooming(UIScrollView uiScrollView) {
-//                return delegate.getViewForZooming(uiScrollView);
-//            }
-//
-//            @Override
-//            public void willBeginZooming(UIScrollView uiScrollView, UIView uiView) {
-//                delegate.willBeginZooming(uiScrollView, uiView);
-//            }
-//
-//            @Override
-//            public void didEndZooming(UIScrollView uiScrollView, UIView uiView, double v) {
-//                delegate.didEndZooming(uiScrollView, uiView, v);
-//            }
-//
-//            @Override
-//            public boolean shouldScrollToTop(UIScrollView uiScrollView) {
-//                return delegate.shouldScrollToTop(uiScrollView);
-//            }
-//
-//            @Override
-//            public void didScrollToTop(UIScrollView uiScrollView) {
-//                delegate.didScrollToTop(uiScrollView);
-//            }
-//        });
+        textView.setDelegate(new UITextViewDelegateAdapter() {
+            @Override
+            public void didChange(UITextView uiTextView) {
+                CGRect currentRect = getSize(uiTextView.getText());
+                if (previousRect != CGRect.Zero()) {
+                    if (currentRect != previousRect) {
+                        textView.setFrame(currentRect);
+                        scrollView.setContentSize(currentRect.getSize());
+                    }
+                }
+                log.debug("Current Size:{}", currentRect);
+                previousRect = currentRect;
+            }
+        });
 
         scrollView.addSubview(textView);
         addSubview(scrollView);
@@ -238,5 +124,19 @@ public class IOS_TextInputView extends UIView {
         });
     }
 
+
+    private CGRect getSize(String text) {
+
+        NSString nsString = new NSString(text);
+        UIFont uiFont = UIFont.getFont("Helvetica", 15);
+
+        NSAttributedStringAttributes attribs = new NSAttributedStringAttributes();
+        attribs.setFont(uiFont);
+        CGSize bounding = nsString.getSize(attribs);
+
+        double ext = (uiFont.getLineHeight() * 2);
+
+        return new CGRect(0, 0, bounding.getWidth() + ext, bounding.getHeight() + ext);
+    }
 
 }
