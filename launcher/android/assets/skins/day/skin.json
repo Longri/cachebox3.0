@@ -164,6 +164,14 @@
       "path": "svg/att_Dogs_1.svg",
       "scale": 0.5
     },
+    "att_Hunting_0": {
+      "path": "svg/att_Hunting_0.svg",
+      "scale": 0.5
+    },
+    "att_Hunting_1": {
+      "path": "svg/att_Hunting_1.svg",
+      "scale": 0.5
+    },
     "att_May_require_swimming_0": {
       "path": "svg/att_May_require_swimming_0.svg",
       "scale": 0.5
@@ -2319,6 +2327,7 @@
       "att_Ticks_0": "att_Ticks_0",
       "att_Abandoned_mines_0": "att_Abandoned_mines_0",
       "att_Cliff_falling_rocks_0": "att_Cliff_falling_rocks_0",
+      "att_Hunting_0": "att_Hunting_0",
       "att_Parking_available_0": "att_Parking_available_0",
       "att_Dogs_1": "att_Dogs_1",
       "att_Access_or_parking_fee_1": "att_Access_or_parking_fee_1",
@@ -2341,6 +2350,7 @@
       "att_Ticks_1": "att_Ticks_1",
       "att_Abandoned_mines_1": "att_Abandoned_mines_1",
       "att_Cliff_falling_rocks_1": "att_Cliff_falling_rocks_1",
+      "att_Hunting_1": "att_Hunting_1",
       "att_Parking_available_1": "att_Parking_available_1"
     }
   },
