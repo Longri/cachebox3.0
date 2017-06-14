@@ -172,6 +172,14 @@
       "path": "svg/att_Parking_available_1.svg",
       "scale": 0.5
     },
+    "att_Poison_plants_0": {
+      "path": "svg/att_Poison_plants_0.svg",
+      "scale": 0.5
+    },
+    "att_Poison_plants_1": {
+      "path": "svg/att_Poison_plants_1.svg",
+      "scale": 0.5
+    },
     "att_Recommended_at_night_0": {
       "path": "svg/att_Recommended_at_night_0.svg",
       "scale": 0.5
@@ -218,6 +226,14 @@
     },
     "att_Takes_less_than_an_hour_1": {
       "path": "svg/att_Takes_less_than_an_hour_1.svg",
+      "scale": 0.5
+    },
+    "att_Ticks_0": {
+      "path": "svg/att_Ticks_0.svg",
+      "scale": 0.5
+    },
+    "att_Ticks_1": {
+      "path": "svg/att_Ticks_1.svg",
       "scale": 0.5
     },
     "baseMapFreizeitkarte": {
@@ -2282,7 +2298,9 @@
       "att_Recommended_at_night_0": "att_Recommended_at_night_0",
       "att_Available_during_winter_0": "att_Available_during_winter_0",
       "att_Cactus_0": "att_Cactus_0",
+      "att_Poison_plants_0": "att_Poison_plants_0",
       "att_Dangerous_Animals_0": "att_Dangerous_Animals-0",
+      "att_Ticks_0": "att_Ticks_0",
       "att_Parking_available_0": "att_Parking_available_0",
       "att_Dogs_1": "att_Dogs_1",
       "att_Access_or_parking_fee_1": "att_Access_or_parking_fee_1",
@@ -2300,7 +2318,9 @@
       "att_Recommended_at_night_1": "att_Recommended_at_night_1",
       "att_Available_during_winter_1": "att_Available_during_winter_1",
       "att_Cactus_1": "att_Cactus_1",
+      "att_Poison_plants_1": "att_Poison_plants_1",
       "att_Dangerous_Animals_1": "att_Dangerous_Animals_1",
+      "att_Ticks_1": "att_Ticks_1",
       "att_Parking_available_1": "att_Parking_available_1"
     }
   },
