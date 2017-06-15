@@ -258,7 +258,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
     @Override
     public void selectedWayPointChanged(de.longri.cachebox3.events.SelectedWayPointChangedEvent event) {
-            if (event.wayPoint != null) setCacheName(Database.Data.Query.GetCacheById(event.wayPoint.CacheId));
+        if (event.wayPoint != null) setCacheName(Database.Data.Query.GetCacheById(event.wayPoint.CacheId));
     }
 
     Cache lastCache = null;
@@ -334,12 +334,35 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
     // Toast pop up
     public enum ToastLength {
-        SHORT(1.0f), NORMAL(1.5f), LONG(3.5f), EXTRA_LONG(6.0f);
+        SHORT(1.0f), NORMAL(1.5f), LONG(3.5f), EXTRA_LONG(6.0f), WAIT(true);
 
         public final float value;
+        public final boolean wait;
+        private CloseListener closeListener;
+
+        public interface CloseListener {
+            void close();
+        }
 
         ToastLength(float value) {
             this.value = value;
+            wait = false;
+        }
+
+        ToastLength(boolean wait) {
+            this.value = 0;
+            this.wait = wait;
+        }
+
+        private void setCloseListener(CloseListener listener) {
+            this.closeListener = listener;
+        }
+
+        public void close() {
+            if (this.closeListener != null) {
+                this.closeListener.close();
+                this.closeListener = null;
+            }
         }
     }
 
@@ -376,11 +399,22 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         StageManager.addToastActor(actor);
         actor.addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
 
-        new com.badlogic.gdx.utils.Timer().scheduleTask(new com.badlogic.gdx.utils.Timer.Task() {
-            @Override
-            public void run() {
-                actor.addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
-            }
-        }, length.value);
+        if (length.wait) {
+            length.setCloseListener(new ToastLength.CloseListener() {
+                @Override
+                public void close() {
+                    actor.addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
+                }
+            });
+        } else {
+            new com.badlogic.gdx.utils.Timer().scheduleTask(new com.badlogic.gdx.utils.Timer.Task() {
+                @Override
+                public void run() {
+                    actor.addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
+                }
+            }, length.value);
+        }
+
+
     }
 }

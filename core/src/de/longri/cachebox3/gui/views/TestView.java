@@ -19,9 +19,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -39,6 +41,8 @@ import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
+import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.settings.Config;
@@ -93,7 +97,26 @@ public class TestView extends AbstractView {
         int lineBreak = 0, lineBreakStep = 0;
         Table lineTable = new Table();
         lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-        lineTable.add(new EditTextBox(true, "Test\nText rect = new CGRect(0, 0, width * 2, height - buttonHeight);"));
+
+        VisTextButton button = new VisTextButton("TOAST");
+        button.addListener(new ClickLongClickListener() {
+            ViewManager.ToastLength length = ViewManager.ToastLength.WAIT;
+
+            @Override
+            public boolean clicked(InputEvent event, float x, float y) {
+                CB.viewmanager.toast("TOAST WAIT", length);
+                return true;
+            }
+
+            @Override
+            public boolean longClicked(Actor actor, float x, float y) {
+                length.close();
+                return true;
+            }
+        });
+        lineTable.add(button);
+
+
         attTable.add(lineTable).left().expandX().fillX();
         attTable.row();
         for (int i = 0, n = attList.size(); i < n; i++) {
