@@ -258,9 +258,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
     @Override
     public void selectedWayPointChanged(de.longri.cachebox3.events.SelectedWayPointChangedEvent event) {
-        synchronized (Database.Data.Query) {
             if (event.wayPoint != null) setCacheName(Database.Data.Query.GetCacheById(event.wayPoint.CacheId));
-        }
     }
 
     Cache lastCache = null;

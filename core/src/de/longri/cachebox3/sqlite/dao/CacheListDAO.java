@@ -19,6 +19,7 @@ package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.LongMap;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.sqlite.Database;
@@ -323,17 +324,10 @@ public class CacheListDAO {
         }
     }
 
-    private ArrayList<String> getGcCodeList(String where) {
+    private Array<String> getGcCodeList(String where) {
         CacheList list = new CacheList();
         ReadCacheList(list, where, false, false);
-        ArrayList<String> StrList = new ArrayList<String>();
-
-        for (int i = 0, n = list.size; i < n; i++) {
-            StrList.add(list.get(i).getGcCode());
-        }
-        list.dispose();
-        list = null;
-        return StrList;
+        return list.getGcCodes();
     }
 
     /**
@@ -345,7 +339,7 @@ public class CacheListDAO {
      * @param DescriptionImageFolder      Config.settings.DescriptionImageFolder.getValue()
      * @param DescriptionImageFolderLocal Config.settings.DescriptionImageFolderLocal.getValue()
      */
-    public void delCacheImages(ArrayList<String> list, String SpoilerFolder, String SpoilerFolderLocal, String DescriptionImageFolder, String DescriptionImageFolderLocal) {
+    public void delCacheImages(Array<String> list, String SpoilerFolder, String SpoilerFolderLocal, String DescriptionImageFolder, String DescriptionImageFolderLocal) {
         String spoilerpath = SpoilerFolder;
         if (SpoilerFolderLocal.length() > 0)
             spoilerpath = SpoilerFolderLocal;
@@ -365,7 +359,7 @@ public class CacheListDAO {
         imageDAO = null;
     }
 
-    public void delCacheImagesByPath(String path, ArrayList<String> list) {
+    public void delCacheImagesByPath(String path, Array<String> list) {
         for (Iterator<String> iterator = list.iterator(); iterator.hasNext(); ) {
             final String GcCode = iterator.next().toLowerCase();
             String directory = path + "/" + GcCode.substring(0, 4);

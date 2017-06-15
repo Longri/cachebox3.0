@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Longri
  */
-public class GlobalLocationReceiver implements  GPS_FallBackEvent {
+public class GlobalLocationReceiver implements GPS_FallBackEvent {
     final static Logger log = LoggerFactory.getLogger(GlobalLocationReceiver.class);
     public final static boolean DEBUG_POSITION = true;
 
@@ -78,7 +78,7 @@ public class GlobalLocationReceiver implements  GPS_FallBackEvent {
 
                     try {
                         if (PlaySounds && !approachSoundCompleted) {
-                            if (EventHandler.getSelectedCache()!=null) {
+                            if (EventHandler.getSelectedCache() != null) {
                                 float distance = EventHandler.getSelectedCache().Distance(MathUtils.CalculationType.FAST, false);
                                 if (EventHandler.getSelectedWaypoint() != null) {
                                     distance = EventHandler.getSelectedWaypoint().distance();
@@ -97,18 +97,14 @@ public class GlobalLocationReceiver implements  GPS_FallBackEvent {
                     }
 
                     try {
-                        if (!initialResortAfterFirstFixCompleted ) {
+                        if (!initialResortAfterFirstFixCompleted) {
                             if (EventHandler.getSelectedCache() == null) {
-                                synchronized (Database.Data.Query) {
-                                    CacheWithWP ret = Database.Data.Query.Resort(EventHandler.getSelectedCoord(), new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWaypoint()));
+                                CacheWithWP ret = Database.Data.Query.Resort(EventHandler.getSelectedCoord(), new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWaypoint()));
 
-                                    if (ret != null && ret.getCache() != null) {
+                                if (ret != null && ret.getCache() != null) {
 //                                        EventHandler.setSelectedWaypoint(ret.getCache(), ret.getWaypoint(), false);
-                                        CB.setNearestCache(ret.getCache());
-                                        ret.dispose();
-                                        ret = null;
-                                    }
-
+                                    CB.setNearestCache(ret.getCache());
+                                    ret.dispose();
                                 }
                             }
                             initialResortAfterFirstFixCompleted = true;
@@ -193,7 +189,7 @@ public class GlobalLocationReceiver implements  GPS_FallBackEvent {
 
         // set approach sound if the distance low
 
-        if (EventHandler.getSelectedCache()!=null) {
+        if (EventHandler.getSelectedCache() != null) {
             float distance = EventHandler.getSelectedCache().Distance(MathUtils.CalculationType.FAST, false);
             boolean value = distance < Config.SoundApproachDistance.getValue();
             approachSoundCompleted = value;

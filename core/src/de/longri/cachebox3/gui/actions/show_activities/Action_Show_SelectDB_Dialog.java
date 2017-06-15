@@ -132,12 +132,12 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
         String sqlWhere = FilterInstances.getLastFilter().getSqlWhere(Config.GcLoginName.getValue());
         Database.Data.GPXFilenameUpdateCacheCount();
 
-        synchronized (Database.Data.Query) {
-            log.debug("Read CacheList");
-            CacheListDAO cacheListDAO = new CacheListDAO();
-            cacheListDAO.ReadCacheList(Database.Data.Query, sqlWhere, false, Config.ShowAllWaypoints.getValue());
-            log.debug("Readed " + Database.Data.Query.size + "Caches into CacheList");
-        }
+
+        log.debug("Read CacheList");
+        CacheListDAO cacheListDAO = new CacheListDAO();
+        cacheListDAO.ReadCacheList(Database.Data.Query, sqlWhere, false, Config.ShowAllWaypoints.getValue());
+        log.debug("Readed " + Database.Data.Query.size + "Caches into CacheList");
+
 
         // set selectedCache from last selected Cache
         String sGc = Config.LastSelectedCache.getValue();

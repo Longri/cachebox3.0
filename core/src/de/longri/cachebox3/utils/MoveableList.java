@@ -183,57 +183,15 @@ public class MoveableList<T> extends CB_List<T> {
 
 	private int _MoveResultIndex;
 
-	// / <summary>
-	// / Gigbt die Position der letzten Move Methode zur�ck.
-	// / </summary>
-	// / <returns>Null-Basierender Index, des Ergebnisses der letzten Move Nethode</returns>
-	// / <remarks>Bei den Methoden <see cref="MoveItemsLeft">[MoveItemsLeft]</see> und <see cref="MoveItemsRight">[MoveItemsRight]</see>
-	// / wird die Eigenschaft <see cref="MoveResultIndex">[MoveResultIndex]</see> auf <b>-1</b> gesetzt, <b>da alle Items bewegt wurden.</b>
-	// </remarks>
-	public int MoveResultIndex() {
-		return _MoveResultIndex;
-	}
 
-	public Iterator<T> reverseIterator() {
-		final MoveableList<T> that = this;
-
-		Iterator<T> iterator = new Iterator<T>() {
-			int aktItem = that.size - 1;
-
-			@Override
-			public boolean hasNext() {
-				if (aktItem >= 0)
-					return true;
-				return false;
-			}
-
-			@Override
-			public T next() {
-				if (that.size == 0 || that.size < aktItem) {
-					aktItem = -1;
-					return null;
-				}
-
-				T ret = that.get(aktItem);
-				aktItem--;
-				return ret;
-			}
-
-			@Override
-			public void remove() {
-
-			}
-		};
-
-		return iterator;
-	}
-
-	public void remove(MoveableList<T> items) {
-		super.removeAll(items,true);
-	}
-
-	public void dispose() {
-
-	}
+//
+//
+//	public void remove(MoveableList<T> items) {
+//		super.removeAll(items,true);
+//	}
+//
+//	public void dispose() {
+//
+//	}
 
 }

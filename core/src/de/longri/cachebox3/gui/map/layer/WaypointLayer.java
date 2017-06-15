@@ -153,8 +153,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                synchronized (Database.Data.Query) {
-
                     //clear item list
                     mItemList.clear();
 
@@ -188,7 +186,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                         else log.error(msg.toString());
                     }
                 }
-            }
         });
         thread.start();
     }

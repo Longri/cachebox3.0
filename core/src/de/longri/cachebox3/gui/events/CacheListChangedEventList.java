@@ -49,19 +49,18 @@ public class CacheListChangedEventList {
         if (CB.isDisplayOff())
             return;
 
-        synchronized (Database.Data.Query) {
-            Cache cache = Database.Data.Query.GetCacheByGcCode("CBPark");
+        Cache cache = Database.Data.Query.GetCacheByGcCode("CBPark");
 
-            if (cache != null)
-                Database.Data.Query.removeValue(cache,false);
+        if (cache != null)
+            Database.Data.Query.removeValue(cache, false);
 
-            // add Parking Cache
-            if (Config.ParkingLatitude.getValue() != 0) {
-                cache = new Cache(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
-                Database.Data.Query.insert(0, cache);
-            }
+        // add Parking Cache
+        if (Config.ParkingLatitude.getValue() != 0) {
+            cache = new Cache(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
+            Database.Data.Query.insert(0, cache);
+        }
 
-            //TODO add Live Caches
+        //TODO add Live Caches
 //            // add all Live Caches
 //            for (int i = 0; i < LiveMapQue.LiveCaches.getSize(); i++) {
 //                if (FilterInstances.isLastFilterSet()) {
@@ -84,7 +83,7 @@ public class CacheListChangedEventList {
 //                    }
 //                }
 //            }
-        }
+
 
         if (threadCall != null) {
             if (threadCall.getState() != Thread.State.TERMINATED)

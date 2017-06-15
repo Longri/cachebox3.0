@@ -152,21 +152,19 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (selectedWayPoint == null || !selectedWayPoint.equals(event.wayPoint)) {
             log.debug("Set Global selected Waypoint: {}", event.wayPoint);
             selectedWayPoint = event.wayPoint;
-            synchronized (Database.Data.Query) {
-                if (selectedWayPoint != null) {
-                    Cache newCache = Database.Data.Query.GetCacheById(selectedWayPoint.CacheId);
-                    if (!newCache.equals(selectedCache)) {
-                        //unload details from last selected Cache
-                        if (selectedCache != null) selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
-                        selectedCache = newCache;
-                        // and load details of new selected Cache
-                        if (!selectedCache.isDetailLoaded()) {
-                            selectedCache.loadDetail();
-                        }
+            if (selectedWayPoint != null) {
+                Cache newCache = Database.Data.Query.GetCacheById(selectedWayPoint.CacheId);
+                if (!newCache.equals(selectedCache)) {
+                    //unload details from last selected Cache
+                    if (selectedCache != null) selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
+                    selectedCache = newCache;
+                    // and load details of new selected Cache
+                    if (!selectedCache.isDetailLoaded()) {
+                        selectedCache.loadDetail();
                     }
-
-                    fireSelectedCoordChanged(event.ID);
                 }
+
+                fireSelectedCoordChanged(event.ID);
             }
         }
     }

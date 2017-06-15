@@ -22,10 +22,15 @@ import de.longri.cachebox3.types.Cache;
  * Created by Longri on 21.04.2017.
  */
 public class CB_List<T> extends Array<T> {
+
+    //TODO delete CB_List<T> and replace method with same function of Array<T>
+
+    //TODO replace with Array<T>.set(int index, T value)
     public void replace(T item, int index) {
         this.items[index] = item;
     }
 
+    //TODO replace with Array<T>.peek ()
     public T last() {
         return items[size - 1];
     }
