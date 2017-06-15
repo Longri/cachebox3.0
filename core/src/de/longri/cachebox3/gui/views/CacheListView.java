@@ -22,6 +22,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
+import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
@@ -43,9 +44,12 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     private ListView listView;
     private final float result[] = new float[4];
 
+    private final ViewManager.ToastLength WAIT_TOAST_LENGTH = ViewManager.ToastLength.WAIT;
 
     public CacheListView() {
         super("CacheListView CacheCount: " + Database.Data.Query.size);
+        //TODO Translate "Load Cache List"
+        CB.viewmanager.toast("Load Cache List", WAIT_TOAST_LENGTH);
 
         //register as cacheListChanged eventListener
         CacheListChangedEventList.Add(this);
@@ -58,6 +62,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         log.debug("Layout");
         super.layout();
         if (listView == null) addNewListView();
+
+        WAIT_TOAST_LENGTH.close();
         log.debug("Finish Layout");
     }
 
@@ -174,6 +180,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         }
                         listView.setSelection(selectedIndex);
                         listView.setSelectedItemVisible();
+                        CB.requestRendering();
                         log.debug("Finish Thread add new listView");
                     }
                 });

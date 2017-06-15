@@ -27,6 +27,7 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.SelectDB_Activity;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheListDAO;
@@ -83,9 +84,11 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
 
     }
 
-    // WaitDialog wd;
+    private final ViewManager.ToastLength WAIT_TOAST_LENGTH = ViewManager.ToastLength.WAIT;
 
     private void returnFromSelectDB() {
+        //TODO Translate "Load DB ..."
+        CB.viewmanager.toast("Load DB ...", WAIT_TOAST_LENGTH);
         //   wd = WaitDialog.ShowWait("Load DB ...");
 
         log.debug("\r\nSwitch DB");
@@ -97,10 +100,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
 
                 CB.setAutoResort(Config.StartWithAutoSelect.getValue());
                 CacheListChangedEventList.Call();
-
-                //  TabMainView.that.filterSetChanged();
-
-                //  wd.dismis();
+                WAIT_TOAST_LENGTH.close();
             }
         });
 
