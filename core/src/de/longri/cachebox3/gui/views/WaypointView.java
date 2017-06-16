@@ -220,7 +220,7 @@ public class WaypointView extends AbstractView {
                         if (wp == null) {
                             //select Cache
                             listView.setSelection(0);
-                            listView.setSelectedItemVisible();
+                            listView.setSelectedItemVisible(false);
                         } else {
                             int index = 0;
                             for (ListViewItem item : listView.items()) {
@@ -231,7 +231,7 @@ public class WaypointView extends AbstractView {
                                 WayPointListItem wayPointListItem = (WayPointListItem) item;
                                 if (wayPointListItem.getWaypointGcCode().equals(wp.getGcCode())) {
                                     listView.setSelection(index);
-                                    listView.setSelectedItemVisible();
+                                    listView.setSelectedItemVisible(false);
                                     break;
                                 }
                                 index++;

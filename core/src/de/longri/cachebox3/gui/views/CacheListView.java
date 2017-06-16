@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
@@ -36,6 +37,8 @@ import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * Created by Longri on 24.07.16.
  */
@@ -43,8 +46,9 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     final static Logger log = LoggerFactory.getLogger(CacheListView.class);
     private ListView listView;
     private final float result[] = new float[4];
+    private final AtomicBoolean ON_LAYOUT_WORK = new AtomicBoolean(false);
 
-    private final ViewManager.ToastLength WAIT_TOAST_LENGTH = ViewManager.ToastLength.WAIT;
+    private ViewManager.ToastLength WAIT_TOAST_LENGTH = ViewManager.ToastLength.WAIT;
 
     public CacheListView() {
         super("CacheListView CacheCount: " + Database.Data.Query.size);
@@ -58,12 +62,12 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         EventHandler.add(this);
     }
 
+    @Override
     public synchronized void layout() {
         log.debug("Layout");
+        ON_LAYOUT_WORK.set(true);
         super.layout();
         if (listView == null) addNewListView();
-
-        WAIT_TOAST_LENGTH.close();
         log.debug("Finish Layout");
     }
 
@@ -77,7 +81,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     private void addNewListView() {
         log.debug("Start Thread add new listView");
-        Thread thread = new Thread(new Runnable() {
+
+        CB.postAsync(new Runnable() {
             @Override
             public void run() {
                 CacheListView.this.clear();
@@ -105,7 +110,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         //get index from item
                         int idx = view.getListIndex();
 
-                        if (idx > Database.Data.Query.size) {
+                        if (idx > Database.Data.Query.getSize()) {
                             // Cachelist is changed, reload!
                             outDated = true;
                             addNewListView();
@@ -179,27 +184,35 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                             selectedIndex++;
                         }
                         listView.setSelection(selectedIndex);
-                        listView.setSelectedItemVisible();
+                        listView.setSelectedItemVisible(false);
                         CB.requestRendering();
                         log.debug("Finish Thread add new listView");
+                        ON_LAYOUT_WORK.set(false);
+                        if (WAIT_TOAST_LENGTH != null) WAIT_TOAST_LENGTH.close();
+                        WAIT_TOAST_LENGTH = null;
                     }
                 });
                 CB.requestRendering();
             }
         });
-        thread.start();
         CB.requestRendering();
     }
 
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        if (ON_LAYOUT_WORK.get()) CB.requestRendering();
+    }
+
     private void disposeListView() {
-        final ListView disposeListView = CacheListView.this.listView;
-        Thread disposeThread = new Thread(new Runnable() {
+        final ListView disposeListView = this.listView;
+        CB.postAsync(new Runnable() {
             @Override
             public void run() {
                 disposeListView.dispose();
             }
         });
-        disposeThread.start();
+        this.listView = null;
     }
 
 
@@ -229,7 +242,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     }
 
     private void setChangedFlagToAllItems() {
-        if (listView == null) return;
+
+        if (listView == null || ON_LAYOUT_WORK.get()) return;
         SnapshotArray<ListViewItem> allItems = listView.items();
         Object[] actors = allItems.begin();
         for (int i = 0, n = allItems.size; i < n; i++) {
@@ -267,4 +281,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         return "CacheListView";
     }
 
+    public void setWaitToastLength(ViewManager.ToastLength wait_toast_length) {
+        this.WAIT_TOAST_LENGTH = wait_toast_length;
+    }
 }

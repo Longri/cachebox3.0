@@ -482,4 +482,10 @@ public class CacheList extends MoveableList<Cache> {
             return super.toArray(type);
         }
     }
+
+    public int getSize() {
+        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+            return size;
+        }
+    }
 }

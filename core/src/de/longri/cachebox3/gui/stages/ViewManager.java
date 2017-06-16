@@ -403,6 +403,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
             length.setCloseListener(new ToastLength.CloseListener() {
                 @Override
                 public void close() {
+                    log.debug("Close Toast from wait");
                     actor.addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
                 }
             });
@@ -410,11 +411,11 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
             new com.badlogic.gdx.utils.Timer().scheduleTask(new com.badlogic.gdx.utils.Timer.Task() {
                 @Override
                 public void run() {
+                    log.debug("Close Toast from schedule task");
                     actor.addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
                 }
             }, length.value);
         }
-
-
+        CB.requestRendering();
     }
 }

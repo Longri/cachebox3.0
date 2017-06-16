@@ -56,16 +56,16 @@ public class CacheboxMain extends ApplicationAdapter {
         EventHandler.INIT();
 
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
-//        INCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
+        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
+        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
 
-        EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
-        EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
-        EXCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
-
-        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
-        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
+//        EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
+//        EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
+//        EXCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
+//
+//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
+//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
 
     }
 

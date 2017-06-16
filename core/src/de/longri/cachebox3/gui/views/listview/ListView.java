@@ -116,7 +116,7 @@ public class ListView extends WidgetGroup {
                 if (tempClickRec.contains(x, y)) {
                     // item Clicked
                     Array<EventListener> listeners = item.getListeners();
-                    log.debug("ListViewItem {} clicked | Item has {} listener", item.getListIndex(),listeners.size);
+                    log.debug("ListViewItem {} clicked | Item has {} listener", item.getListIndex(), listeners.size);
 
                     for (int j = 0, m = listeners.size; j < m; j++) {
                         EventListener listener = listeners.get(j);
@@ -125,7 +125,7 @@ public class ListView extends WidgetGroup {
                         event.setListenerActor(item);
 
                         if (listener instanceof ClickLongClickListener) {
-                            if(((ClickLongClickListener) listener).clicked(event, x, y)){
+                            if (((ClickLongClickListener) listener).clicked(event, x, y)) {
                                 break;
                             }
                         } else if (listener instanceof ClickListener) {
@@ -472,11 +472,14 @@ public class ListView extends WidgetGroup {
 
     public void draw(Batch batch, float parentAlpha) {
 
+        if (adapter == null) return;
+
+
         synchronized (indexList) {
 
             if (listCount != adapter.getCount()) {
                 //adapter has changed!
-                log.debug("List count has changed! set Adapter new!");
+                log.debug("List count({}) has changed to {}! set Adapter new!", listCount, adapter.getCount());
                 setAdapter(this.adapter);
             }
 
@@ -488,9 +491,9 @@ public class ListView extends WidgetGroup {
             if (this.backgroundDrawable != null) {
                 backgroundDrawable.draw(batch, this.getX(), this.getY(), this.getWidth(), this.getHeight());
             }
-            synchronized (this) {
-                super.draw(batch, parentAlpha);
-            }
+
+            if (getStage() != null) super.draw(batch, parentAlpha);
+
 
             if (dontDisposeItems || this.listCount <= OVERLOAD) return;
 
@@ -631,7 +634,7 @@ public class ListView extends WidgetGroup {
         CB.requestRendering();
     }
 
-    public void setSelectedItemVisible() {
+    public void setSelectedItemVisible(boolean withScroll) {
         //get pos of first selected
         ListViewItem item = this.selectedItemList.size == 0 ? null : this.selectedItemList.get(0);
         float scrollPos = 0;
@@ -642,6 +645,8 @@ public class ListView extends WidgetGroup {
             scrollPos = index < 0 ? 0 : completeHeight - (itemYPos.get(index) + item.getHeight());
         }
         this.setScrollPos(scrollPos);
+        if (!withScroll) scrollPane.updateVisualScroll();
+        CB.requestRendering();
         if (item != null) log.debug("Scroll to selected item {} at position {}", item.getListIndex(), scrollPos);
     }
 

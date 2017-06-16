@@ -74,9 +74,9 @@ public class StageManager {
     }
 
     public static void addToastActor(Actor actor) {
-
+        log.debug("Show Toast");
         //only one Toast Actor is visible
-        if(toastStage.getActors().size>0){
+        if (toastStage.getActors().size > 0) {
             toastStage.clear();
         }
 

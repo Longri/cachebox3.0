@@ -326,7 +326,7 @@ public class SelectDB_Activity extends ActivityBase {
             @Override
             public void run() {
                 try {
-                    lvFiles.setSelectedItemVisible();
+                    lvFiles.setSelectedItemVisible(false);
                 } catch (Exception e) {
                     log.error("Set selected Item Visible with onShow SelectDbActivity", e);
                 }
@@ -347,16 +347,14 @@ public class SelectDB_Activity extends ActivityBase {
 
         Config.DatabaseName.setValue(name);
         Config.AcceptChanges();
-
         finish();
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        if (returnListener != null)
-            returnListener.back();
-
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                if (returnListener != null)
+                    returnListener.back();
+            }
+        });
     }
 
     private void setAutoStartText() {

@@ -28,13 +28,11 @@ import de.longri.cachebox3.gui.activities.SelectDB_Activity;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.views.CacheListView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheListDAO;
-import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.Categories;
-import de.longri.cachebox3.types.FilterInstances;
-import de.longri.cachebox3.types.FilterProperties;
+import de.longri.cachebox3.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,35 +78,30 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
                 selectDBDialog.show();
             }
         });
-
-
     }
 
     private final ViewManager.ToastLength WAIT_TOAST_LENGTH = ViewManager.ToastLength.WAIT;
 
     private void returnFromSelectDB() {
-        //TODO Translate "Load DB ..."
-        CB.viewmanager.toast("Load DB ...", WAIT_TOAST_LENGTH);
-        //   wd = WaitDialog.ShowWait("Load DB ...");
-
         log.debug("\r\nSwitch DB");
-        Thread thread = new Thread(new Runnable() {
-
+        CB.postAsync(new Runnable() {
             @Override
             public void run() {
                 loadSelectedDB();
-
-                CB.setAutoResort(Config.StartWithAutoSelect.getValue());
-                CacheListChangedEventList.Call();
-                WAIT_TOAST_LENGTH.close();
             }
         });
-
-        thread.start();
-
     }
 
     public void loadSelectedDB() {
+        CB.postAsync(new Runnable() {
+            @Override
+            public void run() {
+                //TODO Translate "Load DB ..."
+                CB.viewmanager.toast("Load DB ...", WAIT_TOAST_LENGTH);
+                CB.requestRendering();
+            }
+        });
+
         if (Database.Data != null) {
             if (Database.Data.Query != null) Database.Data.Query.clear();
             if (Database.Data.isStarted()) Database.Data.close();
@@ -122,7 +115,6 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             log.error("can't open DB", e);
             return;
         }
-
         Config.ReadFromDB();
 
         CB.Categories = new Categories();
@@ -134,10 +126,11 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
 
 
         log.debug("Read CacheList");
+        CacheList tmpCacheList = new CacheList();
         CacheListDAO cacheListDAO = new CacheListDAO();
-        cacheListDAO.ReadCacheList(Database.Data.Query, sqlWhere, false, Config.ShowAllWaypoints.getValue());
-        log.debug("Readed " + Database.Data.Query.size + "Caches into CacheList");
-
+        cacheListDAO.ReadCacheList(tmpCacheList, sqlWhere, false, Config.ShowAllWaypoints.getValue());
+        log.debug("Readed " + tmpCacheList.size + "Caches into CacheList");
+        Database.Data.Query = tmpCacheList;
 
         // set selectedCache from last selected Cache
         String sGc = Config.LastSelectedCache.getValue();
@@ -164,5 +157,22 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             log.debug("Set selectedCache to " + Database.Data.Query.get(0).getGcCode() + " from firstInDB");
             EventHandler.fire(new SelectedCacheChangedEvent(Database.Data.Query.get(0)));
         }
+
+        CB.setAutoResort(Config.StartWithAutoSelect.getValue());
+        CacheListChangedEventList.Call();
+
+        if (CB.viewmanager.getActView() instanceof CacheListView) {
+            CacheListView cacheListView = (CacheListView) CB.viewmanager.getActView();
+            cacheListView.setWaitToastLength(WAIT_TOAST_LENGTH);
+        } else {
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    WAIT_TOAST_LENGTH.close();
+                }
+            });
+        }
+
+
     }
 }
