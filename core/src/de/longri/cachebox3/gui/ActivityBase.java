@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.utils.Showable;
 
 /**
@@ -37,6 +38,9 @@ public class ActivityBase extends Window implements Disposable, Showable {
 
     public ActivityBase(String name, ActivityBaseStyle style) {
         super(name);
+        if (!CB.isMainThread()) {
+            throw new RuntimeException("Don't instance a ActivityBase on non GL Thread");
+        }
         this.style = style;
         this.setStageBackground(style.background);
     }
@@ -55,10 +59,14 @@ public class ActivityBase extends Window implements Disposable, Showable {
     }
 
     public void show() {
-        super.show();
-
-        //set to full screen
-        this.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        CB.postOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                ActivityBase.super.show();
+                //set to full screen
+                ActivityBase.this.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            }
+        });
     }
 
     @Override

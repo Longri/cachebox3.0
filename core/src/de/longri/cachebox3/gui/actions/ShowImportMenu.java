@@ -69,9 +69,19 @@ public class ShowImportMenu extends Menu {
 //                        imp.show();
                         return true;
                     case MenuID.MI_IMPORT_GS_API_POSITION:
-                        if (!CB.checkApiKeyNeeded()) {
-                            new ImportGcPos().show();
-                        }
+                        CB.postAsync(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!CB.checkApiKeyNeeded()) {
+                                    CB.postOnMainThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new ImportGcPos().show();
+                                        }
+                                    });
+                                }
+                            }
+                        });
                         return true;
                     case MenuID.MI_IMPORT_GS_API_SEARCH:
 //                        SearchOverNameOwnerGcCode.ShowInstanz();

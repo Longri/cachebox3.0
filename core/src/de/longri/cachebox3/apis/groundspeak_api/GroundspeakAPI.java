@@ -289,17 +289,23 @@ public class GroundspeakAPI {
             callBack.callBack(membershipType);
             return;
         }
-        log.debug(("API is not checked, call API check"));
-        final GetYourUserProfile getYourUserProfile = new GetYourUserProfile(getAccessToken());
-        getYourUserProfile.post(new GenericCallBack<Integer>() {
+
+        CB.postAsync(new Runnable() {
             @Override
-            public void callBack(Integer value) {
-                membershipType = getYourUserProfile.getMembershipType();
-                memberName = getYourUserProfile.getMemberName();
-                callBack.callBack(membershipType);
+            public void run() {
+                log.debug(("API is not checked, call API check"));
+                final GetYourUserProfile getYourUserProfile = new GetYourUserProfile(getAccessToken());
+                getYourUserProfile.post(new GenericCallBack<Integer>() {
+                    @Override
+                    public void callBack(Integer value) {
+                        membershipType = getYourUserProfile.getMembershipType();
+                        memberName = getYourUserProfile.getMemberName();
+                        callBack.callBack(membershipType);
+                        API_isCheked = true;
+                    }
+                });
             }
         });
-
     }
 
 

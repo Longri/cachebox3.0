@@ -285,6 +285,10 @@ public class CB {
         MAIN_THREAD = mainThread;
     }
 
+    public static void postOnMainThread(final Runnable runnable) {
+        postOnMainThread(runnable, false);
+    }
+
     public static void postOnMainThread(final Runnable runnable, boolean wait) {
         if (isMainThread()) {
             runnable.run();
@@ -358,6 +362,11 @@ public class CB {
 
 
         while (wait.get()) {
+
+            if (CB.isMainThread()) {
+                throw new RuntimeException("Don't block main thread with check API key!");
+            }
+
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
