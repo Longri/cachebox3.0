@@ -352,17 +352,18 @@ public class CB {
         //check if expired
         final AtomicBoolean expired = new AtomicBoolean(false);
         final AtomicBoolean wait = new AtomicBoolean(true);
+        final AtomicBoolean errror = new AtomicBoolean(false);
         GroundspeakAPI.getMembershipType(new GenericCallBack<Integer>() {
             @Override
             public void callBack(Integer value) {
                 if (value == -3) expired.set(true);
+                if (value == -1) errror.set(true);
                 wait.set(false);
             }
         });
 
 
         while (wait.get()) {
-
             if (CB.isMainThread()) {
                 throw new RuntimeException("Don't block main thread with check API key!");
             }
@@ -385,6 +386,10 @@ public class CB {
             });
             return true;
         }
-        return false;
+        if(errror.get()){
+            //TODO translate "Connection Error"
+            CB.viewmanager.toast("Connection Error");
+        }
+        return errror.get();
     }
 }

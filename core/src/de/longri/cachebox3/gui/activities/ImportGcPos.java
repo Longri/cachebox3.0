@@ -115,6 +115,13 @@ public class ImportGcPos extends ActivityBase {
             return;
         }
 
+        //check if map position actual
+        Coordinate mapCenter = MapView.getLastCenterPos();
+        if (mapCenter == null || mapCenter.isZero() || !mapCenter.isValid()) {
+            tglBtnMap.setDisabled(true);
+        }
+
+
         SnapshotArray<Actor> actors = this.getChildren();
         for (Actor actor : actors)
             this.removeActor(actor);
@@ -235,6 +242,11 @@ public class ImportGcPos extends ActivityBase {
 
         tglBtnMap.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if(tglBtnMap.isDisabled()){
+                    actSearchPos = new CoordinateGPS(Config.MapInitLatitude.getValue(), Config.MapInitLongitude.getValue());
+                    setToggleBtnState(0);
+                    return;
+                }
                 Coordinate mapCenterPos = MapView.getLastCenterPos();
                 if (mapCenterPos == null) {
                     actSearchPos = new CoordinateGPS(Config.MapInitLatitude.getValue(), Config.MapInitLongitude.getValue());

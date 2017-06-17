@@ -1758,7 +1758,8 @@
       "fontColor": "font_color",
       "up": "toggleOff_9_Patch",
       "down": "togglePress_9_Patch",
-      "checked": "toggleOn_9_Patch"
+      "checked": "toggleOn_9_Patch",
+      "disabled": "default_button_disabled_9_Patch"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle": {

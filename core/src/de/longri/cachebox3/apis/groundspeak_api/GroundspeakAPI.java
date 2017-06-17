@@ -298,6 +298,10 @@ public class GroundspeakAPI {
                 getYourUserProfile.post(new GenericCallBack<Integer>() {
                     @Override
                     public void callBack(Integer value) {
+                        if (value == ERROR) {
+                            callBack.callBack(ERROR);
+                            return;
+                        }
                         membershipType = getYourUserProfile.getMembershipType();
                         memberName = getYourUserProfile.getMemberName();
                         callBack.callBack(membershipType);
