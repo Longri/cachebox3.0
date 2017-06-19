@@ -108,6 +108,14 @@
       "path": "svg/att_Available_during_winter_1.svg",
       "scale": 0.5
     },
+    "att_Bicycles_0": {
+      "path": "svg/att_Bicycles_0.svg",
+      "scale": 0.5
+    },
+    "att_Bicycles_1": {
+      "path": "svg/att_Bicycles_1.svg",
+      "scale": 0.5
+    },
     "att_Boat_0": {
       "path": "svg/att_Boat_0.svg",
       "scale": 0.5
@@ -122,6 +130,14 @@
     },
     "att_Cactus_1": {
       "path": "svg/att_Cactus_1.svg",
+      "scale": 0.5
+    },
+    "att_Camping_available_0": {
+      "path": "svg/att_Camping_available_0.svg",
+      "scale": 0.5
+    },
+    "att_Camping_available_1": {
+      "path": "svg/att_Camping_available_1.svg",
       "scale": 0.5
     },
     "att_Cliff_falling_rocks_0": {
@@ -172,6 +188,14 @@
       "path": "svg/att_Dogs_1.svg",
       "scale": 0.5
     },
+    "att_Drinking_water_nearby_0": {
+      "path": "svg/att_Drinking_water_nearby_0.svg",
+      "scale": 0.5
+    },
+    "att_Drinking_water_nearby_1": {
+      "path": "svg/att_Drinking_water_nearby_1.svg",
+      "scale": 0.5
+    },
     "att_Hunting_0": {
       "path": "svg/att_Hunting_0.svg",
       "scale": 0.5
@@ -204,12 +228,36 @@
       "path": "svg/att_Parking_available_1.svg",
       "scale": 0.5
     },
+    "att_Picnic_tables_nearby_0": {
+      "path": "svg/att_Picnic_tables_nearby_0.svg",
+      "scale": 0.5
+    },
+    "att_Picnic_tables_nearby_1": {
+      "path": "svg/att_Picnic_tables_nearby_1.svg",
+      "scale": 0.5
+    },
     "att_Poison_plants_0": {
       "path": "svg/att_Poison_plants_0.svg",
       "scale": 0.5
     },
     "att_Poison_plants_1": {
       "path": "svg/att_Poison_plants_1.svg",
+      "scale": 0.5
+    },
+    "att_Public_restrooms_nearby_0": {
+      "path": "svg/att_Public_restrooms_nearby_0.svg",
+      "scale": 0.5
+    },
+    "att_Public_restrooms_nearby_1": {
+      "path": "svg/att_Public_restrooms_nearby_1.svg",
+      "scale": 0.5
+    },
+    "att_Public_transportation_0": {
+      "path": "svg/att_Public_transportation_0.svg",
+      "scale": 0.5
+    },
+    "att_Public_transportation_1": {
+      "path": "svg/att_Public_transportation_1.svg",
       "scale": 0.5
     },
     "att_Recommended_at_night_0": {
@@ -260,12 +308,28 @@
       "path": "svg/att_Takes_less_than_an_hour_1.svg",
       "scale": 0.5
     },
+    "att_Telephone_nearby_0": {
+      "path": "svg/att_Telephone_nearby_0.svg",
+      "scale": 0.5
+    },
+    "att_Telephone_nearby_1": {
+      "path": "svg/att_Telephone_nearby_1.svg",
+      "scale": 0.5
+    },
     "att_Ticks_0": {
       "path": "svg/att_Ticks_0.svg",
       "scale": 0.5
     },
     "att_Ticks_1": {
       "path": "svg/att_Ticks_1.svg",
+      "scale": 0.5
+    },
+    "att_Wheelchair_accessible_0": {
+      "path": "svg/att_Wheelchair_accessible_0.svg",
+      "scale": 0.5
+    },
+    "att_Wheelchair_accessible_1": {
+      "path": "svg/att_Wheelchair_accessible_1.svg",
       "scale": 0.5
     },
     "baseMapFreizeitkarte": {
@@ -2352,7 +2416,15 @@
       "att_Cliff_falling_rocks_0": "att_Cliff_falling_rocks_0",
       "att_Hunting_0": "att_Hunting_0",
       "att_Dangerous_area_0": "att_Dangerous_area_0",
+      "att_Wheelchair_accessible_0": "att_Wheelchair_accessible_0",
       "att_Parking_available_0": "att_Parking_available_0",
+      "att_Public_transportation_0": "att_Public_transportation_0",
+      "att_Drinking_water_nearby_0": "att_Drinking_water_nearby_0",
+      "att_Public_restrooms_nearby_0": "att_Public_restrooms_nearby_0",
+      "att_Telephone_nearby_0": "att_Telephone_nearby_0",
+      "att_Picnic_tables_nearby_0": "att_Picnic_tables_nearby_0",
+      "att_Camping_available_0": "att_Camping_available_0",
+      "att_Bicycles_0": "att_Bicycles_0",
       "att_Dogs_1": "att_Dogs_1",
       "att_Access_or_parking_fee_1": "att_Access_or_parking_fee_1",
       "att_Climbing_gear_1": "att_Climbing_gear_1",
@@ -2376,7 +2448,15 @@
       "att_Cliff_falling_rocks_1": "att_Cliff_falling_rocks_1",
       "att_Hunting_1": "att_Hunting_1",
       "att_Dangerous_area_1": "att_Dangerous_area_1",
-      "att_Parking_available_1": "att_Parking_available_1"
+      "att_Wheelchair_accessible_1": "att_Wheelchair_accessible_1",
+      "att_Parking_available_1": "att_Parking_available_1",
+      "att_Public_transportation_1": "att_Public_transportation_1",
+      "att_Drinking_water_nearby_1": "att_Drinking_water_nearby_1",
+      "att_Public_restrooms_nearby_1": "att_Public_restrooms_nearby_1",
+      "att_Telephone_nearby_1": "att_Telephone_nearby_1",
+      "att_Picnic_tables_nearby_1": "att_Picnic_tables_nearby_1",
+      "att_Camping_available_1": "att_Camping_available_1",
+      "att_Bicycles_1": "att_Bicycles_1"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LanguageStyle": {
