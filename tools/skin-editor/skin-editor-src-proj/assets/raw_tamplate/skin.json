@@ -220,6 +220,22 @@
       "path": "svg/att_May_require_wading_1.svg",
       "scale": 0.5
     },
+    "att_Motorcycles_0": {
+      "path": "svg/att_Motorcycles_0.svg",
+      "scale": 0.5
+    },
+    "att_Motorcycles_1": {
+      "path": "svg/att_Motorcycles_1.svg",
+      "scale": 0.5
+    },
+    "att_Off_road_vehicles_0": {
+      "path": "svg/att_Off_road_vehicles_0.svg",
+      "scale": 0.5
+    },
+    "att_Off_road_vehicles_1": {
+      "path": "svg/att_Off_road_vehicles_1.svg",
+      "scale": 0.5
+    },
     "att_Parking_available_0": {
       "path": "svg/att_Parking_available_0.svg",
       "scale": 0.5
@@ -258,6 +274,14 @@
     },
     "att_Public_transportation_1": {
       "path": "svg/att_Public_transportation_1.svg",
+      "scale": 0.5
+    },
+    "att_Quads_0": {
+      "path": "svg/att_Quads_0.svg",
+      "scale": 0.5
+    },
+    "att_Quads_1": {
+      "path": "svg/att_Quads_1.svg",
       "scale": 0.5
     },
     "att_Recommended_at_night_0": {
@@ -2425,6 +2449,9 @@
       "att_Picnic_tables_nearby_0": "att_Picnic_tables_nearby_0",
       "att_Camping_available_0": "att_Camping_available_0",
       "att_Bicycles_0": "att_Bicycles_0",
+      "att_Motorcycles_0": "att_Motorcycles_0",
+      "att_Quads_0": "att_Quads_0",
+      "att_Off_road_vehicles_0": "att_Off_road_vehicles_0",
       "att_Dogs_1": "att_Dogs_1",
       "att_Access_or_parking_fee_1": "att_Access_or_parking_fee_1",
       "att_Climbing_gear_1": "att_Climbing_gear_1",
@@ -2456,7 +2483,10 @@
       "att_Telephone_nearby_1": "att_Telephone_nearby_1",
       "att_Picnic_tables_nearby_1": "att_Picnic_tables_nearby_1",
       "att_Camping_available_1": "att_Camping_available_1",
-      "att_Bicycles_1": "att_Bicycles_1"
+      "att_Bicycles_1": "att_Bicycles_1",
+      "att_Motorcycles_1": "att_Motorcycles_1",
+      "att_Quads_1": "att_Quads_1",
+      "att_Off_road_vehicles_1": "att_Off_road_vehicles_1"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LanguageStyle": {
