@@ -23,7 +23,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.SkinFont;
+import com.badlogic.gdx.graphics.g2d.freetype.SkinFont;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -137,7 +137,7 @@ public class Splash extends NamedStage {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         String path = "skins/day/fonts/DroidSans.ttf";
         labelStyle.fontColor = Color.BLACK;
-        labelStyle.font = new SkinFont(path, Gdx.files.internal(path), 20);
+        labelStyle.font = new SkinFont(path, Gdx.files.internal(path), 20, null,null);
         workLabel = new Label(" \n ", labelStyle);
         workLabel.setBounds(margin, margin + progress.getPrefHeight() + margin, progressWidth, workLabel.getPrefHeight());
         this.addActor(workLabel);

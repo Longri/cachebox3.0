@@ -16,6 +16,7 @@
 package com.badlogic.gdx.scenes.scene2d.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.freetype.SkinFont;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -277,7 +278,7 @@ public class NewFontDialog extends Dialog {
 
                 String path = "fonts/" + fontPath.getName();
 
-                BitmapFont font = new SkinFont(path, new FileHandle(fontPath), size);
+                BitmapFont font = new SkinFont(path, new FileHandle(fontPath), size, callback);
 
                 game.skinProject.add(textFontName.getText(), font);
                 game.screenMain.saveToSkin();

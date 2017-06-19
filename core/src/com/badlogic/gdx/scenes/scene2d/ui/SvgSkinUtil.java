@@ -42,7 +42,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 11.01.17.
@@ -192,7 +191,7 @@ public class SvgSkinUtil {
             ObjectMap<String, Object> typeResources = skin.resources.get(item);
 
             if (item == BitmapFont.class) {
-                ObjectMap<String, Object> addTypeResources = skin.resources.get(SkinFont.class);
+                ObjectMap<String, Object> addTypeResources = skin.resources.get(com.badlogic.gdx.graphics.g2d.freetype.SkinFont.class);
                 if (addTypeResources != null) typeResources.putAll(addTypeResources);
             }
 

@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.freetype.SkinFont;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
@@ -427,22 +428,22 @@ public class SvgSkin extends Skin {
                 if (!fontFile.exists()) throw new SerializationException("Font file not found: " + fontFile);
 
                 try {
-                    if (callback != null) callback.taskNameChange("Generate Fonts");
+//                    if (callback != null) callback.taskNameChange("Initial Fonts");
 
-                    final AtomicBoolean wait = new AtomicBoolean(true);
-                    final SkinFont[] font = new SkinFont[1];
+                    final com.badlogic.gdx.graphics.g2d.freetype.SkinFont[] font = new SkinFont[1];
                     try {
                         Thread.sleep(20);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-                   CB.postOnMainThread(new Runnable() {
-                       @Override
-                       public void run() {
-                           font[0] = new SkinFont(path, fontFile, scaledSize);
-                       }
-                   },true);
+                    CB.postOnMainThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            FileHandle cacheFileHandle = Gdx.files.absolute(CB.WorkPath + SvgSkinUtil.TMP_UI_ATLAS_PATH + name );
+                            font[0] = new SkinFont(path, fontFile, scaledSize, callback, cacheFileHandle);
+                        }
+                    }, true);
                     return font[0];
                 } catch (RuntimeException ex) {
                     throw new SerializationException("Error loading bitmap font: " + fontFile, ex);
