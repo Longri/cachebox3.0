@@ -16,19 +16,16 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.utils.Align;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.Action_Show_Hint;
+import de.longri.cachebox3.gui.actions.Action_Switch_Torch;
 import de.longri.cachebox3.gui.actions.QuickActions;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 
@@ -79,6 +76,12 @@ public class QuickButtonItem extends ListViewItem {
 
     public void clicked() {
         mAction.execute();
+        if (mAction instanceof Action_Switch_Torch) {
+            spriteDrawable = mAction.getIcon();
+            mButtonIcon.setDrawable(spriteDrawable);
+            needsLayout = true;
+            this.invalidate();
+        }
     }
 
     @Override

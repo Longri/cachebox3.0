@@ -572,6 +572,18 @@
       "path": "svg/letterbox.svg",
       "scale": 0.2
     },
+    "light_disabled": {
+      "path": "svg/light_disabled.svg",
+      "scale": 0.19
+    },
+    "light_off": {
+      "path": "svg/light_off.svg",
+      "scale": 0.19
+    },
+    "light_on": {
+      "path": "svg/light_on.svg",
+      "scale": 0.19
+    },
     "listIcon": {
       "path": "svg/listIcon.svg",
       "scale": 0.195
@@ -1758,8 +1770,7 @@
       "fontColor": "font_color",
       "up": "toggleOff_9_Patch",
       "down": "togglePress_9_Patch",
-      "checked": "toggleOn_9_Patch",
-      "disabled": "default_button_disabled_9_Patch"
+      "checked": "toggleOn_9_Patch"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle": {
@@ -2122,6 +2133,9 @@
       "addWp": "add-wp",
       "hintIconOn": "hintOn",
       "hintIconOff": "hintOff",
+      "torchOn": "light_on",
+      "torchOff": "light_off",
+      "torchDisabled": "light_disabled",
       "manageDB": "database",
       "settingsIcon": "settings_icon",
       "compassIcon": "compas_icon",

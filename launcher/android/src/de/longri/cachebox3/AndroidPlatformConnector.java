@@ -23,6 +23,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.hardware.Camera;
+import android.hardware.camera2.CameraDevice;
+import android.hardware.camera2.CameraMetadata;
+import android.hardware.camera2.CaptureRequest;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Environment;
@@ -50,6 +54,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 17.07.16.
@@ -61,6 +66,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
     public static AndroidPlatformConnector platformConnector;
     private final Handler handle;
     private final Context context;
+    private final AndroidFlashLight flashLight;
 
     public AndroidPlatformConnector(AndroidLauncherfragment app) {
         this.application = app;
@@ -68,22 +74,31 @@ public class AndroidPlatformConnector extends PlatformConnector {
         platformConnector = this;
         SQLiteGdxDatabaseFactory.setDatabaseManager(new AndroidDatabaseManager());
         this.handle = new Handler();
+        this.flashLight = new AndroidFlashLight(this.context);
     }
 
 
     @Override
     protected boolean _isTorchAvailable() {
-        return false;
+        return flashLight.available();
     }
 
     @Override
     protected boolean _isTorchOn() {
-        return false;
+        return flashLight.isOn();
     }
 
     @Override
     protected void _switchTorch() {
-//TODO implement tourch
+        if (flashLight.available()) {
+            if (flashLight.isOn()) {
+                //switch off
+                flashLight.switchOff();
+            } else {
+                //switch on
+                flashLight.switchOn();
+            }
+        }
     }
 
 
@@ -186,7 +201,8 @@ public class AndroidPlatformConnector extends PlatformConnector {
         this.application.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (descriptionView == null) descriptionView = new AndroidDescriptionView(AndroidPlatformConnector.this.application.getContext());
+                if (descriptionView == null)
+                    descriptionView = new AndroidDescriptionView(AndroidPlatformConnector.this.application.getContext());
                 callBack.callBack(descriptionView);
 
             }

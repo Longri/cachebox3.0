@@ -35,12 +35,21 @@ public class AndroidPermissionCheck {
     static final String INTERNET = "android.permission.INTERNET";
     static final String ACCESS_NETWORK_STATE = "android.permission.ACCESS_NETWORK_STATE";
     static final String RECORD_AUDIO = "android.permission.RECORD_AUDIO";
-    static final String CAMERA = "android.permission.CAMERA";
     static final String VIBRATE = "android.permission.VIBRATE";
     static final String WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
     static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
 
-    static final String[] NEEDED_PERMISSIONS = new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, WAKE_LOCK, INTERNET, ACCESS_NETWORK_STATE, RECORD_AUDIO, CAMERA, VIBRATE, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE};
+    static final String CAMERA = "android.permission.CAMERA";
+
+    static final String FLASHLIGHT = "android.permission.FLASHLIGHT";
+    static final String CAMERA2 = "android.hardware.camera";
+    static final String AUTOFOCUS = "android.hardware.camera.autofocus";
+    static final String FLASH = "android.hardware.camera.flash";
+
+
+    static final String[] NEEDED_PERMISSIONS = new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, WAKE_LOCK
+            , INTERNET, ACCESS_NETWORK_STATE, RECORD_AUDIO, CAMERA, VIBRATE, WRITE_EXTERNAL_STORAGE
+            , READ_EXTERNAL_STORAGE, FLASHLIGHT, CAMERA2, AUTOFOCUS, FLASH};
 
     public static void checkNeededPermissions(Activity context) {
         ArrayList<String> DENIED_List = new ArrayList<String>();

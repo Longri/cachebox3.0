@@ -21,6 +21,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
@@ -77,6 +78,12 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        // permission changed, reinitialize PlatformConnector
+        PlatformConnector.init(new AndroidPlatformConnector(fragment));
+    }
 
     @Override
     protected void onResume() {

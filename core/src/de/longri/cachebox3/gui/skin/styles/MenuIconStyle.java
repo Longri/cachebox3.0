@@ -61,6 +61,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable autoSortOffIcon;
     public Drawable torchOn;
     public Drawable torchOff;
+    public Drawable torchDisabled;
     public Drawable takePhoto;
     public Drawable dayNight;
     public Drawable uploadFieldNote;

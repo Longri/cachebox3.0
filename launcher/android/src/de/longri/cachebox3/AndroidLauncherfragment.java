@@ -16,6 +16,7 @@
 package de.longri.cachebox3;
 
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 26.04.2017.
  */
-public class AndroidLauncherfragment extends AndroidFragmentApplication {
+public class AndroidLauncherfragment extends AndroidFragmentApplication implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     final static Logger log = LoggerFactory.getLogger(AndroidLauncherfragment.class);
 
@@ -61,7 +62,6 @@ public class AndroidLauncherfragment extends AndroidFragmentApplication {
 
         return view;
     }
-
 
     public void show(AndroidDescriptionView descriptionView) {
         ViewGroup.LayoutParams params = new RelativeLayout.LayoutParams(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 2);
