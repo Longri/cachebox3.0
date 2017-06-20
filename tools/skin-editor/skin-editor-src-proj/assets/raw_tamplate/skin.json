@@ -132,6 +132,14 @@
       "path": "svg/att_Cactus_1.svg",
       "scale": 0.5
     },
+    "att_Campfires_0": {
+      "path": "svg/att_Campfires_0.svg",
+      "scale": 0.5
+    },
+    "att_Campfires_1": {
+      "path": "svg/att_Campfires_1.svg",
+      "scale": 0.5
+    },
     "att_Camping_available_0": {
       "path": "svg/att_Camping_available_0.svg",
       "scale": 0.5
@@ -194,6 +202,14 @@
     },
     "att_Drinking_water_nearby_1": {
       "path": "svg/att_Drinking_water_nearby_1.svg",
+      "scale": 0.5
+    },
+    "att_Horses_0": {
+      "path": "svg/att_Horses_0.svg",
+      "scale": 0.5
+    },
+    "att_Horses_1": {
+      "path": "svg/att_Horses_1.svg",
       "scale": 0.5
     },
     "att_Hunting_0": {
@@ -324,6 +340,30 @@
       "path": "svg/att_Significant_Hike_1.svg",
       "scale": 0.5
     },
+    "att_Snowmobiles_0": {
+      "path": "svg/att_Snowmobiles_0.svg",
+      "scale": 0.5
+    },
+    "att_Snowmobiles_1": {
+      "path": "svg/att_Snowmobiles_1.svg",
+      "scale": 0.5
+    },
+    "att_Stealth_required_0": {
+      "path": "svg/att_Stealth_required_0.svg",
+      "scale": 0.5
+    },
+    "att_Stealth_required_1": {
+      "path": "svg/att_Stealth_required_1.svg",
+      "scale": 0.5
+    },
+    "att_Stroller_accessible_0": {
+      "path": "svg/att_Stroller_accessible_0.svg",
+      "scale": 0.5
+    },
+    "att_Stroller_accessible_1": {
+      "path": "svg/att_Stroller_accessible_1.svg",
+      "scale": 0.5
+    },
     "att_Takes_less_than_an_hour_0": {
       "path": "svg/att_Takes_less_than_an_hour_0.svg",
       "scale": 0.5
@@ -338,6 +378,14 @@
     },
     "att_Telephone_nearby_1": {
       "path": "svg/att_Telephone_nearby_1.svg",
+      "scale": 0.5
+    },
+    "att_Thorns_0": {
+      "path": "svg/att_Thorns_0.svg",
+      "scale": 0.5
+    },
+    "att_Thorns_1": {
+      "path": "svg/att_Thorns_1.svg",
       "scale": 0.5
     },
     "att_Ticks_0": {
@@ -2452,6 +2500,12 @@
       "att_Motorcycles_0": "att_Motorcycles_0",
       "att_Quads_0": "att_Quads_0",
       "att_Off_road_vehicles_0": "att_Off_road_vehicles_0",
+      "att_Snowmobiles_0": "att_Snowmobiles_0",
+      "att_Horses_0": "att_Horses_0",
+      "att_Campfires_0": "att_Campfires_0",
+      "att_Thorns_0": "att_Thorns_0",
+      "att_Stealth_required_0": "att_Stealth_required_0",
+      "att_Stroller_accessible_0": "att_Stroller_accessible_0",
       "att_Dogs_1": "att_Dogs_1",
       "att_Access_or_parking_fee_1": "att_Access_or_parking_fee_1",
       "att_Climbing_gear_1": "att_Climbing_gear_1",
@@ -2486,7 +2540,13 @@
       "att_Bicycles_1": "att_Bicycles_1",
       "att_Motorcycles_1": "att_Motorcycles_1",
       "att_Quads_1": "att_Quads_1",
-      "att_Off_road_vehicles_1": "att_Off_road_vehicles_1"
+      "att_Off_road_vehicles_1": "att_Off_road_vehicles_1",
+      "att_Snowmobiles_1": "att_Snowmobiles_1",
+      "att_Horses_1": "att_Horses_1",
+      "att_Campfires_1": "att_Campfires_1",
+      "att_Thorns_1": "att_Thorns_1",
+      "att_Stealth_required_1": "att_Stealth_required_1",
+      "att_Stroller_accessible_1": "att_Stroller_accessible_1"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LanguageStyle": {

@@ -278,7 +278,7 @@ public class NewFontDialog extends Dialog {
 
                 String path = "fonts/" + fontPath.getName();
 
-                BitmapFont font = new SkinFont(path, new FileHandle(fontPath), size, callback);
+                BitmapFont font = new SkinFont(path, new FileHandle(fontPath), size, null,null);
 
                 game.skinProject.add(textFontName.getText(), font);
                 game.screenMain.saveToSkin();
