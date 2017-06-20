@@ -204,6 +204,22 @@
       "path": "svg/att_Drinking_water_nearby_1.svg",
       "scale": 0.5
     },
+    "att_Field_Puzzle_0": {
+      "path": "svg/att_Field_Puzzle_0.svg",
+      "scale": 0.5
+    },
+    "att_Field_Puzzle_1": {
+      "path": "svg/att_Field_Puzzle_1.svg",
+      "scale": 0.5
+    },
+    "att_Flashlight_required_0": {
+      "path": "svg/att_Flashlight_required_0.svg",
+      "scale": 0.5
+    },
+    "att_Flashlight_required_1": {
+      "path": "svg/att_Flashlight_required_1.svg",
+      "scale": 0.5
+    },
     "att_Horses_0": {
       "path": "svg/att_Horses_0.svg",
       "scale": 0.5
@@ -218,6 +234,14 @@
     },
     "att_Hunting_1": {
       "path": "svg/att_Hunting_1.svg",
+      "scale": 0.5
+    },
+    "att_Lost_And_Found_Tour_0": {
+      "path": "svg/att_Lost_And_Found_Tour_0.svg",
+      "scale": 0.5
+    },
+    "att_Lost_And_Found_Tour_1": {
+      "path": "svg/att_Lost_And_Found_Tour_1.svg",
       "scale": 0.5
     },
     "att_May_require_swimming_0": {
@@ -242,6 +266,14 @@
     },
     "att_Motorcycles_1": {
       "path": "svg/att_Motorcycles_1.svg",
+      "scale": 0.5
+    },
+    "att_Needs_maintenance_0": {
+      "path": "svg/att_Needs_maintenance_0.svg",
+      "scale": 0.5
+    },
+    "att_Needs_maintenance_1": {
+      "path": "svg/att_Needs_maintenance_1.svg",
       "scale": 0.5
     },
     "att_Off_road_vehicles_0": {
@@ -394,6 +426,22 @@
     },
     "att_Ticks_1": {
       "path": "svg/att_Ticks_1.svg",
+      "scale": 0.5
+    },
+    "att_Truck_Driver_0": {
+      "path": "svg/att_Truck_Driver_0.svg",
+      "scale": 0.5
+    },
+    "att_Truck_Driver_1": {
+      "path": "svg/att_Truck_Driver_1.svg",
+      "scale": 0.5
+    },
+    "att_Watch_for_livestock_0": {
+      "path": "svg/att_Watch_for_livestock_0.svg",
+      "scale": 0.5
+    },
+    "att_Watch_for_livestock_1": {
+      "path": "svg/att_Watch_for_livestock_1.svg",
       "scale": 0.5
     },
     "att_Wheelchair_accessible_0": {
@@ -2506,6 +2554,12 @@
       "att_Thorns_0": "att_Thorns_0",
       "att_Stealth_required_0": "att_Stealth_required_0",
       "att_Stroller_accessible_0": "att_Stroller_accessible_0",
+      "att_Needs_maintenance_0": "att_Needs_maintenance_0",
+      "att_Watch_for_livestock_0": "att_Watch_for_livestock_0",
+      "att_Flashlight_required_0": "att_Flashlight_required_0",
+      "att_Lost_And_Found_Tour_0": "att_Lost_And_Found_Tour_0",
+      "att_Truck_Driver_0": "att_Truck_Driver_0",
+      "att_Field_Puzzle_0": "att_Field_Puzzle_0",
       "att_Dogs_1": "att_Dogs_1",
       "att_Access_or_parking_fee_1": "att_Access_or_parking_fee_1",
       "att_Climbing_gear_1": "att_Climbing_gear_1",
@@ -2546,7 +2600,13 @@
       "att_Campfires_1": "att_Campfires_1",
       "att_Thorns_1": "att_Thorns_1",
       "att_Stealth_required_1": "att_Stealth_required_1",
-      "att_Stroller_accessible_1": "att_Stroller_accessible_1"
+      "att_Stroller_accessible_1": "att_Stroller_accessible_1",
+      "att_Needs_maintenance_1": "att_Needs_maintenance_1",
+      "att_Watch_for_livestock_1": "att_Watch_for_livestock_1",
+      "att_Flashlight_required_1": "att_Flashlight_required_1",
+      "att_Lost_And_Found_Tour_1": "att_Lost_And_Found_Tour_1",
+      "att_Truck_Driver_1": "att_Truck_Driver_1",
+      "att_Field_Puzzle_1": "att_Field_Puzzle_1"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LanguageStyle": {
