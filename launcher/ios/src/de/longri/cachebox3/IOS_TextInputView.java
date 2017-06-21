@@ -2,17 +2,14 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
-import org.robovm.apple.coregraphics.CGPoint;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.coregraphics.CGSize;
 import org.robovm.apple.foundation.NSRange;
 import org.robovm.apple.foundation.NSString;
-import org.robovm.apple.foundation.NSURL;
+import org.robovm.apple.gamecontroller.GCControllerDirectionPad;
 import org.robovm.apple.uikit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by longri on 09.06.17.
@@ -33,7 +30,7 @@ public class IOS_TextInputView extends UIView {
     UIViewController mainViewController;
     final UIButton okButton, cancelButton;
 
-    public IOS_TextInputView(UIViewController mainViewController, String text, final Callback callback) {
+    public IOS_TextInputView(UIViewController mainViewController, final String text, final Callback callback) {
         this.mainViewController = mainViewController;
         ((IOSApplication) Gdx.app).getUIWindow().addSubview(this);
 
@@ -129,6 +126,19 @@ public class IOS_TextInputView extends UIView {
                 setContentSize(textView, scrollView);
             }
         });
+
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        textView.setSelectedRange(new NSRange(text.length(), 0));
+                        textView.becomeFirstResponder();
+                    }
+                });
+            }
+        });
     }
 
     private CGRect setContentSize(UITextView textView, UIScrollView scrollView) {
@@ -155,8 +165,8 @@ public class IOS_TextInputView extends UIView {
         double ext = (uiFont.getLineHeight() * 2);
 
         double height = Math.max(bounding.getHeight() + ext, this.getBounds().getHeight() - this.okButton.getBounds().getHeight());
-
-        return new CGRect(0, 0, bounding.getWidth() + ext, height);
+        double width = Math.max(bounding.getWidth() + ext, this.getBounds().getWidth());
+        return new CGRect(0, 0, width, height);
     }
 
 }
