@@ -41,6 +41,7 @@ import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
+import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
@@ -48,6 +49,7 @@ import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.LogTypes;
 import org.oscim.utils.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,12 +83,10 @@ public class TestView extends AbstractView {
 
 
         AttributesStyle attStyle = VisUI.getSkin().get("CompassView", AttributesStyle.class);
-
         Attributes[] valuesPos = Attributes.values();
-
         ArrayList<Attributes> attList = new ArrayList<>();
 
-        for (int i = 0, n = valuesPos.length ; i < n; i++) {
+        for (int i = 0, n = valuesPos.length; i < n; i++) {
             Attributes pos = valuesPos[i];
             Attributes neg = valuesPos[i];
             attList.add(pos);
@@ -98,23 +98,8 @@ public class TestView extends AbstractView {
         Table lineTable = new Table();
         lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
 
-        VisTextButton button = new VisTextButton("TOAST");
-        button.addListener(new ClickLongClickListener() {
-            ViewManager.ToastLength length = ViewManager.ToastLength.WAIT;
-
-            @Override
-            public boolean clicked(InputEvent event, float x, float y) {
-                CB.viewmanager.toast("TOAST WAIT", length);
-                return true;
-            }
-
-            @Override
-            public boolean longClicked(Actor actor, float x, float y) {
-                length.close();
-                return true;
-            }
-        });
-        lineTable.add(button);
+        VisLabel label = new VisLabel("Attribute Icons");
+        lineTable.add(label);
 
 
         attTable.add(lineTable).left().expandX().fillX();
@@ -152,6 +137,50 @@ public class TestView extends AbstractView {
 
         }
         attTable.add(lineTable).left();
+
+
+        attTable.row();
+        //LogTypes
+        VisLabel label2 = new VisLabel("Log Type Icons");
+        lineTable = new Table();
+        lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+        lineTable.add(label2);
+        attTable.add(lineTable).left().expandX().fillX();
+        attTable.row();
+        iconWidth = 0;
+        LogTypes[] logTypes = LogTypes.values();
+        LogTypesStyle logTypesStyle = VisUI.getSkin().get("logViewLogStyles", LogTypesStyle.class);
+        for (int i = 0, n = logTypes.length; i < n; i++) {
+            LogTypes logType = logTypes[i];
+
+            Drawable attDrawable = logType.getDrawable(logTypesStyle);
+
+            if (iconWidth == 0) {
+                iconWidth = CB.getScaledFloat(40);//attDrawable.getMinWidth();
+                iconHeight = CB.getScaledFloat(40);// attDrawable.getMinHeight();
+                lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + CB.scaledSizes.MARGINx4));
+                lineTable = new Table();
+                lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            }
+
+            if (attDrawable != null) {
+                lineTable.add(new Image(attDrawable)).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
+            } else {
+                lineTable.add(new VisLabel(Integer.toString(i))).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
+            }
+
+
+            if (i >= lineBreak) {
+                attTable.add(lineTable).left();
+                attTable.row();
+                lineTable = new Table();
+                lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+                lineBreak += lineBreakStep + 1;
+            }
+
+        }
+        attTable.add(lineTable).left();
+
         this.addActor(scrollPane);
     }
 
