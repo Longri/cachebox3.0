@@ -244,12 +244,28 @@
       "path": "svg/att_Food_Nearby_1.svg",
       "scale": 0.5
     },
+    "att_Front_Yard_0": {
+      "path": "svg/att_Front_Yard_0.svg",
+      "scale": 0.5
+    },
+    "att_Front_Yard_1": {
+      "path": "svg/att_Front_Yard_1.svg",
+      "scale": 0.5
+    },
     "att_Fuel_Nearby_0": {
       "path": "svg/att_Fuel_Nearby_0.svg",
       "scale": 0.5
     },
     "att_Fuel_Nearby_1": {
       "path": "svg/att_Fuel_Nearby_1.svg",
+      "scale": 0.5
+    },
+    "att_GeoTour_0": {
+      "path": "svg/att_GeoTour_0.svg",
+      "scale": 0.5
+    },
+    "att_GeoTour_1": {
+      "path": "svg/att_GeoTour_1.svg",
       "scale": 0.5
     },
     "att_Horses_0": {
@@ -436,6 +452,14 @@
       "path": "svg/att_Scuba_gear_1.svg",
       "scale": 0.5
     },
+    "att_Seasonal_Access_0": {
+      "path": "svg/att_Seasonal_Access_0.svg",
+      "scale": 0.5
+    },
+    "att_Seasonal_Access_1": {
+      "path": "svg/att_Seasonal_Access_1.svg",
+      "scale": 0.5
+    },
     "att_Short_hike)": {
       "path": "svg/att_Short_hike).svg",
       "scale": 0.5
@@ -500,6 +524,14 @@
       "path": "svg/att_Takes_less_than_an_hour_1.svg",
       "scale": 0.5
     },
+    "att_Teamwork_Required_0": {
+      "path": "svg/att_Teamwork_Required_0.svg",
+      "scale": 0.5
+    },
+    "att_Teamwork_Required_1": {
+      "path": "svg/att_Teamwork_Required_1.svg",
+      "scale": 0.5
+    },
     "att_Telephone_nearby_0": {
       "path": "svg/att_Telephone_nearby_0.svg",
       "scale": 0.5
@@ -522,6 +554,22 @@
     },
     "att_Ticks_1": {
       "path": "svg/att_Ticks_1.svg",
+      "scale": 0.5
+    },
+    "att_Tourist_Friendly_0": {
+      "path": "svg/att_Tourist_Friendly_0.svg",
+      "scale": 0.5
+    },
+    "att_Tourist_Friendly_1": {
+      "path": "svg/att_Tourist_Friendly_1.svg",
+      "scale": 0.5
+    },
+    "att_Tree_Climbing_0": {
+      "path": "svg/att_Tree_Climbing_0.svg",
+      "scale": 0.5
+    },
+    "att_Tree_Climbing_1": {
+      "path": "svg/att_Tree_Climbing_1.svg",
       "scale": 0.5
     },
     "att_Truck_Driver_0": {
@@ -2686,6 +2734,12 @@
       "att_Food_Nearby_0": "att_Food_Nearby_0",
       "att_Wireless_Beacon_0": "att_Wireless_Beacon_0",
       "att_Partnership_Cache_0": "att_Partnership_Cache_0",
+      "att_Seasonal_Access_0": "att_Seasonal_Access_0",
+      "att_Tourist_Friendly_0": "att_Tourist_Friendly_0",
+      "att_Tree_Climbing_0": "att_Tree_Climbing_0",
+      "att_Front_Yard_0": "att_Front_Yard_0",
+      "att_Teamwork_Required_0": "att_Teamwork_Required_0",
+      "att_GeoTour_0": "att_GeoTour_0",
       "att_Dogs_1": "att_Dogs_1",
       "att_Access_or_parking_fee_1": "att_Access_or_parking_fee_1",
       "att_Climbing_gear_1": "att_Climbing_gear_1",
@@ -2746,7 +2800,13 @@
       "att_Fuel_Nearby_1": "att_Fuel_Nearby_1",
       "att_Food_Nearby_1": "att_Food_Nearby_1",
       "att_Wireless_Beacon_1": "att_Wireless_Beacon_1",
-      "att_Partnership_Cache_1": "att_Partnership_Cache_1"
+      "att_Partnership_Cache_1": "att_Partnership_Cache_1",
+      "att_Seasonal_Access_1": "att_Seasonal_Access_1",
+      "att_Tourist_Friendly_1": "att_Tourist_Friendly_1",
+      "att_Tree_Climbing_1": "att_Tree_Climbing_1",
+      "att_Front_Yard_1": "att_Front_Yard_1",
+      "att_Teamwork_Required_1": "att_Teamwork_Required_1",
+      "att_GeoTour_1": "att_GeoTour_1"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LanguageStyle": {

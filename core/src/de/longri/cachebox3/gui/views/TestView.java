@@ -86,7 +86,7 @@ public class TestView extends AbstractView {
 
         ArrayList<Attributes> attList = new ArrayList<>();
 
-        for (int i = 0, n = valuesPos.length - 1; i < n; i++) {
+        for (int i = 0, n = valuesPos.length ; i < n; i++) {
             Attributes pos = valuesPos[i];
             Attributes neg = valuesPos[i];
             attList.add(pos);
