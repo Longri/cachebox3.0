@@ -76,6 +76,14 @@
       "path": "svg/arrow_help_90.svg",
       "scale": 0.28
     },
+    "att_Abandoned_Structure_0": {
+      "path": "svg/att_Abandoned_Structure_0.svg",
+      "scale": 0.5
+    },
+    "att_Abandoned_Structure_1": {
+      "path": "svg/att_Abandoned_Structure_1.svg",
+      "scale": 0.5
+    },
     "att_Abandoned_mines_0": {
       "path": "svg/att_Abandoned_mines_0.svg",
       "scale": 0.5
@@ -228,6 +236,22 @@
       "path": "svg/att_Flashlight_required_1.svg",
       "scale": 0.5
     },
+    "att_Food_Nearby_0": {
+      "path": "svg/att_Food_Nearby_0.svg",
+      "scale": 0.5
+    },
+    "att_Food_Nearby_1": {
+      "path": "svg/att_Food_Nearby_1.svg",
+      "scale": 0.5
+    },
+    "att_Fuel_Nearby_0": {
+      "path": "svg/att_Fuel_Nearby_0.svg",
+      "scale": 0.5
+    },
+    "att_Fuel_Nearby_1": {
+      "path": "svg/att_Fuel_Nearby_1.svg",
+      "scale": 0.5
+    },
     "att_Horses_0": {
       "path": "svg/att_Horses_0.svg",
       "scale": 0.5
@@ -242,6 +266,14 @@
     },
     "att_Hunting_1": {
       "path": "svg/att_Hunting_1.svg",
+      "scale": 0.5
+    },
+    "att_Long_Hike_0": {
+      "path": "svg/att_Long_Hike_0.svg",
+      "scale": 0.5
+    },
+    "att_Long_Hike_1": {
+      "path": "svg/att_Long_Hike_1.svg",
       "scale": 0.5
     },
     "att_Lost_And_Found_Tour_0": {
@@ -266,6 +298,14 @@
     },
     "att_May_require_wading_1": {
       "path": "svg/att_May_require_wading_1.svg",
+      "scale": 0.5
+    },
+    "att_Medium_hike_0": {
+      "path": "svg/att_Medium_hike_0.svg",
+      "scale": 0.5
+    },
+    "att_Medium_hike_1": {
+      "path": "svg/att_Medium_hike_1.svg",
       "scale": 0.5
     },
     "att_Motorcycles_0": {
@@ -314,6 +354,14 @@
     },
     "att_Parking_available_1": {
       "path": "svg/att_Parking_available_1.svg",
+      "scale": 0.5
+    },
+    "att_Partnership_Cache_0": {
+      "path": "svg/att_Partnership_Cache_0.svg",
+      "scale": 0.5
+    },
+    "att_Partnership_Cache_1": {
+      "path": "svg/att_Partnership_Cache_1.svg",
       "scale": 0.5
     },
     "att_Picnic_tables_nearby_0": {
@@ -386,6 +434,14 @@
     },
     "att_Scuba_gear_1": {
       "path": "svg/att_Scuba_gear_1.svg",
+      "scale": 0.5
+    },
+    "att_Short_hike)": {
+      "path": "svg/att_Short_hike).svg",
+      "scale": 0.5
+    },
+    "att_Short_hike_1": {
+      "path": "svg/att_Short_hike_1.svg",
       "scale": 0.5
     },
     "att_Significant_Hike_0": {
@@ -498,6 +554,14 @@
     },
     "att_Wheelchair_accessible_1": {
       "path": "svg/att_Wheelchair_accessible_1.svg",
+      "scale": 0.5
+    },
+    "att_Wireless_Beacon_0": {
+      "path": "svg/att_Wireless_Beacon_0.svg",
+      "scale": 0.5
+    },
+    "att_Wireless_Beacon_1": {
+      "path": "svg/att_Wireless_Beacon_1.svg",
       "scale": 0.5
     },
     "baseMapFreizeitkarte": {
@@ -2614,6 +2678,14 @@
       "att_Special_Tool_Required_0": "att_Special_Tool_Required_0",
       "att_Night_Cache_0": "att_Night_Cache_0",
       "att_Park_and_Grab_0": "att_Park_and_Grab_0",
+      "att_Abandoned_Structure_0": "att_Abandoned_Structure_0",
+      "att_Short_hike_0": "att_Short_hike)",
+      "att_Medium_hike_0": "att_Medium_hike_0",
+      "att_Long_Hike_0": "att_Long_Hike_0",
+      "att_Fuel_Nearby_0": "att_Fuel_Nearby_0",
+      "att_Food_Nearby_0": "att_Food_Nearby_0",
+      "att_Wireless_Beacon_0": "att_Wireless_Beacon_0",
+      "att_Partnership_Cache_0": "att_Partnership_Cache_0",
       "att_Dogs_1": "att_Dogs_1",
       "att_Access_or_parking_fee_1": "att_Access_or_parking_fee_1",
       "att_Climbing_gear_1": "att_Climbing_gear_1",
@@ -2666,7 +2738,15 @@
       "att_Cross_Country_Skis_1": "att_Cross_Country_Skis_1",
       "att_Special_Tool_Required_1": "att_Special_Tool_Required_1",
       "att_Night_Cache_1": "att_Night_Cache_1",
-      "att_Park_and_Grab_1": "att_Park_and_Grab_1"
+      "att_Park_and_Grab_1": "att_Park_and_Grab_1",
+      "att_Abandoned_Structure_1": "att_Abandoned_Structure_1",
+      "att_Short_hike_1": "att_Short_hike_1",
+      "att_Medium_hike_1": "att_Medium_hike_1",
+      "att_Long_Hike_1": "att_Long_Hike_1",
+      "att_Fuel_Nearby_1": "att_Fuel_Nearby_1",
+      "att_Food_Nearby_1": "att_Food_Nearby_1",
+      "att_Wireless_Beacon_1": "att_Wireless_Beacon_1",
+      "att_Partnership_Cache_1": "att_Partnership_Cache_1"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LanguageStyle": {

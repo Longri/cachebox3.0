@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="95" height="95" viewBox="0 0 95.00 95.00" enable-background="new 0 0 95.00 95.00" xml:space="preserve">
+	<path fill="#000000" fill-opacity="1" stroke-linejoin="round" stroke="#C0C0CC" stroke-opacity="1" d="M 15.5,2.49976L 79.5,2.49976C 86.6797,2.49976 92.5,8.32007 92.5,15.4998L 92.5,79.4998C 92.5,86.6794 86.6797,92.4998 79.5,92.4998L 15.5,92.4998C 8.32031,92.4998 2.5,86.6794 2.5,79.4998L 2.5,15.4998C 2.5,8.32007 8.32031,2.49976 15.5,2.49976 Z "/>
+	<g>
+		<path fill="#FFFFFF" fill-opacity="1" stroke-linejoin="round" d="M 43.1072,78.4768L 37.5337,78.4768L 31.8233,66.2043C 31.7144,65.969 31.5406,65.4497 31.3021,64.6467L 31.2359,64.6467L 31.2359,78.4768L 26.7134,78.4768L 26.7134,50.2239L 31.2359,50.2239L 31.2359,63.5808L 31.3021,63.5808C 31.414,63.2151 31.5966,62.6897 31.8498,62.0042L 37.2731,50.2239L 42.5419,50.2239L 35.6877,63.7007L 43.1072,78.4768 Z "/>
+		<path fill="#FFFFFF" fill-opacity="1" stroke-linejoin="round" d="M 67.6979,78.4768L 63.1755,78.4768L 63.1755,61.5691C 63.1755,59.7444 63.2329,57.7285 63.3477,55.5212L 63.2373,55.5212C 63.0076,57.2576 62.8001,58.5063 62.6146,59.2673L 57.9773,78.4768L 54.3338,78.4768L 49.6126,59.4626C 49.4831,58.95 49.2755,57.636 48.9899,55.5212L 48.8662,55.5212C 48.984,58.3086 49.0429,60.7534 49.0429,62.8557L 49.0429,78.4768L 45.0858,78.4768L 45.0858,50.2239L 51.5558,50.2239L 55.5969,66.9739C 55.9208,68.3108 56.1563,69.6563 56.3035,71.01L 56.3874,71.01C 56.6348,69.446 56.8968,68.0859 57.1735,66.9297L 61.2146,50.2239L 67.6979,50.2239L 67.6979,78.4768 Z "/>
+	</g>
+	<path fill="#FFFFFF" fill-opacity="1" stroke-linejoin="round" d="M 43.7807,40.3096L 29.674,33.8694L 29.674,31.4163L 43.7807,24.6694L 43.7807,28.2632L 33.6607,32.5662L 33.6607,32.6572L 43.7807,36.7109L 43.7807,40.3096 Z "/>
+	<path fill="#FFFFFF" fill-opacity="1" stroke-linejoin="round" d="M 57.6452,44.926L 54.4014,44.926L 54.4014,24.844C 53.2212,26.8918 51.831,28.4055 50.2309,29.385L 50.2309,23.9456C 51.0756,23.4924 51.9927,22.6343 52.9822,21.3716C 53.9718,20.1089 54.6512,18.6357 55.0205,16.9521L 57.6452,16.9521L 57.6452,44.926 Z "/>
+	<g>
+		<path fill="none" stroke-width="3" stroke-linejoin="round" stroke="#FF0000" stroke-opacity="1" d="M 15.5425,6.09497L 79.2102,6.09497C 84.7331,6.09497 89.2102,10.572 89.2102,16.095L 89.2102,80.083C 89.2102,85.6057 84.7331,90.083 79.2102,90.083L 15.5425,90.083C 10.0197,90.083 5.54251,85.6057 5.54251,80.083L 5.54251,16.095C 5.54251,10.572 10.0197,6.09497 15.5425,6.09497 Z "/>
+		<line fill="none" stroke-width="3" stroke-linejoin="round" stroke="#FF0000" stroke-opacity="1" x1="8.04214" y1="9.08911" x2="86.7088" y2="87.0891"/>
+	</g>
+	<g>
+		<radialGradient id="SVGID_Fill1_" cx="-16.0266" cy="9.87939" r="118.103" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#FFFFFF" stop-opacity="0.843137"/>
+			<stop offset="0.77027" stop-color="#FFFFFF" stop-opacity="0.32549"/>
+			<stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+		</radialGradient>
+		<path fill="url(#SVGID_Fill1_)" stroke-width="0.2" stroke-linejoin="round" d="M 16.3506,3.44043L 80.3506,3.44043C 86.4258,3.44043 91.3506,8.36548 91.3506,14.4404L 91.3506,77.4402C 91.3506,83.5154 86.4258,88.4402 80.3506,88.4402L 16.3506,88.4402C 10.2755,88.4402 5.35059,83.5154 5.35059,77.4402L 5.35059,14.4404C 5.35059,8.36548 10.2755,3.44043 16.3506,3.44043 Z "/>
+		<radialGradient id="SVGID_Stroke1_" cx="73.3702" cy="47.4409" r="669.951" gradientUnits="userSpaceOnUse">
+			<stop offset="0.869369" stop-color="#F1F1F1" stop-opacity="0"/>
+			<stop offset="1" stop-color="#EEEEEE" stop-opacity="0.898039"/>
+		</radialGradient>
+		<path fill="none" stroke-width="4" stroke-linejoin="round" stroke="url(#SVGID_Stroke1_)" d="M 82.6005,7.43994L 82.6005,7.43994C 86.6046,7.43994 89.8505,10.6858 89.8505,14.6897L 89.8505,80.1902C 89.8505,84.1943 86.6046,87.4402 82.6005,87.4402L 82.6005,87.4402C 78.5965,87.4402 75.3505,84.1943 75.3505,80.1902L 75.3505,14.6897C 75.3505,10.6858 78.5965,7.43994 82.6005,7.43994 Z "/>
+		<radialGradient id="SVGID_Stroke2_" cx="21.331" cy="47.4399" r="669.951" gradientUnits="userSpaceOnUse" gradientTransform="rotate(180.000000 21.330963 47.439941)">
+			<stop offset="0.869369" stop-color="#F1F1F1" stop-opacity="0"/>
+			<stop offset="1" stop-color="#EEEEEE" stop-opacity="0.898039"/>
+		</radialGradient>
+		<path fill="none" stroke-width="4" stroke-linejoin="round" stroke="url(#SVGID_Stroke2_)" d="M 12.1006,87.4409L 12.1006,87.4409C 8.09659,87.4409 4.85065,84.1951 4.85065,80.1912L 4.85065,14.6907C 4.85065,10.6865 8.09659,7.44067 12.1006,7.44067L 12.1006,7.44067C 16.1047,7.44067 19.3506,10.6865 19.3506,14.6907L 19.3506,80.1912C 19.3506,84.1951 16.1047,87.4409 12.1006,87.4409 Z "/>
+		<radialGradient id="SVGID_Stroke3_" cx="47.3517" cy="21.4207" r="79.1183" gradientUnits="userSpaceOnUse" gradientTransform="rotate(-90.000000 47.351746 21.420654)">
+			<stop offset="0.869369" stop-color="#F1F1F1" stop-opacity="0"/>
+			<stop offset="1" stop-color="#EEEEEE" stop-opacity="0.898039"/>
+		</radialGradient>
+		<path fill="none" stroke-width="4" stroke-linejoin="round" stroke="url(#SVGID_Stroke3_)" d="M 7.3504,12.1902L 7.3504,12.1902C 7.3504,8.18628 10.5964,4.94019 14.6004,4.94019L 80.1008,4.94019C 84.1049,4.94019 87.3507,8.18628 87.3507,12.1902L 87.3507,12.1902C 87.3507,16.1943 84.1049,19.4402 80.1008,19.4402L 14.6004,19.4402C 10.5964,19.4402 7.3504,16.1943 7.3504,12.1902 Z "/>
+		<radialGradient id="SVGID_Stroke4_" cx="47.3489" cy="73.4597" r="79.1195" gradientUnits="userSpaceOnUse" gradientTransform="rotate(90.000000 47.348907 73.459717)">
+			<stop offset="0.869369" stop-color="#F1F1F1" stop-opacity="0"/>
+			<stop offset="1" stop-color="#EEEEEE" stop-opacity="0.898039"/>
+		</radialGradient>
+		<path fill="none" stroke-width="4" stroke-linejoin="round" stroke="url(#SVGID_Stroke4_)" d="M 87.3503,82.6902L 87.3503,82.6902C 87.3503,86.6943 84.1043,89.9402 80.1003,89.9402L 14.5999,89.9402C 10.5957,89.9402 7.34991,86.6943 7.34991,82.6902L 7.34991,82.6902C 7.34991,78.6863 10.5957,75.4402 14.5999,75.4402L 80.1003,75.4402C 84.1043,75.4402 87.3503,78.6863 87.3503,82.6902 Z "/>
+	</g>
+</svg>

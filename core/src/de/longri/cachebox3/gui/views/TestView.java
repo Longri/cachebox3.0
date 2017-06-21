@@ -151,7 +151,7 @@ public class TestView extends AbstractView {
             }
 
         }
-
+        attTable.add(lineTable).left();
         this.addActor(scrollPane);
     }
 
