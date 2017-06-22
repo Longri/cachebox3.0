@@ -1683,6 +1683,10 @@
       "b": 0.9,
       "a": 1
     },
+    "notAvailable": {
+      "r": 0.6784314,
+      "a": 1
+    },
     "settings_default_value_font_color": {
       "r": 0.6,
       "g": 0.6,
@@ -2558,54 +2562,6 @@
       "width": 5.5
     }
   },
-  "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle": {
-    "cacheList": {
-      "traditional": "traddi",
-      "multi": "multi",
-      "mystery": "mapMystery",
-      "camera": "camera",
-      "earth": "earth",
-      "event": "event",
-      "megaEvent": "mega",
-      "cito": "cito",
-      "virtual": "virtual",
-      "letterbox": "letterbox",
-      "wherigo": "whereigo",
-      "referencePoint": "mapReferencePoint",
-      "wikipedia": "Wikipedia",
-      "undefined": "mapUndefined1",
-      "multiStage": "mapMultiStage",
-      "multiQuestion": "mapMultiQuestion",
-      "trailhead": "mapTrailhead",
-      "parkingArea": "mapParkingArea",
-      "Final": "mapFinal",
-      "cache": "mapCache1",
-      "myParking": "mapMyParking",
-      "giga": "giga",
-      "labCache": "mapLabCache1"
-    }
-  },
-  "de.longri.cachebox3.gui.skin.styles.CacheListItemStyle": {
-    "cacheListItems": {
-      "nameFont": "normal_font",
-      "nameFontColor": "font_color",
-      "arrow": "arrow-compass",
-      "distanceFont": "settings_default_value_font",
-      "distanceFontColor": "font_color",
-      "typeStyle": "cacheList"
-    }
-  },
-  "de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle": {
-    "WayPointListItems": {
-      "nameFont": "normal_font",
-      "nameFontColor": "font_color",
-      "arrow": "arrow-compass",
-      "distanceFont": "settings_default_value_font",
-      "distanceFontColor": "font_color",
-      "typeStyle": "cacheList"
-    },
-    "logListItems": {}
-  },
   "de.longri.cachebox3.gui.skin.styles.ApiButtonStyle": {
     "ApiButton": {
       "up": "default_button_9_Patch",
@@ -2822,6 +2778,11 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LogTypesStyle": {
+    "cacheListViewLogTypes": {
+      "found": "found",
+      "didnt_find": "notFound",
+      "temporarily_disabled": "tempDisabled"
+    },
     "logViewLogStyles": {
       "found": "found",
       "didnt_find": "notFound",
@@ -2839,5 +2800,55 @@
       "descriptionFontColor": "font_color",
       "typeStyle": "logViewLogStyles"
     }
+  },
+  "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle": {
+    "cacheList": {
+      "traditional": "traddi",
+      "multi": "multi",
+      "mystery": "mapMystery",
+      "camera": "camera",
+      "earth": "earth",
+      "event": "event",
+      "megaEvent": "mega",
+      "cito": "cito",
+      "virtual": "virtual",
+      "letterbox": "letterbox",
+      "wherigo": "whereigo",
+      "referencePoint": "mapReferencePoint",
+      "wikipedia": "Wikipedia",
+      "undefined": "mapUndefined1",
+      "multiStage": "mapMultiStage",
+      "multiQuestion": "mapMultiQuestion",
+      "trailhead": "mapTrailhead",
+      "parkingArea": "mapParkingArea",
+      "Final": "mapFinal",
+      "cache": "mapCache1",
+      "myParking": "mapMyParking",
+      "giga": "giga",
+      "labCache": "mapLabCache1"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.CacheListItemStyle": {
+    "cacheListItems": {
+      "nameFont": "normal_font",
+      "nameFontColor": "font_color",
+      "notAvailableColor": "notAvailable",
+      "arrow": "arrow-compass",
+      "distanceFont": "settings_default_value_font",
+      "distanceFontColor": "font_color",
+      "typeStyle": "cacheList",
+      "logTypesStyle": "cacheListViewLogTypes"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle": {
+    "WayPointListItems": {
+      "nameFont": "normal_font",
+      "nameFontColor": "font_color",
+      "arrow": "arrow-compass",
+      "distanceFont": "settings_default_value_font",
+      "distanceFontColor": "font_color",
+      "typeStyle": "cacheList"
+    },
+    "logListItems": {}
   }
 }

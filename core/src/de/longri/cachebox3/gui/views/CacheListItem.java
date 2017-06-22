@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
@@ -30,6 +31,7 @@ import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.LogTypes;
 
 /**
  * Created by Longri on 05.09.2016.
@@ -38,9 +40,29 @@ public class CacheListItem extends ListViewItem implements Disposable {
 
     public static ListViewItem getListItem(int listIndex, final Cache cache) {
         if (cache == null) return null;
+
+
+        LogTypes left = null;
+        LogTypes right = null;
+        boolean isAvailable = true;
+        if (cache.isFound()) {
+            left = LogTypes.found;
+        }
+
+        if (!cache.isAvailable()) {
+            right = LogTypes.temporarily_disabled;
+            isAvailable = false;
+        }
+
+        if (cache.isArchived()) {
+            right = LogTypes.archived;
+            isAvailable = false;
+        }
+
+
         ListViewItem listViewItem = new CacheListItem(listIndex, cache.Type, cache.getName(),
                 (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
-                (int) Math.min(cache.Rating * 2, 5 * 2), cache.Size, cache.Size.toShortString());
+                (int) Math.min(cache.Rating * 2, 5 * 2), cache.Size, cache.Size.toShortString(), left, right, isAvailable);
         return listViewItem;
     }
 
@@ -57,9 +79,13 @@ public class CacheListItem extends ListViewItem implements Disposable {
     private final int vote;
     private final CacheSizes size;
     private final String shortSizeString;
+    private final Drawable leftInfoIcon, rightInfoIcon;
+    private final boolean isAvailable;
 
 
-    public CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain, int vote, CacheSizes size, String shortSizeString) {
+    private CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
+                          int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
+                          LogTypes rightLogType, boolean isAvailable) {
         super(listIndex);
         this.difficulty = difficulty;
         this.terrain = terrain;
@@ -69,11 +95,13 @@ public class CacheListItem extends ListViewItem implements Disposable {
         this.style = VisUI.getSkin().get("cacheListItems", CacheListItemStyle.class);
         this.type = type;
         this.cacheName = cacheName;
+        this.leftInfoIcon = leftLogType == null ? null : leftLogType.getDrawable(style.logTypesStyle);
+        this.rightInfoIcon = rightLogType == null ? null : rightLogType.getDrawable(style.logTypesStyle);
+        this.isAvailable = isAvailable;
     }
 
 
     public synchronized void layout() {
-//        this.setDebug(true, false);
         if (!needsLayout) {
             super.layout();
             return;
@@ -82,8 +110,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
         this.clear();
 
         VisTable iconTable = new VisTable();
-        iconTable.add(type.getCacheWidget(style.typeStyle));
-
+        iconTable.add(type.getCacheWidget(style.typeStyle, leftInfoIcon, rightInfoIcon));
         iconTable.pack();
         iconTable.layout();
 
@@ -92,7 +119,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
 
         Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
         nameLabelStyle.font = this.style.nameFont;
-        nameLabelStyle.fontColor = this.style.nameFontColor;
+        nameLabelStyle.fontColor = isAvailable ? this.style.nameFontColor : this.style.notAvailableColor == null ? this.style.nameFontColor : this.style.notAvailableColor;
         VisLabel nameLabel = new VisLabel(cacheName, nameLabelStyle);
         nameLabel.setWrap(true);
         this.add(nameLabel).top().expandX().fillX();

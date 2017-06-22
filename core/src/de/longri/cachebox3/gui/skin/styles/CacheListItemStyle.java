@@ -9,9 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
  */
 public class CacheListItemStyle {
     public BitmapFont nameFont;
-    public Color nameFontColor;
+    public Color nameFontColor, notAvailableColor;
     public Drawable arrow;
     public BitmapFont distanceFont;
     public Color distanceFontColor;
     public CacheTypeStyle typeStyle;
+    public LogTypesStyle logTypesStyle;
 }

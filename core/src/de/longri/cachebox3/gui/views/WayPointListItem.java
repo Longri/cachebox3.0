@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -87,7 +88,7 @@ public class WayPointListItem extends ListViewItem implements Disposable {
         this.clear();
 
         VisTable iconTable = new VisTable();
-        iconTable.add(type.getCacheWidget(style.typeStyle));
+        iconTable.add(type.getCacheWidget(style.typeStyle, null, null));
 
         iconTable.pack();
         iconTable.layout();

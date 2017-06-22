@@ -15,11 +15,7 @@
  */
 package de.longri.cachebox3.types;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
 import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
@@ -145,7 +141,11 @@ public enum CacheTypes implements SelectBoxItem {
     }
 
     public CacheWidget getCacheWidget(CacheTypeStyle style) {
-        return new CacheWidget(this, style);
+        return getCacheWidget(style, null, null);
+    }
+
+    public CacheWidget getCacheWidget(CacheTypeStyle style, Drawable leftInfoIcon, Drawable rightInfoIcon) {
+        return new CacheWidget(this, style, leftInfoIcon, rightInfoIcon);
     }
 
     public String getName() {
@@ -238,76 +238,6 @@ public enum CacheTypes implements SelectBoxItem {
         return drawable;
     }
 
-    public static class CacheWidget extends Widget {
-        private final Drawable drawable;
-        private boolean needsLayout = true;
-
-        public CacheWidget(CacheTypes cacheType, CacheTypeStyle style) {
-            drawable = cacheType.getDrawable(style);
-        }
-
-        private float x, y, imageWidth, imageHeight, scaleX, scaleY;
-
-        @Override
-        public void layout() {
-            if (!needsLayout) {
-                super.layout();
-                return;
-            }
-
-            x = getX();
-            y = getY();
-            imageWidth = getWidth();
-            imageHeight = getHeight();
-            scaleX = getScaleX();
-            scaleY = getScaleY();
-
-            super.layout();
-            needsLayout = true;
-        }
-
-        /**
-         * Called when the actor's size has been changed.
-         */
-        @Override
-        protected void sizeChanged() {
-            super.sizeChanged();
-            needsLayout = true;
-        }
-
-        @Override
-        public void draw(Batch batch, float parentAlpha) {
-            validate();
-            Color color = getColor();
-            batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-
-            x = getX();
-            y = getY();
-
-            if (drawable instanceof TransformDrawable) {
-                float rotation = getRotation();
-                if (scaleX != 1 || scaleY != 1 || rotation != 0) {
-                    ((TransformDrawable) drawable).draw(batch, x, y, getOriginX(), getOriginY(),
-                            imageWidth, imageHeight, scaleX, scaleY, rotation);
-                    return;
-                }
-            }
-            if (drawable != null) drawable.draw(batch, x, y, imageWidth * scaleX, imageHeight * scaleY);
-        }
-
-        @Override
-        public float getPrefWidth() {
-            if (drawable != null) return drawable.getMinWidth();
-            return 0;
-        }
-
-        @Override
-        public float getPrefHeight() {
-            if (drawable != null) return drawable.getMinHeight();
-            return 0;
-        }
-    }
-
     @Override
     public String toString() {
         switch (this) {
@@ -363,7 +293,7 @@ public enum CacheTypes implements SelectBoxItem {
         return super.toString();
     }
 
-    public  String toShortString() {
+    public String toShortString() {
         switch (this) {
             case CITO:
                 return "X";
