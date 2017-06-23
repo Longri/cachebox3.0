@@ -1,32 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="88" height="76" viewBox="0 0 88.00 76.00" enable-background="new 0 0 88.00 76.00" xml:space="preserve">
-	<path fill="#B2AE5A" fill-opacity="1" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" d="M 13.4791,2.43748L 74.4791,2.43748C 80.5543,2.43748 85.4791,7.36235 85.4791,13.4375L 85.4791,63.1042C 85.4791,69.1793 80.5543,74.1042 74.4791,74.1042L 13.4791,74.1042C 7.404,74.1042 2.47913,69.1793 2.47913,63.1042L 2.47913,13.4375C 2.47913,7.36235 7.404,2.43748 13.4791,2.43748 Z "/>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="90" height="77.7272" viewBox="0 0 90.00 77.73" enable-background="new 0 0 90.00 77.73" xml:space="preserve">
+	<path fill="#B2AE5A" fill-opacity="1" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" d="M 13.5404,2.33398L 74.5404,2.33398C 80.6155,2.33398 85.5404,7.25884 85.5404,13.334L 85.5404,63.0007C 85.5404,69.0758 80.6155,74.0007 74.5404,74.0007L 13.5404,74.0007C 7.46523,74.0007 2.54036,69.0758 2.54036,63.0007L 2.54036,13.334C 2.54036,7.25884 7.46523,2.33398 13.5404,2.33398 Z "/>
 	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.503869" y1="-0.274908" x2="2.05368" y2="-0.274908" gradientTransform="rotate(90.000000 0.503869 -0.274908)">
 		<stop offset="0.316279" stop-color="#F0F1EC" stop-opacity="0.592157"/>
 		<stop offset="0.800003" stop-color="#FFFFFF" stop-opacity="0"/>
 	</linearGradient>
-	<path fill="url(#SVGID_Fill1_)" stroke-width="0.2" stroke-linejoin="round" d="M 73.499,4.92154L 15.3879,4.92154C 12.3539,4.92154 8.57967,5.76869 5.81247,9.56689L 5.87836,9.56689C 5.94424,45.1657 24.0444,45.2867 44.4214,45.2867C 64.7985,45.2867 82.108,44.9423 82.4375,9.48311L 82.4375,9.51103C 80.988,7.44437 79.0773,5.32185 73.499,4.92154 Z "/>
+	<path fill="url(#SVGID_Fill1_)" stroke-width="0.2" stroke-linejoin="round" d="M 73.5602,4.81804L 15.4491,4.81804C 12.4151,4.81804 8.64089,5.66519 5.87369,9.46339L 5.93958,9.46339C 6.00547,45.0622 24.1056,45.1832 44.4827,45.1832C 64.8597,45.1832 82.1693,44.8388 82.4987,9.37961L 82.4987,9.40753C 81.0492,7.34087 79.1385,5.21835 73.5602,4.81804 Z "/>
 	<linearGradient id="SVGID_Fill2_" gradientUnits="objectBoundingBox" x1="0.940186" y1="0.437275" x2="2.52462" y2="0.437275" gradientTransform="rotate(170.546570 0.940186 0.437275)">
 		<stop offset="0.274419" stop-color="#F0F1EC" stop-opacity="0.501961"/>
 		<stop offset="0.562791" stop-color="#FFFFFF" stop-opacity="0"/>
 	</linearGradient>
-	<path fill="url(#SVGID_Fill2_)" stroke-width="0.2" stroke-linejoin="round" d="M 73.2684,4.87499L 56.2809,6.73686C 53.2469,6.73686 37.1301,4.94943 34.3629,8.74764L 26.2809,20.6636C 30.6395,27.669 45.9588,18.5783 48.3307,16.8282C 71.9617,13.8119 81.8774,44.8958 82.2069,9.43656L 82.2069,9.46449C 80.7574,7.39782 78.8467,5.2753 73.2684,4.87499 Z "/>
-	<path fill="none" stroke-width="6" stroke-linejoin="round" stroke="#FFD23F" stroke-opacity="1" d="M 13.7291,5.271L 74.479,5.271C 78.8973,5.271 82.479,8.85271 82.479,13.271L 82.479,63.2709C 82.479,67.6891 78.8973,71.2708 74.479,71.2708L 13.7291,71.2708C 9.31083,71.2708 5.72911,67.6891 5.72911,63.2709L 5.72911,13.271C 5.72911,8.85271 9.31083,5.271 13.7291,5.271 Z "/>
+	<path fill="url(#SVGID_Fill2_)" stroke-width="0.2" stroke-linejoin="round" d="M 73.3296,4.77149L 56.3421,6.63336C 53.3082,6.63336 37.1913,4.84593 34.4241,8.64414L 26.3422,20.5601C 30.7007,27.5655 46.02,18.4748 48.3919,16.7247C 72.0229,13.7084 81.9387,44.7923 82.2681,9.33306L 82.2681,9.36099C 80.8186,7.29432 78.9079,5.1718 73.3296,4.77149 Z "/>
+	<path fill="none" stroke-width="6" stroke-linejoin="round" stroke="#FFD23F" stroke-opacity="1" d="M 13.7903,5.1675L 74.5402,5.1675C 78.9585,5.1675 82.5402,8.74921 82.5402,13.1675L 82.5402,63.1674C 82.5402,67.5856 78.9585,71.1673 74.5402,71.1673L 13.7903,71.1673C 9.37206,71.1673 5.79034,67.5856 5.79034,63.1674L 5.79034,13.1675C 5.79034,8.74921 9.37206,5.1675 13.7903,5.1675 Z "/>
 	<linearGradient id="SVGID_Fill3_" gradientUnits="objectBoundingBox" x1="0.997261" y1="0.384958" x2="2.01805" y2="0.384958" gradientTransform="rotate(177.266220 0.997261 0.384958)">
 		<stop offset="0" stop-color="#000000" stop-opacity="0.862745"/>
 		<stop offset="0.418605" stop-color="#000000" stop-opacity="0.862745"/>
 		<stop offset="0.655814" stop-color="#1E1E1E" stop-opacity="0.411765"/>
 		<stop offset="0.902326" stop-color="#3A3A3A" stop-opacity="0"/>
 	</linearGradient>
-	<path fill="url(#SVGID_Fill3_)" stroke-width="0.2" stroke-linejoin="round" d="M 35.1696,57.2102L 17.8646,53.9375C 19.1126,61.5508 37.6765,65.1055 40.7878,65.4982L 43.3114,58.6382L 35.1696,57.2102 Z "/>
-	<linearGradient id="SVGID_Fill4_" gradientUnits="objectBoundingBox" x1="0.227681" y1="-0.765391" x2="3.01549" y2="-0.765391" gradientTransform="rotate(25.282501 0.227681 -0.765391)">
+	<path fill="url(#SVGID_Fill3_)" stroke-width="0.2" stroke-linejoin="round" d="M 35.2308,57.1067L 17.9258,53.834C 19.1739,61.4473 37.7377,65.002 40.849,65.3947L 43.3727,58.5347L 35.2308,57.1067 Z "/>
+	<linearGradient id="SVGID_Fill4_" gradientUnits="objectBoundingBox" x1="0.227681" y1="-0.765391" x2="3.01549" y2="-0.765391" gradientTransform="rotate(25.282509 0.227681 -0.765391)">
 		<stop offset="0" stop-color="#000000" stop-opacity="0.862745"/>
 		<stop offset="0.502326" stop-color="#000000" stop-opacity="0.862745"/>
 		<stop offset="0.693023" stop-color="#1E1E1E" stop-opacity="0.411765"/>
 		<stop offset="0.800003" stop-color="#3A3A3A" stop-opacity="0"/>
 	</linearGradient>
-	<path fill="url(#SVGID_Fill4_)" stroke-width="0.2" stroke-linejoin="round" d="M 40.8057,65.5C 45.8668,66.003 70.1274,68.125 73.1145,64.1875L 61.7947,61.125L 43.9619,58.6382L 40.7878,65.4982 Z "/>
+	<path fill="url(#SVGID_Fill4_)" stroke-width="0.2" stroke-linejoin="round" d="M 40.8669,65.3965C 45.928,65.8995 70.1886,68.0215 73.1758,64.084L 61.8559,61.0215L 44.0232,58.5347L 40.849,65.3947 Z "/>
 	<linearGradient id="SVGID_Stroke1_" gradientUnits="objectBoundingBox" x1="0.5" y1="0.736764" x2="0.973527" y2="0.736764" gradientTransform="rotate(-90.000000 0.500000 0.736764)">
 		<stop offset="0" stop-color="#1A1C1C" stop-opacity="1"/>
 		<stop offset="0.15814" stop-color="#383B3B" stop-opacity="1"/>
@@ -39,7 +39,7 @@
 		<stop offset="0.739535" stop-color="#6B7070" stop-opacity="1"/>
 		<stop offset="0.990698" stop-color="#4B4D4D" stop-opacity="1"/>
 	</linearGradient>
-	<path fill="url(#SVGID_Fill5_)" stroke-linejoin="round" stroke="url(#SVGID_Stroke1_)" d="M 49.9809,59.2691L 49.3578,63.4752C 59.8479,62.6501 67.0208,54.2283 67.0208,43C 67.0208,37.0754 63.489,28.9397 59.625,25.0625L 56.3125,27.0625C 59.2818,30.2286 62.3541,37.1218 62.3541,41.9167C 62.3541,50.6654 57.5138,57.9423 49.9809,59.2691 Z "/>
+	<path fill="url(#SVGID_Fill5_)" stroke-linejoin="round" stroke="url(#SVGID_Stroke1_)" d="M 50.0422,59.1656L 49.419,63.3717C 59.9091,62.5466 67.082,54.1248 67.082,42.8965C 67.082,36.9719 63.5502,28.8362 59.6862,24.959L 56.3737,26.959C 59.343,30.1251 62.4154,37.0183 62.4154,41.8132C 62.4154,50.5619 57.5751,57.8388 50.0422,59.1656 Z "/>
 	<linearGradient id="SVGID_Stroke2_" gradientUnits="objectBoundingBox" x1="0.491356" y1="0.839498" x2="1.17035" y2="0.839498" gradientTransform="rotate(-90.000000 0.491356 0.839498)">
 		<stop offset="0" stop-color="#1A1C1C" stop-opacity="1"/>
 		<stop offset="0.15814" stop-color="#383B3B" stop-opacity="1"/>
@@ -52,9 +52,9 @@
 		<stop offset="0.739535" stop-color="#6B7070" stop-opacity="1"/>
 		<stop offset="0.990698" stop-color="#4B4D4D" stop-opacity="1"/>
 	</linearGradient>
-	<path fill="url(#SVGID_Fill6_)" stroke-linejoin="round" stroke="url(#SVGID_Stroke2_)" d="M 29.9472,39.6502C 30.0006,33.762 31.1854,28.9728 34.1041,26.5833L 33.8541,26.0833L 29.1875,27.5C 24.8679,30.35 25.385,31.6607 25.3125,39.3215C 25.2005,51.1489 36.2373,63.5417 47.6493,63.5417C 48.2279,63.5417 48.7976,63.5193 49.3578,63.4752L 49.9809,59.2691C 49.1736,59.4112 48.3354,59.4851 47.4689,59.4851C 38.517,59.4851 29.8594,49.3361 29.9472,39.6502 Z "/>
-	<path fill="#6F7070" fill-opacity="1" stroke-linejoin="round" stroke="#6F7070" stroke-opacity="1" d="M 25.0416,40.2402C 25.0935,34.0712 26.0221,29.9618 28.856,27.4584L 28.8551,27.4583L 26.1454,23.7128C 21.9514,26.6987 20.612,31.8697 20.5416,39.8958C 20.4329,52.2871 31.1489,65.2708 42.2291,65.2708C 53.3094,65.2708 62.2916,55.2252 62.2916,42.8333C 62.2916,36.6262 59.9282,31.0078 56.1765,26.9457L 53.098,29.7525C 55.981,33.0696 57.7916,37.6223 57.7916,42.6458C 57.7916,52.7941 50.7456,61.0208 42.054,61.0208C 33.3623,61.0208 24.9564,50.3879 25.0416,40.2402 Z "/>
-	<path fill="#4B4D4D" fill-opacity="1" stroke-linejoin="round" stroke="#4B4D4D" stroke-opacity="1" d="M 26.1787,23.6382L 30.9369,22.1634L 33.8206,25.994L 29.0625,27.4688L 26.1787,23.6382 Z "/>
+	<path fill="url(#SVGID_Fill6_)" stroke-linejoin="round" stroke="url(#SVGID_Stroke2_)" d="M 30.0084,39.5467C 30.0618,33.6585 31.2466,28.8693 34.1654,26.4798L 33.9154,25.9798L 29.2487,27.3965C 24.9291,30.2465 25.4462,31.5572 25.3737,39.218C 25.2617,51.0454 36.2986,63.4382 47.7105,63.4382C 48.2891,63.4382 48.8588,63.4158 49.419,63.3717L 50.0422,59.1656C 49.2349,59.3077 48.3966,59.3816 47.5301,59.3816C 38.5782,59.3816 29.9206,49.2326 30.0084,39.5467 Z "/>
+	<path fill="#6F7070" fill-opacity="1" stroke-linejoin="round" stroke="#6F7070" stroke-opacity="1" d="M 25.1029,40.1367C 25.1547,33.9677 26.0833,29.8583 28.9172,27.3549L 28.9163,27.3548L 26.2066,23.6093C 22.0126,26.5952 20.6733,31.7662 20.6029,39.7923C 20.4942,52.1836 31.2101,65.1673 42.2904,65.1673C 53.3706,65.1673 62.3529,55.1217 62.3529,42.7298C 62.3529,36.5227 59.9894,30.9043 56.2377,26.8422L 53.1592,29.649C 56.0422,32.9661 57.8528,37.5188 57.8528,42.5423C 57.8528,52.6906 50.8069,60.9173 42.1152,60.9173C 33.4236,60.9173 25.0176,50.2844 25.1029,40.1367 Z "/>
+	<path fill="#4B4D4D" fill-opacity="1" stroke-linejoin="round" stroke="#4B4D4D" stroke-opacity="1" d="M 26.24,23.5347L 30.9981,22.0599L 33.8818,25.8905L 29.1237,27.3653L 26.24,23.5347 Z "/>
 	<g>
 		<linearGradient id="SVGID_Stroke3_" gradientUnits="objectBoundingBox" x1="0" y1="0.45625" x2="1" y2="0.45625">
 			<stop offset="0.111628" stop-color="#EEBB18" stop-opacity="1"/>
@@ -64,28 +64,28 @@
 			<stop offset="0.111628" stop-color="#EEBB18" stop-opacity="1"/>
 			<stop offset="1" stop-color="#9A802B" stop-opacity="1"/>
 		</linearGradient>
-		<path fill="url(#SVGID_Fill7_)" stroke-width="2" stroke-linejoin="round" stroke="url(#SVGID_Stroke3_)" d="M 41.1771,11.0625L 45.3125,10.3542L 52.9271,26.0469L 49.1354,28.7708L 41.1771,11.0625 Z "/>
-		<path fill="#E2BB3C" fill-opacity="1" stroke-width="2" stroke-linejoin="round" stroke="#E2BB3C" stroke-opacity="1" d="M 41.1458,11.0208L 32.6458,27.0208L 49.0312,28.8542L 41.1458,11.0208 Z "/>
+		<path fill="url(#SVGID_Fill7_)" stroke-width="2" stroke-linejoin="round" stroke="url(#SVGID_Stroke3_)" d="M 41.2383,10.959L 45.3737,10.2507L 52.9883,25.9434L 49.1966,28.6673L 41.2383,10.959 Z "/>
+		<path fill="#E2BB3C" fill-opacity="1" stroke-width="2" stroke-linejoin="round" stroke="#E2BB3C" stroke-opacity="1" d="M 41.207,10.9173L 32.707,26.9173L 49.0924,28.7507L 41.207,10.9173 Z "/>
 	</g>
 	<linearGradient id="SVGID_Stroke4_" gradientUnits="objectBoundingBox" x1="0.224825" y1="0.0722379" x2="0.831643" y2="0.0722379" gradientTransform="rotate(90.000000 0.224825 0.072238)">
 		<stop offset="0.334884" stop-color="#000000" stop-opacity="1"/>
 		<stop offset="0.995349" stop-color="#3A3A3A" stop-opacity="1"/>
 	</linearGradient>
-	<linearGradient id="SVGID_Fill8_" gradientUnits="objectBoundingBox" x1="0.182192" y1="0.0256788" x2="0.855058" y2="0.0256788" gradientTransform="rotate(90.000000 0.182192 0.025679)">
+	<linearGradient id="SVGID_Fill8_" gradientUnits="objectBoundingBox" x1="0.182191" y1="0.0256788" x2="0.855057" y2="0.0256788" gradientTransform="rotate(90.000000 0.182191 0.025679)">
 		<stop offset="0.339535" stop-color="#000000" stop-opacity="1"/>
 		<stop offset="0.995349" stop-color="#3A3A3A" stop-opacity="1"/>
 	</linearGradient>
-	<path fill="url(#SVGID_Fill8_)" stroke-linejoin="round" stroke="url(#SVGID_Stroke4_)" d="M 35.7643,45.3735L 36.9375,50.375L 39.5312,48.5625L 42.2187,46.4792L 39.5312,41.9763L 36.7604,41.1875L 35.7643,45.3735 Z "/>
-	<path fill="#3A3A3A" fill-opacity="1" stroke-linejoin="round" stroke="#3A3A3A" stroke-opacity="1" d="M 42.5933,29.6694L 38.4058,29.0444L 33.1093,32.7656L 37.1771,33.3958L 39.8635,31.6551L 42.5933,29.6694 Z "/>
-	<linearGradient id="SVGID_Stroke5_" gradientUnits="objectBoundingBox" x1="0.432549" y1="0.814219" x2="0.954299" y2="0.814219" gradientTransform="rotate(254.138474 0.432549 0.814219)">
+	<path fill="url(#SVGID_Fill8_)" stroke-linejoin="round" stroke="url(#SVGID_Stroke4_)" d="M 35.8255,45.27L 36.9987,50.2715L 39.5924,48.459L 42.2799,46.3757L 39.5924,41.8728L 36.8216,41.084L 35.8255,45.27 Z "/>
+	<path fill="#3A3A3A" fill-opacity="1" stroke-linejoin="round" stroke="#3A3A3A" stroke-opacity="1" d="M 42.6545,29.5659L 38.467,28.9409L 33.1706,32.6621L 37.2383,33.2923L 39.9247,31.5516L 42.6545,29.5659 Z "/>
+	<linearGradient id="SVGID_Stroke5_" gradientUnits="objectBoundingBox" x1="0.432549" y1="0.814219" x2="0.954299" y2="0.814219" gradientTransform="rotate(254.138489 0.432549 0.814219)">
 		<stop offset="0.0697674" stop-color="#000000" stop-opacity="1"/>
 		<stop offset="0.995349" stop-color="#3A3A3A" stop-opacity="1"/>
 	</linearGradient>
-	<linearGradient id="SVGID_Fill9_" gradientUnits="objectBoundingBox" x1="0.425123" y1="0.840587" x2="0.993119" y2="0.840587" gradientTransform="rotate(254.494278 0.425123 0.840587)">
+	<linearGradient id="SVGID_Fill9_" gradientUnits="objectBoundingBox" x1="0.425123" y1="0.840587" x2="0.993119" y2="0.840587" gradientTransform="rotate(254.494308 0.425123 0.840587)">
 		<stop offset="0.120934" stop-color="#000000" stop-opacity="1"/>
 		<stop offset="0.995349" stop-color="#3A3A3A" stop-opacity="1"/>
 	</linearGradient>
-	<path fill="url(#SVGID_Fill9_)" stroke-linejoin="round" stroke="url(#SVGID_Stroke5_)" d="M 37.4271,33.3125L 42.8021,41.5625L 46.4271,34.0208L 42.6771,29.6458L 37.3437,33.3542"/>
-	<path fill="#3A3A3A" fill-opacity="1" stroke-linejoin="round" stroke="#3A3A3A" stroke-opacity="1" d="M 47.4375,52.9375L 52.5104,50.1458L 52.5104,31.4375L 47.3854,30.6875L 43,33.5625L 45.5937,40.375L 43.4025,37.0406L 42.419,44.0614L 47.4375,52.9375 Z "/>
-	<path fill="#69696A" fill-opacity="1" stroke-linejoin="round" stroke="#69696A" stroke-opacity="1" d="M 33.0625,32.8125L 33.1875,49.4375L 36.9375,50.375L 36.9375,50.3125L 36.9375,41.625L 37.2472,41.3143L 43.5,51.625L 47.375,52.9375L 47.375,34.3124L 43,33.625L 43,42.1875L 37.25,33.4375L 33.0625,32.8125 Z "/>
+	<path fill="url(#SVGID_Fill9_)" stroke-linejoin="round" stroke="url(#SVGID_Stroke5_)" d="M 37.4883,33.209L 42.8633,41.459L 46.4883,33.9173L 42.7383,29.5423L 37.4049,33.2507"/>
+	<path fill="#3A3A3A" fill-opacity="1" stroke-linejoin="round" stroke="#3A3A3A" stroke-opacity="1" d="M 47.4987,52.834L 52.5716,50.0423L 52.5716,31.334L 47.4466,30.584L 43.0612,33.459L 45.6549,40.2715L 43.4638,36.9371L 42.4802,43.9579L 47.4987,52.834 Z "/>
+	<path fill="#69696A" fill-opacity="1" stroke-linejoin="round" stroke="#69696A" stroke-opacity="1" d="M 33.1237,32.709L 33.2487,49.334L 36.9987,50.2715L 36.9987,50.209L 36.9987,41.5215L 37.3084,41.2108L 43.5612,51.5215L 47.4362,52.834L 47.4362,34.2089L 43.0612,33.5215L 43.0612,42.084L 37.3112,33.334L 33.1237,32.709 Z "/>
 </svg>
