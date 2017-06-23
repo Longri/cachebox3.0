@@ -1448,6 +1448,10 @@
       "path": "svg/nav_selected.svg",
       "scale": 0.72
     },
+    "needs_archived": {
+      "path": "svg/needs_archived.svg",
+      "scale": 0.2
+    },
     "needs_maintenance": {
       "path": "svg/needs_maintenance.svg",
       "scale": 0.15
@@ -1515,6 +1519,10 @@
     "regular": {
       "path": "svg/regular.svg",
       "scale": 0.25
+    },
+    "reviewer_note": {
+      "path": "svg/reviewer_note.svg",
+      "scale": 0.2
     },
     "selectOverlay": {
       "path": "svg/selectOverlay.svg",
@@ -2820,7 +2828,9 @@
       "will_attend": "will_attend",
       "attended": "attended",
       "webcam_photo_taken": "webcam_photo_taken",
-      "archived": "archived"
+      "archived": "archived",
+      "reviewer_note": "reviewer_note",
+      "needs_archived": "needs_archived"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LogListItemStyle": {
