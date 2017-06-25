@@ -15,11 +15,11 @@
  */
 package com.badlogic.gdx.scenes.scene2d.ui;
 
+import com.badlogic.gdx.files.FileHandle;
+
 /**
- * Created by Longri on 17.01.2017.
+ * Created by longri on 25.06.17.
  */
-public interface GetName {
-
-     String getName();
-
+public interface StoreSvg {
+    void store(FileHandle child);
 }

@@ -17,19 +17,30 @@ package de.longri.cachebox3.gui.stages.initial_tasks;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
+import com.badlogic.gdx.scenes.scene2d.ui.StoreSvg;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.settings.Settings;
+import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.DevicesSizes;
 import de.longri.cachebox3.utils.SizeF;
+import org.oscim.backend.canvas.Bitmap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 02.08.16.
  */
 public final class SkinLoaderTask extends AbstractInitTask {
-
+    private final Logger log = LoggerFactory.getLogger(SkinLoaderTask.class);
     private static final String INTERNAL_SKIN_DEFAULT_NAME = "internalDefault";
 
     public SkinLoaderTask(String name, int percent) {
@@ -117,8 +128,54 @@ public final class SkinLoaderTask extends AbstractInitTask {
             } catch (InterruptedException e) {
             }
         }
+
+
+        //after skin loading store attribute icons for HTML description view
+        //copy attributes*.png to data folder
+        //this png files are used on description view, as Html image
+
+        callback.taskNameChange("generate attributes images");
+
+        //TODO store temp on generated skin for skin changes
+        FileHandle attFileHandle = Gdx.files.absolute(CB.WorkPath + "/data/Attributes");
+        attFileHandle.mkdirs();
+
+
+        SvgSkin skin = (SvgSkin) VisUI.getSkin();
+        AttributesStyle style = VisUI.getSkin().get("CompassView", AttributesStyle.class);
+
+        Attributes[] values = Attributes.values();
+        for (int i = 0, n = values.length; i < n; i++) {
+            Attributes value = values[i];
+            value.setNegative();
+            storeAttributePng(callback, skin, style, attFileHandle, value);
+            value.setPositive();
+            storeAttributePng(callback, skin, style, attFileHandle, value);
+        }
+
     }
 
+
+    private void storeAttributePng(final WorkCallback callback, SvgSkin skin, AttributesStyle style, FileHandle attFileHandle, Attributes value) {
+
+        String imageName = value.getImageName() + ".png";
+        FileHandle storeFile = attFileHandle.child(imageName);
+        if (storeFile.exists()) return;
+        callback.taskNameChange("generate attribute image: " + imageName);
+        TextureRegionDrawable drawable = (TextureRegionDrawable) value.getDrawable(style);
+        if (drawable == null) return;
+        ScaledSvg scaledSvg = skin.get(drawable.getName(), ScaledSvg.class);
+        Bitmap bitmap = null;
+        try {
+            FileHandle svgFile = skin.skinFolder.child(scaledSvg.path);
+            bitmap = PlatformConnector.getSvg(scaledSvg.getRegisterName(), svgFile.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
+        } catch (IOException e) {
+            log.error("", e);
+        }
+        StoreSvg storeSvg = (StoreSvg) bitmap;
+        storeSvg.store(storeFile);
+        log.debug("store {} png", bitmap);
+    }
 
     private void loadInternaleDefaultSkin() {
 
