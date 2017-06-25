@@ -29,6 +29,7 @@ import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheWithWP;
 import de.longri.cachebox3.types.Waypoint;
@@ -52,8 +53,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     public CacheListView() {
         super("CacheListView CacheCount: " + Database.Data.Query.size);
-        //TODO Translate "Load Cache List"
-        CB.viewmanager.toast("Load Cache List", WAIT_TOAST_LENGTH);
+        CB.viewmanager.toast(Translation.Get("LoadCacheList"), WAIT_TOAST_LENGTH);
 
         //register as cacheListChanged eventListener
         CacheListChangedEventList.Add(this);

@@ -527,7 +527,7 @@ public abstract class Search extends PostRequest {
         if (this.excludeHides) {
             json.writeObjectStart("NotHiddenByUsers");
             json.writeArrayStart("UserNames");
-            json.writeValue(Config.GcLoginName.getValue());
+            json.writeValue(Config.GcLogin.getValue());
             json.writeArrayEnd();
             json.writeObjectEnd();
         }
@@ -535,7 +535,7 @@ public abstract class Search extends PostRequest {
         if (this.excludeFounds) {
             json.writeObjectStart("NotFoundByUsers");
             json.writeArrayStart("UserNames");
-            json.writeValue(Config.GcLoginName.getValue());
+            json.writeValue(Config.GcLogin.getValue());
             json.writeArrayEnd();
             json.writeObjectEnd();
         }

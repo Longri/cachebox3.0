@@ -32,6 +32,7 @@ import de.longri.cachebox3.gui.views.CacheListView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheListDAO;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,8 +97,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
         CB.postAsync(new Runnable() {
             @Override
             public void run() {
-                //TODO Translate "Load DB ..."
-                CB.viewmanager.toast("Load DB ...", WAIT_TOAST_LENGTH);
+                CB.viewmanager.toast(Translation.Get("LoadDB"), WAIT_TOAST_LENGTH);
                 CB.requestRendering();
             }
         });
@@ -121,7 +121,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
 
         FilterInstances.setLastFilter(new FilterProperties(Config.FilterNew.getValue()));
 
-        String sqlWhere = FilterInstances.getLastFilter().getSqlWhere(Config.GcLoginName.getValue());
+        String sqlWhere = FilterInstances.getLastFilter().getSqlWhere(Config.GcLogin.getValue());
         Database.Data.GPXFilenameUpdateCacheCount();
 
 

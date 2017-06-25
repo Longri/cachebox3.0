@@ -387,8 +387,7 @@ public class CB {
             return true;
         }
         if(errror.get()){
-            //TODO translate "Connection Error"
-            CB.viewmanager.toast("Connection Error");
+            CB.viewmanager.toast(Translation.Get("ConnectionError"));
         }
         return errror.get();
     }

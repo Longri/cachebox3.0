@@ -26,7 +26,7 @@ import de.longri.cachebox3.utils.HSV_Color;
 public class Settings extends Settings_Skin {
 
     // NORMAL visible
-    public static final SettingString GcLoginName = (SettingString) SettingsList.addSetting(new SettingString("GcLoginName", SettingCategory.Login, NORMAL, "", SettingStoreType.Platform, SettingUsage.ALL));
+    public static final SettingString GcLogin = (SettingString) SettingsList.addSetting(new SettingString("GcLogin", SettingCategory.Login, NORMAL, "", SettingStoreType.Platform, SettingUsage.ALL));
     public static final SettingEnum<Language> localisation = (SettingEnum<Language>) SettingsList.addSetting(new SettingEnum("localisation", SettingCategory.Locale, NORMAL, Language.en_GB, SettingStoreType.Global, SettingUsage.ALL, Language.en_GB));
     public static final SettingBool showGestureHelp = (SettingBool) SettingsList.addSetting(new SettingBool("showGestureHelp", SettingCategory.RememberAsk, NORMAL, true, SettingStoreType.Platform, SettingUsage.ACB));
 
