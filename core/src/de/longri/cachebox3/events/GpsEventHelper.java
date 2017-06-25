@@ -63,6 +63,7 @@ public class GpsEventHelper {
             setSpeed(speed, eventID);
             setElevation(elevation, eventID);
             setAccuracy(accuracy, eventID);
+            setCourse(bearing, eventID);
         }
     }
 

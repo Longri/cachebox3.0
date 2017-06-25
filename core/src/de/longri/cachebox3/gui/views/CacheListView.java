@@ -65,7 +65,6 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     @Override
     public synchronized void layout() {
         log.debug("Layout");
-        ON_LAYOUT_WORK.set(true);
         super.layout();
         if (listView == null) addNewListView();
         log.debug("Finish Layout");
@@ -81,7 +80,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     private void addNewListView() {
         log.debug("Start Thread add new listView");
-
+        ON_LAYOUT_WORK.set(true);
         CB.postAsync(new Runnable() {
             @Override
             public void run() {
