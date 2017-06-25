@@ -15,17 +15,19 @@
  */
 package org.oscim.awt;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.GetName;
+import com.badlogic.gdx.scenes.scene2d.ui.StoreSvg;
 import com.kitfox.svg.SVGCache;
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.app.beans.SVGIcon;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
-import org.oscim.awt.AwtBitmap;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -35,7 +37,7 @@ import java.net.URI;
 /**
  * Created by Longri on 19.07.16.
  */
-public class DesktopRealSvgBitmap extends AwtBitmap implements GetName {
+public class DesktopRealSvgBitmap extends AwtBitmap implements GetName,StoreSvg {
 
     private final static Logger log = LoggerFactory.getLogger(DesktopRealSvgBitmap.class);
 
@@ -106,4 +108,13 @@ public class DesktopRealSvgBitmap extends AwtBitmap implements GetName {
         super(((AwtBitmap)bmp).bitmap);
     }
 
+    @Override
+    public void store(FileHandle child) {
+        try {
+            ImageIO.write(this.bitmap, "png", child.file());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
