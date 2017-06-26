@@ -47,6 +47,7 @@ import com.badlogic.gdx.sqlite.android.AndroidDatabaseManager;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.translation.Translation;
+import org.oscim.android.canvas.AndroidRealSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

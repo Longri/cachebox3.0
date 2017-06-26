@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3;
+package org.oscim.android.canvas;
 
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Picture;
 import android.graphics.RectF;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.GetName;
+import com.badlogic.gdx.scenes.scene2d.ui.StoreSvg;
 import com.caverock.androidsvg.SVG;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
 import org.oscim.android.canvas.AndroidBitmap;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -31,7 +36,7 @@ import java.io.InputStream;
 /**
  * Created by Longri on 19.07.16.
  */
-public class AndroidRealSvgBitmap extends AndroidBitmap implements GetName {
+public class AndroidRealSvgBitmap extends AndroidBitmap implements GetName, StoreSvg {
 
     public String name;
 
@@ -83,4 +88,22 @@ public class AndroidRealSvgBitmap extends AndroidBitmap implements GetName {
         super(getAndroidBitmap(inputStream, scaleType, scaleValue));
     }
 
+    @Override
+    public void store(FileHandle child) {
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(child.file());
+            this.mBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
