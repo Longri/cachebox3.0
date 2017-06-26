@@ -139,7 +139,7 @@ public class DescriptionView extends AbstractView {
                 log.debug("Link clicked, don't load URL! Show on ext browser");
                 PlatformConnector._openUrlExtern(url);
                 return true;
-            }else if (url.equals("about:blank")) {
+            } else if (url.equals("about:blank")) {
                 // Load description
                 return true;
             }
@@ -167,7 +167,8 @@ public class DescriptionView extends AbstractView {
                 Attributes attribute = attrs.next();
                 File result = new File(CB.WorkPath + "/data/Attributes/" + attribute.getImageName() + ".png");
                 sb.append("<form action=\"Attr\">");
-                sb.append("<input name=\"Button\" type=\"image\" src=\"file://" + result.getAbsolutePath() + "\" value=\" " + attribute.getImageName() + " \">");
+                sb.append("<input name=\"Button\" type=\"image\" src=\"" + result.toURI() + "\" value=\" " + attribute.getImageName() + " \">");
+
             } while (attrs.hasNext());
 
             sb.append("</form>");
