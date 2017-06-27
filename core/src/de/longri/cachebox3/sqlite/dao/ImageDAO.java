@@ -35,7 +35,7 @@ public class ImageDAO {
         Parameters args = new Parameters();
         args.put("CacheId", image.CacheId);
         args.put("GcCode", image.GcCode);
-        args.put("Name", image.Name);
+        args.put("name", image.Name);
         args.put("Description", image.Description);
         args.put("ImageUrl", image.ImageUrl);
         args.put("IsCacheImage", image.IsCacheImage);
@@ -57,7 +57,7 @@ public class ImageDAO {
     public ArrayList<ImageEntry> getImagesForCache(String GcCode) {
         ArrayList<ImageEntry> images = new ArrayList<ImageEntry>();
 
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, GcCode, Name, Description, ImageUrl, IsCacheImage from Images where GcCode=?", new String[]{GcCode});
+        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, GcCode, name, Description, ImageUrl, IsCacheImage from Images where GcCode=?", new String[]{GcCode});
         if (reader.getCount() > 0) {
             reader.moveToFirst();
             while (!reader.isAfterLast()) {
@@ -84,7 +84,7 @@ public class ImageDAO {
     public ArrayList<ImageEntry> getDescriptionImagesForCache(String GcCode) {
         ArrayList<ImageEntry> images = new ArrayList<ImageEntry>();
 
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, GcCode, Name, Description, ImageUrl, IsCacheImage from Images where GcCode=? and IsCacheImage=1", new String[]{GcCode});
+        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, GcCode, name, Description, ImageUrl, IsCacheImage from Images where GcCode=? and IsCacheImage=1", new String[]{GcCode});
 
         if (reader == null)
             return images;

@@ -88,7 +88,7 @@ public abstract class Search extends PostRequest {
     private final String FOUND = "HasbeenFoundbyUser";
     private final String ID = "ID";
     private final String LONG_DESC = "LongDescription";
-    private final String NAME = "Name";
+    private final String NAME = "name";
     private final String USER_NAME = "UserName";
     private final String PLACED_BY = "PlacedBy";
     private final String SHORT_DESC = "ShortDescription";

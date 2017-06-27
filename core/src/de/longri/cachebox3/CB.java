@@ -391,4 +391,14 @@ public class CB {
         }
         return errror.get();
     }
+
+    public static void wait(AtomicBoolean wait) {
+        while (wait.get()){
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

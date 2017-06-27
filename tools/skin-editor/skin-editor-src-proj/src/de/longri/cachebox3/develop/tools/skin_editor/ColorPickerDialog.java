@@ -56,7 +56,7 @@ public class ColorPickerDialog extends Dialog {
         public void finished(final Color color) {
             if (color != null) {
                 final TextField nameTextField = new TextField("???", game.skin);
-                Dialog dlg0 = new Dialog("Name your color", game.skin) {
+                Dialog dlg0 = new Dialog("name your color", game.skin) {
 
                     @Override
                     protected void result(Object object) {
@@ -174,7 +174,7 @@ public class ColorPickerDialog extends Dialog {
     public void updateTable() {
 
         tableColors.clear();
-        tableColors.add(new Label("Color Name", game.skin, "title")).left().width(170);
+        tableColors.add(new Label("Color name", game.skin, "title")).left().width(170);
         tableColors.add(new Label("Value", game.skin, "title")).colspan(2).left().width(60).padRight(50);
 
         tableColors.row();

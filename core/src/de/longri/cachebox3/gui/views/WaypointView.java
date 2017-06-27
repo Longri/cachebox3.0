@@ -348,7 +348,7 @@ public class WaypointView extends AbstractView {
     }
 
     private void deleteWP() {
-        //Name, msg, title, buttons, icon, OnMsgBoxClickListener
+        //name, msg, title, buttons, icon, OnMsgBoxClickListener
         Window dialog = new ButtonDialog("delete Waypoint",
                 Translation.Get("?DelWP") + "\n[" + actWaypoint.getTitle() + "]\n",
                 Translation.Get("!DelWP"), MessageBoxButtons.YesNo, MessageBoxIcon.Question,

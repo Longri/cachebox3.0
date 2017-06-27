@@ -119,7 +119,7 @@ class HashAtlasWriterTest {
 
         ScaledSvg scaledSvg = testSkin.get("cursor", ScaledSvg.class);
         assertThat("Scale value must 0.75f", scaledSvg.scale == 0.75f);
-        assertThat("Name must be: cursor  ", scaledSvg.getRegisterName().equals("cursor"));
+        assertThat("name must be: cursor  ", scaledSvg.getRegisterName().equals("cursor"));
         assertThat("Path must be: cursor.svg", scaledSvg.path.equals("cursor.svg"));
 
 
@@ -181,7 +181,7 @@ class HashAtlasWriterTest {
         assertThat("Must have no changes", result);
         scaledSvg = testSkin.get("cursor", ScaledSvg.class);
         assertThat("Scale value must 0.95f", scaledSvg.scale == 0.95f);
-        assertThat("Name must be: cursor  ", scaledSvg.getRegisterName().equals("cursor"));
+        assertThat("name must be: cursor  ", scaledSvg.getRegisterName().equals("cursor"));
         assertThat("Path must be: cursor.svg", scaledSvg.path.equals("cursor.svg"));
 
 
@@ -214,7 +214,7 @@ class HashAtlasWriterTest {
         assertThat("Must have no changes", result);
         scaledSvg = testSkin.get("cursor2", ScaledSvg.class);
         assertThat("Scale value must 0.95f", scaledSvg.scale == 0.35f);
-        assertThat("Name must be: cursor2  ", scaledSvg.getRegisterName().equals("cursor2"));
+        assertThat("name must be: cursor2  ", scaledSvg.getRegisterName().equals("cursor2"));
         assertThat("Path must be: cursor2.svg", scaledSvg.path.equals("cursor2.svg"));
 
 

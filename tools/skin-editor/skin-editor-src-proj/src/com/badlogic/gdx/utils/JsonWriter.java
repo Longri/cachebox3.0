@@ -113,7 +113,7 @@ public class JsonWriter extends Writer {
             else
                 writer.write(',');
         } else {
-            if (!named) throw new IllegalStateException("Name must be set.");
+            if (!named) throw new IllegalStateException("name must be set.");
             named = false;
         }
     }

@@ -37,7 +37,7 @@ public class ImageEntry implements Serializable {
 	public String Description = "";
 
 	/**
-	 * Name des Bildes
+	 * name des Bildes
 	 */
 	public String Name = "";
 

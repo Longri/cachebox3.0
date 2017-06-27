@@ -215,7 +215,7 @@ public class FilterProperties {
     }
 
     /**
-     * True, wenn FilterProperties eine Filterung nach Name, Gc-Code oder Owner enthält!
+     * True, wenn FilterProperties eine Filterung nach name, Gc-Code oder Owner enthält!
      *
      * @return
      */
@@ -284,7 +284,7 @@ public class FilterProperties {
             }
             json.writeValue("attributes", tmp);
 
-            // Filter Name
+            // Filter name
             json.writeValue("filtername", filterName);
 
             // History
@@ -428,7 +428,7 @@ public class FilterProperties {
             }
 
             if (filterName != "") {
-                andParts.add("Name like '%" + filterName + "%'");
+                andParts.add("name like '%" + filterName + "%'");
             }
             if (filterGcCode != "") {
                 andParts.add("GcCode like '%" + filterGcCode + "%'");

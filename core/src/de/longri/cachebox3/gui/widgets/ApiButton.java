@@ -108,7 +108,7 @@ public class ApiButton extends IconButton {
                         @Override
                         public void callBack(Integer status) {
                             if (status >= 0) {
-                                log.debug("Read User Name/State {}/{}", GroundspeakAPI.memberName, status);
+                                log.debug("Read User name/State {}/{}", GroundspeakAPI.memberName, status);
                                 Config.GcLogin.setValue(GroundspeakAPI.memberName);
                                 Config.AcceptChanges();
                                 CB.viewmanager.toast("Welcome : " + GroundspeakAPI.memberName);

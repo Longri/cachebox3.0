@@ -149,7 +149,7 @@ class GetYourUserProfileTest {
             @Override
             public void callBack(Integer value) {
                 assertThat("Type should be 3", getYourUserProfile.getMembershipType() == 3);
-                assertEquals(getYourUserProfile.getMemberName(), "LONGRI", "Name should be LONGRI");
+                assertEquals(getYourUserProfile.getMemberName(), "LONGRI", "name should be LONGRI");
             }
         });
     }
@@ -165,7 +165,7 @@ class GetYourUserProfileTest {
             @Override
             public void callBack(Integer value) {
                 assertThat("Type should be 3", getYourUserProfile.getMembershipType() == 3);
-                assertEquals(getYourUserProfile.getMemberName(), "Katipa", "Name should be Katipa");
+                assertEquals(getYourUserProfile.getMemberName(), "Katipa", "name should be Katipa");
                 WAIT.set(false);
             }
         });

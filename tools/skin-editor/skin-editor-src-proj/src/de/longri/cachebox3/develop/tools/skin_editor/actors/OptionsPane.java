@@ -265,7 +265,7 @@ public class OptionsPane extends Table {
         };
 
         dlgStyle.pad(20);
-        dlgStyle.getContentTable().add("Style Name:");
+        dlgStyle.getContentTable().add("Style name:");
         dlgStyle.getContentTable().add(textStyleName).pad(20);
         dlgStyle.button("OK", true);
         dlgStyle.button("Cancel", false);
@@ -447,7 +447,7 @@ public class OptionsPane extends Table {
 
         Gdx.app.log("OptionsPane", "Update fields table for widget: " + widget + ", style: " + style);
         tableFields.clear();
-        tableFields.add(new Label("Name", game.skin, "title")).left().width(170);
+        tableFields.add(new Label("name", game.skin, "title")).left().width(170);
         tableFields.add(new Label("Value", game.skin, "title")).left().width(60).padRight(50);
         tableFields.row();
 

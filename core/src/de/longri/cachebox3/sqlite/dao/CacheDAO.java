@@ -197,7 +197,7 @@ public class CacheDAO {
         args.put("GcCode", cache.getGcCode());
         args.put("Latitude", cache.latitude);
         args.put("Longitude", cache.longitude);
-        args.put("Name", cache.getName());
+        args.put("name", cache.getName());
         try {
             args.put("Size", cache.Size.ordinal());
         } catch (Exception e) {
@@ -292,7 +292,7 @@ public class CacheDAO {
             args.put("Latitude", cache.latitude);
             args.put("Longitude", cache.longitude);
         }
-        args.put("Name", cache.getName());
+        args.put("name", cache.getName());
         try {
             args.put("Size", cache.Size.ordinal());
         } catch (Exception e) {

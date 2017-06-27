@@ -84,7 +84,7 @@ public class NinePatchEditorDialog extends Dialog {
 
         textName = new TextField("default_button", game.skin);
         Table tableTop = new Table(game.skin);
-        tableTop.add("NinePatch Name:").padRight(10);
+        tableTop.add("NinePatch name:").padRight(10);
         tableTop.add(textName).padRight(10);
         tableTop.add("Source Image:").padRight(10);
 

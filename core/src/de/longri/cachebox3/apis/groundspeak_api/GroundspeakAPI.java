@@ -16,6 +16,10 @@
 package de.longri.cachebox3.apis.groundspeak_api;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.GenericCallBack;
@@ -31,14 +35,22 @@ import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.types.LogEntry;
 import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.utils.ICancel;
+import de.longri.cachebox3.utils.NetUtils;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.GS_LIVE_URL;
+import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.STAGING_GS_LIVE_URL;
 
 public class GroundspeakAPI {
 
@@ -184,22 +196,22 @@ public class GroundspeakAPI {
 //
 //	    } catch (JSONException e) {
 //		e.printStackTrace();
-//		logger.error("UploadFieldNotesAPI", e);
+//		log.error("UploadFieldNotesAPI", e);
 //		LastAPIError = e.getMessage();
 //		return ERROR;
 //	    }
 //
 //	} catch (ConnectTimeoutException e) {
-//	    logger.error("UploadFieldNotesAPI ConnectTimeoutException", e);
+//	    log.error("UploadFieldNotesAPI ConnectTimeoutException", e);
 //	    return CONNECTION_TIMEOUT;
 //	} catch (UnsupportedEncodingException e) {
-//	    logger.error("UploadFieldNotesAPI UnsupportedEncodingException", e);
+//	    log.error("UploadFieldNotesAPI UnsupportedEncodingException", e);
 //	    return ERROR;
 //	} catch (ClientProtocolException e) {
-//	    logger.error("UploadFieldNotesAPI ClientProtocolException", e);
+//	    log.error("UploadFieldNotesAPI ClientProtocolException", e);
 //	    return ERROR;
 //	} catch (IOException e) {
-//	    logger.error("UploadFieldNotesAPI IOException", e);
+//	    log.error("UploadFieldNotesAPI IOException", e);
 //	    return ERROR;
 //	}
 //
@@ -264,16 +276,16 @@ public class GroundspeakAPI {
 //	    }
 //
 //	} catch (ConnectTimeoutException e) {
-//	    logger.error("GetCachesFound ConnectTimeoutException", e);
+//	    log.error("GetCachesFound ConnectTimeoutException", e);
 //	    return CONNECTION_TIMEOUT;
 //	} catch (UnsupportedEncodingException e) {
-//	    logger.error("GetCachesFound UnsupportedEncodingException", e);
+//	    log.error("GetCachesFound UnsupportedEncodingException", e);
 //	    return ERROR;
 //	} catch (ClientProtocolException e) {
-//	    logger.error("GetCachesFound ClientProtocolException", e);
+//	    log.error("GetCachesFound ClientProtocolException", e);
 //	    return ERROR;
 //	} catch (IOException e) {
-//	    logger.error("GetCachesFound", e);
+//	    log.error("GetCachesFound", e);
 //	    return ERROR;
 //	}
 //
@@ -413,16 +425,16 @@ public class GroundspeakAPI {
 //	    }
 //
 //	} catch (ConnectTimeoutException e) {
-//	    logger.error("GetGeocacheStatus ConnectTimeoutException", e);
+//	    log.error("GetGeocacheStatus ConnectTimeoutException", e);
 //	    return CONNECTION_TIMEOUT;
 //	} catch (UnsupportedEncodingException e) {
-//	    logger.error("GetGeocacheStatus UnsupportedEncodingException", e);
+//	    log.error("GetGeocacheStatus UnsupportedEncodingException", e);
 //	    return ERROR;
 //	} catch (ClientProtocolException e) {
-//	    logger.error("GetGeocacheStatus ClientProtocolException", e);
+//	    log.error("GetGeocacheStatus ClientProtocolException", e);
 //	    return ERROR;
 //	} catch (IOException e) {
-//	    logger.error("GetGeocacheStatus IOException", e);
+//	    log.error("GetGeocacheStatus IOException", e);
 //	    return ERROR;
 //	}
 //
@@ -517,7 +529,7 @@ public class GroundspeakAPI {
 //				String date = (String) dateCreated.subSequence(date1 + 6, date2);
 //				log.Timestamp = new Date(Long.valueOf(date));
 //			    } catch (Exception exc) {
-//				logger.error("SearchForGeocaches_ParseLogDate", exc);
+//				log.error("SearchForGeocaches_ParseLogDate", exc);
 //			    }
 //			    log.Type = LogTypes.GC2CB_LogType(jLogType.getInt("WptLogTypeId"));
 //			    logList.add(log);
@@ -540,16 +552,16 @@ public class GroundspeakAPI {
 //		}
 //
 //	    } catch (ConnectTimeoutException e) {
-//		logger.error("GetGeocacheLogsByCache ConnectTimeoutException", e);
+//		log.error("GetGeocacheLogsByCache ConnectTimeoutException", e);
 //		return CONNECTION_TIMEOUT;
 //	    } catch (UnsupportedEncodingException e) {
-//		logger.error("GetGeocacheLogsByCache UnsupportedEncodingException", e);
+//		log.error("GetGeocacheLogsByCache UnsupportedEncodingException", e);
 //		return ERROR;
 //	    } catch (ClientProtocolException e) {
-//		logger.error("GetGeocacheLogsByCache ClientProtocolException", e);
+//		log.error("GetGeocacheLogsByCache ClientProtocolException", e);
 //		return ERROR;
 //	    } catch (IOException e) {
-//		logger.error("GetGeocacheLogsByCache IOException", e);
+//		log.error("GetGeocacheLogsByCache IOException", e);
 //		return ERROR;
 //	    }
 //	    // die nächsten Logs laden
@@ -622,16 +634,16 @@ public class GroundspeakAPI {
 //	    }
 //
 //	} catch (ConnectTimeoutException e) {
-//	    logger.error("GetGeocacheStatus ConnectTimeoutException", e);
+//	    log.error("GetGeocacheStatus ConnectTimeoutException", e);
 //	    return CONNECTION_TIMEOUT;
 //	} catch (UnsupportedEncodingException e) {
-//	    logger.error("GetGeocacheStatus UnsupportedEncodingException", e);
+//	    log.error("GetGeocacheStatus UnsupportedEncodingException", e);
 //	    return ERROR;
 //	} catch (ClientProtocolException e) {
-//	    logger.error("GetGeocacheStatus ClientProtocolException", e);
+//	    log.error("GetGeocacheStatus ClientProtocolException", e);
 //	    return ERROR;
 //	} catch (IOException e) {
-//	    logger.error("GetGeocacheStatus IOException", e);
+//	    log.error("GetGeocacheStatus IOException", e);
 //	    return ERROR;
 //	}
 //    }
@@ -750,16 +762,16 @@ public class GroundspeakAPI {
 //	    }
 //
 //	} catch (ConnectTimeoutException e) {
-//	    logger.error("GetGeocacheStatus ConnectTimeoutException", e);
+//	    log.error("GetGeocacheStatus ConnectTimeoutException", e);
 //	    return CONNECTION_TIMEOUT;
 //	} catch (UnsupportedEncodingException e) {
-//	    logger.error("GetGeocacheStatus UnsupportedEncodingException", e);
+//	    log.error("GetGeocacheStatus UnsupportedEncodingException", e);
 //	    return ERROR;
 //	} catch (ClientProtocolException e) {
-//	    logger.error("GetGeocacheStatus ClientProtocolException", e);
+//	    log.error("GetGeocacheStatus ClientProtocolException", e);
 //	    return ERROR;
 //	} catch (IOException e) {
-//	    logger.error("GetGeocacheStatus IOException", e);
+//	    log.error("GetGeocacheStatus IOException", e);
 //	    return ERROR;
 //	}
 //
@@ -828,19 +840,19 @@ public class GroundspeakAPI {
 //	    }
 //
 //	} catch (ConnectTimeoutException e) {
-//	    logger.error("getTBbyTreckNumber ConnectTimeoutException", e);
+//	    log.error("getTBbyTreckNumber ConnectTimeoutException", e);
 //	    TB = null;
 //	    return CONNECTION_TIMEOUT;
 //	} catch (UnsupportedEncodingException e) {
-//	    logger.error("getTBbyTreckNumber UnsupportedEncodingException", e);
+//	    log.error("getTBbyTreckNumber UnsupportedEncodingException", e);
 //	    TB = null;
 //	    return ERROR;
 //	} catch (ClientProtocolException e) {
-//	    logger.error("getTBbyTreckNumber ClientProtocolException", e);
+//	    log.error("getTBbyTreckNumber ClientProtocolException", e);
 //	    TB = null;
 //	    return ERROR;
 //	} catch (IOException e) {
-//	    logger.error("getTBbyTreckNumber IOException", e);
+//	    log.error("getTBbyTreckNumber IOException", e);
 //	    TB = null;
 //	    return ERROR;
 //	}
@@ -909,19 +921,19 @@ public class GroundspeakAPI {
 //	    }
 //
 //	} catch (ConnectTimeoutException e) {
-//	    logger.error("getTBbyTbCode ConnectTimeoutException", e);
+//	    log.error("getTBbyTbCode ConnectTimeoutException", e);
 //	    TB = null;
 //	    return CONNECTION_TIMEOUT;
 //	} catch (UnsupportedEncodingException e) {
-//	    logger.error("getTBbyTbCode UnsupportedEncodingException", e);
+//	    log.error("getTBbyTbCode UnsupportedEncodingException", e);
 //	    TB = null;
 //	    return ERROR;
 //	} catch (ClientProtocolException e) {
-//	    logger.error("getTBbyTbCode ClientProtocolException", e);
+//	    log.error("getTBbyTbCode ClientProtocolException", e);
 //	    TB = null;
 //	    return ERROR;
 //	} catch (IOException e) {
-//	    logger.error("getTBbyTbCode IOException", e);
+//	    log.error("getTBbyTbCode IOException", e);
 //	    TB = null;
 //	    return ERROR;
 //	}
@@ -991,16 +1003,16 @@ public class GroundspeakAPI {
 //	    }
 //
 //	} catch (ConnectTimeoutException e) {
-//	    logger.error("getImagesForGeocache ConnectTimeoutException", e);
+//	    log.error("getImagesForGeocache ConnectTimeoutException", e);
 //	    return CONNECTION_TIMEOUT;
 //	} catch (UnsupportedEncodingException e) {
-//	    logger.error("getImagesForGeocache UnsupportedEncodingException", e);
+//	    log.error("getImagesForGeocache UnsupportedEncodingException", e);
 //	    return ERROR;
 //	} catch (ClientProtocolException e) {
-//	    logger.error("getImagesForGeocache ClientProtocolException", e);
+//	    log.error("getImagesForGeocache ClientProtocolException", e);
 //	    return ERROR;
 //	} catch (IOException e) {
-//	    logger.error("getImagesForGeocache IOException", e);
+//	    log.error("getImagesForGeocache IOException", e);
 //	    return ERROR;
 //	}
 //
@@ -1019,99 +1031,84 @@ public class GroundspeakAPI {
 //     *            Config.settings.socket_timeout.getValue()
 //     * @return
 //     */
-//    public static int GetAllImageLinks(String cacheCode, HashMap<String, URI> list, ICancel icancel) {
-//	int chk = chkMembership(false);
-//	if (chk < 0)
-//	    return chk;
+    public static int GetAllImageLinks(String cacheCode, HashMap<String, URI> list, ICancel icancel) {
+        int chk = chkMembership(false);
+        if (chk < 0)
+            return chk;
+
+        String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
+        if (list == null)
+            list = new HashMap<String, URI>();
+        try {
+            Net.HttpRequest httpGet = new Net.HttpRequest(Net.HttpMethods.GET);
+            httpGet.setUrl(URL + "GetImagesForGeocache?AccessToken=" + getAccessToken(true) + "&CacheCode=" + cacheCode + "&format=json");
+            httpGet.setTimeOut(Config.socket_timeout.getValue());
+
+
+            // Execute HTTP Post Request
+            log.debug("Send Post request");
+            String result = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING,httpGet, icancel);
+
+            if (result.contains("The service is unavailable")) {
+                return API_IS_UNAVAILABLE;
+            }
+
+            JsonValue root = new JsonReader().parse(result);
+            JsonValue status = root.getChild("Status");
+            if (status.getInt("StatusCode") == 0) {
+                LastAPIError = "";
+                JsonValue jImages = root.getChild("Images");
+            }
+
+//            JSONTokener tokener = new JSONTokener(result);
+//            JSONObject json = (JSONObject) tokener.nextValue();
+//            JSONObject status = json.getJSONObject("Status");
+//            if (status.getInt("StatusCode") == 0) {
+//                LastAPIError = "";
+//                JSONArray jImages = json.getJSONArray("Images");
 //
-//	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-//	if (list == null)
-//	    list = new HashMap<String, URI>();
-//	try {
-//	    HttpGet httppost = new HttpGet(URL + "GetImagesForGeocache?AccessToken=" + getAccessToken(true) + "&CacheCode=" + cacheCode + "&format=json");
+//                for (int ii = 0; ii < jImages.length(); ii++) {
+//                    JSONObject jImage = (JSONObject) jImages.get(ii);
+//                    String name = jImage.getString("Name");
+//                    String uri = jImage.getString("Url");
+//                    // ignore log images
+//                    if (uri.contains("/cache/log"))
+//                        continue; // LOG-Image
+//                    // Check for duplicate name
+//                    if (list.containsKey(name)) {
+//                        for (int nr = 1; nr < 10; nr++) {
+//                            if (list.containsKey(name + "_" + nr)) {
+//                                continue; // Name already exists
+//                            }
+//                            name += "_" + nr;
+//                            break;
+//                        }
+//                    }
+//                    list.put(name, new URI(uri));
+//                }
+//                return IO;
+//            } else if (status.getInt("StatusCode") == 140) {
+//                return 140; // API-Limit überschritten -> nach etwas Verzögerung wiederholen!
+//            } else {
+//                LastAPIError = "";
+//                LastAPIError = "StatusCode = " + status.getInt("StatusCode") + "\n";
+//                LastAPIError += status.getString("StatusMessage") + "\n";
+//                LastAPIError += status.getString("ExceptionDetails");
 //
-//	    // set time outs
-//	    HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
-//	    HttpUtils.socketTimeout = Config.socket_timeout.getValue();
-//
-//	    // Execute HTTP Post Request
-//	    String result = HttpUtils.Execute(httppost, icancel);
-//
-//	    if (result.contains("The service is unavailable")) {
-//		return API_IS_UNAVAILABLE;
-//	    }
-//	    try
-//	    // Parse JSON Result
-//	    {
-//		JSONTokener tokener = new JSONTokener(result);
-//		JSONObject json = (JSONObject) tokener.nextValue();
-//		JSONObject status = json.getJSONObject("Status");
-//		if (status.getInt("StatusCode") == 0) {
-//		    LastAPIError = "";
-//		    JSONArray jImages = json.getJSONArray("Images");
-//
-//		    for (int ii = 0; ii < jImages.length(); ii++) {
-//			JSONObject jImage = (JSONObject) jImages.get(ii);
-//			String name = jImage.getString("Name");
-//			String uri = jImage.getString("Url");
-//			// ignore log images
-//			if (uri.contains("/cache/log"))
-//			    continue; // LOG-Image
-//			// Check for duplicate name
-//			if (list.containsKey(name)) {
-//			    for (int nr = 1; nr < 10; nr++) {
-//				if (list.containsKey(name + "_" + nr)) {
-//				    continue; // Name already exists
-//				}
-//				name += "_" + nr;
-//				break;
-//			    }
-//			}
-//			list.put(name, new URI(uri));
-//		    }
-//		    return IO;
-//		} else if (status.getInt("StatusCode") == 140) {
-//		    return 140; // API-Limit überschritten -> nach etwas Verzögerung wiederholen!
-//		} else {
-//		    LastAPIError = "";
-//		    LastAPIError = "StatusCode = " + status.getInt("StatusCode") + "\n";
-//		    LastAPIError += status.getString("StatusMessage") + "\n";
-//		    LastAPIError += status.getString("ExceptionDetails");
-//
-//		    list = null;
-//		    return ERROR;
-//		}
-//
-//	    } catch (JSONException e) {
-//		logger.error("getTBbyTbCode JSONException", e);
-//	    } catch (URISyntaxException e) {
-//		logger.error("getTBbyTbCode URISyntaxException", e);
-//	    } catch (ClassCastException e) {
-//		logger.error("getTBbyTbCode URISyntaxException", e);
-//	    }
-//
-//	} catch (ConnectTimeoutException e) {
-//	    logger.error("getTBbyTbCode ConnectTimeoutException", e);
-//	    list = null;
-//	    return CONNECTION_TIMEOUT;
-//	} catch (UnsupportedEncodingException e) {
-//	    logger.error("getTBbyTbCode UnsupportedEncodingException", e);
-//	    list = null;
-//	    return ERROR;
-//	} catch (ClientProtocolException e) {
-//	    logger.error("getTBbyTbCode ClientProtocolException", e);
-//	    list = null;
-//	    return ERROR;
-//	} catch (IOException e) {
-//	    logger.error("getTBbyTbCode IOException", e);
-//	    list = null;
-//	    return ERROR;
-//	}
-//
-//	list = null;
-//	return ERROR;
-//    }
-//
+//                list = null;
+//                return ERROR;
+//            }
+
+        } catch (Exception e) {
+            log.error("getAllImageLinks()", e);
+            list = null;
+            return ERROR;
+        }
+
+        list = null;
+        return ERROR;
+    }
+
     public static void WriteCachesLogsImages_toDB(CB_List<Cache> apiCaches, CB_List<LogEntry> apiLogs, CB_List<ImageEntry> apiImages) throws InterruptedException {
         // Auf eventuellen Thread Abbruch reagieren
         Thread.sleep(2);
@@ -1245,7 +1242,7 @@ public class GroundspeakAPI {
 
 //
 
-//
+    //
 //    /**
 //     * Returns True if the APY-Key INVALID
 //     *
@@ -1258,43 +1255,45 @@ public class GroundspeakAPI {
 //     *            Config.settings.socket_timeout.getValue()
 //     * @return 0=false 1=true
 //     */
-//    public static int chkMembership(boolean withoutMsg) {
-//	boolean isValid = false;
-//	if (API_isCheked) {
-//	    isValid = membershipType > 0;
-//	    return isValid ? 0 : 1;
-//	}
-//	int ret = 0;
-//	if (getAccessToken().length() > 0) {
-//
-//	    if (!isValid) {
-//		ret = GetMembershipType(null);
-//		isValid = membershipType > 0;
-//		if (ret < 0)
-//		    return ret;
-//	    }
-//	    isValid = membershipType > 0;
-//	}
-//
-//	if (!isValid && ret != CONNECTION_TIMEOUT) {
-//	    if (!withoutMsg)
-//		API_ErrorEventHandlerList.callInvalidApiKey(API_ErrorEventHandlerList.API_ERROR.INVALID);
-//	}
-//
-//	if (ret != CONNECTION_TIMEOUT)
-//	    API_isCheked = true;
-//	else
-//	    return CONNECTION_TIMEOUT;
-//
-//	return ret;
-//    }
-//
-//    public static int isValidAPI_Key(boolean withoutMsg) {
-//	if (API_isCheked)
-//	    return membershipType;
-//
-//	return chkMembership(withoutMsg);
-//    }
+    public static int chkMembership(boolean withoutMsg) {
+        boolean isValid = false;
+        if (API_isCheked) {
+            isValid = membershipType > 0;
+            return isValid ? 0 : 1;
+        }
+        final AtomicInteger ret = new AtomicInteger(0);
+        if (getAccessToken().length() > 0) {
+
+            if (!isValid) {
+                final AtomicBoolean WAIT = new AtomicBoolean(true);
+                getMembershipType(new GenericCallBack<Integer>() {
+                    @Override
+                    public void callBack(Integer value) {
+                        ret.set(value);
+                        WAIT.set(false);
+                    }
+                });
+                CB.wait(WAIT);
+                isValid = membershipType > 0;
+                if (ret.get() < 0)
+                    return ret.get();
+            }
+            isValid = membershipType > 0;
+        }
+        if (ret.get() != CONNECTION_TIMEOUT)
+            API_isCheked = true;
+        else
+            return CONNECTION_TIMEOUT;
+
+        return ret.get();
+    }
+
+    public static int isValidAPI_Key(boolean withoutMsg) {
+        if (API_isCheked)
+            return membershipType;
+
+        return chkMembership(withoutMsg);
+    }
 //
 //    /**
 //     * @param Staging
@@ -1382,22 +1381,22 @@ public class GroundspeakAPI {
 //
 //	    } catch (JSONException e) {
 //		e.printStackTrace();
-//		logger.error("UploadFieldNotesAPI JSON-Error", e);
+//		log.error("UploadFieldNotesAPI JSON-Error", e);
 //		LastAPIError = e.getMessage();
 //		return -1;
 //	    }
 //
 //	} catch (ConnectTimeoutException e) {
-//	    logger.error("createTrackableLog ConnectTimeoutException", e);
+//	    log.error("createTrackableLog ConnectTimeoutException", e);
 //	    return CONNECTION_TIMEOUT;
 //	} catch (UnsupportedEncodingException e) {
-//	    logger.error("createTrackableLog UnsupportedEncodingException", e);
+//	    log.error("createTrackableLog UnsupportedEncodingException", e);
 //	    return ERROR;
 //	} catch (ClientProtocolException e) {
-//	    logger.error("createTrackableLog ClientProtocolException", e);
+//	    log.error("createTrackableLog ClientProtocolException", e);
 //	    return ERROR;
 //	} catch (IOException e) {
-//	    logger.error("createTrackableLog IOException", e);
+//	    log.error("createTrackableLog IOException", e);
 //	    return ERROR;
 //	}
 //

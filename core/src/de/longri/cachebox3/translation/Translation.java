@@ -124,7 +124,7 @@ public class Translation {
     /**
      * Return a String from File
      *
-     * @param Name File Name
+     * @param Name File name
      * @return String from File
      * @throws IOException
      */

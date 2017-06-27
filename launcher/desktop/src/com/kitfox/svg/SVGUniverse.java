@@ -547,7 +547,7 @@ public class SVGUniverse implements Serializable
     /**
      * Synthesize a URI for an SVGDiagram constructed from a stream.
      *
-     * @param name - Name given the document constructed from a stream.
+     * @param name - name given the document constructed from a stream.
      */
     public URI getStreamBuiltURI(String name)
     {

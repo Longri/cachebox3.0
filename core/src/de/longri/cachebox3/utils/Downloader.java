@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2013-2016 team-cachebox.de
+ * Copyright (C) 2013-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -40,73 +40,103 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Net.HttpRequest;
-import com.badlogic.gdx.net.HttpParametersUtils;
+import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.CB;
 
 
 /**
- * Download a remote resource.
+ * download a remote resource.
  */
 public class Downloader implements Runnable {
 
-    /** buffer size in number of bytes (1024) */
+    /**
+     * buffer size in number of bytes (1024)
+     */
     private static final int BUFFER_SIZE = 1024;
 
-    /** URL of the remote resource to be downloaded */
+    /**
+     * URL of the remote resource to be downloaded
+     */
     private final URL url;
 
-    /** target object to be populated */
+    /**
+     * target object to be populated
+     */
     private final Object target;
 
-    /** length of the remote resource, in number of bytes; -1 if unknown */
+    /**
+     * length of the remote resource, in number of bytes; -1 if unknown
+     */
     private int totalLength = -1;
 
-    /** number of bytes downloaded */
+    /**
+     * number of bytes downloaded
+     */
     private int downloadedLength = 0;
 
-    /** mutex lock for fields totalLength and downloadedLength */
+    /**
+     * mutex lock for fields totalLength and downloadedLength
+     */
     private final Object lengthLock = new Object();
 
-    /** string describing the current progress */
+    /**
+     * string describing the current progress
+     */
     volatile private String progressString = "Waiting to start";
 
-    /** has there been an update in the progress? */
+    /**
+     * has there been an update in the progress?
+     */
     volatile private boolean progressUpdated = false;
 
-    /** Exception object representing the error, if any */
+    /**
+     * Exception object representing the error, if any
+     */
     volatile private Exception error = null;
 
-    /** has the download started? */
+    /**
+     * has the download started?
+     */
     private boolean started = false;
 
-    /** is the downloader running? */
+    /**
+     * is the downloader running?
+     */
     private boolean running = false;
 
-    /** is the download cancelled? */
+    /**
+     * is the download cancelled?
+     */
     private boolean cancelled = false;
 
-    /** is the download completed? */
+    /**
+     * is the download completed?
+     */
     private boolean completed = false;
 
-    /** mutex lock for fields started, running, cancelled, and completed */
+    /**
+     * mutex lock for fields started, running, cancelled, and completed
+     */
     private final Object stateLock = new Object();
 
     /**
      * Constructor. The target object should not be accessed until after calling waitUntilCompleted().
      *
-     * @param url
-     *            URL of the remote resource to be downloaded
-     * @param target
-     *            target object to be populated (File or StringBuilder object)
+     * @param url    URL of the remote resource to be downloaded
+     * @param target target object to be populated (File or StringBuilder object)
      */
     public Downloader(final URL url, final Object target) {
         if ((target instanceof File) || (target instanceof StringBuilder)) {
             this.target = target;
+        } else if (target instanceof FileHandle) {
+            this.target = ((FileHandle) target).file();
         } else {
             throw new IllegalArgumentException("Target must be a File or StringBuilder object.");
         }
@@ -257,8 +287,7 @@ public class Downloader implements Runnable {
     /**
      * Wait until the download is completed. The target object should be accessed only after calling this method.
      *
-     * @throws Exception
-     *             if an error has occurred during download, or if the download was cancelled
+     * @throws Exception if an error has occurred during download, or if the download was cancelled
      */
     public void waitUntilCompleted() throws Exception {
         while (true) {
@@ -292,7 +321,7 @@ public class Downloader implements Runnable {
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
         BufferedReader br = null;
-
+        NetUtils.StreamHandleObject streamHandle = null;
         try {
             /* open connection to the URL */
             checkState();
@@ -334,27 +363,17 @@ public class Downloader implements Runnable {
             try {
 
                 if (totalLength < 1) {
-
-
-
                     HttpRequest httpGet = new HttpRequest(Net.HttpMethods.GET);
                     httpGet.setUrl(url.toString());
 
-                    Gdx.net.sendHttpRequest (httpGet, new Net.HttpResponseListener() {
-                        public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                            input[0] = httpResponse.getResultAsStream();
-                        }
 
-                        public void failed(Throwable t) {
-
-                        }
-
+                    streamHandle = (NetUtils.StreamHandleObject) NetUtils.postAndWait(NetUtils.ResultType.STREAM, httpGet, new ICancel() {
                         @Override
-                        public void cancelled() {
-
+                        public boolean cancel() {
+                            return cancelled;
                         }
                     });
-
+                    input[0] = streamHandle.stream;
                 } else {
                     input[0] = link.getInputStream();
                 }
@@ -397,7 +416,7 @@ public class Downloader implements Runnable {
                 progressUpdated = true;
 
                 try {
-					/* create parent directories, if necessary */
+                    /* create parent directories, if necessary */
                     final File f = (File) target;
                     final File parent = f.getParentFile();
 
@@ -467,18 +486,18 @@ public class Downloader implements Runnable {
             }
 
 			/* download completed successfully */
-            progressString = "Download completed";
+            progressString = "download completed";
             progressUpdated = true;
         } catch (Exception e) {
             error = e;
         } finally {
-			/* clean-up */
+            /* clean-up */
             for (Closeable c : new Closeable[]{bis, br, bos}) {
                 if (c != null) {
                     try {
                         c.close();
                     } catch (Exception e) {
-						/* ignore */
+                        /* ignore */
                     }
                 }
             }
@@ -487,6 +506,10 @@ public class Downloader implements Runnable {
                 running = false;
                 completed = true;
             }
+
+            if (streamHandle != null) {
+                streamHandle.handled();
+            }
         }
     }
 
@@ -494,16 +517,16 @@ public class Downloader implements Runnable {
      * Check if the downloader state has been modified. This method blocks if the download has been paused, unless it is resumed or
      * cancelled. An exception is thrown if the download is cancelled.
      *
-     * @throws Exception
-     *             if the download is cancelled
+     * @throws Exception if the download is cancelled
      */
+
     private void checkState() throws Exception {
         while (true) {
             synchronized (stateLock) {
                 if (cancelled) {
-                    progressString = "Download cancelled";
+                    progressString = "download cancelled";
                     progressUpdated = true;
-                    throw new Exception("Download cancelled");
+                    throw new Exception("download cancelled");
                 }
 
                 if (running) {

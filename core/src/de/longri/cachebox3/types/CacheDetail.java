@@ -17,6 +17,7 @@ package de.longri.cachebox3.types;
 
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.lists.CB_List;
 
@@ -61,12 +62,12 @@ public class CacheDetail implements Serializable {
     public String tmpSolver = null; // nur fuer den RPC-Import
 
     /**
-     * Name der Tour, wenn die GPX-Datei aus GCTour importiert wurde
+     * name der Tour, wenn die GPX-Datei aus GCTour importiert wurde
      */
     public String TourName = "";
 
     /**
-     * Name der GPX-Datei aus der importiert wurde
+     * name der GPX-Datei aus der importiert wurde
      */
     public long GPXFilename_ID = 0;
 
@@ -296,7 +297,6 @@ public class CacheDetail implements Serializable {
 //		spoilerRessources = new CB_List<ImageEntry>();
 //
 //		synchronized (spoilerRessources) {
-//
 //			String directory = "";
 //
 //			// from own Repository
@@ -383,8 +383,8 @@ public class CacheDetail implements Serializable {
 //					if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("bmp") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("gif")) {
 //						ImageEntry imageEntry = new ImageEntry();
 //						imageEntry.LocalPath = directory + "/" + file;
-//						imageEntry.Name = file;
-//						// Log.debug(log, imageEntry.Name);
+//						imageEntry.name = file;
+//						// Log.debug(log, imageEntry.name);
 //						spoilerRessources.add(imageEntry);
 //					}
 //				}

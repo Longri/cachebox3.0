@@ -294,7 +294,7 @@ public class GestureButton extends Button {
     };
 
     private Menu getLongClickMenu() {
-        Menu longClickMenu = new Menu("Name");
+        Menu longClickMenu = new Menu("name");
 
         longClickMenu.setOnItemClickListener(new OnItemClickListener() {
             @Override

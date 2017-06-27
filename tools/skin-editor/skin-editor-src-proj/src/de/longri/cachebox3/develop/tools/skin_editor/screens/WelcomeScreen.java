@@ -169,7 +169,7 @@ public class WelcomeScreen implements Screen {
         };
 
         dlg.pad(20);
-        dlg.getContentTable().add("Project Name:");
+        dlg.getContentTable().add("Project name:");
         dlg.getContentTable().add(textProject).pad(20);
         dlg.button("OK", true);
         dlg.button("Cancel", false);

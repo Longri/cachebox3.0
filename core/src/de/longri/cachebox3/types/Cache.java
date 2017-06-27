@@ -80,7 +80,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
      */
     private byte[] GcCode;
     /**
-     * Name des Caches
+     * name des Caches
      */
     private byte[] Name;
 

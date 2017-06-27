@@ -50,7 +50,7 @@ public class CreateNightSkinButton extends TextButton {
 
     private void askForName() {
         final TextField nameTextField = new TextField("???", game.skin);
-        Dialog dlg0 = new Dialog("Name your night skin project", game.skin) {
+        Dialog dlg0 = new Dialog("name your night skin project", game.skin) {
 
             @Override
             protected void result(Object object) {

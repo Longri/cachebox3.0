@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright (C) 2014 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -15,6 +15,11 @@
  */
 package de.longri.cachebox3.utils;
 
-public interface IChanged {
-    void isChanged();
+/**
+ * Interface for void cancel()
+ * 
+ * @author Longri
+ */
+public interface ICancel {
+	public boolean cancel();
 }

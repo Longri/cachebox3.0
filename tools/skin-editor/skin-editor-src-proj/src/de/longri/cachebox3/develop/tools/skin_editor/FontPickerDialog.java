@@ -99,7 +99,7 @@ public class FontPickerDialog extends Dialog {
 		fonts = game.skinProject.getAll(BitmapFont.class);
 
 		tableFonts.clear();
-		tableFonts.add(new Label("Font Name", game.skin, "title")).left().width(170);
+		tableFonts.add(new Label("Font name", game.skin, "title")).left().width(170);
 		tableFonts.add(new Label("Value", game.skin, "title")).colspan(3).left().width(60).padRight(50).expandX().fillX();
 
 		tableFonts.row();

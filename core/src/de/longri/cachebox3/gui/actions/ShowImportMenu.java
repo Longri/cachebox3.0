@@ -93,7 +93,7 @@ public class ShowImportMenu extends Menu {
         });
         //ISSUE (#124 add Import of PQ)  menu.addItem(MenuID.MI_IMPORT_GS_PQ, "API_PocketQuery");
         menu.addItem(MenuID.MI_IMPORT_GS_API_POSITION, "API_IMPORT_OVER_POSITION");
-        //ISSUE (#125 add Import over Name, owner code) menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");
+        //ISSUE (#125 add Import over name, owner code) menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");
 
         return menu;
     }

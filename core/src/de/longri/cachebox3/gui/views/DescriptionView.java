@@ -28,6 +28,7 @@ import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.utils.NetUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,7 +103,7 @@ public class DescriptionView extends AbstractView {
 //                            }
 //                        }
 //                        if (CB_Core.Api.GroundspeakAPI.CachesLeft <= 0) {
-//                            String s = "Download limit is reached!\n";
+//                            String s = "download limit is reached!\n";
 //                            s += "You have downloaded the full cache details of " + CB_Core.Api.GroundspeakAPI.MaxCacheCount + " caches in the last 24 hours.\n";
 //                            if (CB_Core.Api.GroundspeakAPI.MaxCacheCount < 10)
 //                                s += "If you want to download the full cache details of 6000 caches per day you can upgrade to Premium Member at \nwww.geocaching.com!";
@@ -115,7 +116,7 @@ public class DescriptionView extends AbstractView {
 //                        }
 //
 //                        if (!CB_Core.Api.GroundspeakAPI.IsPremiumMember()) {
-//                            String s = "Download Details of this cache?\n";
+//                            String s = "download Details of this cache?\n";
 //                            s += "Full Downloads left: " + CB_Core.Api.GroundspeakAPI.CachesLeft + "\n";
 //                            s += "Actual Downloads: " + CB_Core.Api.GroundspeakAPI.CurrentCacheCount + "\n";
 //                            s += "Max. Downloads in 24h: " + CB_Core.Api.GroundspeakAPI.MaxCacheCount;
@@ -129,7 +130,7 @@ public class DescriptionView extends AbstractView {
 //                        }
 //                    }
 //                };
-//                pd = ProgressDialog.show(getContext(), "", "Download Description", true);
+//                pd = ProgressDialog.show(getContext(), "", "download Description", true);
 //
 //                thread.start();
                 log.debug("Get Basic Member description clicked, don't load URL");
@@ -243,6 +244,24 @@ public class DescriptionView extends AbstractView {
                     }
                 }
                 boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());
+
+
+                if (nonLocalImages.size() > 0) {
+                    CB.postAsync(new Runnable() {
+                        @Override
+                        public void run() {
+                            //download and store
+                            log.debug("download description images");
+                            for (int i = 0, n = nonLocalImages.size(); i < n; i++) {
+                                String localFilename = nonLocalImages.get(i);
+                                String dowbnloadUrl = nonLocalImagesUrl.get(i);
+                                if (!NetUtils.download(dowbnloadUrl, localFilename)) {
+                                    log.error("Image '{}' download failed", dowbnloadUrl);
+                                }
+                            }
+                        }
+                    });
+                }
             }
         });
     }

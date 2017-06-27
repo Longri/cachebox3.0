@@ -502,7 +502,7 @@ public class SearchForGeocaches_Core {
 //                            ImageEntry image = new ImageEntry();
 //                            image.CacheId = cache.Id;
 //                            image.GcCode = cache.getGcCode();
-//                            image.Name = jImage.getString("Name");
+//                            image.name = jImage.getString("name");
 //                            image.Description = jImage.getString("Description");
 //                            image.ImageUrl = jImage.getString("Url").replace("img.geocaching.com/gc/cache", "img.geocaching.com/cache");
 //                            // remove "/gc" to match the url used in the description

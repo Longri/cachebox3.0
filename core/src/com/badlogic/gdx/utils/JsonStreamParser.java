@@ -311,7 +311,7 @@ public class JsonStreamParser implements JsonParser {
         }
         if (found > nameStart) {
             String name = new String(data, nameStart + 1, found - nameStart - 1);
-            if (DEBUG) log.debug("Found Name: {}", name);
+            if (DEBUG) log.debug("Found name: {}", name);
             return name;
         }
         return null;

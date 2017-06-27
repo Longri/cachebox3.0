@@ -92,7 +92,7 @@ public class SvgSkin extends Skin {
      * Create a Skin from given Jason-file!
      * The drawable resources are created from Svg-Folder and putted into a Atlas
      *
-     * @param name        Name of this skin, will be used for create tmp cache folder!
+     * @param name        name of this skin, will be used for create tmp cache folder!
      * @param storageType LOCAL or INTERNAL
      * @param skinFolder  {@link FileHandle} to the folder of this skin
      */

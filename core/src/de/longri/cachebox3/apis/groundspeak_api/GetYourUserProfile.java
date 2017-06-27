@@ -58,7 +58,7 @@ public class GetYourUserProfile extends PostRequest {
                 }
 
             }).parse(result);
-            log.debug("ready parse result Type:{} Name:{}", membershipType, memberName);
+            log.debug("ready parse result Type:{} name:{}", membershipType, memberName);
             readyCallBack.callBack(NO_ERROR);
         } else if (status == 3) {
             // expired api key
