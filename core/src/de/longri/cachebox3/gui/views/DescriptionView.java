@@ -168,7 +168,7 @@ public class DescriptionView extends AbstractView {
                 Attributes attribute = attrs.next();
                 File result = new File(CB.WorkPath + "/data/Attributes/" + attribute.getImageName() + ".png");
                 sb.append("<form action=\"Attr\">");
-                sb.append("<input name=\"Button\" type=\"image\" src=\"" + result.toURI() + "\" value=\" " + attribute.getImageName() + " \">");
+                sb.append("<input name=\"Button\" type=\"image\" src=\"" + result.toURI() + "\" height=\"40\" width=\"40\" value=\" " + attribute.getImageName() + " \">");
 
             } while (attrs.hasNext());
 

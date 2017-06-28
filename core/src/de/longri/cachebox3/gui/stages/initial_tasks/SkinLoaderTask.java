@@ -168,8 +168,7 @@ public final class SkinLoaderTask extends AbstractInitTask {
         Bitmap bitmap = null;
         try {
             FileHandle svgFile = skin.skinFolder.child(scaledSvg.path);
-            // PNG is scaled to 48x48 Pixel! the Web view on description view will scale self
-            bitmap = PlatformConnector.getSvg(scaledSvg.getRegisterName(), svgFile.read(), PlatformConnector.SvgScaleType.SCALED_TO_WIDTH, 48);
+            bitmap = PlatformConnector.getSvg(scaledSvg.getRegisterName(), svgFile.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
         } catch (IOException e) {
             log.error("", e);
         }
