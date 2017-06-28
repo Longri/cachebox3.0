@@ -28,6 +28,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Field;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
@@ -42,6 +45,7 @@ import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
+import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
@@ -115,7 +119,7 @@ public class TestView extends AbstractView {
             if (iconWidth == 0) {
                 iconWidth = CB.getScaledFloat(47);//attDrawable.getMinWidth();
                 iconHeight = CB.getScaledFloat(47);// attDrawable.getMinHeight();
-                lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + CB.scaledSizes.MARGINx4));
+                lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
                 lineTable = new Table();
                 lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
             }
@@ -158,7 +162,7 @@ public class TestView extends AbstractView {
             if (iconWidth == 0) {
                 iconWidth = CB.getScaledFloat(40);//attDrawable.getMinWidth();
                 iconHeight = CB.getScaledFloat(40);// attDrawable.getMinHeight();
-                lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + CB.scaledSizes.MARGINx4));
+                lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
                 lineTable = new Table();
                 lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
             }
@@ -177,6 +181,54 @@ public class TestView extends AbstractView {
                 lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
                 lineBreak += lineBreakStep + 1;
             }
+
+        }
+        attTable.add(lineTable).left();
+
+        attTable.row();
+        //Menu Icons
+        VisLabel label3 = new VisLabel("Menu Icons");
+        lineTable = new Table();
+        lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+        lineTable.add(label3);
+        attTable.add(lineTable).left().expandX().fillX();
+        attTable.row();
+        iconWidth = 0;
+
+
+        Field[] fields = ClassReflection.getFields(MenuIconStyle.class);
+
+        for (int i = 0, n = fields.length; i < n; i++) {
+            Field field = fields[i];
+            if (field.getType() == Drawable.class)
+                try {
+                    Drawable drawable = (Drawable) field.get(CB.getSkin().getMenuIcon);
+                    if (iconWidth == 0) {
+                        iconWidth = CB.getScaledFloat(50);
+                        iconHeight = CB.getScaledFloat(50);
+                        lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
+                        lineTable = new Table();
+                        lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+                    }
+
+                    if (drawable != null) {
+                        lineTable.add(new Image(drawable)).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
+                    } else {
+                        lineTable.add(new VisLabel(Integer.toString(i))).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
+                    }
+
+
+                    if (i >= lineBreak) {
+                        attTable.add(lineTable).left();
+                        attTable.row();
+                        lineTable = new Table();
+                        lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+                        lineBreak += lineBreakStep + 1;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
 
         }
         attTable.add(lineTable).left();
