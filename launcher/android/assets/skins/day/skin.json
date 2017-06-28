@@ -776,6 +776,10 @@
       "path": "svg/deleteIcon.svg",
       "scale": 0.19455253
     },
+    "description": {
+      "path": "svg/description.svg",
+      "scale": 0.24
+    },
     "dialog_center": {
       "path": "svg/dialog_center.svg",
       "scale": 1
@@ -2506,6 +2510,7 @@
       "baseMapOnlineBitmap": "baseMapOnlineBitmap",
       "baseMapMapsforge": "baseMapMapsforge",
       "baseMapFreizeitkarte": "baseMapFreizeitkarte",
+      "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
       "deleteIcon": "deleteIcon",
       "sortIcon": "sortIcon",
