@@ -86,7 +86,7 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
         icm.addItem(MenuID.MI_LAYER, "Layer");
      //ISSUE (#110 add MapView Overlays) icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
      //ISSUE (#111 MapView create WP at center)    icm.addItem(MenuID.MI_CENTER_WP, "CenterWP");
-        icm.addItem(MenuID.MI_MAPVIEW_VIEW, "view");
+        icm.addItem(MenuID.MI_MAPVIEW_VIEW, "view", CB.getSkin().getMenuIcon.viewSettings);
      //ISSUE (#112 Record Track)   icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
      //ISSUE (#113 Add Map download)   icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
 

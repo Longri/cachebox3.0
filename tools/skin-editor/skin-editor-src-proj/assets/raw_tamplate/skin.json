@@ -916,6 +916,10 @@
       "path": "svg/images-icon.svg",
       "scale": 0.195
     },
+    "import": {
+      "path": "svg/import.svg",
+      "scale": 0.23
+    },
     "infoIcon": {
       "path": "svg/infoIcon.svg",
       "scale": 1
@@ -1576,6 +1580,10 @@
       "path": "svg/star_half.svg",
       "scale": 0.25
     },
+    "target": {
+      "path": "svg/target.svg",
+      "scale": 0.23
+    },
     "tbListIcon": {
       "path": "svg/tbListIcon.svg",
       "scale": 0.19455253
@@ -1619,6 +1627,10 @@
     "traddi": {
       "path": "svg/traddi.svg",
       "scale": 0.2
+    },
+    "view": {
+      "path": "svg/view.svg",
+      "scale": 0.23
     },
     "virtual": {
       "path": "svg/virtual.svg",
@@ -2510,10 +2522,12 @@
       "baseMapOnlineBitmap": "baseMapOnlineBitmap",
       "baseMapMapsforge": "baseMapMapsforge",
       "baseMapFreizeitkarte": "baseMapFreizeitkarte",
+      "target": "target",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
       "deleteIcon": "deleteIcon",
       "sortIcon": "sortIcon",
+      "importIcon": "import",
       "cacheListIcon": "cacheListIcon",
       "addWp": "add-wp",
       "hintIconOn": "hintOn",
@@ -2537,6 +2551,7 @@
       "waypointListIcon": "waypointListIcon",
       "trackListIcon": "trackListIcon",
       "GC_Live": "gc_liveIcon",
+      "viewSettings": "view",
       "prefWidth": -1,
       "prefHeight": -1
     }

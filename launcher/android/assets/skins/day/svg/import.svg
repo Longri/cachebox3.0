@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="210" height="210" viewBox="0 0 210.00 210.00" enable-background="new 0 0 210.00 210.00" xml:space="preserve">
+	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="-0.000904824" y1="0.499999" x2="1.0014" y2="0.499999">
+		<stop offset="0" stop-color="#0A4D04" stop-opacity="1"/>
+		<stop offset="1" stop-color="#042D01" stop-opacity="1"/>
+	</linearGradient>
+	<path fill="url(#SVGID_Fill1_)" stroke-width="4" stroke-linejoin="round" stroke="#006432" stroke-opacity="1" d="M 131.542,103.701C 155.885,81.1278 156.008,80.6572 155.844,80.2067C 155.68,79.7572 155.251,79.4906 154.801,79.4906L 123.749,79.4906L 123.81,28.6989C 123.81,27.8387 123.482,26.9799 122.828,26.3256C 122.173,25.6714 121.315,25.3436 120.454,25.3436L 90.0369,25.3436C 89.1769,25.3436 88.318,25.6714 87.6637,26.3256C 87.0096,26.9799 86.6818,27.8387 86.6818,28.6989L 86.7429,79.4906L 55.7318,79.4906C 55.2816,79.4906 54.8729,79.7572 54.6881,80.2067C 54.5244,80.6364 54.6471,81.1278 54.9747,81.4344L 102.985,125.967C 103.578,126.52 104.376,126.868 105.256,126.868C 106.135,126.868 106.933,126.52 131.542,103.701 Z "/>
+	<linearGradient id="SVGID_Fill2_" gradientUnits="objectBoundingBox" x1="-0.00221738" y1="0.500003" x2="1.0022" y2="0.500003">
+		<stop offset="0" stop-color="#0A4D04" stop-opacity="1"/>
+		<stop offset="1" stop-color="#042D01" stop-opacity="1"/>
+	</linearGradient>
+	<path fill="url(#SVGID_Fill2_)" stroke-width="4" stroke-linejoin="round" stroke="#006432" stroke-opacity="1" d="M 203.118,138.016L 173.027,114.757C 171.329,113.428 168.159,112.343 165.99,112.343L 148.562,112.343L 177.569,141.249L 148.644,141.249L 133.915,162.175L 75.9623,162.175L 61.8688,141.249L 32.9435,141.249L 61.766,112.343L 44.0105,112.343C 41.8422,112.343 38.6919,113.428 36.9738,114.757L 6.88171,138.016C 5.18494,139.346 4.32471,142.128 5,144.173L 17.0081,180.912C 17.6831,182.979 19.9946,184.656 22.163,184.656L 188.063,184.656C 190.231,184.656 192.543,182.979 193.197,180.912L 205,144.173C 205.675,142.108 204.836,139.346 203.118,138.016 Z "/>
+</svg>

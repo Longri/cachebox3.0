@@ -63,7 +63,7 @@ public class Action_Show_CompassView extends Abstract_Action_ShowView {
         Menu icm = new Menu("menu_compassView");
         icm.setOnItemClickListener(onItemClickListener);
 
-        icm.addItem(MenuID.MI_COMPASS_SHOW, "view");
+        icm.addItem(MenuID.MI_COMPASS_SHOW, "view", CB.getSkin().getMenuIcon.viewSettings);
 
         return icm;
     }

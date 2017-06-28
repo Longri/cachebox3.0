@@ -28,6 +28,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable baseMapOnlineBitmap;
     public Drawable baseMapMapsforge;
     public Drawable baseMapFreizeitkarte;
+    public Drawable target;
 
     @Override
     protected int getPrefWidth() {
@@ -82,4 +83,5 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable waypointListIcon;
     public Drawable trackListIcon;
     public Drawable GC_Live;
+    public Drawable viewSettings;
 }
