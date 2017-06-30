@@ -110,7 +110,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
         FileHandle fileHandle = Gdx.files.absolute(CB.WorkPath + "/" + Config.DatabaseName.getValue());
 
         try {
-            Database.Data.StartUp(fileHandle);
+            Database.Data.startUp(fileHandle);
         } catch (SQLiteGdxException e) {
             log.error("can't open DB", e);
             return;
@@ -122,7 +122,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
         FilterInstances.setLastFilter(new FilterProperties(Config.FilterNew.getValue()));
 
         String sqlWhere = FilterInstances.getLastFilter().getSqlWhere(Config.GcLogin.getValue());
-        Database.Data.GPXFilenameUpdateCacheCount();
+        Database.Data.gpxFilenameUpdateCacheCount();
 
 
         log.debug("Read CacheList");

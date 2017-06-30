@@ -688,7 +688,7 @@ public abstract class Search extends PostRequest {
 
                 // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
                 if (cache.getTmpNote() != null) {
-                    String oldNote = Database.GetNote(cache.Id);
+                    String oldNote = Database.getNote(cache.Id);
                     String newNote = "";
                     if (oldNote == null) {
                         oldNote = "";
@@ -714,7 +714,7 @@ public abstract class Search extends PostRequest {
                         newNote += System.getProperty("line.separator") + end;
                     }
                     cache.setTmpNote(newNote);
-                    Database.SetNote(cache.Id, cache.getTmpNote());
+                    Database.setNote(cache.Id, cache.getTmpNote());
                 }
 
                 // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
@@ -770,7 +770,7 @@ public abstract class Search extends PostRequest {
 //            @Override
 //            public void run() {
 //                importedLogs++;
-//                logDAO.WriteToDatabase(logEntry);
+//                logDAO.writeToDatabase(logEntry);
 //            }
 //        });
 //    }
@@ -779,7 +779,7 @@ public abstract class Search extends PostRequest {
 //        CB.postAsync(new Runnable() {
 //            @Override
 //            public void run() {
-//                imageDAO.WriteToDatabase(imageEntry, false);
+//                imageDAO.writeToDatabase(imageEntry, false);
 //                //TODO start download ?
 //            }
 //        });
@@ -811,12 +811,12 @@ public abstract class Search extends PostRequest {
 //
 //                // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
 //                if (!cacheDAO.UpdateDatabase(cache)) {
-//                    cacheDAO.WriteToDatabase(cache);
+//                    cacheDAO.writeToDatabase(cache);
 //                }
 //
 //                // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
 //                if (cache.getTmpNote() != null) {
-//                    String oldNote = Database.GetNote(cache.Id);
+//                    String oldNote = Database.getNote(cache.Id);
 //                    String newNote = "";
 //                    if (oldNote == null) {
 //                        oldNote = "";
@@ -842,7 +842,7 @@ public abstract class Search extends PostRequest {
 //                        newNote += System.getProperty("line.separator") + end;
 //                    }
 //                    cache.setTmpNote(newNote);
-//                    Database.SetNote(cache.Id, cache.getTmpNote());
+//                    Database.setNote(cache.Id, cache.getTmpNote());
 //                }
 //
 //                // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
@@ -871,7 +871,7 @@ public abstract class Search extends PostRequest {
 //                    if (update) {
 //                        // do not store replication information when importing caches with GC api
 //                        if (!waypointDAO.UpdateDatabase(waypoint, false)) {
-//                            waypointDAO.WriteToDatabase(waypoint, false); // do not store replication information here
+//                            waypointDAO.writeToDatabase(waypoint, false); // do not store replication information here
 //                        }
 //                    }
 //

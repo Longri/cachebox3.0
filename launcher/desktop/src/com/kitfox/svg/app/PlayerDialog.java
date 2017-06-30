@@ -168,7 +168,7 @@ public class PlayerDialog extends javax.swing.JDialog implements PlayerThreadLis
         jPanel3.add(text_curTime);
 
         bn_time0.setText("Time 0");
-        bn_time0.setToolTipText("Reset time to first frame");
+        bn_time0.setToolTipText("reset time to first frame");
         bn_time0.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)

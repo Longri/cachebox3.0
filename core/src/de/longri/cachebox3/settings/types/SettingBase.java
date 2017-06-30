@@ -47,15 +47,26 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     private static int indexCount = 0;
     private int index = -1;
 
-    public SettingBase(String name, de.longri.cachebox3.settings.types.SettingCategory category, de.longri.cachebox3.settings.types.SettingMode modus, de.longri.cachebox3.settings.types.SettingStoreType StoreType, de.longri.cachebox3.settings.types.SettingUsage usage) {
+    protected long desiredTime = -1L;
+
+    public SettingBase(String name, SettingCategory category, SettingMode modus, SettingStoreType StoreType, SettingUsage usage, boolean desired) {
+
+        if (name.length() > 30) throw new IllegalStateException("Name length can't longer then 30 characters");
+
         this.name = name;
         this.category = category;
         this.mode = modus;
         this.storeType = StoreType;
         this.usage = usage;
         this.dirty = false;
-
         this.index = indexCount++;
+        if (desired) {
+            //set to zero (value -1 means that this setting has no desired value)
+            //if desired time not set, so the value is desired
+            desiredTime = 0;
+        } else {
+            desiredTime = -1;
+        }
     }
 
     public void addChangedEventListener(IChanged listener) {
@@ -78,6 +89,16 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     public void setDirty() {
         dirty = true;
         fireChangedEvent();
+    }
+
+    public void setDesiredTime(long time) {
+        this.desiredTime = time;
+        this.setDirty();
+    }
+
+    public boolean isDesired() {
+        if (desiredTime == -1L) return false;
+        return System.currentTimeMillis() > desiredTime;
     }
 
     public void clearDirty() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2014 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package de.longri.cachebox3.sqlite;
 
 public class DatabaseVersions {
-    public static final int LatestDatabaseChange = 1026;
+    public static final int LatestDatabaseChange = 1027;
     public static final int LatestDatabaseFieldNoteChange = 1007;
-    public static final int LatestDatabaseSettingsChange = 1002;
+    public static final int LatestDatabaseSettingsChange = 1003;
 }

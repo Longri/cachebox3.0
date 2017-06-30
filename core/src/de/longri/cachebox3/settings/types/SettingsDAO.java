@@ -19,40 +19,50 @@ package de.longri.cachebox3.settings.types;
 import de.longri.cachebox3.sqlite.Database;
 
 public class SettingsDAO {
-    public void WriteToDatabase(Database database, SettingBase<?> setting) {
+    public void writeToDatabase(Database database, SettingBase<?> setting) {
         String dbString = setting.toDBString();
         if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
             database.WriteConfigLongString(setting.name, dbString);
         } else
-            database.WriteConfigString(setting.name, dbString);
+            database.writeConfigString(setting.name, dbString);
+
+        database.writeConfigDesiredString(setting.name, Long.toString(setting.desiredTime));
     }
 
-    public SettingBase<?> ReadFromDatabase(Database database, SettingBase<?> setting) {
+    public SettingBase<?> readFromDatabase(Database database, SettingBase<?> setting) {
         try {
             String dbString = null;
 
             if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
                 if (setting.name.endsWith("Local")) {
                     try {
-                        dbString = database.ReadConfigString(setting.name.substring(0, setting.name.length() - 5));
+                        dbString = database.readConfigString(setting.name.substring(0, setting.name.length() - 5));
                     } catch (Exception ex) {
                         dbString = null;
                     }
                     if (dbString == null)
-                        dbString = database.ReadConfigLongString(setting.name);
+                        dbString = database.readConfigLongString(setting.name);
                 } else {
-                    dbString = database.ReadConfigLongString(setting.name);
+                    dbString = database.readConfigLongString(setting.name);
                 }
             }
 
             if (dbString == null) {
-                dbString = database.ReadConfigString(setting.name);
+                dbString = database.readConfigString(setting.name);
             }
 
             if (dbString == null) {
                 setting.loadDefault();
             } else {
                 setting.fromDBString(dbString);
+            }
+
+            String desiredString = database.readConfigDesiredString(setting.name);
+            if (desiredString == null) {
+                setting.setDesiredTime(-1L);
+            } else {
+                long time = Long.parseLong(desiredString);
+                setting.setDesiredTime(time);
             }
 
             setting.clearDirty();
@@ -63,11 +73,11 @@ public class SettingsDAO {
         return setting;
     }
 
-    public void WriteToPlatformSettings(SettingBase<?> setting) {
+    public void writeToPlatformSettings(SettingBase<?> setting) {
         PlatformSettings.WriteSetting(setting);
     }
 
-    public SettingBase<?> ReadFromPlatformSetting(SettingBase<?> setting) {
+    public SettingBase<?> readFromPlatformSetting(SettingBase<?> setting) {
         setting = PlatformSettings.ReadSetting(setting);
         return setting;
     }

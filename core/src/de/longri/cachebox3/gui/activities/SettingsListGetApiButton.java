@@ -21,7 +21,11 @@ import de.longri.cachebox3.settings.types.*;
 public class SettingsListGetApiButton<T> extends SettingBase<T> {
 
     public SettingsListGetApiButton(String name, SettingCategory category, SettingMode modus, SettingStoreType StoreType, SettingUsage usage) {
-        super(name, category, modus, StoreType, usage);
+        this( name,  category,  modus,  StoreType,  usage,false);
+    }
+
+    public SettingsListGetApiButton(String name, SettingCategory category, SettingMode modus, SettingStoreType StoreType, SettingUsage usage,boolean desired) {
+        super(name, category, modus, StoreType, usage, desired);
 
     }
 

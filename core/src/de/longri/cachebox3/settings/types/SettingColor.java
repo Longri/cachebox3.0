@@ -25,7 +25,11 @@ import de.longri.cachebox3.utils.HSV_Color;
 public class SettingColor extends SettingBase<Color> {
 
     public SettingColor(String name, SettingCategory category, SettingMode modus, Color defaultValue, SettingStoreType StoreType, SettingUsage usage) {
-        super(name, category, modus, StoreType, usage);
+        this(name, category, modus, defaultValue, StoreType, usage, false);
+    }
+
+    public SettingColor(String name, SettingCategory category, SettingMode modus, Color defaultValue, SettingStoreType StoreType, SettingUsage usage,boolean desired) {
+        super(name, category, modus, StoreType, usage, desired);
         this.defaultValue = defaultValue;
     }
 

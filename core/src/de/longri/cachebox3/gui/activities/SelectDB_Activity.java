@@ -137,7 +137,7 @@ public class SelectDB_Activity extends ActivityBase {
                                     SQLiteGdxDatabase db = SQLiteGdxDatabaseFactory.getNewDatabase(dbFile);
                                     db.openOrCreateDatabase();
                                     Database.Data.close();
-                                    Database.Data.StartUp(dbFile);
+                                    Database.Data.startUp(dbFile);
                                 } catch (SQLiteGdxException e) {
                                     log.error("Create new DB", e);
                                     return true;

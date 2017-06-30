@@ -56,7 +56,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
         try {
             FileHandle configFileHandle = Gdx.files.absolute(CB.WorkPath + "/user/config.db3");
             Database.Settings = new Database(Database.DatabaseType.Settings);
-            Database.Settings.StartUp(configFileHandle);
+            Database.Settings.startUp(configFileHandle);
         } catch (SQLiteGdxException e) {
             log.error("can't open config.db3", e);
         }
@@ -65,7 +65,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
         try {
             FileHandle fieldNotesFileHandle = Gdx.files.absolute(CB.WorkPath + "/user/fieldNotes.db3");
             Database.FieldNotes = new Database(Database.DatabaseType.FieldNotes);
-            Database.FieldNotes.StartUp(fieldNotesFileHandle);
+            Database.FieldNotes.startUp(fieldNotesFileHandle);
         } catch (SQLiteGdxException e) {
             log.error("can't open fieldNotes.db3", e);
         }

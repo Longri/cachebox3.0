@@ -41,7 +41,12 @@ public class TestUtils {
         BuildInfo.setTestBuildInfo("JUnitTest");
         Gdx.net = new LwjglNet();
         Gdx.files = new LwjglFiles();
-        Gdx.app = new DummyLogApplication();
+        Gdx.app = new DummyLogApplication() {
+            @Override
+            public ApplicationType getType() {
+                return ApplicationType.HeadlessDesktop;
+            }
+        };
         Gdx.app.setApplicationLogger(new LwjglApplicationLogger());
     }
 

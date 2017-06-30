@@ -123,12 +123,12 @@ public class SettingsList extends ArrayList<SettingBase<?>> {
 
                 if (SettingStoreType.Local == setting.getStoreType()) {
                     if (data != null)
-                        dao.WriteToDatabase(data, setting);
+                        dao.writeToDatabase(data, setting);
                 } else if (SettingStoreType.Global == setting.getStoreType() || (!PlatformSettings.canUsePlatformSettings() && SettingStoreType.Platform == setting.getStoreType())) {
-                    dao.WriteToDatabase(settings, setting);
+                    dao.writeToDatabase(settings, setting);
                 } else if (SettingStoreType.Platform == setting.getStoreType()) {
-                    dao.WriteToPlatformSettings(setting);
-                    dao.WriteToDatabase(settings, setting);
+                    dao.writeToPlatformSettings(setting);
+                    dao.writeToDatabase(settings, setting);
                 }
 
                 if (setting.needRestart) {
@@ -168,14 +168,14 @@ public class SettingsList extends ArrayList<SettingBase<?>> {
                 if (data == null)
                     setting.loadDefault();
                 else
-                    setting = dao.ReadFromDatabase(data, setting);
+                    setting = dao.readFromDatabase(data, setting);
             } else if (SettingStoreType.Global == setting.getStoreType() || (!PlatformSettings.canUsePlatformSettings() && SettingStoreType.Platform == setting.getStoreType())) {
-                setting = dao.ReadFromDatabase(settings, setting);
+                setting = dao.readFromDatabase(settings, setting);
             } else if (SettingStoreType.Platform == setting.getStoreType()) {
                 isPlatform = true;
                 SettingBase<?> cpy = setting.copy();
-                cpy = dao.ReadFromDatabase(settings, cpy);
-                setting = dao.ReadFromPlatformSetting(setting);
+                cpy = dao.readFromDatabase(settings, cpy);
+                setting = dao.readFromPlatformSetting(setting);
 
                 // chk for Value on User.db3 and cleared Platform Value
 
@@ -184,20 +184,20 @@ public class SettingsList extends ArrayList<SettingBase<?>> {
 
                     if (st.value.length() == 0) {
                         // Platform Settings are empty use db3 value or default
-                        setting = dao.ReadFromDatabase(settings, setting);
-                        dao.WriteToPlatformSettings(setting);
+                        setting = dao.readFromDatabase(settings, setting);
+                        dao.writeToPlatformSettings(setting);
                     }
                 } else if (!cpy.value.equals(setting.value)) {
                     if (setting.value.equals(setting.defaultValue)) {
                         // override Platformsettings with UserDBSettings
                         setting.setValueFrom(cpy);
-                        dao.WriteToPlatformSettings(setting);
+                        dao.writeToPlatformSettings(setting);
                         setting.clearDirty();
                         isPlattformoverride = true;
                     } else {
                         // override UserDBSettings with Platformsettings
                         cpy.setValueFrom(setting);
-                        dao.WriteToDatabase(settings, cpy);
+                        dao.writeToDatabase(settings, cpy);
                         cpy.clearDirty();
                     }
                 }

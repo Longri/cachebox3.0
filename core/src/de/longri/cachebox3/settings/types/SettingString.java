@@ -19,7 +19,11 @@ public class SettingString extends SettingBase<String> {
     public static final String STRING_SPLITTER = "�";
 
     public SettingString(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage) {
-        super(name, category, modus, StoreType, usage);
+        this(name, category, modus, defaultValue, StoreType, usage, false);
+    }
+
+    public SettingString(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage, boolean desired) {
+        super(name, category, modus, StoreType, usage, desired);
         this.defaultValue = defaultValue;
         this.value = defaultValue;
     }

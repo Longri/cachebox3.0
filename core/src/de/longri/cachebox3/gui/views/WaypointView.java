@@ -376,7 +376,7 @@ public class WaypointView extends AbstractView {
     public void addWP() {
         String newGcCode = "";
         try {
-            newGcCode = Database.CreateFreeGcCode(EventHandler.getSelectedCache().getGcCode());
+            newGcCode = Database.createFreeGcCode(EventHandler.getSelectedCache().getGcCode());
         } catch (Exception e) {
             return;
         }

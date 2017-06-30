@@ -72,12 +72,12 @@ public class Config extends Settings {
 
                         if (de.longri.cachebox3.settings.types.SettingStoreType.Local == setting.getStoreType()) {
                             if (Data != null)
-                                dao.WriteToDatabase(Data, setting);
+                                dao.writeToDatabase(Data, setting);
                         } else if (de.longri.cachebox3.settings.types.SettingStoreType.Global == setting.getStoreType() || (!de.longri.cachebox3.settings.types.PlatformSettings.canUsePlatformSettings() && de.longri.cachebox3.settings.types.SettingStoreType.Platform == setting.getStoreType())) {
-                            dao.WriteToDatabase(SettingsDB, setting);
+                            dao.writeToDatabase(SettingsDB, setting);
                         } else if (de.longri.cachebox3.settings.types.SettingStoreType.Platform == setting.getStoreType()) {
-                            dao.WriteToPlatformSettings(setting);
-                            dao.WriteToDatabase(SettingsDB, setting);
+                            dao.writeToPlatformSettings(setting);
+                            dao.writeToDatabase(SettingsDB, setting);
                         }
 
                         if (setting.needRestart()) {
@@ -123,14 +123,14 @@ public class Config extends Settings {
                         if (Data == null)
                             setting.loadDefault();
                         else
-                            setting = dao.ReadFromDatabase(Data, setting);
+                            setting = dao.readFromDatabase(Data, setting);
                     } else if (de.longri.cachebox3.settings.types.SettingStoreType.Global == setting.getStoreType() || (!PlatformSettings.canUsePlatformSettings() && de.longri.cachebox3.settings.types.SettingStoreType.Platform == setting.getStoreType())) {
-                        setting = dao.ReadFromDatabase(SettingsDB, setting);
+                        setting = dao.readFromDatabase(SettingsDB, setting);
                     } else if (SettingStoreType.Platform == setting.getStoreType()) {
                         isPlatform = true;
                         de.longri.cachebox3.settings.types.SettingBase<?> cpy = setting.copy();
-                        cpy = dao.ReadFromDatabase(SettingsDB, cpy);
-                        setting = dao.ReadFromPlatformSetting(setting);
+                        cpy = dao.readFromDatabase(SettingsDB, cpy);
+                        setting = dao.readFromPlatformSetting(setting);
 
                         // chk for Value on User.db3 and cleared Platform Value
 
@@ -139,20 +139,20 @@ public class Config extends Settings {
 
                             if (st.getValue().length() == 0) {
                                 // Platform Settings are empty use db3 value or default
-                                setting = dao.ReadFromDatabase(SettingsDB, setting);
-                                dao.WriteToPlatformSettings(setting);
+                                setting = dao.readFromDatabase(SettingsDB, setting);
+                                dao.writeToPlatformSettings(setting);
                             }
                         } else if (!cpy.getValue().equals(setting.getValue())) {
                             if (setting.getValue().equals(setting.getDefaultValue())) {
                                 // override Platformsettings with UserDBSettings
                                 setting.setValueFrom(cpy);
-                                dao.WriteToPlatformSettings(setting);
+                                dao.writeToPlatformSettings(setting);
                                 setting.clearDirty();
                                 isPlattformoverride = true;
                             } else {
                                 // override UserDBSettings with Platformsettings
                                 cpy.setValueFrom(setting);
-                                dao.WriteToDatabase(SettingsDB, cpy);
+                                dao.writeToDatabase(SettingsDB, cpy);
                                 cpy.clearDirty();
                             }
                         }

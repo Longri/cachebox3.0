@@ -16,7 +16,6 @@
 package de.longri.cachebox3.apis.groundspeak_api;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
@@ -1078,7 +1077,7 @@ public class GroundspeakAPI {
 
             // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
             if (cache.getTmpNote() != null) {
-                String oldNote = Database.GetNote(cache.Id);
+                String oldNote = Database.getNote(cache.Id);
                 String newNote = "";
                 if (oldNote == null) {
                     oldNote = "";
@@ -1104,7 +1103,7 @@ public class GroundspeakAPI {
                     newNote += System.getProperty("line.separator") + end;
                 }
                 cache.setTmpNote(newNote);
-                Database.SetNote(cache.Id, cache.getTmpNote());
+                Database.setNote(cache.Id, cache.getTmpNote());
             }
 
             // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
@@ -1156,7 +1155,7 @@ public class GroundspeakAPI {
 
             if (aktCache == null) {
                 Database.Data.Query.add(cache);
-                // cacheDAO.WriteToDatabase(cache);
+                // cacheDAO.writeToDatabase(cache);
             } else {
                 Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.Id), false);
                 Database.Data.Query.add(cache);
@@ -1166,7 +1165,7 @@ public class GroundspeakAPI {
         }
         Database.Data.setTransactionSuccessful();
         Database.Data.endTransaction();
-        Database.Data.GPXFilenameUpdateCacheCount();
+        Database.Data.gpxFilenameUpdateCacheCount();
 
         CacheListChangedEventList.Call();
     }

@@ -65,6 +65,7 @@ public class SQLiteGdxDatabaseFactory {
                         throw new GdxRuntimeException("Error getting database: " + androidClassname, ex);
                     }
                     break;
+                case HeadlessDesktop:
                 case Desktop:
                     try {
                         databaseManager = (SQLiteGdxDatabaseManager) Class.forName(desktopClassname).newInstance();

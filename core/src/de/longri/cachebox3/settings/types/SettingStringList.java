@@ -18,14 +18,17 @@ package de.longri.cachebox3.settings.types;
 import org.slf4j.Logger;
 
 /**
- *
  * @author Longri  2016
  */
 public class SettingStringList extends SettingBase<String[]> {
     final static Logger log = org.slf4j.LoggerFactory.getLogger(SettingStringList.class);
 
     public SettingStringList(String name, SettingCategory category, SettingMode modus, String[] defaultValue, SettingStoreType StoreType, SettingUsage usage) {
-        super(name, category, modus, StoreType, usage);
+        this(name, category, modus, defaultValue, StoreType, usage, false);
+    }
+
+    public SettingStringList(String name, SettingCategory category, SettingMode modus, String[] defaultValue, SettingStoreType StoreType, SettingUsage usage, boolean desired) {
+        super(name, category, modus, StoreType, usage, desired);
         this.defaultValue = defaultValue;
     }
 

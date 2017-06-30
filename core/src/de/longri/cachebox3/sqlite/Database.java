@@ -48,7 +48,7 @@ public class Database {
     /**
      * @return Set To CB.Categories
      */
-    public Categories GPXFilenameUpdateCacheCount() {
+    public Categories gpxFilenameUpdateCacheCount() {
         // welche GPXFilenamen sind in der DB erfasst
         beginTransaction();
         try {
@@ -185,7 +185,7 @@ public class Database {
     protected int latestDatabaseChange = 0;
 
 
-    public boolean StartUp(FileHandle databasePath) throws SQLiteGdxException {
+    public boolean startUp(FileHandle databasePath) throws SQLiteGdxException {
 
         FileHandle parentDirectory = databasePath.parent();
 
@@ -194,7 +194,7 @@ public class Database {
         }
 
 
-        log.debug("StartUp Database: " + Utils.GetFileName(databasePath));
+        log.debug("startUp Database: " + Utils.GetFileName(databasePath));
         if (myDB != null) {
             log.debug("Database is open ");
             if (this.databasePath.file().getAbsolutePath().equals(databasePath.file().getAbsolutePath())) {
@@ -215,28 +215,28 @@ public class Database {
 
         this.databasePath = databasePath;
         log.debug("Initial database: " + Utils.GetFileName(databasePath));
-        Initialize();
+        initialize();
 
         int databaseSchemeVersion = GetDatabaseSchemeVersion();
         log.debug("DatabaseSchemeVersion: " + databaseSchemeVersion);
         if (databaseSchemeVersion < latestDatabaseChange) {
             log.debug("Alter Database to SchemeVersion: " + latestDatabaseChange);
-            AlterDatabase(databaseSchemeVersion);
+            alterDatabase(databaseSchemeVersion);
             SetDatabaseSchemeVersion();
         }
 
 
         if (databaseType == DatabaseType.CacheBox) { // create or load DatabaseId for each
-            DatabaseId = ReadConfigLong("DatabaseId");
+            DatabaseId = readConfigLong("DatabaseId");
             if (DatabaseId <= 0) {
                 DatabaseId = new Date().getTime();
-                WriteConfigLong("DatabaseId", DatabaseId);
+                writeConfigLong("DatabaseId", DatabaseId);
             }
             // Read MasterDatabaseId. If MasterDatabaseId > 0 -> This database
             // is connected to the Replications Master of WinCB
             // In this case changes of Waypoints, Solvertext, Notes must be
             // noted in the Table Replication...
-            MasterDatabaseId = ReadConfigLong("MasterDatabaseId");
+            MasterDatabaseId = readConfigLong("MasterDatabaseId");
         }
         return true;
     }
@@ -291,7 +291,7 @@ public class Database {
         }
     }
 
-    public void WriteConfigString(String key, String value) {
+    public void writeConfigString(String key, String value) {
         Parameters val = new Parameters();
         val.put("Value", value);
         long anz = update("Config", val, "[Key] like '" + key + "'", null);
@@ -313,7 +313,7 @@ public class Database {
         }
     }
 
-    public String ReadConfigString(String key) throws Exception {
+    public String readConfigString(String key) throws Exception {
         String result = "";
         SQLiteGdxDatabaseCursor c = null;
         boolean found = false;
@@ -341,7 +341,7 @@ public class Database {
         return result;
     }
 
-    public String ReadConfigLongString(String key) throws Exception {
+    public String readConfigLongString(String key) throws Exception {
         String result = "";
         SQLiteGdxDatabaseCursor c = null;
         boolean found = false;
@@ -368,13 +368,51 @@ public class Database {
         return result;
     }
 
-    public void WriteConfigLong(String key, long value) {
-        WriteConfigString(key, String.valueOf(value));
+    public void writeConfigDesiredString(String key, String value) {
+        Parameters val = new Parameters();
+        val.put("desired", value);
+        long anz = update("Config", val, "[Key] like '" + key + "'", null);
+        if (anz <= 0) {
+            // Update not possible because Key does not exist
+            val.put("Key", key);
+            insert("Config", val);
+        }
     }
 
-    public long ReadConfigLong(String key) {
+    public String readConfigDesiredString(String key) throws Exception {
+        String result = "";
+        SQLiteGdxDatabaseCursor c = null;
+        boolean found = false;
         try {
-            String value = ReadConfigString(key);
+            c = rawQuery("select desired from Config where [Key] like ?", new String[]{key});
+        } catch (Exception exc) {
+            throw new Exception("not in DB");
+        }
+        try {
+            c.moveToFirst();
+            while (!c.isAfterLast()) {
+                result = c.getString(0);
+                found = true;
+                c.moveToNext();
+            }
+        } catch (Exception exc) {
+            throw new Exception("not in DB");
+        }
+        c.close();
+
+        if (!found)
+            throw new Exception("not in DB");
+
+        return result;
+    }
+
+    public void writeConfigLong(String key, long value) {
+        writeConfigString(key, String.valueOf(value));
+    }
+
+    public long readConfigLong(String key) {
+        try {
+            String value = readConfigString(key);
             return Long.valueOf(value);
         } catch (Exception ex) {
             return 0;
@@ -391,7 +429,7 @@ public class Database {
     }
 
 
-    protected void AlterDatabase(int lastDatabaseSchemeVersion) {
+    protected void alterDatabase(int lastDatabaseSchemeVersion) {
 
 
         switch (databaseType) {
@@ -582,10 +620,14 @@ public class Database {
                         // [ShortDescription] ntext NULL
                         execSQL("ALTER TABLE [Caches] ADD [ShortDescription] ntext NULL;");
                     }
+                    if (lastDatabaseSchemeVersion < 1027) {
+                        // Long Text Field for long Strings
+                        execSQL("ALTER TABLE [Config] ADD [desired] ntext NULL;");
+                    }
 
                     setTransactionSuccessful();
                 } catch (Exception exc) {
-                    log.error("AlterDatabase", exc);
+                    log.error("alterDatabase", exc);
                 } finally {
                     endTransaction();
                 }
@@ -635,7 +677,7 @@ public class Database {
                     }
                     setTransactionSuccessful();
                 } catch (Exception exc) {
-                    log.error("AlterDatabase", exc);
+                    log.error("alterDatabase", exc);
                 } finally {
                     endTransaction();
                 }
@@ -652,9 +694,13 @@ public class Database {
                         // Long Text Field for long Strings
                         execSQL("ALTER TABLE [Config] ADD [LongString] ntext NULL;");
                     }
+                    if (lastDatabaseSchemeVersion < 1003) {
+                        // Long Text Field for long Strings
+                        execSQL("ALTER TABLE [Config] ADD [desired] ntext NULL;");
+                    }
                     setTransactionSuccessful();
                 } catch (Exception exc) {
-                    log.error("AlterDatabase", exc);
+                    log.error("alterDatabase", exc);
                 } finally {
                     endTransaction();
                 }
@@ -694,7 +740,7 @@ public class Database {
         return result;
     }
 
-    public static boolean WaypointExists(String gcCode) {
+    public static boolean waypointExists(String gcCode) {
         SQLiteGdxDatabaseCursor c = Database.Data.rawQuery("select GcCode from Waypoint where GcCode=@gccode", new String[]{gcCode});
         {
             c.moveToFirst();
@@ -713,7 +759,7 @@ public class Database {
         }
     }
 
-    public static String CreateFreeGcCode(String cacheGcCode) throws Exception {
+    public static String createFreeGcCode(String cacheGcCode) throws Exception {
         String suffix = cacheGcCode.substring(2);
         String firstCharCandidates = "CBXADEFGHIJKLMNOPQRSTUVWYZ0123456789";
         String secondCharCandidates = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -721,14 +767,14 @@ public class Database {
         for (int i = 0; i < firstCharCandidates.length(); i++)
             for (int j = 0; j < secondCharCandidates.length(); j++) {
                 String gcCode = firstCharCandidates.substring(i, i + 1) + secondCharCandidates.substring(j, j + 1) + suffix;
-                if (!WaypointExists(gcCode))
+                if (!waypointExists(gcCode))
                     return gcCode;
             }
         throw new Exception("Alle GcCodes sind bereits vergeben! Dies sollte eigentlich nie vorkommen!");
     }
 
 
-    public static String GetNote(long cacheId) {
+    public static String getNote(long cacheId) {
         String resultString = "";
         SQLiteGdxDatabaseCursor c = Database.Data.rawQuery("select Notes from Caches where Id=?", new String[]{String.valueOf(cacheId)});
         c.moveToFirst();
@@ -745,7 +791,7 @@ public class Database {
      * @param cacheId
      * @param value
      */
-    public static void SetNote(long cacheId, String value) {
+    public static void setNote(long cacheId, String value) {
         Parameters args = new Parameters();
         args.put("Notes", value);
         args.put("HasUserData", true);
@@ -753,13 +799,13 @@ public class Database {
         Database.Data.update("Caches", args, "id=" + cacheId, null);
     }
 
-    public static void SetFound(long cacheId, boolean value) {
+    public static void setFound(long cacheId, boolean value) {
         Parameters args = new Parameters();
         args.put("found", value);
         Database.Data.update("Caches", args, "id=" + cacheId, null);
     }
 
-    public static String GetSolver(long cacheId) {
+    public static String getSolver(long cacheId) {
         try {
             String resultString = "";
             SQLiteGdxDatabaseCursor c = Database.Data.rawQuery("select Solver from Caches where Id=?", new String[]{String.valueOf(cacheId)});
@@ -780,7 +826,7 @@ public class Database {
      * @param cacheId
      * @param value
      */
-    public static void SetSolver(long cacheId, String value) {
+    public static void setSolver(long cacheId, String value) {
         Parameters args = new Parameters();
         args.put("Solver", value);
         args.put("HasUserData", true);
@@ -792,9 +838,9 @@ public class Database {
      * @param minToKeep      Config.settings.LogMinCount.getValue()
      * @param LogMaxMonthAge Config.settings.LogMaxMonthAge.getValue()
      */
-    public void DeleteOldLogs(int minToKeep, int LogMaxMonthAge) {
+    public void deleteOldLogs(int minToKeep, int LogMaxMonthAge) {
 
-        log.debug("DeleteOldLogs but keep " + minToKeep + " and not older than " + LogMaxMonthAge);
+        log.debug("deleteOldLogs but keep " + minToKeep + " and not older than " + LogMaxMonthAge);
         if (LogMaxMonthAge == 0) {
             // Setting are 'immediately'
             // Delete all Logs and return
@@ -826,7 +872,7 @@ public class Database {
                 }
                 reader.close();
             } catch (Exception ex) {
-                log.error("DeleteOldLogs", ex);
+                log.error("deleteOldLogs", ex);
             }
         }
 
@@ -864,7 +910,7 @@ public class Database {
                 }
                 setTransactionSuccessful();
             } catch (Exception ex) {
-                log.error("DeleteOldLogs", ex);
+                log.error("deleteOldLogs", ex);
             } finally {
                 endTransaction();
             }
@@ -874,22 +920,23 @@ public class Database {
 
     // DB Funktionen
 
-    public void Initialize() {
+    public void initialize() {
         if (myDB == null) {
             if (!databasePath.exists())
-                Reset();
+                reset();
 
             try {
                 log.debug("open data base: " + databasePath);
                 myDB = SQLiteGdxDatabaseFactory.getNewDatabase(databasePath);
                 myDB.openOrCreateDatabase();
             } catch (Exception exc) {
+                log.error("Can't open Database", exc);
                 return;
             }
         }
     }
 
-    public void Reset() {
+    public void reset() {
         // if exists, delete old database file
         if (databasePath.exists()) {
             log.debug("RESET DB, delete file: " + databasePath);
