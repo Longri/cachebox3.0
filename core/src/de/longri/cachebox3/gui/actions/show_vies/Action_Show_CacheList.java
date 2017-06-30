@@ -20,6 +20,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.ShowImportMenu;
 import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings;
 import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
+import de.longri.cachebox3.gui.activities.CheckStateActivity;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
@@ -122,32 +123,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 //                        }
                         return true;
                     case MenuID.MI_CHK_STATE_API:
-
-                        CB.viewmanager.toast("Check state NOT IMPLEMENTED NOW");
-
-//
-//                        if (GroundspeakAPI.ApiLimit()) {
-//                            CB.MsgDownloadLimit();
-//                            return;
-//                        }
-//
-//                        // First check API-Key with visual Feedback
-//                        CB.chkAPiLogInWithWaitDialog(new IChkRedyHandler() {
-//
-//                            @Override
-//                            public void checkReady(int MemberType) {
-//                                TimerTask tt = new TimerTask() {
-//
-//                                    @Override
-//                                    public void run() {
-//                                        new CB_Action_chkState().execute();
-//                                    }
-//                                };
-//                                Timer t = new Timer();
-//                                t.schedule(tt, 100);
-//                            }
-//                        });
-
+                        new CheckStateActivity().show();
                         return true;
 
                     case MenuID.MI_NEW_CACHE:
@@ -189,7 +165,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
         // mi.setChecked(CB.getAutoResort());
 
 
-        //ISSUE (#117 add check state) cm.addItem(MenuID.MI_CHK_STATE_API, "chkState", CB.getSkin().getMenuIcon.GC_Live);
+        cm.addItem(MenuID.MI_CHK_STATE_API, "chkState", CB.getSkin().getMenuIcon.GC_Live);
         //ISSUE (#118 add new Cache) cm.addItem(MenuID.MI_NEW_CACHE, "MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon);
         //ISSUE (#119 add delete Cache Dialog) cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSkin().getMenuIcon.deleteIcon);
 

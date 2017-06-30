@@ -40,15 +40,6 @@ public class SearchCoordinate extends Search {
 
     @Override
     protected void getRequest(Json json) {
-        // add Coordinate info
-        //        "PointRadius":{
-        //            "DistanceInMeters":9223372036854775807,
-        //                    "Point":{
-        //                "Latitude":1.26743233E+15,
-        //                        "Longitude":1.26743233E+15
-        //            }
-        //        },
-
         boolean hasStart = false;
 
         try {
@@ -67,13 +58,5 @@ public class SearchCoordinate extends Search {
 
         super.getRequest(json);
         if (!hasStart) json.writeObjectEnd();
-
-//		JSONObject jpr = new JSONObject();
-//		jpr.put("DistanceInMeters", String.valueOf((int) distanceInMeters));
-//		JSONObject jpt = new JSONObject();
-//		jpt.put("Latitude", String.valueOf(pos.getLatitude()));
-//		jpt.put("Longitude", String.valueOf(pos.getLongitude()));
-//		jpr.put("Point", jpt);
-//		request.put("PointRadius", jpr);
     }
 }

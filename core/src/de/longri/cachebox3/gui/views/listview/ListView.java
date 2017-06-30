@@ -134,7 +134,7 @@ public class ListView extends WidgetGroup {
                     }
                     event.reset();
                     event.cancel();
-                    return true;
+                    return false;
                 }
             }
             return false;

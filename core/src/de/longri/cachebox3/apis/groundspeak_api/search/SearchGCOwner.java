@@ -33,11 +33,6 @@ public class SearchGCOwner extends SearchCoordinate {
 
     @Override
     protected void getRequest(Json json) {
-        // add info for User
-        //        "HiddenByUsers":{
-        //            "UserNames":["String content"]
-        //        },
-
         boolean hasStart = false;
 
         try {

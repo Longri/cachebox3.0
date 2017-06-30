@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 18.04.2017.
@@ -43,7 +44,15 @@ public class JsonStreamParser implements JsonParser {
     private final boolean DEBUG = false;
     private int lastPeek;
     private int lastNameStart = -1;
+    private final AtomicBoolean CANCELD = new AtomicBoolean(false);
 
+    public JsonValue parse(final InputStream input) {
+        return parse(input, 1);
+    }
+
+    public void cancel() {
+        CANCELD.set(true);
+    }
 
     @Override
     public JsonValue parse(final InputStream input, long length) {
@@ -55,7 +64,7 @@ public class JsonStreamParser implements JsonParser {
 
             int readed = 0;
             int offset = 0;
-            while (true) {
+            while (!CANCELD.get()) {
 
                 if (offset < actBufferLength && actBufferLength > DEFAULT_BUFFER_LENGTH && offset < DEFAULT_BUFFER_LENGTH) {
                     actBufferLength = actBufferLength >> 1;
@@ -130,7 +139,7 @@ public class JsonStreamParser implements JsonParser {
         lastNameStart = -1;
         lastPeek = -1;
         int offset = 0;
-        while (offset < data.length) {
+        while (!CANCELD.get() && offset < data.length) {
             int peek = searchPeek(data, offset);
             if (peek == -1) return offset;
             int nameStart = searchNameBefore(data, peek);

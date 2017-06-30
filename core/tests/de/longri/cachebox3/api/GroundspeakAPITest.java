@@ -1,5 +1,7 @@
 package de.longri.cachebox3.api;
 
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import de.longri.cachebox3.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -60,9 +62,8 @@ class GroundspeakAPITest {
     @Test
     void getApiStatus() {
 //        int status = de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI.getApiState(API_RESULT_JSON);
-        int status =0;
+        int status = 0;
         assertThat("Status should be 0", status == 0);
 
     }
-
 }

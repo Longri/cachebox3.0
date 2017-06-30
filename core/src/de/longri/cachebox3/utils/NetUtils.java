@@ -29,7 +29,7 @@ public class NetUtils {
     }
 
     public abstract static class StreamHandleObject {
-        InputStream stream;
+        public InputStream stream;
         public abstract void handled();
     }
 

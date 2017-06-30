@@ -18,12 +18,13 @@ package de.longri.cachebox3.apis.groundspeak_api;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.CheckCacheStateParser;
 import de.longri.cachebox3.callbacks.GenericCallBack;
-import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -42,7 +43,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
@@ -325,121 +325,53 @@ public class GroundspeakAPI {
     }
 
 
-    //
-//    /**
-//     * Gets the Status for the given Caches
-//     *
-//     * Staging
-//     *            Config.settings.StagingAPI.getValue()
-//     * accessToken
-//     * conectionTimeout
-//     *            Config.settings.conection_timeout.getValue()
-//     * socketTimeout
-//     *            Config.settings.socket_timeout.getValue()
-//     * @param caches is also for return
-//     * @return
-//     */
-//    public static int GetGeocacheStatus(ArrayList<Cache> caches, final ICancel icancel) {
-//	int chk = chkMembership(false);
-//	if (chk < 0)
-//	    return chk;
-//
-//	try {
-//	    Thread.sleep(2500);
-//	} catch (InterruptedException e1) {
-//	    e1.printStackTrace();
-//	}
-//
-//	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-//
-//	try {
-//	    HttpPost httppost = new HttpPost(URL + "GetGeocacheStatus?format=json");
-//	    String requestString = "";
-//	    requestString = "{";
-//	    requestString += "\"AccessToken\":\"" + getAccessToken() + "\",";
-//	    requestString += "\"CacheCodes\":[";
-//
-//	    int i = 0;
-//	    for (Cache cache : caches) {
-//		requestString += "\"" + cache.getGcCode() + "\"";
-//		if (i < caches.size() - 1)
-//		    requestString += ",";
-//		i++;
-//	    }
-//
-//	    requestString += "]";
-//	    requestString += "}";
-//
-//	    httppost.setEntity(new ByteArrayEntity(requestString.getBytes("UTF8")));
-//
-//	    // set time outs
-//	    HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
-//	    HttpUtils.socketTimeout = Config.socket_timeout.getValue();
-//
-//	    // Execute HTTP Post Request
-//	    String result = HttpUtils.Execute(httppost, icancel);
-//
-//	    if (result.contains("The service is unavailable")) {
-//		return API_IS_UNAVAILABLE;
-//	    }
-//	    try
-//	    // Parse JSON Result
-//	    {
-//		JSONTokener tokener = new JSONTokener(result);
-//		JSONObject json = (JSONObject) tokener.nextValue();
-//		JSONObject status = json.getJSONObject("Status");
-//		if (status.getInt("StatusCode") == 0) {
-//		    result = "";
-//		    JSONArray geocacheStatuses = json.getJSONArray("GeocacheStatuses");
-//		    for (int ii = 0; ii < geocacheStatuses.length(); ii++) {
-//			JSONObject jCache = (JSONObject) geocacheStatuses.get(ii);
-//
-//			Iterator<Cache> iterator = caches.iterator();
-//			do {
-//			    Cache tmp = iterator.next();
-//			    if (jCache.getString("CacheCode").equals(tmp.getGcCode())) {
-//				tmp.setArchived(jCache.getBoolean("Archived"));
-//				tmp.setAvailable(jCache.getBoolean("Available"));
-//				tmp.NumTravelbugs = jCache.getInt("TrackableCount");
-//				// weitere Infos in diesem Json record
-//				// CacheName (getString)
-//				// CacheType (getDouble / getLong ?)
-//				// Premium   (getBoolean)
-//				break;
-//			    }
-//			} while (iterator.hasNext());
-//
-//		    }
-//
-//		    return 0;
-//		} else {
-//		    result = "StatusCode = " + status.getInt("StatusCode") + "\n";
-//		    result += status.getString("StatusMessage") + "\n";
-//		    result += status.getString("ExceptionDetails");
-//		    LastAPIError = result;
-//		    return (-1);
-//		}
-//
-//	    } catch (JSONException e) {
-//		e.printStackTrace();
-//	    }
-//
-//	} catch (ConnectTimeoutException e) {
-//	    log.error("GetGeocacheStatus ConnectTimeoutException", e);
-//	    return CONNECTION_TIMEOUT;
-//	} catch (UnsupportedEncodingException e) {
-//	    log.error("GetGeocacheStatus UnsupportedEncodingException", e);
-//	    return ERROR;
-//	} catch (ClientProtocolException e) {
-//	    log.error("GetGeocacheStatus ClientProtocolException", e);
-//	    return ERROR;
-//	} catch (IOException e) {
-//	    log.error("GetGeocacheStatus IOException", e);
-//	    return ERROR;
-//	}
-//
-//	return (-1);
-//    }
+    public static int getGeocacheStatus(Array<Cache> caches, final ICancel icancel, CheckCacheStateParser.ProgressIncrement progressIncrement) {
+        int chk = chkMembership(false);
+        if (chk < 0)
+            return chk;
+
+        try { //TODO get and store API Limits  and handle wait Time global
+            Thread.sleep(2500); //wait 2.5 sec for request API (request restriction)
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
+
+        String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
+
+        Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
+        httpPost.setUrl(URL + "getGeocacheStatus?format=json");
+        httpPost.setTimeOut(Config.socket_timeout.getValue());
+        httpPost.setHeader("format", "json");
+        httpPost.setHeader("Accept", "application/json");
+        httpPost.setHeader("Content-type", "application/json");
+
+        String requestString = "";
+        requestString = "{";
+        requestString += "\"AccessToken\":\"" + getAccessToken() + "\",";
+        requestString += "\"CacheCodes\":[";
+
+        int i = 0;
+        for (Cache cache : caches) {
+            requestString += "\"" + cache.getGcCode() + "\"";
+            if (i < caches.size - 1)
+                requestString += ",";
+            i++;
+        }
+
+        requestString += "]";
+        requestString += "}";
+
+        httpPost.setContent(requestString);
+        NetUtils.StreamHandleObject result = (NetUtils.StreamHandleObject) NetUtils.postAndWait(NetUtils.ResultType.STREAM, httpPost, icancel);
+        if (icancel.cancel()) {
+            result.handled();
+            return -1;
+        }
+        CheckCacheStateParser parser = new CheckCacheStateParser();
+        int parseResult = parser.parse(result.stream, caches, icancel, progressIncrement);
+        result.handled();
+        return parseResult;
+    }
 //
 //    /**
 //     * Gets the Logs for the given Cache
@@ -634,16 +566,16 @@ public class GroundspeakAPI {
 //	    }
 //
 //	} catch (ConnectTimeoutException e) {
-//	    log.error("GetGeocacheStatus ConnectTimeoutException", e);
+//	    log.error("getGeocacheStatus ConnectTimeoutException", e);
 //	    return CONNECTION_TIMEOUT;
 //	} catch (UnsupportedEncodingException e) {
-//	    log.error("GetGeocacheStatus UnsupportedEncodingException", e);
+//	    log.error("getGeocacheStatus UnsupportedEncodingException", e);
 //	    return ERROR;
 //	} catch (ClientProtocolException e) {
-//	    log.error("GetGeocacheStatus ClientProtocolException", e);
+//	    log.error("getGeocacheStatus ClientProtocolException", e);
 //	    return ERROR;
 //	} catch (IOException e) {
-//	    log.error("GetGeocacheStatus IOException", e);
+//	    log.error("getGeocacheStatus IOException", e);
 //	    return ERROR;
 //	}
 //    }
@@ -762,16 +694,16 @@ public class GroundspeakAPI {
 //	    }
 //
 //	} catch (ConnectTimeoutException e) {
-//	    log.error("GetGeocacheStatus ConnectTimeoutException", e);
+//	    log.error("getGeocacheStatus ConnectTimeoutException", e);
 //	    return CONNECTION_TIMEOUT;
 //	} catch (UnsupportedEncodingException e) {
-//	    log.error("GetGeocacheStatus UnsupportedEncodingException", e);
+//	    log.error("getGeocacheStatus UnsupportedEncodingException", e);
 //	    return ERROR;
 //	} catch (ClientProtocolException e) {
-//	    log.error("GetGeocacheStatus ClientProtocolException", e);
+//	    log.error("getGeocacheStatus ClientProtocolException", e);
 //	    return ERROR;
 //	} catch (IOException e) {
-//	    log.error("GetGeocacheStatus IOException", e);
+//	    log.error("getGeocacheStatus IOException", e);
 //	    return ERROR;
 //	}
 //
@@ -1047,7 +979,7 @@ public class GroundspeakAPI {
 
             // Execute HTTP Post Request
             log.debug("Send Post request");
-            String result = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING,httpGet, icancel);
+            String result = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING, httpGet, icancel);
 
             if (result.contains("The service is unavailable")) {
                 return API_IS_UNAVAILABLE;

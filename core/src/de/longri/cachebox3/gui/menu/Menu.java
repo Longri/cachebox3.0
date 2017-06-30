@@ -108,7 +108,7 @@ public class Menu extends Window {
         menuItem.addListener(new ClickLongClickListener() {
             @Override
             public boolean clicked(InputEvent event, float x, float y) {
-
+                if (event.isHandled()) return true;
                 // have the clicked item a moreMenu, just show it
                 if (menuItem.hasMoreMenu()) {
                     menuItem.getMoreMenu(Menu.this.compoundMenu != null ? Menu.this.compoundMenu : Menu.this).show();

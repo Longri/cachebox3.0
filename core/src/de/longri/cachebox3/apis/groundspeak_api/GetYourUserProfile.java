@@ -18,6 +18,7 @@ package de.longri.cachebox3.apis.groundspeak_api;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
+import de.longri.cachebox3.apis.groundspeak_api.json_parser.string_parser.ApiStatusResultParser;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.utils.BuildInfo;
 import org.oscim.backend.CanvasAdapter;
@@ -64,7 +65,7 @@ public class GetYourUserProfile extends PostRequest {
             // expired api key
             membershipType = -3;
             log.error("expired api key");
-        }else{
+        } else {
             log.error("unknown result state");
         }
     }
@@ -114,21 +115,7 @@ public class GetYourUserProfile extends PostRequest {
     }
 
     public static int getApiStatus(String result) {
-        final AtomicInteger st = new AtomicInteger(-1);
-        try {
-            (new JsonReader() {
-                public void number(String name, long value, String stringValue) {
-                    super.number(name, value, stringValue);
-                    if (name.equals("StatusCode")) {
-                        st.set((int) value);
-                    }
-                }
-            }).parse(result);
-        } catch (Exception e) {
-            log.error("Ask for Api state! Result:{}", result);
-            e.printStackTrace();
-        }
-        return st.get();
+        return new ApiStatusResultParser().get(result);
     }
 
     public int getMembershipType() {
