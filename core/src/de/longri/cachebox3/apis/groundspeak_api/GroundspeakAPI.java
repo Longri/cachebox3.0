@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
@@ -301,26 +302,47 @@ public class GroundspeakAPI {
             return;
         }
 
-        CB.postAsync(new Runnable() {
-            @Override
-            public void run() {
-                log.debug(("API is not checked, call API check"));
-                final GetYourUserProfile getYourUserProfile = new GetYourUserProfile(getAccessToken());
-                getYourUserProfile.post(new GenericCallBack<Integer>() {
-                    @Override
-                    public void callBack(Integer value) {
-                        if (value == ERROR) {
-                            callBack.callBack(ERROR);
-                            return;
+        // try to get type from settings
+        if (Config.memberChipType.isDesired()) {
+            CB.postAsync(new Runnable() {
+                @Override
+                public void run() {
+                    log.debug(("API is not checked, call API check"));
+                    final GetYourUserProfile getYourUserProfile = new GetYourUserProfile(getAccessToken());
+                    getYourUserProfile.post(new GenericCallBack<Integer>() {
+                        @Override
+                        public void callBack(Integer value) {
+                            if (value == ERROR) {
+                                callBack.callBack(ERROR);
+                                return;
+                            }
+                            membershipType = getYourUserProfile.getMembershipType();
+                            memberName = getYourUserProfile.getMemberName();
+                            callBack.callBack(membershipType);
+                            Config.memberChipType.setValue(membershipType);
+
+                            //desired on end of this day
+                            Calendar cal = Calendar.getInstance();
+                            cal.set(Calendar.HOUR_OF_DAY, 0);
+                            cal.set(Calendar.MINUTE, 0);
+                            cal.set(Calendar.SECOND, 0);
+                            cal.set(Calendar.MILLISECOND, 0);
+                            cal.add(Calendar.HOUR_OF_DAY, 24);
+                            Config.memberChipType.setDesiredTime(cal.getTimeInMillis());
+                            Config.AcceptChanges();
+
+                            API_isCheked = true;
                         }
-                        membershipType = getYourUserProfile.getMembershipType();
-                        memberName = getYourUserProfile.getMemberName();
-                        callBack.callBack(membershipType);
-                        API_isCheked = true;
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        } else {
+            membershipType = Config.memberChipType.getValue();
+            callBack.callBack(membershipType);
+            API_isCheked = true;
+        }
+
+
     }
 
 
