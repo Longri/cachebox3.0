@@ -19,6 +19,8 @@ package de.longri.cachebox3.settings.types;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.lists.CB_List;
 
+import java.util.Calendar;
+
 /**
  * @author ging-buh
  * @author Longri
@@ -98,7 +100,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
 
     public boolean isDesired() {
         if (desiredTime == -1L) return false;
-        return System.currentTimeMillis() > desiredTime;
+        return Calendar.getInstance().getTimeInMillis() > desiredTime;
     }
 
     public void clearDirty() {

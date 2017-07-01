@@ -23,6 +23,8 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import org.junit.jupiter.api.Test;
 
+import java.util.Calendar;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,7 +63,7 @@ class SettingBaseTest {
         assertThat("", testBool.getValue());
         assertThat("Setting must not desired", testBool.isDesired());
 
-        long now = System.currentTimeMillis();
+        long now = Calendar.getInstance().getTimeInMillis();
         long desired = now + 1000 ;// future 1 sec
 
         testBool.setDesiredTime(desired);
@@ -80,7 +82,7 @@ class SettingBaseTest {
         assertThat("Setting must desired", testBool.isDesired());
 
 
-         now = System.currentTimeMillis();
+         now = Calendar.getInstance().getTimeInMillis();
          desired = now + 1000 ;// future 10 sec
 
         testBool.setDesiredTime(desired);
