@@ -74,6 +74,7 @@ public class GroundspeakAPI {
     public static String memberName = ""; // this will be filled by
     private static boolean DownloadLimit = false;
     private static boolean API_isCheked = false;
+    private static Limit apiCallLimit;
 
     /**
      * 0: Guest??? 1: Basic 2: Charter??? 3: Premium
@@ -294,6 +295,45 @@ public class GroundspeakAPI {
 //
 
     /**
+     * This method must call before every API-Call, for check any call restrictions!
+     */
+    public static void waitApiCallLimit() {
+
+        //Don't call and block GL thread
+        if (CB.isMainThread()) throw new RuntimeException("Don't call and block GL thread");
+
+        if (apiCallLimit == null) {
+            if (Config.apiCallLimit.isDesired() || Config.apiCallLimit.getValue() < 1) {
+                // get api limits from groundspeak
+                int callsPerMinute = GetApiLimits.getLimit();
+                Calendar cal = Calendar.getInstance();
+                if (callsPerMinute < 1) {
+                    callsPerMinute = Config.apiCallLimit.getDefaultValue();
+                } else {
+                    //desired on end of this Month
+                    cal.set(Calendar.DAY_OF_MONTH, 0);
+                    cal.set(Calendar.HOUR_OF_DAY, 0);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    cal.set(Calendar.MILLISECOND, 0);
+                    cal.add(Calendar.HOUR_OF_DAY, 24);
+                    cal.add(Calendar.MONTH, 1);
+                }
+
+                log.debug("Set apiCallLimit to {} calls per minute", callsPerMinute);
+                Config.apiCallLimit.setValue(callsPerMinute);
+
+                log.debug("Set apiCallLimit desired on: {}", cal.getTime().toString());
+                Config.apiCallLimit.setDesiredTime(cal.getTimeInMillis());
+                Config.AcceptChanges();
+            }
+            apiCallLimit = new Limit(Config.apiCallLimit.getValue(), Calendar.MINUTE, 1);
+        }
+        apiCallLimit.waitForCall();
+    }
+
+
+    /**
      * Loads the Membership type -1: Error 0: Guest??? 1: Basic 2: Charter??? 3: Premium
      */
     public static void getMembershipType(final GenericCallBack<Integer> callBack) {
@@ -351,12 +391,9 @@ public class GroundspeakAPI {
         if (chk < 0)
             return chk;
 
-        try { //TODO get and store API Limits  and handle wait Time global
-            Thread.sleep(2500); //wait 2.5 sec for request API (request restriction)
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
-        }
+        if (caches.size >= 110) throw new RuntimeException("Cache count must les then 110");
 
+        waitApiCallLimit();
         String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
         Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
@@ -992,6 +1029,8 @@ public class GroundspeakAPI {
         String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
         if (list == null)
             list = new HashMap<String, URI>();
+
+        waitApiCallLimit();
         try {
             Net.HttpRequest httpGet = new Net.HttpRequest(Net.HttpMethods.GET);
             httpGet.setUrl(URL + "GetImagesForGeocache?AccessToken=" + getAccessToken(true) + "&CacheCode=" + cacheCode + "&format=json");

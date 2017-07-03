@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import static de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI.waitApiCallLimit;
+
 /**
  * Created by Longri on 14.04.17.
  */
@@ -52,6 +54,7 @@ public abstract class PostRequest {
         CB.postAsync(new Runnable() {
             @Override
             public void run() {
+                waitApiCallLimit();
                 String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
                 StringWriter writer = new StringWriter();

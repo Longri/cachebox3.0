@@ -63,6 +63,7 @@ public class Settings extends Settings_Skin {
     public static final SettingBool DirectOnlineLog = (SettingBool) SettingsList.addSetting(new SettingBool("DirectOnlineLog", SettingCategory.Fieldnotes, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
 
     public static final SettingInt memberChipType = (SettingInt) SettingsList.addSetting(new SettingInt("memberChipType", SettingCategory.API, NEVER, -1, SettingStoreType.Global, SettingUsage.ACB, true));
+    public static final SettingInt apiCallLimit = (SettingInt) SettingsList.addSetting(new SettingInt("apiCallLimit", SettingCategory.API, NEVER, 30, SettingStoreType.Global, SettingUsage.ACB, true));
 
     // Settings Compass
     public static final SettingBool CompassShowMap = (SettingBool) SettingsList.addSetting(new SettingBool("CompassShowMap", SettingCategory.Compass, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));

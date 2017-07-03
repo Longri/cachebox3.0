@@ -357,19 +357,24 @@ class CheckCacheStateParserTest {
         trackableCount.put("GC2RMER", 7);
 
         final AtomicInteger increment = new AtomicInteger(0);
-        final AtomicBoolean canceld = new AtomicBoolean(false);
+        final AtomicBoolean canceled = new AtomicBoolean(false);
         parser.parse(stream, caches, new ICancel() {
             @Override
             public boolean cancel() {
-                return canceld.get();
+                return canceled.get();
             }
         }, new CheckCacheStateParser.ProgressIncrement() {
             @Override
             public void increment() {
-                if (increment.incrementAndGet() == 25) {
-                    canceld.set(true);
+                if (increment.incrementAndGet() == 4) {
+                    canceled.set(true);
                 }
 
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -397,8 +402,6 @@ class CheckCacheStateParserTest {
                 assertThat("Cache trackable count must be 0 on Cache:" + gcCode, cache.NumTravelbugs == 0);
             }
         }
-
-
     }
 
 }
