@@ -37,21 +37,23 @@ public class NetUtils {
         log.debug("Send Post request");
         final AtomicBoolean WAIT = new AtomicBoolean(true);
         final Object[] result = new Object[1];
-        CB.postAsync(new Runnable() {
-            @Override
-            public void run() {
-                while (WAIT.get()) {
-                    if (icancel.cancel()) {
-                        Gdx.net.cancelHttpRequest(request);
-                    }
-                    try {
-                        Thread.sleep(20);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+        if(icancel!=null){
+            CB.postAsync(new Runnable() {
+                @Override
+                public void run() {
+                    while (WAIT.get()) {
+                        if (icancel.cancel()) {
+                            Gdx.net.cancelHttpRequest(request);
+                        }
+                        try {
+                            Thread.sleep(20);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
         final AtomicBoolean isRedirection = new AtomicBoolean(false);
         Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {

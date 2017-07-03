@@ -35,12 +35,9 @@ class LimitTest {
     @Test
     void waitForCall() {
 
-//        int calendarField = Calendar.SECOND;
-//        int calendarAmount = 10;
-
-        int calendarField = Calendar.MINUTE;
-        int calendarAmount = 1;
-
+        int calendarField = Calendar.SECOND;
+        int calendarAmount = 10;
+        
         Limit limit = new Limit(2, calendarField, calendarAmount);
 
         Calendar cal = Calendar.getInstance();

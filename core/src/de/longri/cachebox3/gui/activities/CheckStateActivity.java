@@ -55,7 +55,7 @@ public class CheckStateActivity extends ActivityBase {
 
     private static final Logger log = LoggerFactory.getLogger(CheckStateActivity.class);
 
-    private final int blockSize = 100; // The API leaves only a maximum of 100 per request!
+    private final int blockSize = 108; // The API leaves only a maximum of 110 per request!
     private final VisTextButton bCancel;
     private final VisLabel lblTitle;
     private final Image gsLogo;

@@ -386,14 +386,18 @@ public class CB {
             });
             return true;
         }
-        if(errror.get()){
+        if (errror.get()) {
             CB.viewmanager.toast(Translation.Get("ConnectionError"));
         }
         return errror.get();
     }
 
     public static void wait(AtomicBoolean wait) {
-        while (wait.get()){
+        wait(wait, false);
+    }
+
+    public static void wait(AtomicBoolean wait, boolean negate) {
+        while (negate ? !wait.get() : wait.get()) {
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
