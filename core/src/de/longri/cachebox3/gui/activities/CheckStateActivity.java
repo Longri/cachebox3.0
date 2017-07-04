@@ -16,12 +16,10 @@
 package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
@@ -40,6 +38,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.utils.ICancel;
+import org.oscim.backend.CanvasAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +76,6 @@ public class CheckStateActivity extends ActivityBase {
         workAnimation = new Image(animationDrawable);
         progressBar = new VisProgressBar(0, 100, 1, false, "default");
 
-
         createOkCancelBtn();
         setWorkAnimationVisible(false);
 
@@ -91,7 +89,6 @@ public class CheckStateActivity extends ActivityBase {
             super.layout();
             return;
         }
-
 
         SnapshotArray<Actor> actors = this.getChildren();
         for (Actor actor : actors)
@@ -143,16 +140,18 @@ public class CheckStateActivity extends ActivityBase {
     }
 
     private void importNow() {
+
         setWorkAnimationVisible(true);
+        progressBar.setAnimateDuration(0);
         final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
             @Override
-            public void progressChanged(ImportProgressChangedEvent event) {
-
-                if (event.progress.msg.equals("Start parsing result")) {
-                    progressBar.setVisible(true);
-                }
-                progressBar.setValue(event.progress.progress);
-
+            public void progressChanged(final ImportProgressChangedEvent event) {
+                CB.postOnMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setValue(event.progress.progress);
+                    }
+                });
             }
         };
         EventHandler.add(progressListener);
@@ -212,7 +211,7 @@ public class CheckStateActivity extends ActivityBase {
                         public void increment() {
                             // send Progress Change Msg
                             ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
-                            progress.progress = 100 / (chkList.size / progressIncrement.incrementAndGet());
+                            progress.progress = (int) (100f / ((float) chkList.size / (float) progressIncrement.incrementAndGet()));
                             EventHandler.fire(new ImportProgressChangedEvent(progress));
                         }
                     });
@@ -223,6 +222,8 @@ public class CheckStateActivity extends ActivityBase {
                     stop += blockSize + 1;
 
                 } while (chkList100.size == blockSize + 1);
+                //state check complete, close activity
+                finish();
             }
         });
     }

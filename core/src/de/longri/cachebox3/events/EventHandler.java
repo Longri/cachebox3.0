@@ -95,8 +95,8 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
         final Array<Object> list = listenerMap.get(event.getListenerClass());
         if (list != null) {
-            if (list.size > 0)
-                log.debug("Fire {} event {} to {} listener: {}", event.getClass().getSimpleName(), event.ID, list.size, list.toString());
+//            if (list.size > 0)
+//                log.debug("Fire {} event {} to {} listener: {}", event.getClass().getSimpleName(), event.ID, list.size, list.toString());
 
 
             asyncExecutor.submit(new AsyncTask<Void>() {
