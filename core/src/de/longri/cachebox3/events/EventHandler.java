@@ -43,7 +43,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     static final private Class[] allListener = new Class[]{PositionChangedListener.class,
             SelectedCacheChangedListener.class, SelectedWayPointChangedListener.class, PositionChangedListener.class,
             DistanceChangedListener.class, SpeedChangedListener.class, OrientationChangedListener.class,
-            SelectedCoordChangedListener.class, ImportProgressChangedListener.class};
+            SelectedCoordChangedListener.class, ImportProgressChangedListener.class, ApiCallLimitListener.class};
     static final private ArrayMap<Class, Array<Object>> listenerMap = new ArrayMap<>();
 
     private static final EventHandler INSTANCE = new EventHandler();

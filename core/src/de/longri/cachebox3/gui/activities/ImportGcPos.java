@@ -101,8 +101,6 @@ public class ImportGcPos extends ActivityBase {
 
 
         createOkCancelBtn();
-        createToggleButtonLine();
-
         initialContent();
         setWorkAnimationVisible(false);
 //        this.setDebug(true, true);
@@ -210,15 +208,6 @@ public class ImportGcPos extends ActivityBase {
             }
         });
     }
-
-
-    private void createToggleButtonLine() {
-        //TODO disable with no actual MapCenterPos
-//        if (MapView.that == null)
-//            tglBtnMap.disable();
-
-    }
-
 
     private void initialContent() {
         btnPlus.addListener(new ClickListener() {

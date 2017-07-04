@@ -29,12 +29,19 @@ import com.kotcrab.vis.ui.widget.*;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.CheckCacheStateParser;
-import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.ImportProgressChangedEvent;
-import de.longri.cachebox3.events.ImportProgressChangedListener;
-import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.gui.*;
+import de.longri.cachebox3.gui.Window;
+import de.longri.cachebox3.gui.dialogs.ButtonDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
+import de.longri.cachebox3.gui.events.CacheListChangedEventList;
+import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.utils.ICancel;
@@ -160,14 +167,13 @@ public class CheckStateActivity extends ActivityBase {
         CB.postAsync(new Runnable() {
             @Override
             public void run() {
-                int changedCount = 0;
+
                 int result = 0;
                 final Array<Cache> chkList = new Array<>();
 
                 synchronized (Database.Data.Query) {
                     if (Database.Data.Query == null || Database.Data.Query.size == 0)
                         return;
-                    changedCount = 0;
                     for (int i = 0, n = Database.Data.Query.size; i < n; i++) {
                         chkList.add(Database.Data.Query.get(i));
                     }
@@ -181,10 +187,20 @@ public class CheckStateActivity extends ActivityBase {
                 Array<Cache> addedReturnList = new Array<>();
                 Array<Cache> chkList100;
 
+                ApiCallLimitListener limitListener = new ApiCallLimitListener() {
+                    @Override
+                    public void waitForCall(ApiCallLimitEvent event) {
+                        int sec = (int) (event.getWaitTime() / 1000);
+                        CB.viewmanager.toast( Translation.Get("ApiLimit"
+                                , Integer.toString(Config.apiCallLimit.getValue()), Integer.toString(sec))
+                                , ViewManager.ToastLength.LONG);
+                    }
+                };
+
+                EventHandler.add(limitListener);
+
                 do {
                     chkList100 = new Array<>();
-
-
                     if (chkList == null || chkList.size == 0) {
                         break;
                     }
@@ -222,8 +238,44 @@ public class CheckStateActivity extends ActivityBase {
                     stop += blockSize + 1;
 
                 } while (chkList100.size == blockSize + 1);
+
+                //Write changes to DB
+                final AtomicInteger changedCount = new AtomicInteger(0);
+                Database.Data.beginTransaction();
+                Iterator<Cache> iterator = addedReturnList.iterator();
+                CacheDAO dao = new CacheDAO();
+                do {
+                    Cache writeTmp = iterator.next();
+                    if (dao.UpdateDatabaseCacheState(writeTmp))
+                        changedCount.incrementAndGet();
+                } while (iterator.hasNext());
+
+                Database.Data.setTransactionSuccessful();
+                Database.Data.endTransaction();
+
                 //state check complete, close activity
+                EventHandler.remove(limitListener);
                 finish();
+
+                CB.postOnMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Give feedback and say what updated!
+                        CacheListChangedEventList.Call();
+                        String title = Translation.Get("chkState");
+                        String msg = Translation.Get("CachesUpdatet") + " " + changedCount.get() + "/" + Database.Data.Query.size;
+                        Window dialog = new ButtonDialog("chkState", msg, title, MessageBoxButtons.OK, MessageBoxIcon.None, new OnMsgBoxClickListener() {
+                            @Override
+                            public boolean onClick(int which, Object data) {
+                                if (which == ButtonDialog.BUTTON_POSITIVE) {
+                                    hide();
+                                }
+                                return true;
+                            }
+                        });
+                        dialog.show();
+                    }
+                });
             }
         });
     }

@@ -18,6 +18,8 @@ package de.longri.cachebox3.apis.groundspeak_api;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.ApiCallLimitEvent;
+import de.longri.cachebox3.events.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +67,9 @@ public class Limit {
         } else {
             // wait for free slot
             log.debug("wait for free slot");
+            long desiredTime = calls.get(0) - Calendar.getInstance().getTimeInMillis();
+            ApiCallLimitEvent event = new ApiCallLimitEvent(desiredTime);
+            EventHandler.fire(event);
             CB.wait(isFull);
             log.debug("have free slot, can call");
             Calendar cal = Calendar.getInstance();

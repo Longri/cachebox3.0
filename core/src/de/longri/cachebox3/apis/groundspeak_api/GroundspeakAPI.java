@@ -422,7 +422,7 @@ public class GroundspeakAPI {
         httpPost.setContent(requestString);
         NetUtils.StreamHandleObject result = (NetUtils.StreamHandleObject) NetUtils.postAndWait(NetUtils.ResultType.STREAM, httpPost, icancel);
         if (icancel.cancel()) {
-            result.handled();
+            if (result != null) result.handled();
             return -1;
         }
         CheckCacheStateParser parser = new CheckCacheStateParser();
