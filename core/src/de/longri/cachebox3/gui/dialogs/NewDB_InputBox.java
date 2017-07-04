@@ -28,7 +28,7 @@ import de.longri.cachebox3.translation.Translation;
  */
 public class NewDB_InputBox extends ButtonDialog {
     public NewDB_InputBox(OnMsgBoxClickListener listener) {
-        super("NewDB", createContentBox(), Translation.Get("NewDB"), MessageBoxButtons.OKCancel, MessageBoxIcon.None, listener);
+        super("NewDB", createContentBox(), Translation.Get("NewDB"), MessageBoxButtons.OKCancel, listener);
     }
 
     private static Table createContentBox() {

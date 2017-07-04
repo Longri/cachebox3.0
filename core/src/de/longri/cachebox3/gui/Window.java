@@ -60,7 +60,7 @@ public class Window extends Table {
         this.setName(name);
     }
 
-    protected void setStageBackground(Drawable drawable) {
+    public void setStageBackground(Drawable drawable) {
         this.stageBackground = drawable;
     }
 

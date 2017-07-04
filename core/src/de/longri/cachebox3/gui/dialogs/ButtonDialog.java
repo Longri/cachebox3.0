@@ -61,12 +61,7 @@ public class ButtonDialog extends Window {
     private ObjectMap<Actor, Object> values = new ObjectMap();
     private String titleText;
 
-    public ButtonDialog(String name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
-        this(name, getMsgContentTable(msg, icon), title, buttons, icon, Listener);
-
-    }
-
-    private static Table getMsgContentTable(String msg, MessageBoxIcon icon) {
+    public static Table getMsgContentTable(String msg, MessageBoxIcon icon) {
         Skin skin = VisUI.getSkin();
 
         ButtonDialogStyle style = skin.get("default", ButtonDialogStyle.class);
@@ -84,12 +79,21 @@ public class ButtonDialog extends Window {
     }
 
 
-    public ButtonDialog(String name, Table contentTable, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
+    public ButtonDialog(String name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
+        this(name, getMsgContentTable(msg, icon), title, buttons, Listener);
+    }
+
+    public ButtonDialog(String name, Table contentTable, String title, MessageBoxButtons buttons, OnMsgBoxClickListener Listener) {
+        this(name, contentTable, title, buttons, Listener, VisUI.getSkin().get("default", ButtonDialogStyle.class));
+    }
+
+    public ButtonDialog(String name, Table contentTable, String title, MessageBoxButtons buttons, OnMsgBoxClickListener Listener, ButtonDialogStyle style) {
         super(name);
         this.contentBox = contentTable;
-        this.skin = VisUI.getSkin();
-        setSkin(this.skin);
-        style = skin.get("default", ButtonDialogStyle.class);
+
+        if (style == null)
+            style = skin.get("default", ButtonDialogStyle.class);
+        this.style = style;
         this.setStageBackground(style.stageBackground);
         if (title != null) {
             this.mHasTitle = true;

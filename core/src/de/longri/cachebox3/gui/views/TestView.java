@@ -21,10 +21,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
@@ -32,25 +29,27 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisScrollPane;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.*;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.gui.*;
+import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.FileChooser;
+import de.longri.cachebox3.gui.dialogs.ButtonDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
-import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
-import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
-import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
-import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
+import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.LogTypes;
@@ -60,6 +59,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Longri on 27.07.16.
@@ -67,19 +68,19 @@ import java.util.Arrays;
 public class TestView extends AbstractView {
     final static Logger log = LoggerFactory.getLogger(TestView.class);
 
-
     static private FileChooser fileChooser = new FileChooser("select folder", FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES);
-
+    private final AtomicBoolean showing = new AtomicBoolean(true);
 
     public TestView() {
         super("TestView");
         this.setDebug(true, true);
-        create();
+        // createIconTable();
+        createSvgNinePatchTable();
     }
 
     VisScrollPane scrollPane;
 
-    protected void create() {
+    protected void createIconTable() {
         this.clear();
         VisTable attTable = new VisTable();
         attTable.setDebug(true);
@@ -236,12 +237,190 @@ public class TestView extends AbstractView {
         this.addActor(scrollPane);
     }
 
+    protected void createSvgNinePatchTable() {
+        this.clear();
+        VisTable contentTable = new VisTable();
+        contentTable.setDebug(true);
+        scrollPane = new VisScrollPane(contentTable);
+        {
+            VisLabel label3 = new VisLabel("ProgressBar NinePatch");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            ProgressBar.ProgressBarStyle style = new ProgressBar.ProgressBarStyle();
+            int patch = 12;
+
+            style.background = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(),
+                    patch, patch, patch, patch);
+            style.knob = Utils.get9PatchFromSvg(Gdx.files.internal("progress_foreground.svg").read(),
+                    patch, patch, patch, patch);
+            style.knobBefore = Utils.get9PatchFromSvg(Gdx.files.internal("progress_foreground.svg").read(),
+                    patch, patch, patch, patch);
+            style.background.setLeftWidth(0);
+            style.background.setRightWidth(0);
+            style.background.setTopHeight(0);
+            style.background.setBottomHeight(0);
+
+            style.knob.setLeftWidth(0);
+            style.knob.setRightWidth(0);
+            style.knob.setTopHeight(0);
+            style.knob.setBottomHeight(0);
+
+            style.knobBefore.setLeftWidth(0);
+            style.knobBefore.setRightWidth(0);
+            style.knobBefore.setTopHeight(0);
+            style.knobBefore.setBottomHeight(0);
+
+            final VisProgressBar progress1 = new VisProgressBar(0f, 100f, 1f, false, style);
+            contentTable.add(progress1).left().expandX().fillX();
+            contentTable.row();
+
+            CB.postAsync(new Runnable() {
+                float value = 0;
+
+                @Override
+                public void run() {
+                    while (showing.get()) {
+                        value += 1f;
+                        if (value >= 200) value = 0;
+                        final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
+                        CB.postOnMainThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progress1.setValue(progressValue);
+                            }
+                        });
+                        Gdx.graphics.requestRendering();
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+        }
+        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4));
+        contentTable.row();
+        {
+            VisLabel label3 = new VisLabel("ProgressBar SvgNinePatch");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            final VisProgressBar progress1 = new VisProgressBar(0, 100, 1, false, "default");
+            contentTable.add(progress1).left().expandX().fillX();
+            contentTable.row();
+
+            CB.postAsync(new Runnable() {
+                float value = 0;
+
+                @Override
+                public void run() {
+                    while (showing.get()) {
+                        value += 1f;
+                        if (value >= 200) value = 0;
+                        final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
+                        CB.postOnMainThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progress1.setValue(progressValue);
+                            }
+                        });
+                        Gdx.graphics.requestRendering();
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+        }
+        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4 * 10));
+        contentTable.row();
+        {
+            String Msg = Translation.Get("QuitReally");
+            String Title = Translation.Get("Quit?");
+            ButtonDialogStyle defaultButtonDialogStyle = VisUI.getSkin().get("default", ButtonDialogStyle.class);
+            ButtonDialogStyle buttonDialogStyle = new ButtonDialogStyle();
+            buttonDialogStyle.titleFont = defaultButtonDialogStyle.titleFont;
+            buttonDialogStyle.titleFontColor = defaultButtonDialogStyle.titleFontColor;
+
+
+            int patch = 12;
+
+            buttonDialogStyle.title = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(),
+                    patch, patch, patch, patch);
+
+            buttonDialogStyle.footer = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(),
+                    patch, patch, patch, patch);
+
+            buttonDialogStyle.center = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(),
+                    patch, patch, patch, patch);
+
+            buttonDialogStyle.header = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(),
+                    patch, patch, patch, patch);
+
+            Window dialog = new ButtonDialog("QuitDialog", ButtonDialog.getMsgContentTable(Msg, MessageBoxIcon.Stop), Title, MessageBoxButtons.YesNo, null, buttonDialogStyle);
+
+            dialog.setStageBackground(null);
+
+            VisLabel label3 = new VisLabel("DialogWindow NinePatch");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            contentTable.add(dialog);
+            contentTable.row();
+        }
+        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4));
+        contentTable.row();
+        {
+            String Msg = Translation.Get("QuitReally");
+            String Title = Translation.Get("Quit?");
+            Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop, null);
+
+            dialog.setStageBackground(null);
+
+            VisLabel label3 = new VisLabel("DialogWindow SvgNinePatch");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            contentTable.add(dialog);
+            contentTable.row();
+        }
+
+        this.addActor(scrollPane);
+    }
+
 
     @Override
     public void onShow() {
         sizeChanged();
     }
 
+    public void onHide() {
+        showing.set(false);
+    }
 
     @Override
     public void draw(Batch batch, float parentColor) {

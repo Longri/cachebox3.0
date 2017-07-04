@@ -36,7 +36,7 @@ public class HintDialog extends ButtonDialog {
     private boolean encoded = false;
 
     public HintDialog() {
-        super("Hint", createContentBox(), Translation.Get("hint"), MessageBoxButtons.RetryCancel, MessageBoxIcon.None, null);
+        super("Hint", createContentBox(), Translation.Get("hint"), MessageBoxButtons.RetryCancel, null);
 
         String hintFromDB = EventHandler.getSelectedCache() == null ? "" : EventHandler.getSelectedCache().getHint();
         this.hintTextDecoded = UnitFormatter.rot13(hintFromDB) + "\n ";

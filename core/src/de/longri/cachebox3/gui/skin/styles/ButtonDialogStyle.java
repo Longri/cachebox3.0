@@ -24,7 +24,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
  * Created by Longri on 27.01.17.
  */
 public class ButtonDialogStyle {
-    public SvgNinePatchDrawable title, header, center, footer;
+    public Drawable title;
+    public Drawable header;
+    public Drawable center;
+    public Drawable footer;
     public Drawable stageBackground;
     public BitmapFont titleFont;
     public Color titleFontColor;
