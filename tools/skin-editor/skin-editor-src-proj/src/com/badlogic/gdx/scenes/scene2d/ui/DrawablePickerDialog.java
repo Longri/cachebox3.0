@@ -18,7 +18,6 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -38,6 +37,7 @@ import de.longri.cachebox3.develop.tools.skin_editor.NinePatchEditorDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.develop.tools.skin_editor.SvgFileIconProvider;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
+import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
@@ -641,9 +641,8 @@ public class DrawablePickerDialog extends Dialog {
             if (isNinePatch) {
                 SvgNinePatchDrawable.SvgNinePatchDrawableUnScaledValues values =
                         ((SvgNinePatchDrawable) itemObject.drawable).values;
-                info = String.format("l:%d, r:%d, t:%d, b:%d \nlw:%d, rw:%d, th:%d, bh:%d ",
-                        values.left, values.right, values.top, values.bottom,
-                        values.leftWidth, values.rightWidth, values.topHeight, values.bottomHeight);
+                info = String.format("l:%d, r:%d, t:%d, b:%d ",
+                        values.left, values.right, values.top, values.bottom);
             } else {
                 if (itemObject.skinInfo instanceof ScaledSvg) {
                     info = "scale: " + Float.toString(((ScaledSvg) itemObject.skinInfo).scale) +

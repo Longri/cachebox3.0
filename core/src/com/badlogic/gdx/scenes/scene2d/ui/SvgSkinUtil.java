@@ -28,7 +28,7 @@ import com.badlogic.gdx.utils.reflect.Field;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
-import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
+import de.longri.cachebox3.gui.drawables.*;
 import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
@@ -223,19 +223,15 @@ public class SvgSkinUtil {
 
 
                 // Handle SvgNinePatchDrawable
-                if (object instanceof SvgNinePatchDrawable) {
-                    SvgNinePatchDrawable svgNinePatchDrawable = (SvgNinePatchDrawable) object;
-                    SvgNinePatchDrawable.SvgNinePatchDrawableUnScaledValues values = svgNinePatchDrawable.values;
+                if (object instanceof de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable) {
+                    de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable svgNinePatchDrawable = (de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable) object;
+                    de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable.SvgNinePatchDrawableUnScaledValues values = svgNinePatchDrawable.values;
                     json.writeValue("name", svgNinePatchDrawable.name);
                     json.writeValue("left", values.left);
                     json.writeValue("right", values.right);
                     json.writeValue("top", values.top);
                     json.writeValue("bottom", values.bottom);
 
-                    if (values.leftWidth != 0) json.writeValue("leftWidth", values.leftWidth);
-                    if (values.rightWidth != 0) json.writeValue("rightWidth", values.rightWidth);
-                    if (values.topHeight != 0) json.writeValue("topHeight", values.topHeight);
-                    if (values.bottomHeight != 0) json.writeValue("bottomHeight", values.bottomHeight);
                     json.writeObjectEnd();
                     continue;
 

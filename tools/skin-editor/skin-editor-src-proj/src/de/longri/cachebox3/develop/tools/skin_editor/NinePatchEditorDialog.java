@@ -15,12 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.CB_NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.develop.tools.skin_editor.actors.RangeSelector;
 import de.longri.cachebox3.gui.drawables.EmptyDrawable;
+import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -216,14 +216,11 @@ public class NinePatchEditorDialog extends Dialog {
                 int sourceWidth = sourcePixmap.getWidth();
                 values.left = (int) (rangeTop.rangeStart * sourceWidth);
                 values.right = (int) (sourceWidth - (rangeTop.rangeStop * sourceWidth));
-                values.leftWidth = (int) (rangeBottom.rangeStart * sourceWidth);
-                values.rightWidth = (int) (sourceWidth - (rangeBottom.rangeStop * sourceWidth));
+
 
                 int sourceHeight = sourcePixmap.getHeight();
                 values.top = (int) (rangeLeft.rangeStart * sourceHeight);
                 values.bottom = (int) (sourceHeight - (rangeLeft.rangeStop * sourceHeight));
-                values.topHeight = (int) (rangeRight.rangeStart * sourceHeight);
-                values.bottomHeight = (int) (sourceHeight - (rangeRight.rangeStop * sourceHeight));
 
                 SNPD.values = values;
 

@@ -17,11 +17,11 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
 import de.longri.cachebox3.gui.skin.styles.LanguageStyle;
 import de.longri.cachebox3.gui.skin.styles.LogListItemStyle;
 import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
-import de.longri.cachebox3.translation.Language;
 
 /**
  * Created by Longri on 12.01.2017.
@@ -52,7 +52,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.utils.SkinColor.class);
         items.add(de.longri.cachebox3.gui.skin.styles.ColorDrawableStyle.class);
         items.add(com.badlogic.gdx.graphics.g2d.BitmapFont.class);
-        items.add(com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable.class);
+        items.add(SvgNinePatchDrawable.class);
         items.add(de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle.class);

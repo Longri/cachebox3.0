@@ -13,24 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.badlogic.gdx.scenes.scene2d.ui;
+package de.longri.cachebox3.gui.drawables;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.CB_NinePatchDrawable;
 
 /**
  * Created by Longri on 23.07.16.
  */
-public class SvgNinePatchDrawable extends BaseDrawable {
+public class SvgNinePatchDrawable extends CB_NinePatchDrawable {
 
     public static class SvgNinePatchDrawableUnScaledValues {
         // unscaled values from SvgSkon
-        public int left, right, top, bottom, leftWidth, rightWidth, topHeight, bottomHeight;
+        public int left, right, top, bottom;
     }
 
-
-    NinePatch patch;
 
     public String name;
     private int left, right, top, bottom;
@@ -38,35 +37,31 @@ public class SvgNinePatchDrawable extends BaseDrawable {
     public SvgNinePatchDrawableUnScaledValues values;
 
     public SvgNinePatchDrawable() {
+        super();
     }
 
-//    public SvgNinePatchDrawable(SvgNinePatchDrawable drawable) {
-//        super(drawable);
-//        setPatch(drawable.patch, drawable.leftWidth, drawable.rightWidth, drawable.topHeight, drawable.bottomHeight);
+    public SvgNinePatchDrawable(NinePatch ninePatch) {
+        super(ninePatch);
+    }
+
+
+//    public void draw(Batch batch, float x, float y, float width, float height) {
+//        if (patch != null) patch.draw(batch, x, y, width, height);
 //    }
-
-    public SvgNinePatchDrawable(NinePatch ninePatch, int leftWidth, int rightWidth, int topHeight, int bottomHeight) {
-        setPatch(ninePatch, leftWidth, rightWidth, topHeight, bottomHeight);
-    }
-
-
-    public void draw(Batch batch, float x, float y, float width, float height) {
-        if (patch != null) patch.draw(batch, x, y, width, height);
-    }
-
-    public void setPatch(NinePatch patch, int leftWidth, int rightWidth, int topHeight, int bottomHeight) {
-        this.patch = patch;
-        setMinWidth(patch.getTotalWidth());
-        setMinHeight(patch.getTotalHeight());
-        setTopHeight(topHeight);
-        setRightWidth(rightWidth);
-        setBottomHeight(bottomHeight);
-        setLeftWidth(leftWidth);
-    }
-
-    public NinePatch getPatch() {
-        return patch;
-    }
+//
+//    public void setPatch(NinePatch patch, int leftWidth, int rightWidth, int topHeight, int bottomHeight) {
+//        this.patch = patch;
+//        setMinWidth(patch.getTotalWidth());
+//        setMinHeight(patch.getTotalHeight());
+//        setTopHeight(topHeight);
+//        setRightWidth(rightWidth);
+//        setBottomHeight(bottomHeight);
+//        setLeftWidth(leftWidth);
+//    }
+//
+//    public NinePatch getPatch() {
+//        return patch;
+//    }
 
     public float getLeftWidth() {
         return left;

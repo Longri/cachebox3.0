@@ -1801,7 +1801,7 @@
       "size": 21
     }
   },
-  "com.badlogic.gdx.scenes.scene2d.ui.SvgNinePatchDrawable": {
+  "de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable": {
     "activityBack_drawable": {
       "name": "activityBack",
       "left": 11,
@@ -1862,40 +1862,28 @@
       "left": 16,
       "right": 16,
       "top": 16,
-      "bottom": 1,
-      "leftWidth": 10,
-      "rightWidth": 10,
-      "topHeight": 10,
-      "bottomHeight": 10
+      "bottom": 1
     },
     "drawable_dialog_footer": {
       "name": "dialog_footer",
       "left": 16,
       "right": 16,
       "top": 1,
-      "bottom": 16,
-      "leftWidth": 10,
-      "rightWidth": 10,
-      "topHeight": 10,
-      "bottomHeight": 10
+      "bottom": 16
     },
     "drawable_dialog_header": {
       "name": "dialog_header",
       "left": 16,
       "right": 16,
       "top": 16,
-      "bottom": 1
+      "bottom": 4
     },
     "drawable_dialog_title": {
       "name": "dialog_title",
       "left": 16,
       "right": 39,
       "top": 18,
-      "bottom": 33,
-      "leftWidth": 15,
-      "rightWidth": 36,
-      "topHeight": 8,
-      "bottomHeight": 9
+      "bottom": 33
     },
     "list_background_drawable": {
       "name": "list_background",

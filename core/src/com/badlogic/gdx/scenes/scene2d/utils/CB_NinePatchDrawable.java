@@ -26,6 +26,9 @@ public class CB_NinePatchDrawable extends NinePatchDrawable {
         super(patch);
     }
 
+    public CB_NinePatchDrawable() {
+    }
+
     public void setPatch(NinePatch patch) {
         super.setPatch(patch);
         setMinWidth(patch.getPadLeft() + patch.getPadRight());
