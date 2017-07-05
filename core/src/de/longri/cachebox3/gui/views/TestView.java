@@ -372,7 +372,7 @@ public class TestView extends AbstractView {
                     16, 16, 16, 1);
 
             buttonDialogStyle.header = Utils.get9PatchFromSvg(Gdx.files.internal("skins/day/svg/dialog_header.svg").read(),
-                    16, 16, 16, 1);
+                    16, 16, 16, 4);
 
             Window dialog = new ButtonDialog("QuitDialog", ButtonDialog.getMsgContentTable(Msg, MessageBoxIcon.Stop)
                     , Title, MessageBoxButtons.YesNo, null, buttonDialogStyle);

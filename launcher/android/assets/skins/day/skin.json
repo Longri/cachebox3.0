@@ -1876,7 +1876,7 @@
       "left": 16,
       "right": 16,
       "top": 16,
-      "bottom": 1
+      "bottom": 4
     },
     "drawable_dialog_title": {
       "name": "dialog_title",

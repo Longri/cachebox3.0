@@ -135,10 +135,17 @@ public class ButtonDialog extends Window {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        float versatz = !mHasTitle ? 0 : style.title.getBottomHeight();
+        float offset = 0;
+        if (mHasTitle) {
+            offset = style.title.getBottomHeight();
+        }
+
         if (style.header != null && !dontRenderDialogBackground) {
-            style.header.draw(batch, this.getX(), (contentBox.getY() + versatz + contentBox.getHeight() - style.header.getMinHeight()) + this.getY(),
-                    this.getWidth(), style.header.getMinHeight() + versatz);
+            style.header.draw(batch
+                    , this.getX()
+                    , this.getY() + (contentBox.getY() + contentBox.getHeight()) - offset
+                    , this.getWidth()
+                    , style.header.getMinHeight() + offset);
         }
         if (style.footer != null && !dontRenderDialogBackground) {
             style.footer.draw(batch, this.getX(), this.getY(), this.getWidth(), buttonTable.getHeight() + (2 * CB.scaledSizes.MARGIN));
