@@ -129,8 +129,8 @@ public class ImageLoader {
         textureSettings.stripWhitespaceX = false;
         textureSettings.stripWhitespaceY = false;
         textureSettings.alphaThreshold = 0;
-        textureSettings.filterMin = TextureFilter.Linear;
-        textureSettings.filterMag = TextureFilter.Linear;
+        textureSettings.filterMin = TextureFilter.Nearest;
+        textureSettings.filterMag = TextureFilter.Nearest;
         textureSettings.wrapX = TextureWrap.ClampToEdge;
         textureSettings.wrapY = TextureWrap.ClampToEdge;
         textureSettings.format = Format.RGBA8888;

@@ -63,55 +63,64 @@ public class SvgNinePatchDrawable extends CB_NinePatchDrawable {
 //        return patch;
 //    }
 
-    public float getLeftWidth() {
-        return left;
-    }
-
-    public void setLeftWidth(float leftWidth) {
-        this.left = (int) leftWidth;
-    }
-
-    public float getRightWidth() {
-        return right;
-    }
-
-    public void setRightWidth(float rightWidth) {
-        this.right = (int) rightWidth;
-    }
-
-    public float getTopHeight() {
-        return top;
-    }
-
-    public void setTopHeight(float topHeight) {
-        this.top = (int) topHeight;
-    }
-
-    public float getBottomHeight() {
-        return bottom;
-    }
-
-    public void setBottomHeight(float bottomHeight) {
-        this.bottom = (int) bottomHeight;
-    }
-
-    public float getMinWidth() {
-        return left + right + additionalPrefWidth;
-    }
-
-    public float getMinHeight() {
-        return top + bottom + additionalPrefHeight;
-    }
-
-
-    public void setAdditionalPrefWidth(float minWidth) {
-        this.additionalPrefWidth = minWidth - (left + right);
-    }
-
-
-    public void setAdditionalPrefHeight(float minHeight) {
-        this.additionalPrefHeight = minHeight - (top + bottom);
-    }
+//    @Override
+//    public float getLeftWidth() {
+//        return left;
+//    }
+//
+//    @Override
+//    public void setLeftWidth(float leftWidth) {
+//        this.left = (int) leftWidth;
+//    }
+//
+//    @Override
+//    public float getRightWidth() {
+//        return right;
+//    }
+//
+//    @Override
+//    public void setRightWidth(float rightWidth) {
+//        this.right = (int) rightWidth;
+//    }
+//
+//    @Override
+//    public float getTopHeight() {
+//        return top;
+//    }
+//
+//    @Override
+//    public void setTopHeight(float topHeight) {
+//        this.top = (int) topHeight;
+//    }
+//
+//    @Override
+//    public float getBottomHeight() {
+//        return bottom;
+//    }
+//
+//    @Override
+//    public void setBottomHeight(float bottomHeight) {
+//        this.bottom = (int) bottomHeight;
+//    }
+//
+//    @Override
+//    public float getMinWidth() {
+//        return left + right + additionalPrefWidth;
+//    }
+//
+//    @Override
+//    public float getMinHeight() {
+//        return top + bottom + additionalPrefHeight;
+//    }
+//
+//
+//    public void setAdditionalPrefWidth(float minWidth) {
+//        this.additionalPrefWidth = minWidth - (left + right);
+//    }
+//
+//    public void setAdditionalPrefHeight(float minHeight) {
+//        this.additionalPrefHeight = minHeight - (top + bottom);
+//    }
 
 
 }

@@ -1807,55 +1807,35 @@
       "left": 11,
       "right": 11,
       "top": 11,
-      "bottom": 11,
-      "leftWidth": 6,
-      "rightWidth": 6,
-      "topHeight": 6,
-      "bottomHeight": 6
+      "bottom": 11
     },
     "default_button_9_Patch": {
       "name": "default_button",
       "left": 8,
       "right": 8,
       "top": 8,
-      "bottom": 8,
-      "leftWidth": 8,
-      "rightWidth": 8,
-      "topHeight": 8,
-      "bottomHeight": 8
+      "bottom": 8
     },
     "default_button_disabled_9_Patch": {
       "name": "default_button_disabled",
       "left": 8,
       "right": 8,
       "top": 8,
-      "bottom": 8,
-      "leftWidth": 8,
-      "rightWidth": 8,
-      "topHeight": 8,
-      "bottomHeight": 8
+      "bottom": 8
     },
     "drawable_default_button": {
       "name": "default_button",
       "left": 8,
       "right": 8,
       "top": 8,
-      "bottom": 8,
-      "leftWidth": 8,
-      "rightWidth": 8,
-      "topHeight": 8,
-      "bottomHeight": 8
+      "bottom": 8
     },
     "drawable_default_button_pressed": {
       "name": "default_button_pressed",
       "left": 8,
       "right": 8,
       "top": 8,
-      "bottom": 8,
-      "leftWidth": 8,
-      "rightWidth": 8,
-      "topHeight": 8,
-      "bottomHeight": 8
+      "bottom": 8
     },
     "drawable_dialog_center": {
       "name": "dialog_center",
@@ -1876,7 +1856,7 @@
       "left": 16,
       "right": 16,
       "top": 16,
-      "bottom": 4
+      "bottom": 2
     },
     "drawable_dialog_title": {
       "name": "dialog_title",
@@ -1890,55 +1870,35 @@
       "left": 10,
       "right": 10,
       "top": 10,
-      "bottom": 10,
-      "leftWidth": 5,
-      "rightWidth": 5,
-      "topHeight": 5,
-      "bottomHeight": 5
+      "bottom": 10
     },
     "listrec_first_drawable": {
       "name": "listrec_first",
       "left": 10,
       "right": 10,
       "top": 10,
-      "bottom": 10,
-      "leftWidth": 5,
-      "rightWidth": 5,
-      "topHeight": 5,
-      "bottomHeight": 5
+      "bottom": 10
     },
     "listrec_second_drawable": {
       "name": "listrec_second",
       "left": 10,
       "right": 10,
       "top": 10,
-      "bottom": 10,
-      "leftWidth": 5,
-      "rightWidth": 5,
-      "topHeight": 5,
-      "bottomHeight": 5
+      "bottom": 10
     },
     "listrec_selected_drawable": {
       "name": "listrec_selected",
       "left": 10,
       "right": 10,
       "top": 10,
-      "bottom": 10,
-      "leftWidth": 5,
-      "rightWidth": 5,
-      "topHeight": 5,
-      "bottomHeight": 5
+      "bottom": 10
     },
     "map-info-panel-background_9_Patch": {
       "name": "map-info-panel-background",
       "left": 8,
       "right": 8,
       "top": 8,
-      "bottom": 8,
-      "leftWidth": 8,
-      "rightWidth": 8,
-      "topHeight": 8,
-      "bottomHeight": 8
+      "bottom": 8
     },
     "menu_divider_drawable": {
       "name": "menu_divider",
@@ -1952,11 +1912,7 @@
       "left": 34,
       "right": 34,
       "top": -1,
-      "bottom": -1,
-      "leftWidth": 34,
-      "rightWidth": 34,
-      "topHeight": -1,
-      "bottomHeight": -1
+      "bottom": -1
     },
     "progress_back_9_Patch": {
       "name": "progress_back",
@@ -1984,44 +1940,28 @@
       "left": 10,
       "right": 10,
       "top": 10,
-      "bottom": 10,
-      "leftWidth": 5,
-      "rightWidth": 5,
-      "topHeight": 5,
-      "bottomHeight": 5
+      "bottom": 10
     },
     "toggleOff_9_Patch": {
       "name": "toggleOff",
       "left": 13,
       "right": 13,
       "top": 13,
-      "bottom": 13,
-      "leftWidth": 13,
-      "rightWidth": 13,
-      "topHeight": 13,
-      "bottomHeight": 13
+      "bottom": 13
     },
     "toggleOn_9_Patch": {
       "name": "toggleOn",
       "left": 13,
       "right": 13,
       "top": 13,
-      "bottom": 13,
-      "leftWidth": 13,
-      "rightWidth": 13,
-      "topHeight": 13,
-      "bottomHeight": 13
+      "bottom": 13
     },
     "togglePress_9_Patch": {
       "name": "togglePress",
       "left": 13,
       "right": 13,
       "top": 13,
-      "bottom": 13,
-      "leftWidth": 13,
-      "rightWidth": 13,
-      "topHeight": 13,
-      "bottomHeight": 13
+      "bottom": 13
     }
   },
   "de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle": {

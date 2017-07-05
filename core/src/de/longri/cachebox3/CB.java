@@ -178,7 +178,7 @@ public class CB {
     public static int getScaledInt(int i) {
         if (scalefactor == 0)
             calcScaleFactor();
-        return (int) (i * scalefactor);
+        return (int) Math.ceil((float) i * scalefactor);
     }
 
     private static void calcScaleFactor() {

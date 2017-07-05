@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
@@ -240,7 +241,7 @@ public class TestView extends AbstractView {
     protected void createSvgNinePatchTable() {
         this.clear();
 
-        float contentWidth = (Gdx.graphics.getWidth() * 0.75f) ;
+        float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
 
         VisTable contentTable = new VisTable();
         contentTable.setDebug(true);
@@ -256,7 +257,7 @@ public class TestView extends AbstractView {
             contentTable.row();
 
             ProgressBar.ProgressBarStyle style = new ProgressBar.ProgressBarStyle();
-            int patch = 12;
+            int patch = 14;
 
             style.background = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(),
                     patch, patch, patch, patch);
@@ -264,20 +265,20 @@ public class TestView extends AbstractView {
                     patch, patch, patch, patch);
             style.knobBefore = Utils.get9PatchFromSvg(Gdx.files.internal("progress_foreground.svg").read(),
                     patch, patch, patch, patch);
-            style.background.setLeftWidth(0);
-            style.background.setRightWidth(0);
-            style.background.setTopHeight(0);
-            style.background.setBottomHeight(0);
-
-            style.knob.setLeftWidth(0);
-            style.knob.setRightWidth(0);
-            style.knob.setTopHeight(0);
-            style.knob.setBottomHeight(0);
-
-            style.knobBefore.setLeftWidth(0);
-            style.knobBefore.setRightWidth(0);
-            style.knobBefore.setTopHeight(0);
-            style.knobBefore.setBottomHeight(0);
+//            style.background.setLeftWidth(0);
+//            style.background.setRightWidth(0);
+//            style.background.setTopHeight(0);
+//            style.background.setBottomHeight(0);
+//
+//            style.knob.setLeftWidth(0);
+//            style.knob.setRightWidth(0);
+//            style.knob.setTopHeight(0);
+//            style.knob.setBottomHeight(0);
+//
+//            style.knobBefore.setLeftWidth(0);
+//            style.knobBefore.setRightWidth(0);
+//            style.knobBefore.setTopHeight(0);
+//            style.knobBefore.setBottomHeight(0);
 
             final VisProgressBar progress1 = new VisProgressBar(0f, 100f, 1f, false, style);
             contentTable.add(progress1).width(new Value.Fixed(contentWidth)).pad(20);
@@ -321,6 +322,10 @@ public class TestView extends AbstractView {
             contentTable.row();
 
             final VisProgressBar progress1 = new VisProgressBar(0, 100, 1, false, "default");
+
+            progress1.getStyle().knob.setMinHeight(((NinePatchDrawable) progress1.getStyle().knob).getPatch().getTotalHeight());
+            progress1.getStyle().background.setMinHeight(((NinePatchDrawable) progress1.getStyle().background).getPatch().getTotalHeight());
+
             contentTable.add(progress1).width(new Value.Fixed(contentWidth)).pad(20);
             contentTable.row();
 
@@ -360,8 +365,6 @@ public class TestView extends AbstractView {
             buttonDialogStyle.titleFontColor = defaultButtonDialogStyle.titleFontColor;
 
 
-
-
             buttonDialogStyle.title = Utils.get9PatchFromSvg(Gdx.files.internal("skins/day/svg/dialog_title.svg").read(),
                     16, 39, 18, 33);
 
@@ -372,7 +375,7 @@ public class TestView extends AbstractView {
                     16, 16, 16, 1);
 
             buttonDialogStyle.header = Utils.get9PatchFromSvg(Gdx.files.internal("skins/day/svg/dialog_header.svg").read(),
-                    16, 16, 16, 4);
+                    16, 16, 16, 2);
 
             Window dialog = new ButtonDialog("QuitDialog", ButtonDialog.getMsgContentTable(Msg, MessageBoxIcon.Stop)
                     , Title, MessageBoxButtons.YesNo, null, buttonDialogStyle);
@@ -396,7 +399,7 @@ public class TestView extends AbstractView {
         {
             String Msg = Translation.Get("QuitReally");
             String Title = Translation.Get("Quit?");
-            Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop, null) ;
+            Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop, null);
 
             dialog.setStageBackground(null);
 

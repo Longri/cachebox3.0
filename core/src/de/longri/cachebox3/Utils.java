@@ -64,12 +64,18 @@ public class Utils {
         try {
             Bitmap svgBitmap = PlatformConnector.getSvg("", inputStream, PlatformConnector.SvgScaleType.DPI_SCALED, 1f);
 
+//            //scale nine patch regions
+//            float scale = CB.getScaledFloat(1);
+//            left *= scale;
+//            right *= scale;
+//            top *= scale;
+//            bottom *= scale;
+
             //scale nine patch regions
-            float scale = CB.getScaledFloat(1);
-            left *= scale;
-            right *= scale;
-            top *= scale;
-            bottom *= scale;
+            if (left > 0) left = CB.getScaledInt(left);
+            if (right > 0) right = CB.getScaledInt(right);
+            if (top > 0) top = CB.getScaledInt(top);
+            if (bottom > 0) bottom = CB.getScaledInt(bottom);
 
             CB_NinePatchDrawable ninePatchDrawable = new CB_NinePatchDrawable(new NinePatch(new Texture(getPixmapFromBitmap(svgBitmap)), left, right, top, bottom));
             return ninePatchDrawable;

@@ -139,13 +139,13 @@ public class SvgSkinUtil {
         CB.postOnMainThread(new Runnable() {
             @Override
             public void run() {
-                atlas[0] = packer.generateTextureAtlas(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.MipMapNearestNearest, true);
+                atlas[0] = packer.generateTextureAtlas(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest, true);
             }
         },true);
 
         PixmapPackerIO.SaveParameters parameters = new PixmapPackerIO.SaveParameters();
-        parameters.magFilter = Texture.TextureFilter.MipMapNearestNearest;
-        parameters.minFilter = Texture.TextureFilter.MipMapNearestNearest;
+        parameters.magFilter = Texture.TextureFilter.Nearest;
+        parameters.minFilter = Texture.TextureFilter.Nearest;
 
         int resultHashCode = HashAtlasWriter.getResultHashCode(scaledSvgList, skinFile);
 

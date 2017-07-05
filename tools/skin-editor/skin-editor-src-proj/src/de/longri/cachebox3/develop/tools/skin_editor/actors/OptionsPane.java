@@ -934,9 +934,9 @@ public class OptionsPane extends Table {
             }
 
             if (drawable instanceof SvgNinePatchDrawable) {
-                //override pref width and height
-                ((SvgNinePatchDrawable) drawable).setAdditionalPrefWidth(50);
-                ((SvgNinePatchDrawable) drawable).setAdditionalPrefHeight(50);
+                //TODO override pref width and height
+//                ((SvgNinePatchDrawable) drawable).setAdditionalPrefWidth(50);
+//                ((SvgNinePatchDrawable) drawable).setAdditionalPrefHeight(50);
             }
 
             buttonStyle.imageUp = drawable;
