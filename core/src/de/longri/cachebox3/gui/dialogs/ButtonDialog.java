@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.dialogs;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -32,6 +33,7 @@ import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle;
 import de.longri.cachebox3.gui.skin.styles.IconsStyle;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.utils.MesureFontUtil;
 
 /**
  * Created by Longri on 03.08.16.
@@ -59,6 +61,7 @@ public class ButtonDialog extends Window {
     private Skin skin;
     private ObjectMap<Actor, Object> values = new ObjectMap();
     private String titleText;
+    private final MessageBoxButtons buttons;
 
     public static Table getMsgContentTable(String msg, MessageBoxIcon icon) {
         Skin skin = VisUI.getSkin();
@@ -127,8 +130,8 @@ public class ButtonDialog extends Window {
         });
 
         this.layout();
-
-        setButtonCaptions(buttons);
+        this.buttons = buttons;
+        setButtonCaptions();
         msgBoxClickListener = Listener;
     }
 
@@ -206,7 +209,7 @@ public class ButtonDialog extends Window {
         }
     }
 
-    private void setButtonCaptions(MessageBoxButtons buttons) {
+    private void setButtonCaptions() {
         float buttonWidth = 0;
 
         float prfWidth = this.getPrefWidth();
@@ -269,6 +272,37 @@ public class ButtonDialog extends Window {
                 (titleTable != null ? titleTable.getMinWidth() : 0)
                         + (style.title != null ? style.title.getMinWidth() : 0)
                         + (style.header != null ? style.header.getMinWidth() : 0);
-        return min;
+
+        float maxButtonWidth = 0;
+        VisTextButton.VisTextButtonStyle buttonStyle = VisUI.getSkin().get(VisTextButton.VisTextButtonStyle.class);
+        BitmapFont font = buttonStyle.font;
+        float minButtonWidth = buttonStyle.up.getMinWidth()*2;
+        if (buttons == MessageBoxButtons.YesNoRetry) {
+            String alltext = Translation.Get("yes") + Translation.Get("no") + Translation.Get("retry");
+            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (4 * CB.scaledSizes.MARGIN) + (3 * minButtonWidth);
+        } else if (buttons == MessageBoxButtons.AbortRetryIgnore) {
+            String alltext = Translation.Get("abort") + Translation.Get("retry") + Translation.Get("ignore");
+            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (4 * CB.scaledSizes.MARGIN) + (3 * minButtonWidth);
+        } else if (buttons == MessageBoxButtons.OK) {
+            String alltext = Translation.Get("ok");
+            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (2 * CB.scaledSizes.MARGIN) + (minButtonWidth);
+        } else if (buttons == MessageBoxButtons.OKCancel) {
+            String alltext = Translation.Get("ok") + Translation.Get("cancel");
+            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (3 * CB.scaledSizes.MARGIN) + (2 * minButtonWidth);
+        } else if (buttons == MessageBoxButtons.RetryCancel) {
+            String alltext = Translation.Get("retry") + Translation.Get("cancel");
+            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (3 * CB.scaledSizes.MARGIN) + (2 * minButtonWidth);
+        } else if (buttons == MessageBoxButtons.YesNo) {
+            String alltext = Translation.Get("yes") + Translation.Get("no");
+            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (3 * CB.scaledSizes.MARGIN) + (2 * minButtonWidth);
+        } else if (buttons == MessageBoxButtons.YesNoCancel) {
+            String alltext = Translation.Get("yes") + Translation.Get("no") + Translation.Get("cancel");
+            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (4 * CB.scaledSizes.MARGIN) + (3 * minButtonWidth);
+        } else if (buttons == MessageBoxButtons.Cancel) {
+            String alltext = Translation.Get("cancel");
+            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (2 * CB.scaledSizes.MARGIN) + (minButtonWidth);
+        }
+
+        return Math.max(min, maxButtonWidth);
     }
 }
