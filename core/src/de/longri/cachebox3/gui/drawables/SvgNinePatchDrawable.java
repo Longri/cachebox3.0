@@ -15,25 +15,20 @@
  */
 package de.longri.cachebox3.gui.drawables;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.CB_NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
 /**
  * Created by Longri on 23.07.16.
  */
-public class SvgNinePatchDrawable extends CB_NinePatchDrawable {
+public class SvgNinePatchDrawable extends NinePatchDrawable {
 
     public static class SvgNinePatchDrawableUnScaledValues {
         // unscaled values from SvgSkon
         public int left, right, top, bottom;
     }
 
-
     public String name;
-    private int left, right, top, bottom;
-    private float additionalPrefWidth = 0, additionalPrefHeight = 0;
     public SvgNinePatchDrawableUnScaledValues values;
 
     public SvgNinePatchDrawable() {
@@ -44,83 +39,13 @@ public class SvgNinePatchDrawable extends CB_NinePatchDrawable {
         super(ninePatch);
     }
 
-
-//    public void draw(Batch batch, float x, float y, float width, float height) {
-//        if (patch != null) patch.draw(batch, x, y, width, height);
-//    }
-//
-//    public void setPatch(NinePatch patch, int leftWidth, int rightWidth, int topHeight, int bottomHeight) {
-//        this.patch = patch;
-//        setMinWidth(patch.getTotalWidth());
-//        setMinHeight(patch.getTotalHeight());
-//        setTopHeight(topHeight);
-//        setRightWidth(rightWidth);
-//        setBottomHeight(bottomHeight);
-//        setLeftWidth(leftWidth);
-//    }
-//
-//    public NinePatch getPatch() {
-//        return patch;
-//    }
-
-//    @Override
-//    public float getLeftWidth() {
-//        return left;
-//    }
-//
-//    @Override
-//    public void setLeftWidth(float leftWidth) {
-//        this.left = (int) leftWidth;
-//    }
-//
-//    @Override
-//    public float getRightWidth() {
-//        return right;
-//    }
-//
-//    @Override
-//    public void setRightWidth(float rightWidth) {
-//        this.right = (int) rightWidth;
-//    }
-//
-//    @Override
-//    public float getTopHeight() {
-//        return top;
-//    }
-//
-//    @Override
-//    public void setTopHeight(float topHeight) {
-//        this.top = (int) topHeight;
-//    }
-//
-//    @Override
-//    public float getBottomHeight() {
-//        return bottom;
-//    }
-//
-//    @Override
-//    public void setBottomHeight(float bottomHeight) {
-//        this.bottom = (int) bottomHeight;
-//    }
-//
-//    @Override
-//    public float getMinWidth() {
-//        return left + right + additionalPrefWidth;
-//    }
-//
-//    @Override
-//    public float getMinHeight() {
-//        return top + bottom + additionalPrefHeight;
-//    }
-//
-//
-//    public void setAdditionalPrefWidth(float minWidth) {
-//        this.additionalPrefWidth = minWidth - (left + right);
-//    }
-//
-//    public void setAdditionalPrefHeight(float minHeight) {
-//        this.additionalPrefHeight = minHeight - (top + bottom);
-//    }
-
-
+    public void setPatch(NinePatch patch) {
+        super.setPatch(patch);
+        setMinWidth(patch.getPadLeft() + patch.getPadRight());
+        setMinHeight(patch.getPadTop() + patch.getPadBottom());
+        setTopHeight(patch.getPadTop());
+        setRightWidth(patch.getPadRight());
+        setBottomHeight(patch.getPadBottom());
+        setLeftWidth(patch.getPadLeft());
+    }
 }

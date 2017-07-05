@@ -167,7 +167,7 @@ public class SvgSkin extends Skin {
             if (textureRegion instanceof TextureAtlas.AtlasRegion) {
                 TextureAtlas.AtlasRegion region = (TextureAtlas.AtlasRegion) textureRegion;
                 if (region.splits != null)
-                    drawable = new CB_NinePatchDrawable(getPatch(name));
+                    drawable = new SvgNinePatchDrawable(getPatch(name));
                 else if (region.rotate || region.packedWidth != region.originalWidth || region.packedHeight != region.originalHeight)
                     drawable = new SpriteDrawable(getSprite(name));
             }
@@ -179,7 +179,7 @@ public class SvgSkin extends Skin {
         if (drawable == null) {
             NinePatch patch = optional(name, NinePatch.class);
             if (patch != null)
-                drawable = new CB_NinePatchDrawable(patch);
+                drawable = new SvgNinePatchDrawable(patch);
             else {
                 Sprite sprite = optional(name, Sprite.class);
                 if (sprite != null)
