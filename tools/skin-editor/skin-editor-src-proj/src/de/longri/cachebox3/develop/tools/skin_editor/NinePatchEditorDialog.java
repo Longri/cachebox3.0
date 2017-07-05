@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.CB_NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -404,7 +405,7 @@ public class NinePatchEditorDialog extends Dialog {
 
             TextureAtlas ta = new TextureAtlas(fh.child("pack.atlas"));
             NinePatch np = ta.createPatch("temp");
-            NinePatchDrawable drawable = new NinePatchDrawable(np);
+            CB_NinePatchDrawable drawable = new CB_NinePatchDrawable(np);
             reviewTablePreview();
             buttonPreview1.getStyle().up = drawable;
 

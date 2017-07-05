@@ -40,7 +40,6 @@ public class ButtonDialog extends Window {
 
     // see for layout help ==> https://github.com/libgdx/libgdx/wiki/Table
 
-
     static public final int BUTTON_POSITIVE = 1;
     static public final int BUTTON_NEUTRAL = 2;
     static public final int BUTTON_NEGATIVE = 3;
@@ -203,7 +202,10 @@ public class ButtonDialog extends Window {
     private void setButtonCaptions(MessageBoxButtons buttons) {
         float buttonWidth = 0;
 
-        float maxWindowWidth = CB.scaledSizes.WINDOW_WIDTH;
+        float prfWidth = this.getPrefWidth();
+        float minWidth = this.getMinWidth();
+
+        float maxWindowWidth = minWidth < prfWidth ? prfWidth : minWidth;// CB.scaledSizes.WINDOW_WIDTH;
 
         if (buttons == MessageBoxButtons.YesNoRetry) {
             buttonWidth = (maxWindowWidth / 3) - (4 * CB.scaledSizes.MARGIN);
@@ -252,5 +254,14 @@ public class ButtonDialog extends Window {
             msgBoxClickListener.onClick((Integer) object, null);
             this.hide();
         }
+    }
+
+    @Override
+    public float getMinWidth() {
+        float min =
+                (titleTable != null ? titleTable.getMinWidth() : 0)
+                        + (style.title != null ? style.title.getMinWidth() : 0)
+                        + (style.header != null ? style.header.getMinWidth() : 0);
+        return min;
     }
 }

@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.CB_NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -70,7 +71,7 @@ public class Utils {
             top *= scale;
             bottom *= scale;
 
-            NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(new NinePatch(new Texture(getPixmapFromBitmap(svgBitmap)), left, right, top, bottom));
+            CB_NinePatchDrawable ninePatchDrawable = new CB_NinePatchDrawable(new NinePatch(new Texture(getPixmapFromBitmap(svgBitmap)), left, right, top, bottom));
             return ninePatchDrawable;
 
         } catch (IOException e) {

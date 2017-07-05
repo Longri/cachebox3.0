@@ -239,6 +239,9 @@ public class TestView extends AbstractView {
 
     protected void createSvgNinePatchTable() {
         this.clear();
+
+        float contentWidth = (Gdx.graphics.getWidth() * 0.75f) ;
+
         VisTable contentTable = new VisTable();
         contentTable.setDebug(true);
         scrollPane = new VisScrollPane(contentTable);
@@ -277,7 +280,7 @@ public class TestView extends AbstractView {
             style.knobBefore.setBottomHeight(0);
 
             final VisProgressBar progress1 = new VisProgressBar(0f, 100f, 1f, false, style);
-            contentTable.add(progress1).left().expandX().fillX();
+            contentTable.add(progress1).width(new Value.Fixed(contentWidth)).pad(20);
             contentTable.row();
 
             CB.postAsync(new Runnable() {
@@ -318,7 +321,7 @@ public class TestView extends AbstractView {
             contentTable.row();
 
             final VisProgressBar progress1 = new VisProgressBar(0, 100, 1, false, "default");
-            contentTable.add(progress1).left().expandX().fillX();
+            contentTable.add(progress1).width(new Value.Fixed(contentWidth)).pad(20);
             contentTable.row();
 
             CB.postAsync(new Runnable() {
@@ -346,7 +349,7 @@ public class TestView extends AbstractView {
                 }
             });
         }
-        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4 * 10));
+        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4 * 2));
         contentTable.row();
         {
             String Msg = Translation.Get("QuitReally");
@@ -357,21 +360,22 @@ public class TestView extends AbstractView {
             buttonDialogStyle.titleFontColor = defaultButtonDialogStyle.titleFontColor;
 
 
-            int patch = 12;
 
-            buttonDialogStyle.title = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(),
-                    patch, patch, patch, patch);
 
-            buttonDialogStyle.footer = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(),
-                    patch, patch, patch, patch);
+            buttonDialogStyle.title = Utils.get9PatchFromSvg(Gdx.files.internal("skins/day/svg/dialog_title.svg").read(),
+                    16, 39, 18, 33);
 
-            buttonDialogStyle.center = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(),
-                    patch, patch, patch, patch);
+            buttonDialogStyle.footer = Utils.get9PatchFromSvg(Gdx.files.internal("skins/day/svg/dialog_footer.svg").read(),
+                    16, 16, 1, 16);
 
-            buttonDialogStyle.header = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(),
-                    patch, patch, patch, patch);
+            buttonDialogStyle.center = Utils.get9PatchFromSvg(Gdx.files.internal("skins/day/svg/dialog_center.svg").read(),
+                    16, 16, 16, 1);
 
-            Window dialog = new ButtonDialog("QuitDialog", ButtonDialog.getMsgContentTable(Msg, MessageBoxIcon.Stop), Title, MessageBoxButtons.YesNo, null, buttonDialogStyle);
+            buttonDialogStyle.header = Utils.get9PatchFromSvg(Gdx.files.internal("skins/day/svg/dialog_header.svg").read(),
+                    16, 16, 16, 1);
+
+            Window dialog = new ButtonDialog("QuitDialog", ButtonDialog.getMsgContentTable(Msg, MessageBoxIcon.Stop)
+                    , Title, MessageBoxButtons.YesNo, null, buttonDialogStyle);
 
             dialog.setStageBackground(null);
 
@@ -384,7 +388,7 @@ public class TestView extends AbstractView {
             contentTable.add(lineTable).left().expandX().fillX();
             contentTable.row();
 
-            contentTable.add(dialog);
+            contentTable.add(dialog).width(new Value.Fixed(contentWidth)).pad(20);
             contentTable.row();
         }
         contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4));
@@ -392,7 +396,7 @@ public class TestView extends AbstractView {
         {
             String Msg = Translation.Get("QuitReally");
             String Title = Translation.Get("Quit?");
-            Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop, null);
+            Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop, null) ;
 
             dialog.setStageBackground(null);
 
@@ -405,7 +409,7 @@ public class TestView extends AbstractView {
             contentTable.add(lineTable).left().expandX().fillX();
             contentTable.row();
 
-            contentTable.add(dialog);
+            contentTable.add(dialog).width(new Value.Fixed(contentWidth)).pad(20);
             contentTable.row();
         }
 
