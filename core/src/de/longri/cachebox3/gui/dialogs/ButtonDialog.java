@@ -276,7 +276,7 @@ public class ButtonDialog extends Window {
         float maxButtonWidth = 0;
         VisTextButton.VisTextButtonStyle buttonStyle = VisUI.getSkin().get(VisTextButton.VisTextButtonStyle.class);
         BitmapFont font = buttonStyle.font;
-        float minButtonWidth = buttonStyle.up.getMinWidth()*2;
+        float minButtonWidth = (buttonStyle.up.getMinWidth() + CB.scaledSizes.MARGINx4) * 4;
         if (buttons == MessageBoxButtons.YesNoRetry) {
             String alltext = Translation.Get("yes") + Translation.Get("no") + Translation.Get("retry");
             maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (4 * CB.scaledSizes.MARGIN) + (3 * minButtonWidth);
