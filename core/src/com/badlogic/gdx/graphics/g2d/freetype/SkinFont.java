@@ -95,7 +95,7 @@ public class SkinFont extends BitmapFont {
         parameter.size = CB.getScaledInt(size);
         parameter.characters = DEFAULT_CHARACTER;
         parameter.genMipMaps = true;
-        parameter.minFilter = Texture.TextureFilter.MipMapNearestNearest;
+        parameter.minFilter = Texture.TextureFilter.Nearest;
         parameter.renderCount = 3;
         parameter.packer = new PixmapPacker(PAGE_SIZE, PAGE_SIZE, Pixmap.Format.RGBA8888, 5
                 , false, new PixmapPacker.SkylineStrategy());

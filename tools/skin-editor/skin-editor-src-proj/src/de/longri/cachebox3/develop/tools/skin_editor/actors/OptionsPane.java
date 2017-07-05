@@ -35,12 +35,12 @@ import com.badlogic.gdx.utils.ObjectMap.Keys;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import com.kitfox.svg.A;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
+import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
@@ -934,9 +934,9 @@ public class OptionsPane extends Table {
             }
 
             if (drawable instanceof SvgNinePatchDrawable) {
-                //override pref width and height
-                ((SvgNinePatchDrawable) drawable).setAdditionalPrefWidth(50);
-                ((SvgNinePatchDrawable) drawable).setAdditionalPrefHeight(50);
+                //TODO override pref width and height
+//                ((SvgNinePatchDrawable) drawable).setAdditionalPrefWidth(50);
+//                ((SvgNinePatchDrawable) drawable).setAdditionalPrefHeight(50);
             }
 
             buttonStyle.imageUp = drawable;

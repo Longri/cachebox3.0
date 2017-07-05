@@ -26,8 +26,7 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.gui.drawables.ColorDrawable;
-import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
+import de.longri.cachebox3.gui.drawables.*;
 import de.longri.cachebox3.gui.skin.styles.ColorDrawableStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.IconsStyle;
@@ -41,7 +40,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 20.07.2016.
@@ -169,7 +167,7 @@ public class SvgSkin extends Skin {
             if (textureRegion instanceof TextureAtlas.AtlasRegion) {
                 TextureAtlas.AtlasRegion region = (TextureAtlas.AtlasRegion) textureRegion;
                 if (region.splits != null)
-                    drawable = new NinePatchDrawable(getPatch(name));
+                    drawable = new SvgNinePatchDrawable(getPatch(name));
                 else if (region.rotate || region.packedWidth != region.originalWidth || region.packedHeight != region.originalHeight)
                     drawable = new SpriteDrawable(getSprite(name));
             }
@@ -181,7 +179,7 @@ public class SvgSkin extends Skin {
         if (drawable == null) {
             NinePatch patch = optional(name, NinePatch.class);
             if (patch != null)
-                drawable = new NinePatchDrawable(patch);
+                drawable = new SvgNinePatchDrawable(patch);
             else {
                 Sprite sprite = optional(name, Sprite.class);
                 if (sprite != null)
@@ -362,28 +360,21 @@ public class SvgSkin extends Skin {
             }
         });
 
-        json.setSerializer(SvgNinePatchDrawable.class, new Json.ReadOnlySerializer<SvgNinePatchDrawable>() {
-            public SvgNinePatchDrawable read(Json json, JsonValue jsonData, Class type) {
+        json.setSerializer(SvgNinePatchDrawable.class, new Json.ReadOnlySerializer<de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable>() {
+            public de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable read(Json json, JsonValue jsonData, Class type) {
 
                 String name = json.readValue("name", String.class, jsonData);
                 int left = json.readValue("left", int.class, 0, jsonData);
                 int right = json.readValue("right", int.class, 0, jsonData);
                 int top = json.readValue("top", int.class, 0, jsonData);
                 int bottom = json.readValue("bottom", int.class, 0, jsonData);
-                int leftWidth = json.readValue("leftWidth", int.class, 0, jsonData);
-                int rightWidth = json.readValue("rightWidth", int.class, 0, jsonData);
-                int topHeight = json.readValue("topHeight", int.class, 0, jsonData);
-                int bottomHeight = json.readValue("bottomHeight", int.class, 0, jsonData);
 
                 SvgNinePatchDrawable.SvgNinePatchDrawableUnScaledValues values = new SvgNinePatchDrawable.SvgNinePatchDrawableUnScaledValues();
                 values.left = left;
                 values.right = right;
                 values.top = top;
                 values.bottom = bottom;
-                values.leftWidth = leftWidth;
-                values.rightWidth = rightWidth;
-                values.topHeight = topHeight;
-                values.bottomHeight = bottomHeight;
+
 
                 // get texture region
                 TextureRegion textureRegion = getRegion(name);
@@ -393,10 +384,6 @@ public class SvgSkin extends Skin {
                 if (right > 0) right = CB.getScaledInt(right);
                 if (top > 0) top = CB.getScaledInt(top);
                 if (bottom > 0) bottom = CB.getScaledInt(bottom);
-                if (leftWidth >= 0) leftWidth = leftWidth == 0 ? left : CB.getScaledInt(leftWidth);
-                if (rightWidth >= 0) rightWidth = rightWidth == 0 ? right : CB.getScaledInt(rightWidth);
-                if (topHeight >= 0) topHeight = topHeight == 0 ? top : CB.getScaledInt(topHeight);
-                if (bottomHeight >= 0) bottomHeight = bottomHeight == 0 ? bottom : CB.getScaledInt(bottomHeight);
 
 
                 // if any value < 0 set to half width or height!
@@ -404,13 +391,9 @@ public class SvgSkin extends Skin {
                 if (right < 0) right = textureRegion.getRegionWidth() / 2;
                 if (top < 0) top = (textureRegion.getRegionHeight() / 2);
                 if (bottom < 0) bottom = (textureRegion.getRegionHeight() / 2);
-                if (leftWidth < 0) leftWidth = textureRegion.getRegionWidth() / 2;
-                if (rightWidth < 0) rightWidth = textureRegion.getRegionWidth() / 2;
-                if (topHeight < 0) topHeight = textureRegion.getRegionHeight() / 2;
-                if (bottomHeight < 0) bottomHeight = textureRegion.getRegionHeight() / 2;
 
-                SvgNinePatchDrawable svgNinePatchDrawable = new SvgNinePatchDrawable(new NinePatch(textureRegion, left, right, top, bottom),
-                        leftWidth, rightWidth, topHeight, bottomHeight);
+
+                SvgNinePatchDrawable svgNinePatchDrawable = new SvgNinePatchDrawable(new NinePatch(textureRegion, left, right, top, bottom));
 
                 svgNinePatchDrawable.name = name;
                 svgNinePatchDrawable.values = values;
@@ -440,7 +423,7 @@ public class SvgSkin extends Skin {
                     CB.postOnMainThread(new Runnable() {
                         @Override
                         public void run() {
-                            FileHandle cacheFileHandle = Gdx.files.absolute(CB.WorkPath + SvgSkinUtil.TMP_UI_ATLAS_PATH + name );
+                            FileHandle cacheFileHandle = Gdx.files.absolute(CB.WorkPath + SvgSkinUtil.TMP_UI_ATLAS_PATH + name);
                             font[0] = new SkinFont(path, fontFile, scaledSize, callback, cacheFileHandle);
                         }
                     }, true);
