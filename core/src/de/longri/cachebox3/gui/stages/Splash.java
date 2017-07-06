@@ -24,10 +24,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.graphics.g2d.freetype.SkinFont;
+import com.badlogic.gdx.scenes.scene2d.ui.SvgSkinUtil;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.gui.stages.initial_tasks.*;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
@@ -102,34 +104,21 @@ public class Splash extends NamedStage {
 
 
         ProgressBar.ProgressBarStyle style = new ProgressBar.ProgressBarStyle();
-        int patch = 12;
 
-        style.background = Utils.get9PatchFromSvg(Gdx.files.internal("progress_back.svg").read(),
-                patch, patch, patch, patch);
-        style.knob = Utils.get9PatchFromSvg(Gdx.files.internal("progress_foreground.svg").read(),
-                patch, patch, patch, patch);
-        style.knobBefore = Utils.get9PatchFromSvg(Gdx.files.internal("progress_foreground.svg").read(),
-                patch, patch, patch, patch);
-        style.background.setLeftWidth(0);
-        style.background.setRightWidth(0);
-        style.background.setTopHeight(0);
-        style.background.setBottomHeight(0);
+        style.background = SvgSkinUtil.getSvgNinePatchDrawable(-1, -1, -1, -1
+                , 0, 0, -1, -1
+                , Utils.getTextureRegion(Gdx.files.internal("progress_back.svg").read()));
 
-        style.knob.setLeftWidth(0);
-        style.knob.setRightWidth(0);
-        style.knob.setTopHeight(0);
-        style.knob.setBottomHeight(0);
+        style.knobBefore = SvgSkinUtil.getSvgNinePatchDrawable(-1, -1, -1, -1
+                , -1, -1, -1, -1
+                , Utils.getTextureRegion(Gdx.files.internal("progress_foreground.svg").read()));
 
-        style.knobBefore.setLeftWidth(0);
-        style.knobBefore.setRightWidth(0);
-        style.knobBefore.setTopHeight(0);
-        style.knobBefore.setBottomHeight(0);
 
         progress = new VisProgressBar(0f, 100f, 1f, false, style);
         float margin = 40 * (CanvasAdapter.dpi / 240);
         float progressWidth = Gdx.graphics.getWidth() - (margin * 2);
 
-        progress.setBounds(margin, margin, progressWidth, margin);
+        progress.setBounds(margin, margin, progressWidth,((SvgNinePatchDrawable) style.background).getPatch().getTotalHeight());
         this.addActor(progress);
 
         progress.setValue(0);
@@ -137,9 +126,9 @@ public class Splash extends NamedStage {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         String path = "skins/day/fonts/DroidSans.ttf";
         labelStyle.fontColor = Color.BLACK;
-        labelStyle.font = new SkinFont(path, Gdx.files.internal(path), 20, null,null);
+        labelStyle.font = new SkinFont(path, Gdx.files.internal(path), 20, null, null);
         workLabel = new Label(" \n ", labelStyle);
-        workLabel.setBounds(margin, margin + progress.getPrefHeight() + margin, progressWidth, workLabel.getPrefHeight());
+        workLabel.setBounds(margin, margin + progress.getHeight() + margin, progressWidth, workLabel.getPrefHeight());
         this.addActor(workLabel);
 
         // Init loader tasks

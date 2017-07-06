@@ -19,6 +19,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -54,28 +55,13 @@ public class Utils {
     }
 
 
-    public static Drawable get9PatchFromSvg(InputStream inputStream, int left, int right, int top, int bottom) {
+    public static TextureRegion getTextureRegion(InputStream inputStream) {
         try {
             Bitmap svgBitmap = PlatformConnector.getSvg("", inputStream, PlatformConnector.SvgScaleType.DPI_SCALED, 1f);
-
-//            //scale nine patch regions
-//            float scale = CB.getScaledFloat(1);
-//            left *= scale;
-//            right *= scale;
-//            top *= scale;
-//            bottom *= scale;
-
-            //scale nine patch regions
-            if (left > 0) left = CB.getScaledInt(left);
-            if (right > 0) right = CB.getScaledInt(right);
-            if (top > 0) top = CB.getScaledInt(top);
-            if (bottom > 0) bottom = CB.getScaledInt(bottom);
-
-            SvgNinePatchDrawable ninePatchDrawable = new SvgNinePatchDrawable(new NinePatch(new Texture(getPixmapFromBitmap(svgBitmap)), left, right, top, bottom));
-            return ninePatchDrawable;
+            return new TextureRegion(new Texture(getPixmapFromBitmap(svgBitmap)));
 
         } catch (IOException e) {
-            log.error("get9PatchFromSvg", e);
+            log.error("getTextureRegion", e);
         }
         return null;
     }
@@ -398,10 +384,9 @@ public class Utils {
         log.debug("Perform click event on {}", button);
 
         Array<EventListener> listeners = button.getListeners();
-        for(int i=0;i<listeners.size;i++)
-        {
-            if(listeners.get(i) instanceof ClickListener){
-                ((ClickListener)listeners.get(i)).clicked(null, 0, 0);
+        for (int i = 0; i < listeners.size; i++) {
+            if (listeners.get(i) instanceof ClickListener) {
+                ((ClickListener) listeners.get(i)).clicked(null, 0, 0);
             }
         }
     }

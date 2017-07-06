@@ -368,32 +368,26 @@ public class SvgSkin extends Skin {
                 int right = json.readValue("right", int.class, 0, jsonData);
                 int top = json.readValue("top", int.class, 0, jsonData);
                 int bottom = json.readValue("bottom", int.class, 0, jsonData);
+                int leftWidth = json.readValue("leftWidth", int.class, -1, jsonData);
+                int rightWidth = json.readValue("rightWidth", int.class, -1, jsonData);
+                int topHeight = json.readValue("topHeight", int.class, -1, jsonData);
+                int bottomHeight = json.readValue("bottomHeight", int.class, -1, jsonData);
 
                 SvgNinePatchDrawable.SvgNinePatchDrawableUnScaledValues values = new SvgNinePatchDrawable.SvgNinePatchDrawableUnScaledValues();
                 values.left = left;
                 values.right = right;
                 values.top = top;
                 values.bottom = bottom;
+                values.leftWidth = leftWidth;
+                values.rightWidth = rightWidth;
+                values.topHeight = topHeight;
+                values.bottomHeight = bottomHeight;
 
 
                 // get texture region
                 TextureRegion textureRegion = getRegion(name);
+                SvgNinePatchDrawable svgNinePatchDrawable = SvgSkinUtil.getSvgNinePatchDrawable(left, right, top, bottom, leftWidth, rightWidth, topHeight, bottomHeight, textureRegion);
 
-                //scale nine patch regions
-                if (left > 0) left = CB.getScaledInt(left);
-                if (right > 0) right = CB.getScaledInt(right);
-                if (top > 0) top = CB.getScaledInt(top);
-                if (bottom > 0) bottom = CB.getScaledInt(bottom);
-
-
-                // if any value < 0 set to half width or height!
-                if (left < 0) left = textureRegion.getRegionWidth() / 2;
-                if (right < 0) right = textureRegion.getRegionWidth() / 2;
-                if (top < 0) top = (textureRegion.getRegionHeight() / 2);
-                if (bottom < 0) bottom = (textureRegion.getRegionHeight() / 2);
-
-
-                SvgNinePatchDrawable svgNinePatchDrawable = new SvgNinePatchDrawable(new NinePatch(textureRegion, left, right, top, bottom));
 
                 svgNinePatchDrawable.name = name;
                 svgNinePatchDrawable.values = values;
@@ -476,6 +470,8 @@ public class SvgSkin extends Skin {
 
         return json;
     }
+
+
 
     @Override
     public <T> T get(String name, Class<T> type) {

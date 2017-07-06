@@ -1916,17 +1916,19 @@
     },
     "progress_back_9_Patch": {
       "name": "progress_back",
-      "left": 10,
-      "right": 10,
-      "top": 10,
-      "bottom": 10
+      "left": -1,
+      "right": -1,
+      "top": -1,
+      "bottom":-1,
+      "leftWidth":0,
+      "rightWidth":0
     },
     "progress_foreground_9_Patch": {
       "name": "progress_foreground",
-      "left": 10,
-      "right": 10,
-      "top": 10,
-      "bottom": 10
+      "left": -1,
+      "right": -1,
+      "top": -1,
+      "bottom": -1
     },
     "slider_drawable": {
       "name": "slider",
@@ -2557,7 +2559,6 @@
   "com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle": {
     "default": {
       "background": "progress_back_9_Patch",
-      "knob": "progress_foreground_9_Patch",
       "knobBefore": "progress_foreground_9_Patch"
     }
   },

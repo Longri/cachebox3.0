@@ -76,7 +76,7 @@ public class SvgSkinUtil {
                         public void run() {
                             atlas[0] = new TextureAtlas(finalCachedTexturatlasFileHandle);
                         }
-                    },true);
+                    }, true);
                     return atlas[0];
                 }
             }
@@ -99,8 +99,8 @@ public class SvgSkinUtil {
 //            skinFile.parent().child(scaledSvg.path);
             FileHandle fileHandle = skinFile.parent().child(scaledSvg.path);
 
-            if(!fileHandle.exists())continue;
-            if (callback != null){
+            if (!fileHandle.exists()) continue;
+            if (callback != null) {
                 callback.taskNameChange("load Skin | Create new TextureAtlas \npack:" + scaledSvg.path);
             }
 
@@ -141,7 +141,7 @@ public class SvgSkinUtil {
             public void run() {
                 atlas[0] = packer.generateTextureAtlas(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest, true);
             }
-        },true);
+        }, true);
 
         PixmapPackerIO.SaveParameters parameters = new PixmapPackerIO.SaveParameters();
         parameters.magFilter = Texture.TextureFilter.Nearest;
@@ -232,6 +232,10 @@ public class SvgSkinUtil {
                     json.writeValue("top", values.top);
                     json.writeValue("bottom", values.bottom);
 
+                    if (values.leftWidth >= 0) json.writeValue("leftWidth", values.leftWidth);
+                    if (values.rightWidth >= 0) json.writeValue("rightWidth", values.rightWidth);
+                    if (values.topHeight >= 0) json.writeValue("topHeight", values.topHeight);
+                    if (values.bottomHeight >= 0) json.writeValue("bottomHeight", values.bottomHeight);
                     json.writeObjectEnd();
                     continue;
 
@@ -367,6 +371,29 @@ public class SvgSkinUtil {
         settings.outputType = JsonWriter.OutputType.json;
         settings.singleLineColumns = 1; // wrap all
         fileHandle.writeString(json.prettyPrint(jsonText.toString(), settings), false);
+    }
+
+    public static SvgNinePatchDrawable getSvgNinePatchDrawable(int left, int right, int top, int bottom, int leftWidth, int rightWidth, int topHeight, int bottomHeight, TextureRegion textureRegion) {
+        //scale nine patch regions
+        if (left > 0) left = CB.getScaledInt(left);
+        if (right > 0) right = CB.getScaledInt(right);
+        if (top > 0) top = CB.getScaledInt(top);
+        if (bottom > 0) bottom = CB.getScaledInt(bottom);
+        if (leftWidth > 0)leftWidth =   CB.getScaledInt(leftWidth);
+        if (rightWidth > 0) rightWidth =  CB.getScaledInt(rightWidth);
+        if (topHeight > 0) topHeight = CB.getScaledInt(topHeight);
+        if (bottomHeight > 0) bottomHeight = CB.getScaledInt(bottomHeight);
+
+
+        // if any value < 0 set to half width or height!
+        if (left < 0) left = (textureRegion.getRegionWidth() / 2) - 1;
+        if (right < 0) right = (textureRegion.getRegionWidth() / 2) - 1;
+        if (top < 0) top = (textureRegion.getRegionHeight() / 2) - 1;
+        if (bottom < 0) bottom = (textureRegion.getRegionHeight() / 2) - 1;
+
+
+        return new SvgNinePatchDrawable(new NinePatch(textureRegion, left, right, top, bottom),
+                leftWidth, rightWidth, topHeight, bottomHeight);
     }
 
 

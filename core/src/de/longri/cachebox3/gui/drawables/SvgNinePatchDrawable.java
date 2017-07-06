@@ -23,9 +23,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
  */
 public class SvgNinePatchDrawable extends NinePatchDrawable {
 
+
     public static class SvgNinePatchDrawableUnScaledValues {
         // unscaled values from SvgSkon
-        public int left, right, top, bottom;
+        public int left, right, top, bottom, leftWidth, rightWidth, topHeight, bottomHeight;
     }
 
     public String name;
@@ -37,6 +38,14 @@ public class SvgNinePatchDrawable extends NinePatchDrawable {
 
     public SvgNinePatchDrawable(NinePatch ninePatch) {
         super(ninePatch);
+    }
+
+    public SvgNinePatchDrawable(NinePatch ninePatch, int leftWidth, int rightWidth, int topHeight, int bottomHeight) {
+        super(ninePatch);
+        if (topHeight >= 0) setTopHeight(topHeight);
+        if (rightWidth >= 0) setRightWidth(rightWidth);
+        if (bottomHeight >= 0) setBottomHeight(bottomHeight);
+        if (leftWidth >= 0) setLeftWidth(leftWidth);
     }
 
     public void setPatch(NinePatch patch) {
