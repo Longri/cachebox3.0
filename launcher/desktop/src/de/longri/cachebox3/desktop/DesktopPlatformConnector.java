@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3;
+package de.longri.cachebox3.desktop;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl.DesktopDescriptionView;
 import com.badlogic.gdx.backends.lwjgl.GenerateApiKeyWebView;
 import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.PlatformDescriptionView;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import org.oscim.awt.DesktopRealSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;

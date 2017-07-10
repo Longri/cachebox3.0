@@ -17,12 +17,10 @@ package de.longri.cachebox3.develop.tools.skin_editor;
 
 import javax.swing.UIManager;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.files.FileHandle;
-import de.longri.cachebox3.DesktopPlatformConnector;
+import de.longri.cachebox3.desktop.DesktopPlatformConnector;
 import de.longri.cachebox3.PlatformConnector;
 import org.oscim.awt.AwtGraphics;
 

@@ -4,7 +4,7 @@ sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.output.resourcesDir "../android/assets/"
 
-project.ext.mainClassName = "de.longri.cachebox3.DesktopLauncher"
+project.ext.mainClassName = "de.longri.cachebox3.desktop.touch.TouchLauncher"
 project.ext.assetsDir = new File("../android/assets")
 
 task run(dependsOn: classes, type: JavaExec) {

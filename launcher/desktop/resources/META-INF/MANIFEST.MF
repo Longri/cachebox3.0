@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: de.longri.cachebox3.DesktopLauncher
+Main-Class: de.longri.cachebox3.desktop.touch.TouchLauncher
 

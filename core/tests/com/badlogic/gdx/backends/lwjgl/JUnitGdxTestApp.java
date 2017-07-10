@@ -1,10 +1,9 @@
 package com.badlogic.gdx.backends.lwjgl;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Clipboard;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.DesktopPlatformConnector;
+import de.longri.cachebox3.desktop.DesktopPlatformConnector;
 import de.longri.cachebox3.PlatformConnector;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;

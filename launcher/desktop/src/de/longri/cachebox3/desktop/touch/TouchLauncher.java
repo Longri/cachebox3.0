@@ -13,15 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3;
+package de.longri.cachebox3.desktop.touch;
 
 import ch.fhnw.imvs.gpssimulator.SimulatorMain;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglFileHandle;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.CacheboxMain;
+import de.longri.cachebox3.desktop.DesktopPlatformConnector;
+import de.longri.cachebox3.PlatformConnector;
 import org.apache.commons.cli.*;
 import org.oscim.awt.AwtGraphics;
 import org.oscim.backend.GLAdapter;
@@ -31,7 +34,7 @@ import org.slf4j.impl.LibgdxLogger;
 
 import javax.swing.*;
 
-public class DesktopLauncher {
+public class TouchLauncher {
     public static void main(String[] args) {
         System.setProperty("org.lwjgl.util.NoChecks", "true");
         LibgdxLogger.PROPERTIES_FILE_HANDLE = new LwjglFileHandle(LibgdxLogger.CONFIGURATION_FILE, Files.FileType.Local);
