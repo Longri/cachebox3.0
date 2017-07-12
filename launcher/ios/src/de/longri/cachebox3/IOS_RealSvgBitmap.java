@@ -15,7 +15,9 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.GetName;
+import com.badlogic.gdx.scenes.scene2d.ui.StoreSvg;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.coregraphics.CGSize;
 import org.robovm.apple.uikit.UIImage;
@@ -29,7 +31,7 @@ import java.io.InputStreamReader;
 /**
  * Created by Longri on 19.07.16.
  */
-public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap implements GetName {
+public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap implements GetName,StoreSvg {
 
     public String name;
 
@@ -100,4 +102,8 @@ public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap implement
     }
 
 
+    @Override
+    public void store(FileHandle child) {
+        //TODO
+    }
 }
