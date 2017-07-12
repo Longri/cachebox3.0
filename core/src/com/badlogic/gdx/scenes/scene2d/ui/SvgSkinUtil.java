@@ -28,6 +28,8 @@ import com.badlogic.gdx.utils.reflect.Field;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.drawables.*;
 import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
@@ -55,7 +57,7 @@ public class SvgSkinUtil {
     public final static String TMP_UI_ATLAS_PATH = "/user/temp/";
     public final static String TMP_UI_ATLAS = "_ui_tmp.atlas";
 
-    public static TextureAtlas createTextureAtlasFromImages(AbstractInitTask.WorkCallback callback, boolean forceNew, String skinName, ArrayList<ScaledSvg> scaledSvgList,
+    public static TextureAtlas createTextureAtlasFromImages( boolean forceNew, String skinName, ArrayList<ScaledSvg> scaledSvgList,
                                                             FileHandle skinFile) {
         FileHandle cachedTexturatlasFileHandle = null;
         if (!forceNew) {
@@ -63,7 +65,8 @@ public class SvgSkinUtil {
             if (cachedTexturatlasFileHandle.exists()) {
                 if (HashAtlasWriter.hashEquals(cachedTexturatlasFileHandle, scaledSvgList, skinFile)) {
                     log.debug("load Skin | Load cached TextureAtlas");
-                    if (callback != null) callback.taskNameChange("load Skin | Load cached TextureAtlas");
+                    EventHandler.fire(new IncrementProgressEvent(1,"load Skin | Load cached TextureAtlas"));
+
                     final TextureAtlas[] atlas = new TextureAtlas[1];
                     try {
                         Thread.sleep(50);
@@ -82,7 +85,6 @@ public class SvgSkinUtil {
             }
         }
         log.debug("Create new TextureAtlas");
-        if (callback != null) callback.taskNameChange("load Skin | Create new TextureAtlas");
         // max texture size are 2048x2048
         int pageWidth = 2048;
         int pageHeight = 2048;
@@ -100,10 +102,7 @@ public class SvgSkinUtil {
             FileHandle fileHandle = skinFile.parent().child(scaledSvg.path);
 
             if (!fileHandle.exists()) continue;
-            if (callback != null) {
-                callback.taskNameChange("load Skin | Create new TextureAtlas \npack:" + scaledSvg.path);
-            }
-
+            EventHandler.fire(new IncrementProgressEvent(1,"load Skin | Create new TextureAtlas \npack:" + scaledSvg.path));
 
             try {
                 name = scaledSvg.getRegisterName();
@@ -127,7 +126,7 @@ public class SvgSkinUtil {
         pixmap.fill();
         packer.pack("color", pixmap);
 
-        if (callback != null) callback.taskNameChange("load Skin | Create new TextureAtlas \nGenerate Texture Atlas");
+        EventHandler.fire(new IncrementProgressEvent(20,"load Skin | Create new TextureAtlas \nGenerate Texture Atlas"));
 
         final TextureAtlas[] atlas = new TextureAtlas[1];
         try {

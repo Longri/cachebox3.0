@@ -25,6 +25,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.tools.bmfont.BitmapFontWriter;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.stages.initial_tasks.AbstractInitTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,8 +54,7 @@ public class SkinFont extends BitmapFont {
         return FreeTypeFontGenerator.DEFAULT_CHARS + String.copyValueOf(cyril) + "—–" + "ŐőŰű√€†„”“’‘☺čěřšťůž…";
     }
 
-    private static BitmapFont generateFont(FileHandle fileHandle, int size, AbstractInitTask.WorkCallback callback
-            , FileHandle cachePath) {
+    private static BitmapFont generateFont(FileHandle fileHandle, int size, FileHandle cachePath) {
 
 
         if (!pageSizeCalculated) {
@@ -75,7 +76,7 @@ public class SkinFont extends BitmapFont {
         if (cachePath != null) {
             FileHandle cacheFontPath = cachePath.child(tempName + ".fnt");
             if (cacheFontPath.exists()) {
-                if (callback != null) callback.taskNameChange("Init Fonts | load:" + tempName);
+                EventHandler.fire(new IncrementProgressEvent(1,"Init Fonts | load:" + tempName));
                 log.debug("Init Fonts | load:{}", tempName);
                 try {
                     BitmapFont cachedFont = new BitmapFont(cacheFontPath);
@@ -87,7 +88,7 @@ public class SkinFont extends BitmapFont {
             }
         }
 
-        if (callback != null) callback.taskNameChange("Init Fonts | generate:" + tempName);
+        EventHandler.fire(new IncrementProgressEvent(1,"Init Fonts | generate:" + tempName));
         log.debug("Init Fonts | generate:{}", tempName);
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fileHandle);
@@ -127,8 +128,8 @@ public class SkinFont extends BitmapFont {
     }
 
 
-    public SkinFont(String path, FileHandle fileHandle, int size, AbstractInitTask.WorkCallback callback, FileHandle cachePath) {
-        this(generateFont(fileHandle, size, callback, cachePath), path, size);
+    public SkinFont(String path, FileHandle fileHandle, int size, FileHandle cachePath) {
+        this(generateFont(fileHandle, size, cachePath), path, size);
     }
 
     private SkinFont(BitmapFont bitmapFont, String path, int size) {

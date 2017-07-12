@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,27 +15,17 @@
  */
 package de.longri.cachebox3.gui.stages.initial_tasks;
 
-import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.IncrementProgressEvent;
+import com.badlogic.gdx.utils.Array;
 
 /**
- * Created by Longri on 02.08.16.
+ * Created by Longri on 11.07.2017.
  */
-public final class InitialLocationListenerTask extends AbstractInitTask {
-
-    public InitialLocationListenerTask(String name) {
-        super(name);
-    }
-
-    @Override
-    public void runnable() {
-        EventHandler.fire(new IncrementProgressEvent(1,"Initial location listener"));
-        PlatformConnector.initLocationListener();
-    }
-
-    @Override
+public class InitTaskList extends Array<AbstractInitTask> {
     public int getProgressMax() {
-        return 1;
+        int progressMax = 0;
+        for (AbstractInitTask task : this) {
+            progressMax += task.getProgressMax();
+        }
+        return progressMax;
     }
 }

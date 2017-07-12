@@ -29,6 +29,9 @@ import com.kotcrab.vis.ui.widget.VisProgressBar;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.IncrementProgressEvent;
+import de.longri.cachebox3.events.IncrementProgressListener;
 import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.gui.stages.initial_tasks.*;
 import org.oscim.backend.CanvasAdapter;
@@ -37,7 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The Splash Stage is the first Stage to show on screen
@@ -52,7 +55,7 @@ import java.util.ArrayList;
  */
 public class Splash extends NamedStage {
     final static Logger log = LoggerFactory.getLogger(Splash.class);
-    private boolean threadStarted = false;
+    private final AtomicBoolean initialisationStarted = new AtomicBoolean(false);
 
 
     public interface LoadReady {
@@ -71,7 +74,7 @@ public class Splash extends NamedStage {
     int step = 0;
     boolean switcher = false;
     boolean breakForWait = false;
-    final ArrayList<AbstractInitTask> initTaskList = new ArrayList<AbstractInitTask>();
+    final InitTaskList initTaskList = new InitTaskList();
 
 
     public Splash(LoadReady loadReadyHandler) {
@@ -118,7 +121,7 @@ public class Splash extends NamedStage {
         float margin = 40 * (CanvasAdapter.dpi / 240);
         float progressWidth = Gdx.graphics.getWidth() - (margin * 2);
 
-        progress.setBounds(margin, margin, progressWidth,((SvgNinePatchDrawable) style.background).getPatch().getTotalHeight());
+        progress.setBounds(margin, margin, progressWidth, ((SvgNinePatchDrawable) style.background).getPatch().getTotalHeight());
         this.addActor(progress);
 
         progress.setValue(0);
@@ -126,18 +129,18 @@ public class Splash extends NamedStage {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         String path = "skins/day/fonts/DroidSans.ttf";
         labelStyle.fontColor = Color.BLACK;
-        labelStyle.font = new SkinFont(path, Gdx.files.internal(path), 20, null, null);
+        labelStyle.font = new SkinFont(path, Gdx.files.internal(path), 20, null);
         workLabel = new Label(" \n ", labelStyle);
         workLabel.setBounds(margin, margin + progress.getHeight() + margin, progressWidth, workLabel.getPrefHeight());
         this.addActor(workLabel);
 
         // Init loader tasks
-        initTaskList.add(new InitialWorkPathTask("InitialWorkPAth", 5));
-        initTaskList.add(new SkinLoaderTask("Load UI", 30));
-        initTaskList.add(new TranslationLoaderTask("Load Translations", 10));
-        initTaskList.add(new GdxInitialTask("Initial GDX", 2));
-        initTaskList.add(new InitialLocationListenerTask("Initial Loacation Reciver", 1));
-        initTaskList.add(new LoadDbTask("Load Database", 10));
+        initTaskList.add(new InitialWorkPathTask("InitialWorkPAth"));
+        initTaskList.add(new SkinLoaderTask("Load UI"));
+        initTaskList.add(new TranslationLoaderTask("Load Translations"));
+        initTaskList.add(new GdxInitialTask("Initial GDX"));
+        initTaskList.add(new InitialLocationListenerTask("Initial Loacation Reciver"));
+        initTaskList.add(new LoadDbTask("Load Database"));
 
         // Use classpath for Desktop or assets for iOS and Android
         assets = (CanvasAdapter.platform.isDesktop()) ?
@@ -153,30 +156,40 @@ public class Splash extends NamedStage {
 
         Gdx.graphics.requestRendering();
         super.draw();
-        if (!threadStarted) {
-            //Run Loader Tasks at separate threads
-            Thread runThread = new Thread(new Runnable() {
+        if (!initialisationStarted.get()) {
+            initialisationStarted.set(true);
+
+            int progressMax = initTaskList.getProgressMax();
+            progress.setRange(0, progressMax);
+            progress.setStepSize(1f);
+
+            //add progress increment listener
+            final IncrementProgressListener incrementProgressListener =
+                    new IncrementProgressListener() {
+                        @Override
+                        public void incrementProgress(final IncrementProgressEvent event) {
+                            Gdx.app.postRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    workLabel.setText(event.progressIncrement.msg);
+                                    progress.setValue(progress.getValue() + event.progressIncrement.incrementValue);
+                                }
+                            });
+                        }
+                    };
+            EventHandler.add(incrementProgressListener);
+
+            //Run Loader Tasks at a separate thread
+            CB.postAsync(new Runnable() {
                 @Override
                 public void run() {
                     for (AbstractInitTask task : initTaskList) {
-                        task.runnable(new AbstractInitTask.WorkCallback() {
-                            @Override
-                            public void taskNameChange(final String text) {
-                                Gdx.app.postRunnable(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        workLabel.setText(text);
-                                    }
-                                });
-                            }
-                        });
-                        progress.setValue(progress.getValue() + task.percent);
+                        task.runnable();
                     }
                     loadReadyHandler.ready();
+                    EventHandler.remove(incrementProgressListener);
                 }
             });
-            threadStarted = true;
-            runThread.start();
         }
 
     }

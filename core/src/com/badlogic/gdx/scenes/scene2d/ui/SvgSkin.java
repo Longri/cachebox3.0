@@ -50,7 +50,6 @@ public class SvgSkin extends Skin {
     private boolean forceCreateNewAtlas = false;
     public IconsStyle getIcon;
     public MenuIconStyle getMenuIcon;
-    private final AbstractInitTask.WorkCallback callback;
 
     public enum StorageType {
         LOCAL, INTERNAL
@@ -65,7 +64,6 @@ public class SvgSkin extends Skin {
         this.storageType = null;
         this.name = null;
         this.skinFolder = null;
-        this.callback = null;
     }
 
     public SvgSkin(String name) {
@@ -73,7 +71,6 @@ public class SvgSkin extends Skin {
         this.storageType = null;
         this.name = name;
         this.skinFolder = null;
-        this.callback = null;
     }
 
 
@@ -82,7 +79,6 @@ public class SvgSkin extends Skin {
         this.storageType = null;
         this.name = null;
         this.skinFolder = null;
-        this.callback = null;
     }
 
 
@@ -94,9 +90,8 @@ public class SvgSkin extends Skin {
      * @param storageType LOCAL or INTERNAL
      * @param skinFolder  {@link FileHandle} to the folder of this skin
      */
-    public SvgSkin(AbstractInitTask.WorkCallback callback, boolean forceCreateNewAtlas, String name, StorageType storageType, FileHandle skinFolder) {
+    public SvgSkin( boolean forceCreateNewAtlas, String name, StorageType storageType, FileHandle skinFolder) {
         super();
-        this.callback = callback;
         this.storageType = storageType;
         this.name = name;
         this.forceCreateNewAtlas = forceCreateNewAtlas;
@@ -278,7 +273,7 @@ public class SvgSkin extends Skin {
                 }
 
                 //create and register atlas
-                SvgSkin.this.addRegions(SvgSkinUtil.createTextureAtlasFromImages(callback, forceCreateNewAtlas, SvgSkin.this.name, registerdSvgs, skinFile));
+                SvgSkin.this.addRegions(SvgSkinUtil.createTextureAtlasFromImages( forceCreateNewAtlas, SvgSkin.this.name, registerdSvgs, skinFile));
             }
 
 
@@ -405,8 +400,6 @@ public class SvgSkin extends Skin {
                 if (!fontFile.exists()) throw new SerializationException("Font file not found: " + fontFile);
 
                 try {
-//                    if (callback != null) callback.taskNameChange("Initial Fonts");
-
                     final com.badlogic.gdx.graphics.g2d.freetype.SkinFont[] font = new SkinFont[1];
                     try {
                         Thread.sleep(20);
@@ -418,7 +411,7 @@ public class SvgSkin extends Skin {
                         @Override
                         public void run() {
                             FileHandle cacheFileHandle = Gdx.files.absolute(CB.WorkPath + SvgSkinUtil.TMP_UI_ATLAS_PATH + name);
-                            font[0] = new SkinFont(path, fontFile, scaledSize, callback, cacheFileHandle);
+                            font[0] = new SkinFont(path, fontFile, scaledSize, cacheFileHandle);
                         }
                     }, true);
                     return font[0];

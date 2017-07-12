@@ -20,6 +20,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import org.oscim.backend.CanvasAdapter;
@@ -36,12 +38,12 @@ import java.io.IOException;
 public class InitialWorkPathTask extends AbstractInitTask {
     final static Logger log = LoggerFactory.getLogger(InitialWorkPathTask.class);
 
-    public InitialWorkPathTask(String name, int percent) {
-        super(name, percent);
+    public InitialWorkPathTask(String name) {
+        super(name);
     }
 
     @Override
-    public void runnable(WorkCallback callback) {
+    public void runnable() {
 
         CB.WorkPath = PlatformConnector.getWorkPath();
 
@@ -52,7 +54,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
         // initial Database on user path
         ini_Dir(CB.WorkPath + "/user", false);
 
-        callback.taskNameChange("open/create settings DB");
+        EventHandler.fire(new IncrementProgressEvent(1,"open/create settings DB"));
         try {
             FileHandle configFileHandle = Gdx.files.absolute(CB.WorkPath + "/user/config.db3");
             Database.Settings = new Database(Database.DatabaseType.Settings);
@@ -72,7 +74,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
 
 
         //load settings
-        callback.taskNameChange("load settings");
+        EventHandler.fire(new IncrementProgressEvent(1,"load settings"));
         Config.ReadFromDB();
 
 
@@ -92,9 +94,14 @@ public class InitialWorkPathTask extends AbstractInitTask {
 
 //DEBUG SKIN set for debug
 //        Config.daySkinName.setValue("testDay");
-        callback.taskNameChange("load skin");
+        EventHandler.fire(new IncrementProgressEvent(1,"load skin"));
         Config.daySkinName.loadDefault();
 
+    }
+
+    @Override
+    public int getProgressMax() {
+        return 3;
     }
 
     private FileHandle ini_Dir(String folder, boolean withNoMedia) {

@@ -18,6 +18,9 @@ package de.longri.cachebox3.gui.stages.initial_tasks;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.ImportProgressChangedEvent;
+import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.stages.StageManager;
 
 /**
@@ -25,15 +28,20 @@ import de.longri.cachebox3.gui.stages.StageManager;
  */
 public final class GdxInitialTask extends AbstractInitTask {
 
-    public GdxInitialTask(String name, int percent) {
-        super(name, percent);
+    public GdxInitialTask(String name) {
+        super(name);
     }
 
     @Override
-    public void runnable(WorkCallback callback) {
-        callback.taskNameChange("Initial openGL");
+    public void runnable() {
+        EventHandler.fire(new IncrementProgressEvent(2,"Initial openGL"));
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         StageManager.setInputMultiplexer(inputMultiplexer);
         Gdx.input.setInputProcessor(inputMultiplexer);
+    }
+
+    @Override
+    public int getProgressMax() {
+        return 2;
     }
 }

@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.types.Attributes;
@@ -43,12 +45,12 @@ public final class SkinLoaderTask extends AbstractInitTask {
     private final Logger log = LoggerFactory.getLogger(SkinLoaderTask.class);
     private static final String INTERNAL_SKIN_DEFAULT_NAME = "internalDefault";
 
-    public SkinLoaderTask(String name, int percent) {
-        super(name, percent);
+    public SkinLoaderTask(String name) {
+        super(name);
     }
 
     @Override
-    public void runnable(final WorkCallback callback) {
+    public void runnable() {
 
         //initial sizes
         DevicesSizes ui = new DevicesSizes();
@@ -110,12 +112,11 @@ public final class SkinLoaderTask extends AbstractInitTask {
         final String finalSkinName = skinName;
         final SvgSkin.StorageType finalType = storageType;
         final FileHandle finalSkinFileHandle = skinFileHandle;
-        callback.taskNameChange("load Skin");
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                CB.setActSkin(new SvgSkin(callback, false, finalSkinName, finalType, finalSkinFileHandle));
+                CB.setActSkin(new SvgSkin( false, finalSkinName, finalType, finalSkinFileHandle));
                 CB.backgroundColor = CB.getColor("background");
                 wait.set(false);
             }
@@ -134,7 +135,6 @@ public final class SkinLoaderTask extends AbstractInitTask {
         //copy attributes*.png to data folder
         //this png files are used on description view, as Html image
 
-        callback.taskNameChange("generate attributes images");
 
         //TODO store temp on generated skin for skin changes
         FileHandle attFileHandle = Gdx.files.absolute(CB.WorkPath + "/data/Attributes");
@@ -148,20 +148,26 @@ public final class SkinLoaderTask extends AbstractInitTask {
         for (int i = 0, n = values.length; i < n; i++) {
             Attributes value = values[i];
             value.setNegative();
-            storeAttributePng(callback, skin, style, attFileHandle, value);
+            storeAttributePng(skin, style, attFileHandle, value);
             value.setPositive();
-            storeAttributePng(callback, skin, style, attFileHandle, value);
+            storeAttributePng(skin, style, attFileHandle, value);
         }
 
     }
 
+    @Override
+    public int getProgressMax() {
+        return (Attributes.values().length * 2)+(9 /*TODO get count of used fonts*/);
+    }
 
-    private void storeAttributePng(final WorkCallback callback, SvgSkin skin, AttributesStyle style, FileHandle attFileHandle, Attributes value) {
+
+    private void storeAttributePng(SvgSkin skin, AttributesStyle style, FileHandle attFileHandle, Attributes value) {
 
         String imageName = value.getImageName() + ".png";
+        EventHandler.fire(new IncrementProgressEvent(1, "generate attribute image: " + imageName));
         FileHandle storeFile = attFileHandle.child(imageName);
         if (storeFile.exists()) return;
-        callback.taskNameChange("generate attribute image: " + imageName);
+
         TextureRegionDrawable drawable = (TextureRegionDrawable) value.getDrawable(style);
         if (drawable == null) return;
         ScaledSvg scaledSvg = skin.get(drawable.getName(), ScaledSvg.class);
@@ -176,10 +182,4 @@ public final class SkinLoaderTask extends AbstractInitTask {
         storeSvg.store(storeFile);
         log.debug("store {} png", bitmap);
     }
-
-    private void loadInternaleDefaultSkin() {
-
-
-    }
-
 }

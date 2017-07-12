@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.gui.stages.initial_tasks;
 
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Language;
 import de.longri.cachebox3.translation.Translation;
@@ -33,14 +35,14 @@ public final class TranslationLoaderTask extends AbstractInitTask {
 
     private Language loadedLang;
 
-    public TranslationLoaderTask(String name, int percent) {
-        super(name, percent);
+    public TranslationLoaderTask(String name) {
+        super(name);
     }
 
     @Override
-    public void runnable(WorkCallback callback) {
+    public void runnable() {
         new Translation("lang");
-        callback.taskNameChange("Load Translation");
+        EventHandler.fire(new IncrementProgressEvent(10,"Load Translation"));
         loadTranslation();
 
         // add settings change handler
@@ -50,6 +52,11 @@ public final class TranslationLoaderTask extends AbstractInitTask {
                 loadTranslation();
             }
         });
+    }
+
+    @Override
+    public int getProgressMax() {
+        return 10;
     }
 
     private void loadTranslation() {

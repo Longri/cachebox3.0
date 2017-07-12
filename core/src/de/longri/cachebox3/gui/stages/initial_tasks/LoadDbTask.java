@@ -18,6 +18,8 @@ package de.longri.cachebox3.gui.stages.initial_tasks;
 import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -31,12 +33,12 @@ import org.slf4j.LoggerFactory;
 public class LoadDbTask extends AbstractInitTask {
     final static Logger log = LoggerFactory.getLogger(LoadDbTask.class);
 
-    public LoadDbTask(String name, int percent) {
-        super(name, percent);
+    public LoadDbTask(String name) {
+        super(name);
     }
 
     @Override
-    public void runnable(WorkCallback callback) {
+    public void runnable() {
 
         Gdx.app.postRunnable(new Runnable() {
             @Override
@@ -62,10 +64,16 @@ public class LoadDbTask extends AbstractInitTask {
                     } else {
                         Config.DatabaseName.setValue(Utils.GetFileName(fileList.get(0).getName()));
                     }
+                    EventHandler.fire(new IncrementProgressEvent(10,"load db"));
                     selectDbDialog.loadSelectedDB();
                 }
             }
         });
 
+    }
+
+    @Override
+    public int getProgressMax() {
+        return 10;
     }
 }
