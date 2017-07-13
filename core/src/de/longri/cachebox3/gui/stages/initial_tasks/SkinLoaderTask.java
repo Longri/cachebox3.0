@@ -157,7 +157,9 @@ public final class SkinLoaderTask extends AbstractInitTask {
 
     @Override
     public int getProgressMax() {
-        return (Attributes.values().length * 2)+(9 /*TODO get count of used fonts*/);
+        return (Attributes.values().length * 2)
+                +(9 /*TODO get count of used fonts*/)
+                + 1; // load TextureAtlas. With create new Texture Atlas is fire a Event with increase progress max
     }
 
 

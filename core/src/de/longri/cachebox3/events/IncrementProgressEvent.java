@@ -23,10 +23,12 @@ public class IncrementProgressEvent extends AbstractEvent<IncrementProgressEvent
     public static class ProgressIncrement{
         public final int incrementValue;
         public final String msg;
+        public final int incrementMaxValue;
 
-        public ProgressIncrement(int incrementValue, String msg) {
+        private ProgressIncrement(int incrementValue, String msg, int incrementMaxValue) {
             this.incrementValue = incrementValue;
             this.msg = msg;
+            this.incrementMaxValue = incrementMaxValue;
         }
     }
 
@@ -35,12 +37,17 @@ public class IncrementProgressEvent extends AbstractEvent<IncrementProgressEvent
 
     public IncrementProgressEvent(int incrementValue, String msg) {
         super(IncrementProgressEvent.ProgressIncrement.class);
-        this.progressIncrement = new ProgressIncrement(incrementValue,msg);
+        this.progressIncrement = new ProgressIncrement(incrementValue,msg,0);
     }
 
     public IncrementProgressEvent(int incrementValue, String msg, short id) {
         super(IncrementProgressEvent.ProgressIncrement.class, id);
-        this.progressIncrement = new ProgressIncrement(incrementValue,msg);
+        this.progressIncrement = new ProgressIncrement(incrementValue,msg, 0);
+    }
+
+    public IncrementProgressEvent(int incrementValue, String msg, int incrementMaxValue) {
+        super(IncrementProgressEvent.ProgressIncrement.class);
+        this.progressIncrement = new ProgressIncrement(incrementValue, msg, incrementMaxValue);
     }
 
     @Override

@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.SelectDB_Activity;
@@ -94,13 +95,15 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
     }
 
     public void loadSelectedDB() {
-        CB.postAsync(new Runnable() {
-            @Override
-            public void run() {
-                CB.viewmanager.toast(Translation.Get("LoadDB"), WAIT_TOAST_LENGTH);
-                CB.requestRendering();
-            }
-        });
+        if(CB.viewmanager!=null){
+            CB.postAsync(new Runnable() {
+                @Override
+                public void run() {
+                    CB.viewmanager.toast(Translation.Get("LoadDB"), WAIT_TOAST_LENGTH);
+                    CB.requestRendering();
+                }
+            });
+        }
 
         if (Database.Data != null) {
             if (Database.Data.Query != null) Database.Data.Query.clear();
@@ -161,7 +164,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
         CB.setAutoResort(Config.StartWithAutoSelect.getValue());
         CacheListChangedEventList.Call();
 
-        if (CB.viewmanager.getActView() instanceof CacheListView) {
+        if (CB.viewmanager != null && CB.viewmanager.getActView() instanceof CacheListView) {
             CacheListView cacheListView = (CacheListView) CB.viewmanager.getActView();
             cacheListView.setWaitToastLength(WAIT_TOAST_LENGTH);
         } else {
@@ -173,6 +176,8 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             });
         }
 
+        //Fire progress changed event for progress changed on Splash
+        EventHandler.fire(new IncrementProgressEvent(10, "load db"));
 
     }
 }

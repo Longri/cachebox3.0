@@ -1,4 +1,5 @@
 [3.1.x]
+- ★ add: Compass view
 - ★ add: Waypoint Add/Edit dialog
 - ★ add: generate API-Key dialog
 - ★ add: Cache list view

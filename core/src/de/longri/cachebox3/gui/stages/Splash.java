@@ -171,8 +171,16 @@ public class Splash extends NamedStage {
                             Gdx.app.postRunnable(new Runnable() {
                                 @Override
                                 public void run() {
+
+                                    if (event.progressIncrement.incrementMaxValue > 0) {
+                                        //increment progress max
+                                        progress.setRange(0, progress.getMaxValue() + event.progressIncrement.incrementMaxValue);
+                                    }
+
                                     workLabel.setText(event.progressIncrement.msg);
                                     progress.setValue(progress.getValue() + event.progressIncrement.incrementValue);
+
+                                    log.debug("ProgressEvent MSG:{} increment:{}",event.progressIncrement.msg,event.progressIncrement.incrementValue);
                                 }
                             });
                         }
@@ -188,6 +196,7 @@ public class Splash extends NamedStage {
                     }
                     loadReadyHandler.ready();
                     EventHandler.remove(incrementProgressListener);
+                    log.debug("InitTask ready progress:{} / progressMax:{}", progress.getValue(), progress.getMaxValue());
                 }
             });
         }

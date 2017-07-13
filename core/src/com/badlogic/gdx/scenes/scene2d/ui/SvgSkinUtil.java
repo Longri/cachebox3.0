@@ -57,7 +57,7 @@ public class SvgSkinUtil {
     public final static String TMP_UI_ATLAS_PATH = "/user/temp/";
     public final static String TMP_UI_ATLAS = "_ui_tmp.atlas";
 
-    public static TextureAtlas createTextureAtlasFromImages( boolean forceNew, String skinName, ArrayList<ScaledSvg> scaledSvgList,
+    public static TextureAtlas createTextureAtlasFromImages(boolean forceNew, String skinName, ArrayList<ScaledSvg> scaledSvgList,
                                                             FileHandle skinFile) {
         FileHandle cachedTexturatlasFileHandle = null;
         if (!forceNew) {
@@ -65,7 +65,7 @@ public class SvgSkinUtil {
             if (cachedTexturatlasFileHandle.exists()) {
                 if (HashAtlasWriter.hashEquals(cachedTexturatlasFileHandle, scaledSvgList, skinFile)) {
                     log.debug("load Skin | Load cached TextureAtlas");
-                    EventHandler.fire(new IncrementProgressEvent(1,"load Skin | Load cached TextureAtlas"));
+                    EventHandler.fire(new IncrementProgressEvent(1, "load Skin | Load cached TextureAtlas"));
 
                     final TextureAtlas[] atlas = new TextureAtlas[1];
                     try {
@@ -93,6 +93,8 @@ public class SvgSkinUtil {
 
         final PixmapPacker packer = new PixmapPacker(pageWidth, pageHeight, Pixmap.Format.RGBA8888, padding, duplicateBorder);
 
+        EventHandler.fire(new IncrementProgressEvent(0, "load Skin | Create new TextureAtlas", scaledSvgList.size()));
+
 
         for (ScaledSvg scaledSvg : scaledSvgList) {
 
@@ -102,7 +104,7 @@ public class SvgSkinUtil {
             FileHandle fileHandle = skinFile.parent().child(scaledSvg.path);
 
             if (!fileHandle.exists()) continue;
-            EventHandler.fire(new IncrementProgressEvent(1,"load Skin | Create new TextureAtlas \npack:" + scaledSvg.path));
+            EventHandler.fire(new IncrementProgressEvent(1, "load Skin | Create new TextureAtlas \npack:" + scaledSvg.path));
 
             try {
                 name = scaledSvg.getRegisterName();
@@ -126,7 +128,7 @@ public class SvgSkinUtil {
         pixmap.fill();
         packer.pack("color", pixmap);
 
-        EventHandler.fire(new IncrementProgressEvent(20,"load Skin | Create new TextureAtlas \nGenerate Texture Atlas"));
+        EventHandler.fire(new IncrementProgressEvent(20, "load Skin | Create new TextureAtlas \nGenerate Texture Atlas"));
 
         final TextureAtlas[] atlas = new TextureAtlas[1];
         try {
@@ -378,8 +380,8 @@ public class SvgSkinUtil {
         if (right > 0) right = CB.getScaledInt(right);
         if (top > 0) top = CB.getScaledInt(top);
         if (bottom > 0) bottom = CB.getScaledInt(bottom);
-        if (leftWidth > 0)leftWidth =   CB.getScaledInt(leftWidth);
-        if (rightWidth > 0) rightWidth =  CB.getScaledInt(rightWidth);
+        if (leftWidth > 0) leftWidth = CB.getScaledInt(leftWidth);
+        if (rightWidth > 0) rightWidth = CB.getScaledInt(rightWidth);
         if (topHeight > 0) topHeight = CB.getScaledInt(topHeight);
         if (bottomHeight > 0) bottomHeight = CB.getScaledInt(bottomHeight);
 
