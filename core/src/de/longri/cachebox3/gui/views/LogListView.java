@@ -39,6 +39,8 @@ import de.longri.cachebox3.types.LogEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Comparator;
+
 /**
  * Created by Longri on 24.07.16.
  */
@@ -63,7 +65,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
 
     @Override
     public void onHide() {
-       super.onHide();
+        super.onHide();
     }
 
     private void setListViewAdapter() {
@@ -77,6 +79,14 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
                         items.clear();
                     else
                         items = new Array<>();
+
+                    logEntries.sort(new Comparator<LogEntry>() {
+                        @Override
+                        public int compare(LogEntry o1, LogEntry o2) {
+                            return o1.Timestamp.compareTo(o2.Timestamp) * -1;
+                        }
+                    });
+
                     for (int i = 0, n = logEntries.size; i < n; i++) {
                         items.add(new LogListViewItem(i, logEntries.get(i)));
                     }
