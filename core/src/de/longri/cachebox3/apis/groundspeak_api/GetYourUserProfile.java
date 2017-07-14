@@ -23,8 +23,6 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.utils.BuildInfo;
 import org.oscim.backend.CanvasAdapter;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * Created by longri on 14.04.17.
  */
@@ -34,7 +32,7 @@ public class GetYourUserProfile extends PostRequest {
     private int membershipType;
 
     public GetYourUserProfile(String gcApiKey) {
-        super(gcApiKey);
+        super(gcApiKey, null);
     }
 
     @Override
@@ -65,8 +63,10 @@ public class GetYourUserProfile extends PostRequest {
             // expired api key
             membershipType = -3;
             log.error("expired api key");
+            readyCallBack.callBack(EXPIRED_API_KEY);
         } else {
             log.error("unknown result state");
+            readyCallBack.callBack(ERROR);
         }
     }
 

@@ -36,6 +36,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Categories;
+import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.ScaledSizes;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.renderer.atlas.TextureRegion;
@@ -392,12 +393,24 @@ public class CB {
         return errror.get();
     }
 
+
     public static void wait(AtomicBoolean wait) {
-        wait(wait, false);
+        wait(wait, false, null);
     }
 
-    public static void wait(AtomicBoolean wait, boolean negate) {
+    public static void wait(AtomicBoolean wait, ICancel iCancel) {
+        wait(wait, false, iCancel);
+    }
+
+
+    public static void wait(AtomicBoolean wait, boolean negate, ICancel iCancel) {
+
+        boolean checkCancel = iCancel != null;
+
         while (negate ? !wait.get() : wait.get()) {
+            if (checkCancel) {
+                if (iCancel.cancel()) return;
+            }
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
@@ -405,4 +418,6 @@ public class CB {
             }
         }
     }
+
+
 }

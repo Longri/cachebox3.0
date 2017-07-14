@@ -84,4 +84,5 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable trackListIcon;
     public Drawable GC_Live;
     public Drawable viewSettings;
+    public Drawable reloadCacheIcon;
 }

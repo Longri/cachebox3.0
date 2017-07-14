@@ -298,6 +298,10 @@ public class GroundspeakAPI {
      * This method must call before every API-Call, for check any call restrictions!
      */
     public static void waitApiCallLimit() {
+        waitApiCallLimit(null);
+    }
+
+    public static void waitApiCallLimit(ICancel iCancel) {
 
         //Don't call and block GL thread
         if (CB.isMainThread()) throw new RuntimeException("Don't call and block GL thread");
@@ -329,7 +333,7 @@ public class GroundspeakAPI {
             }
             apiCallLimit = new Limit(Config.apiCallLimit.getValue(), Calendar.MINUTE, 1);
         }
-        apiCallLimit.waitForCall();
+        apiCallLimit.waitForCall(iCancel);
     }
 
 

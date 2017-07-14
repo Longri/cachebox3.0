@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
@@ -37,7 +38,7 @@ import de.longri.cachebox3.translation.Translation;
  */
 public class Action_Show_DescriptionView extends Abstract_Action_ShowView {
     public Action_Show_DescriptionView() {
-        super(IMPLEMENTED,"Description", MenuID.AID_SHOW_DESCRIPTION);
+        super(IMPLEMENTED, "Description", MenuID.AID_SHOW_DESCRIPTION);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class Action_Show_DescriptionView extends Abstract_Action_ShowView {
                         CacheListChangedEventList.Call();
                         return true;
                     case MenuID.MI_RELOAD_CACHE:
-                        //TODO ReloadSelectedCache();
+                        new ReloadCacheActivity().show();
                         return true;
                 }
                 return false;
@@ -86,9 +87,9 @@ public class Action_Show_DescriptionView extends Abstract_Action_ShowView {
 
         MenuItem mi;
 
-        boolean isSelected = (EventHandler.getSelectedCache()!=null);
+        boolean isSelected = (EventHandler.getSelectedCache() != null);
 
-      //ISSUE (#126 handle own favorites)  mi = cm.addItem(MenuID.MI_FAVORIT, "Favorite", CB.getSkin().getMenuIcon.favorit);
+        //ISSUE (#126 handle own favorites)  mi = cm.addItem(MenuID.MI_FAVORIT, "Favorite", CB.getSkin().getMenuIcon.favorit);
 //        mi.setCheckable(true);
 //        if (isSelected) {
 //            mi.setChecked(EventHandler.getSelectedCache().isFavorite());
@@ -97,15 +98,13 @@ public class Action_Show_DescriptionView extends Abstract_Action_ShowView {
 //        }
 
         boolean selectedCacheIsNoGC = false;
-
-        //ISSUE (#127 Reload selected Cache)
-//        if (isSelected)
-//            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().startsWith("GC");
-//        mi = cm.addItem(MenuID.MI_RELOAD_CACHE, "ReloadCacheAPI", CB.getSkin().getIcon.GC_Live);
-//        if (!isSelected)
-//            mi.setEnabled(false);
-//        if (selectedCacheIsNoGC)
-//            mi.setEnabled(false);
+        if (isSelected)
+            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().startsWith("GC");
+        mi = cm.addItem(MenuID.MI_RELOAD_CACHE, "ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon);
+        if (!isSelected)
+            mi.setEnabled(false);
+        if (selectedCacheIsNoGC)
+            mi.setEnabled(false);
 
         return cm;
     }

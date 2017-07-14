@@ -21,6 +21,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.apis.groundspeak_api.search.SearchGC;
 import de.longri.cachebox3.callbacks.GenericCallBack;
@@ -159,25 +160,25 @@ class GetYourUserProfileTest {
         if (isDummy) return;
         final GetYourUserProfile getYourUserProfile = new GetYourUserProfile(apiKey);
 
-       final AtomicBoolean WAIT = new AtomicBoolean(true);
-
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
+        final AtomicBoolean apiKeyExpired = new AtomicBoolean(false);
         getYourUserProfile.post(new GenericCallBack<Integer>() {
             @Override
             public void callBack(Integer value) {
-                assertThat("Type should be 3", getYourUserProfile.getMembershipType() == 3);
-                assertEquals(getYourUserProfile.getMemberName(), "Katipa", "name should be Katipa");
+                if (value == -3) apiKeyExpired.set(true);
                 WAIT.set(false);
             }
         });
 
+        CB.wait(WAIT);
 
-        while (WAIT.get()){
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        if (apiKeyExpired.get()) {
+            assertThat("API key expired, can't test!", false);
+        } else {
+            assertThat("Type should be 3", getYourUserProfile.getMembershipType() == 3);
+            assertEquals(getYourUserProfile.getMemberName(), "Katipa", "name should be Katipa");
         }
+
 
     }
 }

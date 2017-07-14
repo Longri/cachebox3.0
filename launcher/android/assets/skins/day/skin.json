@@ -1528,6 +1528,10 @@
       "path": "svg/regular.svg",
       "scale": 0.25
     },
+    "reload_cache": {
+      "path": "svg/reload_cache.svg",
+      "scale": 0.195
+    },
     "reviewer_note": {
       "path": "svg/reviewer_note.svg",
       "scale": 0.2
@@ -1919,9 +1923,9 @@
       "left": -1,
       "right": -1,
       "top": -1,
-      "bottom":-1,
-      "leftWidth":0,
-      "rightWidth":0
+      "bottom": -1,
+      "leftWidth": 0,
+      "rightWidth": 0
     },
     "progress_foreground_9_Patch": {
       "name": "progress_foreground",
@@ -2482,6 +2486,7 @@
       "trackListIcon": "trackListIcon",
       "GC_Live": "gc_liveIcon",
       "viewSettings": "view",
+      "reloadCacheIcon": "reload_cache",
       "prefWidth": -1,
       "prefHeight": -1
     }

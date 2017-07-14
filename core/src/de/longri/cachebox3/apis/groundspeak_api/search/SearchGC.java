@@ -16,6 +16,8 @@
 package de.longri.cachebox3.apis.groundspeak_api.search;
 
 import com.badlogic.gdx.utils.Json;
+import de.longri.cachebox3.gui.widgets.IconButton;
+import de.longri.cachebox3.utils.ICancel;
 
 import java.util.ArrayList;
 
@@ -30,14 +32,29 @@ public class SearchGC extends Search {
      * @param gcApiKey valid encrypted Api-Key
      */
     public SearchGC(String gcApiKey, String gcCode) {
-        super(gcApiKey, 1, (byte) 2);
+        super(gcApiKey, 1, (byte) 2, null);
+        // single Cache will full loaded
+        this.gcCodes = new ArrayList<>();
+        this.gcCodes.add(gcCode);
+    }
+
+    /**
+     * @param gcApiKey valid encrypted Api-Key
+     */
+    public SearchGC(String gcApiKey, String gcCode, ICancel iCancel) {
+        super(gcApiKey, 1, (byte) 2, iCancel);
         // single Cache will full loaded
         this.gcCodes = new ArrayList<>();
         this.gcCodes.add(gcCode);
     }
 
     public SearchGC(String gcApiKey, ArrayList<String> gcCodes, byte apiState) {
-        super(gcApiKey, gcCodes.size(), apiState);
+        super(gcApiKey, gcCodes.size(), apiState, null);
+        this.gcCodes = gcCodes;
+    }
+
+    public SearchGC(String gcApiKey, ArrayList<String> gcCodes, byte apiState, ICancel iCancel) {
+        super(gcApiKey, gcCodes.size(), apiState, iCancel);
         this.gcCodes = gcCodes;
     }
 

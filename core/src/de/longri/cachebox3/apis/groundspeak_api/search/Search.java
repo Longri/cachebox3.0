@@ -33,6 +33,7 @@ import de.longri.cachebox3.sqlite.dao.ImageDAO;
 import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,6 +130,7 @@ public abstract class Search extends PostRequest {
     private final int IMAGE_ARRAY = 5;
     private final int WAY_POINT_ARRAY = 6;
     private boolean isUserWaypoint = false;
+    private final ICancel iCancel;
 
     /**
      * 0 = unknown, 1 = Basic Member, 2 = Premium Member
@@ -140,9 +142,9 @@ public abstract class Search extends PostRequest {
      * @param number   MaxPerPage size for this request
      * @param apiState 0 = unknown, 1 = Basic Member, 2 = Premium Member
      */
-    Search(String gcApiKey, int number, byte apiState) {
-        super(gcApiKey);
-
+    Search(String gcApiKey, int number, byte apiState, ICancel iCancel) {
+        super(gcApiKey, iCancel);
+        this.iCancel = iCancel;
         if (number > 50)
             throw new RuntimeException("Max CacheCount per Page is 50, " + number + "will produce a API Error");
 
@@ -178,10 +180,13 @@ public abstract class Search extends PostRequest {
             e.printStackTrace();
         }
 
-        JsonParser parser = new JsonStreamParser() {
+        JsonStreamParser parser = new JsonStreamParser() {
 
             @Override
             public void startArray(String name) {
+
+                if (iCancel != null && iCancel.cancel()) this.cancel();
+
                 super.startArray(name);
                 // System.out.println("Start array " + name);
                 arrayStack.add(name);
@@ -207,7 +212,7 @@ public abstract class Search extends PostRequest {
 
             @Override
             public void endArray(String name) {
-                // System.out.println("End array " + name);
+                if (iCancel != null && iCancel.cancel()) this.cancel();
                 arrayStack.pop();
                 isUserWaypoint = false;
                 if (arrayStack.size > 0) {
@@ -239,6 +244,7 @@ public abstract class Search extends PostRequest {
 
             @Override
             public void startObject(String name) {
+                if (iCancel != null && iCancel.cancel()) this.cancel();
                 super.startObject(name);
                 // System.out.println("Start Object " + name);
 
@@ -276,6 +282,7 @@ public abstract class Search extends PostRequest {
 
             @Override
             public void pop() {
+                if (iCancel != null && iCancel.cancel()) this.cancel();
                 super.pop();
                 String name = objectStack.pop();
                 // System.out.println("pop " + name);
@@ -344,6 +351,7 @@ public abstract class Search extends PostRequest {
 
             @Override
             public void string(String name, String value) {
+                if (iCancel != null && iCancel.cancel()) this.cancel();
                 super.string(name, value);
 
                 switch (SWITCH) {
@@ -400,6 +408,7 @@ public abstract class Search extends PostRequest {
 
             @Override
             public void number(String name, double value, String stringValue) {
+                if (iCancel != null && iCancel.cancel()) this.cancel();
                 super.number(name, value, stringValue);
 
                 switch (SWITCH) {
@@ -430,6 +439,7 @@ public abstract class Search extends PostRequest {
 
             @Override
             public void number(String name, long value, String stringValue) {
+                if (iCancel != null && iCancel.cancel()) this.cancel();
                 super.number(name, value, stringValue);
 
                 switch (SWITCH) {
@@ -470,6 +480,7 @@ public abstract class Search extends PostRequest {
 
             @Override
             public void bool(String name, boolean value) {
+                if (iCancel != null && iCancel.cancel()) this.cancel();
                 super.bool(name, value);
 
                 switch (SWITCH) {

@@ -22,10 +22,11 @@ import com.badlogic.gdx.utils.JsonWriter;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.io.StringWriter;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI.waitApiCallLimit;
 
@@ -40,21 +41,30 @@ public abstract class PostRequest {
     public final static int NO_ERROR = 0;
     public final static int ERROR = -1;
     public final static int CANCELED = -2;
+    public final static int EXPIRED_API_KEY = -3;
+    private final ICancel iCancel;
 
     protected final String gcApiKey;
 
-    public PostRequest(String gcApiKey) {
+    public PostRequest(String gcApiKey, ICancel iCancel) {
         if (gcApiKey == null || gcApiKey.isEmpty()) throw new RuntimeException("ApiKey is empty, can't get any result");
         this.gcApiKey = gcApiKey;
+        this.iCancel = iCancel;
     }
 
     protected abstract void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<Integer> readyCallBack);
 
     protected void post(final GenericCallBack<Integer> readyCallBack) {
+        post(readyCallBack, this.iCancel);
+    }
+
+    protected void post(final GenericCallBack<Integer> readyCallBack, final ICancel iCancel) {
         CB.postAsync(new Runnable() {
             @Override
             public void run() {
-                waitApiCallLimit();
+                waitApiCallLimit(iCancel);
+
+                if (iCancel != null && iCancel.cancel()) readyCallBack.callBack(CANCELED);
                 String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
                 StringWriter writer = new StringWriter();
@@ -65,7 +75,7 @@ public abstract class PostRequest {
                 getRequest(json);
                 json.writeObjectEnd();
 
-                Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
+                final Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
                 httpPost.setUrl(URL + getCallUrl());
                 httpPost.setHeader("format", "json");
                 httpPost.setHeader("Accept", "application/json");
@@ -74,23 +84,48 @@ public abstract class PostRequest {
                 httpPost.setContent(writer.toString());
                 httpPost.setIncludeCredentials(true);
 
+                final AtomicBoolean checkCancel = new AtomicBoolean(iCancel != null);
+                if (checkCancel.get()) {
+                    //start cancel listener
+                    CB.postAsync(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (checkCancel.get()) {
+                                if (iCancel.cancel()) {
+                                    Gdx.net.cancelHttpRequest(httpPost);
+                                    checkCancel.set(false);
+                                }
+
+                                try {
+                                    Thread.sleep(50);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+                }
+
                 log.debug("Send Post request");
                 Gdx.net.sendHttpRequest(httpPost, new Net.HttpResponseListener() {
                     @Override
                     public void handleHttpResponse(Net.HttpResponse httpResponse) {
                         log.debug("Handle Response");
+                        checkCancel.set(false);
                         PostRequest.this.handleHttpResponse(httpResponse, readyCallBack);
                     }
 
                     @Override
                     public void failed(Throwable t) {
                         log.error("Request failed", t);
+                        checkCancel.set(false);
                         readyCallBack.callBack(ERROR);
                     }
 
                     @Override
                     public void cancelled() {
                         log.debug("Request cancelled");
+                        checkCancel.set(false);
                         readyCallBack.callBack(CANCELED);
                     }
                 });
