@@ -18,6 +18,8 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedCacheChangedEvent;
+import de.longri.cachebox3.events.SelectedCacheChangedListener;
 import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
@@ -40,7 +42,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 24.07.16.
  */
-public class LogListView extends AbstractView {
+public class LogListView extends AbstractView implements SelectedCacheChangedListener {
     private static Logger log = LoggerFactory.getLogger(LogListView.class);
 
     private final ListView listView = new ListView();
@@ -51,10 +53,20 @@ public class LogListView extends AbstractView {
     public LogListView() {
         super("LogListView");
         this.addActor(listView);
+        EventHandler.add(this);
     }
 
     @Override
     public void onShow() {
+        setListViewAdapter();
+    }
+
+    @Override
+    public void onHide() {
+       super.onHide();
+    }
+
+    private void setListViewAdapter() {
         CB.postOnMainThread(new Runnable() {
             @Override
             public void run() {
@@ -104,7 +116,7 @@ public class LogListView extends AbstractView {
 
     @Override
     public void dispose() {
-
+        EventHandler.remove(this);
     }
 
     public Menu getContextMenu() {
@@ -136,5 +148,11 @@ public class LogListView extends AbstractView {
         if (selectedCacheIsNoGC)
             mi.setEnabled(false);
         return cm;
+    }
+
+    @Override
+    public void selectedCacheChanged(SelectedCacheChangedEvent event) {
+        actGcCode = null;
+        setListViewAdapter();
     }
 }

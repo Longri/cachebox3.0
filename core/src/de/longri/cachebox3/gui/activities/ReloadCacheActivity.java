@@ -207,6 +207,9 @@ public class ReloadCacheActivity extends ActivityBase {
                     }, actCache.getGPXFilename_ID());
 
                     CB.wait(WAIT);
+                    //fire changed event
+                    EventHandler.fire(new SelectedCacheChangedEvent(actCache));
+
                 }
 
                 //reload Cache complete, close activity

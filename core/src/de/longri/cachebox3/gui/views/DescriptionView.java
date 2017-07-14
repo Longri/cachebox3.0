@@ -23,6 +23,8 @@ import de.longri.cachebox3.PlatformDescriptionView;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedCacheChangedEvent;
+import de.longri.cachebox3.events.SelectedCacheChangedListener;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
 import de.longri.cachebox3.translation.Translation;
@@ -40,7 +42,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Longri on 14.09.2016.
  */
-public class DescriptionView extends AbstractView {
+public class DescriptionView extends AbstractView implements SelectedCacheChangedListener {
 
     private static final Logger log = LoggerFactory.getLogger(DescriptionView.class);
 
@@ -154,6 +156,7 @@ public class DescriptionView extends AbstractView {
 
     public DescriptionView() {
         super("DescriptionView");
+        EventHandler.add(this);
     }
 
     private String getAttributesHtml(Cache cache) {
@@ -185,6 +188,7 @@ public class DescriptionView extends AbstractView {
 
     @Override
     public void dispose() {
+        EventHandler.remove(this);
         PlatformConnector.setDescriptionViewToNULL();
     }
 
@@ -196,6 +200,10 @@ public class DescriptionView extends AbstractView {
 
     @Override
     public void onShow() {
+        showPlatformWebView();
+    }
+
+    private void showPlatformWebView() {
         PlatformConnector.getDescriptionView(new GenericCallBack<PlatformDescriptionView>() {
             @Override
             public void callBack(PlatformDescriptionView descriptionView) {
@@ -268,11 +276,17 @@ public class DescriptionView extends AbstractView {
 
     @Override
     public void onHide() {
+        super.onHide();
         if (EventHandler.getSelectedCache() != null) {
             lastCacheId = EventHandler.getSelectedCache().Id;
             lastX = view.getScrollPositionX();
             lastY = view.getScrollPositionY();
             view.close();
         }
+    }
+
+    @Override
+    public void selectedCacheChanged(SelectedCacheChangedEvent event) {
+        showPlatformWebView();
     }
 }
