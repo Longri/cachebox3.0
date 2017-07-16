@@ -127,4 +127,13 @@ public class IOS_DescriptionView extends UIViewController implements UIWebViewDe
         this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
     }
 
+
+    public void disposing() {
+        webView.setDelegate(null);
+        webView.dispose();
+        shouldOverrideUrlLoadingCallBack = null;
+        super.dispose();
+    }
+
+
 }

@@ -130,9 +130,11 @@ public class IOS_PlatformConnector extends PlatformConnector {
             if (descriptionView == null) {
                 UIViewController mainViewController = ((IOSApplication) Gdx.app).getUIWindow().getRootViewController();
                 descriptionView = new IOS_DescriptionView(mainViewController);
+                log.debug("return new DescriptionView");
+            }else{
+                log.debug("return existing DescriptionView");
             }
             callBack.callBack(descriptionView);
-
         } catch (Exception e) {
             log.error("show web view", e);
         }
@@ -142,6 +144,9 @@ public class IOS_PlatformConnector extends PlatformConnector {
     @Override
     protected void descriptionViewToNull() {
 //TODO set descriptionViewToNull
+        log.debug("Set description view to NULL");
+        descriptionView.disposing();
+        descriptionView = null;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -190,6 +190,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     public void dispose() {
         EventHandler.remove(this);
         PlatformConnector.setDescriptionViewToNULL();
+        view = null;
     }
 
     @Override
@@ -200,78 +201,95 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     @Override
     public void onShow() {
-        showPlatformWebView();
+        CB.postOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                showPlatformWebView();
+            }
+        });
     }
 
     private void showPlatformWebView() {
-        PlatformConnector.getDescriptionView(new GenericCallBack<PlatformDescriptionView>() {
-            @Override
-            public void callBack(PlatformDescriptionView descriptionView) {
-                view = descriptionView;
-                Cache actCache = EventHandler.getSelectedCache();
-                if (actCache != null) {
-                    nonLocalImages.clear();
-                    nonLocalImagesUrl.clear();
 
-                    if (!actCache.isDetailLoaded()) {
-                        log.warn("Details not loaded for Cache: {}", actCache);
-                    }
+        final AtomicBoolean WAIT = new AtomicBoolean(false);
 
-                    String cacheHtml = actCache.getLongDescription() + actCache.getShortDescription();
-                    String html = "";
-                    if (actCache.getApiState() == 1)// GC.com API lite
-                    { // Load Standard HTML
-                        log.debug("load is Lite html");
-                        String nodesc = Translation.Get("GC_NoDescription");
-                        html = "</br>" + nodesc + "</br></br></br><form action=\"download\"><input type=\"submit\" value=\" " + Translation.Get("GC_DownloadDescription") + " \"></form>";
-                    } else {
-                        html = DescriptionImageGrabber.resolveImages(actCache, cacheHtml, false, nonLocalImages, nonLocalImagesUrl);
-                        if (!Config.DescriptionNoAttributes.getValue()) {
-                            html = getAttributesHtml(actCache) + html;
-                            log.debug("load html with Attributes");
-                        } else {
-                            log.debug("load html without Attributes");
-                        }
-
-
-                        // add 2 empty lines so that the last line of description can be selected with the markers
-                        html += "</br></br>";
-                    }
+        if (view == null) {
+            WAIT.set(true);
+            PlatformConnector.getDescriptionView(new GenericCallBack<PlatformDescriptionView>() {
+                @Override
+                public void callBack(PlatformDescriptionView descriptionView) {
+                    view = descriptionView;
                     view.setShouldOverrideUrlLoadingCallBack(shouldOverrideUrlLoadingCallBack);
-                    view.display();
-                    view.setHtml(html);
+                    WAIT.set(false);
+                }
+            });
+        }
 
-                    if (lastCacheId == actCache.Id) {
-                        // restore last scroll position
-                        Timer.schedule(new Timer.Task() {
-                            @Override
-                            public void run() {
-                                view.setScrollPosition(lastX, lastY);
-                            }
-                        }, 0.15f);
+        CB.wait(WAIT);
+
+        Cache actCache = EventHandler.getSelectedCache();
+        if (actCache != null) {
+            nonLocalImages.clear();
+            nonLocalImagesUrl.clear();
+
+            if (!actCache.isDetailLoaded()) {
+                log.warn("Details not loaded for Cache: {}", actCache);
+            }
+
+            String cacheHtml = actCache.getLongDescription() + actCache.getShortDescription();
+            String html = "";
+            if (actCache.getApiState() == 1)// GC.com API lite
+            { // Load Standard HTML
+                log.debug("load is Lite html");
+                String nodesc = Translation.Get("GC_NoDescription");
+                html = "</br>" + nodesc + "</br></br></br><form action=\"download\"><input type=\"submit\" value=\" " + Translation.Get("GC_DownloadDescription") + " \"></form>";
+            } else {
+                html = DescriptionImageGrabber.resolveImages(actCache, cacheHtml, false, nonLocalImages, nonLocalImagesUrl);
+                if (!Config.DescriptionNoAttributes.getValue()) {
+                    html = getAttributesHtml(actCache) + html;
+                    log.debug("load html with Attributes");
+                } else {
+                    log.debug("load html without Attributes");
+                }
+
+
+                // add 2 empty lines so that the last line of description can be selected with the markers
+                html += "</br></br>";
+            }
+
+            view.display();
+            view.setHtml(html);
+
+            if (lastCacheId == actCache.Id) {
+                // restore last scroll position
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        view.setScrollPosition(lastX, lastY);
+                    }
+                }, 0.15f);
+            }
+        }
+
+
+        if (nonLocalImages.size() > 0) {
+            CB.postAsync(new Runnable() {
+                @Override
+                public void run() {
+                    //download and store
+                    log.debug("download description images");
+                    for (int i = 0, n = nonLocalImages.size(); i < n; i++) {
+                        String localFilename = nonLocalImages.get(i);
+                        String downloadUrl = nonLocalImagesUrl.get(i);
+                        if (!NetUtils.download(downloadUrl, localFilename)) {
+                            log.error("Image '{}' download failed", downloadUrl);
+                        }
                     }
                 }
-                boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());
+            });
+        }
 
-
-                if (nonLocalImages.size() > 0) {
-                    CB.postAsync(new Runnable() {
-                        @Override
-                        public void run() {
-                            //download and store
-                            log.debug("download description images");
-                            for (int i = 0, n = nonLocalImages.size(); i < n; i++) {
-                                String localFilename = nonLocalImages.get(i);
-                                String dowbnloadUrl = nonLocalImagesUrl.get(i);
-                                if (!NetUtils.download(dowbnloadUrl, localFilename)) {
-                                    log.error("Image '{}' download failed", dowbnloadUrl);
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-        });
+        boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());
     }
 
     @Override
@@ -287,6 +305,11 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
-        showPlatformWebView();
+        CB.postOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                showPlatformWebView();
+            }
+        });
     }
 }
