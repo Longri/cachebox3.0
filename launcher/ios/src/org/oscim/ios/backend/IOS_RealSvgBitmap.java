@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3;
+package org.oscim.ios.backend;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.GetName;
 import com.badlogic.gdx.scenes.scene2d.ui.StoreSvg;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.coregraphics.CGSize;
+import org.robovm.apple.foundation.NSData;
 import org.robovm.apple.uikit.UIImage;
 import svg.SVGRenderer;
 
@@ -104,6 +107,8 @@ public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap implement
 
     @Override
     public void store(FileHandle child) {
-        //TODO
+        UIImage uiImage = new UIImage(cgBitmapContext.toImage());
+        NSData data = uiImage.toPNGData();
+        data.write(child.file(),true);
     }
 }

@@ -20,18 +20,15 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
-import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
-import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import org.oscim.backend.canvas.Bitmap;
+import org.oscim.ios.backend.IOS_RealSvgBitmap;
 import org.robovm.apple.avfoundation.AVCaptureDevice;
 import org.robovm.apple.avfoundation.AVCaptureTorchMode;
 import org.robovm.apple.avfoundation.AVMediaType;
-import org.robovm.apple.coregraphics.CGPoint;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.coregraphics.CGSize;
 import org.robovm.apple.foundation.NSErrorException;
-import org.robovm.apple.foundation.NSRange;
 import org.robovm.apple.foundation.NSURL;
 import org.robovm.apple.uikit.*;
 import org.robovm.objc.block.VoidBlock1;
@@ -197,9 +194,9 @@ public class IOS_PlatformConnector extends PlatformConnector {
         // buildUIAlertView(listener, title, text, hint);
     }
 
-    private void disposeInputView(){
+    private void disposeInputView() {
         textInputView.dispose();
-        textInputView=null;
+        textInputView = null;
     }
 
     // Issue 773 indicates this may solve a premature GC issue
