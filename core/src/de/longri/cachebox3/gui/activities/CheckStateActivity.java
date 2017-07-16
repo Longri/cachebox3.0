@@ -18,18 +18,23 @@ package de.longri.cachebox3.gui.activities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisProgressBar;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.CheckCacheStateParser;
 import de.longri.cachebox3.events.*;
-import de.longri.cachebox3.gui.*;
+import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
@@ -189,9 +194,11 @@ public class CheckStateActivity extends ActivityBase {
                     @Override
                     public void waitForCall(ApiCallLimitEvent event) {
                         int sec = (int) (event.getWaitTime() / 1000);
-                        CB.viewmanager.toast( Translation.Get("ApiLimit"
-                                , Integer.toString(Config.apiCallLimit.getValue()), Integer.toString(sec))
-                                , ViewManager.ToastLength.LONG);
+                        if (sec > 1) {
+                            CB.viewmanager.toast(Translation.Get("ApiLimit"
+                                    , Integer.toString(Config.apiCallLimit.getValue()), Integer.toString(sec))
+                                    , ViewManager.ToastLength.LONG);
+                        }
                     }
                 };
 

@@ -221,15 +221,23 @@ public class Translation {
 
             String readID = line.substring(0, pos).trim();
             String readTransl = line.substring(pos + 1);
-            String ReplacedRead = readTransl.trim().replace("\\n", String.format("%n"));
+            String replacedRead = readTransl.trim().replace("\\n", String.format("%n"));
+
+            if (replacedRead.endsWith("\"")) {
+                replacedRead = replacedRead.substring(0, replacedRead.length() - 1);
+            }
+            if (replacedRead.startsWith("\"")) {
+                replacedRead = replacedRead.substring(1);
+            }
+
 
             if (!Default) {
                 // dont add if added on Def
                 String contains = Get(readID);
                 if (contains.startsWith("$ID: "))
-                    List.add(new Translations(readID, ReplacedRead));
+                    List.add(new Translations(readID, replacedRead));
             } else {
-                List.add(new Translations(readID, ReplacedRead));
+                List.add(new Translations(readID, replacedRead));
             }
         }
 
