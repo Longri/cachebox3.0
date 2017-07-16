@@ -64,7 +64,7 @@ public class ColorDrawable extends EmptyDrawable {
             float a = altColor.a;
 
             batch.setColor(mColor);
-            batch.draw(pixelSprite, x, y, width, height);
+            batch.draw(pixelSprite, x, y);
             batch.setColor(r, g, b, a);
         }
 

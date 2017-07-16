@@ -20,11 +20,13 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.graphics.g2d.freetype.SkinFont;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkinUtil;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -77,8 +79,8 @@ public class Splash extends NamedStage {
     final InitTaskList initTaskList = new InitTaskList();
 
 
-    public Splash(LoadReady loadReadyHandler) {
-        super("splash");
+    public Splash(LoadReady loadReadyHandler, Viewport viewport, Batch batch) {
+        super("splash", viewport, batch);
         this.loadReadyHandler = loadReadyHandler;
         Texture backgroundTexture = new Texture("splash-back.jpg");
         CB.backgroundImage = new Image(backgroundTexture);
@@ -180,7 +182,7 @@ public class Splash extends NamedStage {
                                     workLabel.setText(event.progressIncrement.msg);
                                     progress.setValue(progress.getValue() + event.progressIncrement.incrementValue);
 
-                                    log.debug("ProgressEvent MSG:{} increment:{}",event.progressIncrement.msg,event.progressIncrement.incrementValue);
+                                    log.debug("ProgressEvent MSG:{} increment:{}", event.progressIncrement.msg, event.progressIncrement.incrementValue);
                                 }
                             });
                         }

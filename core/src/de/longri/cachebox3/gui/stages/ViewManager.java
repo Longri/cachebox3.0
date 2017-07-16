@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.stages;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -25,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.SnapshotArray;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
@@ -72,8 +74,8 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
     private final Action_Show_TrackableListView action_show_trackableListView = new Action_Show_TrackableListView();
     private final Action_Show_NoteView action_show_noteView = new Action_Show_NoteView();
 
-    public ViewManager(final CacheboxMain main) {
-        super("ViewManager");
+    public ViewManager(final CacheboxMain main, Viewport viewport, Batch batch) {
+        super("ViewManager", viewport, batch);
 
         log.info("ScaleFactor:" + Float.toString(CB.getScaledFloat(1)));
         log.info("Width:" + Float.toString(Gdx.graphics.getWidth()));

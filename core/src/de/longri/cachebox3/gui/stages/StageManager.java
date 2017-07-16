@@ -15,12 +15,19 @@
  */
 package de.longri.cachebox3.gui.stages;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.CB_SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.gui.views.DescriptionView;
 import de.longri.cachebox3.gui.views.MapView;
 import org.slf4j.Logger;
@@ -31,8 +38,13 @@ import org.slf4j.LoggerFactory;
  */
 public class StageManager {
     final static Logger log = LoggerFactory.getLogger(StageManager.class);
-    final static Array<NamedStage> stageList = new Array<NamedStage>(5);
-    final static NamedStage toastStage = new NamedStage("toastStage");
+    final static Array<NamedStage> stageList = new Array<>(5);
+
+    public final static Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
+    public final static Batch batch = new CB_SpriteBatch(CB_SpriteBatch.Mode.WARN);
+
+
+    final static NamedStage toastStage = new NamedStage("toastStage", viewport, batch);
 
     private static boolean debug = true;
     private static boolean writeDrawSequence = debug;
@@ -114,7 +126,7 @@ public class StageManager {
         }
 
 
-        NamedStage newStage = new NamedStage(actor.getName());
+        NamedStage newStage = new NamedStage(actor.getName(), viewport, batch);
         newStage.addActor(actor);
         newStage.setKeyboardFocus(actor);
         newStage.setScrollFocus(actor);

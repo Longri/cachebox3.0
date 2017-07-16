@@ -20,8 +20,13 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.stages.Splash;
@@ -91,7 +96,10 @@ public class CacheboxMain extends ApplicationAdapter {
 
         Gdx.graphics.setContinuousRendering(false);
 
-        StageManager.setMainStage(new Splash(new Splash.LoadReady() {
+        final Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
+        final Batch batch = new SpriteBatch();
+
+        final Splash splash = new Splash(new Splash.LoadReady() {
             @Override
             public void ready() {
                 Config.AppRaterlaunchCount.setValue(Config.AppRaterlaunchCount.getValue() + 1);
@@ -102,11 +110,15 @@ public class CacheboxMain extends ApplicationAdapter {
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        StageManager.setMainStage(new ViewManager(CacheboxMain.this));
+                        StageManager.setMainStage(new ViewManager(
+                                CacheboxMain.this, StageManager.viewport, StageManager.batch));
+                        batch.dispose();
                     }
                 });
             }
-        }));
+        }, viewport, batch);
+
+        StageManager.setMainStage(splash);
 
         Gdx.graphics.requestRendering();
         CB.initThreadCheck();

@@ -15,7 +15,9 @@
  */
 package de.longri.cachebox3.gui.stages;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by Longri on 03.09.16.
@@ -23,7 +25,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 public class NamedStage extends Stage {
     private String name;
 
-    public NamedStage(String name) {
+    public NamedStage(String name, Viewport viewport, Batch batch) {
+        super(viewport, batch);
         this.name = name;
     }
 

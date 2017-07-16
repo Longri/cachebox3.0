@@ -90,7 +90,7 @@ public class SvgSkin extends Skin {
      * @param storageType LOCAL or INTERNAL
      * @param skinFolder  {@link FileHandle} to the folder of this skin
      */
-    public SvgSkin( boolean forceCreateNewAtlas, String name, StorageType storageType, FileHandle skinFolder) {
+    public SvgSkin(boolean forceCreateNewAtlas, String name, StorageType storageType, FileHandle skinFolder) {
         super();
         this.storageType = storageType;
         this.name = name;
@@ -273,7 +273,7 @@ public class SvgSkin extends Skin {
                 }
 
                 //create and register atlas
-                SvgSkin.this.addRegions(SvgSkinUtil.createTextureAtlasFromImages( forceCreateNewAtlas, SvgSkin.this.name, registerdSvgs, skinFile));
+                SvgSkin.this.addRegions(SvgSkinUtil.createTextureAtlasFromImages(forceCreateNewAtlas, SvgSkin.this.name, registerdSvgs, skinFile));
             }
 
 
@@ -463,7 +463,6 @@ public class SvgSkin extends Skin {
 
         return json;
     }
-
 
 
     @Override
