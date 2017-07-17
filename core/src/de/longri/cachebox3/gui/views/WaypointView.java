@@ -326,7 +326,7 @@ public class WaypointView extends AbstractView {
             cm.addItem(MenuID.MI_WP_SHOW, "show");
         if (actWaypoint != null)
             cm.addItem(MenuID.MI_EDIT, "edit");
-        cm.addItem(MenuID.MI_ADD, "AddWaypoint");
+        cm.addItem(MenuID.MI_ADD, "AddWaypoint", CB.getSkin().getMenuIcon.addWp);
         if ((actWaypoint != null) && (actWaypoint.IsUserWaypoint))
             cm.addItem(MenuID.MI_DELETE, "delete");
 
