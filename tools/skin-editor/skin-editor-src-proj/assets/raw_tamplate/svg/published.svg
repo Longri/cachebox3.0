@@ -5,5 +5,5 @@
 		<stop offset="0" stop-color="#12E00C" stop-opacity="1"/>
 		<stop offset="1" stop-color="#1E851A" stop-opacity="1"/>
 	</linearGradient>
-	<ellipse fill="url(#SVGID_Fill1_)" stroke-width="5" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" cx="105" cy="105" rx="100" ry="100"/>
+	<ellipse fill="url(#SVGID_Fill1_)" stroke-width="5" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" cx="104.997" cy="105.003" rx="100" ry="100"/>
 </svg>

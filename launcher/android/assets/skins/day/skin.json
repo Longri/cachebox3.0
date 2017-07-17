@@ -710,15 +710,15 @@
     },
     "compass_1_arrow": {
       "path": "svg/compass_1_arrow.svg",
-      "scale": 1
+      "scale": 0.85
     },
     "compass_1_frame": {
       "path": "svg/compass_1_frame.svg",
-      "scale": 1
+      "scale": 0.85
     },
     "compass_1_scale": {
       "path": "svg/compass_1_scale.svg",
-      "scale": 1
+      "scale": 0.85
     },
     "cursor": {
       "path": "svg/cursor.svg",
@@ -874,11 +874,11 @@
     },
     "frame_align": {
       "path": "svg/frame_align.svg",
-      "scale": 0.15
+      "scale": 0.145
     },
     "frame_user": {
       "path": "svg/frame_user.svg",
-      "scale": 0.15
+      "scale": 0.145
     },
     "gb": {
       "path": "svg/gb.svg",
@@ -1378,23 +1378,23 @@
     },
     "map_compass_1_arrow": {
       "path": "svg/compass_1_arrow.svg",
-      "scale": 0.15
+      "scale": 0.145
     },
     "map_compass_1_frame": {
       "path": "svg/compass_1_frame.svg",
-      "scale": 0.15
+      "scale": 0.145
     },
     "map_compass_1_scale": {
       "path": "svg/compass_1_scale.svg",
-      "scale": 0.15
+      "scale": 0.145
     },
     "map_compass_2_arrow": {
       "path": "svg/compass_2_arrow.svg",
-      "scale": 0.15
+      "scale": 0.145
     },
     "map_compass_2_scale": {
       "path": "svg/compass_2_scale.svg",
-      "scale": 0.15
+      "scale": 0.145
     },
     "mega": {
       "path": "svg/mega.svg",

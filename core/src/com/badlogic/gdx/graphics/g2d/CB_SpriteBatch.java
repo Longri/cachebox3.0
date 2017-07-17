@@ -16,6 +16,7 @@
 package com.badlogic.gdx.graphics.g2d;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.CB;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public class CB_SpriteBatch extends SpriteBatch {
 
     private final Logger log = LoggerFactory.getLogger(CB_SpriteBatch.class);
     private final float DRAW_SCALE_TOLERANCE = Math.min(3.0f, CB.getScaledFloat(1.2f));
+    private final Array<String> scaledDrawables = new Array<>();
 
     public enum Mode {
         THROW, WARN, NORMAL
@@ -62,6 +64,16 @@ public class CB_SpriteBatch extends SpriteBatch {
                 NORMAL = false;
         }
     }
+
+    /**
+     * Add a drawable that can scaled, without exception or warning! (Like Compass)
+     *
+     * @param name
+     */
+    public void registerScaledDrawable(String name) {
+        scaledDrawables.add(name);
+    }
+
 
     @Override
     public void draw(Texture texture, float x, float y, float originX, float originY, float width, float height, float scaleX,
@@ -119,6 +131,8 @@ public class CB_SpriteBatch extends SpriteBatch {
 
 
     private void checkDrawingSize(String name, float srcWidth, float srcHeight, float drwWidth, float drwHeight) {
+
+        if (this.scaledDrawables.contains(name, false)) return;
 
         float widthDiv = Math.abs(srcWidth - drwWidth);
         float heightDiv = Math.abs(srcHeight - drwHeight);

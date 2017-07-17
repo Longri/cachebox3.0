@@ -22,12 +22,18 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.CB_SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.skin.styles.CompassStyle;
+import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
 import de.longri.cachebox3.gui.views.DescriptionView;
 import de.longri.cachebox3.gui.views.MapView;
 import org.slf4j.Logger;
@@ -41,7 +47,7 @@ public class StageManager {
     final static Array<NamedStage> stageList = new Array<>(5);
 
     public final static Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
-    public final static Batch batch = new CB_SpriteBatch(CB_SpriteBatch.Mode.WARN);
+    public final static CB_SpriteBatch batch = new CB_SpriteBatch(CB_SpriteBatch.Mode.WARN);
 
 
     final static NamedStage toastStage = new NamedStage("toastStage", viewport, batch);
@@ -194,6 +200,26 @@ public class StageManager {
 
     public static void setMainStage(NamedStage stage) {
         mainStage = stage;
+
+        if (false&&mainStage instanceof ViewManager) {
+            // add scaled drawable to batch for non throwing exception with scaled drawing!
+            CompassStyle compassStyle = VisUI.getSkin().get("compassViewStyle", CompassViewStyle.class);
+            if (compassStyle.arrow != null)
+                batch.registerScaledDrawable(((TextureAtlas.AtlasRegion) ((TextureRegionDrawable) compassStyle.arrow).getRegion()).name);
+
+            if (compassStyle.scale != null)
+                batch.registerScaledDrawable(((TextureAtlas.AtlasRegion) ((TextureRegionDrawable) compassStyle.scale).getRegion()).name);
+
+            if (compassStyle.frameCompasAlign != null)
+                batch.registerScaledDrawable(((TextureAtlas.AtlasRegion) ((TextureRegionDrawable) compassStyle.frameCompasAlign).getRegion()).name);
+
+            if (compassStyle.frameNorthOrient != null)
+                batch.registerScaledDrawable(((TextureAtlas.AtlasRegion) ((TextureRegionDrawable) compassStyle.frameNorthOrient).getRegion()).name);
+
+            if (compassStyle.frameUserRotate != null)
+                batch.registerScaledDrawable(((TextureAtlas.AtlasRegion) ((TextureRegionDrawable) compassStyle.frameUserRotate).getRegion()).name);
+
+        }
 
         // add mainStage to input processor
         if (inputMultiplexer != null) addNonDoubleInputProzessor(mainStage);

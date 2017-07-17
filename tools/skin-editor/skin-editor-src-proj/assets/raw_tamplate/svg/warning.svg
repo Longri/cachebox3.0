@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="41.8777" height="38.3927" viewBox="0 0 41.88 38.39" enable-background="new 0 0 41.88 38.39" xml:space="preserve">
-	<radialGradient id="SVGID_Stroke1_" cx="21.0156" cy="50.4285" r="58.0992" gradientUnits="userSpaceOnUse" gradientTransform="rotate(-90.000000 21.015593 50.428535)">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="42" height="42" viewBox="0 0 42.00 42.00" enable-background="new 0 0 42.00 42.00" xml:space="preserve">
+	<radialGradient id="SVGID_Stroke1_" cx="21.0767" cy="52.2322" r="58.0992" gradientUnits="userSpaceOnUse" gradientTransform="rotate(-90.000000 21.076738 52.232185)">
 		<stop offset="0" stop-color="#F68A0C" stop-opacity="1"/>
 		<stop offset="0.846512" stop-color="#FAB71C" stop-opacity="1"/>
 		<stop offset="1" stop-color="#FFE42C" stop-opacity="1"/>
@@ -13,7 +13,7 @@
 		<stop offset="0.89642" stop-color="#FFE17F" stop-opacity="1"/>
 		<stop offset="1" stop-color="#FFFFFF" stop-opacity="1"/>
 	</linearGradient>
-	<path fill="url(#SVGID_Fill1_)" fill-rule="evenodd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="url(#SVGID_Stroke1_)" d="M 40.7527,32.3008L 25.511,4.07912C 24.533,2.17 22.6601,1.04943 20.4084,1.15224C 19.7032,1.18444 17.4992,1.38144 16.3963,3.45658L 1.74077,30.1912C 1.26649,30.9877 0.775433,32.5904 1,33.8628C 1.31076,35.6236 2.60668,36.7834 4.19649,37.3602L 37.6728,37.3464C 38.8016,36.8777 40.0698,36.0605 40.6671,35.0869C 41.151,34.2982 41.0424,33.0962 40.7527,32.3008 Z "/>
-	<path fill="none" fill-rule="evenodd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" d="M 40.8777,32.3075L 25.6015,3.94181C 24.6212,2.02295 22.7441,0.896666 20.4874,0.999998C 19.7805,1.03237 17.5715,1.23038 16.4661,3.31609L 1.77745,30.1871C 1.30209,30.9876 1.02374,32.411 1.24882,33.6899C 1.56028,35.4597 2.64532,36.8129 4.23873,37.3927L 37.7908,37.3788C 38.9222,36.9077 39.9745,36.0601 40.5732,35.0816C 41.0582,34.2888 41.168,33.1069 40.8777,32.3075 Z "/>
-	<path fill="#FFFFFF" fill-opacity="1" stroke-linejoin="round" stroke="#937209" stroke-opacity="1" d="M 19.4333,26.5717L 18.2241,15.281L 18.2241,10.0639L 23.2632,10.0639L 23.2632,15.281L 22.0709,26.5717L 19.4333,26.5717 Z M 18.2241,32.4895L 18.2241,28.129L 23.2632,28.129L 23.2632,32.4895L 18.2241,32.4895 Z "/>
+	<path fill="url(#SVGID_Fill1_)" fill-rule="evenodd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="url(#SVGID_Stroke1_)" d="M 40.8139,34.1045L 25.5722,5.88278C 24.5941,3.97365 22.7212,2.85308 20.4696,2.9559C 19.7643,2.98809 17.5603,3.1851 16.4574,5.26023L 1.80192,31.9949C 1.32764,32.7914 0.836578,34.3941 1.06115,35.6665C 1.3719,37.4273 2.66783,38.587 4.25764,39.1639L 37.734,39.15C 38.8628,38.6813 40.1309,37.8641 40.7282,36.8906C 41.2121,36.1019 41.1036,34.8999 40.8139,34.1045 Z "/>
+	<path fill="none" fill-rule="evenodd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" d="M 40.9389,34.1111L 25.6627,5.74546C 24.6824,3.8266 22.8052,2.70032 20.5485,2.80365C 19.8417,2.83602 17.6327,3.03404 16.5272,5.11975L 1.83859,31.9908C 1.36324,32.7913 1.08489,34.2146 1.30996,35.4935C 1.62142,37.2633 2.70646,38.6166 4.29987,39.1963L 37.852,39.1824C 38.9833,38.7113 40.0357,37.8638 40.6344,36.8852C 41.1194,36.0925 41.2292,34.9106 40.9389,34.1111 Z "/>
+	<path fill="#FFFFFF" fill-opacity="1" stroke-linejoin="round" stroke="#937209" stroke-opacity="1" d="M 19.4944,28.3753L 18.2852,17.0847L 18.2852,11.8676L 23.3243,11.8676L 23.3243,17.0847L 22.1321,28.3753L 19.4944,28.3753 Z M 18.2852,34.2932L 18.2852,29.9327L 23.3243,29.9327L 23.3243,34.2932L 18.2852,34.2932 Z "/>
 </svg>
