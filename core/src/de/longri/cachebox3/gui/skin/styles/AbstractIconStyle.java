@@ -20,13 +20,9 @@ package de.longri.cachebox3.gui.skin.styles;
  */
 public abstract class AbstractIconStyle {
 
-    public final int prefWidth = getPrefWidth();
+    public abstract int getPrefWidth();
 
-    public final int prefHeight = getPrefHeight();
-
-    protected abstract int getPrefWidth();
-
-    protected abstract int getPrefHeight();
+    public abstract int getPrefHeight();
 
 
 }

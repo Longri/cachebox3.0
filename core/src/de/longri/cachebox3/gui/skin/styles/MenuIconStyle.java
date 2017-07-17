@@ -31,13 +31,13 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable target;
 
     @Override
-    protected int getPrefWidth() {
-        return (int) CB.scaledSizes.ICON_WIDTH;
+    public int getPrefWidth() {
+        return CB.getScaledInt(47);
     }
 
     @Override
-    protected int getPrefHeight() {
-        return (int) CB.scaledSizes.ICON_WIDTH;
+    public int getPrefHeight() {
+        return CB.getScaledInt(47);
     }
 
     public Drawable favorit;

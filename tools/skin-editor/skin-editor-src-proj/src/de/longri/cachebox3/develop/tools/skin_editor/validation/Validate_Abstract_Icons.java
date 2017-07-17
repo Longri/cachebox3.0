@@ -30,6 +30,8 @@ import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
  */
 public abstract class Validate_Abstract_Icons<T extends ValidationTask> extends ValidationTask {
 
+    protected final int TOLLERANCE = 1;
+
     private final Array<String> isNullList = new Array<String>();
     private final Array<String> isMissingIconList = new Array<String>();
     private final StringBuilder wrongBitmapsSize = new StringBuilder();
@@ -123,14 +125,14 @@ public abstract class Validate_Abstract_Icons<T extends ValidationTask> extends 
         if (width < getMinWidth() || width > getMaxWidth()) {
             wrongBitmapsSize.append(fieldName);
             wrongBitmapsSize.append(" width: " + width);
-            wrongBitmapsSize.append("   => The width should be between " + getMinWidth() + " and " + getMaxWidth() + "!");
+            wrongBitmapsSize.append("   => The width should be between " + getMinWidth() + " and " + getMaxWidth() + "  !");
             wrongBitmapsSize.append(" \n");
         }
 
         if (height < getMinHeight() || height > getMaxHeight()) {
             wrongBitmapsSize.append(fieldName);
             wrongBitmapsSize.append(" height: " + height);
-            wrongBitmapsSize.append("   => The height should be between " + getMinHeight() + " and " + getMaxHeight() + "!");
+            wrongBitmapsSize.append("   => The height should be between " + getMinHeight() + " and " + getMaxHeight() + "  !");
             wrongBitmapsSize.append(", \n");
         }
     }

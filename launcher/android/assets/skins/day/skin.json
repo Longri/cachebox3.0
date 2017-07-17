@@ -62,7 +62,7 @@
     },
     "addCacheIcon": {
       "path": "svg/addCacheIcon.svg",
-      "scale": 0.19455253
+      "scale": 0.18
     },
     "archived": {
       "path": "svg/archived.svg",
@@ -618,11 +618,11 @@
     },
     "attended": {
       "path": "svg/attended.svg",
-      "scale": 0.15
+      "scale": 0.19
     },
     "baseMapFreizeitkarte": {
       "path": "svg/baseMapFreizeitkarte.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "baseMapMapsforge": {
       "path": "svg/baseMapMapsforge.svg",
@@ -630,11 +630,11 @@
     },
     "baseMapOnlineBitmap": {
       "path": "svg/baseMapOnlineBitmap.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "baseMapOnlineVector": {
       "path": "svg/baseMapOnlineVector.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "button_bar_back": {
       "path": "svg/button_bar_back.svg",
@@ -658,31 +658,31 @@
     },
     "camera": {
       "path": "svg/camera.svg",
-      "scale": 0.2
+      "scale": 0.21
     },
     "cb": {
       "path": "svg/cb.svg",
-      "scale": 0.097
+      "scale": 0.09
     },
     "check_disabled": {
       "path": "svg/check_disabled.svg",
-      "scale": 1
+      "scale": 0.9
     },
     "check_off": {
       "path": "svg/check_off.svg",
-      "scale": 1
+      "scale": 0.9
     },
     "check_on": {
       "path": "svg/check_on.svg",
-      "scale": 1
+      "scale": 0.9
     },
     "cito": {
       "path": "svg/cito.svg",
-      "scale": 0.2
+      "scale": 0.21
     },
     "closeIcon": {
       "path": "svg/closeIcon.svg",
-      "scale": 1
+      "scale": 1.05
     },
     "cluster1": {
       "path": "svg/cluster1.svg",
@@ -730,7 +730,7 @@
     },
     "database": {
       "path": "svg/database.svg",
-      "scale": 0.24
+      "scale": 0.225
     },
     "db": {
       "path": "svg/db.svg",
@@ -774,7 +774,7 @@
     },
     "deleteIcon": {
       "path": "svg/deleteIcon.svg",
-      "scale": 0.19455253
+      "scale": 0.18
     },
     "description": {
       "path": "svg/description.svg",
@@ -830,11 +830,11 @@
     },
     "earth": {
       "path": "svg/earth.svg",
-      "scale": 0.2
+      "scale": 0.21
     },
     "enabled": {
       "path": "svg/enabled.svg",
-      "scale": 0.17
+      "scale": 0.22
     },
     "event": {
       "path": "svg/event.svg",
@@ -842,11 +842,11 @@
     },
     "fieldnoteListIcon": {
       "path": "svg/fieldnoteListIcon.svg",
-      "scale": 0.195
+      "scale": 0.18
     },
     "file": {
       "path": "svg/file.svg",
-      "scale": 1
+      "scale": 0.95
     },
     "filebackIcon": {
       "path": "svg/backIcon.svg",
@@ -890,7 +890,11 @@
     },
     "gc_liveIcon": {
       "path": "svg/gc_liveIcon.svg",
-      "scale": 1
+      "scale": 0.87
+    },
+    "gc_liveMenuIcon": {
+      "path": "svg/gc_liveIcon.svg",
+      "scale": 0.8
     },
     "giga": {
       "path": "svg/giga.svg",
@@ -1530,7 +1534,7 @@
     },
     "reload_cache": {
       "path": "svg/reload_cache.svg",
-      "scale": 0.195
+      "scale": 0.2
     },
     "reviewer_note": {
       "path": "svg/reviewer_note.svg",
@@ -1570,7 +1574,7 @@
     },
     "sortIcon": {
       "path": "svg/sortIcon.svg",
-      "scale": 0.19455253
+      "scale": 0.18
     },
     "star": {
       "path": "svg/star.svg",
@@ -1630,7 +1634,7 @@
     },
     "traddi": {
       "path": "svg/traddi.svg",
-      "scale": 0.2
+      "scale": 0.21
     },
     "view": {
       "path": "svg/view.svg",
@@ -1658,7 +1662,7 @@
     },
     "will_attend": {
       "path": "svg/letterbox.svg",
-      "scale": 0.15
+      "scale": 0.21
     }
   },
   "de.longri.cachebox3.utils.SkinColor": {
@@ -2443,11 +2447,7 @@
       "Powerd_by_GC_Live": "gc_liveIcon",
       "GC_Live": "gc_liveIcon",
       "Close": "closeIcon",
-      "Help": "helpIcon",
-      "cm_icon": "cm_icon",
-      "cm_icon_filterd": "cm_icon_filterd",
-      "prefWidth": 0,
-      "prefHeight": 0
+      "Help": "helpIcon"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MenuIconStyle": {
@@ -2484,11 +2484,9 @@
       "tbListIcon": "tbListIcon",
       "waypointListIcon": "waypointListIcon",
       "trackListIcon": "trackListIcon",
-      "GC_Live": "gc_liveIcon",
+      "GC_Live": "gc_liveMenuIcon",
       "viewSettings": "view",
-      "reloadCacheIcon": "reload_cache",
-      "prefWidth": -1,
-      "prefHeight": -1
+      "reloadCacheIcon": "reload_cache"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {

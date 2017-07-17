@@ -27,7 +27,6 @@ import de.longri.cachebox3.gui.skin.styles.ColorDrawableStyle;
 public class ColorDrawable extends EmptyDrawable {
 
 
-
     /**
      * Da beim Zeichnen dieses Sprites, dieses nicht Manipuliert wird, brauchen wir hier nur eine einmalige Statische Instanz
      */
@@ -64,7 +63,7 @@ public class ColorDrawable extends EmptyDrawable {
             float a = altColor.a;
 
             batch.setColor(mColor);
-            batch.draw(pixelSprite, x, y);
+            batch.draw(pixelSprite, x, y, width, height);
             batch.setColor(r, g, b, a);
         }
 

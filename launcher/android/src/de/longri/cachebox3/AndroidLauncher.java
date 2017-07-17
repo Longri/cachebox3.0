@@ -26,6 +26,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import de.longri.cachebox3.utils.RingBufferFloat;
 import org.slf4j.Logger;
@@ -76,6 +77,8 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
         if (android.os.Build.VERSION.SDK_INT >= 23) {
             AndroidPermissionCheck.checkNeededPermissions(this);
         }
+
+        Gdx.input.setCatchBackKey(true);
     }
 
     @Override

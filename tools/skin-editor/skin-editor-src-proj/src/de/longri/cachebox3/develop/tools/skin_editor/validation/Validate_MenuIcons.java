@@ -21,21 +21,21 @@ public class Validate_MenuIcons extends Validate_Abstract_Icons {
 
     @Override
     protected int getMinWidth() {
-        return validationSkin.getMenuIcon.prefWidth - 4;
+        return validationSkin.getMenuIcon.getPrefWidth() - TOLLERANCE;
     }
 
     @Override
     protected int getMaxWidth() {
-        return validationSkin.getMenuIcon.prefWidth + 4;
+        return validationSkin.getMenuIcon.getPrefWidth() + TOLLERANCE;
     }
 
     @Override
     protected int getMinHeight() {
-        return validationSkin.getMenuIcon.prefHeight - 4;
+        return validationSkin.getMenuIcon.getPrefHeight() - TOLLERANCE;
     }
 
     @Override
     protected int getMaxHeight() {
-        return validationSkin.getMenuIcon.prefHeight + 4;
+        return validationSkin.getMenuIcon.getPrefHeight() + TOLLERANCE;
     }
 }
