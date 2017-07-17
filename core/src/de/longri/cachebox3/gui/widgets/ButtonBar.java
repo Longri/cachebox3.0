@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import de.longri.cachebox3.CB;
 
 import java.util.ArrayList;
@@ -49,7 +50,12 @@ public class ButtonBar extends WidgetGroup {
     public void draw(Batch batch, float parentAlpha) {
         Color color = batch.getColor();
         batch.setColor(1, 1, 1, 1);
-        background.draw(batch, 0, 0, this.getWidth(), this.getHeight());
+
+
+        float drawableWidth = (background instanceof TextureRegionDrawable) ?
+                ((TextureRegionDrawable) background).getRegion().getRegionWidth() : getWidth();
+        float drawX = (getWidth() - drawableWidth) / 2;
+        background.draw(batch, drawX, 0, drawableWidth, getHeight());
         batch.setColor(color);
         super.draw(batch, parentAlpha);
     }
@@ -75,7 +81,7 @@ public class ButtonBar extends WidgetGroup {
         this.clear();
         float xPos = margin;
         for (Button button : buttonList) {
-            button.setPosition(xPos, CB.scaledSizes.MARGIN_HALF);
+            button.setPosition(xPos, CB.scaledSizes.MARGIN_HALF / 2);
             this.addActor(button);
             xPos += button.getWidth() + margin;
         }
@@ -83,7 +89,7 @@ public class ButtonBar extends WidgetGroup {
     }
 
     public float getPrefHeight() {
-        return buttonList.get(0).getHeight() + CB.scaledSizes.MARGIN;
+        return buttonList.get(0).getHeight() + CB.scaledSizes.MARGIN_HALF;
     }
 
 }

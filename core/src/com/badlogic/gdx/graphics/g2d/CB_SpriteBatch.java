@@ -17,6 +17,7 @@ package com.badlogic.gdx.graphics.g2d;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.StringBuilder;
+import de.longri.cachebox3.CB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,13 +33,14 @@ import java.util.Arrays;
 public class CB_SpriteBatch extends SpriteBatch {
 
     private final Logger log = LoggerFactory.getLogger(CB_SpriteBatch.class);
+    private final float DRAW_SCALE_TOLERANCE = Math.min(3.0f, CB.getScaledFloat(1.2f));
 
     public enum Mode {
         THROW, WARN, NORMAL
     }
 
     private final boolean NORMAL, THROW;
-    private final StringBuilder stringBuilder = new StringBuilder();
+    private final StringBuilder stringBuilder = new StringBuilder(100);
 
     public CB_SpriteBatch(Mode mode) {
         switch (mode) {
@@ -60,8 +62,6 @@ public class CB_SpriteBatch extends SpriteBatch {
                 NORMAL = false;
         }
     }
-
-    private final char NULL_CHAR = Character.MIN_VALUE;
 
     @Override
     public void draw(Texture texture, float x, float y, float originX, float originY, float width, float height, float scaleX,
@@ -119,9 +119,13 @@ public class CB_SpriteBatch extends SpriteBatch {
 
 
     private void checkDrawingSize(String name, float srcWidth, float srcHeight, float drwWidth, float drwHeight) {
-        if (drwWidth != srcWidth || drwHeight != srcHeight) {
+
+        float widthDiv = Math.abs(srcWidth - drwWidth);
+        float heightDiv = Math.abs(srcHeight - drwHeight);
+
+        if (widthDiv > DRAW_SCALE_TOLERANCE || heightDiv > DRAW_SCALE_TOLERANCE) {
             stringBuilder.length = 0;
-            Arrays.fill(stringBuilder.chars, NULL_CHAR);
+            Arrays.fill(stringBuilder.chars, Character.MIN_VALUE);
 
             stringBuilder.append("Batch draw scaled Texture '");
             stringBuilder.append(name);
@@ -133,6 +137,10 @@ public class CB_SpriteBatch extends SpriteBatch {
             stringBuilder.append(drwWidth);
             stringBuilder.append("/");
             stringBuilder.append(drwHeight);
+            stringBuilder.append(" difference: ");
+            stringBuilder.append(widthDiv);
+            stringBuilder.append("/");
+            stringBuilder.append(heightDiv);
 
             if (THROW) {
                 throw new RuntimeException(stringBuilder.toString());

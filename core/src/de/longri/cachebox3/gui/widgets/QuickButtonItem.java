@@ -19,6 +19,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
@@ -58,7 +60,7 @@ public class QuickButtonItem extends ListViewItem {
             throw new IllegalStateException(action.getName() + " Action has no Icon");
         }
 
-        mButtonIcon = new Image(spriteDrawable);
+        mButtonIcon = new Image(spriteDrawable, Scaling.none, Align.center);
         this.addActor(mButtonIcon);
 
         if (action instanceof Action_Show_Hint) {

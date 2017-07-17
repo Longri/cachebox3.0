@@ -58,7 +58,7 @@
     },
     "add-wp": {
       "path": "svg/add-wp.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "addCacheIcon": {
       "path": "svg/addCacheIcon.svg",
@@ -638,7 +638,7 @@
     },
     "button_bar_back": {
       "path": "svg/button_bar_back.svg",
-      "scale": 1
+      "scale": 1.695
     },
     "cache": {
       "path": "svg/cache.svg",
@@ -646,7 +646,7 @@
     },
     "cacheListIcon": {
       "path": "svg/cacheListIcon.svg",
-      "scale": 0.19455253
+      "scale": 0.18
     },
     "cache_pressed": {
       "path": "svg/cache_pressed.svg",
@@ -706,7 +706,7 @@
     },
     "compas_icon": {
       "path": "svg/compas_icon.svg",
-      "scale": 0.319
+      "scale": 0.29
     },
     "compass_1_arrow": {
       "path": "svg/compass_1_arrow.svg",
@@ -778,7 +778,7 @@
     },
     "description": {
       "path": "svg/description.svg",
-      "scale": 0.24
+      "scale": 0.235
     },
     "dialog_center": {
       "path": "svg/dialog_center.svg",
@@ -902,11 +902,11 @@
     },
     "hintOff": {
       "path": "svg/hintOff.svg",
-      "scale": 0.2
+      "scale": 0.18
     },
     "hintOn": {
       "path": "svg/hintOn.svg",
-      "scale": 0.2
+      "scale": 0.18
     },
     "hu": {
       "path": "svg/hu.svg",
@@ -946,7 +946,7 @@
     },
     "listIcon": {
       "path": "svg/listIcon.svg",
-      "scale": 0.195
+      "scale": 0.18
     },
     "list_background": {
       "path": "svg/list_background.svg",
@@ -966,7 +966,7 @@
     },
     "map": {
       "path": "svg/map.svg",
-      "scale": 0.19455253
+      "scale": 0.18
     },
     "map-info-panel-background": {
       "path": "svg/map-info-panel-background.svg",
@@ -1528,6 +1528,10 @@
       "path": "svg/regular.svg",
       "scale": 0.25
     },
+    "reload_cache": {
+      "path": "svg/reload_cache.svg",
+      "scale": 0.195
+    },
     "reviewer_note": {
       "path": "svg/reviewer_note.svg",
       "scale": 0.2
@@ -1642,7 +1646,7 @@
     },
     "waypointListIcon": {
       "path": "svg/waypointListIcon.svg",
-      "scale": 0.195
+      "scale": 0.18
     },
     "webcam_photo_taken": {
       "path": "svg/webcam_photo_taken.svg",
@@ -1919,9 +1923,9 @@
       "left": -1,
       "right": -1,
       "top": -1,
-      "bottom":-1,
-      "leftWidth":0,
-      "rightWidth":0
+      "bottom": -1,
+      "leftWidth": 0,
+      "rightWidth": 0
     },
     "progress_foreground_9_Patch": {
       "name": "progress_foreground",
@@ -2411,13 +2415,13 @@
   },
   "de.longri.cachebox3.gui.skin.styles.ScaledSize": {
     "button_height": {
-      "value": 63
+      "value": 58.531246
     },
     "button_width": {
-      "value": 63
+      "value": 58.531246
     },
     "button_width_wide": {
-      "value": 120
+      "value": 117.06249
     },
     "check_box_height": {
       "value": 12
@@ -2482,6 +2486,7 @@
       "trackListIcon": "trackListIcon",
       "GC_Live": "gc_liveIcon",
       "viewSettings": "view",
+      "reloadCacheIcon": "reload_cache",
       "prefWidth": -1,
       "prefHeight": -1
     }
