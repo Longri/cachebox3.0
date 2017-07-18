@@ -27,7 +27,9 @@ import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
  * Created by Longri on 22.06.2017.
  */
 public class CacheWidget extends Widget {
+
     private final static float prefSize = CB.getScaledFloat(45);
+    private final static float logTypeIconSize = CB.getScaledFloat(25);
     private final Drawable typeIcon, leftInfoIcon, rightInfoIcon;
     private boolean needsLayout = true, hasInfoIcon;
     private float typeIconX, leftIconX, rightIconX;
@@ -53,11 +55,13 @@ public class CacheWidget extends Widget {
         }
 
         //TODO use aspect ratio
-        typeIconWidth = getWidth() / (hasInfoIcon ? 1.2f : 1f);
-        typeIconHeight = getHeight() / (hasInfoIcon ? 1.2f : 1f);
 
-        infoIconWidth = hasInfoIcon ? typeIconWidth / 1.5f : 0;
-        infoIconHeight = hasInfoIcon ? typeIconHeight / 1.5f : 0;
+
+        typeIconWidth = getWidth();
+        typeIconHeight = getHeight();
+
+        infoIconWidth = hasInfoIcon ? logTypeIconSize : 0;
+        infoIconHeight = hasInfoIcon ? logTypeIconSize : 0;
 
         scaleX = getScaleX();
         scaleY = getScaleY();

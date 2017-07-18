@@ -66,7 +66,7 @@
     },
     "archived": {
       "path": "svg/archived.svg",
-      "scale": 0.15
+      "scale": 0.1
     },
     "arrow-compass": {
       "path": "svg/arrow-compass.svg",
@@ -618,7 +618,7 @@
     },
     "attended": {
       "path": "svg/attended.svg",
-      "scale": 0.19
+      "scale": 0.1
     },
     "baseMapFreizeitkarte": {
       "path": "svg/baseMapFreizeitkarte.svg",
@@ -834,7 +834,7 @@
     },
     "enabled": {
       "path": "svg/enabled.svg",
-      "scale": 0.22
+      "scale": 0.12
     },
     "event": {
       "path": "svg/event.svg",
@@ -866,7 +866,7 @@
     },
     "found": {
       "path": "svg/log0icon.svg",
-      "scale": 0.15
+      "scale": 0.098
     },
     "fr": {
       "path": "svg/fr.svg",
@@ -1462,11 +1462,11 @@
     },
     "needs_archived": {
       "path": "svg/needs_archived.svg",
-      "scale": 0.2
+      "scale": 0.12
     },
     "needs_maintenance": {
       "path": "svg/needs_maintenance.svg",
-      "scale": 0.15
+      "scale": 0.12
     },
     "nl": {
       "path": "svg/nl.svg",
@@ -1474,7 +1474,7 @@
     },
     "notFound": {
       "path": "svg/log1icon.svg",
-      "scale": 0.15
+      "scale": 0.098
     },
     "noteIcon": {
       "path": "svg/noteIcon.svg",
@@ -1482,7 +1482,7 @@
     },
     "noteIconType": {
       "path": "svg/noteIcon.svg",
-      "scale": 0.15
+      "scale": 0.098
     },
     "option_0": {
       "path": "svg/option_0.svg",
@@ -1498,7 +1498,7 @@
     },
     "owner_maintenance": {
       "path": "svg/owner_maintenance.svg",
-      "scale": 0.15
+      "scale": 0.12
     },
     "pane_slider_vertical": {
       "path": "svg/pane_slider_vertical.svg",
@@ -1526,7 +1526,7 @@
     },
     "published": {
       "path": "svg/published.svg",
-      "scale": 0.17
+      "scale": 0.12
     },
     "regular": {
       "path": "svg/regular.svg",
@@ -1538,7 +1538,7 @@
     },
     "reviewer_note": {
       "path": "svg/reviewer_note.svg",
-      "scale": 0.2
+      "scale": 0.12
     },
     "selectOverlay": {
       "path": "svg/selectOverlay.svg",
@@ -1598,7 +1598,7 @@
     },
     "tempDisabled": {
       "path": "svg/tempDisabled.svg",
-      "scale": 0.17
+      "scale": 0.11
     },
     "toast_background": {
       "path": "svg/toast_background.svg",
@@ -1654,7 +1654,7 @@
     },
     "webcam_photo_taken": {
       "path": "svg/webcam_photo_taken.svg",
-      "scale": 0.15
+      "scale": 0.12
     },
     "whereigo": {
       "path": "svg/whereigo.svg",
@@ -1662,7 +1662,7 @@
     },
     "will_attend": {
       "path": "svg/letterbox.svg",
-      "scale": 0.21
+      "scale": 0.11
     }
   },
   "de.longri.cachebox3.utils.SkinColor": {
