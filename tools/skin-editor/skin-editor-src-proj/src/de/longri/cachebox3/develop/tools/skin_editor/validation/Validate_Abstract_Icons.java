@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SavableSvgSkin;
 import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
@@ -56,32 +57,40 @@ public abstract class Validate_Abstract_Icons<T extends ValidationTask> extends 
 
         try {
             Field[] fields = ClassReflection.getFields(tClass);
-            Object instance = validationSkin.get(tClass);
 
-            for (Field field : fields) {
-                Object object = field.get(instance);
+            ObjectMap<String, T> allStyles =  validationSkin.getAll(tClass);
 
-                if (object instanceof Integer) {
-                    continue;
-                }
+            for (Object instance : allStyles.values()) {
 
-                if (object != null) {
-                    TextureRegionDrawable trd = (TextureRegionDrawable) object;
-                    String svgName = trd.getName();
+                String styleName = allStyles.findKey(instance, false) + " / ";
 
-                    ScaledSvg scaledSvg = validationSkin.get(svgName, ScaledSvg.class);
-                    if (scaledSvg.path.toLowerCase().contains("missingicon")) {
-                        isMissingIconList.add(field.getName());
+                for (Field field : fields) {
+                    Object object = field.get(instance);
+
+                    if (object instanceof Integer) {
+                        continue;
                     }
 
-                    checkSize(object, field.getName());
+                    if (object != null) {
+                        TextureRegionDrawable trd = (TextureRegionDrawable) object;
+                        String svgName = trd.getName();
+
+                        ScaledSvg scaledSvg = validationSkin.get(svgName, ScaledSvg.class);
+                        if (scaledSvg.path.toLowerCase().contains("missingicon")) {
+                            isMissingIconList.add(styleName + field.getName());
+                        }
+
+                        checkSize(object, styleName + field.getName());
 
 
-                } else {
-                    isNullList.add(field.getName());
+                    } else {
+                        isNullList.add(styleName + field.getName());
+                    }
+
                 }
-
             }
+
+
         } catch (Exception e) {
             e.printStackTrace();
             errorMsg = "Error with validation task";

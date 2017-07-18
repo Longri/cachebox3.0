@@ -16,11 +16,12 @@
 package de.longri.cachebox3.gui.skin.styles;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import de.longri.cachebox3.CB;
 
 /**
  * Created by Longri on 31.05.2017.
  */
-public class LogTypesStyle {
+public class LogTypesStyle extends AbstractIconStyle{
     public Drawable
             found, // 0
             didnt_find, // 1
@@ -48,4 +49,14 @@ public class LogTypesStyle {
             move_to_inventory, // 23
             announcement, // 24
             visited; // 25
+
+    @Override
+    public int getPrefWidth() {
+        return CB.getScaledInt(26);
+    }
+
+    @Override
+    public int getPrefHeight() {
+        return CB.getScaledInt(26);
+    }
 }

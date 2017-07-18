@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
@@ -163,15 +164,15 @@ public class TestView extends AbstractView {
                 Drawable attDrawable = logType.getDrawable(logTypesStyle);
 
                 if (iconWidth == 0) {
-                    iconWidth = CB.getScaledFloat(40);//attDrawable.getMinWidth();
-                    iconHeight = CB.getScaledFloat(40);// attDrawable.getMinHeight();
+                    iconWidth = CB.getScaledFloat(25);//attDrawable.getMinWidth();
+                    iconHeight = CB.getScaledFloat(25);// attDrawable.getMinHeight();
                     lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
                     lineTable = new Table();
                     lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
                 }
 
                 if (attDrawable != null) {
-                    lineTable.add(new Image(attDrawable)).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
+                    lineTable.add(new Image(attDrawable, Scaling.stretch)).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
                 } else {
                     lineTable.add(new VisLabel(Integer.toString(i))).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
                 }

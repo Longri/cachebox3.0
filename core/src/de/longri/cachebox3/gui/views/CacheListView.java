@@ -182,8 +182,12 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                             }
                             selectedIndex++;
                         }
-                        listView.setSelection(selectedIndex);
-                        listView.setSelectedItemVisible(false);
+                        try {
+                            listView.setSelection(selectedIndex);
+                            listView.setSelectedItemVisible(false);
+                        } catch (Exception e) {
+                            log.error("setSelected index", e);
+                        }
                         CB.requestRendering();
                         log.debug("Finish Thread add new listView");
                         ON_LAYOUT_WORK.set(false);

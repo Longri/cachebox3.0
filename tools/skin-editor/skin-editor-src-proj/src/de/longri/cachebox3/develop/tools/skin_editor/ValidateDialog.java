@@ -83,6 +83,7 @@ public class ValidateDialog extends Dialog {
         tasks.add(new Validate_UnusedResources(game, validationSkin, getStage()));
         tasks.add(new Validate_Icons(game, validationSkin, getStage()));
         tasks.add(new Validate_MenuIcons(game, validationSkin, getStage()));
+        tasks.add(new Validate_LogTypeIcons(game, validationSkin, getStage()));
     }
 
     public void runValidate() {
@@ -104,14 +105,18 @@ public class ValidateDialog extends Dialog {
 
         //run every task on new Thread
         for (final ValidationTask task : tasks) {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    task.runValidation();
-                    task.setReadyIcon();
-                }
-            });
-            thread.start();
+
+            task.runValidation();
+            task.setReadyIcon();
+
+//            Thread thread = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    task.runValidation();
+//                    task.setReadyIcon();
+//                }
+//            });
+//            thread.start();
         }
 
     }

@@ -34,7 +34,7 @@ import java.util.Arrays;
 public class CB_SpriteBatch extends SpriteBatch {
 
     private final Logger log = LoggerFactory.getLogger(CB_SpriteBatch.class);
-    private final float DRAW_SCALE_TOLERANCE = Math.min(3.0f, CB.getScaledFloat(1.2f));
+    private final float DRAW_SCALE_TOLERANCE = Math.max(1.5f, Math.min(3.0f, CB.getScaledFloat(1.2f)));
     private final Array<String> scaledDrawables = new Array<>();
 
     public enum Mode {

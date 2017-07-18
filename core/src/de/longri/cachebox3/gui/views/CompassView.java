@@ -376,7 +376,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
         private final Label distance, accurate;
 
         private CompassPanel(CompassViewStyle style) {
-            compass = new Compass(style);
+            compass = new Compass(style,true);
 
             Label.LabelStyle distanceStyle = new Label.LabelStyle();
             Label.LabelStyle accurateStyle = new Label.LabelStyle();

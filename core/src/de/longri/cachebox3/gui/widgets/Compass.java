@@ -45,31 +45,31 @@ public class Compass extends WidgetGroup implements Layout {
     private final Matrix4 transform_arrow = new Matrix4();
     private final Matrix4 tmp = new Matrix4();
     private float lastBearing, lastHeading;
-    private final boolean useState;
+    private final boolean useState, CAN_SCALE;
 
     private MapOrientationMode state = MapOrientationMode.NORTH;
     private StateChanged stateChangedListener;
 
     public Compass(String style) {
-        this(VisUI.getSkin().get(style, CompassStyle.class));
+        this(VisUI.getSkin().get(style, CompassStyle.class), false);
     }
 
     public Compass(String style, boolean useState) {
-        this(VisUI.getSkin().get(style, CompassStyle.class), useState);
+        this(VisUI.getSkin().get(style, CompassStyle.class), useState, false);
     }
 
-    public Compass(CompassStyle style) {
-        this(style, false);
+    public Compass(CompassStyle style, boolean canScale) {
+        this(style, false, canScale);
     }
 
-    public Compass(CompassStyle style, boolean useState) {
+    public Compass(CompassStyle style, boolean useState, boolean canScale) {
         this.style = style;
         this.useState = useState;
         rec_frame = new CB_RectF();
         rec_scale = new CB_RectF();
         rec_arrow = new CB_RectF();
         calcSizes();
-
+        CAN_SCALE = canScale;
         if (useState) {
             this.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
@@ -111,8 +111,8 @@ public class Compass extends WidgetGroup implements Layout {
 
     private void calcSizes() {
         prefSize = style.frameNorthOrient.getMinWidth();
-        minSize = prefSize * 0.6f;
-        maxSize = prefSize * 1.3f;
+        minSize = prefSize * (CAN_SCALE ? 0.6f : 1f);
+        maxSize = prefSize * (CAN_SCALE ? 1.3f : 1f);
         scaleRatio = style.scale.getMinWidth() / prefSize;
         arrowRatio = style.arrow.getMinWidth() / prefSize;
     }
