@@ -183,7 +183,8 @@ public class CB {
     }
 
     private static void calcScaleFactor() {
-        scalefactor = (Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale;
+//        scalefactor = (Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale;
+        scalefactor = (float) (Gdx.graphics.getDensity()/1.2634116494889225);
     }
 
     public static void setGlobalScale(float scale) {
@@ -219,7 +220,7 @@ public class CB {
     }
 
     public static void callQuit() {
-        Gdx.app.exit();
+        PlatformConnector.callQuit();
     }
 
     public static boolean isDisplayOff() {

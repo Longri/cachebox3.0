@@ -131,7 +131,7 @@ public class IOS_PlatformConnector extends PlatformConnector {
                 UIViewController mainViewController = ((IOSApplication) Gdx.app).getUIWindow().getRootViewController();
                 descriptionView = new IOS_DescriptionView(mainViewController);
                 log.debug("return new DescriptionView");
-            }else{
+            } else {
                 log.debug("return existing DescriptionView");
             }
             callBack.callBack(descriptionView);
@@ -159,6 +159,11 @@ public class IOS_PlatformConnector extends PlatformConnector {
             log.error(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
             CB.viewmanager.toast(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
         }
+    }
+
+    @Override
+    public void _callQuit() {
+        Gdx.app.exit();
     }
 
     @Override

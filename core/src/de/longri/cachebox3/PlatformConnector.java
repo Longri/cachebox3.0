@@ -68,9 +68,9 @@ public abstract class PlatformConnector {
     protected abstract void descriptionViewToNull();
 
     public static void _openUrlExtern(final String link) {
-        if(CB.isMainThread()){
+        if (CB.isMainThread()) {
             platformConnector.openUrlExtern(link);
-        }else{
+        } else {
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
@@ -81,6 +81,12 @@ public abstract class PlatformConnector {
     }
 
     public abstract void openUrlExtern(String link);
+
+    public static void callQuit() {
+        platformConnector._callQuit();
+    }
+
+    protected abstract void _callQuit();
 
     // SVG implementations #############################################################################################
     public enum SvgScaleType {
@@ -120,15 +126,14 @@ public abstract class PlatformConnector {
     protected abstract void getPlatformDescriptionView(GenericCallBack<PlatformDescriptionView> callBack);
 
 
-
     //Text Input
-    public static void getSinglelineTextInput(Input.TextInputListener listener,String title,String text, String hint){
+    public static void getSinglelineTextInput(Input.TextInputListener listener, String title, String text, String hint) {
         Gdx.input.getTextInput(listener, title, text, hint);
     }
 
-    public abstract void _getMultilineTextInput(Input.TextInputListener listener,String title,String text, String hint);
+    public abstract void _getMultilineTextInput(Input.TextInputListener listener, String title, String text, String hint);
 
-    public static void getMultilineTextInput(Input.TextInputListener listener,String title,String text, String hint){
+    public static void getMultilineTextInput(Input.TextInputListener listener, String title, String text, String hint) {
         platformConnector._getMultilineTextInput(listener, title, text, hint);
     }
 }

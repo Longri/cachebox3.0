@@ -255,7 +255,7 @@ public class MapView extends AbstractView {
 
 
         {//set map scale
-            float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
+            float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue() * 0.8f);
             Tile.SIZE = (int) (400 * scaleFactor);
             CanvasAdapter.dpi = 240 * scaleFactor;
             CanvasAdapter.textScale = scaleFactor;

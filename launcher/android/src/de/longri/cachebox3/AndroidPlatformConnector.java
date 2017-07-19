@@ -29,6 +29,7 @@ import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
@@ -239,6 +240,16 @@ public class AndroidPlatformConnector extends PlatformConnector {
             log.error(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")", exc);
             CB.viewmanager.toast(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
         }
+    }
+
+    @Override
+    public void _callQuit() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            application.getActivity().finishAndRemoveTask();
+        } else {
+            application.getActivity().finishAffinity();
+        }
+        Gdx.app.exit();
     }
 
     @Override

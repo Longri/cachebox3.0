@@ -132,6 +132,11 @@ public class DesktopPlatformConnector extends PlatformConnector {
     }
 
     @Override
+    public void _callQuit() {
+        Gdx.app.exit();
+    }
+
+    @Override
     public void _getMultilineTextInput(final Input.TextInputListener listener, final String title,
                                        final String text, final String hint) {
         SwingUtilities.invokeLater(new Runnable() {
