@@ -307,4 +307,20 @@ public class AndroidPlatformConnector extends PlatformConnector {
             }
         });
     }
+
+    public void removeLocationListener() {
+        application.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    locationManager.removeUpdates(locationListener);
+                    locationManager = null;
+                    locationListener = null;
+                } catch (Exception e) {
+                    log.error("main.initialLocationManager()", e);
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }

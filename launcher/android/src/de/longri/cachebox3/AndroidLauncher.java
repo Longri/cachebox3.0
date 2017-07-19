@@ -114,6 +114,11 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
             mSensorManager.unregisterListener(mListener);
     }
 
+    @Override
+    protected void onDestroy() {
+        AndroidPlatformConnector.platformConnector.removeLocationListener();
+        super.onDestroy();
+    }
 
     private final SensorEventListener mListener = new SensorEventListener() {
         private float[] gravity;
