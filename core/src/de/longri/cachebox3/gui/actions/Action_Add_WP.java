@@ -89,6 +89,9 @@ public class Action_Add_WP extends AbstractAction {
                         waypointDAO.ResetStartWaypoint(EventHandler.getSelectedCache(), value);
                     }
                     waypointDAO.WriteToDatabase(value);
+
+                    // add WP to Cache
+                    EventHandler.getSelectedCache().waypoints.add(value);
                 }
             }
         });
