@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import com.badlogic.gdx.Gdx;
@@ -68,6 +69,12 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        log.debug("Android Display Metrics" + dm.toString());
     }
 
     protected void onStart() {
@@ -127,7 +134,7 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
                 if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
                     gravity = event.values;
                 long now = System.currentTimeMillis();
-                if (lastUpdateTime == 0 || lastUpdateTime + updateTime<now){
+                if (lastUpdateTime == 0 || lastUpdateTime + updateTime < now) {
                     if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
                         geomagnetic = event.values;
                         if (gravity != null && geomagnetic != null) {
