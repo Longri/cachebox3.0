@@ -57,7 +57,7 @@ public class CB_SpriteBatch extends SpriteBatch {
                 break;
             case NORMAL:
                 THROW = false;
-                NORMAL = false;
+                NORMAL = true;
                 break;
             default:
                 THROW = true;

@@ -47,7 +47,7 @@ public class StageManager {
     final static Array<NamedStage> stageList = new Array<>(5);
 
     public final static Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
-    public final static CB_SpriteBatch batch = new CB_SpriteBatch(CB_SpriteBatch.Mode.WARN);
+    public final static CB_SpriteBatch batch = new CB_SpriteBatch(CB_SpriteBatch.Mode.NORMAL);
 
 
     final static NamedStage toastStage = new NamedStage("toastStage", viewport, batch);
