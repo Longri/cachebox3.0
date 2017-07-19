@@ -166,13 +166,23 @@ public class MapView extends AbstractView {
                     }
                     setCenterCrossLayerEnabled(false);
                 } else if (mapMode == MapMode.WP) {
-                    log.debug("Activate WP Mode");
                     final Coordinate wpCoord = EventHandler.getSelectedCoord();
-                    animator.position(
-                            MercatorProjection.longitudeToX(wpCoord.longitude),
-                            MercatorProjection.latitudeToY(wpCoord.latitude)
-                    );
-                    setCenterCrossLayerEnabled(false);
+                    if (wpCoord == null) {
+                        // we hav no selected WP, so switch MapMode to 'LOCK'
+                        CB.postOnMainThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mapStateButton.setMapMode(MapMode.LOCK, true, new Event());
+                            }
+                        });
+                    } else {
+                        log.debug("Activate WP Mode");
+                        animator.position(
+                                MercatorProjection.longitudeToX(wpCoord.longitude),
+                                MercatorProjection.latitudeToY(wpCoord.latitude)
+                        );
+                        setCenterCrossLayerEnabled(false);
+                    }
                 } else if (mapMode == MapMode.LOCK) {
                     setCenterCrossLayerEnabled(false);
                 } else if (mapMode == MapMode.FREE) {
