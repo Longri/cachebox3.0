@@ -16,6 +16,8 @@
 package de.longri.cachebox3;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -70,11 +72,13 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
         accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-        log.debug("Android Display Metrics" + dm.toString());
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+        int resId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resId > 0) {
+            CB.androidStatusbarHeight = getResources().getDimensionPixelSize(resId);
+        } else {
+            CB.androidStatusbarHeight = bm.getHeight() / 2;
+        }
     }
 
     protected void onStart() {

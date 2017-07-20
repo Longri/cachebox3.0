@@ -79,6 +79,8 @@ public class CB {
     public static MapMode mapMode = MapMode.FREE;
     public final static GpsEventHelper eventHelper = new GpsEventHelper();
 
+    public static int androidStatusbarHeight;
+
     final static float PPI_DEFAULT = 163;
     private static float globalScale = 1;
     public static ViewManager viewmanager;
@@ -186,9 +188,14 @@ public class CB {
 
     private static void calcScaleFactor() {
         if (CanvasAdapter.platform.isDesktop()) {
+            //Desktop
             scalefactor = (Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale;
+        } else if (CanvasAdapter.platform == Platform.IOS) {
+            //iOS
+            scalefactor = ((Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale) * 0.8f;
         } else {
-            scalefactor = (float) (Gdx.graphics.getDensity() / 1.2634116494889225);
+            //Android
+            scalefactor = (float) (300.0 / androidStatusbarHeight) * globalScale;
         }
     }
 
