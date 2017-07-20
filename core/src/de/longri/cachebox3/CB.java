@@ -39,6 +39,8 @@ import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.ScaledSizes;
 import de.longri.cachebox3.utils.SkinColor;
+import org.oscim.backend.CanvasAdapter;
+import org.oscim.backend.Platform;
 import org.oscim.renderer.atlas.TextureRegion;
 import org.oscim.theme.IRenderTheme;
 import org.oscim.theme.ThemeFile;
@@ -183,8 +185,11 @@ public class CB {
     }
 
     private static void calcScaleFactor() {
-//        scalefactor = (Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale;
-        scalefactor = (float) (Gdx.graphics.getDensity()/1.2634116494889225);
+        if (CanvasAdapter.platform.isDesktop()) {
+            scalefactor = (Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale;
+        } else {
+            scalefactor = (float) (Gdx.graphics.getDensity() / 1.2634116494889225);
+        }
     }
 
     public static void setGlobalScale(float scale) {
