@@ -195,7 +195,7 @@ public class CB {
             scalefactor = ((Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale) * 0.8f;
         } else {
             //Android
-            scalefactor = (float) (300.0 / androidStatusbarHeight) * globalScale;
+            scalefactor = (float) (0.0325520 * androidStatusbarHeight) * globalScale;
         }
     }
 
