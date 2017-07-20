@@ -29,6 +29,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable baseMapMapsforge;
     public Drawable baseMapFreizeitkarte;
     public Drawable target;
+    public Drawable mapLayer;
 
     @Override
     public int getPrefWidth() {

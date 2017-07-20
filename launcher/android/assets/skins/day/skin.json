@@ -976,6 +976,10 @@
       "path": "svg/map-info-panel-background.svg",
       "scale": 0.75
     },
+    "map-layer": {
+      "path": "svg/map-layer.svg",
+      "scale": 0.19
+    },
     "mapCITO": {
       "path": "svg/cito.svg",
       "scale": 0.15
@@ -2457,6 +2461,7 @@
       "baseMapMapsforge": "baseMapMapsforge",
       "baseMapFreizeitkarte": "baseMapFreizeitkarte",
       "target": "target",
+      "mapLayer": "map-layer",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
       "deleteIcon": "deleteIcon",

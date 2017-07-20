@@ -83,7 +83,7 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
     public Menu getContextMenu() {
         Menu icm = new Menu("menu_mapviewgl");
 
-        icm.addItem(MenuID.MI_LAYER, "Layer");
+        icm.addItem(MenuID.MI_LAYER, "Layer",CB.getSkin().getMenuIcon.mapLayer);
      //ISSUE (#110 add MapView Overlays) icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
      //ISSUE (#111 MapView create WP at center)    icm.addItem(MenuID.MI_CENTER_WP, "CenterWP");
         icm.addItem(MenuID.MI_MAPVIEW_VIEW, "view", CB.getSkin().getMenuIcon.viewSettings);
