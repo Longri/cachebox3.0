@@ -150,6 +150,7 @@ project(":android") {
         compile 'com.caverock:androidsvg:1.2.2-beta-1'
         compile 'com.android.support:support-v4:23.3.0'
         compile 'org.sqldroid:sqldroid:1.0.3'
+        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
 
         //vtm
         compile "org.mapsforge:vtm-android:$vtmVersion"
