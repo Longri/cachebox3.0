@@ -303,6 +303,6 @@ public class ButtonDialog extends Window {
             maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (2 * CB.scaledSizes.MARGIN) + (minButtonWidth);
         }
 
-        return Math.max(min, maxButtonWidth);
+        return Math.min(Math.max(min, maxButtonWidth), Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx4);
     }
 }
