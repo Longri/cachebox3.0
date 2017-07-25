@@ -93,9 +93,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
                 boolean hasIcon = (mIcon != null);
                 if (hasIcon) {
                     com.badlogic.gdx.scenes.scene2d.ui.Image iconImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(mIcon);
-                    iconImage.setWidth(iconImage.getWidth() * imageScaleValue);
-                    iconImage.setHeight(iconImage.getHeight() * imageScaleValue);
-                    this.add(iconImage).width(iconImage.getWidth()).height(iconImage.getHeight()).center().padRight(CB.scaledSizes.MARGIN_HALF);
+                    this.add(iconImage).center().padRight(CB.scaledSizes.MARGIN_HALF);
                     if (!mIsEnabled) {
                         // TODO iconImage.setColor(COLOR.getDisableFontColor());
                     }

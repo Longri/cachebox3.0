@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
@@ -37,8 +38,6 @@ public class MenuItem extends ListViewItem {
     protected Label mLabel;
     protected Image checkImage;
     protected Drawable mIcon;
-    protected float imageScaleValue = 1;
-
 
     protected String mTitle;
     protected boolean mIsEnabled = true;
@@ -111,10 +110,8 @@ public class MenuItem extends ListViewItem {
 
         boolean hasIcon = (mIcon != null);
         if (hasIcon) {
-            Image iconImage = new Image(mIcon);
-            iconImage.setWidth(iconImage.getWidth() * imageScaleValue);
-            iconImage.setHeight(iconImage.getHeight() * imageScaleValue);
-            this.add(iconImage).width(iconImage.getWidth()).height(iconImage.getHeight()).center().padRight(CB.scaledSizes.MARGIN_HALF);
+            Image iconImage = new Image(mIcon, Scaling.none);
+            this.add(iconImage).center().padRight(CB.scaledSizes.MARGIN_HALF);
             if (!mIsEnabled) {
                 // TODO iconImage.setColor(COLOR.getDisableFontColor());
             }
@@ -178,14 +175,6 @@ public class MenuItem extends ListViewItem {
      * @return This Item so additional setters can be called.
      */
     public MenuItem setIcon(Drawable icon) {
-        CB.scaledSizes.checkMaxIconSize();
-        if (icon != null && icon.getMinWidth() > CB.scaledSizes.ICON_HEIGHT) {
-            // set scaled icon size!
-            imageScaleValue = Math.min(CB.scaledSizes.ICON_WIDTH / icon.getMinWidth(), CB.scaledSizes.ICON_HEIGHT / icon.getMinHeight());
-            log.debug("Menu Icon size not otimal for item: " + this.getName() + "! Maby use scalefactor = " + imageScaleValue);
-        } else {
-            imageScaleValue = 1f;
-        }
         mIcon = icon;
         initial();
         return this;
