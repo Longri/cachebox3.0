@@ -44,9 +44,12 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
+import de.longri.cachebox3.utils.UnitFormatter;
+import org.oscim.scalebar.ImperialUnitAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.security.KeyManagementException;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -59,7 +62,7 @@ public class ImportGcPos extends ActivityBase {
     private static final Logger log = LoggerFactory.getLogger(ImportGcPos.class);
 
     private final VisTextButton bOK, bCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap;
-    private final VisLabel lblTitle, lblRadius, lblRadiusEinheit, lblCaches, lblWaypoints, lblLogs, lblImages;
+    private final VisLabel lblTitle, lblRadius, lblRadiusUnit, lblCaches, lblWaypoints, lblLogs, lblImages;
     private final Image gsLogo;
     private final CoordinateButton coordBtn;
     private final VisCheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
@@ -69,12 +72,12 @@ public class ImportGcPos extends ActivityBase {
     private boolean needLayout = true;
     private final Image workAnimation;
     private final VisProgressBar progressBar;
-    private final AtomicBoolean canceld = new AtomicBoolean(false);
+    private final AtomicBoolean canceled = new AtomicBoolean(false);
 
     /**
      * 0=GPS, 1= Map, 2= Manuell
      */
-    private int searcheState = 0;
+    private int searchState = 0;
 
 
     public ImportGcPos() {
@@ -89,7 +92,7 @@ public class ImportGcPos extends ActivityBase {
         lblLogs = new VisLabel("Imported Log's: 0");
         lblImages = new VisLabel("Imported Images: 0");
         textAreaRadius = new VisTextArea("default");
-        lblRadiusEinheit = new VisLabel(Config.ImperialUnits.getValue() ? "mi" : "km");
+        lblRadiusUnit = new VisLabel(Config.ImperialUnits.getValue() ? "mi" : "km");
         btnMinus = new VisTextButton("-");
         btnPlus = new VisTextButton("+");
         checkBoxOnlyAvailable = new VisCheckBox(Translation.Get("SearchOnlyAvailable"));
@@ -136,7 +139,7 @@ public class ImportGcPos extends ActivityBase {
         this.row().padTop(new Value.Fixed(CB.scaledSizes.MARGINx2 * 2));
         this.add(lblRadius);
         this.add(textAreaRadius).height(new Value.Fixed((textAreaRadius.getStyle().font.getLineHeight() + CB.scaledSizes.MARGINx4) * 1.3f));
-        this.add(lblRadiusEinheit).left();
+        this.add(lblRadiusUnit).left();
         this.add(btnMinus).width(new Value.Fixed(textAreaRadius.getPrefHeight()));
         this.add(btnPlus).width(new Value.Fixed(textAreaRadius.getPrefHeight()));
         this.row().left();
@@ -205,7 +208,7 @@ public class ImportGcPos extends ActivityBase {
         bCancel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (importRuns) {
-                    canceld.set(true);
+                    canceled.set(true);
                 } else {
                     finish();
                 }
@@ -261,7 +264,7 @@ public class ImportGcPos extends ActivityBase {
 
     private void initialCoordinates() {
         // initiate Coordinates to actual Map-Center or actual GPS Coordinate
-        switch (searcheState) {
+        switch (searchState) {
             case 0:
                 actSearchPos = EventHandler.getMyPosition();
                 break;
@@ -297,12 +300,12 @@ public class ImportGcPos extends ActivityBase {
      * 0=GPS, 1= Map, 2= Manuell
      */
     public void setToggleBtnState(int value) {
-        searcheState = value;
+        searchState = value;
         setToggleBtnState();
     }
 
     private void setToggleBtnState() {// 0=GPS, 1= Map, 2= Manuell
-        switch (searcheState) {
+        switch (searchState) {
             case 0:
                 tglBtnGPS.setChecked(true);
                 tglBtnMap.setChecked(false);
@@ -340,7 +343,7 @@ public class ImportGcPos extends ActivityBase {
                 lblCaches.setText("Imported Caches: " + event.progress.caches);
                 lblWaypoints.setText("Imported Waypoints: " + event.progress.wayPoints);
                 lblLogs.setText("Imported Logs: " + event.progress.logs);
-                lblImages.setText("Imported Caches: " + event.progress.images);
+                lblImages.setText("Imported Images: " + event.progress.images);
             }
         };
         EventHandler.add(progressListener);
@@ -362,12 +365,14 @@ public class ImportGcPos extends ActivityBase {
 
         Config.AcceptChanges();
 
+        if (Config.ImperialUnits.getValue()) radius = UnitFormatter.getKilometer(radius);
+
         bOK.setDisabled(true);
         importRuns = true;
 
 
         if (actSearchPos != null) {
-            importNow(progressListener, ImportStart);
+            importNow(progressListener, ImportStart, radius);
         } else {
             //wait for act Position
             CB.viewmanager.toast(Translation.Get("waiting_for_fix"), ViewManager.ToastLength.WAIT);
@@ -380,17 +385,17 @@ public class ImportGcPos extends ActivityBase {
                 }
                 actSearchPos = EventHandler.getMyPosition();
                 //TODO react of CANCEL
-                if (canceld.get()) {
+                if (canceled.get()) {
                     finish();
                     return;
                 }
             }
             ViewManager.ToastLength.WAIT.close();
-            importNow(progressListener, ImportStart);
+            importNow(progressListener, ImportStart, radius);
         }
     }
 
-    private void importNow(final ImportProgressChangedListener progressListener, final Date importStart) {
+    private void importNow(final ImportProgressChangedListener progressListener, final Date importStart, int radius) {
         Category category = CB.Categories.getCategory("API-Import");
         if (category != null) // should not happen!!!
         {
@@ -408,11 +413,11 @@ public class ImportGcPos extends ActivityBase {
                 log.debug("Api state = {}", apiState);
                 log.debug("Search at Coordinate:{}", actSearchPos);
                 final SearchCoordinate searchC = new SearchCoordinate(GroundspeakAPI.getAccessToken(),
-                        50, actSearchPos, Config.lastSearchRadius.getValue() * 1000,
+                        50, actSearchPos, radius * 1000,
                         apiState, new ICancel() {
                     @Override
                     public boolean cancel() {
-                        return canceld.get();
+                        return canceled.get();
                     }
                 });
                 searchC.excludeFounds = Config.SearchWithoutFounds.getValue();
@@ -431,7 +436,7 @@ public class ImportGcPos extends ActivityBase {
                                 long ImportZeit = Importfin.getTime() - importStart.getTime();
                                 Msg = "Import " + String.valueOf(searchC.cacheCount) + "C " + String.valueOf(searchC.logCount) + "L in " + String.valueOf(ImportZeit);
                             } else {
-                                Msg = "Import canceld";
+                                Msg = "Import canceled";
                             }
 
                             log.debug(Msg);
@@ -487,9 +492,9 @@ public class ImportGcPos extends ActivityBase {
 //        if (lblRadius != null)
 //            lblRadius.dispose();
 //        lblRadius = null;
-//        if (lblRadiusEinheit != null)
-//            lblRadiusEinheit.dispose();
-//        lblRadiusEinheit = null;
+//        if (lblRadiusUnit != null)
+//            lblRadiusUnit.dispose();
+//        lblRadiusUnit = null;
 //        if (lblMarkerPos != null)
 //            lblMarkerPos.dispose();
 //        lblMarkerPos = null;

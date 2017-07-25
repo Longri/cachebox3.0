@@ -32,6 +32,14 @@ public class UnitFormatter {
     private final static String ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private final static String ROT13_LOOKUP = "nopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM";
 
+    public static int getMiles(int kilometer) {
+        return (int) Math.ceil(kilometer * 0.621371);
+    }
+
+    public static int getKilometer(int miles) {
+        return (int) Math.ceil(miles * 1.609343502101154);
+    }
+
     private static boolean mUseImperialUnits = false;
 
     public static void setUseImperialUnits(boolean useImperialUnits) {
