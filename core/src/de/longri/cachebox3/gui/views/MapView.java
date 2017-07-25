@@ -533,6 +533,7 @@ public class MapView extends AbstractView {
         Settings_Map.ShowDirektLine.addChangedEventListener(new IChanged() {
             @Override
             public void isChanged() {
+                if (map == null) return;
                 log.debug("change direct line visibility to {}", Settings_Map.ShowDirektLine.getValue() ? "visible" : "invisible");
                 directLineLayer.setEnabled(Settings_Map.ShowDirektLine.getValue());
                 map.updateMap(true);

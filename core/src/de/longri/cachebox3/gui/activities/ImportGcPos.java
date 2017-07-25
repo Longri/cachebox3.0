@@ -35,6 +35,7 @@ import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.events.ImportProgressChangedListener;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
+import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.locator.Coordinate;
@@ -42,10 +43,12 @@ import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -66,6 +69,7 @@ public class ImportGcPos extends ActivityBase {
     private boolean needLayout = true;
     private final Image workAnimation;
     private final VisProgressBar progressBar;
+    private final AtomicBoolean canceld = new AtomicBoolean(false);
 
     /**
      * 0=GPS, 1= Map, 2= Manuell
@@ -131,7 +135,7 @@ public class ImportGcPos extends ActivityBase {
         this.add(gsLogo).colspan(2).center();
         this.row().padTop(new Value.Fixed(CB.scaledSizes.MARGINx2 * 2));
         this.add(lblRadius);
-        this.add(textAreaRadius).height(textAreaRadius.getStyle().font.getLineHeight() + CB.scaledSizes.MARGINx2);
+        this.add(textAreaRadius).height(new Value.Fixed((textAreaRadius.getStyle().font.getLineHeight() + CB.scaledSizes.MARGINx4) * 1.3f));
         this.add(lblRadiusEinheit).left();
         this.add(btnMinus).width(new Value.Fixed(textAreaRadius.getPrefHeight()));
         this.add(btnPlus).width(new Value.Fixed(textAreaRadius.getPrefHeight()));
@@ -192,7 +196,7 @@ public class ImportGcPos extends ActivityBase {
                 CB.postAsync(new Runnable() {
                     @Override
                     public void run() {
-                        ImportNow();
+                        startImport();
                     }
                 });
             }
@@ -201,7 +205,7 @@ public class ImportGcPos extends ActivityBase {
         bCancel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (importRuns) {
-
+                    canceld.set(true);
                 } else {
                     finish();
                 }
@@ -231,7 +235,7 @@ public class ImportGcPos extends ActivityBase {
 
         tglBtnMap.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                if(tglBtnMap.isDisabled()){
+                if (tglBtnMap.isDisabled()) {
                     actSearchPos = new CoordinateGPS(Config.MapInitLatitude.getValue(), Config.MapInitLongitude.getValue());
                     setToggleBtnState(0);
                     return;
@@ -317,7 +321,7 @@ public class ImportGcPos extends ActivityBase {
 
     }
 
-    private void ImportNow() {
+    private void startImport() {
         workAnimation.setVisible(true);
 
         final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
@@ -363,73 +367,100 @@ public class ImportGcPos extends ActivityBase {
 
 
         if (actSearchPos != null) {
-            Category category = CB.Categories.getCategory("API-Import");
-            if (category != null) // should not happen!!!
-            {
-                GpxFilename gpxFilename = category.addGpxFilename("API-Import");
-                if (gpxFilename != null) {
+            importNow(progressListener, ImportStart);
+        } else {
+            //wait for act Position
+            CB.viewmanager.toast(Translation.Get("waiting_for_fix"), ViewManager.ToastLength.WAIT);
 
-                    log.debug("Ask for API state");
-                    byte apiState;
-                    if (GroundspeakAPI.isPremiumMember()) {
-                        apiState = 2;
-                    } else {
-                        apiState = 1;
-                    }
-
-                    log.debug("Api state = {}", apiState);
-                    log.debug("Search at Coordinate:{}", actSearchPos);
-                    final SearchCoordinate searchC = new SearchCoordinate(GroundspeakAPI.getAccessToken(),
-                            50, actSearchPos, Config.lastSearchRadius.getValue() * 1000,
-                            apiState);
-                    searchC.excludeFounds = Config.SearchWithoutFounds.getValue();
-                    searchC.excludeHides = Config.SearchWithoutOwns.getValue();
-                    searchC.available = Config.SearchOnlyAvailable.getValue();
-
-                    log.debug("Request Groundspeak API");
-                    searchC.postRequest(new GenericCallBack<Integer>() {
-                        @Override
-                        public void callBack(Integer value) {
-                            if (value == PostRequest.NO_ERROR) {
-
-                                String Msg;
-                                if (ImportStart != null) {
-                                    Date Importfin = new Date();
-                                    long ImportZeit = Importfin.getTime() - ImportStart.getTime();
-                                    Msg = "Import " + String.valueOf(searchC.cacheCount) + "C " + String.valueOf(searchC.logCount) + "L in " + String.valueOf(ImportZeit);
-                                } else {
-                                    Msg = "Import canceld";
-                                }
-
-                                log.debug(Msg);
-                                CB.viewmanager.toast(Msg);
-
-                                //remove Progress handler
-                                EventHandler.remove(progressListener);
-
-                                //close Dialog
-                                finish();
-
-                                //fire CacheList changed event
-                                CacheListChangedEventList.Call();
-                            }
-                            {
-                                //Error
-                                log.debug("ERROR");
-                                CB.viewmanager.toast("ERROR");
-
-                                //remove Progress handler
-                                EventHandler.remove(progressListener);
-
-                                //close Dialog
-                                finish();
-
-                                //fire CacheList changed event
-                                CacheListChangedEventList.Call();
-                            }
-                        }
-                    }, gpxFilename.Id);
+            while (actSearchPos == null) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                actSearchPos = EventHandler.getMyPosition();
+                //TODO react of CANCEL
+                if (canceld.get()) {
+                    finish();
+                    return;
+                }
+            }
+            ViewManager.ToastLength.WAIT.close();
+            importNow(progressListener, ImportStart);
+        }
+    }
+
+    private void importNow(final ImportProgressChangedListener progressListener, final Date importStart) {
+        Category category = CB.Categories.getCategory("API-Import");
+        if (category != null) // should not happen!!!
+        {
+            GpxFilename gpxFilename = category.addGpxFilename("API-Import");
+            if (gpxFilename != null) {
+
+                log.debug("Ask for API state");
+                byte apiState;
+                if (GroundspeakAPI.isPremiumMember()) {
+                    apiState = 2;
+                } else {
+                    apiState = 1;
+                }
+
+                log.debug("Api state = {}", apiState);
+                log.debug("Search at Coordinate:{}", actSearchPos);
+                final SearchCoordinate searchC = new SearchCoordinate(GroundspeakAPI.getAccessToken(),
+                        50, actSearchPos, Config.lastSearchRadius.getValue() * 1000,
+                        apiState, new ICancel() {
+                    @Override
+                    public boolean cancel() {
+                        return canceld.get();
+                    }
+                });
+                searchC.excludeFounds = Config.SearchWithoutFounds.getValue();
+                searchC.excludeHides = Config.SearchWithoutOwns.getValue();
+                searchC.available = Config.SearchOnlyAvailable.getValue();
+
+                log.debug("Request Groundspeak API");
+                searchC.postRequest(new GenericCallBack<Integer>() {
+                    @Override
+                    public void callBack(Integer value) {
+                        if (value == PostRequest.NO_ERROR) {
+
+                            String Msg;
+                            if (importStart != null) {
+                                Date Importfin = new Date();
+                                long ImportZeit = Importfin.getTime() - importStart.getTime();
+                                Msg = "Import " + String.valueOf(searchC.cacheCount) + "C " + String.valueOf(searchC.logCount) + "L in " + String.valueOf(ImportZeit);
+                            } else {
+                                Msg = "Import canceld";
+                            }
+
+                            log.debug(Msg);
+                            CB.viewmanager.toast(Msg);
+
+                            //remove Progress handler
+                            EventHandler.remove(progressListener);
+
+                            //close Dialog
+                            finish();
+
+                            //fire CacheList changed event
+                            CacheListChangedEventList.Call();
+                        } else {
+                            //Error
+                            log.debug("ERROR");
+                            CB.viewmanager.toast("ERROR");
+
+                            //remove Progress handler
+                            EventHandler.remove(progressListener);
+
+                            //close Dialog
+                            finish();
+
+                            //fire CacheList changed event
+                            CacheListChangedEventList.Call();
+                        }
+                    }
+                }, gpxFilename.Id);
             }
         }
     }
