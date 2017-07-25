@@ -134,8 +134,8 @@ public class CB_SpriteBatch extends SpriteBatch {
 
         if (this.scaledDrawables.contains(name, false)) return;
 
-        float widthDiv = Math.abs(srcWidth - drwWidth);
-        float heightDiv = Math.abs(srcHeight - drwHeight);
+        float widthDiv = (float) ((int) (Math.abs(srcWidth - drwWidth)));
+        float heightDiv = (float) ((int) (Math.abs(srcHeight - drwHeight)));
 
         if (widthDiv > DRAW_SCALE_TOLERANCE || heightDiv > DRAW_SCALE_TOLERANCE) {
             stringBuilder.length = 0;

@@ -36,8 +36,7 @@ public class CacheWidget extends Widget {
     private float typeIconY, leftIconY, rightIconY;
     private float typeIconWidth, infoIconWidth;
     private float typeIconHeight, infoIconHeight;
-    private float scaleX;
-    private float scaleY;
+
 
     public CacheWidget(CacheTypes cacheType, CacheTypeStyle style, Drawable leftInfoIcon, Drawable rightInfoIcon) {
         this.typeIcon = cacheType.getDrawable(style);
@@ -57,14 +56,11 @@ public class CacheWidget extends Widget {
         //TODO use aspect ratio
 
 
-        typeIconWidth = getWidth();
-        typeIconHeight = getHeight();
+        typeIconWidth = typeIcon.getMinWidth();
+        typeIconHeight = typeIcon.getMinHeight();
 
         infoIconWidth = hasInfoIcon ? logTypeIconSize : 0;
         infoIconHeight = hasInfoIcon ? logTypeIconSize : 0;
-
-        scaleX = getScaleX();
-        scaleY = getScaleY();
 
         super.layout();
         needsLayout = true;
@@ -99,14 +95,14 @@ public class CacheWidget extends Widget {
         if (typeIcon != null) {
             if (typeIcon instanceof TransformDrawable) {
                 float rotation = getRotation();
-                if (scaleX != 1 || scaleY != 1 || rotation != 0) {
+                if (rotation != 0) {
                     ((TransformDrawable) typeIcon).draw(batch, typeIconX, typeIconY, getOriginX(), getOriginY(),
-                            typeIconWidth, typeIconHeight, scaleX, scaleY, rotation);
+                            typeIconWidth, typeIconHeight, 1, 1, rotation);
                 } else {
-                    typeIcon.draw(batch, typeIconX, typeIconY, typeIconWidth * scaleX, typeIconHeight * scaleY);
+                    typeIcon.draw(batch, typeIconX, typeIconY, typeIconWidth, typeIconHeight);
                 }
             } else {
-                typeIcon.draw(batch, typeIconX, typeIconY, typeIconWidth * scaleX, typeIconHeight * scaleY);
+                typeIcon.draw(batch, typeIconX, typeIconY, typeIconWidth, typeIconHeight);
             }
         }
 
@@ -114,28 +110,28 @@ public class CacheWidget extends Widget {
             if (leftInfoIcon != null) {
                 if (leftInfoIcon instanceof TransformDrawable) {
                     float rotation = getRotation();
-                    if (scaleX != 1 || scaleY != 1 || rotation != 0) {
+                    if (rotation != 0) {
                         ((TransformDrawable) leftInfoIcon).draw(batch, leftIconX, leftIconY, getOriginX(), getOriginY(),
-                                infoIconWidth, infoIconHeight, scaleX, scaleY, rotation);
+                                infoIconWidth, infoIconHeight, 1, 1, rotation);
                     } else {
-                        leftInfoIcon.draw(batch, leftIconX, leftIconY, infoIconWidth * scaleX, infoIconHeight * scaleY);
+                        leftInfoIcon.draw(batch, leftIconX, leftIconY, infoIconWidth, infoIconHeight);
                     }
                 } else {
-                    leftInfoIcon.draw(batch, leftIconX, leftIconY, infoIconWidth * scaleX, infoIconHeight * scaleY);
+                    leftInfoIcon.draw(batch, leftIconX, leftIconY, infoIconWidth, infoIconHeight);
                 }
             }
 
             if (rightInfoIcon != null) {
                 if (rightInfoIcon instanceof TransformDrawable) {
                     float rotation = getRotation();
-                    if (scaleX != 1 || scaleY != 1 || rotation != 0) {
+                    if (rotation != 0) {
                         ((TransformDrawable) rightInfoIcon).draw(batch, rightIconX, rightIconY, getOriginX(), getOriginY(),
-                                infoIconWidth, infoIconHeight, scaleX, scaleY, rotation);
+                                infoIconWidth, infoIconHeight, 1, 1, rotation);
                     } else {
-                        rightInfoIcon.draw(batch, rightIconX, rightIconY, infoIconWidth * scaleX, infoIconHeight * scaleY);
+                        rightInfoIcon.draw(batch, rightIconX, rightIconY, infoIconWidth, infoIconHeight);
                     }
                 } else {
-                    rightInfoIcon.draw(batch, rightIconX, rightIconY, infoIconWidth * scaleX, infoIconHeight * scaleY);
+                    rightInfoIcon.draw(batch, rightIconX, rightIconY, infoIconWidth, infoIconHeight);
                 }
             }
         }

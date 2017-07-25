@@ -161,18 +161,18 @@ public class TestView extends AbstractView {
             for (int i = 0, n = logTypes.length; i < n; i++) {
                 LogTypes logType = logTypes[i];
 
-                Drawable attDrawable = logType.getDrawable(logTypesStyle);
+                Drawable drawable = logType.getDrawable(logTypesStyle);
 
                 if (iconWidth == 0) {
-                    iconWidth = CB.getScaledFloat(25);//attDrawable.getMinWidth();
-                    iconHeight = CB.getScaledFloat(25);// attDrawable.getMinHeight();
+                    iconWidth = drawable.getMinWidth() ;
+                    iconHeight = drawable.getMinHeight();
                     lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
                     lineTable = new Table();
                     lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
                 }
 
-                if (attDrawable != null) {
-                    lineTable.add(new Image(attDrawable, Scaling.stretch)).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
+                if (drawable != null) {
+                    lineTable.add(new Image(drawable, Scaling.stretch)).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
                 } else {
                     lineTable.add(new VisLabel(Integer.toString(i))).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
                 }
@@ -208,8 +208,8 @@ public class TestView extends AbstractView {
                     try {
                         Drawable drawable = (Drawable) field.get(CB.getSkin().getMenuIcon);
                         if (iconWidth == 0) {
-                            iconWidth = CB.getScaledFloat(50);
-                            iconHeight = CB.getScaledFloat(50);
+                            iconWidth = drawable.getMinWidth() ;
+                            iconHeight = drawable.getMinHeight();
                             lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
                             lineTable = new Table();
                             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
