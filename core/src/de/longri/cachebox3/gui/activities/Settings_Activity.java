@@ -517,8 +517,20 @@ public class Settings_Activity extends ActivityBase {
 
         float buttonWidth = this.getWidth() - (CB.scaledSizes.MARGINx2 * 2);
 
-        IconButton apiButton = new ApiButton();
+        final ApiButton apiButton = new ApiButton();
         table.add(apiButton).width(new Value.Fixed(buttonWidth)).center();
+
+
+        // add clickListener
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.getType() == InputEvent.Type.touchUp) {
+                    apiButton.generateKey();
+                }
+            }
+        });
+        
+
         return table;
     }
 

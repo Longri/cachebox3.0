@@ -46,7 +46,7 @@ public class IOS_Launcher extends IOSApplication.Delegate {
     @Override
     protected IOSApplication createApplication() {
 
-        CB.setGlobalScale(0.8f);
+        CB.setGlobalScale(1);
 
         final String appDir = System.getenv("HOME");
         final String localPath = appDir + "/Library/local/";
