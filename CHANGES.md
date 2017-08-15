@@ -1,4 +1,8 @@
-[3.1.x]
+[3.2.x]
+- ★ add: -
+- 🐜 fix -
+
+[3.1.977]
 - ★ add: Compass view
 - ★ add: Waypoint Add/Edit dialog
 - ★ add: generate API-Key dialog
