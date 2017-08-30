@@ -440,7 +440,7 @@ public class MapView extends AbstractView {
         mapStateButton.dispose();
 
         infoPanel.dispose();
-
+        Settings_Map.ShowMapCenterCross.removeChangedEventListener(showMapCenterCrossChangedListener);
     }
 
     private void setMapState(MapState state) {
@@ -545,16 +545,19 @@ public class MapView extends AbstractView {
         log.debug("Initial center cross layer and {}", showCenterCross ? "enable" : "disable");
 
         ccl.setEnabled(showCenterCross);
-        Settings_Map.ShowMapCenterCross.addChangedEventListener(new IChanged() {
-            @Override
-            public void isChanged() {
-                log.debug("change center cross visibility to {}", Settings_Map.ShowMapCenterCross.getValue() ? "visible" : "invisible");
-                setCenterCrossLayerEnabled(Settings_Map.ShowMapCenterCross.getValue());
-                map.updateMap(true);
-            }
-        });
+        Settings_Map.ShowMapCenterCross.addChangedEventListener(showMapCenterCrossChangedListener);
         map.layers().add(layerGroup);
     }
+
+    private final IChanged showMapCenterCrossChangedListener = new IChanged() {
+        @Override
+        public void isChanged() {
+            if (map == null) return;
+            log.debug("change center cross visibility to {}", Settings_Map.ShowMapCenterCross.getValue() ? "visible" : "invisible");
+            setCenterCrossLayerEnabled(Settings_Map.ShowMapCenterCross.getValue());
+            map.updateMap(true);
+        }
+    };
 
     private void setMapScaleBarOffset(float xOffset, float yOffset) {
         if (mapScaleBarLayer == null) return;
