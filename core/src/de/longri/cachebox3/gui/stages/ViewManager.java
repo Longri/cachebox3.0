@@ -73,6 +73,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
     private final Action_Show_SpoilerView action_show_spoilerView = new Action_Show_SpoilerView();
     private final Action_Show_TrackableListView action_show_trackableListView = new Action_Show_TrackableListView();
     private final Action_Show_NoteView action_show_noteView = new Action_Show_NoteView();
+    private final Action_Show_Quit action_show_quit = new Action_Show_Quit();
 
     public ViewManager(final CacheboxMain main, Viewport viewport, Batch batch) {
         super("ViewManager", viewport, batch);
@@ -233,7 +234,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         misc_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_activities.Action_Show_Settings(), false, GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Help(), false));
-        misc_button.addAction(new ActionButton(new Action_Show_Quit(), false, GestureDirection.Down));
+        misc_button.addAction(new ActionButton(action_show_quit, false, GestureDirection.Down));
 
 //        actionShowAboutView.execute();
     }
@@ -331,6 +332,10 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
     public AbstractAction getAction_Show_NoteView() {
         return action_show_noteView;
+    }
+
+    public AbstractAction getAction_Show_Quit() {
+        return action_show_quit;
     }
 
 

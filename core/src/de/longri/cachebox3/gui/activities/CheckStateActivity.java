@@ -42,6 +42,7 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -133,15 +134,18 @@ public class CheckStateActivity extends ActivityBase {
     }
 
 
-    private void createOkCancelBtn() {
-        bCancel.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (importRuns) {
-                    canceled.set(true);
-                }
-                finish();
+    private final ClickListener cancelListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            if (importRuns) {
+                canceled.set(true);
             }
-        });
+            finish();
+        }
+    };
+
+    private void createOkCancelBtn() {
+        bCancel.addListener(cancelListener);
+        StageManager.registerForBackKey(cancelListener);
     }
 
     @Override
@@ -288,6 +292,7 @@ public class CheckStateActivity extends ActivityBase {
     @Override
     public void dispose() {
         super.dispose();
+        StageManager.unRegisterForBackKey(cancelListener);
     }
 }
 

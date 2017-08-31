@@ -47,12 +47,12 @@ import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
 import de.longri.cachebox3.gui.skin.styles.SelectBoxStyle;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.ApiButton;
-import de.longri.cachebox3.gui.widgets.IconButton;
 import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
@@ -173,17 +173,20 @@ public class Settings_Activity extends ActivityBase {
         });
 
 
-        btnCancel.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                Config.LoadFromLastValue();
-                finish();
-            }
-        });
+        btnCancel.addListener(cancelClickListener);
+        StageManager.registerForBackKey(cancelClickListener);
     }
 
+    private final ClickListener cancelClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            Config.LoadFromLastValue();
+            finish();
+        }
+    };
 
-    private Array<WidgetGroup> listViews = new Array<WidgetGroup>();
-    private Array<String> listViewsNames = new Array<String>();
+    private Array<WidgetGroup> listViews = new Array<>();
+    private Array<String> listViewsNames = new Array<>();
+    private Array<ClickListener> listBackClickListener = new Array<>();
     Label.LabelStyle nameStyle, descStyle, defaultValuStyle, valueStyle;
 
 
@@ -259,6 +262,7 @@ public class Settings_Activity extends ActivityBase {
         float topY = widgetGroup.getHeight() - CB.scaledSizes.MARGIN_HALF;
         float xPos = 0;
 
+
         ClickListener backClickListener = new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 backClick();
@@ -313,14 +317,27 @@ public class Settings_Activity extends ActivityBase {
         }
         listViews.add(widgetGroup);
         listViewsNames.add(name);
+        listBackClickListener.add(backClickListener);
+        StageManager.registerForBackKey(backClickListener);
         this.addActor(widgetGroup);
     }
 
     private void backClick() {
+
         float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
 
-        if (listViews.size == 1) return;
+        if (listViews.size == 1) {
+            // remove all BackClickListener
+            while (listBackClickListener.size > 0) {
+                StageManager.unRegisterForBackKey(listBackClickListener.pop());
+            }
 
+            //Send click to Cancel button
+            cancelClickListener.clicked(StageManager.BACK_KEY_INPUT_EVENT, -1, -1);
+            return;
+        }
+
+        StageManager.unRegisterForBackKey(listBackClickListener.pop());
         listViewsNames.pop();
         WidgetGroup actWidgetGroup = listViews.pop();
         WidgetGroup showingWidgetGroup = listViews.get(listViews.size - 1);
@@ -529,7 +546,7 @@ public class Settings_Activity extends ActivityBase {
                 }
             }
         });
-        
+
 
         return table;
     }
@@ -984,12 +1001,16 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-
     public static class SettingsActivityStyle extends ActivityBaseStyle {
         public Drawable nextIcon, backIcon, option_select, option_back;
         public BitmapFont nameFont, descFont, defaultValueFont, valueFont;
         public Color nameFontColor, descFontColor, defaultValueFontColor, valueFontColor;
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        StageManager.unRegisterForBackKey(cancelClickListener);
+    }
 
 }

@@ -35,6 +35,7 @@ import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.events.ImportProgressChangedListener;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
@@ -42,14 +43,13 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.types.Category;
+import de.longri.cachebox3.types.GpxFilename;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.UnitFormatter;
-import org.oscim.scalebar.ImperialUnitAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.security.KeyManagementException;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -205,16 +205,19 @@ public class ImportGcPos extends ActivityBase {
             }
         });
 
-        bCancel.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (importRuns) {
-                    canceled.set(true);
-                } else {
-                    finish();
-                }
-            }
-        });
+        bCancel.addListener(cancelClickListener);
+        StageManager.registerForBackKey(cancelClickListener);
     }
+
+    private final ClickListener cancelClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            if (importRuns) {
+                canceled.set(true);
+            } else {
+                finish();
+            }
+        }
+    };
 
     private void initialContent() {
         btnPlus.addListener(new ClickListener() {
@@ -472,7 +475,7 @@ public class ImportGcPos extends ActivityBase {
 
     @Override
     public void dispose() {
-
+        StageManager.unRegisterForBackKey(cancelClickListener);
 
 //        if (bOK != null)
 //            bOK.dispose();

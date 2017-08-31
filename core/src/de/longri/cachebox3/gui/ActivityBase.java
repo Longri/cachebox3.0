@@ -26,7 +26,7 @@ import de.longri.cachebox3.utils.Showable;
  * A wrapper class to bring the CB2 Activities to CB3
  * Created by Longri on 23.08.2016.
  */
-public class ActivityBase extends Window implements Disposable, Showable {
+public class ActivityBase extends Window implements  Showable {
 
 
     protected final ActivityBaseStyle style;

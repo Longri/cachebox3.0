@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 -2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,7 +101,7 @@ public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposa
         hasOk = ok;
         hasCancel = cancel;
         hasDot = dot;
-        hasDelBack= delBack;
+        hasDelBack = delBack;
 
         btn0 = new VisTextButton("0");
         btn1 = new VisTextButton("1");
@@ -138,18 +139,25 @@ public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposa
         btnDot.addListener(clickListener);
         btnLeft.addListener(clickListener);
         btnRight.addListener(clickListener);
-
+        StageManager.registerForBackKey(clickListener);
 
     }
 
     private ClickListener clickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
-            VisTextButton btn = (VisTextButton) event.getListenerActor();
-            String keyValue = String.valueOf(btn.getText());
-            keyValue = keyValue.replace("Del", "D");
-            keyValue = keyValue.replace("Back", "B");
-            keyValue = keyValue.replace(Translation.Get("ok"), "O");
-            keyValue = keyValue.replace(Translation.Get("cancel"), "C");
+            String keyValue;
+            if (event == StageManager.BACK_KEY_INPUT_EVENT) {
+                keyValue = "C";
+            } else {
+                VisTextButton btn = (VisTextButton) event.getListenerActor();
+                keyValue = String.valueOf(btn.getText());
+                keyValue = keyValue.replace("Del", "D");
+                keyValue = keyValue.replace("Back", "B");
+                keyValue = keyValue.replace(Translation.Get("ok"), "O");
+                keyValue = keyValue.replace(Translation.Get("cancel"), "C");
+
+            }
+
             NumPad.this.keyEventListener.KeyPressed(keyValue);
             log.debug("Button [" + keyValue + "] clicked");
         }
@@ -197,7 +205,7 @@ public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposa
         this.add(new Actor()).pad(pad);
         this.add(btn0).pad(pad).width(buttonWidth);
         this.add(hasDot ? btnDot : new Actor()).pad(pad).width(buttonWidth);
-        if(hasDelBack) {
+        if (hasDelBack) {
             this.add(btnDel).pad(pad).width(buttonWidth);
             this.add(btnBack).pad(pad).width(buttonWidth);
         }
@@ -214,6 +222,7 @@ public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposa
         layoutInvalid = false;
     }
 
+    @Override
     public void dispose() {
         btn0.removeListener(clickListener);
         btn1.removeListener(clickListener);
@@ -232,6 +241,7 @@ public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposa
         btnDot.removeListener(clickListener);
         btnLeft.removeListener(clickListener);
         btnRight.removeListener(clickListener);
+        StageManager.unRegisterForBackKey(clickListener);
         this.clear();
     }
 

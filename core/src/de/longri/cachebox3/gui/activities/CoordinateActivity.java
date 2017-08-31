@@ -34,6 +34,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.NumPad;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
@@ -85,6 +86,11 @@ public class CoordinateActivity extends ActivityBase {
         @Override
         public void KeyPressed(String value) {
 
+            if ("C".equals(value)) {
+                cancelListener.clicked(StageManager.BACK_KEY_INPUT_EVENT, -1, -1);
+                return;
+            }
+
             if (value.equals("<") || value.equals(">")) {
                 if (value.equals("<")) {
                     actValueTable.moveFocus(-1);
@@ -96,10 +102,10 @@ public class CoordinateActivity extends ActivityBase {
             actValueTable.enterValue(value);
         }
     };
-    private final NumPad numPad = new NumPad(keyEventListener, NumPad.OptionalButton.none);
+    private NumPad numPad = new NumPad(keyEventListener, NumPad.OptionalButton.none);
     private Cell valueCell;
     private Group placeHolder;
-    ClickListener tglListener = new ClickListener() {
+    private final ClickListener tglListener = new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
             VisTextButton checkedButton = btnGroup.getChecked();
@@ -1045,4 +1051,11 @@ public class CoordinateActivity extends ActivityBase {
             return true;
         }
     };
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        numPad.dispose();
+        numPad = null;
+    }
 }

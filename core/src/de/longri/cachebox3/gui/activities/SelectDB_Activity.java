@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
@@ -205,16 +206,8 @@ public class SelectDB_Activity extends ActivityBase {
         });
 
         // Cancel Button
-        bCancel.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                stopTimer();
-                if (MustSelect) {
-                    new Action_Show_Quit().execute();
-                } else {
-                    finish();
-                }
-            }
-        });
+        bCancel.addListener(cancelClickListener);
+        StageManager.registerForBackKey(cancelClickListener);
 
         // AutoStart Button
         bAutostart.addListener(new ClickListener() {
@@ -243,6 +236,16 @@ public class SelectDB_Activity extends ActivityBase {
         readCountAtThread();
     }
 
+    private final ClickListener cancelClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            stopTimer();
+            if (MustSelect) {
+                new Action_Show_Quit().execute();
+            } else {
+                finish();
+            }
+        }
+    };
 
     TimerTask timerTask = new TimerTask() {
         @Override
@@ -489,6 +492,7 @@ public class SelectDB_Activity extends ActivityBase {
         lvFiles = null;
         lvAdapter = null;
         fileInfos = null;
+        StageManager.unRegisterForBackKey(cancelClickListener);
         super.dispose();
     }
 

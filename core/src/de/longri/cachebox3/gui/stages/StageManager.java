@@ -15,16 +15,15 @@
  */
 package de.longri.cachebox3.gui.stages;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.CB_SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
@@ -57,6 +56,9 @@ public class StageManager {
 
     private static NamedStage mainStage;
     private static InputMultiplexer inputMultiplexer;
+
+    public static final InputEvent BACK_KEY_INPUT_EVENT = new InputEvent();
+    private static final Array<ClickListener> backKeyClickListener = new Array<>();
 
     public static void draw() {
 
@@ -201,7 +203,7 @@ public class StageManager {
     public static void setMainStage(NamedStage stage) {
         mainStage = stage;
 
-        if (false&&mainStage instanceof ViewManager) {
+        if (false && mainStage instanceof ViewManager) {
             // add scaled drawable to batch for non throwing exception with scaled drawing!
             CompassStyle compassStyle = VisUI.getSkin().get("compassViewStyle", CompassViewStyle.class);
             if (compassStyle.arrow != null)
@@ -232,6 +234,17 @@ public class StageManager {
 
     public static void setInputMultiplexer(InputMultiplexer newInputMultiplexer) {
         inputMultiplexer = newInputMultiplexer;
+
+        //add BackKey listener
+        InputProcessor backProcessor = new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                if ((keycode == Input.Keys.ESCAPE) || (keycode == Input.Keys.BACK))
+                    callBackKeyClicked();
+                return false;
+            }
+        };
+        inputMultiplexer.addProcessor(backProcessor);
     }
 
     public static Batch getBatch() {
@@ -246,5 +259,27 @@ public class StageManager {
 
     public static void removeMapMultiplexer(InputMultiplexer mapInputHandler) {
         inputMultiplexer.removeProcessor(mapInputHandler);
+    }
+
+    public static void registerForBackKey(ClickListener clickListener) {
+        if (!backKeyClickListener.contains(clickListener, true)) {
+            backKeyClickListener.add(clickListener);
+        }
+    }
+
+    public static void unRegisterForBackKey(ClickListener clickListener) {
+        if (backKeyClickListener.contains(clickListener, true)) {
+            backKeyClickListener.removeValue(clickListener, true);
+        }
+    }
+
+    private static void callBackKeyClicked() {
+        if (backKeyClickListener.size == 0) {
+            // no listener registered, call Quit!
+            CB.viewmanager.getAction_Show_Quit().execute();
+        } else {
+            // fire only last
+            backKeyClickListener.peek().clicked(BACK_KEY_INPUT_EVENT, -1, -1);
+        }
     }
 }

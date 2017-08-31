@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ public class NumericInput_Activity<T extends Number> extends ActivityBase {
                     returnValue(retValue);
                     hide();
                 } catch (NumberFormatException e) {
-                   CB.viewmanager.toast(Translation.Get("wrongValue"));
+                    CB.viewmanager.toast(Translation.Get("wrongValue"));
                 }
 
             } else if (keyValue.equals("C")) {

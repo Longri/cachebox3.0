@@ -21,12 +21,16 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.gui.widgets.SelectBox;
@@ -156,7 +160,9 @@ public class EditWaypoint extends ActivityBase {
                 }
             });
         }
+        StageManager.registerForBackKey(cancelClickListener);
     }
+
 
     private void create() {
         this.addActor(btnOk);
@@ -176,14 +182,16 @@ public class EditWaypoint extends ActivityBase {
             }
         });
 
-        btnCancel.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                callBack.callBack(null);
-                finish();
-            }
-        });
+        btnCancel.addListener(cancelClickListener);
+
     }
 
+    private final ClickListener cancelClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            callBack.callBack(null);
+            finish();
+        }
+    };
 
     @Override
     public void layout() {
@@ -206,6 +214,11 @@ public class EditWaypoint extends ActivityBase {
 
         contentTable.setBounds(x, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGINx2));
         contentTable.layout();
+    }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        StageManager.unRegisterForBackKey(cancelClickListener);
     }
 }

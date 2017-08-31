@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.utils.Showable;
@@ -32,12 +33,17 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 /**
  * Created by Longri on 14.08.16.
  */
-public class Window extends Table {
+public class Window extends Table implements Disposable {
 
     static private final Vector2 tmpPosition = new Vector2();
     static private final Vector2 tmpSize = new Vector2();
 
     private Drawable stageBackground;
+
+    @Override
+    public void dispose() {
+
+    }
 
 
     public interface WindowCloseListener {
@@ -94,6 +100,8 @@ public class Window extends Table {
         if (this instanceof Showable) {
             ((Showable) this).onHide();
         }
+
+        dispose();
     }
 
     public void draw(Batch batch, float parentAlpha) {

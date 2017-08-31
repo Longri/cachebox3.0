@@ -17,8 +17,6 @@ package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -34,6 +32,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
@@ -188,13 +187,16 @@ public class FileChooser extends ActivityBase {
             }
         });
 
-        btnCancel.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (selectionReturnListner != null) selectionReturnListner.selected(null);
-                finish();
-            }
-        });
+        btnCancel.addListener(cancelClickListener);
+        StageManager.registerForBackKey(cancelClickListener);
     }
+
+    private final ClickListener cancelClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            if (selectionReturnListner != null) selectionReturnListner.selected(null);
+            finish();
+        }
+    };
 
     public void setSelectionReturnListener(SelectionReturnListner listener) {
         this.selectionReturnListner = listener;
@@ -453,5 +455,11 @@ public class FileChooser extends ActivityBase {
 
         ListView listView;
 
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        StageManager.unRegisterForBackKey(cancelClickListener);
     }
 }

@@ -54,6 +54,12 @@ public class Menu extends Window {
     final static boolean ALL = true;
     public final static float MORE_MENU_ANIMATION_TIME = 0.3f;
     private Menu compoundMenu;
+    private final ClickListener backClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            hide(false);
+            StageManager.unRegisterForBackKey(this);
+        }
+    };
 
     public void setCompoundMenu(Menu compoundMenu) {
         this.compoundMenu = compoundMenu;
@@ -198,6 +204,9 @@ public class Menu extends Window {
             showAsChild();
         }
         this.setTouchable(Touchable.enabled);
+
+        StageManager.registerForBackKey(backClickListener);
+
         log.debug("Show menu: " + this.name);
     }
 
@@ -248,6 +257,7 @@ public class Menu extends Window {
         if (this.parentMenu != null) {
             if (all) {
                 StageManager.removeAllWithActStage();
+                StageManager.unRegisterForBackKey(backClickListener);
             } else {
                 float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
                 mainMenuWidgetGroup.addAction(Actions.sequence(Actions.moveTo(0 + nextXPos, 0, MORE_MENU_ANIMATION_TIME), Actions.removeActor()));
@@ -255,6 +265,7 @@ public class Menu extends Window {
             }
         } else {
             super.hide();
+            StageManager.unRegisterForBackKey(backClickListener);
         }
         log.debug("Hide menu: " + this.name);
         isShowing = false;
@@ -274,11 +285,7 @@ public class Menu extends Window {
 
         // add the titleLabel on top
         titleGroup = new WidgetGroup();
-        ClickListener backClickListener = new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                hide(false);
-            }
-        };
+
 
         if (style.menu_back != null) {
             Image backImage = new Image(style.menu_back);
