@@ -27,7 +27,7 @@ import de.longri.cachebox3.gui.views.FieldNotesView;
  */
 public class Action_Show_FieldNotesView extends Abstract_Action_ShowView {
     public Action_Show_FieldNotesView() {
-        super(NOT_IMPLEMENTED, "Fieldnotes", MenuID.AID_SHOW_FIELDNOTES);
+        super(IMPLEMENTED, "Fieldnotes", MenuID.AID_SHOW_FIELDNOTES);
     }
 
     @Override

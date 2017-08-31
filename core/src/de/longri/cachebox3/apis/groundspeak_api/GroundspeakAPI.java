@@ -1224,7 +1224,7 @@ public class GroundspeakAPI {
             } else {
                 Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.Id), false);
                 Database.Data.Query.add(cache);
-                // cacheDAO.UpdateDatabase(cache);
+                // cacheDAO.updateDatabase(cache);
             }
 
         }

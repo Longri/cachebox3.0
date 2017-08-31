@@ -821,7 +821,7 @@ public abstract class Search extends PostRequest {
 //                }
 //
 //                // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
-//                if (!cacheDAO.UpdateDatabase(cache)) {
+//                if (!cacheDAO.updateDatabase(cache)) {
 //                    cacheDAO.writeToDatabase(cache);
 //                }
 //
@@ -881,7 +881,7 @@ public abstract class Search extends PostRequest {
 //
 //                    if (update) {
 //                        // do not store replication information when importing caches with GC api
-//                        if (!waypointDAO.UpdateDatabase(waypoint, false)) {
+//                        if (!waypointDAO.updateDatabase(waypoint, false)) {
 //                            waypointDAO.writeToDatabase(waypoint, false); // do not store replication information here
 //                        }
 //                    }
