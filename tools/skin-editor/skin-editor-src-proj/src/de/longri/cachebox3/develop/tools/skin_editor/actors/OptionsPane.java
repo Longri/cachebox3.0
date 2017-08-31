@@ -373,6 +373,9 @@ public class OptionsPane extends Table {
                         LogListItemStyle logListItemStyle = game.skinProject.get("logListItems", LogListItemStyle.class);
                         styles.put("logListItems", logListItemStyle);
 
+                        FieldNoteListItemStyle fieldNoteListItemStyle = game.skinProject.get("fieldNoteListItemStyle", FieldNoteListItemStyle.class);
+                        styles.put("fieldNoteListItemStyle", fieldNoteListItemStyle);
+
                     }
 
                     if (widgetStyle.equals("com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle")) {

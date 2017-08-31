@@ -16,13 +16,17 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.skin.styles.FieldNoteListItemStyle;
+import de.longri.cachebox3.gui.skin.styles.LogListItemStyle;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.FieldNoteEntry;
 import de.longri.cachebox3.types.FieldNoteList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,12 +39,19 @@ public class FieldNotesView extends AbstractView {
     private static final Logger log = LoggerFactory.getLogger(FieldNotesView.class);
     private final ListView listView = new ListView();
     private final FieldNoteList fieldNotes;
+    private final FieldNoteListItemStyle itemStyle;
 
     private Array<ListViewItem> items;
 
     public FieldNotesView() {
         super("FieldNotesView");
+
+        itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", FieldNoteListItemStyle.class);
+
         fieldNotes = new FieldNoteList();
+        loadFieldNotes(FieldNoteList.LoadingType.LOAD_NEW_LAST_LENGTH);
+
+
         listView.setEmptyString(Translation.Get("EmptyFieldNotes"));
         this.addActor(listView);
         setListViewAdapter();
@@ -89,6 +100,22 @@ public class FieldNotesView extends AbstractView {
         EventHandler.remove(this);
     }
 
+    private void loadFieldNotes(FieldNoteList.LoadingType type) {
+        fieldNotes.loadFieldNotes("", type);
+
+        if (items == null) {
+            items = new Array<>();
+        }
+        items.clear();
+
+        int idx = 0;
+        for (FieldNoteEntry entry : fieldNotes) {
+            items.add(new FieldNotesViewItem(idx++, entry, itemStyle));
+        }
+
+        listView.setAdapter(listViewAdapter);
+
+    }
 
     public Menu getContextMenu() {
         return null;

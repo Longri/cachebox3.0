@@ -2801,6 +2801,15 @@
       "typeStyle": "logViewLogStyles"
     }
   },
+  "de.longri.cachebox3.gui.skin.styles.FieldNoteListItemStyle": {
+    "fieldNoteListItemStyle": {
+      "headerFont": "normal_bold_font",
+      "headerFontColor": "font_color",
+      "descriptionFont": "normal_font",
+      "descriptionFontColor": "font_color",
+      "typeStyle": "logViewLogStyles"
+    }
+  },
   "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle": {
     "cacheList": {
       "traditional": "traddi",

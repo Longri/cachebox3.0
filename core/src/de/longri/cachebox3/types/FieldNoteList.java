@@ -19,6 +19,7 @@ package de.longri.cachebox3.types;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 /**
  * Created by Longri on 31.08.2017
  */
-public class FieldNoteList extends ArrayList<FieldNoteEntry> {
+public class FieldNoteList extends Array<FieldNoteEntry> {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(FieldNoteList.class);
 
     private static final long serialVersionUID = 1L;
@@ -117,10 +118,10 @@ public class FieldNoteList extends ArrayList<FieldNoteEntry> {
 
             // check Cropped
             if (maybeCropped) {
-                if (this.size() > actCroppedLength) {
+                if (this.size > actCroppedLength) {
                     croppedList = true;
                     // remove last item
-                    this.remove(this.size() - 1);
+                    this.removeIndex(this.size - 1);
                 } else {
                     croppedList = false;
                 }
@@ -168,7 +169,7 @@ public class FieldNoteList extends ArrayList<FieldNoteEntry> {
             if (fne != null) {
                 if (fne.type == LogTypes.found)
                     foundNumber = fne.foundNumber;
-                this.remove(fne);
+                this.removeValue(fne, true);
                 fne.deleteFromDatabase();
             }
             decreaseFoundNumber(foundNumber);
@@ -188,7 +189,7 @@ public class FieldNoteList extends ArrayList<FieldNoteEntry> {
             if (fne != null) {
                 if (fne.type == LogTypes.found)
                     foundNumber = fne.foundNumber;
-                this.remove(fne);
+                this.removeValue(fne, true);
                 fne.deleteFromDatabase();
             }
             decreaseFoundNumber(foundNumber);
