@@ -22,6 +22,7 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.FieldNoteList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,7 @@ public class FieldNotesView extends AbstractView {
     public FieldNotesView() {
         super("FieldNotesView");
         fieldNotes = new FieldNoteList();
-
+        listView.setEmptyString(Translation.Get("EmptyFieldNotes"));
         this.addActor(listView);
         setListViewAdapter();
     }
@@ -64,12 +65,12 @@ public class FieldNotesView extends AbstractView {
 
         @Override
         public int getCount() {
-            return items.size;
+            return items == null ? 0 : items.size;
         }
 
         @Override
         public ListViewItem getView(int index) {
-            return items.get(index);
+            return items == null ? null : items.get(index);
         }
 
         @Override
@@ -79,7 +80,7 @@ public class FieldNotesView extends AbstractView {
 
         @Override
         public float getItemSize(int index) {
-            return items.get(index).getHeight();
+            return items == null ? 0 : items.get(index).getHeight();
         }
     };
 

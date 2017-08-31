@@ -2133,6 +2133,8 @@
       "secondItem": "listrec_second_drawable",
       "selectedItem": "listrec_selected_drawable",
       "pad": 1,
+      "emptyFont": "coordinateValueFont",
+      "emptyFontColor": "settings_default_value_font_color",
       "background": "transparent_drawable",
       "vScroll": "slider_drawable",
       "vScrollKnob": "sliderKnob"

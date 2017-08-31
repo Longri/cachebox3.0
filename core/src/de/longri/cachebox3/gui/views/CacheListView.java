@@ -151,6 +151,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
                 CacheListView.this.listView = new ListView(listViewAdapter, false, true);
                 synchronized (CacheListView.this.listView) {
+                    listView.setEmptyString(Translation.Get("EmptyCacheList"));
                     listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
                     addActor(listView);
                     listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));

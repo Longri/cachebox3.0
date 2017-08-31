@@ -54,6 +54,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
 
     public LogListView() {
         super("LogListView");
+        listView.setEmptyString(Translation.Get("EmptyLogList"));
         this.addActor(listView);
         EventHandler.add(this);
     }

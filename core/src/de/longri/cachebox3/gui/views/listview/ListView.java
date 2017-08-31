@@ -16,16 +16,20 @@
 package de.longri.cachebox3.gui.views.listview;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.*;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
@@ -66,6 +70,8 @@ public class ListView extends WidgetGroup {
 
     private final static int SAME_HEIGHT_INITIAL_COUNT = 10;
     private final boolean itemsHaveSameHeight;
+    private VisLabel emptyLabel;
+    private String emptyString = null;
 
     public SnapshotArray<ListViewItem> items() {
         return itemViews;
@@ -205,12 +211,18 @@ public class ListView extends WidgetGroup {
         itemGroup.clear();
     }
 
+    public void setEmptyString(String emptyString) {
+        this.emptyString = emptyString;
+        emptyLabel = null;
+        layout(true);
+    }
+
     public enum SelectableType {
         NONE, SINGLE, MULTI
     }
 
     public interface SelectionChangedEvent {
-        public void selectionChanged();
+        void selectionChanged();
     }
 
     private final Array<SelectionChangedEvent> changedEventListeners = new Array<SelectionChangedEvent>();
@@ -260,13 +272,29 @@ public class ListView extends WidgetGroup {
             return;
         }
 
-        if (adapter == null) return;
-        log.debug("Start Layout Items");
         this.clearChildren();
         itemHeights.clear();
         itemYPos.clear();
         itemViews.clear();
 
+        if (adapter == null || adapter.getCount() == 0) {
+            log.debug("show empty massage");
+
+            if (style.emptyFont == null || style.emptyFontColor == null || emptyString == null)
+                return;
+            Label.LabelStyle labelStyle = new Label.LabelStyle();
+            labelStyle.font = style.emptyFont;
+            labelStyle.fontColor = style.emptyFontColor;
+            emptyLabel = new VisLabel(this.emptyString, labelStyle);
+            emptyLabel.setAlignment(Align.center, Align.center);
+            this.addActor(emptyLabel);
+            emptyLabel.setBounds(0, 0, getWidth(), getHeight());
+            return;
+        }
+
+        emptyLabel = null;
+
+        log.debug("Start Layout Items");
 
         itemGroup.setWidth(this.getWidth());
         itemGroup.clearChildren();
@@ -400,6 +428,10 @@ public class ListView extends WidgetGroup {
         if (scrollPane != null) {
             setScrollPaneBounds();
         } else {
+            if (emptyLabel != null) {
+                emptyLabel.setBounds(0, 0, getWidth(), getHeight());
+                return;
+            }
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
@@ -471,6 +503,10 @@ public class ListView extends WidgetGroup {
 
 
     public void draw(Batch batch, float parentAlpha) {
+
+        if (emptyLabel != null) {
+            super.draw(batch, parentAlpha);
+        }
 
         if (adapter == null) return;
 
@@ -635,6 +671,9 @@ public class ListView extends WidgetGroup {
     }
 
     public void setSelectedItemVisible(boolean withScroll) {
+
+        if (scrollPane == null) return;
+
         //get pos of first selected
         ListViewItem item = this.selectedItemList.size == 0 ? null : this.selectedItemList.get(0);
         float scrollPos = 0;
@@ -672,5 +711,7 @@ public class ListView extends WidgetGroup {
     public static class ListViewStyle extends ScrollPane.ScrollPaneStyle {
         public Drawable firstItem, secondItem, selectedItem;
         public float pad, padLeft, padRight, padTop, padBottom;
+        public BitmapFont emptyFont;
+        public Color emptyFontColor;
     }
 }

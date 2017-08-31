@@ -20,18 +20,22 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.freetype.SkinFont;
-import com.badlogic.gdx.scenes.scene2d.utils.*;
+import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.gui.drawables.*;
+import de.longri.cachebox3.gui.drawables.ColorDrawable;
+import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
+import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.gui.skin.styles.ColorDrawableStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.IconsStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
-import de.longri.cachebox3.gui.stages.initial_tasks.AbstractInitTask;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
@@ -319,6 +323,8 @@ public class SvgSkin extends Skin {
                 style.secondItem = getDrawable(secondItem);
                 style.selectedItem = getDrawable(selectedItem);
 
+                style.emptyFont = getFont(json.readValue("emptyFont", String.class, jsonData));
+                style.emptyFontColor = getColor(json.readValue("emptyFontColor", String.class, jsonData));
 
                 style.pad = json.readValue("pad", float.class, 0f, jsonData);
                 style.padLeft = json.readValue("padLeft", float.class, 0f, jsonData);
