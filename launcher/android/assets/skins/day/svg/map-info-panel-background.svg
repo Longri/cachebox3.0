@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="79.2084" height="79.3333" viewBox="0 0 79.21 79.33" enable-background="new 0 0 79.21 79.33" xml:space="preserve">
-	<path fill="#E3E3E3" fill-opacity="0.596078" stroke-width="2" stroke-linejoin="round" stroke="#324614" stroke-opacity="0.870588" d="M 12.0593,1.06247L 67.1843,1.06247C 73.2594,1.06247 78.1843,5.98734 78.1843,12.0625L 78.1843,67.3125C 78.1843,73.3876 73.2594,78.3125 67.1843,78.3125L 12.0593,78.3125C 5.98413,78.3125 1.05927,73.3876 1.05927,67.3125L 1.05927,12.0625C 1.05927,5.98734 5.98413,1.06247 12.0593,1.06247 Z "/>
+	<path fill="#E3E3E3" fill-opacity="0.827451" stroke-width="2" stroke-linejoin="round" stroke="#324614" stroke-opacity="1" d="M 12.0593,1.06247L 67.1843,1.06247C 73.2594,1.06247 78.1843,5.98734 78.1843,12.0625L 78.1843,67.3125C 78.1843,73.3876 73.2594,78.3125 67.1843,78.3125L 12.0593,78.3125C 5.98413,78.3125 1.05927,73.3876 1.05927,67.3125L 1.05927,12.0625C 1.05927,5.98734 5.98413,1.06247 12.0593,1.06247 Z "/>
 	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.5" y1="-2.34738" x2="6.19475" y2="-2.34738" gradientTransform="rotate(90.000000 0.500000 -2.347377)">
 		<stop offset="0.427907" stop-color="#EEEAEA" stop-opacity="1"/>
 		<stop offset="0.576744" stop-color="#FFFFFF" stop-opacity="0"/>

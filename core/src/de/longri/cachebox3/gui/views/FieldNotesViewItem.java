@@ -15,8 +15,12 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
@@ -25,15 +29,19 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.types.FieldNoteEntry;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Created by Longri on 31.08.2017.
  */
 public class FieldNotesViewItem extends ListViewItem {
+    private final static SimpleDateFormat postFormatter = new SimpleDateFormat("dd.MMM.yy (HH:mm)", Locale.getDefault());
+
+    final private FieldNoteListItemStyle style;
 
     private boolean needsLayout = true;
     private FieldNoteEntry entry;
-    final private FieldNoteListItemStyle style;
+    private VisTable headerTable;
 
     public FieldNotesViewItem(int listIndex, FieldNoteEntry entry, FieldNoteListItemStyle style) {
         super(listIndex);
@@ -51,40 +59,72 @@ public class FieldNotesViewItem extends ListViewItem {
 
         this.clear();
 
-        VisTable headerTable = new VisTable();
+        Label.LabelStyle headerLabelStyle = new Label.LabelStyle();
+        headerLabelStyle.font = this.style.headerFont;
+        headerLabelStyle.fontColor = this.style.headerFontColor;
+
+        Label.LabelStyle commentLabelStyle = new Label.LabelStyle();
+        commentLabelStyle.font = this.style.descriptionFont;
+        commentLabelStyle.fontColor = this.style.descriptionFontColor;
+
+        headerTable = new VisTable();
         headerTable.add(new Image(this.entry.type.getDrawable(style.typeStyle)));
+        headerTable.add((Actor) null).left().padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
 
-        Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
-        nameLabelStyle.font = this.style.headerFont;
-        nameLabelStyle.fontColor = this.style.headerFontColor;
-        VisLabel nameLabel = new VisLabel(this.entry.CacheName, nameLabelStyle);
-        nameLabel.setWrap(true);
-        headerTable.add(nameLabel).left().padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
+        String foundNumber = "";
+        if (entry.foundNumber > 0) {
+            foundNumber = "#" + entry.foundNumber + " @ ";
+        }
 
-        //TODO replace with formatter from localisation settings
-        SimpleDateFormat postFormater = new SimpleDateFormat("dd.MM.yyyy");
-        String dateString = postFormater.format(entry.timestamp);
-        VisLabel dateLabel = new VisLabel(dateString, nameLabelStyle);
+        VisLabel dateLabel = new VisLabel(foundNumber + postFormatter.format(entry.timestamp), headerLabelStyle);
         headerTable.add(dateLabel).padRight(CB.scaledSizes.MARGINx4).right();
-
-        //TODO set Background for header over style
-
         headerTable.pack();
         headerTable.layout();
         this.add(headerTable).left().expandX().fillX();
 
         this.row().padTop(CB.scaledSizes.MARGINx4);
 
-        Label.LabelStyle commentLabelStyle = new Label.LabelStyle();
-        commentLabelStyle.font = this.style.descriptionFont;
-        commentLabelStyle.fontColor = this.style.descriptionFontColor;
+        VisTable cacheTable = new VisTable();
+
+        VisTable iconTable = new VisTable();
+        iconTable.add(entry.cacheType.getCacheWidget(style.cacheTypeStyle, null, null));
+        iconTable.pack();
+        iconTable.layout();
+
+        cacheTable.add(iconTable).left().padRight(CB.scaledSizes.MARGINx4);
+
+        VisLabel nameLabel = new VisLabel(entry.CacheName, headerLabelStyle);
+        nameLabel.setWrap(true);
+        cacheTable.add(nameLabel).padRight(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        cacheTable.row();
+
+        cacheTable.add((Actor)null).left().padRight(CB.scaledSizes.MARGINx4);
+
+        VisLabel gcLabel = new VisLabel(entry.gcCode, headerLabelStyle);
+        gcLabel.setWrap(true);
+        cacheTable.add(gcLabel).padRight(CB.scaledSizes.MARGIN).expandX().fillX();
+
+
+
+        this.add(cacheTable).top().expandX().fillX();
+        this.row().padTop(CB.scaledSizes.MARGINx4);
+
+
         VisLabel commentLabel = new VisLabel(entry.comment, commentLabelStyle);
         commentLabel.setWrap(true);
         this.add(commentLabel).expand().fill();
 
-
         super.layout();
         needsLayout = false;
+    }
+
+    protected void drawBackground(Batch batch, float parentAlpha, float x, float y) {
+        super.drawBackground(batch, parentAlpha, x, y);
+        if (style.headerBackground != null && headerTable != null) {
+            float height = headerTable.getHeight() + this.getPadTop() + this.getPadBottom();
+            style.headerBackground.draw(batch, x, y + (getHeight() - height), getWidth(), height);
+        }
     }
 
     @Override

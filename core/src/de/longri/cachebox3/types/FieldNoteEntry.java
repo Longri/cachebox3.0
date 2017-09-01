@@ -37,7 +37,7 @@ public class FieldNoteEntry {
     public Date timestamp;
     public String typeString = "";
     public LogTypes type;
-    public int cacheType;
+    public CacheTypes cacheType;
     public String comment = "";
     public int foundNumber;
     public String CacheName = "";
@@ -85,7 +85,7 @@ public class FieldNoteEntry {
         CacheId = reader.getLong(0);
         gcCode = reader.getString(1).trim();
         CacheName = reader.getString(2);
-        cacheType = reader.getInt(3);
+        cacheType = CacheTypes.get(reader.getInt(3));
         String sDate = reader.getString(4);
         DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
@@ -116,12 +116,12 @@ public class FieldNoteEntry {
 
         if (type == LogTypes.found || type == LogTypes.attended || type == LogTypes.webcam_photo_taken) {
             typeString = "#" + foundNumber + " - Found it!";
-            if (cacheType == CacheTypes.Event.ordinal()
-                    || cacheType == CacheTypes.MegaEvent.ordinal()
-                    || cacheType == CacheTypes.Giga.ordinal()
-                    || cacheType == CacheTypes.CITO.ordinal())
+            if (cacheType == CacheTypes.Event
+                    || cacheType == CacheTypes.MegaEvent
+                    || cacheType == CacheTypes.Giga
+                    || cacheType == CacheTypes.CITO)
                 typeString = "Attended";
-            if (cacheType == CacheTypes.Camera.ordinal())
+            if (cacheType == CacheTypes.Camera)
                 typeString = "Webcam Photo Taken";
         }
 

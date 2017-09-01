@@ -70,6 +70,7 @@ public abstract class ListViewItem extends VisTable implements Disposable {
         this.prefHeight = height;
     }
 
+    @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         if (onDrawListener != null) {

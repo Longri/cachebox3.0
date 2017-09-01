@@ -330,4 +330,7 @@ public enum CacheTypes implements SelectBoxItem {
         return " ";
     }
 
+    public static CacheTypes get(int index) {
+        return CacheTypes.values()[index];
+    }
 }
