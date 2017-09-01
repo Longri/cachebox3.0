@@ -956,6 +956,10 @@
       "path": "svg/list_background.svg",
       "scale": 1
     },
+    "list_rec_header": {
+      "path": "svg/list_rec_header.svg",
+      "scale": 1
+    },
     "listrec_first": {
       "path": "svg/listrec_first.svg",
       "scale": 1
@@ -1884,6 +1888,13 @@
       "top": 10,
       "bottom": 10
     },
+    "list_rec_header_9_Patch": {
+      "name": "list_rec_header",
+      "left": 10,
+      "right": 10,
+      "top": 10,
+      "bottom": 1
+    },
     "listrec_first_drawable": {
       "name": "listrec_first",
       "left": 10,
@@ -2801,15 +2812,6 @@
       "typeStyle": "logViewLogStyles"
     }
   },
-  "de.longri.cachebox3.gui.skin.styles.FieldNoteListItemStyle": {
-    "fieldNoteListItemStyle": {
-      "headerFont": "normal_bold_font",
-      "headerFontColor": "font_color",
-      "descriptionFont": "normal_font",
-      "descriptionFontColor": "font_color",
-      "typeStyle": "logViewLogStyles"
-    }
-  },
   "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle": {
     "cacheList": {
       "traditional": "traddi",
@@ -2859,5 +2861,16 @@
       "typeStyle": "cacheList"
     },
     "logListItems": {}
+  },
+  "de.longri.cachebox3.gui.skin.styles.FieldNoteListItemStyle": {
+    "fieldNoteListItemStyle": {
+      "headerFont": "normal_bold_font",
+      "headerFontColor": "font_color",
+      "descriptionFont": "normal_font",
+      "descriptionFontColor": "font_color",
+      "typeStyle": "logViewLogStyles",
+      "cacheTypeStyle": "cacheList",
+      "headerBackground": "list_rec_header_9_Patch"
+    }
   }
 }
