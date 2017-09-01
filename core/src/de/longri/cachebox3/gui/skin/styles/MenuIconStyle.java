@@ -30,6 +30,8 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable baseMapFreizeitkarte;
     public Drawable target;
     public Drawable mapLayer;
+    public Drawable deleteAllFieldNotes;
+    public Drawable ownerLogTypes;
 
     @Override
     public int getPrefWidth() {
