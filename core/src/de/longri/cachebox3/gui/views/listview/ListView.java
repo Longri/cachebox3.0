@@ -214,7 +214,12 @@ public class ListView extends WidgetGroup {
     public void setEmptyString(String emptyString) {
         this.emptyString = emptyString;
         emptyLabel = null;
-        layout(true);
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                layout(true);
+            }
+        });
     }
 
     public enum SelectableType {

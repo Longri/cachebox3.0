@@ -42,6 +42,7 @@ public class LogListViewItem extends ListViewItem {
         this.logEntry = logEntry;
     }
 
+    @Override
     public synchronized void layout() {
 //        this.setDebug(true, false);
         if (!needsLayout) {
