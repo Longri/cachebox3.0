@@ -51,17 +51,24 @@ public class FieldNotesView extends AbstractView {
         fieldNotes = new FieldNoteList();
         loadFieldNotes(FieldNoteList.LoadingType.LOAD_NEW_LAST_LENGTH);
 
-
         listView.setEmptyString(Translation.Get("EmptyFieldNotes"));
         this.addActor(listView);
+    }
+
+    @Override
+    public void onShow() {
         setListViewAdapter();
+    }
+
+    @Override
+    public void onHide() {
+        super.onHide();
     }
 
     private void setListViewAdapter() {
         CB.postOnMainThread(new Runnable() {
             @Override
             public void run() {
-
                 listView.setAdapter(listViewAdapter);
             }
         });
