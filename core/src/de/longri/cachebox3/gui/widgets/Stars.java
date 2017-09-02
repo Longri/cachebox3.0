@@ -26,7 +26,25 @@ import com.kotcrab.vis.ui.widget.VisTable;
  */
 public class Stars extends VisTable {
 
+    private final Image image1, image2, image3, image4, image5;
+
     public Stars(int value) {
+
+        this.add(image1 = new Image());
+        this.add(image2 = new Image());
+        this.add(image3 = new Image());
+        this.add(image4 = new Image());
+        this.add(image5 = new Image());
+
+        setValue(value);
+    }
+
+    public void setValue(int value) {
+
+        if (value < 0 || value > 10) {
+            throw new RuntimeException("value must between 0-10! it was:" + Integer.toString(value));
+        }
+
 
         Skin skin = VisUI.getSkin();
         Drawable star1 = value >= 2 ? skin.getDrawable("star") : value >= 1 ? skin.getDrawable("star_half") : skin.getDrawable("star0");
@@ -35,13 +53,18 @@ public class Stars extends VisTable {
         Drawable star4 = value >= 8 ? skin.getDrawable("star") : value >= 7 ? skin.getDrawable("star_half") : skin.getDrawable("star0");
         Drawable star5 = value == 10 ? skin.getDrawable("star") : value >= 9 ? skin.getDrawable("star_half") : skin.getDrawable("star0");
 
-        this.add(new Image(star1));
-        this.add(new Image(star2));
-        this.add(new Image(star3));
-        this.add(new Image(star4));
-        this.add(new Image(star5));
+        setImage(image1, star1);
+        setImage(image2, star2);
+        setImage(image3, star3);
+        setImage(image4, star4);
+        setImage(image5, star5);
 
         this.pack();
         this.layout();
+    }
+
+    private void setImage(Image image, Drawable drawable) {
+        image.setDrawable(drawable);
+        image.setSize(image.getPrefWidth(), image.getPrefHeight());
     }
 }
