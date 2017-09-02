@@ -244,4 +244,9 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     public void orientationChanged(OrientationChangedEvent event) {
         INSTANCE.heading = event.getOrientation();
     }
+
+    public static void setSelectedWaypoint(Cache cache, Waypoint wp) {
+        if (!cache.equals(getSelectedCache())) fire(new SelectedCacheChangedEvent(cache));
+        if (!wp.equals(getSelectedWaypoint())) fire(new SelectedWayPointChangedEvent(wp));
+    }
 }

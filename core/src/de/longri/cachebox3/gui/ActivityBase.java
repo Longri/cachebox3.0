@@ -22,15 +22,18 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.utils.Showable;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * A wrapper class to bring the CB2 Activities to CB3
  * Created by Longri on 23.08.2016.
  */
-public class ActivityBase extends Window implements  Showable {
+public class ActivityBase extends Window implements Showable {
 
 
     protected final ActivityBaseStyle style;
     protected boolean needsLayout = true;
+    private AtomicBoolean isDisposed = new AtomicBoolean(false);
 
     public ActivityBase(String name) {
         this(name, VisUI.getSkin().get("default", ActivityBaseStyle.class));
@@ -71,7 +74,11 @@ public class ActivityBase extends Window implements  Showable {
 
     @Override
     public void dispose() {
+        isDisposed.set(true);
+    }
 
+    public boolean isDisposed() {
+        return isDisposed.get();
     }
 
     public static class ActivityBaseStyle {
