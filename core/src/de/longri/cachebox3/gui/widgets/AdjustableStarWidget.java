@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -52,15 +53,15 @@ public class AdjustableStarWidget extends Table {
 
         VisTable centerTable = new VisTable();
         VisLabel titleLabel = new VisLabel(title);
-        centerTable.add(titleLabel);
+        centerTable.add(titleLabel).left().expandX().fillX();
         centerTable.row();
-        centerTable.add(starsWidget);
+        centerTable.add(starsWidget).left().expandX().fillX();
         valueLabel = new VisLabel(Double.toString(value / 2));
 
-        this.add(minusBtn);
-        this.add(centerTable);
-        this.add(valueLabel);
-        this.add(plusBtn);
+        this.add(minusBtn).left().padRight(new Value.Fixed(CB.scaledSizes.MARGINx4));
+        this.add(centerTable).left().expandX().fillX().padRight(new Value.Fixed(CB.scaledSizes.MARGIN));
+        this.add(valueLabel).right().padRight(new Value.Fixed(CB.scaledSizes.MARGINx4));
+        this.add(plusBtn).right();
 
         plusBtn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {

@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -30,11 +31,12 @@ public class Stars extends VisTable {
 
     public Stars(int value) {
 
-        this.add(image1 = new Image());
-        this.add(image2 = new Image());
-        this.add(image3 = new Image());
-        this.add(image4 = new Image());
-        this.add(image5 = new Image());
+        this.add(image1 = new Image()).left();
+        this.add(image2 = new Image()).left();
+        this.add(image3 = new Image()).left();
+        this.add(image4 = new Image()).left();
+        this.add(image5 = new Image()).left();
+        this.add((Actor) null).left().expandX().fillX();
 
         setValue(value);
     }
@@ -59,8 +61,6 @@ public class Stars extends VisTable {
         setImage(image4, star4);
         setImage(image5, star5);
         this.invalidateHierarchy();
-        this.pack();
-        this.layout();
     }
 
     private void setImage(Image image, Drawable drawable) {
