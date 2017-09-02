@@ -214,6 +214,13 @@ public class ListView extends WidgetGroup {
     public void setEmptyString(String emptyString) {
         this.emptyString = emptyString;
         emptyLabel = null;
+        if (style.emptyFont == null || style.emptyFontColor == null || emptyString == null)
+            return;
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = style.emptyFont;
+        labelStyle.fontColor = style.emptyFontColor;
+        emptyLabel = new VisLabel(this.emptyString, labelStyle);
+        emptyLabel.setAlignment(Align.center, Align.center);
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
@@ -282,16 +289,8 @@ public class ListView extends WidgetGroup {
         itemYPos.clear();
         itemViews.clear();
 
-        if (adapter == null || adapter.getCount() == 0) {
+        if (emptyLabel != null && (adapter == null || adapter.getCount() == 0)) {
             log.debug("show empty massage");
-
-            if (style.emptyFont == null || style.emptyFontColor == null || emptyString == null)
-                return;
-            Label.LabelStyle labelStyle = new Label.LabelStyle();
-            labelStyle.font = style.emptyFont;
-            labelStyle.fontColor = style.emptyFontColor;
-            emptyLabel = new VisLabel(this.emptyString, labelStyle);
-            emptyLabel.setAlignment(Align.center, Align.center);
             this.addActor(emptyLabel);
             emptyLabel.setBounds(0, 0, getWidth(), getHeight());
             return;
