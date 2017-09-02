@@ -58,7 +58,7 @@ public class Stars extends VisTable {
         setImage(image3, star3);
         setImage(image4, star4);
         setImage(image5, star5);
-
+        this.invalidateHierarchy();
         this.pack();
         this.layout();
     }

@@ -50,6 +50,8 @@ import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
+import de.longri.cachebox3.gui.views.listview.ListView;
+import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.gui.widgets.ProgressBar;
 import de.longri.cachebox3.gui.widgets.SelectBox;
@@ -164,7 +166,7 @@ public class TestView extends AbstractView {
                 Drawable drawable = logType.getDrawable(logTypesStyle);
 
                 if (iconWidth == 0) {
-                    iconWidth = drawable.getMinWidth() ;
+                    iconWidth = drawable.getMinWidth();
                     iconHeight = drawable.getMinHeight();
                     lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
                     lineTable = new Table();
@@ -208,7 +210,7 @@ public class TestView extends AbstractView {
                     try {
                         Drawable drawable = (Drawable) field.get(CB.getSkin().getMenuIcon);
                         if (iconWidth == 0) {
-                            iconWidth = drawable.getMinWidth() ;
+                            iconWidth = drawable.getMinWidth();
                             iconHeight = drawable.getMinHeight();
                             lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
                             lineTable = new Table();
@@ -299,6 +301,28 @@ public class TestView extends AbstractView {
             contentTable.row();
 
             contentTable.add(dialog).width(new Value.Fixed(contentWidth)).pad(20);
+            contentTable.row();
+        }
+
+        {// test AdjustableStarWidget
+
+            AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget("Title");
+            adjustableStarWidget.setValue(6);
+
+
+            ListView.ListViewStyle listViewStyle = CB.getSkin().get(ListView.ListViewStyle.class);
+            adjustableStarWidget.setBackground(listViewStyle.firstItem);
+
+            VisLabel label3 = new VisLabel("AdjustableStarWidget");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            contentTable.add(adjustableStarWidget).width(new Value.Fixed(contentWidth)).pad(20);
             contentTable.row();
         }
 
