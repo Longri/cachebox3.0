@@ -90,6 +90,30 @@ public class TestView extends AbstractView {
         this.clear();
         VisTable contentTable = new VisTable();
         scrollPane = new VisScrollPane(contentTable);
+        float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
+
+        {// test AdjustableStarWidget
+
+            final AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget("Title");
+            adjustableStarWidget.setValue(6);
+
+
+            ListView.ListViewStyle listViewStyle = CB.getSkin().get(ListView.ListViewStyle.class);
+            adjustableStarWidget.setBackground(listViewStyle.firstItem);
+
+            VisLabel label3 = new VisLabel("AdjustableStarWidget");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            contentTable.add(adjustableStarWidget).width(new Value.Fixed(contentWidth)).pad(20);
+            contentTable.row();
+        }
+
 
         {
             AttributesStyle attStyle = VisUI.getSkin().get("CompassView", AttributesStyle.class);
@@ -242,7 +266,8 @@ public class TestView extends AbstractView {
         }
         contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4 * 5));
         contentTable.row();
-        float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
+
+
         {
             VisLabel label3 = new VisLabel("ProgressBar SvgNinePatch");
             Table lineTable = new Table();
@@ -304,27 +329,7 @@ public class TestView extends AbstractView {
             contentTable.row();
         }
 
-        {// test AdjustableStarWidget
 
-            AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget("Title");
-            adjustableStarWidget.setValue(6);
-
-
-            ListView.ListViewStyle listViewStyle = CB.getSkin().get(ListView.ListViewStyle.class);
-            adjustableStarWidget.setBackground(listViewStyle.firstItem);
-
-            VisLabel label3 = new VisLabel("AdjustableStarWidget");
-            Table lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable.add(label3);
-            contentTable.add(lineTable).left().expandX().fillX();
-            contentTable.row();
-
-            contentTable.add(adjustableStarWidget).width(new Value.Fixed(contentWidth)).pad(20);
-            contentTable.row();
-        }
 
         this.addActor(scrollPane);
     }

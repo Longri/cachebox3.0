@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import de.longri.cachebox3.CB;
 
 /**
  * Created by Longri on 02.09.2017.
@@ -36,15 +37,15 @@ public class AdjustableStarWidget extends Table {
     public AdjustableStarWidget(String title) {
 
         starsWidget = new Stars(value);
-        minusBtn = new VisTextButton("-"){
+        minusBtn = new VisTextButton("-") {
             @Override
-            public float getPrefWidth(){
+            public float getPrefWidth() {
                 return this.getPrefHeight();
             }
         };
-        plusBtn = new VisTextButton("+"){
+        plusBtn = new VisTextButton("+") {
             @Override
-            public float getPrefWidth(){
+            public float getPrefWidth() {
                 return this.getPrefHeight();
             }
         };
@@ -69,7 +70,7 @@ public class AdjustableStarWidget extends Table {
             }
         });
 
-        plusBtn.addListener(new ClickListener() {
+        minusBtn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 int newValue = value - 1;
                 if (newValue < 0) newValue = 10;
@@ -78,14 +79,18 @@ public class AdjustableStarWidget extends Table {
         });
     }
 
-    public void setValue(int value) {
-        if (this.value != value) {
-            this.value = value;
-            valueLabel.setText(Double.toString((double) this.value / 2.0));
-            starsWidget.setValue(this.value);
-            this.invalidateHierarchy();
-            this.layout();
-        }
+    public void setValue(final int value) {
+        CB.postAsync(new Runnable() {
+            @Override
+            public void run() {
+                if (AdjustableStarWidget.this.value != value) {
+                    AdjustableStarWidget.this.value = value;
+                    valueLabel.setText(Double.toString((double) AdjustableStarWidget.this.value / 2.0));
+                    starsWidget.setValue(AdjustableStarWidget.this.value);
+                    AdjustableStarWidget.this.invalidateHierarchy();
+                }
+            }
+        });
     }
 
     public int getValue() {
