@@ -112,7 +112,7 @@ public class DirectLineLayer extends GenericLayer implements de.longri.cachebox3
                 new LineStyle(0, "",
                         Color.get(style.color.a, (int) (style.color.r * 255), (int) (style.color.g * 255), (int) (style.color.b * 255)),
                         CB.getScaledFloat(style.width), style.cap, true, 0, 0, 0,
-                        -1, 0, false, textureItem, true)
+                        -1, 0, false, textureItem, true, null)
         );
 
         GeometryBuffer g = new GeometryBuffer(2, 1);
