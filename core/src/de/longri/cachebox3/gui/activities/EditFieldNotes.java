@@ -30,8 +30,12 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.skin.styles.FieldNoteListItemStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
+import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.settings.Config;
@@ -40,13 +44,17 @@ import de.longri.cachebox3.types.FieldNoteEntry;
 import de.longri.cachebox3.types.FieldNoteList;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Longri on 02.09.2017.
  */
 public class EditFieldNotes extends ActivityBase {
 
+    private final static DateFormat dateFormatter = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.getDefault());
     private final static DateFormat iso8601FormatDate = new SimpleDateFormat("yyyy-MM-dd");
     private final static DateFormat iso8601FormatTime = new SimpleDateFormat("HH:mm");
 
@@ -63,7 +71,8 @@ public class EditFieldNotes extends ActivityBase {
     private FieldNoteEntry actFieldNote;
     private FieldNoteEntry altFieldNote;
     private boolean needsLayout = true;
-    private AdjustableStarWidget GcVote;
+    private AdjustableStarWidget gcVoteWidget;
+    private Button onlineOption, fieldNoteOption;
 
     public interface ReturnListener {
         void returnedFieldNote(FieldNoteEntry fn, boolean isNewFieldNote, boolean directlog);
@@ -80,8 +89,9 @@ public class EditFieldNotes extends ActivityBase {
         btnCancel.addListener(cancelClickListener);
         contentTable = new VisTable();
         setFieldNote(note, returnListener, isNewFieldNote);
-        if (Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
-            GcVote = new AdjustableStarWidget(Translation.Get("maxRating"));
+        if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
+            gcVoteWidget = new AdjustableStarWidget(Translation.Get("maxRating"));
+            gcVoteWidget.setBackground(CB.getSkin().get(ListView.ListViewStyle.class).firstItem);
         }
 
         scrollPane = new VisScrollPane(contentTable);
@@ -121,36 +131,31 @@ public class EditFieldNotes extends ActivityBase {
         public void clicked(InputEvent event, float x, float y) {
             if (returnListener != null) {
 
-//                if (actFieldNote.type.isDirectLogType()) {
-//                    actFieldNote.isDirectLog = rbDirectLog.isChecked();
-//                } else {
-//                    actFieldNote.isDirectLog = false;
-//                }
+                if (actFieldNote.type.isDirectLogType()) {
+                    actFieldNote.isDirectLog = onlineOption.isChecked();
+                } else {
+                    actFieldNote.isDirectLog = false;
+                }
 
-//                actFieldNote.comment = etComment.getText();
-//                if (GcVote != null) {
-//                    actFieldNote.gc_Vote = (int) (GcVote.getValue() * 100);
-//                }
+                actFieldNote.comment = commentTextArea.getText();
+                if (gcVoteWidget != null) {
+                    actFieldNote.gc_Vote = gcVoteWidget.getValue() * 100;
+                }
 
-                // parse Date and Time
-//                String date = tvDate.getText();
-//                String time = tvTime.getText();
-//
-//                date = date.replace("-", ".");
-//                time = time.replace(":", ".");
-//
-//                try {
-//                    Date timestamp;
-//                    DateFormat formatter;
-//
-//                    formatter = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.getDefault());
-//                    timestamp = formatter.parse(date + "." + time + ".00");
-//
-//                    actFieldNote.timestamp = timestamp;
-//                } catch (ParseException e) {
-//                    MessageBox.Show(Translation.Get("wrongDate"), Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
-//                    return;
-//                }
+                //parse Date and Time
+                String date = dateTextArea.getText();
+                String time = timeTextArea.getText();
+
+                date = date.replace("-", ".");
+                time = time.replace(":", ".");
+
+                try {
+                    Date timestamp = dateFormatter.parse(date + "." + time + ".00");
+                    actFieldNote.timestamp = timestamp;
+                } catch (ParseException e) {
+                    MessageBox.Show(Translation.Get("wrongDate"), Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                    return;
+                }
 
                 // check of changes
                 if (!altFieldNote.equals(actFieldNote)) {
@@ -158,7 +163,6 @@ public class EditFieldNotes extends ActivityBase {
                     actFieldNote.updateDatabase();
                     FieldNoteList.createVisitsTxt(Config.FieldNotesGarminPath.getValue());
                 }
-
                 returnListener.returnedFieldNote(actFieldNote, isNewFieldNote, actFieldNote.isDirectLog);
             }
             finish();
@@ -189,7 +193,7 @@ public class EditFieldNotes extends ActivityBase {
 
     @Override
     public void layout() {
-        this.setDebug(true);
+//        this.setDebug(true);
 
         if (!needsLayout) return;
 
@@ -208,11 +212,6 @@ public class EditFieldNotes extends ActivityBase {
 
         x = CB.scaledSizes.MARGIN;
         y += CB.scaledSizes.MARGIN + btnCancel.getHeight();
-
-        float maxWidth = Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx4;
-//        titleTextArea.setMaxWidth(maxWidth);
-//        descriptionTextArea.setMaxWidth(maxWidth);
-//        clueTextArea.setMaxWidth(maxWidth);
 
         Label.LabelStyle headerLabelStyle = new Label.LabelStyle();
         headerLabelStyle.font = this.itemStyle.headerFont;
@@ -266,16 +265,28 @@ public class EditFieldNotes extends ActivityBase {
 
 
         VisTable optionTable = new VisTable();
+        optionTable.defaults().pad(CB.scaledSizes.MARGINx4);
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
         buttonStyle.checked = CB.getSkin().getDrawable("option_1");
         buttonStyle.up = CB.getSkin().getDrawable("option_0");
-        Button onlineOption = new Button(buttonStyle);
-        Button fieldNoteOption = new Button(buttonStyle);
+        onlineOption = new Button(buttonStyle);
+        fieldNoteOption = new Button(buttonStyle);
         ButtonGroup<Button> optionGroup = new ButtonGroup<>();
         optionGroup.add(onlineOption, fieldNoteOption);
+        fieldNoteOption.setChecked(true);
         Label onlineOptionLabel = new Label(Translation.Get("directLog"), commentLabelStyle);
         Label fieldNoteOptionLabel = new Label(Translation.Get("onlyFieldNote"), commentLabelStyle);
 
+        onlineOptionLabel.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                onlineOption.setChecked(true);
+            }
+        });
+        fieldNoteOptionLabel.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                fieldNoteOption.setChecked(true);
+            }
+        });
 
         optionTable.add(onlineOption).left();
         optionTable.add(onlineOptionLabel).left().expandX().fillX();
@@ -283,8 +294,8 @@ public class EditFieldNotes extends ActivityBase {
         optionTable.add(fieldNoteOption).left();
         optionTable.add(fieldNoteOptionLabel).left().expandX().fillX();
 
-        contentTable.setDebug(true);
-        timeRow.setDebug(true);
+//        contentTable.setDebug(true);
+//        timeRow.setDebug(true);
         contentTable.defaults().pad(CB.scaledSizes.MARGIN);
 
         contentTable.add(cacheTable).expandX().fillX();
@@ -295,7 +306,7 @@ public class EditFieldNotes extends ActivityBase {
         contentTable.row();
         contentTable.add(timeRow).expandX().fillX();
         contentTable.row();
-        contentTable.add(GcVote).expandX().fillX();
+        contentTable.add(gcVoteWidget).expandX().fillX();
         contentTable.row();
         contentTable.add(commentTextArea).expandX().fillX();
         contentTable.row();
