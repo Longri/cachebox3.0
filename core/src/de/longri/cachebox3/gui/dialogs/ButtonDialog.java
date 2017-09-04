@@ -76,7 +76,9 @@ public class ButtonDialog extends Window {
 
         Label msgLabel = new Label(msg, new Label.LabelStyle(style.titleFont, style.titleFontColor));
         msgLabel.setWrap(true);
-        contentTable.add(msgLabel).expandX().fillX();
+        contentTable.add(msgLabel).expand().fill();
+        contentTable.pack();
+        contentTable.layout();
         return contentTable;
     }
 
@@ -228,7 +230,7 @@ public class ButtonDialog extends Window {
             this.button(Translation.Get("retry"), buttonWidth, BUTTON_NEUTRAL);
             this.button(Translation.Get("ignore"), buttonWidth, BUTTON_NEGATIVE);
         } else if (buttons == MessageBoxButtons.OK) {
-            buttonWidth = (maxWindowWidth / 1) - (2 * CB.scaledSizes.MARGIN);
+            buttonWidth = CB.scaledSizes.BUTTON_WIDTH_WIDE;
             this.button(Translation.Get("ok"), buttonWidth, BUTTON_POSITIVE);
         } else if (buttons == MessageBoxButtons.OKCancel) {
             buttonWidth = (maxWindowWidth / 2) - (3 * CB.scaledSizes.MARGIN);
@@ -248,7 +250,7 @@ public class ButtonDialog extends Window {
             this.button(Translation.Get("no"), buttonWidth, BUTTON_NEGATIVE);
             this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEUTRAL);
         } else if (buttons == MessageBoxButtons.Cancel) {
-            buttonWidth = (maxWindowWidth / 1) - (2 * CB.scaledSizes.MARGIN);
+            buttonWidth = CB.scaledSizes.BUTTON_WIDTH_WIDE;
             this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEGATIVE);
         }
     }
@@ -262,8 +264,8 @@ public class ButtonDialog extends Window {
     protected void result(Object object) {
         if (msgBoxClickListener != null) {
             msgBoxClickListener.onClick((Integer) object, null);
-            this.hide();
         }
+        this.hide();
     }
 
     @Override
@@ -304,5 +306,15 @@ public class ButtonDialog extends Window {
         }
 
         return Math.min(Math.max(min, maxButtonWidth), Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx4);
+    }
+
+    @Override
+    public float getPrefWidth() {
+        return Math.max(Gdx.graphics.getWidth() * 0.7f, getMinWidth());
+    }
+
+    @Override
+    public float getPrefHeight() {
+        return Gdx.graphics.getWidth() * 0.5f;
     }
 }

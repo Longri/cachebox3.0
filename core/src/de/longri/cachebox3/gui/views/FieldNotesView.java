@@ -837,7 +837,7 @@ public class FieldNotesView extends AbstractView {
         if (cache == null) {
             String message = Translation.Get("cacheOtherDb", aktFieldNote.CacheName);
             message += "\n" + Translation.Get("fieldNoteNoSelect");
-            MessageBox.Show(message);
+            MessageBox.Show(message, Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             return;
         }
 

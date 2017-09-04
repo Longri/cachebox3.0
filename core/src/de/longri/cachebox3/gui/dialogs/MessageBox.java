@@ -26,7 +26,7 @@ public class MessageBox {
 
 
     public static void Show(String message) {
-        Show(message, null, null, null, null);
+        Show(message, null, MessageBoxButtons.OK, null, null);
     }
 
     public static void Show(String lastAPIError, String error, MessageBoxIcon icon) {
