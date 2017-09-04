@@ -16,8 +16,14 @@
 package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
@@ -25,8 +31,12 @@ import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.skin.styles.FieldNoteListItemStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
+import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
+import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.FieldNoteEntry;
 import de.longri.cachebox3.types.FieldNoteList;
@@ -42,15 +52,23 @@ import java.util.Locale;
  */
 public class EditFieldNotes extends ActivityBase {
 
+    private final static DateFormat iso8601FormatDate = new SimpleDateFormat("yyyy-MM-dd");
+    private final static DateFormat iso8601FormatTime = new SimpleDateFormat("HH:mm");
+
 
     private final VisTable contentTable;
     private final VisTextButton btnOk, btnCancel;
+    private final FieldNoteListItemStyle itemStyle;
+    private final VisScrollPane scrollPane;
+    private final VisLabel foundLabel, dateLabel, timeLabel;
+    private final EditTextBox dateTextArea, timeTextArea, commentTextArea;
 
     private boolean isNewFieldNote;
     private ReturnListener returnListener;
     private FieldNoteEntry actFieldNote;
     private FieldNoteEntry altFieldNote;
     private boolean needsLayout = true;
+    private AdjustableStarWidget GcVote;
 
     public interface ReturnListener {
         void returnedFieldNote(FieldNoteEntry fn, boolean isNewFieldNote, boolean directlog);
@@ -59,12 +77,41 @@ public class EditFieldNotes extends ActivityBase {
 
     public EditFieldNotes(FieldNoteEntry note, ReturnListener returnListener, boolean isNewFieldNote) {
         super("EditFieldNote");
+        itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", FieldNoteListItemStyle.class);
+
         btnOk = new VisTextButton(Translation.Get("save"));
         btnOk.addListener(saveClickListener);
         btnCancel = new VisTextButton(Translation.Get("cancel"));
         btnCancel.addListener(cancelClickListener);
         contentTable = new VisTable();
         setFieldNote(note, returnListener, isNewFieldNote);
+        if (Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
+            GcVote = new AdjustableStarWidget(Translation.Get("maxRating"));
+        }
+
+        scrollPane = new VisScrollPane(contentTable);
+
+        if (note.isTbFieldNote)
+            foundLabel = new VisLabel("");
+        else
+            foundLabel = new VisLabel("Founds: #" + note.foundNumber);
+
+        dateLabel = new VisLabel(Translation.Get("date") + ":");
+        timeLabel = new VisLabel(Translation.Get("time") + ":");
+
+        dateTextArea = new EditTextBox(false);
+        timeTextArea = new EditTextBox(false) {
+            //return same width like dateTextArea
+            public float getPrefWidth() {
+                return dateTextArea.getPrefWidth();
+            }
+        };
+        commentTextArea = new EditTextBox(true);
+
+        dateTextArea.setText(iso8601FormatDate.format(note.timestamp));
+        timeTextArea.setText(iso8601FormatTime.format(note.timestamp));
+        commentTextArea.setText(note.comment);
+
     }
 
     private final ClickListener cancelClickListener = new ClickListener() {
@@ -77,20 +124,20 @@ public class EditFieldNotes extends ActivityBase {
 
     private final ClickListener saveClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
-//            if (returnListener != null) {
-//
+            if (returnListener != null) {
+
 //                if (actFieldNote.type.isDirectLogType()) {
 //                    actFieldNote.isDirectLog = rbDirectLog.isChecked();
 //                } else {
 //                    actFieldNote.isDirectLog = false;
 //                }
-//
+
 //                actFieldNote.comment = etComment.getText();
 //                if (GcVote != null) {
 //                    actFieldNote.gc_Vote = (int) (GcVote.getValue() * 100);
 //                }
-//
-//                // parse Date and Time
+
+                // parse Date and Time
 //                String date = tvDate.getText();
 //                String time = tvTime.getText();
 //
@@ -109,16 +156,16 @@ public class EditFieldNotes extends ActivityBase {
 //                    MessageBox.Show(Translation.Get("wrongDate"), Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
 //                    return;
 //                }
-//
-//                // check of changes
-//                if (!altFieldNote.equals(actFieldNote)) {
-//                    actFieldNote.uploaded = false;
-//                    actFieldNote.updateDatabase();
-//                    FieldNoteList.createVisitsTxt(Config.FieldNotesGarminPath.getValue());
-//                }
-//
-//                returnListener.returnedFieldNote(actFieldNote, isNewFieldNote, actFieldNote.isDirectLog);
-//            }
+
+                // check of changes
+                if (!altFieldNote.equals(actFieldNote)) {
+                    actFieldNote.uploaded = false;
+                    actFieldNote.updateDatabase();
+                    FieldNoteList.createVisitsTxt(Config.FieldNotesGarminPath.getValue());
+                }
+
+                returnListener.returnedFieldNote(actFieldNote, isNewFieldNote, actFieldNote.isDirectLog);
+            }
             finish();
         }
     };
@@ -147,7 +194,7 @@ public class EditFieldNotes extends ActivityBase {
 
     @Override
     public void layout() {
-        super.layout();
+        this.setDebug(true);
 
         if (!needsLayout) return;
 
@@ -155,7 +202,7 @@ public class EditFieldNotes extends ActivityBase {
         contentTable.clear();
         this.addActor(btnOk);
         this.addActor(btnCancel);
-        this.addActor(contentTable);
+        this.addActor(scrollPane);
 
         float x = Gdx.graphics.getWidth() - (CB.scaledSizes.MARGIN + btnCancel.getWidth());
         float y = CB.scaledSizes.MARGIN;
@@ -172,8 +219,83 @@ public class EditFieldNotes extends ActivityBase {
 //        descriptionTextArea.setMaxWidth(maxWidth);
 //        clueTextArea.setMaxWidth(maxWidth);
 
-        contentTable.setBounds(x, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGINx2));
+        Label.LabelStyle headerLabelStyle = new Label.LabelStyle();
+        headerLabelStyle.font = this.itemStyle.headerFont;
+        headerLabelStyle.fontColor = this.itemStyle.headerFontColor;
+
+        Label.LabelStyle commentLabelStyle = new Label.LabelStyle();
+        commentLabelStyle.font = this.itemStyle.descriptionFont;
+        commentLabelStyle.fontColor = this.itemStyle.descriptionFontColor;
+
+
+        VisTable cacheTable = new VisTable();
+
+        VisTable iconTable = new VisTable();
+        iconTable.add(actFieldNote.cacheType.getCacheWidget(itemStyle.cacheTypeStyle, null, null));
+        iconTable.pack();
+        iconTable.layout();
+
+        cacheTable.add(iconTable).left().padRight(CB.scaledSizes.MARGINx4);
+
+        VisLabel nameLabel = new VisLabel(actFieldNote.CacheName, headerLabelStyle);
+        nameLabel.setWrap(true);
+        cacheTable.add(nameLabel).padRight(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        cacheTable.row();
+
+        cacheTable.add((Actor) null).left().padRight(CB.scaledSizes.MARGINx4);
+
+        VisLabel gcLabel = new VisLabel(actFieldNote.gcCode, headerLabelStyle);
+        gcLabel.setWrap(true);
+        cacheTable.add(gcLabel).padRight(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        VisTable foundRow = new VisTable();
+        Image typeIcon = new Image(actFieldNote.type.getDrawable(itemStyle.typeStyle));
+        foundRow.defaults().pad(CB.scaledSizes.MARGINx2);
+        foundRow.add(typeIcon);
+        foundRow.add(foundLabel);
+        foundRow.add((Actor) null).expandX().fillX();
+
+
+        VisTable dateRow = new VisTable();
+        dateRow.defaults().pad(CB.scaledSizes.MARGINx2);
+        dateRow.add((Actor) null).expandX().fillX();
+        dateRow.add(dateLabel).right();
+        dateRow.add(dateTextArea).right();
+
+        VisTable timeRow = new VisTable();
+        timeRow.defaults().pad(CB.scaledSizes.MARGINx2);
+        timeRow.add((Actor) null).expandX().fillX();
+        timeRow.add(timeLabel);
+        timeRow.add(timeTextArea);
+
+
+
+        contentTable.setDebug(true);
+        timeRow.setDebug(true);
+        contentTable.defaults().pad(CB.scaledSizes.MARGIN);
+
+        contentTable.add(cacheTable).expandX().fillX();
+        contentTable.row().padBottom(CB.scaledSizes.MARGINx4);
+        contentTable.add(foundRow).expandX().fillX();
+        contentTable.row();
+        contentTable.add(dateRow).right().expandX().fillX();
+        contentTable.row();
+        contentTable.add(timeRow).expandX().fillX();
+        contentTable.row();
+        contentTable.add(GcVote).expandX().fillX();
+        contentTable.row();
+        contentTable.add(commentTextArea).expandX().fillX();
+        contentTable.row();
+
+
+        contentTable.add((Actor) null).expand().fill();//Fill
         contentTable.layout();
+
+        scrollPane.setBounds(x, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGINx2));
+        scrollPane.layout();
+
+        super.layout();
     }
 
 
