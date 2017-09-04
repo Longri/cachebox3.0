@@ -32,7 +32,9 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable mapLayer;
     public Drawable deleteAllFieldNotes;
     public Drawable ownerLogTypes;
+    public Drawable edit;
 
+    
     @Override
     public int getPrefWidth() {
         return CB.getScaledInt(47);

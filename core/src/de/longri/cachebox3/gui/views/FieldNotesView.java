@@ -136,7 +136,7 @@ public class FieldNotesView extends AbstractView {
             int listIndex = ((ListViewItem) actor).getListIndex();
             aktFieldNote = fieldNoteEntries.get(listIndex);
 
-            Menu cm = new Menu("CacheListContextMenu");
+            Menu cm = new Menu("FieldNoteItem-Menu");
 
             cm.setOnItemClickListener(new OnItemClickListener() {
 
@@ -158,9 +158,9 @@ public class FieldNotesView extends AbstractView {
                 }
             });
 
-            cm.addItem(MenuID.MI_SELECT_CACHE, "SelectCache");
-            cm.addItem(MenuID.MI_EDIT_FIELDNOTE, "edit");
-            cm.addItem(MenuID.MI_DELETE_FIELDNOTE, "delete");
+            cm.addItem(MenuID.MI_SELECT_CACHE, "SelectCache", ":\n" + aktFieldNote.CacheName, aktFieldNote.cacheType.getDrawable());
+            cm.addItem(MenuID.MI_EDIT_FIELDNOTE, "edit",CB.getSkin().getMenuIcon.edit);
+            cm.addItem(MenuID.MI_DELETE_FIELDNOTE, "delete", CB.getSkin().getMenuIcon.deleteAllFieldNotes);
 
             cm.show();
             return true;
