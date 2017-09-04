@@ -18,6 +18,8 @@ package de.longri.cachebox3.gui.activities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -28,24 +30,17 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
-import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
-import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.skin.styles.FieldNoteListItemStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.FieldNoteEntry;
 import de.longri.cachebox3.types.FieldNoteList;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by Longri on 02.09.2017.
@@ -270,6 +265,23 @@ public class EditFieldNotes extends ActivityBase {
         timeRow.add(timeTextArea);
 
 
+        VisTable optionTable = new VisTable();
+        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
+        buttonStyle.checked = CB.getSkin().getDrawable("option_1");
+        buttonStyle.up = CB.getSkin().getDrawable("option_0");
+        Button onlineOption = new Button(buttonStyle);
+        Button fieldNoteOption = new Button(buttonStyle);
+        ButtonGroup<Button> optionGroup = new ButtonGroup<>();
+        optionGroup.add(onlineOption, fieldNoteOption);
+        Label onlineOptionLabel = new Label(Translation.Get("directLog"), commentLabelStyle);
+        Label fieldNoteOptionLabel = new Label(Translation.Get("onlyFieldNote"), commentLabelStyle);
+
+
+        optionTable.add(onlineOption).left();
+        optionTable.add(onlineOptionLabel).left().expandX().fillX();
+        optionTable.row();
+        optionTable.add(fieldNoteOption).left();
+        optionTable.add(fieldNoteOptionLabel).left().expandX().fillX();
 
         contentTable.setDebug(true);
         timeRow.setDebug(true);
@@ -286,6 +298,8 @@ public class EditFieldNotes extends ActivityBase {
         contentTable.add(GcVote).expandX().fillX();
         contentTable.row();
         contentTable.add(commentTextArea).expandX().fillX();
+        contentTable.row();
+        contentTable.add(optionTable).expandX().fillX();
         contentTable.row();
 
 
