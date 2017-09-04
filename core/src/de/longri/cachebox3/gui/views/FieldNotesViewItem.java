@@ -15,12 +15,10 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
@@ -99,12 +97,11 @@ public class FieldNotesViewItem extends ListViewItem {
 
         cacheTable.row();
 
-        cacheTable.add((Actor)null).left().padRight(CB.scaledSizes.MARGINx4);
+        cacheTable.add((Actor) null).left().padRight(CB.scaledSizes.MARGINx4);
 
         VisLabel gcLabel = new VisLabel(entry.gcCode, headerLabelStyle);
         gcLabel.setWrap(true);
         cacheTable.add(gcLabel).padRight(CB.scaledSizes.MARGIN).expandX().fillX();
-
 
 
         this.add(cacheTable).top().expandX().fillX();

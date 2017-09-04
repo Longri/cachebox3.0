@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Created by Longri on 31.08.2017
@@ -126,6 +127,14 @@ public class FieldNoteList extends Array<FieldNoteEntry> {
                     croppedList = false;
                 }
             }
+
+            //sort by Date/time
+            this.sort(new Comparator<FieldNoteEntry>() {
+                @Override
+                public int compare(FieldNoteEntry o1, FieldNoteEntry o2) {
+                    return o2.timestamp.compareTo(o1.timestamp);
+                }
+            });
         }
     }
 

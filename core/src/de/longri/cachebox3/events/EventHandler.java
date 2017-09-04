@@ -246,7 +246,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
     public static void setSelectedWaypoint(Cache cache, Waypoint wp) {
-        if (!cache.equals(getSelectedCache())) fire(new SelectedCacheChangedEvent(cache));
-        if (!wp.equals(getSelectedWaypoint())) fire(new SelectedWayPointChangedEvent(wp));
+        if (cache == null || !cache.equals(getSelectedCache())) fire(new SelectedCacheChangedEvent(cache));
+        if (wp == null || !wp.equals(getSelectedWaypoint())) fire(new SelectedWayPointChangedEvent(wp));
     }
 }

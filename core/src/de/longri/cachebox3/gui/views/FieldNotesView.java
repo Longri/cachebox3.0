@@ -16,13 +16,13 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.gui.actions.ShowImportMenu;
 import de.longri.cachebox3.gui.activities.EditFieldNotes;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
@@ -31,7 +31,7 @@ import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.popUps.QuickFieldNoteFeedbackPopUp;
 import de.longri.cachebox3.gui.skin.styles.FieldNoteListItemStyle;
-import de.longri.cachebox3.gui.skin.styles.LogListItemStyle;
+import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.utils.TemplateFormatter;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
@@ -56,11 +56,10 @@ public class FieldNotesView extends AbstractView {
 
     private static FieldNotesView THAT;
     private static FieldNoteEntry aktFieldNote;
-    private static FieldNoteList lFieldNotes;
+    private static FieldNoteList fieldNoteEntries;
 
 
     private final ListView listView = new ListView();
-    private final FieldNoteList fieldNotes;
     private final FieldNoteListItemStyle itemStyle;
 
     private Array<ListViewItem> items;
@@ -70,7 +69,7 @@ public class FieldNotesView extends AbstractView {
         THAT = this;
         itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", FieldNoteListItemStyle.class);
 
-        fieldNotes = new FieldNoteList();
+        fieldNoteEntries = new FieldNoteList();
         loadFieldNotes(FieldNoteList.LoadingType.LOAD_NEW_LAST_LENGTH);
 
         listView.setEmptyString(Translation.Get("EmptyFieldNotes"));
@@ -115,7 +114,8 @@ public class FieldNotesView extends AbstractView {
 
         @Override
         public void update(ListViewItem view) {
-            // nothing to do
+            // set listener on Update, because Item is remove all listener with Layout
+            view.addListener(clickLongClickListener);
         }
 
         @Override
@@ -124,13 +124,66 @@ public class FieldNotesView extends AbstractView {
         }
     };
 
+    private final ClickLongClickListener clickLongClickListener = new ClickLongClickListener() {
+        @Override
+        public boolean clicked(InputEvent event, float x, float y) {
+            return false;
+        }
+
+        @Override
+        public boolean longClicked(Actor actor, float x, float y) {
+
+            int listIndex = ((ListViewItem) actor).getListIndex();
+            aktFieldNote = fieldNoteEntries.get(listIndex);
+
+            Menu cm = new Menu("CacheListContextMenu");
+
+            cm.setOnItemClickListener(new OnItemClickListener() {
+
+                @Override
+                public boolean onItemClick(MenuItem item) {
+                    switch (item.getMenuItemId()) {
+                        case MenuID.MI_SELECT_CACHE:
+                            selectCacheFromFieldNote();
+                            return true;
+                        case MenuID.MI_EDIT_FIELDNOTE:
+                            editFieldNote();
+                            return true;
+                        case MenuID.MI_DELETE_FIELDNOTE:
+                            deleteFieldNote();
+                            return true;
+
+                    }
+                    return false;
+                }
+            });
+
+            cm.addItem(MenuID.MI_SELECT_CACHE, "SelectCache");
+            cm.addItem(MenuID.MI_EDIT_FIELDNOTE, "edit");
+            cm.addItem(MenuID.MI_DELETE_FIELDNOTE, "delete");
+
+            cm.show();
+            return true;
+        }
+    };
+
     @Override
     public void dispose() {
         EventHandler.remove(this);
+        fieldNoteEntries.clear();
+        fieldNoteEntries = null;
+        aktFieldNote = null;
+        THAT = null;
+        listView.dispose();
+        for (ListViewItem item : items) {
+            item.dispose();
+        }
+        items.clear();
+        items = null;
     }
 
     private void loadFieldNotes(FieldNoteList.LoadingType type) {
-        fieldNotes.loadFieldNotes("", type);
+        fieldNoteEntries.loadFieldNotes("", type);
 
         if (items == null) {
             items = new Array<>();
@@ -138,7 +191,7 @@ public class FieldNotesView extends AbstractView {
         items.clear();
 
         int idx = 0;
-        for (FieldNoteEntry entry : fieldNotes) {
+        for (FieldNoteEntry entry : fieldNoteEntries) {
             items.add(new FieldNotesViewItem(idx++, entry, itemStyle));
         }
 
@@ -479,15 +532,15 @@ public class FieldNotesView extends AbstractView {
             if (isNewFieldNote) {
                 // nur, wenn eine FieldNote neu angelegt wurde
                 // new FieldNote
-                lFieldNotes.add(fieldNote);
+                fieldNoteEntries.add(fieldNote);
 
                 // eine evtl. vorhandene FieldNote /DNF löschen
                 if (fieldNote.type == LogTypes.attended //
                         || fieldNote.type == LogTypes.found //
                         || fieldNote.type == LogTypes.webcam_photo_taken //
                         || fieldNote.type == LogTypes.didnt_find) {
-                    lFieldNotes.deleteFieldNoteByCacheId(fieldNote.CacheId, LogTypes.found);
-                    lFieldNotes.deleteFieldNoteByCacheId(fieldNote.CacheId, LogTypes.didnt_find);
+                    fieldNoteEntries.deleteFieldNoteByCacheId(fieldNote.CacheId, LogTypes.found);
+                    fieldNoteEntries.deleteFieldNoteByCacheId(fieldNote.CacheId, LogTypes.didnt_find);
                 }
             }
 
@@ -518,16 +571,16 @@ public class FieldNotesView extends AbstractView {
                         Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                         Config.AcceptChanges();
                     } // und eine evtl. vorhandene FieldNote FoundIt löschen
-                    lFieldNotes.deleteFieldNoteByCacheId(EventHandler.getSelectedCache().Id, LogTypes.found);
+                    fieldNoteEntries.deleteFieldNoteByCacheId(EventHandler.getSelectedCache().Id, LogTypes.found);
                 }
             }
             FieldNoteList.createVisitsTxt(Config.FieldNotesGarminPath.getValue());
 
             // Reload List
             if (isNewFieldNote) {
-                lFieldNotes.loadFieldNotes("", FieldNoteList.LoadingType.LOAD_NEW);
+                fieldNoteEntries.loadFieldNotes("", FieldNoteList.LoadingType.LOAD_NEW);
             } else {
-                lFieldNotes.loadFieldNotes("", FieldNoteList.LoadingType.LOAD_NEW_LAST_LENGTH);
+                fieldNoteEntries.loadFieldNotes("", FieldNoteList.LoadingType.LOAD_NEW_LAST_LENGTH);
             }
         }
         THAT.notifyDataSetChanged();
@@ -692,11 +745,11 @@ public class FieldNotesView extends AbstractView {
                                 }
                             }
                         }
-                        lFieldNotes.deleteFieldNote(aktFieldNote.Id, aktFieldNote.type);
+                        fieldNoteEntries.deleteFieldNote(aktFieldNote.Id, aktFieldNote.type);
 
                         aktFieldNote = null;
 
-                        lFieldNotes.loadFieldNotes("", FieldNoteList.LoadingType.LOAD_NEW_LAST_LENGTH);
+                        fieldNoteEntries.loadFieldNotes("", FieldNoteList.LoadingType.LOAD_NEW_LAST_LENGTH);
 
                         loadFieldNotes(FieldNoteList.LoadingType.LOAD_NEW_LAST_LENGTH);
 
@@ -735,14 +788,14 @@ public class FieldNotesView extends AbstractView {
                         // Yes button clicked
                         // delete all FieldNotes
                         // reload all Fieldnotes!
-                        lFieldNotes.loadFieldNotes("", FieldNoteList.LoadingType.LOAD_ALL);
+                        fieldNoteEntries.loadFieldNotes("", FieldNoteList.LoadingType.LOAD_ALL);
 
-                        for (FieldNoteEntry entry : lFieldNotes) {
+                        for (FieldNoteEntry entry : fieldNoteEntries) {
                             entry.deleteFromDatabase();
 
                         }
 
-                        lFieldNotes.clear();
+                        fieldNoteEntries.clear();
                         aktFieldNote = null;
 
                         loadFieldNotes(FieldNoteList.LoadingType.LOAD_NEW_LAST_LENGTH);
@@ -815,7 +868,7 @@ public class FieldNotesView extends AbstractView {
 
             int index = item.getListIndex();
 
-            aktFieldNote = lFieldNotes.get(index);
+            aktFieldNote = fieldNoteEntries.get(index);
 
             Menu cm = new Menu("CacheListContextMenu");
 
