@@ -80,14 +80,14 @@ public class SkinEditorGame extends Game {
         }
 
         // Rebuild from raw resources, kind of overkill, might disable it for production
-        {//TODO enable ones for create a new uiskin.atlas
-            TexturePacker.Settings settings = new TexturePacker.Settings();
-            settings.maxHeight = 2048;
-            settings.maxWidth = 2048;
-            settings.combineSubdirectories = true;
-            TexturePacker.process(settings, "skin-editor-src-proj/assets/resources/raw/", ".",
-                    "skin-editor-src-proj/assets/resources/uiskin");
-        }
+//        {//TODO enable ones for create a new uiskin.atlas
+//            TexturePacker.Settings settings = new TexturePacker.Settings();
+//            settings.maxHeight = 2048;
+//            settings.maxWidth = 2048;
+//            settings.combineSubdirectories = true;
+//            TexturePacker.process(settings, "skin-editor-src-proj/assets/resources/raw/", ".",
+//                    "skin-editor-src-proj/assets/resources/uiskin");
+//        }
 
         batch = new SpriteBatch();
 

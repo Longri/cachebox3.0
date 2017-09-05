@@ -15,30 +15,17 @@ task run(dependsOn: classes, type: JavaExec) {
     ignoreExitValue = true
 }
 
-task dist(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
-    from files(sourceSets.main.output.resourcesDir)
-    from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir);
- 
+
+task launcherJar(type: Jar, dependsOn: classes) {
+    classifier = 'launcher'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    exclude 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.SF'
     manifest {
-        attributes 'Main-Class': project.mainClassName
+        attributes('Main-Class': 'de.longri.cachebox3.desktop.touch.TouchLauncher')
     }
+    with jar
 }
 
-//task copyAssets(type: Copy) {
-//    from("../android/assets")
-//    into("workingDir")
-//}
-//
-//
-//tasks.withType(org.gradle.api.tasks.compile.JavaCompile) {
-//    compileTask -> compileTask.dependsOn copyAssets
-//}
-
-
-
-dist.dependsOn classes
 
 eclipse {
     project {
