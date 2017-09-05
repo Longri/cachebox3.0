@@ -34,12 +34,12 @@ launchIPadSimulator.dependsOn build
 launchIOSDevice.dependsOn build
 createIPA.dependsOn build
 
-robovm {
-    archs = "thumbv7:arm64"
-    iosSignIdentity = "iPhone Developer: Andre Hopfner (FE92XCBVAD)"
-    iosProvisioningProfile = "/Users/longri/Downloads/Cachbox3Develop.mobileprovision"
-    iosSkipSigning = false
-}
+//robovm {
+//    archs = "thumbv7:arm64"
+//    iosSignIdentity = "iPhone Developer: Andre Hopfner (FE92XCBVAD)"
+//    iosProvisioningProfile = "/Users/longri/Downloads/cachebox3.mobileprovision"
+//    iosSkipSigning = false
+//}
 
 eclipse.project {
     name = appName + "-ios"
