@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.menu;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -145,6 +146,30 @@ public class MenuItem extends ListViewItem {
         }
     }
 
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+
+        // set alpha if item disabled
+        if (!this.mIsEnabled)
+            parentAlpha *= 0.25f;
+
+        super.draw(batch, parentAlpha);
+    }
+
+    protected void drawBackground(Batch batch, float parentAlpha, float x, float y) {
+
+        Drawable background = this.getBackground();
+
+        if (background == null) return;
+        Color color = getColor();
+
+        // restore alpha if item disabled, draw background never with alpha
+        if (!this.mIsEnabled)
+            parentAlpha *= 4f;
+
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        background.draw(batch, x, y, getWidth(), getHeight());
+    }
 
     /**
      * Change the title associated with this item.

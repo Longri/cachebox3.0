@@ -159,7 +159,7 @@ public class FieldNotesView extends AbstractView {
             });
 
             cm.addItem(MenuID.MI_SELECT_CACHE, "SelectCache", ":\n" + aktFieldNote.CacheName, aktFieldNote.cacheType.getDrawable());
-            cm.addItem(MenuID.MI_EDIT_FIELDNOTE, "edit",CB.getSkin().getMenuIcon.edit);
+            cm.addItem(MenuID.MI_EDIT_FIELDNOTE, "edit", CB.getSkin().getMenuIcon.edit);
             cm.addItem(MenuID.MI_DELETE_FIELDNOTE, "delete", CB.getSkin().getMenuIcon.deleteAllFieldNotes);
 
             cm.show();
@@ -278,6 +278,11 @@ public class FieldNotesView extends AbstractView {
         if (cache != null) {
             MenuItem mi = cm.addItem(MenuID.MI_IMPORT, "ownerLogTypes", CB.getSkin().getMenuIcon.ownerLogTypes);
             mi.setMoreMenu(getSecondMenu());
+
+            if (!cache.ImTheOwner()) {
+                //disable owner log types
+                mi.setEnabled(false);
+            }
         }
 
         return cm;

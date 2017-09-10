@@ -35,6 +35,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.stages.StageManager;
+import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
@@ -115,6 +116,17 @@ public class Menu extends Window {
             @Override
             public boolean clicked(InputEvent event, float x, float y) {
                 if (event.isHandled()) return true;
+
+                // if the clicked item disabled, ignore click event!
+                if (!menuItem.mIsEnabled) {
+                    //TODO toast message say's way is disabled
+                    // must implement a property for text
+
+                    CB.viewmanager.toast("Item is disabled");
+                    return true;
+                }
+
+
                 // have the clicked item a moreMenu, just show it
                 if (menuItem.hasMoreMenu()) {
                     menuItem.getMoreMenu(Menu.this.compoundMenu != null ? Menu.this.compoundMenu : Menu.this).show();
