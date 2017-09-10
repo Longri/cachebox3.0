@@ -18,7 +18,6 @@ package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.CreditsView;
@@ -32,7 +31,7 @@ public class Action_Show_Credits extends Abstract_Action_ShowView {
     final static Logger log = LoggerFactory.getLogger(Action_Show_Credits.class);
 
     public Action_Show_Credits() {
-        super(NOT_IMPLEMENTED, "Credits", MenuID.AID_SHOW_CREDITS);
+        super(CreditsView.class, NOT_IMPLEMENTED, "Credits", MenuID.AID_SHOW_CREDITS);
     }
 
     @Override
@@ -45,16 +44,6 @@ public class Action_Show_Credits extends Abstract_Action_ShowView {
     @Override
     public Drawable getIcon() {
         return CB.getSkin().getMenuIcon.creditsIcon;
-    }
-
-    @Override
-    public boolean hasContextMenu() {
-        return false;
-    }
-
-    @Override
-    public Menu getContextMenu() {
-        return null;
     }
 
     @Override

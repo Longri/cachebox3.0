@@ -199,95 +199,6 @@ public class FieldNotesView extends AbstractView {
 
     }
 
-    public Menu getContextMenu() {
-
-        Cache cache = EventHandler.getSelectedCache();
-
-        final Menu cm = new Menu("FieldNoteContextMenu");
-
-        cm.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public boolean onItemClick(MenuItem item) {
-                switch (item.getMenuItemId()) {
-                    case MenuID.MI_FOUND:
-                        addNewFieldnote(LogTypes.found);
-                        return true;
-                    case MenuID.MI_ATTENDED:
-                        addNewFieldnote(LogTypes.attended);
-                        return true;
-                    case MenuID.MI_WEBCAM_FOTO_TAKEN:
-                        addNewFieldnote(LogTypes.webcam_photo_taken);
-                        return true;
-                    case MenuID.MI_WILL_ATTENDED:
-                        addNewFieldnote(LogTypes.will_attend);
-                        return true;
-                    case MenuID.MI_NOT_FOUND:
-                        addNewFieldnote(LogTypes.didnt_find);
-                        return true;
-                    case MenuID.MI_MAINTANCE:
-                        addNewFieldnote(LogTypes.needs_maintenance);
-                        return true;
-                    case MenuID.MI_NOTE:
-                        addNewFieldnote(LogTypes.note);
-                        return true;
-                    case MenuID.MI_UPLOAD_FIELDNOTE:
-                        uploadFieldNotes();
-                        return true;
-                    case MenuID.MI_DELETE_ALL_FIELDNOTES:
-                        deleteAllFieldNotes();
-                        return true;
-                }
-                return false;
-            }
-        });
-
-        if (cache != null) {
-
-            // Found je nach CacheType
-            if (cache.Type == null)
-                return null;
-            switch (cache.Type) {
-                case Giga:
-                case MegaEvent:
-                case Event:
-                case CITO:
-                    cm.addItem(MenuID.MI_WILL_ATTENDED, "will-attended", itemStyle.typeStyle.will_attend);
-                    cm.addItem(MenuID.MI_ATTENDED, "attended", itemStyle.typeStyle.attended);
-                    break;
-                case Camera:
-                    cm.addItem(MenuID.MI_WEBCAM_FOTO_TAKEN, "webCamFotoTaken", itemStyle.typeStyle.webcam_photo_taken);
-                    break;
-                default:
-                    cm.addItem(MenuID.MI_FOUND, "found", itemStyle.typeStyle.found);
-                    break;
-            }
-
-            cm.addItem(MenuID.MI_NOT_FOUND, "DNF", itemStyle.typeStyle.didnt_find);
-        }
-
-        // Aktueller Cache ist von geocaching.com dann weitere Menüeinträge freigeben
-        if (cache != null && cache.getGcCode().toLowerCase().startsWith("gc")) {
-            cm.addItem(MenuID.MI_MAINTANCE, "maintenance", itemStyle.typeStyle.needs_maintenance);
-            cm.addItem(MenuID.MI_NOTE, "writenote", itemStyle.typeStyle.note);
-        }
-
-        cm.addItem(MenuID.MI_UPLOAD_FIELDNOTE, "uploadFieldNotes", CB.getSkin().getMenuIcon.uploadFieldNote);
-        cm.addItem(MenuID.MI_DELETE_ALL_FIELDNOTES, "DeleteAllNotes", CB.getSkin().getMenuIcon.deleteAllFieldNotes);
-
-        if (cache != null) {
-            MenuItem mi = cm.addItem(MenuID.MI_IMPORT, "ownerLogTypes", CB.getSkin().getMenuIcon.ownerLogTypes);
-            mi.setMoreMenu(getSecondMenu());
-
-            if (!cache.ImTheOwner()) {
-                //disable owner log types
-                mi.setEnabled(false);
-            }
-        }
-
-        return cm;
-    }
-
     private void uploadFieldNotes() {
         //TODO uploadFieldNotes
     }
@@ -911,5 +822,101 @@ public class FieldNotesView extends AbstractView {
         loadFieldNotes(FieldNoteList.LoadingType.LOAD_NEW_LAST_LENGTH);
     }
 
+
+    //################### Context menu implementation ####################################
+    @Override
+    public boolean hasContextMenu() {
+        return true;
+    }
+
+    @Override
+    public Menu getContextMenu() {
+
+        Cache cache = EventHandler.getSelectedCache();
+
+        final Menu cm = new Menu("FieldNoteContextMenu");
+
+        cm.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public boolean onItemClick(MenuItem item) {
+                switch (item.getMenuItemId()) {
+                    case MenuID.MI_FOUND:
+                        addNewFieldnote(LogTypes.found);
+                        return true;
+                    case MenuID.MI_ATTENDED:
+                        addNewFieldnote(LogTypes.attended);
+                        return true;
+                    case MenuID.MI_WEBCAM_FOTO_TAKEN:
+                        addNewFieldnote(LogTypes.webcam_photo_taken);
+                        return true;
+                    case MenuID.MI_WILL_ATTENDED:
+                        addNewFieldnote(LogTypes.will_attend);
+                        return true;
+                    case MenuID.MI_NOT_FOUND:
+                        addNewFieldnote(LogTypes.didnt_find);
+                        return true;
+                    case MenuID.MI_MAINTANCE:
+                        addNewFieldnote(LogTypes.needs_maintenance);
+                        return true;
+                    case MenuID.MI_NOTE:
+                        addNewFieldnote(LogTypes.note);
+                        return true;
+                    case MenuID.MI_UPLOAD_FIELDNOTE:
+                        uploadFieldNotes();
+                        return true;
+                    case MenuID.MI_DELETE_ALL_FIELDNOTES:
+                        deleteAllFieldNotes();
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        if (cache != null) {
+
+            // Found je nach CacheType
+            if (cache.Type == null)
+                return null;
+            switch (cache.Type) {
+                case Giga:
+                case MegaEvent:
+                case Event:
+                case CITO:
+                    cm.addItem(MenuID.MI_WILL_ATTENDED, "will-attended", itemStyle.typeStyle.will_attend);
+                    cm.addItem(MenuID.MI_ATTENDED, "attended", itemStyle.typeStyle.attended);
+                    break;
+                case Camera:
+                    cm.addItem(MenuID.MI_WEBCAM_FOTO_TAKEN, "webCamFotoTaken", itemStyle.typeStyle.webcam_photo_taken);
+                    break;
+                default:
+                    cm.addItem(MenuID.MI_FOUND, "found", itemStyle.typeStyle.found);
+                    break;
+            }
+
+            cm.addItem(MenuID.MI_NOT_FOUND, "DNF", itemStyle.typeStyle.didnt_find);
+        }
+
+        // Aktueller Cache ist von geocaching.com dann weitere Menüeinträge freigeben
+        if (cache != null && cache.getGcCode().toLowerCase().startsWith("gc")) {
+            cm.addItem(MenuID.MI_MAINTANCE, "maintenance", itemStyle.typeStyle.needs_maintenance);
+            cm.addItem(MenuID.MI_NOTE, "writenote", itemStyle.typeStyle.note);
+        }
+
+        cm.addItem(MenuID.MI_UPLOAD_FIELDNOTE, "uploadFieldNotes", CB.getSkin().getMenuIcon.uploadFieldNote);
+        cm.addItem(MenuID.MI_DELETE_ALL_FIELDNOTES, "DeleteAllNotes", CB.getSkin().getMenuIcon.deleteAllFieldNotes);
+
+        if (cache != null) {
+            MenuItem mi = cm.addItem(MenuID.MI_IMPORT, "ownerLogTypes", CB.getSkin().getMenuIcon.ownerLogTypes);
+            mi.setMoreMenu(getSecondMenu());
+
+            if (!cache.ImTheOwner()) {
+                //disable owner log types
+                mi.setEnabled(false);
+            }
+        }
+
+        return cm;
+    }
 
 }

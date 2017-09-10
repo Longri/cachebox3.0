@@ -23,20 +23,41 @@ import de.longri.cachebox3.gui.views.AbstractView;
 /**
  * Created by Longri on 16.08.2016.
  */
-public abstract class Abstract_Action_ShowView extends AbstractAction {
-    public Abstract_Action_ShowView(boolean disabled, String name, int id) {
+public abstract class Abstract_Action_ShowView<T extends AbstractView> extends AbstractAction {
+
+    private final Class viewClass;
+
+    public Abstract_Action_ShowView(Class<T> viewClass, boolean disabled, String name, int id) {
         super(disabled, name, id);
+        this.viewClass = viewClass;
     }
 
-    public Abstract_Action_ShowView(boolean disabled, String name, String nameExtention, int id) {
+    public Abstract_Action_ShowView(Class<T> viewClass, boolean disabled, String name, String nameExtention, int id) {
         super(disabled, name, nameExtention, id);
+        this.viewClass = viewClass;
     }
 
-    public abstract boolean hasContextMenu();
+    public final boolean hasContextMenu() {
+        AbstractView actView = CB.viewmanager.getActView();
+        if (this.viewClass.isAssignableFrom(actView.getClass())) {
+            return actView.hasContextMenu();
+        }
+        return false;
+    }
 
-    public abstract Menu getContextMenu();
+    public final Menu getContextMenu() {
+        AbstractView actView = CB.viewmanager.getActView();
+        if (this.viewClass.isAssignableFrom(actView.getClass())) {
+            return actView.getContextMenu();
+        }
+        return null;
+    }
 
     public abstract boolean isActVisible();
 
     public abstract boolean viewTypeEquals(AbstractView actView);
+
+    public Class getViewClass() {
+        return this.viewClass;
+    }
 }

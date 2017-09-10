@@ -15,21 +15,18 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.BuildInfo;
-import de.longri.cachebox3.utils.UnitFormatter;
 
 /**
  * Created by Longri on 23.07.16.
@@ -117,7 +114,6 @@ public class AboutView extends AbstractTableView implements de.longri.cachebox3.
         de.longri.cachebox3.events.EventHandler.add(this);
     }
 
-
     @Override
     public void dispose() {
         //register as Location receiver
@@ -147,5 +143,17 @@ public class AboutView extends AbstractTableView implements de.longri.cachebox3.
 
     public String toString() {
         return "AboutView";
+    }
+
+
+    //################### Context menu implementation ####################################
+    @Override
+    public boolean hasContextMenu() {
+        return false;
+    }
+
+    @Override
+    public Menu getContextMenu() {
+        return null;
     }
 }

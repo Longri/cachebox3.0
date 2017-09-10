@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
@@ -28,7 +27,7 @@ import de.longri.cachebox3.gui.views.AbstractView;
 public class Action_Show_AboutView extends Abstract_Action_ShowView {
 
     public Action_Show_AboutView() {
-        super(IMPLEMENTED, "about", MenuID.AID_SHOW_CACHELIST);
+        super(AboutView.class, IMPLEMENTED, "about", MenuID.AID_SHOW_CACHELIST);
     }
 
 
@@ -37,16 +36,6 @@ public class Action_Show_AboutView extends Abstract_Action_ShowView {
         if (isActVisible()) return;
         AboutView view = new AboutView();
         CB.viewmanager.showView(view);
-    }
-
-    @Override
-    public boolean hasContextMenu() {
-        return true;
-    }
-
-    @Override
-    public Menu getContextMenu() {
-        return null;
     }
 
     @Override

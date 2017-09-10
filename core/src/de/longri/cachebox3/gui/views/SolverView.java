@@ -30,7 +30,15 @@ public class SolverView extends AbstractView {
 
     }
 
+
+    //################### Context menu implementation ####################################
+    @Override
+    public boolean hasContextMenu() {
+        return false;
+    }
+
+    @Override
     public Menu getContextMenu() {
-        return null; //TODO
+        return null;
     }
 }

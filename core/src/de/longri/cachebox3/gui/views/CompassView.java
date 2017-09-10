@@ -27,6 +27,7 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisSplitPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.gui.menu.*;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
@@ -35,6 +36,7 @@ import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.settings.types.SettingBool;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.Cache;
@@ -376,7 +378,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
         private final Label distance, accurate;
 
         private CompassPanel(CompassViewStyle style) {
-            compass = new Compass(style,true);
+            compass = new Compass(style, true);
 
             Label.LabelStyle distanceStyle = new Label.LabelStyle();
             Label.LabelStyle accurateStyle = new Label.LabelStyle();
@@ -424,5 +426,145 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
     public String toString() {
         return "CompassView";
+    }
+
+
+    //################### Context menu implementation ####################################
+    @Override
+    public boolean hasContextMenu() {
+        return true;
+    }
+
+    public Menu getContextMenu() {
+        Menu icm = new Menu("menu_compassView");
+        icm.setOnItemClickListener(onItemClickListener);
+
+        icm.addItem(MenuID.MI_COMPASS_SHOW, "view", CB.getSkin().getMenuIcon.viewSettings);
+
+        return icm;
+    }
+
+    private void showOtionMenu() {
+        OptionMenu icm = new OptionMenu("menu_compassView");
+        icm.setOnItemClickListener(onItemClickListener);
+        MenuItem mi;
+
+        mi = icm.addItem(MenuID.MI_COMPASS_SHOW_MAP, "CompassShowMap");
+        mi.setCheckable(true);
+        mi.setChecked(Config.CompassShowMap.getValue());
+
+        mi = icm.addItem(MenuID.MI_COMPASS_SHOW_NAME, "CompassShowWP_Name");
+        mi.setCheckable(true);
+        mi.setChecked(Config.CompassShowWP_Name.getValue());
+
+        mi = icm.addItem(MenuID.MI_COMPASS_SHOW_ICON, "CompassShowWP_Icon");
+        mi.setCheckable(true);
+        mi.setChecked(Config.CompassShowWP_Icon.getValue());
+
+        mi = icm.addItem(MenuID.MI_COMPASS_SHOW_ATTRIBUTES, "CompassShowAttributes");
+        mi.setCheckable(true);
+        mi.setChecked(Config.CompassShowAttributes.getValue());
+
+        mi = icm.addItem(MenuID.MI_COMPASS_SHOW_GC_CODE, "CompassShowGcCode");
+        mi.setCheckable(true);
+        mi.setChecked(Config.CompassShowGcCode.getValue());
+
+        mi = icm.addItem(MenuID.MI_COMPASS_SHOW_COORDS, "CompassShowCoords");
+        mi.setCheckable(true);
+        mi.setChecked(Config.CompassShowCoords.getValue());
+
+        mi = icm.addItem(MenuID.MI_COMPASS_SHOW_WP_DESC, "CompassShowWpDesc");
+        mi.setCheckable(true);
+        mi.setChecked(Config.CompassShowWpDesc.getValue());
+
+        mi = icm.addItem(MenuID.MI_COMPASS_SHOW_SAT_INFO, "CompassShowSatInfos");
+        mi.setCheckable(true);
+        mi.setChecked(Config.CompassShowSatInfos.getValue());
+
+        mi = icm.addItem(MenuID.MI_COMPASS_SHOW_SUN_MOON, "CompassShowSunMoon");
+        mi.setCheckable(true);
+        mi.setChecked(Config.CompassShowSunMoon.getValue());
+
+        mi = icm.addItem(MenuID.MI_COMPASS_SHOW_TARGET_DIRECTION, "CompassShowTargetDirection");
+        mi.setCheckable(true);
+        mi.setChecked(Config.CompassShowTargetDirection.getValue());
+
+        mi = icm.addItem(MenuID.MI_COMPASS_SHOW_S_D_T, "CompassShowSDT");
+        mi.setCheckable(true);
+        mi.setChecked(Config.CompassShowSDT.getValue());
+
+        mi = icm.addItem(MenuID.MI_COMPASS_SHOW_LAST_FOUND, "CompassShowLastFound");
+        mi.setCheckable(true);
+        mi.setChecked(Config.CompassShowLastFound.getValue());
+
+        icm.show();
+
+    }
+
+    private final OnItemClickListener onItemClickListener = new OnItemClickListener() {
+
+        @Override
+        public boolean onItemClick(MenuItem item) {
+            switch (item.getMenuItemId()) {
+                case MenuID.MI_COMPASS_SHOW:
+                    showOtionMenu();
+                    return true;
+                case MenuID.MI_COMPASS_SHOW_MAP:
+                    toggleSetting(Config.CompassShowMap, item);
+                    return true;
+
+                case MenuID.MI_COMPASS_SHOW_NAME:
+                    toggleSetting(Config.CompassShowWP_Name, item);
+                    return true;
+
+                case MenuID.MI_COMPASS_SHOW_ICON:
+                    toggleSetting(Config.CompassShowWP_Icon, item);
+                    return true;
+
+                case MenuID.MI_COMPASS_SHOW_ATTRIBUTES:
+                    toggleSetting(Config.CompassShowAttributes, item);
+                    return true;
+
+                case MenuID.MI_COMPASS_SHOW_GC_CODE:
+                    toggleSetting(Config.CompassShowGcCode, item);
+                    return true;
+
+                case MenuID.MI_COMPASS_SHOW_COORDS:
+                    toggleSetting(Config.CompassShowCoords, item);
+                    return true;
+
+                case MenuID.MI_COMPASS_SHOW_WP_DESC:
+                    toggleSetting(Config.CompassShowWpDesc, item);
+                    return true;
+
+                case MenuID.MI_COMPASS_SHOW_SAT_INFO:
+                    toggleSetting(Config.CompassShowSatInfos, item);
+                    return true;
+
+                case MenuID.MI_COMPASS_SHOW_SUN_MOON:
+                    toggleSetting(Config.CompassShowSunMoon, item);
+                    return true;
+
+                case MenuID.MI_COMPASS_SHOW_TARGET_DIRECTION:
+                    toggleSetting(Config.CompassShowTargetDirection, item);
+                    return true;
+                case MenuID.MI_COMPASS_SHOW_S_D_T:
+                    toggleSetting(Config.CompassShowSDT, item);
+                    return true;
+                case MenuID.MI_COMPASS_SHOW_LAST_FOUND:
+                    toggleSetting(Config.CompassShowLastFound, item);
+                    return true;
+            }
+            return false;
+        }
+    };
+
+    private void toggleSetting(SettingBool setting, MenuItem item) {
+        boolean newValue = !setting.getValue();
+        setting.setValue(newValue);
+        item.setChecked(newValue);
+        Config.AcceptChanges();
+
+        resetLayout();
     }
 }

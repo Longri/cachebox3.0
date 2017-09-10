@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.LogListView;
@@ -27,21 +26,7 @@ import de.longri.cachebox3.gui.views.LogListView;
  */
 public class Action_Show_LogView extends Abstract_Action_ShowView {
     public Action_Show_LogView() {
-        super(IMPLEMENTED, "ShowLogs", MenuID.AID_SHOW_LOGS);
-    }
-
-    @Override
-    public boolean hasContextMenu() {
-        return true;
-    }
-
-    @Override
-    public Menu getContextMenu() {
-        if (CB.viewmanager.getActView() instanceof LogListView) {
-            LogListView logView = (LogListView) CB.viewmanager.getActView();
-            return logView.getContextMenu();
-        }
-        return null;
+        super(LogListView.class, IMPLEMENTED, "ShowLogs", MenuID.AID_SHOW_LOGS);
     }
 
     @Override

@@ -25,8 +25,19 @@ import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
+import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
+import de.longri.cachebox3.gui.dialogs.ButtonDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.events.CacheListChangedEventList;
+import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.gui.menu.MenuItem;
+import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
+import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.Cache;
@@ -311,5 +322,75 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 showPlatformWebView();
             }
         });
+    }
+
+
+    //################### Context menu implementation ####################################
+    @Override
+    public boolean hasContextMenu() {
+        return true;
+    }
+
+    @Override
+    public Menu getContextMenu() {
+        Menu cm = new Menu("DescriptionViewContextMenu");
+
+        cm.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public boolean onItemClick(MenuItem item) {
+                switch (item.getMenuItemId()) {
+                    case MenuID.MI_FAVORIT:
+                        if (EventHandler.getSelectedCache() == null) {
+
+                            new ButtonDialog("NoCacheSelect", Translation.Get("NoCacheSelect"), Translation.Get("Error"),
+                                    MessageBoxButtons.OKCancel, MessageBoxIcon.Error, null).show();
+                            return true;
+                        }
+
+                        EventHandler.getSelectedCache().setFavorite(!EventHandler.getSelectedCache().isFavorite());
+                        CacheDAO dao = new CacheDAO();
+                        dao.UpdateDatabase(EventHandler.getSelectedCache());
+
+                        // Update Query
+                        Database.Data.Query.GetCacheById(EventHandler.getSelectedCache().Id).setFavorite(EventHandler.getSelectedCache().isFavorite());
+
+                        // Update View
+                        //TODO update
+//                        if (TabMainView.descriptionView != null)
+//                            TabMainView.descriptionView.onShow();
+
+                        CacheListChangedEventList.Call();
+                        return true;
+                    case MenuID.MI_RELOAD_CACHE:
+                        new ReloadCacheActivity().show();
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        MenuItem mi;
+
+        boolean isSelected = (EventHandler.getSelectedCache() != null);
+
+        //ISSUE (#126 handle own favorites)  mi = cm.addItem(MenuID.MI_FAVORIT, "Favorite", CB.getSkin().getMenuIcon.favorit);
+//        mi.setCheckable(true);
+//        if (isSelected) {
+//            mi.setChecked(EventHandler.getSelectedCache().isFavorite());
+//        } else {
+//            mi.setEnabled(false);
+//        }
+
+        boolean selectedCacheIsNoGC = false;
+        if (isSelected)
+            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().startsWith("GC");
+        mi = cm.addItem(MenuID.MI_RELOAD_CACHE, "ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon);
+        if (!isSelected)
+            mi.setEnabled(false);
+        if (selectedCacheIsNoGC)
+            mi.setEnabled(false);
+
+        return cm;
     }
 }

@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.WaypointView;
@@ -27,21 +26,7 @@ import de.longri.cachebox3.gui.views.WaypointView;
  */
 public class Action_Show_WaypointView extends Abstract_Action_ShowView {
     public Action_Show_WaypointView() {
-        super(IMPLEMENTED, "Waypoints", MenuID.AID_SHOW_WAYPOINTS);
-    }
-
-    @Override
-    public boolean hasContextMenu() {
-        return true;
-    }
-
-    @Override
-    public Menu getContextMenu() {
-        if (CB.viewmanager.getActView() instanceof WaypointView) {
-            WaypointView waypointView = (WaypointView) CB.viewmanager.getActView();
-            return waypointView.getContextMenu();
-        }
-        return null;
+        super(WaypointView.class, IMPLEMENTED, "Waypoints", MenuID.AID_SHOW_WAYPOINTS);
     }
 
     @Override

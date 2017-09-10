@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.TrackableListView;
@@ -27,7 +26,7 @@ import de.longri.cachebox3.gui.views.TrackableListView;
  */
 public class Action_Show_TrackableListView extends Abstract_Action_ShowView {
     public Action_Show_TrackableListView() {
-        super(NOT_IMPLEMENTED, "TBList", MenuID.AID_SHOW_TRACKABLELIST);
+        super(TrackableListView.class, NOT_IMPLEMENTED, "TBList", MenuID.AID_SHOW_TRACKABLELIST);
     }
 
     @Override
@@ -41,16 +40,6 @@ public class Action_Show_TrackableListView extends Abstract_Action_ShowView {
 
     public Drawable getIcon() {
         return CB.getSkin().getMenuIcon.tbListIcon;
-    }
-
-    @Override
-    public boolean hasContextMenu() {
-        return false;
-    }
-
-    @Override
-    public Menu getContextMenu() {
-        return null;
     }
 
     @Override

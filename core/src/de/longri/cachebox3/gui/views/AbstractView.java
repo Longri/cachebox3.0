@@ -15,10 +15,10 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.widgets.CB_View_Base;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
 import de.longri.cachebox3.utils.SkinColor;
@@ -64,4 +64,8 @@ public abstract class AbstractView extends CB_View_Base {
     public String getName() {
         return this.NAME;
     }
+
+    public abstract boolean hasContextMenu();
+
+    public abstract Menu getContextMenu();
 }

@@ -291,54 +291,6 @@ public class WaypointView extends AbstractView {
         this.listView = null;
     }
 
-    public Menu getContextMenu() {
-        Menu cm = new Menu("CacheListContextMenu");
-
-        cm.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public boolean onItemClick(MenuItem item) {
-                switch (item.getMenuItemId()) {
-                    case MenuID.MI_ADD:
-                        addWP();
-                        return true;
-                    case MenuID.MI_WP_SHOW:
-                        editWP(false);
-                        return true;
-                    case MenuID.MI_EDIT:
-                        editWP(true);
-                        return true;
-                    case MenuID.MI_DELETE:
-                        deleteWP();
-                        return true;
-                    case MenuID.MI_PROJECTION:
-                        addProjection();
-                        return true;
-                    case MenuID.MI_FROM_GPS:
-                        addMeasure();
-                        return true;
-
-                }
-                return false;
-            }
-        });
-
-        if (actWaypoint != null)
-            cm.addItem(MenuID.MI_WP_SHOW, "show");
-        if (actWaypoint != null)
-            cm.addItem(MenuID.MI_EDIT, "edit");
-        cm.addItem(MenuID.MI_ADD, "AddWaypoint", CB.getSkin().getMenuIcon.addWp);
-        if ((actWaypoint != null) && (actWaypoint.IsUserWaypoint))
-            cm.addItem(MenuID.MI_DELETE, "delete");
-
-        //ISSUE (#128 Add Waypoint projection)
-//        if (actWaypoint != null || actCache != null)
-//            cm.addItem(MenuID.MI_PROJECTION, "Projection");
-
-        //ISSUE (#129 add measure WP from GPS)  cm.addItem(MenuID.MI_FROM_GPS, "FromGps");
-
-        return cm;
-    }
-
     private void addProjection() {
 
     }
@@ -420,4 +372,59 @@ public class WaypointView extends AbstractView {
         editWaypoint.show();
     }
 
+
+    //################### Context menu implementation ####################################
+    @Override
+    public boolean hasContextMenu() {
+        return true;
+    }
+
+    @Override
+    public Menu getContextMenu() {
+        Menu cm = new Menu("CacheListContextMenu");
+
+        cm.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public boolean onItemClick(MenuItem item) {
+                switch (item.getMenuItemId()) {
+                    case MenuID.MI_ADD:
+                        addWP();
+                        return true;
+                    case MenuID.MI_WP_SHOW:
+                        editWP(false);
+                        return true;
+                    case MenuID.MI_EDIT:
+                        editWP(true);
+                        return true;
+                    case MenuID.MI_DELETE:
+                        deleteWP();
+                        return true;
+                    case MenuID.MI_PROJECTION:
+                        addProjection();
+                        return true;
+                    case MenuID.MI_FROM_GPS:
+                        addMeasure();
+                        return true;
+
+                }
+                return false;
+            }
+        });
+
+        if (actWaypoint != null)
+            cm.addItem(MenuID.MI_WP_SHOW, "show");
+        if (actWaypoint != null)
+            cm.addItem(MenuID.MI_EDIT, "edit");
+        cm.addItem(MenuID.MI_ADD, "AddWaypoint", CB.getSkin().getMenuIcon.addWp);
+        if ((actWaypoint != null) && (actWaypoint.IsUserWaypoint))
+            cm.addItem(MenuID.MI_DELETE, "delete");
+
+        //ISSUE (#128 Add Waypoint projection)
+//        if (actWaypoint != null || actCache != null)
+//            cm.addItem(MenuID.MI_PROJECTION, "Projection");
+
+        //ISSUE (#129 add measure WP from GPS)  cm.addItem(MenuID.MI_FROM_GPS, "FromGps");
+
+        return cm;
+    }
 }

@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.SolverView;
@@ -27,21 +26,7 @@ import de.longri.cachebox3.gui.views.SolverView;
  */
 public class Action_Show_SolverView extends Abstract_Action_ShowView {
     public Action_Show_SolverView() {
-        super(NOT_IMPLEMENTED, "Solver", MenuID.AID_SHOW_SOLVER);
-    }
-
-    @Override
-    public boolean hasContextMenu() {
-        return true;
-    }
-
-    @Override
-    public Menu getContextMenu() {
-        if (CB.viewmanager.getActView() instanceof SolverView) {
-            SolverView solverView = (SolverView) CB.viewmanager.getActView();
-            return solverView.getContextMenu();
-        }
-        return null;
+        super(SolverView.class, NOT_IMPLEMENTED, "Solver", MenuID.AID_SHOW_SOLVER);
     }
 
     @Override

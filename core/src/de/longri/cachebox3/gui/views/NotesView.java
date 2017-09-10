@@ -30,7 +30,16 @@ public class NotesView extends AbstractView {
 
     }
 
-    public Menu getContextMenu() {
-        return null; //TODO
+
+    //################### Context menu implementation ####################################
+    @Override
+    public boolean hasContextMenu() {
+        return false;
     }
+
+    @Override
+    public Menu getContextMenu() {
+        return null;
+    }
+
 }

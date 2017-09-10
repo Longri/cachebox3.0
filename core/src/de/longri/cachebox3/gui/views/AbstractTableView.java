@@ -23,7 +23,7 @@ import de.longri.cachebox3.CB;
  */
 public abstract class AbstractTableView extends AbstractView {
 
-    protected final VisTable contentTable= new VisTable();
+    protected final VisTable contentTable = new VisTable();
 
     public AbstractTableView(String name) {
         super(name);

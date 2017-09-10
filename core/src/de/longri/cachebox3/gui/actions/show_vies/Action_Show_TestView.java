@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.TestView;
@@ -28,7 +27,7 @@ import de.longri.cachebox3.gui.views.TestView;
 public class Action_Show_TestView extends Abstract_Action_ShowView {
 
     public Action_Show_TestView() {
-        super(IMPLEMENTED, "TestView", MenuID.AID_TEST_VIEW);
+        super(TestView.class, IMPLEMENTED, "TestView", MenuID.AID_TEST_VIEW);
     }
 
 
@@ -39,16 +38,6 @@ public class Action_Show_TestView extends Abstract_Action_ShowView {
         TestView view = new TestView();
         CB.viewmanager.showView(view);
 
-    }
-
-    @Override
-    public boolean hasContextMenu() {
-        return false;
-    }
-
-    @Override
-    public Menu getContextMenu() {
-        return null;
     }
 
     @Override

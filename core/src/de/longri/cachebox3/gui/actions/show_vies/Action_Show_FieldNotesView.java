@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.FieldNotesView;
@@ -27,21 +26,7 @@ import de.longri.cachebox3.gui.views.FieldNotesView;
  */
 public class Action_Show_FieldNotesView extends Abstract_Action_ShowView {
     public Action_Show_FieldNotesView() {
-        super(IMPLEMENTED, "Fieldnotes", MenuID.AID_SHOW_FIELDNOTES);
-    }
-
-    @Override
-    public boolean hasContextMenu() {
-        return true;
-    }
-
-    @Override
-    public Menu getContextMenu() {
-        if (CB.viewmanager.getActView() instanceof FieldNotesView) {
-            FieldNotesView fieldNotesView = (FieldNotesView) CB.viewmanager.getActView();
-            return fieldNotesView.getContextMenu();
-        }
-        return null;
+        super(FieldNotesView.class, IMPLEMENTED, "Fieldnotes", MenuID.AID_SHOW_FIELDNOTES);
     }
 
     @Override

@@ -21,10 +21,6 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
 import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
-import de.longri.cachebox3.gui.dialogs.ButtonDialog;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
-import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -33,7 +29,6 @@ import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.LogEntry;
 import org.slf4j.Logger;
@@ -130,6 +125,21 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
         EventHandler.remove(this);
     }
 
+
+    @Override
+    public void selectedCacheChanged(SelectedCacheChangedEvent event) {
+        actGcCode = null;
+        setListViewAdapter();
+    }
+
+
+    //################### Context menu implementation ####################################
+    @Override
+    public boolean hasContextMenu() {
+        return true;
+    }
+
+    @Override
     public Menu getContextMenu() {
         Menu cm = new Menu("LogViewContextMenu");
 
@@ -159,11 +169,5 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
         if (selectedCacheIsNoGC)
             mi.setEnabled(false);
         return cm;
-    }
-
-    @Override
-    public void selectedCacheChanged(SelectedCacheChangedEvent event) {
-        actGcCode = null;
-        setListViewAdapter();
     }
 }

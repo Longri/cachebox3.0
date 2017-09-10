@@ -16,58 +16,39 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
-import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisScrollPane;
+import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.Utils;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
-import de.longri.cachebox3.callbacks.GenericCallBack;
-import de.longri.cachebox3.gui.*;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
-import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
-import de.longri.cachebox3.gui.skin.styles.*;
-import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.gui.utils.ClickLongClickListener;
+import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
+import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
+import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
-import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.gui.widgets.ProgressBar;
-import de.longri.cachebox3.gui.widgets.SelectBox;
-import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.LogTypes;
-import org.oscim.utils.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Longri on 27.07.16.
@@ -330,7 +311,6 @@ public class TestView extends AbstractView {
         }
 
 
-
         this.addActor(scrollPane);
     }
 
@@ -356,5 +336,17 @@ public class TestView extends AbstractView {
     @Override
     protected void sizeChanged() {
         scrollPane.setBounds(0, 0, this.getWidth(), this.getHeight());
+    }
+
+
+    //################### Context menu implementation ####################################
+    @Override
+    public boolean hasContextMenu() {
+        return false;
+    }
+
+    @Override
+    public Menu getContextMenu() {
+        return null;
     }
 }

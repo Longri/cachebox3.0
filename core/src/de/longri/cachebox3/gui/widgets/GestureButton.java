@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.show_vies.Abstract_Action_ShowView;
@@ -224,6 +225,16 @@ public class GestureButton extends Button {
             for (ActionButton ba : buttonActions) {
                 if (ba.isDefaultAction()) {
                     AbstractAction action = ba.getAction();
+
+                    if(action instanceof Abstract_Action_ShowView){
+                        //check if target view not actView
+                       Class clazz= ((Abstract_Action_ShowView)action).getViewClass();
+                        if (clazz.isAssignableFrom(CB.viewmanager.getActView().getClass())) {
+                            actionExecuted = false;
+                            break;
+                        }
+                    }
+
                     if (action != null) {
                         action.execute();
                         if (action instanceof Abstract_Action_ShowView)

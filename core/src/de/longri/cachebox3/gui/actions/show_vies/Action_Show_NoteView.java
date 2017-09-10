@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.NotesView;
@@ -27,21 +26,7 @@ import de.longri.cachebox3.gui.views.NotesView;
  */
 public class Action_Show_NoteView extends Abstract_Action_ShowView {
     public Action_Show_NoteView() {
-        super(NOT_IMPLEMENTED, "Notes", MenuID.AID_SHOW_NOTES);
-    }
-
-    @Override
-    public boolean hasContextMenu() {
-        return true;
-    }
-
-    @Override
-    public Menu getContextMenu() {
-        if (CB.viewmanager.getActView() instanceof NotesView) {
-            NotesView noteView = (NotesView) CB.viewmanager.getActView();
-            return noteView.getContextMenu();
-        }
-        return null;
+        super(NotesView.class, NOT_IMPLEMENTED, "Notes", MenuID.AID_SHOW_NOTES);
     }
 
     @Override

@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import de.longri.cachebox3.gui.menu.Menu;
+
 /**
  * Created by Longri on 14.09.2016.
  */
@@ -26,5 +28,17 @@ public class CreditsView extends AbstractView {
     @Override
     public void dispose() {
 
+    }
+
+
+    //################### Context menu implementation ####################################
+    @Override
+    public boolean hasContextMenu() {
+        return false;
+    }
+
+    @Override
+    public Menu getContextMenu() {
+        return null;
     }
 }
