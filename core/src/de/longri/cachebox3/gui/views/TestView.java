@@ -32,9 +32,12 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.menu.MenuItem;
+import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
@@ -342,11 +345,36 @@ public class TestView extends AbstractView {
     //################### Context menu implementation ####################################
     @Override
     public boolean hasContextMenu() {
-        return false;
+        return true;
     }
 
     @Override
     public Menu getContextMenu() {
-        return null;
+
+        Menu cm = new Menu("testView contextMenu");
+
+        cm.addItem(10000, "show MSG Box 1", true);
+
+
+        cm.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public boolean onItemClick(MenuItem item) {
+
+                switch (item.getMenuItemId()) {
+                    case 10000:
+                        String title = "Fehler";
+                        String msg = "Der Cache [2 Advent: der Wherigo (wo ist der Weihnachtsmann)] ist nicht in der aktuellen DB.\\nDiese FieldNote kann nicht gewählt werden!";
+                        MessageBoxButtons btn = MessageBoxButtons.OK;
+                        MessageBoxIcon icn = MessageBoxIcon.Error;
+
+                        MessageBox.Show(msg, title, btn, icn, null);
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        return cm;
     }
 }
