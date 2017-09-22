@@ -268,7 +268,7 @@ public class MapView extends AbstractView {
             Tile.SIZE = (int) (400 * scaleFactor);
             CanvasAdapter.dpi = 240 * scaleFactor;
             CanvasAdapter.textScale = scaleFactor;
-            CanvasAdapter.scale = scaleFactor;
+//            CanvasAdapter.scale = scaleFactor;
             log.debug("Create new map instance with scale factor:" + Float.toString(scaleFactor));
             log.debug("Tile.SIZE:" + Integer.toString(Tile.SIZE));
             log.debug("Canvas.dpi:" + Float.toString(CanvasAdapter.dpi));

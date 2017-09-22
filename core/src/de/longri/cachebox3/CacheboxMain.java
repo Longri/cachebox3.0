@@ -28,35 +28,30 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import org.oscim.backend.GL;
-import org.oscim.map.Map;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
-import org.oscim.theme.ThemeLoader;
+import org.oscim.utils.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.impl.LibgdxLogger;
-import org.slf4j.impl.LibgdxLoggerFactory;
 
 import java.text.NumberFormat;
 
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
 import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
-import static org.slf4j.impl.LibgdxLoggerFactory.INCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
 
     static {
-        Map.NEW_GESTURES = true;
-        ThemeLoader.POT_TEXTURES = true;
-        ThemeLoader.USE_ATLAS = true;
+        Parameters.MAP_EVENT_LAYER2 = true;
+        Parameters.TEXTURE_ATLAS = true;
+        Parameters.POT_TEXTURES = true;
         COORD_SCALE = 1;
         EventHandler.INIT();
 
