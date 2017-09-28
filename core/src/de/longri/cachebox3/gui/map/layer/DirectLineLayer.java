@@ -36,6 +36,9 @@ import org.oscim.theme.styles.LineStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.oscim.theme.styles.LineStyle.REPEAT_GAP_DEFAULT;
+import static org.oscim.theme.styles.LineStyle.REPEAT_START_DEFAULT;
+
 /**
  * Created by Longri on 02.03.2017.
  */
@@ -112,7 +115,7 @@ public class DirectLineLayer extends GenericLayer implements de.longri.cachebox3
                 new LineStyle(0, "",
                         Color.get(style.color.a, (int) (style.color.r * 255), (int) (style.color.g * 255), (int) (style.color.b * 255)),
                         CB.getScaledFloat(style.width), style.cap, true, 0, 0, 0,
-                        -1, 0, false, textureItem, true, null)
+                        -1, 0, false, textureItem, true, null, REPEAT_START_DEFAULT, REPEAT_GAP_DEFAULT)
         );
 
         GeometryBuffer g = new GeometryBuffer(2, 1);
