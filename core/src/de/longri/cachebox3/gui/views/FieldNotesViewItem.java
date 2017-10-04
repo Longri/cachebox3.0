@@ -116,11 +116,22 @@ public class FieldNotesViewItem extends ListViewItem {
         needsLayout = false;
     }
 
+    @Override
     protected void drawBackground(Batch batch, float parentAlpha, float x, float y) {
         super.drawBackground(batch, parentAlpha, x, y);
         if (style.headerBackground != null && headerTable != null) {
             float height = headerTable.getHeight() + this.getPadTop() + this.getPadBottom();
             style.headerBackground.draw(batch, x, y + (getHeight() - height), getWidth(), height);
+        }
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+
+        if (entry.uploaded && style.upploadedOverlay != null) {
+            //draw uploaded overlay
+            style.upploadedOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
         }
     }
 

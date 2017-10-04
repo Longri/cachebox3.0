@@ -95,13 +95,13 @@ public class SkinEditorGame extends Game {
         skin = new SavableSvgSkin("UiSkin");
 
         // add skin editor Texture pack
-        skin.addRegions(new TextureAtlas(Gdx.files.classpath("resources/uiskin.atlas")));
+        skin.addRegions(new TextureAtlas(Gdx.files.internal("skin-editor-src-proj/assets/resources/uiskin.atlas")));
 
         // add VisUi Texture pack
-        skin.addRegions(new TextureAtlas(Gdx.files.classpath("resources/visuiskin.atlas")));
+        skin.addRegions(new TextureAtlas(Gdx.files.internal("skin-editor-src-proj/assets/resources/visuiskin.atlas")));
 
 
-        skin.load(Gdx.files.classpath("resources/visuiskin.json"));
+        skin.load(Gdx.files.internal("skin-editor-src-proj/assets/resources/visuiskin.json"));
 
         VisUI.load(skin);
 

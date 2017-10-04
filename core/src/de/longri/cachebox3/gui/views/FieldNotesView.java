@@ -192,6 +192,8 @@ public class FieldNotesView extends AbstractView {
 
         int idx = 0;
         for (FieldNoteEntry entry : fieldNoteEntries) {
+            if (idx == 1) entry.uploaded = true;
+            else entry.uploaded = false;
             items.add(new FieldNotesViewItem(idx++, entry, itemStyle));
         }
 

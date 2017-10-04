@@ -24,10 +24,6 @@
       "path": "svg/map-state-overdraw.svg",
       "scale": 0.75
     },
-    "UPLOADFIELDNOTE": {
-      "path": "svg/UPLOADFIELDNOTE.svg",
-      "scale": 0.18
-    },
     "Wikipedia": {
       "path": "svg/mapWikipedia1.svg",
       "scale": 0.18
@@ -835,10 +831,6 @@
     "earth": {
       "path": "svg/earth.svg",
       "scale": 0.21
-    },
-    "edit": {
-      "path": "svg/pencil.svg",
-      "scale": 0.3
     },
     "enabled": {
       "path": "svg/enabled.svg",
@@ -2483,8 +2475,6 @@
       "baseMapFreizeitkarte": "baseMapFreizeitkarte",
       "target": "target",
       "mapLayer": "map-layer",
-      "deleteAllFieldNotes": "deleteIcon",
-      "edit": "edit",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
       "deleteIcon": "deleteIcon",
@@ -2497,7 +2487,6 @@
       "torchOn": "light_on",
       "torchOff": "light_off",
       "torchDisabled": "light_disabled",
-      "uploadFieldNote": "UPLOADFIELDNOTE",
       "manageDB": "database",
       "settingsIcon": "settings_icon",
       "compassIcon": "compas_icon",
@@ -2881,7 +2870,8 @@
       "descriptionFontColor": "font_color",
       "typeStyle": "logViewLogStyles",
       "cacheTypeStyle": "cacheList",
-      "headerBackground": "list_rec_header_9_Patch"
+      "headerBackground": "list_rec_header_9_Patch",
+      "upploadedOverlay": "dialog_stage_background"
     }
   }
 }

@@ -30,4 +30,5 @@ public class FieldNoteListItemStyle {
     public LogTypesStyle typeStyle;
     public CacheTypeStyle cacheTypeStyle;
     public Drawable headerBackground;
+    public Drawable upploadedOverlay;
 }
