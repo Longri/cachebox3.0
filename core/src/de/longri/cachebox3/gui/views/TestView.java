@@ -309,7 +309,7 @@ public class TestView extends AbstractView {
             contentTable.add(lineTable).left().expandX().fillX();
             contentTable.row();
 
-            contentTable.add(dialog).width(new Value.Fixed(contentWidth)).pad(20);
+            contentTable.add(dialog).width(new Value.Fixed(dialog.getPrefWidth())).pad(20);
             contentTable.row();
         }
 
