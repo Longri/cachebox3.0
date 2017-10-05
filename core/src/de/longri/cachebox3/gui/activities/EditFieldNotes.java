@@ -153,7 +153,7 @@ public class EditFieldNotes extends ActivityBase {
                     Date timestamp = dateFormatter.parse(date + "." + time + ".00");
                     actFieldNote.timestamp = timestamp;
                 } catch (ParseException e) {
-                    MessageBox.Show(Translation.Get("wrongDate"), Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                    MessageBox.show(Translation.Get("wrongDate"), Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
                     return;
                 }
 

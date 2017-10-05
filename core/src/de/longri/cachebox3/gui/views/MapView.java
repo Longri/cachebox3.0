@@ -708,7 +708,7 @@ public class MapView extends AbstractView {
                 // if curent layer a Mapsforge map, it is posible to add the selected Mapsforge map
                 // to the current layer. We ask the User!
 //                if (MapView.mapTileLoader.getCurrentLayer().isMapsForge() && layer.isMapsForge()) {
-//                    GL_MsgBox msgBox = GL_MsgBox.Show("add or change", "Map selection", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
+//                    GL_MsgBox msgBox = GL_MsgBox.show("add or change", "Map selection", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
 //
 //                        @Override
 //                        public boolean onClick(int which, Object data) {

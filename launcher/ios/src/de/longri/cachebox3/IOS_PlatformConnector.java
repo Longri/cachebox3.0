@@ -110,7 +110,7 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     protected void generateApiKey(GenericCallBack<String> callBack) {
-        log.debug("Show WebView for get API key");
+        log.debug("show WebView for get API key");
         try {
             UIViewController mainViewController = ((IOSApplication) Gdx.app).getUIWindow().getRootViewController();
             GenerateApiKeyWebViewController controller = new GenerateApiKeyWebViewController(callBack, mainViewController);
@@ -125,7 +125,7 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
-        log.debug("Show WebView as descriptionView");
+        log.debug("show WebView as descriptionView");
         try {
             if (descriptionView == null) {
                 UIViewController mainViewController = ((IOSApplication) Gdx.app).getUIWindow().getRootViewController();

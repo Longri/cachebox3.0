@@ -332,8 +332,8 @@ public class DrawablePickerDialog extends Dialog {
             }
         };
 
-        togglShowNinePatch = new TextButton("Show NinePatch", game.skin, "toggle");
-        togglShowDrawable = new TextButton("Show Drawable", game.skin, "toggle");
+        togglShowNinePatch = new TextButton("show NinePatch", game.skin, "toggle");
+        togglShowDrawable = new TextButton("show Drawable", game.skin, "toggle");
         filterField = new TextField("", game.skin);
 
         togglShowNinePatch.addListener(refreshListener);

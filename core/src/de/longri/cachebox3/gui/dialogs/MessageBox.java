@@ -25,15 +25,15 @@ public class MessageBox {
     private final static String NAME = "MessageBox";
 
 
-    public static void Show(String message) {
-        Show(message, null, MessageBoxButtons.OK, null, null);
+    public static void show(String message) {
+        show(message, null, MessageBoxButtons.OK, null, null);
     }
 
-    public static void Show(String lastAPIError, String error, MessageBoxIcon icon) {
+    public static void show(String lastAPIError, String error, MessageBoxIcon icon) {
 //TODO
     }
 
-    public static void Show(String message, String title, MessageBoxButtons buttons, MessageBoxIcon icon,
+    public static void show(String message, String title, MessageBoxButtons buttons, MessageBoxIcon icon,
                             OnMsgBoxClickListener clickListener) {
         new ButtonDialog(NAME, message, title, buttons, icon, clickListener).show();
     }

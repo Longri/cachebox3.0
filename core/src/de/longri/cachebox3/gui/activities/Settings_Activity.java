@@ -81,7 +81,7 @@ public class Settings_Activity extends ActivityBase {
 
     @Override
     public void onShow() {
-        log.debug("Show Settings");
+        log.debug("show Settings");
         Config.SaveToLastValue();
         fillContent();
     }
@@ -408,7 +408,7 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private void showCategory(SettingCategory category, boolean animate) {
-        log.debug("Show settings categoriy: " + category.name());
+        log.debug("show settings categoriy: " + category.name());
 
         Adapter listViewAdapter;
         final Array<SettingBase<?>> categorySettingsList = getSettingsOfCategory(category);

@@ -219,7 +219,7 @@ public class Menu extends Window {
 
         StageManager.registerForBackKey(backClickListener);
 
-        log.debug("Show menu: " + this.name);
+        log.debug("show menu: " + this.name);
     }
 
     private void showWidgetGroup() {
@@ -252,7 +252,7 @@ public class Menu extends Window {
 
         mainMenuWidgetGroup.setPosition(nextXPos, 0);
         mainMenuWidgetGroup.addAction(Actions.moveTo(0, 0, MORE_MENU_ANIMATION_TIME));
-        log.debug("Show child menu: " + this.name);
+        log.debug("show child menu: " + this.name);
 
         isShowing = true;
     }

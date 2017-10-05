@@ -379,7 +379,7 @@ public class DescriptionImageGrabber {
                 int result = 0;
                 long startTs = System.currentTimeMillis();
                 do {
-                    result = GroundspeakAPI.GetAllImageLinks(gcCode, allimgDict, null);
+                    result = GroundspeakAPI.getAllImageLinks(gcCode, allimgDict, null);
 
                     if (result == GroundspeakAPI.CONNECTION_TIMEOUT) {
                         return GroundspeakAPI.CONNECTION_TIMEOUT;

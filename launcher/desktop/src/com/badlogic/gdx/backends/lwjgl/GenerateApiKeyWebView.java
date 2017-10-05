@@ -78,13 +78,13 @@ public class GenerateApiKeyWebView extends Window {
             CB_Api.getGcAuthUrl(new GenericCallBack<String>() {
                 @Override
                 public void callBack(final String value) {
-                    log.debug("Show web site at {}", value);
+                    log.debug("show web site at {}", value);
 
                 }
             });
         } else {
             String GC_AuthUrl = Config.OverrideUrl.getValue();
-            log.debug("Show override web site at {}", GC_AuthUrl);
+            log.debug("show override web site at {}", GC_AuthUrl);
 
         }
 
@@ -198,13 +198,13 @@ public class GenerateApiKeyWebView extends Window {
                     CB_Api.getGcAuthUrl(new GenericCallBack<String>() {
                         @Override
                         public void callBack(final String value) {
-                            log.debug("Show web site at {}", value);
+                            log.debug("show web site at {}", value);
                             loadURL(value);
                         }
                     });
                 } else {
                     String GC_AuthUrl = Config.OverrideUrl.getValue();
-                    log.debug("Show override web site at {}", GC_AuthUrl);
+                    log.debug("show override web site at {}", GC_AuthUrl);
                     loadURL(GC_AuthUrl);
                 }
 

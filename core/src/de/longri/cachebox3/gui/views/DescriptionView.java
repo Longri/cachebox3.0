@@ -80,7 +80,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 //
 //                final String attr = url.substring(pos + 1, url.length() - 1);
 //
-//                MessageBox.Show(Translation.Get(attr));
+//                MessageBox.show(Translation.Get(attr));
                 log.debug("Attribute icon clicked, don't load URL");
                 return true;
             } else if (url.contains("fake://fake.de?Button")) {
@@ -90,7 +90,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 //
 //                final String attr = url.substring(pos + 1, url.length() - 1);
 //
-//                MessageBox.Show(Translation.Get(attr));
+//                MessageBox.show(Translation.Get(attr));
                 log.debug("Attribute icon clicked, don't load URL");
                 return true;
             } else if (url.contains("fake://fake.de/download")) {
@@ -150,7 +150,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 return true;
             } else if (url.startsWith("http://")) {
                 // Load Url in ext Browser
-                log.debug("Link clicked, don't load URL! Show on ext browser");
+                log.debug("Link clicked, don't load URL! show on ext browser");
                 PlatformConnector._openUrlExtern(url);
                 return true;
             } else if (url.equals("about:blank")) {

@@ -421,7 +421,7 @@ public class TestView extends AbstractView {
                         MessageBoxButtons btn = MessageBoxButtons.OK;
                         MessageBoxIcon icn = MessageBoxIcon.Error;
 
-                        MessageBox.Show(msg, title, btn, icn, null);
+                        MessageBox.show(msg, title, btn, icn, null);
                         break;
                 }
 

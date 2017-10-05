@@ -104,7 +104,7 @@ public class IOS_DescriptionView extends UIViewController implements UIWebViewDe
 
     @Override
     public void setHtml(String html) {
-        log.debug("Show html");
+        log.debug("show html");
         webView.loadHTML(html, null);
     }
 

@@ -31,10 +31,7 @@ import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.sqlite.dao.ImageDAO;
 import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;
-import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.ImageEntry;
-import de.longri.cachebox3.types.LogEntry;
-import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NetUtils;
 import de.longri.cachebox3.utils.lists.CB_List;
@@ -116,14 +113,6 @@ public class GroundspeakAPI {
         return result;
     }
 
-
-//
-//    public static boolean IsPremiumMember() {
-//        if (membershipType < 0)
-//            membershipType = GetMembershipType(null);
-//        return membershipType == 3;
-//    }
-
     private static String GetUTCDate(Date date) {
         long utc = date.getTime();
         // date.getTime already returns utc timestamp. Conversion to utc is not necessary!!!
@@ -141,84 +130,54 @@ public class GroundspeakAPI {
     }
 
 
-//    public static int CreateFieldNoteAndPublish(String cacheCode, int wptLogTypeId, Date dateLogged, String note, boolean directLog, final ICancel icancel) {
-//	int chk = chkMembership(true);
-//	if (chk < 0)
-//	    return chk;
-//
-//	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-//
-//	try {
-//	    HttpPost httppost = new HttpPost(URL + "CreateFieldNoteAndPublish?format=json");
-//	    String requestString = "";
-//	    requestString = "{";
-//	    requestString += "\"AccessToken\":\"" + getAccessToken() + "\",";
-//	    requestString += "\"CacheCode\":\"" + cacheCode + "\",";
-//	    requestString += "\"WptLogTypeId\":" + String.valueOf(wptLogTypeId) + ",";
-//	    requestString += "\"UTCDateLogged\":\"" + GetUTCDate(dateLogged) + "\",";
-//	    requestString += "\"Note\":\"" + ConvertNotes(note) + "\",";
-//	    if (directLog) {
-//		requestString += "\"PromoteToLog\":true,";
-//	    } else {
-//		requestString += "\"PromoteToLog\":false,";
-//	    }
-//
-//	    requestString += "\"FavoriteThisCache\":false";
-//	    requestString += "}";
-//
-//	    httppost.setEntity(new ByteArrayEntity(requestString.getBytes("UTF8")));
-//
-//	    // set time outs
-//	    HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
-//	    HttpUtils.socketTimeout = Config.socket_timeout.getValue();
-//
-//	    // Execute HTTP Post Request
-//	    String result = HttpUtils.Execute(httppost, icancel);
-//
-//	    if (result.contains("The service is unavailable")) {
-//		return API_IS_UNAVAILABLE;
-//	    }
-//
-//	    // Parse JSON Result
-//	    try {
-//		JSONTokener tokener = new JSONTokener(result);
-//		JSONObject json = (JSONObject) tokener.nextValue();
-//		JSONObject status = json.getJSONObject("Status");
-//		if (status.getInt("StatusCode") == 0) {
-//		    result = "";
-//		    LastAPIError = "";
-//		} else {
-//		    result = "StatusCode = " + status.getInt("StatusCode") + "\n";
-//		    result += status.getString("StatusMessage") + "\n";
-//		    result += status.getString("ExceptionDetails");
-//		    LastAPIError = result;
-//		    return ERROR;
-//		}
-//
-//	    } catch (JSONException e) {
-//		e.printStackTrace();
-//		log.error("UploadFieldNotesAPI", e);
-//		LastAPIError = e.getMessage();
-//		return ERROR;
-//	    }
-//
-//	} catch (ConnectTimeoutException e) {
-//	    log.error("UploadFieldNotesAPI ConnectTimeoutException", e);
-//	    return CONNECTION_TIMEOUT;
-//	} catch (UnsupportedEncodingException e) {
-//	    log.error("UploadFieldNotesAPI UnsupportedEncodingException", e);
-//	    return ERROR;
-//	} catch (ClientProtocolException e) {
-//	    log.error("UploadFieldNotesAPI ClientProtocolException", e);
-//	    return ERROR;
-//	} catch (IOException e) {
-//	    log.error("UploadFieldNotesAPI IOException", e);
-//	    return ERROR;
-//	}
-//
-//	LastAPIError = "";
-//	return IO;
-//    }
+    public static int createFieldNoteAndPublish(String cacheCode, int wptLogTypeId, Date dateLogged, String note, boolean directLog, final ICancel icancel) {
+        int chk = chkMembership(true);
+        if (chk < 0)
+            return chk;
+
+        String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
+
+        try {
+            String requestString = "";
+            requestString = "{";
+            requestString += "\"AccessToken\":\"" + getAccessToken() + "\",";
+            requestString += "\"CacheCode\":\"" + cacheCode + "\",";
+            requestString += "\"WptLogTypeId\":" + String.valueOf(wptLogTypeId) + ",";
+            requestString += "\"UTCDateLogged\":\"" + GetUTCDate(dateLogged) + "\",";
+            requestString += "\"Note\":\"" + ConvertNotes(note) + "\",";
+            if (directLog) {
+                requestString += "\"PromoteToLog\":true,";
+            } else {
+                requestString += "\"PromoteToLog\":false,";
+            }
+
+            requestString += "\"FavoriteThisCache\":false";
+            requestString += "}";
+
+            Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
+            httpPost.setUrl(URL + "createFieldNoteAndPublish?format=json");
+            httpPost.setTimeOut(Config.socket_timeout.getValue());
+            httpPost.setContent(requestString);
+
+            // Execute HTTP Post Request
+            String responseString = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING, httpPost, icancel);
+
+            if (responseString.contains("The service is unavailable")) {
+                return API_IS_UNAVAILABLE;
+            }
+
+            log.debug("createFieldNoteAndPublish \n REQUEST: \n {} \n RESULT: \n {}", requestString, responseString);
+
+            // Parse JSON Result
+            // TODO return is result msg are 'OK'
+        } catch (Exception e) {
+            log.error("UploadFieldNotesAPI IOException", e);
+            return ERROR;
+        }
+
+        LastAPIError = "";
+        return IO;
+    }
 //
 //
 //    public static int GetCachesFound(final ICancel icancel) {
@@ -1025,7 +984,7 @@ public class GroundspeakAPI {
 //     *            Config.settings.socket_timeout.getValue()
 //     * @return
 //     */
-    public static int GetAllImageLinks(String cacheCode, HashMap<String, URI> list, ICancel icancel) {
+    public static int getAllImageLinks(String cacheCode, HashMap<String, URI> list, ICancel icancel) {
         int chk = chkMembership(false);
         if (chk < 0)
             return chk;
@@ -1290,115 +1249,74 @@ public class GroundspeakAPI {
 
         return chkMembership(withoutMsg);
     }
-//
-//    /**
-//     * @param Staging
-//     *            Config.settings.StagingAPI.getValue()
-//     * @param accessToken
-//     * @param TB
-//     * @param cacheCode
-//     * @param LogTypeId
-//     * @param dateLogged
-//     * @param note
-//     * @param conectionTimeout
-//     *            Config.settings.conection_timeout.getValue()
-//     * @param socketTimeout
-//     *            Config.settings.socket_timeout.getValue()
-//     * @return
-//     */
-//    public static int createTrackableLog(Trackable TB, String cacheCode, int LogTypeId, Date dateLogged, String note, ICancel icancel) {
-//	return createTrackableLog(TB.getGcCode(), TB.getTrackingNumber(), cacheCode, LogTypeId, dateLogged, note, icancel);
-//    }
-//
-//    /**
-//     * @param Staging
-//     *            Config.settings.StagingAPI.getValue()
-//     * @param accessToken
-//     * @param TbCode
-//     * @param TrackingNummer
-//     * @param cacheCode
-//     * @param LogTypeId
-//     * @param dateLogged
-//     * @param note
-//     * @param conectionTimeout
-//     *            Config.settings.conection_timeout.getValue()
-//     * @param socketTimeout
-//     *            Config.settings.socket_timeout.getValue()
-//     * @return
-//     */
-//    public static int createTrackableLog(String TbCode, String TrackingNummer, String cacheCode, int LogTypeId, Date dateLogged, String note, ICancel icancel) {
-//	int chk = chkMembership(false);
-//	if (chk < 0)
-//	    return chk;
-//	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-//	if (cacheCode == null)
-//	    cacheCode = "";
-//
-//	try {
-//	    HttpPost httppost = new HttpPost(URL + "CreateTrackableLog?format=json");
-//	    String requestString = "";
-//	    requestString = "{";
-//	    requestString += "\"AccessToken\":\"" + getAccessToken() + "\",";
-//	    requestString += "\"CacheCode\":\"" + cacheCode + "\",";
-//	    requestString += "\"LogType\":" + String.valueOf(LogTypeId) + ",";
-//	    requestString += "\"UTCDateLogged\":\"" + GetUTCDate(dateLogged) + "\",";
-//	    requestString += "\"Note\":\"" + ConvertNotes(note) + "\",";
-//	    requestString += "\"TravelBugCode\":\"" + String.valueOf(TbCode) + "\",";
-//	    requestString += "\"TrackingNumber\":\"" + String.valueOf(TrackingNummer) + "\"";
-//	    requestString += "}";
-//
-//	    httppost.setEntity(new ByteArrayEntity(requestString.getBytes("UTF8")));
-//
-//	    // set time outs
-//	    HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
-//	    HttpUtils.socketTimeout = Config.socket_timeout.getValue();
-//
-//	    // Execute HTTP Post Request
-//	    String result = HttpUtils.Execute(httppost, icancel);
-//
-//	    if (result.contains("The service is unavailable")) {
-//		return API_IS_UNAVAILABLE;
-//	    }
-//	    // Parse JSON Result
-//	    try {
-//		JSONTokener tokener = new JSONTokener(result);
-//		JSONObject json = (JSONObject) tokener.nextValue();
-//		JSONObject status = json.getJSONObject("Status");
-//		if (status.getInt("StatusCode") == 0) {
-//		    result = "";
-//		    LastAPIError = "";
-//		} else {
-//		    result = "StatusCode = " + status.getInt("StatusCode") + "\n";
-//		    result += status.getString("StatusMessage") + "\n";
-//		    result += status.getString("ExceptionDetails");
-//		    LastAPIError = result;
-//		    return -1;
-//		}
-//
-//	    } catch (JSONException e) {
-//		e.printStackTrace();
-//		log.error("UploadFieldNotesAPI JSON-Error", e);
-//		LastAPIError = e.getMessage();
-//		return -1;
-//	    }
-//
-//	} catch (ConnectTimeoutException e) {
-//	    log.error("createTrackableLog ConnectTimeoutException", e);
-//	    return CONNECTION_TIMEOUT;
-//	} catch (UnsupportedEncodingException e) {
-//	    log.error("createTrackableLog UnsupportedEncodingException", e);
-//	    return ERROR;
-//	} catch (ClientProtocolException e) {
-//	    log.error("createTrackableLog ClientProtocolException", e);
-//	    return ERROR;
-//	} catch (IOException e) {
-//	    log.error("createTrackableLog IOException", e);
-//	    return ERROR;
-//	}
-//
-//	LastAPIError = "";
-//	return 0;
-//    }
+
+    /**
+     * @param trackable
+     * @param cacheCode
+     * @param logTypeId
+     * @param dateLogged
+     * @param note
+     * @return
+     */
+    public static int createTrackableLog(Trackable trackable, String cacheCode, int logTypeId, Date dateLogged, String note, ICancel icancel) {
+        return createTrackableLog(trackable.getGcCode(), trackable.getTrackingNumber(), cacheCode, logTypeId, dateLogged, note, icancel);
+    }
+
+    /**
+     * @param tbCode
+     * @param trackingNumber
+     * @param cacheCode
+     * @param logTypeId
+     * @param dateLogged
+     * @param note
+     * @return
+     */
+    public static int createTrackableLog(String tbCode, String trackingNumber, String cacheCode, int logTypeId, Date dateLogged, String note, ICancel icancel) {
+        int chk = chkMembership(false);
+        if (chk < 0)
+            return chk;
+        String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
+        if (cacheCode == null)
+            cacheCode = "";
+
+        try {
+            Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
+            httpPost.setUrl(URL + "CreateTrackableLog?format=json");
+            httpPost.setTimeOut(Config.socket_timeout.getValue());
+            httpPost.setHeader("format", "json");
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+
+
+            String requestString;
+            requestString = "{";
+            requestString += "\"AccessToken\":\"" + getAccessToken() + "\",";
+            requestString += "\"CacheCode\":\"" + cacheCode + "\",";
+            requestString += "\"LogType\":" + String.valueOf(logTypeId) + ",";
+            requestString += "\"UTCDateLogged\":\"" + GetUTCDate(dateLogged) + "\",";
+            requestString += "\"Note\":\"" + ConvertNotes(note) + "\",";
+            requestString += "\"TravelBugCode\":\"" + String.valueOf(tbCode) + "\",";
+            requestString += "\"TrackingNumber\":\"" + String.valueOf(trackingNumber) + "\"";
+            requestString += "}";
+
+            httpPost.setContent(requestString);
+            String result = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING, httpPost, icancel);
+
+            if (result.contains("The service is unavailable")) {
+                return API_IS_UNAVAILABLE;
+            }
+            // Parse JSON Result
+            //TODO parse API ERROR
+
+
+        } catch (Exception e) {
+            log.error("createTrackableLog IOException", e);
+            return ERROR;
+        }
+
+        LastAPIError = "";
+        return 0;
+    }
 
     public static boolean mAPI_isChecked() {
         return API_isCheked;

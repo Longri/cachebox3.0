@@ -173,7 +173,7 @@ public class MenuBar extends Table {
 
 
     /*
-     * Show export dialog
+     * show export dialog
      */
     protected void showExportDialog() {
 

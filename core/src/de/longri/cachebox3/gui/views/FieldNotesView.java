@@ -22,6 +22,8 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.apis.gcvote_api.GCVote;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.activities.EditFieldNotes;
 import de.longri.cachebox3.gui.dialogs.*;
@@ -36,12 +38,14 @@ import de.longri.cachebox3.gui.utils.TemplateFormatter;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.sqlite.dao.CacheListDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -192,8 +196,8 @@ public class FieldNotesView extends AbstractView {
 
         int idx = 0;
         for (FieldNoteEntry entry : fieldNoteEntries) {
-            if (idx == 1) entry.uploaded = true;
-            else entry.uploaded = false;
+//            if (idx == 1) entry.uploaded = true;
+//            else entry.uploaded = false;
             items.add(new FieldNotesViewItem(idx++, entry, itemStyle));
         }
 
@@ -202,7 +206,111 @@ public class FieldNotesView extends AbstractView {
     }
 
     private void uploadFieldNotes() {
-        //TODO uploadFieldNotes
+        new CancelProgressDialog("UploadFieldNotesDialog", "",
+                new ProgressCancelRunnable() {
+
+                    ICancel iCancel = new ICancel() {
+                        @Override
+                        public boolean cancel() {
+                            return isCanceled();
+                        }
+                    };
+
+                    @Override
+                    public void canceled() {
+
+                    }
+
+                    @Override
+                    public void run() {
+                        FieldNoteList lFieldNotes = new FieldNoteList();
+
+                        lFieldNotes.loadFieldNotes("(Uploaded=0 or Uploaded is null)", FieldNoteList.LoadingType.LOAD_ALL);
+
+                        int count = 0;
+                        int anzahl = 0;
+                        for (FieldNoteEntry fieldNote : lFieldNotes) {
+                            if (!fieldNote.uploaded)
+                                anzahl++;
+                        }
+
+                        boolean sendGCVote = !Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("");
+
+                        String UploadMeldung = "";
+                        boolean API_Key_error = false;
+                        if (anzahl > 0) {
+
+                            for (FieldNoteEntry fieldNote : lFieldNotes) {
+                                if (isCanceled())
+                                    break;
+
+                                if (fieldNote.uploaded)
+                                    continue;
+
+                                // Progress status Melden
+                                setProgress((100 * count) / anzahl, fieldNote.CacheName);
+
+                                if (sendGCVote && !fieldNote.isTbFieldNote) {
+                                    try {
+                                        if (!GCVote.sendVotes(Config.GcLogin.getValue(), Config.GcVotePassword.getValue()
+                                                , fieldNote.gc_Vote, fieldNote.CacheUrl, fieldNote.gcCode, iCancel)) {
+                                            UploadMeldung += fieldNote.gcCode + "\n" + "GC-Vote Error" + "\n";
+                                        }
+                                    } catch (Exception e) {
+                                        UploadMeldung += fieldNote.gcCode + "\n" + "GC-Vote Error" + "\n";
+                                    }
+                                }
+
+                                int result = 0;
+
+                                if (fieldNote.isTbFieldNote) {
+                                    result = GroundspeakAPI.createTrackableLog(fieldNote.TravelBugCode, fieldNote.TrackingNumber, fieldNote.gcCode, LogTypes.CB_LogType2GC(fieldNote.type), fieldNote.timestamp, fieldNote.comment, iCancel);
+                                } else {
+                                    boolean dl = fieldNote.isDirectLog;
+                                    result = GroundspeakAPI.createFieldNoteAndPublish(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, dl, iCancel);
+                                }
+
+                                if (result == GroundspeakAPI.CONNECTION_TIMEOUT) {
+                                    CB.viewmanager.toast(Translation.Get("ConnectionError"));
+                                    cancel();
+                                    return;
+                                }
+                                if (result == GroundspeakAPI.API_IS_UNAVAILABLE) {
+                                    CB.viewmanager.toast(Translation.Get("API-offline"));
+                                    cancel();
+                                    return;
+                                }
+
+                                if (result == -1) {
+                                    UploadMeldung += fieldNote.gcCode + "\n" + GroundspeakAPI.LastAPIError + "\n";
+                                } else {
+                                    if (result != -10) {
+                                        // set fieldnote as uploaded only when upload was working
+                                        fieldNote.uploaded = true;
+                                        fieldNote.updateDatabase();
+                                    } else {
+                                        API_Key_error = true;
+                                        UploadMeldung = "error";
+                                    }
+                                }
+                                count++;
+                            }
+                        }
+
+                        if (!isCanceled()) {
+
+                            if (!UploadMeldung.equals("")) {
+                                if (!API_Key_error)
+                                    MessageBox.show(UploadMeldung, Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                            } else {
+                                MessageBox.show(Translation.Get("uploadFinished"), Translation.Get("uploadFieldNotes"), MessageBoxIcon.GC_Live);
+                            }
+                        }
+
+//                        FieldNotesView.this.notifyDataSetChanged();
+                    }
+                }
+        ).show();
     }
 
 
@@ -257,16 +365,16 @@ public class FieldNotesView extends AbstractView {
         Cache cache = EventHandler.getSelectedCache();
 
         if (cache == null) {
-            MessageBox.Show(Translation.Get("NoCacheSelect"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+            MessageBox.show(Translation.Get("NoCacheSelect"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             return;
         }
 
         // chk car found?
         if (cache.getGcCode().equalsIgnoreCase("CBPark")) {
             if (type == LogTypes.found) {
-                MessageBox.Show(Translation.Get("My_Parking_Area_Found"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(Translation.Get("My_Parking_Area_Found"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
             } else if (type == LogTypes.didnt_find) {
-                MessageBox.Show(Translation.Get("My_Parking_Area_DNF"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                MessageBox.show(Translation.Get("My_Parking_Area_DNF"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             }
             return;
         }
@@ -521,7 +629,7 @@ public class FieldNotesView extends AbstractView {
 //                GroundspeakAPI.LastAPIError = "";
 //
 //                boolean dl = fieldNote.isDirectLog;
-//                int result = GroundspeakAPI.CreateFieldNoteAndPublish(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, dl, this);
+//                int result = GroundspeakAPI.createFieldNoteAndPublish(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, dl, this);
 //
 //                if (result == GroundspeakAPI.IO) {
 //                    fieldNote.uploaded = true;
@@ -534,7 +642,7 @@ public class FieldNotesView extends AbstractView {
 //                    GL.that.Toast(ConnectionError.INSTANCE);
 //                    if (wd != null)
 //                        wd.close();
-//                    MessageBox.Show(Translation.Get("CreateFieldnoteInstead"), Translation.Get("UploadFailed"), MessageBoxButtons.YesNoRetry, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
+//                    MessageBox.show(Translation.Get("CreateFieldnoteInstead"), Translation.Get("UploadFailed"), MessageBoxButtons.YesNoRetry, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
 //
 //                        @Override
 //                        public boolean onClick(int which, Object data) {
@@ -559,7 +667,7 @@ public class FieldNotesView extends AbstractView {
 //                    GL.that.Toast(ApiUnavailable.INSTANCE);
 //                    if (wd != null)
 //                        wd.close();
-//                    MessageBox.Show(Translation.Get("CreateFieldnoteInstead"), Translation.Get("UploadFailed"), MessageBoxButtons.YesNoRetry, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
+//                    MessageBox.show(Translation.Get("CreateFieldnoteInstead"), Translation.Get("UploadFailed"), MessageBoxButtons.YesNoRetry, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
 //
 //                        @Override
 //                        public boolean onClick(int which, Object data) {
@@ -585,7 +693,7 @@ public class FieldNotesView extends AbstractView {
 //                    Gdx.app.postRunnable(new Runnable() {
 //                        @Override
 //                        public void run() {
-//                            MessageBox.Show(GroundspeakAPI.LastAPIError, Translation.Get("Error"), MessageBoxIcon.Error);
+//                            MessageBox.show(GroundspeakAPI.LastAPIError, Translation.Get("Error"), MessageBoxIcon.Error);
 //                        }
 //                    });
 //                }
@@ -635,7 +743,7 @@ public class FieldNotesView extends AbstractView {
         if (cache == null && !aktFieldNote.isTbFieldNote) {
             String message = Translation.Get("cacheOtherDb", aktFieldNote.CacheName);
             message += "\n" + Translation.Get("fieldNoteNoDelete");
-            MessageBox.Show(message);
+            MessageBox.show(message);
             return;
         }
 
@@ -693,7 +801,7 @@ public class FieldNotesView extends AbstractView {
                 message += Translation.Get("confirmFieldnoteDeletionRst");
         }
 
-        MessageBox.Show(message, Translation.Get("deleteFieldnote"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
+        MessageBox.show(message, Translation.Get("deleteFieldnote"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
 
     }
 
@@ -732,7 +840,7 @@ public class FieldNotesView extends AbstractView {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                MessageBox.Show(message, Translation.Get("DeleteAllNotes"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning, dialogClickListener);
+                MessageBox.show(message, Translation.Get("DeleteAllNotes"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning, dialogClickListener);
 
             }
         });
@@ -755,7 +863,7 @@ public class FieldNotesView extends AbstractView {
         if (cache == null) {
             String message = Translation.Get("cacheOtherDb", aktFieldNote.CacheName);
             message += "\n" + Translation.Get("fieldNoteNoSelect");
-            MessageBox.Show(message, Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+            MessageBox.show(message, Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             return;
         }
 

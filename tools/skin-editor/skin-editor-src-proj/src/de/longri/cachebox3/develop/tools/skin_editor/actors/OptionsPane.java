@@ -1012,7 +1012,7 @@ public class OptionsPane extends Table {
     }
 
     /**
-     * Show color picker dialog
+     * show color picker dialog
      */
     public void showColorPickerDialog(final Field field) {
 
@@ -1021,7 +1021,7 @@ public class OptionsPane extends Table {
     }
 
     /**
-     * Show font picker dialog
+     * show font picker dialog
      */
     public void showFontPickerDialog(final Field field) {
 
@@ -1031,7 +1031,7 @@ public class OptionsPane extends Table {
 
 
     /**
-     * Show drawable picker dialog
+     * show drawable picker dialog
      *
      * @param field
      */
