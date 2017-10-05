@@ -47,7 +47,7 @@ public class ButtonDialog extends Window {
     static public final int BUTTON_NEGATIVE = 3;
 
 
-    protected final OnMsgBoxClickListener msgBoxClickListener;
+    protected OnMsgBoxClickListener msgBoxClickListener;
     private ButtonDialogStyle style;
     private Label msgLabel;
     private Label titleLabel;
@@ -91,7 +91,7 @@ public class ButtonDialog extends Window {
         this(name, contentTable, title, buttons, Listener, VisUI.getSkin().get("default", ButtonDialogStyle.class));
     }
 
-    public ButtonDialog(String name, Table contentTable, String title, MessageBoxButtons buttons, OnMsgBoxClickListener Listener, ButtonDialogStyle style) {
+    public ButtonDialog(String name, Table contentTable, String title, MessageBoxButtons buttons, OnMsgBoxClickListener listener, ButtonDialogStyle style) {
         super(name);
         this.contentBox = contentTable;
 
@@ -134,8 +134,13 @@ public class ButtonDialog extends Window {
         this.layout();
         this.buttons = buttons;
         setButtonCaptions();
-        msgBoxClickListener = Listener;
+        msgBoxClickListener = listener;
     }
+
+    public Table getContentTable() {
+        return this.contentBox;
+    }
+
 
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
@@ -216,7 +221,7 @@ public class ButtonDialog extends Window {
 
         float prfWidth = this.getPrefWidth();
 
-        float maxWindowWidth = prfWidth- (8 * CB.scaledSizes.MARGIN) ;
+        float maxWindowWidth = prfWidth - (8 * CB.scaledSizes.MARGIN);
 
         if (buttons == MessageBoxButtons.YesNoRetry) {
             buttonWidth = (maxWindowWidth / 3) - (4 * CB.scaledSizes.MARGIN);

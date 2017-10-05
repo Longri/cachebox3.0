@@ -17,9 +17,11 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
@@ -28,13 +30,11 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.FileChooser;
-import de.longri.cachebox3.gui.dialogs.ButtonDialog;
-import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
-import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
@@ -44,6 +44,7 @@ import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.ProgressBar;
+import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.LogTypes;
@@ -75,6 +76,59 @@ public class TestView extends AbstractView {
         VisTable contentTable = new VisTable();
         scrollPane = new VisScrollPane(contentTable);
         float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
+
+
+        {// test CancelProgressDialog
+
+
+            VisTextButton button = new VisTextButton("CancelProgressDialog");
+
+
+            button.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+
+                    new CancelProgressDialog("test", "Test Progress Dialog",
+                            new ProgressCancelRunnable() {
+                                float value = 0;
+                                float progressValue = 0;
+                                @Override
+                                public void canceled() {
+                                    log.debug("Progress canceled ");
+                                }
+
+                                @Override
+                                public void run() {
+                                    while (!isCanceled()) {
+                                        value += 1f;
+                                        if (value >= 200) value = 0;
+                                        progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
+                                        setProgress(progressValue, "Progress:" + Float.toString(progressValue));
+                                        Gdx.graphics.requestRendering();
+                                        try {
+                                            Thread.sleep(50);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    log.debug("Canceled Async Task");
+                                }
+                            }).show();
+                }
+            });
+
+            VisLabel label3 = new VisLabel("CancelProgressDialog");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            contentTable.add(button).width(new Value.Fixed(contentWidth)).pad(20);
+            contentTable.row();
+        }
+
 
         {// test AdjustableStarWidget
 

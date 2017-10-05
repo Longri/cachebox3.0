@@ -197,4 +197,5 @@ public class ProgressBar extends VisProgressBar {
             }
         }
     }
+
 }
