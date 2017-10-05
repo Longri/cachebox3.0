@@ -70,7 +70,7 @@ public class FileChooser extends ActivityBase {
     private SelectionReturnListner selectionReturnListner;
 
     public FileChooser(String title, Mode mode, SelectionMode selectMode) {
-        this(title, mode, selectMode, null);
+        this(title, mode, selectMode, (String) null);
     }
 
     public FileChooser(String title, Mode mode, SelectionMode selectMode, String... extentions) {
