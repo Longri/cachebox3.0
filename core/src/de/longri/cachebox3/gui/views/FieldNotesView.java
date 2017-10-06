@@ -196,8 +196,6 @@ public class FieldNotesView extends AbstractView {
 
         int idx = 0;
         for (FieldNoteEntry entry : fieldNoteEntries) {
-//            if (idx == 1) entry.uploaded = true;
-//            else entry.uploaded = false;
             items.add(new FieldNotesViewItem(idx++, entry, itemStyle));
         }
 
@@ -224,7 +222,6 @@ public class FieldNotesView extends AbstractView {
                     @Override
                     public void run() {
                         FieldNoteList lFieldNotes = new FieldNoteList();
-
                         lFieldNotes.loadFieldNotes("(Uploaded=0 or Uploaded is null)", FieldNoteList.LoadingType.LOAD_ALL);
 
                         int count = 0;

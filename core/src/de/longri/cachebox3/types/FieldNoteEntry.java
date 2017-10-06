@@ -236,23 +236,23 @@ public class FieldNoteEntry {
             return false;
         if (this.CacheId != fne.CacheId)
             return false;
-        if (this.gcCode != fne.gcCode)
+        if (!this.gcCode.equals(fne.gcCode))
             return false;
-        if (this.timestamp != fne.timestamp)
+        if (this.timestamp.compareTo(fne.timestamp) == 0)
             return false;
-        if (this.typeString != fne.typeString)
+        if (!this.typeString.equals(fne.typeString))
             return false;
         if (this.type != fne.type)
             return false;
         if (this.cacheType != fne.cacheType)
             return false;
-        if (this.comment != fne.comment)
+        if (!this.comment.equals(fne.comment))
             return false;
         if (this.foundNumber != fne.foundNumber)
             return false;
-        if (this.CacheName != fne.CacheName)
+        if (!this.CacheName.equals(fne.CacheName))
             return false;
-        if (this.CacheUrl != fne.CacheUrl)
+        if (!this.CacheUrl.equals(fne.CacheUrl))
             return false;
         if (this.typeIcon != fne.typeIcon)
             return false;
@@ -262,9 +262,9 @@ public class FieldNoteEntry {
             return false;
         if (this.isTbFieldNote != fne.isTbFieldNote)
             return false;
-        if (this.TravelBugCode != fne.TravelBugCode)
+        if (!this.TravelBugCode.equals(fne.TravelBugCode))
             return false;
-        if (this.TrackingNumber != fne.TrackingNumber)
+        if (!this.TrackingNumber.equals(fne.TrackingNumber))
             return false;
         if (this.isDirectLog != fne.isDirectLog)
             return false;

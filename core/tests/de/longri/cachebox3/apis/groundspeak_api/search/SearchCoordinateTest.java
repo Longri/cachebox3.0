@@ -43,7 +43,7 @@ class SearchCoordinateTest {
     @Test
     void getRequest() throws IOException {
 
-        String expected = TestUtils.getResourceRequestString("testsResources/SearchGcCoordinate_request.txt",
+        String expected = TestUtils.getResourceRequestString("core/testsResources/SearchGcCoordinate_request.txt",
                 isDummy ? null : apiKey);
 
 
