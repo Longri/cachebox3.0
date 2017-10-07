@@ -15,17 +15,13 @@
  */
 package de.longri.cachebox3.apis.groundspeak_api;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
-import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.TestUtils;
-import de.longri.cachebox3.apis.groundspeak_api.search.SearchGC;
 import de.longri.cachebox3.callbacks.GenericCallBack;
-import de.longri.cachebox3.utils.BuildInfo;
 import org.junit.jupiter.api.Test;
 import travis.EXCLUDE_FROM_TRAVIS;
 
@@ -37,7 +33,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by longri on 14.04.17.
@@ -146,10 +142,10 @@ class GetYourUserProfileTest {
                 return null;
             }
         };
-        getYourUserProfile.handleHttpResponse(response, new GenericCallBack<Integer>() {
+        getYourUserProfile.handleHttpResponse(response, new GenericCallBack<ApiResultState>() {
             @Override
-            public void callBack(Integer value) {
-                assertThat("Type should be 3", getYourUserProfile.getMembershipType() == 3);
+            public void callBack(ApiResultState value) {
+                assertThat("Type should be 3", getYourUserProfile.getMembershipType() == ApiResultState.MEMBERSHIP_TYPE_PREMIUM);
                 assertEquals(getYourUserProfile.getMemberName(), "LONGRI", "name should be LONGRI");
             }
         });
@@ -162,10 +158,10 @@ class GetYourUserProfileTest {
 
         final AtomicBoolean WAIT = new AtomicBoolean(true);
         final AtomicBoolean apiKeyExpired = new AtomicBoolean(false);
-        getYourUserProfile.post(new GenericCallBack<Integer>() {
+        getYourUserProfile.post(new GenericCallBack<ApiResultState>() {
             @Override
-            public void callBack(Integer value) {
-                if (value == -3) apiKeyExpired.set(true);
+            public void callBack(ApiResultState value) {
+                if (value == ApiResultState.EXPIRED_API_KEY) apiKeyExpired.set(true);
                 WAIT.set(false);
             }
         });
@@ -175,7 +171,7 @@ class GetYourUserProfileTest {
         if (apiKeyExpired.get()) {
             assertThat("API key expired, can't test!", false);
         } else {
-            assertThat("Type should be 3", getYourUserProfile.getMembershipType() == 3);
+            assertThat("Type should be 3", getYourUserProfile.getMembershipType() == ApiResultState.MEMBERSHIP_TYPE_PREMIUM);
             assertEquals(getYourUserProfile.getMemberName(), "Katipa", "name should be Katipa");
         }
 

@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.skin.styles.ApiButtonStyle;
@@ -104,10 +105,10 @@ public class ApiButton extends IconButton {
                 Config.AcceptChanges();
                 String act = GroundspeakAPI.getAccessToken();
                 if (act.length() > 0) {
-                    GroundspeakAPI.getMembershipType(new GenericCallBack<Integer>() {
+                    GroundspeakAPI.getMembershipType(new GenericCallBack<ApiResultState>() {
                         @Override
-                        public void callBack(Integer status) {
-                            if (status >= 0) {
+                        public void callBack(ApiResultState status) {
+                            if (!status.isErrorState()) {
                                 log.debug("Read User name/State {}/{}", GroundspeakAPI.memberName, status);
                                 Config.GcLogin.setValue(GroundspeakAPI.memberName);
                                 Config.AcceptChanges();

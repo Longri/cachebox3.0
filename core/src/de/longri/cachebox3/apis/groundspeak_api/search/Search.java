@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.JsonParser;
 import com.badlogic.gdx.utils.JsonStreamParser;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.PostRequest;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
@@ -158,7 +159,7 @@ public abstract class Search extends PostRequest {
     }
 
     @Override
-    protected void handleHttpResponse(Net.HttpResponse httpResponse, final GenericCallBack<Integer> readyCallBack) {
+    protected void handleHttpResponse(Net.HttpResponse httpResponse, final GenericCallBack<ApiResultState> readyCallBack) {
         final InputStream stream = httpResponse.getResultAsStream();
         long length = 1;
 
@@ -515,7 +516,7 @@ public abstract class Search extends PostRequest {
                 log.debug("Ready parse Json! Wait for Async DB writer");
                 asyncExecutor.dispose();
                 log.debug("Async DB writer is ready! Callback!");
-                readyCallBack.callBack(NO_ERROR);
+                readyCallBack.callBack(ApiResultState.IO);
             }
         });
         thread.start();
@@ -562,7 +563,7 @@ public abstract class Search extends PostRequest {
     }
 
 
-    public void postRequest(GenericCallBack<Integer> callBack, long gpxFilenameId) {
+    public void postRequest(GenericCallBack<ApiResultState> callBack, long gpxFilenameId) {
         this.gpxFilenameId = gpxFilenameId;
         this.post(callBack);
     }

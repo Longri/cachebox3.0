@@ -30,6 +30,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.apis.groundspeak_api.search.SearchGC;
 import de.longri.cachebox3.callbacks.GenericCallBack;
@@ -189,9 +190,9 @@ public class ReloadCacheActivity extends ActivityBase {
                     searchGC.logCount = 10;
 
                     final AtomicBoolean WAIT = new AtomicBoolean(true);
-                    searchGC.postRequest(new GenericCallBack<Integer>() {
+                    searchGC.postRequest(new GenericCallBack<ApiResultState>() {
                         @Override
-                        public void callBack(Integer value) {
+                        public void callBack(ApiResultState value) {
                             WAIT.set(false);
                         }
                     }, actCache.getGPXFilename_ID());

@@ -15,30 +15,27 @@
  */
 package de.longri.cachebox3.apis.groundspeak_api.search;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
-import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
-import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.types.*;
-import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.junit.jupiter.api.Test;
-import org.slf4j.impl.DummyLogApplication;
 import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -76,7 +73,7 @@ class SearchGCTest {
         final CB_List<Cache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();
-        final SearchGC searchGC = new SearchGC(apiKey, "GC1T33T"){
+        final SearchGC searchGC = new SearchGC(apiKey, "GC1T33T") {
             protected void writeLogToDB(final LogEntry logEntry) {
                 logList.add(logEntry);
             }
@@ -123,9 +120,9 @@ class SearchGCTest {
             }
         };
 
-        searchGC.handleHttpResponse(response, new GenericCallBack<Integer>() {
+        searchGC.handleHttpResponse(response, new GenericCallBack<ApiResultState>() {
             @Override
-            public void callBack(Integer value) {
+            public void callBack(ApiResultState value) {
 
                 assertEquals(1, cacheList.size);
                 Cache cache = cacheList.pop();
@@ -186,7 +183,7 @@ class SearchGCTest {
                 assertEquals(LogTypes.found, logEntry.Type);
                 assertTrue(logEntry.Comment.startsWith("Heute fand das Event  GC73332 Eiergolf"));
                 assertEquals(new Date(1492196400000L), logEntry.Timestamp);
-                assertEquals("TeamReitenwolfgang",logEntry.Finder);
+                assertEquals("TeamReitenwolfgang", logEntry.Finder);
 
                 logEntry = logList.last();
 
@@ -195,7 +192,7 @@ class SearchGCTest {
                 assertEquals(LogTypes.found, logEntry.Type);
                 assertTrue(logEntry.Comment.startsWith("Ein freundliches Hallo an Wurzellisel,"));
                 assertEquals(new Date(1486497600000L), logEntry.Timestamp);
-                assertEquals("kerbholz",logEntry.Finder);
+                assertEquals("kerbholz", logEntry.Finder);
 
 
                 WAIT.set(false);
@@ -219,7 +216,7 @@ class SearchGCTest {
         final CB_List<Cache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();
-        final SearchGC searchGC = new SearchGC(apiKey, "GC1T33T"){
+        final SearchGC searchGC = new SearchGC(apiKey, "GC1T33T") {
             protected void writeLogToDB(final LogEntry logEntry) {
                 logList.add(logEntry);
             }
@@ -237,9 +234,9 @@ class SearchGCTest {
         final long gpxFilenameId = 10;
         final AtomicBoolean WAIT = new AtomicBoolean(true);
 
-        searchGC.postRequest(new GenericCallBack<Integer>() {
+        searchGC.postRequest(new GenericCallBack<ApiResultState>() {
             @Override
-            public void callBack(Integer value) {
+            public void callBack(ApiResultState value) {
 
                 assertEquals(1, cacheList.size);
                 Cache cache = cacheList.pop();
@@ -289,11 +286,6 @@ class SearchGCTest {
                 }
 
                 TestUtils.assetCacheAttributes(cache, positiveList, negativeList);
-
-
-
-
-
 
 
                 WAIT.set(false);

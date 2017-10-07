@@ -38,10 +38,6 @@ public abstract class PostRequest {
     final static String GS_LIVE_URL = "https://api.groundspeak.com/LiveV6/geocaching.svc/";
     final static String STAGING_GS_LIVE_URL = "https://staging.api.groundspeak.com/Live/V6Beta/geocaching.svc/";
 
-    public final static int NO_ERROR = 0;
-    public final static int ERROR = -1;
-    public final static int CANCELED = -2;
-    public final static int EXPIRED_API_KEY = -3;
     private final ICancel iCancel;
 
     protected final String gcApiKey;
@@ -52,19 +48,19 @@ public abstract class PostRequest {
         this.iCancel = iCancel;
     }
 
-    protected abstract void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<Integer> readyCallBack);
+    protected abstract void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack);
 
-    protected void post(final GenericCallBack<Integer> readyCallBack) {
+    protected void post(final GenericCallBack<ApiResultState> readyCallBack) {
         post(readyCallBack, this.iCancel);
     }
 
-    protected void post(final GenericCallBack<Integer> readyCallBack, final ICancel iCancel) {
+    protected void post(final GenericCallBack<ApiResultState> readyCallBack, final ICancel iCancel) {
         CB.postAsync(new Runnable() {
             @Override
             public void run() {
                 waitApiCallLimit(iCancel);
 
-                if (iCancel != null && iCancel.cancel()) readyCallBack.callBack(CANCELED);
+                if (iCancel != null && iCancel.cancel()) readyCallBack.callBack(ApiResultState.CANCELED);
                 String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
                 StringWriter writer = new StringWriter();
@@ -119,14 +115,14 @@ public abstract class PostRequest {
                     public void failed(Throwable t) {
                         log.error("Request failed", t);
                         checkCancel.set(false);
-                        readyCallBack.callBack(ERROR);
+                        readyCallBack.callBack(ApiResultState.API_ERROR);
                     }
 
                     @Override
                     public void cancelled() {
                         log.debug("Request cancelled");
                         checkCancel.set(false);
-                        readyCallBack.callBack(CANCELED);
+                        readyCallBack.callBack(ApiResultState.CANCELED);
                     }
                 });
             }

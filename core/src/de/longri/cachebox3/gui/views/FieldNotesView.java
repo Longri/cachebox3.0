@@ -23,6 +23,7 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.apis.gcvote_api.GCVote;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.activities.EditFieldNotes;
@@ -258,7 +259,7 @@ public class FieldNotesView extends AbstractView {
                                     }
                                 }
 
-                                int result = 0;
+                                ApiResultState result = ApiResultState.UNKNOWN;
 
                                 if (fieldNote.isTbFieldNote) {
                                     result = GroundspeakAPI.createTrackableLog(fieldNote.TravelBugCode, fieldNote.TrackingNumber, fieldNote.gcCode, LogTypes.CB_LogType2GC(fieldNote.type), fieldNote.timestamp, fieldNote.comment, iCancel);
@@ -267,28 +268,23 @@ public class FieldNotesView extends AbstractView {
                                     result = GroundspeakAPI.createFieldNoteAndPublish(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, dl, iCancel);
                                 }
 
-                                if (result == GroundspeakAPI.CONNECTION_TIMEOUT) {
+                                if (result == ApiResultState.CONNECTION_TIMEOUT) {
                                     CB.viewmanager.toast(Translation.Get("ConnectionError"));
                                     cancel();
                                     return;
                                 }
-                                if (result == GroundspeakAPI.API_IS_UNAVAILABLE) {
+                                if (result == ApiResultState.API_IS_UNAVAILABLE) {
                                     CB.viewmanager.toast(Translation.Get("API-offline"));
                                     cancel();
                                     return;
                                 }
 
-                                if (result == -1) {
+                                if (result.isErrorState()) {
                                     UploadMeldung += fieldNote.gcCode + "\n" + GroundspeakAPI.LastAPIError + "\n";
                                 } else {
-                                    if (result != -10) {
-                                        // set fieldnote as uploaded only when upload was working
-                                        fieldNote.uploaded = true;
-                                        fieldNote.updateDatabase();
-                                    } else {
-                                        API_Key_error = true;
-                                        UploadMeldung = "error";
-                                    }
+
+                                    API_Key_error = true;
+                                    UploadMeldung = "error";
                                 }
                                 count++;
                             }

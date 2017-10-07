@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.GpsEventHelper;
@@ -367,11 +368,11 @@ public class CB {
         final AtomicBoolean expired = new AtomicBoolean(false);
         final AtomicBoolean wait = new AtomicBoolean(true);
         final AtomicBoolean errror = new AtomicBoolean(false);
-        GroundspeakAPI.getMembershipType(new GenericCallBack<Integer>() {
+        GroundspeakAPI.getMembershipType(new GenericCallBack<ApiResultState>() {
             @Override
-            public void callBack(Integer value) {
-                if (value == -3) expired.set(true);
-                if (value == -1) errror.set(true);
+            public void callBack(ApiResultState value) {
+                if (value == ApiResultState.EXPIRED_API_KEY) expired.set(true);
+                if (value.isErrorState()) errror.set(true);
                 wait.set(false);
             }
         });

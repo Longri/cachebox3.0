@@ -18,6 +18,7 @@ package de.longri.cachebox3.apis.groundspeak_api.search;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import org.junit.jupiter.api.Test;
 import travis.EXCLUDE_FROM_TRAVIS;
@@ -47,8 +48,8 @@ class SearchCoordinateTest {
                 isDummy ? null : apiKey);
 
 
-        //set MembershipType for tests to 3
-        GroundspeakAPI.setTestMembershipType(3);
+        //set MembershipType for tests to Premium
+        GroundspeakAPI.setTestMembershipType(ApiResultState.MEMBERSHIP_TYPE_PREMIUM);
 
         byte apiState;
         if (GroundspeakAPI.isPremiumMember()) {

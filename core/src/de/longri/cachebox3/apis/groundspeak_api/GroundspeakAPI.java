@@ -44,7 +44,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.GS_LIVE_URL;
 import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.STAGING_GS_LIVE_URL;
@@ -53,11 +52,6 @@ public class GroundspeakAPI {
 
     private static final Logger log = LoggerFactory.getLogger(GroundspeakAPI.class);
 
-    public static final int IO = 0;
-    private static final int ERROR = -1;
-    public static final int CONNECTION_TIMEOUT = -2;
-    private static final int API_ERROR = -3;
-    public static final int API_IS_UNAVAILABLE = -4;
 
     public static String LastAPIError = "";
     public static boolean CacheStatusValid = false;
@@ -76,7 +70,7 @@ public class GroundspeakAPI {
     /**
      * 0: Guest??? 1: Basic 2: Charter??? 3: Premium
      */
-    private static int membershipType = -1;
+    private static ApiResultState membershipType = ApiResultState.UNKNOWN;
 
 
     /**
@@ -130,9 +124,9 @@ public class GroundspeakAPI {
     }
 
 
-    public static int createFieldNoteAndPublish(String cacheCode, int wptLogTypeId, Date dateLogged, String note, boolean directLog, final ICancel icancel) {
-        int chk = chkMembership(true);
-        if (chk < 0)
+    public static ApiResultState createFieldNoteAndPublish(String cacheCode, int wptLogTypeId, Date dateLogged, String note, boolean directLog, final ICancel icancel) {
+        ApiResultState chk = chkMembership(true);
+        if (chk.isErrorState())
             return chk;
 
         String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
@@ -163,7 +157,7 @@ public class GroundspeakAPI {
             String responseString = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING, httpPost, icancel);
 
             if (responseString.contains("The service is unavailable")) {
-                return API_IS_UNAVAILABLE;
+                return ApiResultState.API_IS_UNAVAILABLE;
             }
 
             log.debug("createFieldNoteAndPublish \n REQUEST: \n {} \n RESULT: \n {}", requestString, responseString);
@@ -172,11 +166,11 @@ public class GroundspeakAPI {
             // TODO return is result msg are 'OK'
         } catch (Exception e) {
             log.error("UploadFieldNotesAPI IOException", e);
-            return ERROR;
+            return ApiResultState.API_ERROR;
         }
 
         LastAPIError = "";
-        return IO;
+        return ApiResultState.IO;
     }
 //
 //
@@ -299,7 +293,7 @@ public class GroundspeakAPI {
     /**
      * Loads the Membership type -1: Error 0: Guest??? 1: Basic 2: Charter??? 3: Premium
      */
-    public static void getMembershipType(final GenericCallBack<Integer> callBack) {
+    public static void getMembershipType(final GenericCallBack<ApiResultState> callBack) {
         if (API_isCheked) {
             callBack.callBack(membershipType);
             return;
@@ -312,17 +306,17 @@ public class GroundspeakAPI {
                 public void run() {
                     log.debug(("API is not checked, call API check"));
                     final GetYourUserProfile getYourUserProfile = new GetYourUserProfile(getAccessToken());
-                    getYourUserProfile.post(new GenericCallBack<Integer>() {
+                    getYourUserProfile.post(new GenericCallBack<ApiResultState>() {
                         @Override
-                        public void callBack(Integer value) {
-                            if (value == ERROR) {
-                                callBack.callBack(ERROR);
+                        public void callBack(ApiResultState value) {
+                            if (value.isErrorState()) {
+                                callBack.callBack(value);
                                 return;
                             }
                             membershipType = getYourUserProfile.getMembershipType();
                             memberName = getYourUserProfile.getMemberName();
                             callBack.callBack(membershipType);
-                            Config.memberChipType.setValue(membershipType);
+                            Config.memberChipType.setValue(membershipType.getState());
 
                             //desired on end of this day
                             Calendar cal = Calendar.getInstance();
@@ -340,7 +334,7 @@ public class GroundspeakAPI {
                 }
             });
         } else {
-            membershipType = Config.memberChipType.getValue();
+            membershipType = ApiResultState.fromState(Config.memberChipType.getValue());
             callBack.callBack(membershipType);
             API_isCheked = true;
         }
@@ -349,9 +343,9 @@ public class GroundspeakAPI {
     }
 
 
-    public static int getGeocacheStatus(Array<Cache> caches, final ICancel icancel, CheckCacheStateParser.ProgressIncrement progressIncrement) {
-        int chk = chkMembership(false);
-        if (chk < 0)
+    public static ApiResultState getGeocacheStatus(Array<Cache> caches, final ICancel icancel, CheckCacheStateParser.ProgressIncrement progressIncrement) {
+        ApiResultState chk = chkMembership(false);
+        if (chk.isErrorState())
             return chk;
 
         if (caches.size >= 110) throw new RuntimeException("Cache count must les then 110");
@@ -386,10 +380,10 @@ public class GroundspeakAPI {
         NetUtils.StreamHandleObject result = (NetUtils.StreamHandleObject) NetUtils.postAndWait(NetUtils.ResultType.STREAM, httpPost, icancel);
         if (icancel.cancel()) {
             if (result != null) result.handled();
-            return -1;
+            return ApiResultState.CANCELED;
         }
         CheckCacheStateParser parser = new CheckCacheStateParser();
-        int parseResult = parser.parse(result.stream, caches, icancel, progressIncrement);
+        ApiResultState parseResult = parser.parse(result.stream, caches, icancel, progressIncrement);
         result.handled();
         return parseResult;
     }
@@ -984,9 +978,9 @@ public class GroundspeakAPI {
 //     *            Config.settings.socket_timeout.getValue()
 //     * @return
 //     */
-    public static int getAllImageLinks(String cacheCode, HashMap<String, URI> list, ICancel icancel) {
-        int chk = chkMembership(false);
-        if (chk < 0)
+    public static ApiResultState getAllImageLinks(String cacheCode, HashMap<String, URI> list, ICancel icancel) {
+        ApiResultState chk = chkMembership(false);
+        if (chk.isErrorState())
             return chk;
 
         String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
@@ -1005,7 +999,7 @@ public class GroundspeakAPI {
             String result = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING, httpGet, icancel);
 
             if (result.contains("The service is unavailable")) {
-                return API_IS_UNAVAILABLE;
+                return ApiResultState.API_IS_UNAVAILABLE;
             }
 
             JsonValue root = new JsonReader().parse(result);
@@ -1057,11 +1051,11 @@ public class GroundspeakAPI {
         } catch (Exception e) {
             log.error("getAllImageLinks()", e);
             list = null;
-            return ERROR;
+            return ApiResultState.API_ERROR;
         }
 
         list = null;
-        return ERROR;
+        return ApiResultState.API_ERROR;
     }
 
     public static void WriteCachesLogsImages_toDB(CB_List<Cache> apiCaches, CB_List<LogEntry> apiLogs, CB_List<ImageEntry> apiImages) throws InterruptedException {
@@ -1210,40 +1204,30 @@ public class GroundspeakAPI {
 //     *            Config.settings.socket_timeout.getValue()
 //     * @return 0=false 1=true
 //     */
-    public static int chkMembership(boolean withoutMsg) {
-        boolean isValid = false;
+    public static ApiResultState chkMembership(boolean withoutMsg) {
         if (API_isCheked) {
-            isValid = membershipType > 0;
-            return isValid ? 0 : 1;
+            return membershipType;
         }
-        final AtomicInteger ret = new AtomicInteger(0);
+        final ApiResultState[] ret = {ApiResultState.UNKNOWN};
         if (getAccessToken().length() > 0) {
 
-            if (!isValid) {
-                final AtomicBoolean WAIT = new AtomicBoolean(true);
-                getMembershipType(new GenericCallBack<Integer>() {
-                    @Override
-                    public void callBack(Integer value) {
-                        ret.set(value);
-                        WAIT.set(false);
-                    }
-                });
-                CB.wait(WAIT);
-                isValid = membershipType > 0;
-                if (ret.get() < 0)
-                    return ret.get();
-            }
-            isValid = membershipType > 0;
-        }
-        if (ret.get() != CONNECTION_TIMEOUT)
-            API_isCheked = true;
-        else
-            return CONNECTION_TIMEOUT;
 
-        return ret.get();
+            final AtomicBoolean WAIT = new AtomicBoolean(true);
+            getMembershipType(new GenericCallBack<ApiResultState>() {
+                @Override
+                public void callBack(ApiResultState value) {
+                    ret[0] = value;
+                    WAIT.set(false);
+                }
+            });
+            CB.wait(WAIT);
+        }
+
+
+        return ret[0];
     }
 
-    public static int isValidAPI_Key(boolean withoutMsg) {
+    public static ApiResultState isValidAPI_Key(boolean withoutMsg) {
         if (API_isCheked)
             return membershipType;
 
@@ -1258,7 +1242,7 @@ public class GroundspeakAPI {
      * @param note
      * @return
      */
-    public static int createTrackableLog(Trackable trackable, String cacheCode, int logTypeId, Date dateLogged, String note, ICancel icancel) {
+    public static ApiResultState createTrackableLog(Trackable trackable, String cacheCode, int logTypeId, Date dateLogged, String note, ICancel icancel) {
         return createTrackableLog(trackable.getGcCode(), trackable.getTrackingNumber(), cacheCode, logTypeId, dateLogged, note, icancel);
     }
 
@@ -1271,9 +1255,9 @@ public class GroundspeakAPI {
      * @param note
      * @return
      */
-    public static int createTrackableLog(String tbCode, String trackingNumber, String cacheCode, int logTypeId, Date dateLogged, String note, ICancel icancel) {
-        int chk = chkMembership(false);
-        if (chk < 0)
+    public static ApiResultState createTrackableLog(String tbCode, String trackingNumber, String cacheCode, int logTypeId, Date dateLogged, String note, ICancel icancel) {
+        ApiResultState chk = chkMembership(false);
+        if (chk.isErrorState())
             return chk;
         String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
         if (cacheCode == null)
@@ -1303,7 +1287,7 @@ public class GroundspeakAPI {
             String result = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING, httpPost, icancel);
 
             if (result.contains("The service is unavailable")) {
-                return API_IS_UNAVAILABLE;
+                return ApiResultState.API_IS_UNAVAILABLE;
             }
             // Parse JSON Result
             //TODO parse API ERROR
@@ -1311,11 +1295,11 @@ public class GroundspeakAPI {
 
         } catch (Exception e) {
             log.error("createTrackableLog IOException", e);
-            return ERROR;
+            return ApiResultState.API_ERROR;
         }
 
         LastAPIError = "";
-        return 0;
+        return ApiResultState.IO;
     }
 
     public static boolean mAPI_isChecked() {
@@ -1333,10 +1317,10 @@ public class GroundspeakAPI {
     public static boolean isPremiumMember() {
         final AtomicBoolean WAIT = new AtomicBoolean(true);
 
-        if (membershipType < 0)
-            getMembershipType(new GenericCallBack<Integer>() {
+        if (membershipType == ApiResultState.UNKNOWN)
+            getMembershipType(new GenericCallBack<ApiResultState>() {
                 @Override
-                public void callBack(Integer value) {
+                public void callBack(ApiResultState value) {
                     membershipType = value;
                     log.debug("result for ask Member Type:{}", value);
 
@@ -1363,10 +1347,10 @@ public class GroundspeakAPI {
                 e.printStackTrace();
             }
         }
-        return membershipType == 3;
+        return membershipType == ApiResultState.MEMBERSHIP_TYPE_PREMIUM;
     }
 
-    public static void setTestMembershipType(int value) {
+    public static void setTestMembershipType(ApiResultState value) {
         membershipType = value;
     }
 }

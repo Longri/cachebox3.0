@@ -31,6 +31,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.CheckCacheStateParser;
 import de.longri.cachebox3.events.*;
@@ -175,7 +176,7 @@ public class CheckStateActivity extends ActivityBase {
             @Override
             public void run() {
 
-                int result = 0;
+                ApiResultState result = ApiResultState.UNKNOWN;
                 final Array<Cache> chkList = new Array<>();
 
                 synchronized (Database.Data.Query) {
@@ -240,7 +241,7 @@ public class CheckStateActivity extends ActivityBase {
                             EventHandler.fire(new ImportProgressChangedEvent(progress));
                         }
                     });
-                    if (result == -1)
+                    if (result.isErrorState())
                         break;// API Error
                     addedReturnList.addAll(chkList100);
                     start += blockSize + 1;
