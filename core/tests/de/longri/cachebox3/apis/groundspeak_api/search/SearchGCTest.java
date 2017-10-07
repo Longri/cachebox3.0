@@ -56,7 +56,7 @@ class SearchGCTest {
 
     @Test
     void getRequest() throws IOException {
-        String expected = TestUtils.getResourceRequestString("core/testsResources/SearchGc_request.txt",
+        String expected = TestUtils.getResourceRequestString("testsResources/SearchGc_request.txt",
                 isDummy ? null : apiKey);
         SearchGC searchGC = new SearchGC(apiKey, "GC1T33T");
 
@@ -72,7 +72,7 @@ class SearchGCTest {
 
     @Test
     void parseJsonResult() throws IOException {
-        final InputStream resultStream = TestUtils.getResourceRequestStream("core/testsResources/SearchGc_result.txt");
+        final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGc_result.txt");
         final CB_List<Cache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();

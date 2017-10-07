@@ -248,6 +248,11 @@ public class Database {
 
 
     private int GetDatabaseSchemeVersion() {
+
+        if (!isTableExists("Config")) {
+            return -1;
+        }
+
         int result = -1;
         SQLiteGdxDatabaseCursor c = null;
         try {
@@ -289,6 +294,27 @@ public class Database {
             val.put("Key", "DatabaseSchemeVersion");
             insert("Config", val);
         }
+    }
+
+    public boolean isTableExists(String tableName) {
+        SQLiteGdxDatabaseCursor cursor = null;
+        try {
+            cursor = rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='" + tableName
+                    + "' COLLATE NOCASE", null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String name = cursor.getString(0);
+                if (tableName.equals(name)) {
+                    return true;
+                }
+                cursor.moveToNext();
+            }
+        } catch (Exception exc) {
+            return false;
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return false;
     }
 
     public void writeConfigString(String key, String value) {

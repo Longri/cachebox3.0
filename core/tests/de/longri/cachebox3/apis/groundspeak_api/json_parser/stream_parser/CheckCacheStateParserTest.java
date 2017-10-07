@@ -37,7 +37,7 @@ class CheckCacheStateParserTest {
 
     @Test
     public void parseCacheStateStream() throws FileNotFoundException {
-        InputStream stream = TestUtils.getResourceRequestStream("core/testsResources/CheckCacheStateResult.json");
+        InputStream stream = TestUtils.getResourceRequestStream("testsResources/CheckCacheStateResult.json");
         CheckCacheStateParser parser = new CheckCacheStateParser();
 
         Array<Cache> caches = new Array<>();
@@ -215,7 +215,7 @@ class CheckCacheStateParserTest {
 
     @Test
     public void parseCacheStateStreamCanceld() throws FileNotFoundException {
-        InputStream stream = TestUtils.getResourceRequestStream("core/testsResources/CheckCacheStateResult.json");
+        InputStream stream = TestUtils.getResourceRequestStream("testsResources/CheckCacheStateResult.json");
         final CheckCacheStateParser parser = new CheckCacheStateParser();
 
         Array<Cache> caches = new Array<>();

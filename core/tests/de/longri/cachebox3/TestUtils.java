@@ -53,6 +53,13 @@ public class TestUtils {
 
     public static String getResourceRequestString(String path, String apiKey) throws IOException {
         File file = new File(path);
+
+        if (!file.exists()) {
+            //try set /core path
+            path = "core/" + path;
+            file = new File(path);
+        }
+
         InputStream stream = getResourceRequestStream(path);
 
         byte[] b = new byte[(int) file.length()];
@@ -76,6 +83,13 @@ public class TestUtils {
 
     public static InputStream getResourceRequestStream(String path) throws FileNotFoundException {
         File file = new File(path);
+
+        if (!file.exists()) {
+            //try set /core path
+            path = "core/" + path;
+            file = new File(path);
+        }
+
         FileInputStream stream = new FileInputStream(file);
 
         return stream;

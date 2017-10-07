@@ -160,7 +160,7 @@ public abstract class Search extends PostRequest {
     @Override
     protected void handleHttpResponse(Net.HttpResponse httpResponse, final GenericCallBack<Integer> readyCallBack) {
         final InputStream stream = httpResponse.getResultAsStream();
-        long length = 0;
+        long length = 1;
 
 
         //fire progress event for begin parsing
@@ -175,7 +175,12 @@ public abstract class Search extends PostRequest {
 
 
         try {
-            length = Long.parseLong(httpResponse.getHeader("Content-Length"));
+            String lengthString = httpResponse.getHeader("Content-Length");
+            if (lengthString == null || lengthString.isEmpty()) {
+                length = 1;
+            } else {
+                length = Long.parseLong(lengthString);
+            }
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }

@@ -96,7 +96,7 @@ class GetYourUserProfileTest {
 
     @Test
     void getRequest() throws IOException {
-        String expected = TestUtils.getResourceRequestString("core/testsResources/GetYourUserProfile_request.txt",
+        String expected = TestUtils.getResourceRequestString("testsResources/GetYourUserProfile_request.txt",
                 isDummy ? null : apiKey);
         GetYourUserProfile getYourUserProfile = new GetYourUserProfile(apiKey);
 

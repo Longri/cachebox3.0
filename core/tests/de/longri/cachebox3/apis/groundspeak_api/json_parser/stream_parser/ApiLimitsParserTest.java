@@ -30,7 +30,7 @@ public class ApiLimitsParserTest {
 
     @Test
     public void parseLimitResultStream() throws FileNotFoundException {
-        InputStream stream = TestUtils.getResourceRequestStream("core/testsResources/ApiLimitsResult.json");
+        InputStream stream = TestUtils.getResourceRequestStream("testsResources/ApiLimitsResult.json");
         ApiLimitParser parser = new ApiLimitParser();
 
         int result = parser.parseCallsPerMinute(stream);

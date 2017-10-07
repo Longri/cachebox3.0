@@ -57,7 +57,7 @@ class SearchGcOwnerTest {
 
     @Test
     void getRequest() throws IOException {
-        String expected = TestUtils.getResourceRequestString("core/testsResources/SearchGcOwner_request.txt",
+        String expected = TestUtils.getResourceRequestString("testsResources/SearchGcOwner_request.txt",
                 isDummy ? null : apiKey);
 
         Coordinate searchCoord = new CoordinateGPS(52.581892, 13.398128); // Home of Katipa(like Longri)
@@ -75,7 +75,7 @@ class SearchGcOwnerTest {
 
     @Test
     void parseJsonResult() throws IOException {
-        final InputStream resultStream = TestUtils.getResourceRequestStream("core/testsResources/SearchGcOwner_result.txt");
+        final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGcOwner_result.txt");
         Coordinate searchCoord = new CoordinateGPS(52.581892, 13.398128); // Home of Katipa(like Longri)
 
 

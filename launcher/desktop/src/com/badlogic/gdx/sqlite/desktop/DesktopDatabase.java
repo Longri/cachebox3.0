@@ -63,6 +63,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             try {
                 log.debug("open data base: " + DB_URL);
                 myDB = DriverManager.getConnection("jdbc:sqlite:" + DB_URL);
+                myDB.setAutoCommit(false);
             } catch (Exception exc) {
                 return;
             }
@@ -108,7 +109,6 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
                 }
             }
             rs = statement.executeQuery();
-
 
         } catch (SQLException e) {
             e.printStackTrace();

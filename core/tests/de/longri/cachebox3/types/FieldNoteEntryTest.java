@@ -37,7 +37,15 @@ public class FieldNoteEntryTest {
 
         //initial a empty FieldNote DB
         try {
-            FileHandle fieldNotesFileHandle = Gdx.files.absolute("core/testsResources/fieldNotes.db3");
+
+
+            FileHandle resourcesFolder= Gdx.files.absolute("testsResources");
+            if(!resourcesFolder.exists()){
+                //try set /core path
+                resourcesFolder= Gdx.files.absolute("core/testsResources");
+            }
+
+            FileHandle fieldNotesFileHandle =   resourcesFolder.child("fieldNotes.db3");
 
             if (fieldNotesFileHandle.exists()) {
                 fieldNotesFileHandle.delete();
