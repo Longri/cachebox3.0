@@ -64,7 +64,7 @@ public class GroundspeakAPI {
     public static int MaxCacheCountLite = -1;
     public static String memberName = ""; // this will be filled by
     private static boolean DownloadLimit = false;
-    private static boolean API_isCheked = false;
+    private static boolean API_isChecked = false;
     private static Limit apiCallLimit;
 
     /**
@@ -260,14 +260,14 @@ public class GroundspeakAPI {
         if (CB.isMainThread()) throw new RuntimeException("Don't call and block GL thread");
 
         if (apiCallLimit == null) {
-            if (Config.apiCallLimit.isDesired() || Config.apiCallLimit.getValue() < 1) {
+            if (Config.apiCallLimit.isExpired() || Config.apiCallLimit.getValue() < 1) {
                 // get api limits from groundspeak
                 int callsPerMinute = GetApiLimits.getLimit();
                 Calendar cal = Calendar.getInstance();
                 if (callsPerMinute < 1) {
                     callsPerMinute = Config.apiCallLimit.getDefaultValue();
                 } else {
-                    //desired on end of this Month
+                    //expired on end of this Month
                     cal.set(Calendar.DAY_OF_MONTH, 0);
                     cal.set(Calendar.HOUR_OF_DAY, 0);
                     cal.set(Calendar.MINUTE, 0);
@@ -280,8 +280,8 @@ public class GroundspeakAPI {
                 log.debug("Set apiCallLimit to {} calls per minute", callsPerMinute);
                 Config.apiCallLimit.setValue(callsPerMinute);
 
-                log.debug("Set apiCallLimit desired on: {}", cal.getTime().toString());
-                Config.apiCallLimit.setDesiredTime(cal.getTimeInMillis());
+                log.debug("Set apiCallLimit expired on: {}", cal.getTime().toString());
+                Config.apiCallLimit.setExpiredTime(cal.getTimeInMillis());
                 Config.AcceptChanges();
             }
             apiCallLimit = new Limit(Config.apiCallLimit.getValue(), Calendar.MINUTE, 1);
@@ -294,13 +294,13 @@ public class GroundspeakAPI {
      * Loads the Membership type -1: Error 0: Guest??? 1: Basic 2: Charter??? 3: Premium
      */
     public static void getMembershipType(final GenericCallBack<ApiResultState> callBack) {
-        if (API_isCheked) {
+        if (API_isChecked) {
             callBack.callBack(membershipType);
             return;
         }
 
         // try to get type from settings
-        if (Config.memberChipType.isDesired()) {
+        if (Config.memberChipType.isExpired()) {
             CB.postAsync(new Runnable() {
                 @Override
                 public void run() {
@@ -318,17 +318,17 @@ public class GroundspeakAPI {
                             callBack.callBack(membershipType);
                             Config.memberChipType.setValue(membershipType.getState());
 
-                            //desired on end of this day
+                            //expired on end of this day
                             Calendar cal = Calendar.getInstance();
                             cal.set(Calendar.HOUR_OF_DAY, 0);
                             cal.set(Calendar.MINUTE, 0);
                             cal.set(Calendar.SECOND, 0);
                             cal.set(Calendar.MILLISECOND, 0);
                             cal.add(Calendar.HOUR_OF_DAY, 24);
-                            Config.memberChipType.setDesiredTime(cal.getTimeInMillis());
+                            Config.memberChipType.setExpiredTime(cal.getTimeInMillis());
                             Config.AcceptChanges();
 
-                            API_isCheked = true;
+                            API_isChecked = true;
                         }
                     });
                 }
@@ -336,7 +336,7 @@ public class GroundspeakAPI {
         } else {
             membershipType = ApiResultState.fromState(Config.memberChipType.getValue());
             callBack.callBack(membershipType);
-            API_isCheked = true;
+            API_isChecked = true;
         }
 
 
@@ -1205,7 +1205,7 @@ public class GroundspeakAPI {
 //     * @return 0=false 1=true
 //     */
     public static ApiResultState chkMembership(boolean withoutMsg) {
-        if (API_isCheked) {
+        if (API_isChecked) {
             return membershipType;
         }
         final ApiResultState[] ret = {ApiResultState.UNKNOWN};
@@ -1228,7 +1228,7 @@ public class GroundspeakAPI {
     }
 
     public static ApiResultState isValidAPI_Key(boolean withoutMsg) {
-        if (API_isCheked)
+        if (API_isChecked)
             return membershipType;
 
         return chkMembership(withoutMsg);
@@ -1303,7 +1303,7 @@ public class GroundspeakAPI {
     }
 
     public static boolean mAPI_isChecked() {
-        return API_isCheked;
+        return API_isChecked;
     }
 
     public static boolean ApiLimit() {
@@ -1352,5 +1352,9 @@ public class GroundspeakAPI {
 
     public static void setTestMembershipType(ApiResultState value) {
         membershipType = value;
+    }
+
+    public static void resetApiIsChecked() {
+        API_isChecked = false;
     }
 }

@@ -41,6 +41,8 @@ public enum ApiResultState {
                 return ApiResultState.MEMBERSHIP_TYPE_BASIC;
             case 3:
                 return ApiResultState.MEMBERSHIP_TYPE_PREMIUM;
+            case -6:
+                return ApiResultState.EXPIRED_API_KEY;
 
         }
         return ApiResultState.MEMBERSHIP_TYPE_INVALID;

@@ -49,7 +49,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     private static int indexCount = 0;
     private int index = -1;
 
-    protected long desiredTime = -1L;
+    protected long expiredTime = -1L;
 
     public SettingBase(String name, SettingCategory category, SettingMode modus, SettingStoreType StoreType, SettingUsage usage, boolean desired) {
 
@@ -65,9 +65,9 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
         if (desired) {
             //set to zero (value -1 means that this setting has no desired value)
             //if desired time not set, so the value is desired
-            desiredTime = 0;
+            expiredTime = 0;
         } else {
-            desiredTime = -1;
+            expiredTime = -1;
         }
     }
 
@@ -93,14 +93,14 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
         fireChangedEvent();
     }
 
-    public void setDesiredTime(long time) {
-        this.desiredTime = time;
+    public void setExpiredTime(long time) {
+        this.expiredTime = time;
         this.setDirty();
     }
 
-    public boolean isDesired() {
-        if (desiredTime == -1L) return false;
-        return Calendar.getInstance().getTimeInMillis() > desiredTime;
+    public boolean isExpired() {
+        if (expiredTime == -1L) return false;
+        return Calendar.getInstance().getTimeInMillis() > expiredTime;
     }
 
     public void clearDirty() {

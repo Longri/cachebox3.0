@@ -29,6 +29,8 @@ import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Calendar;
+
 /**
  * Created by Longri on 11.04.2017.
  */
@@ -101,6 +103,14 @@ public class ApiButton extends IconButton {
                 } else {
                     Config.GcAPI.setEncryptedValue(accessToken);
                 }
+
+                //reset ApiKey validation
+                GroundspeakAPI.resetApiIsChecked();
+
+                //set config stored MemberChipType as expired
+                Calendar cal = Calendar.getInstance();
+                Config.memberChipType.setExpiredTime(cal.getTimeInMillis());
+
 
                 Config.AcceptChanges();
                 String act = GroundspeakAPI.getAccessToken();

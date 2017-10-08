@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Calendar;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by longri on 30.06.17.
@@ -57,35 +56,35 @@ class SettingBaseTest {
         assertThat("Database file must exist", configFileHandle.exists());
         assertThat("", !testBool.getValue());
 
-        assertThat("Setting must desired", testBool.isDesired());
+        assertThat("Setting must desired", testBool.isExpired());
 
         testBool.setValue(true);
         assertThat("", testBool.getValue());
-        assertThat("Setting must not desired", testBool.isDesired());
+        assertThat("Setting must not desired", testBool.isExpired());
 
         long now = Calendar.getInstance().getTimeInMillis();
         long desired = now + 1000 ;// future 1 sec
 
-        testBool.setDesiredTime(desired);
+        testBool.setExpiredTime(desired);
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        assertThat("Setting must not desired", !testBool.isDesired());
+        assertThat("Setting must not desired", !testBool.isExpired());
 
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        assertThat("Setting must desired", testBool.isDesired());
+        assertThat("Setting must desired", testBool.isExpired());
 
 
          now = Calendar.getInstance().getTimeInMillis();
          desired = now + 1000 ;// future 10 sec
 
-        testBool.setDesiredTime(desired);
+        testBool.setExpiredTime(desired);
 
         // close config DB and reload
         Config.AcceptChanges();
@@ -96,7 +95,7 @@ class SettingBaseTest {
 
         Config.ReadFromDB();
         assertThat("", testBool.getValue());
-        assertThat("Setting must not desired", !testBool.isDesired());
+        assertThat("Setting must not desired", !testBool.isExpired());
 
         // close config DB and reload
         Config.AcceptChanges();
@@ -113,7 +112,7 @@ class SettingBaseTest {
 
         Config.ReadFromDB();
         assertThat("", testBool.getValue());
-        assertThat("Setting must desired", testBool.isDesired());
+        assertThat("Setting must desired", testBool.isExpired());
 
         //clean up test file's
         configFileHandle.delete();

@@ -368,6 +368,52 @@ public class CB {
         });
     }
 
+
+    /**
+     * Returns TRUE with any error!
+     *
+     * @param result
+     * @return
+     */
+    public static boolean checkApiResultState(ApiResultState result) {
+        if (result == ApiResultState.CONNECTION_TIMEOUT) {
+            CB.viewmanager.toast(Translation.Get("ConnectionError"));
+            return true;
+        }
+        if (result == ApiResultState.API_IS_UNAVAILABLE) {
+            CB.viewmanager.toast(Translation.Get("API-offline"));
+            return true;
+        }
+
+        if (result == ApiResultState.EXPIRED_API_KEY) {
+            CB.scheduleOnMainThread(new Runnable() {
+                @Override
+                public void run() {
+                    String msg = Translation.Get("apiKeyExpired") + "\n\n"
+                            + Translation.Get("wantApi");
+                    new GetApiKeyQuestionDialog(msg, Translation.Get("errorAPI"),
+                            MessageBoxIcon.ExpiredApiKey).show();
+                }
+            }, 300);// wait for closing ProgressDialog before show msg
+            return true;
+        }
+
+        if (result == ApiResultState.MEMBERSHIP_TYPE_INVALID) {
+            CB.scheduleOnMainThread(new Runnable() {
+                @Override
+                public void run() {
+                    String msg = Translation.Get("apiKeyInvalid") + "\n\n"
+                            + Translation.Get("wantApi");
+                    new GetApiKeyQuestionDialog(msg, Translation.Get("errorAPI"),
+                            MessageBoxIcon.ExpiredApiKey).show();
+                }
+            }, 300);// wait for closing ProgressDialog before show msg
+            return true;
+        }
+        return false;
+    }
+
+
     public static boolean checkApiKeyNeeded() {
         if (Config.GcAPI.getValue() == null || Config.GcAPI.getValue().isEmpty()) {
             Gdx.app.postRunnable(new Runnable() {
@@ -379,15 +425,13 @@ public class CB {
             return true;
         }
 
-        //check if expired
-        final AtomicBoolean expired = new AtomicBoolean(false);
+        //check if expired or invalid
         final AtomicBoolean wait = new AtomicBoolean(true);
         final AtomicBoolean errror = new AtomicBoolean(false);
         GroundspeakAPI.getMembershipType(new GenericCallBack<ApiResultState>() {
             @Override
             public void callBack(ApiResultState value) {
-                if (value == ApiResultState.EXPIRED_API_KEY) expired.set(true);
-                if (value.isErrorState()) errror.set(true);
+                errror.set(checkApiResultState(value));
                 wait.set(false);
             }
         });
@@ -404,22 +448,6 @@ public class CB {
                 e.printStackTrace();
             }
         }
-
-        if (expired.get()) {
-            CB.scheduleOnMainThread(new Runnable() {
-                @Override
-                public void run() {
-                    String msg = Translation.Get("apiKeyExpired") + "\n\n"
-                            + Translation.Get("wantApi");
-                    new GetApiKeyQuestionDialog(msg, Translation.Get("errorAPI"),
-                            MessageBoxIcon.ExpiredApiKey).show();
-                }
-            }, 300);// wait for closing any dialogs before show msg
-            return true;
-        }
-        if (errror.get()) {
-            CB.viewmanager.toast(Translation.Get("ConnectionError"));
-        }
         return errror.get();
     }
 
@@ -431,7 +459,6 @@ public class CB {
     public static void wait(AtomicBoolean wait, ICancel iCancel) {
         wait(wait, false, iCancel);
     }
-
 
     public static void wait(AtomicBoolean wait, boolean negate, ICancel iCancel) {
 
@@ -448,6 +475,5 @@ public class CB {
             }
         }
     }
-
 
 }

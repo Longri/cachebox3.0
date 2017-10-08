@@ -269,27 +269,7 @@ public class FieldNotesView extends AbstractView {
                                     result = GroundspeakAPI.createFieldNoteAndPublish(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, dl, iCancel);
                                 }
 
-                                if (result == ApiResultState.CONNECTION_TIMEOUT) {
-                                    CB.viewmanager.toast(Translation.Get("ConnectionError"));
-                                    cancel();
-                                    return;
-                                }
-                                if (result == ApiResultState.API_IS_UNAVAILABLE) {
-                                    CB.viewmanager.toast(Translation.Get("API-offline"));
-                                    cancel();
-                                    return;
-                                }
-
-                                if (result == ApiResultState.EXPIRED_API_KEY) {
-                                    CB.scheduleOnMainThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            String msg = Translation.Get("apiKeyExpired") + "\n\n"
-                                                    + Translation.Get("wantApi");
-                                            new GetApiKeyQuestionDialog(msg, Translation.Get("errorAPI"),
-                                                    MessageBoxIcon.ExpiredApiKey).show();
-                                        }
-                                    }, 300);// wait for closing ProgressDialog before show msg
+                                if (CB.checkApiResultState(result)) {
                                     cancel();
                                     return;
                                 }
@@ -317,6 +297,8 @@ public class FieldNotesView extends AbstractView {
 
 //                        FieldNotesView.this.notifyDataSetChanged();
                     }
+
+
                 }
         ).show();
     }

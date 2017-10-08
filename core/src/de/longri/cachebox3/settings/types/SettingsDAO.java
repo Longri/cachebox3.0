@@ -26,7 +26,7 @@ public class SettingsDAO {
         } else
             database.writeConfigString(setting.name, dbString);
 
-        database.writeConfigDesiredString(setting.name, Long.toString(setting.desiredTime));
+        database.writeConfigDesiredString(setting.name, Long.toString(setting.expiredTime));
     }
 
     public SettingBase<?> readFromDatabase(Database database, SettingBase<?> setting) {
@@ -59,10 +59,10 @@ public class SettingsDAO {
 
             String desiredString = database.readConfigDesiredString(setting.name);
             if (desiredString == null) {
-                setting.setDesiredTime(-1L);
+                setting.setExpiredTime(-1L);
             } else {
                 long time = Long.parseLong(desiredString);
-                setting.setDesiredTime(time);
+                setting.setExpiredTime(time);
             }
 
             setting.clearDirty();
