@@ -39,6 +39,7 @@ import de.longri.cachebox3.gui.utils.TemplateFormatter;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.ApiButton;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -217,7 +218,7 @@ public class FieldNotesView extends AbstractView {
 
                     @Override
                     public void canceled() {
-
+                        log.debug("cancel clicked");
                     }
 
                     @Override
@@ -275,6 +276,21 @@ public class FieldNotesView extends AbstractView {
                                 }
                                 if (result == ApiResultState.API_IS_UNAVAILABLE) {
                                     CB.viewmanager.toast(Translation.Get("API-offline"));
+                                    cancel();
+                                    return;
+                                }
+
+                                if (result == ApiResultState.EXPIRED_API_KEY) {
+                                    CB.scheduleOnMainThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            String msg = Translation.Get("apiKeyExpired") + "\n\n"
+                                                    + Translation.Get("wantApi");
+                                            //TODO replace icon with expired icon
+                                            new GetApiKeyQuestionDialog(msg, Translation.Get("errorAPI"),
+                                                    MessageBoxIcon.Error).show();
+                                        }
+                                    }, 300);// wait for closing ProgressDialog before show msg
                                     cancel();
                                     return;
                                 }

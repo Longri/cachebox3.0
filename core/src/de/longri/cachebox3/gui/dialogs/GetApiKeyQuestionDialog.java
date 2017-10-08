@@ -30,20 +30,30 @@ public class GetApiKeyQuestionDialog extends ButtonDialog {
     }
 
     public GetApiKeyQuestionDialog(String msg) {
-        super("GetApiKeyQuestionDialog", msg, Translation.Get("apiKeyNeeded"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
-            @Override
-            public boolean onClick(int which, Object data) {
-                if (which == BUTTON_POSITIVE) {
-                    // open create api key dialog
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            new ApiButton().generateKey();
+        this(msg, MessageBoxIcon.Question);
+    }
+
+    public GetApiKeyQuestionDialog(String msg,MessageBoxIcon icon) {
+        this(msg,Translation.Get("apiKeyNeeded"), MessageBoxIcon.Question);
+    }
+
+    public GetApiKeyQuestionDialog(String msg,String title, MessageBoxIcon icon) {
+        super("GetApiKeyQuestionDialog", msg, title,
+                MessageBoxButtons.YesNo, icon,
+                new OnMsgBoxClickListener() {
+                    @Override
+                    public boolean onClick(int which, Object data) {
+                        if (which == BUTTON_POSITIVE) {
+                            // open create api key dialog
+                            Gdx.app.postRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new ApiButton().generateKey();
+                                }
+                            });
                         }
-                    });
-                }
-                return true;
-            }
-        });
+                        return true;
+                    }
+                });
     }
 }

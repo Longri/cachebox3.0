@@ -69,8 +69,21 @@ public class CancelProgressDialog extends ButtonDialog {
         super.show();
 
         //start runnable async
-        CB.postAsync(progressCancelRunnable);
+        CB.postAsync(new Runnable() {
+            @Override
+            public void run() {
+                progressCancelRunnable.run();
 
+                //after finish, close Dialog
+                CB.postOnMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        CancelProgressDialog.this.hide();
+                    }
+                });
+
+            }
+        });
     }
 
     @Override

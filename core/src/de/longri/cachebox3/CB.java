@@ -49,6 +49,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -299,6 +301,18 @@ public class CB {
     public static void setMainThread(Thread mainThread) {
         MAIN_THREAD = mainThread;
     }
+
+
+    public static void scheduleOnMainThread(final Runnable runnable, long delay) {
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                postOnMainThread(runnable);
+            }
+        };
+        new Timer().schedule(timerTask, delay);
+    }
+
 
     public static void postOnMainThread(final Runnable runnable) {
         postOnMainThread(runnable, false);
