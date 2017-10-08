@@ -106,6 +106,9 @@ public class FieldNoteList extends Array<FieldNoteEntry> {
             } catch (Exception exc) {
                 log.error("loadFieldNotes", exc);
             }
+
+            if (reader == null) return;
+
             reader.moveToFirst();
             while (!reader.isAfterLast()) {
                 FieldNoteEntry fne = new FieldNoteEntry(reader);

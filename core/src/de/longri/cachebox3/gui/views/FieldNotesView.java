@@ -39,7 +39,6 @@ import de.longri.cachebox3.gui.utils.TemplateFormatter;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
-import de.longri.cachebox3.gui.widgets.ApiButton;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -236,7 +235,6 @@ public class FieldNotesView extends AbstractView {
                         boolean sendGCVote = !Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("");
 
                         String UploadMeldung = "";
-                        boolean API_Key_error = false;
                         if (anzahl > 0) {
 
                             for (FieldNoteEntry fieldNote : lFieldNotes) {
@@ -277,28 +275,34 @@ public class FieldNotesView extends AbstractView {
                                 if (result.isErrorState()) {
                                     UploadMeldung += fieldNote.gcCode + "\n" + GroundspeakAPI.LastAPIError + "\n";
                                 } else {
-
-                                    API_Key_error = true;
-                                    UploadMeldung = "error";
+                                    // set FieldNote as uploaded
+                                    fieldNote.uploaded = true;
                                 }
+                                fieldNote.writeToDatabase();
                                 count++;
                             }
                         }
 
-                        if (!isCanceled()) {
-
-                            if (!UploadMeldung.equals("")) {
-                                if (!API_Key_error)
-                                    MessageBox.show(UploadMeldung, Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
-                            } else {
-                                MessageBox.show(Translation.Get("uploadFinished"), Translation.Get("uploadFieldNotes"), MessageBoxIcon.GC_Live);
-                            }
+                        if (!UploadMeldung.equals("")) {
+                            final String finalUploadMeldung = UploadMeldung;
+                            CB.scheduleOnMainThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MessageBox.show(finalUploadMeldung, Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                                    log.debug("Show MessageBox for ERROR on upload FieldNote");
+                                }
+                            }, 300);
+                        } else {
+                            CB.scheduleOnMainThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MessageBox.show(Translation.Get("uploadFinished"), Translation.Get("uploadFieldNotes"), MessageBoxButtons.OK, MessageBoxIcon.GC_Live, null);
+                                    log.debug("Show MessageBox for uploaded FieldNote");
+                                }
+                            }, 300);
                         }
-
-//                        FieldNotesView.this.notifyDataSetChanged();
+                        FieldNotesView.this.notifyDataSetChanged();
                     }
-
-
                 }
         ).show();
     }
@@ -919,7 +923,13 @@ public class FieldNotesView extends AbstractView {
 
 
     public void notifyDataSetChanged() {
-        loadFieldNotes(FieldNoteList.LoadingType.LOAD_NEW_LAST_LENGTH);
+
+        CB.postOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                loadFieldNotes(FieldNoteList.LoadingType.LOAD_NEW_LAST_LENGTH);
+            }
+        });
     }
 
 

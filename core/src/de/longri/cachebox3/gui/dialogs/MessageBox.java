@@ -29,9 +29,9 @@ public class MessageBox {
         show(message, null, MessageBoxButtons.OK, null, null);
     }
 
-    public static void show(String lastAPIError, String error, MessageBoxIcon icon) {
-//TODO
-    }
+//    public static void show(String lastAPIError, String error, MessageBoxIcon icon) {
+//show();
+//    }
 
     public static void show(String message, String title, MessageBoxButtons buttons, MessageBoxIcon icon,
                             OnMsgBoxClickListener clickListener) {

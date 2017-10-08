@@ -17,7 +17,10 @@ package de.longri.cachebox3.types;
 
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.sqlite.Database;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -29,6 +32,8 @@ import java.util.TimeZone;
  * Created by Longri on 31.08.2017
  */
 public class FieldNoteEntry {
+
+    private final static Logger log = LoggerFactory.getLogger(FieldNoteEntry.class);
 
 
     public long Id;
@@ -175,13 +180,20 @@ public class FieldNoteEntry {
         args.put("directLog", isDirectLog);
         try {
             Database.FieldNotes.insertWithConflictReplace("Fieldnotes", args);
+            Database.FieldNotes.endTransaction();
         } catch (Exception exc) {
             return;
         }
         // search FieldNote Id
         SQLiteGdxDatabaseCursor reader = Database.FieldNotes
                 .rawQuery("select CacheId, GcCode, Name, CacheType, Timestamp, Type, FoundNumber, Comment, Id, Url, Uploaded, gc_Vote, TbFieldNote, TbName, TbIconUrl, TravelBugCode, TrackingNumber, directLog from FieldNotes where GcCode='" + gcCode
-                        + "' and type=" + type.getGcLogTypeId(), null);
+                        + "' and Type=" + type.getGcLogTypeId(), null);
+
+        if (reader == null) {
+            log.error("Can't find updated FieldNote on DB");
+            return;
+        }
+
         reader.moveToFirst();
         while (!reader.isAfterLast()) {
             FieldNoteEntry fne = new FieldNoteEntry(reader);
@@ -238,7 +250,7 @@ public class FieldNoteEntry {
             return false;
         if (!this.gcCode.equals(fne.gcCode))
             return false;
-        if (this.timestamp.compareTo(fne.timestamp) == 0)
+        if (!Utils.equalsDate(this.timestamp,fne.timestamp))
             return false;
         if (!this.typeString.equals(fne.typeString))
             return false;

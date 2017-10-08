@@ -18,7 +18,6 @@ package de.longri.cachebox3.types;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxException;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.sqlite.Database;
 import org.junit.jupiter.api.Test;
@@ -39,13 +38,13 @@ public class FieldNoteEntryTest {
         try {
 
 
-            FileHandle resourcesFolder= Gdx.files.absolute("testsResources");
-            if(!resourcesFolder.exists()){
+            FileHandle resourcesFolder = Gdx.files.absolute("testsResources");
+            if (!resourcesFolder.exists()) {
                 //try set /core path
-                resourcesFolder= Gdx.files.absolute("core/testsResources");
+                resourcesFolder = Gdx.files.absolute("core/testsResources");
             }
 
-            FileHandle fieldNotesFileHandle =   resourcesFolder.child("fieldNotes.db3");
+            FileHandle fieldNotesFileHandle = resourcesFolder.child("fieldNotes.db3");
 
             if (fieldNotesFileHandle.exists()) {
                 fieldNotesFileHandle.delete();
@@ -101,10 +100,25 @@ public class FieldNoteEntryTest {
         FieldNoteList lFieldNotes = new FieldNoteList();
         lFieldNotes.loadFieldNotes("(Uploaded=0 or Uploaded is null)", FieldNoteList.LoadingType.LOAD_ALL);
 
-        assertThat("FieldNoteList size must be 1", fieldNoteEntries.size == 1);
-        FieldNoteEntry fne3 = fieldNoteEntries.get(0);
+        assertThat("FieldNoteList size must be 1", lFieldNotes.size == 1);
+        FieldNoteEntry fne3 = lFieldNotes.get(0);
         assertThat("FieldNotes must be equals", fne3.equals(fne));
 
+
+        // set uploaded flag and write to DB
+        fne3.uploaded = true;
+        fne3.writeToDatabase();
+
+        FieldNoteList lFieldNotes2 = new FieldNoteList();
+        lFieldNotes2.loadFieldNotes("", FieldNoteList.LoadingType.LOAD_ALL);
+
+        assertThat("FieldNoteList size must be 1", lFieldNotes2.size == 1);
+        FieldNoteEntry fne4 = lFieldNotes2.get(0);
+        assertThat("FieldNotes must not equals", !fne4.equals(fne));
+
+        assertThat("FieldNotes must equals", fne4.equals(fne3));
+
+        assertThat("FieldNotes must have uploaded flag", fne4.uploaded);
     }
 
 

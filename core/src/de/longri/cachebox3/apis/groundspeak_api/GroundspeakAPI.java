@@ -34,6 +34,7 @@ import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NetUtils;
+import de.longri.cachebox3.utils.json_parser.FieldNoteUploadResultParser;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,6 +130,10 @@ public class GroundspeakAPI {
         if (chk.isErrorState())
             return chk;
 
+
+        waitApiCallLimit();
+
+
         String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
         try {
@@ -156,7 +161,6 @@ public class GroundspeakAPI {
             httpPost.setHeader("Content-type", "application/json");
 
 
-
             httpPost.setContent(requestString);
 
             // Execute HTTP Post Request
@@ -166,17 +170,19 @@ public class GroundspeakAPI {
                 return ApiResultState.API_IS_UNAVAILABLE;
             }
 
-            log.debug("createFieldNoteAndPublish \n REQUEST: \n {} \n RESULT: \n {}", requestString, responseString);
-
             // Parse JSON Result
-            // TODO return is result msg are 'OK'
+            if (FieldNoteUploadResultParser.result(responseString)) {
+                return ApiResultState.IO;
+            }
+
+
         } catch (Exception e) {
             log.error("UploadFieldNotesAPI IOException", e);
             return ApiResultState.API_ERROR;
         }
 
         LastAPIError = "";
-        return ApiResultState.IO;
+        return ApiResultState.API_ERROR;
     }
 //
 //

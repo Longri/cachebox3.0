@@ -35,7 +35,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Longri on 18.07.16.
@@ -391,15 +394,16 @@ public class Utils {
         }
     }
 
-    // for use copy method
-
-//    Utils.logRunningTime("Clustering", new Runnable() {
-//        @Override
-//        public void run() {
-//
-//
-//
-//        }
-//    });
+    /**
+     * Return TRUE if both Date are equals on Year, Day, Month, Hour, Minute and Second
+     *
+     * @param timestamp
+     * @param timestamp1
+     * @return
+     */
+    public static boolean equalsDate(Date timestamp, Date timestamp1) {
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        return df.format(timestamp).equals(df.format(timestamp1));
+    }
 
 }

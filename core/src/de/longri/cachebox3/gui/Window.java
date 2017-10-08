@@ -27,6 +27,8 @@ import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.utils.Showable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
@@ -34,6 +36,8 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
  * Created by Longri on 14.08.16.
  */
 public class Window extends Table implements Disposable {
+
+    private final static Logger log = LoggerFactory.getLogger(Window.class);
 
     static private final Vector2 tmpPosition = new Vector2();
     static private final Vector2 tmpSize = new Vector2();
@@ -47,7 +51,7 @@ public class Window extends Table implements Disposable {
 
 
     public interface WindowCloseListener {
-        public void windowClosed();
+        void windowClosed();
     }
 
     private WindowCloseListener windowCloseListener;
@@ -84,6 +88,8 @@ public class Window extends Table implements Disposable {
         if (this instanceof Showable) {
             ((Showable) this).onShow();
         }
+
+        log.debug("Show Window: {}", this.getName());
     }
 
     public void hide() {
@@ -102,6 +108,7 @@ public class Window extends Table implements Disposable {
         }
 
         dispose();
+        log.debug("Hide Window: {}", this.getName());
     }
 
     public void draw(Batch batch, float parentAlpha) {

@@ -987,7 +987,7 @@ public class Database {
         try {
             return myDB.rawQuery(sql, args);
         } catch (SQLiteGdxException e) {
-
+            log.error("rawQuerry", e);
         }
         return null;
     }
@@ -996,7 +996,7 @@ public class Database {
         try {
             myDB.execSQL(sql);
         } catch (SQLiteGdxException e) {
-            e.printStackTrace();
+            log.error("execSQL", e);
         }
     }
 

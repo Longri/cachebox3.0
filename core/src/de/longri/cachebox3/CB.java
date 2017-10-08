@@ -309,9 +309,11 @@ public class CB {
             @Override
             public void run() {
                 postOnMainThread(runnable);
+                requestRendering();
             }
         };
         new Timer().schedule(timerTask, delay);
+        requestRendering();
     }
 
 
