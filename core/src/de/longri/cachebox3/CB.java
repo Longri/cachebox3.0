@@ -28,6 +28,7 @@ import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.GpsEventHelper;
 import de.longri.cachebox3.gui.dialogs.GetApiKeyQuestionDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -405,14 +406,15 @@ public class CB {
         }
 
         if (expired.get()) {
-            Gdx.app.postRunnable(new Runnable() {
+            CB.scheduleOnMainThread(new Runnable() {
                 @Override
                 public void run() {
                     String msg = Translation.Get("apiKeyExpired") + "\n\n"
                             + Translation.Get("wantApi");
-                    new GetApiKeyQuestionDialog(msg).show();
+                    new GetApiKeyQuestionDialog(msg, Translation.Get("errorAPI"),
+                            MessageBoxIcon.ExpiredApiKey).show();
                 }
-            });
+            }, 300);// wait for closing any dialogs before show msg
             return true;
         }
         if (errror.get()) {

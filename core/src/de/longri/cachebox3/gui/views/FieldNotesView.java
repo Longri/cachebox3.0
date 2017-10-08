@@ -286,9 +286,8 @@ public class FieldNotesView extends AbstractView {
                                         public void run() {
                                             String msg = Translation.Get("apiKeyExpired") + "\n\n"
                                                     + Translation.Get("wantApi");
-                                            //TODO replace icon with expired icon
                                             new GetApiKeyQuestionDialog(msg, Translation.Get("errorAPI"),
-                                                    MessageBoxIcon.Error).show();
+                                                    MessageBoxIcon.ExpiredApiKey).show();
                                         }
                                     }, 300);// wait for closing ProgressDialog before show msg
                                     cancel();
