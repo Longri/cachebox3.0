@@ -29,14 +29,14 @@ import org.oscim.backend.CanvasAdapter;
 public class GetYourUserProfile extends PostRequest {
 
     private String memberName;
-    private int membershipType;
+    private ApiResultState membershipType;
 
     public GetYourUserProfile(String gcApiKey) {
         super(gcApiKey, null);
     }
 
     @Override
-    protected void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<Integer> readyCallBack) {
+    protected void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack) {
         String result = httpResponse.getResultAsString();
         int status = getApiStatus(result);
 
@@ -45,7 +45,14 @@ public class GetYourUserProfile extends PostRequest {
                 public void number(String name, long value, String stringValue) {
                     super.number(name, value, stringValue);
                     if (name.equals("MemberTypeId")) {
-                        membershipType = (int) value;
+                        if (value == 0)
+                            membershipType = ApiResultState.MEMBERSHIP_TYPE_GUEST;
+                        else if (value == 1)
+                            membershipType = ApiResultState.MEMBERSHIP_TYPE_BASIC;
+                        else if (value == 3)
+                            membershipType = ApiResultState.MEMBERSHIP_TYPE_PREMIUM;
+                        else
+                            membershipType = ApiResultState.MEMBERSHIP_TYPE_INVALID;
                     }
                 }
 
@@ -58,15 +65,15 @@ public class GetYourUserProfile extends PostRequest {
 
             }).parse(result);
             log.debug("ready parse result Type:{} name:{}", membershipType, memberName);
-            readyCallBack.callBack(NO_ERROR);
+            readyCallBack.callBack(membershipType);
         } else if (status == 3) {
             // expired api key
-            membershipType = -3;
+            membershipType =  ApiResultState.EXPIRED_API_KEY;;
             log.error("expired api key");
-            readyCallBack.callBack(EXPIRED_API_KEY);
+            readyCallBack.callBack(membershipType);
         } else {
             log.error("unknown result state");
-            readyCallBack.callBack(ERROR);
+            readyCallBack.callBack(ApiResultState.API_ERROR);
         }
     }
 
@@ -118,7 +125,7 @@ public class GetYourUserProfile extends PostRequest {
         return new ApiStatusResultParser().get(result);
     }
 
-    public int getMembershipType() {
+    public ApiResultState getMembershipType() {
         return membershipType;
     }
 

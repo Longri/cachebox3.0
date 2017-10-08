@@ -16,15 +16,14 @@
 package de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonStreamParser;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.utils.ICancel;
 
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Longri on 30.06.2017.
@@ -48,10 +47,10 @@ public class CheckCacheStateParser {
     private final static String TRACKABLECOUNT = "TrackableCount";
 
 
-    public int parse(InputStream stream, final Array<Cache> caches, final ICancel icancel, final ProgressIncrement progressIncrement) {
+    public ApiResultState parse(InputStream stream, final Array<Cache> caches, final ICancel icancel, final ProgressIncrement progressIncrement) {
 
 
-        final AtomicInteger retValue = new AtomicInteger(0);
+        final ApiResultState[] retValue = {ApiResultState.UNKNOWN};
 
         // Parse JSON Result
         final JsonStreamParser parser = new JsonStreamParser() {
@@ -79,7 +78,7 @@ public class CheckCacheStateParser {
                     }
                 } else if (name.equals("StatusCode")) {
                     if (value != 0) {
-                        retValue.set(-1);
+                        retValue[0] = ApiResultState.API_ERROR;
                         cancel();
                     }
                 }
@@ -158,7 +157,7 @@ public class CheckCacheStateParser {
         parser.parse(stream);
         chkCancel.set(false);
 
-        return retValue.get();
+        return retValue[0];
     }
 
 

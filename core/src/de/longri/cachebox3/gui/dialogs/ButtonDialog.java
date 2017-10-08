@@ -211,6 +211,8 @@ public class ButtonDialog extends Window {
                 return style.Powerd_by_GC_Live;
             case GC_Live:
                 return style.GC_Live;
+            case ExpiredApiKey:
+                return style.ExpiredApiKey;
             default:
                 return null;
         }

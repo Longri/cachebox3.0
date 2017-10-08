@@ -36,6 +36,7 @@ public class IconsStyle extends AbstractIconStyle {
     public Drawable GC_Live;
     public Drawable Close;
     public Drawable Help;
+    public Drawable ExpiredApiKey;
 
 
     @Override

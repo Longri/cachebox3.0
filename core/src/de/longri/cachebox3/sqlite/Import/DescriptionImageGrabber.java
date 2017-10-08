@@ -18,6 +18,7 @@ package de.longri.cachebox3.sqlite.Import;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -314,7 +315,7 @@ public class DescriptionImageGrabber {
     }
 
 
-    public static int GrabImagesSelectedByCache(ImporterProgress ip, boolean descriptionImagesUpdated, boolean additionalImagesUpdated, long id, String gcCode, String name, String description, String url) {
+    public static ApiResultState GrabImagesSelectedByCache(ImporterProgress ip, boolean descriptionImagesUpdated, boolean additionalImagesUpdated, long id, String gcCode, String name, String description, String url) {
         boolean imageLoadError = false;
 
         if (!descriptionImagesUpdated) {
@@ -326,11 +327,11 @@ public class DescriptionImageGrabber {
                 try {// for cancel/interupt Thread
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
-                    return 0;
+                    return ApiResultState.CANCELED;
                 }
 
                 if (BreakawayImportThread.isCanceled())
-                    return 0;
+                    return ApiResultState.CANCELED;
 
                 String local = BuildImageFilename(gcCode, uri);
 
@@ -376,48 +377,25 @@ public class DescriptionImageGrabber {
                 if (ip != null) ip.ProgressChangeMsg("importImages", "Importing Spoiler Images for " + gcCode);
                 HashMap<String, URI> allimgDict = new HashMap<String, URI>();
 
-                int result = 0;
+                ApiResultState result = ApiResultState.UNKNOWN;
                 long startTs = System.currentTimeMillis();
-                do {
-                    result = GroundspeakAPI.getAllImageLinks(gcCode, allimgDict, null);
 
-                    if (result == GroundspeakAPI.CONNECTION_TIMEOUT) {
-                        return GroundspeakAPI.CONNECTION_TIMEOUT;
-                    }
+                result = GroundspeakAPI.getAllImageLinks(gcCode, allimgDict, null);
 
-                    if (result == GroundspeakAPI.API_IS_UNAVAILABLE) {
-                        return GroundspeakAPI.CONNECTION_TIMEOUT;
-                    }
-                    if (result == 140) {
-                        // API-Limit überschritten -> nach 15 Sekunden wiederholen
-                        System.out.println("******* API-Limit überschritten -> 15 Sekunden warten! *******");
-                        try {
-                            Thread.sleep(15000);
-                        } catch (InterruptedException e) {
-                        }
-                        if (System.currentTimeMillis() > startTs + 60000) {
-                            // Aufruf nach 1 min immer noch nicht OK -> raus!
-                            System.out.println("******* Timeout API-Limit überschritten ********");
-                            break;
-                        }
-                    } else {
-                        break;
-                    }
-                } while (true);
-
-                if (allimgDict == null)
-                    return 0;
+                if (result.isErrorState()) {
+                    return result;
+                }
 
                 for (String key : allimgDict.keySet()) {
 
                     try {// for cancel/interupt Thread
                         Thread.sleep(10);
                     } catch (InterruptedException e) {
-                        return 0;
+                        return ApiResultState.IO;
                     }
 
                     if (BreakawayImportThread.isCanceled())
-                        return 0;
+                        return ApiResultState.CANCELED;
 
                     URI uri = allimgDict.get(key);
                     if (uri.toString().contains("/cache/log/"))
@@ -502,7 +480,7 @@ public class DescriptionImageGrabber {
 
             }
         }
-        return 0;
+        return ApiResultState.IO;
     }
 
     private static FileHandle[] getFilesInDirectory(String path, final String GcCode) {

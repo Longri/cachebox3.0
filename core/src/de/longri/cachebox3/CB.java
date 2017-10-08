@@ -23,10 +23,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.GpsEventHelper;
 import de.longri.cachebox3.gui.dialogs.GetApiKeyQuestionDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -48,6 +50,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -299,6 +303,18 @@ public class CB {
         MAIN_THREAD = mainThread;
     }
 
+
+    public static void scheduleOnMainThread(final Runnable runnable, long delay) {
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                postOnMainThread(runnable);
+            }
+        };
+        new Timer().schedule(timerTask, delay);
+    }
+
+
     public static void postOnMainThread(final Runnable runnable) {
         postOnMainThread(runnable, false);
     }
@@ -367,11 +383,11 @@ public class CB {
         final AtomicBoolean expired = new AtomicBoolean(false);
         final AtomicBoolean wait = new AtomicBoolean(true);
         final AtomicBoolean errror = new AtomicBoolean(false);
-        GroundspeakAPI.getMembershipType(new GenericCallBack<Integer>() {
+        GroundspeakAPI.getMembershipType(new GenericCallBack<ApiResultState>() {
             @Override
-            public void callBack(Integer value) {
-                if (value == -3) expired.set(true);
-                if (value == -1) errror.set(true);
+            public void callBack(ApiResultState value) {
+                if (value == ApiResultState.EXPIRED_API_KEY) expired.set(true);
+                if (value.isErrorState()) errror.set(true);
                 wait.set(false);
             }
         });
@@ -390,14 +406,15 @@ public class CB {
         }
 
         if (expired.get()) {
-            Gdx.app.postRunnable(new Runnable() {
+            CB.scheduleOnMainThread(new Runnable() {
                 @Override
                 public void run() {
                     String msg = Translation.Get("apiKeyExpired") + "\n\n"
                             + Translation.Get("wantApi");
-                    new GetApiKeyQuestionDialog(msg).show();
+                    new GetApiKeyQuestionDialog(msg, Translation.Get("errorAPI"),
+                            MessageBoxIcon.ExpiredApiKey).show();
                 }
-            });
+            }, 300);// wait for closing any dialogs before show msg
             return true;
         }
         if (errror.get()) {

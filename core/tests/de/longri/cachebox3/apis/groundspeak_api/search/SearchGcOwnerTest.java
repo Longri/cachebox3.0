@@ -15,18 +15,16 @@
  */
 package de.longri.cachebox3.apis.groundspeak_api.search;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
-import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.types.*;
-import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.junit.jupiter.api.Test;
 import travis.EXCLUDE_FROM_TRAVIS;
@@ -82,7 +80,7 @@ class SearchGcOwnerTest {
         final CB_List<Cache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();
-        final  SearchGCOwner searchGC = new SearchGCOwner(apiKey, 30, searchCoord, 50000, "bros", (byte) 2){
+        final SearchGCOwner searchGC = new SearchGCOwner(apiKey, 30, searchCoord, 50000, "bros", (byte) 2) {
             protected void writeLogToDB(final LogEntry logEntry) {
                 logList.add(logEntry);
             }
@@ -136,9 +134,9 @@ class SearchGcOwnerTest {
             }
         };
 
-        searchGC.handleHttpResponse(response, new GenericCallBack<Integer>() {
+        searchGC.handleHttpResponse(response, new GenericCallBack<ApiResultState>() {
             @Override
-            public void callBack(Integer value) {
+            public void callBack(ApiResultState value) {
 
                 assertEquals(23, cacheList.size);
                 Cache cache = cacheList.first();
@@ -251,7 +249,7 @@ class SearchGcOwnerTest {
         final CB_List<Cache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();
-        final SearchGCOwner searchGC = new SearchGCOwner(apiKey, 30, searchCoord, 50000, "bros", (byte) 2){
+        final SearchGCOwner searchGC = new SearchGCOwner(apiKey, 30, searchCoord, 50000, "bros", (byte) 2) {
             protected void writeLogToDB(final LogEntry logEntry) {
                 logList.add(logEntry);
             }
@@ -270,9 +268,9 @@ class SearchGcOwnerTest {
         final AtomicBoolean WAIT = new AtomicBoolean(true);
 
         try {
-            searchGC.postRequest(new GenericCallBack<Integer>() {
+            searchGC.postRequest(new GenericCallBack<ApiResultState>() {
                 @Override
-                public void callBack(Integer value) {
+                public void callBack(ApiResultState value) {
 
                     try {
                         assertEquals(23, cacheList.size);

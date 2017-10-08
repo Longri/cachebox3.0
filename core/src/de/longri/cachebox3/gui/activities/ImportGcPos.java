@@ -26,8 +26,8 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
-import de.longri.cachebox3.apis.groundspeak_api.PostRequest;
 import de.longri.cachebox3.apis.groundspeak_api.search.SearchCoordinate;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
@@ -428,10 +428,10 @@ public class ImportGcPos extends ActivityBase {
                 searchC.available = Config.SearchOnlyAvailable.getValue();
 
                 log.debug("Request Groundspeak API");
-                searchC.postRequest(new GenericCallBack<Integer>() {
+                searchC.postRequest(new GenericCallBack<ApiResultState>() {
                     @Override
-                    public void callBack(Integer value) {
-                        if (value == PostRequest.NO_ERROR) {
+                    public void callBack(ApiResultState value) {
+                        if (!value.isErrorState()) {
 
                             String Msg;
                             if (importStart != null) {

@@ -23,6 +23,7 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.apis.gcvote_api.GCVote;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.activities.EditFieldNotes;
@@ -38,6 +39,7 @@ import de.longri.cachebox3.gui.utils.TemplateFormatter;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.ApiButton;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -216,7 +218,7 @@ public class FieldNotesView extends AbstractView {
 
                     @Override
                     public void canceled() {
-
+                        log.debug("cancel clicked");
                     }
 
                     @Override
@@ -258,7 +260,7 @@ public class FieldNotesView extends AbstractView {
                                     }
                                 }
 
-                                int result = 0;
+                                ApiResultState result = ApiResultState.UNKNOWN;
 
                                 if (fieldNote.isTbFieldNote) {
                                     result = GroundspeakAPI.createTrackableLog(fieldNote.TravelBugCode, fieldNote.TrackingNumber, fieldNote.gcCode, LogTypes.CB_LogType2GC(fieldNote.type), fieldNote.timestamp, fieldNote.comment, iCancel);
@@ -267,28 +269,37 @@ public class FieldNotesView extends AbstractView {
                                     result = GroundspeakAPI.createFieldNoteAndPublish(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, dl, iCancel);
                                 }
 
-                                if (result == GroundspeakAPI.CONNECTION_TIMEOUT) {
+                                if (result == ApiResultState.CONNECTION_TIMEOUT) {
                                     CB.viewmanager.toast(Translation.Get("ConnectionError"));
                                     cancel();
                                     return;
                                 }
-                                if (result == GroundspeakAPI.API_IS_UNAVAILABLE) {
+                                if (result == ApiResultState.API_IS_UNAVAILABLE) {
                                     CB.viewmanager.toast(Translation.Get("API-offline"));
                                     cancel();
                                     return;
                                 }
 
-                                if (result == -1) {
+                                if (result == ApiResultState.EXPIRED_API_KEY) {
+                                    CB.scheduleOnMainThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            String msg = Translation.Get("apiKeyExpired") + "\n\n"
+                                                    + Translation.Get("wantApi");
+                                            new GetApiKeyQuestionDialog(msg, Translation.Get("errorAPI"),
+                                                    MessageBoxIcon.ExpiredApiKey).show();
+                                        }
+                                    }, 300);// wait for closing ProgressDialog before show msg
+                                    cancel();
+                                    return;
+                                }
+
+                                if (result.isErrorState()) {
                                     UploadMeldung += fieldNote.gcCode + "\n" + GroundspeakAPI.LastAPIError + "\n";
                                 } else {
-                                    if (result != -10) {
-                                        // set fieldnote as uploaded only when upload was working
-                                        fieldNote.uploaded = true;
-                                        fieldNote.updateDatabase();
-                                    } else {
-                                        API_Key_error = true;
-                                        UploadMeldung = "error";
-                                    }
+
+                                    API_Key_error = true;
+                                    UploadMeldung = "error";
                                 }
                                 count++;
                             }
