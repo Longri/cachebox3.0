@@ -16,11 +16,13 @@
 package de.longri.cachebox3.settings;
 
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.sqlite.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Calendar;
 import java.util.Iterator;
 
 /**
@@ -83,6 +85,17 @@ public class Config extends Settings {
                         if (setting.needRestart()) {
                             needRestart = true;
                         }
+
+
+                        if(setting.name.equals("GcAPIStaging")||setting.name.equals("GcAPI")){
+                            //reset ApiKey validation
+                            GroundspeakAPI.resetApiIsChecked();
+
+                            //set config stored MemberChipType as expired
+                            Calendar cal = Calendar.getInstance();
+                            Config.memberChipType.setExpiredTime(cal.getTimeInMillis());
+                        }
+
 
                         setting.clearDirty();
 
