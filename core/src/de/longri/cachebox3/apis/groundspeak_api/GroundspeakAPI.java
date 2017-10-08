@@ -151,6 +151,12 @@ public class GroundspeakAPI {
             Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
             httpPost.setUrl(URL + "createFieldNoteAndPublish?format=json");
             httpPost.setTimeOut(Config.socket_timeout.getValue());
+            httpPost.setHeader("format", "json");
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+
+
+
             httpPost.setContent(requestString);
 
             // Execute HTTP Post Request
