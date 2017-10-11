@@ -33,15 +33,15 @@ import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.skin.styles.FieldNoteListItemStyle;
+import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.FieldNoteEntry;
-import de.longri.cachebox3.types.FieldNoteList;
+import de.longri.cachebox3.types.DraftEntry;
+import de.longri.cachebox3.types.DraftList;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -52,7 +52,7 @@ import java.util.Locale;
 /**
  * Created by Longri on 02.09.2017.
  */
-public class EditFieldNotes extends ActivityBase {
+public class EditDrafts extends ActivityBase {
 
     private final static DateFormat dateFormatter = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.getDefault());
     private final static DateFormat iso8601FormatDate = new SimpleDateFormat("yyyy-MM-dd");
@@ -61,34 +61,34 @@ public class EditFieldNotes extends ActivityBase {
 
     private final VisTable contentTable;
     private final VisTextButton btnOk, btnCancel;
-    private final FieldNoteListItemStyle itemStyle;
+    private final DraftListItemStyle itemStyle;
     private final VisScrollPane scrollPane;
     private final VisLabel foundLabel, dateLabel, timeLabel;
     private final EditTextBox dateTextArea, timeTextArea, commentTextArea;
 
-    private boolean isNewFieldNote;
+    private boolean isNewDraft;
     private ReturnListener returnListener;
-    private FieldNoteEntry actFieldNote;
-    private FieldNoteEntry altFieldNote;
+    private DraftEntry actDraft;
+    private DraftEntry altDraft;
     private boolean needsLayout = true;
     private AdjustableStarWidget gcVoteWidget;
     private Button onlineOption, fieldNoteOption;
 
     public interface ReturnListener {
-        void returnedFieldNote(FieldNoteEntry fn, boolean isNewFieldNote, boolean directlog);
+        void returnedDraft(DraftEntry fn, boolean isNewDraft, boolean directlog);
     }
 
 
-    public EditFieldNotes(FieldNoteEntry note, ReturnListener returnListener, boolean isNewFieldNote) {
-        super("EditFieldNote");
-        itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", FieldNoteListItemStyle.class);
+    public EditDrafts(DraftEntry note, ReturnListener returnListener, boolean isNewDraft) {
+        super("EditDraft");
+        itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
 
         btnOk = new VisTextButton(Translation.Get("save"));
         btnOk.addListener(saveClickListener);
         btnCancel = new VisTextButton(Translation.Get("cancel"));
         btnCancel.addListener(cancelClickListener);
         contentTable = new VisTable();
-        setFieldNote(note, returnListener, isNewFieldNote);
+        setDraft(note, returnListener, isNewDraft);
         if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
             gcVoteWidget = new AdjustableStarWidget(Translation.Get("maxRating"));
             gcVoteWidget.setBackground(CB.getSkin().get(ListView.ListViewStyle.class).firstItem);
@@ -96,7 +96,7 @@ public class EditFieldNotes extends ActivityBase {
 
         scrollPane = new VisScrollPane(contentTable);
 
-        if (note.isTbFieldNote)
+        if (note.isTbDraft)
             foundLabel = new VisLabel("");
         else
             foundLabel = new VisLabel("Founds: #" + note.foundNumber);
@@ -122,7 +122,7 @@ public class EditFieldNotes extends ActivityBase {
     private final ClickListener cancelClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             if (returnListener != null)
-                returnListener.returnedFieldNote(null, false, false);
+                returnListener.returnedDraft(null, false, false);
             finish();
         }
     };
@@ -131,15 +131,15 @@ public class EditFieldNotes extends ActivityBase {
         public void clicked(InputEvent event, float x, float y) {
             if (returnListener != null) {
 
-                if (actFieldNote.type.isDirectLogType()) {
-                    actFieldNote.isDirectLog = onlineOption.isChecked();
+                if (actDraft.type.isDirectLogType()) {
+                    actDraft.isDirectLog = onlineOption.isChecked();
                 } else {
-                    actFieldNote.isDirectLog = false;
+                    actDraft.isDirectLog = false;
                 }
 
-                actFieldNote.comment = commentTextArea.getText();
+                actDraft.comment = commentTextArea.getText();
                 if (gcVoteWidget != null) {
-                    actFieldNote.gc_Vote = gcVoteWidget.getValue() * 100;
+                    actDraft.gc_Vote = gcVoteWidget.getValue() * 100;
                 }
 
                 //parse Date and Time
@@ -151,19 +151,19 @@ public class EditFieldNotes extends ActivityBase {
 
                 try {
                     Date timestamp = dateFormatter.parse(date + "." + time + ".00");
-                    actFieldNote.timestamp = timestamp;
+                    actDraft.timestamp = timestamp;
                 } catch (ParseException e) {
                     MessageBox.show(Translation.Get("wrongDate"), Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
                     return;
                 }
 
                 // check of changes
-                if (!altFieldNote.equals(actFieldNote)) {
-                    actFieldNote.uploaded = false;
-                    actFieldNote.updateDatabase();
-                    FieldNoteList.createVisitsTxt(Config.FieldNotesGarminPath.getValue());
+                if (!altDraft.equals(actDraft)) {
+                    actDraft.uploaded = false;
+                    actDraft.updateDatabase();
+                    DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
                 }
-                returnListener.returnedFieldNote(actFieldNote, isNewFieldNote, actFieldNote.isDirectLog);
+                returnListener.returnedDraft(actDraft, isNewDraft, actDraft.isDirectLog);
             }
             finish();
         }
@@ -181,11 +181,11 @@ public class EditFieldNotes extends ActivityBase {
         StageManager.unRegisterForBackKey(cancelClickListener);
     }
 
-    public void setFieldNote(FieldNoteEntry note, ReturnListener listener, boolean isNewFieldNote) {
-        this.isNewFieldNote = isNewFieldNote;
+    public void setDraft(DraftEntry note, ReturnListener listener, boolean isNewDraft) {
+        this.isNewDraft = isNewDraft;
         this.returnListener = listener;
-        this.actFieldNote = note;
-        this.altFieldNote = note.copy();
+        this.actDraft = note;
+        this.altDraft = note.copy();
 
         needsLayout = true;
         this.invalidate();
@@ -225,13 +225,13 @@ public class EditFieldNotes extends ActivityBase {
         VisTable cacheTable = new VisTable();
 
         VisTable iconTable = new VisTable();
-        iconTable.add(actFieldNote.cacheType.getCacheWidget(itemStyle.cacheTypeStyle, null, null));
+        iconTable.add(actDraft.cacheType.getCacheWidget(itemStyle.cacheTypeStyle, null, null));
         iconTable.pack();
         iconTable.layout();
 
         cacheTable.add(iconTable).left().padRight(CB.scaledSizes.MARGINx4);
 
-        VisLabel nameLabel = new VisLabel(actFieldNote.CacheName, headerLabelStyle);
+        VisLabel nameLabel = new VisLabel(actDraft.CacheName, headerLabelStyle);
         nameLabel.setWrap(true);
         cacheTable.add(nameLabel).padRight(CB.scaledSizes.MARGIN).expandX().fillX();
 
@@ -239,12 +239,12 @@ public class EditFieldNotes extends ActivityBase {
 
         cacheTable.add((Actor) null).left().padRight(CB.scaledSizes.MARGINx4);
 
-        VisLabel gcLabel = new VisLabel(actFieldNote.gcCode, headerLabelStyle);
+        VisLabel gcLabel = new VisLabel(actDraft.gcCode, headerLabelStyle);
         gcLabel.setWrap(true);
         cacheTable.add(gcLabel).padRight(CB.scaledSizes.MARGIN).expandX().fillX();
 
         VisTable foundRow = new VisTable();
-        Image typeIcon = new Image(actFieldNote.type.getDrawable(itemStyle.typeStyle));
+        Image typeIcon = new Image(actDraft.type.getDrawable(itemStyle.typeStyle));
         foundRow.defaults().pad(CB.scaledSizes.MARGINx2);
         foundRow.add(typeIcon);
         foundRow.add(foundLabel);
@@ -275,7 +275,7 @@ public class EditFieldNotes extends ActivityBase {
         optionGroup.add(onlineOption, fieldNoteOption);
         fieldNoteOption.setChecked(true);
         Label onlineOptionLabel = new Label(Translation.Get("directLog"), commentLabelStyle);
-        Label fieldNoteOptionLabel = new Label(Translation.Get("onlyFieldNote"), commentLabelStyle);
+        Label fieldNoteOptionLabel = new Label(Translation.Get("onlyDraft"), commentLabelStyle);
 
         onlineOptionLabel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {

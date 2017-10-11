@@ -22,9 +22,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.skin.styles.FieldNoteListItemStyle;
+import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
-import de.longri.cachebox3.types.FieldNoteEntry;
+import de.longri.cachebox3.types.DraftEntry;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -32,16 +32,16 @@ import java.util.Locale;
 /**
  * Created by Longri on 31.08.2017.
  */
-public class FieldNotesViewItem extends ListViewItem {
+public class DraftsViewItem extends ListViewItem {
     private final static SimpleDateFormat postFormatter = new SimpleDateFormat("dd.MMM.yy (HH:mm)", Locale.getDefault());
 
-    final private FieldNoteListItemStyle style;
+    final private DraftListItemStyle style;
 
     private boolean needsLayout = true;
-    private FieldNoteEntry entry;
+    private DraftEntry entry;
     private VisTable headerTable;
 
-    public FieldNotesViewItem(int listIndex, FieldNoteEntry entry, FieldNoteListItemStyle style) {
+    public DraftsViewItem(int listIndex, DraftEntry entry, DraftListItemStyle style) {
         super(listIndex);
         this.entry = entry;
         this.style = style;

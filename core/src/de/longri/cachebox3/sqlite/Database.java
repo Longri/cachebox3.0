@@ -40,7 +40,7 @@ import java.util.Map.Entry;
 public class Database {
     protected final Logger log;
     public static Database Data;
-    public static Database FieldNotes;
+    public static Database Drafts;
     public static Database Settings;
     private SQLiteGdxDatabase myDB;
     public CacheList Query;
@@ -141,7 +141,7 @@ public class Database {
     }
 
     public enum DatabaseType {
-        CacheBox, FieldNotes, Settings
+        CacheBox, Drafts, Settings
     }
 
     protected DatabaseType databaseType;
@@ -157,8 +157,8 @@ public class Database {
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseChange;
                 Query = new CacheList();
                 break;
-            case FieldNotes:
-                latestDatabaseChange = DatabaseVersions.LatestDatabaseFieldNoteChange;
+            case Drafts:
+                latestDatabaseChange = DatabaseVersions.LatestDatabaseDraftChange;
                 break;
             case Settings:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseSettingsChange;
@@ -659,7 +659,7 @@ public class Database {
                 }
 
                 break;
-            case FieldNotes:
+            case Drafts:
                 beginTransaction();
                 try {
 

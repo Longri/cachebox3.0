@@ -51,13 +51,13 @@ public enum QuickActions {
     Hint, // 15
     Parking, // 16
     Day_Night, // 17
-    FieldNotes, // 18
-    QuickFieldNotes, // 19
+    Drafts, // 18
+    QuickDrafts, // 19
     TrackableListView, // 20
     addWP, // 21
     Solver2, // 22
     Notesview, // 23
-    uploadFieldNote, // 24
+    uploadDraft, // 24
     torch, // 25
 
     // ScreenLock, // 21
@@ -168,9 +168,9 @@ public enum QuickActions {
             case 17:
                 return new Action_Toggle_Day_Night();
             case 18:
-                return CB.viewmanager.getAction_Show_FieldNotesView();
+                return CB.viewmanager.getAction_Show_DraftsView();
             case 19:
-                return new Action_QuickFieldNote();
+                return new Action_QuickDraft();
             case 20:
                 return CB.viewmanager.getAction_Show_TrackableListView();
             case 21:
@@ -229,7 +229,7 @@ public enum QuickActions {
             case 18:
                 return Translation.Get("Fieldnotes");
             case 19:
-                return Translation.Get("QuickFieldNote");
+                return Translation.Get("QuickDraft");
             case 20:
                 return Translation.Get("TBList");
             case 21:
@@ -239,7 +239,7 @@ public enum QuickActions {
             case 23:
                 return Translation.Get("Notes");
             case 24:
-                return Translation.Get("uploadFieldNotes");
+                return Translation.Get("uploadDrafts");
             case 25:
                 return Translation.Get("torch");
 

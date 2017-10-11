@@ -236,7 +236,7 @@ public class CacheboxMain extends ApplicationAdapter {
         //close databases
         if (Database.Data != null) Database.Data.close();
         if (Database.Settings != null) Database.Settings.close();
-        if (Database.FieldNotes != null) Database.FieldNotes.close();
+        if (Database.Drafts != null) Database.Drafts.close();
 
 
     }
@@ -248,7 +248,7 @@ public class CacheboxMain extends ApplicationAdapter {
 //        //open databases
         if (Database.Data != null) Database.Data.open();
         if (Database.Settings != null) Database.Settings.open();
-        if (Database.FieldNotes != null) Database.FieldNotes.open();
+        if (Database.Drafts != null) Database.Drafts.open();
 
     }
 

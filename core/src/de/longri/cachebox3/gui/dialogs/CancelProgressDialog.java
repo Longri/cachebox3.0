@@ -91,6 +91,7 @@ public class CancelProgressDialog extends ButtonDialog {
         this.progressTable.progress.setValue(this.progressCancelRunnable.getProgress());
         this.progressTable.label.setText(this.progressCancelRunnable.getProgressMsg());
         super.draw(batch, parentAlpha);
+        CB.requestRendering();
     }
 
 

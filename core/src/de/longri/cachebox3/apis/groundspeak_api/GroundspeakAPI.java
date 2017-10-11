@@ -34,7 +34,7 @@ import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NetUtils;
-import de.longri.cachebox3.utils.json_parser.FieldNoteUploadResultParser;
+import de.longri.cachebox3.utils.json_parser.DraftUploadResultParser;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,7 +125,7 @@ public class GroundspeakAPI {
     }
 
 
-    public static ApiResultState createFieldNoteAndPublish(String cacheCode, int wptLogTypeId, Date dateLogged, String note, boolean directLog, final ICancel icancel) {
+    public static ApiResultState createDraftAndPublish(String cacheCode, int wptLogTypeId, Date dateLogged, String note, boolean directLog, final ICancel icancel) {
         ApiResultState chk = chkMembership(true);
         if (chk.isErrorState())
             return chk;
@@ -171,13 +171,13 @@ public class GroundspeakAPI {
             }
 
             // Parse JSON Result
-            if (FieldNoteUploadResultParser.result(responseString)) {
+            if (DraftUploadResultParser.result(responseString)) {
                 return ApiResultState.IO;
             }
 
 
         } catch (Exception e) {
-            log.error("UploadFieldNotesAPI IOException", e);
+            log.error("UploadDraftsAPI IOException", e);
             return ApiResultState.API_ERROR;
         }
 

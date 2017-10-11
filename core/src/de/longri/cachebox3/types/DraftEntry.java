@@ -31,9 +31,9 @@ import java.util.TimeZone;
 /**
  * Created by Longri on 31.08.2017
  */
-public class FieldNoteEntry {
+public class DraftEntry {
 
-    private final static Logger log = LoggerFactory.getLogger(FieldNoteEntry.class);
+    private final static Logger log = LoggerFactory.getLogger(DraftEntry.class);
 
 
     public long Id;
@@ -50,14 +50,14 @@ public class FieldNoteEntry {
     public int typeIcon;
     public boolean uploaded;
     public int gc_Vote;
-    public boolean isTbFieldNote = false;
+    public boolean isTbDraft = false;
     public String TbName = "";
     public String TbIconUrl = "";
     public String TravelBugCode = "";
     public String TrackingNumber = "";
     public boolean isDirectLog = false;
 
-    private FieldNoteEntry(FieldNoteEntry fne) {
+    private DraftEntry(DraftEntry fne) {
         this.Id = fne.Id;
         this.CacheId = fne.CacheId;
         this.gcCode = fne.gcCode;
@@ -72,7 +72,7 @@ public class FieldNoteEntry {
         this.typeIcon = fne.typeIcon;
         this.uploaded = fne.uploaded;
         this.gc_Vote = fne.gc_Vote;
-        this.isTbFieldNote = fne.isTbFieldNote;
+        this.isTbDraft = fne.isTbDraft;
         this.TbName = fne.TbName;
         this.TbIconUrl = fne.TbIconUrl;
         this.TravelBugCode = fne.TravelBugCode;
@@ -80,13 +80,13 @@ public class FieldNoteEntry {
         this.isDirectLog = fne.isDirectLog;
     }
 
-    public FieldNoteEntry(LogTypes Type) {
+    public DraftEntry(LogTypes Type) {
         Id = -1;
         this.type = Type;
         fillType();
     }
 
-    FieldNoteEntry(SQLiteGdxDatabaseCursor reader) {
+    DraftEntry(SQLiteGdxDatabaseCursor reader) {
         CacheId = reader.getLong(0);
         gcCode = reader.getString(1).trim();
         CacheName = reader.getString(2);
@@ -106,7 +106,7 @@ public class FieldNoteEntry {
         CacheUrl = reader.getString(9);
         uploaded = reader.getInt(10) != 0;
         gc_Vote = reader.getInt(11);
-        isTbFieldNote = reader.getInt(12) != 0;
+        isTbDraft = reader.getInt(12) != 0;
         TbName = reader.getString(13);
         TbIconUrl = reader.getString(14);
         TravelBugCode = reader.getString(15);
@@ -172,31 +172,32 @@ public class FieldNoteEntry {
         args.put("url", CacheUrl);
         args.put("Uploaded", uploaded);
         args.put("gc_Vote", gc_Vote);
-        args.put("TbFieldNote", isTbFieldNote);
+        args.put("TbFieldNote", isTbDraft);
         args.put("TbName", TbName);
         args.put("TbIconUrl", TbIconUrl);
         args.put("TravelBugCode", TravelBugCode);
         args.put("TrackingNumber", TrackingNumber);
         args.put("directLog", isDirectLog);
         try {
-            Database.FieldNotes.insertWithConflictReplace("Fieldnotes", args);
-            Database.FieldNotes.endTransaction();
+            Database.Drafts.insertWithConflictReplace("Fieldnotes", args);
+            Database.Drafts.endTransaction();
         } catch (Exception exc) {
+            exc.printStackTrace();
             return;
         }
-        // search FieldNote Id
-        SQLiteGdxDatabaseCursor reader = Database.FieldNotes
+        // search Draft Id
+        SQLiteGdxDatabaseCursor reader = Database.Drafts
                 .rawQuery("select CacheId, GcCode, Name, CacheType, Timestamp, Type, FoundNumber, Comment, Id, Url, Uploaded, gc_Vote, TbFieldNote, TbName, TbIconUrl, TravelBugCode, TrackingNumber, directLog from FieldNotes where GcCode='" + gcCode
                         + "' and Type=" + type.getGcLogTypeId(), null);
 
         if (reader == null) {
-            log.error("Can't find updated FieldNote on DB");
+            log.error("Can't find updated Draft on DB");
             return;
         }
 
         reader.moveToFirst();
         while (!reader.isAfterLast()) {
-            FieldNoteEntry fne = new FieldNoteEntry(reader);
+            DraftEntry fne = new DraftEntry(reader);
             this.Id = fne.Id;
             reader.moveToNext();
         }
@@ -220,14 +221,14 @@ public class FieldNoteEntry {
         args.put("url", CacheUrl);
         args.put("Uploaded", uploaded);
         args.put("gc_Vote", gc_Vote);
-        args.put("TbFieldNote", isTbFieldNote);
+        args.put("TbFieldNote", isTbDraft);
         args.put("TbName", TbName);
         args.put("TbIconUrl", TbIconUrl);
         args.put("TravelBugCode", TravelBugCode);
         args.put("TrackingNumber", TrackingNumber);
         args.put("directLog", isDirectLog);
         try {
-            long count = Database.FieldNotes.update("FieldNotes", args, "id=" + Id, null);
+            long count = Database.Drafts.update("FieldNotes", args, "id=" + Id, null);
             if (count > 0)
                 return;
         } catch (Exception exc) {
@@ -237,20 +238,20 @@ public class FieldNoteEntry {
 
     public void deleteFromDatabase() {
         try {
-            Database.FieldNotes.delete("FieldNotes", "id=" + Id, null);
+            Database.Drafts.delete("FieldNotes", "id=" + Id, null);
         } catch (Exception exc) {
             return;
         }
     }
 
-    public boolean equals(FieldNoteEntry fne) {
+    public boolean equals(DraftEntry fne) {
         if (this.Id != fne.Id)
             return false;
         if (this.CacheId != fne.CacheId)
             return false;
         if (!this.gcCode.equals(fne.gcCode))
             return false;
-        if (!Utils.equalsDate(this.timestamp,fne.timestamp))
+        if (!Utils.equalsDate(this.timestamp, fne.timestamp))
             return false;
         if (!this.typeString.equals(fne.typeString))
             return false;
@@ -272,7 +273,7 @@ public class FieldNoteEntry {
             return false;
         if (this.gc_Vote != fne.gc_Vote)
             return false;
-        if (this.isTbFieldNote != fne.isTbFieldNote)
+        if (this.isTbDraft != fne.isTbDraft)
             return false;
         if (!this.TravelBugCode.equals(fne.TravelBugCode))
             return false;
@@ -284,8 +285,8 @@ public class FieldNoteEntry {
         return true;
     }
 
-    public FieldNoteEntry copy() {
-        return new FieldNoteEntry(this);
+    public DraftEntry copy() {
+        return new DraftEntry(this);
     }
 
 }

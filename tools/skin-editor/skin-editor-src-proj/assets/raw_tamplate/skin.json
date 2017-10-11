@@ -2483,7 +2483,7 @@
       "baseMapFreizeitkarte": "baseMapFreizeitkarte",
       "target": "target",
       "mapLayer": "map-layer",
-      "deleteAllFieldNotes": "deleteIcon",
+      "deleteAllDrafts": "deleteIcon",
       "edit": "edit",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
@@ -2497,7 +2497,7 @@
       "torchOn": "light_on",
       "torchOff": "light_off",
       "torchDisabled": "light_disabled",
-      "uploadFieldNote": "UPLOADFIELDNOTE",
+      "uploadDraft": "UPLOADFIELDNOTE",
       "manageDB": "database",
       "settingsIcon": "settings_icon",
       "compassIcon": "compas_icon",
@@ -2873,7 +2873,7 @@
     },
     "logListItems": {}
   },
-  "de.longri.cachebox3.gui.skin.styles.FieldNoteListItemStyle": {
+  "de.longri.cachebox3.gui.skin.styles.DraftListItemStyle": {
     "fieldNoteListItemStyle": {
       "headerFont": "normal_bold_font",
       "headerFontColor": "font_color",

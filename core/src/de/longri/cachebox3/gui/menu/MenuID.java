@@ -36,7 +36,7 @@ public class MenuID {
     public static final int MI_SET_AS_WAYPOINT = 8;
     public static final int MI_SET_AS_MAPCENTER = 9;
 
-    // FieldNotesView
+    // DraftsView
     public static final int MI_FOUND = 10;
     public static final int MI_NOT_FOUND = 11;
     public static final int MI_MAINTANCE = 12;
@@ -104,7 +104,7 @@ public class MenuID {
     public static final int MI_PAUSE = 65;
     public static final int MI_STOP = 66;
 
-    // CB_Action_QuickFieldNote
+    // CB_Action_QuickDraft
     public static final int MI_QUICK_FOUND = 67;
     public static final int MI_QUICK_NOT_FOUND = 68;
 

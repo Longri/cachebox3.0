@@ -32,8 +32,8 @@ import java.util.Comparator;
 /**
  * Created by Longri on 31.08.2017
  */
-public class FieldNoteList extends Array<FieldNoteEntry> {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(FieldNoteList.class);
+public class DraftList extends Array<DraftEntry> {
+    final static org.slf4j.Logger log = LoggerFactory.getLogger(DraftList.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -44,7 +44,7 @@ public class FieldNoteList extends Array<FieldNoteEntry> {
     private boolean croppedList = false;
     private int actCroppedLength = -1;
 
-    public FieldNoteList() {
+    public DraftList() {
 
     }
 
@@ -52,13 +52,13 @@ public class FieldNoteList extends Array<FieldNoteEntry> {
         return croppedList;
     }
 
-    public void loadFieldNotes(String where, LoadingType loadingType) {
+    public void loadDrafts(String where, LoadingType loadingType) {
         synchronized (this) {
-            loadFieldNotes(where, "", loadingType);
+            loadDrafts(where, "", loadingType);
         }
     }
 
-    public void loadFieldNotes(String where, String order, LoadingType loadingType) {
+    public void loadDrafts(String where, String order, LoadingType loadingType) {
         synchronized (this) {
             // List clear?
             if (loadingType == LoadingType.LOAD_ALL || loadingType == LoadingType.LOAD_NEW || loadingType == LoadingType.LOAD_NEW_LAST_LENGTH) {
@@ -76,7 +76,7 @@ public class FieldNoteList extends Array<FieldNoteEntry> {
             }
 
             // SQLite Limit ?
-            boolean maybeCropped = !Config.FieldNotesLoadAll.getValue() && loadingType != LoadingType.LOAD_ALL;
+            boolean maybeCropped = !Config.DraftsLoadAll.getValue() && loadingType != LoadingType.LOAD_ALL;
 
             if (maybeCropped) {
                 switch (loadingType) {
@@ -84,34 +84,34 @@ public class FieldNoteList extends Array<FieldNoteEntry> {
                         // do nothing
                         break;
                     case LOAD_NEW:
-                        actCroppedLength = Config.FieldNotesLoadLength.getValue();
+                        actCroppedLength = Config.DraftsLoadLength.getValue();
                         sql += " LIMIT " + String.valueOf(actCroppedLength + 1);
                         break;
                     case LOAD_NEW_LAST_LENGTH:
                         if (actCroppedLength == -1)
-                            actCroppedLength = Config.FieldNotesLoadLength.getValue();
+                            actCroppedLength = Config.DraftsLoadLength.getValue();
                         sql += " LIMIT " + String.valueOf(actCroppedLength + 1);
                         break;
                     case LOAD_MORE:
                         int Offset = actCroppedLength;
-                        actCroppedLength += Config.FieldNotesLoadLength.getValue();
-                        sql += " LIMIT " + String.valueOf(Config.FieldNotesLoadLength.getValue() + 1);
+                        actCroppedLength += Config.DraftsLoadLength.getValue();
+                        sql += " LIMIT " + String.valueOf(Config.DraftsLoadLength.getValue() + 1);
                         sql += " OFFSET " + String.valueOf(Offset);
                 }
             }
 
             SQLiteGdxDatabaseCursor reader = null;
             try {
-                reader = Database.FieldNotes.rawQuery(sql, null);
+                reader = Database.Drafts.rawQuery(sql, null);
             } catch (Exception exc) {
-                log.error("loadFieldNotes", exc);
+                log.error("loadDrafts", exc);
             }
 
             if (reader == null) return;
 
             reader.moveToFirst();
             while (!reader.isAfterLast()) {
-                FieldNoteEntry fne = new FieldNoteEntry(reader);
+                DraftEntry fne = new DraftEntry(reader);
                 if (!this.contains(fne)) {
                     this.add(fne);
                 }
@@ -132,9 +132,9 @@ public class FieldNoteList extends Array<FieldNoteEntry> {
             }
 
             //sort by Date/time
-            this.sort(new Comparator<FieldNoteEntry>() {
+            this.sort(new Comparator<DraftEntry>() {
                 @Override
-                public int compare(FieldNoteEntry o1, FieldNoteEntry o2) {
+                public int compare(DraftEntry o1, DraftEntry o2) {
                     return o2.timestamp.compareTo(o1.timestamp);
                 }
             });
@@ -142,11 +142,11 @@ public class FieldNoteList extends Array<FieldNoteEntry> {
     }
 
     /**
-     * @param dirFileName Config.settings.FieldNotesGarminPath.getValue()
+     * @param dirFileName Config.settings.DraftsGarminPath.getValue()
      */
     public static void createVisitsTxt(String dirFileName) {
-        FieldNoteList lFieldNotes = new FieldNoteList();
-        lFieldNotes.loadFieldNotes("", "Timestamp ASC", LoadingType.LOAD_ALL);
+        DraftList lDrafts = new DraftList();
+        lDrafts.loadDrafts("", "Timestamp ASC", LoadingType.LOAD_ALL);
 
         FileHandle txtFile = Gdx.files.absolute(dirFileName);
         OutputStream writer;
@@ -157,7 +157,7 @@ public class FieldNoteList extends Array<FieldNoteEntry> {
             byte[] bom = {(byte) 239, (byte) 187, (byte) 191};
             writer.write(bom);
 
-            for (FieldNoteEntry fieldNote : lFieldNotes) {
+            for (DraftEntry fieldNote : lDrafts) {
                 String log = fieldNote.gcCode + "," + fieldNote.getDateTimeString() + "," + fieldNote.type.toString() + ",\"" + fieldNote.comment + "\"\n";
                 writer.write((log + "\n").getBytes("UTF-8"));
             }
@@ -168,12 +168,12 @@ public class FieldNoteList extends Array<FieldNoteEntry> {
         }
     }
 
-    public void deleteFieldNoteByCacheId(long cacheId, LogTypes type) {
+    public void deleteDraftByCacheId(long cacheId, LogTypes type) {
         synchronized (this) {
             int foundNumber = 0;
-            FieldNoteEntry fne = null;
-            // deletes a possible existing FieldNote of type for the Cache with cacheId
-            for (FieldNoteEntry fn : this) {
+            DraftEntry fne = null;
+            // deletes a possible existing Draft of type for the Cache with cacheId
+            for (DraftEntry fn : this) {
                 if ((fn.CacheId == cacheId) && (fn.type == type)) {
                     fne = fn;
                 }
@@ -188,12 +188,12 @@ public class FieldNoteList extends Array<FieldNoteEntry> {
         }
     }
 
-    public void deleteFieldNote(long fieldNoteID, LogTypes type) {
+    public void deleteDraft(long fieldNoteID, LogTypes type) {
         synchronized (this) {
             int foundNumber = 0;
-            FieldNoteEntry fne = null;
-            // deletes a possible existing FieldNote of type for the Cache with fieldNoteID
-            for (FieldNoteEntry fn : this) {
+            DraftEntry fne = null;
+            // deletes a possible existing Draft of type for the Cache with fieldNoteID
+            for (DraftEntry fn : this) {
                 if (fn.Id == fieldNoteID) {
                     fne = fn;
                 }
@@ -211,7 +211,7 @@ public class FieldNoteList extends Array<FieldNoteEntry> {
     public void decreaseFoundNumber(int deletedFoundNumber) {
         if (deletedFoundNumber > 0) {
             // Customize all FoundNumbers that are larger
-            for (FieldNoteEntry fn : this) {
+            for (DraftEntry fn : this) {
                 if ((fn.type == LogTypes.found) && (fn.foundNumber > deletedFoundNumber)) {
                     int oldFoundNumber = fn.foundNumber;
                     fn.foundNumber--;
@@ -223,9 +223,9 @@ public class FieldNoteList extends Array<FieldNoteEntry> {
         }
     }
 
-    public boolean contains(FieldNoteEntry fne) {
+    public boolean contains(DraftEntry fne) {
         synchronized (this) {
-            for (FieldNoteEntry item : this) {
+            for (DraftEntry item : this) {
                 if (fne.equals(item))
                     return true;
             }

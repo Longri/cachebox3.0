@@ -23,19 +23,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Created by Longri on 08.10.2017
  */
-class FieldNoteUploadResultParserTest {
+class DraftUploadResultParserTest {
 
 
     @Test
     void result() {
         try {
             String result = TestUtils.getResourceRequestString("testsResources/UploadFieldNoteResultOk.json", null);
-            boolean resultOk = FieldNoteUploadResultParser.result(result);
+            boolean resultOk = DraftUploadResultParser.result(result);
 
             assertThat("Result must be OK", resultOk);
 
         } catch (Exception e) {
             e.printStackTrace();
+            assertThat("Exception on Test", false);
         }
 
 

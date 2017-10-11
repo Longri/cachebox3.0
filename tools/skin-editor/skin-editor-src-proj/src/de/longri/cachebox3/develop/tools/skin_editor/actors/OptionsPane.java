@@ -373,7 +373,7 @@ public class OptionsPane extends Table {
                         LogListItemStyle logListItemStyle = game.skinProject.get("logListItems", LogListItemStyle.class);
                         styles.put("logListItems", logListItemStyle);
 
-                        FieldNoteListItemStyle fieldNoteListItemStyle = game.skinProject.get("fieldNoteListItemStyle", FieldNoteListItemStyle.class);
+                        DraftListItemStyle fieldNoteListItemStyle = game.skinProject.get("fieldNoteListItemStyle", DraftListItemStyle.class);
                         styles.put("fieldNoteListItemStyle", fieldNoteListItemStyle);
 
                     }

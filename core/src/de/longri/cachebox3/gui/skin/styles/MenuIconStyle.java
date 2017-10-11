@@ -30,7 +30,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable baseMapFreizeitkarte;
     public Drawable target;
     public Drawable mapLayer;
-    public Drawable deleteAllFieldNotes;
+    public Drawable deleteAllDrafts;
     public Drawable ownerLogTypes;
     public Drawable edit;
 
@@ -70,7 +70,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable torchDisabled;
     public Drawable takePhoto;
     public Drawable dayNight;
-    public Drawable uploadFieldNote;
+    public Drawable uploadDraft;
     public Drawable manageDB;
     public Drawable settingsIcon;
     public Drawable compassIcon;

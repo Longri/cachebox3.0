@@ -72,6 +72,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
 
     @Override
     public void closeDatabase() {
+        if (myDB == null) return;
         try {
             myDB.close();
             myDB = null;

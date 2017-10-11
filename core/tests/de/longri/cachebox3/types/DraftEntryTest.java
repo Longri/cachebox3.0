@@ -29,12 +29,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Created by Longri on 05.10.2017
  */
-public class FieldNoteEntryTest {
+public class DraftEntryTest {
 
     static {
         TestUtils.initialGdx();
 
-        //initial a empty FieldNote DB
+        //initial a empty Draft DB
         try {
 
 
@@ -50,8 +50,8 @@ public class FieldNoteEntryTest {
                 fieldNotesFileHandle.delete();
             }
 
-            Database.FieldNotes = new Database(Database.DatabaseType.FieldNotes);
-            Database.FieldNotes.startUp(fieldNotesFileHandle);
+            Database.Drafts = new Database(Database.DatabaseType.Drafts);
+            Database.Drafts.startUp(fieldNotesFileHandle);
         } catch (SQLiteGdxException e) {
             assertThat("Can't open fieldNotes.db3", false);
         }
@@ -59,11 +59,11 @@ public class FieldNoteEntryTest {
 
     @Test
     void fieldNoteTest() {
-        //Store FieldNote into DB
+        //Store Draft into DB
 
-        FieldNoteEntry fne = new FieldNoteEntry(LogTypes.found);
+        DraftEntry fne = new DraftEntry(LogTypes.found);
 
-        // Set FieldNote values
+        // Set Draft values
         fne.CacheId = 100;
         fne.gcCode = "GCCODE";
         fne.CacheName = "CacheName";
@@ -74,7 +74,7 @@ public class FieldNoteEntryTest {
         fne.CacheUrl = "URL";
         fne.uploaded = false;
         fne.gc_Vote = 7;
-        fne.isTbFieldNote = false;
+        fne.isTbDraft = false;
         fne.TbName = "TB Name";
         fne.TbIconUrl = "TB icon url";
         fne.TravelBugCode = "TravelBugCode";
@@ -85,40 +85,40 @@ public class FieldNoteEntryTest {
         try {
             fne.writeToDatabase();
         } catch (Exception e) {
-            assertThat("Can't write FieldNote to DB", false);
+            assertThat("Can't write Draft to DB", false);
         }
 
 
-        // read FieldNote from DB
-        FieldNoteList fieldNoteEntries = new FieldNoteList();
-        fieldNoteEntries.loadFieldNotes("", FieldNoteList.LoadingType.LOAD_NEW_LAST_LENGTH);
-        assertThat("FieldNoteList size must be 1", fieldNoteEntries.size == 1);
-        FieldNoteEntry fne2 = fieldNoteEntries.get(0);
-        assertThat("FieldNotes must be equals", fne2.equals(fne));
+        // read Draft from DB
+        DraftList fieldNoteEntries = new DraftList();
+        fieldNoteEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
+        assertThat("DraftList size must be 1", fieldNoteEntries.size == 1);
+        DraftEntry fne2 = fieldNoteEntries.get(0);
+        assertThat("Drafts must be equals", fne2.equals(fne));
 
-        //read non uploaded FieldNote from DB
-        FieldNoteList lFieldNotes = new FieldNoteList();
-        lFieldNotes.loadFieldNotes("(Uploaded=0 or Uploaded is null)", FieldNoteList.LoadingType.LOAD_ALL);
+        //read non uploaded Draft from DB
+        DraftList lDrafts = new DraftList();
+        lDrafts.loadDrafts("(Uploaded=0 or Uploaded is null)", DraftList.LoadingType.LOAD_ALL);
 
-        assertThat("FieldNoteList size must be 1", lFieldNotes.size == 1);
-        FieldNoteEntry fne3 = lFieldNotes.get(0);
-        assertThat("FieldNotes must be equals", fne3.equals(fne));
+        assertThat("DraftList size must be 1", lDrafts.size == 1);
+        DraftEntry fne3 = lDrafts.get(0);
+        assertThat("Drafts must be equals", fne3.equals(fne));
 
 
         // set uploaded flag and write to DB
         fne3.uploaded = true;
         fne3.writeToDatabase();
 
-        FieldNoteList lFieldNotes2 = new FieldNoteList();
-        lFieldNotes2.loadFieldNotes("", FieldNoteList.LoadingType.LOAD_ALL);
+        DraftList lDrafts2 = new DraftList();
+        lDrafts2.loadDrafts("", DraftList.LoadingType.LOAD_ALL);
 
-        assertThat("FieldNoteList size must be 1", lFieldNotes2.size == 1);
-        FieldNoteEntry fne4 = lFieldNotes2.get(0);
-        assertThat("FieldNotes must not equals", !fne4.equals(fne));
+        assertThat("DraftList size must be 1", lDrafts2.size == 1);
+        DraftEntry fne4 = lDrafts2.get(0);
+        assertThat("Drafts must not equals", !fne4.equals(fne));
 
-        assertThat("FieldNotes must equals", fne4.equals(fne3));
+        assertThat("Drafts must equals", fne4.equals(fne3));
 
-        assertThat("FieldNotes must have uploaded flag", fne4.uploaded);
+        assertThat("Drafts must have uploaded flag", fne4.uploaded);
     }
 
 

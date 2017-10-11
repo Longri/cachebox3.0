@@ -74,7 +74,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
     private final Action_Show_TrackableListView action_show_trackableListView = new Action_Show_TrackableListView();
     private final Action_Show_NoteView action_show_noteView = new Action_Show_NoteView();
     private final Action_Show_Quit action_show_quit = new Action_Show_Quit();
-    private final Action_Show_FieldNotesView action_show_fieldNotesView = new Action_Show_FieldNotesView();
+    private final Action_Show_DraftsView action_show_fieldNotesView = new Action_Show_DraftsView();
 
     public ViewManager(final CacheboxMain main, Viewport viewport, Batch batch) {
         super("ViewManager", viewport, batch);
@@ -219,7 +219,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         if (CB.isTestVersion())
             navButton.addAction(new ActionButton(new Action_Show_TestView(), false));
 //
-//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickFieldNote, false, GestureDirection.Up));
+//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickDraft, false, GestureDirection.Up));
         tool_button.addAction(new ActionButton(action_show_fieldNotesView, true));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecTrack, false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecVoice, false));
@@ -319,7 +319,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         return action_show_spoilerView;
     }
 
-    public AbstractAction getAction_Show_FieldNotesView() {
+    public AbstractAction getAction_Show_DraftsView() {
         return null;
     }
 

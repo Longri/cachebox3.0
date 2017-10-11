@@ -52,7 +52,7 @@
       {
         "InMinutes": 1,
         "MaxCalls": 30,
-        "MethodName": "CreateFieldNoteAndPublishV1",
+        "MethodName": "CreateDraftAndPublishV1",
         "PartnerMethod": false
       },
       {

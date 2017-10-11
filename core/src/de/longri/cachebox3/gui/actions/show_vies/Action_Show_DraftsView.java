@@ -19,30 +19,30 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.FieldNotesView;
+import de.longri.cachebox3.gui.views.DraftsView;
 
 /**
  * Created by Longri on 14.09.2016.
  */
-public class Action_Show_FieldNotesView extends Abstract_Action_ShowView {
-    public Action_Show_FieldNotesView() {
-        super(FieldNotesView.class, IMPLEMENTED, "Fieldnotes", MenuID.AID_SHOW_FIELDNOTES);
+public class Action_Show_DraftsView extends Abstract_Action_ShowView {
+    public Action_Show_DraftsView() {
+        super(DraftsView.class, IMPLEMENTED, "Fieldnotes", MenuID.AID_SHOW_FIELDNOTES);
     }
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof FieldNotesView;
+        return CB.viewmanager.getActView() instanceof DraftsView;
     }
 
     @Override
     public boolean viewTypeEquals(AbstractView actView) {
-        return actView.getClass().getName().equals(FieldNotesView.class.getName());
+        return actView.getClass().getName().equals(DraftsView.class.getName());
     }
 
     @Override
     public void execute() {
         if (isActVisible()) return;
-        FieldNotesView view = new FieldNotesView();
+        DraftsView view = new DraftsView();
         CB.viewmanager.showView(view);
     }
 

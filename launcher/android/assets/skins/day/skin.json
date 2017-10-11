@@ -2862,7 +2862,7 @@
     },
     "logListItems": {}
   },
-  "de.longri.cachebox3.gui.skin.styles.FieldNoteListItemStyle": {
+  "de.longri.cachebox3.gui.skin.styles.DraftListItemStyle": {
     "fieldNoteListItemStyle": {
       "headerFont": "normal_bold_font",
       "headerFontColor": "font_color",

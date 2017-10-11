@@ -417,7 +417,7 @@ public class TestView extends AbstractView {
                 switch (item.getMenuItemId()) {
                     case 10000:
                         String title = "Fehler";
-                        String msg = "Der Cache [2 Advent: der Wherigo (wo ist der Weihnachtsmann)] ist nicht in der aktuellen DB.\\nDiese FieldNote kann nicht gewählt werden!";
+                        String msg = "Der Cache [2 Advent: der Wherigo (wo ist der Weihnachtsmann)] ist nicht in der aktuellen DB.\\nDiese Draft kann nicht gewählt werden!";
                         MessageBoxButtons btn = MessageBoxButtons.OK;
                         MessageBoxIcon icn = MessageBoxIcon.Error;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.skin.styles;
+package de.longri.cachebox3.gui.actions;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.menu.MenuID;
 
 /**
- * Created by Longri on 31.08.2017.
+ * Created by Longri on 14.09.2016.
  */
-public class FieldNoteListItemStyle {
-    public BitmapFont headerFont;
-    public Color headerFontColor;
-    public BitmapFont descriptionFont;
-    public Color descriptionFontColor;
-    public LogTypesStyle typeStyle;
-    public CacheTypeStyle cacheTypeStyle;
-    public Drawable headerBackground;
-    public Drawable upploadedOverlay;
+public class Action_QuickDraft extends AbstractAction {
+
+    public Action_QuickDraft() {
+        super(NOT_IMPLEMENTED, "QuickDraft", MenuID.AID_QUICK_FIELDNOTE);
+    }
+
+    @Override
+    public void execute() {
+        CB.viewmanager.toast("QuickDraft not implemented");
+    }
+
+    @Override
+    public Drawable getIcon() {
+        return CB.getSkin().getMenuIcon.fieldNote;
+    }
 }

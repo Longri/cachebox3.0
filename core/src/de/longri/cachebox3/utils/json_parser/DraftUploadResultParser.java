@@ -27,9 +27,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Longri on 08.10.2017
  */
-public class FieldNoteUploadResultParser {
+public class DraftUploadResultParser {
 
-    private final static Logger log = LoggerFactory.getLogger(FieldNoteUploadResultParser.class);
+    private final static Logger log = LoggerFactory.getLogger(DraftUploadResultParser.class);
 
 
     public static boolean result(String result) throws UnsupportedEncodingException {
