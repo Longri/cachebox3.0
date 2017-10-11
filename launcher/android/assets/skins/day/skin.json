@@ -24,6 +24,10 @@
       "path": "svg/map-state-overdraw.svg",
       "scale": 0.75
     },
+    "UPLOADFIELDNOTE": {
+      "path": "svg/UPLOADFIELDNOTE.svg",
+      "scale": 0.18
+    },
     "Wikipedia": {
       "path": "svg/mapWikipedia1.svg",
       "scale": 0.18
@@ -63,6 +67,18 @@
     "addCacheIcon": {
       "path": "svg/addCacheIcon.svg",
       "scale": 0.18
+    },
+    "api_key_ex": {
+      "path": "svg/api_key_ex.svg",
+      "scale": 0.25
+    },
+    "api_key_io": {
+      "path": "svg/api_key_io.svg",
+      "scale": 0.22
+    },
+    "api_key_no": {
+      "path": "svg/api_key_no.svg",
+      "scale": 0.22
     },
     "archived": {
       "path": "svg/archived.svg",
@@ -831,6 +847,10 @@
     "earth": {
       "path": "svg/earth.svg",
       "scale": 0.21
+    },
+    "edit": {
+      "path": "svg/pencil.svg",
+      "scale": 0.3
     },
     "enabled": {
       "path": "svg/enabled.svg",
@@ -2464,7 +2484,8 @@
       "Powerd_by_GC_Live": "gc_liveIcon",
       "GC_Live": "gc_liveIcon",
       "Close": "closeIcon",
-      "Help": "helpIcon"
+      "Help": "helpIcon",
+      "ExpiredApiKey": "api_key_ex"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MenuIconStyle": {
@@ -2475,6 +2496,8 @@
       "baseMapFreizeitkarte": "baseMapFreizeitkarte",
       "target": "target",
       "mapLayer": "map-layer",
+      "deleteAllDrafts": "deleteIcon",
+      "edit": "edit",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
       "deleteIcon": "deleteIcon",
@@ -2487,6 +2510,7 @@
       "torchOn": "light_on",
       "torchOff": "light_off",
       "torchDisabled": "light_disabled",
+      "uploadDraft": "UPLOADFIELDNOTE",
       "manageDB": "database",
       "settingsIcon": "settings_icon",
       "compassIcon": "compas_icon",
@@ -2569,10 +2593,10 @@
     "ApiButton": {
       "up": "default_button_9_Patch",
       "down": "drawable_default_button_pressed",
-      "check": "check_on",
-      "unchecked": "check_disabled",
-      "invalid": "closeIcon",
-      "expired": "closeIcon",
+      "check": "api_key_io",
+      "unchecked": "api_key_no",
+      "invalid": "api_key_ex",
+      "expired": "api_key_ex",
       "font": "normal_font",
       "fontColor": "font_color"
     }
@@ -2870,8 +2894,7 @@
       "descriptionFontColor": "font_color",
       "typeStyle": "logViewLogStyles",
       "cacheTypeStyle": "cacheList",
-      "headerBackground": "list_rec_header_9_Patch",
-      "upploadedOverlay": "dialog_stage_background"
+      "headerBackground": "list_rec_header_9_Patch"
     }
   }
 }

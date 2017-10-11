@@ -165,6 +165,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
     }
 
     private void select(int index, boolean fire) {
+        if (entries == null) throw new RuntimeException("Must set Entries before select");
         selectedItem = entries.get(index);
         if (selectedItem.getName() != null) {
             this.setText(selectedItem.getName());
@@ -176,6 +177,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
     }
 
     public void select(T item) {
+        if (entries == null) throw new RuntimeException("Must set Entries before select");
         selectedItem = item;
         if (item.getName() != null) {
             this.setText(item.getName());

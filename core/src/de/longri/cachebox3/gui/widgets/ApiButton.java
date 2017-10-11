@@ -72,7 +72,28 @@ public class ApiButton extends IconButton {
         }
 
         if (Entry) {
-            image.setDrawable(style.check);
+            ApiResultState state = GroundspeakAPI.chkMembership(true);
+
+            switch (state) {
+                case API_ERROR:
+                case MEMBERSHIP_TYPE_INVALID:
+                    image.setDrawable(style.invalid);
+                    break;
+                case EXPIRED_API_KEY:
+                    image.setDrawable(style.expired);
+                    break;
+                case MEMBERSHIP_TYPE_GUEST:
+                case MEMBERSHIP_TYPE_BASIC:
+                case MEMBERSHIP_TYPE_PREMIUM:
+                    image.setDrawable(style.check);
+                    break;
+
+                default:
+                    image.setDrawable(style.unchecked);
+                    break;
+            }
+
+
         } else {
             image.setDrawable(style.unchecked);
         }

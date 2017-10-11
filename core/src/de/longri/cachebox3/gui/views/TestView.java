@@ -17,12 +17,15 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
@@ -33,6 +36,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
+import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
@@ -44,9 +48,11 @@ import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.ProgressBar;
+import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Attributes;
+import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.LogTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,19 +84,62 @@ public class TestView extends AbstractView {
         float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
 
 
+        {// test Spinner with MessageBox Icons
+
+            Array<MessageBoxIcon> itemList = new Array<>();
+            itemList.add(MessageBoxIcon.Asterisk);
+            itemList.add(MessageBoxIcon.Error);
+            itemList.add(MessageBoxIcon.Exclamation);
+            itemList.add(MessageBoxIcon.Hand);
+            itemList.add(MessageBoxIcon.Information);
+            itemList.add(MessageBoxIcon.None);
+            itemList.add(MessageBoxIcon.Question);
+            itemList.add(MessageBoxIcon.Stop);
+            itemList.add(MessageBoxIcon.Warning);
+            itemList.add(MessageBoxIcon.Powerd_by_GC_Live);
+            itemList.add(MessageBoxIcon.GC_Live);
+            itemList.add(MessageBoxIcon.ExpiredApiKey);
+
+
+            final SelectBox<MessageBoxIcon> selectBox = new SelectBox();
+            selectBox.setHideWithItemClick(false);
+            selectBox.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    MessageBoxIcon icon = selectBox.getSelected();
+                    if (icon != MessageBoxIcon.None) {
+                        MessageBox.show("MessageBox with \n" + icon.getName(), "MessageBoxTitle", MessageBoxButtons.OK, icon, null);
+                        selectBox.select(MessageBoxIcon.None);
+                    }
+                }
+            });
+            selectBox.set(itemList);
+            selectBox.select(MessageBoxIcon.None);
+
+
+            VisLabel label3 = new VisLabel("MessageBox Icon Test");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            contentTable.add(selectBox).width(new Value.Fixed(contentWidth)).pad(20);
+            contentTable.row();
+        }
+
+
         {// test CancelProgressDialog
-
-
             VisTextButton button = new VisTextButton("CancelProgressDialog");
-
-
             button.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
-
                     new CancelProgressDialog("test", "Test Progress Dialog",
                             new ProgressCancelRunnable() {
                                 float value = 0;
                                 float progressValue = 0;
+
                                 @Override
                                 public void canceled() {
                                     log.debug("Progress canceled ");

@@ -68,6 +68,18 @@
       "path": "svg/addCacheIcon.svg",
       "scale": 0.18
     },
+    "api_key_ex": {
+      "path": "svg/api_key_ex.svg",
+      "scale": 0.25
+    },
+    "api_key_io": {
+      "path": "svg/api_key_io.svg",
+      "scale": 0.22
+    },
+    "api_key_no": {
+      "path": "svg/api_key_no.svg",
+      "scale": 0.22
+    },
     "archived": {
       "path": "svg/archived.svg",
       "scale": 0.1
@@ -2472,7 +2484,8 @@
       "Powerd_by_GC_Live": "gc_liveIcon",
       "GC_Live": "gc_liveIcon",
       "Close": "closeIcon",
-      "Help": "helpIcon"
+      "Help": "helpIcon",
+      "ExpiredApiKey": "api_key_ex"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MenuIconStyle": {
@@ -2580,10 +2593,10 @@
     "ApiButton": {
       "up": "default_button_9_Patch",
       "down": "drawable_default_button_pressed",
-      "check": "check_on",
-      "unchecked": "check_disabled",
-      "invalid": "closeIcon",
-      "expired": "closeIcon",
+      "check": "api_key_io",
+      "unchecked": "api_key_no",
+      "invalid": "api_key_ex",
+      "expired": "api_key_ex",
       "font": "normal_font",
       "fontColor": "font_color"
     }
