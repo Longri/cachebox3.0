@@ -384,7 +384,6 @@ public class DraftsView extends AbstractView {
                     cacheDAO.WriteToDatabase_Found(EventHandler.getSelectedCache());
                     QuickDraftFeedbackPopUp pop = new QuickDraftFeedbackPopUp(true);
                     pop.show();
-                    PlatformConnector.vibrate();
                 }
             } else if (type == LogTypes.didnt_find) {
                 // DidNotFound -> fremden Cache als nicht gefunden markieren
@@ -394,7 +393,6 @@ public class DraftsView extends AbstractView {
                     cacheDAO.WriteToDatabase_Found(EventHandler.getSelectedCache());
                     QuickDraftFeedbackPopUp pop2 = new QuickDraftFeedbackPopUp(false);
                     pop2.show();
-                    PlatformConnector.vibrate();
                 }
             }
 

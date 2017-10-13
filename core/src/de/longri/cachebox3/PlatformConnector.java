@@ -88,10 +88,6 @@ public abstract class PlatformConnector {
 
     protected abstract void _callQuit();
 
-    public static void vibrate() {
-        //TODO
-    }
-
     // SVG implementations #############################################################################################
     public enum SvgScaleType {
         SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED, NONE, SCALED_TO_WIDTH_OR_HEIGHT
