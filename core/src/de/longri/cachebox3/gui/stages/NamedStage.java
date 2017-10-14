@@ -32,47 +32,11 @@ import org.slf4j.LoggerFactory;
  */
 public class NamedStage extends Stage {
 
-    private final static Logger log = LoggerFactory.getLogger(NamedStage.class);
-    private static int VIBRATE_TIME_MSEC = Config.VibrateTime.getValue();
-    private static boolean VIBRATE = Config.VibrateFeedback.getValue();
-
-    static {
-        Config.VibrateTime.addChangedEventListener(new IChanged() {
-            @Override
-            public void isChanged() {
-                VIBRATE_TIME_MSEC = Config.VibrateTime.getValue();
-            }
-        });
-
-        Config.VibrateFeedback.addChangedEventListener(new IChanged() {
-            @Override
-            public void isChanged() {
-                VIBRATE = Config.VibrateFeedback.getValue();
-            }
-        });
-    }
-
     private String name;
 
     public NamedStage(final String name, Viewport viewport, Batch batch) {
         super(viewport, batch);
         this.name = name;
-
-        this.addListener(new ClickLongClickListener() {
-            @Override
-            public boolean clicked(InputEvent event, float x, float y) {
-                log.debug("click on {} Stage", name);
-                if (VIBRATE) Gdx.input.vibrate(VIBRATE_TIME_MSEC);
-                return true;
-            }
-
-            @Override
-            public boolean longClicked(Actor actor, float x, float y) {
-                log.debug("long click on {} Stage", name);
-                if (VIBRATE) Gdx.input.vibrate(VIBRATE_TIME_MSEC);
-                return true;
-            }
-        });
     }
 
     public String getName() {

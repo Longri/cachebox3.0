@@ -163,7 +163,8 @@ public class DraftList extends Array<DraftEntry> {
             }
             writer.flush();
             writer.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
+            log.error("can't create visit.txt",e);
             e.printStackTrace();
         }
     }
