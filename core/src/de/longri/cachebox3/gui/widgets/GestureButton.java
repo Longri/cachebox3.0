@@ -247,7 +247,7 @@ public class GestureButton extends Button {
 
             // if no default action seted, show context-menu from view (like long click)
             if (!actionExecuted) {
-                longPress(event.getTarget(), x, y);
+                longPress(event.getTarget(), x, y,true);
             }
             return true;
         }

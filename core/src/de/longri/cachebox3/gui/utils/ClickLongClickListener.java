@@ -65,7 +65,11 @@ public abstract class ClickLongClickListener extends ActorGestureListener {
     }
 
     public boolean longPress(Actor actor, float x, float y) {
-        if (canLongPressEventCalled())
+        return longPress(actor, x, y, false);
+    }
+
+    public boolean longPress(Actor actor, float x, float y, boolean force) {
+        if (force || canLongPressEventCalled())
             return longClicked(actor, x, y);
         else
             return true;

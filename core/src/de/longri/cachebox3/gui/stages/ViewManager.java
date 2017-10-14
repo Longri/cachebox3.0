@@ -216,8 +216,8 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         navButton.addAction(new ActionButton(action_show_compassView, false, GestureDirection.Right));
         navButton.addAction(new ActionButton(new Action_NavigateExt(), false, GestureDirection.Down));
         navButton.addAction(new ActionButton(new Action_NavigateInt(), false, GestureDirection.Left));
-        if (CB.isTestVersion())
-            navButton.addAction(new ActionButton(new Action_Show_TestView(), false));
+
+
 //
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickDraft, false, GestureDirection.Up));
         tool_button.addAction(new ActionButton(action_show_fieldNotesView, true));
@@ -228,7 +228,8 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionParking, false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView, false, GestureDirection.Left));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
-        tool_button.addAction(new ActionButton(new Action_Show_TestView(), true));
+        if (CB.isTestVersion())
+        tool_button.addAction(new ActionButton(new Action_Show_TestView(), false));
 //
         misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, GestureDirection.Up));
         misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));
