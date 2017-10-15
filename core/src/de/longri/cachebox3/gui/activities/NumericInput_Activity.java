@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.badlogic.gdx.Input.Keys.*;
+import static de.longri.cachebox3.gui.widgets.NumPad.OptionalButton.*;
 
 /**
  * Created by Longri on 27.08.16.
@@ -59,11 +60,11 @@ public class NumericInput_Activity<T extends Number> extends ActivityBase {
         float width = Gdx.graphics.getWidth();
 
         if (value instanceof Integer) {
-            numPad = new NumPad(numPadKeyListener, width, NumPad.OptionalButton.OK, NumPad.OptionalButton.CANCEL);
+            numPad = new NumPad(numPadKeyListener, width, OK, CANCEL, DelBack);
         } else if (value instanceof Double) {
-            numPad = new NumPad(numPadKeyListener, width, NumPad.OptionalButton.OK, NumPad.OptionalButton.CANCEL);
+            numPad = new NumPad(numPadKeyListener, width, OK, CANCEL, DOT, DelBack);
         } else if (value instanceof Float) {
-            numPad = new NumPad(numPadKeyListener, width, NumPad.OptionalButton.OK, NumPad.OptionalButton.CANCEL);
+            numPad = new NumPad(numPadKeyListener, width, OK, CANCEL, DOT, DelBack);
         } else throw new NotImplementedException("Ilegal Number type");
 
         textField = new VisTextField(value.toString());
