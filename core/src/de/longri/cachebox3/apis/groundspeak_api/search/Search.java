@@ -741,6 +741,10 @@ public abstract class Search extends PostRequest {
                 for (int i = 0, n = cache.waypoints.size; i < n; i++) {
                     // must Cast to Full Waypoint. If Waypoint, is wrong created!
                     Waypoint waypoint = cache.waypoints.get(i);
+
+                    //set CacheId
+                    waypoint.CacheId = cache.Id;
+
                     boolean update = true;
 
                     // don't refresh wp if aktCache.wp is user changed
