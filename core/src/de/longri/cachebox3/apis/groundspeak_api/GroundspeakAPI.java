@@ -1083,21 +1083,21 @@ public class GroundspeakAPI {
 
         for (int c = 0; c < apiCaches.size; c++) {
             Cache cache = apiCaches.get(c);
-            Cache aktCache = Database.Data.Query.GetCacheById(cache.Id);
+            Cache aktCache = Database.Data.Query.GetCacheById(cache.getId());
 
             if (aktCache != null && aktCache.isLive())
                 aktCache = null;
 
             if (aktCache == null) {
-                aktCache = cacheDAO.getFromDbByCacheId(cache.Id);
+                aktCache = cacheDAO.getFromDbByCacheId(cache.getId());
             }
             // Read Detail Info of Cache if not available
-            if ((aktCache != null) && (aktCache.detail == null)) {
+            if ((aktCache != null) && (aktCache.getDetail() == null)) {
                 aktCache.loadDetail();
             }
             // If Cache into DB, extract saved rating
             if (aktCache != null) {
-                cache.Rating = aktCache.Rating;
+                cache.setRating(aktCache.getRating());
             }
 
             // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
@@ -1107,7 +1107,7 @@ public class GroundspeakAPI {
 
             // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
             if (cache.getTmpNote() != null) {
-                String oldNote = Database.getNote(cache.Id);
+                String oldNote = Database.getNote(cache.getId());
                 String newNote = "";
                 if (oldNote == null) {
                     oldNote = "";
@@ -1133,14 +1133,14 @@ public class GroundspeakAPI {
                     newNote += System.getProperty("line.separator") + end;
                 }
                 cache.setTmpNote(newNote);
-                Database.setNote(cache.Id, cache.getTmpNote());
+                Database.setNote(cache.getId(), cache.getTmpNote());
             }
 
             // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
             cache.setLongDescription("");
 
             for (LogEntry log : apiLogs) {
-                if (log.CacheId != cache.Id)
+                if (log.CacheId != cache.getId())
                     continue;
                 // Write Log to database
 
@@ -1148,23 +1148,23 @@ public class GroundspeakAPI {
             }
 
             for (ImageEntry image : apiImages) {
-                if (image.CacheId != cache.Id)
+                if (image.CacheId != cache.getId())
                     continue;
                 // Write Image to database
 
                 imageDAO.WriteToDatabase(image, false);
             }
 
-            for (int i = 0, n = cache.waypoints.size; i < n; i++) {
+            for (int i = 0, n = cache.getWaypoints().size; i < n; i++) {
                 // must Cast to Full Waypoint. If Waypoint, is wrong createt!
-                Waypoint waypoint = cache.waypoints.get(i);
+                Waypoint waypoint = cache.getWaypoints().get(i);
                 boolean update = true;
 
                 // dont refresh wp if aktCache.wp is user changed
                 if (aktCache != null) {
-                    if (aktCache.waypoints != null) {
-                        for (int j = 0, m = aktCache.waypoints.size; j < m; j++) {
-                            Waypoint wp = aktCache.waypoints.get(j);
+                    if (aktCache.getWaypoints() != null) {
+                        for (int j = 0, m = aktCache.getWaypoints().size; j < m; j++) {
+                            Waypoint wp = aktCache.getWaypoints().get(j);
                             if (wp.getGcCode().equalsIgnoreCase(waypoint.getGcCode())) {
                                 if (wp.IsUserWaypoint)
                                     update = false;
@@ -1187,7 +1187,7 @@ public class GroundspeakAPI {
                 Database.Data.Query.add(cache);
                 // cacheDAO.writeToDatabase(cache);
             } else {
-                Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.Id), false);
+                Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.getId()), false);
                 Database.Data.Query.add(cache);
                 // cacheDAO.updateDatabase(cache);
             }

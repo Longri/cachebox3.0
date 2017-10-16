@@ -212,7 +212,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         Waypoint selWp = null;
         if (Settings.ShowAllWaypoints.getValue() || sel) {
             selWp = selectedWaypoint = de.longri.cachebox3.events.EventHandler.getSelectedWaypoint();
-            for (Waypoint waypoint : cache.waypoints) {
+            for (Waypoint waypoint : cache.getWaypoints()) {
                 try {
                     MapWayPointItem waypointCluster = getMapWayPointItem(waypoint, dis, selectedWaypoint != null && selectedWaypoint.equals(waypoint));
                     mItemList.add(waypointCluster);
@@ -346,14 +346,14 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             return "mapStar";
         else if (cache.isFound())
             return "mapFound";
-        else if ((cache.Type == CacheTypes.Mystery) && cache.CorrectedCoordiantesOrMysterySolved())
+        else if ((cache.getType() == CacheTypes.Mystery) && cache.CorrectedCoordiantesOrMysterySolved())
             return "mapSolved";
-        else if ((cache.Type == CacheTypes.Multi) && cache.HasStartWaypoint())
+        else if ((cache.getType() == CacheTypes.Multi) && cache.HasStartWaypoint())
             return "mapMultiStartP"; // Multi with start point
-        else if ((cache.Type == CacheTypes.Mystery) && cache.HasStartWaypoint())
+        else if ((cache.getType() == CacheTypes.Mystery) && cache.HasStartWaypoint())
             return "mapMysteryStartP"; // Mystery without Final but with start point
         else
-            return "map" + cache.Type.name();
+            return "map" + cache.getType().name();
     }
 
     public static String getMapIconName(Waypoint waypoint) {

@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.apis.gcvote_api.GCVote;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
@@ -415,7 +414,7 @@ public class DraftsView extends AbstractView {
             // needMaintance oder Note können zusätzlich angelegt werden
 
             for (DraftEntry nfne : tmpDrafts) {
-                if ((nfne.CacheId == cache.Id) && (nfne.type == type)) {
+                if ((nfne.CacheId == cache.getId()) && (nfne.type == type)) {
                     newDraft = nfne;
                     newDraft.deleteFromDatabase();
                     newDraft.timestamp = new Date();
@@ -430,10 +429,10 @@ public class DraftsView extends AbstractView {
             newDraft.gcCode = cache.getGcCode();
             newDraft.foundNumber = Config.FoundOffset.getValue();
             newDraft.timestamp = new Date();
-            newDraft.CacheId = cache.Id;
+            newDraft.CacheId = cache.getId();
             newDraft.comment = "";
             newDraft.CacheUrl = cache.getUrl();
-            newDraft.cacheType = cache.Type;
+            newDraft.cacheType = cache.getType();
             newDraft.fillType();
             // aktDraftIndex = -1;
             aktDraft = newDraft;
@@ -505,7 +504,7 @@ public class DraftsView extends AbstractView {
                     Config.AcceptChanges();
                 }
                 // und eine evtl. vorhandene Draft DNF löschen
-                tmpDrafts.deleteDraftByCacheId(EventHandler.getSelectedCache().Id, LogTypes.didnt_find);
+                tmpDrafts.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogTypes.didnt_find);
             } else if (newDraft.type == LogTypes.didnt_find) {
                 // DidNotFound -> Cache als nicht gefunden markieren
                 if (EventHandler.getSelectedCache().isFound()) {
@@ -516,7 +515,7 @@ public class DraftsView extends AbstractView {
                     Config.AcceptChanges();
                 }
                 // und eine evtl. vorhandene Draft FoundIt löschen
-                tmpDrafts.deleteDraftByCacheId(EventHandler.getSelectedCache().Id, LogTypes.found);
+                tmpDrafts.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogTypes.found);
             }
 
             DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
@@ -589,7 +588,7 @@ public class DraftsView extends AbstractView {
                         Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                         Config.AcceptChanges();
                     } // und eine evtl. vorhandene Draft FoundIt löschen
-                    fieldNoteEntries.deleteDraftByCacheId(EventHandler.getSelectedCache().Id, LogTypes.found);
+                    fieldNoteEntries.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogTypes.found);
                 }
             }
             DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
@@ -756,7 +755,7 @@ public class DraftsView extends AbstractView {
                                 // jetzt noch diesen Cache in der aktuellen CacheListe suchen und auch da den Found-Status zurücksetzen
                                 // damit das Smiley Symbol aus der Map und der CacheList verschwindet
                                 synchronized (Database.Data.Query) {
-                                    Cache tc = Database.Data.Query.GetCacheById(cache.Id);
+                                    Cache tc = Database.Data.Query.GetCacheById(cache.getId());
                                     if (tc != null) {
                                         tc.setFound(false);
                                     }
@@ -984,9 +983,9 @@ public class DraftsView extends AbstractView {
         if (cache != null) {
 
             // Found je nach CacheType
-            if (cache.Type == null)
+            if (cache.getType() == null)
                 return null;
-            switch (cache.Type) {
+            switch (cache.getType()) {
                 case Giga:
                 case MegaEvent:
                 case Event:

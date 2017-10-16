@@ -60,9 +60,9 @@ public class CacheListItem extends ListViewItem implements Disposable {
         }
 
 
-        ListViewItem listViewItem = new CacheListItem(listIndex, cache.Type, cache.getName(),
+        ListViewItem listViewItem = new CacheListItem(listIndex, cache.getType(), cache.getName(),
                 (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
-                (int) Math.min(cache.Rating * 2, 5 * 2), cache.Size, cache.Size.toShortString(), left, right, isAvailable);
+                (int) Math.min(cache.getRating() * 2, 5 * 2), cache.getSize(), cache.getSize().toShortString(), left, right, isAvailable);
         return listViewItem;
     }
 

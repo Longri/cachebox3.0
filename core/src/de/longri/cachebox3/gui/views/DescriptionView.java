@@ -271,7 +271,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             view.display();
             view.setHtml(html);
 
-            if (lastCacheId == actCache.Id) {
+            if (lastCacheId == actCache.getId()) {
                 // restore last scroll position
                 Timer.schedule(new Timer.Task() {
                     @Override
@@ -307,7 +307,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     public void onHide() {
         super.onHide();
         if (EventHandler.getSelectedCache() != null) {
-            lastCacheId = EventHandler.getSelectedCache().Id;
+            lastCacheId = EventHandler.getSelectedCache().getId();
             lastX = view.getScrollPositionX();
             lastY = view.getScrollPositionY();
             view.close();
@@ -353,7 +353,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                         dao.UpdateDatabase(EventHandler.getSelectedCache());
 
                         // Update Query
-                        Database.Data.Query.GetCacheById(EventHandler.getSelectedCache().Id).setFavorite(EventHandler.getSelectedCache().isFavorite());
+                        Database.Data.Query.GetCacheById(EventHandler.getSelectedCache().getId()).setFavorite(EventHandler.getSelectedCache().isFavorite());
 
                         // Update View
                         //TODO update

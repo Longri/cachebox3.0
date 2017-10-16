@@ -148,7 +148,7 @@ public class GlobalLocationReceiver implements GPS_FallBackEvent {
                                                 continue;
                                             if (cache.ImTheOwner())
                                                 continue;
-                                            if (cache.Type == CacheTypes.Mystery)
+                                            if (cache.getType() == CacheTypes.Mystery)
                                                 if (!cache.CorrectedCoordiantesOrMysterySolved())
                                                     continue;
                                             if (cache.Distance(MathUtils.CalculationType.FAST, true) < nearestDistance) {

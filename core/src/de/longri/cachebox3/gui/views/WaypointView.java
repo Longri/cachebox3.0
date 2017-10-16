@@ -111,7 +111,7 @@ public class WaypointView extends AbstractView {
                     @Override
                     public int getCount() {
                         if (actCache == null) return 0;
-                        return actCache.waypoints.size + 1;
+                        return actCache.getWaypoints().size + 1;
                     }
 
                     @Override
@@ -119,7 +119,7 @@ public class WaypointView extends AbstractView {
                         if (index == 0) {
                             return CacheListItem.getListItem(index, actCache);
                         } else {
-                            final WayPointListItem item = WayPointListItem.getListItem(index, actCache.waypoints.get(index - 1));
+                            final WayPointListItem item = WayPointListItem.getListItem(index, actCache.getWaypoints().get(index - 1));
                             return item;
                         }
                     }
@@ -140,7 +140,7 @@ public class WaypointView extends AbstractView {
                         float heading = de.longri.cachebox3.events.EventHandler.getHeading();
 
                         // get coordinate from Cache or from Waypoint
-                        Coordinate targetCoord = idx == 0 ? actCache : actCache.waypoints.get(idx - 1);
+                        Coordinate targetCoord = idx == 0 ? actCache : actCache.getWaypoints().get(idx - 1);
 
                         //calculate distance and bearing
                         float result[] = new float[4];
@@ -193,7 +193,7 @@ public class WaypointView extends AbstractView {
                         if (listView.getSelectedItem() instanceof WayPointListItem) {
                             WayPointListItem selectedItem = (WayPointListItem) listView.getSelectedItem();
                             int index = selectedItem.getListIndex() - 1;
-                            Waypoint wp = actCache.waypoints.get(index);
+                            Waypoint wp = actCache.getWaypoints().get(index);
 
                             log.debug("Waypoint selection changed to: " + wp.toString());
                             //set selected Waypoint global
@@ -258,7 +258,7 @@ public class WaypointView extends AbstractView {
 
             int listIndex = ((ListViewItem) actor).getListIndex();
 
-            actWaypoint = actCache.waypoints.get(listIndex - 1);
+            actWaypoint = actCache.getWaypoints().get(listIndex - 1);
             if (WaypointView.this.listView != null)
                 WaypointView.this.listView.setSelection(listIndex);
             final Menu contextMenu = getContextMenu();
@@ -312,7 +312,7 @@ public class WaypointView extends AbstractView {
                             // Yes button clicked
                             final WaypointDAO dao = new WaypointDAO();
                             dao.delete(actWaypoint);
-                            actCache.waypoints.removeValue(actWaypoint, false);
+                            actCache.getWaypoints().removeValue(actWaypoint, false);
                             listView.setSelection(0);// select Cache
                         }
                         return true;
@@ -338,7 +338,7 @@ public class WaypointView extends AbstractView {
         if ((coord == null) || (!coord.isValid()))
             coord = EventHandler.getSelectedCache();
         Waypoint newWP = new Waypoint(newGcCode, CacheTypes.ReferencePoint, ""
-                , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().Id, "", newGcCode);
+                , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
 
 
         showEditWpDialog(newWP);
@@ -349,11 +349,11 @@ public class WaypointView extends AbstractView {
             @Override
             public void callBack(Waypoint value) {
                 if (value != null) {
-                    if (actCache.waypoints.contains(value, false)) {
-                        int index = actCache.waypoints.indexOf(value, false);
-                        actCache.waypoints.set(index, value);
+                    if (actCache.getWaypoints().contains(value, false)) {
+                        int index = actCache.getWaypoints().indexOf(value, false);
+                        actCache.getWaypoints().set(index, value);
                     } else {
-                        actCache.waypoints.add(value);
+                        actCache.getWaypoints().add(value);
                     }
 
                     addNewListView();

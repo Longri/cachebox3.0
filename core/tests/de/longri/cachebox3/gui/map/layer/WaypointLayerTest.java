@@ -261,14 +261,14 @@ class WaypointLayerTest {
         Cache testCache3 = new Cache(0.3, 0, "Cache3", CacheTypes.Traditional, "GC3");
 
 
-        Waypoint wp1 = new Waypoint("GCwp1", CacheTypes.Trailhead, "GCwp1", 0, 0.1, testCache1.Id, "", "wp1");
-        testCache1.waypoints.add(wp1);
+        Waypoint wp1 = new Waypoint("GCwp1", CacheTypes.Trailhead, "GCwp1", 0, 0.1, testCache1.getId(), "", "wp1");
+        testCache1.getWaypoints().add(wp1);
 
-        Waypoint wp2 = new Waypoint("GCwp2", CacheTypes.ParkingArea, "GCwp2", 0, 0.2, testCache2.Id, "", "wp2");
-        testCache2.waypoints.add(wp2);
+        Waypoint wp2 = new Waypoint("GCwp2", CacheTypes.ParkingArea, "GCwp2", 0, 0.2, testCache2.getId(), "", "wp2");
+        testCache2.getWaypoints().add(wp2);
 
-        Waypoint wp3 = new Waypoint("GCwp3", CacheTypes.MultiQuestion, "GCwp3", 0, 0.2, testCache2.Id, "", "wp3");
-        testCache2.waypoints.add(wp3);
+        Waypoint wp3 = new Waypoint("GCwp3", CacheTypes.MultiQuestion, "GCwp3", 0, 0.2, testCache2.getId(), "", "wp3");
+        testCache2.getWaypoints().add(wp3);
 
 
         Database.Data.Query.add(testCache1);

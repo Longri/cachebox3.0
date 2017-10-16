@@ -274,9 +274,9 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
             slider.setCacheName(EMPTY);
         } else {
             if (lastCache == null || !lastCache.equals(cache)) {
-                CharSequence text = cache.Type.toShortString()
+                CharSequence text = cache.getType().toShortString()
                         + terrDiffToShortString(cache.getDifficulty()) + "/"
-                        + terrDiffToShortString(cache.getTerrain()) + cache.Size.toShortString()
+                        + terrDiffToShortString(cache.getTerrain()) + cache.getSize().toShortString()
                         + " " + cache.getName();
                 slider.setCacheName(text);
                 lastCache = cache;

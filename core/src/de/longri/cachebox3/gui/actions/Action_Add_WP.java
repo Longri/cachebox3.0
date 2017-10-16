@@ -74,7 +74,7 @@ public class Action_Add_WP extends AbstractAction {
         }
 
         Waypoint newWP = new Waypoint(newGcCode, CacheTypes.ReferencePoint, ""
-                , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().Id, "", newGcCode);
+                , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
 
 
         EditWaypoint editWaypoint = new EditWaypoint(newWP, false, new GenericCallBack<Waypoint>() {
@@ -91,7 +91,7 @@ public class Action_Add_WP extends AbstractAction {
                     waypointDAO.WriteToDatabase(value);
 
                     // add WP to Cache
-                    EventHandler.getSelectedCache().waypoints.add(value);
+                    EventHandler.getSelectedCache().getWaypoints().add(value);
                 }
             }
         });

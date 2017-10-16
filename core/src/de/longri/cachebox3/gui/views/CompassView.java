@@ -135,7 +135,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
             if (showIcon) {
                 icon = new Image();
-                icon.setDrawable(actWaypoint == null ? actCache.Type.getDrawable() : actWaypoint.Type.getDrawable());
+                icon.setDrawable(actWaypoint == null ? actCache.getType().getDrawable() : actWaypoint.Type.getDrawable());
             }
 
             if (showName) {
@@ -185,9 +185,9 @@ public class CompassView extends AbstractView implements PositionChangedListener
             lineTable.add(dLabel);
             Stars difficultyStars = new Stars((int) (actCache.getDifficulty() * 2));
             lineTable.add(difficultyStars);
-            VisLabel sLabel = new VisLabel(actCache.Size.toShortString(), infoStyle);
+            VisLabel sLabel = new VisLabel(actCache.getSize().toShortString(), infoStyle);
             lineTable.add(sLabel).padLeft(CB.scaledSizes.MARGIN);
-            CacheSizeWidget sizeWidget = new CacheSizeWidget(actCache.Size);
+            CacheSizeWidget sizeWidget = new CacheSizeWidget(actCache.getSize());
             lineTable.add(sizeWidget).padLeft(CB.scaledSizes.MARGIN_HALF);
             VisLabel tLabel = new VisLabel("T", infoStyle);
             lineTable.left();
@@ -196,7 +196,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
             lineTable.add(terrainStars);
             VisLabel vLabel = new VisLabel("GcV", infoStyle);
             lineTable.add(vLabel).padLeft(CB.scaledSizes.MARGIN);
-            Stars vStars = new Stars((int) Math.min(actCache.Rating * 2, 5 * 2));
+            Stars vStars = new Stars((int) Math.min(actCache.getRating() * 2, 5 * 2));
             lineTable.add(vStars);
             topTable.add(lineTable).left();
             topTable.row();

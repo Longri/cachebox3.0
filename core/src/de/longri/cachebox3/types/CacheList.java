@@ -19,8 +19,6 @@ package de.longri.cachebox3.types;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Predicate;
-import com.badlogic.gdx.utils.Select;
-import com.badlogic.gdx.utils.Sort;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.MathUtils;
@@ -50,7 +48,7 @@ public class CacheList extends MoveableList<Cache> {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
             for (int i = 0, n = this.size; i < n; i++) {
                 Cache cache = this.get(i);
-                if (cache.Id == cacheId)
+                if (cache.getId() == cacheId)
                     return cache;
             }
             return null;
@@ -124,7 +122,7 @@ public class CacheList extends MoveableList<Cache> {
                             // eigentlich wenn has_fieldnote(found,DNF,Maint,SBA, aber note vielleicht nicht)
                             {
                                 if (!nextCache.ImTheOwner()) {
-                                    if ((nextCache.Type == CacheTypes.Event) || (nextCache.Type == CacheTypes.MegaEvent) || (nextCache.Type == CacheTypes.CITO) || (nextCache.Type == CacheTypes.Giga)) {
+                                    if ((nextCache.getType() == CacheTypes.Event) || (nextCache.getType() == CacheTypes.MegaEvent) || (nextCache.getType() == CacheTypes.CITO) || (nextCache.getType() == CacheTypes.Giga)) {
                                         Calendar dateHidden = GregorianCalendar.getInstance();
                                         Calendar today = GregorianCalendar.getInstance();
                                         dateHidden.setTime(nextCache.getDateHidden());
@@ -133,7 +131,7 @@ public class CacheList extends MoveableList<Cache> {
                                             break;
                                         }
                                     } else {
-                                        if (nextCache.Type != CacheTypes.Mystery) {
+                                        if (nextCache.getType() != CacheTypes.Mystery) {
                                             break;
                                         } else {
                                             if (nextCache.CorrectedCoordiantesOrMysterySolved()) {
@@ -215,7 +213,7 @@ public class CacheList extends MoveableList<Cache> {
             for (int i = 0, n = this.size; i < n; i++) {
 
                 Cache cache = get(i);
-                if (cache.Id == ca.Id) {
+                if (cache.getId() == ca.getId()) {
                     index = i;
                 }
             }

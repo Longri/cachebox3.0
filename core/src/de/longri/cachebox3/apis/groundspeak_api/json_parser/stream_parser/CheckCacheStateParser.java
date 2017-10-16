@@ -106,7 +106,7 @@ public class CheckCacheStateParser {
                     Cache cache = getCache(caches, cacheCode);
                     cache.setArchived(archived);
                     cache.setAvailable(available);
-                    cache.NumTravelbugs = trackableCount;
+                    cache.setNumTravelbugs(trackableCount);
                     if (progressIncrement != null) progressIncrement.increment();
                     newCache = false;
                 }

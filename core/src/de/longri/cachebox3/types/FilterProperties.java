@@ -547,7 +547,7 @@ public class FilterProperties {
             return false;
         if (chkFilterBoolean(this.Archived, cache.isArchived()))
             return false;
-        if (chkFilterBoolean(this.ContainsTravelbugs, cache.NumTravelbugs > 0))
+        if (chkFilterBoolean(this.ContainsTravelbugs, cache.getNumTravelbugs() > 0))
             return false;
         if (chkFilterBoolean(this.Favorites, cache.isFavorite()))
             return false;
@@ -559,7 +559,7 @@ public class FilterProperties {
             return false;
         // TODO implement => if (chkFilterBoolean(this.WithManualWaypoint, cache.)) return false;
         // TODO ? the other restrictions?
-        if (!this.mCacheTypes[cache.Type.ordinal()])
+        if (!this.mCacheTypes[cache.getType().ordinal()])
             return false;
 
         return true;

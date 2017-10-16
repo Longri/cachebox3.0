@@ -197,8 +197,8 @@ public class WaypointDAO {
     // Damit kann bei der Definition eines neuen Start-Waypoints vorher der alte entfernt werden damit sichergestellt ist dass ein Cache nur
     // 1 Start-Waypoint hat
     public void ResetStartWaypoint(Cache cache, Waypoint except) {
-        for (int i = 0, n = cache.waypoints.size; i < n; i++) {
-            Waypoint wp = cache.waypoints.get(i);
+        for (int i = 0, n = cache.getWaypoints().size; i < n; i++) {
+            Waypoint wp = cache.getWaypoints().get(i);
             if (except == wp)
                 continue;
             if (wp.IsStart) {

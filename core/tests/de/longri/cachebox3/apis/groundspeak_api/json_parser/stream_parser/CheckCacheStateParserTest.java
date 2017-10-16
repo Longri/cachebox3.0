@@ -204,9 +204,9 @@ class CheckCacheStateParserTest {
             }
 
             if (trackableCount.containsKey(gcCode)) {
-                assertThat("Cache trackable count must be " + trackableCount.get(gcCode) + "on Cache:" + gcCode, cache.NumTravelbugs == trackableCount.get(gcCode));
+                assertThat("Cache trackable count must be " + trackableCount.get(gcCode) + "on Cache:" + gcCode, cache.getNumTravelbugs() == trackableCount.get(gcCode));
             } else {
-                assertThat("Cache trackable count must be 0 on Cache:" + gcCode, cache.NumTravelbugs == 0);
+                assertThat("Cache trackable count must be 0 on Cache:" + gcCode, cache.getNumTravelbugs() == 0);
             }
         }
 
@@ -397,9 +397,9 @@ class CheckCacheStateParserTest {
             }
 
             if (trackableCount.containsKey(gcCode)) {
-                assertThat("Cache trackable count must be " + trackableCount.get(gcCode) + "on Cache:" + gcCode, cache.NumTravelbugs == trackableCount.get(gcCode));
+                assertThat("Cache trackable count must be " + trackableCount.get(gcCode) + "on Cache:" + gcCode, cache.getNumTravelbugs() == trackableCount.get(gcCode));
             } else {
-                assertThat("Cache trackable count must be 0 on Cache:" + gcCode, cache.NumTravelbugs == 0);
+                assertThat("Cache trackable count must be 0 on Cache:" + gcCode, cache.getNumTravelbugs() == 0);
             }
         }
     }

@@ -130,9 +130,9 @@ class SearchGCTest {
                 assertEquals(false, cache.isArchived());
                 assertEquals(true, cache.isAvailable());
                 assertEquals("GC1T33T", cache.getGcCode());
-                assertEquals(0, cache.waypoints.size);
-                assertEquals(CacheTypes.Traditional, cache.Type);
-                assertEquals(CacheSizes.other, cache.Size);
+                assertEquals(0, cache.getWaypoints().size);
+                assertEquals(CacheTypes.Traditional, cache.getType());
+                assertEquals(CacheSizes.other, cache.getSize());
                 assertEquals("Germany", cache.getCountry());
                 assertEquals(new Date(1243753200000L), cache.getDateHidden());
                 assertEquals(3f, cache.getDifficulty());
@@ -244,9 +244,9 @@ class SearchGCTest {
                 assertEquals(false, cache.isArchived());
                 assertEquals(true, cache.isAvailable());
                 assertEquals("GC1T33T", cache.getGcCode());
-                assertEquals(0, cache.waypoints.size);
-                assertEquals(CacheTypes.Traditional, cache.Type);
-                assertEquals(CacheSizes.other, cache.Size);
+                assertEquals(0, cache.getWaypoints().size);
+                assertEquals(CacheTypes.Traditional, cache.getType());
+                assertEquals(CacheSizes.other, cache.getSize());
                 assertEquals("Germany", cache.getCountry());
                 assertEquals(new Date(1243753200000L), cache.getDateHidden());
                 assertEquals(3f, cache.getDifficulty());

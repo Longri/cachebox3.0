@@ -307,7 +307,7 @@ public class CacheInfoList {
      * @param cache
      */
     public static void putNewInfo(Cache cache) {
-        CacheInfo info = new CacheInfo(cache.Id, cache.getGPXFilename_ID());
+        CacheInfo info = new CacheInfo(cache.getId(), cache.getGPXFilename_ID());
         String stringForListingCheckSum = CacheDAO.getDescription(cache);
         String recentOwnerLogString = "";
 

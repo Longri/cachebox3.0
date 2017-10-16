@@ -18,7 +18,6 @@ package de.longri.cachebox3.apis.groundspeak_api.search;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonParser;
 import com.badlogic.gdx.utils.JsonStreamParser;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
@@ -269,7 +268,7 @@ public abstract class Search extends PostRequest {
                         if (actLog == null) {
                             // System.out.println("NEW_LOG_ENTRY");
                             actLog = new LogEntry();
-                            actLog.CacheId = actCache.Id;
+                            actLog.CacheId = actCache.getId();
                             name = NEW_LOG;
                         }
                         break;
@@ -337,7 +336,7 @@ public abstract class Search extends PostRequest {
                     case WAY_POINT_ARRAY:
                         if (NEW_WAY_POINT.equals(name)) {
                             // System.out.println("add Waypoiint ");
-                            actWayPoint.CacheId = actCache.Id;
+                            actWayPoint.CacheId = actCache.getId();
                             if (isUserWaypoint) {
                                 actWayPoint.IsUserWaypoint = true;
                                 actWayPoint.setTitle("Corrected Coordinates (API)");
@@ -347,7 +346,7 @@ public abstract class Search extends PostRequest {
                             }
 
                             //add final Waypointg instance
-                            actCache.waypoints.add(new Waypoint(actWpLat, actWpLon, actWayPoint));
+                            actCache.getWaypoints().add(new Waypoint(actWpLat, actWpLon, actWayPoint));
                             waypointCount++;
                             actWayPoint = null;
                         }
@@ -366,7 +365,7 @@ public abstract class Search extends PostRequest {
                             actCache.setLongDescription(value);
                         } else if (CODE.equals(name)) {
                             actCache.setGcCode(value);
-                            actCache.Id = Cache.GenerateCacheId(actCache.getGcCode());
+                            actCache.setId(Cache.GenerateCacheId(actCache.getGcCode()));
                         } else if (COUNTRY.equals(name)) {
                             actCache.setCountry(value);
                         } else if (DATE_HIDDEN.equals(name)) {
@@ -451,7 +450,7 @@ public abstract class Search extends PostRequest {
                 switch (SWITCH) {
                     case CACHE_ARRAY:
                         if (CACHE_TYPE_ID.equals(name)) {
-                            actCache.Type = getCacheType((int) value);
+                            actCache.setType(getCacheType((int) value));
                         } else if (DIFFICULTY.equals(name)) {
                             actCache.setDifficulty((float) value);
                         } else if (TERRAIN.equals(name)) {
@@ -681,21 +680,21 @@ public abstract class Search extends PostRequest {
         asyncExecutor.submit(new AsyncTask<Void>() {
             @Override
             public Void call() throws Exception {
-                Cache aktCache = Database.Data.Query.GetCacheById(cache.Id);
+                Cache aktCache = Database.Data.Query.GetCacheById(cache.getId());
 
                 if (aktCache != null && aktCache.isLive())
                     aktCache = null;
 
                 if (aktCache == null) {
-                    aktCache = cacheDAO.getFromDbByCacheId(cache.Id);
+                    aktCache = cacheDAO.getFromDbByCacheId(cache.getId());
                 }
                 // Read Detail Info of Cache if not available
-                if ((aktCache != null) && (aktCache.detail == null)) {
+                if ((aktCache != null) && (aktCache.getDetail() == null)) {
                     aktCache.loadDetail();
                 }
                 // If Cache into DB, extract saved rating
                 if (aktCache != null) {
-                    cache.Rating = aktCache.Rating;
+                    cache.setRating(aktCache.getRating());
                 }
 
                 // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
@@ -705,7 +704,7 @@ public abstract class Search extends PostRequest {
 
                 // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
                 if (cache.getTmpNote() != null) {
-                    String oldNote = Database.getNote(cache.Id);
+                    String oldNote = Database.getNote(cache.getId());
                     String newNote = "";
                     if (oldNote == null) {
                         oldNote = "";
@@ -731,27 +730,27 @@ public abstract class Search extends PostRequest {
                         newNote += System.getProperty("line.separator") + end;
                     }
                     cache.setTmpNote(newNote);
-                    Database.setNote(cache.Id, cache.getTmpNote());
+                    Database.setNote(cache.getId(), cache.getTmpNote());
                 }
 
                 // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
                 cache.setLongDescription("");
 
 
-                for (int i = 0, n = cache.waypoints.size; i < n; i++) {
+                for (int i = 0, n = cache.getWaypoints().size; i < n; i++) {
                     // must Cast to Full Waypoint. If Waypoint, is wrong created!
-                    Waypoint waypoint = cache.waypoints.get(i);
+                    Waypoint waypoint = cache.getWaypoints().get(i);
 
                     //set CacheId
-                    waypoint.CacheId = cache.Id;
+                    waypoint.CacheId = cache.getId();
 
                     boolean update = true;
 
                     // don't refresh wp if aktCache.wp is user changed
                     if (aktCache != null) {
-                        if (aktCache.waypoints != null) {
-                            for (int j = 0, m = aktCache.waypoints.size; j < m; j++) {
-                                Waypoint wp = aktCache.waypoints.get(j);
+                        if (aktCache.getWaypoints() != null) {
+                            for (int j = 0, m = aktCache.getWaypoints().size; j < m; j++) {
+                                Waypoint wp = aktCache.getWaypoints().get(j);
                                 if (wp.getGcCode().equalsIgnoreCase(waypoint.getGcCode())) {
                                     if (wp.IsUserWaypoint)
                                         update = false;
@@ -773,7 +772,7 @@ public abstract class Search extends PostRequest {
                 if (aktCache == null) {
                     Database.Data.Query.add(cache);
                 } else {
-                    Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.Id), false);
+                    Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.getId()), false);
                     Database.Data.Query.add(cache);
                 }
                 return null;
