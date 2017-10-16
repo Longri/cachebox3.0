@@ -90,7 +90,7 @@ public class DLong implements Serializable {
 		return (bLow || bHigh) ? true : false;
 	}
 
-	public String ToString() {
+	public String toString() {
 		StringBuilder Sb = new StringBuilder();
 
 		Sb.append("low =" + String.valueOf(this.low));
