@@ -20,7 +20,7 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.CacheWithWP;
 import de.longri.cachebox3.utils.MathUtils;
@@ -135,23 +135,23 @@ public class GlobalLocationReceiver implements GPS_FallBackEvent {
                                         float nearestDistance = CB.NearestCache().Distance(MathUtils.CalculationType.FAST, true);
 
                                         for (int i = 0, n = Database.Data.Query.size; i < n; i++) {
-                                            Cache cache = Database.Data.Query.get(i);
+                                            AbstractCache abstractCache = Database.Data.Query.get(i);
                                             z++;
                                             if (z >= 50) {
                                                 return;
                                             }
-                                            if (cache.isArchived())
+                                            if (abstractCache.isArchived())
                                                 continue;
-                                            if (!cache.isAvailable())
+                                            if (!abstractCache.isAvailable())
                                                 continue;
-                                            if (cache.isFound())
+                                            if (abstractCache.isFound())
                                                 continue;
-                                            if (cache.ImTheOwner())
+                                            if (abstractCache.ImTheOwner())
                                                 continue;
-                                            if (cache.getType() == CacheTypes.Mystery)
-                                                if (!cache.CorrectedCoordiantesOrMysterySolved())
+                                            if (abstractCache.getType() == CacheTypes.Mystery)
+                                                if (!abstractCache.CorrectedCoordiantesOrMysterySolved())
                                                     continue;
-                                            if (cache.Distance(MathUtils.CalculationType.FAST, true) < nearestDistance) {
+                                            if (abstractCache.Distance(MathUtils.CalculationType.FAST, true) < nearestDistance) {
                                                 resort = true;
                                                 break;
                                             }

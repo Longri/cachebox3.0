@@ -23,13 +23,13 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 
 /**
@@ -122,7 +122,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         add(this);
     }
 
-    Cache selectedCache;
+    AbstractCache selectedCache;
     Waypoint selectedWayPoint;
     Coordinate selectedCoordinate;
     CoordinateGPS myPosition;
@@ -154,7 +154,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             log.debug("Set Global selected Waypoint: {}", event.wayPoint);
             selectedWayPoint = event.wayPoint;
             if (selectedWayPoint != null) {
-                Cache newCache = Database.Data.Query.GetCacheById(selectedWayPoint.CacheId);
+                AbstractCache newCache = Database.Data.Query.GetCacheById(selectedWayPoint.CacheId);
                 if (!newCache.equals(selectedCache)) {
                     //unload details from last selected Cache
                     if (selectedCache != null) selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
@@ -211,12 +211,12 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         }
     }
 
-    public static Cache getSelectedCache() {
+    public static AbstractCache getSelectedCache() {
         return INSTANCE.selectedCache;
     }
 
-    public static boolean isSelectedCache(Cache cache) {
-        return (INSTANCE.selectedCache != null && INSTANCE.selectedCache.equals(cache));
+    public static boolean isSelectedCache(AbstractCache abstractCache) {
+        return (INSTANCE.selectedCache != null && INSTANCE.selectedCache.equals(abstractCache));
     }
 
     public static Waypoint getSelectedWaypoint() {
@@ -245,7 +245,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         INSTANCE.heading = event.getOrientation();
     }
 
-    public static void setSelectedWaypoint(Cache cache, Waypoint wp) {
+    public static void setSelectedWaypoint(AbstractCache cache, Waypoint wp) {
         if (cache == null || !cache.equals(getSelectedCache())) fire(new SelectedCacheChangedEvent(cache));
         if (wp == null || !wp.equals(getSelectedWaypoint())) fire(new SelectedWayPointChangedEvent(wp));
     }

@@ -39,6 +39,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.utils.NetUtils;
@@ -170,10 +171,10 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         EventHandler.add(this);
     }
 
-    private String getAttributesHtml(Cache cache) {
+    private String getAttributesHtml(AbstractCache abstractCache) {
         StringBuilder sb = new StringBuilder();
         try {
-            Iterator<Attributes> attrs = cache.getAttributes().iterator();
+            Iterator<Attributes> attrs = abstractCache.getAttributes().iterator();
 
             if (attrs == null || !attrs.hasNext())
                 return "";
@@ -238,7 +239,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
         CB.wait(WAIT);
 
-        Cache actCache = EventHandler.getSelectedCache();
+        AbstractCache actCache = EventHandler.getSelectedCache();
         if (actCache != null) {
             nonLocalImages.clear();
             nonLocalImagesUrl.clear();

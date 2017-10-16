@@ -18,6 +18,7 @@ package de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.utils.ICancel;
@@ -40,7 +41,7 @@ class CheckCacheStateParserTest {
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/CheckCacheStateResult.json");
         CheckCacheStateParser parser = new CheckCacheStateParser();
 
-        Array<Cache> caches = new Array<>();
+        Array<AbstractCache> caches = new Array<>();
 
 
         caches.add(new Cache(0, 0, "dummy", CacheTypes.Traditional, "GC12DR6"));
@@ -188,25 +189,25 @@ class CheckCacheStateParserTest {
         assertThat("Increment must be 101, but was " + increment.get(), increment.get() == 101);
 
         for (int i = 0, n = caches.size; i < n; i++) {
-            Cache cache = caches.get(i);
-            String gcCode = cache.getGcCode();
+            AbstractCache abstractCache = caches.get(i);
+            String gcCode = abstractCache.getGcCode();
 
             if (archieved.contains(gcCode, false)) {
-                assertThat("Cache must archived:" + gcCode, cache.isArchived());
+                assertThat("Cache must archived:" + gcCode, abstractCache.isArchived());
             } else {
-                assertThat("Cache must not archived:" + gcCode, !cache.isArchived());
+                assertThat("Cache must not archived:" + gcCode, !abstractCache.isArchived());
             }
 
             if (notAvaileble.contains(gcCode, false)) {
-                assertThat("Cache must not available:" + gcCode, !cache.isAvailable());
+                assertThat("Cache must not available:" + gcCode, !abstractCache.isAvailable());
             } else {
-                assertThat("Cache must available:" + gcCode, cache.isAvailable());
+                assertThat("Cache must available:" + gcCode, abstractCache.isAvailable());
             }
 
             if (trackableCount.containsKey(gcCode)) {
-                assertThat("Cache trackable count must be " + trackableCount.get(gcCode) + "on Cache:" + gcCode, cache.getNumTravelbugs() == trackableCount.get(gcCode));
+                assertThat("Cache trackable count must be " + trackableCount.get(gcCode) + "on Cache:" + gcCode, abstractCache.getNumTravelbugs() == trackableCount.get(gcCode));
             } else {
-                assertThat("Cache trackable count must be 0 on Cache:" + gcCode, cache.getNumTravelbugs() == 0);
+                assertThat("Cache trackable count must be 0 on Cache:" + gcCode, abstractCache.getNumTravelbugs() == 0);
             }
         }
 
@@ -218,7 +219,7 @@ class CheckCacheStateParserTest {
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/CheckCacheStateResult.json");
         final CheckCacheStateParser parser = new CheckCacheStateParser();
 
-        Array<Cache> caches = new Array<>();
+        Array<AbstractCache> caches = new Array<>();
 
 
         caches.add(new Cache(0, 0, "dummy", CacheTypes.Traditional, "GC12DR6"));
@@ -381,25 +382,25 @@ class CheckCacheStateParserTest {
         assertThat("Increment must smaller then 101, but was " + increment.get(), increment.get() < 101);
 
         for (int i = 0, n = increment.get(); i < n; i++) {
-            Cache cache = caches.get(i);
-            String gcCode = cache.getGcCode();
+            AbstractCache abstractCache = caches.get(i);
+            String gcCode = abstractCache.getGcCode();
 
             if (archieved.contains(gcCode, false)) {
-                assertThat("Cache must archived:" + gcCode, cache.isArchived());
+                assertThat("Cache must archived:" + gcCode, abstractCache.isArchived());
             } else {
-                assertThat("Cache must not archived:" + gcCode, !cache.isArchived());
+                assertThat("Cache must not archived:" + gcCode, !abstractCache.isArchived());
             }
 
             if (notAvaileble.contains(gcCode, false)) {
-                assertThat("Cache must not available:" + gcCode, !cache.isAvailable());
+                assertThat("Cache must not available:" + gcCode, !abstractCache.isAvailable());
             } else {
-                assertThat("Cache must available:" + gcCode, cache.isAvailable());
+                assertThat("Cache must available:" + gcCode, abstractCache.isAvailable());
             }
 
             if (trackableCount.containsKey(gcCode)) {
-                assertThat("Cache trackable count must be " + trackableCount.get(gcCode) + "on Cache:" + gcCode, cache.getNumTravelbugs() == trackableCount.get(gcCode));
+                assertThat("Cache trackable count must be " + trackableCount.get(gcCode) + "on Cache:" + gcCode, abstractCache.getNumTravelbugs() == trackableCount.get(gcCode));
             } else {
-                assertThat("Cache trackable count must be 0 on Cache:" + gcCode, cache.getNumTravelbugs() == 0);
+                assertThat("Cache trackable count must be 0 on Cache:" + gcCode, abstractCache.getNumTravelbugs() == 0);
             }
         }
     }

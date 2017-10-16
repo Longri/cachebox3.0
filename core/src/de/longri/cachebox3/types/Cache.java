@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-public class Cache extends Coordinate implements Comparable<Cache>, Serializable {
+public class Cache extends AbstractCache implements Comparable<AbstractCache>, Serializable {
     private static final long serialVersionUID = 1015307624242318838L;
     // ########################################################
     // Boolean Handling
@@ -57,23 +57,6 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
     private static final Charset UTF_8 = Charset.forName("UTF-8");
     public static final String EMPTY_STRING = "";
     private static String gcLogin = null;
-
-    public static long GenerateCacheId(String GcCode) {
-        long result = 0;
-        char[] dummy = GcCode.toCharArray();
-        byte[] byteDummy = new byte[8];
-        for (int i = 0; i < 8; i++) {
-            if (i < GcCode.length())
-                byteDummy[i] = (byte) dummy[i];
-            else
-                byteDummy[i] = 0;
-        }
-        for (int i = 7; i >= 0; i--) {
-            result *= 256;
-            result += byteDummy[i];
-        }
-        return result;
-    }
 
     /**
      * Waypoint Code des Caches
@@ -271,6 +254,12 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
+    public void deleteDetail(Boolean value) {
+        //TODO
+    }
+
+    @Override
     public boolean ImTheOwner() {
         String userName = Config.GcLogin.getValue().toLowerCase(Locale.getDefault());
         if (myCache == 0)
@@ -297,9 +286,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
      * Getter/Setter
 	 */
 
-    /**
-     * -- korrigierte Koordinaten (kommt nur aus GSAK? bzw CacheWolf-Import) -- oder Mystery mit gueltigem Final
-     */
+    @Override
     public boolean CorrectedCoordiantesOrMysterySolved() {
         if (this.hasCorrectedCoordinates())
             return true;
@@ -324,16 +311,12 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         return x;
     }
 
-    /**
-     * true, if a this mystery cache has a final waypoint
-     */
+    @Override
     public boolean HasFinalWaypoint() {
         return GetFinalWaypoint() != null;
     }
 
-    /**
-     * search the final waypoint for a mystery cache
-     */
+    @Override
     public Waypoint GetFinalWaypoint() {
         if (this.getType() != CacheTypes.Mystery)
             return null;
@@ -354,20 +337,12 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         return null;
     }
 
-    /**
-     * true if this is a mystery of multi with a Stage Waypoint defined as StartPoint
-     *
-     * @return
-     */
+    @Override
     public boolean HasStartWaypoint() {
         return GetStartWaypoint() != null;
     }
 
-    /**
-     * search the start Waypoint for a multi or mystery
-     *
-     * @return
-     */
+    @Override
     public Waypoint GetStartWaypoint() {
         if ((this.getType() != CacheTypes.Multi) && (this.getType() != CacheTypes.Mystery))
             return null;
@@ -409,11 +384,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
 //		}
 //	}
 
-    /**
-     * Returns true has the Cache Spoilers else returns false
-     *
-     * @return Boolean
-     */
+    @Override
     public boolean hasSpoiler() {
         if (getDetail() != null) {
             boolean hasSpoiler = getDetail().hasSpoiler(this);
@@ -424,15 +395,12 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
     }
 
 
-    /**
-     * Gibt die Entfernung zur uebergebenen User Position als Float zurueck.
-     *
-     * @return Entfernung zur uebergebenen User Position als Float
-     */
+    @Override
     public float Distance(MathUtils.CalculationType type, boolean useFinal) {
         return Distance(type, useFinal, EventHandler.getMyPosition());
     }
 
+    @Override
     float Distance(MathUtils.CalculationType type, boolean useFinal, Coordinate fromPos) {
         if (isDisposed)
             return 0;
@@ -477,7 +445,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
     }
 
     @Override
-    public int compareTo(Cache c2) {
+    public int compareTo(AbstractCache c2) {
         float dist1 = this.getCachedDistance();
         float dist2 = c2.getCachedDistance();
         return (dist1 < dist2 ? -1 : (dist1 == dist2 ? 0 : 1));
@@ -491,7 +459,8 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         return isSearchVisible;
     }
 
-    private Waypoint findWaypointByGc(String gc) {
+    @Override
+    protected Waypoint findWaypointByGc(String gc) {
         if (isDisposed)
             return null;
         for (int i = 0, n = getWaypoints().size; i < n; i++) {
@@ -508,7 +477,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         return "Cache:" + getGcCode() + " " + super.toString();
     }
 
-    void dispose() {
+    public void dispose() {
         isDisposed = true;
 
         if (getDetail() != null)
@@ -542,12 +511,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         return solver1Changed;
     }
 
+    @Override
     public String getGcCode() {
         if (GcCode == null)
             return EMPTY_STRING;
         return new String(GcCode, US_ASCII);
     }
 
+    @Override
     public void setGcCode(String gcCode) {
         if (gcCode == null) {
             GcCode = null;
@@ -556,12 +527,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         GcCode = gcCode.getBytes(US_ASCII);
     }
 
+    @Override
     public String getName() {
         if (Name == null)
             return EMPTY_STRING;
         return new String(Name, UTF_8);
     }
 
+    @Override
     public void setName(String name) {
         if (name == null) {
             Name = null;
@@ -570,12 +543,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         Name = name.getBytes(UTF_8);
     }
 
+    @Override
     public String getOwner() {
         if (Owner == null)
             return EMPTY_STRING;
         return new String(Owner, UTF_8);
     }
 
+    @Override
     public void setOwner(String owner) {
         if (owner == null) {
             Owner = null;
@@ -584,12 +559,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         Owner = owner.getBytes(UTF_8);
     }
 
+    @Override
     public String getGcId() {
         if (GcId == null)
             return EMPTY_STRING;
         return new String(GcId, UTF_8);
     }
 
+    @Override
     public void setGcId(String gcId) {
 
         if (gcId == null) {
@@ -599,6 +576,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         GcId = gcId.trim().getBytes(UTF_8);
     }
 
+    @Override
     public String getHint() {
         if (getDetail() != null) {
             return getDetail().getHint();
@@ -607,12 +585,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setHint(String hint) {
         if (getDetail() != null) {
             getDetail().setHint(hint);
         }
     }
 
+    @Override
     public long getGPXFilename_ID() {
         if (getDetail() != null) {
             return getDetail().GPXFilename_ID;
@@ -620,6 +600,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         return 0;
     }
 
+    @Override
     public void setGPXFilename_ID(long gpxFilenameId) {
         if (getDetail() != null) {
             getDetail().GPXFilename_ID = gpxFilenameId;
@@ -627,6 +608,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
 
     }
 
+    @Override
     public boolean hasHint() {
         if (getDetail() != null) {
             return getDetail().getHint().length() > 0;
@@ -653,51 +635,63 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
 
     // Getter and Setter over Mask
 
+    @Override
     public boolean hasCorrectedCoordinates() {
         return this.getMaskValue(MASK_CORECTED_COORDS);
     }
 
+    @Override
     public void setCorrectedCoordinates(boolean correctedCoordinates) {
         this.setMaskValue(MASK_CORECTED_COORDS, correctedCoordinates);
     }
 
+    @Override
     public boolean isArchived() {
         return this.getMaskValue(MASK_ARCHIVED);
     }
 
+    @Override
     public void setArchived(boolean archived) {
         this.setMaskValue(MASK_ARCHIVED, archived);
     }
 
+    @Override
     public boolean isAvailable() {
         return this.getMaskValue(MASK_AVAILABLE);
     }
 
+    @Override
     public void setAvailable(boolean available) {
         this.setMaskValue(MASK_AVAILABLE, available);
     }
 
+    @Override
     public boolean isFavorite() {
         return this.getMaskValue(MASK_FAVORITE);
     }
 
+    @Override
     public void setFavorite(boolean favorite) {
         this.setMaskValue(MASK_FAVORITE, favorite);
     }
 
+    @Override
     public float getDifficulty() {
         return getFloatX_5FromByte((byte) (DifficultyTerrain & 15));
     }
 
+    @Override
     public void setDifficulty(float difficulty) {
         DifficultyTerrain = (byte) (DifficultyTerrain & (byte) 240);// clear Bits
         DifficultyTerrain = (byte) (DifficultyTerrain | getDT_HalfByte(difficulty));
     }
 
+    @Override
     public float getTerrain() {
         return getFloatX_5FromByte((byte) (DifficultyTerrain >>> 4));
     }
 
+    @Override
     public void setTerrain(float terrain) {
         DifficultyTerrain = (byte) (DifficultyTerrain & (byte) 15);// clear Bits
         DifficultyTerrain = (byte) (DifficultyTerrain | getDT_HalfByte(terrain) << 4);
@@ -745,38 +739,47 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         return 5f;
     }
 
+    @Override
     public boolean isFound() {
         return this.getMaskValue(MASK_FOUND);
     }
 
+    @Override
     public void setFound(boolean found) {
         this.setMaskValue(MASK_FOUND, found);
     }
 
+    @Override
     public boolean isLive() {
         return this.getMaskValue(MASK_IS_LIVE);
     }
 
+    @Override
     public void setLive(boolean isLive) {
         this.setMaskValue(MASK_IS_LIVE, isLive);
     }
 
+    @Override
     public boolean isHasUserData() {
         return this.getMaskValue(MASK_HAS_USER_DATA);
     }
 
+    @Override
     public void setHasUserData(boolean hasUserData) {
         this.setMaskValue(MASK_HAS_USER_DATA, hasUserData);
     }
 
+    @Override
     public boolean isListingChanged() {
         return this.getMaskValue(MASK_LISTING_CHANGED);
     }
 
+    @Override
     public void setListingChanged(boolean listingChanged) {
         this.setMaskValue(MASK_LISTING_CHANGED, listingChanged);
     }
 
+    @Override
     public String getPlacedBy() {
         if (getDetail() != null) {
             return getDetail().PlacedBy;
@@ -785,12 +788,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setPlacedBy(String value) {
         if (getDetail() != null) {
             getDetail().PlacedBy = value;
         }
     }
 
+    @Override
     public Date getDateHidden() {
         if (getDetail() != null) {
             return getDetail().DateHidden;
@@ -799,6 +804,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setDateHidden(Date date) {
         if (getDetail() != null) {
             getDetail().DateHidden = date;
@@ -809,6 +815,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
     public final static byte ISLITE = 1;
     public final static byte NOTLITE = 2;
 
+    @Override
     public byte getApiState() {
         if (getDetail() != null) {
             return getDetail().apiState;
@@ -817,12 +824,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setApiState(byte value) {
         if (getDetail() != null) {
             getDetail().apiState = value;
         }
     }
 
+    @Override
     public int getNoteChecksum() {
         if (getDetail() != null) {
             return getDetail().noteCheckSum;
@@ -831,12 +840,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setNoteChecksum(int value) {
         if (getDetail() != null) {
             getDetail().noteCheckSum = value;
         }
     }
 
+    @Override
     public String getTmpNote() {
         if (getDetail() != null) {
             return getDetail().tmpNote;
@@ -845,12 +856,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setTmpNote(String value) {
         if (getDetail() != null) {
             getDetail().tmpNote = value;
         }
     }
 
+    @Override
     public int getSolverChecksum() {
         if (getDetail() != null) {
             return getDetail().solverCheckSum;
@@ -859,12 +872,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setSolverChecksum(int value) {
         if (getDetail() != null) {
             getDetail().solverCheckSum = value;
         }
     }
 
+    @Override
     public String getTmpSolver() {
         if (getDetail() != null) {
             return getDetail().tmpSolver;
@@ -873,12 +888,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setTmpSolver(String value) {
         if (getDetail() != null) {
             getDetail().tmpSolver = value;
         }
     }
 
+    @Override
     public String getUrl() {
         if (getDetail() != null) {
             return getDetail().Url;
@@ -887,12 +904,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setUrl(String value) {
         if (getDetail() != null) {
             getDetail().Url = value;
         }
     }
 
+    @Override
     public String getCountry() {
         if (getDetail() != null) {
             return getDetail().Country;
@@ -901,12 +920,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setCountry(String value) {
         if (getDetail() != null) {
             getDetail().Country = value;
         }
     }
 
+    @Override
     public String getState() {
         if (getDetail() != null) {
             return getDetail().State;
@@ -915,12 +936,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setState(String value) {
         if (getDetail() != null) {
             getDetail().State = value;
         }
     }
 
+    @Override
     public ArrayList<Attributes> getAttributes() {
         if (getDetail() != null) {
             return getDetail().getAttributes(getId());
@@ -929,18 +952,21 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void addAttributeNegative(Attributes attribute) {
         if (getDetail() != null) {
             getDetail().addAttributeNegative(attribute);
         }
     }
 
+    @Override
     public void addAttributePositive(Attributes attribute) {
         if (getDetail() != null) {
             getDetail().addAttributePositive(attribute);
         }
     }
 
+    @Override
     public DLong getAttributesPositive() {
         if (getDetail() != null) {
             return getDetail().getAttributesPositive(getId());
@@ -949,6 +975,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public DLong getAttributesNegative() {
         if (getDetail() != null) {
             return getDetail().getAttributesNegative(getId());
@@ -957,18 +984,21 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setAttributesPositive(DLong dLong) {
         if (getDetail() != null) {
             getDetail().setAttributesPositive(dLong);
         }
     }
 
+    @Override
     public void setAttributesNegative(DLong dLong) {
         if (getDetail() != null) {
             getDetail().setAttributesNegative(dLong);
         }
     }
 
+    @Override
     public void setLongDescription(String value) {
         if (getDetail() != null) {
             getDetail().setLongDescription(value);
@@ -976,6 +1006,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public String getLongDescription() {
         if (getDetail() != null) {
             if (getDetail().getLongDescription() == null || getDetail().getLongDescription().length() == 0) {
@@ -987,12 +1018,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setShortDescription(String value) {
         if (getDetail() != null) {
             getDetail().setShortDescription(value);
         }
     }
 
+    @Override
     public String getShortDescription() {
         if (getDetail() != null) {
             if (getDetail().getShortDescription() == null || getDetail().getShortDescription().length() == 0) {
@@ -1004,12 +1037,14 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public void setTourName(String value) {
         if (getDetail() != null) {
             getDetail().TourName = value;
         }
     }
 
+    @Override
     public String getTourName() {
         if (getDetail() != null) {
             return getDetail().TourName;
@@ -1018,6 +1053,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public boolean isAttributePositiveSet(Attributes attribute) {
         if (getDetail() != null) {
             return getDetail().isAttributePositiveSet(attribute);
@@ -1026,6 +1062,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         }
     }
 
+    @Override
     public boolean isAttributeNegativeSet(Attributes attribute) {
         if (getDetail() != null) {
             return getDetail().isAttributeNegativeSet(attribute);
@@ -1038,11 +1075,7 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         return isDisposed;
     }
 
-    /**
-     * Returns true if the Cache a event like Giga, Cito, Event or Mega
-     *
-     * @return
-     */
+    @Override
     public boolean isEvent() {
         if (this.getType() == CacheTypes.Giga)
             return true;
@@ -1055,102 +1088,97 @@ public class Cache extends Coordinate implements Comparable<Cache>, Serializable
         return false;
     }
 
+    @Override
     public void setFavoritePoints(int value) {
         this.favoritePoints = value;
     }
 
+    @Override
     public int getFaviritPoints() {
         return this.getFavoritePoints();
     }
 
+    @Override
     public int getFavoritePoints() {
         return favoritePoints;
     }
 
-    /**
-     * Liste der zusaetzlichen Wegpunkte des Caches
-     */
+    @Override
     public CB_List<Waypoint> getWaypoints() {
         return waypoints;
     }
 
+    @Override
     public void setWaypoints(CB_List<Waypoint> waypoints) {
         this.waypoints = waypoints;
     }
 
-    /**
-     * Detail Information of Waypoint which are not always loaded
-     */
+    @Override
     public CacheDetail getDetail() {
         return detail;
     }
 
+    @Override
     public void setDetail(CacheDetail detail) {
         this.detail = detail;
     }
 
-    /**
-     * Id des Caches in der Datenbank von geocaching.com
-     */
+    @Override
     public long getId() {
         return Id;
     }
 
+    @Override
     public void setId(long id) {
         Id = id;
     }
 
-    /**
-     * Durchschnittliche Bewertung des Caches von GcVote
-     */
+    @Override
     public float getRating() {
         return Rating;
     }
 
+    @Override
     public void setRating(float rating) {
         Rating = rating;
     }
 
-    /**
-     * Groesse des Caches. Bei Wikipediaeintraegen enthaelt dieses Feld den Radius in m
-     */
+    @Override
     public CacheSizes getSize() {
         return Size;
     }
 
+    @Override
     public void setSize(CacheSizes size) {
         Size = size;
     }
 
-    /**
-     * Art des Caches
-     */
+    @Override
     public CacheTypes getType() {
         return Type;
     }
 
+    @Override
     public void setType(CacheTypes type) {
         Type = type;
     }
 
-    /**
-     * Anzahl der Travelbugs und Coins, die sich in diesem Cache befinden
-     */
+    @Override
     public int getNumTravelbugs() {
         return NumTravelbugs;
     }
 
+    @Override
     public void setNumTravelbugs(int numTravelbugs) {
         NumTravelbugs = numTravelbugs;
     }
 
-    /**
-     * Falls keine erneute Distanzberechnung noetig ist nehmen wir diese Distanz
-     */
+    @Override
     public float getCachedDistance() {
         return cachedDistance;
     }
 
+    @Override
     public void setCachedDistance(float cachedDistance) {
         this.cachedDistance = cachedDistance;
     }

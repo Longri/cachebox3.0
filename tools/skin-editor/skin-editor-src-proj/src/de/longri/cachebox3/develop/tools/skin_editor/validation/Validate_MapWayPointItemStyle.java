@@ -25,6 +25,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
@@ -84,37 +85,37 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
 
     private void checkCacheTypes() {
         //Check Cache, I'm the owner
-        Cache ownerCache = new Cache(0, 0, "test", CacheTypes.Cache, "GCCODE");
-        checkCache(ownerCache);
+        AbstractCache ownerAbstractCache = new Cache(0, 0, "test", CacheTypes.Cache, "GCCODE");
+        checkCache(ownerAbstractCache);
 
         //Check Cache, found
-        Cache foundCache = new Cache(0, 0, "test", CacheTypes.Cache, "GCCODE");
-        foundCache.setOwner("nicht meiner");
-        foundCache.setFound(true);
-        checkCache(foundCache);
+        AbstractCache foundAbstractCache = new Cache(0, 0, "test", CacheTypes.Cache, "GCCODE");
+        foundAbstractCache.setOwner("nicht meiner");
+        foundAbstractCache.setFound(true);
+        checkCache(foundAbstractCache);
 
         //Check Cache, solved
-        Cache solvedCache = new Cache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
-        solvedCache.setOwner("nicht meiner");
-        solvedCache.setCorrectedCoordinates(true);
-        checkCache(solvedCache);
+        AbstractCache solvedAbstractCache = new Cache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
+        solvedAbstractCache.setOwner("nicht meiner");
+        solvedAbstractCache.setCorrectedCoordinates(true);
+        checkCache(solvedAbstractCache);
 
 
         //Check Cache, multi start
-        Cache multiStartCache = new Cache(0, 0, "test", CacheTypes.Multi, "GCCODE");
-        multiStartCache.setOwner("nicht meiner");
+        AbstractCache multiStartAbstractCache = new Cache(0, 0, "test", CacheTypes.Multi, "GCCODE");
+        multiStartAbstractCache.setOwner("nicht meiner");
         Waypoint wp = new Waypoint("wp", CacheTypes.MultiStage, "", 0, 0, 100, "", "");
         wp.IsStart = true;
-        multiStartCache.getWaypoints().add(wp);
-        checkCache(multiStartCache);
+        multiStartAbstractCache.getWaypoints().add(wp);
+        checkCache(multiStartAbstractCache);
 
         //Check Cache, myst start
-        Cache mystStartCache = new Cache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
-        mystStartCache.setOwner("nicht meiner");
+        AbstractCache mystStartAbstractCache = new Cache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
+        mystStartAbstractCache.setOwner("nicht meiner");
         Waypoint wpm = new Waypoint("wp", CacheTypes.MultiStage, "", 0, 0, 100, "", "");
         wpm.IsStart = true;
-        mystStartCache.getWaypoints().add(wpm);
-        checkCache(mystStartCache);
+        mystStartAbstractCache.getWaypoints().add(wpm);
+        checkCache(mystStartAbstractCache);
 
 
         {// check multiStageStart
@@ -141,21 +142,21 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
         for (CacheTypes type : CacheTypes.values()) {
 
             // create a Temp Cache
-            Cache cache = new Cache(0, 0, "test", type, "GCCODE");
-            cache.setOwner("nicht meiner");
-            checkCache(cache);
+            AbstractCache abstractCache = new Cache(0, 0, "test", type, "GCCODE");
+            abstractCache.setOwner("nicht meiner");
+            checkCache(abstractCache);
         }
     }
 
 
-    private void checkCache(Cache cache) {
+    private void checkCache(AbstractCache abstractCache) {
         MapWayPointItemStyle style = null;
         try {
-            style = WaypointLayer.getClusterSymbolsByCache(cache);
+            style = WaypointLayer.getClusterSymbolsByCache(abstractCache);
         } catch (GdxRuntimeException e) {
         }
 
-        String styleName = WaypointLayer.getMapIconName(cache);
+        String styleName = WaypointLayer.getMapIconName(abstractCache);
 
         if (style == null) {
             missingSyles.append(styleName);

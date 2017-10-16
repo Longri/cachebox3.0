@@ -41,6 +41,7 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
@@ -175,7 +176,7 @@ public class ReloadCacheActivity extends ActivityBase {
 
                 EventHandler.add(limitListener);
 
-                Cache actCache = EventHandler.getSelectedCache();
+                AbstractCache actCache = EventHandler.getSelectedCache();
                 if (actCache != null) {
                     final SearchGC searchGC = new SearchGC(GroundspeakAPI.getAccessToken(), actCache.getGcCode(),
                             new ICancel() {

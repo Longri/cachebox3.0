@@ -20,10 +20,7 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Database.Parameters;
-import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.Replication;
-import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.UnitFormatter;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
@@ -196,9 +193,9 @@ public class WaypointDAO {
     // Hier wird überprüft, ob für diesen Cache ein Start-Waypoint existiert und dieser in diesem Fall zurückgesetzt
     // Damit kann bei der Definition eines neuen Start-Waypoints vorher der alte entfernt werden damit sichergestellt ist dass ein Cache nur
     // 1 Start-Waypoint hat
-    public void ResetStartWaypoint(Cache cache, Waypoint except) {
-        for (int i = 0, n = cache.getWaypoints().size; i < n; i++) {
-            Waypoint wp = cache.getWaypoints().get(i);
+    public void ResetStartWaypoint(AbstractCache abstractCache, Waypoint except) {
+        for (int i = 0, n = abstractCache.getWaypoints().size; i < n; i++) {
+            Waypoint wp = abstractCache.getWaypoints().get(i);
             if (except == wp)
                 continue;
             if (wp.IsStart) {

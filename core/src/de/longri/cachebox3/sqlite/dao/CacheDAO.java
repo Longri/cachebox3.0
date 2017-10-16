@@ -34,9 +34,9 @@ public class CacheDAO {
     final static Logger log = LoggerFactory.getLogger(CacheDAO.class);
 
 
-    public static String GetShortDescription(Cache cache) {
+    public static String GetShortDescription(AbstractCache abstractCache) {
         String description = "";
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select ShortDescription from Caches where Id=?", new String[]{Long.toString(cache.getId())});
+        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select ShortDescription from Caches where Id=?", new String[]{Long.toString(abstractCache.getId())});
         if (reader == null)
             return "";
         reader.moveToFirst();
@@ -49,9 +49,9 @@ public class CacheDAO {
         return description;
     }
 
-    public static String getDescription(Cache cache) {
+    public static String getDescription(AbstractCache abstractCache) {
         String description = "";
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select Description from Caches where Id=?", new String[]{Long.toString(cache.getId())});
+        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select Description from Caches where Id=?", new String[]{Long.toString(abstractCache.getId())});
         if (reader == null)
             return "";
         reader.moveToFirst();
@@ -116,19 +116,19 @@ public class CacheDAO {
         }
     }
 
-    public boolean readDetail(Cache cache) {
-        if (cache.getDetail() != null)
+    public boolean readDetail(AbstractCache abstractCache) {
+        if (abstractCache.getDetail() != null)
             return true;
-        cache.setDetail(new CacheDetail());
+        abstractCache.setDetail(new CacheDetail());
 
         SQLiteGdxDatabaseCursor reader = null;
 
         try {
-            reader = Database.Data.rawQuery(SQL_GET_DETAIL_FROM_ID, new String[]{String.valueOf(cache.getId())});
+            reader = Database.Data.rawQuery(SQL_GET_DETAIL_FROM_ID, new String[]{String.valueOf(abstractCache.getId())});
 
             if (reader != null && reader.getCount() > 0) {
                 reader.moveToFirst();
-                readDetailFromCursor(reader, cache.getDetail(), false, false);
+                readDetailFromCursor(reader, abstractCache.getDetail(), false, false);
 
                 reader.close();
                 return true;
@@ -189,29 +189,29 @@ public class CacheDAO {
         return true;
     }
 
-    public void WriteToDatabase(Cache cache) {
+    public void WriteToDatabase(AbstractCache abstractCache) {
         // int newCheckSum = createCheckSum(WP);
         // Replication.WaypointChanged(CacheId, checkSum, newCheckSum, GcCode);
         Database.Parameters args = new Database.Parameters();
-        args.put("Id", cache.getId());
-        args.put("GcCode", cache.getGcCode());
-        args.put("Latitude", cache.latitude);
-        args.put("Longitude", cache.longitude);
-        args.put("name", cache.getName());
+        args.put("Id", abstractCache.getId());
+        args.put("GcCode", abstractCache.getGcCode());
+        args.put("Latitude", abstractCache.latitude);
+        args.put("Longitude", abstractCache.longitude);
+        args.put("name", abstractCache.getName());
         try {
-            args.put("Size", cache.getSize().ordinal());
+            args.put("Size", abstractCache.getSize().ordinal());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        args.put("Difficulty", (int) (cache.getDifficulty() * 2));
-        args.put("Terrain", (int) (cache.getTerrain() * 2));
-        args.put("Archived", cache.isArchived() ? 1 : 0);
-        args.put("Available", cache.isAvailable() ? 1 : 0);
-        args.put("Found", cache.isFound());
-        args.put("Type", cache.getType().ordinal());
-        args.put("Owner", cache.getOwner());
-        args.put("Country", cache.getCountry());
-        args.put("State", cache.getState());
+        args.put("Difficulty", (int) (abstractCache.getDifficulty() * 2));
+        args.put("Terrain", (int) (abstractCache.getTerrain() * 2));
+        args.put("Archived", abstractCache.isArchived() ? 1 : 0);
+        args.put("Available", abstractCache.isAvailable() ? 1 : 0);
+        args.put("Found", abstractCache.isFound());
+        args.put("Type", abstractCache.getType().ordinal());
+        args.put("Owner", abstractCache.getOwner());
+        args.put("Country", abstractCache.getCountry());
+        args.put("State", abstractCache.getState());
         DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             String firstimported = iso8601Format.format(new Date());
@@ -221,43 +221,43 @@ public class CacheDAO {
             e.printStackTrace();
         }
 
-        if ((cache.getShortDescription() != null) && (cache.getShortDescription().length() > 0)) {
-            args.put("ShortDescription", cache.getShortDescription());
+        if ((abstractCache.getShortDescription() != null) && (abstractCache.getShortDescription().length() > 0)) {
+            args.put("ShortDescription", abstractCache.getShortDescription());
         }
 
-        if ((cache.getLongDescription() != null) && (cache.getLongDescription().length() > 0)) {
-            args.put("Description", cache.getLongDescription());
+        if ((abstractCache.getLongDescription() != null) && (abstractCache.getLongDescription().length() > 0)) {
+            args.put("Description", abstractCache.getLongDescription());
         }
 
-        args.put("NumTravelbugs", cache.getNumTravelbugs());
-        args.put("Rating", (int) (cache.getRating() * 100));
+        args.put("NumTravelbugs", abstractCache.getNumTravelbugs());
+        args.put("Rating", (int) (abstractCache.getRating() * 100));
         // args.put("Vote", cache.);
         // args.put("VotePending", cache.);
         // args.put("Notes", );
         // args.put("Solver", cache.);
         // args.put("ListingCheckSum", cache.);
-        args.put("CorrectedCoordinates", cache.hasCorrectedCoordinates() ? 1 : 0);
+        args.put("CorrectedCoordinates", abstractCache.hasCorrectedCoordinates() ? 1 : 0);
 
-        if (cache.getDetail() != null) {
+        if (abstractCache.getDetail() != null) {
             // write detail information if existing
-            args.put("GcId", cache.getGcId());
-            args.put("PlacedBy", cache.getPlacedBy());
-            args.put("ApiStatus", cache.getApiState());
+            args.put("GcId", abstractCache.getGcId());
+            args.put("PlacedBy", abstractCache.getPlacedBy());
+            args.put("ApiStatus", abstractCache.getApiState());
             try {
-                String stimestamp = iso8601Format.format(cache.getDateHidden());
+                String stimestamp = iso8601Format.format(abstractCache.getDateHidden());
                 args.put("DateHidden", stimestamp);
             } catch (Exception e) {
 
                 e.printStackTrace();
             }
-            args.put("Url", cache.getUrl());
-            args.put("TourName", cache.getTourName());
-            args.put("GPXFilename_Id", cache.getGPXFilename_ID());
-            args.put("AttributesPositive", cache.getAttributesPositive().getLow());
-            args.put("AttributesPositiveHigh", cache.getAttributesPositive().getHigh());
-            args.put("AttributesNegative", cache.getAttributesNegative().getLow());
-            args.put("AttributesNegativeHigh", cache.getAttributesNegative().getHigh());
-            args.put("Hint", cache.getHint());
+            args.put("Url", abstractCache.getUrl());
+            args.put("TourName", abstractCache.getTourName());
+            args.put("GPXFilename_Id", abstractCache.getGPXFilename_ID());
+            args.put("AttributesPositive", abstractCache.getAttributesPositive().getLow());
+            args.put("AttributesPositiveHigh", abstractCache.getAttributesPositive().getHigh());
+            args.put("AttributesNegative", abstractCache.getAttributesNegative().getLow());
+            args.put("AttributesNegativeHigh", abstractCache.getAttributesNegative().getHigh());
+            args.put("Hint", abstractCache.getHint());
 
         }
         try {
@@ -269,83 +269,83 @@ public class CacheDAO {
         }
     }
 
-    public void WriteToDatabase_Found(Cache cache) {
+    public void WriteToDatabase_Found(AbstractCache abstractCache) {
         Database.Parameters args = new Database.Parameters();
-        args.put("found", cache.isFound());
+        args.put("found", abstractCache.isFound());
         try {
-            Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(cache.getId())});
-            Replication.FoundChanged(cache.getId(), cache.isFound());
+            Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(abstractCache.getId())});
+            Replication.FoundChanged(abstractCache.getId(), abstractCache.isFound());
         } catch (Exception exc) {
             log.error("Write Cache Found", exc);
         }
     }
 
-    public boolean UpdateDatabase(Cache cache) {
+    public boolean UpdateDatabase(AbstractCache abstractCache) {
 
         Database.Parameters args = new Database.Parameters();
 
-        args.put("Id", cache.getId());
-        args.put("GcCode", cache.getGcCode());
-        args.put("GcId", cache.getGcId());
-        if (cache.isValid() && !cache.isZero()) {
+        args.put("Id", abstractCache.getId());
+        args.put("GcCode", abstractCache.getGcCode());
+        args.put("GcId", abstractCache.getGcId());
+        if (abstractCache.isValid() && !abstractCache.isZero()) {
             // Update Cache position only when new position is valid and not zero
-            args.put("Latitude", cache.latitude);
-            args.put("Longitude", cache.longitude);
+            args.put("Latitude", abstractCache.latitude);
+            args.put("Longitude", abstractCache.longitude);
         }
-        args.put("name", cache.getName());
+        args.put("name", abstractCache.getName());
         try {
-            args.put("Size", cache.getSize().ordinal());
+            args.put("Size", abstractCache.getSize().ordinal());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        args.put("Difficulty", (int) (cache.getDifficulty() * 2));
-        args.put("Terrain", (int) (cache.getTerrain() * 2));
-        args.put("Archived", cache.isArchived() ? 1 : 0);
-        args.put("Available", cache.isAvailable() ? 1 : 0);
-        args.put("Found", cache.isFound());
-        args.put("Type", cache.getType().ordinal());
-        args.put("PlacedBy", cache.getPlacedBy());
-        args.put("Owner", cache.getOwner());
-        args.put("Country", cache.getCountry());
-        args.put("State", cache.getState());
+        args.put("Difficulty", (int) (abstractCache.getDifficulty() * 2));
+        args.put("Terrain", (int) (abstractCache.getTerrain() * 2));
+        args.put("Archived", abstractCache.isArchived() ? 1 : 0);
+        args.put("Available", abstractCache.isAvailable() ? 1 : 0);
+        args.put("Found", abstractCache.isFound());
+        args.put("Type", abstractCache.getType().ordinal());
+        args.put("PlacedBy", abstractCache.getPlacedBy());
+        args.put("Owner", abstractCache.getOwner());
+        args.put("Country", abstractCache.getCountry());
+        args.put("State", abstractCache.getState());
         DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            String stimestamp = iso8601Format.format(cache.getDateHidden());
+            String stimestamp = iso8601Format.format(abstractCache.getDateHidden());
             args.put("DateHidden", stimestamp);
         } catch (Exception e) {
 
             e.printStackTrace();
         }
-        args.put("Hint", cache.getHint());
+        args.put("Hint", abstractCache.getHint());
 
-        if ((cache.getShortDescription() != null) && (cache.getShortDescription().length() > 0)) {
-            args.put("ShortDescription", cache.getShortDescription());
+        if ((abstractCache.getShortDescription() != null) && (abstractCache.getShortDescription().length() > 0)) {
+            args.put("ShortDescription", abstractCache.getShortDescription());
         }
 
-        if ((cache.getLongDescription() != null) && (cache.getLongDescription().length() > 0)) {
-            args.put("Description", cache.getLongDescription());
+        if ((abstractCache.getLongDescription() != null) && (abstractCache.getLongDescription().length() > 0)) {
+            args.put("Description", abstractCache.getLongDescription());
         }
 
-        args.put("Url", cache.getUrl());
-        args.put("NumTravelbugs", cache.getNumTravelbugs());
-        args.put("Rating", (int) (cache.getRating() * 100));
+        args.put("Url", abstractCache.getUrl());
+        args.put("NumTravelbugs", abstractCache.getNumTravelbugs());
+        args.put("Rating", (int) (abstractCache.getRating() * 100));
         // args.put("Vote", cache.);
         // args.put("VotePending", cache.);
         // args.put("Notes", );
         // args.put("Solver", cache.);
-        args.put("AttributesPositive", cache.getAttributesPositive().getLow());
-        args.put("AttributesPositiveHigh", cache.getAttributesPositive().getHigh());
-        args.put("AttributesNegative", cache.getAttributesNegative().getLow());
-        args.put("AttributesNegativeHigh", cache.getAttributesNegative().getHigh());
+        args.put("AttributesPositive", abstractCache.getAttributesPositive().getLow());
+        args.put("AttributesPositiveHigh", abstractCache.getAttributesPositive().getHigh());
+        args.put("AttributesNegative", abstractCache.getAttributesNegative().getLow());
+        args.put("AttributesNegativeHigh", abstractCache.getAttributesNegative().getHigh());
         // args.put("ListingCheckSum", cache.);
-        args.put("GPXFilename_Id", cache.getGPXFilename_ID());
-        args.put("Favorit", cache.isFavorite() ? 1 : 0);
-        args.put("ApiStatus", cache.getApiState());
-        args.put("CorrectedCoordinates", cache.hasCorrectedCoordinates() ? 1 : 0);
-        args.put("TourName", cache.getTourName());
+        args.put("GPXFilename_Id", abstractCache.getGPXFilename_ID());
+        args.put("Favorit", abstractCache.isFavorite() ? 1 : 0);
+        args.put("ApiStatus", abstractCache.getApiState());
+        args.put("CorrectedCoordinates", abstractCache.hasCorrectedCoordinates() ? 1 : 0);
+        args.put("TourName", abstractCache.getTourName());
 
         try {
-            long ret = Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(cache.getId())});
+            long ret = Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(abstractCache.getId())});
             return ret > 0;
         } catch (Exception exc) {
             log.error("Update Cache", exc);
@@ -380,7 +380,7 @@ public class CacheDAO {
 
     }
 
-    public Cache getFromDbByGcCode(String GcCode, boolean withDetail) // NO_UCD (test only)
+    public AbstractCache getFromDbByGcCode(String GcCode, boolean withDetail) // NO_UCD (test only)
     {
         String where = SQL_GET_CACHE + (withDetail ? ", " + SQL_DETAILS : "") + SQL_BY_GC_CODE;
 
@@ -389,7 +389,7 @@ public class CacheDAO {
         try {
             if (reader != null && reader.getCount() > 0) {
                 reader.moveToFirst();
-                Cache ret = ReadFromCursor(reader, withDetail, false);
+                AbstractCache ret = ReadFromCursor(reader, withDetail, false);
 
                 reader.close();
                 return ret;
@@ -424,11 +424,11 @@ public class CacheDAO {
      *
      * @param writeTmp
      */
-    public boolean UpdateDatabaseCacheState(Cache writeTmp) {
+    public boolean UpdateDatabaseCacheState(AbstractCache writeTmp) {
 
         // chk of changes
         boolean changed = false;
-        Cache fromDB = getFromDbByCacheId(writeTmp.getId());
+        AbstractCache fromDB = getFromDbByCacheId(writeTmp.getId());
 
         if (fromDB == null)
             return false; // nichts zum Updaten gefunden

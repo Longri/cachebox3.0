@@ -355,15 +355,15 @@ public class DraftsView extends AbstractView {
     }
 
     public static void addNewFieldnote(LogTypes type, boolean witoutShowEdit) {
-        Cache cache = EventHandler.getSelectedCache();
+        AbstractCache abstractCache = EventHandler.getSelectedCache();
 
-        if (cache == null) {
+        if (abstractCache == null) {
             MessageBox.show(Translation.Get("NoCacheSelect"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             return;
         }
 
         // chk car found?
-        if (cache.getGcCode().equalsIgnoreCase("CBPark")) {
+        if (abstractCache.getGcCode().equalsIgnoreCase("CBPark")) {
             if (type == LogTypes.found) {
                 MessageBox.show(Translation.Get("My_Parking_Area_Found"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
             } else if (type == LogTypes.didnt_find) {
@@ -373,7 +373,7 @@ public class DraftsView extends AbstractView {
         }
 
         // kein GC Cache
-        if (!cache.getGcCode().toLowerCase().startsWith("gc")) {
+        if (!abstractCache.getGcCode().toLowerCase().startsWith("gc")) {
 
             if (type == LogTypes.found || type == LogTypes.attended || type == LogTypes.webcam_photo_taken) {
                 // Found it! -> fremden Cache als gefunden markieren
@@ -414,7 +414,7 @@ public class DraftsView extends AbstractView {
             // needMaintance oder Note können zusätzlich angelegt werden
 
             for (DraftEntry nfne : tmpDrafts) {
-                if ((nfne.CacheId == cache.getId()) && (nfne.type == type)) {
+                if ((nfne.CacheId == abstractCache.getId()) && (nfne.type == type)) {
                     newDraft = nfne;
                     newDraft.deleteFromDatabase();
                     newDraft.timestamp = new Date();
@@ -425,14 +425,14 @@ public class DraftsView extends AbstractView {
 
         if (newDraft == null) {
             newDraft = new DraftEntry(type);
-            newDraft.CacheName = cache.getName();
-            newDraft.gcCode = cache.getGcCode();
+            newDraft.CacheName = abstractCache.getName();
+            newDraft.gcCode = abstractCache.getGcCode();
             newDraft.foundNumber = Config.FoundOffset.getValue();
             newDraft.timestamp = new Date();
-            newDraft.CacheId = cache.getId();
+            newDraft.CacheId = abstractCache.getId();
             newDraft.comment = "";
-            newDraft.CacheUrl = cache.getUrl();
-            newDraft.cacheType = cache.getType();
+            newDraft.CacheUrl = abstractCache.getUrl();
+            newDraft.cacheType = abstractCache.getType();
             newDraft.fillType();
             // aktDraftIndex = -1;
             aktDraft = newDraft;
@@ -443,7 +443,7 @@ public class DraftsView extends AbstractView {
 
         switch (type) {
             case found:
-                if (!cache.isFound())
+                if (!abstractCache.isFound())
                     newDraft.foundNumber++; //
                 newDraft.fillType();
                 if (newDraft.comment.equals(""))
@@ -452,7 +452,7 @@ public class DraftsView extends AbstractView {
                 // nicht gefunden war -> foundNumber um 1 erhöhen
                 break;
             case attended:
-                if (!cache.isFound())
+                if (!abstractCache.isFound())
                     newDraft.foundNumber++; //
                 newDraft.fillType();
                 if (newDraft.comment.equals(""))
@@ -461,7 +461,7 @@ public class DraftsView extends AbstractView {
                 // nicht gefunden war -> foundNumber um 1 erhöhen
                 break;
             case webcam_photo_taken:
-                if (!cache.isFound())
+                if (!abstractCache.isFound())
                     newDraft.foundNumber++; //
                 newDraft.fillType();
                 if (newDraft.comment.equals(""))
@@ -721,17 +721,17 @@ public class DraftsView extends AbstractView {
         // final Cache cache =
         // Database.Data.Query.GetCacheByGcCode(aktDraft.gcCode);
 
-        Cache tmpCache = null;
+        AbstractCache tmpAbstractCache = null;
         // suche den Cache aus der DB.
         // Nicht aus der aktuellen Query, da dieser herausgefiltert sein könnte
         CacheList lCaches = new CacheList();
         CacheListDAO cacheListDAO = new CacheListDAO();
         cacheListDAO.ReadCacheList(lCaches, "Id = " + aktDraft.CacheId, false, false);
         if (lCaches.size > 0)
-            tmpCache = lCaches.get(0);
-        final Cache cache = tmpCache;
+            tmpAbstractCache = lCaches.get(0);
+        final AbstractCache abstractCache = tmpAbstractCache;
 
-        if (cache == null && !aktDraft.isTbDraft) {
+        if (abstractCache == null && !aktDraft.isTbDraft) {
             String message = Translation.Get("cacheOtherDb", aktDraft.CacheName);
             message += "\n" + Translation.Get("fieldNoteNoDelete");
             MessageBox.show(message);
@@ -745,17 +745,17 @@ public class DraftsView extends AbstractView {
                     case ButtonDialog.BUTTON_POSITIVE:
                         // Yes button clicked
                         // delete aktDraft
-                        if (cache != null) {
-                            if (cache.isFound()) {
-                                cache.setFound(false);
+                        if (abstractCache != null) {
+                            if (abstractCache.isFound()) {
+                                abstractCache.setFound(false);
                                 CacheDAO cacheDAO = new CacheDAO();
-                                cacheDAO.WriteToDatabase_Found(cache);
+                                cacheDAO.WriteToDatabase_Found(abstractCache);
                                 Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                                 Config.AcceptChanges();
                                 // jetzt noch diesen Cache in der aktuellen CacheListe suchen und auch da den Found-Status zurücksetzen
                                 // damit das Smiley Symbol aus der Map und der CacheList verschwindet
                                 synchronized (Database.Data.Query) {
-                                    Cache tc = Database.Data.Query.GetCacheById(cache.getId());
+                                    AbstractCache tc = Database.Data.Query.GetCacheById(abstractCache.getId());
                                     if (tc != null) {
                                         tc.setFound(false);
                                     }
@@ -846,10 +846,10 @@ public class DraftsView extends AbstractView {
         CacheList lCaches = new CacheList();
         CacheListDAO cacheListDAO = new CacheListDAO();
         cacheListDAO.ReadCacheList(lCaches, "Id = " + aktDraft.CacheId, false, false);
-        Cache tmpCache = null;
+        AbstractCache tmpCache = null;
         if (lCaches.size > 0)
             tmpCache = lCaches.get(0);
-        Cache cache = tmpCache;
+        AbstractCache cache = tmpCache;
 
         if (cache == null) {
             String message = Translation.Get("cacheOtherDb", aktDraft.CacheName);
@@ -939,7 +939,7 @@ public class DraftsView extends AbstractView {
     @Override
     public Menu getContextMenu() {
 
-        Cache cache = EventHandler.getSelectedCache();
+        AbstractCache abstractCache = EventHandler.getSelectedCache();
 
         final Menu cm = new Menu("DraftContextMenu");
 
@@ -980,12 +980,12 @@ public class DraftsView extends AbstractView {
             }
         });
 
-        if (cache != null) {
+        if (abstractCache != null) {
 
             // Found je nach CacheType
-            if (cache.getType() == null)
+            if (abstractCache.getType() == null)
                 return null;
-            switch (cache.getType()) {
+            switch (abstractCache.getType()) {
                 case Giga:
                 case MegaEvent:
                 case Event:
@@ -1005,7 +1005,7 @@ public class DraftsView extends AbstractView {
         }
 
         // Aktueller Cache ist von geocaching.com dann weitere Menüeinträge freigeben
-        if (cache != null && cache.getGcCode().toLowerCase().startsWith("gc")) {
+        if (abstractCache != null && abstractCache.getGcCode().toLowerCase().startsWith("gc")) {
             cm.addItem(MenuID.MI_MAINTANCE, "maintenance", itemStyle.typeStyle.needs_maintenance);
             cm.addItem(MenuID.MI_NOTE, "writenote", itemStyle.typeStyle.note);
         }
@@ -1013,11 +1013,11 @@ public class DraftsView extends AbstractView {
         cm.addItem(MenuID.MI_UPLOAD_FIELDNOTE, "uploadDrafts", CB.getSkin().getMenuIcon.uploadDraft);
         cm.addItem(MenuID.MI_DELETE_ALL_FIELDNOTES, "DeleteAllNotes", CB.getSkin().getMenuIcon.deleteAllDrafts);
 
-        if (cache != null) {
+        if (abstractCache != null) {
             MenuItem mi = cm.addItem(MenuID.MI_IMPORT, "ownerLogTypes", CB.getSkin().getMenuIcon.ownerLogTypes);
             mi.setMoreMenu(getSecondMenu());
 
-            if (!cache.ImTheOwner()) {
+            if (!abstractCache.ImTheOwner()) {
                 //disable owner log types
                 mi.setEnabled(false);
             }

@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonStreamParser;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
 
 import java.io.InputStream;
@@ -47,7 +47,7 @@ public class CheckCacheStateParser {
     private final static String TRACKABLECOUNT = "TrackableCount";
 
 
-    public ApiResultState parse(InputStream stream, final Array<Cache> caches, final ICancel icancel, final ProgressIncrement progressIncrement) {
+    public ApiResultState parse(InputStream stream, final Array<AbstractCache> caches, final ICancel icancel, final ProgressIncrement progressIncrement) {
 
 
         final ApiResultState[] retValue = {ApiResultState.UNKNOWN};
@@ -103,10 +103,10 @@ public class CheckCacheStateParser {
             public void pop() {
                 super.pop();
                 if (GeocacheStatusesArray && newCache) {
-                    Cache cache = getCache(caches, cacheCode);
-                    cache.setArchived(archived);
-                    cache.setAvailable(available);
-                    cache.setNumTravelbugs(trackableCount);
+                    AbstractCache abstractCache = getCache(caches, cacheCode);
+                    abstractCache.setArchived(archived);
+                    abstractCache.setAvailable(available);
+                    abstractCache.setNumTravelbugs(trackableCount);
                     if (progressIncrement != null) progressIncrement.increment();
                     newCache = false;
                 }
@@ -161,7 +161,7 @@ public class CheckCacheStateParser {
     }
 
 
-    private static Cache getCache(Array<Cache> caches, String gcCode) {
+    private static AbstractCache getCache(Array<AbstractCache> caches, String gcCode) {
         for (int i = 0, n = caches.size; i < n; i++) {
             if (caches.get(i).getGcCode().equals(gcCode)) return caches.get(i);
         }

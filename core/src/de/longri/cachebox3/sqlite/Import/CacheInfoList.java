@@ -20,7 +20,7 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
-import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.AbstractCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,11 +159,11 @@ public class CacheInfoList {
     /**
      * Fügt die CacheInfo in der Liste mit dem Infos des übergebenen Caches zusammen und ändert gegebenenfalls die Changed Attribute neu!
      *
-     * @param cache
+     * @param abstractCache
      * @throws IOException
      */
-    public static void mergeCacheInfo(Cache cache) throws IOException {
-        String gcCode = cache.getGcCode();
+    public static void mergeCacheInfo(AbstractCache abstractCache) throws IOException {
+        String gcCode = abstractCache.getGcCode();
         CacheInfo cacheInfo = mCacheInfoList.get(gcCode);
         if (cacheInfo != null) {
 //            // if already exists and if the category of the cache is pinned:
@@ -185,7 +185,7 @@ public class CacheInfoList {
 //            }
 
             // handling logs
-            String stringForListingCheckSum = CacheDAO.getDescription(cache);
+            String stringForListingCheckSum = CacheDAO.getDescription(abstractCache);
             String recentOwnerLogString = "";
 
 //            CB_List<LogEntry> cleanLogs = new CB_List<LogEntry>();
@@ -240,7 +240,7 @@ public class CacheInfoList {
 
             if (!cacheInfo.Found) {
                 // nur wenn der Cache nicht als gefunden markiert ist, wird der Wert aus dem GPX Import übernommen!
-                cacheInfo.Found = cache.isFound();
+                cacheInfo.Found = abstractCache.isFound();
             }
 
             // Schreibe info neu in die List(lösche den Eintrag vorher)
@@ -304,11 +304,11 @@ public class CacheInfoList {
     /**
      * Packt eine neue CacheInfo des übergebenen Caches in die Liste
      *
-     * @param cache
+     * @param abstractCache
      */
-    public static void putNewInfo(Cache cache) {
-        CacheInfo info = new CacheInfo(cache.getId(), cache.getGPXFilename_ID());
-        String stringForListingCheckSum = CacheDAO.getDescription(cache);
+    public static void putNewInfo(AbstractCache abstractCache) {
+        CacheInfo info = new CacheInfo(abstractCache.getId(), abstractCache.getGPXFilename_ID());
+        String stringForListingCheckSum = CacheDAO.getDescription(abstractCache);
         String recentOwnerLogString = "";
 
 //        CB_List<LogEntry> cleanLogs = new CB_List<LogEntry>();
@@ -329,16 +329,16 @@ public class CacheInfoList {
 
         int ListingCheckSum = (int) (Utils.sdbm(stringForListingCheckSum) + Utils.sdbm(recentOwnerLogString));
         info.ListingCheckSum = ListingCheckSum;
-        info.Latitude = cache.latitude;
-        info.Longitude = cache.longitude;
-        info.Found = cache.isFound();
-        info.favorite = cache.isFavorite();
-        info.CorrectedCoordinates = cache.CorrectedCoordiantesOrMysterySolved();
+        info.Latitude = abstractCache.latitude;
+        info.Longitude = abstractCache.longitude;
+        info.Found = abstractCache.isFound();
+        info.favorite = abstractCache.isFavorite();
+        info.CorrectedCoordinates = abstractCache.CorrectedCoordiantesOrMysterySolved();
 
         if (mCacheInfoList == null)
             mCacheInfoList = new HashMap<String, CacheInfo>();
 
-        mCacheInfoList.put(cache.getGcCode(), info);
+        mCacheInfoList.put(abstractCache.getGcCode(), info);
 
     }
 

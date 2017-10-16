@@ -38,8 +38,8 @@ import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.SettingBool;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
@@ -115,16 +115,16 @@ public class CompassView extends AbstractView implements PositionChangedListener
         infoStyle.font = style.infoFont;
         infoStyle.fontColor = style.infoColor;
 
-        Cache actCache = null;
+        AbstractCache actAbstractCache = null;
         Waypoint actWaypoint = null;
 
         if (EventHandler.getSelectedWaypoint() == null) {
-            actCache = EventHandler.getSelectedCache();
+            actAbstractCache = EventHandler.getSelectedCache();
         } else {
             actWaypoint = EventHandler.getSelectedWaypoint();
         }
 
-        boolean actCacheNotNull = actCache != null;
+        boolean actCacheNotNull = actAbstractCache != null;
         boolean actWpNotNull = actWaypoint != null;
         //1. line
         if (actCacheNotNull && (showName || showIcon)) {
@@ -135,12 +135,12 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
             if (showIcon) {
                 icon = new Image();
-                icon.setDrawable(actWaypoint == null ? actCache.getType().getDrawable() : actWaypoint.Type.getDrawable());
+                icon.setDrawable(actWaypoint == null ? actAbstractCache.getType().getDrawable() : actWaypoint.Type.getDrawable());
             }
 
             if (showName) {
                 nameLabel = new Label("", infoStyle);
-                nameLabel.setText(actWaypoint == null ? actCache.getName() : actWaypoint.getTitle());
+                nameLabel.setText(actWaypoint == null ? actAbstractCache.getName() : actWaypoint.getTitle());
             }
             lineTable.add(icon);
             lineTable.add(nameLabel);
@@ -153,13 +153,13 @@ public class CompassView extends AbstractView implements PositionChangedListener
             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
             if (showCoords) {
                 if (actWaypoint == null) {
-                    lineTable.add(new Label(actCache.FormatCoordinate(), infoStyle));
+                    lineTable.add(new Label(actAbstractCache.FormatCoordinate(), infoStyle));
                 } else {
                     lineTable.add(new Label(actWaypoint.FormatCoordinate(), infoStyle));
                 }
             }
             if (showGcCode) {
-                lineTable.add(new Label(actCache.getGcCode(), infoStyle));
+                lineTable.add(new Label(actAbstractCache.getGcCode(), infoStyle));
             }
             topTable.add(lineTable).left();
             topTable.row();
@@ -183,20 +183,20 @@ public class CompassView extends AbstractView implements PositionChangedListener
             VisLabel dLabel = new VisLabel("D", infoStyle);
             lineTable.left();
             lineTable.add(dLabel);
-            Stars difficultyStars = new Stars((int) (actCache.getDifficulty() * 2));
+            Stars difficultyStars = new Stars((int) (actAbstractCache.getDifficulty() * 2));
             lineTable.add(difficultyStars);
-            VisLabel sLabel = new VisLabel(actCache.getSize().toShortString(), infoStyle);
+            VisLabel sLabel = new VisLabel(actAbstractCache.getSize().toShortString(), infoStyle);
             lineTable.add(sLabel).padLeft(CB.scaledSizes.MARGIN);
-            CacheSizeWidget sizeWidget = new CacheSizeWidget(actCache.getSize());
+            CacheSizeWidget sizeWidget = new CacheSizeWidget(actAbstractCache.getSize());
             lineTable.add(sizeWidget).padLeft(CB.scaledSizes.MARGIN_HALF);
             VisLabel tLabel = new VisLabel("T", infoStyle);
             lineTable.left();
             lineTable.add(tLabel);
-            Stars terrainStars = new Stars((int) (actCache.getTerrain() * 2));
+            Stars terrainStars = new Stars((int) (actAbstractCache.getTerrain() * 2));
             lineTable.add(terrainStars);
             VisLabel vLabel = new VisLabel("GcV", infoStyle);
             lineTable.add(vLabel).padLeft(CB.scaledSizes.MARGIN);
-            Stars vStars = new Stars((int) Math.min(actCache.getRating() * 2, 5 * 2));
+            Stars vStars = new Stars((int) Math.min(actAbstractCache.getRating() * 2, 5 * 2));
             lineTable.add(vStars);
             topTable.add(lineTable).left();
             topTable.row();
@@ -205,7 +205,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
         // add Attribute
         if (actCacheNotNull && showAtt) {
             AttributesStyle attStyle = VisUI.getSkin().get("CompassView", AttributesStyle.class);
-            ArrayList<Attributes> attList = actCache.getAttributes();
+            ArrayList<Attributes> attList = actAbstractCache.getAttributes();
             float iconWidth = 0, iconHeight = 0;
             int lineBreak = 0, lineBreakStep = 0;
             Table lineTable = null;
@@ -327,15 +327,15 @@ public class CompassView extends AbstractView implements PositionChangedListener
         }
 
 
-        Cache actCache = null;
+        AbstractCache actAbstractCache = null;
         Waypoint actWaypoint = null;
 
         if (EventHandler.getSelectedWaypoint() == null) {
-            actCache = EventHandler.getSelectedCache();
+            actAbstractCache = EventHandler.getSelectedCache();
         } else {
             actWaypoint = EventHandler.getSelectedWaypoint();
         }
-        Coordinate dest = actWaypoint != null ? actWaypoint : actCache;
+        Coordinate dest = actWaypoint != null ? actWaypoint : actAbstractCache;
 
         try {
             MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.ACCURATE, actCoord.getLatitude(),

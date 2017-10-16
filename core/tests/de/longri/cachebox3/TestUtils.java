@@ -19,8 +19,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
 import com.badlogic.gdx.backends.lwjgl.LwjglNet;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.utils.BuildInfo;
 import org.apache.commons.codec.Charsets;
 import org.slf4j.impl.DummyLogApplication;
@@ -95,17 +95,17 @@ public class TestUtils {
         return stream;
     }
 
-    public static void assetCacheAttributes(Cache cache, ArrayList<Attributes> positiveList, ArrayList<Attributes> negativeList) {
+    public static void assetCacheAttributes(AbstractCache abstractCache, ArrayList<Attributes> positiveList, ArrayList<Attributes> negativeList) {
         Iterator<Attributes> positiveIterator = positiveList.iterator();
         Iterator<Attributes> negativeIterator = negativeList.iterator();
 
         while (positiveIterator.hasNext()) {
-            assertThat("Attribute wrong", cache.isAttributePositiveSet((Attributes) positiveIterator.next()));
+            assertThat("Attribute wrong", abstractCache.isAttributePositiveSet((Attributes) positiveIterator.next()));
         }
 
         while (negativeIterator.hasNext()) {
             Attributes tmp = negativeIterator.next();
-            assertThat(tmp.name() + " negative Attribute wrong", cache.isAttributeNegativeSet((tmp)));
+            assertThat(tmp.name() + " negative Attribute wrong", abstractCache.isAttributeNegativeSet((tmp)));
         }
 
         // f�lle eine Liste mit allen Attributen
@@ -136,8 +136,8 @@ public class TestUtils {
 
         while (RestInterator.hasNext()) {
             Attributes attr = (Attributes) RestInterator.next();
-            assertThat(attr.name() + "Attribute wrong", !cache.isAttributePositiveSet(attr));
-            assertThat(attr.name() + "Attribute wrong", !cache.isAttributeNegativeSet(attr));
+            assertThat(attr.name() + "Attribute wrong", !abstractCache.isAttributePositiveSet(attr));
+            assertThat(attr.name() + "Attribute wrong", !abstractCache.isAttributeNegativeSet(attr));
         }
     }
 }

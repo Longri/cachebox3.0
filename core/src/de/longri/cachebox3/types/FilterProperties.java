@@ -535,31 +535,31 @@ public class FilterProperties {
     }
 
     /**
-     * @param cache
+     * @param abstractCache
      * @return
      */
-    public boolean passed(Cache cache) {
-        if (chkFilterBoolean(this.Finds, cache.isFound()))
+    public boolean passed(AbstractCache abstractCache) {
+        if (chkFilterBoolean(this.Finds, abstractCache.isFound()))
             return false;
-        if (chkFilterBoolean(this.Own, cache.ImTheOwner()))
+        if (chkFilterBoolean(this.Own, abstractCache.ImTheOwner()))
             return false;
-        if (chkFilterBoolean(this.NotAvailable, !cache.isAvailable()))
+        if (chkFilterBoolean(this.NotAvailable, !abstractCache.isAvailable()))
             return false;
-        if (chkFilterBoolean(this.Archived, cache.isArchived()))
+        if (chkFilterBoolean(this.Archived, abstractCache.isArchived()))
             return false;
-        if (chkFilterBoolean(this.ContainsTravelbugs, cache.getNumTravelbugs() > 0))
+        if (chkFilterBoolean(this.ContainsTravelbugs, abstractCache.getNumTravelbugs() > 0))
             return false;
-        if (chkFilterBoolean(this.Favorites, cache.isFavorite()))
+        if (chkFilterBoolean(this.Favorites, abstractCache.isFavorite()))
             return false;
-        if (chkFilterBoolean(this.ListingChanged, cache.isListingChanged()))
+        if (chkFilterBoolean(this.ListingChanged, abstractCache.isListingChanged()))
             return false;
-        if (chkFilterBoolean(this.HasUserData, cache.isHasUserData()))
+        if (chkFilterBoolean(this.HasUserData, abstractCache.isHasUserData()))
             return false;
-        if (chkFilterBoolean(this.hasCorrectedCoordinates, cache.hasCorrectedCoordinates()))
+        if (chkFilterBoolean(this.hasCorrectedCoordinates, abstractCache.hasCorrectedCoordinates()))
             return false;
         // TODO implement => if (chkFilterBoolean(this.WithManualWaypoint, cache.)) return false;
         // TODO ? the other restrictions?
-        if (!this.mCacheTypes[cache.getType().ordinal()])
+        if (!this.mCacheTypes[abstractCache.getType().ordinal()])
             return false;
 
         return true;

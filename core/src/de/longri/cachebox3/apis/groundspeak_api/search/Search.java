@@ -365,7 +365,7 @@ public abstract class Search extends PostRequest {
                             actCache.setLongDescription(value);
                         } else if (CODE.equals(name)) {
                             actCache.setGcCode(value);
-                            actCache.setId(Cache.GenerateCacheId(actCache.getGcCode()));
+                            actCache.setId(AbstractCache.GenerateCacheId(actCache.getGcCode()));
                         } else if (COUNTRY.equals(name)) {
                             actCache.setCountry(value);
                         } else if (DATE_HIDDEN.equals(name)) {
@@ -675,18 +675,18 @@ public abstract class Search extends PostRequest {
 
     AsyncExecutor asyncExecutor = new AsyncExecutor(20);
 
-    protected void writeCacheToDB(final Cache cache) {
+    protected void writeCacheToDB(final AbstractCache abstractCache) {
 
         asyncExecutor.submit(new AsyncTask<Void>() {
             @Override
             public Void call() throws Exception {
-                Cache aktCache = Database.Data.Query.GetCacheById(cache.getId());
+                AbstractCache aktCache = Database.Data.Query.GetCacheById(abstractCache.getId());
 
                 if (aktCache != null && aktCache.isLive())
                     aktCache = null;
 
                 if (aktCache == null) {
-                    aktCache = cacheDAO.getFromDbByCacheId(cache.getId());
+                    aktCache = cacheDAO.getFromDbByCacheId(abstractCache.getId());
                 }
                 // Read Detail Info of Cache if not available
                 if ((aktCache != null) && (aktCache.getDetail() == null)) {
@@ -694,17 +694,17 @@ public abstract class Search extends PostRequest {
                 }
                 // If Cache into DB, extract saved rating
                 if (aktCache != null) {
-                    cache.setRating(aktCache.getRating());
+                    abstractCache.setRating(aktCache.getRating());
                 }
 
                 // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
-                if (!cacheDAO.UpdateDatabase(cache)) {
-                    cacheDAO.WriteToDatabase(cache);
+                if (!cacheDAO.UpdateDatabase(abstractCache)) {
+                    cacheDAO.WriteToDatabase(abstractCache);
                 }
 
                 // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
-                if (cache.getTmpNote() != null) {
-                    String oldNote = Database.getNote(cache.getId());
+                if (abstractCache.getTmpNote() != null) {
+                    String oldNote = Database.getNote(abstractCache.getId());
                     String newNote = "";
                     if (oldNote == null) {
                         oldNote = "";
@@ -720,29 +720,29 @@ public abstract class Search extends PostRequest {
                         // the beginning of the groundspeak
                         // block
                         newNote += begin + System.getProperty("line.separator");
-                        newNote += cache.getTmpNote();
+                        newNote += abstractCache.getTmpNote();
                         newNote += System.getProperty("line.separator") + end;
                         newNote += oldNote.substring(iEnd + end.length(), oldNote.length());
                     } else {
                         newNote = oldNote + System.getProperty("line.separator");
                         newNote += begin + System.getProperty("line.separator");
-                        newNote += cache.getTmpNote();
+                        newNote += abstractCache.getTmpNote();
                         newNote += System.getProperty("line.separator") + end;
                     }
-                    cache.setTmpNote(newNote);
-                    Database.setNote(cache.getId(), cache.getTmpNote());
+                    abstractCache.setTmpNote(newNote);
+                    Database.setNote(abstractCache.getId(), abstractCache.getTmpNote());
                 }
 
                 // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
-                cache.setLongDescription("");
+                abstractCache.setLongDescription("");
 
 
-                for (int i = 0, n = cache.getWaypoints().size; i < n; i++) {
+                for (int i = 0, n = abstractCache.getWaypoints().size; i < n; i++) {
                     // must Cast to Full Waypoint. If Waypoint, is wrong created!
-                    Waypoint waypoint = cache.getWaypoints().get(i);
+                    Waypoint waypoint = abstractCache.getWaypoints().get(i);
 
                     //set CacheId
-                    waypoint.CacheId = cache.getId();
+                    waypoint.CacheId = abstractCache.getId();
 
                     boolean update = true;
 
@@ -770,10 +770,10 @@ public abstract class Search extends PostRequest {
                 }
 
                 if (aktCache == null) {
-                    Database.Data.Query.add(cache);
+                    Database.Data.Query.add(abstractCache);
                 } else {
-                    Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.getId()), false);
-                    Database.Data.Query.add(cache);
+                    Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(abstractCache.getId()), false);
+                    Database.Data.Query.add(abstractCache);
                 }
                 return null;
             }

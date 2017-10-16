@@ -39,6 +39,7 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheWithWP;
 import de.longri.cachebox3.types.Waypoint;
@@ -126,7 +127,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         }
 
                         // get Cache
-                        Cache cache = Database.Data.Query.get(idx);
+                        AbstractCache abstractCache = Database.Data.Query.get(idx);
 
                         //get actPos and heading
                         Coordinate position = EventHandler.getMyPosition();
@@ -137,8 +138,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         float heading = EventHandler.getHeading();
 
                         // get coordinate from Cache or from Final Waypoint
-                        Waypoint finalWp = cache.GetFinalWaypoint();
-                        Coordinate finalCoord = finalWp != null ? finalWp : cache;
+                        Waypoint finalWp = abstractCache.GetFinalWaypoint();
+                        Coordinate finalCoord = finalWp != null ? finalWp : abstractCache;
 
                         //calculate distance and bearing
                         MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, position.getLatitude(), position.getLongitude(), finalCoord.getLatitude(), finalCoord.getLongitude(), result);
@@ -175,7 +176,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
                         int selectedItemListIndex = selectedItem.getListIndex();
 
-                        Cache cache = Database.Data.Query.get(selectedItemListIndex);
+                        AbstractCache cache = Database.Data.Query.get(selectedItemListIndex);
                         log.debug("Cache selection changed to: " + cache.toString());
                         //set selected Cache global
                         EventHandler.fire(new SelectedCacheChangedEvent(cache));
@@ -186,8 +187,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     @Override
                     public void run() {
                         int selectedIndex = 0;
-                        for (Cache cache : Database.Data.Query) {
-                            if (cache.equals(EventHandler.getSelectedCache())) {
+                        for (AbstractCache abstractCache : Database.Data.Query) {
+                            if (abstractCache.equals(EventHandler.getSelectedCache())) {
                                 break;
                             }
                             selectedIndex++;

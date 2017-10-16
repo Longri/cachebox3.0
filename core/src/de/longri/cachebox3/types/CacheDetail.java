@@ -17,7 +17,6 @@ package de.longri.cachebox3.types;
 
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
-import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.lists.CB_List;
 
@@ -250,7 +249,7 @@ public class CacheDetail implements Serializable {
      *
      * @return ArrayList of String
      */
-    public CB_List<ImageEntry> getSpoilerRessources(Cache cache) {
+    public CB_List<ImageEntry> getSpoilerRessources(AbstractCache abstractCache) {
         if (spoilerRessources == null) {
             //loadSpoilerRessources(cache);
         }
@@ -272,7 +271,7 @@ public class CacheDetail implements Serializable {
      *
      * @return Boolean
      */
-    public boolean hasSpoiler(Cache cache) {
+    public boolean hasSpoiler(AbstractCache abstractCache) {
         try {
             if (spoilerRessources == null)
                 return false;
@@ -284,7 +283,7 @@ public class CacheDetail implements Serializable {
         }
     }
 
-    public void SpoilerForceReEvaluate(Cache cache) {
+    public void SpoilerForceReEvaluate(AbstractCache abstractCache) {
         spoilerRessources = null;
     }
 
