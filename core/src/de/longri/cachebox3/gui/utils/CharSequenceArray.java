@@ -16,27 +16,24 @@
 package de.longri.cachebox3.gui.utils;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.CharArray;
 
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.IntConsumer;
-import java.util.stream.IntStream;
-import java.util.stream.StreamSupport;
 
 /**
  * Created by Longri on 17.10.2017.
  */
-public class CharArray extends Array<Character> implements CharSequence {
+public class CharSequenceArray extends CharArray implements CharSequence {
 
     private int hash;
 
-    public CharArray(String string) {
+    public CharSequenceArray(String string) {
         for (int i = 0, n = string.length(); i < n; i++) {
             this.add(string.charAt(i));
         }
     }
 
-    private CharArray() {
+    private CharSequenceArray() {
     }
 
     @Override
@@ -46,12 +43,12 @@ public class CharArray extends Array<Character> implements CharSequence {
 
     @Override
     public char charAt(int index) {
-        return this.get(index);
+        return this.items[index];
     }
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        CharArray array = new CharArray();
+        CharSequenceArray array = new CharSequenceArray();
         array.addAll(this.items, start, end - start);
         return array;
     }
@@ -74,7 +71,7 @@ public class CharArray extends Array<Character> implements CharSequence {
         if (h == 0 && size > 0) {
 
             for (int i = 0; i < size; i++) {
-                h = 31 * h + get(i);
+                h = 31 * h + items[i];
             }
             hash = h;
         }
@@ -84,19 +81,15 @@ public class CharArray extends Array<Character> implements CharSequence {
 
     @Override
     public String toString() {
-        char[] chars = new char[this.size];
-        for (int i = 0; i < size; i++) {
-            chars[i] = get(i);
-        }
-        return String.valueOf(chars);
+        return new String(this.shrink());
     }
 
 
     @Override
     public boolean equals(Object other) {
 
-        if (other instanceof CharArray) {
-            CharArray o = (CharArray) other;
+        if (other instanceof CharSequenceArray) {
+            CharSequenceArray o = (CharSequenceArray) other;
             if (this.hashCode() != o.hashCode()) return false;
             return Arrays.equals(this.items, o.items);
         }
@@ -107,7 +100,7 @@ public class CharArray extends Array<Character> implements CharSequence {
             int n = this.size;
             int i = 0;
             while (n-- != 0) {
-                if (this.get(i) != o.charAt(i))
+                if (this.items[i] != o.charAt(i))
                     return false;
                 i++;
             }

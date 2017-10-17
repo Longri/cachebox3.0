@@ -17,33 +17,30 @@ package de.longri.cachebox3.gui.utils;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.stream.IntStream;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by Longri on 17.10.2017.
  */
-class CharArrayTest {
+class CharSequenceArrayTest {
     @Test
     void length() {
 
         String testString = "Test String <?>";
-        CharArray charArray = new CharArray(testString);
+        CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
 
-        assertThat("length must equals", testString.length() == charArray.length());
+        assertThat("length must equals", testString.length() == charSequenceArray.length());
 
     }
 
     @Test
     void charAt() {
         String testString = "Test String <?>";
-        CharArray charArray = new CharArray(testString);
+        CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
 
         for (int i = 0, n = testString.length(); i < n; i++) {
             assertThat("Char at: " + Integer.toString(i) + " must equals",
-                    testString.charAt(i) == charArray.charAt(i));
+                    testString.charAt(i) == charSequenceArray.charAt(i));
         }
 
     }
@@ -51,10 +48,10 @@ class CharArrayTest {
     @Test
     void subSequence() {
         String testString = "Test String <?>";
-        CharArray charArray = new CharArray(testString);
+        CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
 
         CharSequence subString = testString.subSequence(3, 6);
-        CharSequence subCharArray = charArray.subSequence(3, 6);
+        CharSequence subCharArray = charSequenceArray.subSequence(3, 6);
 
         for (int i = 0, n = subString.length(); i < n; i++) {
             assertThat("Char at: " + Integer.toString(i) + " must equals",
@@ -67,10 +64,10 @@ class CharArrayTest {
     void chars() {
 
         String testString = "Test String <?>";
-        CharArray charArray = new CharArray(testString);
+        CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
 
         int[] stringInt = testString.chars().toArray();
-        int[] charArrayInt = charArray.chars().toArray();
+        int[] charArrayInt = charSequenceArray.chars().toArray();
 
         for (int i = 0, n = stringInt.length; i < n; i++) {
             assertThat("Int at: " + Integer.toString(i) + " must equals",
@@ -82,10 +79,10 @@ class CharArrayTest {
     @Test
     void codePoints() {
         String testString = "Test String <?>";
-        CharArray charArray = new CharArray(testString);
+        CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
 
         int[] stringInt = testString.codePoints().toArray();
-        int[] charArrayInt = charArray.codePoints().toArray();
+        int[] charArrayInt = charSequenceArray.codePoints().toArray();
 
         for (int i = 0, n = stringInt.length; i < n; i++) {
             assertThat("Int at: " + Integer.toString(i) + " must equals",
@@ -97,34 +94,34 @@ class CharArrayTest {
     @Test
     void hash() {
         String testString = "Test String <?>";
-        CharArray charArray = new CharArray(testString);
-        assertThat("must equals", charArray.hashCode() == testString.hashCode());
+        CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
+        assertThat("must equals", charSequenceArray.hashCode() == testString.hashCode());
     }
 
     @Test
     void toStringTest() {
         String testString = "Test String <?>";
-        CharArray charArray = new CharArray(testString);
-        assertThat("must equals", charArray.toString().equals(testString));
+        CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
+        assertThat("must equals", charSequenceArray.toString().equals(testString));
     }
 
 
     @Test
     void equals() {
         String testString = "Test String <?>";
-        CharArray charArray = new CharArray(testString);
-        CharArray charArray2 = new CharArray(testString);
+        CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
+        CharSequenceArray charSequenceArray2 = new CharSequenceArray(testString);
 
-        assertThat("must equals", charArray.equals(testString));
-        assertThat("must equals", charArray2.equals(charArray));
-        assertThat("must equals", testString.equals(charArray.toString()));
+        assertThat("must equals", charSequenceArray.equals(testString));
+        assertThat("must equals", charSequenceArray2.equals(charSequenceArray));
+        assertThat("must equals", testString.equals(charSequenceArray.toString()));
 
-        charArray = new CharArray("test");
-        charArray2 = new CharArray("tested");
+        charSequenceArray = new CharSequenceArray("test");
+        charSequenceArray2 = new CharSequenceArray("tested");
 
-        assertThat("must not equals", !charArray.equals(testString));
-        assertThat("must not equals", !charArray2.equals(charArray));
-        assertThat("must not equals", !testString.equals(charArray.toString()));
+        assertThat("must not equals", !charSequenceArray.equals(testString));
+        assertThat("must not equals", !charSequenceArray2.equals(charSequenceArray));
+        assertThat("must not equals", !testString.equals(charSequenceArray.toString()));
 
 
     }
