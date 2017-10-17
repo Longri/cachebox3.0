@@ -17,6 +17,8 @@ package de.longri.cachebox3.gui.utils;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.IntStream;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,18 +65,32 @@ class CharArrayTest {
 
     @Test
     void chars() {
+
+        String testString = "Test String <?>";
+        CharArray charArray = new CharArray(testString);
+
+        int[] stringInt = testString.chars().toArray();
+        int[] charArrayInt = charArray.chars().toArray();
+
+        for (int i = 0, n = stringInt.length; i < n; i++) {
+            assertThat("Int at: " + Integer.toString(i) + " must equals",
+                    stringInt[i] == charArrayInt[i]);
+        }
+
     }
 
     @Test
     void codePoints() {
-    }
+        String testString = "Test String <?>";
+        CharArray charArray = new CharArray(testString);
 
-    @Test
-    void forEach() {
-    }
+        int[] stringInt = testString.codePoints().toArray();
+        int[] charArrayInt = charArray.codePoints().toArray();
 
-    @Test
-    void spliterator() {
+        for (int i = 0, n = stringInt.length; i < n; i++) {
+            assertThat("Int at: " + Integer.toString(i) + " must equals",
+                    stringInt[i] == charArrayInt[i]);
+        }
     }
-
+    
 }

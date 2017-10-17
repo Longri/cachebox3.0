@@ -17,9 +17,14 @@ package de.longri.cachebox3.gui.utils;
 
 import com.badlogic.gdx.utils.Array;
 
+import java.util.NoSuchElementException;
+import java.util.PrimitiveIterator;
 import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by Longri on 17.10.2017.
@@ -52,23 +57,14 @@ public class CharArray extends Array<Character> implements CharSequence {
         return array;
     }
 
-    @Override
-    public IntStream chars() {
-        return null;
-    }
 
-    @Override
-    public IntStream codePoints() {
-        return null;
-    }
-
-    @Override
-    public void forEach(Consumer<? super Character> action) {
-
-    }
-
-    @Override
-    public Spliterator<Character> spliterator() {
-        return null;
-    }
+//    @Override
+//    public void forEach(Consumer<? super Character> action) {
+//
+//    }
+//
+//    @Override
+//    public Spliterator<Character> spliterator() {
+//        return null;
+//    }
 }
