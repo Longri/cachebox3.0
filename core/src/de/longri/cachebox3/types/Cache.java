@@ -528,7 +528,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public String getName() {
+    public CharSequence getName() {
         if (Name == null)
             return EMPTY_STRING;
         return new String(Name, UTF_8);
@@ -1075,18 +1075,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
         return isDisposed;
     }
 
-    @Override
-    public boolean isEvent() {
-        if (this.getType() == CacheTypes.Giga)
-            return true;
-        if (this.getType() == CacheTypes.CITO)
-            return true;
-        if (this.getType() == CacheTypes.Event)
-            return true;
-        if (this.getType() == CacheTypes.MegaEvent)
-            return true;
-        return false;
-    }
+
 
     @Override
     public void setFavoritePoints(int value) {

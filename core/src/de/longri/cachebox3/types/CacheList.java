@@ -29,7 +29,7 @@ import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
-public class CacheList extends MoveableList<AbstractCache> {
+public class CacheList extends Array<AbstractCache> {
 
     public boolean ResortAtWork = false;
 
@@ -161,7 +161,10 @@ public class CacheList extends MoveableList<AbstractCache> {
             // vorhandenen Parkplatz Cache nach oben schieben
             AbstractCache park = this.GetCacheByGcCode("CBPark");
             if (park != null) {
-                this.MoveItemFirst(this.indexOf(park, false));
+                int parkIndex = this.indexOf(park, false);
+                AbstractCache parkCache = this.get(parkIndex);
+                this.removeIndex(parkIndex);
+                this.insert(0, parkCache);
             }
 
             // Cursor.Current = Cursors.Default;
@@ -222,7 +225,7 @@ public class CacheList extends MoveableList<AbstractCache> {
                 // Replace LiveCache with Cache
                 if (get(index).isLive()) {
                     if (!ca.isLive()) {
-                        this.replace(ca, index);
+                        this.set(index,ca);
                         return;
                     }
                 }
@@ -234,48 +237,48 @@ public class CacheList extends MoveableList<AbstractCache> {
 
     //################## synchronised overrides ################################
 
-    public void MoveItemsLeft() {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
-            super.MoveItemsLeft();
-        }
-    }
-
-    public void MoveItemsRight() {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
-            super.MoveItemsRight();
-        }
-    }
-
-    public void MoveItemFirst(int index) {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
-            super.MoveItemFirst(index);
-        }
-
-    }
-
-    public void MoveItemLast(int index) {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
-            super.MoveItemLast(index);
-        }
-    }
-
-    public int MoveItem(int index, int Step) {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
-            return super.MoveItem(index, Step);
-        }
-    }
-
-    public void MoveItem(int index) {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
-            super.MoveItem(index);
-        }
-    }
-
-    public AbstractCache remove(int index) {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-            return super.remove(index);
-        }
-    }
+//    public void MoveItemsLeft() {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            super.MoveItemsLeft();
+//        }
+//    }
+//
+//    public void MoveItemsRight() {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            super.MoveItemsRight();
+//        }
+//    }
+//
+//    public void MoveItemFirst(int index) {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            super.MoveItemFirst(index);
+//        }
+//
+//    }
+//
+//    public void MoveItemLast(int index) {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            super.MoveItemLast(index);
+//        }
+//    }
+//
+//    public int MoveItem(int index, int Step) {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            return super.MoveItem(index, Step);
+//        }
+//    }
+//
+//    public void MoveItem(int index) {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            super.MoveItem(index);
+//        }
+//    }
+//
+//    public AbstractCache remove(int index) {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            return super.remove(index);
+//        }
+//    }
 
     public void addAll(Array<? extends AbstractCache> array) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime

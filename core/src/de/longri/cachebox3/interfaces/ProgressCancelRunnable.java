@@ -24,13 +24,13 @@ public abstract class ProgressCancelRunnable implements Runnable {
 
     private final AtomicBoolean isCanceled = new AtomicBoolean(false);
     private float progressValue;
-    private String progressMsg;
+    private CharSequence progressMsg;
 
     public float getProgress() {
         return this.progressValue;
     }
 
-    public String getProgressMsg() {
+    public CharSequence getProgressMsg() {
         return this.progressMsg;
     }
 
@@ -45,7 +45,7 @@ public abstract class ProgressCancelRunnable implements Runnable {
         return isCanceled.get();
     }
 
-    protected void setProgress(float progressValue, String msg) {
+    protected void setProgress(float progressValue, CharSequence msg) {
         this.progressValue = progressValue;
         this.progressMsg = msg;
     }

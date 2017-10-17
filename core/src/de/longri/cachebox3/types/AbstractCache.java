@@ -102,7 +102,7 @@ public abstract class AbstractCache extends Coordinate {
 
     public abstract void setGcCode(String gcCode);
 
-    public abstract String getName();
+    public abstract CharSequence getName();
 
     public abstract void setName(String name);
 
@@ -239,7 +239,17 @@ public abstract class AbstractCache extends Coordinate {
      *
      * @return
      */
-    public abstract boolean isEvent();
+    public boolean isEvent() {
+        if (this.getType() == CacheTypes.Giga)
+            return true;
+        if (this.getType() == CacheTypes.CITO)
+            return true;
+        if (this.getType() == CacheTypes.Event)
+            return true;
+        if (this.getType() == CacheTypes.MegaEvent)
+            return true;
+        return false;
+    }
 
     public abstract void setFavoritePoints(int value);
 

@@ -45,7 +45,7 @@ public class DraftEntry {
     public CacheTypes cacheType;
     public String comment = "";
     public int foundNumber;
-    public String CacheName = "";
+    public CharSequence CacheName = "";
     public String CacheUrl = "";
     public int typeIcon;
     public boolean uploaded;

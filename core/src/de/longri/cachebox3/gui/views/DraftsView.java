@@ -732,7 +732,7 @@ public class DraftsView extends AbstractView {
         final AbstractCache abstractCache = tmpAbstractCache;
 
         if (abstractCache == null && !aktDraft.isTbDraft) {
-            String message = Translation.Get("cacheOtherDb", aktDraft.CacheName);
+            String message = Translation.Get("cacheOtherDb",aktDraft.CacheName.toString());
             message += "\n" + Translation.Get("fieldNoteNoDelete");
             MessageBox.show(message);
             return;
@@ -787,7 +787,7 @@ public class DraftsView extends AbstractView {
         if (aktDraft.isTbDraft) {
             message = Translation.Get("confirmFieldnoteDeletionTB", aktDraft.typeString, aktDraft.TbName);
         } else {
-            message = Translation.Get("confirmFieldnoteDeletion", aktDraft.typeString, aktDraft.CacheName);
+            message = Translation.Get("confirmFieldnoteDeletion", aktDraft.typeString, aktDraft.CacheName.toString());
             if (aktDraft.type == LogTypes.found || aktDraft.type == LogTypes.attended || aktDraft.type == LogTypes.webcam_photo_taken)
                 message += Translation.Get("confirmFieldnoteDeletionRst");
         }
@@ -852,7 +852,7 @@ public class DraftsView extends AbstractView {
         AbstractCache cache = tmpCache;
 
         if (cache == null) {
-            String message = Translation.Get("cacheOtherDb", aktDraft.CacheName);
+            String message = Translation.Get("cacheOtherDb", aktDraft.CacheName.toString());
             message += "\n" + Translation.Get("fieldNoteNoSelect");
             MessageBox.show(message, Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             return;
