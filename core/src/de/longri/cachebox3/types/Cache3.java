@@ -3,6 +3,8 @@ package de.longri.cachebox3.types;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.lists.CB_List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,6 +13,9 @@ import java.util.Date;
  * Created by Longri on 17.10.2017.
  */
 public class Cache3 extends AbstractCache {
+
+    private final static Logger log = LoggerFactory.getLogger(Cache3.class);
+
 
     public Cache3(double latitude, double longitude) {
         super(latitude, longitude);
