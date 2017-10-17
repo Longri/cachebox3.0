@@ -92,5 +92,40 @@ class CharArrayTest {
                     stringInt[i] == charArrayInt[i]);
         }
     }
-    
+
+
+    @Test
+    void hash() {
+        String testString = "Test String <?>";
+        CharArray charArray = new CharArray(testString);
+        assertThat("must equals", charArray.hashCode() == testString.hashCode());
+    }
+
+    @Test
+    void toStringTest() {
+        String testString = "Test String <?>";
+        CharArray charArray = new CharArray(testString);
+        assertThat("must equals", charArray.toString().equals(testString));
+    }
+
+
+    @Test
+    void equals() {
+        String testString = "Test String <?>";
+        CharArray charArray = new CharArray(testString);
+        CharArray charArray2 = new CharArray(testString);
+
+        assertThat("must equals", charArray.equals(testString));
+        assertThat("must equals", charArray2.equals(charArray));
+        assertThat("must equals", testString.equals(charArray.toString()));
+
+        charArray = new CharArray("test");
+        charArray2 = new CharArray("tested");
+
+        assertThat("must not equals", !charArray.equals(testString));
+        assertThat("must not equals", !charArray2.equals(charArray));
+        assertThat("must not equals", !testString.equals(charArray.toString()));
+
+
+    }
 }

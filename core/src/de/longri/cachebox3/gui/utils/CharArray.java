@@ -17,10 +17,7 @@ package de.longri.cachebox3.gui.utils;
 
 import com.badlogic.gdx.utils.Array;
 
-import java.util.NoSuchElementException;
-import java.util.PrimitiveIterator;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
@@ -30,6 +27,8 @@ import java.util.stream.StreamSupport;
  * Created by Longri on 17.10.2017.
  */
 public class CharArray extends Array<Character> implements CharSequence {
+
+    private int hash;
 
     public CharArray(String string) {
         for (int i = 0, n = string.length(); i < n; i++) {
@@ -57,14 +56,63 @@ public class CharArray extends Array<Character> implements CharSequence {
         return array;
     }
 
+    /**
+     * Returns a hash code for this string. The hash code for a
+     * {@code String} object is computed as
+     * <blockquote><pre>
+     * s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]
+     * </pre></blockquote>
+     * using {@code int} arithmetic, where {@code s[i]} is the
+     * <i>i</i>th character of the string, {@code n} is the length of
+     * the string, and {@code ^} indicates exponentiation.
+     * (The hash value of the empty string is zero.)
+     *
+     * @return a hash code value for this object.
+     */
+    public int hashCode() {
+        int h = hash;
+        if (h == 0 && size > 0) {
 
-//    @Override
-//    public void forEach(Consumer<? super Character> action) {
-//
-//    }
-//
-//    @Override
-//    public Spliterator<Character> spliterator() {
-//        return null;
-//    }
+            for (int i = 0; i < size; i++) {
+                h = 31 * h + get(i);
+            }
+            hash = h;
+        }
+        return h;
+    }
+
+
+    @Override
+    public String toString() {
+        char[] chars = new char[this.size];
+        for (int i = 0; i < size; i++) {
+            chars[i] = get(i);
+        }
+        return String.valueOf(chars);
+    }
+
+
+    @Override
+    public boolean equals(Object other) {
+
+        if (other instanceof CharArray) {
+            CharArray o = (CharArray) other;
+            if (this.hashCode() != o.hashCode()) return false;
+            return Arrays.equals(this.items, o.items);
+        }
+
+        if (other instanceof CharSequence) {
+            CharSequence o = (CharSequence) other;
+            if (this.hashCode() != o.hashCode()) return false;
+            int n = this.size;
+            int i = 0;
+            while (n-- != 0) {
+                if (this.get(i) != o.charAt(i))
+                    return false;
+                i++;
+            }
+            return true;
+        }
+        return false;
+    }
 }
