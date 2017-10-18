@@ -248,7 +248,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             return 0;
         } finally {
             try {
-                st.close();
+                if (st != null) st.close();
             } catch (SQLException e) {
 
                 e.printStackTrace();
@@ -307,7 +307,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             return 0;
         } finally {
             try {
-                st.close();
+                if (st != null) st.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

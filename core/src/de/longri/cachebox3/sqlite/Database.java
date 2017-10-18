@@ -137,7 +137,7 @@ public class Database {
     }
 
     public enum DatabaseType {
-        CacheBox, Drafts, Settings
+        CacheBox, CacheBox3, Drafts, Settings
     }
 
     protected DatabaseType databaseType;
@@ -149,6 +149,10 @@ public class Database {
         log = LoggerFactory.getLogger("Database." + databaseType);
 
         switch (databaseType) {
+            case CacheBox3:
+                latestDatabaseChange = DatabaseVersions.LatestDatabase3Change;
+                Query = new CacheList();
+                break;
             case CacheBox:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseChange;
                 Query = new CacheList();
@@ -455,10 +459,11 @@ public class Database {
 
 
         switch (databaseType) {
+            case CacheBox3:
+                new AlterCachebox3DB().alterCachebox3DB(this, lastDatabaseSchemeVersion);
+                break;
             case CacheBox:
-
-                new AlterCacheboxDB().alterCacheboxDB(this,lastDatabaseSchemeVersion);
-
+                new AlterCacheboxDB().alterCacheboxDB(this, lastDatabaseSchemeVersion);
                 break;
             case Drafts:
                 beginTransaction();

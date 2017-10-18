@@ -30,6 +30,44 @@ import java.util.Date;
  */
 public class Cache3 extends AbstractCache {
 
+    // ########################################################
+    // Boolean Handling
+    // one Boolean use up to 4 Bytes
+    // Boolean data type represents one bit of information, but its "size" isn't something that's precisely defined. (Oracle Docs)
+    //
+    // so we use one Short for Store all Boolean and Use a BitMask
+    // ########################################################
+
+    // Masks
+    public final static short MASK_HAS_HINT = 1 << 0;
+    public final static short MASK_CORECTED_COORDS = 1 << 1;
+    public final static short MASK_ARCHIVED = 1 << 2;
+    public final static short MASK_AVAILABLE = 1 << 3;
+    public final static short MASK_FAVORITE = 1 << 4;
+    public final static short MASK_FOUND = 1 << 5;
+    public final static short MASK_IS_LIVE = 1 << 6;
+    public final static short MASK_SOLVER1CHANGED = 1 << 7;
+    public final static short MASK_HAS_USER_DATA = 1 << 8;
+    public final static short MASK_LISTING_CHANGED = 1 << 9;
+
+    public static boolean getMaskValue(short mask, short bitFlags) {
+        return (bitFlags & mask) == mask;
+    }
+
+    public static short setMaskValue(short mask, boolean value, short bitFlags) {
+        if (getMaskValue(mask, bitFlags) == value){
+            return bitFlags;
+        }
+
+        if (value) {
+            bitFlags |= mask;
+        } else {
+            bitFlags &= ~mask;
+        }
+        return bitFlags;
+    }
+
+
     private final static Logger log = LoggerFactory.getLogger(Cache3.class);
 
     private CharSequence name;

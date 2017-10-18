@@ -16,8 +16,14 @@
 package de.longri.cachebox3.sqlite;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.dao.CacheListDAO;
+import de.longri.cachebox3.types.CacheList;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test for convert ACB V2.x DB to CB3 DB
  * Created by Longri on 18.10.2017.
  */
+@RunWith(JUnitPlatform.class)
 class DatabaseConvert {
 
     static {
@@ -33,17 +40,33 @@ class DatabaseConvert {
     }
 
     @Test
-    void convert() {
+    void convert() throws SQLiteGdxException {
 
         // copy testDb
         FileHandle testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/testACB2.db3");
         FileHandle copyDbFileHandle = testDbFileHandle.parent().child("testDb.db3");
+        if(copyDbFileHandle.exists()){
+            // delete first
+            assertThat("TestDB must be deleted for cleanup", copyDbFileHandle.delete());
+        }
         testDbFileHandle.copyTo(copyDbFileHandle);
         assertThat("TestDB must exist", copyDbFileHandle.exists());
 
+        // open DataBase and read CacheList
+        Database.Data = new Database(Database.DatabaseType.CacheBox);
+        Database.Data.startUp(testDbFileHandle);
+        CacheList tmpCacheList = new CacheList();
+        CacheListDAO cacheListDAO = new CacheListDAO();
+        cacheListDAO.ReadCacheList(tmpCacheList, "", true, Config.ShowAllWaypoints.getValue());
+        Database.Data.Query = tmpCacheList;
+        assertThat("TestDB must have 33 Caches but has:" + Database.Data.Query.size, Database.Data.Query.size == 33);
+
+
+        Database cb3Database = new Database(Database.DatabaseType.CacheBox3);
+        cb3Database.startUp(copyDbFileHandle);
 
         // cleanup
-        assertThat("TestDB must be deleted after cleanup", copyDbFileHandle.delete());
+//        assertThat("TestDB must be deleted after cleanup", copyDbFileHandle.delete());
     }
 
 }
