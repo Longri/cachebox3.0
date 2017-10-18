@@ -42,17 +42,18 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     // ########################################################
 
     // Masks
-    // protected final static short MASK_HAS_HINT = 1 << 0; // not necessary because hasHint is always called for SelectedCache and
-    // SelectedCache will have valid hint field.
+    private final static short MASK_HAS_HINT = 1 << 0;
     private final static short MASK_CORECTED_COORDS = 1 << 1;
     private final static short MASK_ARCHIVED = 1 << 2;
     private final static short MASK_AVAILABLE = 1 << 3;
     private final static short MASK_FAVORITE = 1 << 4;
     private final static short MASK_FOUND = 1 << 5;
     private final static short MASK_IS_LIVE = 1 << 6;
-    // private final static short MASK_SOLVER1CHANGED = 1 << 7;
+    private final static short MASK_SOLVER1CHANGED = 1 << 7;
     private final static short MASK_HAS_USER_DATA = 1 << 8;
     private final static short MASK_LISTING_CHANGED = 1 << 9;
+
+
     protected static final Charset US_ASCII = Charset.forName("US-ASCII");
     private static final Charset UTF_8 = Charset.forName("UTF-8");
     public static final String EMPTY_STRING = "";
@@ -1074,7 +1075,6 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     public boolean isDisposed() {
         return isDisposed;
     }
-
 
 
     @Override

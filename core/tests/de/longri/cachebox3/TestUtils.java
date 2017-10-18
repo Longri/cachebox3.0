@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
 import com.badlogic.gdx.backends.lwjgl.LwjglNet;
+import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.BuildInfo;
@@ -139,5 +140,18 @@ public class TestUtils {
             assertThat(attr.name() + "Attribute wrong", !abstractCache.isAttributePositiveSet(attr));
             assertThat(attr.name() + "Attribute wrong", !abstractCache.isAttributeNegativeSet(attr));
         }
+    }
+
+    public static FileHandle getResourceFileHandle(String path) {
+        File file = new File(path);
+
+        if (!file.exists()) {
+            //try set /core path
+            path = "core/" + path;
+            file = new File(path);
+        }
+
+        FileHandle fileHandle = Gdx.files.absolute(file.getAbsolutePath());
+        return fileHandle;
     }
 }
