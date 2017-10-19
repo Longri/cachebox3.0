@@ -46,6 +46,8 @@ public class AlterCachebox3DB {
                 database.execSQL(schemaStrings.ATTRIBUTES);
                 database.execSQL(schemaStrings.TEXT);
                 database.execSQL(schemaStrings.CACHE_INFO);
+                database.execSQL(schemaStrings.WAYPOINTS);
+                database.execSQL(schemaStrings.WAYPOINTS_TEXT);
 
                 //drop alt Tables
                 database.execSQL("DROP TABLE CelltowerLocation;");
@@ -57,6 +59,8 @@ public class AlterCachebox3DB {
                 database.execSQL(schemaStrings.COPY_ATTRIBUTES_FROM_V2_TO_V3);
                 database.execSQL(schemaStrings.COPY_CACHEINFO_FROM_V2_TO_V3);
                 database.execSQL(schemaStrings.COPY_TEXT_FROM_V2_TO_V3);
+                database.execSQL(schemaStrings.COPY_WAYPOINTS_FROM_V2_TO_V3);
+                database.execSQL(schemaStrings.COPY_WAYPOINTS_TEXT_FROM_V2_TO_V3);
 
                 //convert Boolean values to Short
                 {
@@ -115,21 +119,25 @@ public class AlterCachebox3DB {
 
                 //Delete Data from Caches
                 database.execSQL("DELETE FROM Caches;");
+
+                //Delete Data from Waypont
+                database.execSQL("DELETE FROM Waypoint;");
+
                 database.setTransactionSuccessful();
                 database.endTransaction();
 
-                //drop alt Table Caches (Close and reopen connection)
+                //drop alt Table Caches, Waypoint (Close and reopen connection)
                 database.close();
                 database.open();
                 database.disableAutoCommit();
                 database.execSQL("DROP TABLE Caches;");
+                database.execSQL("DROP TABLE Waypoint;");
 
 
                 //execute VACUUM
                 database.setTransactionSuccessful();
                 database.endTransaction();
                 database.close();
-                Thread.sleep(200);
                 database.open();
                 database.disableAutoCommit();
                 database.execSQL("end transaction");

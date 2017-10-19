@@ -50,7 +50,7 @@ public class DatabaseSchema {
             "  AttributesNegativeHigh    BIGINT         DEFAULT 0\n" +
             " );";
 
-    public final String TEXT = "CREATE TABLE Text (\n" +
+    public final String TEXT = "CREATE TABLE CacheText (\n" +
             "   Id                         BIGINT,\n" +
             "   Url                        NVARCHAR (255),\n" +
             "   Hint                       NTEXT,\n" +
@@ -84,17 +84,47 @@ public class DatabaseSchema {
             "Id, AttributesPositive, AttributesNegative, AttributesPositiveHigh, AttributesNegativeHigh)" +
             "SELECT " +
             "Id, AttributesPositive, AttributesNegative, AttributesPositiveHigh, AttributesNegativeHigh\n" +
-            "FROM Caches;" ;
+            "FROM Caches;";
 
-    public final String COPY_TEXT_FROM_V2_TO_V3 = "INSERT INTO Text (" +
+    public final String COPY_TEXT_FROM_V2_TO_V3 = "INSERT INTO CacheText (" +
             "Id, Url, Hint, Description, Notes, Solver, ShortDescription)" +
             "SELECT " +
             "Id, Url, Hint, Description, Notes, Solver, ShortDescription\n" +
-            "FROM Caches;" ;
+            "FROM Caches;";
 
     public final String COPY_CACHEINFO_FROM_V2_TO_V3 = "INSERT INTO CacheInfo (" +
             "Id, DateHidden, FirstImported, Vote, TourName, GPXFilename_Id, ListingCheckSum, state, country, ApiStatus)" +
             "SELECT " +
             "Id, DateHidden, FirstImported, Vote, TourName, GPXFilename_Id, ListingCheckSum, state, country, ApiStatus\n" +
-            "FROM Caches;" ;
+            "FROM Caches;";
+
+    public final String WAYPOINTS = "CREATE TABLE Waypoints (\n" +
+            "    CacheId      BIGINT,\n" +
+            "    GcCode       NVARCHAR (12), \n" +
+            "    Latitude     FLOAT,\n" +
+            "    Longitude    FLOAT,\n" +
+            "    Type         SMALLINT,\n" +
+            "    IsStart      BOOLEAN       DEFAULT 'false',\n" +
+            "    SyncExclude  BIT,\n" +
+            "    UserWaypoint BIT,\n" +
+            "    Title        NTEXT\n" +
+            ");";
+
+    public final String WAYPOINTS_TEXT = "CREATE TABLE WaypointsText (\n" +
+            "    GcCode       NVARCHAR (12), \n" +
+            "    Description  NTEXT,\n" +
+            "    Clue         NTEXT\n" +
+            ");";
+
+    public final String COPY_WAYPOINTS_FROM_V2_TO_V3 = "INSERT INTO Waypoints (" +
+            "CacheId, GcCode, Latitude, Longitude, Type, IsStart, SyncExclude, UserWaypoint, Title)" +
+            "SELECT " +
+            "CacheId, GcCode, Latitude, Longitude, Type, IsStart, SyncExclude, UserWaypoint, Title\n" +
+            "FROM Waypoint;";
+
+    public final String COPY_WAYPOINTS_TEXT_FROM_V2_TO_V3 = "INSERT INTO WaypointsText (" +
+            "GcCode, Description, Clue)" +
+            "SELECT " +
+            "GcCode, Description, Clue\n" +
+            "FROM Waypoint;";
 }

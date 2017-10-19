@@ -60,17 +60,23 @@ class DatabaseConvert {
         testDbFileHandle.copyTo(copyDbFileHandle);
         assertThat("TestDB must exist", copyDbFileHandle.exists());
 
-        // open DataBase and read CacheList
+
+        // open DataBase
         Database.Data = new Database(Database.DatabaseType.CacheBox);
         Database.Data.startUp(testDbFileHandle);
+        Database cb3Database = new Database(Database.DatabaseType.CacheBox3);
+        cb3Database.startUp(copyDbFileHandle);
+
+        //read Waypoint list and check
+
+
+        //read Cachelist and check
         CacheList tmpCacheList = new CacheList();
         CacheListDAO cacheListDAO = new CacheListDAO();
         cacheListDAO.ReadCacheList(tmpCacheList, "", true, Config.ShowAllWaypoints.getValue());
         Database.Data.Query = tmpCacheList;
         assertThat("TestDB must have 33 Caches but has:" + Database.Data.Query.size, Database.Data.Query.size == 33);
 
-        Database cb3Database = new Database(Database.DatabaseType.CacheBox3);
-        cb3Database.startUp(copyDbFileHandle);
 
         //Load CacheList's and check equals
         CacheList3DAO dao3 = new CacheList3DAO();
@@ -117,9 +123,6 @@ class DatabaseConvert {
             Array<Attributes> cacheAttributes = cache.getAttributes(Database.Data);
             Array<Attributes> cache3Attributes = cache3.getAttributes(cb3Database);
             assertThat("Cache Attributes must equals", cacheAttributes.equals(cache3Attributes));
-
-
-
 
 
             i++;
