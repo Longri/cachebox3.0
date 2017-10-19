@@ -106,18 +106,9 @@ public class Cache3 extends AbstractCache {
     //# properties retained at the class
     ///###############################################################################
 
-    private void throwNotChangeable(String propertyName) {
-        throw new RuntimeException("'" + propertyName + "' is not changeable! Use CacheImport.class instead of Cache3");
-    }
-
     @Override
     public long getId() {
         return this.id;
-    }
-
-    @Override
-    public void setId(long id) {
-        throwNotChangeable("Id");
     }
 
     @Override
@@ -126,18 +117,8 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public void setName(String name) {
-        throwNotChangeable("Name");
-    }
-
-    @Override
     public CacheSizes getSize() {
         return size;
-    }
-
-    @Override
-    public void setSize(CacheSizes size) {
-        throwNotChangeable("Size");
     }
 
     @Override
@@ -146,18 +127,8 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public void setDifficulty(float difficulty) {
-        throwNotChangeable("Difficulty");
-    }
-
-    @Override
     public float getTerrain() {
         return terrain;
-    }
-
-    @Override
-    public void setTerrain(float terrain) {
-        throwNotChangeable("Terrain");
     }
 
     @Override
@@ -166,18 +137,8 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public void setType(CacheTypes type) {
-        throwNotChangeable("Type");
-    }
-
-    @Override
     public CharSequence getGcCode() {
         return gcCode;
-    }
-
-    @Override
-    public void setGcCode(String gcCode) {
-        throwNotChangeable("GcCode");
     }
 
     @Override
@@ -186,18 +147,8 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public void setPlacedBy(String value) {
-        throwNotChangeable("PlacedBy");
-    }
-
-    @Override
     public CharSequence getOwner() {
         return owner;
-    }
-
-    @Override
-    public void setOwner(String owner) {
-        throwNotChangeable("Owner");
     }
 
     @Override
@@ -206,18 +157,8 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public void setGcId(String gcId) {
-        throwNotChangeable("GcId");
-    }
-
-    @Override
     public boolean isAvailable() {
         return this.getMaskValue(MASK_AVAILABLE);
-    }
-
-    @Override
-    public void setAvailable(boolean available) {
-        throwNotChangeable("Available");
     }
 
     @Override
@@ -226,19 +167,8 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public void setFound(boolean found) {
-        throwNotChangeable("Found");
-    }
-
-
-    @Override
     public boolean isHasUserData() {
         return this.getMaskValue(MASK_HAS_USER_DATA);
-    }
-
-    @Override
-    public void setHasUserData(boolean hasUserData) {
-        throwNotChangeable("HasUserData");
     }
 
     @Override
@@ -247,18 +177,8 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public void setNumTravelbugs(int numTravelbugs) {
-        throwNotChangeable("NumTravelbugs");
-    }
-
-    @Override
     public boolean isArchived() {
         return this.getMaskValue(MASK_ARCHIVED);
-    }
-
-    @Override
-    public void setArchived(boolean archived) {
-        throwNotChangeable("Archived");
     }
 
     @Override
@@ -267,18 +187,8 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public void setCorrectedCoordinates(boolean correctedCoordinates) {
-        throwNotChangeable("hasCorrectedCoordinates");
-    }
-
-    @Override
     public boolean isFavorite() {
         return this.getMaskValue(MASK_FAVORITE);
-    }
-
-    @Override
-    public void setFavorite(boolean favorite) {
-        throwNotChangeable("Favorite");
     }
 
     @Override
@@ -286,6 +196,103 @@ public class Cache3 extends AbstractCache {
         return this.getMaskValue(MASK_HAS_HINT);
     }
 
+    private boolean getMaskValue(short mask) {
+        return getMaskValue(mask, booleanStore);
+    }
+
+
+    //################################################################################
+    //# method's that throws exceptions
+    ///###############################################################################
+
+    private void throwNotChangeable(String propertyName) {
+        throw new RuntimeException("'" + propertyName + "' is not changeable! Use CacheImport.class instead of Cache3");
+    }
+
+    @Override
+    public void setId(long id) {
+        throwNotChangeable("Id");
+    }
+
+    @Override
+    public void setName(String name) {
+        throwNotChangeable("Name");
+    }
+
+    @Override
+    public void setSize(CacheSizes size) {
+        throwNotChangeable("Size");
+    }
+
+    @Override
+    public void setDifficulty(float difficulty) {
+        throwNotChangeable("Difficulty");
+    }
+
+    @Override
+    public void setTerrain(float terrain) {
+        throwNotChangeable("Terrain");
+    }
+
+    @Override
+    public void setType(CacheTypes type) {
+        throwNotChangeable("Type");
+    }
+
+    @Override
+    public void setGcCode(String gcCode) {
+        throwNotChangeable("GcCode");
+    }
+
+    @Override
+    public void setPlacedBy(String value) {
+        throwNotChangeable("PlacedBy");
+    }
+
+    @Override
+    public void setOwner(String owner) {
+        throwNotChangeable("Owner");
+    }
+
+    @Override
+    public void setGcId(String gcId) {
+        throwNotChangeable("GcId");
+    }
+
+    @Override
+    public void setAvailable(boolean available) {
+        throwNotChangeable("Available");
+    }
+
+    @Override
+    public void setFound(boolean found) {
+        throwNotChangeable("Found");
+    }
+
+    @Override
+    public void setHasUserData(boolean hasUserData) {
+        throwNotChangeable("HasUserData");
+    }
+
+    @Override
+    public void setNumTravelbugs(int numTravelbugs) {
+        throwNotChangeable("NumTravelbugs");
+    }
+
+    @Override
+    public void setArchived(boolean archived) {
+        throwNotChangeable("Archived");
+    }
+
+    @Override
+    public void setCorrectedCoordinates(boolean correctedCoordinates) {
+        throwNotChangeable("hasCorrectedCoordinates");
+    }
+
+    @Override
+    public void setFavorite(boolean favorite) {
+        throwNotChangeable("Favorite");
+    }
 
     //################################################################################
     //# properties that not retained at the class but read/write directly from/to DB
@@ -294,24 +301,25 @@ public class Cache3 extends AbstractCache {
 
     @Override
     public Array<Attributes> getAttributes(Database database) {
-        SQLiteGdxDatabaseCursor c = database.rawQuery("SELECT * FROM Attributes WHERE Id=?", new String[]{String.valueOf(this.id)});
-        c.moveToFirst();
+        SQLiteGdxDatabaseCursor cursor = database.rawQuery("SELECT * FROM Attributes WHERE Id=?", new String[]{String.valueOf(this.id)});
+        cursor.moveToFirst();
         DLong attributesPositive = null;
         DLong attributesNegative = null;
-        while (!c.isAfterLast()) {
-            if (!c.isNull(0)) {
-                attributesPositive = new DLong(c.getLong(3), c.getLong(1));
-                attributesNegative = new DLong(c.getLong(4), c.getLong(2));
-            } else {
-                attributesPositive = new DLong(0, 0);
-                attributesNegative = new DLong(0, 0);
-            }
-            break;
+        if (!cursor.isNull(1)) {
+            attributesPositive = new DLong(cursor.getLong(3), cursor.getLong(1));
+            attributesNegative = new DLong(cursor.getLong(4), cursor.getLong(2));
+        } else {
+            attributesPositive = new DLong(0, 0);
+            attributesNegative = new DLong(0, 0);
         }
-        c.close();
+        cursor.close();
         return Attributes.getAttributes(attributesPositive, attributesNegative);
     }
 
+
+    //################################################################################
+    //# not tested now
+    ///###############################################################################
 
     @Override
     public boolean ImTheOwner() {
@@ -645,8 +653,5 @@ public class Cache3 extends AbstractCache {
         return false;
     }
 
-    private boolean getMaskValue(short mask) {
-        return getMaskValue(mask, booleanStore);
-    }
 
 }
