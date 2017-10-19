@@ -207,15 +207,15 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
         if ((getWaypoints() != null) && (!showAllWaypoints)) {
             for (int i = 0; i < getWaypoints().size; i++) {
                 Waypoint wp = getWaypoints().get(i);
-                if (wp.IsStart || wp.Type == CacheTypes.Final) {
+                if (wp.isStart() || wp.getType() == CacheTypes.Final) {
 
-                    if (wp.detail != null)
-                        wp.detail.dispose();
-                    wp.detail = null;
+                    if (wp.getDetail() != null)
+                        wp.getDetail().dispose();
+                    wp.setDetail(null);
                 } else {
-                    if (wp.detail != null) {
-                        wp.detail.dispose();
-                        wp.detail = null;
+                    if (wp.getDetail() != null) {
+                        wp.getDetail().dispose();
+                        wp.setDetail(null);
                     }
                     getWaypoints().removeIndex(i);
                     i--;
@@ -244,7 +244,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
                 Waypoint wp2 = getWaypoints().get(j);
                 if (wp.getGcCode().equals(wp2.getGcCode())) {
                     found = true;
-                    wp2.detail = wp.detail; // copy Detail Info
+                    wp2.setDetail(wp.getDetail()); // copy Detail Info
                     break;
                 }
             }
@@ -304,7 +304,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
 
         for (int i = 0, n = getWaypoints().size; i < n; i++) {
             Waypoint wp = getWaypoints().get(i);
-            if (wp.Type == CacheTypes.Final) {
+            if (wp.getType() == CacheTypes.Final) {
                 if (!(wp.latitude == 0 && wp.longitude == 0))
                     x = true;
             }
@@ -327,7 +327,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
 
         for (int i = 0, n = getWaypoints().size; i < n; i++) {
             Waypoint wp = getWaypoints().get(i);
-            if (wp.Type == CacheTypes.Final) {
+            if (wp.getType() == CacheTypes.Final) {
                 // do not activate final waypoint with invalid coordinates
                 if (!wp.isValid() || wp.isZero())
                     continue;
@@ -354,7 +354,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
 
         for (int i = 0, n = getWaypoints().size; i < n; i++) {
             Waypoint wp = getWaypoints().get(i);
-            if ((wp.Type == CacheTypes.MultiStage) && (wp.IsStart)) {
+            if ((wp.getType() == CacheTypes.MultiStage) && (wp.isStart())) {
                 return wp;
             }
         }

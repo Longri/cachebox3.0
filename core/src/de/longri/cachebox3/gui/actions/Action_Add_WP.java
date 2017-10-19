@@ -83,7 +83,7 @@ public class Action_Add_WP extends AbstractAction {
                 if (value != null) {
                     EventHandler.fire(new SelectedWayPointChangedEvent(value));
                     final WaypointDAO waypointDAO = new WaypointDAO();
-                    if (value.IsStart) {
+                    if (value.isStart()) {
                         //It must be ensured here that this waypoint is the only one of these Cache,
                         //which is defined as starting point !!!
                         waypointDAO.ResetStartWaypoint(EventHandler.getSelectedCache(), value);

@@ -105,7 +105,7 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
         AbstractCache multiStartAbstractCache = new Cache(0, 0, "test", CacheTypes.Multi, "GCCODE");
         multiStartAbstractCache.setOwner("nicht meiner");
         Waypoint wp = new Waypoint("wp", CacheTypes.MultiStage, "", 0, 0, 100, "", "");
-        wp.IsStart = true;
+        wp.setStart(true);
         multiStartAbstractCache.getWaypoints().add(wp);
         checkCache(multiStartAbstractCache);
 
@@ -113,14 +113,14 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
         AbstractCache mystStartAbstractCache = new Cache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
         mystStartAbstractCache.setOwner("nicht meiner");
         Waypoint wpm = new Waypoint("wp", CacheTypes.MultiStage, "", 0, 0, 100, "", "");
-        wpm.IsStart = true;
+        wpm.setStart(true);
         mystStartAbstractCache.getWaypoints().add(wpm);
         checkCache(mystStartAbstractCache);
 
 
         {// check multiStageStart
             Waypoint wpMS = new Waypoint("wp", CacheTypes.MultiStage, "", 0, 0, 100, "", "");
-            wpMS.IsStart = true;
+            wpMS.setStart(true);
 
             MapWayPointItemStyle style = null;
             try {

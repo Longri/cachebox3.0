@@ -336,12 +336,12 @@ public abstract class Search extends PostRequest {
                     case WAY_POINT_ARRAY:
                         if (NEW_WAY_POINT.equals(name)) {
                             // System.out.println("add Waypoiint ");
-                            actWayPoint.CacheId = actCache.getId();
+                            actWayPoint.setCacheId(actCache.getId());
                             if (isUserWaypoint) {
-                                actWayPoint.IsUserWaypoint = true;
+                                actWayPoint.setUserWaypoint(true);
                                 actWayPoint.setTitle("Corrected Coordinates (API)");
                                 actWayPoint.setDescription("");
-                                actWayPoint.Type = CacheTypes.Final;
+                                actWayPoint.setType(CacheTypes.Final);
                                 actWayPoint.setGcCode("CO" + actCache.getGcCode().toString().substring(2, actCache.getGcCode().length()));
                             }
 
@@ -476,7 +476,7 @@ public abstract class Search extends PostRequest {
                         break;
                     case WAY_POINT_ARRAY:
                         if (WAYPOINT_TYPE_ID.equals(name)) {
-                            actWayPoint.Type = getCacheType((int) value);
+                            actWayPoint.setType(getCacheType((int) value));
                         }
                 }
 
@@ -742,7 +742,7 @@ public abstract class Search extends PostRequest {
                     Waypoint waypoint = abstractCache.getWaypoints().get(i);
 
                     //set CacheId
-                    waypoint.CacheId = abstractCache.getId();
+                    waypoint.setCacheId(abstractCache.getId());
 
                     boolean update = true;
 
@@ -752,7 +752,7 @@ public abstract class Search extends PostRequest {
                             for (int j = 0, m = aktCache.getWaypoints().size; j < m; j++) {
                                 Waypoint wp = aktCache.getWaypoints().get(j);
                                 if (wp.getGcCode().equalsIgnoreCase(waypoint.getGcCode())) {
-                                    if (wp.IsUserWaypoint)
+                                    if (wp.isUserWaypoint())
                                         update = false;
                                     break;
                                 }

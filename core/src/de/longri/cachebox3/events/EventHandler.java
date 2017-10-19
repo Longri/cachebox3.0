@@ -24,7 +24,6 @@ import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import org.slf4j.Logger;
@@ -154,7 +153,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             log.debug("Set Global selected Waypoint: {}", event.wayPoint);
             selectedWayPoint = event.wayPoint;
             if (selectedWayPoint != null) {
-                AbstractCache newCache = Database.Data.Query.GetCacheById(selectedWayPoint.CacheId);
+                AbstractCache newCache = Database.Data.Query.GetCacheById(selectedWayPoint.getCacheId());
                 if (!newCache.equals(selectedCache)) {
                     //unload details from last selected Cache
                     if (selectedCache != null) selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());

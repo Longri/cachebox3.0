@@ -68,6 +68,8 @@ class DatabaseConvert {
         cb3Database.startUp(copyDbFileHandle);
 
         //read Waypoint list and check
+        Array<Waypoint> waypointList = new Array<>();
+        Array<Waypoint3> waypoint3List = new Array<>();
 
 
         //read Cachelist and check

@@ -26,74 +26,50 @@ import java.util.Arrays;
 
 public class Waypoint extends Coordinate implements Serializable {
     private static final long serialVersionUID = 67610567646416L;
-    public static final Charset US_ASCII = Charset.forName("US-ASCII");
     public static final Charset UTF_8 = Charset.forName("UTF-8");
     public static final String EMPTY_STRING = "";
 
-    /**
-     * Id des dazugehörigen Caches in der Datenbank von geocaching.com
-     */
-    public long CacheId;
+    private long CacheId;
 
-    /**
-     * Waypoint Code
-     */
-    private byte[] GcCode;
+    private String GcCode;
 
 
-    /**
-     * Titel des Wegpunktes
-     */
-    private byte[] Title;
+    private String Title;
 
-    /**
-     * Art des Wegpunkts
-     */
-    public CacheTypes Type;
+    private CacheTypes Type;
 
-    /**
-     * true, falls der Wegpunkt vom Benutzer erstellt wurde
-     */
-    public boolean IsUserWaypoint;
+    private boolean IsUserWaypoint;
 
-    /**
-     * true, falls der Wegpunkt von der Synchronisation ausgeschlossen wird
-     */
-    public boolean IsSyncExcluded;
+    private boolean IsSyncExcluded;
 
-    /**
-     * True wenn dies der Startpunkt für den nächsten Besuch ist.<br>
-     * Das CacheIcon wird dann auf diesen Waypoint verschoben und dieser Waypoint wird standardmäßig aktiviert<br>
-     * Es muss aber sichergestellt sein dass immer nur 1 Waypoint eines Caches ein Startpunkt ist!<br>
-     */
-    public boolean IsStart = false;
+    private boolean IsStart = false;
 
     // Detail Information of Waypoint which are not always loaded
-    public WaypointDetail detail = null;
+    private WaypointDetail detail = null;
 
     public Waypoint(double lat, double lon, boolean withDetails) {
         super(lat, lon);
-        CacheId = -1;
+        setCacheId(-1);
         setGcCode("");
         setDescription("");
-        IsStart = false;
+        setStart(false);
         if (withDetails) {
-            detail = new WaypointDetail();
+            setDetail(new WaypointDetail());
         }
     }
 
     public Waypoint(String gcCode, CacheTypes type, String description, double latitude, double longitude, long cacheId, String clue, String title) {
         super(latitude, longitude);
         setGcCode(gcCode);
-        CacheId = cacheId;
+        setCacheId(cacheId);
         setDescription(description);
-        Type = type;
-        IsSyncExcluded = true;
-        IsUserWaypoint = true;
+        setType(type);
+        setSyncExcluded(true);
+        setUserWaypoint(true);
         setClue(clue);
         setTitle(title);
-        IsStart = false;
-        detail = new WaypointDetail();
+        setStart(false);
+        setDetail(new WaypointDetail());
     }
 
     /**
@@ -105,14 +81,14 @@ public class Waypoint extends Coordinate implements Serializable {
      */
     public Waypoint(double latitude, double longitude, Waypoint other) {
         super(latitude, longitude);
-        this.CacheId = other.CacheId;
-        this.GcCode = other.GcCode;
-        this.Title = other.Title;
-        this.Type = other.Type;
-        this.IsUserWaypoint = other.IsUserWaypoint;
-        this.IsSyncExcluded = other.IsSyncExcluded;
-        this.IsStart = other.IsStart;
-        this.detail = other.detail;
+        this.setCacheId(other.getCacheId());
+        this.GcCode = other.getGcCode();
+        this.Title = other.getTitle();
+        this.setType(other.getType());
+        this.setUserWaypoint(other.isUserWaypoint());
+        this.setSyncExcluded(other.isSyncExcluded());
+        this.setStart(other.isStart());
+        this.setDetail(other.getDetail());
     }
 
 
@@ -124,9 +100,6 @@ public class Waypoint extends Coordinate implements Serializable {
         return dist[0];
     }
 
-//	public void setCoordinate(Coordinate result) {
-//		Pos = result;
-//	}
 
     /**
      * @param strText
@@ -142,7 +115,7 @@ public class Waypoint extends Coordinate implements Serializable {
 
         String[] arrSplitted = strText.split("\\|");
         if (arrSplitted[0].toLowerCase().equals("geocache")) {
-            this.Type = CacheTypes.Cache;
+            this.setType(CacheTypes.Cache);
         } else {
             String strCacheType;
             if (arrSplitted.length > 1)
@@ -153,26 +126,13 @@ public class Waypoint extends Coordinate implements Serializable {
             String[] strFirstWord = strCacheType.split(" ");
 
             for (String word : strFirstWord) {
-                this.Type = CacheTypes.parseString(word);
-                if (this.Type != CacheTypes.Undefined)
+                this.setType(CacheTypes.parseString(word));
+                if (this.getType() != CacheTypes.Undefined)
                     break;
             }
 
         }
     }
-
-//	public void clear() {
-//		CacheId = -1;
-//		setGcCode("");
-//		Pos = new Coordinate(0, 0);
-//		setTitle("");
-//		setDescription("");
-//		Type = null;
-//		IsUserWaypoint = false;
-//		IsSyncExcluded = false;
-//		setClue("");
-//		setCheckSum(0);
-//	}
 
     @Override
     public String toString() {
@@ -180,80 +140,72 @@ public class Waypoint extends Coordinate implements Serializable {
     }
 
     public void dispose() {
-        setGcCode(null);
-        setTitle(null);
         setDescription(null);
-        Type = null;
+        setType(null);
         setClue(null);
     }
 
+    /**
+     * Waypoint Code
+     */
     public String getGcCode() {
-        if (GcCode == null)
-            return EMPTY_STRING;
-        return new String(GcCode, US_ASCII);
+        return GcCode;
     }
 
     public void setGcCode(String gcCode) {
-        if (gcCode == null) {
-            GcCode = null;
-            return;
-        }
-        GcCode = gcCode.getBytes(US_ASCII);
+        GcCode = gcCode;
     }
 
+    /**
+     * Titel des Wegpunktes
+     */
     public String getTitle() {
-        if (Title == null)
-            return EMPTY_STRING;
-        return new String(Title, UTF_8);
+        return Title;
     }
 
     public void setTitle(String title) {
-        if (title == null) {
-            Title = null;
-            return;
-        }
-        Title = title.getBytes(UTF_8);
+        Title = title;
     }
 
     public String getDescription() {
-        if (detail == null) {
+        if (getDetail() == null) {
             return EMPTY_STRING;
         } else {
-            return detail.getDescription();
+            return getDetail().getDescription();
         }
     }
 
     public void setDescription(String description) {
-        if (detail != null) {
-            detail.setDescription(description);
+        if (getDetail() != null) {
+            getDetail().setDescription(description);
         }
     }
 
     public String getClue() {
-        if (detail == null) {
+        if (getDetail() == null) {
             return EMPTY_STRING;
         } else {
-            return detail.getClue();
+            return getDetail().getClue();
         }
     }
 
     public void setClue(String clue) {
-        if (detail != null) {
-            detail.setClue(clue);
+        if (getDetail() != null) {
+            getDetail().setClue(clue);
         }
     }
 
     public void setCheckSum(int i) {
-        if (detail != null) {
-            detail.setCheckSum(i);
+        if (getDetail() != null) {
+            getDetail().setCheckSum(i);
         }
     }
 
     public int getCheckSum() {
-        if (detail == null) {
+        if (getDetail() == null) {
             return 0;
         } else {
-            return detail.checkSum;
+            return getDetail().checkSum;
         }
     }
 
@@ -264,11 +216,75 @@ public class Waypoint extends Coordinate implements Serializable {
         if (obj instanceof Waypoint) {
 
             Waypoint wp = (Waypoint) obj;
-            if (wp.GcCode == null)
+            if (wp.getGcCode() == null)
                 return false;
-            return this.GcCode != null && Arrays.equals(wp.GcCode, this.GcCode);
+            return this.getGcCode() != null && wp.getGcCode().equals(this.getGcCode());
         }
         return false;
     }
 
+    /**
+     * Id des dazugehörigen Caches in der Datenbank von geocaching.com
+     */
+    public long getCacheId() {
+        return CacheId;
+    }
+
+    public void setCacheId(long cacheId) {
+        CacheId = cacheId;
+    }
+
+    /**
+     * Art des Wegpunkts
+     */
+    public CacheTypes getType() {
+        return Type;
+    }
+
+    public void setType(CacheTypes type) {
+        Type = type;
+    }
+
+    /**
+     * true, falls der Wegpunkt vom Benutzer erstellt wurde
+     */
+    public boolean isUserWaypoint() {
+        return IsUserWaypoint;
+    }
+
+    public void setUserWaypoint(boolean userWaypoint) {
+        IsUserWaypoint = userWaypoint;
+    }
+
+    /**
+     * true, falls der Wegpunkt von der Synchronisation ausgeschlossen wird
+     */
+    public boolean isSyncExcluded() {
+        return IsSyncExcluded;
+    }
+
+    public void setSyncExcluded(boolean syncExcluded) {
+        IsSyncExcluded = syncExcluded;
+    }
+
+    /**
+     * True wenn dies der Startpunkt für den nächsten Besuch ist.<br>
+     * Das CacheIcon wird dann auf diesen Waypoint verschoben und dieser Waypoint wird standardmäßig aktiviert<br>
+     * Es muss aber sichergestellt sein dass immer nur 1 Waypoint eines Caches ein Startpunkt ist!<br>
+     */
+    public boolean isStart() {
+        return IsStart;
+    }
+
+    public void setStart(boolean start) {
+        IsStart = start;
+    }
+
+    public WaypointDetail getDetail() {
+        return detail;
+    }
+
+    public void setDetail(WaypointDetail detail) {
+        this.detail = detail;
+    }
 }

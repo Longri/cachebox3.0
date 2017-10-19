@@ -48,8 +48,6 @@ import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-
 /**
  * Created by Longri on 24.07.16.
  */
@@ -137,7 +135,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
             if (showIcon) {
                 icon = new Image();
-                icon.setDrawable(actWaypoint == null ? actAbstractCache.getType().getDrawable() : actWaypoint.Type.getDrawable());
+                icon.setDrawable(actWaypoint == null ? actAbstractCache.getType().getDrawable() : actWaypoint.getType().getDrawable());
             }
 
             if (showName) {

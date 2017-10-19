@@ -40,33 +40,33 @@ public class WaypointDAO {
     public void WriteToDatabase(Waypoint WP, boolean useReplication) {
         int newCheckSum = createCheckSum(WP);
         if (useReplication) {
-            Replication.WaypointNew(WP.CacheId, WP.getCheckSum(), newCheckSum, WP.getGcCode());
+            Replication.WaypointNew(WP.getCacheId(), WP.getCheckSum(), newCheckSum, WP.getGcCode());
         }
         Parameters args = new Parameters();
         args.put("gccode", WP.getGcCode());
-        args.put("cacheid", WP.CacheId);
+        args.put("cacheid", WP.getCacheId());
         args.put("latitude", WP.latitude);
         args.put("longitude", WP.longitude);
         args.put("description", WP.getDescription());
-        args.put("type", WP.Type.ordinal());
-        args.put("syncexclude", WP.IsSyncExcluded);
-        args.put("userwaypoint", WP.IsUserWaypoint);
+        args.put("type", WP.getType().ordinal());
+        args.put("syncexclude", WP.isSyncExcluded());
+        args.put("userwaypoint", WP.isUserWaypoint());
         if (WP.getClue() == null)
             WP.setClue("");
         args.put("clue", WP.getClue());
         args.put("title", WP.getTitle());
-        args.put("isStart", WP.IsStart);
+        args.put("isStart", WP.isStart());
 
         try {
             long count = Database.Data.insert("Waypoint", args);
             if (count <= 0) {
                 Database.Data.update("Waypoint", args, "gccode=\"" + WP.getGcCode() + "\"", null);
             }
-            if (WP.IsUserWaypoint) {
+            if (WP.isUserWaypoint()) {
                 // HasUserData nicht updaten wenn der Waypoint kein UserWaypoint ist!!!
                 args = new Parameters();
                 args.put("hasUserData", true);
-                Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(WP.CacheId)});
+                Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(WP.getCacheId())});
             }
         } catch (Exception exc) {
             return;
@@ -83,23 +83,23 @@ public class WaypointDAO {
         boolean result = false;
         int newCheckSum = createCheckSum(WP);
         if (useReplication) {
-            Replication.WaypointChanged(WP.CacheId, WP.getCheckSum(), newCheckSum, WP.getGcCode());
+            Replication.WaypointChanged(WP.getCacheId(), WP.getCheckSum(), newCheckSum, WP.getGcCode());
         }
         if (newCheckSum != WP.getCheckSum()) {
             Parameters args = new Parameters();
             args.put("gccode", WP.getGcCode());
-            args.put("cacheid", WP.CacheId);
+            args.put("cacheid", WP.getCacheId());
             args.put("latitude", WP.latitude);
             args.put("longitude", WP.longitude);
             args.put("description", WP.getDescription());
-            args.put("type", WP.Type.ordinal());
-            args.put("syncexclude", WP.IsSyncExcluded);
-            args.put("userwaypoint", WP.IsUserWaypoint);
+            args.put("type", WP.getType().ordinal());
+            args.put("syncexclude", WP.isSyncExcluded());
+            args.put("userwaypoint", WP.isUserWaypoint());
             args.put("clue", WP.getClue());
             args.put("title", WP.getTitle());
-            args.put("isStart", WP.IsStart);
+            args.put("isStart", WP.isStart());
             try {
-                long count = Database.Data.update("Waypoint", args, "CacheId=" + WP.CacheId + " and GcCode=\"" + WP.getGcCode() + "\"", null);
+                long count = Database.Data.update("Waypoint", args, "CacheId=" + WP.getCacheId() + " and GcCode=\"" + WP.getGcCode() + "\"", null);
                 if (count > 0)
                     result = true;
             } catch (Exception exc) {
@@ -107,12 +107,12 @@ public class WaypointDAO {
 
             }
 
-            if (WP.IsUserWaypoint) {
+            if (WP.isUserWaypoint()) {
                 // HasUserData nicht updaten wenn der Waypoint kein UserWaypoint ist (z.B. über API)
                 args = new Parameters();
                 args.put("hasUserData", true);
                 try {
-                    Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(WP.CacheId)});
+                    Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(WP.getCacheId())});
                 } catch (Exception exc) {
                     return result;
                 }
@@ -135,12 +135,12 @@ public class WaypointDAO {
         WP = new Waypoint(reader.getDouble(2), reader.getDouble(3), full);
 
         WP.setGcCode(reader.getString(0));
-        WP.CacheId = reader.getLong(1);
-        WP.Type = CacheTypes.values()[reader.getShort(4)];
-        WP.IsSyncExcluded = reader.getInt(5) == 1;
-        WP.IsUserWaypoint = reader.getInt(6) == 1;
+        WP.setCacheId(reader.getLong(1));
+        WP.setType(CacheTypes.values()[reader.getShort(4)]);
+        WP.setSyncExcluded(reader.getInt(5) == 1);
+        WP.setUserWaypoint(reader.getInt(6) == 1);
         WP.setTitle(reader.getString(7).trim());
-        WP.IsStart = reader.getInt(8) == 1;
+        WP.setStart(reader.getInt(8) == 1);
 
         if (full) {
             WP.setClue(reader.getString(10));
@@ -156,10 +156,10 @@ public class WaypointDAO {
         sCheckSum += UnitFormatter.formatLatitudeDM(WP.latitude);
         sCheckSum += UnitFormatter.formatLongitudeDM(WP.longitude);
         sCheckSum += WP.getDescription();
-        sCheckSum += WP.Type.ordinal();
+        sCheckSum += WP.getType().ordinal();
         sCheckSum += WP.getClue();
         sCheckSum += WP.getTitle();
-        if (WP.IsStart)
+        if (WP.isStart())
             sCheckSum += "1";
         return (int) Utils.sdbm(sCheckSum);
     }
@@ -167,23 +167,23 @@ public class WaypointDAO {
     public void WriteImportToDatabase(Waypoint WP) {
         Parameters args = new Parameters();
         args.put("gccode", WP.getGcCode());
-        args.put("cacheid", WP.CacheId);
+        args.put("cacheid", WP.getCacheId());
         args.put("latitude", WP.latitude);
         args.put("longitude", WP.longitude);
         args.put("description", WP.getDescription());
-        args.put("type", WP.Type.ordinal());
-        args.put("syncexclude", WP.IsSyncExcluded);
-        args.put("userwaypoint", WP.IsUserWaypoint);
+        args.put("type", WP.getType().ordinal());
+        args.put("syncexclude", WP.isSyncExcluded());
+        args.put("userwaypoint", WP.isUserWaypoint());
         args.put("clue", WP.getClue());
         args.put("title", WP.getTitle());
-        args.put("isStart", WP.IsStart);
+        args.put("isStart", WP.isStart());
 
         try {
             Database.Data.insertWithConflictReplace("Waypoint", args);
 
             args = new Parameters();
             args.put("hasUserData", true);
-            Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(WP.CacheId)});
+            Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(WP.getCacheId())});
         } catch (Exception exc) {
             return;
 
@@ -198,12 +198,12 @@ public class WaypointDAO {
             Waypoint wp = abstractCache.getWaypoints().get(i);
             if (except == wp)
                 continue;
-            if (wp.IsStart) {
-                wp.IsStart = false;
+            if (wp.isStart()) {
+                wp.setStart(false);
                 Parameters args = new Parameters();
                 args.put("isStart", false);
                 try {
-                    long count = Database.Data.update("Waypoint", args, "CacheId=" + wp.CacheId + " and GcCode=\"" + wp.getGcCode() + "\"", null);
+                    long count = Database.Data.update("Waypoint", args, "CacheId=" + wp.getCacheId() + " and GcCode=\"" + wp.getGcCode() + "\"", null);
 
                 } catch (Exception exc) {
 
@@ -239,8 +239,8 @@ public class WaypointDAO {
             reader.moveToFirst();
             while (!reader.isAfterLast()) {
                 Waypoint wp = getWaypoint(reader, Full);
-                if (wp.CacheId != aktCacheID) {
-                    aktCacheID = wp.CacheId;
+                if (wp.getCacheId() != aktCacheID) {
+                    aktCacheID = wp.getCacheId();
                     wpList = new CB_List<Waypoint>();
 
                 }

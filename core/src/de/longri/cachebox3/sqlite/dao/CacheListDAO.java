@@ -98,13 +98,13 @@ public class CacheListDAO {
             Waypoint wp = waypointDAO.getWaypoint(reader, fullDetails);
             if (!(fullDetails || loadAllWaypoints)) {
                 // wenn keine FullDetails geladen werden sollen dann sollen nur die Finals und Start-Waypoints geladen werden
-                if (!(wp.IsStart || wp.Type == CacheTypes.Final)) {
+                if (!(wp.isStart() || wp.getType() == CacheTypes.Final)) {
                     reader.moveToNext();
                     continue;
                 }
             }
-            if (wp.CacheId != aktCacheID) {
-                aktCacheID = wp.CacheId;
+            if (wp.getCacheId() != aktCacheID) {
+                aktCacheID = wp.getCacheId();
                 wpList = new CB_List<Waypoint>();
                 waypoints.put(aktCacheID, wpList);
             }

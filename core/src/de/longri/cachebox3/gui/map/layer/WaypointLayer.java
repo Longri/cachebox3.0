@@ -358,10 +358,10 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
     public static String getMapIconName(Waypoint waypoint) {
-        if ((waypoint.Type == CacheTypes.MultiStage) && (waypoint.IsStart))
+        if ((waypoint.getType() == CacheTypes.MultiStage) && (waypoint.isStart()))
             return "mapMultiStageStartP";
         else
-            return "map" + waypoint.Type.name();
+            return "map" + waypoint.getType().name();
     }
 
     private static Bitmap getClusterSymbol(String name) {
@@ -437,7 +437,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         // new selected wp
         if (indexOfNewSelectedWp >= 0) {
-            AbstractCache abstractCacheForWp = Database.Data.Query.GetCacheById(selectedwaypoint.CacheId);
+            AbstractCache abstractCacheForWp = Database.Data.Query.GetCacheById(selectedwaypoint.getCacheId());
             MapWayPointItem newWp = getMapWayPointItem(selectedwaypoint, abstractCacheForWp.isArchived()
                     || !abstractCacheForWp.isAvailable(), true);
             mItemList.set(indexOfNewSelectedWp, newWp);
@@ -445,7 +445,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         // last selected wp
         if (indexOfLastSelectedWp >= 0) {
-            AbstractCache abstractCacheForWp = Database.Data.Query.GetCacheById(lastWaypoint.CacheId);
+            AbstractCache abstractCacheForWp = Database.Data.Query.GetCacheById(lastWaypoint.getCacheId());
             MapWayPointItem lastWp = getMapWayPointItem(lastWaypoint, abstractCacheForWp.isArchived()
                     || !abstractCacheForWp.isAvailable(), false);
             mItemList.set(indexOfLastSelectedWp, lastWp);

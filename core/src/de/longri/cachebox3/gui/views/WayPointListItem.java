@@ -18,7 +18,6 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -35,7 +34,7 @@ import de.longri.cachebox3.types.Waypoint;
 public class WayPointListItem extends ListViewItem implements Disposable {
 
     public static WayPointListItem getListItem(int listIndex, final Waypoint waypoint) {
-        WayPointListItem listViewItem = new WayPointListItem(listIndex, waypoint.Type,
+        WayPointListItem listViewItem = new WayPointListItem(listIndex, waypoint.getType(),
                 waypoint.getGcCode(), waypoint.getTitle(), waypoint.getDescription(), waypoint.FormatCoordinate());
         return listViewItem;
     }

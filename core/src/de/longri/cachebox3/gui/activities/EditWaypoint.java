@@ -70,7 +70,7 @@ public class EditWaypoint extends ActivityBase {
 
         btnOk = new VisTextButton(Translation.Get("save"));
         btnCancel = new VisTextButton(Translation.Get("cancel"));
-        cacheTitelLabel = new VisLabel(Database.Data.Query.GetCacheById(waypoint.CacheId).getName());
+        cacheTitelLabel = new VisLabel(Database.Data.Query.GetCacheById(waypoint.getCacheId()).getName());
         typeLabel = new VisLabel(Translation.Get("type"));
         titleLabel = new VisLabel(Translation.Get("Title"));
         descriptionLabel = new VisLabel(Translation.Get("Description"));
@@ -96,8 +96,8 @@ public class EditWaypoint extends ActivityBase {
         selectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                EditWaypoint.this.waypoint.Type = selectBox.getSelected();
-                showCbStartPoint(EditWaypoint.this.waypoint.Type == CacheTypes.MultiStage);
+                EditWaypoint.this.waypoint.setType(selectBox.getSelected());
+                showCbStartPoint(EditWaypoint.this.waypoint.getType() == CacheTypes.MultiStage);
             }
         });
         selectBox.set(itemList);
@@ -141,7 +141,7 @@ public class EditWaypoint extends ActivityBase {
         titleTextArea.setText((waypoint.getTitle() == null) ? "" : waypoint.getTitle());
         descriptionTextArea.setText(waypoint.getDescription() == null ? "" : waypoint.getDescription());
         clueTextArea.setText(waypoint.getClue() == null ? "" : waypoint.getClue());
-        selectBox.select(waypoint.Type);
+        selectBox.select(waypoint.getType());
     }
 
 
@@ -176,7 +176,7 @@ public class EditWaypoint extends ActivityBase {
                 newWaypoint.setTitle(titleTextArea.getText());
                 newWaypoint.setDescription(descriptionTextArea.getText());
                 newWaypoint.setClue(clueTextArea.getText());
-                newWaypoint.IsStart = startCheckBox.isChecked();
+                newWaypoint.setStart(startCheckBox.isChecked());
                 callBack.callBack(newWaypoint);
                 finish();
             }

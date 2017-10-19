@@ -1166,7 +1166,7 @@ public class GroundspeakAPI {
                         for (int j = 0, m = aktCache.getWaypoints().size; j < m; j++) {
                             Waypoint wp = aktCache.getWaypoints().get(j);
                             if (wp.getGcCode().equalsIgnoreCase(waypoint.getGcCode())) {
-                                if (wp.IsUserWaypoint)
+                                if (wp.isUserWaypoint())
                                     update = false;
                                 break;
                             }

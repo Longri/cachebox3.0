@@ -44,7 +44,6 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
@@ -360,7 +359,7 @@ public class WaypointView extends AbstractView {
                     addNewListView();
                     EventHandler.fire(new SelectedWayPointChangedEvent(value));
                     final WaypointDAO waypointDAO = new WaypointDAO();
-                    if (value.IsStart) {
+                    if (value.isStart()) {
                         //It must be ensured here that this waypoint is the only one of these Cache,
                         //which is defined as starting point !!!
                         waypointDAO.ResetStartWaypoint(EventHandler.getSelectedCache(), value);
@@ -417,7 +416,7 @@ public class WaypointView extends AbstractView {
         if (actWaypoint != null)
             cm.addItem(MenuID.MI_EDIT, "edit");
         cm.addItem(MenuID.MI_ADD, "AddWaypoint", CB.getSkin().getMenuIcon.addWp);
-        if ((actWaypoint != null) && (actWaypoint.IsUserWaypoint))
+        if ((actWaypoint != null) && (actWaypoint.isUserWaypoint()))
             cm.addItem(MenuID.MI_DELETE, "delete");
 
         //ISSUE (#128 Add Waypoint projection)
