@@ -16,9 +16,11 @@
 package de.longri.cachebox3.types;
 
 
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.utils.MathUtils;
@@ -26,7 +28,6 @@ import de.longri.cachebox3.utils.lists.CB_List;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
@@ -945,7 +946,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public ArrayList<Attributes> getAttributes() {
+    public Array<Attributes> getAttributes(Database database) {
         if (getDetail() != null) {
             return getDetail().getAttributes(getId());
         } else {

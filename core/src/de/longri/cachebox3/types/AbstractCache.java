@@ -15,11 +15,12 @@
  */
 package de.longri.cachebox3.types;
 
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.lists.CB_List;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -46,6 +47,8 @@ public abstract class AbstractCache extends Coordinate {
         }
         return result;
     }
+
+    public abstract Array<Attributes> getAttributes(Database database);
 
     public abstract boolean ImTheOwner();
 
@@ -203,8 +206,6 @@ public abstract class AbstractCache extends Coordinate {
     public abstract String getState();
 
     public abstract void setState(String value);
-
-    public abstract ArrayList<Attributes> getAttributes();
 
     public abstract void addAttributeNegative(Attributes attribute);
 

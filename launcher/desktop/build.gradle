@@ -1,6 +1,7 @@
 apply plugin: "java"
 
-sourceCompatibility = 1.7
+targetCompatibility = 1.8
+sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.output.resourcesDir "../android/assets/"
 

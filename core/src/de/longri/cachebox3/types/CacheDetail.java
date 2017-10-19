@@ -17,6 +17,7 @@ package de.longri.cachebox3.types;
 
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.lists.CB_List;
 
@@ -231,7 +232,7 @@ public class CacheDetail implements Serializable {
         return this.attributesPositive;
     }
 
-    public ArrayList<Attributes> getAttributes(long Id) {
+    public Array<Attributes> getAttributes(long Id) {
         return Attributes.getAttributes(this.getAttributesPositive(Id), this.getAttributesNegative(Id));
     }
 

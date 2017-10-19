@@ -16,14 +16,15 @@
 package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -292,6 +293,27 @@ public class Cache3 extends AbstractCache {
 
 
     @Override
+    public Array<Attributes> getAttributes(Database database) {
+        SQLiteGdxDatabaseCursor c = database.rawQuery("SELECT * FROM Attributes WHERE Id=?", new String[]{String.valueOf(this.id)});
+        c.moveToFirst();
+        DLong attributesPositive = null;
+        DLong attributesNegative = null;
+        while (!c.isAfterLast()) {
+            if (!c.isNull(0)) {
+                attributesPositive = new DLong(c.getLong(3), c.getLong(1));
+                attributesNegative = new DLong(c.getLong(4), c.getLong(2));
+            } else {
+                attributesPositive = new DLong(0, 0);
+                attributesNegative = new DLong(0, 0);
+            }
+            break;
+        }
+        c.close();
+        return Attributes.getAttributes(attributesPositive, attributesNegative);
+    }
+
+
+    @Override
     public boolean ImTheOwner() {
         return false;
     }
@@ -476,10 +498,6 @@ public class Cache3 extends AbstractCache {
 
     }
 
-    @Override
-    public ArrayList<Attributes> getAttributes() {
-        return null;
-    }
 
     @Override
     public void addAttributeNegative(Attributes attribute) {

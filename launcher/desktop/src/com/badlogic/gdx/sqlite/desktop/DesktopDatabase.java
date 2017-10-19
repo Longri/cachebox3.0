@@ -138,7 +138,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             e.printStackTrace();
         } finally {
             try {
-                statement2.close();
+                if (statement2 != null) statement2.close();
             } catch (SQLException e) {
 
                 e.printStackTrace();

@@ -17,11 +17,13 @@ package de.longri.cachebox3.sqlite;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxException;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
 import de.longri.cachebox3.sqlite.dao.CacheListDAO;
+import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.Cache3;
 import de.longri.cachebox3.types.CacheList;
@@ -31,6 +33,8 @@ import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 import org.mapsforge.core.util.LatLongUtils;
 import org.oscim.core.Tile;
+
+import java.util.ArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,6 +111,12 @@ class DatabaseConvert {
             assertThat("Cache FavePoints must be 0", cache3.getFaviritPoints() == 0);
             assertThat("Cache HasHint must equals", cache3.hasHint() == cache.hasHint());
 
+            //check properties that not stored on class (direct DB Access)
+
+            Array<Attributes> cacheAttributes = cache.getAttributes(Database.Data);
+            Array<Attributes> cache3Attributes = cache3.getAttributes(cb3Database);
+            assertThat("Cache Attributes must equals", cacheAttributes.equals(cache3Attributes));
+
             i++;
         }
 
@@ -115,7 +125,7 @@ class DatabaseConvert {
     }
 
 
-    double roundDoubleCoordinate(double value) {
+    private double roundDoubleCoordinate(double value) {
         value = Math.round(LatLongUtils.degreesToMicrodegrees(value));
         value = LatLongUtils.microdegreesToDegrees((int) value);
         return value;

@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -37,6 +38,7 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.SettingBool;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
@@ -205,11 +207,11 @@ public class CompassView extends AbstractView implements PositionChangedListener
         // add Attribute
         if (actCacheNotNull && showAtt) {
             AttributesStyle attStyle = VisUI.getSkin().get("CompassView", AttributesStyle.class);
-            ArrayList<Attributes> attList = actAbstractCache.getAttributes();
+            Array<Attributes> attList = actAbstractCache.getAttributes(Database.Data);
             float iconWidth = 0, iconHeight = 0;
             int lineBreak = 0, lineBreakStep = 0;
             Table lineTable = null;
-            for (int i = 0, n = attList.size(); i < n; i++) {
+            for (int i = 0, n = attList.size; i < n; i++) {
                 Drawable attDrawable = attList.get(i).getDrawable(attStyle);
                 if (attDrawable != null) {
                     if (iconWidth == 0) {

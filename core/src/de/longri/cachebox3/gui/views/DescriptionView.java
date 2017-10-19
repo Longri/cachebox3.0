@@ -174,7 +174,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     private String getAttributesHtml(AbstractCache abstractCache) {
         StringBuilder sb = new StringBuilder();
         try {
-            Iterator<Attributes> attrs = abstractCache.getAttributes().iterator();
+            Iterator<Attributes> attrs = abstractCache.getAttributes(Database.Data).iterator();
 
             if (attrs == null || !attrs.hasNext())
                 return "";
