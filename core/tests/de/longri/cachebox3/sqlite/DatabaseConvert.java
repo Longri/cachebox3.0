@@ -23,10 +23,7 @@ import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
 import de.longri.cachebox3.sqlite.dao.CacheListDAO;
-import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.Cache3;
-import de.longri.cachebox3.types.CacheList;
+import de.longri.cachebox3.types.*;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
@@ -111,11 +108,19 @@ class DatabaseConvert {
             assertThat("Cache FavePoints must be 0", cache3.getFaviritPoints() == 0);
             assertThat("Cache HasHint must equals", cache3.hasHint() == cache.hasHint());
 
-            //check properties that not stored on class (direct DB Access)
 
+            Array<Waypoint> cacheWayPoints = cache.getWaypoints();
+            Array<Waypoint> cache3WayPoints = cache3.getWaypoints();
+            assertThat("Cache Waypoints must equals", cacheWayPoints.equals(cache3WayPoints));
+
+            //check properties that not stored on class (direct DB Access)
             Array<Attributes> cacheAttributes = cache.getAttributes(Database.Data);
             Array<Attributes> cache3Attributes = cache3.getAttributes(cb3Database);
             assertThat("Cache Attributes must equals", cacheAttributes.equals(cache3Attributes));
+
+
+
+
 
             i++;
         }
