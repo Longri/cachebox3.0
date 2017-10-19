@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.types;
 
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.MathUtils;
@@ -50,12 +51,13 @@ public class Cache3 extends AbstractCache {
     public final static short MASK_HAS_USER_DATA = 1 << 8;
     public final static short MASK_LISTING_CHANGED = 1 << 9;
 
+
     public static boolean getMaskValue(short mask, short bitFlags) {
         return (bitFlags & mask) == mask;
     }
 
     public static short setMaskValue(short mask, boolean value, short bitFlags) {
-        if (getMaskValue(mask, bitFlags) == value){
+        if (getMaskValue(mask, bitFlags) == value) {
             return bitFlags;
         }
 
@@ -70,16 +72,52 @@ public class Cache3 extends AbstractCache {
 
     private final static Logger log = LoggerFactory.getLogger(Cache3.class);
 
-    private CharSequence name;
+    private final CharSequence name, gcCode, placedBy, owner, gcId;
+    private final short rating, numTravelbugs, booleanStore;
+    private final int favPoints;
+    private final long id;
+    private final CacheTypes type;
+    private final CacheSizes size;
+    private final float difficulty, terrain;
 
-    public Cache3(double latitude, double longitude) {
-        super(latitude, longitude);
+
+    public Cache3(SQLiteGdxDatabaseCursor cursor) {
+        super(cursor.getDouble(1), cursor.getDouble(2));
+        this.id = cursor.getLong(0);
+        short sizeOrigin = cursor.getShort(3);
+        this.size = CacheSizes.parseInt(sizeOrigin);
+        this.difficulty = (float) cursor.getShort(4) / 2.0f;
+        this.terrain = (float) cursor.getShort(5) / 2.0f;
+        short typeOrigin = cursor.getShort(6);
+        this.type = CacheTypes.get(typeOrigin);
+        this.rating = cursor.getShort(7);
+        this.numTravelbugs = cursor.getShort(8);
+        this.gcCode = new CharSequenceArray(cursor.getString(9));
+        this.name = new CharSequenceArray(cursor.getString(10).trim());
+        this.placedBy = new CharSequenceArray(cursor.getString(11));
+        this.owner = new CharSequenceArray(cursor.getString(12));
+        this.gcId = new CharSequenceArray(cursor.getString(13));
+        this.booleanStore = cursor.getShort(14);
+        this.favPoints = cursor.getInt(15);
     }
-
 
     //################################################################################
     //# properties retained at the class
     ///###############################################################################
+
+    private void throwNotChangeable(String propertyName) {
+        throw new RuntimeException("'" + propertyName + "' is not changeable! Use CacheImport.class instead of Cache3");
+    }
+
+    @Override
+    public long getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(long id) {
+        throwNotChangeable("Id");
+    }
 
     @Override
     public CharSequence getName() {
@@ -88,12 +126,170 @@ public class Cache3 extends AbstractCache {
 
     @Override
     public void setName(String name) {
-        this.name = new CharSequenceArray(name);
+        throwNotChangeable("Name");
     }
+
+    @Override
+    public CacheSizes getSize() {
+        return size;
+    }
+
+    @Override
+    public void setSize(CacheSizes size) {
+        throwNotChangeable("Size");
+    }
+
+    @Override
+    public float getDifficulty() {
+        return difficulty;
+    }
+
+    @Override
+    public void setDifficulty(float difficulty) {
+        throwNotChangeable("Difficulty");
+    }
+
+    @Override
+    public float getTerrain() {
+        return terrain;
+    }
+
+    @Override
+    public void setTerrain(float terrain) {
+        throwNotChangeable("Terrain");
+    }
+
+    @Override
+    public CacheTypes getType() {
+        return type;
+    }
+
+    @Override
+    public void setType(CacheTypes type) {
+        throwNotChangeable("Type");
+    }
+
+    @Override
+    public CharSequence getGcCode() {
+        return gcCode;
+    }
+
+    @Override
+    public void setGcCode(String gcCode) {
+        throwNotChangeable("GcCode");
+    }
+
+    @Override
+    public CharSequence getPlacedBy() {
+        return placedBy;
+    }
+
+    @Override
+    public void setPlacedBy(String value) {
+        throwNotChangeable("PlacedBy");
+    }
+
+    @Override
+    public CharSequence getOwner() {
+        return owner;
+    }
+
+    @Override
+    public void setOwner(String owner) {
+        throwNotChangeable("Owner");
+    }
+
+    @Override
+    public CharSequence getGcId() {
+        return gcId;
+    }
+
+    @Override
+    public void setGcId(String gcId) {
+        throwNotChangeable("GcId");
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return this.getMaskValue(MASK_AVAILABLE);
+    }
+
+    @Override
+    public void setAvailable(boolean available) {
+        throwNotChangeable("Available");
+    }
+
+    @Override
+    public boolean isFound() {
+        return this.getMaskValue(MASK_FOUND);
+    }
+
+    @Override
+    public void setFound(boolean found) {
+        throwNotChangeable("Found");
+    }
+
+
+    @Override
+    public boolean isHasUserData() {
+        return this.getMaskValue(MASK_HAS_USER_DATA);
+    }
+
+    @Override
+    public void setHasUserData(boolean hasUserData) {
+        throwNotChangeable("HasUserData");
+    }
+
+    @Override
+    public int getNumTravelbugs() {
+        return numTravelbugs;
+    }
+
+    @Override
+    public void setNumTravelbugs(int numTravelbugs) {
+        throwNotChangeable("NumTravelbugs");
+    }
+
+    @Override
+    public boolean isArchived() {
+        return this.getMaskValue(MASK_ARCHIVED);
+    }
+
+    @Override
+    public void setArchived(boolean archived) {
+        throwNotChangeable("Archived");
+    }
+
+    @Override
+    public boolean hasCorrectedCoordinates() {
+        return this.getMaskValue(MASK_CORECTED_COORDS);
+    }
+
+    @Override
+    public void setCorrectedCoordinates(boolean correctedCoordinates) {
+        throwNotChangeable("hasCorrectedCoordinates");
+    }
+
+    @Override
+    public boolean isFavorite() {
+        return this.getMaskValue(MASK_FAVORITE);
+    }
+
+    @Override
+    public void setFavorite(boolean favorite) {
+        throwNotChangeable("Favorite");
+    }
+
+    @Override
+    public boolean hasHint() {
+        return this.getMaskValue(MASK_HAS_HINT);
+    }
+
 
     //################################################################################
     //# properties that not retained at the class but read/write directly from/to DB
     ///###############################################################################
+
 
     @Override
     public boolean ImTheOwner() {
@@ -151,37 +347,6 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public String getGcCode() {
-        return null;
-    }
-
-    @Override
-    public void setGcCode(String gcCode) {
-
-    }
-
-
-    @Override
-    public String getOwner() {
-        return null;
-    }
-
-    @Override
-    public void setOwner(String owner) {
-
-    }
-
-    @Override
-    public String getGcId() {
-        return null;
-    }
-
-    @Override
-    public void setGcId(String gcId) {
-
-    }
-
-    @Override
     public String getHint() {
         return null;
     }
@@ -202,81 +367,6 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public boolean hasHint() {
-        return false;
-    }
-
-    @Override
-    public boolean hasCorrectedCoordinates() {
-        return false;
-    }
-
-    @Override
-    public void setCorrectedCoordinates(boolean correctedCoordinates) {
-
-    }
-
-    @Override
-    public boolean isArchived() {
-        return false;
-    }
-
-    @Override
-    public void setArchived(boolean archived) {
-
-    }
-
-    @Override
-    public boolean isAvailable() {
-        return false;
-    }
-
-    @Override
-    public void setAvailable(boolean available) {
-
-    }
-
-    @Override
-    public boolean isFavorite() {
-        return false;
-    }
-
-    @Override
-    public void setFavorite(boolean favorite) {
-
-    }
-
-    @Override
-    public float getDifficulty() {
-        return 0;
-    }
-
-    @Override
-    public void setDifficulty(float difficulty) {
-
-    }
-
-    @Override
-    public float getTerrain() {
-        return 0;
-    }
-
-    @Override
-    public void setTerrain(float terrain) {
-
-    }
-
-    @Override
-    public boolean isFound() {
-        return false;
-    }
-
-    @Override
-    public void setFound(boolean found) {
-
-    }
-
-    @Override
     public boolean isLive() {
         return false;
     }
@@ -287,32 +377,12 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public boolean isHasUserData() {
-        return false;
-    }
-
-    @Override
-    public void setHasUserData(boolean hasUserData) {
-
-    }
-
-    @Override
     public boolean isListingChanged() {
         return false;
     }
 
     @Override
     public void setListingChanged(boolean listingChanged) {
-
-    }
-
-    @Override
-    public String getPlacedBy() {
-        return null;
-    }
-
-    @Override
-    public void setPlacedBy(String value) {
 
     }
 
@@ -516,15 +586,6 @@ public class Cache3 extends AbstractCache {
 
     }
 
-    @Override
-    public long getId() {
-        return 0;
-    }
-
-    @Override
-    public void setId(long id) {
-
-    }
 
     @Override
     public float getRating() {
@@ -533,36 +594,6 @@ public class Cache3 extends AbstractCache {
 
     @Override
     public void setRating(float rating) {
-
-    }
-
-    @Override
-    public CacheSizes getSize() {
-        return null;
-    }
-
-    @Override
-    public void setSize(CacheSizes size) {
-
-    }
-
-    @Override
-    public CacheTypes getType() {
-        return null;
-    }
-
-    @Override
-    public void setType(CacheTypes type) {
-
-    }
-
-    @Override
-    public int getNumTravelbugs() {
-        return 0;
-    }
-
-    @Override
-    public void setNumTravelbugs(int numTravelbugs) {
 
     }
 
@@ -595,4 +626,9 @@ public class Cache3 extends AbstractCache {
     public boolean isDetailLoaded() {
         return false;
     }
+
+    private boolean getMaskValue(short mask) {
+        return getMaskValue(mask, booleanStore);
+    }
+
 }

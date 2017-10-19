@@ -363,7 +363,7 @@ public class DraftsView extends AbstractView {
         }
 
         // chk car found?
-        if (abstractCache.getGcCode().equalsIgnoreCase("CBPark")) {
+        if (abstractCache.getGcCode().toString().equalsIgnoreCase("CBPark")) {
             if (type == LogTypes.found) {
                 MessageBox.show(Translation.Get("My_Parking_Area_Found"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
             } else if (type == LogTypes.didnt_find) {
@@ -373,7 +373,7 @@ public class DraftsView extends AbstractView {
         }
 
         // kein GC Cache
-        if (!abstractCache.getGcCode().toLowerCase().startsWith("gc")) {
+        if (!abstractCache.getGcCode().toString().toLowerCase().startsWith("gc")) {
 
             if (type == LogTypes.found || type == LogTypes.attended || type == LogTypes.webcam_photo_taken) {
                 // Found it! -> fremden Cache als gefunden markieren
@@ -426,7 +426,7 @@ public class DraftsView extends AbstractView {
         if (newDraft == null) {
             newDraft = new DraftEntry(type);
             newDraft.CacheName = abstractCache.getName();
-            newDraft.gcCode = abstractCache.getGcCode();
+            newDraft.gcCode = abstractCache.getGcCode().toString();
             newDraft.foundNumber = Config.FoundOffset.getValue();
             newDraft.timestamp = new Date();
             newDraft.CacheId = abstractCache.getId();
@@ -1005,7 +1005,7 @@ public class DraftsView extends AbstractView {
         }
 
         // Aktueller Cache ist von geocaching.com dann weitere Menüeinträge freigeben
-        if (abstractCache != null && abstractCache.getGcCode().toLowerCase().startsWith("gc")) {
+        if (abstractCache != null && abstractCache.getGcCode().toString().toLowerCase().startsWith("gc")) {
             cm.addItem(MenuID.MI_MAINTANCE, "maintenance", itemStyle.typeStyle.needs_maintenance);
             cm.addItem(MenuID.MI_NOTE, "writenote", itemStyle.typeStyle.note);
         }

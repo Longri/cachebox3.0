@@ -98,7 +98,7 @@ public abstract class AbstractCache extends Coordinate {
 
     protected abstract Waypoint findWaypointByGc(String gc);
 
-    public abstract String getGcCode();
+    public abstract CharSequence getGcCode();
 
     public abstract void setGcCode(String gcCode);
 
@@ -106,11 +106,11 @@ public abstract class AbstractCache extends Coordinate {
 
     public abstract void setName(String name);
 
-    public abstract String getOwner();
+    public abstract CharSequence getOwner();
 
     public abstract void setOwner(String owner);
 
-    public abstract String getGcId();
+    public abstract CharSequence getGcId();
 
     public abstract void setGcId(String gcId);
 
@@ -164,7 +164,7 @@ public abstract class AbstractCache extends Coordinate {
 
     public abstract void setListingChanged(boolean listingChanged);
 
-    public abstract String getPlacedBy();
+    public abstract CharSequence getPlacedBy();
 
     public abstract void setPlacedBy(String value);
 

@@ -211,7 +211,7 @@ class SearchGcOwnerTest {
                 assertEquals(230, logList.size);
                 LogEntry logEntry = logList.first();
 
-                assertEquals(AbstractCache.GenerateCacheId(abstractCache.getGcCode()), logEntry.CacheId);
+                assertEquals(AbstractCache.GenerateCacheId(abstractCache.getGcCode().toString()), logEntry.CacheId);
                 assertEquals(678589990, logEntry.Id);
                 assertEquals(LogTypes.found, logEntry.Type);
                 assertTrue(logEntry.Comment.startsWith("Fast in Berlin, fast auf'm Lan"));
@@ -330,7 +330,7 @@ class SearchGcOwnerTest {
                         assertEquals(230, logList.size);
                         LogEntry logEntry = logList.first();
 
-                        assertEquals(AbstractCache.GenerateCacheId(abstractCache.getGcCode()), logEntry.CacheId);
+                        assertEquals(AbstractCache.GenerateCacheId(abstractCache.getGcCode().toString()), logEntry.CacheId);
                         logEntry = logList.last();
 
                         assertEquals(AbstractCache.GenerateCacheId("GC3FHRP"), logEntry.CacheId);

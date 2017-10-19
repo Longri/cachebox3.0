@@ -178,7 +178,7 @@ public class ReloadCacheActivity extends ActivityBase {
 
                 AbstractCache actCache = EventHandler.getSelectedCache();
                 if (actCache != null) {
-                    final SearchGC searchGC = new SearchGC(GroundspeakAPI.getAccessToken(), actCache.getGcCode(),
+                    final SearchGC searchGC = new SearchGC(GroundspeakAPI.getAccessToken(), actCache.getGcCode().toString(),
                             new ICancel() {
                                 @Override
                                 public boolean cancel() {

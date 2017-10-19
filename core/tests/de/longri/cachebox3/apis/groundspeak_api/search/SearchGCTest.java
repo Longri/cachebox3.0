@@ -178,7 +178,7 @@ class SearchGCTest {
                 assertEquals(10, logList.size);
                 LogEntry logEntry = logList.first();
 
-                assertEquals(AbstractCache.GenerateCacheId(abstractCache.getGcCode()), logEntry.CacheId);
+                assertEquals(AbstractCache.GenerateCacheId(abstractCache.getGcCode().toString()), logEntry.CacheId);
                 assertEquals(677446155, logEntry.Id);
                 assertEquals(LogTypes.found, logEntry.Type);
                 assertTrue(logEntry.Comment.startsWith("Heute fand das Event  GC73332 Eiergolf"));
@@ -187,7 +187,7 @@ class SearchGCTest {
 
                 logEntry = logList.last();
 
-                assertEquals(AbstractCache.GenerateCacheId(abstractCache.getGcCode()), logEntry.CacheId);
+                assertEquals(AbstractCache.GenerateCacheId(abstractCache.getGcCode().toString()), logEntry.CacheId);
                 assertEquals(663746391, logEntry.Id);
                 assertEquals(LogTypes.found, logEntry.Type);
                 assertTrue(logEntry.Comment.startsWith("Ein freundliches Hallo an Wurzellisel,"));

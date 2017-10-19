@@ -190,7 +190,7 @@ class CheckCacheStateParserTest {
 
         for (int i = 0, n = caches.size; i < n; i++) {
             AbstractCache abstractCache = caches.get(i);
-            String gcCode = abstractCache.getGcCode();
+            String gcCode = abstractCache.getGcCode().toString();
 
             if (archieved.contains(gcCode, false)) {
                 assertThat("Cache must archived:" + gcCode, abstractCache.isArchived());
@@ -383,7 +383,7 @@ class CheckCacheStateParserTest {
 
         for (int i = 0, n = increment.get(); i < n; i++) {
             AbstractCache abstractCache = caches.get(i);
-            String gcCode = abstractCache.getGcCode();
+            String gcCode = abstractCache.getGcCode().toString();
 
             if (archieved.contains(gcCode, false)) {
                 assertThat("Cache must archived:" + gcCode, abstractCache.isArchived());

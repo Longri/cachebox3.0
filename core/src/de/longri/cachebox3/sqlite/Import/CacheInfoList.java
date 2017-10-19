@@ -163,7 +163,7 @@ public class CacheInfoList {
      * @throws IOException
      */
     public static void mergeCacheInfo(AbstractCache abstractCache) throws IOException {
-        String gcCode = abstractCache.getGcCode();
+        String gcCode = abstractCache.getGcCode().toString();
         CacheInfo cacheInfo = mCacheInfoList.get(gcCode);
         if (cacheInfo != null) {
 //            // if already exists and if the category of the cache is pinned:
@@ -338,7 +338,7 @@ public class CacheInfoList {
         if (mCacheInfoList == null)
             mCacheInfoList = new HashMap<String, CacheInfo>();
 
-        mCacheInfoList.put(abstractCache.getGcCode(), info);
+        mCacheInfoList.put(abstractCache.getGcCode().toString(), info);
 
     }
 

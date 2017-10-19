@@ -227,7 +227,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
         if (EventHandler.getSelectedCache() != null) {
             //save selected Cache
-            Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGcCode());
+            Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGcCode().toString());
             Config.AcceptChanges();
             log.debug("Store LastSelectedCache = " + EventHandler.getSelectedCache().getGcCode());
         }

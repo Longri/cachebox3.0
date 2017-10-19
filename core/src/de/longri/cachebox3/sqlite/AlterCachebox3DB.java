@@ -76,7 +76,7 @@ public class AlterCachebox3DB {
                     while (n-- > 0) {
                         cursor = database.rawQuery("SELECT Archived, Available, Found, VotePending, Favorit, " +
                                 "HasUserData, ListingChanged, ImagesUpdated, DescriptionImagesUpdated, " +
-                                "CorrectedCoordinates" +
+                                "CorrectedCoordinates, Hint" +
                                 " from Caches WHERE Id=?", new String[]{String.valueOf(allIds.get(i))});
                         cursor.moveToFirst();
                         boolean Archived = cursor.getInt(0) != 0;
@@ -89,6 +89,8 @@ public class AlterCachebox3DB {
                         boolean ImagesUpdated = cursor.getInt(7) != 0;
                         boolean DescriptionImagesUpdated = cursor.getInt(8) != 0;
                         boolean CorrectedCoordinates = cursor.getInt(9) != 0;
+                        String hint = cursor.getString(10);
+                        boolean hasHint = hint != null && hint.length() > 0;
 
                         short bitFlags = 0;
                         bitFlags = Cache3.setMaskValue(Cache3.MASK_ARCHIVED, Archived, bitFlags);
@@ -98,6 +100,7 @@ public class AlterCachebox3DB {
                         bitFlags = Cache3.setMaskValue(Cache3.MASK_HAS_USER_DATA, HasUserData, bitFlags);
                         bitFlags = Cache3.setMaskValue(Cache3.MASK_LISTING_CHANGED, ListingChanged, bitFlags);
                         bitFlags = Cache3.setMaskValue(Cache3.MASK_CORECTED_COORDS, CorrectedCoordinates, bitFlags);
+                        bitFlags = Cache3.setMaskValue(Cache3.MASK_HAS_HINT, hasHint, bitFlags);
 
                         //Store bitFlags
                         Database.Parameters args = new Database.Parameters();

@@ -62,7 +62,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
 
         if (EventHandler.getSelectedCache() != null) {
             // speichere selektierten Cache, da nicht alles über die SelectedCacheEventList läuft
-            Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGcCode());
+            Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGcCode().toString());
             Config.AcceptChanges();
             log.debug("LastSelectedCache = " + EventHandler.getSelectedCache().getGcCode());
         }
@@ -142,7 +142,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             for (int i = 0, n = Database.Data.Query.size; i < n; i++) {
                 AbstractCache c = Database.Data.Query.get(i);
 
-                if (c.getGcCode().equalsIgnoreCase(sGc)) {
+                if (c.getGcCode().toString().equalsIgnoreCase(sGc)) {
                     try {
                         log.debug("returnFromSelectDB:Set selectedCache to " + c.getGcCode() + " from lastSaved.");
                         c.loadDetail();

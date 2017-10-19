@@ -275,7 +275,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
         boolean ret = false;
 
         try {
-            ret = this.getOwner().toLowerCase(Locale.getDefault()).equals(gcLogin);
+            ret = this.getOwner().toString().toLowerCase(Locale.getDefault()).equals(gcLogin);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -513,7 +513,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public String getGcCode() {
+    public CharSequence getGcCode() {
         if (GcCode == null)
             return EMPTY_STRING;
         return new String(GcCode, US_ASCII);
@@ -545,7 +545,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public String getOwner() {
+    public CharSequence getOwner() {
         if (Owner == null)
             return EMPTY_STRING;
         return new String(Owner, UTF_8);
@@ -561,7 +561,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public String getGcId() {
+    public CharSequence getGcId() {
         if (GcId == null)
             return EMPTY_STRING;
         return new String(GcId, UTF_8);
@@ -781,7 +781,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public String getPlacedBy() {
+    public CharSequence getPlacedBy() {
         if (getDetail() != null) {
             return getDetail().PlacedBy;
         } else {

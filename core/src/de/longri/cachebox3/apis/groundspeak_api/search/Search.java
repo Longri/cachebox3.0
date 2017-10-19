@@ -342,7 +342,7 @@ public abstract class Search extends PostRequest {
                                 actWayPoint.setTitle("Corrected Coordinates (API)");
                                 actWayPoint.setDescription("");
                                 actWayPoint.Type = CacheTypes.Final;
-                                actWayPoint.setGcCode("CO" + actCache.getGcCode().substring(2, actCache.getGcCode().length()));
+                                actWayPoint.setGcCode("CO" + actCache.getGcCode().toString().substring(2, actCache.getGcCode().length()));
                             }
 
                             //add final Waypointg instance
@@ -365,7 +365,7 @@ public abstract class Search extends PostRequest {
                             actCache.setLongDescription(value);
                         } else if (CODE.equals(name)) {
                             actCache.setGcCode(value);
-                            actCache.setId(AbstractCache.GenerateCacheId(actCache.getGcCode()));
+                            actCache.setId(AbstractCache.GenerateCacheId(actCache.getGcCode().toString()));
                         } else if (COUNTRY.equals(name)) {
                             actCache.setCountry(value);
                         } else if (DATE_HIDDEN.equals(name)) {

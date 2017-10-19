@@ -185,7 +185,7 @@ public class DescriptionImageGrabber {
                 try {
                     URI imgUri = URI.create(/* baseUri, */src); // NICHT
                     // ORGINAL!!!!!!!!!
-                    String localFile = BuildImageFilename(abstractCache.getGcCode(), imgUri);
+                    String localFile = BuildImageFilename(abstractCache.getGcCode().toString(), imgUri);
 
                     if (Utils.FileExistsNotEmpty(localFile)) {
                         int idx = 0;
