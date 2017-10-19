@@ -71,6 +71,9 @@ class DatabaseConvert {
         Array<Waypoint> waypointList = new Array<>();
         Array<Waypoint3> waypoint3List = new Array<>();
 
+        assertThat("All Waypoints must equals", waypointList.equals(waypoint3List));
+
+
 
         //read Cachelist and check
         CacheList tmpCacheList = new CacheList();
