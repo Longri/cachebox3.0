@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-public class Waypoint extends Coordinate implements Serializable {
+public class Waypoint extends AbstractWaypoint implements Serializable {
     private static final long serialVersionUID = 67610567646416L;
     public static final Charset UTF_8 = Charset.forName("UTF-8");
     public static final String EMPTY_STRING = "";
@@ -92,6 +92,7 @@ public class Waypoint extends Coordinate implements Serializable {
     }
 
 
+    @Override
     public float distance() {
         Coordinate fromPos = EventHandler.getMyPosition();
         if (fromPos == null) return -1;
@@ -148,10 +149,12 @@ public class Waypoint extends Coordinate implements Serializable {
     /**
      * Waypoint Code
      */
+    @Override
     public String getGcCode() {
         return GcCode;
     }
 
+    @Override
     public void setGcCode(String gcCode) {
         GcCode = gcCode;
     }
@@ -159,14 +162,17 @@ public class Waypoint extends Coordinate implements Serializable {
     /**
      * Titel des Wegpunktes
      */
+    @Override
     public String getTitle() {
         return Title;
     }
 
+    @Override
     public void setTitle(String title) {
         Title = title;
     }
 
+    @Override
     public String getDescription() {
         if (getDetail() == null) {
             return EMPTY_STRING;
@@ -175,12 +181,14 @@ public class Waypoint extends Coordinate implements Serializable {
         }
     }
 
+    @Override
     public void setDescription(String description) {
         if (getDetail() != null) {
             getDetail().setDescription(description);
         }
     }
 
+    @Override
     public String getClue() {
         if (getDetail() == null) {
             return EMPTY_STRING;
@@ -189,18 +197,21 @@ public class Waypoint extends Coordinate implements Serializable {
         }
     }
 
+    @Override
     public void setClue(String clue) {
         if (getDetail() != null) {
             getDetail().setClue(clue);
         }
     }
 
+    @Override
     public void setCheckSum(int i) {
         if (getDetail() != null) {
             getDetail().setCheckSum(i);
         }
     }
 
+    @Override
     public int getCheckSum() {
         if (getDetail() == null) {
             return 0;
@@ -226,10 +237,12 @@ public class Waypoint extends Coordinate implements Serializable {
     /**
      * Id des dazugehörigen Caches in der Datenbank von geocaching.com
      */
+    @Override
     public long getCacheId() {
         return CacheId;
     }
 
+    @Override
     public void setCacheId(long cacheId) {
         CacheId = cacheId;
     }
@@ -237,10 +250,12 @@ public class Waypoint extends Coordinate implements Serializable {
     /**
      * Art des Wegpunkts
      */
+    @Override
     public CacheTypes getType() {
         return Type;
     }
 
+    @Override
     public void setType(CacheTypes type) {
         Type = type;
     }
@@ -248,10 +263,12 @@ public class Waypoint extends Coordinate implements Serializable {
     /**
      * true, falls der Wegpunkt vom Benutzer erstellt wurde
      */
+    @Override
     public boolean isUserWaypoint() {
         return IsUserWaypoint;
     }
 
+    @Override
     public void setUserWaypoint(boolean userWaypoint) {
         IsUserWaypoint = userWaypoint;
     }
@@ -259,10 +276,12 @@ public class Waypoint extends Coordinate implements Serializable {
     /**
      * true, falls der Wegpunkt von der Synchronisation ausgeschlossen wird
      */
+    @Override
     public boolean isSyncExcluded() {
         return IsSyncExcluded;
     }
 
+    @Override
     public void setSyncExcluded(boolean syncExcluded) {
         IsSyncExcluded = syncExcluded;
     }
@@ -272,10 +291,12 @@ public class Waypoint extends Coordinate implements Serializable {
      * Das CacheIcon wird dann auf diesen Waypoint verschoben und dieser Waypoint wird standardmäßig aktiviert<br>
      * Es muss aber sichergestellt sein dass immer nur 1 Waypoint eines Caches ein Startpunkt ist!<br>
      */
+    @Override
     public boolean isStart() {
         return IsStart;
     }
 
+    @Override
     public void setStart(boolean start) {
         IsStart = start;
     }
