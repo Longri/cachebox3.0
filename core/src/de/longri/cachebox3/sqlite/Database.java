@@ -136,6 +136,11 @@ public class Database {
         return retLogEntry;
     }
 
+    public void disableAutoCommit() {
+        myDB.setAutoCommit(false);
+    }
+
+
     public enum DatabaseType {
         CacheBox, CacheBox3, Drafts, Settings
     }

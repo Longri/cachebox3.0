@@ -106,15 +106,31 @@ public class AlterCachebox3DB {
 
                         i++;
                     }
+                    cursor.close();
                 }
 
+
+                //Delete Data from Caches
+                database.execSQL("DELETE FROM Caches;");
                 database.setTransactionSuccessful();
                 database.endTransaction();
 
                 //drop alt Table Caches (Close and reopen connection)
                 database.close();
                 database.open();
+                database.disableAutoCommit();
                 database.execSQL("DROP TABLE Caches;");
+
+
+                //execute VACUUM
+                database.setTransactionSuccessful();
+                database.endTransaction();
+                database.close();
+                Thread.sleep(200);
+                database.open();
+                database.disableAutoCommit();
+                database.execSQL("end transaction");
+                database.execSQL("VACUUM");
             }
 
 
