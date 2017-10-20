@@ -16,6 +16,7 @@
 package de.longri.cachebox3.sqlite;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
@@ -23,7 +24,10 @@ import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
 import de.longri.cachebox3.sqlite.dao.CacheListDAO;
+import de.longri.cachebox3.sqlite.dao.Waypoint3DAO;
+import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.utils.lists.CB_List;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
@@ -69,10 +73,39 @@ class DatabaseConvert {
 
         //read Waypoint list and check
         Array<Waypoint> waypointList = new Array<>();
-        Array<Waypoint3> waypoint3List = new Array<>();
 
-        assertThat("All Waypoints must equals", waypointList.equals(waypoint3List));
+        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(WaypointDAO.SQL_WP_FULL, null);
+        reader.moveToFirst();
+        while (!reader.isAfterLast()) {
+            Waypoint wp = new WaypointDAO().getWaypoint(reader, true);
+            waypointList.add(wp);
+            reader.moveToNext();
+        }
+        reader.close();
 
+        Array<Waypoint3> waypoint3list = new Waypoint3DAO().getAllWayPoints(cb3Database);
+
+        int n = waypointList.size;
+        int i = 0;
+        while (n-- > 0) {
+            Waypoint waypoint = waypointList.get(i);
+            Waypoint3 waypoint3 = waypoint3list.get(i);
+            assertThat("Waypoint Id must equals", waypoint.getCacheId() == waypoint3.getCacheId());
+            assertThat("Waypoint Latitude must equals", roundDoubleCoordinate(waypoint.getLatitude()) == roundDoubleCoordinate(waypoint3.getLatitude()));
+            assertThat("Waypoint Longitude must equals", roundDoubleCoordinate(waypoint.getLongitude()) == roundDoubleCoordinate(waypoint3.getLongitude()));
+            assertThat("Waypoint GcCode must equals", waypoint3.getGcCode().equals(waypoint.getGcCode()));
+            assertThat("Waypoint Type must equals", waypoint.getType() == waypoint3.getType());
+            assertThat("Waypoint IsStart must equals", waypoint.isStart() == waypoint3.isStart());
+            assertThat("Waypoint SyncExclude must equals", waypoint.isSyncExcluded() == waypoint3.isSyncExcluded());
+            assertThat("Waypoint IsUserWaypoint must equals", waypoint.isUserWaypoint() == waypoint3.isUserWaypoint());
+            assertThat("Waypoint Title must equals", waypoint3.getTitle().equals(waypoint.getTitle()));
+
+            assertThat("Waypoint Description must equals", waypoint3.getDescription(cb3Database).equals(waypoint.getDescription(Database.Data)));
+            assertThat("Waypoint Clue must equals", waypoint3.getClue(cb3Database).equals(waypoint.getClue(Database.Data)));
+            i++;
+        }
+
+        assertThat("All Waypoints must equals", waypoint3list.equals(waypointList));
 
 
         //read Cachelist and check
@@ -89,8 +122,8 @@ class DatabaseConvert {
 
         assertThat("Cache3DB must have 33 Caches but has:" + cacheList3.size, cacheList3.size == 33);
 
-        int n = cacheList3.size;
-        int i = 0;
+        n = cacheList3.size;
+        i = 0;
         while (n-- > 0) {
             Cache cache = (Cache) Database.Data.Query.get(i);
             Cache3 cache3 = (Cache3) cacheList3.get(i);
@@ -122,13 +155,12 @@ class DatabaseConvert {
 
             Array<Waypoint> cacheWayPoints = cache.getWaypoints();
             Array<Waypoint> cache3WayPoints = cache3.getWaypoints();
-            assertThat("Cache Waypoints must equals", cacheWayPoints.equals(cache3WayPoints));
+            assertThat("Cache Waypoints must equals", cache3WayPoints.equals(cacheWayPoints));
 
             //check properties that not stored on class (direct DB Access)
             Array<Attributes> cacheAttributes = cache.getAttributes(Database.Data);
             Array<Attributes> cache3Attributes = cache3.getAttributes(cb3Database);
             assertThat("Cache Attributes must equals", cacheAttributes.equals(cache3Attributes));
-
 
             i++;
         }

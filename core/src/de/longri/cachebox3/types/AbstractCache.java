@@ -261,9 +261,9 @@ public abstract class AbstractCache extends Coordinate {
     /**
      * Liste der zusaetzlichen Wegpunkte des Caches
      */
-    public abstract CB_List<Waypoint> getWaypoints();
+    public abstract Array<Waypoint> getWaypoints();
 
-    public abstract void setWaypoints(CB_List<Waypoint> waypoints);
+    public abstract void setWaypoints(Array<Waypoint> waypoints);
 
     /**
      * Detail Information of Waypoint which are not always loaded

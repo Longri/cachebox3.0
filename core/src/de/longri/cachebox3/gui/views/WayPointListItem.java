@@ -25,6 +25,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 
@@ -35,21 +36,21 @@ public class WayPointListItem extends ListViewItem implements Disposable {
 
     public static WayPointListItem getListItem(int listIndex, final Waypoint waypoint) {
         WayPointListItem listViewItem = new WayPointListItem(listIndex, waypoint.getType(),
-                waypoint.getGcCode(), waypoint.getTitle(), waypoint.getDescription(), waypoint.FormatCoordinate());
+                waypoint.getGcCode().toString(), waypoint.getTitle().toString(), waypoint.getDescription(Database.Data), waypoint.FormatCoordinate());
         return listViewItem;
     }
 
 
     private final WayPointListItemStyle style;
     private final CacheTypes type;
-    private final String wayPointGcCode;
+    private final CharSequence wayPointGcCode;
     private boolean needsLayout = true;
     final private Image arrowImage;
     final private VisLabel distanceLabel, descriptionLabel, coordLabel, nameLabel;
     private boolean distanceOrBearingChanged = true;
 
-    public WayPointListItem(int listIndex, CacheTypes type, String wayPointGcCode, String wayPointTitle,
-                            String description, String coord) {
+    public WayPointListItem(int listIndex, CacheTypes type, CharSequence wayPointGcCode, CharSequence wayPointTitle,
+                            CharSequence description, CharSequence coord) {
         super(listIndex);
         this.style = VisUI.getSkin().get("WayPointListItems", WayPointListItemStyle.class);
         this.type = type;
@@ -145,7 +146,7 @@ public class WayPointListItem extends ListViewItem implements Disposable {
         }
     }
 
-    public String getWaypointGcCode() {
+    public CharSequence getWaypointGcCode() {
         return this.wayPointGcCode;
     }
 }

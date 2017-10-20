@@ -27,15 +27,19 @@ public class CacheList3DAO {
 
     private final String READ_ALL = "SELECT * from CacheCoreInfo";
 
-    public CacheList readCacheList(Database cb3Database) {
+    public CacheList readCacheList(Database database) {
         CacheList caches = new CacheList();
-        SQLiteGdxDatabaseCursor cursor = cb3Database.rawQuery(READ_ALL, null);
+        SQLiteGdxDatabaseCursor cursor = database.rawQuery(READ_ALL, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             caches.add(new Cache3(cursor));
             cursor.moveToNext();
         }
         cursor.close();
+
+        //read waypoints
+
+
         return caches;
     }
 

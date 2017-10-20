@@ -19,10 +19,10 @@ package de.longri.cachebox3.types;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.sqlite.Database;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 
 public class Waypoint extends AbstractWaypoint implements Serializable {
     private static final long serialVersionUID = 67610567646416L;
@@ -82,8 +82,8 @@ public class Waypoint extends AbstractWaypoint implements Serializable {
     public Waypoint(double latitude, double longitude, Waypoint other) {
         super(latitude, longitude);
         this.setCacheId(other.getCacheId());
-        this.GcCode = other.getGcCode();
-        this.Title = other.getTitle();
+        this.GcCode = other.getGcCode().toString();
+        this.Title = other.getTitle().toString();
         this.setType(other.getType());
         this.setUserWaypoint(other.isUserWaypoint());
         this.setSyncExcluded(other.isSyncExcluded());
@@ -150,7 +150,7 @@ public class Waypoint extends AbstractWaypoint implements Serializable {
      * Waypoint Code
      */
     @Override
-    public String getGcCode() {
+    public CharSequence getGcCode() {
         return GcCode;
     }
 
@@ -163,7 +163,7 @@ public class Waypoint extends AbstractWaypoint implements Serializable {
      * Titel des Wegpunktes
      */
     @Override
-    public String getTitle() {
+    public CharSequence getTitle() {
         return Title;
     }
 
@@ -173,7 +173,7 @@ public class Waypoint extends AbstractWaypoint implements Serializable {
     }
 
     @Override
-    public String getDescription() {
+    public CharSequence getDescription(Database database) {
         if (getDetail() == null) {
             return EMPTY_STRING;
         } else {
@@ -189,7 +189,7 @@ public class Waypoint extends AbstractWaypoint implements Serializable {
     }
 
     @Override
-    public String getClue() {
+    public CharSequence getClue(Database cb3Database) {
         if (getDetail() == null) {
             return EMPTY_STRING;
         } else {
@@ -221,15 +221,12 @@ public class Waypoint extends AbstractWaypoint implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-        if (obj instanceof Waypoint) {
+    public boolean equals(Object object) {
+        if (this == object) return true;
 
-            Waypoint wp = (Waypoint) obj;
-            if (wp.getGcCode() == null)
-                return false;
-            return this.getGcCode() != null && wp.getGcCode().equals(this.getGcCode());
+        if (object instanceof AbstractWaypoint) {
+            AbstractWaypoint other = (AbstractWaypoint) object;
+            return this.getGcCode().equals(other.getGcCode());
         }
         return false;
     }

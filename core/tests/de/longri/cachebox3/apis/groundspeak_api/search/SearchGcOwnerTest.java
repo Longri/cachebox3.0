@@ -24,6 +24,7 @@ import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.junit.jupiter.api.Test;
@@ -148,15 +149,15 @@ class SearchGcOwnerTest {
 
                 Waypoint waypoint = abstractCache.getWaypoints().first();
                 assertEquals("PA18JGX", waypoint.getGcCode());
-                assertEquals("Parkmöglichkeit", waypoint.getDescription());
+                assertEquals("Parkmöglichkeit", waypoint.getDescription(Database.Data));
                 assertEquals("Parking", waypoint.getTitle());
                 assertEquals(CacheTypes.ParkingArea, waypoint.getType());
                 assertEquals(52.633667, waypoint.getLatitude());
                 assertEquals(13.375917, waypoint.getLongitude());
 
-                Waypoint userWaypoint = abstractCache.getWaypoints().last();
+                Waypoint userWaypoint = abstractCache.getWaypoints().peek();
                 assertEquals("CO18JGX", userWaypoint.getGcCode());
-                assertEquals("", userWaypoint.getDescription());
+                assertEquals("", userWaypoint.getDescription(Database.Data));
                 assertEquals("Corrected Coordinates (API)", userWaypoint.getTitle());
                 assertEquals(CacheTypes.Final, userWaypoint.getType());
                 assertEquals(52.616666666666667, userWaypoint.getLatitude());
@@ -283,7 +284,7 @@ class SearchGcOwnerTest {
 
                         Waypoint waypoint = abstractCache.getWaypoints().first();
                         assertEquals("PA18JGX", waypoint.getGcCode());
-                        assertEquals("Parkmöglichkeit", waypoint.getDescription());
+                        assertEquals("Parkmöglichkeit", waypoint.getDescription(Database.Data));
                         assertEquals("Parking", waypoint.getTitle());
                         assertEquals(CacheTypes.ParkingArea, waypoint.getType());
                         assertEquals(52.633667, waypoint.getLatitude());

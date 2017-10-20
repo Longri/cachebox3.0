@@ -751,7 +751,7 @@ public abstract class Search extends PostRequest {
                         if (aktCache.getWaypoints() != null) {
                             for (int j = 0, m = aktCache.getWaypoints().size; j < m; j++) {
                                 Waypoint wp = aktCache.getWaypoints().get(j);
-                                if (wp.getGcCode().equalsIgnoreCase(waypoint.getGcCode())) {
+                                if (wp.getGcCode().toString().equalsIgnoreCase(waypoint.getGcCode().toString())) {
                                     if (wp.isUserWaypoint())
                                         update = false;
                                     break;

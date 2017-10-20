@@ -17,6 +17,7 @@ package de.longri.cachebox3.sqlite.dao;
 
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Database.Parameters;
@@ -40,20 +41,20 @@ public class WaypointDAO {
     public void WriteToDatabase(Waypoint WP, boolean useReplication) {
         int newCheckSum = createCheckSum(WP);
         if (useReplication) {
-            Replication.WaypointNew(WP.getCacheId(), WP.getCheckSum(), newCheckSum, WP.getGcCode());
+            Replication.WaypointNew(WP.getCacheId(), WP.getCheckSum(), newCheckSum, WP.getGcCode().toString());
         }
         Parameters args = new Parameters();
         args.put("gccode", WP.getGcCode());
         args.put("cacheid", WP.getCacheId());
         args.put("latitude", WP.latitude);
         args.put("longitude", WP.longitude);
-        args.put("description", WP.getDescription());
+        args.put("description", WP.getDescription(Database.Data));
         args.put("type", WP.getType().ordinal());
         args.put("syncexclude", WP.isSyncExcluded());
         args.put("userwaypoint", WP.isUserWaypoint());
-        if (WP.getClue() == null)
+        if (WP.getClue(Database.Data) == null)
             WP.setClue("");
-        args.put("clue", WP.getClue());
+        args.put("clue", WP.getClue(Database.Data));
         args.put("title", WP.getTitle());
         args.put("isStart", WP.isStart());
 
@@ -83,7 +84,7 @@ public class WaypointDAO {
         boolean result = false;
         int newCheckSum = createCheckSum(WP);
         if (useReplication) {
-            Replication.WaypointChanged(WP.getCacheId(), WP.getCheckSum(), newCheckSum, WP.getGcCode());
+            Replication.WaypointChanged(WP.getCacheId(), WP.getCheckSum(), newCheckSum, WP.getGcCode().toString());
         }
         if (newCheckSum != WP.getCheckSum()) {
             Parameters args = new Parameters();
@@ -91,11 +92,11 @@ public class WaypointDAO {
             args.put("cacheid", WP.getCacheId());
             args.put("latitude", WP.latitude);
             args.put("longitude", WP.longitude);
-            args.put("description", WP.getDescription());
+            args.put("description", WP.getDescription(Database.Data));
             args.put("type", WP.getType().ordinal());
             args.put("syncexclude", WP.isSyncExcluded());
             args.put("userwaypoint", WP.isUserWaypoint());
-            args.put("clue", WP.getClue());
+            args.put("clue", WP.getClue(Database.Data));
             args.put("title", WP.getTitle());
             args.put("isStart", WP.isStart());
             try {
@@ -152,12 +153,12 @@ public class WaypointDAO {
 
     private int createCheckSum(Waypoint WP) {
         // for Replication
-        String sCheckSum = WP.getGcCode();
+        String sCheckSum = WP.getGcCode().toString();
         sCheckSum += UnitFormatter.formatLatitudeDM(WP.latitude);
         sCheckSum += UnitFormatter.formatLongitudeDM(WP.longitude);
-        sCheckSum += WP.getDescription();
+        sCheckSum += WP.getDescription(Database.Data);
         sCheckSum += WP.getType().ordinal();
-        sCheckSum += WP.getClue();
+        sCheckSum += WP.getClue(Database.Data);
         sCheckSum += WP.getTitle();
         if (WP.isStart())
             sCheckSum += "1";
@@ -170,11 +171,11 @@ public class WaypointDAO {
         args.put("cacheid", WP.getCacheId());
         args.put("latitude", WP.latitude);
         args.put("longitude", WP.longitude);
-        args.put("description", WP.getDescription());
+        args.put("description", WP.getDescription(Database.Data));
         args.put("type", WP.getType().ordinal());
         args.put("syncexclude", WP.isSyncExcluded());
         args.put("userwaypoint", WP.isUserWaypoint());
-        args.put("clue", WP.getClue());
+        args.put("clue", WP.getClue(Database.Data));
         args.put("title", WP.getTitle());
         args.put("isStart", WP.isStart());
 
@@ -227,8 +228,8 @@ public class WaypointDAO {
      * @param Full    Waypoints as FullWaypoints (true) or Waypoint (false)
      * @return
      */
-    public CB_List<Waypoint> getWaypointsFromCacheID(Long CacheID, boolean Full) {
-        CB_List<Waypoint> wpList = new CB_List<Waypoint>();
+    public Array<Waypoint> getWaypointsFromCacheID(Long CacheID, boolean Full) {
+        Array<Waypoint> wpList = new CB_List<>();
         long aktCacheID = -1;
 
         StringBuilder sqlState = new StringBuilder(Full ? SQL_WP_FULL : SQL_WP);

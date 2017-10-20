@@ -125,7 +125,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
 
     private float cachedDistance = 0;
 
-    private CB_List<Waypoint> waypoints = null;
+    private Array<Waypoint> waypoints = null;
 
 	/*
      * Constructors
@@ -236,7 +236,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
         dao.readDetail(this);
         // load all Waypoints with full Details
         WaypointDAO wdao = new WaypointDAO();
-        CB_List<Waypoint> wpts = wdao.getWaypointsFromCacheID(getId(), true);
+        Array<Waypoint> wpts = wdao.getWaypointsFromCacheID(getId(), true);
         for (int i = 0; i < wpts.size; i++) {
             Waypoint wp = wpts.get(i);
             boolean found = false;
@@ -1094,12 +1094,12 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public CB_List<Waypoint> getWaypoints() {
+    public Array<Waypoint> getWaypoints() {
         return waypoints;
     }
 
     @Override
-    public void setWaypoints(CB_List<Waypoint> waypoints) {
+    public void setWaypoints(Array<Waypoint> waypoints) {
         this.waypoints = waypoints;
     }
 

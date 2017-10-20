@@ -16,6 +16,7 @@
 package de.longri.cachebox3.types;
 
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.sqlite.Database;
 
 /**
  * Created by Longri on 19.10.2017.
@@ -27,19 +28,19 @@ public abstract class AbstractWaypoint extends Coordinate {
 
     public abstract float distance();
 
-    public abstract String getGcCode();
+    public abstract CharSequence getGcCode();
 
     public abstract void setGcCode(String gcCode);
 
-    public abstract String getTitle();
+    public abstract CharSequence getTitle();
 
     public abstract void setTitle(String title);
 
-    public abstract String getDescription();
+    public abstract CharSequence getDescription(Database database);
 
     public abstract void setDescription(String description);
 
-    public abstract String getClue();
+    public abstract CharSequence getClue(Database cb3Database);
 
     public abstract void setClue(String clue);
 

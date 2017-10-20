@@ -206,7 +206,7 @@ public class Cache3 extends AbstractCache {
     ///###############################################################################
 
     private void throwNotChangeable(String propertyName) {
-        throw new RuntimeException("'" + propertyName + "' is not changeable! Use CacheImport.class instead of Cache3");
+        throw new RuntimeException("'" + propertyName + "' is not changeable! Use CacheImport.class instead of Cache3.class");
     }
 
     @Override
@@ -593,12 +593,12 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public CB_List<Waypoint> getWaypoints() {
+    public Array<Waypoint> getWaypoints() {
         return null;
     }
 
     @Override
-    public void setWaypoints(CB_List<Waypoint> waypoints) {
+    public void setWaypoints(Array<Waypoint> waypoints) {
 
     }
 
