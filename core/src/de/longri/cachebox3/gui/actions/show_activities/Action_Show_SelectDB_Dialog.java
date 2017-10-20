@@ -32,6 +32,7 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.CacheListView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.AbstractCacheListDAO;
 import de.longri.cachebox3.sqlite.dao.CacheListDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
@@ -95,7 +96,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
     }
 
     public void loadSelectedDB() {
-        if(CB.viewmanager!=null){
+        if (CB.viewmanager != null) {
             CB.postAsync(new Runnable() {
                 @Override
                 public void run() {
@@ -130,8 +131,8 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
 
         log.debug("Read CacheList");
         CacheList tmpCacheList = new CacheList();
-        CacheListDAO cacheListDAO = new CacheListDAO();
-        cacheListDAO.ReadCacheList(tmpCacheList, sqlWhere, false, Config.ShowAllWaypoints.getValue());
+        AbstractCacheListDAO abstractCacheListDAO = new CacheListDAO();
+        abstractCacheListDAO.readCacheList(Database.Data, tmpCacheList, sqlWhere, false, Config.ShowAllWaypoints.getValue());
         log.debug("Readed " + tmpCacheList.size + "Caches into CacheList");
         Database.Data.Query = tmpCacheList;
 

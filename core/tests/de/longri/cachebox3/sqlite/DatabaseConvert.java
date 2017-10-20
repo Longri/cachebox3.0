@@ -20,25 +20,15 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
-import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
-import de.longri.cachebox3.sqlite.dao.CacheListDAO;
-import de.longri.cachebox3.sqlite.dao.Waypoint3DAO;
-import de.longri.cachebox3.sqlite.dao.WaypointDAO;
+import de.longri.cachebox3.sqlite.dao.*;
 import de.longri.cachebox3.types.*;
-import de.longri.cachebox3.utils.lists.CB_List;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 import org.mapsforge.core.util.LatLongUtils;
-import org.oscim.core.Tile;
-
-import java.util.ArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test for convert ACB V2.x DB to CB3 DB
@@ -110,8 +100,8 @@ class DatabaseConvert {
 
         //read Cachelist and check
         CacheList tmpCacheList = new CacheList();
-        CacheListDAO cacheListDAO = new CacheListDAO();
-        cacheListDAO.ReadCacheList(tmpCacheList, "", true, Config.ShowAllWaypoints.getValue());
+        AbstractCacheListDAO abstractCacheListDAO = new CacheListDAO();
+        abstractCacheListDAO.readCacheList(Database.Data, tmpCacheList, "", true, Config.ShowAllWaypoints.getValue());
         Database.Data.Query = tmpCacheList;
         assertThat("TestDB must have 33 Caches but has:" + Database.Data.Query.size, Database.Data.Query.size == 33);
 

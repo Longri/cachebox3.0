@@ -41,6 +41,7 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.AbstractCacheListDAO;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.sqlite.dao.CacheListDAO;
 import de.longri.cachebox3.translation.Translation;
@@ -725,14 +726,14 @@ public class DraftsView extends AbstractView {
         // suche den Cache aus der DB.
         // Nicht aus der aktuellen Query, da dieser herausgefiltert sein könnte
         CacheList lCaches = new CacheList();
-        CacheListDAO cacheListDAO = new CacheListDAO();
-        cacheListDAO.ReadCacheList(lCaches, "Id = " + aktDraft.CacheId, false, false);
+        AbstractCacheListDAO abstractCacheListDAO = new CacheListDAO();
+        abstractCacheListDAO.readCacheList(Database.Data, lCaches, "Id = " + aktDraft.CacheId, false, false);
         if (lCaches.size > 0)
             tmpAbstractCache = lCaches.get(0);
         final AbstractCache abstractCache = tmpAbstractCache;
 
         if (abstractCache == null && !aktDraft.isTbDraft) {
-            String message = Translation.Get("cacheOtherDb",aktDraft.CacheName.toString());
+            String message = Translation.Get("cacheOtherDb", aktDraft.CacheName.toString());
             message += "\n" + Translation.Get("fieldNoteNoDelete");
             MessageBox.show(message);
             return;
@@ -844,8 +845,8 @@ public class DraftsView extends AbstractView {
         // suche den Cache aus der DB.
         // Nicht aus der aktuellen Query, da dieser herausgefiltert sein könnte
         CacheList lCaches = new CacheList();
-        CacheListDAO cacheListDAO = new CacheListDAO();
-        cacheListDAO.ReadCacheList(lCaches, "Id = " + aktDraft.CacheId, false, false);
+        AbstractCacheListDAO abstractCacheListDAO = new CacheListDAO();
+        abstractCacheListDAO.readCacheList(Database.Data, lCaches, "Id = " + aktDraft.CacheId, false, false);
         AbstractCache tmpCache = null;
         if (lCaches.size > 0)
             tmpCache = lCaches.get(0);

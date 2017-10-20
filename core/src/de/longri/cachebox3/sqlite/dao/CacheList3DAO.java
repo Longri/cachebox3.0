@@ -27,9 +27,14 @@ import de.longri.cachebox3.types.Waypoint3;
 /**
  * Created by Longri on 19.10.2017.
  */
-public class CacheList3DAO {
+public class CacheList3DAO extends AbstractCacheListDAO {
 
     private final String READ_ALL = "SELECT * from CacheCoreInfo";
+
+    @Override
+    public CacheList readCacheList(Database database, CacheList cacheList, String where, boolean fullDetails, boolean loadAllWaypoints) {
+        return null;
+    }
 
     public CacheList readCacheList(Database database) {
         CacheList caches = new CacheList();
@@ -63,6 +68,5 @@ public class CacheList3DAO {
 
         return caches;
     }
-
 
 }

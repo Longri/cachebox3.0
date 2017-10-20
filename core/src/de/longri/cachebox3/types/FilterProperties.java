@@ -316,6 +316,11 @@ public class FilterProperties {
      * @return
      */
     public String getSqlWhere(String userName) {
+
+        if (true)
+            return ""; //must rework with new Database schema
+
+
         if (isHistory) {
             ArrayList<String> orParts = new ArrayList<String>();
             String[] gcCodes = CB.cacheHistory.split(",");
