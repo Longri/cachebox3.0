@@ -41,6 +41,7 @@ import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.AbstractWaypointDAO;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
@@ -311,7 +312,7 @@ public class WaypointView extends AbstractView {
                         if (which == ButtonDialog.BUTTON_POSITIVE) {
                             log.debug("Delete Waypoint");
                             // Yes button clicked
-                            final WaypointDAO dao = new WaypointDAO();
+                            final AbstractWaypointDAO dao = new WaypointDAO();
                             dao.delete(actWaypoint);
                             actAbstractCache.getWaypoints().removeValue(actWaypoint, false);
                             listView.setSelection(0);// select Cache
@@ -359,13 +360,13 @@ public class WaypointView extends AbstractView {
 
                     addNewListView();
                     EventHandler.fire(new SelectedWayPointChangedEvent(value));
-                    final WaypointDAO waypointDAO = new WaypointDAO();
+                    final AbstractWaypointDAO abstractWaypointDAO = new WaypointDAO();
                     if (value.isStart()) {
                         //It must be ensured here that this waypoint is the only one of these Cache,
                         //which is defined as starting point !!!
-                        waypointDAO.ResetStartWaypoint(EventHandler.getSelectedCache(), value);
+                        abstractWaypointDAO.resetStartWaypoint(EventHandler.getSelectedCache(), value);
                     }
-                    waypointDAO.WriteToDatabase(value);
+                    abstractWaypointDAO.writeToDatabase(value);
                     CB.requestRendering();
                 }
             }

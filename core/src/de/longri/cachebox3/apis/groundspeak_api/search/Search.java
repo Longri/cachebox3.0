@@ -107,7 +107,7 @@ public abstract class Search extends PostRequest {
     private final AbstractCacheDAO abstractCacheDAO = new CacheDAO();
     private final LogDAO logDAO = new LogDAO();
     private final ImageDAO imageDAO = new ImageDAO();
-    private final WaypointDAO waypointDAO = new WaypointDAO();
+    private final AbstractWaypointDAO abstractWaypointDAO = new WaypointDAO();
 
     protected int geocacheLogCount = 10;
     protected int trackableLogCount = 10;
@@ -759,8 +759,8 @@ public abstract class Search extends PostRequest {
 
                     if (update) {
                         // do not store replication information when importing caches with GC api
-                        if (!waypointDAO.UpdateDatabase(waypoint, false)) {
-                            waypointDAO.WriteToDatabase(waypoint, false); // do not store replication information here
+                        if (!abstractWaypointDAO.updateDatabase(waypoint)) {
+                            abstractWaypointDAO.writeToDatabase(waypoint); // do not store replication information here
                         }
                     }
 

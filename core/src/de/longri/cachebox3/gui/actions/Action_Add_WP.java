@@ -26,6 +26,7 @@ import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.views.WaypointView;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.AbstractWaypointDAO;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
@@ -82,13 +83,13 @@ public class Action_Add_WP extends AbstractAction {
             public void callBack(Waypoint value) {
                 if (value != null) {
                     EventHandler.fire(new SelectedWayPointChangedEvent(value));
-                    final WaypointDAO waypointDAO = new WaypointDAO();
+                    final AbstractWaypointDAO abstractWaypointDAO = new WaypointDAO();
                     if (value.isStart()) {
                         //It must be ensured here that this waypoint is the only one of these Cache,
                         //which is defined as starting point !!!
-                        waypointDAO.ResetStartWaypoint(EventHandler.getSelectedCache(), value);
+                        abstractWaypointDAO.resetStartWaypoint(EventHandler.getSelectedCache(), value);
                     }
-                    waypointDAO.WriteToDatabase(value);
+                    abstractWaypointDAO.writeToDatabase(value);
 
                     // add WP to Cache
                     EventHandler.getSelectedCache().getWaypoints().add(value);

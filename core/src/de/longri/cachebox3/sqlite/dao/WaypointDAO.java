@@ -27,18 +27,19 @@ import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WaypointDAO {
+public class WaypointDAO extends AbstractWaypointDAO {
     private static final Logger log = LoggerFactory.getLogger(WaypointDAO.class);
 
     public static final String SQL_WP = "select GcCode, CacheId, Latitude, Longitude, Type, SyncExclude, UserWaypoint, Title, isStart from Waypoint";
     public static final String SQL_WP_FULL = "select GcCode, CacheId, Latitude, Longitude, Type, SyncExclude, UserWaypoint, Title, isStart, Description, Clue from Waypoint";
 
-    public void WriteToDatabase(Waypoint WP) {
-        WriteToDatabase(WP, true);
+    @Override
+    public void writeToDatabase(AbstractWaypoint WP) {
+        writeToDatabase(WP, true);
     }
 
     // sometimes Replication for synchronization with CBServer should not be used (when importing caches from gc api)
-    public void WriteToDatabase(Waypoint WP, boolean useReplication) {
+    public void writeToDatabase(AbstractWaypoint WP, boolean useReplication) {
         int newCheckSum = createCheckSum(WP);
         if (useReplication) {
             Replication.WaypointNew(WP.getCacheId(), WP.getCheckSum(), newCheckSum, WP.getGcCode().toString());
@@ -75,12 +76,13 @@ public class WaypointDAO {
         }
     }
 
-    public boolean UpdateDatabase(Waypoint WP) {
-        return UpdateDatabase(WP, true);
+    @Override
+    public boolean updateDatabase(AbstractWaypoint WP) {
+        return updateDatabase(WP, false);
     }
 
     // sometimes Replication for synchronization with CBServer should not be used (when importing caches from gc api)
-    public boolean UpdateDatabase(Waypoint WP, boolean useReplication) {
+    public boolean updateDatabase(AbstractWaypoint WP, boolean useReplication) {
         boolean result = false;
         int newCheckSum = createCheckSum(WP);
         if (useReplication) {
@@ -151,7 +153,7 @@ public class WaypointDAO {
         return WP;
     }
 
-    private int createCheckSum(Waypoint WP) {
+    private int createCheckSum(AbstractWaypoint WP) {
         // for Replication
         String sCheckSum = WP.getGcCode().toString();
         sCheckSum += UnitFormatter.formatLatitudeDM(WP.latitude);
@@ -194,7 +196,8 @@ public class WaypointDAO {
     // Hier wird überprüft, ob für diesen Cache ein Start-Waypoint existiert und dieser in diesem Fall zurückgesetzt
     // Damit kann bei der Definition eines neuen Start-Waypoints vorher der alte entfernt werden damit sichergestellt ist dass ein Cache nur
     // 1 Start-Waypoint hat
-    public void ResetStartWaypoint(AbstractCache abstractCache, Waypoint except) {
+    @Override
+    public void resetStartWaypoint(AbstractCache abstractCache, AbstractWaypoint except) {
         for (int i = 0, n = abstractCache.getWaypoints().size; i < n; i++) {
             Waypoint wp = (Waypoint) abstractCache.getWaypoints().get(i);
             if (except == wp)
@@ -221,15 +224,9 @@ public class WaypointDAO {
         Database.Data.execSQL(SQL);
     }
 
-    /**
-     * Returns a WaypointList from reading DB!
-     *
-     * @param CacheID ID of Cache
-     * @param Full    Waypoints as FullWaypoints (true) or Waypoint (false)
-     * @return
-     */
-    public Array<Waypoint> getWaypointsFromCacheID(Long CacheID, boolean Full) {
-        Array<Waypoint> wpList = new CB_List<>();
+    @Override
+    public Array<AbstractWaypoint> getWaypointsFromCacheID(Long CacheID, boolean Full) {
+        Array<AbstractWaypoint> wpList = new CB_List<>();
         long aktCacheID = -1;
 
         StringBuilder sqlState = new StringBuilder(Full ? SQL_WP_FULL : SQL_WP);
@@ -242,7 +239,7 @@ public class WaypointDAO {
                 Waypoint wp = getWaypoint(reader, Full);
                 if (wp.getCacheId() != aktCacheID) {
                     aktCacheID = wp.getCacheId();
-                    wpList = new CB_List<Waypoint>();
+                    wpList = new Array<AbstractWaypoint>();
 
                 }
                 wpList.add(wp);
@@ -255,6 +252,7 @@ public class WaypointDAO {
         return wpList;
     }
 
+    @Override
     public void delete(AbstractWaypoint waypoint) {
         try {
             Database.Data.delete("Waypoint", "GcCode='" + waypoint.getGcCode() + "'", null);

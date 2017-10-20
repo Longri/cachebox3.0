@@ -1076,7 +1076,7 @@ public class GroundspeakAPI {
         AbstractCacheDAO abstractCacheDAO = new CacheDAO();
         LogDAO logDAO = new LogDAO();
         ImageDAO imageDAO = new ImageDAO();
-        WaypointDAO waypointDAO = new WaypointDAO();
+        AbstractWaypointDAO abstractWaypointDAO = new WaypointDAO();
 
         for (int c = 0; c < apiCaches.size; c++) {
             AbstractCache abstractCache = apiCaches.get(c);
@@ -1173,8 +1173,8 @@ public class GroundspeakAPI {
 
                 if (update) {
                     // do not store replication information when importing caches with GC api
-                    if (!waypointDAO.UpdateDatabase((Waypoint) waypoint, false)) {
-                        waypointDAO.WriteToDatabase((Waypoint) waypoint, false); // do not store replication information here
+                    if (!abstractWaypointDAO.updateDatabase((Waypoint) waypoint)) {
+                        abstractWaypointDAO.writeToDatabase((Waypoint) waypoint); // do not store replication information here
                     }
                 }
 

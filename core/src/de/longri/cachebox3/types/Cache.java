@@ -21,6 +21,7 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.AbstractWaypointDAO;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.utils.MathUtils;
@@ -234,10 +235,10 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
         CacheDAO dao = new CacheDAO();
         dao.readDetail(this);
         // load all Waypoints with full Details
-        WaypointDAO wdao = new WaypointDAO();
-        Array<Waypoint> wpts = wdao.getWaypointsFromCacheID(getId(), true);
+        AbstractWaypointDAO wdao = new WaypointDAO();
+        Array<AbstractWaypoint> wpts = wdao.getWaypointsFromCacheID(getId(), true);
         for (int i = 0; i < wpts.size; i++) {
-            Waypoint wp = wpts.get(i);
+            Waypoint wp = (Waypoint) wpts.get(i);
             boolean found = false;
             for (int j = 0; j < getWaypoints().size; j++) {
                 Waypoint wp2 = (Waypoint) getWaypoints().get(j);

@@ -18,15 +18,22 @@ package de.longri.cachebox3.sqlite.dao;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.types.Waypoint3;
 
 /**
  * Created by Longri on 20.10.2017.
  */
-public class Waypoint3DAO {
+public class Waypoint3DAO extends AbstractWaypointDAO {
 
     private final String GET_ALL_WAYPOINTS = "SELECT * FROM Waypoints";
+
+    @Override
+    public Array<AbstractWaypoint> getWaypointsFromCacheID(Long CacheID, boolean Full) {
+        return null; //TODO Use getAllWayPoints(Database database) and remove
+    }
 
     public Array<Waypoint3> getAllWayPoints(Database database) {
         Array<Waypoint3> waypoints = new Array<>();
@@ -41,4 +48,23 @@ public class Waypoint3DAO {
         return waypoints;
     }
 
+    @Override
+    public void writeToDatabase(AbstractWaypoint WP) {
+
+    }
+
+    @Override
+    public boolean updateDatabase(AbstractWaypoint WP) {
+        return false;
+    }
+
+    @Override
+    public void resetStartWaypoint(AbstractCache abstractCache, AbstractWaypoint except) {
+
+    }
+
+    @Override
+    public void delete(AbstractWaypoint waypoint) {
+
+    }
 }
