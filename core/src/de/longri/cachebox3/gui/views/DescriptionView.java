@@ -37,11 +37,11 @@ import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
+import de.longri.cachebox3.sqlite.dao.AbstractCacheDAO;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.utils.NetUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -350,8 +350,8 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                         }
 
                         EventHandler.getSelectedCache().setFavorite(!EventHandler.getSelectedCache().isFavorite());
-                        CacheDAO dao = new CacheDAO();
-                        dao.UpdateDatabase(EventHandler.getSelectedCache());
+                        AbstractCacheDAO dao = new CacheDAO();
+                        dao.updateDatabase(EventHandler.getSelectedCache());
 
                         // Update Query
                         Database.Data.Query.GetCacheById(EventHandler.getSelectedCache().getId()).setFavorite(EventHandler.getSelectedCache().isFavorite());

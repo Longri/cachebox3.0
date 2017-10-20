@@ -25,12 +25,11 @@ import org.slf4j.LoggerFactory;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import static de.longri.cachebox3.sqlite.dao.SQL.*;
 
-public class CacheDAO {
+public class CacheDAO extends AbstractCacheDAO {
     final static Logger log = LoggerFactory.getLogger(CacheDAO.class);
 
 
@@ -189,7 +188,8 @@ public class CacheDAO {
         return true;
     }
 
-    public void WriteToDatabase(AbstractCache abstractCache) {
+    @Override
+    public void writeToDatabase(AbstractCache abstractCache) {
         // int newCheckSum = createCheckSum(WP);
         // Replication.WaypointChanged(CacheId, checkSum, newCheckSum, GcCode);
         Database.Parameters args = new Database.Parameters();
@@ -269,7 +269,8 @@ public class CacheDAO {
         }
     }
 
-    public void WriteToDatabase_Found(AbstractCache abstractCache) {
+    @Override
+    public void writeToDatabaseFound(AbstractCache abstractCache) {
         Database.Parameters args = new Database.Parameters();
         args.put("found", abstractCache.isFound());
         try {
@@ -280,7 +281,8 @@ public class CacheDAO {
         }
     }
 
-    public boolean UpdateDatabase(AbstractCache abstractCache) {
+    @Override
+    public boolean updateDatabase(AbstractCache abstractCache) {
 
         Database.Parameters args = new Database.Parameters();
 
@@ -354,7 +356,8 @@ public class CacheDAO {
         }
     }
 
-    public Cache getFromDbByCacheId(long CacheID) {
+    @Override
+    public AbstractCache getFromDbByCacheId(long CacheID) {
         SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(SQL_GET_CACHE + SQL_BY_ID, new String[]{String.valueOf(CacheID)});
 
         try {
@@ -380,51 +383,47 @@ public class CacheDAO {
 
     }
 
-    public AbstractCache getFromDbByGcCode(String GcCode, boolean withDetail) // NO_UCD (test only)
-    {
-        String where = SQL_GET_CACHE + (withDetail ? ", " + SQL_DETAILS : "") + SQL_BY_GC_CODE;
+//    public AbstractCache getFromDbByGcCode(String GcCode, boolean withDetail) // NO_UCD (test only)
+//    {
+//        String where = SQL_GET_CACHE + (withDetail ? ", " + SQL_DETAILS : "") + SQL_BY_GC_CODE;
+//
+//        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(where, new String[]{GcCode});
+//
+//        try {
+//            if (reader != null && reader.getCount() > 0) {
+//                reader.moveToFirst();
+//                AbstractCache ret = ReadFromCursor(reader, withDetail, false);
+//
+//                reader.close();
+//                return ret;
+//            } else {
+//                if (reader != null)
+//                    reader.close();
+//                return null;
+//            }
+//        } catch (Exception e) {
+//            if (reader != null)
+//                reader.close();
+//            e.printStackTrace();
+//            return null;
+//        }
+//
+//    }
 
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(where, new String[]{GcCode});
+//    public Boolean cacheExists(long CacheID) {
+//
+//        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(SQL_EXIST_CACHE, new String[]{String.valueOf(CacheID)});
+//
+//        boolean exists = (reader.getCount() > 0);
+//
+//        reader.close();
+//
+//        return exists;
+//
+//    }
 
-        try {
-            if (reader != null && reader.getCount() > 0) {
-                reader.moveToFirst();
-                AbstractCache ret = ReadFromCursor(reader, withDetail, false);
-
-                reader.close();
-                return ret;
-            } else {
-                if (reader != null)
-                    reader.close();
-                return null;
-            }
-        } catch (Exception e) {
-            if (reader != null)
-                reader.close();
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-
-    public Boolean cacheExists(long CacheID) {
-
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(SQL_EXIST_CACHE, new String[]{String.valueOf(CacheID)});
-
-        boolean exists = (reader.getCount() > 0);
-
-        reader.close();
-
-        return exists;
-
-    }
-
-    /**
-     * hier wird nur die Status Abfrage zurück geschrieben und gegebenen Falls die Replication Informationen geschrieben.
-     *
-     * @param writeTmp
-     */
-    public boolean UpdateDatabaseCacheState(AbstractCache writeTmp) {
+    @Override
+    public boolean updateDatabaseCacheState(AbstractCache writeTmp) {
 
         // chk of changes
         boolean changed = false;
@@ -466,41 +465,41 @@ public class CacheDAO {
         return changed;
     }
 
-    public ArrayList<String> getGcCodesFromMustLoadImages() {
-
-        ArrayList<String> GcCodes = new ArrayList<String>();
-
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select GcCode from Caches where Type<>4 and (ImagesUpdated=0 or DescriptionImagesUpdated=0)", null);
-
-        if (reader.getCount() > 0) {
-            reader.moveToFirst();
-            while (!reader.isAfterLast()) {
-                String GcCode = reader.getString(0);
-                GcCodes.add(GcCode);
-                reader.moveToNext();
-            }
-        }
-        reader.close();
-        return GcCodes;
-    }
-
-    public Boolean loadBooleanValue(String gcCode, String key) {
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select " + key + " from Caches where GcCode = \"" + gcCode + "\"", null);
-        try {
-            reader.moveToFirst();
-            while (!reader.isAfterLast()) {
-                if (reader.getInt(0) != 0) { // gefunden. Suche abbrechen
-                    return true;
-                }
-                reader.moveToNext();
-            }
-        } catch (Exception ex) {
-            return false;
-        } finally {
-            reader.close();
-        }
-
-        return false;
-    }
+//    public ArrayList<String> getGcCodesFromMustLoadImages() {
+//
+//        ArrayList<String> GcCodes = new ArrayList<String>();
+//
+//        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select GcCode from Caches where Type<>4 and (ImagesUpdated=0 or DescriptionImagesUpdated=0)", null);
+//
+//        if (reader.getCount() > 0) {
+//            reader.moveToFirst();
+//            while (!reader.isAfterLast()) {
+//                String GcCode = reader.getString(0);
+//                GcCodes.add(GcCode);
+//                reader.moveToNext();
+//            }
+//        }
+//        reader.close();
+//        return GcCodes;
+//    }
+//
+//    public Boolean loadBooleanValue(String gcCode, String key) {
+//        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select " + key + " from Caches where GcCode = \"" + gcCode + "\"", null);
+//        try {
+//            reader.moveToFirst();
+//            while (!reader.isAfterLast()) {
+//                if (reader.getInt(0) != 0) { // gefunden. Suche abbrechen
+//                    return true;
+//                }
+//                reader.moveToNext();
+//            }
+//        } catch (Exception ex) {
+//            return false;
+//        } finally {
+//            reader.close();
+//        }
+//
+//        return false;
+//    }
 
 }

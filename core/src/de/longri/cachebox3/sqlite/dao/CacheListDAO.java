@@ -17,11 +17,8 @@
 package de.longri.cachebox3.sqlite.dao;
 
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.LongMap;
-import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.lists.CB_List;
@@ -29,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * @author ging-buh
@@ -190,12 +186,12 @@ public class CacheListDAO extends AbstractCacheListDAO {
                 reader.moveToNext();
             }
 
-            CacheDAO cacheDAO = new CacheDAO();
+            AbstractCacheDAO abstractCacheDAO = new CacheDAO();
 
             for (Long id : idList) {
                 AbstractCache abstractCache = null;
                 try {
-                    abstractCache = cacheDAO.getFromDbByCacheId(id);
+                    abstractCache = abstractCacheDAO.getFromDbByCacheId(id);
                 } catch (Exception e) {
                     log.error("Can't read Cache (id:" + id + ") from database.");
                     try {

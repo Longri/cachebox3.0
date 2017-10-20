@@ -28,10 +28,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.CacheDAO;
-import de.longri.cachebox3.sqlite.dao.ImageDAO;
-import de.longri.cachebox3.sqlite.dao.LogDAO;
-import de.longri.cachebox3.sqlite.dao.WaypointDAO;
+import de.longri.cachebox3.sqlite.dao.*;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
@@ -107,7 +104,7 @@ public abstract class Search extends PostRequest {
     private final String COMMENT = "Comment";
     private final String WAYPOINT_TYPE_ID = "WptTypeID";
 
-    private final CacheDAO cacheDAO = new CacheDAO();
+    private final AbstractCacheDAO abstractCacheDAO = new CacheDAO();
     private final LogDAO logDAO = new LogDAO();
     private final ImageDAO imageDAO = new ImageDAO();
     private final WaypointDAO waypointDAO = new WaypointDAO();
@@ -686,7 +683,7 @@ public abstract class Search extends PostRequest {
                     aktCache = null;
 
                 if (aktCache == null) {
-                    aktCache = cacheDAO.getFromDbByCacheId(abstractCache.getId());
+                    aktCache = abstractCacheDAO.getFromDbByCacheId(abstractCache.getId());
                 }
                 // Read Detail Info of Cache if not available
                 if ((aktCache != null) && (aktCache.getDetail() == null)) {
@@ -698,8 +695,8 @@ public abstract class Search extends PostRequest {
                 }
 
                 // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
-                if (!cacheDAO.UpdateDatabase(abstractCache)) {
-                    cacheDAO.WriteToDatabase(abstractCache);
+                if (!abstractCacheDAO.updateDatabase(abstractCache)) {
+                    abstractCacheDAO.writeToDatabase(abstractCache);
                 }
 
                 // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen

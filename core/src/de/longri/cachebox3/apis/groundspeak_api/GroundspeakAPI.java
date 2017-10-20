@@ -27,10 +27,7 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.CacheDAO;
-import de.longri.cachebox3.sqlite.dao.ImageDAO;
-import de.longri.cachebox3.sqlite.dao.LogDAO;
-import de.longri.cachebox3.sqlite.dao.WaypointDAO;
+import de.longri.cachebox3.sqlite.dao.*;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NetUtils;
@@ -1076,7 +1073,7 @@ public class GroundspeakAPI {
 
         Database.Data.beginTransaction();
 
-        CacheDAO cacheDAO = new CacheDAO();
+        AbstractCacheDAO abstractCacheDAO = new CacheDAO();
         LogDAO logDAO = new LogDAO();
         ImageDAO imageDAO = new ImageDAO();
         WaypointDAO waypointDAO = new WaypointDAO();
@@ -1089,7 +1086,7 @@ public class GroundspeakAPI {
                 aktCache = null;
 
             if (aktCache == null) {
-                aktCache = cacheDAO.getFromDbByCacheId(abstractCache.getId());
+                aktCache = abstractCacheDAO.getFromDbByCacheId(abstractCache.getId());
             }
             // Read Detail Info of Cache if not available
             if ((aktCache != null) && (aktCache.getDetail() == null)) {
@@ -1101,8 +1098,8 @@ public class GroundspeakAPI {
             }
 
             // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
-            if (!cacheDAO.UpdateDatabase(abstractCache)) {
-                cacheDAO.WriteToDatabase(abstractCache);
+            if (!abstractCacheDAO.updateDatabase(abstractCache)) {
+                abstractCacheDAO.writeToDatabase(abstractCache);
             }
 
             // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
