@@ -41,6 +41,7 @@ import de.longri.cachebox3.settings.types.SettingBool;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
@@ -116,7 +117,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
         infoStyle.fontColor = style.infoColor;
 
         AbstractCache actAbstractCache = null;
-        Waypoint actWaypoint = null;
+        AbstractWaypoint actWaypoint = null;
 
         if (EventHandler.getSelectedWaypoint() == null) {
             actAbstractCache = EventHandler.getSelectedCache();
@@ -328,7 +329,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
 
         AbstractCache actAbstractCache = null;
-        Waypoint actWaypoint = null;
+        AbstractWaypoint actWaypoint = null;
 
         if (EventHandler.getSelectedWaypoint() == null) {
             actAbstractCache = EventHandler.getSelectedCache();

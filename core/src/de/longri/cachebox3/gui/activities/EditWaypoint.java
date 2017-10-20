@@ -37,6 +37,7 @@ import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 import org.slf4j.Logger;
@@ -50,7 +51,7 @@ public class EditWaypoint extends ActivityBase {
     private final static Logger log = LoggerFactory.getLogger(EditWaypoint.class);
 
     private final EditWaypointStyle style;
-    private final Waypoint waypoint;
+    private final AbstractWaypoint waypoint;
     private final VisTextButton btnOk, btnCancel;
     private final VisLabel cacheTitelLabel, titleLabel, typeLabel, descriptionLabel, clueLabel, startLabel;
     private final EditTextBox titleTextArea, descriptionTextArea, clueTextArea;
@@ -61,7 +62,7 @@ public class EditWaypoint extends ActivityBase {
     private final boolean showCoordsOnShow;
     private final GenericCallBack<Waypoint> callBack;
 
-    public EditWaypoint(final Waypoint waypoint, boolean showCoordsOnShow, GenericCallBack<Waypoint> callBack) {
+    public EditWaypoint(final AbstractWaypoint waypoint, boolean showCoordsOnShow, GenericCallBack<Waypoint> callBack) {
         super("EditWaypoint");
         style = null;
         this.waypoint = waypoint;
@@ -172,7 +173,7 @@ public class EditWaypoint extends ActivityBase {
         btnOk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 Coordinate coor = coordinateButton.getCoordinate();
-                Waypoint newWaypoint = new Waypoint(coor.latitude, coor.longitude, waypoint);
+                Waypoint newWaypoint = new Waypoint(coor.latitude, coor.longitude, (Waypoint) waypoint);
                 newWaypoint.setTitle(titleTextArea.getText());
                 newWaypoint.setDescription(descriptionTextArea.getText());
                 newWaypoint.setClue(clueTextArea.getText());

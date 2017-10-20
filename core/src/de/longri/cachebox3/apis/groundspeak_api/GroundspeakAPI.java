@@ -1157,14 +1157,14 @@ public class GroundspeakAPI {
 
             for (int i = 0, n = abstractCache.getWaypoints().size; i < n; i++) {
                 // must Cast to Full Waypoint. If Waypoint, is wrong createt!
-                Waypoint waypoint = abstractCache.getWaypoints().get(i);
+                AbstractWaypoint waypoint = abstractCache.getWaypoints().get(i);
                 boolean update = true;
 
                 // dont refresh wp if aktCache.wp is user changed
                 if (aktCache != null) {
                     if (aktCache.getWaypoints() != null) {
                         for (int j = 0, m = aktCache.getWaypoints().size; j < m; j++) {
-                            Waypoint wp = aktCache.getWaypoints().get(j);
+                            AbstractWaypoint wp = aktCache.getWaypoints().get(j);
                             if (wp.getGcCode().toString().equalsIgnoreCase(waypoint.getGcCode().toString())) {
                                 if (wp.isUserWaypoint())
                                     update = false;
@@ -1176,8 +1176,8 @@ public class GroundspeakAPI {
 
                 if (update) {
                     // do not store replication information when importing caches with GC api
-                    if (!waypointDAO.UpdateDatabase(waypoint, false)) {
-                        waypointDAO.WriteToDatabase(waypoint, false); // do not store replication information here
+                    if (!waypointDAO.UpdateDatabase((Waypoint) waypoint, false)) {
+                        waypointDAO.WriteToDatabase((Waypoint) waypoint, false); // do not store replication information here
                     }
                 }
 

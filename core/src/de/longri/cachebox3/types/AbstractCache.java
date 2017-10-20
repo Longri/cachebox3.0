@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MathUtils;
-import de.longri.cachebox3.utils.lists.CB_List;
 
 import java.util.Date;
 
@@ -65,7 +64,7 @@ public abstract class AbstractCache extends Coordinate {
     /**
      * search the final waypoint for a mystery cache
      */
-    public abstract Waypoint GetFinalWaypoint();
+    public abstract AbstractWaypoint GetFinalWaypoint();
 
     /**
      * true if this is a mystery of multi with a Stage Waypoint defined as StartPoint
@@ -79,7 +78,7 @@ public abstract class AbstractCache extends Coordinate {
      *
      * @return
      */
-    public abstract Waypoint GetStartWaypoint();
+    public abstract AbstractWaypoint GetStartWaypoint();
 
     /**
      * Returns true has the Cache Spoilers else returns false
@@ -99,7 +98,7 @@ public abstract class AbstractCache extends Coordinate {
 
     public abstract int compareTo(AbstractCache c2);
 
-    protected abstract Waypoint findWaypointByGc(String gc);
+    protected abstract AbstractWaypoint findWaypointByGc(String gc);
 
     public abstract CharSequence getGcCode();
 
@@ -261,9 +260,9 @@ public abstract class AbstractCache extends Coordinate {
     /**
      * Liste der zusaetzlichen Wegpunkte des Caches
      */
-    public abstract Array<Waypoint> getWaypoints();
+    public abstract Array<AbstractWaypoint> getWaypoints();
 
-    public abstract void setWaypoints(Array<Waypoint> waypoints);
+    public abstract void setWaypoints(Array<AbstractWaypoint> waypoints);
 
     /**
      * Detail Information of Waypoint which are not always loaded

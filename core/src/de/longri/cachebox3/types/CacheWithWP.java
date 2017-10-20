@@ -7,9 +7,9 @@ package de.longri.cachebox3.types;
  */
 public class CacheWithWP {
 	private AbstractCache abstractCache;
-	private Waypoint waypoint;
+	private AbstractWaypoint waypoint;
 
-	public CacheWithWP(AbstractCache AbstractCache, Waypoint waypoint) {
+	public CacheWithWP(AbstractCache AbstractCache, AbstractWaypoint waypoint) {
 		this.abstractCache = AbstractCache;
 		this.waypoint = waypoint;
 	}
@@ -23,7 +23,7 @@ public class CacheWithWP {
 		return this.abstractCache;
 	}
 
-	public Waypoint getWaypoint() {
+	public AbstractWaypoint getWaypoint() {
 		return this.waypoint;
 	}
 }

@@ -24,6 +24,7 @@ import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import org.slf4j.Logger;
@@ -122,7 +123,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
     AbstractCache selectedCache;
-    Waypoint selectedWayPoint;
+    AbstractWaypoint selectedWayPoint;
     Coordinate selectedCoordinate;
     CoordinateGPS myPosition;
     private float heading;
@@ -218,7 +219,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         return (INSTANCE.selectedCache != null && INSTANCE.selectedCache.equals(abstractCache));
     }
 
-    public static Waypoint getSelectedWaypoint() {
+    public static AbstractWaypoint getSelectedWaypoint() {
         return INSTANCE.selectedWayPoint;
     }
 
@@ -244,7 +245,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         INSTANCE.heading = event.getOrientation();
     }
 
-    public static void setSelectedWaypoint(AbstractCache cache, Waypoint wp) {
+    public static void setSelectedWaypoint(AbstractCache cache, AbstractWaypoint wp) {
         if (cache == null || !cache.equals(getSelectedCache())) fire(new SelectedCacheChangedEvent(cache));
         if (wp == null || !wp.equals(getSelectedWaypoint())) fire(new SelectedWayPointChangedEvent(wp));
     }

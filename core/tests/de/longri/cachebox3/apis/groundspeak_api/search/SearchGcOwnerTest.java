@@ -147,7 +147,7 @@ class SearchGcOwnerTest {
                 assertEquals("GC18JGX", abstractCache.getGcCode());
                 assertEquals(2, abstractCache.getWaypoints().size);
 
-                Waypoint waypoint = abstractCache.getWaypoints().first();
+                AbstractWaypoint waypoint = abstractCache.getWaypoints().first();
                 assertEquals("PA18JGX", waypoint.getGcCode());
                 assertEquals("Parkmöglichkeit", waypoint.getDescription(Database.Data));
                 assertEquals("Parking", waypoint.getTitle());
@@ -155,7 +155,7 @@ class SearchGcOwnerTest {
                 assertEquals(52.633667, waypoint.getLatitude());
                 assertEquals(13.375917, waypoint.getLongitude());
 
-                Waypoint userWaypoint = abstractCache.getWaypoints().peek();
+                AbstractWaypoint userWaypoint = abstractCache.getWaypoints().peek();
                 assertEquals("CO18JGX", userWaypoint.getGcCode());
                 assertEquals("", userWaypoint.getDescription(Database.Data));
                 assertEquals("Corrected Coordinates (API)", userWaypoint.getTitle());
@@ -282,7 +282,7 @@ class SearchGcOwnerTest {
                         assertEquals("GC18JGX", abstractCache.getGcCode());
                         assertEquals(2, abstractCache.getWaypoints().size);
 
-                        Waypoint waypoint = abstractCache.getWaypoints().first();
+                        AbstractWaypoint waypoint = abstractCache.getWaypoints().first();
                         assertEquals("PA18JGX", waypoint.getGcCode());
                         assertEquals("Parkmöglichkeit", waypoint.getDescription(Database.Data));
                         assertEquals("Parking", waypoint.getTitle());

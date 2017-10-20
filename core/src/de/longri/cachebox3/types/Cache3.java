@@ -21,7 +21,6 @@ import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MathUtils;
-import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +50,7 @@ public class Cache3 extends AbstractCache {
     public final static short MASK_SOLVER1CHANGED = 1 << 7;
     public final static short MASK_HAS_USER_DATA = 1 << 8;
     public final static short MASK_LISTING_CHANGED = 1 << 9;
+    private Array<AbstractWaypoint> waypoints;
 
 
     public static boolean getMaskValue(short mask, short bitFlags) {
@@ -200,6 +200,15 @@ public class Cache3 extends AbstractCache {
         return getMaskValue(mask, booleanStore);
     }
 
+    @Override
+    public Array<AbstractWaypoint> getWaypoints() {
+        return this.waypoints;
+    }
+
+    @Override
+    public void setWaypoints(Array<AbstractWaypoint> waypoints) {
+        this.waypoints = waypoints;
+    }
 
     //################################################################################
     //# method's that throws exceptions
@@ -337,7 +346,7 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public Waypoint GetFinalWaypoint() {
+    public AbstractWaypoint GetFinalWaypoint() {
         return null;
     }
 
@@ -347,7 +356,7 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public Waypoint GetStartWaypoint() {
+    public AbstractWaypoint GetStartWaypoint() {
         return null;
     }
 
@@ -372,7 +381,7 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    protected Waypoint findWaypointByGc(String gc) {
+    protected AbstractWaypoint findWaypointByGc(String gc) {
         return null;
     }
 
@@ -592,15 +601,6 @@ public class Cache3 extends AbstractCache {
         return 0;
     }
 
-    @Override
-    public Array<Waypoint> getWaypoints() {
-        return null;
-    }
-
-    @Override
-    public void setWaypoints(Array<Waypoint> waypoints) {
-
-    }
 
     @Override
     public CacheDetail getDetail() {

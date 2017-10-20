@@ -39,10 +39,7 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.CacheWithWP;
-import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
@@ -138,7 +135,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         float heading = EventHandler.getHeading();
 
                         // get coordinate from Cache or from Final Waypoint
-                        Waypoint finalWp = abstractCache.GetFinalWaypoint();
+                        AbstractWaypoint finalWp = abstractCache.GetFinalWaypoint();
                         Coordinate finalCoord = finalWp != null ? finalWp : abstractCache;
 
                         //calculate distance and bearing

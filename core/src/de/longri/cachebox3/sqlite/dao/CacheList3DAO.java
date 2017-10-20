@@ -16,9 +16,13 @@
 package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.Cache3;
 import de.longri.cachebox3.types.CacheList;
+import de.longri.cachebox3.types.Waypoint3;
+
 
 /**
  * Created by Longri on 19.10.2017.
@@ -38,6 +42,23 @@ public class CacheList3DAO {
         cursor.close();
 
         //read waypoints
+        Array<Waypoint3> waypoints = new Waypoint3DAO().getAllWayPoints(database);
+
+        int n = caches.size-1;
+        int i = 0;
+        while (n-- >= 0) {
+            Cache3 cache = (Cache3) caches.get(i++);
+            Array<AbstractWaypoint> cachewaypoints = new Array<>();
+            int m = waypoints.size-1;
+            int j=0;
+            while (m-- >= 0) {
+                Waypoint3 waypoint = waypoints.get(j++);
+                if (waypoint.getCacheId() == cache.getId()) {
+                    cachewaypoints.add(waypoint);
+                }
+            }
+            cache.setWaypoints(cachewaypoints);
+        }
 
 
         return caches;

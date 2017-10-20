@@ -148,7 +148,7 @@ public class CacheList extends Array<AbstractCache> {
                 // -> gleich den Final Waypoint auswahlen!!!
                 // When the next Cache is a mystery with final waypoint
                 // -> activate the final waypoint!!!
-                Waypoint waypoint = nextAbstractCache.GetFinalWaypoint();
+                AbstractWaypoint waypoint = nextAbstractCache.GetFinalWaypoint();
                 if (waypoint == null) {
                     // wenn ein Cache keinen Final Waypoint hat dann wird überprüft, ob dieser einen Startpunkt definiert hat
                     // Wenn ein Cache einen Startpunkt definiert hat dann wird beim Selektieren dieses Caches gleich dieser Startpunkt
@@ -156,7 +156,7 @@ public class CacheList extends Array<AbstractCache> {
                     waypoint = nextAbstractCache.GetStartWaypoint();
                 }
 
-                retValue = new CacheWithWP(nextAbstractCache, waypoint);
+                retValue = new CacheWithWP(nextAbstractCache, (Waypoint) waypoint);
             }
             // vorhandenen Parkplatz Cache nach oben schieben
             AbstractCache park = this.GetCacheByGcCode("CBPark");

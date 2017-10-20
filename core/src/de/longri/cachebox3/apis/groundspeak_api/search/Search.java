@@ -739,7 +739,7 @@ public abstract class Search extends PostRequest {
 
                 for (int i = 0, n = abstractCache.getWaypoints().size; i < n; i++) {
                     // must Cast to Full Waypoint. If Waypoint, is wrong created!
-                    Waypoint waypoint = abstractCache.getWaypoints().get(i);
+                    Waypoint waypoint = (Waypoint) abstractCache.getWaypoints().get(i);
 
                     //set CacheId
                     waypoint.setCacheId(abstractCache.getId());
@@ -750,7 +750,7 @@ public abstract class Search extends PostRequest {
                     if (aktCache != null) {
                         if (aktCache.getWaypoints() != null) {
                             for (int j = 0, m = aktCache.getWaypoints().size; j < m; j++) {
-                                Waypoint wp = aktCache.getWaypoints().get(j);
+                                Waypoint wp = (Waypoint) aktCache.getWaypoints().get(j);
                                 if (wp.getGcCode().toString().equalsIgnoreCase(waypoint.getGcCode().toString())) {
                                     if (wp.isUserWaypoint())
                                         update = false;

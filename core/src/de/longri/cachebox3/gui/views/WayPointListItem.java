@@ -26,6 +26,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 
@@ -34,7 +35,7 @@ import de.longri.cachebox3.types.Waypoint;
  */
 public class WayPointListItem extends ListViewItem implements Disposable {
 
-    public static WayPointListItem getListItem(int listIndex, final Waypoint waypoint) {
+    public static WayPointListItem getListItem(int listIndex, final AbstractWaypoint waypoint) {
         WayPointListItem listViewItem = new WayPointListItem(listIndex, waypoint.getType(),
                 waypoint.getGcCode().toString(), waypoint.getTitle().toString(), waypoint.getDescription(Database.Data), waypoint.FormatCoordinate());
         return listViewItem;

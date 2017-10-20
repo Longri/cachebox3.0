@@ -153,8 +153,8 @@ class DatabaseConvert {
             assertThat("Cache HasHint must equals", cache3.hasHint() == cache.hasHint());
 
 
-            Array<Waypoint> cacheWayPoints = cache.getWaypoints();
-            Array<Waypoint> cache3WayPoints = cache3.getWaypoints();
+            Array<AbstractWaypoint> cacheWayPoints = cache.getWaypoints();
+            Array<AbstractWaypoint> cache3WayPoints = cache3.getWaypoints();
             assertThat("Cache Waypoints must equals", cache3WayPoints.equals(cacheWayPoints));
 
             //check properties that not stored on class (direct DB Access)

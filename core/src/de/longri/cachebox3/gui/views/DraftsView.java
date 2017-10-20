@@ -867,7 +867,7 @@ public class DraftsView extends AbstractView {
             cache = Database.Data.Query.GetCacheByGcCode(aktDraft.gcCode);
         }
 
-        Waypoint finalWp = null;
+        AbstractWaypoint finalWp = null;
         if (cache != null) {
             if (cache.HasFinalWaypoint())
                 finalWp = cache.GetFinalWaypoint();

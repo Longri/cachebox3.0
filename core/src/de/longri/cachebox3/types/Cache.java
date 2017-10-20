@@ -24,7 +24,6 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheDAO;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.utils.MathUtils;
-import de.longri.cachebox3.utils.lists.CB_List;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
@@ -125,7 +124,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
 
     private float cachedDistance = 0;
 
-    private Array<Waypoint> waypoints = null;
+    private Array<AbstractWaypoint> waypoints = null;
 
 	/*
      * Constructors
@@ -141,7 +140,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
         this.setTerrain(0);
         this.setSize(CacheSizes.other);
         this.setAvailable(true);
-        setWaypoints(new CB_List<Waypoint>());
+        setWaypoints(new Array<AbstractWaypoint>());
         if (withDetails) {
             setDetail(new CacheDetail());
         }
@@ -160,7 +159,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
         this.setTerrain(0);
         this.setSize(CacheSizes.other);
         this.setAvailable(true);
-        setWaypoints(new CB_List<Waypoint>());
+        setWaypoints(new Array<AbstractWaypoint>());
     }
 
     /**
@@ -206,7 +205,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
         // remove all Waypoints != Start and Final
         if ((getWaypoints() != null) && (!showAllWaypoints)) {
             for (int i = 0; i < getWaypoints().size; i++) {
-                Waypoint wp = getWaypoints().get(i);
+                Waypoint wp = (Waypoint) getWaypoints().get(i);
                 if (wp.isStart() || wp.getType() == CacheTypes.Final) {
 
                     if (wp.getDetail() != null)
@@ -241,7 +240,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
             Waypoint wp = wpts.get(i);
             boolean found = false;
             for (int j = 0; j < getWaypoints().size; j++) {
-                Waypoint wp2 = getWaypoints().get(j);
+                Waypoint wp2 = (Waypoint) getWaypoints().get(j);
                 if (wp.getGcCode().equals(wp2.getGcCode())) {
                     found = true;
                     wp2.setDetail(wp.getDetail()); // copy Detail Info
@@ -303,7 +302,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
         x = false;
 
         for (int i = 0, n = getWaypoints().size; i < n; i++) {
-            Waypoint wp = getWaypoints().get(i);
+            AbstractWaypoint wp = getWaypoints().get(i);
             if (wp.getType() == CacheTypes.Final) {
                 if (!(wp.latitude == 0 && wp.longitude == 0))
                     x = true;
@@ -319,14 +318,14 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public Waypoint GetFinalWaypoint() {
+    public AbstractWaypoint GetFinalWaypoint() {
         if (this.getType() != CacheTypes.Mystery)
             return null;
         if (getWaypoints() == null || getWaypoints().size == 0)
             return null;
 
         for (int i = 0, n = getWaypoints().size; i < n; i++) {
-            Waypoint wp = getWaypoints().get(i);
+            AbstractWaypoint wp = getWaypoints().get(i);
             if (wp.getType() == CacheTypes.Final) {
                 // do not activate final waypoint with invalid coordinates
                 if (!wp.isValid() || wp.isZero())
@@ -345,7 +344,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public Waypoint GetStartWaypoint() {
+    public AbstractWaypoint GetStartWaypoint() {
         if ((this.getType() != CacheTypes.Multi) && (this.getType() != CacheTypes.Mystery))
             return null;
 
@@ -353,7 +352,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
             return null;
 
         for (int i = 0, n = getWaypoints().size; i < n; i++) {
-            Waypoint wp = getWaypoints().get(i);
+            AbstractWaypoint wp = getWaypoints().get(i);
             if ((wp.getType() == CacheTypes.MultiStage) && (wp.isStart())) {
                 return wp;
             }
@@ -410,7 +409,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
         if (fromPos == null)
             return -1;
 
-        Waypoint waypoint = null;
+        AbstractWaypoint waypoint = null;
         if (useFinal)
             waypoint = this.GetFinalWaypoint();
         // Wenn ein Mystery-Cache einen Final-Waypoint hat, soll die
@@ -462,11 +461,11 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    protected Waypoint findWaypointByGc(String gc) {
+    protected AbstractWaypoint findWaypointByGc(String gc) {
         if (isDisposed)
             return null;
         for (int i = 0, n = getWaypoints().size; i < n; i++) {
-            Waypoint wp = getWaypoints().get(i);
+            AbstractWaypoint wp = getWaypoints().get(i);
             if (wp.getGcCode().equals(gc)) {
                 return wp;
             }
@@ -493,11 +492,6 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
         Owner = null;
 
         if (getWaypoints() != null) {
-            for (int i = 0, n = getWaypoints().size; i < n; i++) {
-                Waypoint entry = getWaypoints().get(i);
-                entry.dispose();
-            }
-
             getWaypoints().clear();
             setWaypoints(null);
         }
@@ -1094,12 +1088,12 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public Array<Waypoint> getWaypoints() {
+    public Array<AbstractWaypoint> getWaypoints() {
         return waypoints;
     }
 
     @Override
-    public void setWaypoints(Array<Waypoint> waypoints) {
+    public void setWaypoints(Array<AbstractWaypoint> waypoints) {
         this.waypoints = waypoints;
     }
 

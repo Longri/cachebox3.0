@@ -34,10 +34,7 @@ import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxDouble;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.lists.CB_List;
 import de.longri.cachebox3.utils.lists.ThreadStack;
@@ -210,10 +207,10 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
 
         //add waypoints from selected Cache or all Waypoints if set
-        Waypoint selWp = null;
+        AbstractWaypoint selWp = null;
         if (Settings.ShowAllWaypoints.getValue() || sel) {
             selWp = selectedWaypoint = de.longri.cachebox3.events.EventHandler.getSelectedWaypoint();
-            for (Waypoint waypoint : abstractCache.getWaypoints()) {
+            for (AbstractWaypoint waypoint : abstractCache.getWaypoints()) {
                 try {
                     MapWayPointItem waypointCluster = getMapWayPointItem(waypoint, dis, selectedWaypoint != null && selectedWaypoint.equals(waypoint));
                     mItemList.add(waypointCluster);
@@ -255,7 +252,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         return new MapWayPointItem(abstractCache, abstractCache, regions, sel);
     }
 
-    private MapWayPointItem getMapWayPointItem(Waypoint waypoint, boolean dis, boolean sel) {
+    private MapWayPointItem getMapWayPointItem(AbstractWaypoint waypoint, boolean dis, boolean sel) {
         MapWayPointItemStyle style = getClusterSymbolsByWaypoint(waypoint);
 
         TextureRegion small = textureRegionMap.get(((GetName) style.small).getName());
@@ -336,7 +333,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         return VisUI.getSkin().get(symbolStyleName, MapWayPointItemStyle.class);
     }
 
-    public static MapWayPointItemStyle getClusterSymbolsByWaypoint(Waypoint waypoint) {
+    public static MapWayPointItemStyle getClusterSymbolsByWaypoint(AbstractWaypoint waypoint) {
         String symbolStyleName = getMapIconName(waypoint);
         return VisUI.getSkin().get(symbolStyleName, MapWayPointItemStyle.class);
     }
@@ -357,7 +354,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             return "map" + abstractCache.getType().name();
     }
 
-    public static String getMapIconName(Waypoint waypoint) {
+    public static String getMapIconName(AbstractWaypoint waypoint) {
         if ((waypoint.getType() == CacheTypes.MultiStage) && (waypoint.isStart()))
             return "mapMultiStageStartP";
         else
@@ -381,7 +378,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
 
-    public void selectedCacheWPChanged(AbstractCache selectedAbstractCache, Waypoint selectedwaypoint, AbstractCache lastSelectedAbstractCache, Waypoint lastWaypoint) {
+    public void selectedCacheWPChanged(AbstractCache selectedAbstractCache, AbstractWaypoint selectedwaypoint, AbstractCache lastSelectedAbstractCache, AbstractWaypoint lastWaypoint) {
 
         //reset selected state of last Cache/WP
         //set selected state to Cache/WP
@@ -456,7 +453,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
     AbstractCache selectedAbstractCache;
-    Waypoint selectedWaypoint;
+    AbstractWaypoint selectedWaypoint;
 
     @Override
     public void selectedCacheChanged(de.longri.cachebox3.events.SelectedCacheChangedEvent event) {

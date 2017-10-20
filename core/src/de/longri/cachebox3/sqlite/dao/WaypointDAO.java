@@ -196,7 +196,7 @@ public class WaypointDAO {
     // 1 Start-Waypoint hat
     public void ResetStartWaypoint(AbstractCache abstractCache, Waypoint except) {
         for (int i = 0, n = abstractCache.getWaypoints().size; i < n; i++) {
-            Waypoint wp = abstractCache.getWaypoints().get(i);
+            Waypoint wp = (Waypoint) abstractCache.getWaypoints().get(i);
             if (except == wp)
                 continue;
             if (wp.isStart()) {
@@ -255,7 +255,7 @@ public class WaypointDAO {
         return wpList;
     }
 
-    public void delete(Waypoint waypoint) {
+    public void delete(AbstractWaypoint waypoint) {
         try {
             Database.Data.delete("Waypoint", "GcCode='" + waypoint.getGcCode() + "'", null);
         } catch (Exception exc) {

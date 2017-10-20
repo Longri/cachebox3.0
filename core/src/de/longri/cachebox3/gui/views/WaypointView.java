@@ -44,6 +44,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.WaypointDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
@@ -58,7 +59,7 @@ public class WaypointView extends AbstractView {
 
     private static final Logger log = LoggerFactory.getLogger(WaypointView.class);
     private AbstractCache actAbstractCache;
-    private Waypoint actWaypoint;
+    private AbstractWaypoint actWaypoint;
     private ListView listView;
 
     public WaypointView() {
@@ -193,7 +194,7 @@ public class WaypointView extends AbstractView {
                         if (listView.getSelectedItem() instanceof WayPointListItem) {
                             WayPointListItem selectedItem = (WayPointListItem) listView.getSelectedItem();
                             int index = selectedItem.getListIndex() - 1;
-                            Waypoint wp = actAbstractCache.getWaypoints().get(index);
+                            AbstractWaypoint wp = actAbstractCache.getWaypoints().get(index);
 
                             log.debug("Waypoint selection changed to: " + wp.toString());
                             //set selected Waypoint global
@@ -216,7 +217,7 @@ public class WaypointView extends AbstractView {
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        Waypoint wp = EventHandler.getSelectedWaypoint();
+                        AbstractWaypoint wp = EventHandler.getSelectedWaypoint();
                         if (wp == null) {
                             //select Cache
                             listView.setSelection(0);
@@ -344,7 +345,7 @@ public class WaypointView extends AbstractView {
         showEditWpDialog(newWP);
     }
 
-    private void showEditWpDialog(Waypoint newWP) {
+    private void showEditWpDialog(AbstractWaypoint newWP) {
         EditWaypoint editWaypoint = new EditWaypoint(newWP, true, new GenericCallBack<Waypoint>() {
             @Override
             public void callBack(Waypoint value) {
