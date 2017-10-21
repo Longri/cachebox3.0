@@ -24,6 +24,7 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.BuildInfo;
 import org.apache.commons.codec.Charsets;
+import org.mapsforge.core.util.LatLongUtils;
 import org.slf4j.impl.DummyLogApplication;
 
 import java.io.*;
@@ -51,6 +52,11 @@ public class TestUtils {
         Gdx.app.setApplicationLogger(new LwjglApplicationLogger());
     }
 
+    public static double roundDoubleCoordinate(double value) {
+        value = Math.round(LatLongUtils.degreesToMicrodegrees(value));
+        value = LatLongUtils.microdegreesToDegrees((int) value);
+        return value;
+    }
 
     public static String getResourceRequestString(String path, String apiKey) throws IOException {
         File file = new File(path);

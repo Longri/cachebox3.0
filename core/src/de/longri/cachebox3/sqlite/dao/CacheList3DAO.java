@@ -47,7 +47,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         cursor.close();
 
         //read waypoints
-        Array<Waypoint3> waypoints = new Waypoint3DAO().getAllWayPoints(database);
+        Array<AbstractWaypoint> waypoints = new Waypoint3DAO().getWaypointsFromCacheID(database,null,true);
 
         int n = caches.size-1;
         int i = 0;
@@ -57,7 +57,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             int m = waypoints.size-1;
             int j=0;
             while (m-- >= 0) {
-                Waypoint3 waypoint = waypoints.get(j++);
+                AbstractWaypoint waypoint = waypoints.get(j++);
                 if (waypoint.getCacheId() == cache.getId()) {
                     cachewaypoints.add(waypoint);
                 }

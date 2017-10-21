@@ -216,6 +216,8 @@ public class WaypointDAO extends AbstractWaypointDAO {
         }
     }
 
+
+
     /**
      * Delete all Logs without exist Cache
      */
@@ -225,8 +227,8 @@ public class WaypointDAO extends AbstractWaypointDAO {
     }
 
     @Override
-    public Array<AbstractWaypoint> getWaypointsFromCacheID(Long CacheID, boolean Full) {
-        Array<AbstractWaypoint> wpList = new CB_List<>();
+    public Array<AbstractWaypoint> getWaypointsFromCacheID(Database database, Long CacheID, boolean Full) {
+       Array<AbstractWaypoint> wpList = new CB_List<>();
         long aktCacheID = -1;
 
         StringBuilder sqlState = new StringBuilder(Full ? SQL_WP_FULL : SQL_WP);

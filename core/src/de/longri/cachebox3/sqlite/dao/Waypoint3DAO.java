@@ -29,15 +29,16 @@ import de.longri.cachebox3.types.Waypoint3;
 public class Waypoint3DAO extends AbstractWaypointDAO {
 
     private final String GET_ALL_WAYPOINTS = "SELECT * FROM Waypoints";
+    private final String GET_ALL_WAYPOINTS_FROM_CACHE = "SELECT * FROM Waypoints WHERE CacheId=?";
+
 
     @Override
-    public Array<AbstractWaypoint> getWaypointsFromCacheID(Long CacheID, boolean Full) {
-        return null; //TODO Use getAllWayPoints(Database database) and remove
-    }
+    public Array<AbstractWaypoint> getWaypointsFromCacheID(Database database,Long cacheID, boolean full) {
 
-    public Array<Waypoint3> getAllWayPoints(Database database) {
-        Array<Waypoint3> waypoints = new Array<>();
-        SQLiteGdxDatabaseCursor cursor = database.rawQuery(GET_ALL_WAYPOINTS, null);
+        String[] args = cacheID == null ? null : new String[]{String.valueOf(cacheID)};
+        String where=cacheID == null ? GET_ALL_WAYPOINTS:GET_ALL_WAYPOINTS_FROM_CACHE;
+        Array<AbstractWaypoint> waypoints = new Array<>();
+        SQLiteGdxDatabaseCursor cursor = database.rawQuery(where, args);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Waypoint3 wp = new Waypoint3(cursor);
@@ -47,6 +48,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         cursor.close();
         return waypoints;
     }
+
 
     @Override
     public void writeToDatabase(AbstractWaypoint WP) {

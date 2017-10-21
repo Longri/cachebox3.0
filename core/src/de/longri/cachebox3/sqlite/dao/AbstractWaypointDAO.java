@@ -16,6 +16,7 @@
 package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 
@@ -39,7 +40,7 @@ public abstract class AbstractWaypointDAO {
      * @param Full    Waypoints as FullWaypoints (true) or Waypoint (false)
      * @return
      */
-    public abstract Array<AbstractWaypoint> getWaypointsFromCacheID(Long CacheID, boolean Full);
+    public abstract Array<AbstractWaypoint> getWaypointsFromCacheID(Database database, Long CacheID, boolean Full);
 
     public abstract void delete(AbstractWaypoint waypoint);
 }

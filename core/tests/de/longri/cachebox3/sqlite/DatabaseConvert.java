@@ -73,16 +73,16 @@ class DatabaseConvert {
         }
         reader.close();
 
-        Array<Waypoint3> waypoint3list = new Waypoint3DAO().getAllWayPoints(cb3Database);
+        Array<AbstractWaypoint> waypoint3list = new Waypoint3DAO().getWaypointsFromCacheID(cb3Database,null,true);
 
         int n = waypointList.size;
         int i = 0;
         while (n-- > 0) {
             Waypoint waypoint = waypointList.get(i);
-            Waypoint3 waypoint3 = waypoint3list.get(i);
+            AbstractWaypoint waypoint3 = waypoint3list.get(i);
             assertThat("Waypoint Id must equals", waypoint.getCacheId() == waypoint3.getCacheId());
-            assertThat("Waypoint Latitude must equals", roundDoubleCoordinate(waypoint.getLatitude()) == roundDoubleCoordinate(waypoint3.getLatitude()));
-            assertThat("Waypoint Longitude must equals", roundDoubleCoordinate(waypoint.getLongitude()) == roundDoubleCoordinate(waypoint3.getLongitude()));
+            assertThat("Waypoint Latitude must equals", TestUtils.roundDoubleCoordinate(waypoint.getLatitude()) == TestUtils.roundDoubleCoordinate(waypoint3.getLatitude()));
+            assertThat("Waypoint Longitude must equals", TestUtils.roundDoubleCoordinate(waypoint.getLongitude()) == TestUtils.roundDoubleCoordinate(waypoint3.getLongitude()));
             assertThat("Waypoint GcCode must equals", waypoint3.getGcCode().equals(waypoint.getGcCode()));
             assertThat("Waypoint Type must equals", waypoint.getType() == waypoint3.getType());
             assertThat("Waypoint IsStart must equals", waypoint.isStart() == waypoint3.isStart());
@@ -118,8 +118,8 @@ class DatabaseConvert {
             Cache cache = (Cache) Database.Data.Query.get(i);
             Cache3 cache3 = (Cache3) cacheList3.get(i);
             assertThat("Cache Id must equals", cache.getId() == cache3.getId());
-            assertThat("Cache Latitude must equals", roundDoubleCoordinate(cache.getLatitude()) == roundDoubleCoordinate(cache3.getLatitude()));
-            assertThat("Cache Longitude must equals", roundDoubleCoordinate(cache.getLongitude()) == roundDoubleCoordinate(cache3.getLongitude()));
+            assertThat("Cache Latitude must equals", TestUtils.roundDoubleCoordinate(cache.getLatitude()) == TestUtils.roundDoubleCoordinate(cache3.getLatitude()));
+            assertThat("Cache Longitude must equals", TestUtils.roundDoubleCoordinate(cache.getLongitude()) == TestUtils.roundDoubleCoordinate(cache3.getLongitude()));
             assertThat("Cache Size must equals", cache.getSize() == cache3.getSize());
             assertThat("Cache Difficulty must equals", cache.getDifficulty() == cache3.getDifficulty());
             assertThat("Cache Terrain must equals", cache.getTerrain() == cache3.getTerrain());
@@ -160,10 +160,6 @@ class DatabaseConvert {
     }
 
 
-    private double roundDoubleCoordinate(double value) {
-        value = Math.round(LatLongUtils.degreesToMicrodegrees(value));
-        value = LatLongUtils.microdegreesToDegrees((int) value);
-        return value;
-    }
+
 
 }

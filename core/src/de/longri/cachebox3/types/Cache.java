@@ -236,7 +236,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
         dao.readDetail(this);
         // load all Waypoints with full Details
         AbstractWaypointDAO wdao = new WaypointDAO();
-        Array<AbstractWaypoint> wpts = wdao.getWaypointsFromCacheID(getId(), true);
+        Array<AbstractWaypoint> wpts = wdao.getWaypointsFromCacheID(Database.Data, getId(), true);
         for (int i = 0; i < wpts.size; i++) {
             Waypoint wp = (Waypoint) wpts.get(i);
             boolean found = false;
