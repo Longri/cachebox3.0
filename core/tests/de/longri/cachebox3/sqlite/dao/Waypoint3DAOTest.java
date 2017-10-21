@@ -4,9 +4,12 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.Waypoint3;
+import de.longri.cachebox3.types.WaypointImport;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -76,19 +79,137 @@ class Waypoint3DAOTest {
 
 
     @Test
-    void writeToDatabase() {
+    void exceptionThrowing() {
+        //Waypoint3 class must throw a Exception with set propertie
+
+        AbstractWaypoint wp = new Waypoint3(should_Latitude, should_Longitude);
+        boolean hasThrowed = false;
+        try {
+            wp.setCacheId(should_cacheId);
+        } catch (Exception e) {
+            hasThrowed = true;
+        } finally {
+            assertThat("Set CacheID must throw a RuntimeException", hasThrowed);
+        }
+
+        hasThrowed = false;
+        try {
+            wp.setGcCode(should_GcCode);
+        } catch (Exception e) {
+            hasThrowed = true;
+        } finally {
+            assertThat("Set GcCode must throw a RuntimeException", hasThrowed);
+        }
+
+        hasThrowed = false;
+        try {
+            wp.setTitle(should_Title);
+        } catch (Exception e) {
+            hasThrowed = true;
+        } finally {
+            assertThat("Set Title must throw a RuntimeException", hasThrowed);
+        }
+
+        hasThrowed = false;
+        try {
+            wp.setType(should_Type);
+        } catch (Exception e) {
+            hasThrowed = true;
+        } finally {
+            assertThat("Set Type must throw a RuntimeException", hasThrowed);
+        }
+
+        hasThrowed = false;
+        try {
+            wp.setStart(should_isStart);
+        } catch (Exception e) {
+            hasThrowed = true;
+        } finally {
+            assertThat("Set Start must throw a RuntimeException", hasThrowed);
+        }
+
+        hasThrowed = false;
+        try {
+            wp.setSyncExcluded(should_syncExclude);
+        } catch (Exception e) {
+            hasThrowed = true;
+        } finally {
+            assertThat("Set SyncExclude must throw a RuntimeException", hasThrowed);
+        }
+
+        hasThrowed = false;
+        try {
+            wp.setUserWaypoint(should_userWaypoint);
+        } catch (Exception e) {
+            hasThrowed = true;
+        } finally {
+            assertThat("Set UserWaypoint must throw a RuntimeException", hasThrowed);
+        }
+
+        hasThrowed = false;
+        try {
+            wp.setUserWaypoint(should_userWaypoint);
+        } catch (Exception e) {
+            hasThrowed = true;
+        } finally {
+            assertThat("Set UserWaypoint must throw a RuntimeException", hasThrowed);
+        }
     }
 
+
+    private final double should_Latitude = 53.123;
+    private final double should_Longitude = 13.456;
+    private final long should_cacheId = 1234567890L;
+    private final String should_GcCode = "GCCCCCX";
+    private final String should_Title = "Waypoint-Title";
+    private final CacheTypes should_Type = CacheTypes.MultiQuestion;
+    private final boolean should_isStart = true;
+    private final boolean should_syncExclude = true;
+    private final boolean should_userWaypoint = true;
+    private final String should_Description = " Waypoint description";
+    private final String should_Clue = " Waypoint clue";
+
+
     @Test
-    void updateDatabase() {
+    void writeToDatabase() {
+        //1. write new wp to DB
+        //2. update wp
+        //3. delete wp
+
+        AbstractWaypoint wp = new WaypointImport(should_Latitude, should_Longitude);
+        wp.setCacheId(should_cacheId);
+        wp.setGcCode(should_GcCode);
+        wp.setTitle(should_Title);
+        wp.setType(should_Type);
+        wp.setStart(should_isStart);
+        wp.setSyncExcluded(should_syncExclude);
+        wp.setUserWaypoint(should_userWaypoint);
+        wp.setDescription(should_Description);
+        wp.setClue(should_Clue);
+        assertWp("", wp);
+
     }
+
+    private void assertWp(String msg, AbstractWaypoint wp) {
+        assertThat(msg + " Waypoint Id must equals", wp.getCacheId() == should_cacheId);
+        assertThat(msg + " Waypoint Latitude must equals", TestUtils.roundDoubleCoordinate(wp.getLatitude()) == should_Latitude);
+        assertThat(msg + " Waypoint Longitude must equals", TestUtils.roundDoubleCoordinate(wp.getLongitude()) == should_Longitude);
+        assertThat(msg + " Waypoint GcCode must equals", wp.getGcCode().equals(should_GcCode));
+        assertThat(msg + " Waypoint Type must equals", wp.getType() == should_Type);
+        assertThat(msg + " Waypoint IsStart must equals", wp.isStart() == should_isStart);
+        assertThat(msg + " Waypoint SyncExclude must equals", wp.isSyncExcluded() == should_syncExclude);
+        assertThat(msg + " Waypoint IsUserWaypoint must equals", wp.isUserWaypoint() == should_userWaypoint);
+        assertThat(msg + " Waypoint Title must equals", wp.getTitle().equals(should_Title));
+
+        assertThat(msg + " Waypoint Description must equals", wp.getDescription(cb3Database).equals(should_Description));
+        assertThat(msg + " Waypoint Clue must equals", wp.getClue(cb3Database).equals(should_Clue));
+
+    }
+
 
     @Test
     void resetStartWaypoint() {
     }
 
-    @Test
-    void delete() {
-    }
 
 }

@@ -255,9 +255,9 @@ public class WaypointDAO extends AbstractWaypointDAO {
     }
 
     @Override
-    public void delete(AbstractWaypoint waypoint) {
+    public void delete(Database database,AbstractWaypoint waypoint) {
         try {
-            Database.Data.delete("Waypoint", "GcCode='" + waypoint.getGcCode() + "'", null);
+            database.delete("Waypoint", "GcCode='" + waypoint.getGcCode() + "'", null);
         } catch (Exception exc) {
             log.error("delete from dataBase", exc);
         }

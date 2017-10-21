@@ -66,7 +66,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
     }
 
     @Override
-    public void delete(AbstractWaypoint waypoint) {
+    public void delete(Database database,AbstractWaypoint waypoint) {
 
     }
 }

@@ -42,6 +42,17 @@ public class Waypoint3 extends AbstractWaypoint {
         this.title = new CharSequenceArray(cursor.getString(8));
     }
 
+    public Waypoint3(double latitude, double longitude) {
+        super(latitude, longitude);
+        this.cacheId = -1L;
+        this.gcCode = null;
+        this.type = null;
+        this.isStart = false;
+        this.syncExclude = false;
+        this.userWaypoint = false;
+        this.title = null;
+    }
+
     //################################################################################
     //# properties retained at the class
     ///###############################################################################

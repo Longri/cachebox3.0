@@ -313,7 +313,7 @@ public class WaypointView extends AbstractView {
                             log.debug("Delete Waypoint");
                             // Yes button clicked
                             final AbstractWaypointDAO dao = new WaypointDAO();
-                            dao.delete(actWaypoint);
+                            dao.delete(Database.Data,actWaypoint);
                             actAbstractCache.getWaypoints().removeValue(actWaypoint, false);
                             listView.setSelection(0);// select Cache
                         }

@@ -42,5 +42,5 @@ public abstract class AbstractWaypointDAO {
      */
     public abstract Array<AbstractWaypoint> getWaypointsFromCacheID(Database database, Long CacheID, boolean Full);
 
-    public abstract void delete(AbstractWaypoint waypoint);
+    public abstract void delete(Database database,AbstractWaypoint waypoint);
 }
