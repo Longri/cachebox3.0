@@ -51,7 +51,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
 
 
     @Override
-    public void writeToDatabase(AbstractWaypoint WP) {
+    public void writeToDatabase(Database database,AbstractWaypoint WP) {
 
     }
 

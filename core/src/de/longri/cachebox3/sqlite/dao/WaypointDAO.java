@@ -34,7 +34,7 @@ public class WaypointDAO extends AbstractWaypointDAO {
     public static final String SQL_WP_FULL = "select GcCode, CacheId, Latitude, Longitude, Type, SyncExclude, UserWaypoint, Title, isStart, Description, Clue from Waypoint";
 
     @Override
-    public void writeToDatabase(AbstractWaypoint WP) {
+    public void writeToDatabase(Database database,AbstractWaypoint WP) {
         writeToDatabase(WP, true);
     }
 

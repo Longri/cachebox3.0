@@ -19,14 +19,48 @@ import de.longri.cachebox3.sqlite.Database;
 
 /**
  * A special class for Import, don't use that for hold and dispose if not used anymore!
- *
+ * <p>
  * Created by Longri on 19.10.2017.
  */
 public class WaypointImport extends AbstractWaypoint {
 
+    private double latitude = 0;
+    private double longitude = 0;
+    private long cacheId = 0L;
+    private String gcCode = "";
+    private String title = "";
+    private CacheTypes type = CacheTypes.Undefined;
+    private boolean isStart = false;
+    private boolean syncExclude = false;
+    private boolean userWaypoint = false;
+    private String description = "";
+    private String clue = "";
+
+
     public WaypointImport(double latitude, double longitude) {
-        super(latitude, longitude);
+        super(0, 0);
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
+
+    @Override
+    public double getLatitude() {
+        return this.latitude;
+    }
+
+    @Override
+    public double getLongitude() {
+        return this.longitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
 
     @Override
     public float distance() {
@@ -35,42 +69,42 @@ public class WaypointImport extends AbstractWaypoint {
 
     @Override
     public CharSequence getGcCode() {
-        return null;
+        return this.gcCode;
     }
 
     @Override
     public void setGcCode(String gcCode) {
-
+        this.gcCode = gcCode;
     }
 
     @Override
     public CharSequence getTitle() {
-        return null;
+        return this.title;
     }
 
     @Override
     public void setTitle(String title) {
-
+        this.title = title;
     }
 
     @Override
     public CharSequence getDescription(Database database) {
-        return null;
+        return this.description;
     }
 
     @Override
     public void setDescription(String description) {
-
+        this.description = description;
     }
 
     @Override
     public CharSequence getClue(Database cb3Database) {
-        return null;
+        return this.clue;
     }
 
     @Override
     public void setClue(String clue) {
-
+        this.clue = clue;
     }
 
     @Override
@@ -85,59 +119,73 @@ public class WaypointImport extends AbstractWaypoint {
 
     @Override
     public long getCacheId() {
-        return 0;
+        return this.cacheId;
     }
 
     @Override
     public void setCacheId(long cacheId) {
-
+        this.cacheId = cacheId;
     }
 
     @Override
     public CacheTypes getType() {
-        return null;
+        return this.type;
     }
 
     @Override
     public void setType(CacheTypes type) {
-
+        this.type = type;
     }
 
     @Override
     public boolean isUserWaypoint() {
-        return false;
+        return this.userWaypoint;
     }
 
     @Override
     public void setUserWaypoint(boolean userWaypoint) {
-
+        this.userWaypoint = userWaypoint;
     }
 
     @Override
     public boolean isSyncExcluded() {
-        return false;
+        return this.syncExclude;
     }
 
     @Override
     public void setSyncExcluded(boolean syncExcluded) {
-
+        this.syncExclude = syncExcluded;
     }
 
     @Override
     public boolean isStart() {
-        return false;
+        return this.isStart;
     }
 
     @Override
     public void setStart(boolean start) {
-
+        this.isStart = start;
     }
 
-    public void reset(){
-
+    public void reset() {
+        latitude = 0;
+        longitude = 0;
+        cacheId = 0L;
+        gcCode = "";
+        title = "";
+        type = CacheTypes.Undefined;
+        isStart = false;
+        syncExclude = false;
+        userWaypoint = false;
+        description = "";
+        clue = "";
     }
 
-    public void dispose(){
-
+    public void dispose() {
+        gcCode = null;
+        title = null;
+        type = null;
+        description = null;
+        clue = null;
     }
 }

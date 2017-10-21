@@ -1173,8 +1173,8 @@ public class GroundspeakAPI {
 
                 if (update) {
                     // do not store replication information when importing caches with GC api
-                    if (!abstractWaypointDAO.updateDatabase((Waypoint) waypoint)) {
-                        abstractWaypointDAO.writeToDatabase((Waypoint) waypoint); // do not store replication information here
+                    if (!abstractWaypointDAO.updateDatabase( waypoint)) {
+                        abstractWaypointDAO.writeToDatabase(Database.Data, waypoint); // do not store replication information here
                     }
                 }
 

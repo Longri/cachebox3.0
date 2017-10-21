@@ -366,7 +366,7 @@ public class WaypointView extends AbstractView {
                         //which is defined as starting point !!!
                         abstractWaypointDAO.resetStartWaypoint(EventHandler.getSelectedCache(), value);
                     }
-                    abstractWaypointDAO.writeToDatabase(value);
+                    abstractWaypointDAO.writeToDatabase(Database.Data,value);
                     CB.requestRendering();
                 }
             }

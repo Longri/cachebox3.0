@@ -24,7 +24,6 @@ import de.longri.cachebox3.types.AbstractWaypoint;
  * Created by Longri on 20.10.2017.
  */
 public abstract class AbstractWaypointDAO {
-    public abstract void writeToDatabase(AbstractWaypoint WP);
 
     public abstract boolean updateDatabase(AbstractWaypoint WP);
 
@@ -43,4 +42,6 @@ public abstract class AbstractWaypointDAO {
     public abstract Array<AbstractWaypoint> getWaypointsFromCacheID(Database database, Long CacheID, boolean Full);
 
     public abstract void delete(Database database,AbstractWaypoint waypoint);
+
+    public abstract void writeToDatabase(Database database, AbstractWaypoint wp);
 }

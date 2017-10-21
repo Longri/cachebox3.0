@@ -6,10 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.AbstractWaypoint;
-import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.Waypoint3;
-import de.longri.cachebox3.types.WaypointImport;
+import de.longri.cachebox3.types.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -80,7 +77,7 @@ class Waypoint3DAOTest {
 
     @Test
     void exceptionThrowing() {
-        //Waypoint3 class must throw a Exception with set propertie
+        //Waypoint3 class must throw a Exception with set properties
 
         AbstractWaypoint wp = new Waypoint3(should_Latitude, should_Longitude);
         boolean hasThrowed = false;
@@ -186,23 +183,26 @@ class Waypoint3DAOTest {
         wp.setUserWaypoint(should_userWaypoint);
         wp.setDescription(should_Description);
         wp.setClue(should_Clue);
-        assertWp("", wp);
+        assertWp("WaypointImport", wp);
+
+        Waypoint3DAO DAO=new Waypoint3DAO();
+        DAO.writeToDatabase(cb3Database,wp);
 
     }
 
     private void assertWp(String msg, AbstractWaypoint wp) {
-        assertThat(msg + " Waypoint Id must equals", wp.getCacheId() == should_cacheId);
-        assertThat(msg + " Waypoint Latitude must equals", TestUtils.roundDoubleCoordinate(wp.getLatitude()) == should_Latitude);
-        assertThat(msg + " Waypoint Longitude must equals", TestUtils.roundDoubleCoordinate(wp.getLongitude()) == should_Longitude);
-        assertThat(msg + " Waypoint GcCode must equals", wp.getGcCode().equals(should_GcCode));
-        assertThat(msg + " Waypoint Type must equals", wp.getType() == should_Type);
-        assertThat(msg + " Waypoint IsStart must equals", wp.isStart() == should_isStart);
-        assertThat(msg + " Waypoint SyncExclude must equals", wp.isSyncExcluded() == should_syncExclude);
-        assertThat(msg + " Waypoint IsUserWaypoint must equals", wp.isUserWaypoint() == should_userWaypoint);
-        assertThat(msg + " Waypoint Title must equals", wp.getTitle().equals(should_Title));
+        assertThat(msg + " Id must equals", wp.getCacheId() == should_cacheId);
+        assertThat(msg + " Latitude must equals", TestUtils.roundDoubleCoordinate(wp.getLatitude()) == should_Latitude);
+        assertThat(msg + " Longitude must equals", TestUtils.roundDoubleCoordinate(wp.getLongitude()) == should_Longitude);
+        assertThat(msg + " GcCode must equals", wp.getGcCode().equals(should_GcCode));
+        assertThat(msg + " Type must equals", wp.getType() == should_Type);
+        assertThat(msg + " IsStart must equals", wp.isStart() == should_isStart);
+        assertThat(msg + " SyncExclude must equals", wp.isSyncExcluded() == should_syncExclude);
+        assertThat(msg + " IsUserWaypoint must equals", wp.isUserWaypoint() == should_userWaypoint);
+        assertThat(msg + " Title must equals", wp.getTitle().equals(should_Title));
 
-        assertThat(msg + " Waypoint Description must equals", wp.getDescription(cb3Database).equals(should_Description));
-        assertThat(msg + " Waypoint Clue must equals", wp.getClue(cb3Database).equals(should_Clue));
+        assertThat(msg + " Description must equals", wp.getDescription(cb3Database).equals(should_Description));
+        assertThat(msg + " Clue must equals", wp.getClue(cb3Database).equals(should_Clue));
 
     }
 
