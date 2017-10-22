@@ -759,7 +759,7 @@ public abstract class Search extends PostRequest {
 
                     if (update) {
                         // do not store replication information when importing caches with GC api
-                        if (!abstractWaypointDAO.updateDatabase(waypoint)) {
+                        if (!abstractWaypointDAO.updateDatabase(Database.Data,waypoint)) {
                             abstractWaypointDAO.writeToDatabase(Database.Data,waypoint); // do not store replication information here
                         }
                     }

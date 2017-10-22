@@ -22,7 +22,7 @@ import de.longri.cachebox3.sqlite.Database;
 /**
  * Created by Longri on 19.10.2017.
  */
-public class Waypoint3 extends AbstractWaypoint {
+public class ImmutableWaypoint extends AbstractWaypoint {
 
     private final long cacheId;
     private final CharSequence gcCode, title;
@@ -30,7 +30,7 @@ public class Waypoint3 extends AbstractWaypoint {
     private final boolean isStart, syncExclude, userWaypoint;
 
 
-    public Waypoint3(SQLiteGdxDatabaseCursor cursor) {
+    public ImmutableWaypoint(SQLiteGdxDatabaseCursor cursor) {
         super(cursor.getDouble(2), cursor.getDouble(3));
         this.cacheId = cursor.getLong(0);
         this.gcCode = new CharSequenceArray(cursor.getString(1));
@@ -42,7 +42,7 @@ public class Waypoint3 extends AbstractWaypoint {
         this.title = new CharSequenceArray(cursor.getString(8));
     }
 
-    public Waypoint3(double latitude, double longitude) {
+    public ImmutableWaypoint(double latitude, double longitude) {
         super(latitude, longitude);
         this.cacheId = -1L;
         this.gcCode = null;
@@ -52,6 +52,17 @@ public class Waypoint3 extends AbstractWaypoint {
         this.userWaypoint = false;
         this.title = null;
     }
+
+    @Override
+    public boolean isMutable() {
+        return false;
+    }
+
+    @Override
+    public AbstractWaypoint getMutable(Database database) {
+        return new MutableWaypoint(database,this);
+    }
+
 
     //################################################################################
     //# properties retained at the class
@@ -101,7 +112,7 @@ public class Waypoint3 extends AbstractWaypoint {
     ///###############################################################################
 
     private void throwNotChangeable(String propertyName) {
-        throw new RuntimeException("'" + propertyName + "' is not changeable! Use WaypointImport.class instead of Waypoint3.class");
+        throw new RuntimeException("'" + propertyName + "' is not changeable! Use MutableWaypoint.class instead of ImmutableWaypoint.class");
     }
 
     @Override
@@ -144,6 +155,17 @@ public class Waypoint3 extends AbstractWaypoint {
     @Override
     public void setStart(boolean start) {
         throwNotChangeable("IsStart");
+    }
+
+
+    @Override
+    public void setLatitude(double latitude) {
+        throwNotChangeable("Latitude");
+    }
+
+    @Override
+    public void setLongitude(double longitude) {
+        throwNotChangeable("Longitude");
     }
 
     //################################################################################

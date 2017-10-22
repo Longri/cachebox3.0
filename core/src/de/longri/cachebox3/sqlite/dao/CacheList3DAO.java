@@ -21,7 +21,6 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.Cache3;
 import de.longri.cachebox3.types.CacheList;
-import de.longri.cachebox3.types.Waypoint3;
 
 
 /**

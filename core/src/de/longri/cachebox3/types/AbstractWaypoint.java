@@ -67,4 +67,12 @@ public abstract class AbstractWaypoint extends Coordinate {
     public abstract boolean isStart();
 
     public abstract void setStart(boolean start);
+
+    public abstract boolean isMutable();
+
+    public abstract AbstractWaypoint getMutable(Database database);
+
+    public abstract void setLatitude(double latitude);
+
+    public abstract void setLongitude(double longitude);
 }

@@ -4,9 +4,11 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
-import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.types.AbstractWaypoint;
+import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.ImmutableWaypoint;
+import de.longri.cachebox3.types.MutableWaypoint;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -77,9 +79,9 @@ class Waypoint3DAOTest {
 
     @Test
     void exceptionThrowing() {
-        //Waypoint3 class must throw a Exception with set properties
+        //ImmutableWaypoint class must throw a Exception with set properties
 
-        AbstractWaypoint wp = new Waypoint3(should_Latitude, should_Longitude);
+        AbstractWaypoint wp = new ImmutableWaypoint(should_Latitude, should_Longitude);
         boolean hasThrowed = false;
         try {
             wp.setCacheId(should_cacheId);
@@ -166,6 +168,16 @@ class Waypoint3DAOTest {
     private final String should_Description = " Waypoint description";
     private final String should_Clue = " Waypoint clue";
 
+    private final double should2_Latitude = 53.456;
+    private final double should2_Longitude = 13.789;
+    private final String should2_Title = "Waypoint-Title Updated";
+    private final CacheTypes should2_Type = CacheTypes.CITO;
+    private final boolean should2_isStart = false;
+    private final boolean should2_syncExclude = false;
+    private final boolean should2_userWaypoint = false;
+    private final String should2_Description = " Waypoint updated description";
+    private final String should2_Clue = " Waypoint updated clue";
+
 
     @Test
     void writeToDatabase() {
@@ -173,7 +185,8 @@ class Waypoint3DAOTest {
         //2. update wp
         //3. delete wp
 
-        AbstractWaypoint wp = new WaypointImport(should_Latitude, should_Longitude);
+//1. write new wp to DB -------------------------------------------------------------------        
+        AbstractWaypoint wp = new MutableWaypoint(should_Latitude, should_Longitude);
         wp.setCacheId(should_cacheId);
         wp.setGcCode(should_GcCode);
         wp.setTitle(should_Title);
@@ -183,14 +196,39 @@ class Waypoint3DAOTest {
         wp.setUserWaypoint(should_userWaypoint);
         wp.setDescription(should_Description);
         wp.setClue(should_Clue);
-        assertWp("WaypointImport", wp);
+        assertWp("MutableWaypoint", wp);
 
-        Waypoint3DAO DAO=new Waypoint3DAO();
-        DAO.writeToDatabase(cb3Database,wp);
+        Waypoint3DAO DAO = new Waypoint3DAO();
+        DAO.writeToDatabase(cb3Database, wp);
 
         Array<AbstractWaypoint> waypoints = DAO.getWaypointsFromCacheID(cb3Database, should_cacheId, true);
-        AbstractWaypoint wp2= waypoints.get(0);
+        AbstractWaypoint wp2 = waypoints.get(0);
         assertWp("StoredWaypoint", wp2);
+
+
+//2. update wp -----------------------------------------------------------------------------  
+
+        if (!wp2.isMutable()) {
+            wp2 = wp2.getMutable(cb3Database);
+        }
+
+        wp2.setLatitude(should2_Latitude);
+        wp2.setLongitude(should2_Longitude);
+        wp2.setTitle(should2_Title);
+        wp2.setType(should2_Type);
+        wp2.setStart(should2_isStart);
+        wp2.setSyncExcluded(should2_syncExclude);
+        wp2.setUserWaypoint(should2_userWaypoint);
+        wp2.setDescription(should2_Description);
+        wp2.setClue(should2_Clue);
+        assertWp2("ChangedWaypoint", wp2);
+
+        DAO.updateDatabase(cb3Database, wp2);
+
+        Array<AbstractWaypoint> waypoints2 = DAO.getWaypointsFromCacheID(cb3Database, should_cacheId, true);
+        AbstractWaypoint wp3 = waypoints2.get(0);
+        assertWp2("updatedWaypoint", wp3);
+
 
     }
 
@@ -204,10 +242,22 @@ class Waypoint3DAOTest {
         assertThat(msg + " SyncExclude must equals", wp.isSyncExcluded() == should_syncExclude);
         assertThat(msg + " IsUserWaypoint must equals", wp.isUserWaypoint() == should_userWaypoint);
         assertThat(msg + " Title must equals", wp.getTitle().equals(should_Title));
-
         assertThat(msg + " Description must equals", wp.getDescription(cb3Database).equals(should_Description));
         assertThat(msg + " Clue must equals", wp.getClue(cb3Database).equals(should_Clue));
+    }
 
+    private void assertWp2(String msg, AbstractWaypoint wp) {
+        assertThat(msg + " Id must equals", wp.getCacheId() == should_cacheId);
+        assertThat(msg + " Latitude must equals", TestUtils.roundDoubleCoordinate(wp.getLatitude()) == should2_Latitude);
+        assertThat(msg + " Longitude must equals", TestUtils.roundDoubleCoordinate(wp.getLongitude()) == should2_Longitude);
+        assertThat(msg + " GcCode must equals", wp.getGcCode().equals(should_GcCode));
+        assertThat(msg + " Type must equals", wp.getType() == should2_Type);
+        assertThat(msg + " IsStart must equals", wp.isStart() == should2_isStart);
+        assertThat(msg + " SyncExclude must equals", wp.isSyncExcluded() == should2_syncExclude);
+        assertThat(msg + " IsUserWaypoint must equals", wp.isUserWaypoint() == should2_userWaypoint);
+        assertThat(msg + " Title must equals", wp.getTitle().equals(should2_Title));
+        assertThat(msg + " Description must equals", wp.getDescription(cb3Database).equals(should2_Description));
+        assertThat(msg + " Clue must equals", wp.getClue(cb3Database).equals(should2_Clue));
     }
 
 

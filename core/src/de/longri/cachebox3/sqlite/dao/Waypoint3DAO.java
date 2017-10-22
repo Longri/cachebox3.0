@@ -40,7 +40,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         SQLiteGdxDatabaseCursor cursor = database.rawQuery(where, args);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Waypoint3 wp = new Waypoint3(cursor);
+            ImmutableWaypoint wp = new ImmutableWaypoint(cursor);
             waypoints.add(wp);
             cursor.moveToNext();
         }
@@ -51,7 +51,15 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
 
     @Override
     public void writeToDatabase(Database database, AbstractWaypoint wp) {
+        writeToDatabase(database, wp, false);
+    }
 
+    @Override
+    public boolean updateDatabase(Database database, AbstractWaypoint wp) {
+        return writeToDatabase(database, wp, true);
+    }
+
+    private boolean writeToDatabase(Database database, AbstractWaypoint wp, boolean update) {
         //TODO  int newCheckSum = createCheckSum(database, wp);
 
         Database.Parameters args = new Database.Parameters();
@@ -66,47 +74,28 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         args.put("UserWaypoint", wp.isUserWaypoint());
         args.put("Title", wp.getTitle());
 
-        args2.put("GcCode", wp.getGcCode());
-        args2.put("description", wp.getDescription(database));
-        args2.put("clue", wp.getClue(database));
+        if (!update) args2.put("GcCode", wp.getGcCode());
+        args2.put("Description", wp.getDescription(database));
+        args2.put("Clue", wp.getClue(database));
 
-        long count = database.insert("Waypoints", args);
-        if (count <= 0) {
-            database.update("Waypoints", args, "GcCode=\"" + wp.getGcCode() + "\"", null);
-            database.update("WaypointsText", args2, "GcCode=\"" + wp.getGcCode() + "\"", null);
+        boolean updated = false;
+        if (update || database.insert("Waypoints", args) <= 0) {
+
+            //remove GcCode from args2
+            args2.remove("GcCode");
+
+            updated = 0 < database.update("Waypoints", args, "GcCode=\"" + wp.getGcCode() + "\"", null);
+            boolean textUpdated = 0 < database.update("WaypointsText", args2, "GcCode=\"" + wp.getGcCode() + "\"", null);
+            updated = updated || textUpdated;
         } else {
             database.insert("WaypointsText", args2);
         }
 
-        if (wp.isUserWaypoint()) {
+        checkUserWaypointFlag(database, wp);
 
-            String[] cacheIdString = new String[]{String.valueOf(wp.getCacheId())};
-
-            //read booleanStore of Cache
-            SQLiteGdxDatabaseCursor cursor = database.rawQuery("SELECT BooleanStore from CacheCoreInfo WHERE Id=?", cacheIdString);
-            cursor.moveToFirst();
-            short booleanStore = cursor.getShort(0);
-
-            if (Cache3.getMaskValue(Cache3.MASK_HAS_USER_DATA, booleanStore)) {
-                // HasUserData is set, return!
-                return;
-            }
-
-            Cache3.setMaskValue(Cache3.MASK_HAS_USER_DATA, true, booleanStore);
-
-            //Set 'HasUserData' on Cache table
-            args = new Database.Parameters();
-            args.put("BooleanStore", booleanStore);
-            database.update("CacheCoreInfo", args, "Id = ?", cacheIdString);
-        }
-
-
+        return updated;
     }
 
-    @Override
-    public boolean updateDatabase(AbstractWaypoint WP) {
-        return false;
-    }
 
     @Override
     public void resetStartWaypoint(AbstractCache abstractCache, AbstractWaypoint except) {
@@ -130,5 +119,29 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         if (WP.isStart())
             sCheckSum += "1";
         return (int) Utils.sdbm(sCheckSum);
+    }
+
+    private void checkUserWaypointFlag(Database database, AbstractWaypoint wp) {
+
+        if (wp.isUserWaypoint()) {
+            String[] cacheIdString = new String[]{String.valueOf(wp.getCacheId())};
+
+            //read booleanStore of Cache
+            SQLiteGdxDatabaseCursor cursor = database.rawQuery("SELECT BooleanStore from CacheCoreInfo WHERE Id=?", cacheIdString);
+            cursor.moveToFirst();
+            short booleanStore = cursor.getShort(0);
+
+            if (Cache3.getMaskValue(Cache3.MASK_HAS_USER_DATA, booleanStore)) {
+                // HasUserData is set, return!
+                return;
+            }
+
+            Cache3.setMaskValue(Cache3.MASK_HAS_USER_DATA, true, booleanStore);
+
+            //Set 'HasUserData' on Cache table
+            Database.Parameters args = new Database.Parameters();
+            args.put("BooleanStore", booleanStore);
+            database.update("CacheCoreInfo", args, "Id = ?", cacheIdString);
+        }
     }
 }

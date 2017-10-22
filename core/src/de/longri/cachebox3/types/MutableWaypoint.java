@@ -22,7 +22,7 @@ import de.longri.cachebox3.sqlite.Database;
  * <p>
  * Created by Longri on 19.10.2017.
  */
-public class WaypointImport extends AbstractWaypoint {
+public class MutableWaypoint extends AbstractWaypoint {
 
     private double latitude = 0;
     private double longitude = 0;
@@ -37,10 +37,25 @@ public class WaypointImport extends AbstractWaypoint {
     private String clue = "";
 
 
-    public WaypointImport(double latitude, double longitude) {
+    public MutableWaypoint(double latitude, double longitude) {
         super(0, 0);
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public MutableWaypoint(Database database, AbstractWaypoint waypoint) {
+        super(0, 0);
+        this.latitude = waypoint.getLatitude();
+        this.longitude = waypoint.getLongitude();
+        this.cacheId = waypoint.getCacheId();
+        this.gcCode = waypoint.getGcCode().toString();
+        this.title = waypoint.getTitle().toString();
+        this.type = waypoint.getType();
+        this.isStart = waypoint.isStart();
+        this.syncExclude = waypoint.isSyncExcluded();
+        this.userWaypoint = waypoint.isUserWaypoint();
+        this.description = waypoint.getDescription(database).toString();
+        this.clue = waypoint.getClue(database).toString();
     }
 
     @Override
@@ -165,6 +180,16 @@ public class WaypointImport extends AbstractWaypoint {
     @Override
     public void setStart(boolean start) {
         this.isStart = start;
+    }
+
+    @Override
+    public boolean isMutable() {
+        return true;
+    }
+
+    @Override
+    public AbstractWaypoint getMutable(Database database) {
+        return this;
     }
 
     public void reset() {

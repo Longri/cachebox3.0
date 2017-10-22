@@ -77,7 +77,7 @@ public class WaypointDAO extends AbstractWaypointDAO {
     }
 
     @Override
-    public boolean updateDatabase(AbstractWaypoint WP) {
+    public boolean updateDatabase(Database database,AbstractWaypoint WP) {
         return updateDatabase(WP, false);
     }
 

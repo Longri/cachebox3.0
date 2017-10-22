@@ -298,6 +298,26 @@ public class Waypoint extends AbstractWaypoint implements Serializable {
         IsStart = start;
     }
 
+    @Override
+    public boolean isMutable() {
+        return true;
+    }
+
+    @Override
+    public AbstractWaypoint getMutable(Database database) {
+        return this;
+    }
+
+    @Override
+    public void setLatitude(double latitude) {
+
+    }
+
+    @Override
+    public void setLongitude(double longitude) {
+
+    }
+
     public WaypointDetail getDetail() {
         return detail;
     }
