@@ -1,6 +1,7 @@
 package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
@@ -229,6 +230,16 @@ class Waypoint3DAOTest {
         AbstractWaypoint wp3 = waypoints2.get(0);
         assertWp2("updatedWaypoint", wp3);
 
+//3. delete wp -----------------------------------------------------------------------------
+
+        DAO.delete(cb3Database, wp3);
+        Array<AbstractWaypoint> waypoints3 = DAO.getWaypointsFromCacheID(cb3Database, should_cacheId, true);
+        assertThat("Waypoint list must be empty", waypoints3.size == 0);
+
+        //check is also deleted from WaypointsText table
+        SQLiteGdxDatabaseCursor cursor = cb3Database.rawQuery("SELECT * FROM WaypointsText WHERE GcCode='GCCCCCX'", null);
+        cursor.moveToFirst();
+        assertThat("Waypoint must also deleted from WaypointsText table",cursor.isAfterLast());
 
     }
 

@@ -105,6 +105,11 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
     @Override
     public void delete(Database database, AbstractWaypoint waypoint) {
 
+        //delete from Waypoints table
+        database.delete("Waypoints", "GcCode='" + waypoint.getGcCode() + "'", null);
+
+        //delete from WaypointsText table
+        database.delete("WaypointsText", "GcCode='" + waypoint.getGcCode() + "'", null);
     }
 
     private int createCheckSum(Database database, AbstractWaypoint WP) {
