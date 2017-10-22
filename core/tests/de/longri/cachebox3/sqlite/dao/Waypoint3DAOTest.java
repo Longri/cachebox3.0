@@ -188,6 +188,10 @@ class Waypoint3DAOTest {
         Waypoint3DAO DAO=new Waypoint3DAO();
         DAO.writeToDatabase(cb3Database,wp);
 
+        Array<AbstractWaypoint> waypoints = DAO.getWaypointsFromCacheID(cb3Database, should_cacheId, true);
+        AbstractWaypoint wp2= waypoints.get(0);
+        assertWp("StoredWaypoint", wp2);
+
     }
 
     private void assertWp(String msg, AbstractWaypoint wp) {

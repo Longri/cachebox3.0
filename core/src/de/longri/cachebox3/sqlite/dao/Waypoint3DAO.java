@@ -17,11 +17,10 @@ package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.AbstractWaypoint;
-import de.longri.cachebox3.types.Waypoint;
-import de.longri.cachebox3.types.Waypoint3;
+import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.utils.UnitFormatter;
 
 /**
  * Created by Longri on 20.10.2017.
@@ -33,10 +32,10 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
 
 
     @Override
-    public Array<AbstractWaypoint> getWaypointsFromCacheID(Database database,Long cacheID, boolean full) {
+    public Array<AbstractWaypoint> getWaypointsFromCacheID(Database database, Long cacheID, boolean full) {
 
         String[] args = cacheID == null ? null : new String[]{String.valueOf(cacheID)};
-        String where=cacheID == null ? GET_ALL_WAYPOINTS:GET_ALL_WAYPOINTS_FROM_CACHE;
+        String where = cacheID == null ? GET_ALL_WAYPOINTS : GET_ALL_WAYPOINTS_FROM_CACHE;
         Array<AbstractWaypoint> waypoints = new Array<>();
         SQLiteGdxDatabaseCursor cursor = database.rawQuery(where, args);
         cursor.moveToFirst();
@@ -51,7 +50,56 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
 
 
     @Override
-    public void writeToDatabase(Database database,AbstractWaypoint WP) {
+    public void writeToDatabase(Database database, AbstractWaypoint wp) {
+
+        //TODO  int newCheckSum = createCheckSum(database, wp);
+
+        Database.Parameters args = new Database.Parameters();
+        Database.Parameters args2 = new Database.Parameters();
+        args.put("CacheId", wp.getCacheId());
+        args.put("GcCode", wp.getGcCode());
+        args.put("Latitude", wp.getLatitude());
+        args.put("Longitude", wp.getLongitude());
+        args.put("Type", wp.getType().ordinal());
+        args.put("IsStart", wp.isStart());
+        args.put("SyncExclude", wp.isSyncExcluded());
+        args.put("UserWaypoint", wp.isUserWaypoint());
+        args.put("Title", wp.getTitle());
+
+        args2.put("GcCode", wp.getGcCode());
+        args2.put("description", wp.getDescription(database));
+        args2.put("clue", wp.getClue(database));
+
+        long count = database.insert("Waypoints", args);
+        if (count <= 0) {
+            database.update("Waypoints", args, "GcCode=\"" + wp.getGcCode() + "\"", null);
+            database.update("WaypointsText", args2, "GcCode=\"" + wp.getGcCode() + "\"", null);
+        } else {
+            database.insert("WaypointsText", args2);
+        }
+
+        if (wp.isUserWaypoint()) {
+
+            String[] cacheIdString = new String[]{String.valueOf(wp.getCacheId())};
+
+            //read booleanStore of Cache
+            SQLiteGdxDatabaseCursor cursor = database.rawQuery("SELECT BooleanStore from CacheCoreInfo WHERE Id=?", cacheIdString);
+            cursor.moveToFirst();
+            short booleanStore = cursor.getShort(0);
+
+            if (Cache3.getMaskValue(Cache3.MASK_HAS_USER_DATA, booleanStore)) {
+                // HasUserData is set, return!
+                return;
+            }
+
+            Cache3.setMaskValue(Cache3.MASK_HAS_USER_DATA, true, booleanStore);
+
+            //Set 'HasUserData' on Cache table
+            args = new Database.Parameters();
+            args.put("BooleanStore", booleanStore);
+            database.update("CacheCoreInfo", args, "Id = ?", cacheIdString);
+        }
+
 
     }
 
@@ -66,7 +114,21 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
     }
 
     @Override
-    public void delete(Database database,AbstractWaypoint waypoint) {
+    public void delete(Database database, AbstractWaypoint waypoint) {
 
+    }
+
+    private int createCheckSum(Database database, AbstractWaypoint WP) {
+        // for Replication
+        String sCheckSum = WP.getGcCode().toString();
+        sCheckSum += UnitFormatter.formatLatitudeDM(WP.getLatitude());
+        sCheckSum += UnitFormatter.formatLongitudeDM(WP.getLongitude());
+        sCheckSum += WP.getDescription(database);
+        sCheckSum += WP.getType().ordinal();
+        sCheckSum += WP.getClue(database);
+        sCheckSum += WP.getTitle();
+        if (WP.isStart())
+            sCheckSum += "1";
+        return (int) Utils.sdbm(sCheckSum);
     }
 }
