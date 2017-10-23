@@ -136,12 +136,12 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
             cursor.moveToFirst();
             short booleanStore = cursor.getShort(0);
 
-            if (Cache3.getMaskValue(Cache3.MASK_HAS_USER_DATA, booleanStore)) {
+            if (ImmutableCache.getMaskValue(ImmutableCache.MASK_HAS_USER_DATA, booleanStore)) {
                 // HasUserData is set, return!
                 return;
             }
 
-            Cache3.setMaskValue(Cache3.MASK_HAS_USER_DATA, true, booleanStore);
+            ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, true, booleanStore);
 
             //Set 'HasUserData' on Cache table
             Database.Parameters args = new Database.Parameters();

@@ -309,12 +309,7 @@ public class Waypoint extends AbstractWaypoint implements Serializable {
     }
 
     @Override
-    public void setLatitude(double latitude) {
-
-    }
-
-    @Override
-    public void setLongitude(double longitude) {
+    public void setLatLon(double latitude, double longitude) {
 
     }
 

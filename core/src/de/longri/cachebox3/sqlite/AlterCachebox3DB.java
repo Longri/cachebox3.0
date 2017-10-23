@@ -17,8 +17,7 @@ package de.longri.cachebox3.sqlite;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IntArray;
-import de.longri.cachebox3.types.Cache3;
+import de.longri.cachebox3.types.ImmutableCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,14 +96,14 @@ public class AlterCachebox3DB {
                         boolean hasHint = hint != null && hint.length() > 0;
 
                         short bitFlags = 0;
-                        bitFlags = Cache3.setMaskValue(Cache3.MASK_ARCHIVED, Archived, bitFlags);
-                        bitFlags = Cache3.setMaskValue(Cache3.MASK_AVAILABLE, Available, bitFlags);
-                        bitFlags = Cache3.setMaskValue(Cache3.MASK_FOUND, Found, bitFlags);
-                        bitFlags = Cache3.setMaskValue(Cache3.MASK_FAVORITE, Favorit, bitFlags);
-                        bitFlags = Cache3.setMaskValue(Cache3.MASK_HAS_USER_DATA, HasUserData, bitFlags);
-                        bitFlags = Cache3.setMaskValue(Cache3.MASK_LISTING_CHANGED, ListingChanged, bitFlags);
-                        bitFlags = Cache3.setMaskValue(Cache3.MASK_CORECTED_COORDS, CorrectedCoordinates, bitFlags);
-                        bitFlags = Cache3.setMaskValue(Cache3.MASK_HAS_HINT, hasHint, bitFlags);
+                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_ARCHIVED, Archived, bitFlags);
+                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, Available, bitFlags);
+                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, Found, bitFlags);
+                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, Favorit, bitFlags);
+                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, HasUserData, bitFlags);
+                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_LISTING_CHANGED, ListingChanged, bitFlags);
+                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_CORECTED_COORDS, CorrectedCoordinates, bitFlags);
+                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_HINT, hasHint, bitFlags);
 
                         //Store bitFlags
                         Database.Parameters args = new Database.Parameters();

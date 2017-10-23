@@ -253,7 +253,6 @@ public abstract class AbstractCache extends Coordinate {
 
     public abstract void setFavoritePoints(int value);
 
-    public abstract int getFaviritPoints();
 
     public abstract int getFavoritePoints();
 
@@ -320,4 +319,16 @@ public abstract class AbstractCache extends Coordinate {
     public abstract void deleteDetail(Boolean value);
 
     public abstract boolean isDetailLoaded();
+
+    public abstract boolean isMutable();
+
+    public abstract AbstractCache getMutable(Database database);
+
+    public abstract void setAttributes(Array<Attributes> attributes);
+
+    public abstract void setHasHint(boolean hasHint);
+
+    public abstract void setLatLon(double latitude, double longitude);
+
+    public abstract short getBooleanStore();
 }

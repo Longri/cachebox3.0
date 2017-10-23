@@ -785,11 +785,13 @@ public enum Attributes {
         return null;
     }
 
-    public void setPositive() {
+    public Attributes setPositive() {
         this.negative = false;
+        return this;
     }
 
-    public void setNegative() {
+    public Attributes setNegative() {
         this.negative = true;
+        return this;
     }
 }

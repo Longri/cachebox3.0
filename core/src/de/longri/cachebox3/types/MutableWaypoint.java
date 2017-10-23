@@ -192,6 +192,12 @@ public class MutableWaypoint extends AbstractWaypoint {
         return this;
     }
 
+    @Override
+    public void setLatLon(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public void reset() {
         latitude = 0;
         longitude = 0;

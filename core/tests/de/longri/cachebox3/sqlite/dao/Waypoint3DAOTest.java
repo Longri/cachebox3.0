@@ -110,6 +110,16 @@ class Waypoint3DAOTest {
 
         hasThrowed = false;
         try {
+            wp.setLatLon(should_Latitude, should_Longitude);
+        } catch (Exception e) {
+            hasThrowed = true;
+        } finally {
+            assertThat("Set LatLon must throw a RuntimeException", hasThrowed);
+        }
+
+
+        hasThrowed = false;
+        try {
             wp.setGcCode(should_GcCode);
         } catch (Exception e) {
             hasThrowed = true;
@@ -203,7 +213,9 @@ class Waypoint3DAOTest {
         //3. delete wp
 
 //1. write new wp to DB -------------------------------------------------------------------        
-        AbstractWaypoint wp = new MutableWaypoint(should_Latitude, should_Longitude);
+        AbstractWaypoint wp = new MutableWaypoint(0, 0);
+
+        wp.setLatLon(should_Latitude, should_Longitude);
         wp.setCacheId(should_cacheId);
         wp.setGcCode(should_GcCode);
         wp.setTitle(should_Title);
@@ -229,8 +241,7 @@ class Waypoint3DAOTest {
             wp2 = wp2.getMutable(cb3Database);
         }
 
-        wp2.setLatitude(should2_Latitude);
-        wp2.setLongitude(should2_Longitude);
+        wp2.setLatLon(should2_Latitude, should2_Longitude);
         wp2.setTitle(should2_Title);
         wp2.setType(should2_Type);
         wp2.setStart(should2_isStart);
@@ -255,7 +266,7 @@ class Waypoint3DAOTest {
         //check is also deleted from WaypointsText table
         SQLiteGdxDatabaseCursor cursor = cb3Database.rawQuery("SELECT * FROM WaypointsText WHERE GcCode='GCCCCCX'", null);
         cursor.moveToFirst();
-        assertThat("Waypoint must also deleted from WaypointsText table",cursor.isAfterLast());
+        assertThat("Waypoint must also deleted from WaypointsText table", cursor.isAfterLast());
 
     }
 

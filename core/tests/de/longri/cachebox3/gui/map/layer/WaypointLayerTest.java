@@ -90,7 +90,7 @@ class WaypointLayerTest {
         WaypointLayer wpLayer = new WaypointLayer(null, textureRegionMap);
         Cache testCache1 = new Cache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
         Cache testCache2 = new Cache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
-        Cache testCache3 = new Cache(0.3, 0, "Cache3", CacheTypes.Traditional, "GC3");
+        Cache testCache3 = new Cache(0.3, 0, "ImmutableCache", CacheTypes.Traditional, "GC3");
 
         Database.Data.Query.add(testCache1);
         Database.Data.Query.add(testCache2);
@@ -258,7 +258,7 @@ class WaypointLayerTest {
         WaypointLayer wpLayer = new WaypointLayer(null, textureRegionMap);
         Cache testCache1 = new Cache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
         Cache testCache2 = new Cache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
-        Cache testCache3 = new Cache(0.3, 0, "Cache3", CacheTypes.Traditional, "GC3");
+        Cache testCache3 = new Cache(0.3, 0, "ImmutableCache", CacheTypes.Traditional, "GC3");
 
 
         Waypoint wp1 = new Waypoint("GCwp1", CacheTypes.Trailhead, "GCwp1", 0, 0.1, testCache1.getId(), "", "wp1");

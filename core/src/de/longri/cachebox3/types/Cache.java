@@ -228,6 +228,36 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
         return (getDetail() != null);
     }
 
+    @Override
+    public boolean isMutable() {
+        return true;
+    }
+
+    @Override
+    public AbstractCache getMutable(Database database) {
+        return this;
+    }
+
+    @Override
+    public void setAttributes(Array<Attributes> attributes) {
+
+    }
+
+    @Override
+    public void setHasHint(boolean hasHint) {
+
+    }
+
+    @Override
+    public void setLatLon(double latitude, double longitude) {
+
+    }
+
+    @Override
+    public short getBooleanStore() {
+        return 0;
+    }
+
     /**
      * Load Detail Information from DB
      */
@@ -1076,11 +1106,6 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     @Override
     public void setFavoritePoints(int value) {
         this.favoritePoints = value;
-    }
-
-    @Override
-    public int getFaviritPoints() {
-        return this.getFavoritePoints();
     }
 
     @Override

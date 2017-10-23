@@ -382,7 +382,7 @@ public class DraftsView extends AbstractView {
                 if (!EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(true);
                     AbstractCacheDAO abstractCacheDAO = new CacheDAO();
-                    abstractCacheDAO.writeToDatabaseFound(EventHandler.getSelectedCache());
+                    abstractCacheDAO.writeToDatabaseFound(Database.Data, EventHandler.getSelectedCache());
                     QuickDraftFeedbackPopUp pop = new QuickDraftFeedbackPopUp(true);
                     pop.show();
                 }
@@ -391,7 +391,7 @@ public class DraftsView extends AbstractView {
                 if (EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(false);
                     AbstractCacheDAO abstractCacheDAO = new CacheDAO();
-                    abstractCacheDAO.writeToDatabaseFound(EventHandler.getSelectedCache());
+                    abstractCacheDAO.writeToDatabaseFound(Database.Data, EventHandler.getSelectedCache());
                     QuickDraftFeedbackPopUp pop2 = new QuickDraftFeedbackPopUp(false);
                     pop2.show();
                 }
@@ -501,7 +501,7 @@ public class DraftsView extends AbstractView {
                 if (!EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(true);
                     AbstractCacheDAO abstractCacheDAO = new CacheDAO();
-                    abstractCacheDAO.writeToDatabaseFound(EventHandler.getSelectedCache());
+                    abstractCacheDAO.writeToDatabaseFound(Database.Data, EventHandler.getSelectedCache());
                     Config.FoundOffset.setValue(aktDraft.foundNumber);
                     Config.AcceptChanges();
                 }
@@ -512,7 +512,7 @@ public class DraftsView extends AbstractView {
                 if (EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(false);
                     AbstractCacheDAO abstractCacheDAO = new CacheDAO();
-                    abstractCacheDAO.writeToDatabaseFound(EventHandler.getSelectedCache());
+                    abstractCacheDAO.writeToDatabaseFound(Database.Data, EventHandler.getSelectedCache());
                     Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                     Config.AcceptChanges();
                 }
@@ -577,7 +577,7 @@ public class DraftsView extends AbstractView {
                     if (!EventHandler.getSelectedCache().isFound()) {
                         EventHandler.getSelectedCache().setFound(true);
                         AbstractCacheDAO abstractCacheDAO = new CacheDAO();
-                        abstractCacheDAO.writeToDatabaseFound(EventHandler.getSelectedCache());
+                        abstractCacheDAO.writeToDatabaseFound(Database.Data, EventHandler.getSelectedCache());
                         Config.FoundOffset.setValue(aktDraft.foundNumber);
                         Config.AcceptChanges();
                     }
@@ -586,7 +586,7 @@ public class DraftsView extends AbstractView {
                     if (EventHandler.getSelectedCache().isFound()) {
                         EventHandler.getSelectedCache().setFound(false);
                         AbstractCacheDAO abstractCacheDAO = new CacheDAO();
-                        abstractCacheDAO.writeToDatabaseFound(EventHandler.getSelectedCache());
+                        abstractCacheDAO.writeToDatabaseFound(Database.Data, EventHandler.getSelectedCache());
                         Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                         Config.AcceptChanges();
                     } // und eine evtl. vorhandene Draft FoundIt löschen
@@ -751,7 +751,7 @@ public class DraftsView extends AbstractView {
                             if (abstractCache.isFound()) {
                                 abstractCache.setFound(false);
                                 AbstractCacheDAO abstractCacheDAO = new CacheDAO();
-                                abstractCacheDAO.writeToDatabaseFound(abstractCache);
+                                abstractCacheDAO.writeToDatabaseFound(Database.Data, abstractCache);
                                 Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                                 Config.AcceptChanges();
                                 // jetzt noch diesen Cache in der aktuellen CacheListe suchen und auch da den Found-Status zurücksetzen

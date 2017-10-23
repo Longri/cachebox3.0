@@ -19,7 +19,7 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractWaypoint;
-import de.longri.cachebox3.types.Cache3;
+import de.longri.cachebox3.types.ImmutableCache;
 import de.longri.cachebox3.types.CacheList;
 
 
@@ -42,7 +42,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            cacheList.add(new Cache3(cursor));
+            cacheList.add(new ImmutableCache(cursor));
             cursor.moveToNext();
         }
         cursor.close();
@@ -55,7 +55,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         int n = cacheList.size - 1;
         int i = 0;
         while (n-- >= 0) {
-            Cache3 cache = (Cache3) cacheList.get(i++);
+            ImmutableCache cache = (ImmutableCache) cacheList.get(i++);
             Array<AbstractWaypoint> cachewaypoints = new Array<>();
             int m = waypoints.size - 1;
             int j = 0;

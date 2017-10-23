@@ -157,16 +157,11 @@ public class ImmutableWaypoint extends AbstractWaypoint {
         throwNotChangeable("IsStart");
     }
 
-
     @Override
-    public void setLatitude(double latitude) {
-        throwNotChangeable("Latitude");
+    public void setLatLon(double latitude, double longitude) {
+        throwNotChangeable("Coordinate");
     }
 
-    @Override
-    public void setLongitude(double longitude) {
-        throwNotChangeable("Longitude");
-    }
 
     //################################################################################
     //# properties that not retained at the class but read/write directly from/to DB

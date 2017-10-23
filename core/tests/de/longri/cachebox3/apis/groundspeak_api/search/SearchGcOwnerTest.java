@@ -170,7 +170,7 @@ class SearchGcOwnerTest {
                 assertEquals(new Date(1200211200000L), abstractCache.getDateHidden());
                 assertEquals(1.5f, abstractCache.getDifficulty());
                 assertEquals("bücken!", abstractCache.getHint());
-                assertEquals(0, abstractCache.getFaviritPoints());
+                assertEquals(0, abstractCache.getFavoritePoints());
                 assertEquals(false, abstractCache.isFound());
                 assertEquals("768551", abstractCache.getGcId());
                 assertTrue(abstractCache.getLongDescription().startsWith("Vom empfohlenen Parkplatz beträgt die Wegstrecke etwa 500 m. Der Cac"));
@@ -296,7 +296,7 @@ class SearchGcOwnerTest {
                         assertEquals(new Date(1200211200000L), abstractCache.getDateHidden());
                         assertEquals(1.5f, abstractCache.getDifficulty());
                         assertEquals("bücken!", abstractCache.getHint());
-                        assertEquals(0, abstractCache.getFaviritPoints());
+                        assertEquals(0, abstractCache.getFavoritePoints());
                         assertEquals(false, abstractCache.isFound());
                         assertEquals("768551", abstractCache.getGcId());
                         assertTrue(abstractCache.getLongDescription().startsWith("Vom empfohlenen Parkplatz beträgt die Wegstrecke etwa 500 m. Der Cac"));

@@ -26,7 +26,6 @@ import de.longri.cachebox3.types.*;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
-import org.mapsforge.core.util.LatLongUtils;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -116,40 +115,40 @@ class DatabaseConvert {
         i = 0;
         while (n-- > 0) {
             Cache cache = (Cache) Database.Data.Query.get(i);
-            Cache3 cache3 = (Cache3) cacheList3.get(i);
-            assertThat("Cache Id must equals", cache.getId() == cache3.getId());
-            assertThat("Cache Latitude must equals", TestUtils.roundDoubleCoordinate(cache.getLatitude()) == TestUtils.roundDoubleCoordinate(cache3.getLatitude()));
-            assertThat("Cache Longitude must equals", TestUtils.roundDoubleCoordinate(cache.getLongitude()) == TestUtils.roundDoubleCoordinate(cache3.getLongitude()));
-            assertThat("Cache Size must equals", cache.getSize() == cache3.getSize());
-            assertThat("Cache Difficulty must equals", cache.getDifficulty() == cache3.getDifficulty());
-            assertThat("Cache Terrain must equals", cache.getTerrain() == cache3.getTerrain());
-            assertThat("Cache Type must equals", cache.getType() == cache3.getType());
-            assertThat("Cache Rating must equals", cache.getRating() == cache3.getRating());
-            assertThat("Cache NumTravelbugs must equals", cache.getNumTravelbugs() == cache3.getNumTravelbugs());
-            assertThat("Cache GcCode must equals", cache3.getGcCode().equals(cache.getGcCode()));
-            assertThat("Cache Name must equals", cache3.getName().equals(cache.getName()));
-            assertThat("Cache PlacedBy must equals", cache3.getPlacedBy().equals(cache.getPlacedBy()));
-            assertThat("Cache Owner must equals", cache3.getOwner().equals(cache.getOwner()));
-            assertThat("Cache GcId must equals", cache3.getGcId().equals(cache.getGcId()));
-            assertThat("Cache Rating must equals", cache.getRating() == cache3.getRating());
-            assertThat("Cache Archived must equals", cache.isArchived() == cache3.isArchived());
-            assertThat("Cache Available must equals", cache.isAvailable() == cache3.isAvailable());
-            assertThat("Cache Found must equals", cache.isFound() == cache3.isFound());
-            assertThat("Cache Favorit must equals", cache.isFavorite() == cache3.isFavorite());
-            assertThat("Cache HasUserData must equals", cache.isHasUserData() == cache3.isHasUserData());
-            assertThat("Cache ListingChanged must equals", cache.isListingChanged() == cache3.isListingChanged());
-            assertThat("Cache CorrectedCoordinates must equals", cache.hasCorrectedCoordinates() == cache3.hasCorrectedCoordinates());
-            assertThat("Cache FavePoints must be 0", cache3.getFaviritPoints() == 0);
-            assertThat("Cache HasHint must equals", cache3.hasHint() == cache.hasHint());
+            ImmutableCache immutableCache = (ImmutableCache) cacheList3.get(i);
+            assertThat("Cache Id must equals", cache.getId() == immutableCache.getId());
+            assertThat("Cache Latitude must equals", TestUtils.roundDoubleCoordinate(cache.getLatitude()) == TestUtils.roundDoubleCoordinate(immutableCache.getLatitude()));
+            assertThat("Cache Longitude must equals", TestUtils.roundDoubleCoordinate(cache.getLongitude()) == TestUtils.roundDoubleCoordinate(immutableCache.getLongitude()));
+            assertThat("Cache Size must equals", cache.getSize() == immutableCache.getSize());
+            assertThat("Cache Difficulty must equals", cache.getDifficulty() == immutableCache.getDifficulty());
+            assertThat("Cache Terrain must equals", cache.getTerrain() == immutableCache.getTerrain());
+            assertThat("Cache Type must equals", cache.getType() == immutableCache.getType());
+            assertThat("Cache Rating must equals", cache.getRating() == immutableCache.getRating());
+            assertThat("Cache NumTravelbugs must equals", cache.getNumTravelbugs() == immutableCache.getNumTravelbugs());
+            assertThat("Cache GcCode must equals", immutableCache.getGcCode().equals(cache.getGcCode()));
+            assertThat("Cache Name must equals", immutableCache.getName().equals(cache.getName()));
+            assertThat("Cache PlacedBy must equals", immutableCache.getPlacedBy().equals(cache.getPlacedBy()));
+            assertThat("Cache Owner must equals", immutableCache.getOwner().equals(cache.getOwner()));
+            assertThat("Cache GcId must equals", immutableCache.getGcId().equals(cache.getGcId()));
+            assertThat("Cache Rating must equals", cache.getRating() == immutableCache.getRating());
+            assertThat("Cache Archived must equals", cache.isArchived() == immutableCache.isArchived());
+            assertThat("Cache Available must equals", cache.isAvailable() == immutableCache.isAvailable());
+            assertThat("Cache Found must equals", cache.isFound() == immutableCache.isFound());
+            assertThat("Cache Favorit must equals", cache.isFavorite() == immutableCache.isFavorite());
+            assertThat("Cache HasUserData must equals", cache.isHasUserData() == immutableCache.isHasUserData());
+            assertThat("Cache ListingChanged must equals", cache.isListingChanged() == immutableCache.isListingChanged());
+            assertThat("Cache CorrectedCoordinates must equals", cache.hasCorrectedCoordinates() == immutableCache.hasCorrectedCoordinates());
+            assertThat("Cache FavePoints must be 0", immutableCache.getFavoritePoints() == 0);
+            assertThat("Cache HasHint must equals", immutableCache.hasHint() == cache.hasHint());
 
 
             Array<AbstractWaypoint> cacheWayPoints = cache.getWaypoints();
-            Array<AbstractWaypoint> cache3WayPoints = cache3.getWaypoints();
+            Array<AbstractWaypoint> cache3WayPoints = immutableCache.getWaypoints();
             assertThat("Cache Waypoints must equals", cache3WayPoints.equals(cacheWayPoints));
 
             //check properties that not stored on class (direct DB Access)
             Array<Attributes> cacheAttributes = cache.getAttributes(Database.Data);
-            Array<Attributes> cache3Attributes = cache3.getAttributes(cb3Database);
+            Array<Attributes> cache3Attributes = immutableCache.getAttributes(cb3Database);
             assertThat("Cache Attributes must equals", cacheAttributes.equals(cache3Attributes));
 
             i++;

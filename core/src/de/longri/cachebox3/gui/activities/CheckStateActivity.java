@@ -257,7 +257,7 @@ public class CheckStateActivity extends ActivityBase {
                 AbstractCacheDAO dao = new CacheDAO();
                 do {
                     AbstractCache writeTmp = iterator.next();
-                    if (dao.updateDatabaseCacheState(writeTmp))
+                    if (dao.updateDatabaseCacheState(Database.Data, writeTmp))
                         changedCount.incrementAndGet();
                 } while (iterator.hasNext());
 

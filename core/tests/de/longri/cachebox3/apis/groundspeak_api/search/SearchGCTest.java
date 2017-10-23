@@ -137,7 +137,7 @@ class SearchGCTest {
                 assertEquals(new Date(1243753200000L), abstractCache.getDateHidden());
                 assertEquals(3f, abstractCache.getDifficulty());
                 assertEquals("", abstractCache.getHint());
-                assertEquals(12, abstractCache.getFaviritPoints());
+                assertEquals(12, abstractCache.getFavoritePoints());
                 assertEquals(true, abstractCache.isFound());
                 assertEquals("1260177", abstractCache.getGcId());
                 assertTrue(abstractCache.getLongDescription().startsWith("<div style=\"text-align:center;\">Eine Hunderunde gedreht und mal "));
@@ -251,7 +251,7 @@ class SearchGCTest {
                 assertEquals(new Date(1243753200000L), abstractCache.getDateHidden());
                 assertEquals(3f, abstractCache.getDifficulty());
                 assertEquals("", abstractCache.getHint());
-                assertEquals(12, abstractCache.getFaviritPoints());
+                assertEquals(12, abstractCache.getFavoritePoints());
                 assertEquals(true, abstractCache.isFound());
                 assertEquals("1260177", abstractCache.getGcId());
                 assertTrue(abstractCache.getLongDescription().startsWith("<div style=\"text-align:center;\">Eine Hunderunde gedreht und mal "));

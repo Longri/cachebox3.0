@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 team-cachebox.de
+ * Copyright (C) 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import java.util.Date;
 /**
  * Created by Longri on 17.10.2017.
  */
-public class Cache3 extends AbstractCache {
+public class ImmutableCache extends AbstractCache {
 
     // ########################################################
     // Boolean Handling
@@ -52,6 +52,26 @@ public class Cache3 extends AbstractCache {
     public final static short MASK_LISTING_CHANGED = 1 << 9;
     private Array<AbstractWaypoint> waypoints;
 
+    public ImmutableCache(double latitude, double longitude) {
+        super(latitude, longitude);
+        this.id = 0;
+        short sizeOrigin = 0;
+        this.size = CacheSizes.parseInt(sizeOrigin);
+        this.difficulty = 0f;
+        this.terrain = 0f;
+        short typeOrigin = 0;
+        this.type = CacheTypes.get(typeOrigin);
+        this.rating = 0;
+        this.numTravelbugs = 0;
+        this.gcCode = "";
+        this.name = "";
+        this.placedBy = "";
+        this.owner = "";
+        this.gcId = "";
+        this.booleanStore = 0;
+        this.favPoints = 0;
+    }
+
 
     public static boolean getMaskValue(short mask, short bitFlags) {
         return (bitFlags & mask) == mask;
@@ -71,7 +91,7 @@ public class Cache3 extends AbstractCache {
     }
 
 
-    private final static Logger log = LoggerFactory.getLogger(Cache3.class);
+    private final static Logger log = LoggerFactory.getLogger(ImmutableCache.class);
 
     private final CharSequence name, gcCode, placedBy, owner, gcId;
     private final short rating, numTravelbugs, booleanStore;
@@ -82,7 +102,7 @@ public class Cache3 extends AbstractCache {
     private final float difficulty, terrain;
 
 
-    public Cache3(SQLiteGdxDatabaseCursor cursor) {
+    public ImmutableCache(SQLiteGdxDatabaseCursor cursor) {
         super(cursor.getDouble(1), cursor.getDouble(2));
         this.id = cursor.getLong(0);
         short sizeOrigin = cursor.getShort(3);
@@ -215,7 +235,7 @@ public class Cache3 extends AbstractCache {
     ///###############################################################################
 
     private void throwNotChangeable(String propertyName) {
-        throw new RuntimeException("'" + propertyName + "' is not changeable! Use CacheImport.class instead of Cache3.class");
+        throw new RuntimeException("'" + propertyName + "' is not changeable! Use CacheImport.class instead of ImmutableCache.class");
     }
 
     @Override
@@ -592,11 +612,6 @@ public class Cache3 extends AbstractCache {
     }
 
     @Override
-    public int getFaviritPoints() {
-        return 0;
-    }
-
-    @Override
     public int getFavoritePoints() {
         return 0;
     }
@@ -651,6 +666,36 @@ public class Cache3 extends AbstractCache {
     @Override
     public boolean isDetailLoaded() {
         return false;
+    }
+
+    @Override
+    public boolean isMutable() {
+        return false;
+    }
+
+    @Override
+    public AbstractCache getMutable(Database database) {
+        return new MutableCache(database, this);
+    }
+
+    @Override
+    public void setAttributes(Array<Attributes> attributes) {
+
+    }
+
+    @Override
+    public void setHasHint(boolean hasHint) {
+
+    }
+
+    @Override
+    public void setLatLon(double latitude, double longitude) {
+
+    }
+
+    @Override
+    public short getBooleanStore() {
+        return this.booleanStore;
     }
 
 

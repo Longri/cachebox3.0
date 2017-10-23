@@ -351,7 +351,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
                         EventHandler.getSelectedCache().setFavorite(!EventHandler.getSelectedCache().isFavorite());
                         AbstractCacheDAO dao = new CacheDAO();
-                        dao.updateDatabase(EventHandler.getSelectedCache());
+                        dao.updateDatabase(Database.Data, EventHandler.getSelectedCache());
 
                         // Update Query
                         Database.Data.Query.GetCacheById(EventHandler.getSelectedCache().getId()).setFavorite(EventHandler.getSelectedCache().isFavorite());

@@ -683,7 +683,7 @@ public abstract class Search extends PostRequest {
                     aktCache = null;
 
                 if (aktCache == null) {
-                    aktCache = abstractCacheDAO.getFromDbByCacheId(abstractCache.getId());
+                    aktCache = abstractCacheDAO.getFromDbByCacheId(Database.Data, abstractCache.getId());
                 }
                 // Read Detail Info of Cache if not available
                 if ((aktCache != null) && (aktCache.getDetail() == null)) {
@@ -695,8 +695,8 @@ public abstract class Search extends PostRequest {
                 }
 
                 // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
-                if (!abstractCacheDAO.updateDatabase(abstractCache)) {
-                    abstractCacheDAO.writeToDatabase(abstractCache);
+                if (!abstractCacheDAO.updateDatabase(Database.Data, abstractCache)) {
+                    abstractCacheDAO.writeToDatabase(Database.Data, abstractCache);
                 }
 
                 // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
@@ -759,8 +759,8 @@ public abstract class Search extends PostRequest {
 
                     if (update) {
                         // do not store replication information when importing caches with GC api
-                        if (!abstractWaypointDAO.updateDatabase(Database.Data,waypoint)) {
-                            abstractWaypointDAO.writeToDatabase(Database.Data,waypoint); // do not store replication information here
+                        if (!abstractWaypointDAO.updateDatabase(Database.Data, waypoint)) {
+                            abstractWaypointDAO.writeToDatabase(Database.Data, waypoint); // do not store replication information here
                         }
                     }
 

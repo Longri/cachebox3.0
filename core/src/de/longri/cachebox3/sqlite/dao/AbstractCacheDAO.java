@@ -16,23 +16,27 @@
 package de.longri.cachebox3.sqlite.dao;
 
 import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.sqlite.Database;
 
 /**
  * Created by Longri on 20.10.2017.
  */
 public abstract class AbstractCacheDAO {
-    public abstract void writeToDatabase(AbstractCache abstractCache);
 
-    public abstract void writeToDatabaseFound(AbstractCache abstractCache);
+    public abstract AbstractWaypointDAO getWaypointDAO();
 
-    public abstract boolean updateDatabase(AbstractCache abstractCache);
+    public abstract void writeToDatabase(Database database, AbstractCache abstractCache);
 
-    public abstract AbstractCache getFromDbByCacheId(long CacheID);
+    public abstract void writeToDatabaseFound(Database database, AbstractCache abstractCache);
+
+    public abstract boolean updateDatabase(Database database, AbstractCache abstractCache);
+
+    public abstract AbstractCache getFromDbByCacheId(Database database, long CacheID);
 
     /**
      * hier wird nur die Status Abfrage zurück geschrieben und gegebenen Falls die Replication Informationen geschrieben.
      *
      * @param writeTmp
      */
-    public abstract boolean updateDatabaseCacheState(AbstractCache writeTmp);
+    public abstract boolean updateDatabaseCacheState(Database database, AbstractCache writeTmp);
 }

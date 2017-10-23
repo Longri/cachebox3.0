@@ -189,7 +189,12 @@ public class CacheDAO extends AbstractCacheDAO {
     }
 
     @Override
-    public void writeToDatabase(AbstractCache abstractCache) {
+    public AbstractWaypointDAO getWaypointDAO() {
+        return new WaypointDAO();
+    }
+
+    @Override
+    public void writeToDatabase(Database database, AbstractCache abstractCache) {
         // int newCheckSum = createCheckSum(WP);
         // Replication.WaypointChanged(CacheId, checkSum, newCheckSum, GcCode);
         Database.Parameters args = new Database.Parameters();
@@ -270,7 +275,7 @@ public class CacheDAO extends AbstractCacheDAO {
     }
 
     @Override
-    public void writeToDatabaseFound(AbstractCache abstractCache) {
+    public void writeToDatabaseFound(Database database,AbstractCache abstractCache) {
         Database.Parameters args = new Database.Parameters();
         args.put("found", abstractCache.isFound());
         try {
@@ -282,7 +287,7 @@ public class CacheDAO extends AbstractCacheDAO {
     }
 
     @Override
-    public boolean updateDatabase(AbstractCache abstractCache) {
+    public boolean updateDatabase(Database database,AbstractCache abstractCache) {
 
         Database.Parameters args = new Database.Parameters();
 
@@ -357,7 +362,7 @@ public class CacheDAO extends AbstractCacheDAO {
     }
 
     @Override
-    public AbstractCache getFromDbByCacheId(long CacheID) {
+    public AbstractCache getFromDbByCacheId(Database database, long CacheID) {
         SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(SQL_GET_CACHE + SQL_BY_ID, new String[]{String.valueOf(CacheID)});
 
         try {
@@ -423,11 +428,11 @@ public class CacheDAO extends AbstractCacheDAO {
 //    }
 
     @Override
-    public boolean updateDatabaseCacheState(AbstractCache writeTmp) {
+    public boolean updateDatabaseCacheState(Database database, AbstractCache writeTmp) {
 
         // chk of changes
         boolean changed = false;
-        AbstractCache fromDB = getFromDbByCacheId(writeTmp.getId());
+        AbstractCache fromDB = getFromDbByCacheId(database, writeTmp.getId());
 
         if (fromDB == null)
             return false; // nichts zum Updaten gefunden

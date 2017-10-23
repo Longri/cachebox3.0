@@ -38,8 +38,8 @@ public class DatabaseSchema {
             " Owner    NVARCHAR (255),\n" +
             " GcId     NVARCHAR (255),\n" +
             " BooleanStore        SMALLINT,\n" +
-            " FavPoints        INT\n" +
-            " \n" +
+            " FavPoints        INT,\n" +
+            " Vote            SMALLINT\n" +
             " );       ";
 
     public final String ATTRIBUTES = "CREATE TABLE Attributes (\n" +
@@ -64,7 +64,6 @@ public class DatabaseSchema {
             "    Id                         BIGINT,\n" +
             "    DateHidden                DATETIME,\n" +
             "    FirstImported              DATETIME,\n" +
-            "    Vote                       SMALLINT,\n" +
             "    TourName                   NCHAR (255),\n" +
             "    GPXFilename_Id            BIGINT,\n" +
             "    ListingCheckSum           INT            DEFAULT 0,\n" +
@@ -75,9 +74,9 @@ public class DatabaseSchema {
             "   );";
 
     public final String COPY_DATA_FROM_V2_TO_V3 = "INSERT INTO CacheCoreInfo (" +
-            "Id, Latitude, Longitude, Size, Difficulty, Terrain, Type, Rating, NumTravelbugs, GcCode, Name, PlacedBy, Owner, GcId)\n" +
+            "Id, Latitude, Longitude, Size, Difficulty, Terrain, Type, Rating, NumTravelbugs, GcCode, Name, PlacedBy, Owner, GcId, Vote)\n" +
             "SELECT " +
-            "Id, Latitude, Longitude, Size, Difficulty, Terrain, Type, Rating, NumTravelbugs, GcCode, Name, PlacedBy, Owner, GcId\n" +
+            "Id, Latitude, Longitude, Size, Difficulty, Terrain, Type, Rating, NumTravelbugs, GcCode, Name, PlacedBy, Owner, GcId, Vote\n" +
             "FROM Caches;";
 
     public final String COPY_ATTRIBUTES_FROM_V2_TO_V3 = "INSERT INTO Attributes (" +
@@ -93,9 +92,9 @@ public class DatabaseSchema {
             "FROM Caches;";
 
     public final String COPY_CACHEINFO_FROM_V2_TO_V3 = "INSERT INTO CacheInfo (" +
-            "Id, DateHidden, FirstImported, Vote, TourName, GPXFilename_Id, ListingCheckSum, state, country, ApiStatus)" +
+            "Id, DateHidden, FirstImported, TourName, GPXFilename_Id, ListingCheckSum, state, country, ApiStatus)" +
             "SELECT " +
-            "Id, DateHidden, FirstImported, Vote, TourName, GPXFilename_Id, ListingCheckSum, state, country, ApiStatus\n" +
+            "Id, DateHidden, FirstImported, TourName, GPXFilename_Id, ListingCheckSum, state, country, ApiStatus\n" +
             "FROM Caches;";
 
     public final String WAYPOINTS = "CREATE TABLE Waypoints (\n" +
