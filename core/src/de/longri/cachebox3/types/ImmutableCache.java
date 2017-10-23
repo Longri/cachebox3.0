@@ -323,6 +323,63 @@ public class ImmutableCache extends AbstractCache {
         throwNotChangeable("Favorite");
     }
 
+    @Override
+    public void setLatLon(double latitude, double longitude) {
+        throwNotChangeable("LatLon");
+    }
+
+    @Override
+    public void setAttributesPositive(DLong dLong) {
+        throwNotChangeable("AttributesPositive");
+    }
+
+    @Override
+    public void setAttributesNegative(DLong dLong) {
+        throwNotChangeable("AttributesNegative");
+    }
+
+    @Override
+    public void setAttributes(Array<Attributes> attributes) {
+        throwNotChangeable("Attributes");
+    }
+
+    @Override
+    public void setDateHidden(Date date) {
+        throwNotChangeable("DateHidden");
+    }
+
+    @Override
+    public void setRating(float rating) {
+        throwNotChangeable("Rating");
+    }
+
+    @Override
+    public void setFavoritePoints(int value) {
+        throwNotChangeable("FavoritePoints");
+    }
+
+    @Override
+    public void setHasHint(boolean hasHint) {
+        throwNotChangeable("HasHint");
+    }
+
+
+    @Override
+    public void setShortDescription(String value) {
+        throwNotChangeable("ShortDescription");
+    }
+
+    @Override
+    public void setLongDescription(String value) {
+        throwNotChangeable("LongDescription");
+    }
+
+    @Override
+    public void setHint(String hint) {
+        throwNotChangeable("Hint");
+    }
+
+
     //################################################################################
     //# properties that not retained at the class but read/write directly from/to DB
     ///###############################################################################
@@ -410,10 +467,6 @@ public class ImmutableCache extends AbstractCache {
         return null;
     }
 
-    @Override
-    public void setHint(String hint) {
-
-    }
 
     @Override
     public long getGPXFilename_ID() {
@@ -450,10 +503,6 @@ public class ImmutableCache extends AbstractCache {
         return null;
     }
 
-    @Override
-    public void setDateHidden(Date date) {
-
-    }
 
     @Override
     public byte getApiState() {
@@ -556,30 +605,12 @@ public class ImmutableCache extends AbstractCache {
         return null;
     }
 
-    @Override
-    public void setAttributesPositive(DLong dLong) {
-
-    }
-
-    @Override
-    public void setAttributesNegative(DLong dLong) {
-
-    }
-
-    @Override
-    public void setLongDescription(String value) {
-
-    }
 
     @Override
     public String getLongDescription() {
         return null;
     }
 
-    @Override
-    public void setShortDescription(String value) {
-
-    }
 
     @Override
     public String getShortDescription() {
@@ -606,10 +637,6 @@ public class ImmutableCache extends AbstractCache {
         return false;
     }
 
-    @Override
-    public void setFavoritePoints(int value) {
-
-    }
 
     @Override
     public int getFavoritePoints() {
@@ -633,10 +660,6 @@ public class ImmutableCache extends AbstractCache {
         return 0;
     }
 
-    @Override
-    public void setRating(float rating) {
-
-    }
 
     @Override
     public float getCachedDistance() {
@@ -678,20 +701,6 @@ public class ImmutableCache extends AbstractCache {
         return new MutableCache(database, this);
     }
 
-    @Override
-    public void setAttributes(Array<Attributes> attributes) {
-
-    }
-
-    @Override
-    public void setHasHint(boolean hasHint) {
-
-    }
-
-    @Override
-    public void setLatLon(double latitude, double longitude) {
-
-    }
 
     @Override
     public short getBooleanStore() {
