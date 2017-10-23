@@ -22,7 +22,6 @@ import com.badlogic.gdx.utils.Predicate;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.MathUtils;
-import de.longri.cachebox3.utils.MoveableList;
 
 import java.util.Calendar;
 import java.util.Comparator;
@@ -487,6 +486,15 @@ public class CacheList extends Array<AbstractCache> {
     public int getSize() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return size;
+        }
+    }
+
+    public AbstractCache getCacheById(long id) {
+        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+            Object[] items = this.items;
+            for (int i = 0, n = size; i < n; i++)
+                if (((AbstractCache) items[i]).getId() == id) return get(i);
+            return null;
         }
     }
 }

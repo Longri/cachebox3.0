@@ -73,7 +73,7 @@ class DatabaseConvert {
         }
         reader.close();
 
-        Array<AbstractWaypoint> waypoint3list = new Waypoint3DAO().getWaypointsFromCacheID(cb3Database,null,true);
+        Array<AbstractWaypoint> waypoint3list = new Waypoint3DAO().getWaypointsFromCacheID(cb3Database, null, true);
 
         int n = waypointList.size;
         int i = 0;
@@ -108,7 +108,7 @@ class DatabaseConvert {
 
         //Load CacheList's and check equals
         CacheList3DAO dao3 = new CacheList3DAO();
-        CacheList cacheList3 = dao3.readCacheList(cb3Database);
+        CacheList cacheList3 = dao3.readCacheList(cb3Database, null, null, true, true);
 
         assertThat("Cache3DB must have 33 Caches but has:" + cacheList3.size, cacheList3.size == 33);
 
@@ -158,8 +158,6 @@ class DatabaseConvert {
         // cleanup
 //        assertThat("TestDB must be deleted after cleanup", copyDbFileHandle.delete());
     }
-
-
 
 
 }

@@ -28,33 +28,37 @@ import de.longri.cachebox3.types.CacheList;
  */
 public class CacheList3DAO extends AbstractCacheListDAO {
 
-    private final String READ_ALL = "SELECT * from CacheCoreInfo";
-
     @Override
     public CacheList readCacheList(Database database, CacheList cacheList, String where, boolean fullDetails, boolean loadAllWaypoints) {
-        return null;
-    }
 
-    public CacheList readCacheList(Database database) {
-        CacheList caches = new CacheList();
-        SQLiteGdxDatabaseCursor cursor = database.rawQuery(READ_ALL, null);
+        String statement = "SELECT * from CacheCoreInfo" + (where == null || where.isEmpty() ? "" : " WHERE " + where);
+
+        if (cacheList == null) {
+            cacheList = new CacheList();
+        } else {
+            cacheList.clear();
+        }
+
+        SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            caches.add(new Cache3(cursor));
+            cacheList.add(new Cache3(cursor));
             cursor.moveToNext();
         }
         cursor.close();
 
-        //read waypoints
-        Array<AbstractWaypoint> waypoints = new Waypoint3DAO().getWaypointsFromCacheID(database,null,true);
+        if (!loadAllWaypoints) return cacheList;
 
-        int n = caches.size-1;
+        //read waypoints
+        Array<AbstractWaypoint> waypoints = new Waypoint3DAO().getWaypointsFromCacheID(database, null, true);
+
+        int n = cacheList.size - 1;
         int i = 0;
         while (n-- >= 0) {
-            Cache3 cache = (Cache3) caches.get(i++);
+            Cache3 cache = (Cache3) cacheList.get(i++);
             Array<AbstractWaypoint> cachewaypoints = new Array<>();
-            int m = waypoints.size-1;
-            int j=0;
+            int m = waypoints.size - 1;
+            int j = 0;
             while (m-- >= 0) {
                 AbstractWaypoint waypoint = waypoints.get(j++);
                 if (waypoint.getCacheId() == cache.getId()) {
@@ -63,9 +67,6 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             }
             cache.setWaypoints(cachewaypoints);
         }
-
-
-        return caches;
+        return cacheList;
     }
-
 }
