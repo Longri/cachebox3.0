@@ -46,7 +46,7 @@ public class MutableCache extends AbstractCache {
     private boolean found;
     private boolean userData;
     private boolean listingChanged;
-    private Array<AbstractWaypoint> waypoints;
+    private Array<AbstractWaypoint> waypoints=new Array<>();
     private String longDescription;
     private String shortDescription;
     private String hint;
