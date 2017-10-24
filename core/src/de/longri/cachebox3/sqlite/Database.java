@@ -30,7 +30,10 @@ import org.slf4j.LoggerFactory;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 
 
 public class Database {
@@ -48,7 +51,7 @@ public class Database {
         // welche GPXFilenamen sind in der DB erfasst
         beginTransaction();
         try {
-            SQLiteGdxDatabaseCursor reader = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from Caches where GPXFilename_ID is not null Group by GPXFilename_ID", null);
+            SQLiteGdxDatabaseCursor reader = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from CacheInfo where GPXFilename_ID is not null Group by GPXFilename_ID", null);
             reader.moveToFirst();
 
             while (reader.isAfterLast() == false) {
@@ -63,7 +66,7 @@ public class Database {
             }
 
             delete("GPXFilenames", "Cachecount is NULL or CacheCount = 0", null);
-            delete("GPXFilenames", "ID not in (Select GPXFilename_ID From Caches)", null);
+            delete("GPXFilenames", "ID not in (Select GPXFilename_ID From CacheInfo)", null);
             reader.close();
             setTransactionSuccessful();
         } catch (Exception e) {
@@ -838,10 +841,22 @@ public class Database {
         try {
             SQLiteGdxDatabase tempDB = SQLiteGdxDatabaseFactory.getNewDatabase(Gdx.files.absolute(absolutePath));
             tempDB.openOrCreateDatabase();
-            SQLiteGdxDatabaseCursor result = tempDB.rawQuery("SELECT COUNT(*) FROM caches", null);
-            result.moveToFirst();
-            int count = result.getInt(0);
-            result.close();
+
+            //get schema version
+            SQLiteGdxDatabaseCursor cursor = tempDB.rawQuery("SELECT Value FROM Config WHERE [Key] like ?", new String[]{"DatabaseSchemeVersionWin"});
+            cursor.moveToFirst();
+            int version = Integer.parseInt(cursor.getString(0));
+
+            if (version < 1028) {
+                cursor = tempDB.rawQuery("SELECT COUNT(*) FROM caches", null);
+            } else {
+                cursor = tempDB.rawQuery("SELECT COUNT(*) FROM CacheCoreInfo", null);
+            }
+
+
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            cursor.close();
             tempDB.closeDatabase();
             return count;
         } catch (Exception exc) {

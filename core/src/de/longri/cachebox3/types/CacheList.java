@@ -387,29 +387,6 @@ public class CacheList extends Array<AbstractCache> {
         }
     }
 
-//    public Cache[] shrink() {
-//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-//            return super.shrink();
-//        }
-//    }
-//
-//    public Cache[] ensureCapacity(int additionalCapacity) {
-//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-//            return super.ensureCapacity(additionalCapacity);
-//        }
-//    }
-//
-//    public Cache[] setSize(int newSize) {
-//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-//            return super.setSize(newSize);
-//        }
-//    }
-//
-//    protected Cache[] resize(int newSize) {
-//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-//            return super.resize(newSize);
-//        }
-//    }
 
     public void sort() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime

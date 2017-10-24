@@ -92,11 +92,4 @@ public class SQLiteGdxDatabaseFactory {
     private SQLiteGdxDatabaseFactory() {
     }
 
-//	public static SQLiteGdxDatabaseCursor getNewDatabaseCursor(ResultSet rs, int rowcount) {
-//		return databaseManager.getNewDatabaseCursor(rs, rowcount) ;
-//	}
-//
-//	public static SQLiteGdxDatabaseCursor getNewDatabaseCursor(ResultSet rs) {
-//		return databaseManager.getNewDatabaseCursor(rs) ;
-//	}
 }
