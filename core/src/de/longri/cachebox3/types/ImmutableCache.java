@@ -652,12 +652,12 @@ public class ImmutableCache extends AbstractCache {
 
     @Override
     public boolean isAttributePositiveSet(Attributes attribute) {
-        return false;
+        throw new RuntimeException("not Stored on ImmutableCache.class");
     }
 
     @Override
     public boolean isAttributeNegativeSet(Attributes attribute) {
-        return false;
+        throw new RuntimeException("not Stored on ImmutableCache.class");
     }
 
     @Override

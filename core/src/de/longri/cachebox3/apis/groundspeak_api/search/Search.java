@@ -79,6 +79,7 @@ public abstract class Search extends PostRequest {
     private final String CODE = "Code";
     private final String CACHE_TYPE = "CacheType";
     private final String CACHE_TYPE_ID = "GeocacheTypeId";
+    private final String CONTAINER_TYPE_ID = "ContainerTypeId";
     private final String COUNTRY = "Country";
     private final String DATE_HIDDEN = "DateCreated";
     private final String DIFFICULTY = "Difficulty";
@@ -459,7 +460,10 @@ public abstract class Search extends PostRequest {
                             actCache.setFavoritePoints((int) value);
                         } else if (ID.equals(name)) {
                             actCache.setGcId(Long.toString(value));
+                        } else if (CONTAINER_TYPE_ID.equals(name)) {
+                            actCache.setSize(CacheSizes.parseInt(getCacheSize((int) value)));
                         }
+
                         break;
                     case ATTRIBUTE_ARRAY:
                         if (ATTRIBUTE_ID.equals(name)) {

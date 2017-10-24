@@ -159,7 +159,7 @@ class SearchGcOwnerTest {
                 assertEquals(true, userWaypoint.isUserWaypoint());
 
                 assertEquals(CacheTypes.Traditional, abstractCache.getType());
-                assertEquals(CacheSizes.other, abstractCache.getSize());
+                assertEquals(CacheSizes.small, abstractCache.getSize());
                 assertEquals("Germany", abstractCache.getCountry());
                 assertEquals(new Date(1200211200000L), abstractCache.getDateHidden());
                 assertEquals(1.5f, abstractCache.getDifficulty());

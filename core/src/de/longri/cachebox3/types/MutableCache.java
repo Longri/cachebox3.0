@@ -53,6 +53,9 @@ public class MutableCache extends AbstractCache {
     private Date dateHidden;
     private DLong attributesNegative;
     private DLong attributesPositive;
+    private String country;
+    private String url;
+    private byte apiState;
 
     public MutableCache(double latitude, double longitude) {
         super(latitude, longitude);
@@ -372,12 +375,12 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public byte getApiState() {
-        return 0;
+        return this.apiState;
     }
 
     @Override
     public void setApiState(byte value) {
-
+        this.apiState = value;
     }
 
     @Override
@@ -422,22 +425,22 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public String getUrl() {
-        return null;
+        return this.url;
     }
 
     @Override
     public void setUrl(String value) {
-
+        this.url = value;
     }
 
     @Override
     public String getCountry() {
-        return null;
+        return this.country;
     }
 
     @Override
     public void setCountry(String value) {
-
+        this.country = value;
     }
 
     @Override
@@ -514,12 +517,14 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public boolean isAttributePositiveSet(Attributes attribute) {
-        return false;
+        if (attributesPositive == null) return false;
+        return attributesPositive.BitAndBiggerNull(Attributes.GetAttributeDlong(attribute));
     }
 
     @Override
     public boolean isAttributeNegativeSet(Attributes attribute) {
-        return false;
+        if (attributesNegative == null) return false;
+        return attributesNegative.BitAndBiggerNull(Attributes.GetAttributeDlong(attribute));
     }
 
 
