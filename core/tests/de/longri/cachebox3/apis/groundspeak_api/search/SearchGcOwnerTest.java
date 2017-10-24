@@ -96,12 +96,6 @@ class SearchGcOwnerTest {
         };
 
         final AtomicBoolean WAIT = new AtomicBoolean(true);
-//        final CB_List<Cache> cacheList = new CB_List<>();
-//        final CB_List<LogEntry> logList = new CB_List<>();
-//        final CB_List<ImageEntry> imageList = new CB_List<>();
-//        final long gpxFilenameId = 10;
-//
-//        searchGC.setLists(cacheList, logList, imageList, gpxFilenameId);
 
         Net.HttpResponse response = new Net.HttpResponse() {
             @Override
@@ -199,9 +193,6 @@ class SearchGcOwnerTest {
                     positiveList.add(Attributes.Public_transportation);
                     positiveList.add(Attributes.Bicycles);
 
-//                    negativeList.add(Attributes.Wheelchair_accessible);
-//                    negativeList.add(Attributes.Horses);
-//                    negativeList.add(Attributes.Campfires);
 
                 }
 

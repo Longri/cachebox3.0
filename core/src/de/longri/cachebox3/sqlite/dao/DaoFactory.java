@@ -1,5 +1,5 @@
 /*
- * Copyright (C)  2017 team-cachebox.de
+ * Copyright (C) 2014 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.utils.lists;
-
-import com.badlogic.gdx.utils.Array;
+package de.longri.cachebox3.sqlite.dao;
 
 /**
- * Created by Longri on 21.04.2017.
+ * Created by Longri on 24.10.2017.
  */
-public class CB_List<T> extends Array<T> {
+public class DaoFactory {
 
-    //TODO delete CB_List<T> and replace method with same function of Array<T>
+    public static final AbstractCacheDAO CACHE_DAO = new Cache3DAO();
 
-    //TODO replace with Array<T>.set(int index, T value)
-    public void replace(T item, int index) {
-        this.items[index] = item;
-    }
+    public static final AbstractCacheListDAO CACHE_LIST_DAO = new CacheList3DAO();
 
-    //TODO replace with Array<T>.peek ()
-    public T last() {
-        return items[size - 1];
-    }
+    public static final AbstractWaypointDAO WAYPOINT_DAO = new Waypoint3DAO();
+
 }

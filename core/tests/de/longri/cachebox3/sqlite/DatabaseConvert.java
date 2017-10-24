@@ -55,18 +55,18 @@ class DatabaseConvert {
 
 
         // open DataBase
-        Database.Data = new Database(Database.DatabaseType.CacheBox);
+        Database.Data = new Database(Database.DatabaseType.CacheBox3);
         Database.Data.startUp(testDbFileHandle);
         Database cb3Database = new Database(Database.DatabaseType.CacheBox3);
         cb3Database.startUp(copyDbFileHandle);
 
         //read Waypoint list and check
-        Array<Waypoint> waypointList = new Array<>();
+        Array<AbstractWaypoint> waypointList = new Array<>();
 
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(WaypointDAO.SQL_WP_FULL, null);
+        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("", null);
         reader.moveToFirst();
         while (!reader.isAfterLast()) {
-            Waypoint wp = new WaypointDAO().getWaypoint(reader, true);
+            AbstractWaypoint wp = new ImmutableWaypoint(reader);
             waypointList.add(wp);
             reader.moveToNext();
         }
@@ -77,7 +77,7 @@ class DatabaseConvert {
         int n = waypointList.size;
         int i = 0;
         while (n-- > 0) {
-            Waypoint waypoint = waypointList.get(i);
+            AbstractWaypoint waypoint = waypointList.get(i);
             AbstractWaypoint waypoint3 = waypoint3list.get(i);
             assertThat("Waypoint Id must equals", waypoint.getCacheId() == waypoint3.getCacheId());
             assertThat("Waypoint Latitude must equals", TestUtils.roundDoubleCoordinate(waypoint.getLatitude()) == TestUtils.roundDoubleCoordinate(waypoint3.getLatitude()));
@@ -99,8 +99,7 @@ class DatabaseConvert {
 
         //read Cachelist and check
         CacheList tmpCacheList = new CacheList();
-        AbstractCacheListDAO abstractCacheListDAO = new CacheListDAO();
-        abstractCacheListDAO.readCacheList(Database.Data, tmpCacheList, "", true, Config.ShowAllWaypoints.getValue());
+        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, tmpCacheList, "", true, Config.ShowAllWaypoints.getValue());
         Database.Data.Query = tmpCacheList;
         assertThat("TestDB must have 33 Caches but has:" + Database.Data.Query.size, Database.Data.Query.size == 33);
 
@@ -114,7 +113,7 @@ class DatabaseConvert {
         n = cacheList3.size;
         i = 0;
         while (n-- > 0) {
-            Cache cache = (Cache) Database.Data.Query.get(i);
+            AbstractCache cache = Database.Data.Query.get(i);
             ImmutableCache immutableCache = (ImmutableCache) cacheList3.get(i);
             assertThat("Cache Id must equals", cache.getId() == immutableCache.getId());
             assertThat("Cache Latitude must equals", TestUtils.roundDoubleCoordinate(cache.getLatitude()) == TestUtils.roundDoubleCoordinate(immutableCache.getLatitude()));

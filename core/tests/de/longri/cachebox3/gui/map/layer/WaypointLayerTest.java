@@ -27,10 +27,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.CacheList;
-import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.types.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.oscim.awt.AwtGraphics;
@@ -82,15 +79,15 @@ class WaypointLayerTest {
         skin.add("selectOverlay", styleSelectOverlay, MapWayPointItemStyle.class);
         skin.add("disabledOverlay", mapStar, MapWayPointItemStyle.class);
         skin.add("mapStar", mapStar, MapWayPointItemStyle.class);
-        Database.Data = new Database(Database.DatabaseType.CacheBox);
+        Database.Data = new Database(Database.DatabaseType.CacheBox3);
         Database.Data.Query = new CacheList();
         if (VisUI.isLoaded()) VisUI.dispose();
         VisUI.load(skin);
         LinkedHashMap<Object, TextureRegion> textureRegionMap = MapView.createTextureAtlasRegions();
         WaypointLayer wpLayer = new WaypointLayer(null, textureRegionMap);
-        Cache testCache1 = new Cache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
-        Cache testCache2 = new Cache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
-        Cache testCache3 = new Cache(0.3, 0, "ImmutableCache", CacheTypes.Traditional, "GC3");
+        MutableCache testCache1 = new MutableCache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
+        MutableCache testCache2 = new MutableCache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
+        MutableCache testCache3 = new MutableCache(0.3, 0, "ImmutableCache", CacheTypes.Traditional, "GC3");
 
         Database.Data.Query.add(testCache1);
         Database.Data.Query.add(testCache2);
@@ -248,7 +245,7 @@ class WaypointLayerTest {
         skin.add("mapTrailhead", mapTrailhead, MapWayPointItemStyle.class);
         skin.add("mapParkingArea", mapParkingArea, MapWayPointItemStyle.class);
         skin.add("mapMultiQuestion", mapMultiQuestion, MapWayPointItemStyle.class);
-        Database.Data = new Database(Database.DatabaseType.CacheBox);
+        Database.Data = new Database(Database.DatabaseType.CacheBox3);
         Database.Data.Query = new CacheList();
 
         if (VisUI.isLoaded()) VisUI.dispose();
@@ -256,18 +253,18 @@ class WaypointLayerTest {
         LinkedHashMap<Object, TextureRegion> textureRegionMap = MapView.createTextureAtlasRegions();
 
         WaypointLayer wpLayer = new WaypointLayer(null, textureRegionMap);
-        Cache testCache1 = new Cache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
-        Cache testCache2 = new Cache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
-        Cache testCache3 = new Cache(0.3, 0, "ImmutableCache", CacheTypes.Traditional, "GC3");
+        MutableCache testCache1 = new MutableCache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
+        MutableCache testCache2 = new MutableCache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
+        MutableCache testCache3 = new MutableCache(0.3, 0, "ImmutableCache", CacheTypes.Traditional, "GC3");
 
 
-        Waypoint wp1 = new Waypoint("GCwp1", CacheTypes.Trailhead, "GCwp1", 0, 0.1, testCache1.getId(), "", "wp1");
+        ImmutableWaypoint wp1 = new ImmutableWaypoint("GCwp1", CacheTypes.Trailhead,  0, 0.1, testCache1.getId(),  "wp1");
         testCache1.getWaypoints().add(wp1);
 
-        Waypoint wp2 = new Waypoint("GCwp2", CacheTypes.ParkingArea, "GCwp2", 0, 0.2, testCache2.getId(), "", "wp2");
+        ImmutableWaypoint wp2 = new ImmutableWaypoint("GCwp2", CacheTypes.ParkingArea,  0, 0.2, testCache2.getId(),  "wp2");
         testCache2.getWaypoints().add(wp2);
 
-        Waypoint wp3 = new Waypoint("GCwp3", CacheTypes.MultiQuestion, "GCwp3", 0, 0.2, testCache2.getId(), "", "wp3");
+        ImmutableWaypoint wp3 = new ImmutableWaypoint("GCwp3", CacheTypes.MultiQuestion,  0, 0.2, testCache2.getId(),  "wp3");
         testCache2.getWaypoints().add(wp3);
 
 

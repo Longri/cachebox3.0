@@ -25,7 +25,6 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
-import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,18 +131,9 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
         if (selectedCache == null || !selectedCache.equals(event.cache)) {
 
-            //unload details from last selected Cache
-            if (selectedCache != null) selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
-
             log.debug("Set Global selected Cache: {}", event.cache);
             selectedCache = event.cache;
             selectedWayPoint = null;
-
-            // and load details of new selected Cache
-            if (!selectedCache.isDetailLoaded()) {
-                selectedCache.loadDetail();
-            }
-
             fireSelectedCoordChanged(event.ID);
         }
     }
@@ -156,13 +146,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             if (selectedWayPoint != null) {
                 AbstractCache newCache = Database.Data.Query.GetCacheById(selectedWayPoint.getCacheId());
                 if (!newCache.equals(selectedCache)) {
-                    //unload details from last selected Cache
-                    if (selectedCache != null) selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
                     selectedCache = newCache;
-                    // and load details of new selected Cache
-                    if (!selectedCache.isDetailLoaded()) {
-                        selectedCache.loadDetail();
-                    }
                 }
 
                 fireSelectedCoordChanged(event.ID);

@@ -155,7 +155,7 @@ public class CacheList extends Array<AbstractCache> {
                     waypoint = nextAbstractCache.GetStartWaypoint();
                 }
 
-                retValue = new CacheWithWP(nextAbstractCache, (Waypoint) waypoint);
+                retValue = new CacheWithWP(nextAbstractCache, waypoint);
             }
             // vorhandenen Parkplatz Cache nach oben schieben
             AbstractCache park = this.GetCacheByGcCode("CBPark");

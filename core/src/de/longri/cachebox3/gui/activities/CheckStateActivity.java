@@ -47,8 +47,7 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.AbstractCacheDAO;
-import de.longri.cachebox3.sqlite.dao.CacheDAO;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
@@ -254,10 +253,9 @@ public class CheckStateActivity extends ActivityBase {
                 final AtomicInteger changedCount = new AtomicInteger(0);
                 Database.Data.beginTransaction();
                 Iterator<AbstractCache> iterator = addedReturnList.iterator();
-                AbstractCacheDAO dao = new CacheDAO();
                 do {
                     AbstractCache writeTmp = iterator.next();
-                    if (dao.updateDatabaseCacheState(Database.Data, writeTmp))
+                    if (DaoFactory.CACHE_DAO.updateDatabaseCacheState(Database.Data, writeTmp))
                         changedCount.incrementAndGet();
                 } while (iterator.hasNext());
 

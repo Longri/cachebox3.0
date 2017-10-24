@@ -25,10 +25,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
-import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.types.*;
 import org.oscim.backend.canvas.Bitmap;
 
 /**
@@ -85,41 +82,41 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
 
     private void checkCacheTypes() {
         //Check Cache, I'm the owner
-        AbstractCache ownerAbstractCache = new Cache(0, 0, "test", CacheTypes.Cache, "GCCODE");
+        AbstractCache ownerAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Cache, "GCCODE");
         checkCache(ownerAbstractCache);
 
         //Check Cache, found
-        AbstractCache foundAbstractCache = new Cache(0, 0, "test", CacheTypes.Cache, "GCCODE");
+        AbstractCache foundAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Cache, "GCCODE");
         foundAbstractCache.setOwner("nicht meiner");
         foundAbstractCache.setFound(true);
         checkCache(foundAbstractCache);
 
         //Check Cache, solved
-        AbstractCache solvedAbstractCache = new Cache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
+        AbstractCache solvedAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
         solvedAbstractCache.setOwner("nicht meiner");
         solvedAbstractCache.setCorrectedCoordinates(true);
         checkCache(solvedAbstractCache);
 
 
         //Check Cache, multi start
-        AbstractCache multiStartAbstractCache = new Cache(0, 0, "test", CacheTypes.Multi, "GCCODE");
+        AbstractCache multiStartAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Multi, "GCCODE");
         multiStartAbstractCache.setOwner("nicht meiner");
-        Waypoint wp = new Waypoint("wp", CacheTypes.MultiStage, "", 0, 0, 100, "", "");
+        AbstractWaypoint wp = new ImmutableWaypoint("wp", CacheTypes.MultiStage, 0, 0, 100, "");
         wp.setStart(true);
         multiStartAbstractCache.getWaypoints().add(wp);
         checkCache(multiStartAbstractCache);
 
         //Check Cache, myst start
-        AbstractCache mystStartAbstractCache = new Cache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
+        AbstractCache mystStartAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
         mystStartAbstractCache.setOwner("nicht meiner");
-        Waypoint wpm = new Waypoint("wp", CacheTypes.MultiStage, "", 0, 0, 100, "", "");
+        ImmutableWaypoint wpm = new ImmutableWaypoint("wp", CacheTypes.MultiStage, 0, 0, 100, "");
         wpm.setStart(true);
         mystStartAbstractCache.getWaypoints().add(wpm);
         checkCache(mystStartAbstractCache);
 
 
         {// check multiStageStart
-            Waypoint wpMS = new Waypoint("wp", CacheTypes.MultiStage, "", 0, 0, 100, "", "");
+            AbstractWaypoint wpMS = new ImmutableWaypoint("wp", CacheTypes.MultiStage, 0, 0, 100, "");
             wpMS.setStart(true);
 
             MapWayPointItemStyle style = null;
@@ -132,7 +129,7 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
             if (style == null) {
                 missingSyles.append(styleName);
                 missingSyles.append("\n");
-            }else{
+            } else {
                 checkBitmap(style.small, styleName, Size.small);
                 checkBitmap(style.middle, styleName, Size.middle);
                 checkBitmap(style.large, styleName, Size.large);
@@ -140,9 +137,8 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
         }
 
         for (CacheTypes type : CacheTypes.values()) {
-
             // create a Temp Cache
-            AbstractCache abstractCache = new Cache(0, 0, "test", type, "GCCODE");
+            AbstractCache abstractCache = new MutableCache(0, 0, "test", type, "GCCODE");
             abstractCache.setOwner("nicht meiner");
             checkCache(abstractCache);
         }

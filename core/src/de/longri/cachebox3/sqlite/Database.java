@@ -142,7 +142,7 @@ public class Database {
 
 
     public enum DatabaseType {
-        CacheBox, CacheBox3, Drafts, Settings
+        CacheBox3, Drafts, Settings
     }
 
     protected DatabaseType databaseType;
@@ -155,10 +155,6 @@ public class Database {
 
         switch (databaseType) {
             case CacheBox3:
-                latestDatabaseChange = DatabaseVersions.LatestDatabase3Change;
-                Query = new CacheList();
-                break;
-            case CacheBox:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseChange;
                 Query = new CacheList();
                 break;
@@ -231,7 +227,7 @@ public class Database {
         }
 
 
-        if (databaseType == DatabaseType.CacheBox) { // create or load DatabaseId for each
+        if (databaseType == DatabaseType.CacheBox3) { // create or load DatabaseId for each
             DatabaseId = readConfigLong("DatabaseId");
             if (DatabaseId <= 0) {
                 DatabaseId = new Date().getTime();
@@ -466,9 +462,6 @@ public class Database {
         switch (databaseType) {
             case CacheBox3:
                 new AlterCachebox3DB().alterCachebox3DB(this, lastDatabaseSchemeVersion);
-                break;
-            case CacheBox:
-                new AlterCacheboxDB().alterCacheboxDB(this, lastDatabaseSchemeVersion);
                 break;
             case Drafts:
                 beginTransaction();

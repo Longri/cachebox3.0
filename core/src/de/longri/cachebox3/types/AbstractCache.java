@@ -234,6 +234,10 @@ public abstract class AbstractCache extends Coordinate {
 
     public abstract boolean isAttributeNegativeSet(Attributes attribute);
 
+    public abstract void setLatitude(double latitude);
+
+    public abstract void setLongitude(double longitude);
+
     /**
      * Returns true if the Cache a event like Giga, Cito, Event or Mega
      *
@@ -263,12 +267,6 @@ public abstract class AbstractCache extends Coordinate {
 
     public abstract void setWaypoints(Array<AbstractWaypoint> waypoints);
 
-    /**
-     * Detail Information of Waypoint which are not always loaded
-     */
-    public abstract CacheDetail getDetail();
-
-    public abstract void setDetail(CacheDetail detail);
 
     /**
      * Id des Caches in der Datenbank von geocaching.com
@@ -313,12 +311,6 @@ public abstract class AbstractCache extends Coordinate {
     public abstract void setCachedDistance(float cachedDistance);
 
     public abstract void dispose();
-
-    public abstract void loadDetail();
-
-    public abstract void deleteDetail(Boolean value);
-
-    public abstract boolean isDetailLoaded();
 
     public abstract boolean isMutable();
 

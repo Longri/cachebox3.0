@@ -41,13 +41,12 @@ import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.AbstractWaypointDAO;
-import de.longri.cachebox3.sqlite.dao.WaypointDAO;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.types.MutableWaypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
@@ -312,8 +311,7 @@ public class WaypointView extends AbstractView {
                         if (which == ButtonDialog.BUTTON_POSITIVE) {
                             log.debug("Delete Waypoint");
                             // Yes button clicked
-                            final AbstractWaypointDAO dao = new WaypointDAO();
-                            dao.delete(Database.Data,actWaypoint);
+                            DaoFactory.WAYPOINT_DAO.delete(Database.Data, actWaypoint);
                             actAbstractCache.getWaypoints().removeValue(actWaypoint, false);
                             listView.setSelection(0);// select Cache
                         }
@@ -339,7 +337,7 @@ public class WaypointView extends AbstractView {
             coord = EventHandler.getMyPosition();
         if ((coord == null) || (!coord.isValid()))
             coord = EventHandler.getSelectedCache();
-        Waypoint newWP = new Waypoint(newGcCode, CacheTypes.ReferencePoint, ""
+        AbstractWaypoint newWP = new MutableWaypoint(newGcCode, CacheTypes.ReferencePoint
                 , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
 
 
@@ -347,9 +345,9 @@ public class WaypointView extends AbstractView {
     }
 
     private void showEditWpDialog(AbstractWaypoint newWP) {
-        EditWaypoint editWaypoint = new EditWaypoint(newWP, true, new GenericCallBack<Waypoint>() {
+        EditWaypoint editWaypoint = new EditWaypoint(newWP, true, new GenericCallBack<AbstractWaypoint>() {
             @Override
-            public void callBack(Waypoint value) {
+            public void callBack(AbstractWaypoint value) {
                 if (value != null) {
                     if (actAbstractCache.getWaypoints().contains(value, false)) {
                         int index = actAbstractCache.getWaypoints().indexOf(value, false);
@@ -360,13 +358,12 @@ public class WaypointView extends AbstractView {
 
                     addNewListView();
                     EventHandler.fire(new SelectedWayPointChangedEvent(value));
-                    final AbstractWaypointDAO abstractWaypointDAO = new WaypointDAO();
                     if (value.isStart()) {
                         //It must be ensured here that this waypoint is the only one of these Cache,
                         //which is defined as starting point !!!
-                        abstractWaypointDAO.resetStartWaypoint(EventHandler.getSelectedCache(), value);
+                        DaoFactory.WAYPOINT_DAO.resetStartWaypoint(EventHandler.getSelectedCache(), value);
                     }
-                    abstractWaypointDAO.writeToDatabase(Database.Data,value);
+                    DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, value);
                     CB.requestRendering();
                 }
             }
