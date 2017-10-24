@@ -359,7 +359,7 @@ public abstract class Search extends PostRequest {
                 switch (SWITCH) {
                     case CACHE_ARRAY:
                         if (LONG_DESC.equals(name)) {
-                            actCache.setLongDescription(value);
+                            actCache.setLongDescription(Database.Data, value);
                         } else if (CODE.equals(name)) {
                             actCache.setGcCode(value);
                             actCache.setId(AbstractCache.GenerateCacheId(actCache.getGcCode().toString()));
@@ -368,7 +368,7 @@ public abstract class Search extends PostRequest {
                         } else if (DATE_HIDDEN.equals(name)) {
                             actCache.setDateHidden(getDateFromLongString(value));
                         } else if (HINT.equals(name)) {
-                            actCache.setHint(value);
+                            actCache.setHint(Database.Data, value);
                         } else if (ID.equals(name)) {
                             actCache.setGcId(value);
                         } else if (NAME.equals(name)) {
@@ -378,7 +378,7 @@ public abstract class Search extends PostRequest {
                         } else if (PLACED_BY.equals(name)) {
                             actCache.setPlacedBy(value);
                         } else if (SHORT_DESC.equals(name)) {
-                            actCache.setShortDescription(value);
+                            actCache.setShortDescription(Database.Data, value);
                         } else if (URL.equals(name)) {
                             actCache.setUrl(value);
                         }
@@ -683,7 +683,7 @@ public abstract class Search extends PostRequest {
                     aktCache = null;
 
                 if (aktCache == null) {
-                    aktCache = abstractCacheDAO.getFromDbByCacheId(Database.Data, abstractCache.getId());
+                    aktCache = abstractCacheDAO.getFromDbByCacheId(Database.Data, abstractCache.getId(), true);
                 }
                 // Read Detail Info of Cache if not available
                 if ((aktCache != null) && (aktCache.getDetail() == null)) {
@@ -731,7 +731,7 @@ public abstract class Search extends PostRequest {
                 }
 
                 // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
-                abstractCache.setLongDescription("");
+                abstractCache.setLongDescription(Database.Data, "");
 
 
                 for (int i = 0, n = abstractCache.getWaypoints().size; i < n; i++) {

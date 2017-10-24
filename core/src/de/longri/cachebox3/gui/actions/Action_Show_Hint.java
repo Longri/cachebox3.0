@@ -20,6 +20,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.dialogs.HintDialog;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.sqlite.Database;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -46,7 +47,8 @@ public class Action_Show_Hint extends AbstractAction {
         // return true if any Cache selected and this Cache has a Hint
         if (EventHandler.getSelectedCache() == null)
             return false;
-        String hintText = EventHandler.getSelectedCache().getHint();
+        String hintText = EventHandler.getSelectedCache().getHint(Database.Data);
+
         return !((hintText == null) || (hintText.length() == 0));
     }
 }

@@ -248,7 +248,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 log.warn("Details not loaded for Cache: {}", actCache);
             }
 
-            String cacheHtml = actCache.getLongDescription() + actCache.getShortDescription();
+            String cacheHtml = actCache.getLongDescription(Database.Data) + actCache.getShortDescription(Database.Data);
             String html = "";
             if (actCache.getApiState() == 1)// GC.com API lite
             { // Load Standard HTML

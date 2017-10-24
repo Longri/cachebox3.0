@@ -191,7 +191,7 @@ public class CacheListDAO extends AbstractCacheListDAO {
             for (Long id : idList) {
                 AbstractCache abstractCache = null;
                 try {
-                    abstractCache = abstractCacheDAO.getFromDbByCacheId(Database.Data, id);
+                    abstractCache = abstractCacheDAO.getFromDbByCacheId(Database.Data, id, loadAllWaypoints);
                 } catch (Exception e) {
                     log.error("Can't read Cache (id:" + id + ") from database.");
                     try {

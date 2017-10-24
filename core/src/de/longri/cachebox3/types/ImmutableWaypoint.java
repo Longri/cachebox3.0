@@ -45,12 +45,12 @@ public class ImmutableWaypoint extends AbstractWaypoint {
     public ImmutableWaypoint(double latitude, double longitude) {
         super(latitude, longitude);
         this.cacheId = -1L;
-        this.gcCode = null;
-        this.type = null;
+        this.gcCode = "";
+        this.type = CacheTypes.Undefined;
         this.isStart = false;
         this.syncExclude = false;
         this.userWaypoint = false;
-        this.title = null;
+        this.title = "";
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ImmutableWaypoint extends AbstractWaypoint {
 
     @Override
     public AbstractWaypoint getMutable(Database database) {
-        return new MutableWaypoint(database,this);
+        return new MutableWaypoint(database, this);
     }
 
 
@@ -103,8 +103,6 @@ public class ImmutableWaypoint extends AbstractWaypoint {
     public boolean isStart() {
         return this.isStart;
     }
-
-
 
 
     //################################################################################
@@ -215,7 +213,6 @@ public class ImmutableWaypoint extends AbstractWaypoint {
     public int getCheckSum() {
         return 0;
     }
-
 
 
     @Override

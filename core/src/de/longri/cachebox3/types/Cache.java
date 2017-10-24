@@ -604,7 +604,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public String getHint() {
+    public String getHint(Database database) {
         if (getDetail() != null) {
             return getDetail().getHint();
         } else {
@@ -613,7 +613,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public void setHint(String hint) {
+    public void setHint(Database database, String hint) {
         if (getDetail() != null) {
             getDetail().setHint(hint);
         }
@@ -1026,7 +1026,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public void setLongDescription(String value) {
+    public void setLongDescription(Database database, String value) {
         if (getDetail() != null) {
             getDetail().setLongDescription(value);
 
@@ -1034,7 +1034,7 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public String getLongDescription() {
+    public String getLongDescription(Database database) {
         if (getDetail() != null) {
             if (getDetail().getLongDescription() == null || getDetail().getLongDescription().length() == 0) {
                 return CacheDAO.getDescription(this);
@@ -1046,14 +1046,14 @@ public class Cache extends AbstractCache implements Comparable<AbstractCache>, S
     }
 
     @Override
-    public void setShortDescription(String value) {
+    public void setShortDescription(Database database, String value) {
         if (getDetail() != null) {
             getDetail().setShortDescription(value);
         }
     }
 
     @Override
-    public String getShortDescription() {
+    public String getShortDescription(Database database) {
         if (getDetail() != null) {
             if (getDetail().getShortDescription() == null || getDetail().getShortDescription().length() == 0) {
                 return CacheDAO.GetShortDescription(this);

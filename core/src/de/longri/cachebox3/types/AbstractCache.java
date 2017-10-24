@@ -116,9 +116,9 @@ public abstract class AbstractCache extends Coordinate {
 
     public abstract void setGcId(String gcId);
 
-    public abstract String getHint();
+    public abstract String getHint(Database database);
 
-    public abstract void setHint(String hint);
+    public abstract void setHint(Database database, String hint);
 
     public abstract long getGPXFilename_ID();
 
@@ -218,13 +218,13 @@ public abstract class AbstractCache extends Coordinate {
 
     public abstract void setAttributesNegative(DLong dLong);
 
-    public abstract void setLongDescription(String value);
+    public abstract void setLongDescription(Database database, String value);
 
-    public abstract String getLongDescription();
+    public abstract String getLongDescription(Database database);
 
-    public abstract void setShortDescription(String value);
+    public abstract void setShortDescription(Database database, String value);
 
-    public abstract String getShortDescription();
+    public abstract String getShortDescription(Database database);
 
     public abstract void setTourName(String value);
 

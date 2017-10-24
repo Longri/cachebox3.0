@@ -226,12 +226,12 @@ public class CacheDAO extends AbstractCacheDAO {
             e.printStackTrace();
         }
 
-        if ((abstractCache.getShortDescription() != null) && (abstractCache.getShortDescription().length() > 0)) {
-            args.put("ShortDescription", abstractCache.getShortDescription());
+        if ((abstractCache.getShortDescription(database) != null) && (abstractCache.getShortDescription(database).length() > 0)) {
+            args.put("ShortDescription", abstractCache.getShortDescription(database));
         }
 
-        if ((abstractCache.getLongDescription() != null) && (abstractCache.getLongDescription().length() > 0)) {
-            args.put("Description", abstractCache.getLongDescription());
+        if ((abstractCache.getLongDescription(database) != null) && (abstractCache.getLongDescription(database).length() > 0)) {
+            args.put("Description", abstractCache.getLongDescription(database));
         }
 
         args.put("NumTravelbugs", abstractCache.getNumTravelbugs());
@@ -262,7 +262,7 @@ public class CacheDAO extends AbstractCacheDAO {
             args.put("AttributesPositiveHigh", abstractCache.getAttributesPositive().getHigh());
             args.put("AttributesNegative", abstractCache.getAttributesNegative().getLow());
             args.put("AttributesNegativeHigh", abstractCache.getAttributesNegative().getHigh());
-            args.put("Hint", abstractCache.getHint());
+            args.put("Hint", abstractCache.getHint(database));
 
         }
         try {
@@ -275,7 +275,7 @@ public class CacheDAO extends AbstractCacheDAO {
     }
 
     @Override
-    public void writeToDatabaseFound(Database database,AbstractCache abstractCache) {
+    public void writeToDatabaseFound(Database database, AbstractCache abstractCache) {
         Database.Parameters args = new Database.Parameters();
         args.put("found", abstractCache.isFound());
         try {
@@ -287,7 +287,7 @@ public class CacheDAO extends AbstractCacheDAO {
     }
 
     @Override
-    public boolean updateDatabase(Database database,AbstractCache abstractCache) {
+    public boolean updateDatabase(Database database, AbstractCache abstractCache) {
 
         Database.Parameters args = new Database.Parameters();
 
@@ -323,14 +323,14 @@ public class CacheDAO extends AbstractCacheDAO {
 
             e.printStackTrace();
         }
-        args.put("Hint", abstractCache.getHint());
+        args.put("Hint", abstractCache.getHint(database));
 
-        if ((abstractCache.getShortDescription() != null) && (abstractCache.getShortDescription().length() > 0)) {
-            args.put("ShortDescription", abstractCache.getShortDescription());
+        if ((abstractCache.getShortDescription(database) != null) && (abstractCache.getShortDescription(database).length() > 0)) {
+            args.put("ShortDescription", abstractCache.getShortDescription(database));
         }
 
-        if ((abstractCache.getLongDescription() != null) && (abstractCache.getLongDescription().length() > 0)) {
-            args.put("Description", abstractCache.getLongDescription());
+        if ((abstractCache.getLongDescription(database) != null) && (abstractCache.getLongDescription(database).length() > 0)) {
+            args.put("Description", abstractCache.getLongDescription(database));
         }
 
         args.put("Url", abstractCache.getUrl());
@@ -362,16 +362,17 @@ public class CacheDAO extends AbstractCacheDAO {
     }
 
     @Override
-    public AbstractCache getFromDbByCacheId(Database database, long CacheID) {
+    public AbstractCache getFromDbByCacheId(Database database, long CacheID, boolean withWaypoints) {
         SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(SQL_GET_CACHE + SQL_BY_ID, new String[]{String.valueOf(CacheID)});
 
+        Cache ret;
         try {
             if (reader != null && reader.getCount() > 0) {
                 reader.moveToFirst();
-                Cache ret = ReadFromCursor(reader, false, false);
+                ret = ReadFromCursor(reader, false, false);
 
                 reader.close();
-                return ret;
+
             } else {
                 if (reader != null)
                     reader.close();
@@ -386,6 +387,10 @@ public class CacheDAO extends AbstractCacheDAO {
             reader = null;
         }
 
+        if (withWaypoints && ret != null) {
+            ret.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(Database.Data, ret.getId(), true));
+        }
+        return ret;
     }
 
 //    public AbstractCache getFromDbByGcCode(String GcCode, boolean withDetail) // NO_UCD (test only)
@@ -432,7 +437,7 @@ public class CacheDAO extends AbstractCacheDAO {
 
         // chk of changes
         boolean changed = false;
-        AbstractCache fromDB = getFromDbByCacheId(database, writeTmp.getId());
+        AbstractCache fromDB = getFromDbByCacheId(database, writeTmp.getId(),false);
 
         if (fromDB == null)
             return false; // nichts zum Updaten gefunden

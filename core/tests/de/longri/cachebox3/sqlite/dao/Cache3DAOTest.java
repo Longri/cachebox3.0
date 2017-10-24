@@ -89,7 +89,7 @@ class Cache3DAOTest {
     private final boolean should_found = true;
     private final boolean should_userData = true;
     private final boolean should_listingChanged = true;
-    private final Array<AbstractWaypoint> should_waypoints = new Array<>(new AbstractWaypoint[]{new ImmutableWaypoint(53.456, 13.789)});
+    private final Array<AbstractWaypoint> should_waypoints = new Array<>(new AbstractWaypoint[]{new MutableWaypoint(53.456, 13.789, should_id)});
 
     private final String should_LongDescription = "Cache Long Description";
     private final String should_ShortDescription = "Cache Short Description";
@@ -283,7 +283,7 @@ class Cache3DAOTest {
 
         hasThrowed = false;
         try {
-            cache.setLongDescription(should_LongDescription);
+            cache.setLongDescription(cb3Database, should_LongDescription);
         } catch (Exception e) {
             hasThrowed = true;
         } finally {
@@ -292,7 +292,7 @@ class Cache3DAOTest {
 
         hasThrowed = false;
         try {
-            cache.setShortDescription(should_ShortDescription);
+            cache.setShortDescription(cb3Database, should_ShortDescription);
         } catch (Exception e) {
             hasThrowed = true;
         } finally {
@@ -301,11 +301,20 @@ class Cache3DAOTest {
 
         hasThrowed = false;
         try {
-            cache.setHint(should_Hint);
+            cache.setHint(cb3Database, should_Hint);
         } catch (Exception e) {
             hasThrowed = true;
         } finally {
             assertThat("Set Hint must throw a RuntimeException", hasThrowed);
+        }
+
+        hasThrowed = false;
+        try {
+            cache.setListingChanged(should_listingChanged);
+        } catch (Exception e) {
+            hasThrowed = true;
+        } finally {
+            assertThat("Set ListingChanged must throw a RuntimeException", hasThrowed);
         }
     }
 
@@ -313,7 +322,6 @@ class Cache3DAOTest {
     @Test
     void writeToDatabase() {
         AbstractCache cache = new MutableCache(should_latitude, should_longitude);
-//        MutableCache cache = new MutableCache(should_latitude, should_longitude);
 
         cache.setLatLon(should_latitude, should_longitude);
         cache.setDateHidden(should_DateHidden);
@@ -340,17 +348,17 @@ class Cache3DAOTest {
         cache.setHasUserData(should_userData);
         cache.setListingChanged(should_listingChanged);
         cache.setWaypoints(should_waypoints);
-        cache.setLongDescription(should_LongDescription);
-        cache.setShortDescription(should_ShortDescription);
-        cache.setHint(should_Hint);
+        cache.setLongDescription(cb3Database, should_LongDescription);
+        cache.setShortDescription(cb3Database, should_ShortDescription);
+        cache.setHint(cb3Database, should_Hint);
+        cache.setAttributes(should_attributes);
 
         assertCache("MutableCache", cache);
 
-//        AbstractCacheDAO DAO = new Cache3DAO();
-        Cache3DAO DAO = new Cache3DAO();
+        AbstractCacheDAO DAO = new Cache3DAO();
         DAO.writeToDatabase(cb3Database, cache);
 
-        AbstractCache storedCache = DAO.getFromDbByCacheId(cb3Database, should_id);
+        AbstractCache storedCache = DAO.getFromDbByCacheId(cb3Database, should_id, true);
         assertCache("StoredCache", storedCache);
     }
 
@@ -372,7 +380,7 @@ class Cache3DAOTest {
         assertThat(msg + " Difficulty must equals", cache.getDifficulty() == should_difficulty);
         assertThat(msg + " Terrain must equals", cache.getTerrain() == should_terrain);
         assertThat(msg + " HasHint must equals", cache.hasHint() == should_hint);
-        assertThat(msg + " HasCorrectedCoordinates must equals", cache.CorrectedCoordiantesOrMysterySolved() == should_correctedCoordinates);
+        assertThat(msg + " HasCorrectedCoordinates must equals", cache.hasCorrectedCoordinates() == should_correctedCoordinates);
         assertThat(msg + " Archived must equals", cache.isArchived() == should_archived);
         assertThat(msg + " Available must equals", cache.isAvailable() == should_available);
         assertThat(msg + " Favorite must equals", cache.isFavorite() == should_favorite);
@@ -380,9 +388,10 @@ class Cache3DAOTest {
         assertThat(msg + " HasUserData must equals", cache.isHasUserData() == should_userData);
         assertThat(msg + " ListingChanged must equals", cache.isListingChanged() == should_listingChanged);
         assertThat(msg + " Waypoints must equals", cache.getWaypoints().equals(should_waypoints));
-        assertThat(msg + " LongDescription must equals", cache.getLongDescription().equals(should_LongDescription));
-        assertThat(msg + " ShortDescription must equals", cache.getShortDescription().equals(should_ShortDescription));
-        assertThat(msg + " Hint must equals", cache.getHint().equals(should_Hint));
+        assertThat(msg + " LongDescription must equals", cache.getLongDescription(cb3Database).equals(should_LongDescription));
+        assertThat(msg + " ShortDescription must equals", cache.getShortDescription(cb3Database).equals(should_ShortDescription));
+        assertThat(msg + " Hint must equals", cache.getHint(cb3Database).equals(should_Hint));
+        assertThat(msg + " Attributes must equals", cache.getAttributes(cb3Database).equals(should_attributes));
     }
 
     @Test

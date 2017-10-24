@@ -111,7 +111,7 @@ public class ImmutableCache extends AbstractCache {
         this.terrain = (float) cursor.getShort(5) / 2.0f;
         short typeOrigin = cursor.getShort(6);
         this.type = CacheTypes.get(typeOrigin);
-        this.rating = cursor.getShort(7);
+        this.rating = (short) (cursor.getShort(7) / 100);
         this.numTravelbugs = cursor.getShort(8);
         this.gcCode = new CharSequenceArray(cursor.getString(9));
         this.name = new CharSequenceArray(cursor.getString(10).trim());
@@ -215,6 +215,12 @@ public class ImmutableCache extends AbstractCache {
     public boolean hasHint() {
         return this.getMaskValue(MASK_HAS_HINT);
     }
+
+    @Override
+    public boolean isListingChanged() {
+        return this.getMaskValue(MASK_LISTING_CHANGED);
+    }
+
 
     private boolean getMaskValue(short mask) {
         return getMaskValue(mask, booleanStore);
@@ -365,20 +371,24 @@ public class ImmutableCache extends AbstractCache {
 
 
     @Override
-    public void setShortDescription(String value) {
+    public void setShortDescription(Database database, String value) {
         throwNotChangeable("ShortDescription");
     }
 
     @Override
-    public void setLongDescription(String value) {
+    public void setLongDescription(Database database, String value) {
         throwNotChangeable("LongDescription");
     }
 
     @Override
-    public void setHint(String hint) {
+    public void setHint(Database database, String hint) {
         throwNotChangeable("Hint");
     }
 
+    @Override
+    public void setListingChanged(boolean listingChanged) {
+        throwNotChangeable("ListingChanged");
+    }
 
     //################################################################################
     //# properties that not retained at the class but read/write directly from/to DB
@@ -400,6 +410,35 @@ public class ImmutableCache extends AbstractCache {
         }
         cursor.close();
         return Attributes.getAttributes(attributesPositive, attributesNegative);
+    }
+
+    @Override
+    public String getLongDescription(Database database) {
+        return getStringFromDB(database, "SELECT Description FROM CacheText WHERE Id=?");
+    }
+
+
+    @Override
+    public String getShortDescription(Database database) {
+        return getStringFromDB(database, "SELECT ShortDescription FROM CacheText WHERE Id=?");
+    }
+
+    @Override
+    public String getHint(Database database) {
+        return getStringFromDB(database, "SELECT Hint FROM CacheText WHERE Id=?");
+    }
+
+    private String getStringFromDB(Database database, String statement) {
+        SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(this.id)});
+        try {
+            cursor.moveToFirst();
+            if (!cursor.isAfterLast()) {
+                return cursor.getString(0);
+            }
+            return "";
+        } finally {
+            cursor.close();
+        }
     }
 
 
@@ -462,11 +501,6 @@ public class ImmutableCache extends AbstractCache {
         return null;
     }
 
-    @Override
-    public String getHint() {
-        return null;
-    }
-
 
     @Override
     public long getGPXFilename_ID() {
@@ -488,15 +522,6 @@ public class ImmutableCache extends AbstractCache {
 
     }
 
-    @Override
-    public boolean isListingChanged() {
-        return false;
-    }
-
-    @Override
-    public void setListingChanged(boolean listingChanged) {
-
-    }
 
     @Override
     public Date getDateHidden() {
@@ -607,17 +632,6 @@ public class ImmutableCache extends AbstractCache {
 
 
     @Override
-    public String getLongDescription() {
-        return null;
-    }
-
-
-    @Override
-    public String getShortDescription() {
-        return null;
-    }
-
-    @Override
     public void setTourName(String value) {
 
     }
@@ -640,7 +654,7 @@ public class ImmutableCache extends AbstractCache {
 
     @Override
     public int getFavoritePoints() {
-        return 0;
+        return this.favPoints;
     }
 
 
@@ -657,7 +671,7 @@ public class ImmutableCache extends AbstractCache {
 
     @Override
     public float getRating() {
-        return 0;
+        return this.rating / 2f;
     }
 
 

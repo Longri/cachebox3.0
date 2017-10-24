@@ -794,4 +794,8 @@ public enum Attributes {
         this.negative = true;
         return this;
     }
+
+    public boolean isNegative() {
+        return negative;
+    }
 }

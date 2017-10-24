@@ -31,7 +31,7 @@ public abstract class AbstractCacheDAO {
 
     public abstract boolean updateDatabase(Database database, AbstractCache abstractCache);
 
-    public abstract AbstractCache getFromDbByCacheId(Database database, long CacheID);
+    public abstract AbstractCache getFromDbByCacheId(Database database, long CacheID, boolean withWaypoints);
 
     /**
      * hier wird nur die Status Abfrage zurück geschrieben und gegebenen Falls die Replication Informationen geschrieben.

@@ -213,10 +213,9 @@ class Waypoint3DAOTest {
         //3. delete wp
 
 //1. write new wp to DB -------------------------------------------------------------------        
-        AbstractWaypoint wp = new MutableWaypoint(0, 0);
+        AbstractWaypoint wp = new MutableWaypoint(0, 0, should_cacheId);
 
         wp.setLatLon(should_Latitude, should_Longitude);
-        wp.setCacheId(should_cacheId);
         wp.setGcCode(should_GcCode);
         wp.setTitle(should_Title);
         wp.setType(should_Type);

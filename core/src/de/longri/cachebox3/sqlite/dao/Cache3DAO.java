@@ -16,8 +16,10 @@
 package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.ImmutableCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +54,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("Difficulty", (int) (abstractCache.getDifficulty() * 2));
         args.put("Terrain", (int) (abstractCache.getTerrain() * 2));
         args.put("Type", abstractCache.getType().ordinal());
-        args.put("Rating", (int) (abstractCache.getRating() * 100));
+        args.put("Rating", (int) (abstractCache.getRating() * 200));
         args.put("NumTravelbugs", abstractCache.getNumTravelbugs());
         args.put("GcCode", abstractCache.getGcCode());
         args.put("Name", abstractCache.getName());
@@ -61,7 +63,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("GcId", abstractCache.getGcId());
         args.put("BooleanStore", abstractCache.getBooleanStore());
         args.put("FavPoints", abstractCache.getFavoritePoints());
-        args.put("Vote", abstractCache.getRating());
+        args.put("Vote", (int) (abstractCache.getRating() * 2));
 
         if (database.insert("CacheCoreInfo", args) <= 0) {
             //Cache not inserted, can't write other information's!
@@ -88,11 +90,11 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.clear();
         args.put("Id", abstractCache.getId());
         args.put("Url", abstractCache.getUrl());
-        args.put("Hint", abstractCache.getHint());
-        args.put("Description", abstractCache.getLongDescription());
+        args.put("Hint", abstractCache.getHint(database));
+        args.put("Description", abstractCache.getLongDescription(database));
         args.put("Notes", abstractCache.getTmpNote());
         args.put("Solver", abstractCache.getTmpSolver());
-        args.put("ShortDescription", abstractCache.getShortDescription());
+        args.put("ShortDescription", abstractCache.getShortDescription(database));
         if (database.insert("CacheText", args) <= 0) {
             //CacheInfo not inserted, can't write other information's!
             log.error("Cache {} not inserted on CacheText table", abstractCache.toString());
@@ -111,6 +113,17 @@ public class Cache3DAO extends AbstractCacheDAO {
             log.error("Cache {} not inserted on Attributes table", abstractCache.toString());
         }
         args.clear();
+
+        //store Waypoints
+        Array<AbstractWaypoint> waypoints = abstractCache.getWaypoints();
+        AbstractWaypointDAO WDAO = getWaypointDAO();
+
+        int n = waypoints.size;
+        while (n-- > 0) {
+            AbstractWaypoint wp = waypoints.get(n);
+            WDAO.writeToDatabase(database, wp);
+        }
+
     }
 
     @Override
@@ -124,12 +137,16 @@ public class Cache3DAO extends AbstractCacheDAO {
     }
 
     @Override
-    public AbstractCache getFromDbByCacheId(Database database, long cacheID) {
+    public AbstractCache getFromDbByCacheId(Database database, long cacheID, boolean withWaypoints) {
         String statement = "SELECT * from CacheCoreInfo WHERE Id=?";
         SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(cacheID)});
         cursor.moveToFirst();
         if (!cursor.isAfterLast()) {
-            return new ImmutableCache(cursor);
+            AbstractCache cache = new ImmutableCache(cursor);
+            if (withWaypoints) {
+                cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cacheID, true));
+            }
+            return cache;
         }
         return null;
     }

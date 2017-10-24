@@ -37,10 +37,11 @@ public class MutableWaypoint extends AbstractWaypoint {
     private String clue = "";
 
 
-    public MutableWaypoint(double latitude, double longitude) {
+    public MutableWaypoint(double latitude, double longitude, long cacheId) {
         super(0, 0);
         this.latitude = latitude;
         this.longitude = longitude;
+        this.cacheId = cacheId;
     }
 
     public MutableWaypoint(Database database, AbstractWaypoint waypoint) {

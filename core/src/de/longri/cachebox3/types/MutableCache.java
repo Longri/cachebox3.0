@@ -198,12 +198,12 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getHint() {
+    public String getHint(Database database) {
         return this.hint;
     }
 
     @Override
-    public void setHint(String hint) {
+    public void setHint(Database database, String hint) {
         this.hint = hint;
     }
 
@@ -455,22 +455,22 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setLongDescription(String value) {
+    public void setLongDescription(Database database, String value) {
         this.longDescription = value;
     }
 
     @Override
-    public String getLongDescription() {
+    public String getLongDescription(Database database) {
         return this.longDescription;
     }
 
     @Override
-    public void setShortDescription(String value) {
+    public void setShortDescription(Database database, String value) {
         this.shortDescription = value;
     }
 
     @Override
-    public String getShortDescription() {
+    public String getShortDescription(Database database) {
         return this.shortDescription;
     }
 
@@ -618,6 +618,29 @@ public class MutableCache extends AbstractCache {
     @Override
     public void setAttributes(Array<Attributes> attributes) {
         this.attributes = attributes;
+
+        if (attributesNegative == null) {
+            attributesNegative = new DLong(0, 0);
+        } else {
+            attributesNegative.reset();
+        }
+
+        if (attributesPositive == null) {
+            attributesPositive = new DLong(0, 0);
+        } else {
+            attributesPositive.reset();
+        }
+
+
+        int n = attributes.size;
+        while (n-- > 0) {
+            Attributes a = attributes.get(n);
+            if (a.isNegative()) {
+                attributesNegative.BitOr(Attributes.GetAttributeDlong(a));
+            } else {
+                attributesPositive.BitOr(Attributes.GetAttributeDlong(a));
+            }
+        }
     }
 
     @Override

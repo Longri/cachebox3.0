@@ -227,54 +227,54 @@ public class DescriptionImageGrabber {
         return html;
     }
 
-    public static LinkedList<String> GetAllImages(AbstractCache AbstractCache) {
-
-        LinkedList<String> images = new LinkedList<String>();
-
-        URI baseUri;
-        try {
-            baseUri = URI.create(AbstractCache.getUrl());
-        } catch (Exception exc) {
-            baseUri = null;
-        }
-
-        if (baseUri == null) {
-            AbstractCache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + AbstractCache.getGcCode());
-            try {
-                baseUri = URI.create(AbstractCache.getUrl());
-            } catch (Exception exc) {
-                return images;
-            }
-        }
-
-        CB_List<Segment> imgTags = Segmentize(AbstractCache.getShortDescription(), "<img", ">");
-
-        imgTags.addAll(Segmentize(AbstractCache.getLongDescription(), "<img", ">"));
-
-        for (int i = 0, n = imgTags.size; i < n; i++) {
-            Segment img = imgTags.get(i);
-            int srcStart = -1;
-            int srcEnd = -1;
-            int srcIdx = img.text.toLowerCase().indexOf("src=");
-            if (srcIdx != -1)
-                srcStart = img.text.indexOf('"', srcIdx + 4);
-            if (srcStart != -1)
-                srcEnd = img.text.indexOf('"', srcStart + 1);
-
-            if (srcIdx != -1 && srcStart != -1 && srcEnd != -1) {
-                String src = img.text.substring(srcStart + 1, srcEnd);
-                try {
-                    URI imgUri = URI.create(src);
-
-                    images.add(imgUri.toString());
-
-                } catch (Exception exc) {
-                }
-            }
-        }
-
-        return images;
-    }
+//    public static LinkedList<String> GetAllImages(AbstractCache AbstractCache) {
+//
+//        LinkedList<String> images = new LinkedList<String>();
+//
+//        URI baseUri;
+//        try {
+//            baseUri = URI.create(AbstractCache.getUrl());
+//        } catch (Exception exc) {
+//            baseUri = null;
+//        }
+//
+//        if (baseUri == null) {
+//            AbstractCache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + AbstractCache.getGcCode());
+//            try {
+//                baseUri = URI.create(AbstractCache.getUrl());
+//            } catch (Exception exc) {
+//                return images;
+//            }
+//        }
+//
+//        CB_List<Segment> imgTags = Segmentize(AbstractCache.getShortDescription(), "<img", ">");
+//
+//        imgTags.addAll(Segmentize(AbstractCache.getLongDescription(), "<img", ">"));
+//
+//        for (int i = 0, n = imgTags.size; i < n; i++) {
+//            Segment img = imgTags.get(i);
+//            int srcStart = -1;
+//            int srcEnd = -1;
+//            int srcIdx = img.text.toLowerCase().indexOf("src=");
+//            if (srcIdx != -1)
+//                srcStart = img.text.indexOf('"', srcIdx + 4);
+//            if (srcStart != -1)
+//                srcEnd = img.text.indexOf('"', srcStart + 1);
+//
+//            if (srcIdx != -1 && srcStart != -1 && srcEnd != -1) {
+//                String src = img.text.substring(srcStart + 1, srcEnd);
+//                try {
+//                    URI imgUri = URI.create(src);
+//
+//                    images.add(imgUri.toString());
+//
+//                } catch (Exception exc) {
+//                }
+//            }
+//        }
+//
+//        return images;
+//    }
 
     public static LinkedList<URI> GetImageUris(String html, String baseUrl) {
 

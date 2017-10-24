@@ -1086,7 +1086,7 @@ public class GroundspeakAPI {
                 aktCache = null;
 
             if (aktCache == null) {
-                aktCache = abstractCacheDAO.getFromDbByCacheId(Database.Data, abstractCache.getId());
+                aktCache = abstractCacheDAO.getFromDbByCacheId(Database.Data, abstractCache.getId(), true);
             }
             // Read Detail Info of Cache if not available
             if ((aktCache != null) && (aktCache.getDetail() == null)) {
@@ -1134,7 +1134,7 @@ public class GroundspeakAPI {
             }
 
             // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
-            abstractCache.setLongDescription("");
+            abstractCache.setLongDescription(Database.Data,"");
 
             for (LogEntry log : apiLogs) {
                 if (log.CacheId != abstractCache.getId())
