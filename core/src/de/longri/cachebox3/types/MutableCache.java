@@ -16,6 +16,7 @@
 package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MathUtils;
@@ -45,13 +46,16 @@ public class MutableCache extends AbstractCache {
     private boolean found;
     private boolean userData;
     private boolean listingChanged;
-    private Array<AbstractWaypoint> waypoints;
+    private Array<AbstractWaypoint> waypoints=new Array<>();
     private String longDescription;
     private String shortDescription;
     private String hint;
     private Date dateHidden;
     private DLong attributesNegative;
     private DLong attributesPositive;
+    private String country;
+    private String url;
+    private byte apiState;
 
     public MutableCache(double latitude, double longitude) {
         super(latitude, longitude);
@@ -85,6 +89,33 @@ public class MutableCache extends AbstractCache {
         this.listingChanged = cache.isListingChanged();
         this.waypoints = cache.getWaypoints();
         this.correctedCoordinates = cache.hasCorrectedCoordinates();
+    }
+
+    public MutableCache(double latitude, double longitude, String name, CacheTypes type, String gcCode) {
+        super(latitude, longitude);
+        this.id = 0;
+        this.size = CacheSizes.regular;
+        this.difficulty = 0.0f;
+        this.terrain = 0.0f;
+        this.type = type;
+        this.rating = 0;
+        this.numTravelbugs = 0;
+        this.gcCode = gcCode;
+        this.name = name;
+        this.placedBy = "";
+        this.owner = "";
+        this.gcId = "";
+        this.favPoints = 0;
+    }
+
+    @Override
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    @Override
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     @Override
@@ -344,12 +375,12 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public byte getApiState() {
-        return 0;
+        return this.apiState;
     }
 
     @Override
     public void setApiState(byte value) {
-
+        this.apiState = value;
     }
 
     @Override
@@ -394,22 +425,22 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public String getUrl() {
-        return null;
+        return this.url;
     }
 
     @Override
     public void setUrl(String value) {
-
+        this.url = value;
     }
 
     @Override
     public String getCountry() {
-        return null;
+        return this.country;
     }
 
     @Override
     public void setCountry(String value) {
-
+        this.country = value;
     }
 
     @Override
@@ -486,13 +517,16 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public boolean isAttributePositiveSet(Attributes attribute) {
-        return false;
+        if (attributesPositive == null) return false;
+        return attributesPositive.BitAndBiggerNull(Attributes.GetAttributeDlong(attribute));
     }
 
     @Override
     public boolean isAttributeNegativeSet(Attributes attribute) {
-        return false;
+        if (attributesNegative == null) return false;
+        return attributesNegative.BitAndBiggerNull(Attributes.GetAttributeDlong(attribute));
     }
+
 
     @Override
     public void setFavoritePoints(int value) {
@@ -513,16 +547,6 @@ public class MutableCache extends AbstractCache {
     @Override
     public void setWaypoints(Array<AbstractWaypoint> waypoints) {
         this.waypoints = waypoints;
-    }
-
-    @Override
-    public CacheDetail getDetail() {
-        return null;
-    }
-
-    @Override
-    public void setDetail(CacheDetail detail) {
-
     }
 
     @Override
@@ -588,21 +612,6 @@ public class MutableCache extends AbstractCache {
     @Override
     public void dispose() {
 
-    }
-
-    @Override
-    public void loadDetail() {
-
-    }
-
-    @Override
-    public void deleteDetail(Boolean value) {
-
-    }
-
-    @Override
-    public boolean isDetailLoaded() {
-        return false;
     }
 
     @Override

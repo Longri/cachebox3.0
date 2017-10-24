@@ -53,6 +53,18 @@ public class ImmutableWaypoint extends AbstractWaypoint {
         this.title = "";
     }
 
+    public ImmutableWaypoint(String gcCode, CacheTypes type,  double latitude, double longitude, long cacheId,  String title) {
+        super(latitude, longitude);
+        this.cacheId = cacheId;
+        this.gcCode = gcCode;
+        this.type = type;
+        this.isStart = false;
+        this.syncExclude = false;
+        this.userWaypoint = false;
+        this.title = title;
+    }
+
+
     @Override
     public boolean isMutable() {
         return false;
@@ -158,6 +170,16 @@ public class ImmutableWaypoint extends AbstractWaypoint {
     @Override
     public void setLatLon(double latitude, double longitude) {
         throwNotChangeable("Coordinate");
+    }
+
+    @Override
+    public void setLatitude(double latitude) {
+        throwNotChangeable("Latitude");
+    }
+
+    @Override
+    public void setLongitude(double longitude) {
+        throwNotChangeable("Longitude");
     }
 
 

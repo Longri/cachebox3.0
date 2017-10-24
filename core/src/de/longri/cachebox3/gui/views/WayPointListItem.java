@@ -28,7 +28,6 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.Waypoint;
 
 /**
  * Created by Longri on 03.04.2017.

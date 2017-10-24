@@ -151,39 +151,39 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                    //clear item list
-                    mItemList.clear();
+                //clear item list
+                mItemList.clear();
 
-                    //add WayPoint items
+                //add WayPoint items
 
-                    CB_List<String> missingIconList = new CB_List<>();
-                    boolean hasSelectedWP = de.longri.cachebox3.events.EventHandler.getSelectedWaypoint() != null;
+                CB_List<String> missingIconList = new CB_List<>();
+                boolean hasSelectedWP = de.longri.cachebox3.events.EventHandler.getSelectedWaypoint() != null;
 
-                    //set selected Cache at front
-                    for (AbstractCache cache : Database.Data.Query) {
-                        addCache(missingIconList, hasSelectedWP, cache);
-                    }
-
-                    mItemList.setFinishFill();
-                    WaypointLayer.this.populate(true);
-
-
-                    if (missingIconList.size != 0) {
-                        StringBuilder msg = new StringBuilder("\n\n" + ERROR_MSG + "\n");
-                        int count = 0;
-                        for (String name : missingIconList) {
-                            msg.append(", " + name);
-                            count++;
-                            if (count > 5) {
-                                msg.append("\n");
-                                count = 0;
-                            }
-                        }
-                        if (CanvasAdapter.platform.isDesktop())
-                            throw new GdxRuntimeException(msg.toString());
-                        else log.error(msg.toString());
-                    }
+                //set selected Cache at front
+                for (AbstractCache cache : Database.Data.Query) {
+                    addCache(missingIconList, hasSelectedWP, cache);
                 }
+
+                mItemList.setFinishFill();
+                WaypointLayer.this.populate(true);
+
+
+                if (missingIconList.size != 0) {
+                    StringBuilder msg = new StringBuilder("\n\n" + ERROR_MSG + "\n");
+                    int count = 0;
+                    for (String name : missingIconList) {
+                        msg.append(", " + name);
+                        count++;
+                        if (count > 5) {
+                            msg.append("\n");
+                            count = 0;
+                        }
+                    }
+                    if (CanvasAdapter.platform.isDesktop())
+                        throw new GdxRuntimeException(msg.toString());
+                    else log.error(msg.toString());
+                }
+            }
         });
         thread.start();
     }
@@ -217,7 +217,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                 } catch (GdxRuntimeException e) {
                     if (e.getMessage().startsWith(ERROR_MSG)) {
                         String iconName = e.getMessage().replace(ERROR_MSG, "");
-                        if (!missingIconList.contains(iconName,false))
+                        if (!missingIconList.contains(iconName, false))
                             missingIconList.add(iconName);
                     } else {
                         e.printStackTrace();
@@ -403,7 +403,8 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         for (int i = 0, n = mItemList.size; i < n; i++) {
             MapWayPointItem item = mItemList.get(i);
-            if (indexOfNewSelectedCache == -1 && item.dataObject.equals(selectedAbstractCache)) indexOfNewSelectedCache = i;
+            if (indexOfNewSelectedCache == -1 && item.dataObject.equals(selectedAbstractCache))
+                indexOfNewSelectedCache = i;
             if (indexOfLastSelectedCache == -1 && item.dataObject.equals(lastSelectedAbstractCache))
                 indexOfLastSelectedCache = i;
             if (indexOfLastSelectedWp == -1 && item.dataObject.equals(lastWaypoint)) indexOfLastSelectedWp = i;
@@ -477,10 +478,10 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         log.debug("Click on: " + item);
 
         //set as selected cache/wp
-        if (item.dataObject instanceof Cache) {
-            de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedCacheChangedEvent((Cache) item.dataObject));
-        } else if (item.dataObject instanceof Waypoint) {
-            Waypoint wp = (Waypoint) item.dataObject;
+        if (item.dataObject instanceof AbstractCache) {
+            de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedCacheChangedEvent((AbstractCache) item.dataObject));
+        } else if (item.dataObject instanceof AbstractWaypoint) {
+            AbstractWaypoint wp = (AbstractWaypoint) item.dataObject;
             de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedWayPointChangedEvent(wp));
         }
         return true;
@@ -564,7 +565,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             clickedItems.add(item);
         }
 
-        if (clickedItems.size!=0) {
+        if (clickedItems.size != 0) {
             MapWayPointItem clickedItem = null;
             //if more then one item so search nearest
             if (clickedItems.size == 1) {

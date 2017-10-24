@@ -42,7 +42,6 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

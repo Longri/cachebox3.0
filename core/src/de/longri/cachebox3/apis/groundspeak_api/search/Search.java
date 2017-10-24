@@ -28,7 +28,9 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.*;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
+import de.longri.cachebox3.sqlite.dao.ImageDAO;
+import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
@@ -56,9 +58,8 @@ public abstract class Search extends PostRequest {
     int imageCount;
     private boolean isLite;
     private long gpxFilenameId;
-    private double actLat, actLon, actWpLat, actWpLon;
-    private Cache actCache;
-    private Waypoint actWayPoint;
+    private AbstractCache actCache;
+    private AbstractWaypoint actWayPoint;
     private LogEntry actLog;
     private Array<Attributes> attributes;
     private Attributes actAttribute;
@@ -78,12 +79,15 @@ public abstract class Search extends PostRequest {
     private final String CODE = "Code";
     private final String CACHE_TYPE = "CacheType";
     private final String CACHE_TYPE_ID = "GeocacheTypeId";
+    private final String CONTAINER_TYPE_ID = "ContainerTypeId";
     private final String COUNTRY = "Country";
     private final String DATE_HIDDEN = "DateCreated";
     private final String DIFFICULTY = "Difficulty";
     private final String HINT = "EncodedHints";
     private final String FAVRITE_POINTS = "FavoritePoints";
     private final String FOUND = "HasbeenFoundbyUser";
+    private final String ARCHIVED = "Archived";
+    private final String AVAILABLE = "Available";
     private final String ID = "ID";
     private final String LONG_DESC = "LongDescription";
     private final String NAME = "Name";
@@ -104,10 +108,8 @@ public abstract class Search extends PostRequest {
     private final String COMMENT = "Comment";
     private final String WAYPOINT_TYPE_ID = "WptTypeID";
 
-    private final AbstractCacheDAO abstractCacheDAO = new CacheDAO();
     private final LogDAO logDAO = new LogDAO();
     private final ImageDAO imageDAO = new ImageDAO();
-    private final AbstractWaypointDAO abstractWaypointDAO = new WaypointDAO();
 
     protected int geocacheLogCount = 10;
     protected int trackableLogCount = 10;
@@ -254,7 +256,7 @@ public abstract class Search extends PostRequest {
                     case CACHE_ARRAY:
                         if (actCache == null) {
                             // System.out.println("NEW_CACHE");
-                            actCache = new Cache(0, 0, true);
+                            actCache = new MutableCache(0, 0);
                             name = NEW_CACHE;
                         }
                         break;
@@ -272,7 +274,7 @@ public abstract class Search extends PostRequest {
                     case WAY_POINT_ARRAY:
                         if (actWayPoint == null) {
                             //System.out.println("NEW_WayPoint");
-                            actWayPoint = new Waypoint(0, 0, true);
+                            actWayPoint = new MutableWaypoint(0, 0, 0);
                             name = NEW_WAY_POINT;
                         }
                         break;
@@ -297,7 +299,7 @@ public abstract class Search extends PostRequest {
                             actCache.setApiState(apiState);
 
                             //add final Cache instance
-                            writeCacheToDB(new Cache(actLat, actLon, actCache));
+                            writeCacheToDB(actCache);
 
                             ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
                             progress.progress = this.getProgress();
@@ -342,8 +344,10 @@ public abstract class Search extends PostRequest {
                                 actWayPoint.setGcCode("CO" + actCache.getGcCode().toString().substring(2, actCache.getGcCode().length()));
                             }
 
-                            //add final Waypointg instance
-                            actCache.getWaypoints().add(new Waypoint(actWpLat, actWpLon, actWayPoint));
+                            //add final Waypoint instance
+                            if (actCache.getWaypoints() == null)
+                                actCache.setWaypoints(new Array<>());
+                            actCache.getWaypoints().add(new MutableWaypoint(Database.Data, actWayPoint));
                             waypointCount++;
                             actWayPoint = null;
                         }
@@ -420,9 +424,9 @@ public abstract class Search extends PostRequest {
                         } else if (TERRAIN.equals(name)) {
                             actCache.setTerrain((float) value);
                         } else if (LAT.equals(name)) {
-                            actLat = value;
+                            actCache.setLatitude(value);
                         } else if (LON.equals(name)) {
-                            actLon = value;
+                            actCache.setLongitude(value);
                         }
                         break;
                     case ATTRIBUTE_ARRAY:
@@ -431,9 +435,9 @@ public abstract class Search extends PostRequest {
                         break;
                     case WAY_POINT_ARRAY:
                         if (LAT.equals(name)) {
-                            actWpLat = value;
+                            actWayPoint.setLatitude(value);
                         } else if (LON.equals(name)) {
-                            actWpLon = value;
+                            actWayPoint.setLongitude(value);
                         }
                         break;
                 }
@@ -456,7 +460,10 @@ public abstract class Search extends PostRequest {
                             actCache.setFavoritePoints((int) value);
                         } else if (ID.equals(name)) {
                             actCache.setGcId(Long.toString(value));
+                        } else if (CONTAINER_TYPE_ID.equals(name)) {
+                            actCache.setSize(CacheSizes.parseInt(getCacheSize((int) value)));
                         }
+
                         break;
                     case ATTRIBUTE_ARRAY:
                         if (ATTRIBUTE_ID.equals(name)) {
@@ -489,7 +496,13 @@ public abstract class Search extends PostRequest {
                     case CACHE_ARRAY:
                         if (FOUND.equals(name)) {
                             actCache.setFound(value);
+                        } else if (ARCHIVED.equals(name)) {
+                            actCache.setArchived(value);
+                        } else if (AVAILABLE.equals(name)) {
+                            actCache.setAvailable(value);
                         }
+
+
                         break;
                     case ATTRIBUTE_ARRAY:
                         if (IS_ON.equals(name)) {
@@ -683,20 +696,17 @@ public abstract class Search extends PostRequest {
                     aktCache = null;
 
                 if (aktCache == null) {
-                    aktCache = abstractCacheDAO.getFromDbByCacheId(Database.Data, abstractCache.getId(), true);
+                    aktCache = DaoFactory.CACHE_DAO.getFromDbByCacheId(Database.Data, abstractCache.getId(), true);
                 }
-                // Read Detail Info of Cache if not available
-                if ((aktCache != null) && (aktCache.getDetail() == null)) {
-                    aktCache.loadDetail();
-                }
+
                 // If Cache into DB, extract saved rating
                 if (aktCache != null) {
                     abstractCache.setRating(aktCache.getRating());
                 }
 
                 // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
-                if (!abstractCacheDAO.updateDatabase(Database.Data, abstractCache)) {
-                    abstractCacheDAO.writeToDatabase(Database.Data, abstractCache);
+                if (!DaoFactory.CACHE_DAO.updateDatabase(Database.Data, abstractCache)) {
+                    DaoFactory.CACHE_DAO.writeToDatabase(Database.Data, abstractCache);
                 }
 
                 // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
@@ -736,7 +746,7 @@ public abstract class Search extends PostRequest {
 
                 for (int i = 0, n = abstractCache.getWaypoints().size; i < n; i++) {
                     // must Cast to Full Waypoint. If Waypoint, is wrong created!
-                    Waypoint waypoint = (Waypoint) abstractCache.getWaypoints().get(i);
+                    AbstractWaypoint waypoint = abstractCache.getWaypoints().get(i);
 
                     //set CacheId
                     waypoint.setCacheId(abstractCache.getId());
@@ -747,7 +757,7 @@ public abstract class Search extends PostRequest {
                     if (aktCache != null) {
                         if (aktCache.getWaypoints() != null) {
                             for (int j = 0, m = aktCache.getWaypoints().size; j < m; j++) {
-                                Waypoint wp = (Waypoint) aktCache.getWaypoints().get(j);
+                                AbstractWaypoint wp = aktCache.getWaypoints().get(j);
                                 if (wp.getGcCode().toString().equalsIgnoreCase(waypoint.getGcCode().toString())) {
                                     if (wp.isUserWaypoint())
                                         update = false;
@@ -759,8 +769,8 @@ public abstract class Search extends PostRequest {
 
                     if (update) {
                         // do not store replication information when importing caches with GC api
-                        if (!abstractWaypointDAO.updateDatabase(Database.Data, waypoint)) {
-                            abstractWaypointDAO.writeToDatabase(Database.Data, waypoint); // do not store replication information here
+                        if (!DaoFactory.WAYPOINT_DAO.updateDatabase(Database.Data, waypoint)) {
+                            DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, waypoint); // do not store replication information here
                         }
                     }
 

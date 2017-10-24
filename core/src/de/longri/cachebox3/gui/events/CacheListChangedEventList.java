@@ -20,8 +20,9 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.ImmutableCache;
+import de.longri.cachebox3.types.MutableCache;
 
 import java.util.ArrayList;
 
@@ -57,7 +58,7 @@ public class CacheListChangedEventList {
 
         // add Parking Cache
         if (Config.ParkingLatitude.getValue() != 0) {
-            abstractCache = new Cache(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
+            abstractCache = new MutableCache(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
             Database.Data.Query.insert(0, abstractCache);
         }
 

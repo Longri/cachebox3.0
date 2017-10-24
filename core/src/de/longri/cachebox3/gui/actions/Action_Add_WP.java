@@ -26,10 +26,10 @@ import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.views.WaypointView;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.AbstractWaypointDAO;
-import de.longri.cachebox3.sqlite.dao.WaypointDAO;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.types.MutableWaypoint;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -74,22 +74,21 @@ public class Action_Add_WP extends AbstractAction {
                 coord = EventHandler.getSelectedCache();
         }
 
-        Waypoint newWP = new Waypoint(newGcCode, CacheTypes.ReferencePoint, ""
+        MutableWaypoint newWP = new MutableWaypoint(newGcCode, CacheTypes.ReferencePoint
                 , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
 
 
-        EditWaypoint editWaypoint = new EditWaypoint(newWP, false, new GenericCallBack<Waypoint>() {
+        EditWaypoint editWaypoint = new EditWaypoint(newWP, false, new GenericCallBack<AbstractWaypoint>() {
             @Override
-            public void callBack(Waypoint value) {
+            public void callBack(AbstractWaypoint value) {
                 if (value != null) {
                     EventHandler.fire(new SelectedWayPointChangedEvent(value));
-                    final AbstractWaypointDAO abstractWaypointDAO = new WaypointDAO();
                     if (value.isStart()) {
                         //It must be ensured here that this waypoint is the only one of these Cache,
                         //which is defined as starting point !!!
-                        abstractWaypointDAO.resetStartWaypoint(EventHandler.getSelectedCache(), value);
+                        DaoFactory.WAYPOINT_DAO.resetStartWaypoint(EventHandler.getSelectedCache(), value);
                     }
-                    abstractWaypointDAO.writeToDatabase(Database.Data,value);
+                    DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, value);
 
                     // add WP to Cache
                     EventHandler.getSelectedCache().getWaypoints().add(value);

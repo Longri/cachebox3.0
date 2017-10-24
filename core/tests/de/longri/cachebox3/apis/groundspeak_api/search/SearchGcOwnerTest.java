@@ -96,12 +96,6 @@ class SearchGcOwnerTest {
         };
 
         final AtomicBoolean WAIT = new AtomicBoolean(true);
-//        final CB_List<Cache> cacheList = new CB_List<>();
-//        final CB_List<LogEntry> logList = new CB_List<>();
-//        final CB_List<ImageEntry> imageList = new CB_List<>();
-//        final long gpxFilenameId = 10;
-//
-//        searchGC.setLists(cacheList, logList, imageList, gpxFilenameId);
 
         Net.HttpResponse response = new Net.HttpResponse() {
             @Override
@@ -165,7 +159,7 @@ class SearchGcOwnerTest {
                 assertEquals(true, userWaypoint.isUserWaypoint());
 
                 assertEquals(CacheTypes.Traditional, abstractCache.getType());
-                assertEquals(CacheSizes.other, abstractCache.getSize());
+                assertEquals(CacheSizes.small, abstractCache.getSize());
                 assertEquals("Germany", abstractCache.getCountry());
                 assertEquals(new Date(1200211200000L), abstractCache.getDateHidden());
                 assertEquals(1.5f, abstractCache.getDifficulty());
@@ -199,9 +193,6 @@ class SearchGcOwnerTest {
                     positiveList.add(Attributes.Public_transportation);
                     positiveList.add(Attributes.Bicycles);
 
-//                    negativeList.add(Attributes.Wheelchair_accessible);
-//                    negativeList.add(Attributes.Horses);
-//                    negativeList.add(Attributes.Campfires);
 
                 }
 

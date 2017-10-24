@@ -72,7 +72,6 @@ public class ImmutableCache extends AbstractCache {
         this.favPoints = 0;
     }
 
-
     public static boolean getMaskValue(short mask, short bitFlags) {
         return (bitFlags & mask) == mask;
     }
@@ -241,7 +240,7 @@ public class ImmutableCache extends AbstractCache {
     ///###############################################################################
 
     private void throwNotChangeable(String propertyName) {
-        throw new RuntimeException("'" + propertyName + "' is not changeable! Use CacheImport.class instead of ImmutableCache.class");
+        throw new RuntimeException("'" + propertyName + "' is not changeable! Use MutableCache.class instead of ImmutableCache.class");
     }
 
     @Override
@@ -388,6 +387,16 @@ public class ImmutableCache extends AbstractCache {
     @Override
     public void setListingChanged(boolean listingChanged) {
         throwNotChangeable("ListingChanged");
+    }
+
+    @Override
+    public void setLatitude(double latitude) {
+        throwNotChangeable("Latitude");
+    }
+
+    @Override
+    public void setLongitude(double longitude) {
+        throwNotChangeable("Longitude");
     }
 
     //################################################################################
@@ -643,29 +652,17 @@ public class ImmutableCache extends AbstractCache {
 
     @Override
     public boolean isAttributePositiveSet(Attributes attribute) {
-        return false;
+        throw new RuntimeException("not Stored on ImmutableCache.class");
     }
 
     @Override
     public boolean isAttributeNegativeSet(Attributes attribute) {
-        return false;
+        throw new RuntimeException("not Stored on ImmutableCache.class");
     }
-
 
     @Override
     public int getFavoritePoints() {
         return this.favPoints;
-    }
-
-
-    @Override
-    public CacheDetail getDetail() {
-        return null;
-    }
-
-    @Override
-    public void setDetail(CacheDetail detail) {
-
     }
 
 
@@ -688,21 +685,6 @@ public class ImmutableCache extends AbstractCache {
     @Override
     public void dispose() {
 
-    }
-
-    @Override
-    public void loadDetail() {
-
-    }
-
-    @Override
-    public void deleteDetail(Boolean value) {
-
-    }
-
-    @Override
-    public boolean isDetailLoaded() {
-        return false;
     }
 
     @Override

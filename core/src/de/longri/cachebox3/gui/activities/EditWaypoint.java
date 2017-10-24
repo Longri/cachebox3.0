@@ -39,7 +39,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.types.MutableWaypoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,9 +60,9 @@ public class EditWaypoint extends ActivityBase {
     private final VisCheckBox startCheckBox;
     private final SelectBox<CacheTypes> selectBox;
     private final boolean showCoordsOnShow;
-    private final GenericCallBack<Waypoint> callBack;
+    private final GenericCallBack<AbstractWaypoint> callBack;
 
-    public EditWaypoint(final AbstractWaypoint waypoint, boolean showCoordsOnShow, GenericCallBack<Waypoint> callBack) {
+    public EditWaypoint(final AbstractWaypoint waypoint, boolean showCoordsOnShow, GenericCallBack<AbstractWaypoint> callBack) {
         super("EditWaypoint");
         style = null;
         this.waypoint = waypoint;
@@ -173,7 +173,9 @@ public class EditWaypoint extends ActivityBase {
         btnOk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 Coordinate coor = coordinateButton.getCoordinate();
-                Waypoint newWaypoint = new Waypoint(coor.latitude, coor.longitude, (Waypoint) waypoint);
+                AbstractWaypoint newWaypoint = new MutableWaypoint(Database.Data, waypoint);
+                newWaypoint.setLatitude(coor.latitude);
+                newWaypoint.setLongitude(coor.longitude);
                 newWaypoint.setTitle(titleTextArea.getText());
                 newWaypoint.setDescription(descriptionTextArea.getText());
                 newWaypoint.setClue(clueTextArea.getText());

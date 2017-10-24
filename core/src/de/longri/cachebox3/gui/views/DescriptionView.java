@@ -37,8 +37,7 @@ import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
-import de.longri.cachebox3.sqlite.dao.AbstractCacheDAO;
-import de.longri.cachebox3.sqlite.dao.CacheDAO;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
@@ -244,10 +243,6 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             nonLocalImages.clear();
             nonLocalImagesUrl.clear();
 
-            if (!actCache.isDetailLoaded()) {
-                log.warn("Details not loaded for Cache: {}", actCache);
-            }
-
             String cacheHtml = actCache.getLongDescription(Database.Data) + actCache.getShortDescription(Database.Data);
             String html = "";
             if (actCache.getApiState() == 1)// GC.com API lite
@@ -350,8 +345,8 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                         }
 
                         EventHandler.getSelectedCache().setFavorite(!EventHandler.getSelectedCache().isFavorite());
-                        AbstractCacheDAO dao = new CacheDAO();
-                        dao.updateDatabase(Database.Data, EventHandler.getSelectedCache());
+
+                        DaoFactory.CACHE_DAO.updateDatabase(Database.Data, EventHandler.getSelectedCache());
 
                         // Update Query
                         Database.Data.Query.GetCacheById(EventHandler.getSelectedCache().getId()).setFavorite(EventHandler.getSelectedCache().isFavorite());
