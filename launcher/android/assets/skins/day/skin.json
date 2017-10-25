@@ -2485,7 +2485,8 @@
       "GC_Live": "gc_liveIcon",
       "Close": "closeIcon",
       "Help": "helpIcon",
-      "ExpiredApiKey": "api_key_ex"
+      "ExpiredApiKey": "api_key_ex",
+      "Database": "database"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MenuIconStyle": {

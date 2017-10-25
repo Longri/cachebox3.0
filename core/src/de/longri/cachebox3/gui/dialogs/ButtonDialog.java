@@ -60,10 +60,10 @@ public class ButtonDialog extends Window {
 
     private Skin skin;
     private ObjectMap<Actor, Object> values = new ObjectMap();
-    private String titleText;
+    private CharSequence titleText;
     private final MessageBoxButtons buttons;
 
-    public static Table getMsgContentTable(String msg, MessageBoxIcon icon) {
+    public static Table getMsgContentTable(CharSequence msg, MessageBoxIcon icon) {
         Skin skin = VisUI.getSkin();
 
         ButtonDialogStyle style = skin.get("default", ButtonDialogStyle.class);
@@ -83,15 +83,15 @@ public class ButtonDialog extends Window {
     }
 
 
-    public ButtonDialog(String name, String msg, String title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
+    public ButtonDialog(String name, CharSequence msg, CharSequence title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener Listener) {
         this(name, getMsgContentTable(msg, icon), title, buttons, Listener);
     }
 
-    public ButtonDialog(String name, Table contentTable, String title, MessageBoxButtons buttons, OnMsgBoxClickListener Listener) {
+    public ButtonDialog(String name, Table contentTable, CharSequence title, MessageBoxButtons buttons, OnMsgBoxClickListener Listener) {
         this(name, contentTable, title, buttons, Listener, VisUI.getSkin().get("default", ButtonDialogStyle.class));
     }
 
-    public ButtonDialog(String name, Table contentTable, String title, MessageBoxButtons buttons, OnMsgBoxClickListener listener, ButtonDialogStyle style) {
+    public ButtonDialog(String name, Table contentTable, CharSequence title, MessageBoxButtons buttons, OnMsgBoxClickListener listener, ButtonDialogStyle style) {
         super(name);
         this.contentBox = contentTable;
 
@@ -213,6 +213,8 @@ public class ButtonDialog extends Window {
                 return style.GC_Live;
             case ExpiredApiKey:
                 return style.ExpiredApiKey;
+            case Database:
+                return style.Database;
             default:
                 return null;
         }

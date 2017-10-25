@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.sql.SQLiteGdxDatabase;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.kotcrab.vis.ui.VisUI;
@@ -31,9 +32,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.actions.Action_Show_Quit;
-import de.longri.cachebox3.gui.dialogs.ButtonDialog;
-import de.longri.cachebox3.gui.dialogs.NewDB_InputBox;
-import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
+import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -56,6 +55,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 29.08.2016.
@@ -78,13 +78,13 @@ public class SelectDB_Activity extends ActivityBase {
     private ListView lvFiles;
     private CustomAdapter lvAdapter;
     private String[] fileInfos;
-    private boolean MustSelect = false;
+    private boolean mustSelect = false;
 
     public SelectDB_Activity(IReturnListener returnListener, boolean mustSelect) {
         super("select DB dialog");
         this.returnListener = returnListener;
 
-        MustSelect = mustSelect;
+        this.mustSelect = mustSelect;
 
         String DBFile = Config.DatabaseName.getValue();
 
@@ -239,7 +239,7 @@ public class SelectDB_Activity extends ActivityBase {
     private final ClickListener cancelClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             stopTimer();
-            if (MustSelect) {
+            if (mustSelect) {
                 new Action_Show_Quit().execute();
             } else {
                 finish();
@@ -337,25 +337,85 @@ public class SelectDB_Activity extends ActivityBase {
         });
     }
 
-    protected void selectDB() {
-        if (lvFiles.getSelectedItem() == null) {
-            CB.viewmanager.toast("no DB selected", ViewManager.ToastLength.SHORT);
-            return;
-        }
+    private void selectDB() {
 
-        Config.MultiDBAutoStartTime.setValue(autoStartTime);
-        Config.MultiDBAsk.setValue(autoStartTime >= 0);
-
-        String name = ((SelectDBItem) lvFiles.getSelectedItem()).getFileName();
-
-        Config.DatabaseName.setValue(name);
-        Config.AcceptChanges();
-        finish();
-        Gdx.app.postRunnable(new Runnable() {
+        CB.postAsync(new Runnable() {
             @Override
             public void run() {
-                if (returnListener != null)
-                    returnListener.back();
+                if (lvFiles.getSelectedItem() == null) {
+                    CB.viewmanager.toast("no DB selected", ViewManager.ToastLength.SHORT);
+                    return;
+                }
+
+                String name = ((SelectDBItem) lvFiles.getSelectedItem()).getFileName();
+
+
+                // if Database schema version <1028 we ask the User for convert
+                SQLiteGdxDatabase tempDB = null;
+                SQLiteGdxDatabaseCursor cursor = null;
+                try {
+                    FileHandle dbFile = Gdx.files.absolute(CB.WorkPath).child(name);
+                    tempDB = SQLiteGdxDatabaseFactory.getNewDatabase(dbFile);
+                    tempDB.openOrCreateDatabase();
+
+                    //get schema version
+                    cursor = tempDB.rawQuery("SELECT Value FROM Config WHERE [Key] like ?", new String[]{"DatabaseSchemeVersionWin"});
+                    cursor.moveToFirst();
+                    int version = Integer.parseInt(cursor.getString(0));
+
+                    if (version < 1028) {
+
+                        AtomicBoolean WAIT = new AtomicBoolean(true);
+                        AtomicBoolean CONVERT = new AtomicBoolean(false);
+
+                        CharSequence msg = Translation.Get("DB_outdated_question");
+                        CharSequence title = Translation.Get("DB_outdated");
+
+                        MessageBox.show(msg, title, MessageBoxButtons.YesNo, MessageBoxIcon.Database, new OnMsgBoxClickListener() {
+                            @Override
+                            public boolean onClick(int which, Object data) {
+
+                                if (which == ButtonDialog.BUTTON_POSITIVE)
+                                    CONVERT.set(true);
+
+                                WAIT.set(false);
+                                return true;
+                            }
+                        });
+                        CB.wait(WAIT);
+                        if (!CONVERT.get()) return;
+
+                        //copy Db to *.db3.old
+                        FileHandle target = dbFile.parent().child(name + ".old");
+                        dbFile.copyTo(target);
+                    }
+                } catch (SQLiteGdxException e) {
+                    e.printStackTrace();
+                    return;
+                } finally {
+                    if (cursor != null) cursor.close();
+                    try {
+                        if (tempDB != null) tempDB.closeDatabase();
+                    } catch (SQLiteGdxException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+                Config.MultiDBAutoStartTime.setValue(autoStartTime);
+                Config.MultiDBAsk.setValue(autoStartTime >= 0);
+
+
+                Config.DatabaseName.setValue(name);
+                Config.AcceptChanges();
+                finish();
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (returnListener != null)
+                            returnListener.back();
+                    }
+                });
             }
         });
     }

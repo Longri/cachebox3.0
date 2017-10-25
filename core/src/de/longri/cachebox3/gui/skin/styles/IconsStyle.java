@@ -37,6 +37,7 @@ public class IconsStyle extends AbstractIconStyle {
     public Drawable Close;
     public Drawable Help;
     public Drawable ExpiredApiKey;
+    public Drawable Database;
 
 
     @Override
