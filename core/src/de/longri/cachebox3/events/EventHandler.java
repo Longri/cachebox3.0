@@ -133,7 +133,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (selectedCache == null || !selectedCache.equals(event.cache)) {
 
             log.debug("Set Global selected Cache: {}", event.cache);
-            load_unload_Cache_Waypoints(selectedCache,event.cache);
+            load_unload_Cache_Waypoints(selectedCache, event.cache);
             selectedCache = event.cache;
             selectedWayPoint = null;
             fireSelectedCoordChanged(event.ID);
@@ -148,7 +148,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             if (selectedWayPoint != null) {
                 AbstractCache newCache = Database.Data.Query.GetCacheById(selectedWayPoint.getCacheId());
                 if (!newCache.equals(selectedCache)) {
-                    load_unload_Cache_Waypoints(selectedCache,newCache);
+                    load_unload_Cache_Waypoints(selectedCache, newCache);
                     selectedCache = newCache;
                 }
 
@@ -174,7 +174,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
             //load new
             if (newCache != null)
-                DaoFactory.WAYPOINT_DAO.getWaypointsFromCacheID(Database.Data, newCache.getId(), true);
+                newCache.setWaypoints(DaoFactory.WAYPOINT_DAO.getWaypointsFromCacheID(Database.Data, newCache.getId(), true));
         }
 
     }
