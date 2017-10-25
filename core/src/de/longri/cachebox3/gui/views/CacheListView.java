@@ -79,7 +79,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     public void resort() {
         log.debug("resort Query");
-        Database.Data.Query.Resort(EventHandler.getSelectedCoord(),
+        Database.Data.Query.resort(EventHandler.getSelectedCoord(),
                 new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWaypoint()));
         log.debug("Finish resort Query");
     }
@@ -361,7 +361,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 //                        CB.setAutoResort(!(CB.getAutoResort()));
 //                        if (CB.getAutoResort()) {
 //                            synchronized (Database.Data.Query) {
-//                                Database.Data.Query.Resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
+//                                Database.Data.Query.resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
 //                            }
 //                        }
                         return true;

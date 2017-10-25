@@ -491,16 +491,6 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
-    public float Distance(MathUtils.CalculationType type, boolean useFinal) {
-        return 0;
-    }
-
-    @Override
-    float Distance(MathUtils.CalculationType type, boolean useFinal, Coordinate fromPos) {
-        return 0;
-    }
-
-    @Override
     public int compareTo(AbstractCache c2) {
         return 0;
     }
@@ -671,16 +661,6 @@ public class ImmutableCache extends AbstractCache {
         return this.rating / 2f;
     }
 
-
-    @Override
-    public float getCachedDistance() {
-        return 0;
-    }
-
-    @Override
-    public void setCachedDistance(float cachedDistance) {
-
-    }
 
     @Override
     public void dispose() {

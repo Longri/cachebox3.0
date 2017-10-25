@@ -16,10 +16,7 @@
 package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.utils.Array;
-import de.longri.cachebox3.gui.utils.CharSequenceArray;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.utils.MathUtils;
 
 import java.util.Date;
 
@@ -46,7 +43,7 @@ public class MutableCache extends AbstractCache {
     private boolean found;
     private boolean userData;
     private boolean listingChanged;
-    private Array<AbstractWaypoint> waypoints=new Array<>();
+    private Array<AbstractWaypoint> waypoints = new Array<>();
     private String longDescription;
     private String shortDescription;
     private String hint;
@@ -93,6 +90,8 @@ public class MutableCache extends AbstractCache {
 
     public MutableCache(double latitude, double longitude, String name, CacheTypes type, String gcCode) {
         super(latitude, longitude);
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.id = 0;
         this.size = CacheSizes.regular;
         this.difficulty = 0.0f;
@@ -166,16 +165,6 @@ public class MutableCache extends AbstractCache {
     @Override
     public boolean hasSpoiler() {
         return false;
-    }
-
-    @Override
-    public float Distance(MathUtils.CalculationType type, boolean useFinal) {
-        return 0;
-    }
-
-    @Override
-    float Distance(MathUtils.CalculationType type, boolean useFinal, Coordinate fromPos) {
-        return 0;
     }
 
     @Override
@@ -599,15 +588,6 @@ public class MutableCache extends AbstractCache {
         this.numTravelbugs = (short) numTravelbugs;
     }
 
-    @Override
-    public float getCachedDistance() {
-        return 0;
-    }
-
-    @Override
-    public void setCachedDistance(float cachedDistance) {
-
-    }
 
     @Override
     public void dispose() {

@@ -77,25 +77,28 @@ public class CacheList extends Array<AbstractCache> {
      * @param selected
      * @return
      */
-    public CacheWithWP Resort(Coordinate selectedCoord, CacheWithWP selected) {
+    public CacheWithWP resort(Coordinate selectedCoord, CacheWithWP selected) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
             if (selected == null) return null;
             CacheWithWP retValue = null;
 
             this.ResortAtWork = true;
-            boolean LocatorValid = EventHandler.getSelectedCoord() != null;
-            // Alle Distanzen aktualisieren
-            if (LocatorValid) {
-                for (int i = 0, n = this.size; i < n; i++) {
-                    AbstractCache abstractCache = this.get(i);
-                    abstractCache.Distance(MathUtils.CalculationType.FAST, true);
+            Coordinate myPos = EventHandler.getMyPosition();
+            // refresh all distances
+            if (myPos != null) {
+                int n = this.size;
+                while (n-- > 0) {
+                    this.get(n).distance(MathUtils.CalculationType.FAST, true, myPos);
                 }
             } else {
                 // sort after distance from selected Cache
                 Coordinate fromPos = selectedCoord;
                 // avoid "illegal waypoint"
                 if (fromPos == null || (fromPos.getLatitude() == 0 && fromPos.getLongitude() == 0)) {
-                    if (selected.getCache() == null) return null;
+                    if (selected.getCache() == null) {
+                        this.ResortAtWork = false;
+                        return null;
+                    }
                     fromPos = selected.getCache();
                 }
                 if (fromPos == null) {
@@ -104,7 +107,7 @@ public class CacheList extends Array<AbstractCache> {
                 }
                 for (int i = 0, n = this.size; i < n; i++) {
                     AbstractCache abstractCache = this.get(i);
-                    abstractCache.Distance(MathUtils.CalculationType.FAST, true, fromPos);
+                    abstractCache.distance(MathUtils.CalculationType.FAST, true, fromPos);
                 }
             }
 
@@ -117,9 +120,7 @@ public class CacheList extends Array<AbstractCache> {
                     nextAbstractCache = this.get(i);
                     if (!nextAbstractCache.isArchived()) {
                         if (nextAbstractCache.isAvailable()) {
-                            if (!nextAbstractCache.isFound())
-                            // eigentlich wenn has_fieldnote(found,DNF,Maint,SBA, aber note vielleicht nicht)
-                            {
+                            if (!nextAbstractCache.isFound()) {
                                 if (!nextAbstractCache.ImTheOwner()) {
                                     if ((nextAbstractCache.getType() == CacheTypes.Event) || (nextAbstractCache.getType() == CacheTypes.MegaEvent) || (nextAbstractCache.getType() == CacheTypes.CITO) || (nextAbstractCache.getType() == CacheTypes.Giga)) {
                                         Calendar dateHidden = GregorianCalendar.getInstance();
@@ -390,7 +391,12 @@ public class CacheList extends Array<AbstractCache> {
 
     public void sort() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-            super.sort();
+            super.sort(new Comparator<AbstractCache>() {
+                @Override
+                public int compare(AbstractCache o1, AbstractCache o2) {
+                    return o1.getCachedDistance() - o2.getCachedDistance();
+                }
+            });
         }
     }
 

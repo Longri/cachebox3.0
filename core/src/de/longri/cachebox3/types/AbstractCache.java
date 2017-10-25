@@ -16,6 +16,7 @@
 package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MathUtils;
@@ -25,7 +26,7 @@ import java.util.Date;
 /**
  * Created by Longri on 16.10.2017.
  */
-public abstract class AbstractCache extends Coordinate {
+public abstract class AbstractCache extends Coordinate implements Comparable<AbstractCache> {
     public AbstractCache(double latitude, double longitude) {
         super(latitude, longitude);
     }
@@ -46,6 +47,53 @@ public abstract class AbstractCache extends Coordinate {
         }
         return result;
     }
+
+    /**
+     * Last calculated distance as meter
+     */
+    private int cachedDistance;
+
+    public final float distance(MathUtils.CalculationType type, boolean useFinal, Coordinate fromPos) {
+        if (fromPos == null)
+            return -1;
+
+        AbstractWaypoint waypoint = null;
+        if (useFinal)
+            waypoint = this.GetFinalWaypoint();
+        // If a mystery has a final waypoint, the distance will be calculated to
+        // the final not the the cache coordinates
+        Coordinate toPos = this;
+        if (waypoint != null) {
+            toPos = new Coordinate(waypoint.latitude, waypoint.longitude);
+            // nur sinnvolles Final, sonst vom Cache
+            if (waypoint.latitude == 0 && waypoint.longitude == 0)
+                toPos = this;
+        }
+        float[] dist = new float[4];
+        MathUtils.computeDistanceAndBearing(type, fromPos.getLatitude(), fromPos.getLongitude(), toPos.getLatitude(), toPos.getLongitude(), dist);
+        cachedDistance = Math.round(dist[0]);
+        return cachedDistance;
+    }
+
+    public String toString() {
+        return getGcCode().toString();
+    }
+
+    /**
+     * Returns the last calculated distance
+     *
+     * @return
+     */
+    public final int getCachedDistance() {
+        return cachedDistance;
+    }
+
+
+    @Override
+    public int compareTo(AbstractCache o) {
+        return this.cachedDistance - o.cachedDistance;
+    }
+
 
     public abstract Array<Attributes> getAttributes(Database database);
 
@@ -86,17 +134,6 @@ public abstract class AbstractCache extends Coordinate {
      * @return Boolean
      */
     public abstract boolean hasSpoiler();
-
-    /**
-     * Gibt die Entfernung zur uebergebenen User Position als Float zurueck.
-     *
-     * @return Entfernung zur uebergebenen User Position als Float
-     */
-    public abstract float Distance(MathUtils.CalculationType type, boolean useFinal);
-
-    abstract float Distance(MathUtils.CalculationType type, boolean useFinal, Coordinate fromPos);
-
-    public abstract int compareTo(AbstractCache c2);
 
     protected abstract AbstractWaypoint findWaypointByGc(String gc);
 
@@ -302,13 +339,6 @@ public abstract class AbstractCache extends Coordinate {
     public abstract int getNumTravelbugs();
 
     public abstract void setNumTravelbugs(int numTravelbugs);
-
-    /**
-     * Falls keine erneute Distanzberechnung noetig ist nehmen wir diese Distanz
-     */
-    public abstract float getCachedDistance();
-
-    public abstract void setCachedDistance(float cachedDistance);
 
     public abstract void dispose();
 

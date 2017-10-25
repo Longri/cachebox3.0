@@ -21,9 +21,7 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Date;
 
@@ -38,8 +36,8 @@ class Cache3DAOTest {
     static FileHandle copyDbFileHandle;
     static Database cb3Database;
 
-    @BeforeEach
-    void setUp() throws SQLiteGdxException {
+    @BeforeAll
+    static void setUp() throws SQLiteGdxException {
         TestUtils.initialGdx();
 
         // copy testDb
@@ -58,8 +56,8 @@ class Cache3DAOTest {
 
     }
 
-    @AfterEach
-    void tearDown() {
+    @AfterAll
+    static void tearDown() {
         cb3Database.close();
         assertThat("TestDB must be deleted after cleanup", copyDbFileHandle.delete());
     }
