@@ -23,6 +23,7 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.utils.MathUtils;
@@ -132,6 +133,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (selectedCache == null || !selectedCache.equals(event.cache)) {
 
             log.debug("Set Global selected Cache: {}", event.cache);
+            load_unload_Cache_Waypoints(selectedCache,event.cache);
             selectedCache = event.cache;
             selectedWayPoint = null;
             fireSelectedCoordChanged(event.ID);
@@ -146,12 +148,35 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             if (selectedWayPoint != null) {
                 AbstractCache newCache = Database.Data.Query.GetCacheById(selectedWayPoint.getCacheId());
                 if (!newCache.equals(selectedCache)) {
+                    load_unload_Cache_Waypoints(selectedCache,newCache);
                     selectedCache = newCache;
                 }
 
                 fireSelectedCoordChanged(event.ID);
             }
         }
+    }
+
+    private void load_unload_Cache_Waypoints(AbstractCache oldCache, AbstractCache newCache) {
+
+        //with show all waypoints, must all waypoints loaded, so do nothing
+        if (!Config.ShowAllWaypoints.getValue()) {
+
+            //clear old
+            if (oldCache != null && oldCache.getWaypoints() != null) {
+                //dispose waypoints
+                int n = oldCache.getWaypoints().size;
+                while (n-- > 0) {
+                    oldCache.getWaypoints().get(n).dispose();
+                }
+                oldCache.getWaypoints().clear();
+            }
+
+            //load new
+            if (newCache != null)
+                DaoFactory.WAYPOINT_DAO.getWaypointsFromCacheID(Database.Data, newCache.getId(), true);
+        }
+
     }
 
     private void fireSelectedCoordChanged(short id) {

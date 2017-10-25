@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
@@ -209,7 +210,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         //add waypoints from selected Cache or all Waypoints if set
         AbstractWaypoint selWp = null;
         if (Settings.ShowAllWaypoints.getValue() || sel) {
-            selWp = selectedWaypoint = de.longri.cachebox3.events.EventHandler.getSelectedWaypoint();
+            selWp = selectedWaypoint = EventHandler.getSelectedWaypoint();
             for (AbstractWaypoint waypoint : abstractCache.getWaypoints()) {
                 try {
                     MapWayPointItem waypointCluster = getMapWayPointItem(waypoint, dis, selectedWaypoint != null && selectedWaypoint.equals(waypoint));

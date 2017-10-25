@@ -182,6 +182,11 @@ public class ImmutableWaypoint extends AbstractWaypoint {
         throwNotChangeable("Longitude");
     }
 
+    @Override
+    public void dispose() {
+        //is Immutable, so do nothing
+    }
+
 
     //################################################################################
     //# properties that not retained at the class but read/write directly from/to DB
