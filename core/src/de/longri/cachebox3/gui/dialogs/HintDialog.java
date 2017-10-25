@@ -23,6 +23,7 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.UnitFormatter;
 
@@ -38,7 +39,7 @@ public class HintDialog extends ButtonDialog {
     public HintDialog() {
         super("Hint", createContentBox(), Translation.Get("hint"), MessageBoxButtons.RetryCancel, null);
 
-        String hintFromDB = EventHandler.getSelectedCache() == null ? "" : EventHandler.getSelectedCache().getHint();
+        String hintFromDB = EventHandler.getSelectedCache() == null ? "" : EventHandler.getSelectedCache().getHint(Database.Data);
         this.hintTextDecoded = UnitFormatter.rot13(hintFromDB) + "\n ";
         this.hintTextEncoded = hintFromDB + "\n ";
 

@@ -22,32 +22,31 @@ import com.badlogic.gdx.utils.Predicate;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.MathUtils;
-import de.longri.cachebox3.utils.MoveableList;
 
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
-public class CacheList extends MoveableList<Cache> {
+public class CacheList extends Array<AbstractCache> {
 
     public boolean ResortAtWork = false;
 
-    public Cache GetCacheByGcCode(String GcCode) {
+    public AbstractCache GetCacheByGcCode(String GcCode) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             for (int i = 0, n = this.size; i < n; i++) {
-                Cache cache = this.get(i);
-                if (cache.getGcCode().equalsIgnoreCase(GcCode))
+                AbstractCache cache = this.get(i);
+                if (cache.getGcCode().toString().equalsIgnoreCase(GcCode))
                     return cache;
             }
             return null;
         }
     }
 
-    public Cache GetCacheById(long cacheId) {
+    public AbstractCache GetCacheById(long cacheId) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
             for (int i = 0, n = this.size; i < n; i++) {
-                Cache cache = this.get(i);
+                AbstractCache cache = this.get(i);
                 if (cache.getId() == cacheId)
                     return cache;
             }
@@ -78,25 +77,28 @@ public class CacheList extends MoveableList<Cache> {
      * @param selected
      * @return
      */
-    public CacheWithWP Resort(Coordinate selectedCoord, CacheWithWP selected) {
+    public CacheWithWP resort(Coordinate selectedCoord, CacheWithWP selected) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
             if (selected == null) return null;
             CacheWithWP retValue = null;
 
             this.ResortAtWork = true;
-            boolean LocatorValid = EventHandler.getSelectedCoord() != null;
-            // Alle Distanzen aktualisieren
-            if (LocatorValid) {
-                for (int i = 0, n = this.size; i < n; i++) {
-                    Cache cache = this.get(i);
-                    cache.Distance(MathUtils.CalculationType.FAST, true);
+            Coordinate myPos = EventHandler.getMyPosition();
+            // refresh all distances
+            if (myPos != null) {
+                int n = this.size;
+                while (n-- > 0) {
+                    this.get(n).distance(MathUtils.CalculationType.FAST, true, myPos);
                 }
             } else {
                 // sort after distance from selected Cache
                 Coordinate fromPos = selectedCoord;
                 // avoid "illegal waypoint"
                 if (fromPos == null || (fromPos.getLatitude() == 0 && fromPos.getLongitude() == 0)) {
-                    if (selected.getCache() == null) return null;
+                    if (selected.getCache() == null) {
+                        this.ResortAtWork = false;
+                        return null;
+                    }
                     fromPos = selected.getCache();
                 }
                 if (fromPos == null) {
@@ -104,8 +106,8 @@ public class CacheList extends MoveableList<Cache> {
                     return retValue;
                 }
                 for (int i = 0, n = this.size; i < n; i++) {
-                    Cache cache = this.get(i);
-                    cache.Distance(MathUtils.CalculationType.FAST, true, fromPos);
+                    AbstractCache abstractCache = this.get(i);
+                    abstractCache.distance(MathUtils.CalculationType.FAST, true, fromPos);
                 }
             }
 
@@ -113,28 +115,26 @@ public class CacheList extends MoveableList<Cache> {
 
             // Nächsten Cache auswählen
             if (this.size > 0) {
-                Cache nextCache = this.get(0); // or null ...
+                AbstractCache nextAbstractCache = this.get(0); // or null ...
                 for (int i = 0; i < this.size; i++) {
-                    nextCache = this.get(i);
-                    if (!nextCache.isArchived()) {
-                        if (nextCache.isAvailable()) {
-                            if (!nextCache.isFound())
-                            // eigentlich wenn has_fieldnote(found,DNF,Maint,SBA, aber note vielleicht nicht)
-                            {
-                                if (!nextCache.ImTheOwner()) {
-                                    if ((nextCache.getType() == CacheTypes.Event) || (nextCache.getType() == CacheTypes.MegaEvent) || (nextCache.getType() == CacheTypes.CITO) || (nextCache.getType() == CacheTypes.Giga)) {
+                    nextAbstractCache = this.get(i);
+                    if (!nextAbstractCache.isArchived()) {
+                        if (nextAbstractCache.isAvailable()) {
+                            if (!nextAbstractCache.isFound()) {
+                                if (!nextAbstractCache.ImTheOwner()) {
+                                    if ((nextAbstractCache.getType() == CacheTypes.Event) || (nextAbstractCache.getType() == CacheTypes.MegaEvent) || (nextAbstractCache.getType() == CacheTypes.CITO) || (nextAbstractCache.getType() == CacheTypes.Giga)) {
                                         Calendar dateHidden = GregorianCalendar.getInstance();
                                         Calendar today = GregorianCalendar.getInstance();
-                                        dateHidden.setTime(nextCache.getDateHidden());
+                                        dateHidden.setTime(nextAbstractCache.getDateHidden());
                                         if (("" + today.get(Calendar.DAY_OF_MONTH) + today.get(Calendar.MONTH) + today.get(Calendar.YEAR))
                                                 .equals("" + dateHidden.get(Calendar.DAY_OF_MONTH) + dateHidden.get(Calendar.MONTH) + dateHidden.get(Calendar.YEAR))) {
                                             break;
                                         }
                                     } else {
-                                        if (nextCache.getType() != CacheTypes.Mystery) {
+                                        if (nextAbstractCache.getType() != CacheTypes.Mystery) {
                                             break;
                                         } else {
-                                            if (nextCache.CorrectedCoordiantesOrMysterySolved()) {
+                                            if (nextAbstractCache.CorrectedCoordiantesOrMysterySolved()) {
                                                 break;
                                             }
                                         }
@@ -148,20 +148,23 @@ public class CacheList extends MoveableList<Cache> {
                 // -> gleich den Final Waypoint auswahlen!!!
                 // When the next Cache is a mystery with final waypoint
                 // -> activate the final waypoint!!!
-                Waypoint waypoint = nextCache.GetFinalWaypoint();
+                AbstractWaypoint waypoint = nextAbstractCache.GetFinalWaypoint();
                 if (waypoint == null) {
                     // wenn ein Cache keinen Final Waypoint hat dann wird überprüft, ob dieser einen Startpunkt definiert hat
                     // Wenn ein Cache einen Startpunkt definiert hat dann wird beim Selektieren dieses Caches gleich dieser Startpunkt
                     // selektiert
-                    waypoint = nextCache.GetStartWaypoint();
+                    waypoint = nextAbstractCache.GetStartWaypoint();
                 }
 
-                retValue = new CacheWithWP(nextCache, waypoint);
+                retValue = new CacheWithWP(nextAbstractCache, waypoint);
             }
             // vorhandenen Parkplatz Cache nach oben schieben
-            Cache park = this.GetCacheByGcCode("CBPark");
+            AbstractCache park = this.GetCacheByGcCode("CBPark");
             if (park != null) {
-                this.MoveItemFirst(this.indexOf(park, false));
+                int parkIndex = this.indexOf(park, false);
+                AbstractCache parkCache = this.get(parkIndex);
+                this.removeIndex(parkIndex);
+                this.insert(0, parkCache);
             }
 
             // Cursor.Current = Cursors.Default;
@@ -185,7 +188,7 @@ public class CacheList extends MoveableList<Cache> {
     public void clear() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
             for (int i = 0, n = this.size; i < n; i++) {
-                Cache cache = this.get(i);
+                AbstractCache cache = this.get(i);
                 if (!cache.isLive())
                     cache.dispose(); // don't dispose LiveCaches
             }
@@ -197,14 +200,14 @@ public class CacheList extends MoveableList<Cache> {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
             Array<String> list = new Array<>(this.size);
             for (int i = 0, n = this.size; i < n; i++) {
-                list.add(this.get(i).getGcCode());
+                list.add(this.get(i).getGcCode().toString());
             }
             return list;
         }
     }
 
 
-    public void add(Cache ca) {
+    public void add(AbstractCache ca) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
             if (ca == null)
                 return;
@@ -212,8 +215,8 @@ public class CacheList extends MoveableList<Cache> {
             int index = -1;
             for (int i = 0, n = this.size; i < n; i++) {
 
-                Cache cache = get(i);
-                if (cache.getId() == ca.getId()) {
+                AbstractCache abstractCache = get(i);
+                if (abstractCache.getId() == ca.getId()) {
                     index = i;
                 }
             }
@@ -222,7 +225,7 @@ public class CacheList extends MoveableList<Cache> {
                 // Replace LiveCache with Cache
                 if (get(index).isLive()) {
                     if (!ca.isLive()) {
-                        this.replace(ca, index);
+                        this.set(index, ca);
                         return;
                     }
                 }
@@ -234,86 +237,86 @@ public class CacheList extends MoveableList<Cache> {
 
     //################## synchronised overrides ################################
 
-    public void MoveItemsLeft() {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
-            super.MoveItemsLeft();
-        }
-    }
+//    public void MoveItemsLeft() {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            super.MoveItemsLeft();
+//        }
+//    }
+//
+//    public void MoveItemsRight() {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            super.MoveItemsRight();
+//        }
+//    }
+//
+//    public void MoveItemFirst(int index) {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            super.MoveItemFirst(index);
+//        }
+//
+//    }
+//
+//    public void MoveItemLast(int index) {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            super.MoveItemLast(index);
+//        }
+//    }
+//
+//    public int MoveItem(int index, int Step) {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            return super.MoveItem(index, Step);
+//        }
+//    }
+//
+//    public void MoveItem(int index) {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            super.MoveItem(index);
+//        }
+//    }
+//
+//    public AbstractCache remove(int index) {
+//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+//            return super.remove(index);
+//        }
+//    }
 
-    public void MoveItemsRight() {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
-            super.MoveItemsRight();
-        }
-    }
-
-    public void MoveItemFirst(int index) {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
-            super.MoveItemFirst(index);
-        }
-
-    }
-
-    public void MoveItemLast(int index) {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
-            super.MoveItemLast(index);
-        }
-    }
-
-    public int MoveItem(int index, int Step) {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
-            return super.MoveItem(index, Step);
-        }
-    }
-
-    public void MoveItem(int index) {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
-            super.MoveItem(index);
-        }
-    }
-
-    public Cache remove(int index) {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-            return super.remove(index);
-        }
-    }
-
-    public void addAll(Array<? extends Cache> array) {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-            super.addAll(array);
-        }
-    }
-
-    public void addAll(Array<? extends Cache> array, int start, int count) {
-        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-            super.addAll(array, start, count);
-        }
-    }
-
-    public void addAll(Cache... array) {
+    public void addAll(Array<? extends AbstractCache> array) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             super.addAll(array);
         }
     }
 
-    public void addAll(Cache[] array, int start, int count) {
+    public void addAll(Array<? extends AbstractCache> array, int start, int count) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             super.addAll(array, start, count);
         }
     }
 
-    public Cache get(int index) {
+    public void addAll(AbstractCache... array) {
+        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+            super.addAll(array);
+        }
+    }
+
+    public void addAll(AbstractCache[] array, int start, int count) {
+        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+            super.addAll(array, start, count);
+        }
+    }
+
+    public AbstractCache get(int index) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.get(index);
         }
     }
 
-    public void set(int index, Cache value) {
+    public void set(int index, AbstractCache value) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             super.set(index, value);
         }
     }
 
-    public void insert(int index, Cache value) {
+    public void insert(int index, AbstractCache value) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             super.insert(index, value);
         }
@@ -325,31 +328,31 @@ public class CacheList extends MoveableList<Cache> {
         }
     }
 
-    public boolean contains(Cache value, boolean identity) {
+    public boolean contains(AbstractCache value, boolean identity) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.contains(value, identity);
         }
     }
 
-    public int indexOf(Cache value, boolean identity) {
+    public int indexOf(AbstractCache value, boolean identity) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.indexOf(value, identity);
         }
     }
 
-    public int lastIndexOf(Cache value, boolean identity) {
+    public int lastIndexOf(AbstractCache value, boolean identity) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.lastIndexOf(value, identity);
         }
     }
 
-    public boolean removeValue(Cache value, boolean identity) {
+    public boolean removeValue(AbstractCache value, boolean identity) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.removeValue(value, identity);
         }
     }
 
-    public Cache removeIndex(int index) {
+    public AbstractCache removeIndex(int index) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.removeIndex(index);
         }
@@ -361,73 +364,55 @@ public class CacheList extends MoveableList<Cache> {
         }
     }
 
-    public boolean removeAll(Array<? extends Cache> array, boolean identity) {
+    public boolean removeAll(Array<? extends AbstractCache> array, boolean identity) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.removeAll(array, identity);
         }
     }
 
-    public Cache pop() {
+    public AbstractCache pop() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.pop();
         }
     }
 
-    public Cache peek() {
+    public AbstractCache peek() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.peek();
         }
     }
 
-    public Cache first() {
+    public AbstractCache first() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.first();
         }
     }
 
-//    public Cache[] shrink() {
-//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-//            return super.shrink();
-//        }
-//    }
-//
-//    public Cache[] ensureCapacity(int additionalCapacity) {
-//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-//            return super.ensureCapacity(additionalCapacity);
-//        }
-//    }
-//
-//    public Cache[] setSize(int newSize) {
-//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-//            return super.setSize(newSize);
-//        }
-//    }
-//
-//    protected Cache[] resize(int newSize) {
-//        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-//            return super.resize(newSize);
-//        }
-//    }
 
     public void sort() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
-            super.sort();
+            super.sort(new Comparator<AbstractCache>() {
+                @Override
+                public int compare(AbstractCache o1, AbstractCache o2) {
+                    return o1.getCachedDistance() - o2.getCachedDistance();
+                }
+            });
         }
     }
 
-    public void sort(Comparator<? super Cache> comparator) {
+    public void sort(Comparator<? super AbstractCache> comparator) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             super.sort(comparator);
         }
     }
 
-    public Cache selectRanked(Comparator<Cache> comparator, int kthLowest) {
+    public AbstractCache selectRanked(Comparator<AbstractCache> comparator, int kthLowest) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.selectRanked(comparator, kthLowest);
         }
     }
 
-    public int selectRankedIndex(Comparator<Cache> comparator, int kthLowest) {
+    public int selectRankedIndex(Comparator<AbstractCache> comparator, int kthLowest) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.selectRankedIndex(comparator, kthLowest);
         }
@@ -445,13 +430,13 @@ public class CacheList extends MoveableList<Cache> {
         }
     }
 
-    public Iterator<Cache> iterator() {
+    public Iterator<AbstractCache> iterator() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.iterator();
         }
     }
 
-    public Iterable<Cache> select(Predicate<Cache> predicate) {
+    public Iterable<AbstractCache> select(Predicate<AbstractCache> predicate) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.select(predicate);
         }
@@ -463,13 +448,13 @@ public class CacheList extends MoveableList<Cache> {
         }
     }
 
-    public Cache random() {
+    public AbstractCache random() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.random();
         }
     }
 
-    public Cache[] toArray() {
+    public AbstractCache[] toArray() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.toArray();
         }
@@ -484,6 +469,15 @@ public class CacheList extends MoveableList<Cache> {
     public int getSize() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return size;
+        }
+    }
+
+    public AbstractCache getCacheById(long id) {
+        synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
+            Object[] items = this.items;
+            for (int i = 0, n = size; i < n; i++)
+                if (((AbstractCache) items[i]).getId() == id) return get(i);
+            return null;
         }
     }
 }

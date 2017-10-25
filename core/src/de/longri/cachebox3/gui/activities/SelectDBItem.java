@@ -15,8 +15,13 @@
  */
 package de.longri.cachebox3.gui.activities;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 
 import java.io.File;
@@ -40,12 +45,19 @@ public class SelectDBItem extends ListViewItem {
         infoStyle.font = style.infoFont;
         infoStyle.fontColor = style.infoColor;
 
+        Table infoTable = new VisTable();
+
         fileName = file.getName();
         lblName = new VisLabel(fileName, nameStyle);
         lblInfo = new VisLabel(fileInfo, infoStyle);
-        this.add(lblName).left().fillX();
-        this.row();
-        this.add(lblInfo).left().fillX();
+        infoTable.add(lblName).left().fillX();
+        infoTable.row();
+        infoTable.add(lblInfo).left().fillX();
+
+        Image iconImage = new Image(CB.getSkin().getMenuIcon.manageDB, Scaling.none);
+        this.add(iconImage).center().padRight(CB.scaledSizes.MARGIN_HALF);
+
+        this.add(infoTable).expandX().fillX();
     }
 
     public String getFileName() {
@@ -57,7 +69,7 @@ public class SelectDBItem extends ListViewItem {
 
     }
 
-    public void updateFileInfoe(String fileInfo) {
+    public void updateFileInfo(String fileInfo) {
         lblInfo.setText(fileInfo);
     }
 }

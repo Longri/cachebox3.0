@@ -23,13 +23,13 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 
 /**
@@ -122,8 +122,8 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         add(this);
     }
 
-    Cache selectedCache;
-    Waypoint selectedWayPoint;
+    AbstractCache selectedCache;
+    AbstractWaypoint selectedWayPoint;
     Coordinate selectedCoordinate;
     CoordinateGPS myPosition;
     private float heading;
@@ -132,18 +132,10 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
         if (selectedCache == null || !selectedCache.equals(event.cache)) {
 
-            //unload details from last selected Cache
-            if (selectedCache != null) selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
-
             log.debug("Set Global selected Cache: {}", event.cache);
+            load_unload_Cache_Waypoints(selectedCache, event.cache);
             selectedCache = event.cache;
             selectedWayPoint = null;
-
-            // and load details of new selected Cache
-            if (!selectedCache.isDetailLoaded()) {
-                selectedCache.loadDetail();
-            }
-
             fireSelectedCoordChanged(event.ID);
         }
     }
@@ -154,20 +146,37 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             log.debug("Set Global selected Waypoint: {}", event.wayPoint);
             selectedWayPoint = event.wayPoint;
             if (selectedWayPoint != null) {
-                Cache newCache = Database.Data.Query.GetCacheById(selectedWayPoint.CacheId);
+                AbstractCache newCache = Database.Data.Query.GetCacheById(selectedWayPoint.getCacheId());
                 if (!newCache.equals(selectedCache)) {
-                    //unload details from last selected Cache
-                    if (selectedCache != null) selectedCache.deleteDetail(Config.ShowAllWaypoints.getValue());
+                    load_unload_Cache_Waypoints(selectedCache, newCache);
                     selectedCache = newCache;
-                    // and load details of new selected Cache
-                    if (!selectedCache.isDetailLoaded()) {
-                        selectedCache.loadDetail();
-                    }
                 }
 
                 fireSelectedCoordChanged(event.ID);
             }
         }
+    }
+
+    private void load_unload_Cache_Waypoints(AbstractCache oldCache, AbstractCache newCache) {
+
+        //with show all waypoints, must all waypoints loaded, so do nothing
+        if (!Config.ShowAllWaypoints.getValue()) {
+
+            //clear old
+            if (oldCache != null && oldCache.getWaypoints() != null) {
+                //dispose waypoints
+                int n = oldCache.getWaypoints().size;
+                while (n-- > 0) {
+                    oldCache.getWaypoints().get(n).dispose();
+                }
+                oldCache.getWaypoints().clear();
+            }
+
+            //load new
+            if (newCache != null)
+                newCache.setWaypoints(DaoFactory.WAYPOINT_DAO.getWaypointsFromCacheID(Database.Data, newCache.getId(), true));
+        }
+
     }
 
     private void fireSelectedCoordChanged(short id) {
@@ -211,15 +220,15 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         }
     }
 
-    public static Cache getSelectedCache() {
+    public static AbstractCache getSelectedCache() {
         return INSTANCE.selectedCache;
     }
 
-    public static boolean isSelectedCache(Cache cache) {
-        return (INSTANCE.selectedCache != null && INSTANCE.selectedCache.equals(cache));
+    public static boolean isSelectedCache(AbstractCache abstractCache) {
+        return (INSTANCE.selectedCache != null && INSTANCE.selectedCache.equals(abstractCache));
     }
 
-    public static Waypoint getSelectedWaypoint() {
+    public static AbstractWaypoint getSelectedWaypoint() {
         return INSTANCE.selectedWayPoint;
     }
 
@@ -245,7 +254,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         INSTANCE.heading = event.getOrientation();
     }
 
-    public static void setSelectedWaypoint(Cache cache, Waypoint wp) {
+    public static void setSelectedWaypoint(AbstractCache cache, AbstractWaypoint wp) {
         if (cache == null || !cache.equals(getSelectedCache())) fire(new SelectedCacheChangedEvent(cache));
         if (wp == null || !wp.equals(getSelectedWaypoint())) fire(new SelectedWayPointChangedEvent(wp));
     }

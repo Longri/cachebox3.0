@@ -41,8 +41,7 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.CacheDAO;
-import de.longri.cachebox3.sqlite.dao.CacheListDAO;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
@@ -60,7 +59,7 @@ public class DraftsView extends AbstractView {
 
     private static DraftsView THAT;
     private static DraftEntry aktDraft;
-    private static DraftList fieldNoteEntries;
+    private static DraftList draftEntries;
 
 
     private final ListView listView = new ListView();
@@ -73,7 +72,7 @@ public class DraftsView extends AbstractView {
         THAT = this;
         itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
 
-        fieldNoteEntries = new DraftList();
+        draftEntries = new DraftList();
         loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
 
         listView.setEmptyString(Translation.Get("EmptyDrafts"));
@@ -138,7 +137,7 @@ public class DraftsView extends AbstractView {
         public boolean longClicked(Actor actor, float x, float y) {
 
             int listIndex = ((ListViewItem) actor).getListIndex();
-            aktDraft = fieldNoteEntries.get(listIndex);
+            aktDraft = draftEntries.get(listIndex);
 
             Menu cm = new Menu("DraftItem-Menu");
 
@@ -174,8 +173,8 @@ public class DraftsView extends AbstractView {
     @Override
     public void dispose() {
         EventHandler.remove(this);
-        fieldNoteEntries.clear();
-        fieldNoteEntries = null;
+        draftEntries.clear();
+        draftEntries = null;
         aktDraft = null;
         THAT = null;
         listView.dispose();
@@ -187,7 +186,7 @@ public class DraftsView extends AbstractView {
     }
 
     private void loadDrafts(DraftList.LoadingType type) {
-        fieldNoteEntries.loadDrafts("", type);
+        draftEntries.loadDrafts("", type);
 
         if (items == null) {
             items = new Array<>();
@@ -195,7 +194,7 @@ public class DraftsView extends AbstractView {
         items.clear();
 
         int idx = 0;
-        for (DraftEntry entry : fieldNoteEntries) {
+        for (DraftEntry entry : draftEntries) {
             items.add(new DraftsViewItem(idx++, entry, itemStyle));
         }
 
@@ -355,15 +354,15 @@ public class DraftsView extends AbstractView {
     }
 
     public static void addNewFieldnote(LogTypes type, boolean witoutShowEdit) {
-        Cache cache = EventHandler.getSelectedCache();
+        AbstractCache abstractCache = EventHandler.getSelectedCache();
 
-        if (cache == null) {
+        if (abstractCache == null) {
             MessageBox.show(Translation.Get("NoCacheSelect"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             return;
         }
 
         // chk car found?
-        if (cache.getGcCode().equalsIgnoreCase("CBPark")) {
+        if (abstractCache.getGcCode().toString().equalsIgnoreCase("CBPark")) {
             if (type == LogTypes.found) {
                 MessageBox.show(Translation.Get("My_Parking_Area_Found"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
             } else if (type == LogTypes.didnt_find) {
@@ -373,14 +372,13 @@ public class DraftsView extends AbstractView {
         }
 
         // kein GC Cache
-        if (!cache.getGcCode().toLowerCase().startsWith("gc")) {
+        if (!abstractCache.getGcCode().toString().toLowerCase().startsWith("gc")) {
 
             if (type == LogTypes.found || type == LogTypes.attended || type == LogTypes.webcam_photo_taken) {
                 // Found it! -> fremden Cache als gefunden markieren
                 if (!EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(true);
-                    CacheDAO cacheDAO = new CacheDAO();
-                    cacheDAO.WriteToDatabase_Found(EventHandler.getSelectedCache());
+                    DaoFactory.CACHE_DAO.writeToDatabaseFound(Database.Data, EventHandler.getSelectedCache());
                     QuickDraftFeedbackPopUp pop = new QuickDraftFeedbackPopUp(true);
                     pop.show();
                 }
@@ -388,8 +386,7 @@ public class DraftsView extends AbstractView {
                 // DidNotFound -> fremden Cache als nicht gefunden markieren
                 if (EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(false);
-                    CacheDAO cacheDAO = new CacheDAO();
-                    cacheDAO.WriteToDatabase_Found(EventHandler.getSelectedCache());
+                    DaoFactory.CACHE_DAO.writeToDatabaseFound(Database.Data, EventHandler.getSelectedCache());
                     QuickDraftFeedbackPopUp pop2 = new QuickDraftFeedbackPopUp(false);
                     pop2.show();
                 }
@@ -414,7 +411,7 @@ public class DraftsView extends AbstractView {
             // needMaintance oder Note können zusätzlich angelegt werden
 
             for (DraftEntry nfne : tmpDrafts) {
-                if ((nfne.CacheId == cache.getId()) && (nfne.type == type)) {
+                if ((nfne.CacheId == abstractCache.getId()) && (nfne.type == type)) {
                     newDraft = nfne;
                     newDraft.deleteFromDatabase();
                     newDraft.timestamp = new Date();
@@ -425,14 +422,14 @@ public class DraftsView extends AbstractView {
 
         if (newDraft == null) {
             newDraft = new DraftEntry(type);
-            newDraft.CacheName = cache.getName();
-            newDraft.gcCode = cache.getGcCode();
+            newDraft.CacheName = abstractCache.getName();
+            newDraft.gcCode = abstractCache.getGcCode().toString();
             newDraft.foundNumber = Config.FoundOffset.getValue();
             newDraft.timestamp = new Date();
-            newDraft.CacheId = cache.getId();
+            newDraft.CacheId = abstractCache.getId();
             newDraft.comment = "";
-            newDraft.CacheUrl = cache.getUrl();
-            newDraft.cacheType = cache.getType();
+            newDraft.CacheUrl = abstractCache.getUrl();
+            newDraft.cacheType = abstractCache.getType();
             newDraft.fillType();
             // aktDraftIndex = -1;
             aktDraft = newDraft;
@@ -443,7 +440,7 @@ public class DraftsView extends AbstractView {
 
         switch (type) {
             case found:
-                if (!cache.isFound())
+                if (!abstractCache.isFound())
                     newDraft.foundNumber++; //
                 newDraft.fillType();
                 if (newDraft.comment.equals(""))
@@ -452,7 +449,7 @@ public class DraftsView extends AbstractView {
                 // nicht gefunden war -> foundNumber um 1 erhöhen
                 break;
             case attended:
-                if (!cache.isFound())
+                if (!abstractCache.isFound())
                     newDraft.foundNumber++; //
                 newDraft.fillType();
                 if (newDraft.comment.equals(""))
@@ -461,7 +458,7 @@ public class DraftsView extends AbstractView {
                 // nicht gefunden war -> foundNumber um 1 erhöhen
                 break;
             case webcam_photo_taken:
-                if (!cache.isFound())
+                if (!abstractCache.isFound())
                     newDraft.foundNumber++; //
                 newDraft.fillType();
                 if (newDraft.comment.equals(""))
@@ -498,8 +495,7 @@ public class DraftsView extends AbstractView {
                 // Found it! -> Cache als gefunden markieren
                 if (!EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(true);
-                    CacheDAO cacheDAO = new CacheDAO();
-                    cacheDAO.WriteToDatabase_Found(EventHandler.getSelectedCache());
+                    DaoFactory.CACHE_DAO.writeToDatabaseFound(Database.Data, EventHandler.getSelectedCache());
                     Config.FoundOffset.setValue(aktDraft.foundNumber);
                     Config.AcceptChanges();
                 }
@@ -509,8 +505,7 @@ public class DraftsView extends AbstractView {
                 // DidNotFound -> Cache als nicht gefunden markieren
                 if (EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(false);
-                    CacheDAO cacheDAO = new CacheDAO();
-                    cacheDAO.WriteToDatabase_Found(EventHandler.getSelectedCache());
+                    DaoFactory.CACHE_DAO.writeToDatabaseFound(Database.Data, EventHandler.getSelectedCache());
                     Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                     Config.AcceptChanges();
                 }
@@ -549,15 +544,15 @@ public class DraftsView extends AbstractView {
             if (isNewDraft) {
                 // nur, wenn eine Draft neu angelegt wurde
                 // new Draft
-                fieldNoteEntries.add(fieldNote);
+                draftEntries.add(fieldNote);
 
                 // eine evtl. vorhandene Draft /DNF löschen
                 if (fieldNote.type == LogTypes.attended //
                         || fieldNote.type == LogTypes.found //
                         || fieldNote.type == LogTypes.webcam_photo_taken //
                         || fieldNote.type == LogTypes.didnt_find) {
-                    fieldNoteEntries.deleteDraftByCacheId(fieldNote.CacheId, LogTypes.found);
-                    fieldNoteEntries.deleteDraftByCacheId(fieldNote.CacheId, LogTypes.didnt_find);
+                    draftEntries.deleteDraftByCacheId(fieldNote.CacheId, LogTypes.found);
+                    draftEntries.deleteDraftByCacheId(fieldNote.CacheId, LogTypes.didnt_find);
                 }
             }
 
@@ -574,8 +569,7 @@ public class DraftsView extends AbstractView {
                     // Found it! -> Cache als gefunden markieren
                     if (!EventHandler.getSelectedCache().isFound()) {
                         EventHandler.getSelectedCache().setFound(true);
-                        CacheDAO cacheDAO = new CacheDAO();
-                        cacheDAO.WriteToDatabase_Found(EventHandler.getSelectedCache());
+                        DaoFactory.CACHE_DAO.writeToDatabaseFound(Database.Data, EventHandler.getSelectedCache());
                         Config.FoundOffset.setValue(aktDraft.foundNumber);
                         Config.AcceptChanges();
                     }
@@ -583,21 +577,20 @@ public class DraftsView extends AbstractView {
                 } else if (fieldNote.type == LogTypes.didnt_find) { // DidNotFound -> Cache als nicht gefunden markieren
                     if (EventHandler.getSelectedCache().isFound()) {
                         EventHandler.getSelectedCache().setFound(false);
-                        CacheDAO cacheDAO = new CacheDAO();
-                        cacheDAO.WriteToDatabase_Found(EventHandler.getSelectedCache());
+                        DaoFactory.CACHE_DAO.writeToDatabaseFound(Database.Data, EventHandler.getSelectedCache());
                         Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                         Config.AcceptChanges();
                     } // und eine evtl. vorhandene Draft FoundIt löschen
-                    fieldNoteEntries.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogTypes.found);
+                    draftEntries.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogTypes.found);
                 }
             }
             DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
 
             // Reload List
             if (isNewDraft) {
-                fieldNoteEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW);
+                draftEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW);
             } else {
-                fieldNoteEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
+                draftEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
             }
         }
         THAT.notifyDataSetChanged();
@@ -721,19 +714,18 @@ public class DraftsView extends AbstractView {
         // final Cache cache =
         // Database.Data.Query.GetCacheByGcCode(aktDraft.gcCode);
 
-        Cache tmpCache = null;
+        AbstractCache tmpAbstractCache = null;
         // suche den Cache aus der DB.
         // Nicht aus der aktuellen Query, da dieser herausgefiltert sein könnte
         CacheList lCaches = new CacheList();
-        CacheListDAO cacheListDAO = new CacheListDAO();
-        cacheListDAO.ReadCacheList(lCaches, "Id = " + aktDraft.CacheId, false, false);
+        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, lCaches, "Id = " + aktDraft.CacheId, false, false);
         if (lCaches.size > 0)
-            tmpCache = lCaches.get(0);
-        final Cache cache = tmpCache;
+            tmpAbstractCache = lCaches.get(0);
+        final AbstractCache abstractCache = tmpAbstractCache;
 
-        if (cache == null && !aktDraft.isTbDraft) {
-            String message = Translation.Get("cacheOtherDb", aktDraft.CacheName);
-            message += "\n" + Translation.Get("fieldNoteNoDelete");
+        if (abstractCache == null && !aktDraft.isTbDraft) {
+            String message = Translation.Get("cacheOtherDb", aktDraft.CacheName.toString());
+            message += "\n" + Translation.Get("draftNoteNoDelete");
             MessageBox.show(message);
             return;
         }
@@ -745,28 +737,27 @@ public class DraftsView extends AbstractView {
                     case ButtonDialog.BUTTON_POSITIVE:
                         // Yes button clicked
                         // delete aktDraft
-                        if (cache != null) {
-                            if (cache.isFound()) {
-                                cache.setFound(false);
-                                CacheDAO cacheDAO = new CacheDAO();
-                                cacheDAO.WriteToDatabase_Found(cache);
+                        if (abstractCache != null) {
+                            if (abstractCache.isFound()) {
+                                abstractCache.setFound(false);
+                                DaoFactory.CACHE_DAO.writeToDatabaseFound(Database.Data, abstractCache);
                                 Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                                 Config.AcceptChanges();
                                 // jetzt noch diesen Cache in der aktuellen CacheListe suchen und auch da den Found-Status zurücksetzen
                                 // damit das Smiley Symbol aus der Map und der CacheList verschwindet
                                 synchronized (Database.Data.Query) {
-                                    Cache tc = Database.Data.Query.GetCacheById(cache.getId());
+                                    AbstractCache tc = Database.Data.Query.GetCacheById(abstractCache.getId());
                                     if (tc != null) {
                                         tc.setFound(false);
                                     }
                                 }
                             }
                         }
-                        fieldNoteEntries.deleteDraft(aktDraft.Id, aktDraft.type);
+                        draftEntries.deleteDraft(aktDraft.Id, aktDraft.type);
 
                         aktDraft = null;
 
-                        fieldNoteEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
+                        draftEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
 
                         loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
 
@@ -785,14 +776,14 @@ public class DraftsView extends AbstractView {
 
         String message = "";
         if (aktDraft.isTbDraft) {
-            message = Translation.Get("confirmFieldnoteDeletionTB", aktDraft.typeString, aktDraft.TbName);
+            message = Translation.Get("confirmDraftDeletionTB", aktDraft.typeString, aktDraft.TbName);
         } else {
-            message = Translation.Get("confirmFieldnoteDeletion", aktDraft.typeString, aktDraft.CacheName);
+            message = Translation.Get("confirmDraftDeletion", aktDraft.typeString, aktDraft.CacheName.toString());
             if (aktDraft.type == LogTypes.found || aktDraft.type == LogTypes.attended || aktDraft.type == LogTypes.webcam_photo_taken)
-                message += Translation.Get("confirmFieldnoteDeletionRst");
+                message += Translation.Get("confirmDraftDeletionRst");
         }
 
-        MessageBox.show(message, Translation.Get("deleteFieldnote"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
+        MessageBox.show(message, Translation.Get("deleteDraft"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
 
     }
 
@@ -804,15 +795,15 @@ public class DraftsView extends AbstractView {
                     case ButtonDialog.BUTTON_POSITIVE:
                         // Yes button clicked
                         // delete all Drafts
-                        // reload all Fieldnotes!
-                        fieldNoteEntries.loadDrafts("", DraftList.LoadingType.LOAD_ALL);
+                        // reload all Drafts!
+                        draftEntries.loadDrafts("", DraftList.LoadingType.LOAD_ALL);
 
-                        for (DraftEntry entry : fieldNoteEntries) {
+                        for (DraftEntry entry : draftEntries) {
                             entry.deleteFromDatabase();
 
                         }
 
-                        fieldNoteEntries.clear();
+                        draftEntries.clear();
                         aktDraft = null;
 
                         loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
@@ -844,16 +835,15 @@ public class DraftsView extends AbstractView {
         // suche den Cache aus der DB.
         // Nicht aus der aktuellen Query, da dieser herausgefiltert sein könnte
         CacheList lCaches = new CacheList();
-        CacheListDAO cacheListDAO = new CacheListDAO();
-        cacheListDAO.ReadCacheList(lCaches, "Id = " + aktDraft.CacheId, false, false);
-        Cache tmpCache = null;
+        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, lCaches, "Id = " + aktDraft.CacheId, false, false);
+        AbstractCache tmpCache = null;
         if (lCaches.size > 0)
             tmpCache = lCaches.get(0);
-        Cache cache = tmpCache;
+        AbstractCache cache = tmpCache;
 
         if (cache == null) {
-            String message = Translation.Get("cacheOtherDb", aktDraft.CacheName);
-            message += "\n" + Translation.Get("fieldNoteNoSelect");
+            String message = Translation.Get("cacheOtherDb", aktDraft.CacheName.toString());
+            message += "\n" + Translation.Get("DraftNoSelect");
             MessageBox.show(message, Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             return;
         }
@@ -867,7 +857,7 @@ public class DraftsView extends AbstractView {
             cache = Database.Data.Query.GetCacheByGcCode(aktDraft.gcCode);
         }
 
-        Waypoint finalWp = null;
+        AbstractWaypoint finalWp = null;
         if (cache != null) {
             if (cache.HasFinalWaypoint())
                 finalWp = cache.GetFinalWaypoint();
@@ -885,7 +875,7 @@ public class DraftsView extends AbstractView {
 
             int index = item.getListIndex();
 
-            aktDraft = fieldNoteEntries.get(index);
+            aktDraft = draftEntries.get(index);
 
             Menu cm = new Menu("CacheListContextMenu");
 
@@ -939,7 +929,7 @@ public class DraftsView extends AbstractView {
     @Override
     public Menu getContextMenu() {
 
-        Cache cache = EventHandler.getSelectedCache();
+        AbstractCache abstractCache = EventHandler.getSelectedCache();
 
         final Menu cm = new Menu("DraftContextMenu");
 
@@ -980,12 +970,12 @@ public class DraftsView extends AbstractView {
             }
         });
 
-        if (cache != null) {
+        if (abstractCache != null) {
 
             // Found je nach CacheType
-            if (cache.getType() == null)
+            if (abstractCache.getType() == null)
                 return null;
-            switch (cache.getType()) {
+            switch (abstractCache.getType()) {
                 case Giga:
                 case MegaEvent:
                 case Event:
@@ -1005,19 +995,19 @@ public class DraftsView extends AbstractView {
         }
 
         // Aktueller Cache ist von geocaching.com dann weitere Menüeinträge freigeben
-        if (cache != null && cache.getGcCode().toLowerCase().startsWith("gc")) {
+        if (abstractCache != null && abstractCache.getGcCode().toString().toLowerCase().startsWith("gc")) {
             cm.addItem(MenuID.MI_MAINTANCE, "maintenance", itemStyle.typeStyle.needs_maintenance);
             cm.addItem(MenuID.MI_NOTE, "writenote", itemStyle.typeStyle.note);
         }
 
         cm.addItem(MenuID.MI_UPLOAD_FIELDNOTE, "uploadDrafts", CB.getSkin().getMenuIcon.uploadDraft);
-        cm.addItem(MenuID.MI_DELETE_ALL_FIELDNOTES, "DeleteAllNotes", CB.getSkin().getMenuIcon.deleteAllDrafts);
+        cm.addItem(MenuID.MI_DELETE_ALL_FIELDNOTES, "DeleteAllDrafts", CB.getSkin().getMenuIcon.deleteAllDrafts);
 
-        if (cache != null) {
+        if (abstractCache != null) {
             MenuItem mi = cm.addItem(MenuID.MI_IMPORT, "ownerLogTypes", CB.getSkin().getMenuIcon.ownerLogTypes);
             mi.setMoreMenu(getSecondMenu());
 
-            if (!cache.ImTheOwner()) {
+            if (!abstractCache.ImTheOwner()) {
                 //disable owner log types
                 mi.setEnabled(false);
             }

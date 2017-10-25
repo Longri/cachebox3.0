@@ -32,7 +32,7 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.CacheListView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.CacheListDAO;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
 import org.slf4j.Logger;
@@ -62,7 +62,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
 
         if (EventHandler.getSelectedCache() != null) {
             // speichere selektierten Cache, da nicht alles über die SelectedCacheEventList läuft
-            Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGcCode());
+            Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGcCode().toString());
             Config.AcceptChanges();
             log.debug("LastSelectedCache = " + EventHandler.getSelectedCache().getGcCode());
         }
@@ -95,7 +95,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
     }
 
     public void loadSelectedDB() {
-        if(CB.viewmanager!=null){
+        if (CB.viewmanager != null) {
             CB.postAsync(new Runnable() {
                 @Override
                 public void run() {
@@ -130,24 +130,23 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
 
         log.debug("Read CacheList");
         CacheList tmpCacheList = new CacheList();
-        CacheListDAO cacheListDAO = new CacheListDAO();
-        cacheListDAO.ReadCacheList(tmpCacheList, sqlWhere, false, Config.ShowAllWaypoints.getValue());
+
+        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, tmpCacheList, sqlWhere, false, Config.ShowAllWaypoints.getValue());
         log.debug("Readed " + tmpCacheList.size + "Caches into CacheList");
         Database.Data.Query = tmpCacheList;
 
         // set selectedCache from last selected Cache
         String sGc = Config.LastSelectedCache.getValue();
-        Cache lastSelectedCache = null;
+        AbstractCache lastSelectedAbstractCache = null;
         if (sGc != null && !sGc.equals("")) {
             for (int i = 0, n = Database.Data.Query.size; i < n; i++) {
-                Cache c = Database.Data.Query.get(i);
+                AbstractCache c = Database.Data.Query.get(i);
 
-                if (c.getGcCode().equalsIgnoreCase(sGc)) {
+                if (c.getGcCode().toString().equalsIgnoreCase(sGc)) {
                     try {
                         log.debug("returnFromSelectDB:Set selectedCache to " + c.getGcCode() + " from lastSaved.");
-                        c.loadDetail();
                         EventHandler.fire(new SelectedCacheChangedEvent(c));
-                        lastSelectedCache = c;
+                        lastSelectedAbstractCache = c;
                     } catch (Exception e) {
                         log.error("set last selected Cache", e);
                     }
@@ -156,7 +155,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             }
         }
         // Wenn noch kein Cache Selected ist dann einfach den ersten der Liste aktivieren
-        if ((lastSelectedCache == null) && (Database.Data.Query.size > 0)) {
+        if ((lastSelectedAbstractCache == null) && (Database.Data.Query.size > 0)) {
             log.debug("Set selectedCache to " + Database.Data.Query.get(0).getGcCode() + " from firstInDB");
             EventHandler.fire(new SelectedCacheChangedEvent(Database.Data.Query.get(0)));
         }

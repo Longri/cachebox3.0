@@ -39,7 +39,7 @@ public class EditTextBox extends WidgetGroup {
     private VisLabel textLabel;
     private VisScrollPane scrollPane;
     private Button editButton;
-    private String text;
+    private CharSequence text;
     private EditTextStyle style;
     private float maxWidth = 0;
 
@@ -74,9 +74,9 @@ public class EditTextBox extends WidgetGroup {
                 };
 
                 if (singleLine) {
-                    PlatformConnector.getSinglelineTextInput(listener, "", EditTextBox.this.text, "");
+                    PlatformConnector.getSinglelineTextInput(listener, "", EditTextBox.this.text.toString(), "");
                 } else {
-                    PlatformConnector.getMultilineTextInput(listener, "", EditTextBox.this.text, "");
+                    PlatformConnector.getMultilineTextInput(listener, "", EditTextBox.this.text.toString(), "");
                 }
             }
         };
@@ -111,7 +111,7 @@ public class EditTextBox extends WidgetGroup {
     }
 
 
-    public void setText(String text) {
+    public void setText(CharSequence text) {
         this.text = text;
         textLabel.setText(text);
     }
@@ -147,10 +147,10 @@ public class EditTextBox extends WidgetGroup {
 
     @Override
     public float getPrefHeight() {
-        if(textLabel.getPrefHeight()+ style.background.getMinHeight()>getMaxHeight()){
+        if (textLabel.getPrefHeight() + style.background.getMinHeight() > getMaxHeight()) {
             return getMaxHeight();
         }
-        return textLabel.getPrefHeight()+ style.background.getMinHeight();
+        return textLabel.getPrefHeight() + style.background.getMinHeight();
     }
 
     @Override
@@ -170,10 +170,10 @@ public class EditTextBox extends WidgetGroup {
 
 
     public String getText() {
-        return this.text;
+        return this.text.toString();
     }
 
     public EditTextStyle getStyle() {
-       return this.style;
+        return this.style;
     }
 }

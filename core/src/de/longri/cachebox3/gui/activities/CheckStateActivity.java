@@ -47,9 +47,9 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.CacheDAO;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -177,7 +177,7 @@ public class CheckStateActivity extends ActivityBase {
             public void run() {
 
                 ApiResultState result = ApiResultState.UNKNOWN;
-                final Array<Cache> chkList = new Array<>();
+                final Array<AbstractCache> chkList = new Array<>();
 
                 synchronized (Database.Data.Query) {
                     if (Database.Data.Query == null || Database.Data.Query.size == 0)
@@ -192,8 +192,8 @@ public class CheckStateActivity extends ActivityBase {
                 // in Blöcke Teilen
                 int start = 0;
                 int stop = blockSize;
-                Array<Cache> addedReturnList = new Array<>();
-                Array<Cache> chkList100;
+                Array<AbstractCache> addedReturnList = new Array<>();
+                Array<AbstractCache> chkList100;
 
                 ApiCallLimitListener limitListener = new ApiCallLimitListener() {
                     @Override
@@ -215,7 +215,7 @@ public class CheckStateActivity extends ActivityBase {
                         break;
                     }
 
-                    Iterator<Cache> Iterator2 = chkList.iterator();
+                    Iterator<AbstractCache> Iterator2 = chkList.iterator();
 
                     int index = 0;
                     do {
@@ -252,11 +252,10 @@ public class CheckStateActivity extends ActivityBase {
                 //Write changes to DB
                 final AtomicInteger changedCount = new AtomicInteger(0);
                 Database.Data.beginTransaction();
-                Iterator<Cache> iterator = addedReturnList.iterator();
-                CacheDAO dao = new CacheDAO();
+                Iterator<AbstractCache> iterator = addedReturnList.iterator();
                 do {
-                    Cache writeTmp = iterator.next();
-                    if (dao.UpdateDatabaseCacheState(writeTmp))
+                    AbstractCache writeTmp = iterator.next();
+                    if (DaoFactory.CACHE_DAO.updateDatabaseCacheState(Database.Data, writeTmp))
                         changedCount.incrementAndGet();
                 } while (iterator.hasNext());
 

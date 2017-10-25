@@ -37,8 +37,9 @@ import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.types.MutableWaypoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +51,7 @@ public class EditWaypoint extends ActivityBase {
     private final static Logger log = LoggerFactory.getLogger(EditWaypoint.class);
 
     private final EditWaypointStyle style;
-    private final Waypoint waypoint;
+    private final AbstractWaypoint waypoint;
     private final VisTextButton btnOk, btnCancel;
     private final VisLabel cacheTitelLabel, titleLabel, typeLabel, descriptionLabel, clueLabel, startLabel;
     private final EditTextBox titleTextArea, descriptionTextArea, clueTextArea;
@@ -59,9 +60,9 @@ public class EditWaypoint extends ActivityBase {
     private final VisCheckBox startCheckBox;
     private final SelectBox<CacheTypes> selectBox;
     private final boolean showCoordsOnShow;
-    private final GenericCallBack<Waypoint> callBack;
+    private final GenericCallBack<AbstractWaypoint> callBack;
 
-    public EditWaypoint(final Waypoint waypoint, boolean showCoordsOnShow, GenericCallBack<Waypoint> callBack) {
+    public EditWaypoint(final AbstractWaypoint waypoint, boolean showCoordsOnShow, GenericCallBack<AbstractWaypoint> callBack) {
         super("EditWaypoint");
         style = null;
         this.waypoint = waypoint;
@@ -70,7 +71,7 @@ public class EditWaypoint extends ActivityBase {
 
         btnOk = new VisTextButton(Translation.Get("save"));
         btnCancel = new VisTextButton(Translation.Get("cancel"));
-        cacheTitelLabel = new VisLabel(Database.Data.Query.GetCacheById(waypoint.CacheId).getName());
+        cacheTitelLabel = new VisLabel(Database.Data.Query.GetCacheById(waypoint.getCacheId()).getName());
         typeLabel = new VisLabel(Translation.Get("type"));
         titleLabel = new VisLabel(Translation.Get("Title"));
         descriptionLabel = new VisLabel(Translation.Get("Description"));
@@ -96,8 +97,8 @@ public class EditWaypoint extends ActivityBase {
         selectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                EditWaypoint.this.waypoint.Type = selectBox.getSelected();
-                showCbStartPoint(EditWaypoint.this.waypoint.Type == CacheTypes.MultiStage);
+                EditWaypoint.this.waypoint.setType(selectBox.getSelected());
+                showCbStartPoint(EditWaypoint.this.waypoint.getType() == CacheTypes.MultiStage);
             }
         });
         selectBox.set(itemList);
@@ -139,9 +140,9 @@ public class EditWaypoint extends ActivityBase {
         descriptionTextArea.setMaxLineCount(lineCount);
         clueTextArea.setMaxLineCount(lineCount);
         titleTextArea.setText((waypoint.getTitle() == null) ? "" : waypoint.getTitle());
-        descriptionTextArea.setText(waypoint.getDescription() == null ? "" : waypoint.getDescription());
-        clueTextArea.setText(waypoint.getClue() == null ? "" : waypoint.getClue());
-        selectBox.select(waypoint.Type);
+        descriptionTextArea.setText(waypoint.getDescription(Database.Data) == null ? "" : waypoint.getDescription(Database.Data));
+        clueTextArea.setText(waypoint.getClue(Database.Data) == null ? "" : waypoint.getClue(Database.Data));
+        selectBox.select(waypoint.getType());
     }
 
 
@@ -172,11 +173,13 @@ public class EditWaypoint extends ActivityBase {
         btnOk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 Coordinate coor = coordinateButton.getCoordinate();
-                Waypoint newWaypoint = new Waypoint(coor.latitude, coor.longitude, waypoint);
+                AbstractWaypoint newWaypoint = new MutableWaypoint(Database.Data, waypoint);
+                newWaypoint.setLatitude(coor.latitude);
+                newWaypoint.setLongitude(coor.longitude);
                 newWaypoint.setTitle(titleTextArea.getText());
                 newWaypoint.setDescription(descriptionTextArea.getText());
                 newWaypoint.setClue(clueTextArea.getText());
-                newWaypoint.IsStart = startCheckBox.isChecked();
+                newWaypoint.setStart(startCheckBox.isChecked());
                 callBack.callBack(newWaypoint);
                 finish();
             }

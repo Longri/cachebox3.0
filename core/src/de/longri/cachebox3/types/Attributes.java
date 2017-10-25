@@ -16,6 +16,7 @@
 package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 
 import java.util.ArrayList;
@@ -319,8 +320,8 @@ public enum Attributes {
         attributeLookup.put(Attributes.GeoTour, 67);
     }
 
-    public static ArrayList<Attributes> getAttributes(DLong attributesPositive, DLong attributesNegative) {
-        ArrayList<Attributes> ret = new ArrayList<Attributes>();
+    public static Array<Attributes> getAttributes(DLong attributesPositive, DLong attributesNegative) {
+        Array<Attributes> ret = new Array<>();
         if (attributeLookup == null)
             ini();
         for (Attributes attribute : attributeLookup.keySet()) {
@@ -784,11 +785,17 @@ public enum Attributes {
         return null;
     }
 
-    public void setPositive() {
+    public Attributes setPositive() {
         this.negative = false;
+        return this;
     }
 
-    public void setNegative() {
+    public Attributes setNegative() {
         this.negative = true;
+        return this;
+    }
+
+    public boolean isNegative() {
+        return negative;
     }
 }

@@ -36,7 +36,7 @@ import de.longri.cachebox3.locator.track.Track;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.ScaledSizes;
@@ -95,7 +95,7 @@ public class CB {
     public static final String splashMsg = AboutMsg + br + br + "POWERED BY:";
 
 
-    private static Cache nearestCache = null;
+    private static AbstractCache nearestAbstractCache = null;
     private static boolean autoResort;
     public static boolean switchToCompassCompleted = false;
     public static String cacheHistory = "";
@@ -267,13 +267,13 @@ public class CB {
     }
 
 
-    public static void setNearestCache(Cache Cache) {
-        nearestCache = Cache;
+    public static void setNearestCache(AbstractCache AbstractCache) {
+        nearestAbstractCache = AbstractCache;
     }
 
 
-    public static Cache NearestCache() {
-        return nearestCache;
+    public static AbstractCache NearestCache() {
+        return nearestAbstractCache;
     }
 
 
@@ -346,7 +346,7 @@ public class CB {
         return;
     }
 
-    public static Cache getCacheFromId(long cacheId) {
+    public static AbstractCache getCacheFromId(long cacheId) {
         return Database.Data.Query.GetCacheById(cacheId);
     }
 

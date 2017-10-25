@@ -22,7 +22,7 @@ import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.NetUtils;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
@@ -136,32 +136,32 @@ public class DescriptionImageGrabber {
     }
 
     /**
-     * @param cache
+     * @param abstractCache
      * @param html
      * @param suppressNonLocalMedia
      * @param nonLocalImages
      * @param nonLocalImagesUrl
      * @return
      */
-    public static String resolveImages(Cache cache, String html, boolean suppressNonLocalMedia, LinkedList<String> nonLocalImages, LinkedList<String> nonLocalImagesUrl) {
+    public static String resolveImages(AbstractCache abstractCache, String html, boolean suppressNonLocalMedia, LinkedList<String> nonLocalImages, LinkedList<String> nonLocalImagesUrl) {
         /*
          * NonLocalImages = new List<string>(); NonLocalImagesUrl = new List<string>();
 		 */
 
         URI baseUri;
         try {
-            baseUri = URI.create(cache.getUrl());
+            baseUri = URI.create(abstractCache.getUrl());
         } catch (Exception exc) {
-            log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", cache.getUrl(), exc);
+            log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", abstractCache.getUrl(), exc);
             baseUri = null;
         }
 
         if (baseUri == null) {
-            cache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + cache.getGcCode());
+            abstractCache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + abstractCache.getGcCode());
             try {
-                baseUri = URI.create(cache.getUrl());
+                baseUri = URI.create(abstractCache.getUrl());
             } catch (Exception exc) {
-                log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", cache.getUrl(), exc);
+                log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", abstractCache.getUrl(), exc);
                 return html;
             }
         }
@@ -185,7 +185,7 @@ public class DescriptionImageGrabber {
                 try {
                     URI imgUri = URI.create(/* baseUri, */src); // NICHT
                     // ORGINAL!!!!!!!!!
-                    String localFile = BuildImageFilename(cache.getGcCode(), imgUri);
+                    String localFile = BuildImageFilename(abstractCache.getGcCode().toString(), imgUri);
 
                     if (Utils.FileExistsNotEmpty(localFile)) {
                         int idx = 0;
@@ -227,54 +227,54 @@ public class DescriptionImageGrabber {
         return html;
     }
 
-    public static LinkedList<String> GetAllImages(Cache Cache) {
-
-        LinkedList<String> images = new LinkedList<String>();
-
-        URI baseUri;
-        try {
-            baseUri = URI.create(Cache.getUrl());
-        } catch (Exception exc) {
-            baseUri = null;
-        }
-
-        if (baseUri == null) {
-            Cache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + Cache.getGcCode());
-            try {
-                baseUri = URI.create(Cache.getUrl());
-            } catch (Exception exc) {
-                return images;
-            }
-        }
-
-        CB_List<Segment> imgTags = Segmentize(Cache.getShortDescription(), "<img", ">");
-
-        imgTags.addAll(Segmentize(Cache.getLongDescription(), "<img", ">"));
-
-        for (int i = 0, n = imgTags.size; i < n; i++) {
-            Segment img = imgTags.get(i);
-            int srcStart = -1;
-            int srcEnd = -1;
-            int srcIdx = img.text.toLowerCase().indexOf("src=");
-            if (srcIdx != -1)
-                srcStart = img.text.indexOf('"', srcIdx + 4);
-            if (srcStart != -1)
-                srcEnd = img.text.indexOf('"', srcStart + 1);
-
-            if (srcIdx != -1 && srcStart != -1 && srcEnd != -1) {
-                String src = img.text.substring(srcStart + 1, srcEnd);
-                try {
-                    URI imgUri = URI.create(src);
-
-                    images.add(imgUri.toString());
-
-                } catch (Exception exc) {
-                }
-            }
-        }
-
-        return images;
-    }
+//    public static LinkedList<String> GetAllImages(AbstractCache AbstractCache) {
+//
+//        LinkedList<String> images = new LinkedList<String>();
+//
+//        URI baseUri;
+//        try {
+//            baseUri = URI.create(AbstractCache.getUrl());
+//        } catch (Exception exc) {
+//            baseUri = null;
+//        }
+//
+//        if (baseUri == null) {
+//            AbstractCache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + AbstractCache.getGcCode());
+//            try {
+//                baseUri = URI.create(AbstractCache.getUrl());
+//            } catch (Exception exc) {
+//                return images;
+//            }
+//        }
+//
+//        CB_List<Segment> imgTags = Segmentize(AbstractCache.getShortDescription(), "<img", ">");
+//
+//        imgTags.addAll(Segmentize(AbstractCache.getLongDescription(), "<img", ">"));
+//
+//        for (int i = 0, n = imgTags.size; i < n; i++) {
+//            Segment img = imgTags.get(i);
+//            int srcStart = -1;
+//            int srcEnd = -1;
+//            int srcIdx = img.text.toLowerCase().indexOf("src=");
+//            if (srcIdx != -1)
+//                srcStart = img.text.indexOf('"', srcIdx + 4);
+//            if (srcStart != -1)
+//                srcEnd = img.text.indexOf('"', srcStart + 1);
+//
+//            if (srcIdx != -1 && srcStart != -1 && srcEnd != -1) {
+//                String src = img.text.substring(srcStart + 1, srcEnd);
+//                try {
+//                    URI imgUri = URI.create(src);
+//
+//                    images.add(imgUri.toString());
+//
+//                } catch (Exception exc) {
+//                }
+//            }
+//        }
+//
+//        return images;
+//    }
 
     public static LinkedList<URI> GetImageUris(String html, String baseUrl) {
 

@@ -24,6 +24,7 @@ import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.junit.jupiter.api.Test;
@@ -77,7 +78,7 @@ class SearchGcOwnerTest {
         Coordinate searchCoord = new CoordinateGPS(52.581892, 13.398128); // Home of Katipa(like Longri)
 
 
-        final CB_List<Cache> cacheList = new CB_List<>();
+        final CB_List<AbstractCache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();
         final SearchGCOwner searchGC = new SearchGCOwner(apiKey, 30, searchCoord, 50000, "bros", (byte) 2) {
@@ -89,18 +90,12 @@ class SearchGcOwnerTest {
                 imageList.add(imageEntry);
             }
 
-            protected void writeCacheToDB(final Cache cache) {
+            protected void writeCacheToDB(final AbstractCache cache) {
                 cacheList.add(cache);
             }
         };
 
         final AtomicBoolean WAIT = new AtomicBoolean(true);
-//        final CB_List<Cache> cacheList = new CB_List<>();
-//        final CB_List<LogEntry> logList = new CB_List<>();
-//        final CB_List<ImageEntry> imageList = new CB_List<>();
-//        final long gpxFilenameId = 10;
-//
-//        searchGC.setLists(cacheList, logList, imageList, gpxFilenameId);
 
         Net.HttpResponse response = new Net.HttpResponse() {
             @Override
@@ -139,51 +134,51 @@ class SearchGcOwnerTest {
             public void callBack(ApiResultState value) {
 
                 assertEquals(23, cacheList.size);
-                Cache cache = cacheList.first();
+                AbstractCache abstractCache = cacheList.first();
 
-                assertEquals(false, cache.isArchived());
-                assertEquals(true, cache.isAvailable());
-                assertEquals("GC18JGX", cache.getGcCode());
-                assertEquals(2, cache.getWaypoints().size);
+                assertEquals(false, abstractCache.isArchived());
+                assertEquals(true, abstractCache.isAvailable());
+                assertEquals("GC18JGX", abstractCache.getGcCode());
+                assertEquals(2, abstractCache.getWaypoints().size);
 
-                Waypoint waypoint = cache.getWaypoints().first();
+                AbstractWaypoint waypoint = abstractCache.getWaypoints().first();
                 assertEquals("PA18JGX", waypoint.getGcCode());
-                assertEquals("Parkmöglichkeit", waypoint.getDescription());
+                assertEquals("Parkmöglichkeit", waypoint.getDescription(Database.Data));
                 assertEquals("Parking", waypoint.getTitle());
-                assertEquals(CacheTypes.ParkingArea, waypoint.Type);
+                assertEquals(CacheTypes.ParkingArea, waypoint.getType());
                 assertEquals(52.633667, waypoint.getLatitude());
                 assertEquals(13.375917, waypoint.getLongitude());
 
-                Waypoint userWaypoint = cache.getWaypoints().last();
+                AbstractWaypoint userWaypoint = abstractCache.getWaypoints().peek();
                 assertEquals("CO18JGX", userWaypoint.getGcCode());
-                assertEquals("", userWaypoint.getDescription());
+                assertEquals("", userWaypoint.getDescription(Database.Data));
                 assertEquals("Corrected Coordinates (API)", userWaypoint.getTitle());
-                assertEquals(CacheTypes.Final, userWaypoint.Type);
+                assertEquals(CacheTypes.Final, userWaypoint.getType());
                 assertEquals(52.616666666666667, userWaypoint.getLatitude());
                 assertEquals(13.366666666666667, userWaypoint.getLongitude());
-                assertEquals(true, userWaypoint.IsUserWaypoint);
+                assertEquals(true, userWaypoint.isUserWaypoint());
 
-                assertEquals(CacheTypes.Traditional, cache.getType());
-                assertEquals(CacheSizes.other, cache.getSize());
-                assertEquals("Germany", cache.getCountry());
-                assertEquals(new Date(1200211200000L), cache.getDateHidden());
-                assertEquals(1.5f, cache.getDifficulty());
-                assertEquals("bücken!", cache.getHint());
-                assertEquals(0, cache.getFaviritPoints());
-                assertEquals(false, cache.isFound());
-                assertEquals("768551", cache.getGcId());
-                assertTrue(cache.getLongDescription().startsWith("Vom empfohlenen Parkplatz beträgt die Wegstrecke etwa 500 m. Der Cac"));
-                assertEquals("Weideblick", cache.getName());
-                assertEquals("bros", cache.getOwner());
-                assertEquals("bros", cache.getPlacedBy());
-                assertEquals("Ein weiterer Cache im Tegeler Fließtal", cache.getShortDescription());
-                assertEquals(2f, cache.getTerrain());
-                assertEquals("http://coord.info/GC18JGX", cache.getUrl());
-                assertEquals(2, cache.getApiState());
-                assertEquals(52.62965, cache.getLatitude());
-                assertEquals(13.372317, cache.getLongitude());
+                assertEquals(CacheTypes.Traditional, abstractCache.getType());
+                assertEquals(CacheSizes.small, abstractCache.getSize());
+                assertEquals("Germany", abstractCache.getCountry());
+                assertEquals(new Date(1200211200000L), abstractCache.getDateHidden());
+                assertEquals(1.5f, abstractCache.getDifficulty());
+                assertEquals("bücken!", abstractCache.getHint(Database.Data));
+                assertEquals(0, abstractCache.getFavoritePoints());
+                assertEquals(false, abstractCache.isFound());
+                assertEquals("768551", abstractCache.getGcId());
+                assertTrue(abstractCache.getLongDescription(Database.Data).startsWith("Vom empfohlenen Parkplatz beträgt die Wegstrecke etwa 500 m. Der Cac"));
+                assertEquals("Weideblick", abstractCache.getName());
+                assertEquals("bros", abstractCache.getOwner());
+                assertEquals("bros", abstractCache.getPlacedBy());
+                assertEquals("Ein weiterer Cache im Tegeler Fließtal", abstractCache.getShortDescription(Database.Data));
+                assertEquals(2f, abstractCache.getTerrain());
+                assertEquals("http://coord.info/GC18JGX", abstractCache.getUrl());
+                assertEquals(2, abstractCache.getApiState());
+                assertEquals(52.62965, abstractCache.getLatitude());
+                assertEquals(13.372317, abstractCache.getLongitude());
 
-                assertEquals(2, cache.getWaypoints().size);
+                assertEquals(2, abstractCache.getWaypoints().size);
 
                 // Attribute Tests
 
@@ -198,20 +193,17 @@ class SearchGcOwnerTest {
                     positiveList.add(Attributes.Public_transportation);
                     positiveList.add(Attributes.Bicycles);
 
-//                    negativeList.add(Attributes.Wheelchair_accessible);
-//                    negativeList.add(Attributes.Horses);
-//                    negativeList.add(Attributes.Campfires);
 
                 }
 
-                TestUtils.assetCacheAttributes(cache, positiveList, negativeList);
+                TestUtils.assetCacheAttributes(abstractCache, positiveList, negativeList);
 
 
                 //check Logs
                 assertEquals(230, logList.size);
                 LogEntry logEntry = logList.first();
 
-                assertEquals(Cache.GenerateCacheId(cache.getGcCode()), logEntry.CacheId);
+                assertEquals(AbstractCache.GenerateCacheId(abstractCache.getGcCode().toString()), logEntry.CacheId);
                 assertEquals(678589990, logEntry.Id);
                 assertEquals(LogTypes.found, logEntry.Type);
                 assertTrue(logEntry.Comment.startsWith("Fast in Berlin, fast auf'm Lan"));
@@ -220,7 +212,7 @@ class SearchGcOwnerTest {
 
                 logEntry = logList.last();
 
-                assertEquals(Cache.GenerateCacheId("GC3FHRP"), logEntry.CacheId);
+                assertEquals(AbstractCache.GenerateCacheId("GC3FHRP"), logEntry.CacheId);
                 assertEquals(664057049, logEntry.Id);
                 assertEquals(LogTypes.found, logEntry.Type);
                 assertTrue(logEntry.Comment.startsWith("Heute war ich am Morgen hier bei Neptun zu Besuch."));
@@ -246,7 +238,7 @@ class SearchGcOwnerTest {
     void testOnline() {
         if (isDummy) return;
         Coordinate searchCoord = new CoordinateGPS(52.581892, 13.398128); // Home of Katipa(like Longri)
-        final CB_List<Cache> cacheList = new CB_List<>();
+        final CB_List<AbstractCache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();
         final SearchGCOwner searchGC = new SearchGCOwner(apiKey, 30, searchCoord, 50000, "bros", (byte) 2) {
@@ -258,7 +250,7 @@ class SearchGcOwnerTest {
                 imageList.add(imageEntry);
             }
 
-            protected void writeCacheToDB(final Cache cache) {
+            protected void writeCacheToDB(final AbstractCache cache) {
                 cacheList.add(cache);
             }
         };
@@ -273,41 +265,41 @@ class SearchGcOwnerTest {
                 public void callBack(ApiResultState value) {
 
                     try {
-                        assertEquals(23, cacheList.size);
-                        Cache cache = cacheList.first();
+                        assertEquals(22, cacheList.size);
+                        AbstractCache abstractCache = cacheList.first();
 
-                        assertEquals(false, cache.isArchived());
-                        assertEquals(true, cache.isAvailable());
-                        assertEquals("GC18JGX", cache.getGcCode());
-                        assertEquals(2, cache.getWaypoints().size);
+                        assertEquals(false, abstractCache.isArchived());
+                        assertEquals(true, abstractCache.isAvailable());
+                        assertEquals("GC18JGX", abstractCache.getGcCode());
+                        assertEquals(2, abstractCache.getWaypoints().size);
 
-                        Waypoint waypoint = cache.getWaypoints().first();
+                        AbstractWaypoint waypoint = abstractCache.getWaypoints().first();
                         assertEquals("PA18JGX", waypoint.getGcCode());
-                        assertEquals("Parkmöglichkeit", waypoint.getDescription());
+                        assertEquals("Parkmöglichkeit", waypoint.getDescription(Database.Data));
                         assertEquals("Parking", waypoint.getTitle());
-                        assertEquals(CacheTypes.ParkingArea, waypoint.Type);
+                        assertEquals(CacheTypes.ParkingArea, waypoint.getType());
                         assertEquals(52.633667, waypoint.getLatitude());
                         assertEquals(13.375917, waypoint.getLongitude());
 
-                        assertEquals(CacheTypes.Traditional, cache.getType());
-                        assertEquals(CacheSizes.other, cache.getSize());
-                        assertEquals("Germany", cache.getCountry());
-                        assertEquals(new Date(1200211200000L), cache.getDateHidden());
-                        assertEquals(1.5f, cache.getDifficulty());
-                        assertEquals("bücken!", cache.getHint());
-                        assertEquals(0, cache.getFaviritPoints());
-                        assertEquals(false, cache.isFound());
-                        assertEquals("768551", cache.getGcId());
-                        assertTrue(cache.getLongDescription().startsWith("Vom empfohlenen Parkplatz beträgt die Wegstrecke etwa 500 m. Der Cac"));
-                        assertEquals("Weideblick", cache.getName());
-                        assertEquals("bros", cache.getOwner());
-                        assertEquals("bros", cache.getPlacedBy());
-                        assertEquals("Ein weiterer Cache im Tegeler Fließtal", cache.getShortDescription());
-                        assertEquals(2f, cache.getTerrain());
-                        assertEquals("http://coord.info/GC18JGX", cache.getUrl());
-                        assertEquals(2, cache.getApiState());
-                        assertEquals(52.62965, cache.getLatitude());
-                        assertEquals(13.372317, cache.getLongitude());
+                        assertEquals(CacheTypes.Traditional, abstractCache.getType());
+                        assertEquals(CacheSizes.small, abstractCache.getSize());
+                        assertEquals("Germany", abstractCache.getCountry());
+                        assertEquals(new Date(1200211200000L), abstractCache.getDateHidden());
+                        assertEquals(1.5f, abstractCache.getDifficulty());
+                        assertEquals("bücken!", abstractCache.getHint(Database.Data));
+                        assertEquals(0, abstractCache.getFavoritePoints());
+                        assertEquals(false, abstractCache.isFound());
+                        assertEquals("768551", abstractCache.getGcId());
+                        assertTrue(abstractCache.getLongDescription(Database.Data).startsWith("Vom empfohlenen Parkplatz beträgt die Wegstrecke etwa 500 m. Der Cac"));
+                        assertEquals("Weideblick", abstractCache.getName());
+                        assertEquals("bros", abstractCache.getOwner());
+                        assertEquals("bros", abstractCache.getPlacedBy());
+                        assertEquals("Ein weiterer Cache im Tegeler Fließtal", abstractCache.getShortDescription(Database.Data));
+                        assertEquals(2f, abstractCache.getTerrain());
+                        assertEquals("http://coord.info/GC18JGX", abstractCache.getUrl());
+                        assertEquals(2, abstractCache.getApiState());
+                        assertEquals(52.62965, abstractCache.getLatitude());
+                        assertEquals(13.372317, abstractCache.getLongitude());
 
                         // Attribute Tests
 
@@ -323,17 +315,17 @@ class SearchGcOwnerTest {
                             positiveList.add(Attributes.Bicycles);
                         }
 
-                        TestUtils.assetCacheAttributes(cache, positiveList, negativeList);
+                        TestUtils.assetCacheAttributes(abstractCache, positiveList, negativeList);
 
 
                         //check Logs
-                        assertEquals(230, logList.size);
+                        assertEquals(220, logList.size);
                         LogEntry logEntry = logList.first();
 
-                        assertEquals(Cache.GenerateCacheId(cache.getGcCode()), logEntry.CacheId);
+                        assertEquals(AbstractCache.GenerateCacheId(abstractCache.getGcCode().toString()), logEntry.CacheId);
                         logEntry = logList.last();
 
-                        assertEquals(Cache.GenerateCacheId("GC3FHRP"), logEntry.CacheId);
+                        assertEquals(AbstractCache.GenerateCacheId("GC3FHRP"), logEntry.CacheId);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

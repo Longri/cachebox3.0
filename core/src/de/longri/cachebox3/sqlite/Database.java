@@ -30,7 +30,10 @@ import org.slf4j.LoggerFactory;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 
 
 public class Database {
@@ -48,7 +51,7 @@ public class Database {
         // welche GPXFilenamen sind in der DB erfasst
         beginTransaction();
         try {
-            SQLiteGdxDatabaseCursor reader = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from Caches where GPXFilename_ID is not null Group by GPXFilename_ID", null);
+            SQLiteGdxDatabaseCursor reader = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from CacheInfo where GPXFilename_ID is not null Group by GPXFilename_ID", null);
             reader.moveToFirst();
 
             while (reader.isAfterLast() == false) {
@@ -63,7 +66,7 @@ public class Database {
             }
 
             delete("GPXFilenames", "Cachecount is NULL or CacheCount = 0", null);
-            delete("GPXFilenames", "ID not in (Select GPXFilename_ID From Caches)", null);
+            delete("GPXFilenames", "ID not in (Select GPXFilename_ID From CacheInfo)", null);
             reader.close();
             setTransactionSuccessful();
         } catch (Exception e) {
@@ -83,20 +86,20 @@ public class Database {
         return false;
     }
 
-    public static Array<LogEntry> getLogs(Cache cache) {
+    public static Array<LogEntry> getLogs(AbstractCache abstractCache) {
         Array<LogEntry> result = new Array<LogEntry>();
-        if (cache == null) // if no cache is selected!
+        if (abstractCache == null) // if no cache is selected!
             return result;
 
 
         //TODO Qerry with args not working on iOS
 //      SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId=@cacheid order by Timestamp desc", new String[]{Long.toString(cache.Id)});
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(cache.getId()) + "\"", null);
+        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(abstractCache.getId()) + "\"", null);
 
 
         reader.moveToFirst();
         while (!reader.isAfterLast()) {
-            LogEntry logent = getLogEntry(cache, reader, true);
+            LogEntry logent = getLogEntry(abstractCache, reader, true);
             if (logent != null)
                 result.add(logent);
             reader.moveToNext();
@@ -105,7 +108,7 @@ public class Database {
         return result;
     }
 
-    private static LogEntry getLogEntry(Cache cache, SQLiteGdxDatabaseCursor reader, boolean filterBbCode) {
+    private static LogEntry getLogEntry(AbstractCache abstractCache, SQLiteGdxDatabaseCursor reader, boolean filterBbCode) {
         int intLogType = reader.getInt(3);
         if (intLogType < 0 || intLogType > 13)
             return null;
@@ -136,8 +139,13 @@ public class Database {
         return retLogEntry;
     }
 
+    public void disableAutoCommit() {
+        myDB.setAutoCommit(false);
+    }
+
+
     public enum DatabaseType {
-        CacheBox, Drafts, Settings
+        CacheBox3, Drafts, Settings
     }
 
     protected DatabaseType databaseType;
@@ -149,7 +157,7 @@ public class Database {
         log = LoggerFactory.getLogger("Database." + databaseType);
 
         switch (databaseType) {
-            case CacheBox:
+            case CacheBox3:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseChange;
                 Query = new CacheList();
                 break;
@@ -222,7 +230,7 @@ public class Database {
         }
 
 
-        if (databaseType == DatabaseType.CacheBox) { // create or load DatabaseId for each
+        if (databaseType == DatabaseType.CacheBox3) { // create or load DatabaseId for each
             DatabaseId = readConfigLong("DatabaseId");
             if (DatabaseId <= 0) {
                 DatabaseId = new Date().getTime();
@@ -455,10 +463,8 @@ public class Database {
 
 
         switch (databaseType) {
-            case CacheBox:
-
-                new AlterCacheboxDB().alterCacheboxDB(this,lastDatabaseSchemeVersion);
-
+            case CacheBox3:
+                new AlterCachebox3DB().alterCachebox3DB(this, lastDatabaseSchemeVersion);
                 break;
             case Drafts:
                 beginTransaction();
@@ -835,10 +841,22 @@ public class Database {
         try {
             SQLiteGdxDatabase tempDB = SQLiteGdxDatabaseFactory.getNewDatabase(Gdx.files.absolute(absolutePath));
             tempDB.openOrCreateDatabase();
-            SQLiteGdxDatabaseCursor result = tempDB.rawQuery("SELECT COUNT(*) FROM caches", null);
-            result.moveToFirst();
-            int count = result.getInt(0);
-            result.close();
+
+            //get schema version
+            SQLiteGdxDatabaseCursor cursor = tempDB.rawQuery("SELECT Value FROM Config WHERE [Key] like ?", new String[]{"DatabaseSchemeVersionWin"});
+            cursor.moveToFirst();
+            int version = Integer.parseInt(cursor.getString(0));
+
+            if (version < 1028) {
+                cursor = tempDB.rawQuery("SELECT COUNT(*) FROM caches", null);
+            } else {
+                cursor = tempDB.rawQuery("SELECT COUNT(*) FROM CacheCoreInfo", null);
+            }
+
+
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            cursor.close();
             tempDB.closeDatabase();
             return count;
         } catch (Exception exc) {

@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.gui.dialogs;
 
+import de.longri.cachebox3.CB;
+
 /**
  * Created by Longri on 02.09.2017.
  * <p>
@@ -25,17 +27,21 @@ public class MessageBox {
     private final static String NAME = "MessageBox";
 
 
-    public static void show(String message) {
+    public static void show(CharSequence message) {
         show(message, null, MessageBoxButtons.OK, null, null);
     }
 
-//    public static void show(String lastAPIError, String error, MessageBoxIcon icon) {
-//show();
-//    }
-
-    public static void show(String message, String title, MessageBoxButtons buttons, MessageBoxIcon icon,
+    public static void show(CharSequence message, CharSequence title, MessageBoxButtons buttons, MessageBoxIcon icon,
                             OnMsgBoxClickListener clickListener) {
-        new ButtonDialog(NAME, message, title, buttons, icon, clickListener).show();
+
+        CB.postOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                new ButtonDialog(NAME, message, title, buttons, icon, clickListener).show();
+            }
+        });
+
+
     }
 
 

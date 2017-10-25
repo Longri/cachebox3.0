@@ -19,8 +19,10 @@ package de.longri.cachebox3.gui.events;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.ImmutableCache;
+import de.longri.cachebox3.types.MutableCache;
 
 import java.util.ArrayList;
 
@@ -49,15 +51,15 @@ public class CacheListChangedEventList {
         if (CB.isDisplayOff())
             return;
 
-        Cache cache = Database.Data.Query.GetCacheByGcCode("CBPark");
+        AbstractCache abstractCache = Database.Data.Query.GetCacheByGcCode("CBPark");
 
-        if (cache != null)
-            Database.Data.Query.removeValue(cache, false);
+        if (abstractCache != null)
+            Database.Data.Query.removeValue(abstractCache, false);
 
         // add Parking Cache
         if (Config.ParkingLatitude.getValue() != 0) {
-            cache = new Cache(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
-            Database.Data.Query.insert(0, cache);
+            abstractCache = new MutableCache(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
+            Database.Data.Query.insert(0, abstractCache);
         }
 
         //TODO add Live Caches

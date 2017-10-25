@@ -28,41 +28,38 @@ import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Stars;
-import de.longri.cachebox3.types.Cache;
-import de.longri.cachebox3.types.CacheSizes;
-import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.LogTypes;
+import de.longri.cachebox3.types.*;
 
 /**
  * Created by Longri on 05.09.2016.
  */
 public class CacheListItem extends ListViewItem implements Disposable {
 
-    public static ListViewItem getListItem(int listIndex, final Cache cache) {
-        if (cache == null) return null;
+    public static ListViewItem getListItem(int listIndex, final AbstractCache abstractCache) {
+        if (abstractCache == null) return null;
 
 
         LogTypes left = null;
         LogTypes right = null;
         boolean isAvailable = true;
-        if (cache.isFound()) {
+        if (abstractCache.isFound()) {
             left = LogTypes.found;
         }
 
-        if (!cache.isAvailable()) {
+        if (!abstractCache.isAvailable()) {
             right = LogTypes.temporarily_disabled;
             isAvailable = false;
         }
 
-        if (cache.isArchived()) {
+        if (abstractCache.isArchived()) {
             right = LogTypes.archived;
             isAvailable = false;
         }
 
 
-        ListViewItem listViewItem = new CacheListItem(listIndex, cache.getType(), cache.getName(),
-                (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
-                (int) Math.min(cache.getRating() * 2, 5 * 2), cache.getSize(), cache.getSize().toShortString(), left, right, isAvailable);
+        ListViewItem listViewItem = new CacheListItem(listIndex, abstractCache.getType(), abstractCache.getName(),
+                (int) (abstractCache.getDifficulty() * 2), (int) (abstractCache.getTerrain() * 2),
+                (int) Math.min(abstractCache.getRating() * 2, 5 * 2), abstractCache.getSize(), abstractCache.getSize().toShortString(), left, right, isAvailable);
         return listViewItem;
     }
 

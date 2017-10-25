@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2011-2014 team-cachebox.de
+ * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,12 @@
  */
 package de.longri.cachebox3.locator;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
-
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.utils.GeoUtils;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.MathUtils.CalculationType;
-import de.longri.cachebox3.utils.converter.UTMConvert;
 
-public class Coordinate extends LatLong implements Serializable {
-    private static final long serialVersionUID = 4288564255686705L;
+public class Coordinate extends LatLong {
 
     static final String br = System.getProperty("line.separator");
 
@@ -261,6 +255,5 @@ public class Coordinate extends LatLong implements Serializable {
     public String toString() {
         return FormatCoordinate();
     }
-
 
 }

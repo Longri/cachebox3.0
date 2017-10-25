@@ -15,21 +15,21 @@
  */
 package de.longri.cachebox3.events;
 
-import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.AbstractCache;
 
 /**
  * Created by Longri on 23.03.2017.
  */
-public class SelectedCacheChangedEvent extends AbstractEvent<Cache> {
-    public final Cache cache;
+public class SelectedCacheChangedEvent extends AbstractEvent<AbstractCache> {
+    public final AbstractCache cache;
 
-    public SelectedCacheChangedEvent(Cache cache) {
-        super(Cache.class);
+    public SelectedCacheChangedEvent(AbstractCache cache) {
+        super(AbstractCache.class);
         this.cache = cache;
     }
 
-    public SelectedCacheChangedEvent(Cache cache, short id) {
-        super(Cache.class, id);
+    public SelectedCacheChangedEvent(AbstractCache cache, short id) {
+        super(AbstractCache.class, id);
         this.cache = cache;
     }
 

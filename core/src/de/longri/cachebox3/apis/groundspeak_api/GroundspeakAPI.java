@@ -27,10 +27,7 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.CacheDAO;
-import de.longri.cachebox3.sqlite.dao.ImageDAO;
-import de.longri.cachebox3.sqlite.dao.LogDAO;
-import de.longri.cachebox3.sqlite.dao.WaypointDAO;
+import de.longri.cachebox3.sqlite.dao.*;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NetUtils;
@@ -355,7 +352,7 @@ public class GroundspeakAPI {
     }
 
 
-    public static ApiResultState getGeocacheStatus(Array<Cache> caches, final ICancel icancel, CheckCacheStateParser.ProgressIncrement progressIncrement) {
+    public static ApiResultState getGeocacheStatus(Array<AbstractCache> caches, final ICancel icancel, CheckCacheStateParser.ProgressIncrement progressIncrement) {
         ApiResultState chk = chkMembership(false);
         if (chk.isErrorState())
             return chk;
@@ -378,8 +375,8 @@ public class GroundspeakAPI {
         requestString += "\"CacheCodes\":[";
 
         int i = 0;
-        for (Cache cache : caches) {
-            requestString += "\"" + cache.getGcCode() + "\"";
+        for (AbstractCache abstractCache : caches) {
+            requestString += "\"" + abstractCache.getGcCode() + "\"";
             if (i < caches.size - 1)
                 requestString += ",";
             i++;
@@ -1070,135 +1067,7 @@ public class GroundspeakAPI {
         return ApiResultState.API_ERROR;
     }
 
-    public static void WriteCachesLogsImages_toDB(CB_List<Cache> apiCaches, CB_List<LogEntry> apiLogs, CB_List<ImageEntry> apiImages) throws InterruptedException {
-        // Auf eventuellen Thread Abbruch reagieren
-        Thread.sleep(2);
 
-        Database.Data.beginTransaction();
-
-        CacheDAO cacheDAO = new CacheDAO();
-        LogDAO logDAO = new LogDAO();
-        ImageDAO imageDAO = new ImageDAO();
-        WaypointDAO waypointDAO = new WaypointDAO();
-
-        for (int c = 0; c < apiCaches.size; c++) {
-            Cache cache = apiCaches.get(c);
-            Cache aktCache = Database.Data.Query.GetCacheById(cache.getId());
-
-            if (aktCache != null && aktCache.isLive())
-                aktCache = null;
-
-            if (aktCache == null) {
-                aktCache = cacheDAO.getFromDbByCacheId(cache.getId());
-            }
-            // Read Detail Info of Cache if not available
-            if ((aktCache != null) && (aktCache.getDetail() == null)) {
-                aktCache.loadDetail();
-            }
-            // If Cache into DB, extract saved rating
-            if (aktCache != null) {
-                cache.setRating(aktCache.getRating());
-            }
-
-            // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
-            if (!cacheDAO.UpdateDatabase(cache)) {
-                cacheDAO.WriteToDatabase(cache);
-            }
-
-            // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
-            if (cache.getTmpNote() != null) {
-                String oldNote = Database.getNote(cache.getId());
-                String newNote = "";
-                if (oldNote == null) {
-                    oldNote = "";
-                }
-                String begin = "<Import from Geocaching.com>";
-                String end = "</Import from Geocaching.com>";
-                int iBegin = oldNote.indexOf(begin);
-                int iEnd = oldNote.indexOf(end);
-                if ((iBegin >= 0) && (iEnd > iBegin)) {
-                    // Note from Groundspeak already in Database
-                    // -> Replace only this part in whole Note
-                    newNote = oldNote.substring(0, iBegin - 1) + System.getProperty("line.separator"); // Copy the old part of Note before
-                    // the beginning of the groundspeak
-                    // block
-                    newNote += begin + System.getProperty("line.separator");
-                    newNote += cache.getTmpNote();
-                    newNote += System.getProperty("line.separator") + end;
-                    newNote += oldNote.substring(iEnd + end.length(), oldNote.length());
-                } else {
-                    newNote = oldNote + System.getProperty("line.separator");
-                    newNote += begin + System.getProperty("line.separator");
-                    newNote += cache.getTmpNote();
-                    newNote += System.getProperty("line.separator") + end;
-                }
-                cache.setTmpNote(newNote);
-                Database.setNote(cache.getId(), cache.getTmpNote());
-            }
-
-            // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
-            cache.setLongDescription("");
-
-            for (LogEntry log : apiLogs) {
-                if (log.CacheId != cache.getId())
-                    continue;
-                // Write Log to database
-
-                logDAO.WriteToDatabase(log);
-            }
-
-            for (ImageEntry image : apiImages) {
-                if (image.CacheId != cache.getId())
-                    continue;
-                // Write Image to database
-
-                imageDAO.WriteToDatabase(image, false);
-            }
-
-            for (int i = 0, n = cache.getWaypoints().size; i < n; i++) {
-                // must Cast to Full Waypoint. If Waypoint, is wrong createt!
-                Waypoint waypoint = cache.getWaypoints().get(i);
-                boolean update = true;
-
-                // dont refresh wp if aktCache.wp is user changed
-                if (aktCache != null) {
-                    if (aktCache.getWaypoints() != null) {
-                        for (int j = 0, m = aktCache.getWaypoints().size; j < m; j++) {
-                            Waypoint wp = aktCache.getWaypoints().get(j);
-                            if (wp.getGcCode().equalsIgnoreCase(waypoint.getGcCode())) {
-                                if (wp.IsUserWaypoint)
-                                    update = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (update) {
-                    // do not store replication information when importing caches with GC api
-                    if (!waypointDAO.UpdateDatabase(waypoint, false)) {
-                        waypointDAO.WriteToDatabase(waypoint, false); // do not store replication information here
-                    }
-                }
-
-            }
-
-            if (aktCache == null) {
-                Database.Data.Query.add(cache);
-                // cacheDAO.writeToDatabase(cache);
-            } else {
-                Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.getId()), false);
-                Database.Data.Query.add(cache);
-                // cacheDAO.updateDatabase(cache);
-            }
-
-        }
-        Database.Data.setTransactionSuccessful();
-        Database.Data.endTransaction();
-        Database.Data.gpxFilenameUpdateCacheCount();
-
-        CacheListChangedEventList.Call();
-    }
 
 
 //

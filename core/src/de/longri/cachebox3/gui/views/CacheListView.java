@@ -39,9 +39,9 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheWithWP;
-import de.longri.cachebox3.types.Waypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
@@ -81,7 +81,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     public void resort() {
         log.debug("resort Query");
-        Database.Data.Query.Resort(EventHandler.getSelectedCoord(),
+        Database.Data.Query.resort(EventHandler.getSelectedCoord(),
                 new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWaypoint()));
         log.debug("Finish resort Query");
     }
@@ -126,7 +126,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         }
 
                         // get Cache
-                        Cache cache = Database.Data.Query.get(idx);
+                        AbstractCache abstractCache = Database.Data.Query.get(idx);
 
                         //get actPos and heading
                         Coordinate position = EventHandler.getMyPosition();
@@ -137,8 +137,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         float heading = EventHandler.getHeading();
 
                         // get coordinate from Cache or from Final Waypoint
-                        Waypoint finalWp = cache.GetFinalWaypoint();
-                        Coordinate finalCoord = finalWp != null ? finalWp : cache;
+                        AbstractWaypoint finalWp = abstractCache.GetFinalWaypoint();
+                        Coordinate finalCoord = finalWp != null ? finalWp : abstractCache;
 
                         //calculate distance and bearing
                         MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, position.getLatitude(), position.getLongitude(), finalCoord.getLatitude(), finalCoord.getLongitude(), result);
@@ -175,7 +175,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
                         int selectedItemListIndex = selectedItem.getListIndex();
 
-                        Cache cache = Database.Data.Query.get(selectedItemListIndex);
+                        AbstractCache cache = Database.Data.Query.get(selectedItemListIndex);
                         log.debug("Cache selection changed to: " + cache.toString());
                         //set selected Cache global
                         EventHandler.fire(new SelectedCacheChangedEvent(cache));
@@ -186,8 +186,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     @Override
                     public void run() {
                         int selectedIndex = 0;
-                        for (Cache cache : Database.Data.Query) {
-                            if (cache.equals(EventHandler.getSelectedCache())) {
+                        for (AbstractCache abstractCache : Database.Data.Query) {
+                            if (abstractCache.equals(EventHandler.getSelectedCache())) {
                                 break;
                             }
                             selectedIndex++;
@@ -363,7 +363,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 //                        CB.setAutoResort(!(CB.getAutoResort()));
 //                        if (CB.getAutoResort()) {
 //                            synchronized (Database.Data.Query) {
-//                                Database.Data.Query.Resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
+//                                Database.Data.Query.resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
 //                            }
 //                        }
                         return true;
@@ -389,10 +389,11 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
         String DBName = Database.Data == null || !Database.Data.isStarted() ? Translation.Get("noDB") : Database.Data.getPath();
         try {
-            int Pos = DBName.lastIndexOf("/");
-            DBName = DBName.substring(Pos + 1);
-            Pos = DBName.lastIndexOf(".");
-            DBName = DBName.substring(0, Pos);
+            int pos = DBName.lastIndexOf("/");
+            if (pos < 0) pos = DBName.lastIndexOf("\\");
+            DBName = DBName.substring(pos + 1);
+            pos = DBName.lastIndexOf(".");
+            DBName = DBName.substring(0, pos);
         } catch (Exception e) {
             DBName = "???";
         }

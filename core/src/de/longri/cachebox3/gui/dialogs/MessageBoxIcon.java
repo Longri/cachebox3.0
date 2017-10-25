@@ -32,7 +32,8 @@ public enum MessageBoxIcon implements SelectBoxItem {
     Warning, //	Das Meldungsfeld enth�lt ein Symbol, das aus einem Ausrufezeichen in einem Dreieck mit gelbem Hintergrund besteht.
     Powerd_by_GC_Live,
     GC_Live,
-    ExpiredApiKey;
+    ExpiredApiKey,
+    Database;
 
     private static IconsStyle iconStyle;
 
@@ -70,6 +71,8 @@ public enum MessageBoxIcon implements SelectBoxItem {
                 return iconStyle.GC_Live;
             case ExpiredApiKey:
                 return iconStyle.ExpiredApiKey;
+            case Database:
+                return iconStyle.Database;
         }
         return null;
     }

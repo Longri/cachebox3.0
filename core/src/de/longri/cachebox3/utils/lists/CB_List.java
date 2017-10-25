@@ -16,7 +16,6 @@
 package de.longri.cachebox3.utils.lists;
 
 import com.badlogic.gdx.utils.Array;
-import de.longri.cachebox3.types.Cache;
 
 /**
  * Created by Longri on 21.04.2017.

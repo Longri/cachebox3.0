@@ -1,2 +1,4 @@
 *.properties
-*.db3
+testConfig.db3
+testDb.db3
+fieldNotes.db3

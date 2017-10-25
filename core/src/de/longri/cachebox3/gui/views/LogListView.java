@@ -70,7 +70,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
             public void run() {
                 if (actGcCode == null || !actGcCode.equals(EventHandler.getSelectedCache().getGcCode())) {
                     Array<LogEntry> logEntries = Database.getLogs(EventHandler.getSelectedCache());
-                    actGcCode = EventHandler.getSelectedCache() == null ? "" : EventHandler.getSelectedCache().getGcCode();
+                    actGcCode = EventHandler.getSelectedCache() == null ? "" : EventHandler.getSelectedCache().getGcCode().toString();
                     if (items != null)
                         items.clear();
                     else
@@ -162,7 +162,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
         boolean selectedCacheIsNoGC = false;
 
         if (isSelected)
-            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().startsWith("GC");
+            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().toString().startsWith("GC");
         mi = cm.addItem(MenuID.MI_RELOAD_CACHE, "ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon);
         if (!isSelected)
             mi.setEnabled(false);

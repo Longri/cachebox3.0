@@ -37,10 +37,10 @@ import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
-import de.longri.cachebox3.sqlite.dao.CacheDAO;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.Cache;
 import de.longri.cachebox3.utils.NetUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -170,10 +170,10 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         EventHandler.add(this);
     }
 
-    private String getAttributesHtml(Cache cache) {
+    private String getAttributesHtml(AbstractCache abstractCache) {
         StringBuilder sb = new StringBuilder();
         try {
-            Iterator<Attributes> attrs = cache.getAttributes().iterator();
+            Iterator<Attributes> attrs = abstractCache.getAttributes(Database.Data).iterator();
 
             if (attrs == null || !attrs.hasNext())
                 return "";
@@ -238,16 +238,12 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
         CB.wait(WAIT);
 
-        Cache actCache = EventHandler.getSelectedCache();
+        AbstractCache actCache = EventHandler.getSelectedCache();
         if (actCache != null) {
             nonLocalImages.clear();
             nonLocalImagesUrl.clear();
 
-            if (!actCache.isDetailLoaded()) {
-                log.warn("Details not loaded for Cache: {}", actCache);
-            }
-
-            String cacheHtml = actCache.getLongDescription() + actCache.getShortDescription();
+            String cacheHtml = actCache.getLongDescription(Database.Data) + actCache.getShortDescription(Database.Data);
             String html = "";
             if (actCache.getApiState() == 1)// GC.com API lite
             { // Load Standard HTML
@@ -349,8 +345,8 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                         }
 
                         EventHandler.getSelectedCache().setFavorite(!EventHandler.getSelectedCache().isFavorite());
-                        CacheDAO dao = new CacheDAO();
-                        dao.UpdateDatabase(EventHandler.getSelectedCache());
+
+                        DaoFactory.CACHE_DAO.updateDatabase(Database.Data, EventHandler.getSelectedCache());
 
                         // Update Query
                         Database.Data.Query.GetCacheById(EventHandler.getSelectedCache().getId()).setFavorite(EventHandler.getSelectedCache().isFavorite());
@@ -384,7 +380,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
         boolean selectedCacheIsNoGC = false;
         if (isSelected)
-            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().startsWith("GC");
+            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().toString().startsWith("GC");
         mi = cm.addItem(MenuID.MI_RELOAD_CACHE, "ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon);
         if (!isSelected)
             mi.setEnabled(false);

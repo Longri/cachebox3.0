@@ -15,21 +15,21 @@
  */
 package de.longri.cachebox3.events;
 
-import de.longri.cachebox3.types.Waypoint;
+import de.longri.cachebox3.types.AbstractWaypoint;
 
 /**
  * Created by Longri on 23.03.2017.
  */
-public class SelectedWayPointChangedEvent extends AbstractEvent<Waypoint> {
-    public final Waypoint wayPoint;
+public class SelectedWayPointChangedEvent extends AbstractEvent<AbstractWaypoint> {
+    public final AbstractWaypoint wayPoint;
 
-    public SelectedWayPointChangedEvent(Waypoint wayPoint) {
-        super(Waypoint.class);
+    public SelectedWayPointChangedEvent(AbstractWaypoint wayPoint) {
+        super(AbstractWaypoint.class);
         this.wayPoint = wayPoint;
     }
 
-    public SelectedWayPointChangedEvent(Waypoint wayPoint, short id) {
-        super(Waypoint.class, id);
+    public SelectedWayPointChangedEvent(AbstractWaypoint wayPoint, short id) {
+        super(AbstractWaypoint.class, id);
         this.wayPoint = wayPoint;
     }
 

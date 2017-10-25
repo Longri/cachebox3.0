@@ -67,4 +67,6 @@ gradle-app.setting
 ## OS Specific
 .DS_Store
 Thumbs.db
-*.db3
+testConfig.db3
+*.db3-journal
+

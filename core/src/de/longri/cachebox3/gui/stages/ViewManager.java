@@ -41,7 +41,7 @@ import de.longri.cachebox3.gui.widgets.GestureButton;
 import de.longri.cachebox3.gui.widgets.Slider;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.Cache;
+import de.longri.cachebox3.types.AbstractCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -263,23 +263,23 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
     @Override
     public void selectedWayPointChanged(de.longri.cachebox3.events.SelectedWayPointChangedEvent event) {
-        if (event.wayPoint != null) setCacheName(Database.Data.Query.GetCacheById(event.wayPoint.CacheId));
+        if (event.wayPoint != null) setCacheName(Database.Data.Query.GetCacheById(event.wayPoint.getCacheId()));
     }
 
-    Cache lastCache = null;
+    AbstractCache lastAbstractCache = null;
 
-    private void setCacheName(Cache cache) {
+    private void setCacheName(AbstractCache abstractCache) {
         // set Cache name to Slider
-        if (cache == null) {
+        if (abstractCache == null) {
             slider.setCacheName(EMPTY);
         } else {
-            if (lastCache == null || !lastCache.equals(cache)) {
-                CharSequence text = cache.getType().toShortString()
-                        + terrDiffToShortString(cache.getDifficulty()) + "/"
-                        + terrDiffToShortString(cache.getTerrain()) + cache.getSize().toShortString()
-                        + " " + cache.getName();
+            if (lastAbstractCache == null || !lastAbstractCache.equals(abstractCache)) {
+                CharSequence text = abstractCache.getType().toShortString()
+                        + terrDiffToShortString(abstractCache.getDifficulty()) + "/"
+                        + terrDiffToShortString(abstractCache.getTerrain()) + abstractCache.getSize().toShortString()
+                        + " " + abstractCache.getName();
                 slider.setCacheName(text);
-                lastCache = cache;
+                lastAbstractCache = abstractCache;
             }
         }
     }

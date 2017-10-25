@@ -44,7 +44,7 @@ public class LoadDbTask extends AbstractInitTask {
             @Override
             public void run() {
                 // initial DB
-                Database.Data = new Database(Database.DatabaseType.CacheBox);
+                Database.Data = new Database(Database.DatabaseType.CacheBox3);
 
                 Action_Show_SelectDB_Dialog selectDbDialog = new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.FORCE_SHOW);
 
