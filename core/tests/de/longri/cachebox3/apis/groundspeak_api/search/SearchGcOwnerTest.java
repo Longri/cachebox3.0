@@ -265,7 +265,7 @@ class SearchGcOwnerTest {
                 public void callBack(ApiResultState value) {
 
                     try {
-                        assertEquals(23, cacheList.size);
+                        assertEquals(22, cacheList.size);
                         AbstractCache abstractCache = cacheList.first();
 
                         assertEquals(false, abstractCache.isArchived());
@@ -282,7 +282,7 @@ class SearchGcOwnerTest {
                         assertEquals(13.375917, waypoint.getLongitude());
 
                         assertEquals(CacheTypes.Traditional, abstractCache.getType());
-                        assertEquals(CacheSizes.other, abstractCache.getSize());
+                        assertEquals(CacheSizes.small, abstractCache.getSize());
                         assertEquals("Germany", abstractCache.getCountry());
                         assertEquals(new Date(1200211200000L), abstractCache.getDateHidden());
                         assertEquals(1.5f, abstractCache.getDifficulty());
@@ -319,7 +319,7 @@ class SearchGcOwnerTest {
 
 
                         //check Logs
-                        assertEquals(230, logList.size);
+                        assertEquals(220, logList.size);
                         LogEntry logEntry = logList.first();
 
                         assertEquals(AbstractCache.GenerateCacheId(abstractCache.getGcCode().toString()), logEntry.CacheId);
