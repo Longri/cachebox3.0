@@ -407,7 +407,7 @@ public class SelectDB_Activity extends ActivityBase {
         @Override
         public void update(ListViewItem view) {
             SelectDBItem dbItem = (SelectDBItem) view;
-            dbItem.updateFileInfoe(fileInfos[view.getListIndex()]);
+            dbItem.updateFileInfo(fileInfos[view.getListIndex()]);
         }
 
         @Override

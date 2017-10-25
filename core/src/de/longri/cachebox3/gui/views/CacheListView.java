@@ -39,7 +39,9 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
+import de.longri.cachebox3.types.CacheWithWP;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
@@ -387,10 +389,11 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
         String DBName = Database.Data == null || !Database.Data.isStarted() ? Translation.Get("noDB") : Database.Data.getPath();
         try {
-            int Pos = DBName.lastIndexOf("/");
-            DBName = DBName.substring(Pos + 1);
-            Pos = DBName.lastIndexOf(".");
-            DBName = DBName.substring(0, Pos);
+            int pos = DBName.lastIndexOf("/");
+            if (pos < 0) pos = DBName.lastIndexOf("\\");
+            DBName = DBName.substring(pos + 1);
+            pos = DBName.lastIndexOf(".");
+            DBName = DBName.substring(0, pos);
         } catch (Exception e) {
             DBName = "???";
         }
