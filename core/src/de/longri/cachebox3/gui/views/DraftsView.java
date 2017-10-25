@@ -59,7 +59,7 @@ public class DraftsView extends AbstractView {
 
     private static DraftsView THAT;
     private static DraftEntry aktDraft;
-    private static DraftList fieldNoteEntries;
+    private static DraftList draftEntries;
 
 
     private final ListView listView = new ListView();
@@ -72,7 +72,7 @@ public class DraftsView extends AbstractView {
         THAT = this;
         itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
 
-        fieldNoteEntries = new DraftList();
+        draftEntries = new DraftList();
         loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
 
         listView.setEmptyString(Translation.Get("EmptyDrafts"));
@@ -137,7 +137,7 @@ public class DraftsView extends AbstractView {
         public boolean longClicked(Actor actor, float x, float y) {
 
             int listIndex = ((ListViewItem) actor).getListIndex();
-            aktDraft = fieldNoteEntries.get(listIndex);
+            aktDraft = draftEntries.get(listIndex);
 
             Menu cm = new Menu("DraftItem-Menu");
 
@@ -173,8 +173,8 @@ public class DraftsView extends AbstractView {
     @Override
     public void dispose() {
         EventHandler.remove(this);
-        fieldNoteEntries.clear();
-        fieldNoteEntries = null;
+        draftEntries.clear();
+        draftEntries = null;
         aktDraft = null;
         THAT = null;
         listView.dispose();
@@ -186,7 +186,7 @@ public class DraftsView extends AbstractView {
     }
 
     private void loadDrafts(DraftList.LoadingType type) {
-        fieldNoteEntries.loadDrafts("", type);
+        draftEntries.loadDrafts("", type);
 
         if (items == null) {
             items = new Array<>();
@@ -194,7 +194,7 @@ public class DraftsView extends AbstractView {
         items.clear();
 
         int idx = 0;
-        for (DraftEntry entry : fieldNoteEntries) {
+        for (DraftEntry entry : draftEntries) {
             items.add(new DraftsViewItem(idx++, entry, itemStyle));
         }
 
@@ -544,15 +544,15 @@ public class DraftsView extends AbstractView {
             if (isNewDraft) {
                 // nur, wenn eine Draft neu angelegt wurde
                 // new Draft
-                fieldNoteEntries.add(fieldNote);
+                draftEntries.add(fieldNote);
 
                 // eine evtl. vorhandene Draft /DNF löschen
                 if (fieldNote.type == LogTypes.attended //
                         || fieldNote.type == LogTypes.found //
                         || fieldNote.type == LogTypes.webcam_photo_taken //
                         || fieldNote.type == LogTypes.didnt_find) {
-                    fieldNoteEntries.deleteDraftByCacheId(fieldNote.CacheId, LogTypes.found);
-                    fieldNoteEntries.deleteDraftByCacheId(fieldNote.CacheId, LogTypes.didnt_find);
+                    draftEntries.deleteDraftByCacheId(fieldNote.CacheId, LogTypes.found);
+                    draftEntries.deleteDraftByCacheId(fieldNote.CacheId, LogTypes.didnt_find);
                 }
             }
 
@@ -581,16 +581,16 @@ public class DraftsView extends AbstractView {
                         Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                         Config.AcceptChanges();
                     } // und eine evtl. vorhandene Draft FoundIt löschen
-                    fieldNoteEntries.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogTypes.found);
+                    draftEntries.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogTypes.found);
                 }
             }
             DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
 
             // Reload List
             if (isNewDraft) {
-                fieldNoteEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW);
+                draftEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW);
             } else {
-                fieldNoteEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
+                draftEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
             }
         }
         THAT.notifyDataSetChanged();
@@ -725,7 +725,7 @@ public class DraftsView extends AbstractView {
 
         if (abstractCache == null && !aktDraft.isTbDraft) {
             String message = Translation.Get("cacheOtherDb", aktDraft.CacheName.toString());
-            message += "\n" + Translation.Get("fieldNoteNoDelete");
+            message += "\n" + Translation.Get("draftNoteNoDelete");
             MessageBox.show(message);
             return;
         }
@@ -753,11 +753,11 @@ public class DraftsView extends AbstractView {
                                 }
                             }
                         }
-                        fieldNoteEntries.deleteDraft(aktDraft.Id, aktDraft.type);
+                        draftEntries.deleteDraft(aktDraft.Id, aktDraft.type);
 
                         aktDraft = null;
 
-                        fieldNoteEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
+                        draftEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
 
                         loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
 
@@ -776,14 +776,14 @@ public class DraftsView extends AbstractView {
 
         String message = "";
         if (aktDraft.isTbDraft) {
-            message = Translation.Get("confirmFieldnoteDeletionTB", aktDraft.typeString, aktDraft.TbName);
+            message = Translation.Get("confirmDraftDeletionTB", aktDraft.typeString, aktDraft.TbName);
         } else {
-            message = Translation.Get("confirmFieldnoteDeletion", aktDraft.typeString, aktDraft.CacheName.toString());
+            message = Translation.Get("confirmDraftDeletion", aktDraft.typeString, aktDraft.CacheName.toString());
             if (aktDraft.type == LogTypes.found || aktDraft.type == LogTypes.attended || aktDraft.type == LogTypes.webcam_photo_taken)
-                message += Translation.Get("confirmFieldnoteDeletionRst");
+                message += Translation.Get("confirmDraftDeletionRst");
         }
 
-        MessageBox.show(message, Translation.Get("deleteFieldnote"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
+        MessageBox.show(message, Translation.Get("deleteDraft"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
 
     }
 
@@ -795,15 +795,15 @@ public class DraftsView extends AbstractView {
                     case ButtonDialog.BUTTON_POSITIVE:
                         // Yes button clicked
                         // delete all Drafts
-                        // reload all Fieldnotes!
-                        fieldNoteEntries.loadDrafts("", DraftList.LoadingType.LOAD_ALL);
+                        // reload all Drafts!
+                        draftEntries.loadDrafts("", DraftList.LoadingType.LOAD_ALL);
 
-                        for (DraftEntry entry : fieldNoteEntries) {
+                        for (DraftEntry entry : draftEntries) {
                             entry.deleteFromDatabase();
 
                         }
 
-                        fieldNoteEntries.clear();
+                        draftEntries.clear();
                         aktDraft = null;
 
                         loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
@@ -843,7 +843,7 @@ public class DraftsView extends AbstractView {
 
         if (cache == null) {
             String message = Translation.Get("cacheOtherDb", aktDraft.CacheName.toString());
-            message += "\n" + Translation.Get("fieldNoteNoSelect");
+            message += "\n" + Translation.Get("DraftNoSelect");
             MessageBox.show(message, Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             return;
         }
@@ -875,7 +875,7 @@ public class DraftsView extends AbstractView {
 
             int index = item.getListIndex();
 
-            aktDraft = fieldNoteEntries.get(index);
+            aktDraft = draftEntries.get(index);
 
             Menu cm = new Menu("CacheListContextMenu");
 
@@ -1001,7 +1001,7 @@ public class DraftsView extends AbstractView {
         }
 
         cm.addItem(MenuID.MI_UPLOAD_FIELDNOTE, "uploadDrafts", CB.getSkin().getMenuIcon.uploadDraft);
-        cm.addItem(MenuID.MI_DELETE_ALL_FIELDNOTES, "DeleteAllNotes", CB.getSkin().getMenuIcon.deleteAllDrafts);
+        cm.addItem(MenuID.MI_DELETE_ALL_FIELDNOTES, "DeleteAllDrafts", CB.getSkin().getMenuIcon.deleteAllDrafts);
 
         if (abstractCache != null) {
             MenuItem mi = cm.addItem(MenuID.MI_IMPORT, "ownerLogTypes", CB.getSkin().getMenuIcon.ownerLogTypes);
