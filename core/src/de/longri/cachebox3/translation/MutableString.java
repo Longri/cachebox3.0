@@ -18,7 +18,6 @@ package de.longri.cachebox3.translation;
 import com.badlogic.gdx.utils.CharArray;
 
 /**
- *
  * Created by Longri on 25.10.17.
  */
 public class MutableString implements CharSequence {
@@ -53,6 +52,12 @@ public class MutableString implements CharSequence {
         }
     }
 
+    private MutableString(CharArray storage, int ptr, int length) {
+        this.storage = storage;
+        this.ptr = ptr;
+        this.length = length;
+    }
+
 
     @Override
     public int length() {
@@ -65,7 +70,15 @@ public class MutableString implements CharSequence {
     }
 
     @Override
-    public CharSequence subSequence(int start, int end) {
-        return null;
+    public MutableString subSequence(int start, int end) {
+        // we must not store this sub, only set new values for ptr and length
+        return new MutableString(this.storage, this.ptr + start, end - start);
+    }
+
+    @Override
+    public String toString() {
+        char[] chars = new char[this.length];
+        System.arraycopy(this.storage.items, this.ptr, chars, 0, this.length);
+        return new String(chars);
     }
 }
