@@ -31,13 +31,19 @@ class MutableStringTest {
         CharArray buffer = new CharArray();
         CharArray buffer2 = new CharArray();
         String t1 = "TestString";
+        StringBuilder sb = new StringBuilder();
+        sb.append(t1);
 
         MutableString mutable1 = new MutableString(buffer, t1);
         MutableString mutable2 = new MutableString(buffer2, mutable1);
+        MutableString mutable3 = new MutableString(buffer, sb);
 
         assertThat("MutableString must equals", equals(t1, mutable1));
         assertThat("MutableString must equals", equals(t1, mutable2));
+        assertThat("MutableString must equals", equals(t1, mutable3));
         assertThat("MutableString must equals", equals(mutable1, mutable2));
+        assertThat("MutableString must equals", equals(mutable1, mutable3));
+        assertThat("MutableString must equals", equals(mutable2, mutable3));
 
     }
 
@@ -72,8 +78,8 @@ class MutableStringTest {
         MutableString mutable1 = new MutableString(buffer, t1);
         MutableString mutable2 = new MutableString(buffer, mutable1);
 
-        MutableString sub1 = mutable1.subSequence(4, 10);
-        MutableString sub2 = mutable2.subSequence(4, 10);
+        CharSequence sub1 = mutable1.subSequence(4, 10);
+        CharSequence sub2 = mutable2.subSequence(4, 10);
 
         assertThat("MutableSubString must equals", equals(sub, sub1));
         assertThat("MutableSubString must equals", equals(sub, sub2));
@@ -94,6 +100,45 @@ class MutableStringTest {
         assertThat("MutableString must equals", mutable1.toString().equals(t1));
         assertThat("MutableString must equals", mutable2.toString().equals(t1));
         assertThat("MutableString must equals", mutable1.toString().equals(mutable2.toString()));
+    }
+
+    @Test
+    void add() {
+        CharArray buffer = new CharArray();
+
+        String t1 = "Test";
+        String t2 = "String";
+        String t3 = "Added";
+        MutableString m1 = new MutableString(buffer, t1);
+        MutableString m3 = new MutableString(buffer, t3);
+        MutableString m2 = new MutableString(buffer, t2);
+
+        String shouldString = t1 + t2 + t3;
+        m1.add(m2).add(m3);
+
+        assertThat("Length must equals  '" + shouldString.length() + "' : '" + m1.length() + "'", shouldString.length() == m1.length());
+        assertThat("MutableString must equals  '" + shouldString + "' : '" + m1 + "'", equals(shouldString, m1));
+        assertThat("toString() must equals  '" + shouldString + "' : '" + m1 + "'", shouldString.equals(m1.toString()));
+
+        m1 = new MutableString(buffer, t1);
+        m1.add(t2).add(m3);
+
+        assertThat("Length must equals  '" + shouldString.length() + "' : '" + m1.length() + "'", shouldString.length() == m1.length());
+        assertThat("MutableString must equals  '" + shouldString + "' : '" + m1 + "'", equals(shouldString, m1));
+        assertThat("toString() must equals  '" + shouldString + "' : '" + m1 + "'", shouldString.equals(m1.toString()));
+
+
+        m1 = new MutableString(buffer, t1);
+        m1.add(m2).add(m3).add(m2);
+        String should2String = t1 + t2 + t3 + t2;
+
+        assertThat("Length must equals  '" + should2String.length() + "' : '" + m1.length() + "'", should2String.length() == m1.length());
+        assertThat("MutableString must equals  '" + should2String + "' : '" + m1 + "'", equals(should2String, m1));
+        assertThat("toString() must equals  '" + should2String + "' : '" + m1 + "'", should2String.equals(m1.toString()));
+
+        CharSequence sub1 = should2String.subSequence(3, 13);
+        CharSequence sub2 = m1.subSequence(3, 13);
+        assertThat("SubSequences must equals  '" + sub1 + "' : '" + sub2 + "'", equals(sub2, sub1));
     }
 
 

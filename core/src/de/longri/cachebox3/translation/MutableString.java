@@ -20,9 +20,9 @@ import com.badlogic.gdx.utils.CharArray;
 /**
  * Created by Longri on 25.10.17.
  */
-public class MutableString implements CharSequence {
+public class MutableString implements StringSequence {
 
-
+    private StringSequence head, next;
     private final CharArray storage;
     private int ptr;
     private int length;
@@ -58,27 +58,120 @@ public class MutableString implements CharSequence {
         this.length = length;
     }
 
+    private MutableString(MutableString mutableString) {
+        this(mutableString.storage, mutableString.ptr, mutableString.length);
+    }
+
 
     @Override
     public int length() {
+        if (next == null)
+            return length;
+
+        StringSequence act = this;
+        int l = this.length;
+        while (act.getNext() != null) {
+            act = act.getNext();
+            l += act.getSequenceLength();
+        }
+        return l;
+    }
+
+    @Override
+    public int getSequenceLength() {
         return length;
     }
 
     @Override
     public char charAt(int index) {
+        if (index >= length) {
+            if (next == null) throw new RuntimeException("Index out of range");
+            return next.charAt(index - length);
+        }
         return storage.get(ptr + index);
     }
 
     @Override
-    public MutableString subSequence(int start, int end) {
-        // we must not store this sub, only set new values for ptr and length
-        return new MutableString(this.storage, this.ptr + start, end - start);
+    public CharSequence subSequence(int start, int end) {
+        if (next == null) {
+            // we must not store this sub, only set new values for ptr and length
+            return new MutableString(this.storage, this.ptr + start, end - start);
+        }
+        return toString().subSequence(start, end);
     }
 
     @Override
+    public StringSequence add(CharSequence string) {
+        if (this.head == null) this.head = this;
+
+        StringSequence last = this;
+        while (last.getNext() != null) {
+            last = last.getNext();
+        }
+        StringSequence addSequence;
+
+        if (string instanceof MutableString) {
+            addSequence = (MutableString) string;
+
+            if (addSequence.getNext() != null) {
+                //MutableString is in use of other StringSequence, so create a copy
+                addSequence = new MutableString((MutableString) string);
+            }
+
+        } else {
+            //create a ImmutableString instance
+            addSequence = new ImmutableString(string.toString());
+            addSequence.setHead(this.getHead());
+        }
+        addSequence.setHead(this.getHead());
+        last.setNext(addSequence);
+        return this.head;
+    }
+
+
+    @Override
     public String toString() {
-        char[] chars = new char[this.length];
-        System.arraycopy(this.storage.items, this.ptr, chars, 0, this.length);
+        char[] chars = new char[this.length()];
+
+        if (next == null) {
+            System.arraycopy(this.storage.items, this.ptr, chars, 0, this.length);
+        } else {
+            StringSequence act = this;
+            int dest = 0;
+            do {
+                if (act instanceof MutableString) {
+                    MutableString mutableString = (MutableString) act;
+                    System.arraycopy(mutableString.storage.items, mutableString.ptr, chars, dest, mutableString.length);
+                } else if (act instanceof ImmutableString) {
+                    char[] arr = ((ImmutableString) act).string.toCharArray();
+                    System.arraycopy(arr, 0, chars, dest, arr.length);
+                } else {
+                    throw new RuntimeException("Class '" + act.getClass() + "' not implemented");
+                }
+                dest += act.getSequenceLength();
+                act = act.getNext();
+            } while (act != null);
+        }
         return new String(chars);
+    }
+
+    @Override
+    public void setHead(StringSequence string) {
+        this.head = string;
+    }
+
+    @Override
+    public void setNext(StringSequence string) {
+        this.next = string;
+    }
+
+    @Override
+    public StringSequence getHead() {
+        return this.head;
+    }
+
+    @Override
+    public StringSequence getNext() {
+        return this.next;
     }
 }
