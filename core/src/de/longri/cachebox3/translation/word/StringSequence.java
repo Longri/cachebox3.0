@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.translation;
+package de.longri.cachebox3.translation.word;
 
 /**
  * Created by Longri on 26.10.2017.

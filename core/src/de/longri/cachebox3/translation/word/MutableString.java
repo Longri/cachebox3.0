@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.translation;
+package de.longri.cachebox3.translation.word;
 
 import com.badlogic.gdx.utils.CharArray;
 
@@ -22,13 +22,15 @@ import com.badlogic.gdx.utils.CharArray;
  */
 public class MutableString implements StringSequence {
 
-    private StringSequence head, next;
-    private final CharArray storage;
-    private int ptr;
-    private int length;
+    protected StringSequence head, next;
+    protected final CharArray storage;
+    protected int ptr;
+    protected int length;
 
     public MutableString(CharArray storage, CharSequence string) {
         this.storage = storage;
+        if (string == null) return;
+
         ptr = storage.size;
         length = string.length();
 
@@ -52,16 +54,15 @@ public class MutableString implements StringSequence {
         }
     }
 
-    private MutableString(CharArray storage, int ptr, int length) {
+    public MutableString(CharArray storage, int ptr, int length) {
         this.storage = storage;
         this.ptr = ptr;
         this.length = length;
     }
 
-    private MutableString(MutableString mutableString) {
+    public MutableString(MutableString mutableString) {
         this(mutableString.storage, mutableString.ptr, mutableString.length);
     }
-
 
     @Override
     public int length() {

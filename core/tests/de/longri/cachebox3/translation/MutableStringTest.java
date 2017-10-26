@@ -16,10 +16,10 @@
 package de.longri.cachebox3.translation;
 
 import com.badlogic.gdx.utils.CharArray;
+import de.longri.cachebox3.translation.word.MutableString;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by Longri on 26.10.2017.
@@ -34,9 +34,9 @@ class MutableStringTest {
         StringBuilder sb = new StringBuilder();
         sb.append(t1);
 
-        MutableString mutable1 = new MutableString(buffer, t1);
-        MutableString mutable2 = new MutableString(buffer2, mutable1);
-        MutableString mutable3 = new MutableString(buffer, sb);
+        de.longri.cachebox3.translation.word.MutableString mutable1 = new de.longri.cachebox3.translation.word.MutableString(buffer, t1);
+        de.longri.cachebox3.translation.word.MutableString mutable2 = new de.longri.cachebox3.translation.word.MutableString(buffer2, mutable1);
+        de.longri.cachebox3.translation.word.MutableString mutable3 = new de.longri.cachebox3.translation.word.MutableString(buffer, sb);
 
         assertThat("MutableString must equals", equals(t1, mutable1));
         assertThat("MutableString must equals", equals(t1, mutable2));
@@ -51,8 +51,8 @@ class MutableStringTest {
     void length() {
         CharArray buffer = new CharArray();
         String t1 = "TestString";
-        MutableString mutable1 = new MutableString(buffer, t1);
-        MutableString mutable2 = new MutableString(buffer, mutable1);
+        de.longri.cachebox3.translation.word.MutableString mutable1 = new de.longri.cachebox3.translation.word.MutableString(buffer, t1);
+        de.longri.cachebox3.translation.word.MutableString mutable2 = new de.longri.cachebox3.translation.word.MutableString(buffer, mutable1);
 
         assertThat("Length must: " + t1.length() + "but was: " + mutable1.length(), t1.length() == mutable1.length());
         assertThat("Length must: " + t1.length() + "but was: " + mutable2.length(), t1.length() == mutable2.length());
@@ -62,8 +62,8 @@ class MutableStringTest {
     void charAt() {
         CharArray buffer = new CharArray();
         String t1 = "TestString";
-        MutableString mutable1 = new MutableString(buffer, t1);
-        MutableString mutable2 = new MutableString(buffer, mutable1);
+        de.longri.cachebox3.translation.word.MutableString mutable1 = new de.longri.cachebox3.translation.word.MutableString(buffer, t1);
+        de.longri.cachebox3.translation.word.MutableString mutable2 = new de.longri.cachebox3.translation.word.MutableString(buffer, mutable1);
 
         assertThat("MutableString must equals", equals(t1, mutable1));
         assertThat("MutableString must equals", equals(t1, mutable2));
@@ -75,8 +75,8 @@ class MutableStringTest {
         CharArray buffer = new CharArray();
         String t1 = "TestString";
         CharSequence sub = t1.subSequence(4, 10);
-        MutableString mutable1 = new MutableString(buffer, t1);
-        MutableString mutable2 = new MutableString(buffer, mutable1);
+        de.longri.cachebox3.translation.word.MutableString mutable1 = new de.longri.cachebox3.translation.word.MutableString(buffer, t1);
+        de.longri.cachebox3.translation.word.MutableString mutable2 = new de.longri.cachebox3.translation.word.MutableString(buffer, mutable1);
 
         CharSequence sub1 = mutable1.subSequence(4, 10);
         CharSequence sub2 = mutable2.subSequence(4, 10);
@@ -90,8 +90,8 @@ class MutableStringTest {
     void toStringTest() {
         CharArray buffer = new CharArray();
         String t1 = "TestString";
-        MutableString mutable1 = new MutableString(buffer, t1);
-        MutableString mutable2 = new MutableString(buffer, mutable1);
+        de.longri.cachebox3.translation.word.MutableString mutable1 = new de.longri.cachebox3.translation.word.MutableString(buffer, t1);
+        de.longri.cachebox3.translation.word.MutableString mutable2 = new de.longri.cachebox3.translation.word.MutableString(buffer, mutable1);
 
         assertThat("MutableString must equals", t1.equals(mutable1.toString()));
         assertThat("MutableString must equals", t1.equals(mutable2.toString()));
@@ -109,9 +109,9 @@ class MutableStringTest {
         String t1 = "Test";
         String t2 = "String";
         String t3 = "Added";
-        MutableString m1 = new MutableString(buffer, t1);
-        MutableString m3 = new MutableString(buffer, t3);
-        MutableString m2 = new MutableString(buffer, t2);
+        de.longri.cachebox3.translation.word.MutableString m1 = new de.longri.cachebox3.translation.word.MutableString(buffer, t1);
+        de.longri.cachebox3.translation.word.MutableString m3 = new de.longri.cachebox3.translation.word.MutableString(buffer, t3);
+        de.longri.cachebox3.translation.word.MutableString m2 = new de.longri.cachebox3.translation.word.MutableString(buffer, t2);
 
         String shouldString = t1 + t2 + t3;
         m1.add(m2).add(m3);
@@ -120,7 +120,7 @@ class MutableStringTest {
         assertThat("MutableString must equals  '" + shouldString + "' : '" + m1 + "'", equals(shouldString, m1));
         assertThat("toString() must equals  '" + shouldString + "' : '" + m1 + "'", shouldString.equals(m1.toString()));
 
-        m1 = new MutableString(buffer, t1);
+        m1 = new de.longri.cachebox3.translation.word.MutableString(buffer, t1);
         m1.add(t2).add(m3);
 
         assertThat("Length must equals  '" + shouldString.length() + "' : '" + m1.length() + "'", shouldString.length() == m1.length());
