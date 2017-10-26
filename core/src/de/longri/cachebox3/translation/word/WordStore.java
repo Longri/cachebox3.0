@@ -33,17 +33,23 @@ public class WordStore {
         MutableString mutableString = addWord(split[0]);
         if (split.length > 1) mutableString.add(new Space());
         for (int i = 1, n = split.length, m = n - 1; i < n; i++) {
-            mutableString.add(addWord(split[i]));
-            if (i < m) mutableString.add(new Space());
+
+            String s = split[i++];
+            while (s.length() < 10 && i < n) {
+                s += (" " + split[i++]);
+            }
+            if (i < m) s += " ";
+            mutableString.add(addWord(s));
         }
         return mutableString;
     }
 
+    public static int count = 0;
 
     private MutableString addWord(String word) {
         // check if storage contains the word
         int pos = indexOf(storage.items, 0, storage.size, word.toCharArray(), 0, word.length(), 0);
-
+        count++;
         if (pos < 0) {
             //create and add a new
             return new MutableString(storage, word);
