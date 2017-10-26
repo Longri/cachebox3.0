@@ -25,6 +25,22 @@ import static org.junit.jupiter.api.Assertions.*;
  * Created by Longri on 26.10.2017.
  */
 class MutableStringTest {
+
+    @Test
+    void constructor() {
+        CharArray buffer = new CharArray();
+        CharArray buffer2 = new CharArray();
+        String t1 = "TestString";
+
+        MutableString mutable1 = new MutableString(buffer, t1);
+        MutableString mutable2 = new MutableString(buffer2, mutable1);
+
+        assertThat("MutableString must equals", equals(t1, mutable1));
+        assertThat("MutableString must equals", equals(t1, mutable2));
+        assertThat("MutableString must equals", equals(mutable1, mutable2));
+
+    }
+
     @Test
     void length() {
         CharArray buffer = new CharArray();
