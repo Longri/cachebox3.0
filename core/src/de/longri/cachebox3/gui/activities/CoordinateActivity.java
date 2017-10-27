@@ -241,8 +241,8 @@ public class CoordinateActivity extends ActivityBase {
         this.row();
         Table cancelOkTable = new Table();
 
-        VisTextButton btnOk = new VisTextButton(Translation.get("ok"));
-        VisTextButton btnCancel = new VisTextButton(Translation.get("cancel"));
+        VisTextButton btnOk = new VisTextButton(Translation.get("ok").toString());//TODO change to CharSequence
+        VisTextButton btnCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
 
         btnOk.addListener(okListener);
         btnCancel.addListener(cancelListener);

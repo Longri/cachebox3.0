@@ -248,7 +248,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             if (actCache.getApiState() == 1)// GC.com API lite
             { // Load Standard HTML
                 log.debug("load is Lite html");
-                String nodesc = Translation.get("GC_NoDescription");
+                String nodesc = Translation.get("GC_NoDescription").toString();
                 html = "</br>" + nodesc + "</br></br></br><form action=\"download\"><input type=\"submit\" value=\" " + Translation.get("GC_DownloadDescription") + " \"></form>";
             } else {
                 html = DescriptionImageGrabber.resolveImages(actCache, cacheHtml, false, nonLocalImages, nonLocalImagesUrl);

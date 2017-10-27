@@ -57,6 +57,7 @@ import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.utils.CharSequenceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,9 +107,9 @@ public class Settings_Activity extends ActivityBase {
 
     private void createButtons() {
 
-        btnOk = new VisTextButton(Translation.get("save"));
+        btnOk = new VisTextButton(Translation.get("save").toString());//TODO change to CharSequence
         btnMenu = new VisTextButton("...");
-        btnCancel = new VisTextButton(Translation.get("cancel"));
+        btnCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
 
         this.addActor(btnOk);
         this.addActor(btnMenu);
@@ -185,7 +186,7 @@ public class Settings_Activity extends ActivityBase {
     };
 
     private Array<WidgetGroup> listViews = new Array<>();
-    private Array<String> listViewsNames = new Array<>();
+    private Array<CharSequence> listViewsNames = new Array<>();
     private Array<ClickListener> listBackClickListener = new Array<>();
     Label.LabelStyle nameStyle, descStyle, defaultValuStyle, valueStyle;
 
@@ -248,7 +249,7 @@ public class Settings_Activity extends ActivityBase {
         showListView(new ListView(listViewAdapter, true), Translation.get("setting"), true);
     }
 
-    private void showListView(ListView listView, String name, boolean animate) {
+    private void showListView(ListView listView, CharSequence name, boolean animate) {
 
         float y = btnOk.getY() + btnOk.getHeight() + CB.scaledSizes.MARGIN;
 
@@ -581,8 +582,8 @@ public class Settings_Activity extends ActivityBase {
         table.add(valuelabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
         // add description line if description exist
-        String description = Translation.get("Desc_" + setting.getName());
-        if (!description.contains("$ID:")) {
+        CharSequence description = Translation.get("Desc_" + setting.getName());
+        if (!CharSequenceUtil.contains(description, "$ID:")) {
             table.row();
             VisLabel desclabel = new VisLabel(description, descStyle);
             desclabel.setWrap(true);
@@ -615,7 +616,7 @@ public class Settings_Activity extends ActivityBase {
                         public void canceled() {
 
                         }
-                    }, Translation.get(setting.getName()), setting.getValue(), "");
+                    }, Translation.get(setting.getName()).toString(), setting.getValue(), "");
                 }
             }
         });
@@ -708,8 +709,8 @@ public class Settings_Activity extends ActivityBase {
         table.add(folderIcon).width(folderIcon.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
         // add description line if description exist
-        String description = Translation.get("Desc_" + setting.getName());
-        if (!description.contains("$ID:")) {
+        CharSequence description = Translation.get("Desc_" + setting.getName());
+        if (!CharSequenceUtil.contains(description, "$ID:")) {
             table.row();
             VisLabel desclabel = new VisLabel(description, descStyle);
             desclabel.setWrap(true);
@@ -758,7 +759,7 @@ public class Settings_Activity extends ActivityBase {
                                             // check WriteProtection
                                             String path = fileHandle.file().getAbsolutePath();
                                             if (setting.needWritePermission() && !Utils.checkWritePermission(path)) {
-                                                String WriteProtectionMsg = Translation.get("NoWriteAcces");
+                                                CharSequence WriteProtectionMsg = Translation.get("NoWriteAcces");
                                                 CB.viewmanager.toast(WriteProtectionMsg, ViewManager.ToastLength.EXTRA_LONG);
                                             } else {
                                                 setting.setValue(path);
@@ -943,8 +944,8 @@ public class Settings_Activity extends ActivityBase {
 
 
         // add description line if description exist
-        String description = Translation.get("Desc_" + setting.getName());
-        if (!description.contains("$ID:")) {
+        CharSequence description = Translation.get("Desc_" + setting.getName());
+        if (!CharSequenceUtil.contains(description, "$ID:")) {
             table.row();
             VisLabel desclabel = new VisLabel(description, descStyle);
             desclabel.setWrap(true);
@@ -981,8 +982,8 @@ public class Settings_Activity extends ActivityBase {
         table.add(valueLabel).width(valueLabel.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
         // add description line if description exist
-        String description = Translation.get("Desc_" + setting.getName());
-        if (!description.contains("$ID:")) {
+        CharSequence description = Translation.get("Desc_" + setting.getName());
+        if (!CharSequenceUtil.contains(description, "$ID:")) {
             table.row();
             VisLabel desclabel = new VisLabel(description, descStyle);
             desclabel.setWrap(true);

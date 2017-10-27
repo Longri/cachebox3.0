@@ -38,7 +38,7 @@ public class QuickButtonItem extends ListViewItem {
     final Drawable background;
     private AbstractAction mAction;
     private Image mButtonIcon;
-    private String mActionDesc;
+    private CharSequence mActionDesc;
     private Button mButton;
     private QuickActions quickActionsEnum;
     private int autoResortState = -1;
@@ -48,7 +48,7 @@ public class QuickButtonItem extends ListViewItem {
     private boolean needsLayout = true;
     private Drawable spriteDrawable;
 
-    public QuickButtonItem(int listIndex, Drawable background, final AbstractAction action, String Desc, QuickActions type) {
+    public QuickButtonItem(int listIndex, Drawable background, final AbstractAction action, CharSequence Desc, QuickActions type) {
         super(listIndex);
         this.background = background;
         quickActionsEnum = type;

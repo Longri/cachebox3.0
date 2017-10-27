@@ -387,7 +387,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
         });
 
-        String DBName = Database.Data == null || !Database.Data.isStarted() ? Translation.get("noDB") : Database.Data.getPath();
+        String DBName = Database.Data == null || !Database.Data.isStarted() ? Translation.get("noDB").toString() : Database.Data.getPath();
         try {
             int pos = DBName.lastIndexOf("/");
             if (pos < 0) pos = DBName.lastIndexOf("\\");

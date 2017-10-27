@@ -71,7 +71,7 @@ public class ListView extends WidgetGroup {
     private final static int SAME_HEIGHT_INITIAL_COUNT = 10;
     private final boolean itemsHaveSameHeight;
     private VisLabel emptyLabel;
-    private String emptyString = null;
+    private CharSequence emptyString = null;
 
     public SnapshotArray<ListViewItem> items() {
         return itemViews;
@@ -211,7 +211,7 @@ public class ListView extends WidgetGroup {
         itemGroup.clear();
     }
 
-    public void setEmptyString(String emptyString) {
+    public void setEmptyString(CharSequence emptyString) {
         this.emptyString = emptyString;
         emptyLabel = null;
         if (style.emptyFont == null || style.emptyFontColor == null || emptyString == null)

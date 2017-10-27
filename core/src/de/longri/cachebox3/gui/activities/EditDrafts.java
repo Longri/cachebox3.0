@@ -83,9 +83,9 @@ public class EditDrafts extends ActivityBase {
         super("EditDraft");
         itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
 
-        btnOk = new VisTextButton(Translation.get("save"));
+        btnOk = new VisTextButton(Translation.get("save").toString());//TODO change to CharSequence
         btnOk.addListener(saveClickListener);
-        btnCancel = new VisTextButton(Translation.get("cancel"));
+        btnCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
         btnCancel.addListener(cancelClickListener);
         contentTable = new VisTable();
         setDraft(note, returnListener, isNewDraft);

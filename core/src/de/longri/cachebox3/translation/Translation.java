@@ -14,11 +14,11 @@ public class Translation {
         translation.loadTranslation(LangPath);
     }
 
-    public static String get(String StringId, String... params) {
+    public static CharSequence get(String StringId, String... params) {
         return translation.getTranslation(StringId, params);
     }
 
-    public static String get(int hashCode, String... params) {
+    public static CharSequence get(int hashCode, String... params) {
         return translation.getTranslation(hashCode, params);
     }
 

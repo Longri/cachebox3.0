@@ -78,7 +78,7 @@ public class CheckStateActivity extends ActivityBase {
 
     public CheckStateActivity() {
         super("CheckStateActivity");
-        bCancel = new VisTextButton(Translation.get("cancel"));
+        bCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
         lblTitle = new VisLabel(Translation.get("chkApiState"));
         Label.LabelStyle style = new Label.LabelStyle(lblTitle.getStyle());
@@ -271,8 +271,8 @@ public class CheckStateActivity extends ActivityBase {
                     public void run() {
                         //Give feedback and say what updated!
                         CacheListChangedEventList.Call();
-                        String title = Translation.get("chkState");
-                        String msg = Translation.get("CachesUpdatet") + " " + changedCount.get() + "/" + Database.Data.Query.size;
+                        CharSequence title = Translation.get("chkState");
+                        String msg = Translation.get("CachesUpdatet") + " " + changedCount.get() + "/" + Database.Data.Query.size;//TODO change to CharSequence
                         Window dialog = new ButtonDialog("chkState", msg, title, MessageBoxButtons.OK, MessageBoxIcon.None, new OnMsgBoxClickListener() {
                             @Override
                             public boolean onClick(int which, Object data) {

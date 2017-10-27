@@ -261,8 +261,8 @@ public class ButtonDialog extends Window {
         }
     }
 
-    private void button(String text, float buttonWidth, Object object) {
-        VisTextButton button = new VisTextButton(text);
+    private void button(CharSequence text, float buttonWidth, Object object) {
+        VisTextButton button = new VisTextButton(text.toString());//TODO change to CharSequence
         buttonTable.add(button).width(buttonWidth);
         values.put(button, object);
     }

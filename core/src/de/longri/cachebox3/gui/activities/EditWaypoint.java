@@ -69,8 +69,8 @@ public class EditWaypoint extends ActivityBase {
         this.showCoordsOnShow = showCoordsOnShow;
         this.callBack = callBack;
 
-        btnOk = new VisTextButton(Translation.get("save"));
-        btnCancel = new VisTextButton(Translation.get("cancel"));
+        btnOk = new VisTextButton(Translation.get("save").toString());//TODO change to CharSequence
+        btnCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
         cacheTitelLabel = new VisLabel(Database.Data.Query.GetCacheById(waypoint.getCacheId()).getName());
         typeLabel = new VisLabel(Translation.get("type"));
         titleLabel = new VisLabel(Translation.get("Title"));

@@ -395,8 +395,8 @@ public class TestView extends AbstractView {
         contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4 * 2));
         contentTable.row();
         {
-            String Msg = Translation.get("QuitReally");
-            String Title = Translation.get("Quit?");
+            CharSequence Msg = Translation.get("QuitReally");
+            CharSequence Title = Translation.get("Quit?");
             Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop, null);
 
             dialog.setStageBackground(null);

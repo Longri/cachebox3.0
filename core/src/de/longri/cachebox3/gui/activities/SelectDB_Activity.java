@@ -107,10 +107,10 @@ public class SelectDB_Activity extends ActivityBase {
 
         if (selectedIndex > -1) lvFiles.setSelection(selectedIndex);
 
-        bNew = new VisTextButton(Translation.get("selectDB.bNew"));
-        bSelect = new VisTextButton(Translation.get("selectDB.bSelect"));
-        bCancel = new VisTextButton(Translation.get("selectDB.bCancel"));
-        bAutostart = new VisTextButton(Translation.get("selectDB.bAutostart"));
+        bNew = new VisTextButton(Translation.get("selectDB.bNew").toString());//TODO change to CharSequence
+        bSelect = new VisTextButton(Translation.get("selectDB.bSelect").toString());//TODO change to CharSequence
+        bCancel = new VisTextButton(Translation.get("selectDB.bCancel").toString());//TODO change to CharSequence
+        bAutostart = new VisTextButton(Translation.get("selectDB.bAutostart").toString());//TODO change to CharSequence
 
         this.addActor(bSelect);
         this.addActor(bNew);
@@ -216,11 +216,6 @@ public class SelectDB_Activity extends ActivityBase {
                 showSelectionMenu();
             }
         });
-
-        // Translations
-        bNew.setText(Translation.get("NewDB"));
-        bSelect.setText(Translation.get("confirm"));
-        bCancel.setText(Translation.get("cancel"));
 
         autoStartTime = Config.MultiDBAutoStartTime.getValue();
         if (autoStartTime > 0) {
@@ -422,11 +417,11 @@ public class SelectDB_Activity extends ActivityBase {
 
     private void setAutoStartText() {
         if (autoStartTime < 0)
-            bAutostart.setText(Translation.get("StartWithoutSelection"));
+            bAutostart.setText(Translation.get("StartWithoutSelection").toString());//TODO change to CharSequence
         else if (autoStartTime == 0)
-            bAutostart.setText(Translation.get("AutoStartDisabled"));
+            bAutostart.setText(Translation.get("AutoStartDisabled").toString());//TODO change to CharSequence
         else
-            bAutostart.setText(Translation.get("AutoStartTime", String.valueOf(autoStartTime)));
+            bAutostart.setText(Translation.get("AutoStartTime", String.valueOf(autoStartTime)).toString());//TODO change to CharSequence
     }
 
     private class CustomAdapter implements Adapter {
@@ -486,7 +481,7 @@ public class SelectDB_Activity extends ActivityBase {
     Timer updateTimer;
 
     private void showSelectionMenu() {
-        final String[] cs = new String[6];
+        final CharSequence[] cs = new String[6];
         cs[0] = Translation.get("StartWithoutSelection");
         cs[1] = Translation.get("AutoStartDisabled");
         cs[2] = Translation.get("AutoStartTime", "5");

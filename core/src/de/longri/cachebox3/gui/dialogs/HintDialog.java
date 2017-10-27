@@ -47,8 +47,8 @@ public class HintDialog extends ButtonDialog {
 
         SnapshotArray<Actor> childs = this.buttonTable.getChildren();
         encodeButton = ((VisTextButton) childs.get(0));
-        encodeButton.setText(Translation.get("decode"));
-        ((VisTextButton) childs.get(1)).setText(Translation.get("close"));
+        encodeButton.setText(Translation.get("decode").toString());//TODO change to CharSequence
+        ((VisTextButton) childs.get(1)).setText(Translation.get("close").toString());//TODO change to CharSequence
         result(BUTTON_POSITIVE);
     }
 
@@ -69,11 +69,11 @@ public class HintDialog extends ButtonDialog {
             if (!encoded) {
                 encoded = true;
                 hintLabel.setText(this.hintTextEncoded);
-                encodeButton.setText(Translation.get("encode"));
+                encodeButton.setText(Translation.get("encode").toString());//TODO change to CharSequence
             } else {
                 encoded = false;
                 hintLabel.setText(this.hintTextDecoded);
-                encodeButton.setText(Translation.get("decode"));
+                encodeButton.setText(Translation.get("decode").toString());////TODO change to CharSequence
             }
             return;
         }

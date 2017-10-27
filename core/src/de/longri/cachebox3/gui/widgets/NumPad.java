@@ -115,8 +115,8 @@ public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposa
         btn9 = new VisTextButton("9");
         btnBack = new VisTextButton("Back");
         btnDel = new VisTextButton("Del");
-        btnOk = new VisTextButton(Translation.get("ok"));
-        btnCancel = new VisTextButton(Translation.get("cancel"));
+        btnOk = new VisTextButton(Translation.get("ok").toString());//TODO change to CharSequence
+        btnCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
         btnDot = new VisTextButton(".");
         btnLeft = new VisTextButton("<");
         btnRight = new VisTextButton(">");

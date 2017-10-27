@@ -187,7 +187,7 @@ public enum QuickActions {
         return null;
     }
 
-    public static String getName(int id) {
+    public static CharSequence getName(int id) {
         switch (id) {
             case 0:
                 return Translation.get("Description");

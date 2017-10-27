@@ -67,7 +67,7 @@ public class ReloadCacheActivity extends ActivityBase {
 
     public ReloadCacheActivity() {
         super("CheckStateActivity");
-        bCancel = new VisTextButton(Translation.get("cancel"));
+        bCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
         lblTitle = new VisLabel(Translation.get("ReloadCacheAPI"));
         Label.LabelStyle style = new Label.LabelStyle(lblTitle.getStyle());

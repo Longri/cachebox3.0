@@ -40,7 +40,7 @@ public class ApiButton extends IconButton {
     private final ApiButtonStyle style;
 
     public ApiButton() {
-        super(Translation.get("getApiKey"));
+        super(Translation.get("getApiKey").toString());//TODO change to CharSequence
         this.addListener(clickListener);
         this.style = VisUI.getSkin().get("ApiButton", ApiButtonStyle.class);
         TextButtonStyle btnStyle = new VisTextButtonStyle();

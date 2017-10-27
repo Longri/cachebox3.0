@@ -724,7 +724,7 @@ public class DraftsView extends AbstractView {
         final AbstractCache abstractCache = tmpAbstractCache;
 
         if (abstractCache == null && !aktDraft.isTbDraft) {
-            String message = Translation.get("cacheOtherDb", aktDraft.CacheName.toString());
+            String message = Translation.get("cacheOtherDb", aktDraft.CacheName.toString()).toString();
             message += "\n" + Translation.get("draftNoteNoDelete");
             MessageBox.show(message);
             return;
@@ -774,13 +774,13 @@ public class DraftsView extends AbstractView {
 
         };
 
-        String message = "";
+        CharSequence message = "";
         if (aktDraft.isTbDraft) {
             message = Translation.get("confirmDraftDeletionTB", aktDraft.typeString, aktDraft.TbName);
         } else {
             message = Translation.get("confirmDraftDeletion", aktDraft.typeString, aktDraft.CacheName.toString());
-            if (aktDraft.type == LogTypes.found || aktDraft.type == LogTypes.attended || aktDraft.type == LogTypes.webcam_photo_taken)
-                message += Translation.get("confirmDraftDeletionRst");
+           //TODO if (aktDraft.type == LogTypes.found || aktDraft.type == LogTypes.attended || aktDraft.type == LogTypes.webcam_photo_taken)
+              //TODO  message += Translation.get("confirmDraftDeletionRst");
         }
 
         MessageBox.show(message, Translation.get("deleteDraft"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
@@ -818,7 +818,7 @@ public class DraftsView extends AbstractView {
 
             }
         };
-        final String message = Translation.get("DeleteAllDraftsQuestion");
+        final CharSequence message = Translation.get("DeleteAllDraftsQuestion");
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
@@ -842,8 +842,8 @@ public class DraftsView extends AbstractView {
         AbstractCache cache = tmpCache;
 
         if (cache == null) {
-            String message = Translation.get("cacheOtherDb", aktDraft.CacheName.toString());
-            message += "\n" + Translation.get("DraftNoSelect");
+            CharSequence message = Translation.get("cacheOtherDb", aktDraft.CacheName.toString());
+           //TODO message += "\n" + Translation.get("DraftNoSelect");
             MessageBox.show(message, Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             return;
         }

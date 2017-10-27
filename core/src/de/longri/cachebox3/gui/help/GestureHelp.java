@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.animations.actor_animations.Blink;
 import de.longri.cachebox3.gui.animations.actor_animations.GestureHelpAnimation;
@@ -49,8 +50,8 @@ public class GestureHelp extends HelpWindow {
     final Drawable buttonDrawable;
     final Drawable gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
     final GestureHelpStyle style;
-    final String GESTURE_MSG = Translation.get("gestureHelp"); // "You can also use this gesture to call this function"
-    final String DONT_SHOW_AGAIN_MSG = Translation.get("DontShowHelp"); // "Don't show help Msg again!"
+    final CharSequence GESTURE_MSG = Translation.get("gestureHelp");
+    final String DONT_SHOW_AGAIN_MSG = Translation.get("DontShowHelp").toString(); //TODO change to CharSequence
     final Table table = new Table();
     private boolean isShowing = false;
 

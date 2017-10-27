@@ -82,11 +82,11 @@ public class ImportGcPos extends ActivityBase {
 
     public ImportGcPos() {
         super("searchOverPosActivity");
-        bOK = new VisTextButton(Translation.get("import"));
-        bCancel = new VisTextButton(Translation.get("cancel"));
+        bOK = new VisTextButton(Translation.get("import").toString());//TODO change to CharSequence
+        bCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
         lblTitle = new VisLabel(Translation.get("importCachesOverPosition"));
-        lblRadius = new VisLabel(Translation.get(Translation.get("Radius")));
+        lblRadius = new VisLabel(Translation.get("Radius"));
         lblCaches = new VisLabel("Imported Caches: 0");
         lblWaypoints = new VisLabel("Imported Waypoints: 0");
         lblLogs = new VisLabel("Imported Log's: 0");
@@ -95,12 +95,12 @@ public class ImportGcPos extends ActivityBase {
         lblRadiusUnit = new VisLabel(Config.ImperialUnits.getValue() ? "mi" : "km");
         btnMinus = new VisTextButton("-");
         btnPlus = new VisTextButton("+");
-        checkBoxOnlyAvailable = new VisCheckBox(Translation.get("SearchOnlyAvailable"));
-        checkBoxExcludeHides = new VisCheckBox(Translation.get("SearchWithoutOwns"));
-        checkBoxExcludeFounds = new VisCheckBox(Translation.get("SearchWithoutFounds"));
+        checkBoxOnlyAvailable = new VisCheckBox(Translation.get("SearchOnlyAvailable").toString());//TODO change to CharSequence
+        checkBoxExcludeHides = new VisCheckBox(Translation.get("SearchWithoutOwns").toString());//TODO change to CharSequence
+        checkBoxExcludeFounds = new VisCheckBox(Translation.get("SearchWithoutFounds").toString());//TODO change to CharSequence
         coordBtn = new CoordinateButton(EventHandler.getMyPosition());
-        tglBtnGPS = new VisTextButton(Translation.get("FromGps"), "toggle");
-        tglBtnMap = new VisTextButton(Translation.get("FromMap"), "toggle");
+        tglBtnGPS = new VisTextButton(Translation.get("FromGps").toString(), "toggle");//TODO change to CharSequence
+        tglBtnMap = new VisTextButton(Translation.get("FromMap").toString(), "toggle");//TODO change to CharSequence
 
         Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
         workAnimation = new Image(animationDrawable);

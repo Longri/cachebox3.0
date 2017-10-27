@@ -18,6 +18,9 @@ package de.longri.cachebox3.translation.word;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.DraftEntry;
+import de.longri.cachebox3.types.LogTypes;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -52,6 +55,27 @@ class TranslationListTest {
         translation = "Sum of all individual Digits in the Number. \nExample: CS(123456)=21";
         sequence = translationList.get(id);
         assertThat("Translation must '" + translation + "' but was: '" + sequence + "'", equals(sequence, translation));
+
+
+    }
+
+    @Test
+    void appendixTest() {
+
+        FileHandle fileHandle = TestUtils.getResourceFileHandle("testsResources/strings.ini");
+
+        TranslationList translationList = new TranslationList();
+        translationList.load(fileHandle);
+
+        DraftEntry aktDraft = new DraftEntry(LogTypes.discovered);
+        aktDraft.CacheName = "CacheNameVale";
+
+        String message = translationList.get("cacheOtherDb", aktDraft.CacheName.toString()).toString();
+        message += "\n" + translationList.get("draftNoteNoDelete");
+
+        String translation = "???";
+
+// TODO       assertThat("Translation must '" + translation + "' but was: '" + message + "'", equals(message, translation));
 
 
     }

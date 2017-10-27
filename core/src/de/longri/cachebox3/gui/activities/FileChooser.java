@@ -69,11 +69,11 @@ public class FileChooser extends ActivityBase {
     private final SelectionMode selectionMode;
     private SelectionReturnListner selectionReturnListner;
 
-    public FileChooser(String title, Mode mode, SelectionMode selectMode) {
+    public FileChooser(CharSequence title, Mode mode, SelectionMode selectMode) {
         this(title, mode, selectMode, (String) null);
     }
 
-    public FileChooser(String title, Mode mode, SelectionMode selectMode, String... extentions) {
+    public FileChooser(CharSequence title, Mode mode, SelectionMode selectMode, String... extentions) {
         super("FileChooser", VisUI.getSkin().get("default", FileChooserStyle.class));
         fileChooserStyle = (FileChooserStyle) this.style;
         this.setStageBackground(style.background);
@@ -167,8 +167,8 @@ public class FileChooser extends ActivityBase {
 
     private void createButtons() {
 
-        btnOk = new VisTextButton(Translation.get("select"));
-        btnCancel = new VisTextButton(Translation.get("cancel"));
+        btnOk = new VisTextButton(Translation.get("select").toString());//TODO change to CharSequence
+        btnCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
 
         this.addActor(btnOk);
         this.addActor(btnCancel);

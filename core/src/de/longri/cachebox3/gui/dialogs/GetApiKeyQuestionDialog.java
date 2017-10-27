@@ -29,15 +29,15 @@ public class GetApiKeyQuestionDialog extends ButtonDialog {
         this(Translation.get("wantApi"));
     }
 
-    public GetApiKeyQuestionDialog(String msg) {
+    public GetApiKeyQuestionDialog(CharSequence msg) {
         this(msg, MessageBoxIcon.Question);
     }
 
-    public GetApiKeyQuestionDialog(String msg,MessageBoxIcon icon) {
+    public GetApiKeyQuestionDialog(CharSequence msg,MessageBoxIcon icon) {
         this(msg,Translation.get("apiKeyNeeded"), MessageBoxIcon.Question);
     }
 
-    public GetApiKeyQuestionDialog(String msg,String title, MessageBoxIcon icon) {
+    public GetApiKeyQuestionDialog(CharSequence msg,CharSequence title, MessageBoxIcon icon) {
         super("GetApiKeyQuestionDialog", msg, title,
                 MessageBoxButtons.YesNo, icon,
                 new OnMsgBoxClickListener() {
