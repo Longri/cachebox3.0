@@ -107,10 +107,10 @@ public class SelectDB_Activity extends ActivityBase {
 
         if (selectedIndex > -1) lvFiles.setSelection(selectedIndex);
 
-        bNew = new VisTextButton(Translation.get("selectDB.bNew").toString());//TODO change to CharSequence
-        bSelect = new VisTextButton(Translation.get("selectDB.bSelect").toString());//TODO change to CharSequence
-        bCancel = new VisTextButton(Translation.get("selectDB.bCancel").toString());//TODO change to CharSequence
-        bAutostart = new VisTextButton(Translation.get("selectDB.bAutostart").toString());//TODO change to CharSequence
+        bNew = new VisTextButton(Translation.get("NewDB").toString());//TODO change to CharSequence
+        bSelect = new VisTextButton(Translation.get("confirm").toString());//TODO change to CharSequence
+        bCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
+        bAutostart = new VisTextButton("");
 
         this.addActor(bSelect);
         this.addActor(bNew);
