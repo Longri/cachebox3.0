@@ -38,6 +38,7 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
@@ -61,7 +62,7 @@ public class ImportGcPos extends ActivityBase {
 
     private static final Logger log = LoggerFactory.getLogger(ImportGcPos.class);
 
-    private final VisTextButton bOK, bCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap;
+    private final CharSequenceButton bOK, bCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap;
     private final VisLabel lblTitle, lblRadius, lblRadiusUnit, lblCaches, lblWaypoints, lblLogs, lblImages;
     private final Image gsLogo;
     private final CoordinateButton coordBtn;
@@ -82,8 +83,8 @@ public class ImportGcPos extends ActivityBase {
 
     public ImportGcPos() {
         super("searchOverPosActivity");
-        bOK = new VisTextButton(Translation.get("import").toString());//TODO change to CharSequence
-        bCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
+        bOK = new CharSequenceButton(Translation.get("import"));
+        bCancel = new CharSequenceButton(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
         lblTitle = new VisLabel(Translation.get("importCachesOverPosition"));
         lblRadius = new VisLabel(Translation.get("Radius"));
@@ -93,14 +94,14 @@ public class ImportGcPos extends ActivityBase {
         lblImages = new VisLabel("Imported Images: 0");
         textAreaRadius = new VisTextArea("default");
         lblRadiusUnit = new VisLabel(Config.ImperialUnits.getValue() ? "mi" : "km");
-        btnMinus = new VisTextButton("-");
-        btnPlus = new VisTextButton("+");
+        btnMinus = new CharSequenceButton("-");
+        btnPlus = new CharSequenceButton("+");
         checkBoxOnlyAvailable = new VisCheckBox(Translation.get("SearchOnlyAvailable").toString());//TODO change to CharSequence
         checkBoxExcludeHides = new VisCheckBox(Translation.get("SearchWithoutOwns").toString());//TODO change to CharSequence
         checkBoxExcludeFounds = new VisCheckBox(Translation.get("SearchWithoutFounds").toString());//TODO change to CharSequence
         coordBtn = new CoordinateButton(EventHandler.getMyPosition());
-        tglBtnGPS = new VisTextButton(Translation.get("FromGps").toString(), "toggle");//TODO change to CharSequence
-        tglBtnMap = new VisTextButton(Translation.get("FromMap").toString(), "toggle");//TODO change to CharSequence
+        tglBtnGPS = new CharSequenceButton(Translation.get("FromGps"), "toggle");
+        tglBtnMap = new CharSequenceButton(Translation.get("FromMap"), "toggle");
 
         Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
         workAnimation = new Image(animationDrawable);

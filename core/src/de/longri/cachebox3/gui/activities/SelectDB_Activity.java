@@ -42,6 +42,7 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
@@ -71,10 +72,10 @@ public class SelectDB_Activity extends ActivityBase {
     private int autoStartTime = 10;
     private int autoStartCounter = 0;
     private String DBPath;
-    private VisTextButton bNew;
-    private VisTextButton bSelect;
-    private VisTextButton bCancel;
-    private VisTextButton bAutostart;
+    private CharSequenceButton bNew;
+    private CharSequenceButton bSelect;
+    private CharSequenceButton bCancel;
+    private CharSequenceButton bAutostart;
     private ListView lvFiles;
     private CustomAdapter lvAdapter;
     private String[] fileInfos;
@@ -107,10 +108,10 @@ public class SelectDB_Activity extends ActivityBase {
 
         if (selectedIndex > -1) lvFiles.setSelection(selectedIndex);
 
-        bNew = new VisTextButton(Translation.get("NewDB").toString());//TODO change to CharSequence
-        bSelect = new VisTextButton(Translation.get("confirm").toString());//TODO change to CharSequence
-        bCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
-        bAutostart = new VisTextButton("");
+        bNew = new CharSequenceButton(Translation.get("NewDB"));
+        bSelect = new CharSequenceButton(Translation.get("confirm"));
+        bCancel = new CharSequenceButton(Translation.get("cancel"));
+        bAutostart = new CharSequenceButton("");
 
         this.addActor(bSelect);
         this.addActor(bNew);
@@ -417,9 +418,9 @@ public class SelectDB_Activity extends ActivityBase {
 
     private void setAutoStartText() {
         if (autoStartTime < 0)
-            bAutostart.setText(Translation.get("StartWithoutSelection").toString());//TODO change to CharSequence
+            bAutostart.setText(Translation.get("StartWithoutSelection"));
         else if (autoStartTime == 0)
-            bAutostart.setText(Translation.get("AutoStartDisabled").toString());//TODO change to CharSequence
+            bAutostart.setText(Translation.get("AutoStartDisabled"));
         else
             bAutostart.setText(Translation.get("AutoStartTime", String.valueOf(autoStartTime)).toString());//TODO change to CharSequence
     }

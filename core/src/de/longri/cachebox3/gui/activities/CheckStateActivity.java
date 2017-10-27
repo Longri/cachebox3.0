@@ -45,6 +45,7 @@ import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
@@ -67,7 +68,7 @@ public class CheckStateActivity extends ActivityBase {
     private static final Logger log = LoggerFactory.getLogger(CheckStateActivity.class);
 
     private final int blockSize = 108; // The API leaves only a maximum of 110 per request!
-    private final VisTextButton bCancel;
+    private final CharSequenceButton bCancel;
     private final VisLabel lblTitle;
     private final Image gsLogo;
     private boolean importRuns = false;
@@ -78,7 +79,7 @@ public class CheckStateActivity extends ActivityBase {
 
     public CheckStateActivity() {
         super("CheckStateActivity");
-        bCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
+        bCancel = new CharSequenceButton(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
         lblTitle = new VisLabel(Translation.get("chkApiState"));
         Label.LabelStyle style = new Label.LabelStyle(lblTitle.getStyle());

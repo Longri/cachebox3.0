@@ -53,6 +53,7 @@ import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.ApiButton;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
@@ -70,7 +71,7 @@ public class Settings_Activity extends ActivityBase {
 
     final static Logger log = LoggerFactory.getLogger(Settings_Activity.class);
     private static final boolean FORCE = true;
-    private VisTextButton btnOk, btnCancel, btnMenu;
+    private CharSequenceButton btnOk, btnCancel, btnMenu;
     private final SettingsActivityStyle style;
 
     public Settings_Activity() {
@@ -107,9 +108,9 @@ public class Settings_Activity extends ActivityBase {
 
     private void createButtons() {
 
-        btnOk = new VisTextButton(Translation.get("save").toString());//TODO change to CharSequence
-        btnMenu = new VisTextButton("...");
-        btnCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
+        btnOk = new CharSequenceButton(Translation.get("save"));
+        btnMenu = new CharSequenceButton("...");
+        btnCancel = new CharSequenceButton(Translation.get("cancel"));
 
         this.addActor(btnOk);
         this.addActor(btnMenu);

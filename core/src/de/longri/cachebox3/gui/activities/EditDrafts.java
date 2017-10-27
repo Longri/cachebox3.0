@@ -37,6 +37,7 @@ import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
@@ -60,7 +61,7 @@ public class EditDrafts extends ActivityBase {
 
 
     private final VisTable contentTable;
-    private final VisTextButton btnOk, btnCancel;
+    private final CharSequenceButton btnOk, btnCancel;
     private final DraftListItemStyle itemStyle;
     private final VisScrollPane scrollPane;
     private final VisLabel foundLabel, dateLabel, timeLabel;
@@ -83,9 +84,9 @@ public class EditDrafts extends ActivityBase {
         super("EditDraft");
         itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
 
-        btnOk = new VisTextButton(Translation.get("save").toString());//TODO change to CharSequence
+        btnOk = new CharSequenceButton(Translation.get("save"));
         btnOk.addListener(saveClickListener);
-        btnCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
+        btnCancel = new CharSequenceButton(Translation.get("cancel"));
         btnCancel.addListener(cancelClickListener);
         contentTable = new VisTable();
         setDraft(note, returnListener, isNewDraft);

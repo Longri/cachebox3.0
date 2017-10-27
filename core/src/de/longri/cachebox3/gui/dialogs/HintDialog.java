@@ -23,6 +23,7 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.UnitFormatter;
@@ -33,7 +34,7 @@ import de.longri.cachebox3.utils.UnitFormatter;
 public class HintDialog extends ButtonDialog {
     private final String hintTextDecoded, hintTextEncoded;
     private static final VisLabel hintLabel = new VisLabel();
-    private final VisTextButton encodeButton;
+    private final CharSequenceButton encodeButton;
     private boolean encoded = false;
 
     public HintDialog() {
@@ -46,9 +47,9 @@ public class HintDialog extends ButtonDialog {
         hintLabel.setWrap(true);
 
         SnapshotArray<Actor> childs = this.buttonTable.getChildren();
-        encodeButton = ((VisTextButton) childs.get(0));
-        encodeButton.setText(Translation.get("decode").toString());//TODO change to CharSequence
-        ((VisTextButton) childs.get(1)).setText(Translation.get("close").toString());//TODO change to CharSequence
+        encodeButton = ((CharSequenceButton) childs.get(0));
+        encodeButton.setText(Translation.get("decode"));
+        ((CharSequenceButton) childs.get(1)).setText(Translation.get("close"));
         result(BUTTON_POSITIVE);
     }
 
@@ -69,11 +70,11 @@ public class HintDialog extends ButtonDialog {
             if (!encoded) {
                 encoded = true;
                 hintLabel.setText(this.hintTextEncoded);
-                encodeButton.setText(Translation.get("encode").toString());//TODO change to CharSequence
+                encodeButton.setText(Translation.get("encode"));
             } else {
                 encoded = false;
                 hintLabel.setText(this.hintTextDecoded);
-                encodeButton.setText(Translation.get("decode").toString());////TODO change to CharSequence
+                encodeButton.setText(Translation.get("decode"));
             }
             return;
         }

@@ -39,6 +39,7 @@ import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
@@ -56,7 +57,7 @@ public class ReloadCacheActivity extends ActivityBase {
 
     private static final Logger log = LoggerFactory.getLogger(ReloadCacheActivity.class);
 
-    private final VisTextButton bCancel;
+    private final CharSequenceButton bCancel;
     private final VisLabel lblTitle;
     private final Image gsLogo;
     private boolean importRuns = false;
@@ -67,7 +68,7 @@ public class ReloadCacheActivity extends ActivityBase {
 
     public ReloadCacheActivity() {
         super("CheckStateActivity");
-        bCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
+        bCancel = new CharSequenceButton(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
         lblTitle = new VisLabel(Translation.get("ReloadCacheAPI"));
         Label.LabelStyle style = new Label.LabelStyle(lblTitle.getStyle());

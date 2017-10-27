@@ -36,6 +36,7 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.translation.Translation;
 
 import java.io.File;
@@ -59,7 +60,7 @@ public class FileChooser extends ActivityBase {
         void selected(FileHandle fileHandle);
     }
 
-    private VisTextButton btnOk, btnCancel;
+    private CharSequenceButton btnOk, btnCancel;
     private FileHandle actDir;
     private FileChooserStyle fileChooserStyle;
     private FileFilter actFilter;
@@ -167,8 +168,8 @@ public class FileChooser extends ActivityBase {
 
     private void createButtons() {
 
-        btnOk = new VisTextButton(Translation.get("select").toString());//TODO change to CharSequence
-        btnCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
+        btnOk = new CharSequenceButton(Translation.get("select"));
+        btnCancel = new CharSequenceButton(Translation.get("cancel"));
 
         this.addActor(btnOk);
         this.addActor(btnCancel);

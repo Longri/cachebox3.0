@@ -31,6 +31,7 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.gui.widgets.SelectBox;
@@ -52,7 +53,7 @@ public class EditWaypoint extends ActivityBase {
 
     private final EditWaypointStyle style;
     private final AbstractWaypoint waypoint;
-    private final VisTextButton btnOk, btnCancel;
+    private final CharSequenceButton btnOk, btnCancel;
     private final VisLabel cacheTitelLabel, titleLabel, typeLabel, descriptionLabel, clueLabel, startLabel;
     private final EditTextBox titleTextArea, descriptionTextArea, clueTextArea;
     private final VisTable contentTable;
@@ -69,8 +70,8 @@ public class EditWaypoint extends ActivityBase {
         this.showCoordsOnShow = showCoordsOnShow;
         this.callBack = callBack;
 
-        btnOk = new VisTextButton(Translation.get("save").toString());//TODO change to CharSequence
-        btnCancel = new VisTextButton(Translation.get("cancel").toString());//TODO change to CharSequence
+        btnOk = new CharSequenceButton(Translation.get("save"));
+        btnCancel = new CharSequenceButton(Translation.get("cancel"));
         cacheTitelLabel = new VisLabel(Database.Data.Query.GetCacheById(waypoint.getCacheId()).getName());
         typeLabel = new VisLabel(Translation.get("type"));
         titleLabel = new VisLabel(Translation.get("Title"));
