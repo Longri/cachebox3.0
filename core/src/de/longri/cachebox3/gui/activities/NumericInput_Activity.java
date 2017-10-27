@@ -87,7 +87,7 @@ public class NumericInput_Activity<T extends Number> extends ActivityBase {
                     returnValue(retValue);
                     hide();
                 } catch (NumberFormatException e) {
-                    CB.viewmanager.toast(Translation.Get("wrongValue"));
+                    CB.viewmanager.toast(Translation.get("wrongValue"));
                 }
 
             } else if (keyValue.equals("C")) {

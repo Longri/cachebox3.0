@@ -28,17 +28,17 @@ import de.longri.cachebox3.translation.Translation;
  */
 public class NewDB_InputBox extends ButtonDialog {
     public NewDB_InputBox(OnMsgBoxClickListener listener) {
-        super("NewDB", createContentBox(), Translation.Get("NewDB"), MessageBoxButtons.OKCancel, listener);
+        super("NewDB", createContentBox(), Translation.get("NewDB"), MessageBoxButtons.OKCancel, listener);
     }
 
     private static Table createContentBox() {
         Table contentBox = new Table();
 
         VisTextField textField = new VisTextField();
-        textField.setMessageText(Translation.Get("EnterNewDBName"));
+        textField.setMessageText(Translation.get("EnterNewDBName"));
 
         VisCheckBox checkBox = new VisCheckBox("");
-        checkBox.setText(Translation.Get("UseDefaultRep"));
+        checkBox.setText(Translation.get("UseDefaultRep"));
 
         float pad = CB.scaledSizes.MARGIN;
         contentBox.add(textField).pad(pad).left().fillX();
@@ -66,7 +66,7 @@ public class NewDB_InputBox extends ButtonDialog {
             String newDbName = textField.getText();
             boolean okClicked = ((Integer) which) == BUTTON_POSITIVE;
             if (okClicked && (newDbName == null || newDbName.isEmpty())) {
-                CB.viewmanager.toast(Translation.Get("MustEnterName"));
+                CB.viewmanager.toast(Translation.get("MustEnterName"));
                 return;
             }
 

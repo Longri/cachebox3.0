@@ -379,11 +379,11 @@ public class CB {
      */
     public static boolean checkApiResultState(ApiResultState result) {
         if (result == ApiResultState.CONNECTION_TIMEOUT) {
-            CB.viewmanager.toast(Translation.Get("ConnectionError"));
+            CB.viewmanager.toast(Translation.get("ConnectionError"));
             return true;
         }
         if (result == ApiResultState.API_IS_UNAVAILABLE) {
-            CB.viewmanager.toast(Translation.Get("API-offline"));
+            CB.viewmanager.toast(Translation.get("API-offline"));
             return true;
         }
 
@@ -391,9 +391,9 @@ public class CB {
             CB.scheduleOnMainThread(new Runnable() {
                 @Override
                 public void run() {
-                    String msg = Translation.Get("apiKeyExpired") + "\n\n"
-                            + Translation.Get("wantApi");
-                    new GetApiKeyQuestionDialog(msg, Translation.Get("errorAPI"),
+                    String msg = Translation.get("apiKeyExpired") + "\n\n"
+                            + Translation.get("wantApi");
+                    new GetApiKeyQuestionDialog(msg, Translation.get("errorAPI"),
                             MessageBoxIcon.ExpiredApiKey).show();
                 }
             }, 300);// wait for closing ProgressDialog before show msg
@@ -404,9 +404,9 @@ public class CB {
             CB.scheduleOnMainThread(new Runnable() {
                 @Override
                 public void run() {
-                    String msg = Translation.Get("apiKeyInvalid") + "\n\n"
-                            + Translation.Get("wantApi");
-                    new GetApiKeyQuestionDialog(msg, Translation.Get("errorAPI"),
+                    String msg = Translation.get("apiKeyInvalid") + "\n\n"
+                            + Translation.get("wantApi");
+                    new GetApiKeyQuestionDialog(msg, Translation.get("errorAPI"),
                             MessageBoxIcon.ExpiredApiKey).show();
                 }
             }, 300);// wait for closing ProgressDialog before show msg

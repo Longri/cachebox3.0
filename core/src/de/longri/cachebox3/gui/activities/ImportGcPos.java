@@ -82,11 +82,11 @@ public class ImportGcPos extends ActivityBase {
 
     public ImportGcPos() {
         super("searchOverPosActivity");
-        bOK = new VisTextButton(Translation.Get("import"));
-        bCancel = new VisTextButton(Translation.Get("cancel"));
+        bOK = new VisTextButton(Translation.get("import"));
+        bCancel = new VisTextButton(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
-        lblTitle = new VisLabel(Translation.Get("importCachesOverPosition"));
-        lblRadius = new VisLabel(Translation.Get(Translation.Get("Radius")));
+        lblTitle = new VisLabel(Translation.get("importCachesOverPosition"));
+        lblRadius = new VisLabel(Translation.get(Translation.get("Radius")));
         lblCaches = new VisLabel("Imported Caches: 0");
         lblWaypoints = new VisLabel("Imported Waypoints: 0");
         lblLogs = new VisLabel("Imported Log's: 0");
@@ -95,12 +95,12 @@ public class ImportGcPos extends ActivityBase {
         lblRadiusUnit = new VisLabel(Config.ImperialUnits.getValue() ? "mi" : "km");
         btnMinus = new VisTextButton("-");
         btnPlus = new VisTextButton("+");
-        checkBoxOnlyAvailable = new VisCheckBox(Translation.Get("SearchOnlyAvailable"));
-        checkBoxExcludeHides = new VisCheckBox(Translation.Get("SearchWithoutOwns"));
-        checkBoxExcludeFounds = new VisCheckBox(Translation.Get("SearchWithoutFounds"));
+        checkBoxOnlyAvailable = new VisCheckBox(Translation.get("SearchOnlyAvailable"));
+        checkBoxExcludeHides = new VisCheckBox(Translation.get("SearchWithoutOwns"));
+        checkBoxExcludeFounds = new VisCheckBox(Translation.get("SearchWithoutFounds"));
         coordBtn = new CoordinateButton(EventHandler.getMyPosition());
-        tglBtnGPS = new VisTextButton(Translation.Get("FromGps"), "toggle");
-        tglBtnMap = new VisTextButton(Translation.Get("FromMap"), "toggle");
+        tglBtnGPS = new VisTextButton(Translation.get("FromGps"), "toggle");
+        tglBtnMap = new VisTextButton(Translation.get("FromMap"), "toggle");
 
         Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
         workAnimation = new Image(animationDrawable);
@@ -378,7 +378,7 @@ public class ImportGcPos extends ActivityBase {
             importNow(progressListener, ImportStart, radius);
         } else {
             //wait for act Position
-            CB.viewmanager.toast(Translation.Get("waiting_for_fix"), ViewManager.ToastLength.WAIT);
+            CB.viewmanager.toast(Translation.get("waiting_for_fix"), ViewManager.ToastLength.WAIT);
 
             while (actSearchPos == null) {
                 try {

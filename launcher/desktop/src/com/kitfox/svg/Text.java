@@ -266,7 +266,7 @@ public class Text extends ShapeElement
 
     protected void buildText() throws SVGException
     {
-        //Get font
+        //get font
         String[] families = fontFamily.split(",");
         Font font = null;
         for (int i = 0; i < families.length; ++i)
@@ -545,7 +545,7 @@ public class Text extends ShapeElement
 //        if (trackManager.getNumTracks() == 0) return false;
         boolean changeState = super.updateTime(curTime);
 
-        //Get current values for parameters
+        //get current values for parameters
         StyleAttribute sty = new StyleAttribute();
         boolean shapeChange = false;
 

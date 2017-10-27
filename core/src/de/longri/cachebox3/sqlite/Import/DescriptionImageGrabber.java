@@ -360,7 +360,7 @@ public class DescriptionImageGrabber {
         }
 
         if (!additionalImagesUpdated) {
-            // Get additional images (Spoiler)
+            // get additional images (Spoiler)
 
             // Liste aller Spoiler Images für diesen Cache erstellen
             // anhand dieser Liste kann überprüft werden, ob ein Spoiler schon geladen ist und muss nicht ein 2. mal geladen werden.

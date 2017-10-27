@@ -167,8 +167,8 @@ public class FileChooser extends ActivityBase {
 
     private void createButtons() {
 
-        btnOk = new VisTextButton(Translation.Get("select"));
-        btnCancel = new VisTextButton(Translation.Get("cancel"));
+        btnOk = new VisTextButton(Translation.get("select"));
+        btnCancel = new VisTextButton(Translation.get("cancel"));
 
         this.addActor(btnOk);
         this.addActor(btnCancel);

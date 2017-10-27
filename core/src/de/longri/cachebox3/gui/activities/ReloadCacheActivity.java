@@ -67,9 +67,9 @@ public class ReloadCacheActivity extends ActivityBase {
 
     public ReloadCacheActivity() {
         super("CheckStateActivity");
-        bCancel = new VisTextButton(Translation.Get("cancel"));
+        bCancel = new VisTextButton(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
-        lblTitle = new VisLabel(Translation.Get("ReloadCacheAPI"));
+        lblTitle = new VisLabel(Translation.get("ReloadCacheAPI"));
         Label.LabelStyle style = new Label.LabelStyle(lblTitle.getStyle());
         style.fontColor.set(Color.WHITE);
         lblTitle.setStyle(style);
@@ -167,7 +167,7 @@ public class ReloadCacheActivity extends ActivityBase {
                     @Override
                     public void waitForCall(ApiCallLimitEvent event) {
                         int sec = (int) (event.getWaitTime() / 1000);
-                        CB.viewmanager.toast(Translation.Get("ApiLimit"
+                        CB.viewmanager.toast(Translation.get("ApiLimit"
                                 , Integer.toString(Config.apiCallLimit.getValue()), Integer.toString(sec))
                                 , ViewManager.ToastLength.LONG);
                     }

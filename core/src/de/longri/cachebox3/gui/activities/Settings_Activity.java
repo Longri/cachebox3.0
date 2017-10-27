@@ -106,9 +106,9 @@ public class Settings_Activity extends ActivityBase {
 
     private void createButtons() {
 
-        btnOk = new VisTextButton(Translation.Get("save"));
+        btnOk = new VisTextButton(Translation.get("save"));
         btnMenu = new VisTextButton("...");
-        btnCancel = new VisTextButton(Translation.Get("cancel"));
+        btnCancel = new VisTextButton(Translation.get("cancel"));
 
         this.addActor(btnOk);
         this.addActor(btnMenu);
@@ -116,7 +116,7 @@ public class Settings_Activity extends ActivityBase {
 
         btnMenu.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Menu icm = new Menu(Translation.Get("changeSettingsVisibility"));
+                Menu icm = new Menu(Translation.get("changeSettingsVisibility"));
                 icm.setOnItemClickListener(new OnItemClickListener() {
 
                     @Override
@@ -245,7 +245,7 @@ public class Settings_Activity extends ActivityBase {
             }
         };
 
-        showListView(new ListView(listViewAdapter, true), Translation.Get("setting"), true);
+        showListView(new ListView(listViewAdapter, true), Translation.get("setting"), true);
     }
 
     private void showListView(ListView listView, String name, boolean animate) {
@@ -388,7 +388,7 @@ public class Settings_Activity extends ActivityBase {
         table.left();
 
 
-        VisLabel label = new VisLabel(Translation.Get(category.name()));
+        VisLabel label = new VisLabel(Translation.get(category.name()));
         label.setAlignment(Align.left);
         table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
@@ -568,7 +568,7 @@ public class Settings_Activity extends ActivityBase {
 
         // add label with category name, align left
         table.left();
-        VisLabel label = new VisLabel(Translation.Get(setting.getName()), nameStyle);
+        VisLabel label = new VisLabel(Translation.get(setting.getName()), nameStyle);
         label.setWrap(true);
         label.setAlignment(Align.left);
         table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -581,7 +581,7 @@ public class Settings_Activity extends ActivityBase {
         table.add(valuelabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
         // add description line if description exist
-        String description = Translation.Get("Desc_" + setting.getName());
+        String description = Translation.get("Desc_" + setting.getName());
         if (!description.contains("$ID:")) {
             table.row();
             VisLabel desclabel = new VisLabel(description, descStyle);
@@ -615,7 +615,7 @@ public class Settings_Activity extends ActivityBase {
                         public void canceled() {
 
                         }
-                    }, Translation.Get(setting.getName()), setting.getValue(), "");
+                    }, Translation.get(setting.getName()), setting.getValue(), "");
                 }
             }
         });
@@ -655,7 +655,7 @@ public class Settings_Activity extends ActivityBase {
 
         selectBox.set(itemList);
         if (setting == Config.localisation) {
-            selectBox.setPrefix(Translation.Get("SelectLanguage") + ":  ");
+            selectBox.setPrefix(Translation.get("SelectLanguage") + ":  ");
         }
         selectBox.select(selectIndex);
 
@@ -697,7 +697,7 @@ public class Settings_Activity extends ActivityBase {
 
         // add label with category name, align left
         table.left();
-        VisLabel label = new VisLabel(Translation.Get(setting.getName()), nameStyle);
+        VisLabel label = new VisLabel(Translation.get(setting.getName()), nameStyle);
         label.setWrap(true);
         label.setAlignment(Align.left);
         table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -708,7 +708,7 @@ public class Settings_Activity extends ActivityBase {
         table.add(folderIcon).width(folderIcon.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
         // add description line if description exist
-        String description = Translation.Get("Desc_" + setting.getName());
+        String description = Translation.get("Desc_" + setting.getName());
         if (!description.contains("$ID:")) {
             table.row();
             VisLabel desclabel = new VisLabel(description, descStyle);
@@ -749,7 +749,7 @@ public class Settings_Activity extends ActivityBase {
                         public boolean onItemClick(MenuItem item) {
                             switch (item.getMenuItemId()) {
                                 case MenuID.MI_SELECT_PATH:
-                                    FileChooser folderChooser = new FileChooser(Translation.Get("selectFolder"),
+                                    FileChooser folderChooser = new FileChooser(Translation.get("selectFolder"),
                                             FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES);
                                     folderChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
                                         @Override
@@ -758,7 +758,7 @@ public class Settings_Activity extends ActivityBase {
                                             // check WriteProtection
                                             String path = fileHandle.file().getAbsolutePath();
                                             if (setting.needWritePermission() && !Utils.checkWritePermission(path)) {
-                                                String WriteProtectionMsg = Translation.Get("NoWriteAcces");
+                                                String WriteProtectionMsg = Translation.get("NoWriteAcces");
                                                 CB.viewmanager.toast(WriteProtectionMsg, ViewManager.ToastLength.EXTRA_LONG);
                                             } else {
                                                 setting.setValue(path);
@@ -912,7 +912,7 @@ public class Settings_Activity extends ActivityBase {
 
         // add label with category name, align left
         table.left();
-        VisLabel label = new VisLabel(Translation.Get(setting.getName()), nameStyle);
+        VisLabel label = new VisLabel(Translation.get(setting.getName()), nameStyle);
         label.setWrap(true);
         label.setAlignment(Align.left);
         table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -943,7 +943,7 @@ public class Settings_Activity extends ActivityBase {
 
 
         // add description line if description exist
-        String description = Translation.Get("Desc_" + setting.getName());
+        String description = Translation.get("Desc_" + setting.getName());
         if (!description.contains("$ID:")) {
             table.row();
             VisLabel desclabel = new VisLabel(description, descStyle);
@@ -972,7 +972,7 @@ public class Settings_Activity extends ActivityBase {
 
         // add label with category name, align left
         table.left();
-        VisLabel label = new VisLabel(Translation.Get(setting.getName()), nameStyle);
+        VisLabel label = new VisLabel(Translation.get(setting.getName()), nameStyle);
         label.setWrap(true);
         label.setAlignment(Align.left);
         table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -981,7 +981,7 @@ public class Settings_Activity extends ActivityBase {
         table.add(valueLabel).width(valueLabel.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
         // add description line if description exist
-        String description = Translation.Get("Desc_" + setting.getName());
+        String description = Translation.get("Desc_" + setting.getName());
         if (!description.contains("$ID:")) {
             table.row();
             VisLabel desclabel = new VisLabel(description, descStyle);

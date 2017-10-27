@@ -78,9 +78,9 @@ public class CheckStateActivity extends ActivityBase {
 
     public CheckStateActivity() {
         super("CheckStateActivity");
-        bCancel = new VisTextButton(Translation.Get("cancel"));
+        bCancel = new VisTextButton(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
-        lblTitle = new VisLabel(Translation.Get("chkApiState"));
+        lblTitle = new VisLabel(Translation.get("chkApiState"));
         Label.LabelStyle style = new Label.LabelStyle(lblTitle.getStyle());
         style.fontColor.set(Color.WHITE);
         lblTitle.setStyle(style);
@@ -200,7 +200,7 @@ public class CheckStateActivity extends ActivityBase {
                     public void waitForCall(ApiCallLimitEvent event) {
                         int sec = (int) (event.getWaitTime() / 1000);
                         if (sec > 1) {
-                            CB.viewmanager.toast(Translation.Get("ApiLimit"
+                            CB.viewmanager.toast(Translation.get("ApiLimit"
                                     , Integer.toString(Config.apiCallLimit.getValue()), Integer.toString(sec))
                                     , ViewManager.ToastLength.LONG);
                         }
@@ -271,8 +271,8 @@ public class CheckStateActivity extends ActivityBase {
                     public void run() {
                         //Give feedback and say what updated!
                         CacheListChangedEventList.Call();
-                        String title = Translation.Get("chkState");
-                        String msg = Translation.Get("CachesUpdatet") + " " + changedCount.get() + "/" + Database.Data.Query.size;
+                        String title = Translation.get("chkState");
+                        String msg = Translation.get("CachesUpdatet") + " " + changedCount.get() + "/" + Database.Data.Query.size;
                         Window dialog = new ButtonDialog("chkState", msg, title, MessageBoxButtons.OK, MessageBoxIcon.None, new OnMsgBoxClickListener() {
                             @Override
                             public boolean onClick(int which, Object data) {

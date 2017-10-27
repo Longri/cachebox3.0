@@ -69,14 +69,14 @@ public class EditWaypoint extends ActivityBase {
         this.showCoordsOnShow = showCoordsOnShow;
         this.callBack = callBack;
 
-        btnOk = new VisTextButton(Translation.Get("save"));
-        btnCancel = new VisTextButton(Translation.Get("cancel"));
+        btnOk = new VisTextButton(Translation.get("save"));
+        btnCancel = new VisTextButton(Translation.get("cancel"));
         cacheTitelLabel = new VisLabel(Database.Data.Query.GetCacheById(waypoint.getCacheId()).getName());
-        typeLabel = new VisLabel(Translation.Get("type"));
-        titleLabel = new VisLabel(Translation.Get("Title"));
-        descriptionLabel = new VisLabel(Translation.Get("Description"));
-        clueLabel = new VisLabel(Translation.Get("Clue"));
-        startLabel = new VisLabel(Translation.Get("start"));
+        typeLabel = new VisLabel(Translation.get("type"));
+        titleLabel = new VisLabel(Translation.get("Title"));
+        descriptionLabel = new VisLabel(Translation.get("Description"));
+        clueLabel = new VisLabel(Translation.get("Clue"));
+        startLabel = new VisLabel(Translation.get("start"));
         titleTextArea = new EditTextBox(false);
         descriptionTextArea = new EditTextBox(true);
         clueTextArea = new EditTextBox(true);

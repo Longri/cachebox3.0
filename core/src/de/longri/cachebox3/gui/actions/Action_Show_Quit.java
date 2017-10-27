@@ -39,8 +39,8 @@ public class Action_Show_Quit extends AbstractAction {
     @Override
     public void execute() {
 
-        String Msg = Translation.Get("QuitReally");
-        String Title = Translation.Get("Quit?");
+        String Msg = Translation.get("QuitReally");
+        String Title = Translation.get("Quit?");
 
         //Name, msg, title, buttons, icon, OnMsgBoxClickListener
         Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop, new OnMsgBoxClickListener() {

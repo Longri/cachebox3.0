@@ -37,7 +37,7 @@ public class HintDialog extends ButtonDialog {
     private boolean encoded = false;
 
     public HintDialog() {
-        super("Hint", createContentBox(), Translation.Get("hint"), MessageBoxButtons.RetryCancel, null);
+        super("Hint", createContentBox(), Translation.get("hint"), MessageBoxButtons.RetryCancel, null);
 
         String hintFromDB = EventHandler.getSelectedCache() == null ? "" : EventHandler.getSelectedCache().getHint(Database.Data);
         this.hintTextDecoded = UnitFormatter.rot13(hintFromDB) + "\n ";
@@ -47,8 +47,8 @@ public class HintDialog extends ButtonDialog {
 
         SnapshotArray<Actor> childs = this.buttonTable.getChildren();
         encodeButton = ((VisTextButton) childs.get(0));
-        encodeButton.setText(Translation.Get("decode"));
-        ((VisTextButton) childs.get(1)).setText(Translation.Get("close"));
+        encodeButton.setText(Translation.get("decode"));
+        ((VisTextButton) childs.get(1)).setText(Translation.get("close"));
         result(BUTTON_POSITIVE);
     }
 
@@ -69,11 +69,11 @@ public class HintDialog extends ButtonDialog {
             if (!encoded) {
                 encoded = true;
                 hintLabel.setText(this.hintTextEncoded);
-                encodeButton.setText(Translation.Get("encode"));
+                encodeButton.setText(Translation.get("encode"));
             } else {
                 encoded = false;
                 hintLabel.setText(this.hintTextDecoded);
-                encodeButton.setText(Translation.Get("decode"));
+                encodeButton.setText(Translation.get("decode"));
             }
             return;
         }

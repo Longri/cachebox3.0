@@ -115,8 +115,8 @@ public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposa
         btn9 = new VisTextButton("9");
         btnBack = new VisTextButton("Back");
         btnDel = new VisTextButton("Del");
-        btnOk = new VisTextButton(Translation.Get("ok"));
-        btnCancel = new VisTextButton(Translation.Get("cancel"));
+        btnOk = new VisTextButton(Translation.get("ok"));
+        btnCancel = new VisTextButton(Translation.get("cancel"));
         btnDot = new VisTextButton(".");
         btnLeft = new VisTextButton("<");
         btnRight = new VisTextButton(">");
@@ -153,8 +153,8 @@ public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposa
                 keyValue = String.valueOf(btn.getText());
                 keyValue = keyValue.replace("Del", "D");
                 keyValue = keyValue.replace("Back", "B");
-                keyValue = keyValue.replace(Translation.Get("ok"), "O");
-                keyValue = keyValue.replace(Translation.Get("cancel"), "C");
+                keyValue = keyValue.replace(Translation.get("ok"), "O");
+                keyValue = keyValue.replace(Translation.get("cancel"), "C");
 
             }
 

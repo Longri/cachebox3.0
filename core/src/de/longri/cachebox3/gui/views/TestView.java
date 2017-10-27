@@ -36,7 +36,6 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
-import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
@@ -52,7 +51,6 @@ import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.LogTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -397,8 +395,8 @@ public class TestView extends AbstractView {
         contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4 * 2));
         contentTable.row();
         {
-            String Msg = Translation.Get("QuitReally");
-            String Title = Translation.Get("Quit?");
+            String Msg = Translation.get("QuitReally");
+            String Title = Translation.get("Quit?");
             Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop, null);
 
             dialog.setStageBackground(null);

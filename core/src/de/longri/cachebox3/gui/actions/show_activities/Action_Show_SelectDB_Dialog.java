@@ -99,7 +99,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             CB.postAsync(new Runnable() {
                 @Override
                 public void run() {
-                    CB.viewmanager.toast(Translation.Get("LoadDB"), WAIT_TOAST_LENGTH);
+                    CB.viewmanager.toast(Translation.get("LoadDB"), WAIT_TOAST_LENGTH);
                     CB.requestRendering();
                 }
             });

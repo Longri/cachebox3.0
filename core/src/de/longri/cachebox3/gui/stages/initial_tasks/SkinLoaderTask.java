@@ -64,7 +64,7 @@ public final class SkinLoaderTask extends AbstractInitTask {
         FileHandle skinFileHandle = null;
 
 
-        //Get selected skin name and check if available
+        //get selected skin name and check if available
         if (Settings.nightMode.getValue()) {
             if (!Settings.nightSkinName.isDefault()) {
                 // check if skin exist into skin folder

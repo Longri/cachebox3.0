@@ -241,8 +241,8 @@ public class CoordinateActivity extends ActivityBase {
         this.row();
         Table cancelOkTable = new Table();
 
-        VisTextButton btnOk = new VisTextButton(Translation.Get("ok"));
-        VisTextButton btnCancel = new VisTextButton(Translation.Get("cancel"));
+        VisTextButton btnOk = new VisTextButton(Translation.get("ok"));
+        VisTextButton btnCancel = new VisTextButton(Translation.get("cancel"));
 
         btnOk.addListener(okListener);
         btnCancel.addListener(cancelListener);

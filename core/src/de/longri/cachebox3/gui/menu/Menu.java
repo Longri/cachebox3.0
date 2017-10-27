@@ -35,7 +35,6 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.stages.StageManager;
-import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
@@ -188,7 +187,7 @@ public class Menu extends Window {
             if (withoutTranslation)
                 trans = StringId + appendix;
             else
-                trans = Translation.Get(StringId) + appendix;
+                trans = Translation.get(StringId) + appendix;
         }
 
         MenuItem item = new MenuItem(0, ID, "Menu Item@" + ID + "[" + trans + "]", this);

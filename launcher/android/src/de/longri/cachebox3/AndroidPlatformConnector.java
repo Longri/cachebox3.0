@@ -22,31 +22,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.hardware.Camera;
-import android.hardware.camera2.CameraDevice;
-import android.hardware.camera2.CameraMetadata;
-import android.hardware.camera2.CaptureRequest;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.text.InputType;
 import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.backends.android.AndroidInput;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sqlite.android.AndroidDatabaseManager;
 import de.longri.cachebox3.callbacks.GenericCallBack;
-import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.translation.Translation;
 import org.oscim.android.canvas.AndroidRealSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
@@ -56,7 +47,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 17.07.16.
@@ -127,7 +117,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
         locationListener = new AndroidLocationListener();
 
         // GPS
-        // Get the location manager
+        // get the location manager
         locationManager = (LocationManager) this.application.getContext().getSystemService(Context.LOCATION_SERVICE);
 
         final int updateTime = 1000; // 1s
@@ -234,11 +224,11 @@ public class AndroidPlatformConnector extends PlatformConnector {
                 application.getActivity().startActivity(intent);
             } else {
                 log.error("Activity for " + link + " not installed.");
-                CB.viewmanager.toast(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
+                CB.viewmanager.toast(Translation.get("Cann_not_open_cache_browser") + " (" + link + ")");
             }
         } catch (Exception exc) {
-            log.error(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")", exc);
-            CB.viewmanager.toast(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
+            log.error(Translation.get("Cann_not_open_cache_browser") + " (" + link + ")", exc);
+            CB.viewmanager.toast(Translation.get("Cann_not_open_cache_browser") + " (" + link + ")");
         }
     }
 

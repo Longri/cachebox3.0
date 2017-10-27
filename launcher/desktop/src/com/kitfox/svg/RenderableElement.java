@@ -122,7 +122,7 @@ abstract public class RenderableElement extends TransformableElement
 
         StyleAttribute styleAttrib = new StyleAttribute();
 
-        //Get clipping path
+        //get clipping path
 //        StyleAttribute styleAttrib = getStyle("clip-path", false);
         Shape clipPath = null;
         int clipPathUnits = ClipPath.CP_USER_SPACE_ON_USE;

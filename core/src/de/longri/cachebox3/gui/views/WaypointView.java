@@ -303,8 +303,8 @@ public class WaypointView extends AbstractView {
     private void deleteWP() {
         //name, msg, title, buttons, icon, OnMsgBoxClickListener
         Window dialog = new ButtonDialog("delete Waypoint",
-                Translation.Get("?DelWP") + "\n[" + actWaypoint.getTitle() + "]\n",
-                Translation.Get("!DelWP"), MessageBoxButtons.YesNo, MessageBoxIcon.Question,
+                Translation.get("?DelWP") + "\n[" + actWaypoint.getTitle() + "]\n",
+                Translation.get("!DelWP"), MessageBoxButtons.YesNo, MessageBoxIcon.Question,
                 new OnMsgBoxClickListener() {
                     @Override
                     public boolean onClick(int which, Object data) {

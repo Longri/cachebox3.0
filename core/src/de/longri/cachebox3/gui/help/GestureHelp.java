@@ -49,8 +49,8 @@ public class GestureHelp extends HelpWindow {
     final Drawable buttonDrawable;
     final Drawable gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
     final GestureHelpStyle style;
-    final String GESTURE_MSG = Translation.Get("gestureHelp"); // "You can also use this gesture to call this function"
-    final String DONT_SHOW_AGAIN_MSG = Translation.Get("DontShowHelp"); // "Don't show help Msg again!"
+    final String GESTURE_MSG = Translation.get("gestureHelp"); // "You can also use this gesture to call this function"
+    final String DONT_SHOW_AGAIN_MSG = Translation.get("DontShowHelp"); // "Don't show help Msg again!"
     final Table table = new Table();
     private boolean isShowing = false;
 
