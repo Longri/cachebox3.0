@@ -23,25 +23,37 @@ import com.badlogic.gdx.utils.CharArray;
 public class WordStore {
 
     protected final CharArray storage;
+    private final boolean asSingleWord;
 
     public WordStore() {
+        this(false);
+    }
+
+    public WordStore(boolean splitToWords) {
         this.storage = new CharArray();
+        this.asSingleWord = splitToWords;
     }
 
     public StringSequence add(String string) {
-        String[] split = string.split(" ");
-        MutableString mutableString = addWord(split[0]);
-        if (split.length > 1) mutableString.add(new Space());
-        for (int i = 1, n = split.length, m = n - 1; i < n; i++) {
 
-            String s = split[i++];
-            while (s.length() < 10 && i < n) {
-                s += (" " + split[i++]);
+        if (asSingleWord) {
+            String[] split = string.split(" ");
+            MutableString mutableString = addWord(split[0]);
+            if (split.length > 1) {
+                mutableString.add(new Space());
+                count++;
             }
-            if (i < m) s += " ";
-            mutableString.add(addWord(s));
+            for (int i = 1, n = split.length, m = n - 1; i < n; i++) {
+                mutableString.add(addWord(split[i]));
+                if (i < m) {
+                    mutableString.add(new Space());
+                    count++;
+                }
+            }
+            return mutableString;
+        } else {
+            return addWord(string);
         }
-        return mutableString;
     }
 
     public static int count = 0;
@@ -96,7 +108,7 @@ public class WordStore {
         return -1;
     }
 
-    private static class Space implements StringSequence {
+    public static class Space implements StringSequence {
 
         protected StringSequence head, next;
         protected final static char SPACE = ' ';

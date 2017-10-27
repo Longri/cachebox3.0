@@ -18,11 +18,14 @@ package de.longri.cachebox3.translation.word;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.types.MutableCache;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.openjdk.jol.info.ClassLayout;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.instrument.Instrumentation;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -50,23 +53,22 @@ class WordStoreTest {
         assertThat("MutableString must equals  '" + t1 + "' : '" + m1 + "'", equals(t1, m1));
         assertThat("toString() must equals  '" + t1 + "' : '" + m1 + "'", t1.equals(m1.toString()));
 
-        assertThat("Store length must be 33, but was:" + store.storage.size, store.storage.size == 33);
 
         StringSequence m2 = store.add(t2);
         assertThat("MutableString must equals  '" + t2 + "' : '" + m2 + "'", equals(t2, m2));
         assertThat("toString() must equals  '" + t2 + "' : '" + m2 + "'", t2.equals(m2.toString()));
-        assertThat("Store length must be 48, but was:" + store.storage.size, store.storage.size == 48);
 
         StringSequence m3 = store.add(t3);
         assertThat("MutableString must equals  '" + t3 + "' : '" + m3 + "'", equals(t3, m3));
         assertThat("toString() must equals  '" + t3 + "' : '" + m3 + "'", t3.equals(m3.toString()));
-        assertThat("Store length must be 54, but was:" + store.storage.size, store.storage.size == 54);
 
     }
 
 
     @Test
     void addTranslationFile() throws FileNotFoundException {
+
+        WordStore.count = 0;
         FileHandle fileHandle = TestUtils.getResourceFileHandle("testsResources/strings.ini");
         WordStore store = new WordStore();
 
@@ -100,9 +102,7 @@ class WordStoreTest {
             assertThat("toString() must equals  '" + line + "' : '" + sequence + "'", line.equals(sequence.toString()));
         }
 
-
-        assertThat("Store length must shorter then 26000, but was:" + store.storage.size, store.storage.size < 20000);
-
+        System.out.println(ClassLayout.parseInstance(store).toPrintable());
 
     }
 

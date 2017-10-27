@@ -25,6 +25,7 @@ import de.longri.cachebox3.types.CacheTypes;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.openjdk.jol.info.ClassLayout;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,7 +83,7 @@ class CacheList3DAOTest {
         DAO.readCacheList(cb3Database, caches, where, true, true);
         assertThat("CacheList must have 7 Caches but has:" + caches.size, caches.size == 7);
 
-
+        System.out.println(ClassLayout.parseInstance(cache).toPrintable());
     }
 
 }
