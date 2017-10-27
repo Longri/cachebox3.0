@@ -119,6 +119,8 @@ public class MutableString implements StringSequence {
                 addSequence = new MutableString((MutableString) string);
             }
 
+        } else if (string instanceof ReplacedStringSequence) {
+            addSequence = (StringSequence) string;
         } else {
             //create a ReplacedStringSequence instance
             addSequence = new ReplacedStringSequence(string.toString());
