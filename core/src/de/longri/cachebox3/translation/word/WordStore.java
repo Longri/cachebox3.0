@@ -100,7 +100,7 @@ public class WordStore {
                     ;
 
                 if (j == end) {
-                    /* Found whole string. */
+                    /* Found whole storage. */
                     return i - sourceOffset;
                 }
             }
@@ -152,8 +152,8 @@ public class WordStore {
                 }
 
             } else {
-                //create a ImmutableString instance
-                addSequence = new ImmutableString(string.toString());
+                //create a ReplacedStringSequence instance
+                addSequence = new ReplacedStringSequence(string.toString());
                 addSequence.setHead(this.getHead());
             }
             addSequence.setHead(this.getHead());
@@ -207,8 +207,8 @@ public class WordStore {
                     if (act instanceof MutableString) {
                         MutableString mutableString = (MutableString) act;
                         System.arraycopy(mutableString.storage.items, mutableString.ptr, chars, dest, mutableString.length);
-                    } else if (act instanceof ImmutableString) {
-                        char[] arr = ((ImmutableString) act).string.toCharArray();
+                    } else if (act instanceof ReplacedStringSequence) {
+                        char[] arr = ((ReplacedStringSequence) act).storage.shrink();
                         System.arraycopy(arr, 0, chars, dest, arr.length);
                     } else {
                         throw new RuntimeException("Class '" + act.getClass() + "' not implemented");

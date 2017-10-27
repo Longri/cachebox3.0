@@ -15,16 +15,41 @@
  */
 package de.longri.cachebox3.translation.word;
 
+import com.badlogic.gdx.utils.CharArray;
+
 /**
  * Created by Longri on 26.10.2017.
  */
-public class ImmutableString implements StringSequence {
+public class ReplacedStringSequence implements StringSequence {
 
     private StringSequence head, next;
-    final String string;
+    final CharArray storage = new CharArray();
 
-    public ImmutableString(String string) {
-        this.string = string;
+    public ReplacedStringSequence(String string) {
+        this.storage.addAll(string.toCharArray());
+    }
+
+    public ReplacedStringSequence(ReplacedStringSequence string) {
+        this.storage.addAll(string.storage.shrink());
+    }
+
+    public ReplacedStringSequence(StringBuilder stringBuilder) {
+        this.storage.addAll(stringBuilder.toString().toCharArray());
+    }
+
+    public void replace(String string) {
+        this.storage.clear();
+        this.storage.addAll(string.toCharArray());
+    }
+
+    public void replace(ReplacedStringSequence string) {
+        this.storage.clear();
+        this.storage.addAll(string.storage.shrink());
+    }
+
+    public void replace(StringBuilder stringBuilder) {
+        this.storage.clear();
+        this.storage.addAll(stringBuilder.toString().toCharArray());
     }
 
 
@@ -64,21 +89,24 @@ public class ImmutableString implements StringSequence {
 
     @Override
     public int getSequenceLength() {
-        return this.string.length();
+        return this.storage.size;
     }
 
     @Override
     public char charAt(int index) {
-        if (index >= this.string.length()) {
+        if (index >= this.storage.size) {
             if (next == null) throw new RuntimeException("Index out of range");
-            return next.charAt(index - this.string.length());
+            return next.charAt(index - this.storage.size);
         }
-        return this.string.charAt(index);
+        return this.storage.get(index);
     }
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        return this.string.subSequence(start, end);
+        int length = end - start;
+        char[] chars = new char[length];
+        System.arraycopy(this.storage.items, start, chars, 0, length);
+        return new String(chars);
     }
 
     @Override
@@ -90,11 +118,17 @@ public class ImmutableString implements StringSequence {
             this.setNext(mutableString);
 
         } else {
-            //create a ImmutableString instance
-            ImmutableString immutableString = new ImmutableString(string.toString());
+            //create a ReplacedStringSequence instance
+            ReplacedStringSequence immutableString = new ReplacedStringSequence(string.toString());
             immutableString.setHead(this.getHead());
             this.setNext(immutableString);
         }
         return this;
     }
+
+    @Override
+    public String toString() {
+        return new String(this.storage.shrink());
+    }
+
 }

@@ -24,7 +24,7 @@ public class MutablePlaceholderString extends MutableString {
 
 
     /**
-     * The given string will split by {x} for replace the placeHolder
+     * The given storage will split by {x} for replace the placeHolder
      *
      * @param storage
      * @param string

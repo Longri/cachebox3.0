@@ -43,9 +43,9 @@ class WordStoreTest {
     @Test
     void add() {
 
-        String t1 = "Test string with double used words like Test or string";
-        String t2 = "Test string that contains non double words";
-        String t3 = "Test string that contains non double words!";
+        String t1 = "Test storage with double used words like Test or storage";
+        String t2 = "Test storage that contains non double words";
+        String t3 = "Test storage that contains non double words!";
 
         WordStore store = new WordStore();
 
