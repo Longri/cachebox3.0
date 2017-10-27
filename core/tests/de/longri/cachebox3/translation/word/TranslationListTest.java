@@ -47,6 +47,13 @@ class TranslationListTest {
         CharSequence sequence = translationList.get("ErrDbFNStartup");
         String translation = "Error during Fieldnote Database Startup!";
         assertThat("Translation must '" + translation + "' but was: '" + sequence + "'", equals(sequence, translation));
+
+        int id = "solverDescCrosstotal".hashCode();
+        translation = "Sum of all individual Digits in the Number. \nExample: CS(123456)=21";
+        sequence = translationList.get(id);
+        assertThat("Translation must '" + translation + "' but was: '" + sequence + "'", equals(sequence, translation));
+
+
     }
 
     //##################################################################

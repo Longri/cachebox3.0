@@ -33,7 +33,7 @@ public class TranslationList {
 
         String text = file.readString("UTF-8");
 
-        String[] lines = text.split("\r\n");
+        String[] lines = text.split("\n");
 
         for (String line : lines) {
             int pos;
