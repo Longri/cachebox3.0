@@ -1,5 +1,7 @@
 package de.longri.cachebox3.translation;
 
+import de.longri.cachebox3.translation.word.CompoundCharSequence;
+
 import java.io.IOException;
 
 /**
@@ -14,11 +16,11 @@ public class Translation {
         translation.loadTranslation(LangPath);
     }
 
-    public static CharSequence get(String StringId, String... params) {
+    public static CompoundCharSequence get(String StringId, String... params) {
         return translation.getTranslation(StringId, params);
     }
 
-    public static CharSequence get(int hashCode, String... params) {
+    public static CompoundCharSequence get(int hashCode, String... params) {
         return translation.getTranslation(hashCode, params);
     }
 

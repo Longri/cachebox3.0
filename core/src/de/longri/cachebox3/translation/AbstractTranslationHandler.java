@@ -1,5 +1,7 @@
 package de.longri.cachebox3.translation;
 
+import de.longri.cachebox3.translation.word.CompoundCharSequence;
+
 import java.io.IOException;
 
 /**
@@ -8,9 +10,9 @@ import java.io.IOException;
 public abstract class AbstractTranslationHandler {
     public abstract void loadTranslation(String langPath) throws IOException;
 
-    public abstract CharSequence getTranslation(String stringId, String... params);
+    public abstract CompoundCharSequence getTranslation(String stringId, String... params);
 
-    public abstract CharSequence getTranslation(int hashCode, String... params);
+    public abstract CompoundCharSequence getTranslation(int hashCode, String... params);
 
     public abstract boolean isInitial();
 

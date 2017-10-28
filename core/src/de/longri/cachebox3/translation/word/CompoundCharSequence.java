@@ -71,4 +71,12 @@ public class CompoundCharSequence implements CharSequence {
         }
         return sb.toString();
     }
+
+    public CharSequence get(int index) {
+        return items.get(index);
+    }
+
+    public void set(int index, CharSequence sequence) {
+        this.items.set(index, sequence);
+    }
 }

@@ -20,6 +20,8 @@ import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.translation.word.CompoundCharSequence;
+import de.longri.cachebox3.utils.CharSequenceUtil;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +81,7 @@ public class altTranslation extends AbstractTranslationHandler {
      *                 second... get("abc {1} def {3} ghi {2}", "123", "456", "789"); Result: "abc 123 def 789 ghi 456"
      * @return String
      */
-    public String getTranslation(String StringId, String... params) {
+    public CompoundCharSequence getTranslation(String StringId, String... params) {
         return this.get(StringId, params);
     }
 
@@ -95,7 +97,7 @@ public class altTranslation extends AbstractTranslationHandler {
      *                 Result: "abc 123 def 789 ghi 456"<br>
      * @return String
      */
-    public String getTranslation(int hashCode, String... params) {
+    public CompoundCharSequence getTranslation(int hashCode, String... params) {
         return this.get(hashCode, params);
     }
 
@@ -197,20 +199,19 @@ public class altTranslation extends AbstractTranslationHandler {
 
             if (!Default) {
                 // dont add if added on Def
-                String contains = this.getTranslation(readID);
-                if (contains.startsWith("$ID: "))
+                CompoundCharSequence contains = this.getTranslation(readID);
+                if (CharSequenceUtil.contains(contains, "$ID: "))
                     List.add(new Translations(readID, replacedRead));
             } else {
                 List.add(new Translations(readID, replacedRead));
             }
         }
-
     }
 
-    private String get(String StringId, String... params) {
-        String retString = getTranslation(StringId.hashCode(), params);
-        if (retString == "") {
-            retString = "$ID: " + StringId;// "No translation found";
+    private CompoundCharSequence get(String StringId, String... params) {
+        CompoundCharSequence retString = getTranslation(StringId.hashCode(), params);
+        if (retString.length() == 0) {
+            retString = new CompoundCharSequence("$ID: ", StringId);// "No translation found";
 
             MissingTranslation notFound = new MissingTranslation(StringId, "??");
             if (!mMissingStringList.contains(notFound, false)) {
@@ -222,12 +223,12 @@ public class altTranslation extends AbstractTranslationHandler {
         return retString;
     }
 
-    private String get(int Id, String... params) {
+    private CompoundCharSequence get(int Id, String... params) {
 
         if (mStringList == null || mRefTranslation == null)
-            return "Translation  not initial";
+            return new CompoundCharSequence("Translation  not initial");
 
-        String retString = "";
+        CompoundCharSequence retString = new CompoundCharSequence();
         for (int i = 0, n = mStringList.size; i < n; i++) {
             Translations tmp = mStringList.get(i);
             if (tmp.getIdString() == Id) {
@@ -236,7 +237,7 @@ public class altTranslation extends AbstractTranslationHandler {
             }
         }
 
-        if (retString == "") {
+        if (retString.length() == 0) {
             for (int i = 0, n = mRefTranslation.size; i < n; i++) {
                 Translations tmp = mRefTranslation.get(i);
                 if (tmp.getIdString() == Id) {
@@ -246,7 +247,7 @@ public class altTranslation extends AbstractTranslationHandler {
             }
         }
 
-        if (retString == "") {
+        if (retString.length() == 0) {
             return retString;
         }
 
@@ -257,14 +258,16 @@ public class altTranslation extends AbstractTranslationHandler {
         return retString;
     }
 
-    private String replaceParams(String retString, String... params) {
+    private CompoundCharSequence replaceParams(CompoundCharSequence retString, String... params) {
         int i = 1;
+
+        String string = (String) retString.get(0);
+
         for (String param : params) {
-            if ((param.length() >= 1) && (param.charAt(0) == '$'))
-                param = this.get(param.substring(1));
-            retString = retString.replace("{" + i + "}", param);
+            string = string.replace("{" + i + "}", param);
             i++;
         }
+        retString.set(0, string);
         return retString;
     }
 
