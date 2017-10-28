@@ -10,9 +10,9 @@ import java.io.IOException;
 public abstract class AbstractTranslationHandler {
     public abstract void loadTranslation(String langPath) throws IOException;
 
-    public abstract CompoundCharSequence getTranslation(String stringId, String... params);
+    public abstract CompoundCharSequence getTranslation(String stringId, CharSequence... params);
 
-    public abstract CompoundCharSequence getTranslation(int hashCode, String... params);
+    public abstract CompoundCharSequence getTranslation(int hashCode, CharSequence... params);
 
     public abstract boolean isInitial();
 

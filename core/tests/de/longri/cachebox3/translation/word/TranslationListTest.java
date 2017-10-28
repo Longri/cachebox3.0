@@ -78,6 +78,10 @@ class TranslationListTest {
 // TODO       assertThat("Translation must '" + translation + "' but was: '" + message + "'", equals(message, translation));
 
 
+
+       //test  bAutostart.setText(Translation.get("AutoStartTime", String.valueOf(autoStartTime)).toString());//TODO change to CharSequence
+
+
     }
 
     //##################################################################

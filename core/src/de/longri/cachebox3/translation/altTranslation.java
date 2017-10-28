@@ -81,7 +81,7 @@ public class altTranslation extends AbstractTranslationHandler {
      *                 second... get("abc {1} def {3} ghi {2}", "123", "456", "789"); Result: "abc 123 def 789 ghi 456"
      * @return String
      */
-    public CompoundCharSequence getTranslation(String StringId, String... params) {
+    public CompoundCharSequence getTranslation(String StringId, CharSequence... params) {
         return this.get(StringId, params);
     }
 
@@ -97,7 +97,7 @@ public class altTranslation extends AbstractTranslationHandler {
      *                 Result: "abc 123 def 789 ghi 456"<br>
      * @return String
      */
-    public CompoundCharSequence getTranslation(int hashCode, String... params) {
+    public CompoundCharSequence getTranslation(int hashCode, CharSequence... params) {
         return this.get(hashCode, params);
     }
 
@@ -208,7 +208,7 @@ public class altTranslation extends AbstractTranslationHandler {
         }
     }
 
-    private CompoundCharSequence get(String StringId, String... params) {
+    private CompoundCharSequence get(String StringId, CharSequence... params) {
         CompoundCharSequence retString = getTranslation(StringId.hashCode(), params);
         if (retString.length() == 0) {
             retString = new CompoundCharSequence("$ID: ", StringId);// "No translation found";
@@ -223,7 +223,7 @@ public class altTranslation extends AbstractTranslationHandler {
         return retString;
     }
 
-    private CompoundCharSequence get(int Id, String... params) {
+    private CompoundCharSequence get(int Id, CharSequence... params) {
 
         if (mStringList == null || mRefTranslation == null)
             return new CompoundCharSequence("Translation  not initial");
@@ -258,12 +258,12 @@ public class altTranslation extends AbstractTranslationHandler {
         return retString;
     }
 
-    private CompoundCharSequence replaceParams(CompoundCharSequence retString, String... params) {
+    private CompoundCharSequence replaceParams(CompoundCharSequence retString, CharSequence... params) {
         int i = 1;
 
         String string = (String) retString.get(0);
 
-        for (String param : params) {
+        for (CharSequence param : params) {
             string = string.replace("{" + i + "}", param);
             i++;
         }

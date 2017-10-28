@@ -50,6 +50,7 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
@@ -273,7 +274,8 @@ public class CheckStateActivity extends ActivityBase {
                         //Give feedback and say what updated!
                         CacheListChangedEventList.Call();
                         CharSequence title = Translation.get("chkState");
-                        String msg = Translation.get("CachesUpdatet") + " " + changedCount.get() + "/" + Database.Data.Query.size;//TODO change to CharSequence
+                        CharSequence msg = new CompoundCharSequence(Translation.get("CachesUpdatet")
+                                , " ", Integer.toString(changedCount.get()), "/", Integer.toString(Database.Data.Query.size));
                         Window dialog = new ButtonDialog("chkState", msg, title, MessageBoxButtons.OK, MessageBoxIcon.None, new OnMsgBoxClickListener() {
                             @Override
                             public boolean onClick(int which, Object data) {
