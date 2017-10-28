@@ -32,7 +32,7 @@ import java.io.IOException;
 /**
  * @author Longri
  */
-public class altTranslation extends AbstractTranslationHandler {
+public class StringTranslationHandler extends AbstractTranslationHandler {
     final static Logger log = LoggerFactory.getLogger(Translation.class);
 
     private static final String BR = "\n";
@@ -48,7 +48,7 @@ public class altTranslation extends AbstractTranslationHandler {
      *
      * @param WorkPath
      */
-    public altTranslation(String WorkPath) {
+    public StringTranslationHandler(String WorkPath) {
         mWorkPath = WorkPath;
         mStringList = new CB_List<>();
         mRefTranslation = new CB_List<>();

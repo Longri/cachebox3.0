@@ -20,7 +20,7 @@ import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Language;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.translation.altTranslation;
+import de.longri.cachebox3.translation.StringTranslationHandler;
 import de.longri.cachebox3.utils.IChanged;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +42,7 @@ public final class TranslationLoaderTask extends AbstractInitTask {
 
     @Override
     public void runnable() {
-       Translation.translation= new altTranslation("lang");
+       Translation.translation= new StringTranslationHandler("lang");
         EventHandler.fire(new IncrementProgressEvent(10,"Load Translation"));
         loadTranslation();
 
