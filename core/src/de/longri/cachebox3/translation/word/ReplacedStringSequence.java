@@ -52,6 +52,13 @@ public class ReplacedStringSequence implements StringSequence {
         this.storage.addAll(stringBuilder.toString().toCharArray());
     }
 
+    public void replace(CharSequence sequence) {
+        this.storage.clear();
+        this.storage.addAll(sequence.toString().toCharArray());
+    }
+
+
+
 
     @Override
     public void setHead(StringSequence string) {
