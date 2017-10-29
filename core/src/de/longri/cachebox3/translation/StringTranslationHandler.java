@@ -40,16 +40,15 @@ public class StringTranslationHandler extends AbstractTranslationHandler {
     private final CB_List<Translations> mRefTranslation;
     private final CB_List<MissingTranslation> mMissingStringList;
     private String mLangID;
-    private final String mWorkPath;
     private String mInitialLangPath;
 
     /**
      * Constructor
      *
-     * @param WorkPath
+     * @param workPath
      */
-    public StringTranslationHandler(String WorkPath) {
-        mWorkPath = WorkPath;
+    public StringTranslationHandler(FileHandle workPath, String defaultLang) {
+        super(workPath, defaultLang);
         mStringList = new CB_List<>();
         mRefTranslation = new CB_List<>();
         mMissingStringList = new CB_List<>();

@@ -25,7 +25,7 @@ import com.badlogic.gdx.utils.IntMap;
 public class TranslationList {
 
     private final CharArray STORE = new CharArray();
-    private final IntMap<ParameterStringSequence> MAP = new IntMap();
+    private final IntMap<CompoundCharSequence> MAP = new IntMap();
 
     public void load(FileHandle file) {
         MAP.clear();
@@ -66,20 +66,34 @@ public class TranslationList {
                 replacedRead = replacedRead.substring(1);
             }
 
-            MAP.put(readID.hashCode(), new ParameterStringSequence(STORE, replacedRead));
+
+            ParameterStringSequence pss = new ParameterStringSequence(STORE, replacedRead);
+            CompoundCharSequence compoundCharSequence = new CompoundCharSequence(pss);
+
+            MAP.put(readID.hashCode(), compoundCharSequence);
         }
     }
 
-    public CharSequence get(String id, String... para) {
+    public CompoundCharSequence get(String id, CharSequence... para) {
         return get(id.hashCode(), para);
     }
 
-    public CharSequence get(int id, String... para) {
-        ParameterStringSequence pss = MAP.get(id);
+    public CompoundCharSequence get(int id, CharSequence... para) {
+
+        CompoundCharSequence compound = MAP.get(id);
+
+        if (compound == null) return null;
+        compound.clean();
+
+        ParameterStringSequence pss = (ParameterStringSequence) compound.get(0);
         if (pss != null && para.length > 0) {
-            pss.replace(para);
+            int replaceCount = pss.replace(para);
+            if (replaceCount < para.length) {
+                //add not replaced paras
+                compound.add(para, replaceCount);
+            }
         }
-        return pss;
+        return compound;
     }
 
 

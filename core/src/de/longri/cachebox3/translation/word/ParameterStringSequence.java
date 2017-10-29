@@ -95,11 +95,12 @@ public class ParameterStringSequence implements CharSequence {
         return sequence.toString();
     }
 
-    public void replace(CharSequence... params) {
+    public int replace(CharSequence... params) {
         for (int i = 0, n = replaceArray.size; i < n; i++) {
             ReplacedStringSequence rss = replaceArray.get(i);
             CharSequence replacement = i >= params.length ? "" : params[i];
             rss.replace(replacement);
         }
+        return replaceArray.size;
     }
 }

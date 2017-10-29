@@ -34,6 +34,10 @@ public class CompoundCharSequence implements CharSequence {
         items.addAll(sequences);
     }
 
+    public void add(CharSequence[] para, int start) {
+        items.addAll(para, start, para.length - start);
+    }
+
 
     @Override
     public int length() {
@@ -79,4 +83,13 @@ public class CompoundCharSequence implements CharSequence {
     public void set(int index, CharSequence sequence) {
         this.items.set(index, sequence);
     }
+
+    public void clean() {
+        //remove all without first
+        int end = items.size;
+        if (end > 1)
+            items.removeRange(1, end);
+    }
+
+
 }

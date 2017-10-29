@@ -59,31 +59,6 @@ class TranslationListTest {
 
     }
 
-    @Test
-    void appendixTest() {
-
-        FileHandle fileHandle = TestUtils.getResourceFileHandle("testsResources/strings.ini");
-
-        TranslationList translationList = new TranslationList();
-        translationList.load(fileHandle);
-
-        DraftEntry aktDraft = new DraftEntry(LogTypes.discovered);
-        aktDraft.CacheName = "CacheNameVale";
-
-        String message = translationList.get("cacheOtherDb", aktDraft.CacheName.toString()).toString();
-        message += "\n" + translationList.get("draftNoteNoDelete");
-
-        String translation = "???";
-
-// TODO       assertThat("Translation must '" + translation + "' but was: '" + message + "'", equals(message, translation));
-
-
-
-       //test  bAutostart.setText(Translation.get("AutoStartTime", String.valueOf(autoStartTime)).toString());//TODO change to CharSequence
-
-
-    }
-
     //##################################################################
     //# Helper
     //##################################################################

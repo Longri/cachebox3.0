@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.stages.initial_tasks;
 
+import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.settings.Config;
@@ -42,8 +43,8 @@ public final class TranslationLoaderTask extends AbstractInitTask {
 
     @Override
     public void runnable() {
-       Translation.translation= new StringTranslationHandler("lang");
-        EventHandler.fire(new IncrementProgressEvent(10,"Load Translation"));
+        Translation.translation = new StringTranslationHandler(Gdx.files.internal("lang"), "en-GB");
+        EventHandler.fire(new IncrementProgressEvent(10, "Load Translation"));
         loadTranslation();
 
         // add settings change handler
