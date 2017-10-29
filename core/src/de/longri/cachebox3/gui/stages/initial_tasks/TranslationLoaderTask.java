@@ -20,6 +20,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Language;
+import de.longri.cachebox3.translation.SequenceTranslationHandler;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.translation.StringTranslationHandler;
 import de.longri.cachebox3.utils.IChanged;
@@ -43,7 +44,9 @@ public final class TranslationLoaderTask extends AbstractInitTask {
 
     @Override
     public void runnable() {
-        Translation.translation = new StringTranslationHandler(Gdx.files.internal("lang"), "en-GB");
+//        Translation.translation = new StringTranslationHandler(Gdx.files.internal("lang"), "en-GB");
+        Translation.translation = new SequenceTranslationHandler(Gdx.files.internal("lang"), "en-GB");
+
         EventHandler.fire(new IncrementProgressEvent(10, "Load Translation"));
         loadTranslation();
 

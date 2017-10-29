@@ -32,9 +32,13 @@ public enum Language implements SelectBoxItem {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("lang/");
-        sb.append(super.toString());
-        sb.append("/strings.ini");
+//        StringBuilder sb = new StringBuilder("lang/");
+//        sb.append(super.toString());
+//        sb.append("/strings.ini");
+//        return sb.toString().replaceAll("_", "-");
+
+
+        StringBuilder sb = new StringBuilder(super.toString());
         return sb.toString().replaceAll("_", "-");
     }
 
