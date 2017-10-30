@@ -15,12 +15,58 @@
  */
 package de.longri.cachebox3.socket.filebrowser;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.net.ServerSocket;
+import com.badlogic.gdx.net.ServerSocketHints;
+import com.badlogic.gdx.net.Socket;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+
 /**
  * Created by longri on 30.10.17.
  */
 public class FileBrowserServer {
 
-    public FileBrowserServer(String clintAdress, String clintPort) {
+    final static String CONNECTED = "Connected\n";
+
+    private final FileHandle workPath;
+    private final String clintAddress;
+    private final int clintPort;
+
+    public FileBrowserServer(FileHandle workPath, String clintAddress, int clintPort) {
+        this.workPath = workPath;
+        this.clintAddress = clintAddress;
+        this.clintPort = clintPort;
+    }
+
+    public void startListening() {
+        // setup a server thread where we wait for incoming connections
+        // to the server
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ServerSocketHints hints = new ServerSocketHints();
+                ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, clintAddress, clintPort, hints);
+
+                while (true){
+                    // wait for the next client connection
+                    Socket client = server.accept(null);
+                    // read message and send it back
+                    try {
+                        String message = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
+                        Gdx.app.log("PingPongSocketExample", "got client message: " + message);
+                        client.getOutputStream().write(CONNECTED.getBytes());
+                    } catch (Exception e) {
+                        Gdx.app.log("PingPongSocketExample", "an error occured", e);
+                    }
+                }
+            }
+        }).start();
 
     }
 

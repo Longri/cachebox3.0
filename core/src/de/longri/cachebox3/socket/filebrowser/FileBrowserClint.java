@@ -15,14 +15,63 @@
  */
 package de.longri.cachebox3.socket.filebrowser;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.net.Socket;
+import com.badlogic.gdx.net.SocketHints;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 /**
  * Created by longri on 30.10.17.
  */
 public class FileBrowserClint {
 
+    private final String CONNECT = "Connect\n";
+    final static String CONNECTED = "Connected";
 
-    public FileBrowserClint(String serverAdress, String serverPort) {
+    private final String serverAddress;
+    private final int serverPort;
+
+
+    public FileBrowserClint(String serverAddress, int serverPort) {
+        this.serverAddress = serverAddress;
+        this.serverPort = serverPort;
+    }
+
+    public boolean connect() {
+
+        SocketHints hints = new SocketHints();
+        Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, serverAddress, serverPort, hints);
+        try {
+            client.getOutputStream().write(CONNECT.getBytes());
+            String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
+            Gdx.app.log("PingPongSocketExample", "got server message: " + response);
+
+            if (response.equals(CONNECTED)) {
+                return true;
+            }
+        } catch (IOException e) {
+            Gdx.app.log("PingPongSocketExample", "an error occured", e);
+        }
+        return false;
+    }
+
+
+    public void sendFile(FileHandle source, String targetPath) {
 
     }
+
+    public String[] getDirs(String targetPath) {
+        return new String[]{};
+    }
+
+    public String[] getFiles(String targetPath) {
+        return new String[]{};
+    }
+
 
 }
