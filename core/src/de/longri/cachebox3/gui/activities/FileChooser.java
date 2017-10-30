@@ -36,6 +36,7 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.translation.Translation;
 
 import java.io.File;
@@ -59,7 +60,7 @@ public class FileChooser extends ActivityBase {
         void selected(FileHandle fileHandle);
     }
 
-    private VisTextButton btnOk, btnCancel;
+    private CharSequenceButton btnOk, btnCancel;
     private FileHandle actDir;
     private FileChooserStyle fileChooserStyle;
     private FileFilter actFilter;
@@ -69,11 +70,11 @@ public class FileChooser extends ActivityBase {
     private final SelectionMode selectionMode;
     private SelectionReturnListner selectionReturnListner;
 
-    public FileChooser(String title, Mode mode, SelectionMode selectMode) {
+    public FileChooser(CharSequence title, Mode mode, SelectionMode selectMode) {
         this(title, mode, selectMode, (String) null);
     }
 
-    public FileChooser(String title, Mode mode, SelectionMode selectMode, String... extentions) {
+    public FileChooser(CharSequence title, Mode mode, SelectionMode selectMode, String... extentions) {
         super("FileChooser", VisUI.getSkin().get("default", FileChooserStyle.class));
         fileChooserStyle = (FileChooserStyle) this.style;
         this.setStageBackground(style.background);
@@ -167,8 +168,8 @@ public class FileChooser extends ActivityBase {
 
     private void createButtons() {
 
-        btnOk = new VisTextButton(Translation.Get("select"));
-        btnCancel = new VisTextButton(Translation.Get("cancel"));
+        btnOk = new CharSequenceButton(Translation.get("select"));
+        btnCancel = new CharSequenceButton(Translation.get("cancel"));
 
         this.addActor(btnOk);
         this.addActor(btnCancel);

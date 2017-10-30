@@ -225,7 +225,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
     }
 
     public Menu getMenu() {
-        Menu menu = new Menu(Translation.Get("select"));
+        Menu menu = new Menu(Translation.get("select"));
         for (int i = 0, n = entries.size; i < n; i++) {
             menu.addItem(getMenuItem(i, entries.get(i)));
         }

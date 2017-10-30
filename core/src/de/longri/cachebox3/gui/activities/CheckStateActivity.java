@@ -45,10 +45,12 @@ import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
@@ -67,7 +69,7 @@ public class CheckStateActivity extends ActivityBase {
     private static final Logger log = LoggerFactory.getLogger(CheckStateActivity.class);
 
     private final int blockSize = 108; // The API leaves only a maximum of 110 per request!
-    private final VisTextButton bCancel;
+    private final CharSequenceButton bCancel;
     private final VisLabel lblTitle;
     private final Image gsLogo;
     private boolean importRuns = false;
@@ -78,9 +80,9 @@ public class CheckStateActivity extends ActivityBase {
 
     public CheckStateActivity() {
         super("CheckStateActivity");
-        bCancel = new VisTextButton(Translation.Get("cancel"));
+        bCancel = new CharSequenceButton(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
-        lblTitle = new VisLabel(Translation.Get("chkApiState"));
+        lblTitle = new VisLabel(Translation.get("chkApiState"));
         Label.LabelStyle style = new Label.LabelStyle(lblTitle.getStyle());
         style.fontColor.set(Color.WHITE);
         lblTitle.setStyle(style);
@@ -200,7 +202,7 @@ public class CheckStateActivity extends ActivityBase {
                     public void waitForCall(ApiCallLimitEvent event) {
                         int sec = (int) (event.getWaitTime() / 1000);
                         if (sec > 1) {
-                            CB.viewmanager.toast(Translation.Get("ApiLimit"
+                            CB.viewmanager.toast(Translation.get("ApiLimit"
                                     , Integer.toString(Config.apiCallLimit.getValue()), Integer.toString(sec))
                                     , ViewManager.ToastLength.LONG);
                         }
@@ -271,8 +273,9 @@ public class CheckStateActivity extends ActivityBase {
                     public void run() {
                         //Give feedback and say what updated!
                         CacheListChangedEventList.Call();
-                        String title = Translation.Get("chkState");
-                        String msg = Translation.Get("CachesUpdatet") + " " + changedCount.get() + "/" + Database.Data.Query.size;
+                        CharSequence title = Translation.get("chkState");
+                        CharSequence msg = new CompoundCharSequence(Translation.get("CachesUpdatet")
+                                , " ", Integer.toString(changedCount.get()), "/", Integer.toString(Database.Data.Query.size));
                         Window dialog = new ButtonDialog("chkState", msg, title, MessageBoxButtons.OK, MessageBoxIcon.None, new OnMsgBoxClickListener() {
                             @Override
                             public boolean onClick(int which, Object data) {

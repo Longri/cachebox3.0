@@ -42,6 +42,7 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
@@ -71,10 +72,10 @@ public class SelectDB_Activity extends ActivityBase {
     private int autoStartTime = 10;
     private int autoStartCounter = 0;
     private String DBPath;
-    private VisTextButton bNew;
-    private VisTextButton bSelect;
-    private VisTextButton bCancel;
-    private VisTextButton bAutostart;
+    private CharSequenceButton bNew;
+    private CharSequenceButton bSelect;
+    private CharSequenceButton bCancel;
+    private CharSequenceButton bAutostart;
     private ListView lvFiles;
     private CustomAdapter lvAdapter;
     private String[] fileInfos;
@@ -107,10 +108,10 @@ public class SelectDB_Activity extends ActivityBase {
 
         if (selectedIndex > -1) lvFiles.setSelection(selectedIndex);
 
-        bNew = new VisTextButton(Translation.Get("selectDB.bNew"));
-        bSelect = new VisTextButton(Translation.Get("selectDB.bSelect"));
-        bCancel = new VisTextButton(Translation.Get("selectDB.bCancel"));
-        bAutostart = new VisTextButton(Translation.Get("selectDB.bAutostart"));
+        bNew = new CharSequenceButton(Translation.get("NewDB"));
+        bSelect = new CharSequenceButton(Translation.get("confirm"));
+        bCancel = new CharSequenceButton(Translation.get("cancel"));
+        bAutostart = new CharSequenceButton("");
 
         this.addActor(bSelect);
         this.addActor(bNew);
@@ -217,15 +218,10 @@ public class SelectDB_Activity extends ActivityBase {
             }
         });
 
-        // Translations
-        bNew.setText(Translation.Get("NewDB"));
-        bSelect.setText(Translation.Get("confirm"));
-        bCancel.setText(Translation.Get("cancel"));
-
         autoStartTime = Config.MultiDBAutoStartTime.getValue();
         if (autoStartTime > 0) {
             autoStartCounter = autoStartTime;
-            bAutostart.setText(autoStartCounter + " " + Translation.Get("confirm"));
+            bAutostart.setText(autoStartCounter + " " + Translation.get("confirm"));
             if ((autoStartTime > 0) && (lvFiles.getSelectedItem() != null)) {
                 updateTimer = new Timer();
                 updateTimer.scheduleAtFixedRate(timerTask, 1000, 1000);
@@ -256,7 +252,7 @@ public class SelectDB_Activity extends ActivityBase {
             } else {
                 try {
                     autoStartCounter--;
-                    bAutostart.setText(autoStartCounter + "    " + Translation.Get("confirm"));
+                    bAutostart.setText(autoStartCounter + "    " + Translation.get("confirm"));
                 } catch (Exception e) {
                     autoStartCounter = 0;
                     stopTimer();
@@ -365,11 +361,11 @@ public class SelectDB_Activity extends ActivityBase {
 
                     if (version < 1028) {
 
-                        AtomicBoolean WAIT = new AtomicBoolean(true);
-                        AtomicBoolean CONVERT = new AtomicBoolean(false);
+                        final AtomicBoolean WAIT = new AtomicBoolean(true);
+                        final AtomicBoolean CONVERT = new AtomicBoolean(false);
 
-                        CharSequence msg = Translation.Get("DB_outdated_question");
-                        CharSequence title = Translation.Get("DB_outdated");
+                        CharSequence msg = Translation.get("DB_outdated_question");
+                        CharSequence title = Translation.get("DB_outdated");
 
                         MessageBox.show(msg, title, MessageBoxButtons.YesNo, MessageBoxIcon.Database, new OnMsgBoxClickListener() {
                             @Override
@@ -422,11 +418,11 @@ public class SelectDB_Activity extends ActivityBase {
 
     private void setAutoStartText() {
         if (autoStartTime < 0)
-            bAutostart.setText(Translation.Get("StartWithoutSelection"));
+            bAutostart.setText(Translation.get("StartWithoutSelection"));
         else if (autoStartTime == 0)
-            bAutostart.setText(Translation.Get("AutoStartDisabled"));
+            bAutostart.setText(Translation.get("AutoStartDisabled"));
         else
-            bAutostart.setText(Translation.Get("AutoStartTime", String.valueOf(autoStartTime)));
+            bAutostart.setText(Translation.get("AutoStartTime", String.valueOf(autoStartTime)));
     }
 
     private class CustomAdapter implements Adapter {
@@ -486,13 +482,13 @@ public class SelectDB_Activity extends ActivityBase {
     Timer updateTimer;
 
     private void showSelectionMenu() {
-        final String[] cs = new String[6];
-        cs[0] = Translation.Get("StartWithoutSelection");
-        cs[1] = Translation.Get("AutoStartDisabled");
-        cs[2] = Translation.Get("AutoStartTime", "5");
-        cs[3] = Translation.Get("AutoStartTime", "10");
-        cs[4] = Translation.Get("AutoStartTime", "25");
-        cs[5] = Translation.Get("AutoStartTime", "60");
+        final CharSequence[] cs = new String[6];
+        cs[0] = Translation.get("StartWithoutSelection");
+        cs[1] = Translation.get("AutoStartDisabled");
+        cs[2] = Translation.get("AutoStartTime", "5");
+        cs[3] = Translation.get("AutoStartTime", "10");
+        cs[4] = Translation.get("AutoStartTime", "25");
+        cs[5] = Translation.get("AutoStartTime", "60");
 
         Menu cm = new Menu("MiscContextMenu");
 

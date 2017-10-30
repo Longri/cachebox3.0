@@ -150,7 +150,7 @@ public class TrackManager implements Serializable
             return null;
         }
         
-        //Get requested attribute
+        //get requested attribute
         TrackKey key = new TrackKey(name, type);
         TrackBase t = (TrackBase)tracks.get(key);
         if (t != null) return t;

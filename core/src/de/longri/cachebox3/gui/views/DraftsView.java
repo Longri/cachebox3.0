@@ -75,7 +75,7 @@ public class DraftsView extends AbstractView {
         draftEntries = new DraftList();
         loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
 
-        listView.setEmptyString(Translation.Get("EmptyDrafts"));
+        listView.setEmptyString(Translation.get("EmptyDrafts"));
         this.addActor(listView);
     }
 
@@ -286,7 +286,7 @@ public class DraftsView extends AbstractView {
                             CB.scheduleOnMainThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    MessageBox.show(finalUploadMeldung, Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                                    MessageBox.show(finalUploadMeldung, Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
                                     log.debug("Show MessageBox for ERROR on upload Draft");
                                 }
                             }, 300);
@@ -294,7 +294,7 @@ public class DraftsView extends AbstractView {
                             CB.scheduleOnMainThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    MessageBox.show(Translation.Get("uploadFinished"), Translation.Get("uploadDrafts"), MessageBoxButtons.OK, MessageBoxIcon.GC_Live, null);
+                                    MessageBox.show(Translation.get("uploadFinished"), Translation.get("uploadDrafts"), MessageBoxButtons.OK, MessageBoxIcon.GC_Live, null);
                                     log.debug("Show MessageBox for uploaded Draft");
                                 }
                             }, 300);
@@ -357,16 +357,16 @@ public class DraftsView extends AbstractView {
         AbstractCache abstractCache = EventHandler.getSelectedCache();
 
         if (abstractCache == null) {
-            MessageBox.show(Translation.Get("NoCacheSelect"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+            MessageBox.show(Translation.get("NoCacheSelect"), Translation.get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             return;
         }
 
         // chk car found?
         if (abstractCache.getGcCode().toString().equalsIgnoreCase("CBPark")) {
             if (type == LogTypes.found) {
-                MessageBox.show(Translation.Get("My_Parking_Area_Found"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(Translation.get("My_Parking_Area_Found"), Translation.get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
             } else if (type == LogTypes.didnt_find) {
-                MessageBox.show(Translation.Get("My_Parking_Area_DNF"), Translation.Get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                MessageBox.show(Translation.get("My_Parking_Area_DNF"), Translation.get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             }
             return;
         }
@@ -428,7 +428,7 @@ public class DraftsView extends AbstractView {
             newDraft.timestamp = new Date();
             newDraft.CacheId = abstractCache.getId();
             newDraft.comment = "";
-            newDraft.CacheUrl = abstractCache.getUrl();
+            newDraft.CacheUrl = abstractCache.getUrl(Database.Data);
             newDraft.cacheType = abstractCache.getType();
             newDraft.fillType();
             // aktDraftIndex = -1;
@@ -626,7 +626,7 @@ public class DraftsView extends AbstractView {
 //                    GL.that.Toast(ConnectionError.INSTANCE);
 //                    if (wd != null)
 //                        wd.close();
-//                    MessageBox.show(Translation.Get("CreateFieldnoteInstead"), Translation.Get("UploadFailed"), MessageBoxButtons.YesNoRetry, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
+//                    MessageBox.show(Translation.get("CreateFieldnoteInstead"), Translation.get("UploadFailed"), MessageBoxButtons.YesNoRetry, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
 //
 //                        @Override
 //                        public boolean onClick(int which, Object data) {
@@ -651,7 +651,7 @@ public class DraftsView extends AbstractView {
 //                    GL.that.Toast(ApiUnavailable.INSTANCE);
 //                    if (wd != null)
 //                        wd.close();
-//                    MessageBox.show(Translation.Get("CreateFieldnoteInstead"), Translation.Get("UploadFailed"), MessageBoxButtons.YesNoRetry, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
+//                    MessageBox.show(Translation.get("CreateFieldnoteInstead"), Translation.get("UploadFailed"), MessageBoxButtons.YesNoRetry, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
 //
 //                        @Override
 //                        public boolean onClick(int which, Object data) {
@@ -677,7 +677,7 @@ public class DraftsView extends AbstractView {
 //                    Gdx.app.postRunnable(new Runnable() {
 //                        @Override
 //                        public void run() {
-//                            MessageBox.show(GroundspeakAPI.LastAPIError, Translation.Get("Error"), MessageBoxIcon.Error);
+//                            MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("Error"), MessageBoxIcon.Error);
 //                        }
 //                    });
 //                }
@@ -724,8 +724,8 @@ public class DraftsView extends AbstractView {
         final AbstractCache abstractCache = tmpAbstractCache;
 
         if (abstractCache == null && !aktDraft.isTbDraft) {
-            String message = Translation.Get("cacheOtherDb", aktDraft.CacheName.toString());
-            message += "\n" + Translation.Get("draftNoteNoDelete");
+            String message = Translation.get("cacheOtherDb", aktDraft.CacheName.toString()).toString();
+            message += "\n" + Translation.get("draftNoteNoDelete");
             MessageBox.show(message);
             return;
         }
@@ -774,16 +774,16 @@ public class DraftsView extends AbstractView {
 
         };
 
-        String message = "";
+        CharSequence message = "";
         if (aktDraft.isTbDraft) {
-            message = Translation.Get("confirmDraftDeletionTB", aktDraft.typeString, aktDraft.TbName);
+            message = Translation.get("confirmDraftDeletionTB", aktDraft.typeString, aktDraft.TbName);
         } else {
-            message = Translation.Get("confirmDraftDeletion", aktDraft.typeString, aktDraft.CacheName.toString());
-            if (aktDraft.type == LogTypes.found || aktDraft.type == LogTypes.attended || aktDraft.type == LogTypes.webcam_photo_taken)
-                message += Translation.Get("confirmDraftDeletionRst");
+            message = Translation.get("confirmDraftDeletion", aktDraft.typeString, aktDraft.CacheName.toString());
+            //TODO if (aktDraft.type == LogTypes.found || aktDraft.type == LogTypes.attended || aktDraft.type == LogTypes.webcam_photo_taken)
+            //TODO  message += Translation.get("confirmDraftDeletionRst");
         }
 
-        MessageBox.show(message, Translation.Get("deleteDraft"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
+        MessageBox.show(message, Translation.get("deleteDraft"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
 
     }
 
@@ -818,11 +818,11 @@ public class DraftsView extends AbstractView {
 
             }
         };
-        final String message = Translation.Get("DeleteAllDraftsQuestion");
+        final CharSequence message = Translation.get("DeleteAllDraftsQuestion");
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                MessageBox.show(message, Translation.Get("DeleteAllNotes"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning, dialogClickListener);
+                MessageBox.show(message, Translation.get("DeleteAllNotes"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning, dialogClickListener);
 
             }
         });
@@ -842,9 +842,9 @@ public class DraftsView extends AbstractView {
         AbstractCache cache = tmpCache;
 
         if (cache == null) {
-            String message = Translation.Get("cacheOtherDb", aktDraft.CacheName.toString());
-            message += "\n" + Translation.Get("DraftNoSelect");
-            MessageBox.show(message, Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+            CharSequence message = Translation.get("cacheOtherDb", aktDraft.CacheName.toString());
+            //TODO message += "\n" + Translation.get("DraftNoSelect");
+            MessageBox.show(message, Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             return;
         }
 

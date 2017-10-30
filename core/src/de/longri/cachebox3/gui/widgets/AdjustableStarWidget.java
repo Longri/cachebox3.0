@@ -35,7 +35,7 @@ public class AdjustableStarWidget extends Table {
     private final VisLabel valueLabel;
 
 
-    public AdjustableStarWidget(String title) {
+    public AdjustableStarWidget(CharSequence title) {
 
         starsWidget = new Stars(value);
         minusBtn = new VisTextButton("-") {

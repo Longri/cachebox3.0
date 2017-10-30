@@ -91,7 +91,7 @@ public class A extends Group
         boolean changeState = super.updateTime(curTime);
 //        if (trackManager.getNumTracks() == 0) return false;
 
-        //Get current values for parameters
+        //get current values for parameters
         StyleAttribute sty = new StyleAttribute();
         
         if (getPres(sty.setName("xlink:href")))

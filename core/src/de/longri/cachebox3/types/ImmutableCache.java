@@ -399,6 +399,12 @@ public class ImmutableCache extends AbstractCache {
         throwNotChangeable("Longitude");
     }
 
+
+    @Override
+    public void setUrl(String value) {
+        throwNotChangeable("Url");
+    }
+
     //################################################################################
     //# properties that not retained at the class but read/write directly from/to DB
     ///###############################################################################
@@ -435,6 +441,11 @@ public class ImmutableCache extends AbstractCache {
     @Override
     public String getHint(Database database) {
         return getStringFromDB(database, "SELECT Hint FROM CacheText WHERE Id=?");
+    }
+
+    @Override
+    public String getUrl(Database database) {
+        return getStringFromDB(database, "SELECT Url FROM CacheText WHERE Id=?");
     }
 
     private String getStringFromDB(Database database, String statement) {
@@ -578,15 +589,6 @@ public class ImmutableCache extends AbstractCache {
 
     }
 
-    @Override
-    public String getUrl() {
-        return null;
-    }
-
-    @Override
-    public void setUrl(String value) {
-
-    }
 
     @Override
     public String getCountry() {
@@ -673,7 +675,7 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
-    public AbstractCache getMutable(Database database) {
+    public MutableCache getMutable(Database database) {
         return new MutableCache(database, this);
     }
 

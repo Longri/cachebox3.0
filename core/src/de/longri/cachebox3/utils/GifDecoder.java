@@ -335,7 +335,7 @@ public class GifDecoder {
 					count--;
 					continue;
 				}
-				// Get the next code.
+				// get the next code.
 				code = datum & code_mask;
 				datum >>= code_size;
 				bits -= code_size;

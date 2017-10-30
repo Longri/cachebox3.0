@@ -35,7 +35,6 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.stages.StageManager;
-import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
@@ -72,7 +71,7 @@ public class Menu extends Window {
 
     CB_List<ListViewItem> mItems = new CB_List();
     public MenuStyle style;
-    final String name;
+    final CharSequence name;
     ListView listView;
     OnItemClickListener onItemClickListener;
     private VisLabel titleLabel, parentTitleLabel;
@@ -83,27 +82,27 @@ public class Menu extends Window {
     private boolean isShowing = false;
     private OnHideListener onHideListener;
 
-    public Menu(String name) {
-        super(name);
+    public Menu(CharSequence name) {
+        super(name.toString());
         this.style = VisUI.getSkin().get("default", MenuStyle.class);
         this.name = name;
         this.setStageBackground(style.stageBackground);
         hideWithItemClick = true;
     }
 
-    public Menu(String name, MenuStyle style) {
-        super(name);
+    public Menu(CharSequence name, MenuStyle style) {
+        super(name.toString());
         this.style = style;
         this.name = name;
         this.setStageBackground(style.stageBackground);
         hideWithItemClick = true;
     }
 
-    public Menu(String name, String styleName) {
+    public Menu(CharSequence name, String styleName) {
         this(name, VisUI.getSkin().get(styleName, MenuStyle.class));
     }
 
-    public MenuItem addItem(int ID, String StringId, Drawable icon) {
+    public MenuItem addItem(int ID, CharSequence StringId, Drawable icon) {
         MenuItem item = addItem(ID, StringId);
         if (icon != null)
             item.setIcon(icon);
@@ -147,29 +146,29 @@ public class Menu extends Window {
         mItems.add(menuItem);
     }
 
-    public MenuItem addItem(int ID, String StringId) {
+    public MenuItem addItem(int ID, CharSequence StringId) {
         return addItem(ID, StringId, "", false);
     }
 
-    public MenuItem addItem(int ID, String StringId, boolean withoutTranslation) {
+    public MenuItem addItem(int ID, CharSequence StringId, boolean withoutTranslation) {
         return addItem(ID, StringId, "", withoutTranslation);
     }
 
-    public MenuItem addItem(int ID, String StringId, String appendix, Sprite icon) {
+    public MenuItem addItem(int ID, CharSequence StringId, String appendix, Sprite icon) {
         MenuItem item = addItem(ID, StringId, appendix);
         if (icon != null)
             item.setIcon(new SpriteDrawable(icon));
         return item;
     }
 
-    public MenuItem addItem(int ID, String StringId, String appendix, Drawable icon) {
+    public MenuItem addItem(int ID, CharSequence StringId, String appendix, Drawable icon) {
         MenuItem item = addItem(ID, StringId, appendix);
         if (icon != null)
             item.setIcon(icon);
         return item;
     }
 
-    public MenuItem addItem(int ID, String StringId, String appendix) {
+    public MenuItem addItem(int ID, CharSequence StringId, String appendix) {
         return addItem(ID, StringId, appendix, false);
     }
 
@@ -180,7 +179,7 @@ public class Menu extends Window {
         return item;
     }
 
-    public MenuItem addItem(int ID, String StringId, String appendix, boolean withoutTranslation) {
+    public MenuItem addItem(int ID, CharSequence StringId, String appendix, boolean withoutTranslation) {
         String trans;
         if (StringId == null || StringId.equals("")) {
             trans = appendix;
@@ -188,7 +187,7 @@ public class Menu extends Window {
             if (withoutTranslation)
                 trans = StringId + appendix;
             else
-                trans = Translation.Get(StringId) + appendix;
+                trans = Translation.get(StringId.toString()) + appendix;
         }
 
         MenuItem item = new MenuItem(0, ID, "Menu Item@" + ID + "[" + trans + "]", this);
@@ -198,7 +197,7 @@ public class Menu extends Window {
         return item;
     }
 
-    public MenuItem addCheckableItem(int ID, String StringId, boolean checked) {
+    public MenuItem addCheckableItem(int ID, CharSequence StringId, boolean checked) {
         MenuItem item = addItem(ID, StringId, "", false);
         item.setCheckable(true);
         item.setChecked(checked);
@@ -227,7 +226,7 @@ public class Menu extends Window {
         pack();
 
         mainMenuWidgetGroup = new WidgetGroup();
-        mainMenuWidgetGroup.setName(this.name);
+        mainMenuWidgetGroup.setName(this.name.toString());
         mainMenuWidgetGroup.setBounds(this.getX(), this.getY(), this.getWidth(), this.getHeight());
         mainMenuWidgetGroup.addActor(this);
 

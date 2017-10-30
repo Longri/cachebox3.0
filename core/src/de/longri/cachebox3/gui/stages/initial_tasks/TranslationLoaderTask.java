@@ -15,11 +15,14 @@
  */
 package de.longri.cachebox3.gui.stages.initial_tasks;
 
+import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Language;
+import de.longri.cachebox3.translation.SequenceTranslationHandler;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.translation.StringTranslationHandler;
 import de.longri.cachebox3.utils.IChanged;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +44,10 @@ public final class TranslationLoaderTask extends AbstractInitTask {
 
     @Override
     public void runnable() {
-        new Translation("lang");
-        EventHandler.fire(new IncrementProgressEvent(10,"Load Translation"));
+//        Translation.translation = new StringTranslationHandler(Gdx.files.internal("lang"), "en-GB");
+        Translation.translation = new SequenceTranslationHandler(Gdx.files.internal("lang"), "en-GB");
+
+        EventHandler.fire(new IncrementProgressEvent(10, "Load Translation"));
         loadTranslation();
 
         // add settings change handler
@@ -62,12 +67,12 @@ public final class TranslationLoaderTask extends AbstractInitTask {
     private void loadTranslation() {
         if (Config.localisation.getEnumValue() == loadedLang) return;
         try {
-            Translation.LoadTranslation(Config.localisation.getEnumValue().toString());
+            Translation.loadTranslation(Config.localisation.getEnumValue().toString());
             loadedLang = Config.localisation.getEnumValue();
         } catch (Exception e) {
             try {
                 log.error("can't load lang: {}", Config.localisation.getEnumValue(), e);
-                Translation.LoadTranslation(Config.localisation.getEnumDefaultValue().toString());
+                Translation.loadTranslation(Config.localisation.getEnumDefaultValue().toString());
                 loadedLang = Config.localisation.getEnumDefaultValue();
             } catch (IOException e1) {
                 log.error("can't load default lang", e1);

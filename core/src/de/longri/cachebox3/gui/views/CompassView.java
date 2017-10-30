@@ -166,13 +166,13 @@ public class CompassView extends AbstractView implements PositionChangedListener
         }
 
         if (showSatInfos) {
-            ownPositionLabel = new Label(Translation.Get("waiting_for_fix"), infoStyle);
+            ownPositionLabel = new Label(Translation.get("waiting_for_fix"), infoStyle);
             topTable.add(ownPositionLabel).left();
             topTable.row();
         }
 
         if (showTargetDirection) {
-            targetdirectionLabel = new Label(Translation.Get("waiting_for_fix"), infoStyle);
+            targetdirectionLabel = new Label(Translation.get("waiting_for_fix"), infoStyle);
             topTable.add(targetdirectionLabel).left();
             topTable.row();
         }
@@ -357,7 +357,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
             else
                 directionToTarget = bearing;
 
-            String sBearing = Translation.Get("directionToTarget") + " : " +
+            String sBearing = Translation.get("directionToTarget") + " : " +
                     String.format("%.0f", directionToTarget) + "°";
             targetdirectionLabel.setText(sBearing);
         }

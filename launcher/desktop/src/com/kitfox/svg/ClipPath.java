@@ -139,7 +139,7 @@ public class ClipPath extends SVGElement
     @Override
     public boolean updateTime(double curTime) throws SVGException
     {
-        //Get current values for parameters
+        //get current values for parameters
         StyleAttribute sty = new StyleAttribute();
         boolean shapeChange = false;
 

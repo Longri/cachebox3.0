@@ -111,8 +111,9 @@ public class AlterCachebox3DB {
                         database.update("CacheCoreInfo", args, "id=" + String.valueOf(allIds.get(i)), null);
 
                         i++;
+                        cursor.close();
                     }
-                    cursor.close();
+
                 }
 
 

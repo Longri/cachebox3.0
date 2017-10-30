@@ -57,7 +57,7 @@ public class TrackRecorder implements PositionChangedListener {
 
         EventHandler.add(this);
 
-        CB.actRoute = new Track(Translation.Get("actualTrack"), Color.BLUE);
+        CB.actRoute = new Track(Translation.get("actualTrack"), Color.BLUE);
         CB.actRoute.ShowRoute = true;
         CB.actRoute.IsActualTrack = true;
         CB.actRouteCount = 0;
@@ -183,7 +183,7 @@ public class TrackRecorder implements PositionChangedListener {
         EventHandler.remove(this);
         if (CB.actRoute != null) {
             CB.actRoute.IsActualTrack = false;
-            CB.actRoute.Name = Translation.Get("recordetTrack");
+            CB.actRoute.Name = Translation.get("recordetTrack");
         }
         pauseRecording = false;
         recording = false;

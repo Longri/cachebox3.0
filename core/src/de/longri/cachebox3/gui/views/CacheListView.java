@@ -62,7 +62,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     public CacheListView() {
         super("CacheListView CacheCount: " + Database.Data.Query.size);
-        CB.viewmanager.toast(Translation.Get("LoadCacheList"), WAIT_TOAST_LENGTH);
+        CB.viewmanager.toast(Translation.get("LoadCacheList"), WAIT_TOAST_LENGTH);
 
         //register as cacheListChanged eventListener
         CacheListChangedEventList.Add(this);
@@ -160,7 +160,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
                 CacheListView.this.listView = new ListView(listViewAdapter, false, true);
                 synchronized (CacheListView.this.listView) {
-                    listView.setEmptyString(Translation.Get("EmptyCacheList"));
+                    listView.setEmptyString(Translation.get("EmptyCacheList"));
                     listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
                     addActor(listView);
                     listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
@@ -387,7 +387,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
         });
 
-        String DBName = Database.Data == null || !Database.Data.isStarted() ? Translation.Get("noDB") : Database.Data.getPath();
+        String DBName = Database.Data == null || !Database.Data.isStarted() ? Translation.get("noDB").toString() : Database.Data.getPath();
         try {
             int pos = DBName.lastIndexOf("/");
             if (pos < 0) pos = DBName.lastIndexOf("\\");

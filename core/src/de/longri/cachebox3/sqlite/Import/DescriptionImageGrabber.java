@@ -150,18 +150,18 @@ public class DescriptionImageGrabber {
 
         URI baseUri;
         try {
-            baseUri = URI.create(abstractCache.getUrl());
+            baseUri = URI.create(abstractCache.getUrl(Database.Data));
         } catch (Exception exc) {
-            log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", abstractCache.getUrl(), exc);
+            log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", abstractCache.getUrl(Database.Data), exc);
             baseUri = null;
         }
 
         if (baseUri == null) {
             abstractCache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + abstractCache.getGcCode());
             try {
-                baseUri = URI.create(abstractCache.getUrl());
+                baseUri = URI.create(abstractCache.getUrl(Database.Data));
             } catch (Exception exc) {
-                log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", abstractCache.getUrl(), exc);
+                log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", abstractCache.getUrl(Database.Data), exc);
                 return html;
             }
         }
@@ -360,7 +360,7 @@ public class DescriptionImageGrabber {
         }
 
         if (!additionalImagesUpdated) {
-            // Get additional images (Spoiler)
+            // get additional images (Spoiler)
 
             // Liste aller Spoiler Images für diesen Cache erstellen
             // anhand dieser Liste kann überprüft werden, ob ein Spoiler schon geladen ist und muss nicht ein 2. mal geladen werden.

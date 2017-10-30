@@ -28,7 +28,7 @@ public interface Adapter {
     int getCount();
 
     /**
-     * Get a View that displays the data at the specified position in the data set.
+     * get a View that displays the data at the specified position in the data set.
      *
      * @param index The position of the item within the adapter's data set of the item whose view we want.
      * @return A View corresponding to the data at the specified position.

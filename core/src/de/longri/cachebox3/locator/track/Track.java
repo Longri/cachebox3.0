@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class Track {
     public ArrayList<TrackPoint> Points;
-    public String Name;
+    public CharSequence Name;
     public String FileName;
     public boolean ShowRoute = false;
     public boolean IsActualTrack = false;
@@ -29,7 +29,7 @@ public class Track {
     public double TrackLength;
     public double AltitudeDifference;
 
-    public Track(String name, Color color) {
+    public Track(CharSequence name, Color color) {
         Points = new ArrayList<TrackPoint>();
         Name = name;
         mColor = color;

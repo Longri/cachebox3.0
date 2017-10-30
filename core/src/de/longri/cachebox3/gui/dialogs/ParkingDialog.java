@@ -23,7 +23,7 @@ import de.longri.cachebox3.translation.Translation;
  */
 public class ParkingDialog extends ButtonDialog {
     public ParkingDialog() {
-        super("NewDB", createContentBox(), Translation.Get("NewDB"), MessageBoxButtons.OKCancel, null);
+        super("NewDB", createContentBox(), Translation.get("NewDB"), MessageBoxButtons.OKCancel, null);
     }
 
     private static Table createContentBox() {

@@ -261,7 +261,7 @@ abstract public class Gradient extends FillElement
 //        if (trackManager.getNumTracks() == 0) return false;
         boolean stateChange = false;
 
-        //Get current values for parameters
+        //get current values for parameters
         StyleAttribute sty = new StyleAttribute();
         String strn;
 

@@ -150,7 +150,7 @@ public class Downloader implements Runnable {
     }
 
     /**
-     * Get the length of the remote resource.
+     * get the length of the remote resource.
      *
      * @return length of the remote resource, in number of bytes; -1 if unknown
      */
@@ -161,7 +161,7 @@ public class Downloader implements Runnable {
     }
 
     /**
-     * Get the number of bytes downloaded.
+     * get the number of bytes downloaded.
      *
      * @return number of bytes downloaded
      */
@@ -172,7 +172,7 @@ public class Downloader implements Runnable {
     }
 
     /**
-     * Get a string describing the current progress.
+     * get a string describing the current progress.
      *
      * @return string describing the current progress
      */
@@ -181,7 +181,7 @@ public class Downloader implements Runnable {
     }
 
     /**
-     * Get the percentage describing the current progress.
+     * get the percentage describing the current progress.
      *
      * @return percentage describing the current progress; -1 if unknown
      */

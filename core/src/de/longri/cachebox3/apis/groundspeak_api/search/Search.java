@@ -346,7 +346,7 @@ public abstract class Search extends PostRequest {
 
                             //add final Waypoint instance
                             if (actCache.getWaypoints() == null)
-                                actCache.setWaypoints(new Array<>());
+                                actCache.setWaypoints(new Array<AbstractWaypoint>());
                             actCache.getWaypoints().add(new MutableWaypoint(Database.Data, actWayPoint));
                             waypointCount++;
                             actWayPoint = null;

@@ -343,7 +343,7 @@ public class MapView extends AbstractView {
         try {
             mapArrowStyle = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
         } catch (Exception e) {
-            log.error("Get MapArrowStyle 'myLocation'", e);
+            log.error("get MapArrowStyle 'myLocation'", e);
         }
 
         if (mapArrowStyle != null) {

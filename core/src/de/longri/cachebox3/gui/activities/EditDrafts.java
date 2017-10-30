@@ -37,6 +37,7 @@ import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
@@ -60,7 +61,7 @@ public class EditDrafts extends ActivityBase {
 
 
     private final VisTable contentTable;
-    private final VisTextButton btnOk, btnCancel;
+    private final CharSequenceButton btnOk, btnCancel;
     private final DraftListItemStyle itemStyle;
     private final VisScrollPane scrollPane;
     private final VisLabel foundLabel, dateLabel, timeLabel;
@@ -83,14 +84,14 @@ public class EditDrafts extends ActivityBase {
         super("EditDraft");
         itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
 
-        btnOk = new VisTextButton(Translation.Get("save"));
+        btnOk = new CharSequenceButton(Translation.get("save"));
         btnOk.addListener(saveClickListener);
-        btnCancel = new VisTextButton(Translation.Get("cancel"));
+        btnCancel = new CharSequenceButton(Translation.get("cancel"));
         btnCancel.addListener(cancelClickListener);
         contentTable = new VisTable();
         setDraft(note, returnListener, isNewDraft);
         if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
-            gcVoteWidget = new AdjustableStarWidget(Translation.Get("maxRating"));
+            gcVoteWidget = new AdjustableStarWidget(Translation.get("maxRating"));
             gcVoteWidget.setBackground(CB.getSkin().get(ListView.ListViewStyle.class).firstItem);
         }
 
@@ -101,8 +102,8 @@ public class EditDrafts extends ActivityBase {
         else
             foundLabel = new VisLabel("Founds: #" + note.foundNumber);
 
-        dateLabel = new VisLabel(Translation.Get("date") + ":");
-        timeLabel = new VisLabel(Translation.Get("time") + ":");
+        dateLabel = new VisLabel(Translation.get("date") + ":");
+        timeLabel = new VisLabel(Translation.get("time") + ":");
 
         dateTextArea = new EditTextBox(false);
         timeTextArea = new EditTextBox(false) {
@@ -153,7 +154,7 @@ public class EditDrafts extends ActivityBase {
                     Date timestamp = dateFormatter.parse(date + "." + time + ".00");
                     actDraft.timestamp = timestamp;
                 } catch (ParseException e) {
-                    MessageBox.show(Translation.Get("wrongDate"), Translation.Get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                    MessageBox.show(Translation.get("wrongDate"), Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
                     return;
                 }
 
@@ -274,8 +275,8 @@ public class EditDrafts extends ActivityBase {
         ButtonGroup<Button> optionGroup = new ButtonGroup<>();
         optionGroup.add(onlineOption, fieldNoteOption);
         fieldNoteOption.setChecked(true);
-        Label onlineOptionLabel = new Label(Translation.Get("directLog"), commentLabelStyle);
-        Label fieldNoteOptionLabel = new Label(Translation.Get("onlyDraft"), commentLabelStyle);
+        Label onlineOptionLabel = new Label(Translation.get("directLog"), commentLabelStyle);
+        Label fieldNoteOptionLabel = new Label(Translation.get("onlyDraft"), commentLabelStyle);
 
         onlineOptionLabel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {

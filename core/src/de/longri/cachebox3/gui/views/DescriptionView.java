@@ -80,7 +80,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 //
 //                final String attr = url.substring(pos + 1, url.length() - 1);
 //
-//                MessageBox.show(Translation.Get(attr));
+//                MessageBox.show(Translation.get(attr));
                 log.debug("Attribute icon clicked, don't load URL");
                 return true;
             } else if (url.contains("fake://fake.de?Button")) {
@@ -90,7 +90,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 //
 //                final String attr = url.substring(pos + 1, url.length() - 1);
 //
-//                MessageBox.show(Translation.Get(attr));
+//                MessageBox.show(Translation.get(attr));
                 log.debug("Attribute icon clicked, don't load URL");
                 return true;
             } else if (url.contains("fake://fake.de/download")) {
@@ -146,7 +146,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 //                pd = ProgressDialog.show(getContext(), "", "download Description", true);
 //
 //                thread.start();
-                log.debug("Get Basic Member description clicked, don't load URL");
+                log.debug("get Basic Member description clicked, don't load URL");
                 return true;
             } else if (url.startsWith("http://")) {
                 // Load Url in ext Browser
@@ -248,8 +248,8 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             if (actCache.getApiState() == 1)// GC.com API lite
             { // Load Standard HTML
                 log.debug("load is Lite html");
-                String nodesc = Translation.Get("GC_NoDescription");
-                html = "</br>" + nodesc + "</br></br></br><form action=\"download\"><input type=\"submit\" value=\" " + Translation.Get("GC_DownloadDescription") + " \"></form>";
+                String nodesc = Translation.get("GC_NoDescription").toString();
+                html = "</br>" + nodesc + "</br></br></br><form action=\"download\"><input type=\"submit\" value=\" " + Translation.get("GC_DownloadDescription") + " \"></form>";
             } else {
                 html = DescriptionImageGrabber.resolveImages(actCache, cacheHtml, false, nonLocalImages, nonLocalImagesUrl);
                 if (!Config.DescriptionNoAttributes.getValue()) {
@@ -339,7 +339,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                     case MenuID.MI_FAVORIT:
                         if (EventHandler.getSelectedCache() == null) {
 
-                            new ButtonDialog("NoCacheSelect", Translation.Get("NoCacheSelect"), Translation.Get("Error"),
+                            new ButtonDialog("NoCacheSelect", Translation.get("NoCacheSelect"), Translation.get("Error"),
                                     MessageBoxButtons.OKCancel, MessageBoxIcon.Error, null).show();
                             return true;
                         }

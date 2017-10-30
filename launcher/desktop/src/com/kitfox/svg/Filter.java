@@ -182,7 +182,7 @@ public class Filter extends SVGElement
     {
 //        if (trackManager.getNumTracks() == 0) return false;
 
-        //Get current values for parameters
+        //get current values for parameters
         StyleAttribute sty = new StyleAttribute();
         boolean stateChange = false;
 

@@ -28,12 +28,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.animations.actor_animations.Blink;
 import de.longri.cachebox3.gui.animations.actor_animations.GestureHelpAnimation;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CB_RectF;
@@ -49,8 +51,8 @@ public class GestureHelp extends HelpWindow {
     final Drawable buttonDrawable;
     final Drawable gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
     final GestureHelpStyle style;
-    final String GESTURE_MSG = Translation.Get("gestureHelp"); // "You can also use this gesture to call this function"
-    final String DONT_SHOW_AGAIN_MSG = Translation.Get("DontShowHelp"); // "Don't show help Msg again!"
+    final CharSequence GESTURE_MSG = Translation.get("gestureHelp");
+    final CharSequence DONT_SHOW_AGAIN_MSG = Translation.get("DontShowHelp");
     final Table table = new Table();
     private boolean isShowing = false;
 
@@ -170,12 +172,12 @@ public class GestureHelp extends HelpWindow {
         this.addActor(label);
 
 
-        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
+        VisTextButton.VisTextButtonStyle buttonStyle = new VisTextButton.VisTextButtonStyle();
         buttonStyle.font = this.style.font;
         buttonStyle.fontColor = this.style.fontColor;
         buttonStyle.up = new ColorDrawable(this.style.backgroundColor);
 
-        TextButton button = new TextButton(DONT_SHOW_AGAIN_MSG, buttonStyle);
+        CharSequenceButton button = new CharSequenceButton(DONT_SHOW_AGAIN_MSG, buttonStyle);
         button.setPosition(CB.scaledSizes.MARGIN, this.ellipseRectangle.getMaxY() + CB.scaledSizes.MARGINx2);
         button.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {

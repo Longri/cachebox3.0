@@ -204,10 +204,10 @@ project(":core") {
     apply plugin: 'org.junit.platform.gradle.plugin'
 
 
-    ext.junit4Version        = '4.12'
-    ext.junitVintageVersion  = '4.12.0-M4'
+    ext.junit4Version = '4.12'
+    ext.junitVintageVersion = '4.12.0-M4'
     ext.junitPlatformVersion = '1.0.0-M4'
-    ext.junitJupiterVersion  = '5.0.0-M4'
+    ext.junitJupiterVersion = '5.0.0-M4'
 
 
     dependencies {
@@ -244,6 +244,8 @@ project(":core") {
         testCompile "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
         testCompile 'com.kitfox.svg:svg-salamander:1.0'
         testCompile project(":desktop")
+        testCompile group: 'org.openjdk.jol', name: 'jol-core', version: '0.9'
+
     }
 }
 

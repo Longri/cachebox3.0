@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.dialogs;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -32,8 +31,8 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle;
 import de.longri.cachebox3.gui.skin.styles.IconsStyle;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.utils.MesureFontUtil;
 
 /**
  * Created by Longri on 03.08.16.
@@ -229,42 +228,42 @@ public class ButtonDialog extends Window {
 
         if (buttons == MessageBoxButtons.YesNoRetry) {
             buttonWidth = (maxWindowWidth / 3) - (4 * CB.scaledSizes.MARGIN);
-            this.button(Translation.Get("yes"), buttonWidth, BUTTON_POSITIVE);
-            this.button(Translation.Get("no"), buttonWidth, BUTTON_NEGATIVE);
-            this.button(Translation.Get("retry"), buttonWidth, BUTTON_NEUTRAL);
+            this.button(Translation.get("yes"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.get("no"), buttonWidth, BUTTON_NEGATIVE);
+            this.button(Translation.get("retry"), buttonWidth, BUTTON_NEUTRAL);
         } else if (buttons == MessageBoxButtons.AbortRetryIgnore) {
             buttonWidth = (maxWindowWidth / 3) - (4 * CB.scaledSizes.MARGIN);
-            this.button(Translation.Get("abort"), buttonWidth, BUTTON_POSITIVE);
-            this.button(Translation.Get("retry"), buttonWidth, BUTTON_NEUTRAL);
-            this.button(Translation.Get("ignore"), buttonWidth, BUTTON_NEGATIVE);
+            this.button(Translation.get("abort"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.get("retry"), buttonWidth, BUTTON_NEUTRAL);
+            this.button(Translation.get("ignore"), buttonWidth, BUTTON_NEGATIVE);
         } else if (buttons == MessageBoxButtons.OK) {
             buttonWidth = CB.scaledSizes.BUTTON_WIDTH_WIDE;
-            this.button(Translation.Get("ok"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.get("ok"), buttonWidth, BUTTON_POSITIVE);
         } else if (buttons == MessageBoxButtons.OKCancel) {
             buttonWidth = (maxWindowWidth / 2) - (3 * CB.scaledSizes.MARGIN);
-            this.button(Translation.Get("ok"), buttonWidth, BUTTON_POSITIVE);
-            this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEGATIVE);
+            this.button(Translation.get("ok"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.get("cancel"), buttonWidth, BUTTON_NEGATIVE);
         } else if (buttons == MessageBoxButtons.RetryCancel) {
             buttonWidth = (maxWindowWidth / 2) - (3 * CB.scaledSizes.MARGIN);
-            this.button(Translation.Get("retry"), buttonWidth, BUTTON_POSITIVE);
-            this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEGATIVE);
+            this.button(Translation.get("retry"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.get("cancel"), buttonWidth, BUTTON_NEGATIVE);
         } else if (buttons == MessageBoxButtons.YesNo) {
             buttonWidth = (maxWindowWidth / 2) - (3 * CB.scaledSizes.MARGIN);
-            this.button(Translation.Get("yes"), buttonWidth, BUTTON_POSITIVE);
-            this.button(Translation.Get("no"), buttonWidth, BUTTON_NEGATIVE);
+            this.button(Translation.get("yes"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.get("no"), buttonWidth, BUTTON_NEGATIVE);
         } else if (buttons == MessageBoxButtons.YesNoCancel) {
             buttonWidth = (maxWindowWidth / 3) - (4 * CB.scaledSizes.MARGIN);
-            this.button(Translation.Get("yes"), buttonWidth, BUTTON_POSITIVE);
-            this.button(Translation.Get("no"), buttonWidth, BUTTON_NEGATIVE);
-            this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEUTRAL);
+            this.button(Translation.get("yes"), buttonWidth, BUTTON_POSITIVE);
+            this.button(Translation.get("no"), buttonWidth, BUTTON_NEGATIVE);
+            this.button(Translation.get("cancel"), buttonWidth, BUTTON_NEUTRAL);
         } else if (buttons == MessageBoxButtons.Cancel) {
             buttonWidth = CB.scaledSizes.BUTTON_WIDTH_WIDE;
-            this.button(Translation.Get("cancel"), buttonWidth, BUTTON_NEGATIVE);
+            this.button(Translation.get("cancel"), buttonWidth, BUTTON_NEGATIVE);
         }
     }
 
-    private void button(String text, float buttonWidth, Object object) {
-        VisTextButton button = new VisTextButton(text);
+    private void button(CharSequence text, float buttonWidth, Object object) {
+        CharSequenceButton button = new CharSequenceButton(text);
         buttonTable.add(button).width(buttonWidth);
         values.put(button, object);
     }
@@ -288,28 +287,28 @@ public class ButtonDialog extends Window {
 //        BitmapFont font = buttonStyle.font;
 //        float minButtonWidth = (buttonStyle.up.getMinWidth() + CB.scaledSizes.MARGINx4) * 4;
 //        if (buttons == MessageBoxButtons.YesNoRetry) {
-//            String alltext = Translation.Get("yes") + Translation.Get("no") + Translation.Get("retry");
+//            String alltext = Translation.get("yes") + Translation.get("no") + Translation.get("retry");
 //            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (4 * CB.scaledSizes.MARGIN) + (3 * minButtonWidth);
 //        } else if (buttons == MessageBoxButtons.AbortRetryIgnore) {
-//            String alltext = Translation.Get("abort") + Translation.Get("retry") + Translation.Get("ignore");
+//            String alltext = Translation.get("abort") + Translation.get("retry") + Translation.get("ignore");
 //            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (4 * CB.scaledSizes.MARGIN) + (3 * minButtonWidth);
 //        } else if (buttons == MessageBoxButtons.OK) {
-//            String alltext = Translation.Get("ok");
+//            String alltext = Translation.get("ok");
 //            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (2 * CB.scaledSizes.MARGIN) + (minButtonWidth);
 //        } else if (buttons == MessageBoxButtons.OKCancel) {
-//            String alltext = Translation.Get("ok") + Translation.Get("cancel");
+//            String alltext = Translation.get("ok") + Translation.get("cancel");
 //            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (3 * CB.scaledSizes.MARGIN) + (2 * minButtonWidth);
 //        } else if (buttons == MessageBoxButtons.RetryCancel) {
-//            String alltext = Translation.Get("retry") + Translation.Get("cancel");
+//            String alltext = Translation.get("retry") + Translation.get("cancel");
 //            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (3 * CB.scaledSizes.MARGIN) + (2 * minButtonWidth);
 //        } else if (buttons == MessageBoxButtons.YesNo) {
-//            String alltext = Translation.Get("yes") + Translation.Get("no");
+//            String alltext = Translation.get("yes") + Translation.get("no");
 //            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (3 * CB.scaledSizes.MARGIN) + (2 * minButtonWidth);
 //        } else if (buttons == MessageBoxButtons.YesNoCancel) {
-//            String alltext = Translation.Get("yes") + Translation.Get("no") + Translation.Get("cancel");
+//            String alltext = Translation.get("yes") + Translation.get("no") + Translation.get("cancel");
 //            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (4 * CB.scaledSizes.MARGIN) + (3 * minButtonWidth);
 //        } else if (buttons == MessageBoxButtons.Cancel) {
-//            String alltext = Translation.Get("cancel");
+//            String alltext = Translation.get("cancel");
 //            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (2 * CB.scaledSizes.MARGIN) + (minButtonWidth);
 //        }
 //

@@ -285,7 +285,7 @@ public class ImageSVG extends RenderableElement
 //        if (trackManager.getNumTracks() == 0) return false;
         boolean changeState = super.updateTime(curTime);
 
-        //Get current values for parameters
+        //get current values for parameters
         StyleAttribute sty = new StyleAttribute();
         boolean shapeChange = false;
 

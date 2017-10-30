@@ -226,7 +226,7 @@ public class Tspan extends ShapeElement
         }
 
 
-        //Get font
+        //get font
         Font font = diagram.getUniverse().getFont(fontFamily);
         if (font == null)
         {
@@ -384,7 +384,7 @@ public class Tspan extends ShapeElement
             fontSize = sty.getFloatValueWithUnits();
         }
 
-        //Get font
+        //get font
         Font font = diagram.getUniverse().getFont(fontFamily);
         if (font == null)
         {

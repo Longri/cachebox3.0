@@ -1125,7 +1125,7 @@ public class Base64 {
                         baos.write(buffer, 0, length);
                     } // end while: reading input
 
-                    // No error? Get new bytes.
+                    // No error? get new bytes.
                     bytes = baos.toByteArray();
 
                 } // end try

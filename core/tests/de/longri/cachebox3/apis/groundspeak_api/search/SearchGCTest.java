@@ -147,7 +147,7 @@ class SearchGCTest {
                 assertEquals("Wurzellisel", abstractCache.getPlacedBy());
                 assertEquals("\r\n", abstractCache.getShortDescription(Database.Data));
                 assertEquals(2f, abstractCache.getTerrain());
-                assertEquals("http://coord.info/GC1T33T", abstractCache.getUrl());
+                assertEquals("http://coord.info/GC1T33T", abstractCache.getUrl(Database.Data));
                 assertEquals(2, abstractCache.getApiState());
                 assertEquals(52.579267, abstractCache.getLatitude());
                 assertEquals(13.381983, abstractCache.getLongitude());
@@ -261,7 +261,7 @@ class SearchGCTest {
                 assertEquals("Wurzellisel", abstractCache.getPlacedBy());
                 assertEquals("\r\n", abstractCache.getShortDescription(Database.Data));
                 assertEquals(2f, abstractCache.getTerrain());
-                assertEquals("http://coord.info/GC1T33T", abstractCache.getUrl());
+                assertEquals("http://coord.info/GC1T33T", abstractCache.getUrl(Database.Data));
                 assertEquals(2, abstractCache.getApiState());
                 assertEquals(52.579267, abstractCache.getLatitude());
                 assertEquals(13.381983, abstractCache.getLongitude());

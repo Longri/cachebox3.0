@@ -375,11 +375,11 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         }
     }
 
-    public void toast(String massage) {
+    public void toast(CharSequence massage) {
         toast(massage, ToastLength.NORMAL);
     }
 
-    public void toast(String massage, ToastLength length) {
+    public void toast(CharSequence massage, ToastLength length) {
         if (toastLabel == null) {
             //initial ToastLabel
             toastLabel = new VisLabel(massage, "toast");

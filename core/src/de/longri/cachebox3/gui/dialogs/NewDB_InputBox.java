@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.widgets.CharSequenceCheckBox;
 import de.longri.cachebox3.translation.Translation;
 
 /**
@@ -28,17 +29,16 @@ import de.longri.cachebox3.translation.Translation;
  */
 public class NewDB_InputBox extends ButtonDialog {
     public NewDB_InputBox(OnMsgBoxClickListener listener) {
-        super("NewDB", createContentBox(), Translation.Get("NewDB"), MessageBoxButtons.OKCancel, listener);
+        super("NewDB", createContentBox(), Translation.get("NewDB"), MessageBoxButtons.OKCancel, listener);
     }
 
     private static Table createContentBox() {
         Table contentBox = new Table();
 
         VisTextField textField = new VisTextField();
-        textField.setMessageText(Translation.Get("EnterNewDBName"));
+        textField.setMessageText(Translation.get("EnterNewDBName").toString());//TODO change to CharSequence
 
-        VisCheckBox checkBox = new VisCheckBox("");
-        checkBox.setText(Translation.Get("UseDefaultRep"));
+        CharSequenceCheckBox checkBox = new CharSequenceCheckBox("Translation.get(\"UseDefaultRep\")");
 
         float pad = CB.scaledSizes.MARGIN;
         contentBox.add(textField).pad(pad).left().fillX();
@@ -66,7 +66,7 @@ public class NewDB_InputBox extends ButtonDialog {
             String newDbName = textField.getText();
             boolean okClicked = ((Integer) which) == BUTTON_POSITIVE;
             if (okClicked && (newDbName == null || newDbName.isEmpty())) {
-                CB.viewmanager.toast(Translation.Get("MustEnterName"));
+                CB.viewmanager.toast(Translation.get("MustEnterName"));
                 return;
             }
 

@@ -156,8 +156,8 @@ public class IOS_PlatformConnector extends PlatformConnector {
             link = "http://" + link;
         }
         if (!UIApplication.getSharedApplication().openURL(new NSURL(link))) {
-            log.error(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
-            CB.viewmanager.toast(Translation.Get("Cann_not_open_cache_browser") + " (" + link + ")");
+            log.error(Translation.get("Cann_not_open_cache_browser") + " (" + link + ")");
+            CB.viewmanager.toast(Translation.get("Cann_not_open_cache_browser") + " (" + link + ")");
         }
     }
 

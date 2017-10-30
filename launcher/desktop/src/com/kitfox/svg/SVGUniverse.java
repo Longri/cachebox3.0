@@ -629,7 +629,7 @@ public class SVGUniverse implements Serializable
     }
 
     /**
-     * Get list of uris of all loaded documents and subdocuments.
+     * get list of uris of all loaded documents and subdocuments.
      * @return 
      */
     public ArrayList<URI> getLoadedDocumentURIs()

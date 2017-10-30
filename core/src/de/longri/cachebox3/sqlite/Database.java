@@ -658,7 +658,7 @@ public class Database {
         String TimeStamp = (now.get(Calendar.YEAR)) + "-" + String.format("%02d", (now.get(Calendar.MONTH) + 1)) + "-" + String.format("%02d", now.get(Calendar.DATE));
 
         // #############################################################################
-        // Get CacheId's from Caches with older logs and having more logs than minToKeep
+        // get CacheId's from Caches with older logs and having more logs than minToKeep
         // #############################################################################
         {
             try {
@@ -679,7 +679,7 @@ public class Database {
         }
 
         // ###################################################
-        // Get Logs
+        // get Logs
         // ###################################################
         {
             try {

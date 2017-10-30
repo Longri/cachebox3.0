@@ -35,6 +35,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.stages.StageManager;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.NumPad;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
@@ -241,8 +242,8 @@ public class CoordinateActivity extends ActivityBase {
         this.row();
         Table cancelOkTable = new Table();
 
-        VisTextButton btnOk = new VisTextButton(Translation.Get("ok"));
-        VisTextButton btnCancel = new VisTextButton(Translation.Get("cancel"));
+        CharSequenceButton btnOk = new CharSequenceButton(Translation.get("ok"));
+        CharSequenceButton btnCancel = new CharSequenceButton(Translation.get("cancel"));
 
         btnOk.addListener(okListener);
         btnCancel.addListener(cancelListener);
