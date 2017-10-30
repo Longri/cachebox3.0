@@ -15,28 +15,22 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
 
 /**
- * Created by Longri on 27.10.2017.
+ * Created by Longri on 30.10.2017.
  */
-public class CharSequenceButton extends VisTextButton {
+public class CharSequenceCheckBox extends VisCheckBox {
 
     private final static String EMPTY = "";
 
-    public CharSequenceButton(CharSequence text) {
+    public CharSequenceCheckBox(CharSequence text) {
         super(EMPTY);
         getLabel().setText(text);
     }
 
-    public CharSequenceButton(CharSequence text, String styleName) {
+    public CharSequenceCheckBox(CharSequence text, String styleName) {
         super(EMPTY, styleName);
-        getLabel().setText(text);
-    }
-
-    public CharSequenceButton(CharSequence text, VisTextButtonStyle buttonStyle) {
-        super(EMPTY, buttonStyle);
         getLabel().setText(text);
     }
 

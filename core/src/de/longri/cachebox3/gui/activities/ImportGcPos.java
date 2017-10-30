@@ -39,6 +39,7 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CharSequenceCheckBox;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
@@ -66,7 +67,7 @@ public class ImportGcPos extends ActivityBase {
     private final VisLabel lblTitle, lblRadius, lblRadiusUnit, lblCaches, lblWaypoints, lblLogs, lblImages;
     private final Image gsLogo;
     private final CoordinateButton coordBtn;
-    private final VisCheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
+    private final CharSequenceCheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
     private final VisTextArea textAreaRadius;
     private Coordinate actSearchPos;
     private boolean importRuns = false;
@@ -96,9 +97,9 @@ public class ImportGcPos extends ActivityBase {
         lblRadiusUnit = new VisLabel(Config.ImperialUnits.getValue() ? "mi" : "km");
         btnMinus = new CharSequenceButton("-");
         btnPlus = new CharSequenceButton("+");
-        checkBoxOnlyAvailable = new VisCheckBox(Translation.get("SearchOnlyAvailable").toString());//TODO change to CharSequence
-        checkBoxExcludeHides = new VisCheckBox(Translation.get("SearchWithoutOwns").toString());//TODO change to CharSequence
-        checkBoxExcludeFounds = new VisCheckBox(Translation.get("SearchWithoutFounds").toString());//TODO change to CharSequence
+        checkBoxOnlyAvailable = new CharSequenceCheckBox(Translation.get("SearchOnlyAvailable"));
+        checkBoxExcludeHides = new CharSequenceCheckBox(Translation.get("SearchWithoutOwns"));
+        checkBoxExcludeFounds = new CharSequenceCheckBox(Translation.get("SearchWithoutFounds"));
         coordBtn = new CoordinateButton(EventHandler.getMyPosition());
         tglBtnGPS = new CharSequenceButton(Translation.get("FromGps"), "toggle");
         tglBtnMap = new CharSequenceButton(Translation.get("FromMap"), "toggle");

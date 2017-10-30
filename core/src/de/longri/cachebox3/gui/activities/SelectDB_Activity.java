@@ -422,7 +422,7 @@ public class SelectDB_Activity extends ActivityBase {
         else if (autoStartTime == 0)
             bAutostart.setText(Translation.get("AutoStartDisabled"));
         else
-            bAutostart.setText(Translation.get("AutoStartTime", String.valueOf(autoStartTime)).toString());//TODO change to CharSequence
+            bAutostart.setText(Translation.get("AutoStartTime", String.valueOf(autoStartTime)));
     }
 
     private class CustomAdapter implements Adapter {

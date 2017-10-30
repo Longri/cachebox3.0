@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.widgets.CharSequenceCheckBox;
 import de.longri.cachebox3.translation.Translation;
 
 /**
@@ -37,8 +38,7 @@ public class NewDB_InputBox extends ButtonDialog {
         VisTextField textField = new VisTextField();
         textField.setMessageText(Translation.get("EnterNewDBName").toString());//TODO change to CharSequence
 
-        VisCheckBox checkBox = new VisCheckBox("");
-        checkBox.setText(Translation.get("UseDefaultRep").toString());//TODO change to CharSequence
+        CharSequenceCheckBox checkBox = new CharSequenceCheckBox("Translation.get(\"UseDefaultRep\")");
 
         float pad = CB.scaledSizes.MARGIN;
         contentBox.add(textField).pad(pad).left().fillX();
