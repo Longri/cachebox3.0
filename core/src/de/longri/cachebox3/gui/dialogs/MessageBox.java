@@ -31,8 +31,8 @@ public class MessageBox {
         show(message, null, MessageBoxButtons.OK, null, null);
     }
 
-    public static void show(CharSequence message, CharSequence title, MessageBoxButtons buttons, MessageBoxIcon icon,
-                            OnMsgBoxClickListener clickListener) {
+    public static void show(final CharSequence message,final CharSequence title, final MessageBoxButtons buttons, final MessageBoxIcon icon,
+                            final OnMsgBoxClickListener clickListener) {
 
         CB.postOnMainThread(new Runnable() {
             @Override

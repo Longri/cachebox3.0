@@ -361,8 +361,8 @@ public class SelectDB_Activity extends ActivityBase {
 
                     if (version < 1028) {
 
-                        AtomicBoolean WAIT = new AtomicBoolean(true);
-                        AtomicBoolean CONVERT = new AtomicBoolean(false);
+                        final AtomicBoolean WAIT = new AtomicBoolean(true);
+                        final AtomicBoolean CONVERT = new AtomicBoolean(false);
 
                         CharSequence msg = Translation.get("DB_outdated_question");
                         CharSequence title = Translation.get("DB_outdated");
