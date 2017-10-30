@@ -173,7 +173,7 @@ class SearchGcOwnerTest {
                 assertEquals("bros", abstractCache.getPlacedBy());
                 assertEquals("Ein weiterer Cache im Tegeler Fließtal", abstractCache.getShortDescription(Database.Data));
                 assertEquals(2f, abstractCache.getTerrain());
-                assertEquals("http://coord.info/GC18JGX", abstractCache.getUrl());
+                assertEquals("http://coord.info/GC18JGX", abstractCache.getUrl(Database.Data));
                 assertEquals(2, abstractCache.getApiState());
                 assertEquals(52.62965, abstractCache.getLatitude());
                 assertEquals(13.372317, abstractCache.getLongitude());
@@ -296,7 +296,7 @@ class SearchGcOwnerTest {
                         assertEquals("bros", abstractCache.getPlacedBy());
                         assertEquals("Ein weiterer Cache im Tegeler Fließtal", abstractCache.getShortDescription(Database.Data));
                         assertEquals(2f, abstractCache.getTerrain());
-                        assertEquals("http://coord.info/GC18JGX", abstractCache.getUrl());
+                        assertEquals("http://coord.info/GC18JGX", abstractCache.getUrl(Database.Data));
                         assertEquals(2, abstractCache.getApiState());
                         assertEquals(52.62965, abstractCache.getLatitude());
                         assertEquals(13.372317, abstractCache.getLongitude());

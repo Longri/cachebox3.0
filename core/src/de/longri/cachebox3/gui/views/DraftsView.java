@@ -428,7 +428,7 @@ public class DraftsView extends AbstractView {
             newDraft.timestamp = new Date();
             newDraft.CacheId = abstractCache.getId();
             newDraft.comment = "";
-            newDraft.CacheUrl = abstractCache.getUrl();
+            newDraft.CacheUrl = abstractCache.getUrl(Database.Data);
             newDraft.cacheType = abstractCache.getType();
             newDraft.fillType();
             // aktDraftIndex = -1;
@@ -779,8 +779,8 @@ public class DraftsView extends AbstractView {
             message = Translation.get("confirmDraftDeletionTB", aktDraft.typeString, aktDraft.TbName);
         } else {
             message = Translation.get("confirmDraftDeletion", aktDraft.typeString, aktDraft.CacheName.toString());
-           //TODO if (aktDraft.type == LogTypes.found || aktDraft.type == LogTypes.attended || aktDraft.type == LogTypes.webcam_photo_taken)
-              //TODO  message += Translation.get("confirmDraftDeletionRst");
+            //TODO if (aktDraft.type == LogTypes.found || aktDraft.type == LogTypes.attended || aktDraft.type == LogTypes.webcam_photo_taken)
+            //TODO  message += Translation.get("confirmDraftDeletionRst");
         }
 
         MessageBox.show(message, Translation.get("deleteDraft"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
@@ -843,7 +843,7 @@ public class DraftsView extends AbstractView {
 
         if (cache == null) {
             CharSequence message = Translation.get("cacheOtherDb", aktDraft.CacheName.toString());
-           //TODO message += "\n" + Translation.get("DraftNoSelect");
+            //TODO message += "\n" + Translation.get("DraftNoSelect");
             MessageBox.show(message, Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
             return;
         }

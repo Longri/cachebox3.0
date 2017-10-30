@@ -413,7 +413,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getUrl() {
+    public String getUrl(Database database) {
         return this.url;
     }
 

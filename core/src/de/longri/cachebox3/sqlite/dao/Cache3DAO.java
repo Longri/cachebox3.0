@@ -74,7 +74,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         //Write to CacheInfo table
         args.clear();
         args.put("Id", abstractCache.getId());
-        args.put("DateHidden", iso8601Format.format(abstractCache.getDateHidden()));
+        args.put("DateHidden", iso8601Format.format(abstractCache.getDateHidden() == null ? new Date() : abstractCache.getDateHidden()));
         args.put("FirstImported", iso8601Format.format(new Date()));
         args.put("TourName", abstractCache.getTourName());
         args.put("GPXFilename_Id", abstractCache.getGPXFilename_ID());
@@ -89,7 +89,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         //Write to CacheText table
         args.clear();
         args.put("Id", abstractCache.getId());
-        args.put("Url", abstractCache.getUrl());
+        args.put("Url", abstractCache.getUrl(database));
         args.put("Hint", abstractCache.getHint(database));
         args.put("Description", abstractCache.getLongDescription(database));
         args.put("Notes", abstractCache.getTmpNote());
@@ -103,10 +103,14 @@ public class Cache3DAO extends AbstractCacheDAO {
         //Write to Attributes table
         args.clear();
         args.put("Id", abstractCache.getId());
-        args.put("AttributesPositive", abstractCache.getAttributesPositive().getLow());
-        args.put("AttributesPositiveHigh", abstractCache.getAttributesPositive().getHigh());
-        args.put("AttributesNegative", abstractCache.getAttributesNegative().getLow());
-        args.put("AttributesNegativeHigh", abstractCache.getAttributesNegative().getHigh());
+        if (abstractCache.getAttributesPositive() != null) {
+            args.put("AttributesPositive", abstractCache.getAttributesPositive().getLow());
+            args.put("AttributesPositiveHigh", abstractCache.getAttributesPositive().getHigh());
+        }
+        if (abstractCache.getAttributesNegative() != null) {
+            args.put("AttributesNegative", abstractCache.getAttributesNegative().getLow());
+            args.put("AttributesNegativeHigh", abstractCache.getAttributesNegative().getHigh());
+        }
 
         if (database.insert("Attributes", args) <= 0) {
             //CacheInfo not inserted, can't write other information's!
@@ -116,14 +120,15 @@ public class Cache3DAO extends AbstractCacheDAO {
 
         //store Waypoints
         Array<AbstractWaypoint> waypoints = abstractCache.getWaypoints();
-        AbstractWaypointDAO WDAO = getWaypointDAO();
+        if (waypoints != null) {
+            AbstractWaypointDAO WDAO = getWaypointDAO();
 
-        int n = waypoints.size;
-        while (n-- > 0) {
-            AbstractWaypoint wp = waypoints.get(n);
-            WDAO.writeToDatabase(database, wp);
+            int n = waypoints.size;
+            while (n-- > 0) {
+                AbstractWaypoint wp = waypoints.get(n);
+                WDAO.writeToDatabase(database, wp);
+            }
         }
-
     }
 
     @Override
