@@ -33,6 +33,7 @@ import java.io.OutputStream;
 public class FileBrowserServer {
 
     final static String CONNECTED = "Connected\n";
+    final static String ERROR = "ERROR\n";
 
     private final FileHandle workPath;
     private final String clintAddress;
@@ -53,22 +54,32 @@ public class FileBrowserServer {
                 ServerSocketHints hints = new ServerSocketHints();
                 ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, clintAddress, clintPort, hints);
 
-                while (true){
+                while (true) {
                     // wait for the next client connection
                     Socket client = server.accept(null);
                     // read message and send it back
                     try {
                         String message = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
                         Gdx.app.log("PingPongSocketExample", "got client message: " + message);
-                        client.getOutputStream().write(CONNECTED.getBytes());
+                        client.getOutputStream().write(getResponse(message));
                     } catch (Exception e) {
                         Gdx.app.log("PingPongSocketExample", "an error occured", e);
                     }
                 }
             }
         }).start();
-
     }
 
+
+    private byte[] getResponse(String message) {
+
+        if (message.equals("Connect")) {
+            return CONNECTED.getBytes();
+        } else if (message.equals("getFiles")) {
+
+        }
+
+        return ERROR.getBytes();
+    }
 
 }

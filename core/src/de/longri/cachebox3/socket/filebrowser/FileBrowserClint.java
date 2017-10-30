@@ -60,17 +60,9 @@ public class FileBrowserClint {
         return false;
     }
 
-
-    public void sendFile(FileHandle source, String targetPath) {
-
-    }
-
-    public String[] getDirs(String targetPath) {
-        return new String[]{};
-    }
-
-    public String[] getFiles(String targetPath) {
-        return new String[]{};
+    public ServerFile getFiles() {
+        ServerFile root = new ServerFile();
+        return root;
     }
 
 

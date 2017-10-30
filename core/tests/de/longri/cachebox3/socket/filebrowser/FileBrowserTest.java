@@ -23,9 +23,7 @@ import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
 import de.longri.cachebox3.TestUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,37 +48,31 @@ class FileBrowserTest {
     static FileBrowserClint clint;
 
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         TestUtils.initialGdx();
 
         workpath = TestUtils.getResourceFileHandle("testsResources");
         server = new FileBrowserServer(workpath, SERVER_ADRESS, PORT);
         clint = new FileBrowserClint(SERVER_ADRESS, PORT);
-
+        server.startListening();
     }
 
-    @AfterEach
-    void tearDown() {
+    @AfterAll
+    static void tearDown() {
     }
 
 
     @Test
     void connection() throws InterruptedException {
-        server.startListening();
-
-        Thread.sleep(500);
-
         assertThat("Connection must be established", clint.connect());
         assertThat("Connection must be established", clint.connect());
-
-
-        clint.getFiles("/");
     }
 
     @Test
     void getRootDir() {
-
+        ServerFile root = clint.getFiles();
+        ServerFileTest.assertRecursiveDir(workpath, root);
     }
 
     @Test
@@ -90,27 +82,26 @@ class FileBrowserTest {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
-                    ServerSocketHints hints = new ServerSocketHints();
-                    ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, "localhost", 9999, hints);
-                    // wait for the next client connection
-                    Socket client = server.accept(null);
-                    // read message and send it back
-                    try {
-                        String message = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
-                        Gdx.app.log("PingPongSocketExample", "got client message: " + message);
-                        client.getOutputStream().write("PONG\n".getBytes());
-                    } catch (IOException e) {
-                        Gdx.app.log("PingPongSocketExample", "an error occured", e);
-                    }
+                ServerSocketHints hints = new ServerSocketHints();
+                ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, "localhost", 9998, hints);
+                // wait for the next client connection
+                Socket client = server.accept(null);
+                // read message and send it back
+                try {
+                    String message = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
+                    Gdx.app.log("PingPongSocketExample", "got client message: " + message);
+                    client.getOutputStream().write("PONG\n".getBytes());
+                } catch (IOException e) {
+                    Gdx.app.log("PingPongSocketExample", "an error occured", e);
                 }
+
             }
         }).start();
 
         // create the client send a message, then wait for the
         // server to reply
         SocketHints hints = new SocketHints();
-        Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, "localhost", 9999, hints);
+        Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, "localhost", 9998, hints);
         try {
             client.getOutputStream().write("PING\n".getBytes());
             String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();

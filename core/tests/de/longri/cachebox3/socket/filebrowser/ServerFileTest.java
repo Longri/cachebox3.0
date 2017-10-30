@@ -49,7 +49,7 @@ class ServerFileTest {
     }
 
 
-    private void assertRecursiveDir(FileHandle fileHandle, ServerFile serverFile) {
+    public static void assertRecursiveDir(FileHandle fileHandle, ServerFile serverFile) {
         if (!fileHandle.isDirectory()) {
             assertThat("FileName must Equals", fileHandle.name().equals(serverFile.getName()));
             return;
