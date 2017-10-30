@@ -32,8 +32,8 @@ import java.io.OutputStream;
  */
 public class FileBrowserServer {
 
-    final static String CONNECTED = "Connected\n";
-    final static String ERROR = "ERROR\n";
+    final static String CONNECTED = "Connected";
+    final static String ERROR = "ERROR";
 
     private final FileHandle workPath;
     private final String clintAddress;
@@ -62,6 +62,7 @@ public class FileBrowserServer {
                         String message = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
                         Gdx.app.log("PingPongSocketExample", "got client message: " + message);
                         client.getOutputStream().write(getResponse(message));
+                        client.getOutputStream().write("\n".getBytes());
                     } catch (Exception e) {
                         Gdx.app.log("PingPongSocketExample", "an error occured", e);
                     }

@@ -30,7 +30,7 @@ import java.io.InputStreamReader;
  */
 public class FileBrowserClint {
 
-    private final String CONNECT = "Connect\n";
+    private final String CONNECT = "Connect";
     final static String CONNECTED = "Connected";
 
     private final String serverAddress;
@@ -48,6 +48,7 @@ public class FileBrowserClint {
         Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, serverAddress, serverPort, hints);
         try {
             client.getOutputStream().write(CONNECT.getBytes());
+            client.getOutputStream().write("\n".getBytes());
             String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
             Gdx.app.log("PingPongSocketExample", "got server message: " + response);
 

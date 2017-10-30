@@ -90,7 +90,8 @@ class FileBrowserTest {
                 try {
                     String message = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
                     Gdx.app.log("PingPongSocketExample", "got client message: " + message);
-                    client.getOutputStream().write("PONG\n".getBytes());
+                    client.getOutputStream().write("PONG".getBytes());
+                    client.getOutputStream().write("\n".getBytes());
                 } catch (IOException e) {
                     Gdx.app.log("PingPongSocketExample", "an error occured", e);
                 }
@@ -103,7 +104,8 @@ class FileBrowserTest {
         SocketHints hints = new SocketHints();
         Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, "localhost", 9998, hints);
         try {
-            client.getOutputStream().write("PING\n".getBytes());
+            client.getOutputStream().write("PING".getBytes());
+            client.getOutputStream().write("\n".getBytes());
             String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
             Gdx.app.log("PingPongSocketExample", "got server message: " + response);
         } catch (IOException e) {
