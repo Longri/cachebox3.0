@@ -73,6 +73,14 @@ class FileBrowserTest {
 
         assertThat("Connection must be established", clint.connect());
         assertThat("Connection must be established", clint.connect());
+
+
+        clint.getFiles("/");
+    }
+
+    @Test
+    void getRootDir() {
+
     }
 
     @Test
