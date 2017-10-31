@@ -22,10 +22,12 @@ import com.badlogic.gdx.net.ServerSocket;
 import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
+import com.badlogic.gdx.utils.ByteArray;
 import de.longri.cachebox3.TestUtils;
 import org.junit.jupiter.api.*;
 
 import java.io.*;
+import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -71,8 +73,33 @@ class FileBrowserTest {
 
         FileHandle file = workpath.child("lang/de/strings.ini");
         String sendPath = "sendTest/de/de.ini";
-        clint.sendFile(sendPath, file);
+        FileHandle targetFile = workpath.child(sendPath);
 
+        if (targetFile.exists()) {
+            // delete test file
+            targetFile.parent().parent().deleteDirectory();
+            assertThat("transmitted File must delete", !targetFile.exists());
+        }
+
+        try {
+            clint.sendFile(sendPath, file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertThat("transmitted File must exist", targetFile.exists());
+        assertThat("File.length must equals", targetFile.length() == file.length());
+
+        ByteArray a1 = new ByteArray(targetFile.readBytes());
+        ByteArray a2 = new ByteArray(file.readBytes());
+
+
+        assertThat("File Content must equals", a1.equals(a2));
+
+
+        // delete test file
+        targetFile.parent().parent().deleteDirectory();
+        assertThat("transmitted File must delete", !targetFile.exists());
     }
 
     @Test

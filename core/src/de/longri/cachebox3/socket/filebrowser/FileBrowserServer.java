@@ -24,10 +24,7 @@ import com.badlogic.gdx.net.Socket;
 import de.longri.serializable.BitStore;
 import de.longri.serializable.NotImplementedException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * Created by longri on 30.10.17.
@@ -37,6 +34,7 @@ public class FileBrowserServer {
     private final String GETFILES = "getFiles";
     final static String CONNECTED = "Connected";
     final static String ERROR = "ERROR";
+    final static String TRANSFERRED = "Transferred";
 
     private final FileHandle workPath;
     private final String clintAddress;
@@ -63,9 +61,21 @@ public class FileBrowserServer {
                     // read message and send it back
                     try {
                         String message = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
-                        Gdx.app.log("PingPongSocketExample", "got client message: " + message);
-                        client.getOutputStream().write(getResponse(message));
-                        client.getOutputStream().close();
+
+                        if (message.startsWith(FileBrowserClint.SENDFILE)) {
+                            String path = message.replace(FileBrowserClint.SENDFILE, "");
+
+                            FileHandle outputFile = workPath.child(path);
+                            outputFile.parent().mkdirs();
+                            outputFile.write(client.getInputStream(),false);
+
+
+                            client.getOutputStream().write(getResponse(FileBrowserClint.SENDFILE));
+                            client.getOutputStream().close();
+                        } else {
+                            client.getOutputStream().write(getResponse(message));
+                            client.getOutputStream().close();
+                        }
                     } catch (Exception e) {
                         Gdx.app.log("PingPongSocketExample", "an error occured", e);
                     }
@@ -88,6 +98,8 @@ public class FileBrowserServer {
             } catch (NotImplementedException e) {
                 e.printStackTrace();
             }
+        } else if (message.equals(FileBrowserClint.SENDFILE)) {
+            return TRANSFERRED.getBytes();
         }
 
         return ERROR.getBytes();

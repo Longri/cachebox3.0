@@ -30,8 +30,9 @@ import java.io.*;
  */
 public class FileBrowserClint {
 
-    private final String CONNECT = "Connect";
-    private final String GETFILES = "getFiles";
+    static final String CONNECT = "Connect";
+    static final String SENDFILE = "sendFile";
+    static final String GETFILES = "getFiles";
     final static String CONNECTED = "Connected";
 
     private final String serverAddress;
@@ -104,12 +105,9 @@ public class FileBrowserClint {
         try {
             OutputStream out = client.getOutputStream();
             //send command
-            out.write(CONNECT.getBytes());
+            out.write((SENDFILE + path).getBytes());
             out.write("\n".getBytes());
-
-            //send path
-            out.write(path.getBytes());
-            out.write("\n".getBytes());
+            out.flush();
 
 
             //send file bytes
@@ -122,7 +120,7 @@ public class FileBrowserClint {
             String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
             Gdx.app.log("PingPongSocketExample", "got server message: " + response);
 
-            if (response.equals(CONNECTED)) {
+            if (response.equals(FileBrowserServer.TRANSFERRED)) {
                 return true;
             }
         } catch (IOException e) {
