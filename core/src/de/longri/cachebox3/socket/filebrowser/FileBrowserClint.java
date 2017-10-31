@@ -20,10 +20,10 @@ import com.badlogic.gdx.Net;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 /**
  * Created by longri on 30.10.17.
@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 public class FileBrowserClint {
 
     private final String CONNECT = "Connect";
+    private final String GETFILES = "getFiles";
     final static String CONNECTED = "Connected";
 
     private final String serverAddress;
@@ -63,6 +64,35 @@ public class FileBrowserClint {
 
     public ServerFile getFiles() {
         ServerFile root = new ServerFile();
+
+        SocketHints hints = new SocketHints();
+        Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, serverAddress, serverPort, hints);
+        try {
+            client.getOutputStream().write(GETFILES.getBytes());
+            client.getOutputStream().write("\n".getBytes());
+
+            InputStream is = client.getInputStream();
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+            int nRead;
+            byte[] data = new byte[4096];
+
+            while ((nRead = is.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+            buffer.flush();
+
+            ServerFile deserializeServerFile = new ServerFile();
+            deserializeServerFile.deserialize(new BitStore(buffer.toByteArray()));
+
+            return deserializeServerFile;
+        } catch (IOException e) {
+            Gdx.app.log("PingPongSocketExample", "an error occured", e);
+        } catch (NotImplementedException e) {
+            e.printStackTrace();
+        }
+
+
         return root;
     }
 

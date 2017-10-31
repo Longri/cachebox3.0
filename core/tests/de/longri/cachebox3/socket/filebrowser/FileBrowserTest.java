@@ -25,9 +25,7 @@ import com.badlogic.gdx.net.SocketHints;
 import de.longri.cachebox3.TestUtils;
 import org.junit.jupiter.api.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -108,6 +106,60 @@ class FileBrowserTest {
             client.getOutputStream().write("\n".getBytes());
             String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
             Gdx.app.log("PingPongSocketExample", "got server message: " + response);
+        } catch (IOException e) {
+            Gdx.app.log("PingPongSocketExample", "an error occured", e);
+        }
+    }
+
+
+    @Test
+    void excempleStreamTest() {
+        // setup a server thread where we wait for incoming connections
+        // to the server
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ServerSocketHints hints = new ServerSocketHints();
+                ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, "localhost", 9997, hints);
+                // wait for the next client connection
+                Socket client = server.accept(null);
+                // read message and send it back
+                try {
+                    String message = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
+                    Gdx.app.log("PingPongSocketExample", "got client message: " + message);
+                    client.getOutputStream().write("PONG".getBytes());
+                    client.getOutputStream().write("\n".getBytes());
+                    client.getOutputStream().close();
+                } catch (IOException e) {
+                    Gdx.app.log("PingPongSocketExample", "an error occured", e);
+                }
+
+            }
+        }).start();
+
+        // create the client send a message, then wait for the
+        // server to reply
+        SocketHints hints = new SocketHints();
+        Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, "localhost", 9997, hints);
+        try {
+            client.getOutputStream().write("PING".getBytes());
+            client.getOutputStream().write("\n".getBytes());
+
+            InputStream is = client.getInputStream();
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+            int nRead;
+            byte[] data = new byte[50];
+
+            while ((nRead = is.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+            buffer.flush();
+
+            byte[] response = buffer.toByteArray();
+
+            Gdx.app.log("butes", response.toString());
+
         } catch (IOException e) {
             Gdx.app.log("PingPongSocketExample", "an error occured", e);
         }

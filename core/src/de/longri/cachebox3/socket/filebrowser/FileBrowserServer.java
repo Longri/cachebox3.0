@@ -21,6 +21,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.ServerSocket;
 import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,6 +34,7 @@ import java.io.OutputStream;
  */
 public class FileBrowserServer {
 
+    private final String GETFILES = "getFiles";
     final static String CONNECTED = "Connected";
     final static String ERROR = "ERROR";
 
@@ -62,7 +65,7 @@ public class FileBrowserServer {
                         String message = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
                         Gdx.app.log("PingPongSocketExample", "got client message: " + message);
                         client.getOutputStream().write(getResponse(message));
-                        client.getOutputStream().write("\n".getBytes());
+                        client.getOutputStream().close();
                     } catch (Exception e) {
                         Gdx.app.log("PingPongSocketExample", "an error occured", e);
                     }
@@ -76,8 +79,15 @@ public class FileBrowserServer {
 
         if (message.equals("Connect")) {
             return CONNECTED.getBytes();
-        } else if (message.equals("getFiles")) {
-
+        } else if (message.equals(GETFILES)) {
+            try {
+                ServerFile root = ServerFile.getDirectory(workPath);
+                BitStore writer = new BitStore();
+                root.serialize(writer);
+                return writer.getArray();
+            } catch (NotImplementedException e) {
+                e.printStackTrace();
+            }
         }
 
         return ERROR.getBytes();
