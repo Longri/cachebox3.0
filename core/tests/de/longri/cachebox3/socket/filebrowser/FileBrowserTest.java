@@ -67,6 +67,12 @@ class FileBrowserTest {
         assertThat("Connection must be established", clint.connect());
         ServerFile root = clint.getFiles();
         ServerFileTest.assertRecursiveDir(workpath, root, workpath.parent().path());
+
+
+        FileHandle file = workpath.child("lang/de/strings.ini");
+        String sendPath = "sendTest/de/de.ini";
+        clint.sendFile(sendPath, file);
+
     }
 
     @Test

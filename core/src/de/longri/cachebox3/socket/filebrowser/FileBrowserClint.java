@@ -95,11 +95,41 @@ public class FileBrowserClint {
     }
 
 
-    public void sendFile(ServerFile file) {
-        if (file.isDirectory()) return;
+    public boolean sendFile(String path, FileHandle file) {
+        if (file.isDirectory()) return false;
 
-        String path = file.getAbsolute();
+        InputStream in = file.read();
+        SocketHints hints = new SocketHints();
+        Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, serverAddress, serverPort, hints);
+        try {
+            OutputStream out = client.getOutputStream();
+            //send command
+            out.write(CONNECT.getBytes());
+            out.write("\n".getBytes());
 
+            //send path
+            out.write(path.getBytes());
+            out.write("\n".getBytes());
+
+
+            //send file bytes
+            //pipe inputStream to outputStream
+            byte[] buf = new byte[4096];
+            for (int n; (n = in.read(buf)) != -1; ) out.write(buf, 0, n);
+
+            out.close();
+
+            String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
+            Gdx.app.log("PingPongSocketExample", "got server message: " + response);
+
+            if (response.equals(CONNECTED)) {
+                return true;
+            }
+        } catch (IOException e) {
+            Gdx.app.log("PingPongSocketExample", "an error occured", e);
+        }
+
+        return false;
     }
 
 
