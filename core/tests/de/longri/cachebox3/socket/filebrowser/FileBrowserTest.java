@@ -61,14 +61,11 @@ class FileBrowserTest {
     }
 
 
-    @Test
-    void connection() throws InterruptedException {
-        assertThat("Connection must be established", clint.connect());
-        assertThat("Connection must be established", clint.connect());
-    }
 
     @Test
     void getRootDir() {
+        assertThat("Connection must be established", clint.connect());
+        assertThat("Connection must be established", clint.connect());
         ServerFile root = clint.getFiles();
         ServerFileTest.assertRecursiveDir(workpath, root);
     }
