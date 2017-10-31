@@ -91,9 +91,15 @@ public class FileBrowserClint {
         } catch (NotImplementedException e) {
             e.printStackTrace();
         }
-
-
         return root;
+    }
+
+
+    public void sendFile(ServerFile file) {
+        if (file.isDirectory()) return;
+
+        String path = file.getAbsolute();
+
     }
 
 

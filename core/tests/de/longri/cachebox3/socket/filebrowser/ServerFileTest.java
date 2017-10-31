@@ -28,7 +28,7 @@ class ServerFileTest {
     void getDirectory() {
         ServerFile root = ServerFile.getDirectory(workpath);
         assertThat("Root must be a Directory", root.isDirectory());
-        assertRecursiveDir(workpath, root);
+        assertRecursiveDir(workpath, root, workpath.parent().path());
     }
 
     @Test
@@ -40,25 +40,35 @@ class ServerFileTest {
         root.serialize(writer);
 
 
-        ServerFile deserializeServerFile=new ServerFile();
+        ServerFile deserializeServerFile = new ServerFile();
         deserializeServerFile.deserialize(new BitStore(writer.getArray()));
 
-        assertRecursiveDir(workpath, root);
-        assertRecursiveDir(workpath, deserializeServerFile);
+
+        String rootPath = workpath.parent().path();
+
+        assertRecursiveDir(workpath, root, rootPath);
+        assertRecursiveDir(workpath, deserializeServerFile, rootPath);
 
     }
 
 
-    public static void assertRecursiveDir(FileHandle fileHandle, ServerFile serverFile) {
+    public static void assertRecursiveDir(FileHandle fileHandle, ServerFile serverFile, String rootPath) {
         if (!fileHandle.isDirectory()) {
             assertThat("FileName must Equals", fileHandle.name().equals(serverFile.getName()));
+
+            String handleAbsolut = fileHandle.path().replace(rootPath, "");
+            String serverAbsolute = serverFile.getAbsolute();
+
+            assertThat("FileAbsolute must Equals", handleAbsolut.equals(serverAbsolute));
+
+
             return;
         }
         FileHandle[] fileHandles = fileHandle.list();
         Array<ServerFile> serverFiles = serverFile.getFiles();
         assertThat("Dir size must be Equals", fileHandles.length == serverFiles.size);
         for (int i = 0, n = fileHandles.length; i < n; i++) {
-            assertRecursiveDir(fileHandles[i], serverFiles.get(i));
+            assertRecursiveDir(fileHandles[i], serverFiles.get(i), rootPath);
         }
     }
 

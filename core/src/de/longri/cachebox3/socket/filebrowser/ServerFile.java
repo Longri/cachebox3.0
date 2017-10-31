@@ -27,11 +27,13 @@ import de.longri.serializable.StoreBase;
 public class ServerFile implements Serializable {
 
     private String name;
+    private String parent;
     private Array<ServerFile> files = new Array<>();
 
 
-    public ServerFile(String name) {
+    public ServerFile(String parent, String name) {
         this.name = name;
+        this.parent = parent;
     }
 
     public ServerFile() {
@@ -41,6 +43,7 @@ public class ServerFile implements Serializable {
     @Override
     public void serialize(StoreBase storeBase) throws NotImplementedException {
         storeBase.write(name);
+        storeBase.write(parent);
         storeBase.write(files.size);
         for (int i = 0, n = files.size; i < n; i++) {
             ServerFile child = files.get(i);
@@ -51,6 +54,7 @@ public class ServerFile implements Serializable {
     @Override
     public void deserialize(StoreBase storeBase) throws NotImplementedException {
         name = storeBase.readString();
+        parent = storeBase.readString();
         int childCount = storeBase.readInt();
 
         if (childCount > 0) {
@@ -84,23 +88,27 @@ public class ServerFile implements Serializable {
 
 
     public static ServerFile getDirectory(FileHandle fileHandle) {
-        ServerFile root = getChilds(new ServerFile(fileHandle.name()), fileHandle);
+        ServerFile root = getChilds(new ServerFile("", fileHandle.name()), fileHandle);
         return root;
     }
 
     private static ServerFile getChilds(ServerFile root, FileHandle fileHandle) {
         FileHandle[] list = fileHandle.list();
+        String parentPath = root.parent + "/" + root.name;
         for (int i = 0, n = list.length; i < n; i++) {
             FileHandle handle = list[i];
             if (handle.isDirectory()) {
-                ServerFile dir = new ServerFile(list[i].name());
+                ServerFile dir = new ServerFile(parentPath, list[i].name());
                 root.addFile(getChilds(dir, handle));
             } else {
-                root.addFile(new ServerFile(handle.name()));
+                root.addFile(new ServerFile(parentPath, handle.name()));
             }
         }
         return root;
     }
 
 
+    public String getAbsolute() {
+        return parent + "/" + name;
+    }
 }

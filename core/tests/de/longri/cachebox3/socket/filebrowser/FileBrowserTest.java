@@ -61,13 +61,12 @@ class FileBrowserTest {
     }
 
 
-
     @Test
     void getRootDir() {
         assertThat("Connection must be established", clint.connect());
         assertThat("Connection must be established", clint.connect());
         ServerFile root = clint.getFiles();
-        ServerFileTest.assertRecursiveDir(workpath, root);
+        ServerFileTest.assertRecursiveDir(workpath, root, workpath.parent().path());
     }
 
     @Test
