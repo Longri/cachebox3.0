@@ -28,7 +28,7 @@ public class MainWindow extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setHeight(660);
-        primaryStage.setWidth(1200);
+        primaryStage.setWidth(800);
 
 
 //        Scene scene = new Scene(null);

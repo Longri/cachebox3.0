@@ -25,6 +25,8 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.desktop.DesktopPlatformConnector;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.file_transfer.MainWindow;
+import javafx.application.Application;
 import org.apache.commons.cli.*;
 import org.oscim.awt.AwtGraphics;
 import org.oscim.backend.GLAdapter;
@@ -88,6 +90,15 @@ public class TouchLauncher {
         }
 
 
+        if (cmd.hasOption("transfer")) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Application.launch(MainWindow.class);
+                }
+            }).start();
+        }
+
         initVtm();
 
         // Don't change this LogLevel
@@ -120,6 +131,10 @@ public class TouchLauncher {
         Option gpsSimulator = new Option("g", "gps", false, "start with GPS simulator");
         gpsSimulator.setRequired(false);
         options.addOption(gpsSimulator);
+
+        Option fileTransfer = new Option("t", "transfer", false, "start with FileTransfer");
+        fileTransfer.setRequired(false);
+        options.addOption(fileTransfer);
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();

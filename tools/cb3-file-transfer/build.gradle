@@ -4,7 +4,7 @@ targetCompatibility = 1.7
 sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = ["src/"]
 
-project.ext.mainClassName = "ch.fhnw.imvs.gpssimulator.SimulaterMain";
+project.ext.mainClassName = "de.longri.cachebox3.file_transfer.MainWindow"
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
@@ -28,7 +28,7 @@ dist.dependsOn classes
 
 eclipse {
     project {
-        name = appName + "-desktop-simulator"
+        name = appName + "-file-transfer"
         linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/android/assets'
     }
 }
