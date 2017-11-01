@@ -89,6 +89,20 @@ project(":gps-simulator") {
     }
 }
 
+
+project(":cb3-file-transfer") {
+    apply plugin: "java"
+
+
+    dependencies {
+        compile project(":core")
+
+
+        //include libs
+        compile fileTree(dir: 'libs', include: ['*.jar'])
+    }
+}
+
 project(":skin-editor-src-proj") {
     apply plugin: "java"
 
