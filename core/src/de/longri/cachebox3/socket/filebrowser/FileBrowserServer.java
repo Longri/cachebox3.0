@@ -69,7 +69,7 @@ public class FileBrowserServer {
                             outputFile.parent().mkdirs();
                             outputFile.write(client.getInputStream(),false);
 
-
+                            client = server.accept(null);
                             client.getOutputStream().write(getResponse(FileBrowserClint.SENDFILE));
                             client.getOutputStream().close();
                         } else {
