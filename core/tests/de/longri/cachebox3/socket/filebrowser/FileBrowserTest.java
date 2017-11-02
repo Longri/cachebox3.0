@@ -15,19 +15,12 @@
  */
 package de.longri.cachebox3.socket.filebrowser;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.net.ServerSocket;
-import com.badlogic.gdx.net.ServerSocketHints;
-import com.badlogic.gdx.net.Socket;
-import com.badlogic.gdx.net.SocketHints;
 import com.badlogic.gdx.utils.ByteArray;
 import de.longri.cachebox3.TestUtils;
-import org.junit.jupiter.api.*;
-
-import java.io.*;
-import java.util.Arrays;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 

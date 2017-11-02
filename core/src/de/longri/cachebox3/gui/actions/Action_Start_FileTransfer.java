@@ -17,9 +17,8 @@ package de.longri.cachebox3.gui.actions;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.activities.FileTransfer_Activity;
 import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.socket.filebrowser.FileBrowserServer;
 
 /**
  * Created by Longri on 02.11.2017.
@@ -30,19 +29,15 @@ public class Action_Start_FileTransfer extends AbstractAction {
         super(false, "StartFileTransfer", MenuID.AID_START_FILE_TRANSFER);
     }
 
-    FileBrowserServer server;
-
 
     @Override
     public void execute() {
-        if (server != null) {
-            server.stopListening();
-            server = null;
-
-        } else {
-            server = new FileBrowserServer(Gdx.files.absolute(CB.WorkPath), "localhost", 9988);
-            server.startListening();
-        }
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                new FileTransfer_Activity().show();
+            }
+        });
     }
 
     @Override
@@ -50,8 +45,4 @@ public class Action_Start_FileTransfer extends AbstractAction {
         return null;
     }
 
-    public String getName() {
-        if (server != null) return "StopFileTransfer";
-        return name;
-    }
 }
