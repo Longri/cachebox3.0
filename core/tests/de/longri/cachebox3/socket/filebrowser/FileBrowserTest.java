@@ -53,7 +53,7 @@ class FileBrowserTest {
         TestUtils.initialGdx();
 
         workpath = TestUtils.getResourceFileHandle("testsResources");
-        server = new FileBrowserServer(workpath, SERVER_ADRESS, PORT);
+        server = new FileBrowserServer(workpath, PORT);
         clint = new FileBrowserClint(SERVER_ADRESS, PORT);
         server.startListening();
     }
@@ -64,7 +64,7 @@ class FileBrowserTest {
 
 
     @Test
-    void getRootDir() {
+    void getRootDir() throws InterruptedException {
         assertThat("Connection must be established", clint.connect());
         assertThat("Connection must be established", clint.connect());
         ServerFile root = clint.getFiles();
@@ -81,11 +81,16 @@ class FileBrowserTest {
             assertThat("transmitted File must delete", !targetFile.exists());
         }
 
+        Thread.sleep(100);
+
+
         try {
             assertThat("sendFile must return true", clint.sendFile(sendPath, file));
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Thread.sleep(100);
 
         assertThat("transmitted File must exist", targetFile.exists());
         assertThat("File.length must equals", targetFile.length() == file.length());
@@ -100,6 +105,8 @@ class FileBrowserTest {
         // delete test file
         targetFile.parent().parent().deleteDirectory();
         assertThat("transmitted File must delete", !targetFile.exists());
+
+        Thread.sleep(100);
     }
 
 //    @Test

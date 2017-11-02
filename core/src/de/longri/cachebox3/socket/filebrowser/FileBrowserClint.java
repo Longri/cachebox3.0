@@ -22,6 +22,8 @@ import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
 import de.longri.serializable.BitStore;
 import de.longri.serializable.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
@@ -29,6 +31,8 @@ import java.io.*;
  * Created by longri on 30.10.17.
  */
 public class FileBrowserClint {
+
+    private final Logger log = LoggerFactory.getLogger(FileBrowserServer.class);
 
     static final String CONNECT = "Connect";
     static final String SENDFILE = "sendFile";
@@ -44,22 +48,44 @@ public class FileBrowserClint {
         this.serverPort = serverPort;
     }
 
+    Socket socket;
+    OutputStream os;
+    BufferedOutputStream bos;
+    DataOutputStream dos;
+    InputStream in;
+    BufferedInputStream bis;
+    DataInputStream dis;
+
+
     public boolean connect() {
+
+        if (socket != null) {
+            if (socket.isConnected())
+                return true;
+        }
 
         try {
             SocketHints hints = new SocketHints();
-            Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, serverAddress, serverPort, hints);
+            socket = Gdx.net.newClientSocket(Net.Protocol.TCP, serverAddress, serverPort, hints);
 
-            client.getOutputStream().write(CONNECT.getBytes());
-            client.getOutputStream().write("\n".getBytes());
-            String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
-            Gdx.app.log("PingPongSocketExample", "got server message: " + response);
+            os = socket.getOutputStream();
+            bos = new BufferedOutputStream(os);
+            dos = new DataOutputStream(bos);
+            in = socket.getInputStream();
+            bis = new BufferedInputStream(in);
+            dis = new DataInputStream(bis);
+
+            dos.writeUTF(CONNECT);
+            dos.flush();
+
+            String response = dis.readUTF();
+            log.debug("got server message: " + response);
 
             if (response.equals(CONNECTED)) {
                 return true;
             }
         } catch (Exception e) {
-            Gdx.app.log("PingPongSocketExample", "an error occured", e);
+            log.error("an error occured", e);
         }
         return false;
     }
@@ -67,25 +93,18 @@ public class FileBrowserClint {
     public ServerFile getFiles() {
         ServerFile root = new ServerFile();
 
-        SocketHints hints = new SocketHints();
-        Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, serverAddress, serverPort, hints);
+
         try {
-            client.getOutputStream().write(GETFILES.getBytes());
-            client.getOutputStream().write("\n".getBytes());
 
-            InputStream is = client.getInputStream();
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            dos.writeUTF(GETFILES);
+            dos.flush();
 
-            int nRead;
-            byte[] data = new byte[4096];
-
-            while ((nRead = is.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-            buffer.flush();
+            int length = dis.readInt();
+            byte[] data = new byte[length];
+            dis.read(data);
 
             ServerFile deserializeServerFile = new ServerFile();
-            deserializeServerFile.deserialize(new BitStore(buffer.toByteArray()));
+            deserializeServerFile.deserialize(new BitStore(data));
 
             return deserializeServerFile;
         } catch (IOException e) {
@@ -100,34 +119,32 @@ public class FileBrowserClint {
     public boolean sendFile(String path, FileHandle file) {
         if (file.isDirectory()) return false;
 
-        InputStream in = file.read();
-        SocketHints hints = new SocketHints();
-        Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, serverAddress, serverPort, hints);
         try {
-            OutputStream out = client.getOutputStream();
-            //send command
-            out.write((SENDFILE + path).getBytes());
-            out.write("\n".getBytes());
-            out.flush();
 
+            dos.writeUTF(SENDFILE);
+            dos.writeUTF(path);
+            long length = file.length();
+            dos.writeLong(length);
+            dos.flush();
 
-            //send file bytes
-            //pipe inputStream to outputStream
-            byte[] buf = new byte[4096];
-            for (int n; (n = in.read(buf)) != -1; ) out.write(buf, 0, n);
+            FileInputStream fis = new FileInputStream(file.file());
+            BufferedInputStream bis = new BufferedInputStream(fis);
 
-            out.close();
+            int theByte = 0;
+            while ((theByte = bis.read()) != -1) {
+                bos.write(theByte);
+            }
+            bis.close();
+            bos.flush();
 
-            String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
-            Gdx.app.log("PingPongSocketExample", "got server message: " + response);
+            String response = dis.readUTF();
 
             if (response.equals(FileBrowserServer.TRANSFERRED)) {
                 return true;
             }
         } catch (IOException e) {
-            Gdx.app.log("PingPongSocketExample", "an error occured", e);
+            log.error("an error occured", e);
         }
-
         return false;
     }
 

@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.SocketTimeoutException;
 
 /**
  * Created by longri on 30.10.17.
@@ -42,13 +43,11 @@ public class FileBrowserServer {
     final static String TRANSFERRED = "Transferred";
 
     private final FileHandle workPath;
-    private final String clintAddress;
     private final int clintPort;
     private boolean listining = false;
 
-    public FileBrowserServer(FileHandle workPath, String clintAddress, int clintPort) {
+    public FileBrowserServer(FileHandle workPath, int clintPort) {
         this.workPath = workPath;
-        this.clintAddress = clintAddress;
         this.clintPort = clintPort;
     }
 
@@ -61,34 +60,72 @@ public class FileBrowserServer {
             @Override
             public void run() {
                 ServerSocketHints hints = new ServerSocketHints();
-                ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, clintAddress, clintPort, hints);
+                hints.acceptTimeout = 0;
+                ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, null, clintPort, hints);
 
                 SocketHints socketHints = new SocketHints();
                 socketHints.connectTimeout = 0;
+                socketHints.keepAlive = true;
+
+                // wait for the next client connection
+                Socket socket = server.accept(socketHints);
+
+                InputStream in = socket.getInputStream();
+                BufferedInputStream bis = new BufferedInputStream(in);
+                DataInputStream dis = new DataInputStream(bis);
+
+                OutputStream os = socket.getOutputStream();
+                BufferedOutputStream bos = new BufferedOutputStream(os);
+                DataOutputStream dos = new DataOutputStream(bos);
 
                 while (listining) {
                     try {
-                        // wait for the next client connection
-                        Socket client = server.accept(socketHints);
-                        // read message and send it back
-                        String message = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
 
-                        if (message.startsWith(FileBrowserClint.SENDFILE)) {
-                            String path = message.replace(FileBrowserClint.SENDFILE, "");
 
+                        String message = dis.readUTF();
+
+                        if (message.equals("Connect")) {
+                            dos.writeUTF("Connected");
+                            dos.flush();
+                        } else if (message.equals("getFiles")) {
+                            try {
+                                ServerFile root = ServerFile.getDirectory(workPath);
+                                BitStore writer = new BitStore();
+                                root.serialize(writer);
+
+                                byte[] data = writer.getArray();
+                                dos.writeInt(data.length);
+                                dos.write(data);
+                                dos.flush();
+                            } catch (NotImplementedException e) {
+                                e.printStackTrace();
+                            }
+                        } else if (message.equals(FileBrowserClint.SENDFILE)) {
+                            String path = dis.readUTF();
                             FileHandle outputFile = workPath.child(path);
                             outputFile.parent().mkdirs();
-                            outputFile.write(client.getInputStream(), false);
 
-                            client = server.accept(null);
-                            client.getOutputStream().write(getResponse(FileBrowserClint.SENDFILE));
-                            client.getOutputStream().close();
-                        } else {
-                            client.getOutputStream().write(getResponse(message));
-                            client.getOutputStream().close();
+
+                            long fileLength = dis.readLong();
+
+                            FileOutputStream fos = new FileOutputStream(outputFile.file());
+                            BufferedOutputStream fbos = new BufferedOutputStream(fos);
+
+
+                            for(int j = 0; j < fileLength; j++) {
+                                fbos.write(bis.read());
+                            }
+                            fbos.close();
+
+                            dos.writeUTF(TRANSFERRED);
+                            dos.flush();
                         }
                     } catch (Exception e) {
-                        log.error("an error occured", e);
+                        if (e.getCause() instanceof SocketTimeoutException) {
+                            //ignore, while waiting
+                        } else {
+                            log.error("an error occured", e);
+                        }
                     }
                 }
                 server.dispose();
@@ -103,24 +140,15 @@ public class FileBrowserServer {
         log.debug("Stop listening for FileTransfer");
     }
 
-    private byte[] getResponse(String message) {
+    private String getResponse(String message) {
 
         if (message.equals("Connect")) {
-            return CONNECTED.getBytes();
-        } else if (message.equals(GETFILES)) {
-            try {
-                ServerFile root = ServerFile.getDirectory(workPath);
-                BitStore writer = new BitStore();
-                root.serialize(writer);
-                return writer.getArray();
-            } catch (NotImplementedException e) {
-                e.printStackTrace();
-            }
+            return CONNECTED;
         } else if (message.equals(FileBrowserClint.SENDFILE)) {
-            return TRANSFERRED.getBytes();
+            return TRANSFERRED;
         }
 
-        return ERROR.getBytes();
+        return ERROR;
     }
 
 
