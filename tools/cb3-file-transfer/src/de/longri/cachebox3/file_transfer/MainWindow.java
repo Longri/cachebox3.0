@@ -15,9 +15,15 @@
  */
 package de.longri.cachebox3.file_transfer;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
+import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
+import com.badlogic.gdx.backends.lwjgl.LwjglNet;
+import de.longri.cachebox3.utils.BuildInfo;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.slf4j.impl.DummyLogApplication;
 
 
 /**
@@ -25,16 +31,36 @@ import javafx.stage.Stage;
  */
 public class MainWindow extends Application {
 
+    private ConnectPane connectPane = new ConnectPane(this);
+    Stage primaryStage;
+
+    @Override
+    public void init() {
+
+        if (Gdx.net != null) return;
+        BuildInfo.setTestBuildInfo("JUnitTest");
+        Gdx.net = new LwjglNet();
+        Gdx.files = new LwjglFiles();
+        Gdx.app = new DummyLogApplication() {
+            @Override
+            public ApplicationType getType() {
+                return ApplicationType.HeadlessDesktop;
+            }
+        };
+        Gdx.app.setApplicationLogger(new LwjglApplicationLogger());
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
         primaryStage.setHeight(660);
         primaryStage.setWidth(800);
 
 
-//        Scene scene = new Scene(null);
+        Scene scene = new Scene(connectPane);
 
         primaryStage.setTitle("Cachebox File Transfer");
-//        primaryStage.setScene(scene);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 }

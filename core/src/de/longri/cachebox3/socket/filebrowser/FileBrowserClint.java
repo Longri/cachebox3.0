@@ -46,9 +46,10 @@ public class FileBrowserClint {
 
     public boolean connect() {
 
-        SocketHints hints = new SocketHints();
-        Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, serverAddress, serverPort, hints);
         try {
+            SocketHints hints = new SocketHints();
+            Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, serverAddress, serverPort, hints);
+
             client.getOutputStream().write(CONNECT.getBytes());
             client.getOutputStream().write("\n".getBytes());
             String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
@@ -57,7 +58,7 @@ public class FileBrowserClint {
             if (response.equals(CONNECTED)) {
                 return true;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             Gdx.app.log("PingPongSocketExample", "an error occured", e);
         }
         return false;

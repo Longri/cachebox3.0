@@ -21,8 +21,11 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.ServerSocket;
 import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
+import com.badlogic.gdx.net.SocketHints;
 import de.longri.serializable.BitStore;
 import de.longri.serializable.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
@@ -30,6 +33,8 @@ import java.io.*;
  * Created by longri on 30.10.17.
  */
 public class FileBrowserServer {
+
+    private static Logger log = LoggerFactory.getLogger(FileBrowserServer.class);
 
     private final String GETFILES = "getFiles";
     final static String CONNECTED = "Connected";
@@ -39,6 +44,7 @@ public class FileBrowserServer {
     private final FileHandle workPath;
     private final String clintAddress;
     private final int clintPort;
+    private boolean listining = false;
 
     public FileBrowserServer(FileHandle workPath, String clintAddress, int clintPort) {
         this.workPath = workPath;
@@ -49,17 +55,22 @@ public class FileBrowserServer {
     public void startListening() {
         // setup a server thread where we wait for incoming connections
         // to the server
+        listining = true;
+        log.debug("Start listening for FileTransfer");
         new Thread(new Runnable() {
             @Override
             public void run() {
                 ServerSocketHints hints = new ServerSocketHints();
                 ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, clintAddress, clintPort, hints);
 
-                while (true) {
-                    // wait for the next client connection
-                    Socket client = server.accept(null);
-                    // read message and send it back
+                SocketHints socketHints = new SocketHints();
+                socketHints.connectTimeout = 0;
+
+                while (listining) {
                     try {
+                        // wait for the next client connection
+                        Socket client = server.accept(socketHints);
+                        // read message and send it back
                         String message = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
 
                         if (message.startsWith(FileBrowserClint.SENDFILE)) {
@@ -67,7 +78,7 @@ public class FileBrowserServer {
 
                             FileHandle outputFile = workPath.child(path);
                             outputFile.parent().mkdirs();
-                            outputFile.write(client.getInputStream(),false);
+                            outputFile.write(client.getInputStream(), false);
 
                             client = server.accept(null);
                             client.getOutputStream().write(getResponse(FileBrowserClint.SENDFILE));
@@ -77,13 +88,20 @@ public class FileBrowserServer {
                             client.getOutputStream().close();
                         }
                     } catch (Exception e) {
-                        Gdx.app.log("PingPongSocketExample", "an error occured", e);
+                        log.error("an error occured", e);
                     }
                 }
+                server.dispose();
+                server = null;
+                log.debug(" listening stopped");
             }
         }).start();
     }
 
+    public void stopListening() {
+        listining = false;
+        log.debug("Stop listening for FileTransfer");
+    }
 
     private byte[] getResponse(String message) {
 
@@ -104,5 +122,6 @@ public class FileBrowserServer {
 
         return ERROR.getBytes();
     }
+
 
 }
