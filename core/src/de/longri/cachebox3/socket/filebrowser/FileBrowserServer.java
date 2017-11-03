@@ -44,49 +44,76 @@ public class FileBrowserServer {
 
     private final FileHandle workPath;
     private final int clintPort;
-    private boolean listining = false;
+    private final ConectionCloesRemoteReciver closeReciver;
+    private boolean listening = false;
+    ServerSocket server;
+    Socket socket;
+    InputStream in;
+    BufferedInputStream bis;
+    DataInputStream dis;
 
-    public FileBrowserServer(FileHandle workPath, int clintPort) {
+    OutputStream os;
+    BufferedOutputStream bos;
+    DataOutputStream dos;
+
+
+    public FileBrowserServer(FileHandle workPath, int clintPort, ConectionCloesRemoteReciver reciver) {
         this.workPath = workPath;
         this.clintPort = clintPort;
+        this.closeReciver = reciver;
     }
 
     public void startListening() {
         // setup a server thread where we wait for incoming connections
         // to the server
-        listining = true;
+        listening = true;
         log.debug("Start listening for FileTransfer");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ServerSocketHints hints = new ServerSocketHints();
-                hints.acceptTimeout = 0;
-                ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, null, clintPort, hints);
+                try {
+                    ServerSocketHints hints = new ServerSocketHints();
+                    hints.acceptTimeout = 0;
+                    server = Gdx.net.newServerSocket(Net.Protocol.TCP, null, clintPort, hints);
 
-                SocketHints socketHints = new SocketHints();
-                socketHints.connectTimeout = 0;
-                socketHints.keepAlive = true;
+                    SocketHints socketHints = new SocketHints();
+                    socketHints.connectTimeout = 0;
+                    socketHints.keepAlive = true;
 
-                // wait for the next client connection
-                Socket socket = server.accept(socketHints);
+                    // wait for the next client connection
+                    socket = server.accept(socketHints);
 
-                InputStream in = socket.getInputStream();
-                BufferedInputStream bis = new BufferedInputStream(in);
-                DataInputStream dis = new DataInputStream(bis);
+                    in = socket.getInputStream();
+                    bis = new BufferedInputStream(in);
+                    dis = new DataInputStream(bis);
 
-                OutputStream os = socket.getOutputStream();
-                BufferedOutputStream bos = new BufferedOutputStream(os);
-                DataOutputStream dos = new DataOutputStream(bos);
+                    os = socket.getOutputStream();
+                    bos = new BufferedOutputStream(os);
+                    dos = new DataOutputStream(bos);
+                } catch (Exception e) {
+                    if (!listening) {
+                        //connection is closed
+                        return;
+                    }
+                }
 
-                while (listining) {
+                while (listening) {
                     try {
-
-
-                        String message = dis.readUTF();
+                        String message = null;
+                        try {
+                            message = dis.readUTF();
+                        } catch (Exception e) {
+                            if (!listening) {
+                                //connection is closed
+                                break;
+                            }
+                        }
 
                         if (message.equals("Connect")) {
                             dos.writeUTF("Connected");
                             dos.flush();
+                        } else if (message.equals(FileBrowserClint.CLOSE)) {
+                            if (closeReciver != null) closeReciver.close();
                         } else if (message.equals("getFiles")) {
                             try {
                                 ServerFile root = ServerFile.getDirectory(workPath);
@@ -95,6 +122,7 @@ public class FileBrowserServer {
 
                                 byte[] data = writer.getArray();
                                 dos.writeInt(data.length);
+                                dos.flush();
                                 dos.write(data);
                                 dos.flush();
                             } catch (NotImplementedException e) {
@@ -112,7 +140,7 @@ public class FileBrowserServer {
                             BufferedOutputStream fbos = new BufferedOutputStream(fos);
 
 
-                            for(int j = 0; j < fileLength; j++) {
+                            for (int j = 0; j < fileLength; j++) {
                                 fbos.write(bis.read());
                             }
                             fbos.close();
@@ -128,27 +156,39 @@ public class FileBrowserServer {
                         }
                     }
                 }
-                server.dispose();
-                server = null;
                 log.debug(" listening stopped");
             }
         }).start();
     }
 
     public void stopListening() {
-        listining = false;
+        listening = false;
         log.debug("Stop listening for FileTransfer");
-    }
+        if (server != null) server.dispose();
+        server = null;
 
-    private String getResponse(String message) {
-
-        if (message.equals("Connect")) {
-            return CONNECTED;
-        } else if (message.equals(FileBrowserClint.SENDFILE)) {
-            return TRANSFERRED;
+        if (socket != null) {
+            socket.dispose();
+            socket = null;
         }
 
-        return ERROR;
+        try {
+            if (in != null) in.close();
+            if (bis != null) bis.close();
+            if (dis != null) dis.close();
+
+            if (os != null) os.close();
+            if (bos != null) bos.close();
+            if (dos != null) dos.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public interface ConectionCloesRemoteReciver {
+        void close();
     }
 
 

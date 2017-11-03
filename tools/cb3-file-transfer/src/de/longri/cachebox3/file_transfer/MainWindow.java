@@ -21,8 +21,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
 import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import de.longri.cachebox3.utils.BuildInfo;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.slf4j.impl.DummyLogApplication;
 
 
@@ -31,8 +35,10 @@ import org.slf4j.impl.DummyLogApplication;
  */
 public class MainWindow extends Application {
 
-    private ConnectPane connectPane = new ConnectPane(this);
+    private ConnectPane connectPane;
     Stage primaryStage;
+//    static ImageView FOLDER_ICON = new ImageView(new Image(getClass().getResourceAsStream("duke_44x80.png")));
+
 
     @Override
     public void init() {
@@ -48,11 +54,15 @@ public class MainWindow extends Application {
             }
         };
         Gdx.app.setApplicationLogger(new LwjglApplicationLogger());
+
+
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
+        connectPane = new ConnectPane(this);
+
         primaryStage.setHeight(660);
         primaryStage.setWidth(800);
 

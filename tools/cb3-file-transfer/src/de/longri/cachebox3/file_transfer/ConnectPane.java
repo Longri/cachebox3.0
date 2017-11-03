@@ -25,6 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.WindowEvent;
 
 /**
  * Created by Longri on 02.11.2017.
@@ -33,15 +34,14 @@ public class ConnectPane extends BorderPane {
 
 
     private final MainWindow main;
+    private FileBrowserClint clint;
 
     ConnectPane(MainWindow main) {
         this.main = main;
 
         VBox vb = new VBox();
 
-
         Label label0 = new Label("connect to Cachebox");
-
 
         Label label1 = new Label("Ip Address:");
         final TextField textField = new TextField();
@@ -69,11 +69,21 @@ public class ConnectPane extends BorderPane {
         vb.setSpacing(10);
         this.setCenter(vb);
 
+
+        main.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                if(clint!=null){
+                    clint.sendCloseEvent();
+                }
+            }
+        });
+
+
     }
 
 
     void connect(String address, String port) {
-        FileBrowserClint clint = new FileBrowserClint(address, Integer.parseInt(port));
+        clint = new FileBrowserClint(address, Integer.parseInt(port));
         if (clint.connect()) {
             FileBrowserPane fb = new FileBrowserPane(clint);
 

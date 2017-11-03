@@ -38,6 +38,7 @@ public class FileBrowserClint {
     static final String SENDFILE = "sendFile";
     static final String GETFILES = "getFiles";
     final static String CONNECTED = "Connected";
+    static final String CLOSE="close";
 
     private final String serverAddress;
     private final int serverPort;
@@ -149,4 +150,12 @@ public class FileBrowserClint {
     }
 
 
+    public void sendCloseEvent() {
+        try {
+            dos.writeUTF(CLOSE);
+            dos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

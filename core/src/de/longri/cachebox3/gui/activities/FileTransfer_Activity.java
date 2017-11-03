@@ -18,12 +18,17 @@ package de.longri.cachebox3.gui.activities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.kotcrab.vis.ui.building.utilities.Alignment;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.socket.filebrowser.FileBrowserServer;
+import de.longri.cachebox3.socket.filebrowser.ServerFile;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,10 +50,12 @@ public class FileTransfer_Activity extends ActivityBase {
 
     private final CharSequenceButton closeButton;
     private final FileBrowserServer server;
+    private final VisLabel msgLabel;
 
 
     public FileTransfer_Activity() {
         super("FileTransfer");
+
         closeButton = new CharSequenceButton(Translation.get("close"));
         closeButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -62,17 +69,25 @@ public class FileTransfer_Activity extends ActivityBase {
                                 if (which == ButtonDialog.BUTTON_POSITIVE) {
                                     closeServer();
                                 }
-
                                 return true;
                             }
                         });
             }
         });
 
-        server = new FileBrowserServer(Gdx.files.absolute(CB.WorkPath), 9988);
+        server = new FileBrowserServer(Gdx.files.absolute(CB.WorkPath), 9988, new FileBrowserServer.ConectionCloesRemoteReciver() {
+            @Override
+            public void close() {
+                closeServer();
+            }
+        });
         server.startListening();
 
+        CharSequence message = Translation.get("StartFileTransferConnect", getIpAddress());
+        msgLabel = new VisLabel(message);
+        msgLabel.setAlignment(Alignment.CENTER.getAlignment());
 
+        this.add(msgLabel);
         this.add(closeButton);
     }
 
@@ -84,6 +99,13 @@ public class FileTransfer_Activity extends ActivityBase {
         float y = CB.scaledSizes.MARGIN;
 
         closeButton.setPosition(x, y);
+
+        float width = this.getWidth() - CB.scaledSizes.MARGINx4;
+        float height = this.getHeight() - (y + CB.scaledSizes.MARGINx4);
+        y += closeButton.getHeight() + CB.scaledSizes.MARGINx2;
+        x = CB.scaledSizes.MARGINx2;
+
+        msgLabel.setBounds(x, y, width, height);
     }
 
     private String getIpAddress() {
@@ -91,7 +113,7 @@ public class FileTransfer_Activity extends ActivityBase {
         // Keep in mind, there can be multiple interfaces per device, for example
         // one per NIC, one per active wireless and the loopback
         // In this case we only care about IPv4 address ( x.x.x.x format )
-        List<String> addresses = new ArrayList<String>();
+        List<String> addresses = new ArrayList<>();
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             for (NetworkInterface ni : Collections.list(interfaces)) {

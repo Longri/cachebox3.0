@@ -27,6 +27,8 @@ import de.longri.cachebox3.desktop.DesktopPlatformConnector;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.file_transfer.MainWindow;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import org.apache.commons.cli.*;
 import org.oscim.awt.AwtGraphics;
 import org.oscim.backend.GLAdapter;
@@ -90,6 +92,14 @@ public class TouchLauncher {
         }
 
 
+
+        initVtm();
+
+        // Don't change this LogLevel
+        // Cachebox use the slf4j implematation for LibGdx as Log engine.
+        // so set LogLevel on CB.class if you wont (USED_LOG_LEVEL)
+        new LwjglApplication(new CacheboxMain(), config).setLogLevel(LwjglApplication.LOG_DEBUG);
+
         if (cmd.hasOption("transfer")) {
             new Thread(new Runnable() {
                 @Override
@@ -98,13 +108,6 @@ public class TouchLauncher {
                 }
             }).start();
         }
-
-        initVtm();
-
-        // Don't change this LogLevel
-        // Cachebox use the slf4j implematation for LibGdx as Log engine.
-        // so set LogLevel on CB.class if you wont (USED_LOG_LEVEL)
-        new LwjglApplication(new CacheboxMain(), config).setLogLevel(LwjglApplication.LOG_DEBUG);
     }
 
     public static void initVtm() {

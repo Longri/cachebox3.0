@@ -46,7 +46,7 @@ class FileBrowserTest {
         TestUtils.initialGdx();
 
         workpath = TestUtils.getResourceFileHandle("testsResources");
-        server = new FileBrowserServer(workpath, PORT);
+        server = new FileBrowserServer(workpath, PORT,null);
         clint = new FileBrowserClint(SERVER_ADRESS, PORT);
         server.startListening();
     }
@@ -58,6 +58,7 @@ class FileBrowserTest {
 
     @Test
     void getRootDir() throws InterruptedException {
+
         assertThat("Connection must be established", clint.connect());
         assertThat("Connection must be established", clint.connect());
         ServerFile root = clint.getFiles();
