@@ -63,9 +63,8 @@ public class MainWindow extends Application {
         this.primaryStage = primaryStage;
         connectPane = new ConnectPane(this);
 
-        primaryStage.setHeight(660);
-        primaryStage.setWidth(800);
-
+        primaryStage.setHeight(150);
+        primaryStage.setWidth(250);
 
         Scene scene = new Scene(connectPane);
 

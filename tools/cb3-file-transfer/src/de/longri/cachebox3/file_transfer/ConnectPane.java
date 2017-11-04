@@ -89,6 +89,8 @@ public class ConnectPane extends BorderPane {
 
             Scene scene = new Scene(fb);
             this.main.primaryStage.setScene(scene);
+            this.main.primaryStage.setHeight(500);
+            this.main.primaryStage.setWidth(500);
 
         }
     }
