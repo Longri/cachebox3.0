@@ -20,8 +20,8 @@ import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
 import de.longri.cachebox3.socket.filebrowser.ServerFile;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.geometry.Orientation;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -34,17 +34,37 @@ public class FileBrowserPane extends BorderPane {
 
 
     private final FileBrowserClint clint;
+    private final ObservableList<ServerFile> files = FXCollections.observableArrayList();
+    private final ListView<ServerFile> listView = new ListView<>();
+    private ServerFile selectedDir;
 
 
     public FileBrowserPane(FileBrowserClint clint) {
         this.clint = clint;
 
+        selectedDir = clint.getFiles();
+        TreeView<ServerFile> treeView = new TreeView<>(new ServerFileTreeItem(selectedDir));
+        listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        TreeView<ServerFile> fileView = new TreeView<>(
-                new ServerFileTreeItem(clint.getFiles()));
+        SplitPane splitPane = new SplitPane();
+        splitPane.setOrientation(Orientation.HORIZONTAL);
+        splitPane.getItems().add(treeView);
+        splitPane.getItems().add(listView);
 
-        this.setLeft(fileView);
+        this.setCenter(splitPane);
+        setList(selectedDir);
+    }
 
+    private void setList(ServerFile file) {
+        files.clear();
+        Array<ServerFile> serverFiles = file.getFiles();
+        int n = serverFiles.size;
+        while (n-- > 0) {
+            ServerFile f = serverFiles.get(n);
+            if (!f.isDirectory())
+                files.add(f);
+        }
+        listView.setItems(files);
     }
 
     private class ServerFileTreeItem extends TreeItem<ServerFile> {

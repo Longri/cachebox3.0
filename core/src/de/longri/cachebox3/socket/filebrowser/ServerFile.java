@@ -29,11 +29,13 @@ public class ServerFile implements Serializable {
     private String name;
     private String parent;
     private Array<ServerFile> files = new Array<>();
+    private boolean isDir = false;
 
 
-    public ServerFile(String parent, String name) {
+    public ServerFile(String parent, String name, boolean isDir) {
         this.name = name;
         this.parent = parent;
+        this.isDir = isDir;
     }
 
     public ServerFile() {
@@ -44,6 +46,7 @@ public class ServerFile implements Serializable {
     public void serialize(StoreBase storeBase) throws NotImplementedException {
         storeBase.write(name);
         storeBase.write(parent);
+        storeBase.write(isDir);
         storeBase.write(files.size);
         for (int i = 0, n = files.size; i < n; i++) {
             ServerFile child = files.get(i);
@@ -55,6 +58,7 @@ public class ServerFile implements Serializable {
     public void deserialize(StoreBase storeBase) throws NotImplementedException {
         name = storeBase.readString();
         parent = storeBase.readString();
+        isDir = storeBase.readBool();
         int childCount = storeBase.readInt();
 
         if (childCount > 0) {
@@ -67,7 +71,7 @@ public class ServerFile implements Serializable {
     }
 
     public boolean isDirectory() {
-        return files.size > 0;
+        return isDir;
     }
 
     public void addFile(ServerFile file) {
@@ -88,7 +92,7 @@ public class ServerFile implements Serializable {
 
 
     public static ServerFile getDirectory(FileHandle fileHandle) {
-        ServerFile root = getChilds(new ServerFile("", fileHandle.name()), fileHandle);
+        ServerFile root = getChilds(new ServerFile("", fileHandle.name(),fileHandle.isDirectory()), fileHandle);
         return root;
     }
 
@@ -98,10 +102,10 @@ public class ServerFile implements Serializable {
         for (int i = 0, n = list.length; i < n; i++) {
             FileHandle handle = list[i];
             if (handle.isDirectory()) {
-                ServerFile dir = new ServerFile(parentPath, list[i].name());
+                ServerFile dir = new ServerFile(parentPath, list[i].name(),list[i].isDirectory());
                 root.addFile(getChilds(dir, handle));
             } else {
-                root.addFile(new ServerFile(parentPath, handle.name()));
+                root.addFile(new ServerFile(parentPath, handle.name(),handle.isDirectory()));
             }
         }
         return root;
