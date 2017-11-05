@@ -86,13 +86,10 @@ public class ServerFile implements Serializable {
         return files;
     }
 
-    public String toString() {
-        return (isDirectory() ? "DIR:" : "") + name;
-    }
 
 
     public static ServerFile getDirectory(FileHandle fileHandle) {
-        ServerFile root = getChilds(new ServerFile("", fileHandle.name(),fileHandle.isDirectory()), fileHandle);
+        ServerFile root = getChilds(new ServerFile("", fileHandle.name(), fileHandle.isDirectory()), fileHandle);
         return root;
     }
 
@@ -102,15 +99,33 @@ public class ServerFile implements Serializable {
         for (int i = 0, n = list.length; i < n; i++) {
             FileHandle handle = list[i];
             if (handle.isDirectory()) {
-                ServerFile dir = new ServerFile(parentPath, list[i].name(),list[i].isDirectory());
+                ServerFile dir = new ServerFile(parentPath, list[i].name(), list[i].isDirectory());
                 root.addFile(getChilds(dir, handle));
             } else {
-                root.addFile(new ServerFile(parentPath, handle.name(),handle.isDirectory()));
+                root.addFile(new ServerFile(parentPath, handle.name(), handle.isDirectory()));
             }
         }
         return root;
     }
 
+    @Override
+    public int hashCode() {
+        return getAbsolute().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) return true;
+        if (other instanceof ServerFile) {
+            return (this.getAbsolute().equals(((ServerFile) other).getAbsolute()));
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 
     public String getAbsolute() {
         return parent + "/" + name;

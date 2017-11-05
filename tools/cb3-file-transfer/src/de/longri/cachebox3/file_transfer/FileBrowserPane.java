@@ -16,6 +16,7 @@
 package de.longri.cachebox3.file_transfer;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
 import de.longri.cachebox3.socket.filebrowser.ServerFile;
 import javafx.beans.value.ChangeListener;
@@ -43,14 +44,14 @@ public class FileBrowserPane extends BorderPane {
     TreeView<ServerFile> treeView;
     private ServerFile selectedDir;
     private ServerFile currentListItemSelected;
-    Map<ServerFile, ServerFileTreeItem> map = new HashMap<>();
+    ObjectMap<ServerFile, ServerFileTreeItem> map = new ObjectMap<>();
+
 
 
     public FileBrowserPane(FileBrowserClint clint) {
         this.clint = clint;
 
         selectedDir = clint.getFiles();
-
 
 
         treeView = new TreeView<>(new ServerFileTreeItem(selectedDir));
@@ -72,7 +73,7 @@ public class FileBrowserPane extends BorderPane {
 
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                setList(((TreeItem<ServerFile>) newValue).getValue());
+                if (newValue != null) setList(((TreeItem<ServerFile>) newValue).getValue());
             }
 
         });
@@ -93,17 +94,19 @@ public class FileBrowserPane extends BorderPane {
 
     private void populateMap(TreeItem<ServerFile> item) {
         if (item.getChildren().size() > 0) {
+            map.put(item.getValue(), (ServerFileTreeItem) item);
             for (TreeItem<ServerFile> subItem : item.getChildren()) {
                 populateMap(subItem);
             }
         } else {
             ServerFile node = item.getValue();
-            map.put( node, (ServerFileTreeItem) item);
+            map.put(node, (ServerFileTreeItem) item);
         }
     }
 
     private void selectDir(ServerFile currentListItemSelected) {
         ServerFileTreeItem treeItem = map.get(currentListItemSelected);
+
         treeView.getSelectionModel().select(treeItem);
     }
 
