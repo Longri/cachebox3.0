@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.file_transfer;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
@@ -39,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Set;
 
 /**
  * Created by Longri on 01.11.2017.
@@ -55,6 +57,8 @@ public class FileBrowserPane extends BorderPane {
     private ServerFile selectedDir;
     private ServerFile currentListItemSelected;
     ObjectMap<ServerFile, ServerFileTreeItem> map = new ObjectMap<>();
+    String lastStyle = "";
+    Node actIntersectedNode = null;
 
 
     public FileBrowserPane(FileBrowserClint clint) {
@@ -102,22 +106,31 @@ public class FileBrowserPane extends BorderPane {
         iniDragAndDrop(listView);
 //        iniDragAndDrop(treeView);
 
-        treeView.setCellFactory(new Callback<TreeView<ServerFile>, TreeCell<ServerFile>>() {
+//        treeView.setCellFactory(new Callback<TreeView<ServerFile>, TreeCell<ServerFile>>() {
+//            @Override
+//            public TreeCell<ServerFile> call(TreeView<ServerFile> param) {
+//                final Tooltip tooltip = new Tooltip();
+//                TreeCell<ServerFile> cell = new TreeCell<ServerFile>() {
+//                    @Override
+//                    public void updateItem(ServerFile item, boolean empty) {
+//                        super.updateItem(item, empty);
+//                    }
+//                };
+//                iniDragAndDrop(cell);
+//                return cell;
+//            }
+//        });
+
+        Platform.runLater(new Runnable() {
             @Override
-            public TreeCell<ServerFile> call(TreeView<ServerFile> param) {
-                final Tooltip tooltip = new Tooltip();
-                TreeCell<ServerFile> cell = new TreeCell<ServerFile>() {
-                    @Override
-                    public void updateItem(ServerFile item, boolean empty) {
-                        super.updateItem(item, empty);
-                    }
-                };
-                iniDragAndDrop(cell);
-                return cell;
+            public void run() {
+                Set<Node> treeCells = treeView.lookupAll(".tree-cell");
+                for (Node cell : treeCells) {
+                    iniDragAndDrop(cell);
+                }
             }
         });
     }
-
 
 
     private void populateMap(TreeItem<ServerFile> item) {
@@ -137,7 +150,6 @@ public class FileBrowserPane extends BorderPane {
 
     private void selectDir(ServerFile currentListItemSelected) {
         ServerFileTreeItem treeItem = map.get(currentListItemSelected);
-
         treeView.getSelectionModel().select(treeItem);
     }
 
@@ -218,7 +230,7 @@ public class FileBrowserPane extends BorderPane {
         node.setOnDragOver(new EventHandler() {
             @Override
             public void handle(final Event event) {
-                log.debug("OnDragOver");
+//                log.debug("OnDragOver");
                 mouseDragOver(event);
             }
         });
@@ -226,7 +238,7 @@ public class FileBrowserPane extends BorderPane {
         node.setOnDragDropped(new EventHandler() {
             @Override
             public void handle(final Event event) {
-                log.debug("OnDragDropped");
+//                log.debug("OnDragDropped");
                 mouseDragDropped(event);
             }
         });
@@ -252,10 +264,23 @@ public class FileBrowserPane extends BorderPane {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    log.debug("Drop files", db.getFiles());
 
-                    // Only get the first file from the list
+
+                    ServerFile path = null;
+
+                    // get DropPath
+                    if (actIntersectedNode == listView) {
+                        path = selectedDir;
+                    } else if (actIntersectedNode instanceof TreeCell) {
+                        // get path from TreeviewItem
+                        TreeCell cell = (TreeCell) actIntersectedNode;
+                        ServerFileTreeItem item = (ServerFileTreeItem) cell.getTreeItem();
+                        path = item.getServerFile();
+                    }
                     final File file = db.getFiles().get(0);
+                    log.debug("Drop file {} to path {}", file.getName(), path.getAbsolute());
+
+                    clint.sendFile(path.getAbsolute(), Gdx.files.absolute(file.getAbsolutePath()));
 
                 }
             });
@@ -263,9 +288,6 @@ public class FileBrowserPane extends BorderPane {
         ((DragEvent) e).setDropCompleted(success);
         e.consume();
     }
-
-    String lastStyle = "";
-    Node actIntersectedNode = null;
 
     private void mouseDragOver(final Event e) {
         final Dragboard db = ((DragEvent) e).getDragboard();
@@ -307,13 +329,6 @@ public class FileBrowserPane extends BorderPane {
             e.consume();
         }
     }
-
-
-
-    
-
-
-
 
 
 }
