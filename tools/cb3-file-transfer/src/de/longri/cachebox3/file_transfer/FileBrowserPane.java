@@ -19,24 +19,34 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
 import de.longri.cachebox3.socket.filebrowser.ServerFile;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
+import javafx.util.Callback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
 
 /**
  * Created by Longri on 01.11.2017.
  */
 public class FileBrowserPane extends BorderPane {
 
+
+    private static final Logger log = LoggerFactory.getLogger(FileBrowserPane.class);
 
     private final FileBrowserClint clint;
     private final ObservableList<ServerFile> files = FXCollections.observableArrayList();
@@ -45,7 +55,6 @@ public class FileBrowserPane extends BorderPane {
     private ServerFile selectedDir;
     private ServerFile currentListItemSelected;
     ObjectMap<ServerFile, ServerFileTreeItem> map = new ObjectMap<>();
-
 
 
     public FileBrowserPane(FileBrowserClint clint) {
@@ -82,7 +91,6 @@ public class FileBrowserPane extends BorderPane {
 
             @Override
             public void handle(MouseEvent click) {
-
                 if (click.getClickCount() == 2) {
                     currentListItemSelected = listView.getSelectionModel().getSelectedItem();
                     selectDir(currentListItemSelected);
@@ -90,10 +98,33 @@ public class FileBrowserPane extends BorderPane {
             }
         });
 
+
+        iniDragAndDrop(listView);
+//        iniDragAndDrop(treeView);
+
+        treeView.setCellFactory(new Callback<TreeView<ServerFile>, TreeCell<ServerFile>>() {
+            @Override
+            public TreeCell<ServerFile> call(TreeView<ServerFile> param) {
+                final Tooltip tooltip = new Tooltip();
+                TreeCell<ServerFile> cell = new TreeCell<ServerFile>() {
+                    @Override
+                    public void updateItem(ServerFile item, boolean empty) {
+                        super.updateItem(item, empty);
+                    }
+                };
+                iniDragAndDrop(cell);
+                return cell;
+            }
+        });
     }
+
+
 
     private void populateMap(TreeItem<ServerFile> item) {
         if (item.getChildren().size() > 0) {
+
+//            iniDragAndDrop((ServerFileTreeItem)item);
+
             map.put(item.getValue(), (ServerFileTreeItem) item);
             for (TreeItem<ServerFile> subItem : item.getChildren()) {
                 populateMap(subItem);
@@ -177,4 +208,112 @@ public class FileBrowserPane extends BorderPane {
             return this.file;
         }
     }
+
+
+    //#############################################################################
+    //  Drag&Drop
+    //#############################################################################
+
+    private void iniDragAndDrop(Node node) {
+        node.setOnDragOver(new EventHandler() {
+            @Override
+            public void handle(final Event event) {
+                log.debug("OnDragOver");
+                mouseDragOver(event);
+            }
+        });
+
+        node.setOnDragDropped(new EventHandler() {
+            @Override
+            public void handle(final Event event) {
+                log.debug("OnDragDropped");
+                mouseDragDropped(event);
+            }
+        });
+
+        node.setOnDragExited(new EventHandler() {
+
+            @Override
+            public void handle(final Event event) {
+                log.debug("OnDragExited");
+                Node node = ((DragEvent) event).getPickResult().getIntersectedNode();
+                node.setStyle(lastStyle);
+            }
+        });
+    }
+
+
+    private void mouseDragDropped(final Event e) {
+        final Dragboard db = ((DragEvent) e).getDragboard();
+        boolean success = false;
+        if (db.hasFiles()) {
+            success = true;
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    log.debug("Drop files", db.getFiles());
+
+                    // Only get the first file from the list
+                    final File file = db.getFiles().get(0);
+
+                }
+            });
+        }
+        ((DragEvent) e).setDropCompleted(success);
+        e.consume();
+    }
+
+    String lastStyle = "";
+    Node actIntersectedNode = null;
+
+    private void mouseDragOver(final Event e) {
+        final Dragboard db = ((DragEvent) e).getDragboard();
+
+
+        final boolean isAccepted = db.getFiles().get(0).getName().toLowerCase().endsWith(".map")
+                || db.getFiles().get(0).getName().toLowerCase().endsWith(".jpeg")
+                || db.getFiles().get(0).getName().toLowerCase().endsWith(".jpg");
+
+        if (db.hasFiles()) {
+            if (isAccepted) {
+
+                Node node = ((DragEvent) e).getPickResult().getIntersectedNode();
+
+                if (node instanceof ListCell) {
+                    node = ((ListCell) node).getListView();
+                }
+
+                if (node == listView || node instanceof TreeCell) {
+                    if (node != actIntersectedNode) {
+                        if (actIntersectedNode != null) {
+//                        actIntersectedNode.setStyle("-fx-border-color: #C6C6C6;");
+                            actIntersectedNode.setStyle(lastStyle);
+                        }
+                        actIntersectedNode = node;
+                        lastStyle = actIntersectedNode.getStyle();
+                    }
+
+                    actIntersectedNode.setStyle("-fx-border-color: red;"
+                            + "-fx-border-width: 5;"
+                            + "-fx-background-color: #C6C6C6;"
+                            + "-fx-border-style: solid;");
+                    ((DragEvent) e).acceptTransferModes(TransferMode.COPY);
+                }
+
+
+            }
+        } else {
+            e.consume();
+        }
+    }
+
+
+
+    
+
+
+
+
+
 }
