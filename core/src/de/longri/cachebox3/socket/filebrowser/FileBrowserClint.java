@@ -145,15 +145,20 @@ public class FileBrowserClint {
             dos.flush();
 
             FileInputStream fis = new FileInputStream(file.file());
-            BufferedInputStream bis = new BufferedInputStream(fis);
+            BufferedInputStream bis = new BufferedInputStream(fis, BUFFER_SIZE);
 
             if (progressHandler != null) progressHandler.updateProgress("", 0, length);
             int theByte = 0;
             long sendet = 0;
-            while ((theByte = bis.read()) != -1) {
-                bos.write(theByte);
+
+            byte[] buffer = new byte[BUFFER_SIZE];
+
+            while (bis.read(buffer, 0, BUFFER_SIZE) != -1) {
+                bos.write(buffer);
+                bos.flush();
                 if (progressHandler != null) {
-                    progressHandler.updateProgress("", sendet++, length);
+                    sendet += BUFFER_SIZE;
+                    progressHandler.updateProgress("", sendet, length);
                 }
             }
             bis.close();

@@ -147,14 +147,23 @@ public class FileBrowserServer {
                             long fileLength = dis.readLong();
 
                             FileOutputStream fos = new FileOutputStream(outputFile.file());
-                            BufferedOutputStream fbos = new BufferedOutputStream(fos);
+                            BufferedOutputStream fbos = new BufferedOutputStream(fos, FileBrowserClint.BUFFER_SIZE);
 
+                            byte[] buffer = new byte[FileBrowserClint.BUFFER_SIZE];
 
-                            for (int j = 0; j < fileLength; j++) {
-                                fbos.write(bis.read());
+                            int readed = 0;
+                            while ((readed < fileLength)) {
+
+                                int read = (int) (fileLength - readed);
+                                if (read > FileBrowserClint.BUFFER_SIZE) {
+                                    read = FileBrowserClint.BUFFER_SIZE;
+                                }
+                                bis.read(buffer, 0, read);
+                                fbos.write(buffer, 0, read);
+                                readed += read;
                             }
-                            fbos.close();
 
+                            fbos.close();
                             dos.writeUTF(TRANSFERRED);
                             dos.flush();
                         }
