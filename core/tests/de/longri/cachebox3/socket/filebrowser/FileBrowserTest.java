@@ -46,7 +46,7 @@ class FileBrowserTest {
         TestUtils.initialGdx();
 
         workpath = TestUtils.getResourceFileHandle("testsResources");
-        server = new FileBrowserServer(workpath, PORT,null);
+        server = new FileBrowserServer(workpath, PORT, null);
         clint = new FileBrowserClint(SERVER_ADRESS, PORT);
         server.startListening();
     }
@@ -79,7 +79,7 @@ class FileBrowserTest {
 
 
         try {
-            assertThat("sendFile must return true", clint.sendFile(progressHandler, sendPath, file));
+            assertThat("sendFile must return true", clint.sendFile(null, sendPath, file));
         } catch (Exception e) {
             e.printStackTrace();
         }

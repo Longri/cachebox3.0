@@ -80,10 +80,8 @@ public class FileBrowserPane extends BorderPane {
     public FileBrowserPane(FileBrowserClint clint, Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.clint = clint;
-        workingDir = selectedDir = clint.getFiles();
-        treeView = new TreeView<>(new ServerFileTreeItem(selectedDir));
-        populateMap(treeView.getRoot());
-
+        workingDir = clint.getFiles();
+        treeView = new TreeView<>();
         listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         SplitPane splitPane = new SplitPane();
@@ -92,10 +90,8 @@ public class FileBrowserPane extends BorderPane {
         splitPane.getItems().add(listView);
 
         this.setCenter(splitPane);
-        setList(selectedDir);
 
         treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 if (newValue != null) {
@@ -103,11 +99,9 @@ public class FileBrowserPane extends BorderPane {
                     setList(selectedDir);
                 }
             }
-
         });
 
         listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
             @Override
             public void handle(MouseEvent click) {
                 if (click.getClickCount() == 2) {
@@ -116,17 +110,39 @@ public class FileBrowserPane extends BorderPane {
                 }
             }
         });
+        updateFileList(workingDir);
+    }
 
 
-        iniDragAndDrop(listView);
+    private void updateFileList(final ServerFile root) {
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Set<Node> treeCells = treeView.lookupAll(".tree-cell");
-                for (Node cell : treeCells) {
-                    iniDragAndDrop(cell);
+                ServerFile lastSelectedDir = selectedDir;
+                selectedDir = root == null ? clint.getFiles() : root;
+                treeView.setRoot(new ServerFileTreeItem(selectedDir));
+                populateMap(treeView.getRoot());
+
+                if (lastSelectedDir != null) {
+                    //get new read selected Dir
+                    ServerFileTreeItem item = map.get(lastSelectedDir);
+                    selectedDir = item.getServerFile();
+                    selectDir(selectedDir);
+                } else {
+                    setList(selectedDir);
                 }
+                iniDragAndDrop(listView);
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Set<Node> treeCells = treeView.lookupAll(".tree-cell");
+                        for (Node cell : treeCells) {
+                            iniDragAndDrop(cell);
+                        }
+                    }
+                });
             }
         });
     }
@@ -331,6 +347,7 @@ public class FileBrowserPane extends BorderPane {
                     }
                 }
                 updateProgress(20, 20);
+                updateFileList(null);
                 return null;
             }
         };
