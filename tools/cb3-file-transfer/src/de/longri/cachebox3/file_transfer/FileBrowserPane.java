@@ -372,7 +372,6 @@ public class FileBrowserPane extends BorderPane {
         Thread thread = new Thread(task);
         thread.start();
 
-
         actIntersectedNode.setStyle(lastStyle);
         actIntersectedNode = null;
     }

@@ -84,11 +84,11 @@ public class FileBrowserServer {
                     socket = server.accept(socketHints);
 
                     in = socket.getInputStream();
-                    bis = new BufferedInputStream(in);
+                    bis = new BufferedInputStream(in, FileBrowserClint.BUFFER_SIZE);
                     dis = new DataInputStream(bis);
 
                     os = socket.getOutputStream();
-                    bos = new BufferedOutputStream(os);
+                    bos = new BufferedOutputStream(os, FileBrowserClint.BUFFER_SIZE);
                     dos = new DataOutputStream(bos);
                 } catch (Exception e) {
                     if (!listening) {
@@ -121,10 +121,20 @@ public class FileBrowserServer {
                                 root.serialize(writer);
 
                                 byte[] data = writer.getArray();
-                                dos.writeInt(data.length);
+                                int length = data.length;
+                                dos.writeInt(length);
                                 dos.flush();
-                                dos.write(data);
-                                dos.flush();
+
+                                int offset = 0;
+                                while (offset < length) {
+                                    int writeLength = length - offset;
+                                    if (writeLength > FileBrowserClint.BUFFER_SIZE) {
+                                        writeLength = FileBrowserClint.BUFFER_SIZE;
+                                    }
+                                    dos.write(data, offset, writeLength);
+                                    dos.flush();
+                                    offset += writeLength;
+                                }
                             } catch (NotImplementedException e) {
                                 e.printStackTrace();
                             }

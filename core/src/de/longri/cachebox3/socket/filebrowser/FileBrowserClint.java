@@ -33,6 +33,8 @@ import java.io.*;
  */
 public class FileBrowserClint {
 
+    public final static int BUFFER_SIZE = 512;
+
     private final Logger log = LoggerFactory.getLogger(FileBrowserServer.class);
 
     static final String CONNECT = "Connect";
@@ -71,10 +73,10 @@ public class FileBrowserClint {
             socket = Gdx.net.newClientSocket(Net.Protocol.TCP, serverAddress, serverPort, hints);
 
             os = socket.getOutputStream();
-            bos = new BufferedOutputStream(os);
+            bos = new BufferedOutputStream(os, BUFFER_SIZE);
             dos = new DataOutputStream(bos);
             in = socket.getInputStream();
-            bis = new BufferedInputStream(in);
+            bis = new BufferedInputStream(in, BUFFER_SIZE);
             dis = new DataInputStream(bis);
 
             dos.writeUTF(CONNECT);
@@ -103,7 +105,17 @@ public class FileBrowserClint {
 
             int length = dis.readInt();
             byte[] data = new byte[length];
-            dis.read(data);
+
+            int offset = 0;
+            while (offset < length) {
+                int readLength = length - offset;
+                if (readLength > BUFFER_SIZE) {
+                    readLength = BUFFER_SIZE;
+                }
+                dis.read(data, offset, readLength);
+                offset += readLength;
+            }
+
 
             ServerFile deserializeServerFile = new ServerFile();
             deserializeServerFile.deserialize(new BitStore(data));
