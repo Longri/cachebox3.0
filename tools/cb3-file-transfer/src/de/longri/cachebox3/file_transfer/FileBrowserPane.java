@@ -16,6 +16,7 @@
 package de.longri.cachebox3.file_transfer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
@@ -53,6 +54,7 @@ public class FileBrowserPane extends BorderPane {
     private final FileBrowserClint clint;
     private final ObservableList<ServerFile> files = FXCollections.observableArrayList();
     private final ListView<ServerFile> listView = new ListView<>();
+    private final ServerFile workingDir;
     TreeView<ServerFile> treeView;
     private ServerFile selectedDir;
     private ServerFile currentListItemSelected;
@@ -63,13 +65,8 @@ public class FileBrowserPane extends BorderPane {
 
     public FileBrowserPane(FileBrowserClint clint) {
         this.clint = clint;
-
-        selectedDir = clint.getFiles();
-
-
+        workingDir = selectedDir = clint.getFiles();
         treeView = new TreeView<>(new ServerFileTreeItem(selectedDir));
-
-
         populateMap(treeView.getRoot());
 
         listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -86,7 +83,10 @@ public class FileBrowserPane extends BorderPane {
 
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                if (newValue != null) setList(((TreeItem<ServerFile>) newValue).getValue());
+                if (newValue != null) {
+                    selectedDir = ((TreeItem<ServerFile>) newValue).getValue();
+                    setList(selectedDir);
+                }
             }
 
         });
@@ -190,7 +190,8 @@ public class FileBrowserPane extends BorderPane {
                 if (files != null) {
                     ObservableList<TreeItem<ServerFile>> children = FXCollections.observableArrayList();
                     for (ServerFile childFile : files) {
-                        children.add(new ServerFileTreeItem(childFile));
+                        if (childFile.isDirectory())
+                            children.add(new ServerFileTreeItem(childFile));
                     }
                     return children;
                 }
@@ -260,12 +261,10 @@ public class FileBrowserPane extends BorderPane {
         boolean success = false;
         if (db.hasFiles()) {
             success = true;
-
+            final File file = db.getFiles().get(0);
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-
-
                     ServerFile path = null;
 
                     // get DropPath
@@ -277,11 +276,11 @@ public class FileBrowserPane extends BorderPane {
                         ServerFileTreeItem item = (ServerFileTreeItem) cell.getTreeItem();
                         path = item.getServerFile();
                     }
-                    final File file = db.getFiles().get(0);
+
                     log.debug("Drop file {} to path {}", file.getName(), path.getAbsolute());
-
-                    clint.sendFile(path.getAbsolute(), Gdx.files.absolute(file.getAbsolutePath()));
-
+                    clint.sendFile(path.getTransferPath(workingDir, file), Gdx.files.absolute(file.getAbsolutePath()));
+                    actIntersectedNode.setStyle(lastStyle);
+                    actIntersectedNode = null;
                 }
             });
         }
@@ -317,7 +316,7 @@ public class FileBrowserPane extends BorderPane {
                     }
 
                     actIntersectedNode.setStyle("-fx-border-color: red;"
-                            + "-fx-border-width: 5;"
+                            + "-fx-border-width: 3;"
                             + "-fx-background-color: #C6C6C6;"
                             + "-fx-border-style: solid;");
                     ((DragEvent) e).acceptTransferModes(TransferMode.COPY);

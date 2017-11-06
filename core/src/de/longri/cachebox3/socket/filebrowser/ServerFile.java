@@ -21,6 +21,8 @@ import de.longri.serializable.NotImplementedException;
 import de.longri.serializable.Serializable;
 import de.longri.serializable.StoreBase;
 
+import java.io.File;
+
 /**
  * Created by longri on 30.10.17.
  */
@@ -87,7 +89,6 @@ public class ServerFile implements Serializable {
     }
 
 
-
     public static ServerFile getDirectory(FileHandle fileHandle) {
         ServerFile root = getChilds(new ServerFile("", fileHandle.name(), fileHandle.isDirectory()), fileHandle);
         return root;
@@ -129,5 +130,9 @@ public class ServerFile implements Serializable {
 
     public String getAbsolute() {
         return parent + "/" + name;
+    }
+
+    public String getTransferPath(ServerFile rootDir, File file) {
+        return getAbsolute().replace(rootDir.getAbsolute(), "") + "/" + file.getName();
     }
 }
