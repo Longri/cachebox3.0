@@ -79,7 +79,7 @@ class FileBrowserTest {
 
 
         try {
-            assertThat("sendFile must return true", clint.sendFile(sendPath, file));
+            assertThat("sendFile must return true", clint.sendFile(progressHandler, sendPath, file));
         } catch (Exception e) {
             e.printStackTrace();
         }

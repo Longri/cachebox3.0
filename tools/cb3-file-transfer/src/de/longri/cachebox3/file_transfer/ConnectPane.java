@@ -72,7 +72,7 @@ public class ConnectPane extends BorderPane {
 
         main.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
-                if(clint!=null){
+                if (clint != null) {
                     clint.sendCloseEvent();
                 }
             }
@@ -85,7 +85,7 @@ public class ConnectPane extends BorderPane {
     void connect(String address, String port) {
         clint = new FileBrowserClint(address, Integer.parseInt(port));
         if (clint.connect()) {
-            FileBrowserPane fb = new FileBrowserPane(clint);
+            FileBrowserPane fb = new FileBrowserPane(clint, this.main.primaryStage);
 
             Scene scene = new Scene(fb);
             this.main.primaryStage.setScene(scene);

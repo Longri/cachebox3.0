@@ -20,6 +20,7 @@ import com.badlogic.gdx.Net;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
+import de.longri.cachebox3.interfaces.ProgressHandler;
 import de.longri.serializable.BitStore;
 import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
@@ -38,7 +39,7 @@ public class FileBrowserClint {
     static final String SENDFILE = "sendFile";
     static final String GETFILES = "getFiles";
     final static String CONNECTED = "Connected";
-    static final String CLOSE="close";
+    static final String CLOSE = "close";
 
     private final String serverAddress;
     private final int serverPort;
@@ -117,8 +118,11 @@ public class FileBrowserClint {
     }
 
 
-    public boolean sendFile(String path, FileHandle file) {
-        if (file.isDirectory()) return false;
+    public boolean sendFile(ProgressHandler progressHandler, String path, FileHandle file) {
+        if (file.isDirectory()) {
+            if (progressHandler != null) progressHandler.sucess();
+            return false;
+        }
 
         try {
 
@@ -131,9 +135,14 @@ public class FileBrowserClint {
             FileInputStream fis = new FileInputStream(file.file());
             BufferedInputStream bis = new BufferedInputStream(fis);
 
+            if (progressHandler != null) progressHandler.updateProgress("", 0, length);
             int theByte = 0;
+            long sendet = 0;
             while ((theByte = bis.read()) != -1) {
                 bos.write(theByte);
+                if (progressHandler != null) {
+                    progressHandler.updateProgress("", sendet++, length);
+                }
             }
             bis.close();
             bos.flush();
@@ -145,6 +154,8 @@ public class FileBrowserClint {
             }
         } catch (IOException e) {
             log.error("an error occured", e);
+        } finally {
+            if (progressHandler != null) progressHandler.sucess();
         }
         return false;
     }

@@ -19,6 +19,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.interfaces.ProgressHandler;
 import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
 import de.longri.cachebox3.socket.filebrowser.ServerFile;
 import javafx.application.Platform;
@@ -26,22 +28,33 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by Longri on 01.11.2017.
@@ -55,6 +68,7 @@ public class FileBrowserPane extends BorderPane {
     private final ObservableList<ServerFile> files = FXCollections.observableArrayList();
     private final ListView<ServerFile> listView = new ListView<>();
     private final ServerFile workingDir;
+    private final Stage primaryStage;
     TreeView<ServerFile> treeView;
     private ServerFile selectedDir;
     private ServerFile currentListItemSelected;
@@ -63,7 +77,8 @@ public class FileBrowserPane extends BorderPane {
     Node actIntersectedNode = null;
 
 
-    public FileBrowserPane(FileBrowserClint clint) {
+    public FileBrowserPane(FileBrowserClint clint, Stage primaryStage) {
+        this.primaryStage = primaryStage;
         this.clint = clint;
         workingDir = selectedDir = clint.getFiles();
         treeView = new TreeView<>(new ServerFileTreeItem(selectedDir));
@@ -104,22 +119,6 @@ public class FileBrowserPane extends BorderPane {
 
 
         iniDragAndDrop(listView);
-//        iniDragAndDrop(treeView);
-
-//        treeView.setCellFactory(new Callback<TreeView<ServerFile>, TreeCell<ServerFile>>() {
-//            @Override
-//            public TreeCell<ServerFile> call(TreeView<ServerFile> param) {
-//                final Tooltip tooltip = new Tooltip();
-//                TreeCell<ServerFile> cell = new TreeCell<ServerFile>() {
-//                    @Override
-//                    public void updateItem(ServerFile item, boolean empty) {
-//                        super.updateItem(item, empty);
-//                    }
-//                };
-//                iniDragAndDrop(cell);
-//                return cell;
-//            }
-//        });
 
         Platform.runLater(new Runnable() {
             @Override
@@ -278,14 +277,87 @@ public class FileBrowserPane extends BorderPane {
                     }
 
                     log.debug("Drop file {} to path {}", file.getName(), path.getAbsolute());
-                    clint.sendFile(path.getTransferPath(workingDir, file), Gdx.files.absolute(file.getAbsolutePath()));
-                    actIntersectedNode.setStyle(lastStyle);
-                    actIntersectedNode = null;
+                    startTransfer(path, file);
                 }
             });
         }
         ((DragEvent) e).setDropCompleted(success);
         e.consume();
+    }
+
+    private void startTransfer(final ServerFile path, final File file) {
+
+        final ProgressForm pForm = new ProgressForm();
+
+
+        final AtomicLong progressMax = new AtomicLong(0);
+        final AtomicLong progressValue = new AtomicLong(0);
+        final AtomicBoolean wait = new AtomicBoolean(true);
+        final ProgressHandler progressHandler = new ProgressHandler() {
+            @Override
+            public void updateProgress(CharSequence msg, long value, long maxValue) {
+                progressMax.set(maxValue);
+                progressValue.set(value);
+            }
+
+            @Override
+            public void sucess() {
+                wait.set(false);
+            }
+        };
+
+        // In real life this task would do something useful and return
+        // some meaningful result:
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() throws InterruptedException {
+
+                final AtomicBoolean WAIT_READY = new AtomicBoolean(true);
+
+                CB.postAsync(new Runnable() {
+                    @Override
+                    public void run() {
+                        clint.sendFile(progressHandler, path.getTransferPath(workingDir, file), Gdx.files.absolute(file.getAbsolutePath()));
+                        WAIT_READY.set(false);
+                    }
+                });
+
+                while (WAIT_READY.get()) {
+                    try {
+                        updateProgress(progressValue.get(), progressMax.get());
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                updateProgress(20, 20);
+                return null;
+            }
+        };
+
+        // binds progress of progress bars to progress of task:
+        pForm.activateProgressBar(task);
+
+        // in real life this method would get the result of the task
+        // and update the UI based on its value:
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                pForm.getDialogStage().close();
+            }
+        });
+
+        Stage dialogStage = pForm.getDialogStage();
+        dialogStage.show();
+        dialogStage.setX(primaryStage.getX());
+        dialogStage.setY(primaryStage.getY());
+
+        Thread thread = new Thread(task);
+        thread.start();
+
+
+        actIntersectedNode.setStyle(lastStyle);
+        actIntersectedNode = null;
     }
 
     private void mouseDragOver(final Event e) {
@@ -308,7 +380,6 @@ public class FileBrowserPane extends BorderPane {
                 if (node == listView || node instanceof TreeCell) {
                     if (node != actIntersectedNode) {
                         if (actIntersectedNode != null) {
-//                        actIntersectedNode.setStyle("-fx-border-color: #C6C6C6;");
                             actIntersectedNode.setStyle(lastStyle);
                         }
                         actIntersectedNode = node;
@@ -329,5 +400,50 @@ public class FileBrowserPane extends BorderPane {
         }
     }
 
+
+    //################################################################################
+    // Progress Dialog
+    //################################################################################
+
+    public static class ProgressForm {
+        private final Stage dialogStage;
+        private final ProgressBar pb = new ProgressBar();
+        private final ProgressIndicator pin = new ProgressIndicator();
+
+
+        public ProgressForm() {
+            dialogStage = new Stage();
+            dialogStage.initStyle(StageStyle.UTILITY);
+            dialogStage.setWidth(300);
+            dialogStage.setHeight(100);
+            dialogStage.setResizable(false);
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+
+            // PROGRESS BAR
+            final Label label = new Label();
+            label.setText("alerto");
+
+            pb.setProgress(-1F);
+            pin.setProgress(-1F);
+
+            final HBox hb = new HBox();
+            hb.setSpacing(5);
+            hb.setAlignment(Pos.CENTER);
+            hb.getChildren().addAll(pb, pin);
+
+            Scene scene = new Scene(hb);
+            dialogStage.setScene(scene);
+        }
+
+        public void activateProgressBar(final Task<?> task) {
+            pb.progressProperty().bind(task.progressProperty());
+            pin.progressProperty().bind(task.progressProperty());
+            dialogStage.show();
+        }
+
+        public Stage getDialogStage() {
+            return dialogStage;
+        }
+    }
 
 }
