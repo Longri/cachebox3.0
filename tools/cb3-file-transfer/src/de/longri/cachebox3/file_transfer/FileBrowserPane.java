@@ -301,11 +301,9 @@ public class FileBrowserPane extends BorderPane {
         e.consume();
     }
 
-    ProgressForm pForm;
-
     private void startTransfer(final ServerFile path, final File file) {
 
-        pForm = new ProgressForm();
+        final ProgressForm pForm = new ProgressForm();
 
 
         final AtomicLong progressMax = new AtomicLong(0);
@@ -350,13 +348,21 @@ public class FileBrowserPane extends BorderPane {
                 }
                 updateProgress(20, 20);
                 updateFileList(null);
-                closeDialog();
                 return null;
             }
         };
 
         // binds progress of progress bars to progress of task:
         pForm.activateProgressBar(task);
+
+        // in real life this method would get the result of the task
+        // and update the UI based on its value:
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                pForm.getDialogStage().close();
+            }
+        });
 
         Stage dialogStage = pForm.getDialogStage();
         dialogStage.show();
@@ -368,16 +374,6 @@ public class FileBrowserPane extends BorderPane {
 
         actIntersectedNode.setStyle(lastStyle);
         actIntersectedNode = null;
-    }
-
-    private void closeDialog() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if (pForm != null) pForm.getDialogStage().close();
-                pForm = null;
-            }
-        });
     }
 
     private void mouseDragOver(final Event e) {
