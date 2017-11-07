@@ -19,6 +19,9 @@ package de.longri.cachebox3.interfaces;
  * Created by Longri on 06.11.2017.
  */
 public interface ProgressHandler {
+
+    void start();
+
     void updateProgress(CharSequence msg, long value, long maxValue);
 
     void sucess();

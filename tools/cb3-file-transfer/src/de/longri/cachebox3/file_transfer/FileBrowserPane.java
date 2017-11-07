@@ -16,9 +16,9 @@
 package de.longri.cachebox3.file_transfer;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.interfaces.ProgressHandler;
 import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
@@ -42,18 +42,16 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -310,10 +308,43 @@ public class FileBrowserPane extends BorderPane {
         final AtomicLong progressValue = new AtomicLong(0);
         final AtomicBoolean wait = new AtomicBoolean(true);
         final ProgressHandler progressHandler = new ProgressHandler() {
+
+            long startTime;
+            final StringBuilder sb = new StringBuilder();
+
+            @Override
+            public void start() {
+                startTime = System.currentTimeMillis();
+            }
+
             @Override
             public void updateProgress(CharSequence msg, long value, long maxValue) {
                 progressMax.set(maxValue);
                 progressValue.set(value);
+
+                try {
+                    sb.length = 0;//reset StringBuilder
+                    int speedInKBps = 0;
+                    double speedInBps = 0.0;
+                    long timeInSecs = (System.currentTimeMillis() - startTime) / 1000;
+                    speedInBps = value / timeInSecs;
+                    speedInKBps = (int) (speedInBps / 1024D);
+                    long remainingTime = (long) ((maxValue / speedInBps) - timeInSecs);
+
+                    sb.append(speedInKBps).append(" KB/s\n remaining time: ");
+
+                    if (remainingTime > 60) {
+                        double min = (double) remainingTime / 60.0D;
+                        sb.append(String.format("%.2f", min)).append(" min");
+                    } else {
+                        sb.append(remainingTime).append(" sec");
+                    }
+
+
+                    pForm.setText(sb.toString());
+                } catch (ArithmeticException e) {
+                    //do nothing
+                }
             }
 
             @Override
@@ -357,7 +388,9 @@ public class FileBrowserPane extends BorderPane {
 
         // in real life this method would get the result of the task
         // and update the UI based on its value:
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>()
+
+        {
             @Override
             public void handle(WorkerStateEvent event) {
                 pForm.getDialogStage().close();
@@ -366,7 +399,7 @@ public class FileBrowserPane extends BorderPane {
 
         Stage dialogStage = pForm.getDialogStage();
         dialogStage.show();
-        dialogStage.setX(primaryStage.getX() + (primaryStage.getWidth() / 2) - 25);
+        dialogStage.setX(primaryStage.getX() + (primaryStage.getWidth() / 2) - 50);
         dialogStage.setY(primaryStage.getY() + (primaryStage.getHeight() / 2) - 25);
 
         Thread thread = new Thread(task);
@@ -423,45 +456,49 @@ public class FileBrowserPane extends BorderPane {
 
     public static class ProgressForm {
         private final Stage dialogStage;
-        //        private final ProgressBar pb = new ProgressBar();
         private final ProgressIndicator pin = new ProgressIndicator();
-
+        private final Label label = new Label();
 
         public ProgressForm() {
-
+            label.setWrapText(true);
             pin.setPrefWidth(80);
             pin.setPrefHeight(80);
             dialogStage = new Stage();
             dialogStage.initStyle(StageStyle.UTILITY);
-            dialogStage.setWidth(100);
-            dialogStage.setHeight(100);
+            dialogStage.setWidth(200);
+            dialogStage.setHeight(200);
             dialogStage.setResizable(false);
             dialogStage.initModality(Modality.APPLICATION_MODAL);
 
-            // PROGRESS BAR
-            final Label label = new Label();
-            label.setText("alerto");
+            label.setText("...\n...");
 
-//            pb.setProgress(-1F);
             pin.setProgress(-1F);
 
-            final HBox hb = new HBox();
-            hb.setSpacing(5);
-            hb.setAlignment(Pos.CENTER);
-            hb.getChildren().addAll(/*pb,*/ pin);
+            final VBox vb = new VBox();
+            vb.setSpacing(5);
+            vb.setAlignment(Pos.CENTER);
+            vb.getChildren().addAll(pin, label);
 
-            Scene scene = new Scene(hb);
+            Scene scene = new Scene(vb);
             dialogStage.setScene(scene);
         }
 
         public void activateProgressBar(final Task<?> task) {
-//            pb.progressProperty().bind(task.progressProperty());
             pin.progressProperty().bind(task.progressProperty());
             dialogStage.show();
         }
 
         public Stage getDialogStage() {
             return dialogStage;
+        }
+
+        public void setText(final String text) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    label.setText(text);
+                }
+            });
         }
     }
 
