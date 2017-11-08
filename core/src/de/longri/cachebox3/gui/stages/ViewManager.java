@@ -221,6 +221,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 //
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickDraft, false, GestureDirection.Up));
         tool_button.addAction(new ActionButton(action_show_fieldNotesView, true));
+        tool_button.addAction(new ActionButton(new Action_Start_FileTransfer(), false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecTrack, false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecVoice, false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecPicture, false, GestureDirection.Down));
@@ -229,7 +230,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView, false, GestureDirection.Left));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
         if (CB.isTestVersion())
-        tool_button.addAction(new ActionButton(new Action_Show_TestView(), false));
+            tool_button.addAction(new ActionButton(new Action_Show_TestView(), false));
 //
         misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, GestureDirection.Up));
         misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));

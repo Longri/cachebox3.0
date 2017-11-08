@@ -868,6 +868,10 @@
       "path": "svg/file.svg",
       "scale": 0.95
     },
+    "fileTransfer": {
+      "path": "svg/fileTransfer.svg",
+      "scale": 0.21
+    },
     "filebackIcon": {
       "path": "svg/backIcon.svg",
       "scale": 0.3
@@ -2499,6 +2503,7 @@
       "mapLayer": "map-layer",
       "deleteAllDrafts": "deleteIcon",
       "edit": "edit",
+      "fileTransfer": "fileTransfer",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
       "deleteIcon": "deleteIcon",

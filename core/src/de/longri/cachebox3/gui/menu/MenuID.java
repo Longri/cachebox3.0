@@ -258,4 +258,5 @@ public class MenuID {
     public static final int AID_SHOW_DescExt = 207;
 
     public static final int AID_HELP = 209;
+    public static final int AID_START_FILE_TRANSFER = 210;
 }

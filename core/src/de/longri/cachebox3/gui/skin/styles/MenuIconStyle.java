@@ -33,8 +33,9 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable deleteAllDrafts;
     public Drawable ownerLogTypes;
     public Drawable edit;
+    public Drawable fileTransfer;
 
-    
+
     @Override
     public int getPrefWidth() {
         return CB.getScaledInt(47);

@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.1'
-        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.3-SNAPSHOT'
+        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.4-SNAPSHOT'
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4'
     }
 }
@@ -19,9 +19,9 @@ allprojects {
     version = '3.0'
     ext {
         appName = "Cachebox 3.0"
-        gdxVersion = '1.9.7-SNAPSHOT'
+        gdxVersion = '1.9.8-SNAPSHOT'
 //        gdxVersion = '1.9.6'
-        roboVMVersion = '2.3.3-SNAPSHOT'
+        roboVMVersion = '2.3.4-SNAPSHOT'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
@@ -48,6 +48,7 @@ project(":desktop") {
     dependencies {
         compile project(":core")
         compile project(":gps-simulator")
+        compile project(":cb3-file-transfer")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
@@ -83,6 +84,20 @@ project(":gps-simulator") {
         compile("org.mapsforge:mapsforge-map-awt:0.8.0")
         compile 'com.kitfox.svg:svg-salamander:1.0'
         compile 'net.sf.kxml:kxml2:2.3.0'
+
+        //include libs
+        compile fileTree(dir: 'libs', include: ['*.jar'])
+    }
+}
+
+
+project(":cb3-file-transfer") {
+    apply plugin: "java"
+
+
+    dependencies {
+        compile project(":core")
+
 
         //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])
