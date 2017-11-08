@@ -30,6 +30,29 @@ public class AlterCachebox3DB {
 
     public void alterCachebox3DB(Database database, int lastDatabaseSchemeVersion) {
 
+        if (lastDatabaseSchemeVersion == -1) {
+            //create new Database
+            DatabaseSchema schemaStrings = new DatabaseSchema();
+
+            database.execSQL(schemaStrings.CONFIG_TABLE);
+            database.execSQL(schemaStrings.CATEGORY_TABLE);
+            database.execSQL(schemaStrings.GPX_FILE_NAMES);
+            database.execSQL(schemaStrings.IMAGES);
+            database.execSQL(schemaStrings.LOGS);
+            database.execSQL(schemaStrings.POCKET_QUERIES);
+            database.execSQL(schemaStrings.REPLICATION);
+            database.execSQL(schemaStrings.TB_LOGS);
+            database.execSQL(schemaStrings.TRACKABLE);
+            database.execSQL(schemaStrings.CACHE_CORE_INFO);
+            database.execSQL(schemaStrings.ATTRIBUTES);
+            database.execSQL(schemaStrings.TEXT);
+            database.execSQL(schemaStrings.CACHE_INFO);
+            database.execSQL(schemaStrings.WAYPOINTS);
+            database.execSQL(schemaStrings.WAYPOINTS_TEXT);
+
+            return;
+        }
+
         if (lastDatabaseSchemeVersion < DatabaseVersions.LatestDatabaseChange) {
             // update to latest ACB2 Database Version
             new AlterCacheboxDB().alterCacheboxDB(database, DatabaseVersions.LatestDatabaseChange);

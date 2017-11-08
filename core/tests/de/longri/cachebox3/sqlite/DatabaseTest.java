@@ -17,6 +17,7 @@ package de.longri.cachebox3.sqlite;
 
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.TestUtils;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,12 @@ class DatabaseTest {
     static void setUp() {
         TestUtils.initialGdx();
         workpath = TestUtils.getResourceFileHandle("testsResources").child("TestNewDB");
+        workpath.mkdirs();
+    }
+
+    @AfterAll
+    static void tearDown() {
+        workpath.deleteDirectory();
     }
 
 
@@ -46,6 +53,14 @@ class DatabaseTest {
         Database.createNewDB(testDb, workpath, "testDB", true);
 
         assertThat("Database schema version must be last version", testDb.getDatabaseSchemeVersion() == DatabaseVersions.LatestDatabaseChange);
+
+
+        //check all tables
+        String[] tableNames = new String[]{"Config", "Category", "GPXFilenames", "Images",
+                "Logs", "PocketQueries", "Replication", "TbLogs", "Trackable", "CacheCoreInfo",
+                "Attributes", "CacheText", "CacheInfo", "Waypoints", "WaypointsText"};
+        for (String tableName : tableNames)
+            assertThat("Table '" + tableName + "' must exist", testDb.isTableExists(tableName));
 
     }
 

@@ -115,6 +115,102 @@ public class DatabaseSchema {
             "    Clue         NTEXT\n" +
             ");";
 
+
+    public final String CONFIG_TABLE = "CREATE TABLE Config (\n" +
+            "    [Key]      NVARCHAR (30)  NOT NULL,\n" +
+            "    Value      NVARCHAR (255),\n" +
+            "    LongString NTEXT,\n" +
+            "    desired    NTEXT\n" +
+            ");";
+
+    public final String CATEGORY_TABLE = "CREATE TABLE Category (\n" +
+            "    Id          INTEGER        NOT NULL\n" +
+            "                               PRIMARY KEY AUTOINCREMENT,\n" +
+            "    GpxFilename NVARCHAR (255),\n" +
+            "    Pinned      BIT            DEFAULT 0,\n" +
+            "    CacheCount  INT\n" +
+            ");";
+
+    public final String GPX_FILE_NAMES = "CREATE TABLE GPXFilenames (\n" +
+            "    Id          INTEGER        NOT NULL\n" +
+            "                               PRIMARY KEY AUTOINCREMENT,\n" +
+            "    GPXFilename NVARCHAR (255),\n" +
+            "    Imported    DATETIME,\n" +
+            "    name        NVARCHAR (255),\n" +
+            "    CacheCount  INT,\n" +
+            "    CategoryId  BIGINT\n" +
+            ");";
+
+    public final String IMAGES = "CREATE TABLE Images (\n" +
+            "    Id           INTEGER        NOT NULL\n" +
+            "                                PRIMARY KEY AUTOINCREMENT,\n" +
+            "    CacheId      BIGINT,\n" +
+            "    GcCode       NVARCHAR (12),\n" +
+            "    Description  NTEXT,\n" +
+            "    name         NVARCHAR (255),\n" +
+            "    ImageUrl     NVARCHAR (255),\n" +
+            "    IsCacheImage BIT\n" +
+            ");";
+
+    public final String LOGS = "CREATE TABLE Logs (\n" +
+            "    Id        BIGINT         NOT NULL\n" +
+            "                             PRIMARY KEY,\n" +
+            "    CacheId   BIGINT,\n" +
+            "    Timestamp DATETIME,\n" +
+            "    Finder    NVARCHAR (128),\n" +
+            "    Type      SMALLINT,\n" +
+            "    Comment   NTEXT\n" +
+            ");";
+
+    public final String POCKET_QUERIES = "CREATE TABLE PocketQueries (\n" +
+            "    Id               INTEGER        NOT NULL\n" +
+            "                                    PRIMARY KEY AUTOINCREMENT,\n" +
+            "    PQName           NVARCHAR (255),\n" +
+            "    CreationTimeOfPQ DATETIME\n" +
+            ");";
+
+    public final String REPLICATION = "CREATE TABLE Replication (\n" +
+            "    Id              INTEGER       NOT NULL\n" +
+            "                                  PRIMARY KEY AUTOINCREMENT,\n" +
+            "    ChangeType      INT           NOT NULL,\n" +
+            "    CacheId         BIGINT        NOT NULL,\n" +
+            "    WpGcCode        NVARCHAR (12),\n" +
+            "    SolverCheckSum  INT,\n" +
+            "    NotesCheckSum   INT,\n" +
+            "    WpCoordCheckSum INT\n" +
+            ");\n";
+
+    public final String TB_LOGS = "CREATE TABLE TbLogs (\n" +
+            "    Id           INTEGER        NOT NULL\n" +
+            "                                PRIMARY KEY AUTOINCREMENT,\n" +
+            "    TrackableId  INTEGER        NOT NULL,\n" +
+            "    CacheID      BIGINT,\n" +
+            "    GcCode       NVARCHAR (12),\n" +
+            "    LogIsEncoded BIT            DEFAULT 0,\n" +
+            "    LogText      NTEXT,\n" +
+            "    LogTypeId    BIGINT,\n" +
+            "    LoggedByName NVARCHAR (255),\n" +
+            "    Visited      DATETIME\n" +
+            ");";
+
+    public final String TRACKABLE = "CREATE TABLE Trackable (\n" +
+            "    Id               INTEGER        NOT NULL\n" +
+            "                                    PRIMARY KEY AUTOINCREMENT,\n" +
+            "    Archived         BIT,\n" +
+            "    GcCode           NVARCHAR (12),\n" +
+            "    CacheId          BIGINT,\n" +
+            "    CurrentGoal      NTEXT,\n" +
+            "    CurrentOwnerName NVARCHAR (255),\n" +
+            "    DateCreated      DATETIME,\n" +
+            "    Description      NTEXT,\n" +
+            "    IconUrl          NVARCHAR (255),\n" +
+            "    ImageUrl         NVARCHAR (255),\n" +
+            "    path             NVARCHAR (255),\n" +
+            "    OwnerName        NVARCHAR (255),\n" +
+            "    Url              NVARCHAR (255) \n" +
+            ");";
+
+
     public final String COPY_WAYPOINTS_FROM_V2_TO_V3 = "INSERT INTO Waypoints (" +
             "CacheId, GcCode, Latitude, Longitude, Type, IsStart, SyncExclude, UserWaypoint, Title)" +
             "SELECT " +
