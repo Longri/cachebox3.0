@@ -141,7 +141,14 @@ public class FileBrowserClint {
         ObjectMap<String, FileHandle> fileMap = new ObjectMap<>();
         addToFileList(fileMap, path, workingDir, files);
 
-        //iterate over all
+        long sendet = 0;
+        long completeLength = 0;
+        //iterate over all for calculate complete length
+        for (ObjectMap.Entry<String, FileHandle> entry : fileMap.iterator()) {
+            completeLength += entry.value.length();
+        }
+
+        //iterate over all for send
         for (ObjectMap.Entry<String, FileHandle> entry : fileMap.iterator()) {
             try {
                 dos.writeUTF(SENDFILE);
@@ -155,21 +162,21 @@ public class FileBrowserClint {
 
                 if (progressHandler != null) {
                     progressHandler.start();
-                    progressHandler.updateProgress("", 0, length);
+                    progressHandler.updateProgress("", 0, completeLength);
                 }
                 int theByte = 0;
-                long sendet = 0;
+
                 int left = progressHandler != null ? 0 : -1;
                 while ((theByte = bis.read()) != -1) {
                     bos.write(theByte);
 
                     if (sendet % 1024 == left) {
-                        progressHandler.updateProgress("", sendet, length);
+                        progressHandler.updateProgress("", sendet, completeLength);
                     }
                     sendet++;
                 }
                 if (progressHandler != null) {
-                    progressHandler.updateProgress("", sendet, length);
+                    progressHandler.updateProgress("", sendet, completeLength);
                 }
                 bis.close();
                 bos.flush();
