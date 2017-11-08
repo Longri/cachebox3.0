@@ -21,6 +21,7 @@ import de.longri.cachebox3.TestUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -61,6 +62,8 @@ class FileBrowserTest {
 
     @Test
     void getRootDir() throws InterruptedException {
+
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
 
         assertThat("Connection must be established", clint.connect());
         assertThat("Connection must be established", clint.connect());
