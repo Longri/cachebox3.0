@@ -36,9 +36,9 @@ public class NewDB_InputBox extends ButtonDialog {
         Table contentBox = new Table();
 
         VisTextField textField = new VisTextField();
-        textField.setMessageText(Translation.get("EnterNewDBName").toString());//TODO change to CharSequence
+        textField.setMessageText(Translation.get("InsNewDBName").toString());//TODO change to CharSequence
 
-        CharSequenceCheckBox checkBox = new CharSequenceCheckBox("Translation.get(\"UseDefaultRep\")");
+        CharSequenceCheckBox checkBox = new CharSequenceCheckBox(Translation.get("UseDefaultRep"));
 
         float pad = CB.scaledSizes.MARGIN;
         contentBox.add(textField).pad(pad).left().fillX();

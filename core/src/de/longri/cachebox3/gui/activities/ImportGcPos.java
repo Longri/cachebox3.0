@@ -402,8 +402,7 @@ public class ImportGcPos extends ActivityBase {
 
     private void importNow(final ImportProgressChangedListener progressListener, final Date importStart, int radius) {
         Category category = CB.Categories.getCategory("API-Import");
-        if (category != null) // should not happen!!!
-        {
+        if (category != null) { // should not happen!!!
             GpxFilename gpxFilename = category.addGpxFilename("API-Import");
             if (gpxFilename != null) {
 
