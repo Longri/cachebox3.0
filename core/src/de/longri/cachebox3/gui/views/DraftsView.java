@@ -43,6 +43,7 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
@@ -724,9 +725,10 @@ public class DraftsView extends AbstractView {
         final AbstractCache abstractCache = tmpAbstractCache;
 
         if (abstractCache == null && !aktDraft.isTbDraft) {
-            String message = Translation.get("cacheOtherDb", aktDraft.CacheName.toString()).toString();
-            message += "\n" + Translation.get("draftNoteNoDelete");
-            MessageBox.show(message);
+            CharSequence message = new CompoundCharSequence(Translation.get("cacheOtherDb", aktDraft.CacheName.toString())
+                    , "\n", Translation.get("draftNoDelete"));
+
+            MessageBox.show(message, null, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, null);
             return;
         }
 
@@ -779,8 +781,6 @@ public class DraftsView extends AbstractView {
             message = Translation.get("confirmDraftDeletionTB", aktDraft.typeString, aktDraft.TbName);
         } else {
             message = Translation.get("confirmDraftDeletion", aktDraft.typeString, aktDraft.CacheName.toString());
-            //TODO if (aktDraft.type == LogTypes.found || aktDraft.type == LogTypes.attended || aktDraft.type == LogTypes.webcam_photo_taken)
-            //TODO  message += Translation.get("confirmDraftDeletionRst");
         }
 
         MessageBox.show(message, Translation.get("deleteDraft"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
@@ -818,11 +818,11 @@ public class DraftsView extends AbstractView {
 
             }
         };
-        final CharSequence message = Translation.get("DeleteAllDraftsQuestion");
+        final CharSequence message = Translation.get("DelDrafts?");
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                MessageBox.show(message, Translation.get("DeleteAllNotes"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning, dialogClickListener);
+                MessageBox.show(message, Translation.get("DeleteAllDrafts"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning, dialogClickListener);
 
             }
         });
