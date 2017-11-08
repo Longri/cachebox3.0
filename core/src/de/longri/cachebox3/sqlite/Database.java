@@ -23,6 +23,7 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,7 @@ import java.util.HashMap;
 
 
 public class Database {
-    protected final Logger log;
+    private final static Logger log = LoggerFactory.getLogger(Database.class);
     public static Database Data;
     public static Database Drafts;
     public static Database Settings;
@@ -154,8 +155,6 @@ public class Database {
         super();
         this.databaseType = databaseType;
 
-        log = LoggerFactory.getLogger("Database." + databaseType);
-
         switch (databaseType) {
             case CacheBox3:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseChange;
@@ -221,7 +220,7 @@ public class Database {
         log.debug("Initial database: " + Utils.GetFileName(databasePath));
         initialize();
 
-        int databaseSchemeVersion = GetDatabaseSchemeVersion();
+        int databaseSchemeVersion = getDatabaseSchemeVersion();
         log.debug("DatabaseSchemeVersion: " + databaseSchemeVersion);
         if (databaseSchemeVersion < latestDatabaseChange) {
             log.debug("Alter Database to SchemeVersion: " + latestDatabaseChange);
@@ -251,7 +250,7 @@ public class Database {
     }
 
 
-    private int GetDatabaseSchemeVersion() {
+    protected int getDatabaseSchemeVersion() {
 
         if (!isTableExists("Config")) {
             return -1;
@@ -862,5 +861,51 @@ public class Database {
         } catch (Exception exc) {
             return -1;
         }
+    }
+
+    public static boolean createNewDB(Database database, FileHandle rootFolder, String newDB_Name, Boolean ownRepository) {
+        FilterInstances.setLastFilter(new FilterProperties(Config.FilterNew.getValue()));
+        FileHandle dbFile = rootFolder.child(newDB_Name + ".db3");
+        try {
+            SQLiteGdxDatabase db = SQLiteGdxDatabaseFactory.getNewDatabase(dbFile);
+            db.openOrCreateDatabase();
+            database.close();
+            database.startUp(dbFile);
+        } catch (SQLiteGdxException e) {
+            log.error("Create new DB", e);
+            return true;
+        }
+        // OwnRepository?
+        if (ownRepository) {
+            String folder = "?/" + newDB_Name + "/";
+
+            Config.DescriptionImageFolderLocal.setValue(folder + "Images");
+            Config.MapPackFolderLocal.setValue(folder + "Maps");
+            Config.SpoilerFolderLocal.setValue(folder + "Spoilers");
+            Config.TileCacheFolderLocal.setValue(folder + "Cache");
+            Config.AcceptChanges();
+            log.debug(
+                    newDB_Name + " has own Repository:\n" + //
+                            Config.DescriptionImageFolderLocal.getValue() + ", \n" + //
+                            Config.MapPackFolderLocal.getValue() + ", \n" + //
+                            Config.SpoilerFolderLocal.getValue() + ", \n" + //
+                            Config.TileCacheFolderLocal.getValue()//
+            );
+
+            // Create Folder?
+            boolean creationOK = Utils.createDirectory(Config.DescriptionImageFolderLocal.getValue());
+            creationOK = creationOK && Utils.createDirectory(Config.MapPackFolderLocal.getValue());
+            creationOK = creationOK && Utils.createDirectory(Config.SpoilerFolderLocal.getValue());
+            creationOK = creationOK && Utils.createDirectory(Config.TileCacheFolderLocal.getValue());
+            if (!creationOK)
+                log.debug(
+                        "Problem with creation of one of the Directories:" + //
+                                Config.DescriptionImageFolderLocal.getValue() + ", " + //
+                                Config.MapPackFolderLocal.getValue() + ", " + //
+                                Config.SpoilerFolderLocal.getValue() + ", " + //
+                                Config.TileCacheFolderLocal.getValue()//
+                );
+        }
+        return false;
     }
 }

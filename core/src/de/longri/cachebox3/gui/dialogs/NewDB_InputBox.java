@@ -66,7 +66,7 @@ public class NewDB_InputBox extends ButtonDialog {
             String newDbName = textField.getText();
             boolean okClicked = ((Integer) which) == BUTTON_POSITIVE;
             if (okClicked && (newDbName == null || newDbName.isEmpty())) {
-                CB.viewmanager.toast(Translation.get("MustEnterName"));
+                CB.viewmanager.toast(Translation.get("MustEnterName"));//TODO Missing translation
                 return;
             }
 

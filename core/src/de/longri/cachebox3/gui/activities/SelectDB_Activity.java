@@ -133,48 +133,8 @@ public class SelectDB_Activity extends ActivityBase {
                                 Boolean ownRepository = !(Boolean) dataObjects[0];
                                 String NewDB_Name = (String) dataObjects[1];
 
-                                FilterInstances.setLastFilter(new FilterProperties(Config.FilterNew.getValue()));
-                                FileHandle dbFile = Gdx.files.absolute(CB.WorkPath + "/" + NewDB_Name + ".db3");
-                                try {
-                                    SQLiteGdxDatabase db = SQLiteGdxDatabaseFactory.getNewDatabase(dbFile);
-                                    db.openOrCreateDatabase();
-                                    Database.Data.close();
-                                    Database.Data.startUp(dbFile);
-                                } catch (SQLiteGdxException e) {
-                                    log.error("Create new DB", e);
+                                if (Database.createNewDB(Database.Data, Gdx.files.absolute(CB.WorkPath), NewDB_Name, ownRepository))
                                     return true;
-                                }
-                                // OwnRepository?
-                                if (ownRepository) {
-                                    String folder = "?/" + NewDB_Name + "/";
-
-                                    Config.DescriptionImageFolderLocal.setValue(folder + "Images");
-                                    Config.MapPackFolderLocal.setValue(folder + "Maps");
-                                    Config.SpoilerFolderLocal.setValue(folder + "Spoilers");
-                                    Config.TileCacheFolderLocal.setValue(folder + "Cache");
-                                    Config.AcceptChanges();
-                                    log.debug(
-                                            NewDB_Name + " has own Repository:\n" + //
-                                                    Config.DescriptionImageFolderLocal.getValue() + ", \n" + //
-                                                    Config.MapPackFolderLocal.getValue() + ", \n" + //
-                                                    Config.SpoilerFolderLocal.getValue() + ", \n" + //
-                                                    Config.TileCacheFolderLocal.getValue()//
-                                    );
-
-                                    // Create Folder?
-                                    boolean creationOK = Utils.createDirectory(Config.DescriptionImageFolderLocal.getValue());
-                                    creationOK = creationOK && Utils.createDirectory(Config.MapPackFolderLocal.getValue());
-                                    creationOK = creationOK && Utils.createDirectory(Config.SpoilerFolderLocal.getValue());
-                                    creationOK = creationOK && Utils.createDirectory(Config.TileCacheFolderLocal.getValue());
-                                    if (!creationOK)
-                                        log.debug(
-                                                "Problem with creation of one of the Directories:" + //
-                                                        Config.DescriptionImageFolderLocal.getValue() + ", " + //
-                                                        Config.MapPackFolderLocal.getValue() + ", " + //
-                                                        Config.SpoilerFolderLocal.getValue() + ", " + //
-                                                        Config.TileCacheFolderLocal.getValue()//
-                                        );
-                                }
                                 Config.AcceptChanges();
                                 Config.DatabaseName.setValue(NewDB_Name + ".db3");
                                 finish();
@@ -231,6 +191,7 @@ public class SelectDB_Activity extends ActivityBase {
         setAutoStartText();
         readCountAtThread();
     }
+
 
     private final ClickListener cancelClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
