@@ -1,5 +1,5 @@
 [3.2.x]
-- ★ add: -
+- ★ add: File transfer over own App
 - 🐜 fix -
 
 [3.1.977]
