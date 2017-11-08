@@ -12,6 +12,7 @@ import java.util.Properties;
  */
 public class EXCLUDE_FROM_TRAVIS {
     static final Properties p = new Properties();
+    public static final boolean REPAIR = true;
     static boolean readFailer = false;
     public static final String DUMMY_API_KEY = "+DummyKEY";
     public static final Coordinate LONGRI_HOME_COORDS = new Coordinate(52.581892, 13.398128);

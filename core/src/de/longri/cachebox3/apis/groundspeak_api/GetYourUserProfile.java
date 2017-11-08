@@ -68,7 +68,7 @@ public class GetYourUserProfile extends PostRequest {
             readyCallBack.callBack(membershipType);
         } else if (status == 3) {
             // expired api key
-            membershipType =  ApiResultState.EXPIRED_API_KEY;
+            membershipType = ApiResultState.EXPIRED_API_KEY;
             log.error("expired api key");
             readyCallBack.callBack(membershipType);
         } else {
@@ -98,7 +98,7 @@ public class GetYourUserProfile extends PostRequest {
         json.writeObjectEnd();
     }
 
-    private String getDeviceOperatingSystem() {
+    public static String getDeviceOperatingSystem() {
 
         switch (CanvasAdapter.platform) {
 

@@ -57,7 +57,7 @@ public class TranslationList {
 
             String readID = line.substring(0, pos).trim();
             String readTransl = line.substring(pos + 1);
-            String replacedRead = readTransl.trim().replace("\\n", String.format("%n"));
+            String replacedRead = readTransl.trim().replace("\\n", Character.toString('\n'));
 
             if (replacedRead.endsWith("\"")) {
                 replacedRead = replacedRead.substring(0, replacedRead.length() - 1);

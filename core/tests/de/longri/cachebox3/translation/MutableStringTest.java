@@ -61,7 +61,7 @@ class MutableStringTest {
     @Test
     void charAt() {
         CharArray buffer = new CharArray();
-        String t1 = "TestString";
+        String t1 = "Test\nString";
         MutableString mutable1 = new MutableString(buffer, t1);
         MutableString mutable2 = new MutableString(buffer, mutable1);
 

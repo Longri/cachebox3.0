@@ -105,6 +105,9 @@ class GetYourUserProfileTest {
         json.writeObjectEnd();
 
         String actual = writer.toString();
+
+        //remove "DeviceOperatingSystem"
+        expected = expected.replace("UNKNOWN", GetYourUserProfile.getDeviceOperatingSystem());
         assertEquals(expected, actual, "Should be equals");
     }
 
