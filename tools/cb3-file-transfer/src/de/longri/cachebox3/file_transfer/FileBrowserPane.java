@@ -412,16 +412,8 @@ public class FileBrowserPane extends BorderPane {
     private void mouseDragOver(final Event e) {
         final Dragboard db = ((DragEvent) e).getDragboard();
 
-
-        final boolean isAccepted = db.getFiles().get(0).getName().toLowerCase().endsWith(".map")
-                || db.getFiles().get(0).getName().toLowerCase().endsWith(".jpeg")
-                || db.getFiles().get(0).getName().toLowerCase().endsWith(".jpg");
-
         if (db.hasFiles()) {
-            if (isAccepted) {
-
                 Node node = ((DragEvent) e).getPickResult().getIntersectedNode();
-
                 if (node instanceof ListCell) {
                     node = ((ListCell) node).getListView();
                 }
@@ -434,16 +426,12 @@ public class FileBrowserPane extends BorderPane {
                         actIntersectedNode = node;
                         lastStyle = actIntersectedNode.getStyle();
                     }
-
                     actIntersectedNode.setStyle("-fx-border-color: red;"
                             + "-fx-border-width: 3;"
                             + "-fx-background-color: #C6C6C6;"
                             + "-fx-border-style: solid;");
                     ((DragEvent) e).acceptTransferModes(TransferMode.COPY);
                 }
-
-
-            }
         } else {
             e.consume();
         }
