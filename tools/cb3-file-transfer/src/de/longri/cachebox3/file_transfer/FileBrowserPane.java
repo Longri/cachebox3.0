@@ -50,6 +50,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -274,7 +275,7 @@ public class FileBrowserPane extends BorderPane {
         boolean success = false;
         if (db.hasFiles()) {
             success = true;
-            final File file = db.getFiles().get(0);
+            final List<File> files = db.getFiles();
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -290,8 +291,8 @@ public class FileBrowserPane extends BorderPane {
                         path = item.getServerFile();
                     }
 
-                    log.debug("Drop file {} to path {}", file.getName(), path.getAbsolute());
-                    startTransfer(path, file);
+                    log.debug("Drop {} files to path {}", files.size(), path.getAbsolute());
+                    startTransfer(path, files);
                 }
             });
         }
@@ -299,7 +300,7 @@ public class FileBrowserPane extends BorderPane {
         e.consume();
     }
 
-    private void startTransfer(final ServerFile path, final File file) {
+    private void startTransfer(final ServerFile path, final List<File> files) {
 
         final ProgressForm pForm = new ProgressForm();
 
@@ -364,7 +365,7 @@ public class FileBrowserPane extends BorderPane {
                 CB.postAsync(new Runnable() {
                     @Override
                     public void run() {
-                        clint.sendFile(progressHandler, path.getTransferPath(workingDir, file), Gdx.files.absolute(file.getAbsolutePath()));
+                        clint.sendFiles(progressHandler, path, workingDir, files);
                         WAIT_READY.set(false);
                     }
                 });
@@ -413,25 +414,25 @@ public class FileBrowserPane extends BorderPane {
         final Dragboard db = ((DragEvent) e).getDragboard();
 
         if (db.hasFiles()) {
-                Node node = ((DragEvent) e).getPickResult().getIntersectedNode();
-                if (node instanceof ListCell) {
-                    node = ((ListCell) node).getListView();
-                }
+            Node node = ((DragEvent) e).getPickResult().getIntersectedNode();
+            if (node instanceof ListCell) {
+                node = ((ListCell) node).getListView();
+            }
 
-                if (node == listView || node instanceof TreeCell) {
-                    if (node != actIntersectedNode) {
-                        if (actIntersectedNode != null) {
-                            actIntersectedNode.setStyle(lastStyle);
-                        }
-                        actIntersectedNode = node;
-                        lastStyle = actIntersectedNode.getStyle();
+            if (node == listView || node instanceof TreeCell) {
+                if (node != actIntersectedNode) {
+                    if (actIntersectedNode != null) {
+                        actIntersectedNode.setStyle(lastStyle);
                     }
-                    actIntersectedNode.setStyle("-fx-border-color: red;"
-                            + "-fx-border-width: 3;"
-                            + "-fx-background-color: #C6C6C6;"
-                            + "-fx-border-style: solid;");
-                    ((DragEvent) e).acceptTransferModes(TransferMode.COPY);
+                    actIntersectedNode = node;
+                    lastStyle = actIntersectedNode.getStyle();
                 }
+                actIntersectedNode.setStyle("-fx-border-color: red;"
+                        + "-fx-border-width: 3;"
+                        + "-fx-background-color: #C6C6C6;"
+                        + "-fx-border-style: solid;");
+                ((DragEvent) e).acceptTransferModes(TransferMode.COPY);
+            }
         } else {
             e.consume();
         }

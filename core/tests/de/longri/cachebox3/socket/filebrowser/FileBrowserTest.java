@@ -22,6 +22,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
@@ -66,8 +69,9 @@ class FileBrowserTest {
 
 
         FileHandle file = workpath.child("lang/de/strings.ini");
-        String sendPath = "sendTest/de/de.ini";
-        FileHandle targetFile = workpath.child(sendPath);
+        String sendPath = "sendTest/de";
+        ServerFile serverFile = new ServerFile("", sendPath, true);
+        FileHandle targetFile = workpath.child(sendPath).child("strings.ini");
 
         if (targetFile.exists()) {
             // delete test file
@@ -77,9 +81,11 @@ class FileBrowserTest {
 
         Thread.sleep(100);
 
+        ArrayList<File> fileList = new ArrayList<>();
+        fileList.add(file.file());
 
         try {
-            assertThat("sendFile must return true", clint.sendFile(null, sendPath, file));
+            assertThat("sendFiles must return true", clint.sendFiles(null, serverFile, root, fileList));
         } catch (Exception e) {
             e.printStackTrace();
         }
