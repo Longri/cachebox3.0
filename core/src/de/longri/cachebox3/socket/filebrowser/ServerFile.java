@@ -135,4 +135,8 @@ public class ServerFile implements Serializable {
     public String getTransferPath(ServerFile rootDir, File file) {
         return getAbsolute().replace(rootDir.getAbsolute(), "") + "/" + file.getName();
     }
+
+    public ServerFile child(String name, boolean isDir) {
+        return new ServerFile(this.getAbsolute(), name, isDir);
+    }
 }

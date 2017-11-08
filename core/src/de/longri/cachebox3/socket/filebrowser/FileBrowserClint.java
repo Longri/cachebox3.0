@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -148,6 +149,8 @@ public class FileBrowserClint {
             completeLength += entry.value.length();
         }
 
+        boolean error = false;
+
         //iterate over all for send
         for (ObjectMap.Entry<String, FileHandle> entry : fileMap.iterator()) {
             try {
@@ -180,34 +183,31 @@ public class FileBrowserClint {
                 }
                 bis.close();
                 bos.flush();
+                String response = dis.readUTF();// wait for next
+                if (!response.equals(FileBrowserServer.TRANSFERRED)) {
+                    error = true;
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
-
-        try {
-
-            String response = dis.readUTF();
-
-            if (response.equals(FileBrowserServer.TRANSFERRED)) {
-                return true;
-            }
-        } catch (IOException e) {
-            log.error("an error occured", e);
-        } finally {
-            if (progressHandler != null) progressHandler.sucess();
-        }
-        return false;
+        if (progressHandler != null) progressHandler.sucess();
+        return !error;
     }
 
-    private void addToFileList(ObjectMap<String, FileHandle> map, ServerFile path, ServerFile workingDir, List<File> files) {
+    protected void addToFileList(ObjectMap<String, FileHandle> map, ServerFile path, ServerFile workingDir, List<File> files) {
         for (File file : files) {
             if (file.isFile()) {
                 map.put(path.getTransferPath(workingDir, file), Gdx.files.absolute(file.getAbsolutePath()));
+            } else if (file.isDirectory()) {
+                List<File> subFiles = new ArrayList<>();
+                ServerFile subDir = path.child(file.getName(), true);
+                for (File f : file.listFiles())
+                    subFiles.add(f);
+                addToFileList(map, subDir, workingDir, subFiles);
             }
         }
-
     }
 
 
