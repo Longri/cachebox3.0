@@ -179,7 +179,9 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     }
 
     public void setNewBaseMap(final AbstractManagedMapLayer baseMap) {
-        if (this.layers().size() > 1) this.layers().remove(1);
+        if (this.layers().size() > 1)
+            this.layers().remove(1);
+
         TileLayer tileLayer;
 
         //remove alt BuildingLabelLayer

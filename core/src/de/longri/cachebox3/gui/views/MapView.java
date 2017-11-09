@@ -79,6 +79,7 @@ import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.utils.FastMath;
+import org.oscim.utils.Parameters;
 import org.oscim.utils.TextureAtlasUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -262,19 +263,14 @@ public class MapView extends AbstractView {
 
     private CacheboxMapAdapter createMap() {
 
-
         {//set map scale
-            float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue() * 0.8f);
-            Tile.SIZE = (int) (400 * scaleFactor);
-            CanvasAdapter.dpi = 240 * scaleFactor;
-            CanvasAdapter.textScale = scaleFactor;
-//            CanvasAdapter.scale = scaleFactor;
+            float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
+            CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
             log.debug("Create new map instance with scale factor:" + Float.toString(scaleFactor));
             log.debug("Tile.SIZE:" + Integer.toString(Tile.SIZE));
             log.debug("Canvas.dpi:" + Float.toString(CanvasAdapter.dpi));
         }
-
-
+        
         CacheboxMain.drawMap = true;
         map = new CacheboxMapAdapter() {
 
