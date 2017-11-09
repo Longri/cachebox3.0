@@ -196,7 +196,7 @@ public class CB {
             scalefactor = (Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale;
         } else if (CanvasAdapter.platform == Platform.IOS) {
             //iOS
-            scalefactor = ((Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale) * 0.8f;
+            scalefactor = ((Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale);
         } else {
             //Android
             scalefactor = (float) (0.0325520 * androidStatusbarHeight) * globalScale;
