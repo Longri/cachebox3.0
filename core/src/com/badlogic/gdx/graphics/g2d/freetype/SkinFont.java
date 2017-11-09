@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.tools.bmfont.BitmapFontWriter;
 import com.badlogic.gdx.utils.Array;
@@ -59,10 +60,16 @@ public class SkinFont extends BitmapFont {
 
         if (!pageSizeCalculated) {
             if (Gdx.graphics != null) {
-                //initial Page size
-                //TODO try to calculate that only one Page is created
-                PAGE_SIZE = MathUtils.nextPowerOfTwo((int) (300 * Gdx.graphics.getDensity()));
-                if (PAGE_SIZE < 1024) PAGE_SIZE = 1024;
+                // create one Char page
+
+                FreeTypeFontGenerator gen = new FreeTypeFontGenerator(fileHandle);
+                FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+                parameter.size = CB.getScaledInt(15);
+                parameter.characters = "W";
+                BitmapFont font = gen.generateFont(parameter);
+                int pixel = font.getRegion().getRegionHeight() * font.getRegion().getRegionHeight() * DEFAULT_CHARACTER.length();
+
+                PAGE_SIZE = MathUtils.nextPowerOfTwo((int) Math.sqrt(pixel));
                 if (PAGE_SIZE > 2048) PAGE_SIZE = 2048;
                 log.debug("FontPageSize: {}", PAGE_SIZE);
                 pageSizeCalculated = true;
@@ -76,7 +83,7 @@ public class SkinFont extends BitmapFont {
         if (cachePath != null) {
             FileHandle cacheFontPath = cachePath.child(tempName + ".fnt");
             if (cacheFontPath.exists()) {
-                EventHandler.fire(new IncrementProgressEvent(1,"Init Fonts | load:" + tempName));
+                EventHandler.fire(new IncrementProgressEvent(1, "Init Fonts | load:" + tempName));
                 log.debug("Init Fonts | load:{}", tempName);
                 try {
                     BitmapFont cachedFont = new BitmapFont(cacheFontPath);
@@ -88,7 +95,7 @@ public class SkinFont extends BitmapFont {
             }
         }
 
-        EventHandler.fire(new IncrementProgressEvent(1,"Init Fonts | generate:" + tempName));
+        EventHandler.fire(new IncrementProgressEvent(1, "Init Fonts | generate:" + tempName));
         log.debug("Init Fonts | generate:{}", tempName);
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fileHandle);
