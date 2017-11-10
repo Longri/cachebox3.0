@@ -28,6 +28,11 @@ public class SettingFolder extends SettingLongString {
     }
 
     @Override
+    public void setValue(String value){
+        super.setValue(value.replace(CB.WorkPath,"?"));
+    }
+
+    @Override
     public String getValue() {
         return replacePathSaperator(value);
     }

@@ -15,8 +15,10 @@
  */
 package de.longri.cachebox3.gui.map.baseMap;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.lists.CB_List;
 
 import java.io.File;
@@ -29,26 +31,39 @@ public final class BaseMapManager extends CB_List<AbstractManagedMapLayer> {
 
     public final static BaseMapManager INSTANCE = new BaseMapManager();
 
-    private BaseMapManager() {
+    public BaseMapManager() {
     }
 
-    public void setMapFolder(FileHandle folder) {
+    public void refreshMaps(FileHandle workPath) {
         this.clear();
 
+        // add map files from repository
+        addMapFiles(workPath.child("repository").child("maps"));
+
+        // add map files from act selected repository
+        String actRepositoryName = Config.DatabaseName.getValue().replace(".db3", "");
+        addMapFiles(workPath.child("repositories").child(actRepositoryName).child("maps"));
+
+        // add map files from setet user map folder
+        String userMapFolder = Config.MapPackFolder.getValue();
+        addMapFiles(Gdx.files.absolute(userMapFolder));
+
+        this.addStaticMaps();
+        this.sort();
+    }
+
+    private void addMapFiles(FileHandle workPath) {
         FileFilter mapFileFilter = new FileFilter() {
             @Override
             public boolean accept(File pathname) {
                 return Utils.GetFileExtension(pathname.getAbsolutePath()).toLowerCase().equals("map");
             }
         };
-        FileHandle[] mapFiles = folder.list(mapFileFilter);
+        FileHandle[] mapFiles = workPath.list(mapFileFilter);
 
         for (FileHandle mapFile : mapFiles) {
             this.add(new MapsforgeSingleMap(mapFile));
         }
-
-        this.addStaticMaps();
-        this.sort();
     }
 
     private void addStaticMaps() {

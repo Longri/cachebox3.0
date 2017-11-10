@@ -24,6 +24,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.utils.CreateCbDirectoryStructure;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.slf4j.Logger;
@@ -48,11 +49,8 @@ public class InitialWorkPathTask extends AbstractInitTask {
         CB.WorkPath = PlatformConnector.getWorkPath();
 
         log.info("WorkPath set to :" + CB.WorkPath);
-
-        boolean nomedia = CanvasAdapter.platform == Platform.ANDROID;
-
-        // initial Database on user path
-        ini_Dir(CB.WorkPath + "/user", false);
+        log.debug("ini_Dirs");
+        new CreateCbDirectoryStructure(CB.WorkPath,CanvasAdapter.platform == Platform.ANDROID);
 
         EventHandler.fire(new IncrementProgressEvent(1,"open/create settings DB"));
         try {
@@ -78,18 +76,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
         Config.ReadFromDB();
 
 
-        log.debug("ini_Dirs");
-        ini_Dir(Config.PocketQueryFolder.getValue(), false);
-        ini_Dir(Config.TileCacheFolder.getValue(), nomedia);
-        ini_Dir(Config.TrackFolder.getValue(), false);
-        ini_Dir(Config.UserImageFolder.getValue(), nomedia);
-        ini_Dir(CB.WorkPath + "/repository", nomedia);
-        ini_Dir(CB.WorkPath + "/repositories", nomedia);
-        FileHandle dataFileHandle = ini_Dir(CB.WorkPath + "/data", nomedia);
-        ini_Dir(CB.WorkPath + "/user/temp", nomedia);
-        ini_Dir(Config.DescriptionImageFolder.getValue(), nomedia);
-        ini_Dir(Config.MapPackFolder.getValue(), nomedia);
-        ini_Dir(Config.SpoilerFolder.getValue(), nomedia);
+
 
 
 //DEBUG SKIN set for debug
@@ -104,26 +91,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
         return 3;
     }
 
-    private FileHandle ini_Dir(String folder, boolean withNoMedia) {
-        FileHandle ff = Gdx.files.absolute(folder);
-        if (!ff.exists()) {
-            ff.mkdirs();
-        }
 
-
-        if (!withNoMedia) return ff;
-        // prevent mediascanner to parse all the images in this folder
-        File nomedia = new File(ff.file(), ".nomedia");
-        if (!nomedia.exists()) {
-            try {
-                nomedia.createNewFile();
-            } catch (IOException e) {
-
-                e.printStackTrace();
-            }
-        }
-        return ff;
-    }
 
 
 }

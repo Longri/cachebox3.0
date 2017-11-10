@@ -50,6 +50,7 @@ public class TestUtils {
             }
         };
         Gdx.app.setApplicationLogger(new LwjglApplicationLogger());
+        CB.WorkPath = "!!!";
     }
 
     public static double roundDoubleCoordinate(double value) {

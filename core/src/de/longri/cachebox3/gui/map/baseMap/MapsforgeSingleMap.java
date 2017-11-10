@@ -31,7 +31,7 @@ public class MapsforgeSingleMap extends AbstractVectorLayer {
     MapFileTileSource tileSource;
 
     public MapsforgeSingleMap(FileHandle mapFile) {
-        super(mapFile.name(), false, false);
+        super(mapFile.nameWithoutExtension(), false, false);
         this.mapFile = mapFile;
     }
 

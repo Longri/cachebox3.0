@@ -26,10 +26,10 @@ import de.longri.cachebox3.settings.types.*;
 public class Settings_Map extends Settings_Const {
 
     // NORMAL visible
-     public static final SettingFolder MapPackFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("MapPackFolder", SettingCategory.Map, NORMAL, CB.WorkPath + "/repository/maps", SettingStoreType.Global, SettingUsage.ALL, false));
+    public static final SettingFolder MapPackFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("MapPackFolder", SettingCategory.Map, NORMAL, "?/repository/maps", SettingStoreType.Global, SettingUsage.ALL, false));
     public static final SettingInt dynamicZoomLevelMax = (SettingInt) SettingsList.addSetting(new SettingInt("dynamicZoomLevelMax", SettingCategory.CarMode, NORMAL, 17, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingInt dynamicZoomLevelMin = (SettingInt) SettingsList.addSetting(new SettingInt("dynamicZoomLevelMin", SettingCategory.CarMode, NORMAL, 15, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool dynamicZoom = (SettingBool) SettingsList.addSetting(new SettingBool("dynamicZoom", SettingCategory.CarMode, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool dynamicZoom = (SettingBool) SettingsList.addSetting(new SettingBool("dynamicZoom", SettingCategory.CarMode, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingInt MoveMapCenterMaxSpeed = (SettingInt) SettingsList.addSetting(new SettingInt("MoveMapCenterMaxSpeed", SettingCategory.CarMode, NORMAL, 60, SettingStoreType.Global, SettingUsage.ACB));
 
 
@@ -53,15 +53,13 @@ public class Settings_Map extends Settings_Const {
     public static final SettingBool MapShowCompass = (SettingBool) SettingsList.addSetting(new SettingBool("MapShowCompass", SettingCategory.Map, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool ShowDirektLine = (SettingBool) SettingsList.addSetting(new SettingBool("ShowDirektLine", SettingCategory.Map, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool MapHideMyFinds = (SettingBool) SettingsList.addSetting(new SettingBool("MapHideMyFinds", SettingCategory.Map, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingFolder MapPackFolderLocal = (SettingFolder) SettingsList.addSetting(new SettingFolder("MapPackFolderLocal", SettingCategory.Map, NEVER, CB.WorkPath + "/repository/maps", SettingStoreType.Local, SettingUsage.ALL, false));
+    public static final SettingFolder MapPackFolderLocal = (SettingFolder) SettingsList.addSetting(new SettingFolder("MapPackFolderLocal", SettingCategory.Map, NEVER, "?/repository/maps", SettingStoreType.Local, SettingUsage.ALL, false));
     public static final SettingStringList CurrentMapLayer = (SettingStringList) SettingsList.addSetting(new SettingStringList("CurrentMapLayer", SettingCategory.Map, NEVER, new String[]{"Mapnik"}, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingInt lastMapState = (SettingInt) SettingsList.addSetting(new SettingInt("lastMapState", SettingCategory.Map, NEVER, 0, SettingStoreType.Global, SettingUsage.ALL));
     public static final SettingBool ShowAccuracyCircle = (SettingBool) SettingsList.addSetting(new SettingBool("ShowAccuracyCircle", SettingCategory.Map, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool ShowMapCenterCross = (SettingBool) SettingsList.addSetting(new SettingBool("ShowMapCenterCross", SettingCategory.Map, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingFolder TileCacheFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("TileCacheFolder", SettingCategory.Folder, NEVER, CB.WorkPath + "/repository/cache", SettingStoreType.Global, SettingUsage.ALL, true));
+    public static final SettingFolder TileCacheFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("TileCacheFolder", SettingCategory.Folder, NEVER, "?/repository/cache", SettingStoreType.Global, SettingUsage.ALL, true));
     public static final SettingFolder TileCacheFolderLocal = (SettingFolder) SettingsList.addSetting(new SettingFolder("TileCacheFolderLocal", SettingCategory.Folder, NEVER, "", SettingStoreType.Local, SettingUsage.ALL, true));
-
-
 
 
 //    public static final SettingIntArray ZoomCross = (SettingIntArray) SettingsList.addSetting(new SettingIntArray("ZoomCross", SettingCategory.Map, NORMAL, 16, SettingStoreType.Global, SettingUsage.ACB, CrossLevel));
@@ -80,7 +78,6 @@ public class Settings_Map extends Settings_Const {
 //    public static final SettingFile MapsforgeCarNightTheme = (SettingFile) SettingsList.addSetting(new SettingFile("MapsforgeCarNightTheme", SettingCategory.Map, NEVER, "", SettingStoreType.Global, SettingUsage.ACB, "xml"));
 //    public static final SettingBool MoveMapCenterWithSpeed = (SettingBool) SettingsList.addSetting(new SettingBool("MoveMapCenterWithSpeed", SettingCategory.CarMode, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool DEBUG_MapGrid = (SettingBool) SettingsList.addSetting(new SettingBool("DEBUG_MapGrid", SettingCategory.Debug, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
-
 
 
 }

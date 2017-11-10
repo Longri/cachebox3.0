@@ -36,7 +36,7 @@ public class Settings extends Settings_Skin {
 
     // EXPERT visible
     public static final SettingInt LongClicktime = (SettingInt) SettingsList.addSetting(new SettingInt("LongClicktime", SettingCategory.Misc, EXPERT, 600, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingFolder TrackFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("TrackFolder", SettingCategory.Folder, EXPERT, CB.WorkPath + "/user/tracks", SettingStoreType.Global, SettingUsage.ACB, true));
+    public static final SettingFolder TrackFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("TrackFolder", SettingCategory.Folder, EXPERT,  "?/user/tracks", SettingStoreType.Global, SettingUsage.ACB, true));
     public static final SettingIntArray TrackDistance = (SettingIntArray) SettingsList.addSetting(new SettingIntArray("TrackDistance", SettingCategory.Misc, EXPERT, 3, SettingStoreType.Global, SettingUsage.ACB, TrackDistanceArray));
 
 
@@ -47,12 +47,12 @@ public class Settings extends Settings_Skin {
     // NEVER visible
 
     public static final SettingEncryptedString GcAPIStaging = (SettingEncryptedString) SettingsList.addSetting(new SettingEncryptedString("GcAPIStaging", SettingCategory.Login, NEVER, "", SettingStoreType.Platform, SettingUsage.ALL));
-    public static final SettingFolder DescriptionImageFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("DescriptionImageFolder", SettingCategory.Folder, NEVER, CB.WorkPath + "/repository/images", SettingStoreType.Global, SettingUsage.ALL, true));
+    public static final SettingFolder DescriptionImageFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("DescriptionImageFolder", SettingCategory.Folder, NEVER,  "?/repository/images", SettingStoreType.Global, SettingUsage.ALL, true));
     public static final SettingFolder DescriptionImageFolderLocal = (SettingFolder) SettingsList.addSetting(new SettingFolder("DescriptionImageFolderLocal", SettingCategory.Folder, NEVER, "", SettingStoreType.Local, SettingUsage.ALL, true));
-    public static final SettingFolder SpoilerFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("SpoilerFolder", SettingCategory.Folder, NEVER, CB.WorkPath + "/repository/spoilers", SettingStoreType.Global, SettingUsage.ALL, true));
+    public static final SettingFolder SpoilerFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("SpoilerFolder", SettingCategory.Folder, NEVER,  "?/repository/spoilers", SettingStoreType.Global, SettingUsage.ALL, true));
     public static final SettingFolder SpoilerFolderLocal = (SettingFolder) SettingsList.addSetting(new SettingFolder("SpoilerFolderLocal", SettingCategory.Folder, NEVER, "", SettingStoreType.Local, SettingUsage.ALL, true));
-    public static final SettingFolder PocketQueryFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("PocketQueryFolder", SettingCategory.Folder, NEVER, CB.WorkPath + "/pocketQuery", SettingStoreType.Global, SettingUsage.ALL, true));
-    public static final SettingFolder UserImageFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("UserImageFolder", SettingCategory.Folder, NEVER, CB.WorkPath + "/user/media", SettingStoreType.Global, SettingUsage.ALL, true));
+    public static final SettingFolder PocketQueryFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("PocketQueryFolder", SettingCategory.Folder, NEVER,  "?/pocketQuery", SettingStoreType.Global, SettingUsage.ALL, true));
+    public static final SettingFolder UserImageFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("UserImageFolder", SettingCategory.Folder, NEVER, "?/user/media", SettingStoreType.Global, SettingUsage.ALL, true));
     public static final SettingBool StagingAPI = (SettingBool) SettingsList.addSetting(new SettingBool("StagingAPI", SettingCategory.Folder, NEVER, false, SettingStoreType.Global, SettingUsage.ALL));
 
     public static final SettingInt socket_timeout = (SettingInt) SettingsList.addSetting(new SettingInt("socket_timeout", SettingCategory.Internal, NEVER, 60000, SettingStoreType.Global, SettingUsage.ALL));
@@ -79,7 +79,7 @@ public class Settings extends Settings_Skin {
     public static final SettingBool CompassShowSDT = (SettingBool) SettingsList.addSetting(new SettingBool("CompassShowSDT", SettingCategory.Compass, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool CompassShowLastFound = (SettingBool) SettingsList.addSetting(new SettingBool("CompassShowLastFound", SettingCategory.Compass, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingString OverrideUrl = (SettingString) SettingsList.addSetting(new SettingString("OverrideUrl", SettingCategory.Login, NEVER, "", SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingFile DatabaseName = (SettingFile) SettingsList.addSetting(new SettingFile("DatabaseName", SettingCategory.Folder, NEVER, CB.WorkPath + "/cachebox.db3", SettingStoreType.Global, SettingUsage.ACB, "db3"));
+    public static final SettingFile DatabaseName = (SettingFile) SettingsList.addSetting(new SettingFile("DatabaseName", SettingCategory.Folder, NEVER,  "?/cachebox.db3", SettingStoreType.Global, SettingUsage.ACB, "db3"));
     public static final SettingBool StartWithAutoSelect = (SettingBool) SettingsList.addSetting(new SettingBool("StartWithAutoSelect", SettingCategory.Misc, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool MultiDBAsk = (SettingBool) SettingsList.addSetting(new SettingBool("MultiDBAsk", SettingCategory.Internal, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool ImperialUnits = (SettingBool) SettingsList.addSetting(new SettingBool("ImperialUnits", SettingCategory.Locale, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
@@ -104,7 +104,7 @@ public class Settings extends Settings_Skin {
     public static final SettingsAudio AutoResortSound = (SettingsAudio) SettingsList.addSetting(new SettingsAudio("AutoResortSound", SettingCategory.Sounds, NEVER, new Audio("data/sound/AutoResort.ogg", false, false, 1.0f), SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingsAudio GlobalVolume = (SettingsAudio) SettingsList.addSetting(new SettingsAudio("GlobalVolume", SettingCategory.Sounds, NEVER, new Audio("data/sound/Approach.ogg", false, false, 1.0f), SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingIntArray SoundApproachDistance = (SettingIntArray) SettingsList.addSetting(new SettingIntArray("SoundApproachDistance", SettingCategory.Misc, NEVER, 50, SettingStoreType.Global, SettingUsage.ACB, approach));
-    public static final SettingFolder ImageCacheFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("ImageCacheFolder", SettingCategory.Folder, NEVER, CB.WorkPath + "/repository/cache", SettingStoreType.Local, SettingUsage.ACB, true));
+    public static final SettingFolder ImageCacheFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("ImageCacheFolder", SettingCategory.Folder, NEVER, "?/repository/cache", SettingStoreType.Local, SettingUsage.ACB, true));
     public static final SettingBool SettingsShowExpert = (SettingBool) SettingsList.addSetting(new SettingBool("SettingsShowExpert", SettingCategory.Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool SettingsShowAll = (SettingBool) SettingsList.addSetting(new SettingBool("SettingsShowAll", SettingCategory.Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingFloat CompassViewSplit = (SettingFloat) SettingsList.addSetting(new SettingFloat("CompassViewSplit", SettingCategory.Compass, NEVER, 0.5f, SettingStoreType.Global, SettingUsage.ACB));
@@ -124,7 +124,7 @@ public class Settings extends Settings_Skin {
     public static final SettingString DroppedTemplate = (SettingString) SettingsList.addSetting(new SettingLongString("DroppedTemplate", SettingCategory.Templates, NORMAL, DROPPED, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingString GrabbedTemplate = (SettingString) SettingsList.addSetting(new SettingLongString("GrabbedTemplate", SettingCategory.Templates, NORMAL, GRABED, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingString PickedTemplate = (SettingString) SettingsList.addSetting(new SettingLongString("PickedTemplate", SettingCategory.Templates, NORMAL, PICKED, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingFile DraftsGarminPath = (SettingFile) SettingsList.addSetting(new SettingFile("DraftsGarminPath", SettingCategory.Folder, DEVELOPER, CB.WorkPath + "/user/geocache_visits.txt", SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingFile DraftsGarminPath = (SettingFile) SettingsList.addSetting(new SettingFile("DraftsGarminPath", SettingCategory.Folder, DEVELOPER,  "?/user/geocache_visits.txt", SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingEncryptedString GcVotePassword = (SettingEncryptedString) SettingsList.addSetting(new SettingEncryptedString("GcVotePassword", SettingCategory.Login, NORMAL, "", SettingStoreType.Platform, SettingUsage.ALL));
 
     public static final SettingInt VibrateTime = (SettingInt) SettingsList.addSetting(new SettingInt("VibrateTime", SettingCategory.Misc, EXPERT, 20, SettingStoreType.Global, SettingUsage.ACB));
@@ -150,7 +150,7 @@ public class Settings extends Settings_Skin {
 
 //    public static final SettingInt conection_timeout = (SettingInt) SettingsList.addSetting(new SettingInt("conection_timeout", SettingCategory.Internal, DEVELOPER, 10000, SettingStoreType.Global, SettingUsage.ALL));
 
-//    public static final SettingFile gpxExportFileName = (SettingFile) SettingsList.addSetting(new SettingFile("gpxExportFileName", SettingCategory.Folder, NEVER, CB.WorkPath + "/user/export.gpx", SettingStoreType.Global, SettingUsage.ACB, "gpx"));
+//    public static final SettingFile gpxExportFileName = (SettingFile) SettingsList.addSetting(new SettingFile("gpxExportFileName", SettingCategory.Folder, NEVER,  "?/user/export.gpx", SettingStoreType.Global, SettingUsage.ACB, "gpx"));
 //    public static final SettingBool TrackRecorderStartup = (SettingBool) SettingsList.addSetting(new SettingBool("TrackRecorderStartup", SettingCategory.Misc, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool ImportGpx = (SettingBool) SettingsList.addSetting(new SettingBool("ImportGpx", SettingCategory.API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool CacheMapData = (SettingBool) SettingsList.addSetting(new SettingBool("CacheMapData", SettingCategory.Internal, DEVELOPER, false, SettingStoreType.Global, SettingUsage.ACB));

@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.settings.types;
 
+import de.longri.cachebox3.CB;
+
 public class SettingFile extends SettingLongString {
     private String ext = "*";
 
@@ -25,6 +27,11 @@ public class SettingFile extends SettingLongString {
     public SettingFile(String name, SettingCategory category, SettingMode modus, String defaultValue, SettingStoreType StoreType, SettingUsage usage, String ext) {
         super(name, category, modus, defaultValue, StoreType, usage);
         this.ext = ext;
+    }
+
+    @Override
+    public void setValue(String value){
+        super.setValue(value.replace(CB.WorkPath,"?"));
     }
 
     public String getExt() {

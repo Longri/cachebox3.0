@@ -79,7 +79,6 @@ import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.utils.FastMath;
-import org.oscim.utils.Parameters;
 import org.oscim.utils.TextureAtlasUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -489,7 +488,7 @@ public class MapView extends AbstractView {
 
         // load last saved BaseMap
         String baseMapName = Settings_Map.CurrentMapLayer.getValue()[0];
-        BaseMapManager.INSTANCE.setMapFolder(Gdx.files.absolute(Settings_Map.MapPackFolder.getValue()));
+        BaseMapManager.INSTANCE.refreshMaps(Gdx.files.absolute(Settings_Map.MapPackFolder.getValue()));
         AbstractManagedMapLayer baseMap = null;
         for (int i = 0, n = BaseMapManager.INSTANCE.size; i < n; i++) {
             AbstractManagedMapLayer map = BaseMapManager.INSTANCE.get(i);
@@ -646,7 +645,7 @@ public class MapView extends AbstractView {
     private void showMapLayerMenu() {
         Menu icm = new Menu("MapViewShowLayerContextMenu");
 
-        BaseMapManager.INSTANCE.setMapFolder(Gdx.files.absolute(Settings_Map.MapPackFolder.getValue()));
+        BaseMapManager.INSTANCE.refreshMaps(Gdx.files.absolute(Settings_Map.MapPackFolder.getValue()));
 
 
         int menuID = 0;
