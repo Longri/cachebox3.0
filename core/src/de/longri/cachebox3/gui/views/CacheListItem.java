@@ -35,6 +35,7 @@ import de.longri.cachebox3.types.*;
  */
 public class CacheListItem extends ListViewItem implements Disposable {
 
+
     public static ListViewItem getListItem(int listIndex, final AbstractCache abstractCache) {
         if (abstractCache == null) return null;
 
@@ -59,7 +60,8 @@ public class CacheListItem extends ListViewItem implements Disposable {
 
         ListViewItem listViewItem = new CacheListItem(listIndex, abstractCache.getType(), abstractCache.getName(),
                 (int) (abstractCache.getDifficulty() * 2), (int) (abstractCache.getTerrain() * 2),
-                (int) Math.min(abstractCache.getRating() * 2, 5 * 2), abstractCache.getSize(), abstractCache.getSize().toShortString(), left, right, isAvailable);
+                (int) Math.min(abstractCache.getRating() * 2, 5 * 2), abstractCache.getSize(),
+                abstractCache.getSize().toShortString(), left, right, isAvailable, abstractCache.getFavoritePoints());
         return listViewItem;
     }
 
@@ -78,11 +80,12 @@ public class CacheListItem extends ListViewItem implements Disposable {
     private final String shortSizeString;
     private final Drawable leftInfoIcon, rightInfoIcon;
     private final boolean isAvailable;
+    private final int favPoints;
 
 
     private CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
                           int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
-                          LogTypes rightLogType, boolean isAvailable) {
+                          LogTypes rightLogType, boolean isAvailable, int favPoints) {
         super(listIndex);
         this.difficulty = difficulty;
         this.terrain = terrain;
@@ -95,6 +98,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
         this.leftInfoIcon = leftLogType == null ? null : leftLogType.getDrawable(style.logTypesStyle);
         this.rightInfoIcon = rightLogType == null ? null : rightLogType.getDrawable(style.logTypesStyle);
         this.isAvailable = isAvailable;
+        this.favPoints = favPoints;
     }
 
 
@@ -165,6 +169,15 @@ public class CacheListItem extends ListViewItem implements Disposable {
         line2.add(vLabel).padLeft(CB.scaledSizes.MARGIN);
         Stars vStars = new Stars(this.vote);
         line2.add(vStars);
+
+        if (this.favPoints > 0) {
+            // don't show we have no favpoint info's
+            Image favpointIcon = new Image(CB.getSkin().getMenuIcon.favPoint);
+            line2.add(favpointIcon).padLeft(CB.scaledSizes.MARGIN).align(Align.top);
+            VisLabel fLabel = new VisLabel("x" + Integer.toString(this.favPoints), distanceLabelStyle);
+            line2.add(fLabel);
+        }
+
 
         this.add(line2).colspan(3).align(Align.left);
 

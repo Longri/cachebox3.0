@@ -860,6 +860,10 @@
       "path": "svg/event.svg",
       "scale": 0.2
     },
+    "favpoint": {
+      "path": "svg/favpoint.svg",
+      "scale": 0.2
+    },
     "fieldnoteListIcon": {
       "path": "svg/fieldnoteListIcon.svg",
       "scale": 0.18
@@ -867,6 +871,10 @@
     "file": {
       "path": "svg/file.svg",
       "scale": 0.95
+    },
+    "fileTransfer": {
+      "path": "svg/fileTransfer.svg",
+      "scale": 0.21
     },
     "filebackIcon": {
       "path": "svg/backIcon.svg",
@@ -2485,7 +2493,8 @@
       "GC_Live": "gc_liveIcon",
       "Close": "closeIcon",
       "Help": "helpIcon",
-      "ExpiredApiKey": "api_key_ex"
+      "ExpiredApiKey": "api_key_ex",
+      "Database": "database"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MenuIconStyle": {
@@ -2498,6 +2507,8 @@
       "mapLayer": "map-layer",
       "deleteAllDrafts": "deleteIcon",
       "edit": "edit",
+      "fileTransfer": "fileTransfer",
+      "favPoint": "favpoint",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
       "deleteIcon": "deleteIcon",

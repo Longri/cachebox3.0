@@ -860,6 +860,10 @@
       "path": "svg/event.svg",
       "scale": 0.2
     },
+    "favpoint": {
+      "path": "svg/favpoint.svg",
+      "scale": 0.2
+    },
     "fieldnoteListIcon": {
       "path": "svg/fieldnoteListIcon.svg",
       "scale": 0.18
@@ -2504,6 +2508,7 @@
       "deleteAllDrafts": "deleteIcon",
       "edit": "edit",
       "fileTransfer": "fileTransfer",
+      "favPoint": "favpoint",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
       "deleteIcon": "deleteIcon",

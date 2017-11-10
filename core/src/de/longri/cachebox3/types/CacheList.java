@@ -123,12 +123,14 @@ public class CacheList extends Array<AbstractCache> {
                             if (!nextAbstractCache.isFound()) {
                                 if (!nextAbstractCache.ImTheOwner()) {
                                     if ((nextAbstractCache.getType() == CacheTypes.Event) || (nextAbstractCache.getType() == CacheTypes.MegaEvent) || (nextAbstractCache.getType() == CacheTypes.CITO) || (nextAbstractCache.getType() == CacheTypes.Giga)) {
-                                        Calendar dateHidden = GregorianCalendar.getInstance();
-                                        Calendar today = GregorianCalendar.getInstance();
-                                        dateHidden.setTime(nextAbstractCache.getDateHidden());
-                                        if (("" + today.get(Calendar.DAY_OF_MONTH) + today.get(Calendar.MONTH) + today.get(Calendar.YEAR))
-                                                .equals("" + dateHidden.get(Calendar.DAY_OF_MONTH) + dateHidden.get(Calendar.MONTH) + dateHidden.get(Calendar.YEAR))) {
-                                            break;
+                                        if (nextAbstractCache.getDateHidden() != null) {
+                                            Calendar dateHidden = GregorianCalendar.getInstance();
+                                            Calendar today = GregorianCalendar.getInstance();
+                                            dateHidden.setTime(nextAbstractCache.getDateHidden());
+                                            if (("" + today.get(Calendar.DAY_OF_MONTH) + today.get(Calendar.MONTH) + today.get(Calendar.YEAR))
+                                                    .equals("" + dateHidden.get(Calendar.DAY_OF_MONTH) + dateHidden.get(Calendar.MONTH) + dateHidden.get(Calendar.YEAR))) {
+                                                break;
+                                            }
                                         }
                                     } else {
                                         if (nextAbstractCache.getType() != CacheTypes.Mystery) {
