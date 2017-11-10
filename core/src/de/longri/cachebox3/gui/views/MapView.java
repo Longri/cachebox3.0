@@ -269,7 +269,7 @@ public class MapView extends AbstractView {
             log.debug("Tile.SIZE:" + Integer.toString(Tile.SIZE));
             log.debug("Canvas.dpi:" + Float.toString(CanvasAdapter.dpi));
         }
-        
+
         CacheboxMain.drawMap = true;
         map = new CacheboxMapAdapter() {
 
@@ -645,7 +645,7 @@ public class MapView extends AbstractView {
     private void showMapLayerMenu() {
         Menu icm = new Menu("MapViewShowLayerContextMenu");
 
-        BaseMapManager.INSTANCE.refreshMaps(Gdx.files.absolute(Settings_Map.MapPackFolder.getValue()));
+        BaseMapManager.INSTANCE.refreshMaps(Gdx.files.absolute(CB.WorkPath));
 
 
         int menuID = 0;
