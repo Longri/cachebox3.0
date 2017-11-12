@@ -185,7 +185,8 @@ public class CheckStateActivity extends ActivityBase {
                     if (Database.Data.Query == null || Database.Data.Query.size == 0)
                         return;
                     for (int i = 0, n = Database.Data.Query.size; i < n; i++) {
-                        chkList.add(Database.Data.Query.get(i));
+                        //we want to change the Caches, so we need a changeable instance
+                        chkList.add(Database.Data.Query.get(i).getMutable(Database.Data));
                     }
 
                 }
