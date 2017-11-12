@@ -42,12 +42,22 @@ public class Cache3DAO extends AbstractCacheDAO {
     }
 
     @Override
+    public boolean updateDatabase(Database database, AbstractCache abstractCache) {
+        return writeOrUpdate(true, database, abstractCache);
+    }
+
+    @Override
     public void writeToDatabase(Database database, AbstractCache abstractCache) {
+        writeOrUpdate(false, database, abstractCache);
+    }
+
+    private boolean writeOrUpdate(boolean update, Database database, AbstractCache abstractCache) {
+
+        boolean noError = true;
 
         //Write to CacheCoreInfo Table
-
         Database.Parameters args = new Database.Parameters();
-        args.put("Id", abstractCache.getId());
+        if (!update) args.put("Id", abstractCache.getId());
         args.put("Latitude", abstractCache.latitude);
         args.put("Longitude", abstractCache.longitude);
         args.put("Size", abstractCache.getSize().ordinal());
@@ -65,11 +75,20 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("FavPoints", abstractCache.getFavoritePoints());
         args.put("Vote", (int) (abstractCache.getRating() * 2));
 
-        if (database.insert("CacheCoreInfo", args) <= 0) {
-            //Cache not inserted, can't write other information's!
-            log.error("Cache {} not inserted on CacheCoreInfo table", abstractCache.toString());
-            return;
+        if (update) {
+            if (database.update("CacheCoreInfo", args, "WHERE id=?", new String[]{Long.toString(abstractCache.getId())}) <= 0) {
+                //Cache not inserted, can't write other information's!
+                log.error("Cache {} not inserted on CacheCoreInfo table", abstractCache.toString());
+                return false;
+            }
+        } else {
+            if (database.insert("CacheCoreInfo", args) <= 0) {
+                //Cache not inserted, can't write other information's!
+                log.error("Cache {} not inserted on CacheCoreInfo table", abstractCache.toString());
+                return false;
+            }
         }
+
 
         //Write to CacheInfo table
         args.clear();
@@ -81,10 +100,21 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("state", abstractCache.getState());
         args.put("country", abstractCache.getCountry());
         args.put("ApiStatus", abstractCache.getApiState());
-        if (database.insert("CacheInfo", args) <= 0) {
-            //CacheInfo not inserted, can't write other information's!
-            log.error("Cache {} not inserted on CacheInfo table", abstractCache.toString());
+
+        if (update) {
+            if (database.update("CacheInfo", args, "WHERE id=?", new String[]{Long.toString(abstractCache.getId())}) <= 0) {
+                //CacheInfo not inserted, can't write other information's!
+                log.error("Cache {} not inserted on CacheInfo table", abstractCache.toString());
+                noError = false;
+            }
+        } else {
+            if (database.insert("CacheInfo", args) <= 0) {
+                //CacheInfo not inserted, can't write other information's!
+                log.error("Cache {} not inserted on CacheInfo table", abstractCache.toString());
+                noError = false;
+            }
         }
+
 
         //Write to CacheText table
         args.clear();
@@ -95,10 +125,21 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("Notes", abstractCache.getTmpNote());
         args.put("Solver", abstractCache.getTmpSolver());
         args.put("ShortDescription", abstractCache.getShortDescription(database));
-        if (database.insert("CacheText", args) <= 0) {
-            //CacheInfo not inserted, can't write other information's!
-            log.error("Cache {} not inserted on CacheText table", abstractCache.toString());
+
+        if (update) {
+            if (database.update("CacheText", args, "WHERE id=?", new String[]{Long.toString(abstractCache.getId())}) <= 0) {
+                //CacheInfo not inserted, can't write other information's!
+                log.error("Cache {} not inserted on CacheText table", abstractCache.toString());
+                noError = false;
+            }
+        } else {
+            if (database.insert("CacheText", args) <= 0) {
+                //CacheInfo not inserted, can't write other information's!
+                log.error("Cache {} not inserted on CacheText table", abstractCache.toString());
+                noError = false;
+            }
         }
+
 
         //Write to Attributes table
         args.clear();
@@ -112,10 +153,20 @@ public class Cache3DAO extends AbstractCacheDAO {
             args.put("AttributesNegativeHigh", abstractCache.getAttributesNegative().getHigh());
         }
 
-        if (database.insert("Attributes", args) <= 0) {
-            //CacheInfo not inserted, can't write other information's!
-            log.error("Cache {} not inserted on Attributes table", abstractCache.toString());
+        if (update) {
+            if (database.update("Attributes", args, "WHERE id=?", new String[]{Long.toString(abstractCache.getId())}) <= 0) {
+                //CacheInfo not inserted, can't write other information's!
+                log.error("Cache {} not inserted on Attributes table", abstractCache.toString());
+                noError = false;
+            }
+        } else {
+            if (database.insert("Attributes", args) <= 0) {
+                //CacheInfo not inserted, can't write other information's!
+                log.error("Cache {} not inserted on Attributes table", abstractCache.toString());
+                noError = false;
+            }
         }
+
         args.clear();
 
         //store Waypoints
@@ -126,9 +177,17 @@ public class Cache3DAO extends AbstractCacheDAO {
             int n = waypoints.size;
             while (n-- > 0) {
                 AbstractWaypoint wp = waypoints.get(n);
-                WDAO.writeToDatabase(database, wp);
+                if (update) {
+                    if (!WDAO.updateDatabase(database, wp)) {
+                        WDAO.writeToDatabase(database, wp);
+                    }
+                } else {
+                    WDAO.writeToDatabase(database, wp);
+                }
+
             }
         }
+        return noError;
     }
 
     @Override
@@ -136,10 +195,6 @@ public class Cache3DAO extends AbstractCacheDAO {
 
     }
 
-    @Override
-    public boolean updateDatabase(Database database, AbstractCache abstractCache) {
-        return false;
-    }
 
     @Override
     public AbstractCache getFromDbByCacheId(Database database, long cacheID, boolean withWaypoints) {
