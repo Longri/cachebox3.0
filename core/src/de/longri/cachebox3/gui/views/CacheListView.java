@@ -193,6 +193,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                             selectedIndex++;
                         }
                         try {
+                            if (selectedIndex >= Database.Data.Query.size)
+                                selectedIndex = 0;// select first item, if Cache not found
                             listView.setSelection(selectedIndex);
                             listView.setSelectedItemVisible(false);
                         } catch (Exception e) {

@@ -58,8 +58,8 @@ public class Cache3DAO extends AbstractCacheDAO {
         //Write to CacheCoreInfo Table
         Database.Parameters args = new Database.Parameters();
         if (!update) args.put("Id", abstractCache.getId());
-        args.put("Latitude", abstractCache.latitude);
-        args.put("Longitude", abstractCache.longitude);
+        args.put("Latitude", abstractCache.getLatitude());
+        args.put("Longitude", abstractCache.getLongitude());
         args.put("Size", abstractCache.getSize().ordinal());
         args.put("Difficulty", (int) (abstractCache.getDifficulty() * 2));
         args.put("Terrain", (int) (abstractCache.getTerrain() * 2));
@@ -77,8 +77,6 @@ public class Cache3DAO extends AbstractCacheDAO {
 
         if (update) {
             if (database.update("CacheCoreInfo", args, "WHERE id=?", new String[]{Long.toString(abstractCache.getId())}) <= 0) {
-                //Cache not inserted, can't write other information's!
-                log.error("Cache {} not inserted on CacheCoreInfo table", abstractCache.toString());
                 return false;
             }
         } else {
@@ -103,8 +101,6 @@ public class Cache3DAO extends AbstractCacheDAO {
 
         if (update) {
             if (database.update("CacheInfo", args, "WHERE id=?", new String[]{Long.toString(abstractCache.getId())}) <= 0) {
-                //CacheInfo not inserted, can't write other information's!
-                log.error("Cache {} not inserted on CacheInfo table", abstractCache.toString());
                 noError = false;
             }
         } else {
@@ -128,8 +124,6 @@ public class Cache3DAO extends AbstractCacheDAO {
 
         if (update) {
             if (database.update("CacheText", args, "WHERE id=?", new String[]{Long.toString(abstractCache.getId())}) <= 0) {
-                //CacheInfo not inserted, can't write other information's!
-                log.error("Cache {} not inserted on CacheText table", abstractCache.toString());
                 noError = false;
             }
         } else {
@@ -155,8 +149,6 @@ public class Cache3DAO extends AbstractCacheDAO {
 
         if (update) {
             if (database.update("Attributes", args, "WHERE id=?", new String[]{Long.toString(abstractCache.getId())}) <= 0) {
-                //CacheInfo not inserted, can't write other information's!
-                log.error("Cache {} not inserted on Attributes table", abstractCache.toString());
                 noError = false;
             }
         } else {

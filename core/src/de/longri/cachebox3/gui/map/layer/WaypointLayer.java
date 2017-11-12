@@ -209,21 +209,23 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
         //add waypoints from selected Cache or all Waypoints if set
         AbstractWaypoint selWp = null;
-        if (Settings.ShowAllWaypoints.getValue() || sel) {
-            selWp = selectedWaypoint = EventHandler.getSelectedWaypoint();
-            for (AbstractWaypoint waypoint : abstractCache.getWaypoints()) {
-                try {
-                    MapWayPointItem waypointCluster = getMapWayPointItem(waypoint, dis, selectedWaypoint != null && selectedWaypoint.equals(waypoint));
-                    mItemList.add(waypointCluster);
-                } catch (GdxRuntimeException e) {
-                    if (e.getMessage().startsWith(ERROR_MSG)) {
-                        String iconName = e.getMessage().replace(ERROR_MSG, "");
-                        if (!missingIconList.contains(iconName, false))
-                            missingIconList.add(iconName);
-                    } else {
-                        e.printStackTrace();
+        if (abstractCache.getWaypoints() != null) {
+            if (Settings.ShowAllWaypoints.getValue() || sel) {
+                selWp = selectedWaypoint = EventHandler.getSelectedWaypoint();
+                for (AbstractWaypoint waypoint : abstractCache.getWaypoints()) {
+                    try {
+                        MapWayPointItem waypointCluster = getMapWayPointItem(waypoint, dis, selectedWaypoint != null && selectedWaypoint.equals(waypoint));
+                        mItemList.add(waypointCluster);
+                    } catch (GdxRuntimeException e) {
+                        if (e.getMessage().startsWith(ERROR_MSG)) {
+                            String iconName = e.getMessage().replace(ERROR_MSG, "");
+                            if (!missingIconList.contains(iconName, false))
+                                missingIconList.add(iconName);
+                        } else {
+                            e.printStackTrace();
+                        }
+                        continue;
                     }
-                    continue;
                 }
             }
         }
