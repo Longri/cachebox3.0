@@ -259,9 +259,11 @@ public class WaypointView extends AbstractView {
 
             int listIndex = ((ListViewItem) actor).getListIndex();
 
-            actWaypoint = actAbstractCache.getWaypoints().get(listIndex - 1);
-            if (WaypointView.this.listView != null)
-                WaypointView.this.listView.setSelection(listIndex);
+            if (listIndex > 0) {
+                actWaypoint = actAbstractCache.getWaypoints().get(listIndex - 1);
+                if (WaypointView.this.listView != null)
+                    WaypointView.this.listView.setSelection(listIndex);
+            }
             final Menu contextMenu = getContextMenu();
             Gdx.app.postRunnable(new Runnable() {
                 @Override
@@ -339,7 +341,7 @@ public class WaypointView extends AbstractView {
             coord = EventHandler.getSelectedCache();
         AbstractWaypoint newWP = new MutableWaypoint(newGcCode, CacheTypes.ReferencePoint
                 , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
-
+        newWP.setUserWaypoint(true);
 
         showEditWpDialog(newWP);
     }

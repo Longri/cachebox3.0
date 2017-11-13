@@ -542,7 +542,7 @@ public class Database {
 
 
     public static boolean waypointExists(String gcCode) {
-        SQLiteGdxDatabaseCursor c = Database.Data.rawQuery("select GcCode from Waypoint where GcCode=@gccode", new String[]{gcCode});
+        SQLiteGdxDatabaseCursor c = Database.Data.rawQuery("select GcCode from Waypoints where GcCode=?", new String[]{gcCode});
         {
             c.moveToFirst();
             while (!c.isAfterLast()) {
