@@ -28,19 +28,23 @@ public class CharSequenceButton extends VisTextButton {
     public CharSequenceButton(CharSequence text) {
         super(EMPTY);
         getLabel().setText(text);
+        setSize(getPrefWidth(), getPrefHeight());
     }
 
     public CharSequenceButton(CharSequence text, String styleName) {
         super(EMPTY, styleName);
         getLabel().setText(text);
+        setSize(getPrefWidth(), getPrefHeight());
     }
 
     public CharSequenceButton(CharSequence text, VisTextButtonStyle buttonStyle) {
         super(EMPTY, buttonStyle);
         getLabel().setText(text);
+        setSize(getPrefWidth(), getPrefHeight());
     }
 
     public void setText(CharSequence sequence) {
         getLabel().setText(sequence);
+        setSize(getPrefWidth(), getPrefHeight());
     }
 }
