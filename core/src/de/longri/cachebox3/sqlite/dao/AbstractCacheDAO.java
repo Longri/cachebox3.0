@@ -27,8 +27,6 @@ public abstract class AbstractCacheDAO {
 
     public abstract void writeToDatabase(Database database, AbstractCache abstractCache);
 
-    public abstract void writeToDatabaseFound(Database database, AbstractCache abstractCache);
-
     public abstract boolean updateDatabase(Database database, AbstractCache abstractCache);
 
     public abstract AbstractCache getFromDbByCacheId(Database database, long CacheID, boolean withWaypoints);
@@ -39,4 +37,6 @@ public abstract class AbstractCacheDAO {
      * @param writeTmp
      */
     public abstract boolean updateDatabaseCacheState(Database database, AbstractCache writeTmp);
+
+    public abstract void writeCacheBooleanStore(Database data, int newBooleanStore, long id);
 }

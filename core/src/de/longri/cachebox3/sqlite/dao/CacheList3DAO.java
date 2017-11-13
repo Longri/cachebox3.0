@@ -18,15 +18,20 @@ package de.longri.cachebox3.sqlite.dao;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.ImmutableCache;
 import de.longri.cachebox3.types.CacheList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Created by Longri on 19.10.2017.
  */
 public class CacheList3DAO extends AbstractCacheListDAO {
+
+    private final Logger log = LoggerFactory.getLogger(CacheList3DAO.class);
 
     @Override
     public CacheList readCacheList(Database database, CacheList cacheList, String where, boolean fullDetails, boolean loadAllWaypoints) {
@@ -68,5 +73,35 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             cache.setWaypoints(cachewaypoints);
         }
         return cacheList;
+    }
+
+    @Override
+    public AbstractCache reloadCache(Database database, CacheList cacheList, AbstractCache cache) {
+        String statement = "SELECT * from CacheCoreInfo WHERE id=?";
+
+        SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, new String[]{Long.toString(cache.getId())});
+        cursor.moveToFirst();
+        ImmutableCache newCache = null;
+        while (!cursor.isAfterLast()) {
+            newCache = new ImmutableCache(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        if (newCache == null) {
+            log.warn("Can't reload Cache! Can't find on DB");
+            return null;
+        }
+
+        //read waypoints
+        Array<AbstractWaypoint> waypoints = new Waypoint3DAO().getWaypointsFromCacheID(database, cache.getId(), true);
+        newCache.setWaypoints(waypoints);
+
+
+        //remove cache by id
+        AbstractCache remove = cacheList.getCacheById(cache.getId());
+        cacheList.removeValue(remove, true);
+        cacheList.add(newCache);
+        return newCache;
     }
 }

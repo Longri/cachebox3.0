@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -299,11 +300,6 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
-    public void setFound(boolean found) {
-        throwNotChangeable("Found");
-    }
-
-    @Override
     public void setHasUserData(boolean hasUserData) {
         throwNotChangeable("HasUserData");
     }
@@ -459,6 +455,13 @@ public class ImmutableCache extends AbstractCache {
         } finally {
             cursor.close();
         }
+    }
+
+    @Override
+    public void setFound(boolean found) {
+        //write direct to DB
+        int newBooleanStore = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, found, booleanStore);
+        DaoFactory.CACHE_DAO.writeCacheBooleanStore(Database.Data, newBooleanStore, getId());
     }
 
 

@@ -229,6 +229,7 @@ public class DraftEntry {
         args.put("directLog", isDirectLog);
         try {
             long count = Database.Drafts.update("FieldNotes", args, "id=" + Id, null);
+            Database.Drafts.endTransaction();
             if (count > 0)
                 return;
         } catch (Exception exc) {
@@ -238,7 +239,8 @@ public class DraftEntry {
 
     public void deleteFromDatabase() {
         try {
-            Database.Drafts.delete("FieldNotes", "id=" + Id, null);
+            Database.Drafts.delete("FieldNotes", "Id=" + Id, null);
+            Database.Drafts.endTransaction();
         } catch (Exception exc) {
             return;
         }

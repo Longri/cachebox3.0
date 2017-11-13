@@ -34,6 +34,27 @@ public class SettingFile extends SettingLongString {
         super.setValue(value.replace(CB.WorkPath,"?"));
     }
 
+    @Override
+    public String getValue() {
+        return replacePathSeparator(value);
+    }
+
+    @Override
+    public String getDefaultValue() {
+        return replacePathSeparator(defaultValue);
+    }
+
+
+    private String replacePathSeparator(String rep) {
+        if (rep.startsWith("?")) {
+            rep = CB.WorkPath + System.getProperty("file.separator") + "Repositories" + rep.substring(1);
+        }
+        rep = rep.replace("\\", System.getProperty("file.separator"));
+        rep = rep.replace("/", System.getProperty("file.separator"));
+        return rep;
+    }
+
+
     public String getExt() {
         return ext;
     }

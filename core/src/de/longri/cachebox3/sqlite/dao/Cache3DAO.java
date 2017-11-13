@@ -183,12 +183,6 @@ public class Cache3DAO extends AbstractCacheDAO {
     }
 
     @Override
-    public void writeToDatabaseFound(Database database, AbstractCache abstractCache) {
-
-    }
-
-
-    @Override
     public AbstractCache getFromDbByCacheId(Database database, long cacheID, boolean withWaypoints) {
         String statement = "SELECT * from CacheCoreInfo WHERE Id=?";
         SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(cacheID)});
@@ -206,5 +200,14 @@ public class Cache3DAO extends AbstractCacheDAO {
     @Override
     public boolean updateDatabaseCacheState(Database database, AbstractCache writeTmp) {
         return false;
+    }
+
+    @Override
+    public void writeCacheBooleanStore(Database database, int newBooleanStore, long id) {
+        Database.Parameters args = new Database.Parameters();
+        args.put("BooleanStore", newBooleanStore);
+        if (database.update("CacheCoreInfo", args, " Id=?", new String[]{Long.toString(id)}) <= 0) {
+            log.error("Can't update booleanStore");
+        }
     }
 }

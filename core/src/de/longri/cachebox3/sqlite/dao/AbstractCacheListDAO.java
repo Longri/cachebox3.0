@@ -16,6 +16,7 @@
 package de.longri.cachebox3.sqlite.dao;
 
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheList;
 
 /**
@@ -23,4 +24,6 @@ import de.longri.cachebox3.types.CacheList;
  */
 public abstract class AbstractCacheListDAO {
     public abstract CacheList readCacheList(Database database, CacheList cacheList, String where, boolean fullDetails, boolean loadAllWaypoints);
+
+    public abstract AbstractCache reloadCache(Database database, CacheList cacheList, AbstractCache selectedCache);
 }

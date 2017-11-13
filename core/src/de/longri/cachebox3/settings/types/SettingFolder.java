@@ -34,15 +34,15 @@ public class SettingFolder extends SettingLongString {
 
     @Override
     public String getValue() {
-        return replacePathSaperator(value);
+        return replacePathSeparator(value);
     }
 
     @Override
     public String getDefaultValue() {
-        return replacePathSaperator(defaultValue);
+        return replacePathSeparator(defaultValue);
     }
 
-    private String replacePathSaperator(String rep) {
+    private String replacePathSeparator(String rep) {
         if (rep.startsWith("?")) {
             rep = CB.WorkPath + System.getProperty("file.separator") + "Repositories" + rep.substring(1);
         }

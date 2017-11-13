@@ -36,6 +36,8 @@ import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.utils.CB_RectF;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.NONE;
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.SINGLE;
 
@@ -216,11 +218,6 @@ public class ListView extends WidgetGroup {
         emptyLabel = null;
         if (style.emptyFont == null || style.emptyFontColor == null || emptyString == null)
             return;
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = style.emptyFont;
-        labelStyle.fontColor = style.emptyFontColor;
-        emptyLabel = new VisLabel(this.emptyString, labelStyle);
-        emptyLabel.setAlignment(Align.center, Align.center);
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
@@ -269,18 +266,21 @@ public class ListView extends WidgetGroup {
     }
 
 
-    private boolean atWork = false;
+    private AtomicBoolean atWork = new AtomicBoolean(false);
 
+    public boolean layoutAtWork() {
+        return atWork.get();
+    }
 
     @Override
     public synchronized void layout() {
-        if (atWork) return;
-        atWork = true;
+        if (atWork.get()) return;
+        atWork.set(true);
 
 
         if (!this.needsLayout) {
             super.layout();
-            atWork = false;
+            atWork.set(false);
             return;
         }
 
@@ -289,10 +289,25 @@ public class ListView extends WidgetGroup {
         itemYPos.clear();
         itemViews.clear();
 
-        if (emptyLabel != null && (adapter == null || adapter.getCount() == 0)) {
+        if ((adapter == null || adapter.getCount() == 0)) {
+            if (emptyLabel == null && (this.emptyString != null && this.emptyString.length() > 0)) {
+                Label.LabelStyle labelStyle = new Label.LabelStyle();
+                labelStyle.font = style.emptyFont;
+                labelStyle.fontColor = style.emptyFontColor;
+                emptyLabel = new VisLabel(this.emptyString, labelStyle);
+                emptyLabel.setAlignment(Align.center, Align.center);
+            } else {
+                if (emptyLabel == null) {
+                    this.needsLayout = false;
+                    atWork.set(false);
+                    return;
+                }
+            }
             log.debug("show empty massage");
             this.addActor(emptyLabel);
             emptyLabel.setBounds(0, 0, getWidth(), getHeight());
+            this.needsLayout = false;
+            atWork.set(false);
             return;
         }
 
@@ -371,7 +386,7 @@ public class ListView extends WidgetGroup {
         this.addActor(scrollPane);
         scrollPane.layout();
         needsLayout = false;
-        atWork = false;
+        atWork.set(false);
         log.debug("Finish Layout Items");
     }
 
