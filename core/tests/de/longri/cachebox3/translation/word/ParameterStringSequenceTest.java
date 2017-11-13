@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.translation.word;
 
+import de.longri.cachebox3.utils.CharSequenceUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,59 +31,43 @@ class ParameterStringSequenceTest {
         String replaced = "Error: Function first/Parameter second (third) is no valid fourth: [fifth]";
 
         ParameterStringSequence pss = new ParameterStringSequence(txt);
-        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", equals(txt, pss));
+        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
 
 
         pss.replace("first", "second", "third", "fourth", "fifth");
-        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", equals(replaced, pss));
+        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
 
 
         txt = "text {2} Test {1}";
         replaced = "text second Test first";
         pss = new ParameterStringSequence(txt);
-        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", equals(txt, pss));
+        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
         pss.replace("first", "second", "third", "fourth", "fifth");
-        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", equals(replaced, pss));
+        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
 
 
         txt = "text {} Test {}";
         replaced = "text first Test second";
         pss = new ParameterStringSequence(txt);
-        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", equals(txt, pss));
+        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
         pss.replace("first", "second", "third", "fourth", "fifth");
-        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", equals(replaced, pss));
+        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
 
 
         txt = "text ";
         replaced = "text ";
         pss = new ParameterStringSequence(txt);
-        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", equals(txt, pss));
+        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
         pss.replace("first", "second", "third", "fourth", "fifth");
-        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", equals(replaced, pss));
+        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
 
 
         txt = "Error: Function {1}/Parameter {2} ({3}) is no valid {4}: [{5}]";
         replaced = "Error: Function first/Parameter second (third) is no valid : []";
         pss = new ParameterStringSequence(txt);
-        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", equals(txt, pss));
+        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
         pss.replace("first", "second", "third");
-        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", equals(replaced, pss));
+        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
 
     }
-
-
-    //##################################################################
-    //# Helper
-    //##################################################################
-
-    private boolean equals(CharSequence s1, CharSequence s2) {
-        if (s1.length() != s2.length()) return false;
-        int n = s1.length();
-        while (n-- > 0) {
-            if (s1.charAt(n) != s2.charAt(n)) return false;
-        }
-        return true;
-    }
-
-
 }

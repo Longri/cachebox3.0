@@ -59,7 +59,7 @@ public class MutableWaypoint extends AbstractWaypoint {
         this.clue = waypoint.getClue(database).toString();
     }
 
-    public MutableWaypoint(String title, CacheTypes type,  double latitude, double longitude, long cacheId, String s1, String gcCode) {
+    public MutableWaypoint(String title, CacheTypes type, double latitude, double longitude, long cacheId, String s1, String gcCode) {
         super(latitude, longitude);
         this.latitude = latitude;
         this.longitude = longitude;

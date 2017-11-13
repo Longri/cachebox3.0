@@ -142,10 +142,9 @@ public class CoordinateActivity extends ActivityBase {
 
     public CoordinateActivity(Coordinate coordinate) {
         super("CorrdinateActivity");
-//        this.setDebug(true);
         this.coordinate = coordinate;
-        this.lat = coordinate.latitude;
-        this.lon = coordinate.longitude;
+        this.lat = coordinate.getLatitude();
+        this.lon = coordinate.getLongitude();
     }
 
     @Override
@@ -160,9 +159,7 @@ public class CoordinateActivity extends ActivityBase {
     }
 
     private void create() {
-
         this.defaults().pad(CB.scaledSizes.MARGIN_HALF);
-
 
         createToggleBtn();
         valueCell = createValues();
@@ -174,16 +171,13 @@ public class CoordinateActivity extends ActivityBase {
 
         btnGroup.setChecked("Min");
         tglListener.clicked(null, 0, 0);
-
     }
 
     private Group createPlaceHolder() {
         this.row();
-
         Group group = new Group();
         group.addActor(new VisLabel(""));
         this.add(group);
-
         return group;
     }
 
@@ -194,13 +188,9 @@ public class CoordinateActivity extends ActivityBase {
 
     private Cell createValues() {
         this.row();
-
         Group group = new Group();
-
         group.addActor(decValues);
-
         float height = (CB.scaledSizes.BUTTON_HEIGHT * 2) + CB.scaledSizes.MARGIN * 4;
-
         return this.add(group).height(new Value.Fixed(height));
     }
 
@@ -253,9 +243,7 @@ public class CoordinateActivity extends ActivityBase {
         cancelOkTable.add(btnOk).width(new Value.Fixed(btnWidth));
         cancelOkTable.add(btnCancel).width(new Value.Fixed(btnWidth));
 
-
         this.add(cancelOkTable).bottom().width(new Value.Fixed(Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2));
-
     }
 
     @Override

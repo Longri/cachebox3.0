@@ -16,6 +16,7 @@
 package de.longri.cachebox3.translation.word;
 
 import com.badlogic.gdx.utils.CharArray;
+import de.longri.cachebox3.utils.CharSequenceUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -41,24 +42,9 @@ class CompoundCharSequenceTest {
         sequence.add(mutable1, t1, sb);
 
         assertThat("Length must equals  '" + shouldSequence.length() + "' : '" + sequence.length() + "'", shouldSequence.length() == sequence.length());
-        assertThat("Sequence must equals  '" + shouldSequence + "' : '" + sequence + "'", equals(shouldSequence, sequence));
+        assertThat("Sequence must equals  '" + shouldSequence + "' : '" + sequence + "'", CharSequenceUtil.equals(shouldSequence, sequence));
         assertThat("toString() must equals  '" + shouldSequence + "' : '" + sequence + "'", shouldSequence.equals(sequence.toString()));
 
 
-
     }
-
-    //##################################################################
-    //# Helper
-    //##################################################################
-
-    private boolean equals(CharSequence s1, CharSequence s2) {
-        if (s1.length() != s2.length()) return false;
-        int n = s1.length();
-        while (n-- > 0) {
-            if (s1.charAt(n) != s2.charAt(n)) return false;
-        }
-        return true;
-    }
-
 }

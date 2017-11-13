@@ -18,14 +18,12 @@ package de.longri.cachebox3.translation.word;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.TestUtils;
-import de.longri.cachebox3.types.MutableCache;
+import de.longri.cachebox3.utils.CharSequenceUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jol.info.ClassLayout;
 
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.lang.instrument.Instrumentation;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -50,16 +48,16 @@ class WordStoreTest {
         WordStore store = new WordStore();
 
         StringSequence m1 = store.add(t1);
-        assertThat("MutableString must equals  '" + t1 + "' : '" + m1 + "'", equals(t1, m1));
+        assertThat("MutableString must equals  '" + t1 + "' : '" + m1 + "'", CharSequenceUtil.equals(t1, m1));
         assertThat("toString() must equals  '" + t1 + "' : '" + m1 + "'", t1.equals(m1.toString()));
 
 
         StringSequence m2 = store.add(t2);
-        assertThat("MutableString must equals  '" + t2 + "' : '" + m2 + "'", equals(t2, m2));
+        assertThat("MutableString must equals  '" + t2 + "' : '" + m2 + "'", CharSequenceUtil.equals(t2, m2));
         assertThat("toString() must equals  '" + t2 + "' : '" + m2 + "'", t2.equals(m2.toString()));
 
         StringSequence m3 = store.add(t3);
-        assertThat("MutableString must equals  '" + t3 + "' : '" + m3 + "'", equals(t3, m3));
+        assertThat("MutableString must equals  '" + t3 + "' : '" + m3 + "'", CharSequenceUtil.equals(t3, m3));
         assertThat("toString() must equals  '" + t3 + "' : '" + m3 + "'", t3.equals(m3.toString()));
 
     }
@@ -98,26 +96,11 @@ class WordStoreTest {
             String line = clearedLines[i];
             StringSequence sequence = sequences[i];
             if (line == null || line.isEmpty()) continue;
-            assertThat("MutableString must equals  '" + line + "' : '" + sequence + "'", equals(line, sequence));
+            assertThat("MutableString must equals  '" + line + "' : '" + sequence + "'", CharSequenceUtil.equals(line, sequence));
             assertThat("toString() must equals  '" + line + "' : '" + sequence + "'", line.equals(sequence.toString()));
         }
 
         System.out.println(ClassLayout.parseInstance(store).toPrintable());
 
     }
-
-
-    //##################################################################
-    //# Helper
-    //##################################################################
-
-    private boolean equals(CharSequence s1, CharSequence s2) {
-        if (s1.length() != s2.length()) return false;
-        int n = s1.length();
-        while (n-- > 0) {
-            if (s1.charAt(n) != s2.charAt(n)) return false;
-        }
-        return true;
-    }
-
 }

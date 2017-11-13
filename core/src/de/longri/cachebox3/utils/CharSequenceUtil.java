@@ -74,4 +74,13 @@ public class CharSequenceUtil {
         return -1;
     }
 
+    public static boolean equals(CharSequence s1, CharSequence s2) {
+        if (s1.length() != s2.length()) return false;
+        int n = s1.length();
+        while (n-- > 0) {
+            if (s1.charAt(n) != s2.charAt(n)) return false;
+        }
+        return true;
+    }
+
 }

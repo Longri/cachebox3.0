@@ -345,13 +345,18 @@ public class WaypointView extends AbstractView {
     }
 
     private void showEditWpDialog(AbstractWaypoint newWP) {
-        EditWaypoint editWaypoint = new EditWaypoint(newWP, true, new GenericCallBack<AbstractWaypoint>() {
+
+        AbstractWaypoint mutable = newWP.getMutable(Database.Data);
+
+        EditWaypoint editWaypoint = new EditWaypoint(mutable, true, new GenericCallBack<AbstractWaypoint>() {
             @Override
             public void callBack(AbstractWaypoint value) {
                 if (value != null) {
+                    boolean update = false;
                     if (actAbstractCache.getWaypoints().contains(value, false)) {
                         int index = actAbstractCache.getWaypoints().indexOf(value, false);
                         actAbstractCache.getWaypoints().set(index, value);
+                        update = true;
                     } else {
                         actAbstractCache.getWaypoints().add(value);
                     }
@@ -363,7 +368,11 @@ public class WaypointView extends AbstractView {
                         //which is defined as starting point !!!
                         DaoFactory.WAYPOINT_DAO.resetStartWaypoint(EventHandler.getSelectedCache(), value);
                     }
-                    DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, value);
+                    if (update) {
+                        DaoFactory.WAYPOINT_DAO.updateDatabase(Database.Data, value);
+                    } else {
+                        DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, value);
+                    }
                     CB.requestRendering();
                 }
             }

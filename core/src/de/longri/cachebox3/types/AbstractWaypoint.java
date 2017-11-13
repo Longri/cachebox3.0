@@ -17,6 +17,7 @@ package de.longri.cachebox3.types;
 
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.utils.CharSequenceUtil;
 
 /**
  * Created by Longri on 19.10.2017.
@@ -80,4 +81,13 @@ public abstract class AbstractWaypoint extends Coordinate {
     public abstract void setLongitude(double longitude);
 
     public abstract void dispose();
+
+    @Override
+    public boolean equals(Object other) {
+        // return true, if the gcCode chars are equals
+        if (other instanceof AbstractWaypoint) {
+            return CharSequenceUtil.equals(this.getGcCode(), ((AbstractWaypoint) other).getGcCode());
+        }
+        return false;
+    }
 }
