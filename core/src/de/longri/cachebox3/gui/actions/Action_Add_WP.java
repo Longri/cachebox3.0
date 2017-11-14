@@ -49,7 +49,7 @@ public class Action_Add_WP extends AbstractAction {
         if (CB.viewmanager.getActView() instanceof WaypointView) {
             // if wayPointView visible, create new waypoint with waypointViewFunction
             WaypointView wpv = (WaypointView) CB.viewmanager.getActView();
-            wpv.addWP();
+            wpv.addWp();
             return;
         }
 
@@ -78,7 +78,7 @@ public class Action_Add_WP extends AbstractAction {
                 , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
 
 
-        EditWaypoint editWaypoint = new EditWaypoint(newWP, false, new GenericCallBack<AbstractWaypoint>() {
+        EditWaypoint editWaypoint = new EditWaypoint(newWP, true, false, new GenericCallBack<AbstractWaypoint>() {
             @Override
             public void callBack(AbstractWaypoint value) {
                 if (value != null) {

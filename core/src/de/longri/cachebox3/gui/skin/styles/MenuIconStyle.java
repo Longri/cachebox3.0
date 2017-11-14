@@ -59,6 +59,11 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable importIcon;
     public Drawable cacheListIcon;
     public Drawable addWp;
+    public Drawable delWp;
+    public Drawable projectWp;
+    public Drawable showWp;
+    public Drawable editWp;
+    public Drawable mesureWp;
     public Drawable navigate;
     public Drawable fieldNote;
     public Drawable videoIcon;

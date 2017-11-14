@@ -24,7 +24,6 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.callbacks.GenericCallBack;
@@ -62,13 +61,15 @@ public class EditWaypoint extends ActivityBase {
     private final SelectBox<CacheTypes> selectBox;
     private final boolean showCoordsOnShow;
     private final GenericCallBack<AbstractWaypoint> callBack;
+    private final boolean onlyShow;//TODO implement
 
-    public EditWaypoint(final AbstractWaypoint waypoint, boolean showCoordsOnShow, GenericCallBack<AbstractWaypoint> callBack) {
+    public EditWaypoint(final AbstractWaypoint waypoint, boolean showCoordsOnShow, boolean onlyShow, GenericCallBack<AbstractWaypoint> callBack) {
         super("EditWaypoint");
         style = null;
         this.waypoint = waypoint;
         this.showCoordsOnShow = showCoordsOnShow;
         this.callBack = callBack;
+        this.onlyShow = onlyShow;
 
         btnOk = new CharSequenceButton(Translation.get("save"));
         btnCancel = new CharSequenceButton(Translation.get("cancel"));

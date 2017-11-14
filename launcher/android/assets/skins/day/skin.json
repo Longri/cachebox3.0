@@ -788,6 +788,10 @@
       "path": "svg/default_button_pressed.svg",
       "scale": 0.5
     },
+    "delWp": {
+      "path": "svg/delWp.svg",
+      "scale": 0.23
+    },
     "deleteIcon": {
       "path": "svg/deleteIcon.svg",
       "scale": 0.18
@@ -851,6 +855,10 @@
     "edit": {
       "path": "svg/pencil.svg",
       "scale": 0.3
+    },
+    "editWp": {
+      "path": "svg/editWp.svg",
+      "scale": 0.19
     },
     "enabled": {
       "path": "svg/enabled.svg",
@@ -1448,6 +1456,10 @@
       "path": "svg/menu_for.svg",
       "scale": 0.3
     },
+    "mesureWp": {
+      "path": "svg/mesureWp.svg",
+      "scale": 0.19
+    },
     "micro": {
       "path": "svg/micro.svg",
       "scale": 0.25
@@ -1556,6 +1568,10 @@
       "path": "svg/progress_foreground.svg",
       "scale": 1
     },
+    "projectWp": {
+      "path": "svg/projectWp.svg",
+      "scale": 0.19
+    },
     "pt": {
       "path": "svg/pt.svg",
       "scale": 0.08
@@ -1586,6 +1602,10 @@
     },
     "settings_icon": {
       "path": "svg/settings_icon.svg",
+      "scale": 0.19
+    },
+    "showWp": {
+      "path": "svg/showWp.svg",
       "scale": 0.19
     },
     "slider": {
@@ -2516,6 +2536,11 @@
       "importIcon": "import",
       "cacheListIcon": "cacheListIcon",
       "addWp": "add-wp",
+      "delWp": "delWp",
+      "projectWp": "projectWp",
+      "showWp": "showWp",
+      "editWp": "editWp",
+      "mesureWp": "mesureWp",
       "hintIconOn": "hintOn",
       "hintIconOff": "hintOff",
       "torchOn": "light_on",

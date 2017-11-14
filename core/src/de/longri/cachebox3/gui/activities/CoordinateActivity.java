@@ -71,7 +71,6 @@ public class CoordinateActivity extends ActivityBase {
             } else {
                 callBack(CoordinateActivity.this.coordinate);
             }
-
             finish();
         }
     };
