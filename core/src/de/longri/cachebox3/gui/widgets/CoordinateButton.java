@@ -38,22 +38,18 @@ public class CoordinateButton extends VisTextButton {
 
 
     ClickListener clickListener = new ClickListener() {
-
         @Override
         public void clicked(InputEvent event, float x, float y) {
-
             CoordinateActivity coordinateActivity = new CoordinateActivity(CoordinateButton.this.coordinate) {
                 public void callBack(Coordinate coordinate) {
                     if (coordinate != null) {
                         CoordinateButton.this.coordinate = coordinate;
-
                         CoordinateButton.this.setText(coordinate.FormatCoordinate());
                     }
                 }
             };
             coordinateActivity.show();
         }
-
     };
 
     public void setCoordinate(Coordinate coordinate) {
