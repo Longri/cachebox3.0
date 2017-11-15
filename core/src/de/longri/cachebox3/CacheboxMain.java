@@ -33,7 +33,9 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GL;
+import org.oscim.backend.Platform;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
 import org.oscim.utils.Parameters;
@@ -233,23 +235,24 @@ public class CacheboxMain extends ApplicationAdapter {
         }
 
         log.debug("App on pause close databases");
-        //close databases
-        if (Database.Data != null) Database.Data.close();
-        if (Database.Settings != null) Database.Settings.close();
-        if (Database.Drafts != null) Database.Drafts.close();
-
-
+        //close databases on non Desktop platform
+        if (!CanvasAdapter.platform.isDesktop()) {
+            if (Database.Data != null) Database.Data.close();
+            if (Database.Settings != null) Database.Settings.close();
+            if (Database.Drafts != null) Database.Drafts.close();
+        }
     }
 
     @Override
     public void resume() {
         checkLogger();
         log.debug("App on resume reopen databases");
-//        //open databases
-        if (Database.Data != null) Database.Data.open();
-        if (Database.Settings != null) Database.Settings.open();
-        if (Database.Drafts != null) Database.Drafts.open();
-
+        //open databases on non Desktop platform
+        if (!CanvasAdapter.platform.isDesktop()) {
+            if (Database.Data != null) Database.Data.open();
+            if (Database.Settings != null) Database.Settings.open();
+            if (Database.Drafts != null) Database.Drafts.open();
+        }
     }
 
     public String getMemory() {
