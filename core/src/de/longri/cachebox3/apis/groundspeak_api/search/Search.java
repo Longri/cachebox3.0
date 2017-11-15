@@ -704,8 +704,8 @@ public abstract class Search extends PostRequest {
                     abstractCache.setRating(aktCache.getRating());
                 }
 
-                // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
-                if (!DaoFactory.CACHE_DAO.updateDatabase(Database.Data, abstractCache)) {
+                //if Cache not in DB insert else Update
+                if (aktCache == null || !DaoFactory.CACHE_DAO.updateDatabase(Database.Data, abstractCache)) {
                     DaoFactory.CACHE_DAO.writeToDatabase(Database.Data, abstractCache);
                 }
 

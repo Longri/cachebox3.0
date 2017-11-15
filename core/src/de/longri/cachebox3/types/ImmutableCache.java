@@ -409,17 +409,22 @@ public class ImmutableCache extends AbstractCache {
     @Override
     public Array<Attributes> getAttributes(Database database) {
         SQLiteGdxDatabaseCursor cursor = database.rawQuery("SELECT * FROM Attributes WHERE Id=?", new String[]{String.valueOf(this.id)});
-        cursor.moveToFirst();
-        DLong attributesPositive = null;
-        DLong attributesNegative = null;
-        if (!cursor.isNull(1)) {
-            attributesPositive = new DLong(cursor.getLong(3), cursor.getLong(1));
-            attributesNegative = new DLong(cursor.getLong(4), cursor.getLong(2));
+        DLong attributesPositive;
+        DLong attributesNegative;
+        if (cursor != null) {
+            cursor.moveToFirst();
+            if (!cursor.isNull(1)) {
+                attributesPositive = new DLong(cursor.getLong(3), cursor.getLong(1));
+                attributesNegative = new DLong(cursor.getLong(4), cursor.getLong(2));
+            } else {
+                attributesPositive = new DLong(0, 0);
+                attributesNegative = new DLong(0, 0);
+            }
+            cursor.close();
         } else {
             attributesPositive = new DLong(0, 0);
             attributesNegative = new DLong(0, 0);
         }
-        cursor.close();
         return Attributes.getAttributes(attributesPositive, attributesNegative);
     }
 
