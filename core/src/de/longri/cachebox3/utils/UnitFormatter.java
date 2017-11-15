@@ -16,6 +16,7 @@
 package de.longri.cachebox3.utils;
 
 
+import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -156,10 +157,25 @@ public class UnitFormatter {
         return formatDM(longitude, "E", "W");
     }
 
-    public static String rot13(String message) {
+    public static CharSequence rot13(CharSequence message) {
+
+        if (message instanceof CharSequenceArray) {
+            // change the char's and return it self
+            for (int i = 0; i < message.length(); i++) {
+                char curChar = message.charAt(i);
+                int idx = ALPHABET.indexOf(curChar);
+
+                if (idx < 0)
+                    ((CharSequenceArray) message).set(i, curChar);
+                else
+                    ((CharSequenceArray) message).set(i, ROT13_LOOKUP.charAt(idx));
+            }
+            return message;
+        }
+
         String result = "";
         for (int i = 0; i < message.length(); i++) {
-            String curChar = message.substring(i, i + 1);
+            char curChar = message.charAt(i);
             int idx = ALPHABET.indexOf(curChar);
 
             if (idx < 0)

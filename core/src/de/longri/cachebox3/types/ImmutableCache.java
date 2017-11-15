@@ -18,10 +18,8 @@ package de.longri.cachebox3.types;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
-import de.longri.cachebox3.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -469,8 +467,8 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
-    public String getHint(Database database) {
-        return getStringFromDB(database, "SELECT Hint FROM CacheText WHERE Id=?");
+    public CharSequence getHint(Database database) {
+        return getCharSequenceFromDB(database, "SELECT Hint FROM CacheText WHERE Id=?");
     }
 
     @Override
@@ -478,19 +476,14 @@ public class ImmutableCache extends AbstractCache {
         return getStringFromDB(database, "SELECT Url FROM CacheText WHERE Id=?");
     }
 
+    private CharSequence getCharSequenceFromDB(Database database, String statement) {
+        String[] args = new String[]{Long.toString(this.id)};
+        return database.getCharSequence(statement, args);
+    }
+
     private String getStringFromDB(Database database, String statement) {
-        SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(this.id)});
-        try {
-            if (cursor != null) {
-                cursor.moveToFirst();
-                if (!cursor.isAfterLast()) {
-                    return cursor.getString(0);
-                }
-            }
-            return "";
-        } finally {
-            if (cursor != null) cursor.close();
-        }
+        String[] args = new String[]{Long.toString(this.id)};
+        return database.getString(statement, args);
     }
 
     @Override

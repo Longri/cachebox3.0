@@ -32,17 +32,16 @@ import de.longri.cachebox3.utils.UnitFormatter;
  * Created by Longri on 01.06.17
  */
 public class HintDialog extends ButtonDialog {
-    private final String hintTextDecoded, hintTextEncoded;
+    private final CharSequence hintFromDB;
     private static final VisLabel hintLabel = new VisLabel();
     private final CharSequenceButton encodeButton;
     private boolean encoded = false;
 
     public HintDialog() {
         super("Hint", createContentBox(), Translation.get("hint"), MessageBoxButtons.RetryCancel, null);
+        hintFromDB = EventHandler.getSelectedCache() == null ? ""
+                : UnitFormatter.rot13(EventHandler.getSelectedCache().getHint(Database.Data));
 
-        String hintFromDB = EventHandler.getSelectedCache() == null ? "" : EventHandler.getSelectedCache().getHint(Database.Data);
-        this.hintTextDecoded = UnitFormatter.rot13(hintFromDB) + "\n ";
-        this.hintTextEncoded = hintFromDB + "\n ";
 
         hintLabel.setWrap(true);
 
@@ -69,11 +68,11 @@ public class HintDialog extends ButtonDialog {
         if (decodeClicked) {
             if (!encoded) {
                 encoded = true;
-                hintLabel.setText(this.hintTextEncoded);
+                hintLabel.setText(UnitFormatter.rot13(hintFromDB));
                 encodeButton.setText(Translation.get("encode"));
             } else {
                 encoded = false;
-                hintLabel.setText(this.hintTextDecoded);
+                hintLabel.setText(UnitFormatter.rot13(hintFromDB));
                 encodeButton.setText(Translation.get("decode"));
             }
             return;

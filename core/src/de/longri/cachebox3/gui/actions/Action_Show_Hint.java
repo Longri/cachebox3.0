@@ -47,8 +47,6 @@ public class Action_Show_Hint extends AbstractAction {
         // return true if any Cache selected and this Cache has a Hint
         if (EventHandler.getSelectedCache() == null)
             return false;
-        String hintText = EventHandler.getSelectedCache().getHint(Database.Data);
-
-        return !((hintText == null) || (hintText.length() == 0));
+        return EventHandler.getSelectedCache().hasHint();
     }
 }

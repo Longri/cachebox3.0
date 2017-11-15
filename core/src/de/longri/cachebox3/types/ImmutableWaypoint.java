@@ -53,7 +53,7 @@ public class ImmutableWaypoint extends AbstractWaypoint {
         this.title = "";
     }
 
-    public ImmutableWaypoint(String gcCode, CacheTypes type,  double latitude, double longitude, long cacheId,  String title) {
+    public ImmutableWaypoint(String gcCode, CacheTypes type, double latitude, double longitude, long cacheId, String title) {
         super(latitude, longitude);
         this.cacheId = cacheId;
         this.gcCode = gcCode;
@@ -195,26 +195,17 @@ public class ImmutableWaypoint extends AbstractWaypoint {
 
     @Override
     public CharSequence getDescription(Database database) {
-        SQLiteGdxDatabaseCursor cursor = null;
-        try {
-            cursor = database.rawQuery("SELECT Description FROM WaypointsText WHERE GcCode=?", new String[]{this.gcCode.toString()});
-            cursor.moveToFirst();
-            return new CharSequenceArray(cursor.getString(0));
-        } finally {
-            if (cursor != null) cursor.close();
-        }
+        String sql = "SELECT Description FROM WaypointsText WHERE GcCode=?";
+        String[] args = new String[]{this.gcCode.toString()};
+        return database.getCharSequence(sql, args);
     }
+
 
     @Override
     public CharSequence getClue(Database database) {
-        SQLiteGdxDatabaseCursor cursor = null;
-        try {
-            cursor = database.rawQuery("SELECT Clue FROM WaypointsText WHERE GcCode=?", new String[]{this.gcCode.toString()});
-            cursor.moveToFirst();
-            return new CharSequenceArray(cursor.getString(0));
-        } finally {
-            if (cursor != null) cursor.close();
-        }
+        String sql = "SELECT Clue FROM WaypointsText WHERE GcCode=?";
+        String[] args = new String[]{this.gcCode.toString()};
+        return database.getCharSequence(sql, args);
     }
 
 

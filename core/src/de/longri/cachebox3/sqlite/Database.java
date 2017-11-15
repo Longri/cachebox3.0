@@ -23,6 +23,7 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.*;
 import org.slf4j.Logger;
@@ -142,6 +143,28 @@ public class Database {
 
     public void disableAutoCommit() {
         myDB.setAutoCommit(false);
+    }
+
+
+    public CharSequence getCharSequence(String sql, String[] args) {
+        return new CharSequenceArray(getString(sql, args));
+    }
+
+    public String getString(String sql, String[] args) {
+        SQLiteGdxDatabaseCursor cursor = null;
+        try {
+            cursor = this.rawQuery(sql, args);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (!cursor.isAfterLast()) {
+                    String result = cursor.getString(0);
+                    return result != null ? result : "";
+                }
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return "";
     }
 
 

@@ -221,7 +221,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getHint(Database database) {
+    public CharSequence getHint(Database database) {
         return this.hint;
     }
 
