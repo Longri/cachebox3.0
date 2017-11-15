@@ -82,7 +82,7 @@ public class LatLong implements  Serializable {
         stringBuilder.append("lat=");
         stringBuilder.append(String.format("%.4f", this.latitude));
         // stringBuilder.append(this.latitude);
-        stringBuilder.append(", long=");
+        stringBuilder.append(", lon=");
         stringBuilder.append(String.format("%.4f", this.longitude));
         // stringBuilder.append(this.longitude);
         return stringBuilder.toString();

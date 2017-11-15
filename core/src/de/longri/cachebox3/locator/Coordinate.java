@@ -24,7 +24,25 @@ public class Coordinate extends LatLong {
 
     static final String br = System.getProperty("line.separator");
 
-    protected boolean valid;
+    /**
+     * Maximum possible latitude coordinate.
+     */
+    public static final double LATITUDE_MAX = 90;
+
+    /**
+     * Minimum possible latitude coordinate.
+     */
+    public static final double LATITUDE_MIN = -LATITUDE_MAX;
+
+    /**
+     * Maximum possible longitude coordinate.
+     */
+    public static final double LONGITUDE_MAX = 180;
+
+    /**
+     * Minimum possible longitude coordinate.
+     */
+    public static final double LONGITUDE_MIN = -LONGITUDE_MAX;
 
     private static final float[] mResults = new float[2];
 
@@ -32,8 +50,22 @@ public class Coordinate extends LatLong {
         return Project(coord.getLatitude(), coord.getLongitude(), Direction, Distance);
     }
 
+    /**
+     * A Coordinate is valid, if lat/lon in range and not 0,0!
+     * 0,0 is in Range of max/min lat/lon, but we handle this as not valid
+     *
+     * @return
+     */
     public boolean isValid() {
-        return valid;
+
+        //we use getLatitude() and getLongitude() because some extended classes use their own value!
+        double lat = getLatitude();
+        double lon = getLongitude();
+
+        if (lat < LATITUDE_MIN || lat > LATITUDE_MAX || lat == 0) return false;
+        if (lon < LONGITUDE_MIN || lon > LONGITUDE_MAX || lon == 0) return false;
+
+        return true;
     }
 
     public boolean isZero() {
@@ -52,7 +84,7 @@ public class Coordinate extends LatLong {
      * @return
      */
     public String FormatCoordinate() {
-        if (valid)
+        if (isValid())
             return Formatter.FormatLatitudeDM(getLatitude()) + " / " + Formatter.FormatLongitudeDM(getLongitude());
         else
             return "not Valid";
@@ -64,7 +96,7 @@ public class Coordinate extends LatLong {
      * @return
      */
     public String formatCoordinateLineBreak() {
-        if (valid)
+        if (isValid())
             return Formatter.FormatLatitudeDM(getLatitude()) + br + Formatter.FormatLongitudeDM(getLongitude());
         else
             return "not Valid";
@@ -83,7 +115,6 @@ public class Coordinate extends LatLong {
         lon2 = (lon2 + 3 * Math.PI) % (2 * Math.PI) - Math.PI; // normalise to -180°..+180°
 
         Coordinate result = new Coordinate(lat2 * MathUtils.RAD_DEG, lon2 * MathUtils.RAD_DEG);
-        result.valid = true;
         return result;
 
     }
@@ -215,21 +246,18 @@ public class Coordinate extends LatLong {
 
     public Coordinate(Coordinate parent) {
         super(parent.latitude, parent.longitude);
-        this.valid = parent.valid;
     }
 
     public Coordinate(double latitude, double longitude) {
         super(latitude, longitude);
         if (latitude == 0 && longitude == 0)
             return;
-        valid = true;
     }
 
     public Coordinate(int latitude, int longitude) {
         super(latitude, longitude);
         if (latitude == 0 && longitude == 0)
             return;
-        valid = true;
     }
 
     public Coordinate(String text) {
@@ -238,17 +266,10 @@ public class Coordinate extends LatLong {
 
     public Coordinate(double[] coordinate) {
         super(coordinate[0], coordinate[1]);
-        if (coordinate.length > 2) {
-            this.valid = coordinate[2] == 1;
-        }
     }
 
     public Coordinate copy() {
         return new Coordinate(this);
-    }
-
-    public void setValid(boolean b) {
-        valid = b;
     }
 
     @Override
