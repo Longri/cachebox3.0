@@ -447,13 +447,15 @@ public class ImmutableCache extends AbstractCache {
     private String getStringFromDB(Database database, String statement) {
         SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(this.id)});
         try {
-            cursor.moveToFirst();
-            if (!cursor.isAfterLast()) {
-                return cursor.getString(0);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (!cursor.isAfterLast()) {
+                    return cursor.getString(0);
+                }
             }
             return "";
         } finally {
-            cursor.close();
+            if (cursor != null) cursor.close();
         }
     }
 
