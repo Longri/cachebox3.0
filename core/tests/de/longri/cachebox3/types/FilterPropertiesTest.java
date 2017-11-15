@@ -659,9 +659,6 @@ class FilterPropertiesTest {
     @Test
     public void chehkSqlWhere() {
 
-
-        if (true) return; //DISABLED
-
         FilterProperties[] filters = new FilterProperties[]{FilterInstances.ACTIVE, FilterInstances.ALL,
                 FilterInstances.BEGINNER, FilterInstances.DROPTB, FilterInstances.FAVORITES, FilterInstances.HIGHLIGHTS,
                 FilterInstances.LISTINGCHANGED, FilterInstances.QUICK, FilterInstances.TOARCHIVE, FilterInstances.WITHTB};

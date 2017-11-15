@@ -317,10 +317,6 @@ public class FilterProperties {
      */
     public String getSqlWhere(String userName) {
 
-        if (true)
-            return ""; //must rework with new Database schema
-
-
         if (isHistory) {
             ArrayList<String> orParts = new ArrayList<String>();
             String[] gcCodes = CB.cacheHistory.split(",");
@@ -341,6 +337,9 @@ public class FilterProperties {
                 andParts.add("Found=1");
             if (Finds == -1)
                 andParts.add("(Found=0 or Found is null)");
+
+            //TODO Bitwise equals [BooleanStore & MASK_FOUND != 0] for true
+            //TODO Bitwise equals [BooleanStore & MASK_FOUND == 0] for false
 
             if (NotAvailable == 1)
                 andParts.add("Available=0");
