@@ -445,7 +445,6 @@ public class WaypointView extends AbstractView {
         if ((actWaypoint != null) && (actWaypoint.isUserWaypoint()))
             cm.addItem(MenuID.MI_DELETE, "delete", CB.getSkin().getMenuIcon.delWp);
 
-        //ISSUE (#128 Add Waypoint projection)
         if (actWaypoint != null || actAbstractCache != null)
             cm.addItem(MenuID.MI_PROJECTION, "Projection", CB.getSkin().getMenuIcon.projectWp);
 
