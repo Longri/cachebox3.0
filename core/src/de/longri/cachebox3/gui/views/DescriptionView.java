@@ -272,7 +272,9 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-                        view.setScrollPosition(lastX, lastY);
+                        if (view!=null) {// maybe is disposed now
+                            view.setScrollPosition(lastX, lastY);
+                        }
                     }
                 }, 0.15f);
             }
