@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -173,18 +174,19 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     private String getAttributesHtml(AbstractCache abstractCache) {
         StringBuilder sb = new StringBuilder();
         try {
-            Iterator<Attributes> attrs = abstractCache.getAttributes(Database.Data).iterator();
-
-            if (attrs == null || !attrs.hasNext())
+            Array<Attributes> attributes = abstractCache.getAttributes(Database.Data);
+            if (attributes == null) return "";
+            Iterator<Attributes> attributesIterator = attributes.iterator();
+            if (attributesIterator == null || !attributesIterator.hasNext())
                 return "";
 
             do {
-                Attributes attribute = attrs.next();
+                Attributes attribute = attributesIterator.next();
                 File result = new File(CB.WorkPath + "/data/Attributes/" + attribute.getImageName() + ".png");
                 sb.append("<form action=\"Attr\">");
                 sb.append("<input name=\"Button\" type=\"image\" src=\"" + result.toURI() + "\" height=\"40\" width=\"40\" value=\" " + attribute.getImageName() + " \">");
 
-            } while (attrs.hasNext());
+            } while (attributesIterator.hasNext());
 
             sb.append("</form>");
 
@@ -272,7 +274,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-                        if (view!=null) {// maybe is disposed now
+                        if (view != null) {// maybe is disposed now
                             view.setScrollPosition(lastX, lastY);
                         }
                     }
