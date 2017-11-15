@@ -129,6 +129,9 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public Array<Attributes> getAttributes(Database database) {
+        if (this.attributes == null) {
+            Attributes.getAttributes(attributesPositive, attributesNegative);
+        }
         return this.attributes;
     }
 

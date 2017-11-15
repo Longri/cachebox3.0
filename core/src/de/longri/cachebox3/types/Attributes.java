@@ -321,6 +321,8 @@ public enum Attributes {
     }
 
     public static Array<Attributes> getAttributes(DLong attributesPositive, DLong attributesNegative) {
+        if (attributesPositive == null) attributesNegative = new DLong(0, 0);
+        if (attributesNegative == null) attributesNegative = new DLong(0, 0);
         Array<Attributes> ret = new Array<>();
         if (attributeLookup == null)
             ini();
@@ -338,7 +340,6 @@ public enum Attributes {
                 ret.add(attribute);
             }
         }
-
         return ret;
     }
 
