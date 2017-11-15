@@ -299,6 +299,10 @@ public class WaypointView extends AbstractView {
         ProjectionCoordinate projActivity = new ProjectionCoordinate(actWaypoint == null ? actAbstractCache : actWaypoint) {
             @Override
             public void callBack(Coordinate newCoord) {
+                if (newCoord == null) {
+                    // wrong input, create no WP!
+                    return;
+                }
                 addWp(newCoord, false);
             }
         };
@@ -322,7 +326,7 @@ public class WaypointView extends AbstractView {
                             // Yes button clicked
                             DaoFactory.WAYPOINT_DAO.delete(Database.Data, actWaypoint);
                             actAbstractCache.getWaypoints().removeValue(actWaypoint, false);
-                            listView.setSelection(0);// select Cache
+                            addNewListView();
                         }
                         return true;
                     }
@@ -434,19 +438,19 @@ public class WaypointView extends AbstractView {
         });
 
         if (actWaypoint != null)
-            cm.addItem(MenuID.MI_WP_SHOW, "show",CB.getSkin().getMenuIcon.showWp);
+            cm.addItem(MenuID.MI_WP_SHOW, "show", CB.getSkin().getMenuIcon.showWp);
         if (actWaypoint != null)
-            cm.addItem(MenuID.MI_EDIT, "edit",CB.getSkin().getMenuIcon.editWp);
+            cm.addItem(MenuID.MI_EDIT, "edit", CB.getSkin().getMenuIcon.editWp);
         cm.addItem(MenuID.MI_ADD, "AddWaypoint", CB.getSkin().getMenuIcon.addWp);
         if ((actWaypoint != null) && (actWaypoint.isUserWaypoint()))
-            cm.addItem(MenuID.MI_DELETE, "delete",CB.getSkin().getMenuIcon.delWp);
+            cm.addItem(MenuID.MI_DELETE, "delete", CB.getSkin().getMenuIcon.delWp);
 
         //ISSUE (#128 Add Waypoint projection)
         if (actWaypoint != null || actAbstractCache != null)
-            cm.addItem(MenuID.MI_PROJECTION, "Projection",CB.getSkin().getMenuIcon.projectWp);
+            cm.addItem(MenuID.MI_PROJECTION, "Projection", CB.getSkin().getMenuIcon.projectWp);
 
         //ISSUE (#129 add measure WP from GPS)
-         cm.addItem(MenuID.MI_FROM_GPS, "FromGps",CB.getSkin().getMenuIcon.mesureWp);
+        cm.addItem(MenuID.MI_FROM_GPS, "FromGps", CB.getSkin().getMenuIcon.mesureWp);
 
         return cm;
     }

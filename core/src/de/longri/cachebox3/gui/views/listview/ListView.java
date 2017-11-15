@@ -162,7 +162,8 @@ public class ListView extends WidgetGroup {
                     for (int j = 0, m = listeners.size; j < m; j++) {
                         EventListener listener = listeners.get(j);
                         if (listener instanceof ClickLongClickListener) {
-                            return ((ClickLongClickListener) listener).longClicked(item, x, y);
+                            if (((ClickLongClickListener) listener).longClicked(item, x, y))
+                                return true;
                         }
                     }
                     return false;

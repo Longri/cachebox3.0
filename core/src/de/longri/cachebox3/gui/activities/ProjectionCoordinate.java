@@ -136,6 +136,13 @@ public class ProjectionCoordinate extends ActivityBase {
                 public void run() {
                     float distance = 0;
                     float direction = 0;
+                    try {
+                        distance = Float.parseFloat(textFieldDistance.getText());
+                        direction = Float.parseFloat(textFieldBearing.getText());
+                    } catch (NumberFormatException e) {
+                        //TODO handle ( give feedback for wrong input)
+                        callBack(null);
+                    }
                     Coordinate project = Coordinate.Project(cordButton.getCoordinate(), direction, distance);
                     callBack(project);
                 }
