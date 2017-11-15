@@ -608,6 +608,11 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
+    public AbstractCache getImmutable() {
+        return new ImmutableCache(this);
+    }
+
+    @Override
     public void setAttributes(Array<Attributes> attributes) {
         this.attributes = attributes;
 

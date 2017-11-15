@@ -353,4 +353,6 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     public abstract void setLatLon(double latitude, double longitude);
 
     public abstract short getBooleanStore();
+
+    public abstract AbstractCache getImmutable();
 }

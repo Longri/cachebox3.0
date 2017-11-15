@@ -65,7 +65,7 @@ public class CacheboxMain extends ApplicationAdapter {
         EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
         EXCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
 
-        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
         EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
         EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
 

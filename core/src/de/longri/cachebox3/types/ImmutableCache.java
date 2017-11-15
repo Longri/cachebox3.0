@@ -73,6 +73,35 @@ public class ImmutableCache extends AbstractCache {
         this.favPoints = 0;
     }
 
+    public ImmutableCache(AbstractCache cache) {
+        super(cache.getLatitude(), cache.getLongitude());
+        this.name = cache.getName().toString();
+        this.gcCode = cache.getGcCode().toString();
+        this.placedBy = cache.getPlacedBy().toString();
+        this.owner = cache.getOwner().toString();
+        this.gcId = cache.getGcId().toString();
+        this.rating = (short) (cache.getRating() * 2);
+        this.favPoints = cache.getFavoritePoints();
+        this.id = cache.getId();
+        this.type = cache.getType();
+        this.size = cache.getSize();
+        this.difficulty = cache.getDifficulty();
+        this.terrain = cache.getTerrain();
+        this.waypoints = cache.getWaypoints();
+        this.numTravelbugs = (short) cache.getNumTravelbugs();
+
+        short bitStore = 0;
+        bitStore = setMaskValue(MASK_HAS_HINT, cache.hasHint(), bitStore);
+        bitStore = setMaskValue(MASK_ARCHIVED, cache.isArchived(), bitStore);
+        bitStore = setMaskValue(MASK_AVAILABLE, cache.isAvailable(), bitStore);
+        bitStore = setMaskValue(MASK_FAVORITE, cache.isFavorite(), bitStore);
+        bitStore = setMaskValue(MASK_FOUND, cache.isFound(), bitStore);
+        bitStore = setMaskValue(MASK_HAS_USER_DATA, cache.isHasUserData(), bitStore);
+        bitStore = setMaskValue(MASK_LISTING_CHANGED, cache.isListingChanged(), bitStore);
+        bitStore = setMaskValue(MASK_CORECTED_COORDS, cache.hasCorrectedCoordinates(), bitStore);
+        this.booleanStore = bitStore;
+    }
+
     public static boolean getMaskValue(short mask, short bitFlags) {
         return (bitFlags & mask) == mask;
     }
@@ -687,6 +716,11 @@ public class ImmutableCache extends AbstractCache {
     @Override
     public MutableCache getMutable(Database database) {
         return new MutableCache(database, this);
+    }
+
+    @Override
+    public AbstractCache getImmutable() {
+        return this;
     }
 
 

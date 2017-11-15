@@ -90,7 +90,7 @@ public class Cache3DAO extends AbstractCacheDAO {
 
         //Write to CacheInfo table
         args.clear();
-        args.put("Id", abstractCache.getId());
+        if(!update)args.put("Id", abstractCache.getId());
         args.put("DateHidden", iso8601Format.format(abstractCache.getDateHidden() == null ? new Date() : abstractCache.getDateHidden()));
         args.put("FirstImported", iso8601Format.format(new Date()));
         args.put("TourName", abstractCache.getTourName());
@@ -101,7 +101,11 @@ public class Cache3DAO extends AbstractCacheDAO {
 
         if (update) {
             if (database.update("CacheInfo", args, "WHERE id=?", new String[]{Long.toString(abstractCache.getId())}) <= 0) {
-                noError = false;
+                //try to insert
+                args.put("Id", abstractCache.getId());
+                if (database.insert("CacheInfo", args) <= 0) {
+                    noError = false;
+                }
             }
         } else {
             if (database.insert("CacheInfo", args) <= 0) {
@@ -114,7 +118,7 @@ public class Cache3DAO extends AbstractCacheDAO {
 
         //Write to CacheText table
         args.clear();
-        args.put("Id", abstractCache.getId());
+        if(!update) args.put("Id", abstractCache.getId());
         args.put("Url", abstractCache.getUrl(database));
         args.put("Hint", abstractCache.getHint(database));
         args.put("Description", abstractCache.getLongDescription(database));
@@ -124,7 +128,11 @@ public class Cache3DAO extends AbstractCacheDAO {
 
         if (update) {
             if (database.update("CacheText", args, "WHERE id=?", new String[]{Long.toString(abstractCache.getId())}) <= 0) {
-                noError = false;
+                //try to insert
+                args.put("Id", abstractCache.getId());
+                if (database.insert("CacheText", args) <= 0) {
+                    noError = false;
+                }
             }
         } else {
             if (database.insert("CacheText", args) <= 0) {
@@ -137,7 +145,7 @@ public class Cache3DAO extends AbstractCacheDAO {
 
         //Write to Attributes table
         args.clear();
-        args.put("Id", abstractCache.getId());
+        if(!update) args.put("Id", abstractCache.getId());
         if (abstractCache.getAttributesPositive() != null) {
             args.put("AttributesPositive", abstractCache.getAttributesPositive().getLow());
             args.put("AttributesPositiveHigh", abstractCache.getAttributesPositive().getHigh());
@@ -149,7 +157,11 @@ public class Cache3DAO extends AbstractCacheDAO {
 
         if (update) {
             if (database.update("Attributes", args, "WHERE id=?", new String[]{Long.toString(abstractCache.getId())}) <= 0) {
-                noError = false;
+                //try to insert
+                args.put("Id", abstractCache.getId());
+                if (database.insert("Attributes", args) <= 0) {
+                    noError = false;
+                }
             }
         } else {
             if (database.insert("Attributes", args) <= 0) {

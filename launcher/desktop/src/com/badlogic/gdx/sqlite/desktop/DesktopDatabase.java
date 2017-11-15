@@ -223,7 +223,10 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         }
 
         if (!whereClause.isEmpty()) {
-            sql.append(" where ");
+            if (!whereClause.toLowerCase().contains("where")) {
+                sql.append(" WHERE");
+            }
+            sql.append(" ");
             sql.append(whereClause);
         }
         PreparedStatement st = null;
@@ -245,12 +248,16 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             return st.executeUpdate();
 
         } catch (SQLException e) {
+            if (e.getMessage().contains("near")) {
+                log.error("UPDATE:", sql.toString());
+            } else {
+                log.error("UPDATE:", e);
+            }
             return 0;
         } finally {
             try {
                 if (st != null) st.close();
             } catch (SQLException e) {
-
                 e.printStackTrace();
             }
         }
@@ -303,7 +310,6 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
 
         } catch (SQLException e) {
             log.error("INSERT", e);
-
             return 0;
         } finally {
             try {
@@ -353,6 +359,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             return st.executeUpdate();
 
         } catch (SQLException e) {
+            log.error("DELETE", e);
             return 0;
         } finally {
             try {

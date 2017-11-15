@@ -777,10 +777,10 @@ public abstract class Search extends PostRequest {
                 }
 
                 if (aktCache == null) {
-                    Database.Data.Query.add(abstractCache);
+                    Database.Data.Query.add(abstractCache.getImmutable());
                 } else {
                     Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(abstractCache.getId()), false);
-                    Database.Data.Query.add(abstractCache);
+                    Database.Data.Query.add(abstractCache.getImmutable());
                 }
                 return null;
             }
