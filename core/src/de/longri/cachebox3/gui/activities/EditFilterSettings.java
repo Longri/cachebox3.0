@@ -66,6 +66,7 @@ public class EditFilterSettings extends ActivityBase {
             style = new FilterStyle();// set empty style
         }
 
+        this.defaults().pad(CB.scaledSizes.MARGIN);
 
         presetListView = new PresetListView(style);
         filterSetListView = new FilterSetListView();
@@ -155,7 +156,7 @@ public class EditFilterSettings extends ActivityBase {
         tglTbl.add(tglBtnCategory).width(new Value.Fixed(btnWidth));
         tglTbl.add(tglBtnText).width(new Value.Fixed(btnWidth));
 
-        this.add(tglTbl).top().width(new Value.Fixed(Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2));
+        this.add(tglTbl).width(new Value.Fixed(Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2));
     }
 
     private Cell createViewCell() {
@@ -168,19 +169,18 @@ public class EditFilterSettings extends ActivityBase {
     private void createOkCancel() {
         this.row();
         Table cancelOkTable = new Table();
+        cancelOkTable.defaults().pad(CB.scaledSizes.MARGIN);
 
         CharSequenceButton btnOk = new CharSequenceButton(Translation.get("ok"));
         CharSequenceButton btnCancel = new CharSequenceButton(Translation.get("cancel"));
 
         btnOk.addListener(okListener);
         btnCancel.addListener(cancelListener);
+        
+        cancelOkTable.add(btnOk).expandX().fillX();
+        cancelOkTable.add(btnCancel).expandX().fillX();
 
-        float btnWidth = (Gdx.graphics.getWidth() - CB.scaledSizes.MARGIN_HALF * 3) / 2;
-
-        cancelOkTable.add(btnOk).width(new Value.Fixed(btnWidth));
-        cancelOkTable.add(btnCancel).width(new Value.Fixed(btnWidth));
-
-        this.add(cancelOkTable).bottom().width(new Value.Fixed(Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2));
+        this.add(cancelOkTable).width(new Value.Fixed(Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2));
     }
 
 }

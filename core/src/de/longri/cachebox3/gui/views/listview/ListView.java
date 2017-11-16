@@ -547,9 +547,10 @@ public class ListView extends WidgetGroup {
             drawedIndexList.clear();
 
             //Somtimes item with are <0, so set new
+            float itemWidth = this.getWidth() - CB.scaledSizes.MARGIN_HALF;
             for (ListViewItem item : itemViews) {
-                item.setPrefWidth(this.getWidth());
-                item.setWidth(this.getWidth());
+                item.setPrefWidth(itemWidth);
+                item.setWidth(itemWidth);
             }
 
             if (this.backgroundDrawable != null) {

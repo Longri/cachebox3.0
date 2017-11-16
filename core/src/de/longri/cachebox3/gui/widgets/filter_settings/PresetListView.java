@@ -149,8 +149,6 @@ public class PresetListView extends Table {
         for (int i = 0, n = presetEntries.size; i < n; i++) {
             PresetEntry entry = presetEntries.get(i);
             PresetItem item = new PresetItem(i, entry.name, entry.icon);
-            item.setPrefHeight(100);
-            item.setPrefWidth(300);
             presetListItems.add(item);
         }
 
