@@ -15,13 +15,17 @@
  */
 package de.longri.cachebox3.gui.skin.styles;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 /**
  * Created by Longri on 16.11.2017.
  */
-public class FilterStyle  {
+public class FilterStyle {
 
+    public BitmapFont toggleButtonFont;
+    public Color toggleButtonFontColor;
     public Drawable HISTORY;
     public Drawable QuickCaches;
     public Drawable AllCachesToFind;

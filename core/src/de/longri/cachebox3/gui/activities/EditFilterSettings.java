@@ -129,10 +129,15 @@ public class EditFilterSettings extends ActivityBase {
 
         btnGroup = new ButtonGroup<>();
 
-        tglBtnPreset = new CharSequenceButton(Translation.get("preset"), "toggle");
-        tglBtnSet = new CharSequenceButton(Translation.get("setting"), "toggle");
-        tglBtnCategory = new CharSequenceButton(Translation.get("category"), "toggle");
-        tglBtnText = new CharSequenceButton(Translation.get("text"), "toggle");
+        VisTextButton.VisTextButtonStyle buttonStyle = VisUI.getSkin().get("toggle", VisTextButton.VisTextButtonStyle.class);
+
+        buttonStyle.font = style.toggleButtonFont;
+        buttonStyle.fontColor = style.toggleButtonFontColor;
+
+        tglBtnPreset = new CharSequenceButton(Translation.get("preset"), buttonStyle);
+        tglBtnSet = new CharSequenceButton(Translation.get("setting"), buttonStyle);
+        tglBtnCategory = new CharSequenceButton(Translation.get("category"), buttonStyle);
+        tglBtnText = new CharSequenceButton(Translation.get("text"), buttonStyle);
 
         tglBtnPreset.addListener(tglListener);
         tglBtnSet.addListener(tglListener);
@@ -148,13 +153,10 @@ public class EditFilterSettings extends ActivityBase {
         Table tglTbl = new Table();
         tglTbl.defaults().space(CB.scaledSizes.MARGIN / 4);
 
-        float btnWidth = (Gdx.graphics.getWidth() - CB.scaledSizes.MARGIN * 3) / 4;
-
-
-        tglTbl.add(tglBtnPreset).width(new Value.Fixed(btnWidth));
-        tglTbl.add(tglBtnSet).width(new Value.Fixed(btnWidth));
-        tglTbl.add(tglBtnCategory).width(new Value.Fixed(btnWidth));
-        tglTbl.add(tglBtnText).width(new Value.Fixed(btnWidth));
+        tglTbl.add(tglBtnPreset).expandX().fillX();
+        tglTbl.add(tglBtnSet).expandX().fillX();
+        tglTbl.add(tglBtnCategory).expandX().fillX();
+        tglTbl.add(tglBtnText).expandX().fillX();
 
         this.add(tglTbl).width(new Value.Fixed(Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2));
     }
@@ -176,7 +178,7 @@ public class EditFilterSettings extends ActivityBase {
 
         btnOk.addListener(okListener);
         btnCancel.addListener(cancelListener);
-        
+
         cancelOkTable.add(btnOk).expandX().fillX();
         cancelOkTable.add(btnCancel).expandX().fillX();
 

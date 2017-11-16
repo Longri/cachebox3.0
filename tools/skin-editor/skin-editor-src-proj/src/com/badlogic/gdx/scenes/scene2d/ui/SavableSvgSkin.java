@@ -101,6 +101,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.skin.styles.CacheListItemStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.DraftListItemStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.FilterStyle.class);
 
 
         SvgSkinUtil.saveSkin(this, items, skinFile);

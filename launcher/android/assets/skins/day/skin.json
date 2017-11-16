@@ -2932,5 +2932,11 @@
       "cacheTypeStyle": "cacheList",
       "headerBackground": "list_rec_header_9_Patch"
     }
+  },
+  "de.longri.cachebox3.gui.skin.styles.FilterStyle": {
+    "default": {
+      "toggleButtonFont": "AboutSmall",
+      "toggleButtonFontColor": "font_color"
+    }
   }
 }

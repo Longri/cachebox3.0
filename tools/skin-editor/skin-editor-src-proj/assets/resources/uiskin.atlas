@@ -323,6 +323,13 @@ widgets/Tree
   orig: 48, 48
   offset: 0, 0
   index: -1
+widgets/Filter
+  rotate: false
+  xy: 50, 171
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
 widgets/Icons
   rotate: false
   xy: 50, 171
