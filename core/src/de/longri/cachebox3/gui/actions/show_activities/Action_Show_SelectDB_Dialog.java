@@ -125,7 +125,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
         FilterInstances.setLastFilter(new FilterProperties(Config.FilterNew.getValue()));
 
         String sqlWhere = FilterInstances.getLastFilter().getSqlWhere(Config.GcLogin.getValue());
-        sqlWhere = FilterInstances.ACTIVE.getSqlWhere(Config.GcLogin.getValue());
+//        sqlWhere = FilterInstances.ACTIVE.getSqlWhere(Config.GcLogin.getValue());
 
         Database.Data.gpxFilenameUpdateCacheCount();
 

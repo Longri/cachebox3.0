@@ -432,6 +432,8 @@ public class ListView extends WidgetGroup {
             view.setPrefWidth(this.getWidth() - (padLeft + padRight));
             view.pack();
             view.layout();
+            view.setPrefWidth(this.getWidth());
+            view.setWidth(this.getWidth());
             itemViews.add(view);
             itemGroup.addActor(view);
             indexList.add(index);
@@ -543,6 +545,12 @@ public class ListView extends WidgetGroup {
             if (scrollPane == null) return;
 
             drawedIndexList.clear();
+
+            //Somtimes item with are <0, so set new
+            for (ListViewItem item : itemViews) {
+                item.setPrefWidth(this.getWidth());
+                item.setWidth(this.getWidth());
+            }
 
             if (this.backgroundDrawable != null) {
                 backgroundDrawable.draw(batch, this.getX(), this.getY(), this.getWidth(), this.getHeight());

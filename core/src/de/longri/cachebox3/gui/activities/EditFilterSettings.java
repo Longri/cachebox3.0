@@ -23,9 +23,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.filter_settings.*;
 import de.longri.cachebox3.translation.Translation;
@@ -52,11 +54,20 @@ public class EditFilterSettings extends ActivityBase {
     private FilterSetListView filterSetListView;
     private CategoriesListView categoriesListView;
     private TextFilterView textFilterView;
+    private FilterStyle style;
 
     public EditFilterSettings(String name) {
         super(name);
 
-        presetListView = new PresetListView();
+        try {
+            style = VisUI.getSkin().get(FilterStyle.class);
+        } catch (Exception e) {
+            log.error("No style found, set to default empty");
+            style = new FilterStyle();// set empty style
+        }
+
+
+        presetListView = new PresetListView(style);
         filterSetListView = new FilterSetListView();
         categoriesListView = new CategoriesListView();
         textFilterView = new TextFilterView();
@@ -118,7 +129,7 @@ public class EditFilterSettings extends ActivityBase {
         btnGroup = new ButtonGroup<>();
 
         tglBtnPreset = new CharSequenceButton(Translation.get("preset"), "toggle");
-        tglBtnSet = new CharSequenceButton( Translation.get("setting"), "toggle");
+        tglBtnSet = new CharSequenceButton(Translation.get("setting"), "toggle");
         tglBtnCategory = new CharSequenceButton(Translation.get("category"), "toggle");
         tglBtnText = new CharSequenceButton(Translation.get("text"), "toggle");
 
