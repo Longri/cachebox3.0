@@ -28,6 +28,7 @@ import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.SettingString;
 import de.longri.cachebox3.translation.Translation;
@@ -56,7 +57,7 @@ public class PresetListView extends Table {
     private final ListView presetListView;
     private final FilterStyle style;
     private Array<PresetEntry> presetEntries;
-    private Array<PresetItem> presetListItems;
+    private Array<ListViewItem> presetListItems;
 
     public PresetListView(FilterStyle style) {
         this.style = style;
@@ -103,8 +104,12 @@ public class PresetListView extends Table {
 
     }
 
+    protected void sizeChanged() {
+        this.invalidate();
+        this.layout();
+    }
 
-    public void fillPresetList() {
+    private void fillPresetList() {
         if (presetEntries != null)
             presetEntries.clear();
         else
@@ -152,11 +157,29 @@ public class PresetListView extends Table {
             presetListItems.add(item);
         }
 
+        // add a Button of the end of list, to create UserItem
+        presetListItems.add(new ButtonListViewItem(presetListItems.size + 1));
+
     }
 
-    private void presetEntriesAdd(String name, Drawable icon, FilterProperties PresetFilter) {
-        presetEntries.add(new PresetEntry(Translation.get(name), icon, PresetFilter));
+    private void presetEntriesAdd(String name, Drawable icon, FilterProperties filter) {
+        presetEntries.add(new PresetEntry(Translation.get(name), icon, filter));
     }
+
+    static class ButtonListViewItem extends ListViewItem {
+
+        public ButtonListViewItem(int listIndex) {
+            super(listIndex);
+            CharSequenceButton btn = new CharSequenceButton("test");
+            this.add(btn).expand().fill();
+        }
+
+        @Override
+        public void dispose() {
+
+        }
+    }
+
 
     static class PresetItem extends ListViewItem {
         public PresetItem(int listIndex, CharSequence title, Drawable icon) {

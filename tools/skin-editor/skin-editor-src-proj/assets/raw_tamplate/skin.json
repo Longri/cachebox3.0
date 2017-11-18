@@ -24,6 +24,14 @@
       "path": "svg/map-state-overdraw.svg",
       "scale": 0.75
     },
+    "TB_drop": {
+      "path": "svg/TB_drop.svg",
+      "scale": 0.15
+    },
+    "TB_picked": {
+      "path": "svg/TB_picked.svg",
+      "scale": 0.15
+    },
     "UPLOADFIELDNOTE": {
       "path": "svg/UPLOADFIELDNOTE.svg",
       "scale": 0.18
@@ -652,6 +660,10 @@
       "path": "svg/baseMapOnlineVector.svg",
       "scale": 0.18
     },
+    "beginner": {
+      "path": "svg/beginner.svg",
+      "scale": 0.16
+    },
     "button_bar_back": {
       "path": "svg/button_bar_back.svg",
       "scale": 1.695
@@ -864,9 +876,21 @@
       "path": "svg/enabled.svg",
       "scale": 0.12
     },
+    "erth": {
+      "path": "svg/erth.svg",
+      "scale": 0.16
+    },
     "event": {
       "path": "svg/event.svg",
       "scale": 0.2
+    },
+    "fastCache": {
+      "path": "svg/fastCache.svg",
+      "scale": 0.16
+    },
+    "favIcon": {
+      "path": "svg/favIcon.svg",
+      "scale": 0.16
     },
     "favpoint": {
       "path": "svg/favpoint.svg",
@@ -888,6 +912,14 @@
       "path": "svg/backIcon.svg",
       "scale": 0.3
     },
+    "filter": {
+      "path": "svg/filter.svg",
+      "scale": 0.16
+    },
+    "filterReset": {
+      "path": "svg/filterReset.svg",
+      "scale": 0.16
+    },
     "finger": {
       "path": "svg/finger.svg",
       "scale": 1
@@ -895,6 +927,10 @@
     "finger_click": {
       "path": "svg/finger_click.svg",
       "scale": 1
+    },
+    "flow": {
+      "path": "svg/flow.svg",
+      "scale": 0.16
     },
     "folder": {
       "path": "svg/folder.svg",
@@ -2529,10 +2565,13 @@
       "edit": "edit",
       "fileTransfer": "fileTransfer",
       "favPoint": "favpoint",
+      "favorit": "favIcon",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
       "deleteIcon": "deleteIcon",
       "sortIcon": "sortIcon",
+      "filterIcon": "filter",
+      "resetFilterIcon": "filterReset",
       "importIcon": "import",
       "cacheListIcon": "cacheListIcon",
       "addWp": "add-wp",
@@ -2931,6 +2970,23 @@
       "typeStyle": "logViewLogStyles",
       "cacheTypeStyle": "cacheList",
       "headerBackground": "list_rec_header_9_Patch"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.FilterStyle": {
+    "default": {
+      "toggleButtonFont": "AboutSmall",
+      "toggleButtonFontColor": "font_color",
+      "HISTORY": "flow",
+      "QuickCaches": "fastCache",
+      "AllCachesToFind": "erth",
+      "BEGINNER": "beginner",
+      "GrabTB": "TB_picked",
+      "DropTB": "TB_drop",
+      "Highlights": "mapStar2",
+      "Favorites": "favIcon",
+      "PrepareToArchive": "archived",
+      "ListingChanged": "warning",
+      "AllCaches": "erth"
     }
   }
 }

@@ -36,6 +36,5 @@ public class Action_ShowFilterSettings extends AbstractAction {
     public void execute() {
         EditFilterSettings edFi = new EditFilterSettings("Filter");
         edFi.show();
-
     }
 }
