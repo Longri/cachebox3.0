@@ -78,37 +78,7 @@ public class FilterProperties {
      * @param properties
      */
     public FilterProperties(FilterProperties properties) {
-        Finds = properties.Finds;
-        NotAvailable = properties.NotAvailable;
-        Archived = properties.Archived;
-        Own = properties.Own;
-        ContainsTravelbugs = properties.ContainsTravelbugs;
-        Favorites = properties.Favorites;
-        ListingChanged = properties.ListingChanged;
-        WithManualWaypoint = properties.WithManualWaypoint;
-        HasUserData = properties.HasUserData;
-
-        MinDifficulty = properties.MinDifficulty;
-        MaxDifficulty = properties.MaxDifficulty;
-        MinTerrain = properties.MinTerrain;
-        MaxTerrain = properties.MaxTerrain;
-        MinContainerSize = properties.MinContainerSize;
-        MaxContainerSize = properties.MaxContainerSize;
-        MinRating = properties.MinRating;
-        MaxRating = properties.MaxRating;
-
-        this.hasCorrectedCoordinates = properties.hasCorrectedCoordinates;
-        isHistory = properties.isHistory;
-        mCacheTypes = Arrays.copyOf(properties.mCacheTypes, properties.mCacheTypes.length);
-
-        mAttributes = Arrays.copyOf(properties.mAttributes, properties.mAttributes.length);
-
-        filterName = properties.filterName;
-        filterGcCode = properties.filterGcCode;
-        filterOwner = properties.filterOwner;
-
-        Categories = new LongArray();
-        GPXFilenameIds = new LongArray();
+        this.set(properties);
     }
 
     private void initCreation() {
@@ -556,8 +526,8 @@ public class FilterProperties {
 
         if (GPXFilenameIds.size != filter.GPXFilenameIds.size)
             return false;
-        for (Long gid : GPXFilenameIds.items) {
-            if (!filter.GPXFilenameIds.contains(gid))
+        for (int i = 0, n = GPXFilenameIds.size; i < n; i++) {
+            if (!filter.GPXFilenameIds.contains(GPXFilenameIds.items[i]))
                 return false;
         }
 
@@ -624,5 +594,39 @@ public class FilterProperties {
 
     public FilterProperties copy() {
         return new FilterProperties(this);
+    }
+
+    public void set(FilterProperties properties) {
+        Finds = properties.Finds;
+        NotAvailable = properties.NotAvailable;
+        Archived = properties.Archived;
+        Own = properties.Own;
+        ContainsTravelbugs = properties.ContainsTravelbugs;
+        Favorites = properties.Favorites;
+        ListingChanged = properties.ListingChanged;
+        WithManualWaypoint = properties.WithManualWaypoint;
+        HasUserData = properties.HasUserData;
+
+        MinDifficulty = properties.MinDifficulty;
+        MaxDifficulty = properties.MaxDifficulty;
+        MinTerrain = properties.MinTerrain;
+        MaxTerrain = properties.MaxTerrain;
+        MinContainerSize = properties.MinContainerSize;
+        MaxContainerSize = properties.MaxContainerSize;
+        MinRating = properties.MinRating;
+        MaxRating = properties.MaxRating;
+
+        this.hasCorrectedCoordinates = properties.hasCorrectedCoordinates;
+        isHistory = properties.isHistory;
+        mCacheTypes = Arrays.copyOf(properties.mCacheTypes, properties.mCacheTypes.length);
+
+        mAttributes = Arrays.copyOf(properties.mAttributes, properties.mAttributes.length);
+
+        filterName = properties.filterName;
+        filterGcCode = properties.filterGcCode;
+        filterOwner = properties.filterOwner;
+
+        Categories = new LongArray();
+        GPXFilenameIds = new LongArray();
     }
 }

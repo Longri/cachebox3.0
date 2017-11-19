@@ -87,7 +87,7 @@ public class Config extends Settings {
                         }
 
 
-                        if(setting.name.equals("GcAPIStaging")||setting.name.equals("GcAPI")){
+                        if (setting.name.equals("GcAPIStaging") || setting.name.equals("GcAPI")) {
                             //reset ApiKey validation
                             GroundspeakAPI.resetApiIsChecked();
 
@@ -193,7 +193,7 @@ public class Config extends Settings {
                 }
                 log.debug("Settings are loaded");
             }
-        }, false);
+        }, true);
     }
 
     public static void LoadFromLastValue() {

@@ -35,6 +35,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.utils.IChanged;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,7 +123,18 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
 
         CB.Categories = new Categories();
 
-        CB.viewmanager.setNewFilter(new FilterProperties(Config.FilterNew.getValue()));
+        // load local settings
+        Config.ReadFromDB();
+
+        Config.FilterNew.addChangedEventListener(new IChanged() {
+            @Override
+            public void isChanged() {
+                log.debug("Filter changed");
+            }
+        });
+
+        String filter = Config.FilterNew.getValue();
+        CB.viewmanager.setNewFilter(new FilterProperties(filter));
         String sqlWhere = CB.viewmanager.getActFilter().getSqlWhere(Config.GcLogin.getValue());
 //        sqlWhere = FilterInstances.ACTIVE.getSqlWhere(Config.GcLogin.getValue());
 

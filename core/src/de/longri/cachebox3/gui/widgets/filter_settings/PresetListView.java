@@ -88,6 +88,23 @@ public class PresetListView extends Table {
                 if (selected > -1) {
                     presetListView.setSelection(selected);
                     presetListView.setSelectedItemVisible(true);
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            CB.requestRendering();
+                        }
+                    });
+                }
+            }
+        });
+
+        //selection changed listener
+        presetListView.addSelectionChangedEventListner(new ListView.SelectionChangedEvent() {
+            @Override
+            public void selectionChanged() {
+                ListViewItem item = presetListView.getSelectedItem();
+                if(item instanceof PresetItem){
+                    filterSettings.filterProperties.set(((PresetItem)item).entry.filterProperties);
                 }
             }
         });

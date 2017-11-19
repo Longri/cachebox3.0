@@ -151,7 +151,8 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
                 isFilters.set(!actFilter.equals(FilterInstances.ALL));
 
                 // store filter to config
-//                Config.FilterNew.getValue()
+                Config.FilterNew.setValue(actFilter.toString());
+                Config.AcceptChanges();
 
                 //todo load Query new
             }

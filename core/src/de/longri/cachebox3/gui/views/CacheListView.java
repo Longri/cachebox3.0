@@ -42,6 +42,7 @@ import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheWithWP;
+import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
@@ -330,9 +331,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         new Action_ShowFilterSettings().execute();
                         return true;
                     case MenuID.MI_RESET_FILTER:
-                        CB.viewmanager.toast("RESET FILTER NOT IMPLEMENTED NOW");
-//                        FilterInstances.setLastFilter(new FilterProperties());
-//                        EditFilterSettings.ApplyFilter(FilterInstances.getLastFilter());
+                        CB.viewmanager.setNewFilter(FilterInstances.ALL);
                         return true;
                     case MenuID.MI_SEARCH_LIST:
                         CB.viewmanager.toast("Search NOT IMPLEMENTED NOW");
