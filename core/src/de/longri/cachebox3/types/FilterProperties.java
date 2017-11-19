@@ -15,10 +15,7 @@
  */
 package de.longri.cachebox3.types;
 
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.*;
 import de.longri.cachebox3.CB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,13 +56,13 @@ public class FilterProperties {
 
     public int[] mAttributes;
 
-    public ArrayList<Long> GPXFilenameIds;
+    public LongArray GPXFilenameIds;
 
     public String filterName;
     public String filterGcCode;
     public String filterOwner;
 
-    public ArrayList<Long> Categories;
+    public LongArray Categories;
 
     /**
      * creates the FilterProperties with default values.
@@ -73,6 +70,45 @@ public class FilterProperties {
      */
     public FilterProperties() {
         initCreation();
+    }
+
+    /**
+     * Copy constructor
+     *
+     * @param properties
+     */
+    public FilterProperties(FilterProperties properties) {
+        Finds = properties.Finds;
+        NotAvailable = properties.NotAvailable;
+        Archived = properties.Archived;
+        Own = properties.Own;
+        ContainsTravelbugs = properties.ContainsTravelbugs;
+        Favorites = properties.Favorites;
+        ListingChanged = properties.ListingChanged;
+        WithManualWaypoint = properties.WithManualWaypoint;
+        HasUserData = properties.HasUserData;
+
+        MinDifficulty = properties.MinDifficulty;
+        MaxDifficulty = properties.MaxDifficulty;
+        MinTerrain = properties.MinTerrain;
+        MaxTerrain = properties.MaxTerrain;
+        MinContainerSize = properties.MinContainerSize;
+        MaxContainerSize = properties.MaxContainerSize;
+        MinRating = properties.MinRating;
+        MaxRating = properties.MaxRating;
+
+        this.hasCorrectedCoordinates = properties.hasCorrectedCoordinates;
+        isHistory = properties.isHistory;
+        mCacheTypes = Arrays.copyOf(properties.mCacheTypes, properties.mCacheTypes.length);
+
+        mAttributes = Arrays.copyOf(properties.mAttributes, properties.mAttributes.length);
+
+        filterName = properties.filterName;
+        filterGcCode = properties.filterGcCode;
+        filterOwner = properties.filterOwner;
+
+        Categories = new LongArray();
+        GPXFilenameIds = new LongArray();
     }
 
     private void initCreation() {
@@ -103,12 +139,12 @@ public class FilterProperties {
         mAttributes = new int[Attributes.values().length]; // !!! attention: Attributes 0 not used
         Arrays.fill(mAttributes, 0);
 
-        GPXFilenameIds = new ArrayList<Long>();
+        GPXFilenameIds = new LongArray();
         filterName = "";
         filterGcCode = "";
         filterOwner = "";
 
-        Categories = new ArrayList<Long>();
+        Categories = new LongArray();
     }
 
     /**
@@ -173,7 +209,7 @@ public class FilterProperties {
             for (int i = og; i < mAttributes.length - 1; i++)
                 mAttributes[i + 1] = 0;
 
-            GPXFilenameIds = new ArrayList<Long>();
+            GPXFilenameIds = new LongArray();
             String gpxfilenames = json.getString("gpxfilenameids");
             parts = gpxfilenames.split(SEPARATOR);
             cnt = 0;
@@ -189,7 +225,7 @@ public class FilterProperties {
             filterGcCode = json.getString("filtergc");
             filterOwner = json.getString("filterowner");
 
-            Categories = new ArrayList<Long>();
+            Categories = new LongArray();
             String filtercategories = json.getString("categories");
             if (filtercategories.length() > 0) {
                 String[] partsGPX = filtercategories.split("\\" + GPXSEPARATOR);
@@ -270,7 +306,7 @@ public class FilterProperties {
 
             // GPX Filenames
             tmp = "";
-            for (int i = 0; i <= GPXFilenameIds.size() - 1; i++) {
+            for (int i = 0; i <= GPXFilenameIds.size - 1; i++) {
                 tmp += GPXSEPARATOR + String.valueOf(GPXFilenameIds.get(i));
             }
             json.writeValue("gpxfilenameids", tmp);
@@ -292,8 +328,8 @@ public class FilterProperties {
 
             // Categories
             tmp = "";
-            for (long i : Categories) {
-                tmp += GPXSEPARATOR + i;
+            for (int i = 0, n = Categories.size; i < n; i++) {
+                tmp += GPXSEPARATOR + Categories.items[i];
             }
             json.writeValue("categories", tmp);
 
@@ -420,9 +456,9 @@ public class FilterProperties {
                 }
             }
 
-            if (GPXFilenameIds.size() != 0) {
+            if (GPXFilenameIds.size != 0) {
                 String s = "";
-                for (long id : GPXFilenameIds) {
+                for (long id : GPXFilenameIds.items) {
                     s += String.valueOf(id) + ",";
                 }
                 // s += "-1";
@@ -518,9 +554,9 @@ public class FilterProperties {
                 return false; // nicht gleich!!!
         }
 
-        if (GPXFilenameIds.size() != filter.GPXFilenameIds.size())
+        if (GPXFilenameIds.size != filter.GPXFilenameIds.size)
             return false;
-        for (Long gid : GPXFilenameIds) {
+        for (Long gid : GPXFilenameIds.items) {
             if (!filter.GPXFilenameIds.contains(gid))
                 return false;
         }
@@ -586,4 +622,7 @@ public class FilterProperties {
         return false;
     }
 
+    public FilterProperties copy() {
+        return new FilterProperties(this);
+    }
 }

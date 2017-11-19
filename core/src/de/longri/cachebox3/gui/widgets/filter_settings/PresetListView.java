@@ -231,10 +231,9 @@ public class PresetListView extends Table {
         // Check if Preset exist
         boolean exist = false;
         CharSequence existName = "";
-        final FilterProperties filterSet = filterSettings.getFilterSet();
         for (ListViewItem v : presetListItems) {
             if (v instanceof PresetItem) {
-                if (((PresetItem) v).entry.filterProperties.equals(filterSet)) {
+                if (((PresetItem) v).entry.filterProperties.equals(filterSettings.filterProperties)) {
                     exist = true;
                     existName = ((PresetItem) v).entry.name;
                 }
@@ -256,7 +255,7 @@ public class PresetListView extends Table {
             @Override
             public void input(String text) {
                 String uF = Config.UserFilter.getValue();
-                String aktFilter = filterSet.toString();
+                String aktFilter = filterSettings.filterProperties.toString();
 
                 // Category Filterungen aus Filter entfernen
                 int pos = aktFilter.indexOf("^");

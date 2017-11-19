@@ -888,7 +888,7 @@ public class Database {
     }
 
     public static boolean createNewDB(Database database, FileHandle rootFolder, String newDB_Name, Boolean ownRepository) {
-        CB.viewmanager.setNewFilter(FilterInstances.ALL);
+        if (CB.viewmanager != null) CB.viewmanager.setNewFilter(FilterInstances.ALL); // in case of JUnit
         FileHandle dbFile = rootFolder.child(newDB_Name + ".db3");
         try {
             SQLiteGdxDatabase db = SQLiteGdxDatabaseFactory.getNewDatabase(dbFile);

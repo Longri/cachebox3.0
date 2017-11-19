@@ -20,6 +20,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.EditFilterSettings;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.types.FilterProperties;
 
 public class Action_ShowFilterSettings extends AbstractAction {
 
@@ -34,7 +35,11 @@ public class Action_ShowFilterSettings extends AbstractAction {
 
     @Override
     public void execute() {
-        EditFilterSettings edFi = new EditFilterSettings("Filter");
+        EditFilterSettings edFi = new EditFilterSettings(CB.viewmanager.getActFilter()) {
+            public void callBack(FilterProperties properties) {
+                CB.viewmanager.setNewFilter(properties);
+            }
+        };
         edFi.show();
     }
 }

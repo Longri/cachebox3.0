@@ -42,6 +42,7 @@ public class EditFilterSettings extends ActivityBase {
 
     private final Logger log = LoggerFactory.getLogger(EditFilterSettings.class);
 
+
     private CharSequenceButton tglBtnPreset;
     private CharSequenceButton tglBtnSet;
     private CharSequenceButton tglBtnCategory;
@@ -57,8 +58,12 @@ public class EditFilterSettings extends ActivityBase {
     private TextFilterView textFilterView;
     private FilterStyle style;
 
-    public EditFilterSettings(String name) {
-        super(name);
+    public final FilterProperties filterProperties;
+
+    public EditFilterSettings(FilterProperties filterProperties) {
+        super("EditFilterSettings");
+
+        this.filterProperties = filterProperties.copy();
 
         try {
             style = VisUI.getSkin().get(FilterStyle.class);
@@ -69,7 +74,7 @@ public class EditFilterSettings extends ActivityBase {
 
         this.defaults().pad(CB.scaledSizes.MARGIN);
 
-        presetListView = new PresetListView(this,style);
+        presetListView = new PresetListView(this, style);
         filterSetListView = new FilterSetListView();
         categoriesListView = new CategoriesListView();
         textFilterView = new TextFilterView();
@@ -87,10 +92,12 @@ public class EditFilterSettings extends ActivityBase {
         });
     }
 
+    public void callBack(FilterProperties properties) {
+    }
+
     private final ClickListener cancelListener = new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
-
             finish();
         }
     };
@@ -98,7 +105,7 @@ public class EditFilterSettings extends ActivityBase {
     private final ClickListener okListener = new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
-
+            callBack(EditFilterSettings.this.filterProperties);
             finish();
         }
     };
@@ -185,40 +192,4 @@ public class EditFilterSettings extends ActivityBase {
 
         this.add(cancelOkTable).width(new Value.Fixed(Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2));
     }
-
-    public FilterProperties getFilterSet() {
-        FilterProperties props = new FilterProperties();
-//        props.NotAvailable = NotAvailable.getChecked();
-//        props.Archived = Archived.getChecked();
-//        props.Finds = Finds.getChecked();
-//        props.Own = Own.getChecked();
-//        props.ContainsTravelbugs = ContainsTravelBugs.getChecked();
-//        props.Favorites = Favorites.getChecked();
-//        props.HasUserData = HasUserData.getChecked();
-//        props.ListingChanged = ListingChanged.getChecked();
-//        props.WithManualWaypoint = WithManualWaypoint.getChecked();
-//        props.hasCorrectedCoordinates = hasCorrectedCoordinates.getChecked();
-//
-//        props.MinDifficulty = minDifficulty.getValue();
-//        props.MaxDifficulty = maxDifficulty.getValue();
-//        props.MinTerrain = minTerrain.getValue();
-//        props.MaxTerrain = maxTerrain.getValue();
-//        props.MinContainerSize = minContainerSize.getValue();
-//        props.MaxContainerSize = maxContainerSize.getValue();
-//        props.MinRating = minRating.getValue();
-//        props.MaxRating = maxRating.getValue();
-//
-//        for (int i = 0; i < types.getChildLength(); i++) {
-//            FilterSetListViewItem itm = types.getChild(i);
-//            int ct = itm.getFilterSetEntry().cacheType.ordinal();
-//            props.mCacheTypes[ct] = itm.getBoolean();
-//        }
-//
-//        for (int i = 0; i < attribs.getChildLength(); i++) {
-//            props.mAttributes[i + 1] = attribs.getChild(i).getChecked();
-//        }
-
-        return props;
-    }
-
 }

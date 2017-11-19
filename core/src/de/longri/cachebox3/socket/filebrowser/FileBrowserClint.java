@@ -199,6 +199,7 @@ public class FileBrowserClint {
     protected void addToFileList(ObjectMap<String, FileHandle> map, ServerFile path, ServerFile workingDir, List<File> files) {
         for (File file : files) {
             if (file.isFile()) {
+                if(file.getName().equals(".DS_Store"))continue; //don't store
                 map.put(path.getTransferPath(workingDir, file), Gdx.files.absolute(file.getAbsolutePath()));
             } else if (file.isDirectory()) {
                 List<File> subFiles = new ArrayList<>();

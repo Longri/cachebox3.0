@@ -61,7 +61,7 @@ class FileBrowserClintTest {
         ObjectMap<String, FileHandle> fileMap = new ObjectMap<>();
         clint.addToFileList(fileMap, path, workingDir, files);
 
-        assertThat("Map size must be 8", fileMap.size == 8);
+        assertThat("Map size must be 8, not "+fileMap.size, fileMap.size == 8);
 
     }
 
