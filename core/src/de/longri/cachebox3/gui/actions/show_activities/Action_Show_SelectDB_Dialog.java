@@ -83,7 +83,6 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
         });
     }
 
-    private final ViewManager.ToastLength WAIT_TOAST_LENGTH = ViewManager.ToastLength.WAIT;
 
     private void returnFromSelectDB() {
         log.debug("\r\nSwitch DB");
@@ -100,7 +99,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             CB.postAsync(new Runnable() {
                 @Override
                 public void run() {
-                    CB.viewmanager.toast(Translation.get("LoadDB"), WAIT_TOAST_LENGTH);
+                    CB.viewmanager.toast(Translation.get("LoadDB"), ViewManager.ToastLength.WAIT);
                     CB.requestRendering();
                 }
             });
@@ -119,77 +118,9 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             log.error("can't open DB", e);
             return;
         }
-        Config.ReadFromDB();
 
-        CB.Categories = new Categories();
-
-        // load local settings
-        Config.ReadFromDB();
-
-        Config.FilterNew.addChangedEventListener(new IChanged() {
-            @Override
-            public void isChanged() {
-                log.debug("Filter changed");
-            }
-        });
-
-        String filter = Config.FilterNew.getValue();
-        CB.viewmanager.setNewFilter(new FilterProperties(filter));
-        String sqlWhere = CB.viewmanager.getActFilter().getSqlWhere(Config.GcLogin.getValue());
-//        sqlWhere = FilterInstances.ACTIVE.getSqlWhere(Config.GcLogin.getValue());
-
-        Database.Data.gpxFilenameUpdateCacheCount();
-
-
-        log.debug("Read CacheList");
-        CacheList tmpCacheList = new CacheList();
-
-        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, tmpCacheList, sqlWhere, false, Config.ShowAllWaypoints.getValue());
-        log.debug("Readed " + tmpCacheList.size + "Caches into CacheList");
-        Database.Data.Query = tmpCacheList;
-
-        // set selectedCache from last selected Cache
-        String sGc = Config.LastSelectedCache.getValue();
-        AbstractCache lastSelectedAbstractCache = null;
-        if (sGc != null && !sGc.equals("")) {
-            for (int i = 0, n = Database.Data.Query.size; i < n; i++) {
-                AbstractCache c = Database.Data.Query.get(i);
-
-                if (c.getGcCode().toString().equalsIgnoreCase(sGc)) {
-                    try {
-                        log.debug("returnFromSelectDB:Set selectedCache to " + c.getGcCode() + " from lastSaved.");
-                        EventHandler.fire(new SelectedCacheChangedEvent(c));
-                        lastSelectedAbstractCache = c;
-                    } catch (Exception e) {
-                        log.error("set last selected Cache", e);
-                    }
-                    break;
-                }
-            }
-        }
-        // Wenn noch kein Cache Selected ist dann einfach den ersten der Liste aktivieren
-        if ((lastSelectedAbstractCache == null) && (Database.Data.Query.size > 0)) {
-            log.debug("Set selectedCache to " + Database.Data.Query.get(0).getGcCode() + " from firstInDB");
-            EventHandler.fire(new SelectedCacheChangedEvent(Database.Data.Query.get(0)));
-        }
-
-        CB.setAutoResort(Config.StartWithAutoSelect.getValue());
-        CacheListChangedEventList.Call();
-
-        if (CB.viewmanager != null && CB.viewmanager.getActView() instanceof CacheListView) {
-            CacheListView cacheListView = (CacheListView) CB.viewmanager.getActView();
-            cacheListView.setWaitToastLength(WAIT_TOAST_LENGTH);
-        } else {
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    WAIT_TOAST_LENGTH.close();
-                }
-            });
-        }
-
-        //Fire progress changed event for progress changed on Splash
-        EventHandler.fire(new IncrementProgressEvent(10, "load db"));
+        CB.loadFilteredCacheList();
 
     }
+
 }

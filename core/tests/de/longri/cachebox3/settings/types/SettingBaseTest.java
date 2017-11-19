@@ -93,7 +93,7 @@ class SettingBaseTest {
         Database.Settings = new Database(Database.DatabaseType.Settings);
         Database.Settings.startUp(configFileHandle);
 
-        Config.ReadFromDB();
+        Config.ReadFromDB(false);
         assertThat("", testBool.getValue());
         assertThat("Setting must not desired", !testBool.isExpired());
 
@@ -110,7 +110,7 @@ class SettingBaseTest {
         Database.Settings = new Database(Database.DatabaseType.Settings);
         Database.Settings.startUp(configFileHandle);
 
-        Config.ReadFromDB();
+        Config.ReadFromDB(false);
         assertThat("", testBool.getValue());
         assertThat("Setting must desired", testBool.isExpired());
 

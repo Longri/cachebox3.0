@@ -26,18 +26,26 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.GpsEventHelper;
+import de.longri.cachebox3.events.IncrementProgressEvent;
+import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.dialogs.GetApiKeyQuestionDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.views.CacheListView;
 import de.longri.cachebox3.locator.track.Track;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.CacheList;
 import de.longri.cachebox3.types.Categories;
+import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.ScaledSizes;
 import de.longri.cachebox3.utils.SkinColor;
@@ -336,7 +344,7 @@ public class CB {
         });
 
         while (WAIT.get()) {
-            Gdx.graphics.requestRendering();
+            if (Gdx.graphics != null) Gdx.graphics.requestRendering();// in case of JUnit test
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
@@ -476,6 +484,69 @@ public class CB {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void loadFilteredCacheList() {
+        Config.ReadFromDB(true);
+        CB.Categories = new Categories();
+
+        String filter = Config.FilterNew.getValue();
+        CB.viewmanager.setNewFilter(new FilterProperties(filter));
+        String sqlWhere = CB.viewmanager.getActFilter().getSqlWhere(Config.GcLogin.getValue());
+//        sqlWhere = FilterInstances.ACTIVE.getSqlWhere(Config.GcLogin.getValue());
+
+        Database.Data.gpxFilenameUpdateCacheCount();
+
+
+        log.debug("Read CacheList");
+        CacheList tmpCacheList = new CacheList();
+
+        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, tmpCacheList, sqlWhere, false, Config.ShowAllWaypoints.getValue());
+        log.debug("Readed " + tmpCacheList.size + "Caches into CacheList");
+        Database.Data.Query = tmpCacheList;
+
+        // set selectedCache from last selected Cache
+        String sGc = Config.LastSelectedCache.getValue();
+        AbstractCache lastSelectedAbstractCache = null;
+        if (sGc != null && !sGc.equals("")) {
+            for (int i = 0, n = Database.Data.Query.size; i < n; i++) {
+                AbstractCache c = Database.Data.Query.get(i);
+
+                if (c.getGcCode().toString().equalsIgnoreCase(sGc)) {
+                    try {
+                        log.debug("returnFromSelectDB:Set selectedCache to " + c.getGcCode() + " from lastSaved.");
+                        EventHandler.fire(new SelectedCacheChangedEvent(c));
+                        lastSelectedAbstractCache = c;
+                    } catch (Exception e) {
+                        log.error("set last selected Cache", e);
+                    }
+                    break;
+                }
+            }
+        }
+        // Wenn noch kein Cache Selected ist dann einfach den ersten der Liste aktivieren
+        if ((lastSelectedAbstractCache == null) && (Database.Data.Query.size > 0)) {
+            log.debug("Set selectedCache to " + Database.Data.Query.get(0).getGcCode() + " from firstInDB");
+            EventHandler.fire(new SelectedCacheChangedEvent(Database.Data.Query.get(0)));
+        }
+
+        CB.setAutoResort(Config.StartWithAutoSelect.getValue());
+        CacheListChangedEventList.Call();
+
+        if (CB.viewmanager != null && CB.viewmanager.getActView() instanceof CacheListView) {
+            CacheListView cacheListView = (CacheListView) CB.viewmanager.getActView();
+            cacheListView.setWaitToastLength(ViewManager.ToastLength.WAIT);
+        } else {
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    ViewManager.ToastLength.WAIT.close();
+                }
+            });
+        }
+
+        //Fire progress changed event for progress changed on Splash
+        EventHandler.fire(new IncrementProgressEvent(10, "load db"));
     }
 
 }

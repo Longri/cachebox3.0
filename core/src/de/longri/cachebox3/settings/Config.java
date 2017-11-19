@@ -116,7 +116,7 @@ public class Config extends Settings {
         return false;
     }
 
-    public static void ReadFromDB() {
+    public static void ReadFromDB(boolean wait) {
         CB.postOnMainThread(new Runnable() {
             @Override
             public void run() {
@@ -193,7 +193,7 @@ public class Config extends Settings {
                 }
                 log.debug("Settings are loaded");
             }
-        }, true);
+        }, wait);
     }
 
     public static void LoadFromLastValue() {

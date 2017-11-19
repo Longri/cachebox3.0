@@ -30,9 +30,6 @@ import org.oscim.backend.Platform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-
 /**
  * Created by Longri on 02.08.16.
  */
@@ -73,7 +70,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
 
         //load settings
         EventHandler.fire(new IncrementProgressEvent(1,"load settings"));
-        Config.ReadFromDB();
+        Config.ReadFromDB(false);
 
 
 
