@@ -31,6 +31,7 @@ import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.filter_settings.*;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.FilterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +69,7 @@ public class EditFilterSettings extends ActivityBase {
 
         this.defaults().pad(CB.scaledSizes.MARGIN);
 
-        presetListView = new PresetListView(style);
+        presetListView = new PresetListView(this,style);
         filterSetListView = new FilterSetListView();
         categoriesListView = new CategoriesListView();
         textFilterView = new TextFilterView();
@@ -183,6 +184,41 @@ public class EditFilterSettings extends ActivityBase {
         cancelOkTable.add(btnCancel).expandX().fillX();
 
         this.add(cancelOkTable).width(new Value.Fixed(Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2));
+    }
+
+    public FilterProperties getFilterSet() {
+        FilterProperties props = new FilterProperties();
+//        props.NotAvailable = NotAvailable.getChecked();
+//        props.Archived = Archived.getChecked();
+//        props.Finds = Finds.getChecked();
+//        props.Own = Own.getChecked();
+//        props.ContainsTravelbugs = ContainsTravelBugs.getChecked();
+//        props.Favorites = Favorites.getChecked();
+//        props.HasUserData = HasUserData.getChecked();
+//        props.ListingChanged = ListingChanged.getChecked();
+//        props.WithManualWaypoint = WithManualWaypoint.getChecked();
+//        props.hasCorrectedCoordinates = hasCorrectedCoordinates.getChecked();
+//
+//        props.MinDifficulty = minDifficulty.getValue();
+//        props.MaxDifficulty = maxDifficulty.getValue();
+//        props.MinTerrain = minTerrain.getValue();
+//        props.MaxTerrain = maxTerrain.getValue();
+//        props.MinContainerSize = minContainerSize.getValue();
+//        props.MaxContainerSize = maxContainerSize.getValue();
+//        props.MinRating = minRating.getValue();
+//        props.MaxRating = maxRating.getValue();
+//
+//        for (int i = 0; i < types.getChildLength(); i++) {
+//            FilterSetListViewItem itm = types.getChild(i);
+//            int ct = itm.getFilterSetEntry().cacheType.ordinal();
+//            props.mCacheTypes[ct] = itm.getBoolean();
+//        }
+//
+//        for (int i = 0; i < attribs.getChildLength(); i++) {
+//            props.mAttributes[i + 1] = attribs.getChild(i).getChecked();
+//        }
+
+        return props;
     }
 
 }

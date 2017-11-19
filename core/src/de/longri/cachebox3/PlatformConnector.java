@@ -127,8 +127,8 @@ public abstract class PlatformConnector {
 
 
     //Text Input
-    public static void getSinglelineTextInput(Input.TextInputListener listener, String title, String text, String hint) {
-        Gdx.input.getTextInput(listener, title, text, hint);
+    public static void getSinglelineTextInput(Input.TextInputListener listener, CharSequence title, CharSequence text, CharSequence hint) {
+        Gdx.input.getTextInput(listener, title.toString(), text.toString(), hint.toString());
     }
 
     public abstract void _getMultilineTextInput(Input.TextInputListener listener, String title, String text, String hint);

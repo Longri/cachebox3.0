@@ -44,10 +44,8 @@ public class NewDB_InputBox extends ButtonDialog {
         contentBox.add(textField).pad(pad).left().fillX();
         contentBox.row();
         contentBox.add(checkBox).pad(pad).left().fillX();
-
         contentBox.pack();
         contentBox.layout();
-
         return contentBox;
     }
 

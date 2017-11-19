@@ -16,19 +16,29 @@
 package de.longri.cachebox3.gui.widgets.filter_settings;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.gui.activities.EditFilterSettings;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.EditTextBox;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.SettingString;
 import de.longri.cachebox3.translation.Translation;
@@ -58,11 +68,12 @@ public class PresetListView extends Table {
     private final FilterStyle style;
     private Array<PresetEntry> presetEntries;
     private Array<ListViewItem> presetListItems;
+    private final EditFilterSettings filterSettings;
 
-    public PresetListView(FilterStyle style) {
+    public PresetListView(EditFilterSettings editFilterSettings, FilterStyle style) {
         this.style = style;
-
-        fillPresetList();
+        this.filterSettings = editFilterSettings;
+        final int selected = fillPresetList();
 
         presetListView = new ListView();
         presetListView.setSelectable(ListView.SelectableType.SINGLE);
@@ -74,6 +85,10 @@ public class PresetListView extends Table {
                 setListViewAdapter();
                 presetListView.pack();
                 presetListView.invalidateHierarchy();
+                if (selected > -1) {
+                    presetListView.setSelection(selected);
+                    presetListView.setSelectedItemVisible(true);
+                }
             }
         });
     }
@@ -109,7 +124,7 @@ public class PresetListView extends Table {
         this.layout();
     }
 
-    private void fillPresetList() {
+    private int fillPresetList() {
         if (presetEntries != null)
             presetEntries.clear();
         else
@@ -153,24 +168,54 @@ public class PresetListView extends Table {
         //add listViewItems
         for (int i = 0, n = presetEntries.size; i < n; i++) {
             PresetEntry entry = presetEntries.get(i);
-            PresetItem item = new PresetItem(i, entry.name, entry.icon);
+            PresetItem item = new PresetItem(i, entry);
             presetListItems.add(item);
         }
 
         // add a Button of the end of list, to create UserItem
-        presetListItems.add(new ButtonListViewItem(presetListItems.size + 1));
+        presetListItems.add(new ButtonListViewItem(presetListItems.size));
 
+        //setSelection
+        int n = presetListItems.size;
+        FilterProperties actFilter = CB.viewmanager.getActFilter();
+        int selectedIndex = -1;
+        while (n-- > 0) {
+            ListViewItem item = presetListItems.get(n);
+            if (item instanceof PresetItem) {
+                if (((PresetItem) item).entry.filterProperties.equals(actFilter)) {
+                    selectedIndex = n;
+                    break;
+                }
+            }
+        }
+        return selectedIndex;
     }
 
     private void presetEntriesAdd(String name, Drawable icon, FilterProperties filter) {
         presetEntries.add(new PresetEntry(Translation.get(name), icon, filter));
     }
 
-    static class ButtonListViewItem extends ListViewItem {
+    class ButtonListViewItem extends ListViewItem {
 
         public ButtonListViewItem(int listIndex) {
             super(listIndex);
-            CharSequenceButton btn = new CharSequenceButton("test");
+            CharSequenceButton btn = new CharSequenceButton(Translation.get("AddOwnFilterPreset"));
+
+            this.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    final int selected = presetListView.getSelectedItem().getListIndex();
+                    addUserPreset();
+
+                    // can't select this item, so select the last
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            presetListView.setSelection(selected);
+                            presetListView.setSelectedItemVisible(true);
+                        }
+                    });
+                }
+            });
             this.add(btn).expand().fill();
         }
 
@@ -181,12 +226,68 @@ public class PresetListView extends Table {
     }
 
 
-    static class PresetItem extends ListViewItem {
-        public PresetItem(int listIndex, CharSequence title, Drawable icon) {
+    private void addUserPreset() {
+
+        // Check if Preset exist
+        boolean exist = false;
+        CharSequence existName = "";
+        final FilterProperties filterSet = filterSettings.getFilterSet();
+        for (ListViewItem v : presetListItems) {
+            if (v instanceof PresetItem) {
+                if (((PresetItem) v).entry.filterProperties.equals(filterSet)) {
+                    exist = true;
+                    existName = ((PresetItem) v).entry.name;
+                }
+            }
+        }
+
+        if (exist) {
+            CharSequence msg = Translation.get("PresetExist", "\n\n", existName.toString());
+            MessageBox.show(msg, null, MessageBoxButtons.OK, MessageBoxIcon.Warning, new OnMsgBoxClickListener() {
+                @Override
+                public boolean onClick(int which, Object data) {
+                    return true;
+                }
+            });
+            return;
+        }
+
+        Input.TextInputListener listener = new Input.TextInputListener() {
+            @Override
+            public void input(String text) {
+                String uF = Config.UserFilter.getValue();
+                String aktFilter = filterSet.toString();
+
+                // Category Filterungen aus Filter entfernen
+                int pos = aktFilter.indexOf("^");
+                aktFilter = aktFilter.substring(0, pos);
+
+                uF += text + ";" + aktFilter + "#";
+                Config.UserFilter.setValue(uF);
+                Config.AcceptChanges();
+                fillPresetList();
+                presetListView.dataSetChanged();
+            }
+
+            @Override
+            public void canceled() {
+                // do nothing
+            }
+        };
+
+        PlatformConnector.getSinglelineTextInput(listener, Translation.get("NewUserPreset"), "", Translation.get("InsNewUserPreset"));
+    }
+
+
+    class PresetItem extends ListViewItem {
+        final PresetEntry entry;
+
+        public PresetItem(int listIndex, PresetEntry entry) {
             super(listIndex);
-            final Image iconImage = new Image(icon, Scaling.none);
+            this.entry = entry;
+            final Image iconImage = new Image(entry.icon, Scaling.none);
             this.add(iconImage).center().padRight(CB.scaledSizes.MARGIN_HALF);
-            final VisLabel label = new VisLabel(title);
+            final VisLabel label = new VisLabel(entry.name);
             label.setWrap(true);
             this.add(label).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
         }
