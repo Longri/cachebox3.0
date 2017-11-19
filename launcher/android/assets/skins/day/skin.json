@@ -2136,12 +2136,14 @@
     "cache": {
       "select": "cache_selected",
       "hasMenu": "cm_icon",
-      "hasFilteredMenu": "cm_icon_filterd",
       "up": "cache",
       "down": "cache_pressed"
     },
     "db": {
       "select": "db_selected",
+      "selectFilterd": "db_selected_filter_active",
+      "upFiltered": "db_filter_active",
+      "downFiltered": "db_pressed_filter_active",
       "hasMenu": "cm_icon",
       "hasFilteredMenu": "cm_icon_filterd",
       "up": "db",
@@ -2150,21 +2152,18 @@
     "misc": {
       "select": "misc_selected",
       "hasMenu": "cm_icon",
-      "hasFilteredMenu": "cm_icon_filterd",
       "up": "misc",
       "down": "misc_pressed"
     },
     "nav": {
       "select": "nav_selected",
       "hasMenu": "cm_icon",
-      "hasFilteredMenu": "cm_icon_filterd",
       "up": "nav",
       "down": "nav_pressed"
     },
     "tool": {
       "select": "tool_selected",
       "hasMenu": "cm_icon",
-      "hasFilteredMenu": "cm_icon_filterd",
       "up": "tool",
       "down": "tool_pressed"
     }

@@ -22,6 +22,7 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.settings.Config;
@@ -887,7 +888,7 @@ public class Database {
     }
 
     public static boolean createNewDB(Database database, FileHandle rootFolder, String newDB_Name, Boolean ownRepository) {
-        FilterInstances.setLastFilter(new FilterProperties(Config.FilterNew.getValue()));
+        CB.viewmanager.setNewFilter(FilterInstances.ALL);
         FileHandle dbFile = rootFolder.child(newDB_Name + ".db3");
         try {
             SQLiteGdxDatabase db = SQLiteGdxDatabaseFactory.getNewDatabase(dbFile);

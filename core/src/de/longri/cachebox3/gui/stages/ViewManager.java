@@ -42,8 +42,12 @@ import de.longri.cachebox3.gui.widgets.Slider;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.FilterInstances;
+import de.longri.cachebox3.types.FilterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
@@ -76,6 +80,9 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
     private final Action_Show_Quit action_show_quit = new Action_Show_Quit();
     private final Action_Show_DraftsView action_show_fieldNotesView = new Action_Show_DraftsView();
 
+    private FilterProperties actFilter = FilterInstances.ALL;
+    private final AtomicBoolean isFilters = new AtomicBoolean(false);
+
     public ViewManager(final CacheboxMain main, Viewport viewport, Batch batch) {
         super("ViewManager", viewport, batch);
 
@@ -105,11 +112,11 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         if (Config.quickButtonLastShow.getValue())
             slider.setQuickButtonVisible();
 
-        db_button = new GestureButton("db");
-        cache_button = new GestureButton("cache");
-        navButton = new GestureButton("nav");
-        tool_button = new GestureButton("tool");
-        misc_button = new GestureButton("misc");
+        db_button = new GestureButton("db", this);
+        cache_button = new GestureButton("cache", this);
+        navButton = new GestureButton("nav", this);
+        tool_button = new GestureButton("tool", this);
+        misc_button = new GestureButton("misc", this);
 
         mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class));
         mainButtonBar.addButton(db_button);
@@ -132,6 +139,30 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         selectedCacheChanged(new de.longri.cachebox3.events.SelectedCacheChangedEvent(de.longri.cachebox3.events.EventHandler.getSelectedCache()));
     }
 
+
+    public FilterProperties getActFilter() {
+        return actFilter;
+    }
+
+    public void setNewFilter(FilterProperties filter) {
+        synchronized (isFilters) {
+            if (!actFilter.equals(filter)) {
+                actFilter = filter;
+                isFilters.set(!actFilter.equals(FilterInstances.ALL));
+
+                // store filter to config
+//                Config.FilterNew.getValue()
+
+                //todo load Query new
+            }
+        }
+    }
+
+    public boolean isFilters() {
+        synchronized (isFilters) {
+            return isFilters.get();
+        }
+    }
 
     private String terrDiffToShortString(float value) {
         int intValue = (int) value;

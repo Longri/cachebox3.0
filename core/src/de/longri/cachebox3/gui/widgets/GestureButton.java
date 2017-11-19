@@ -33,10 +33,9 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.GestureButtonStyle;
+import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,16 +51,15 @@ public class GestureButton extends Button {
 
 
     private static int idCounter = 0;
-//    protected static Drawable menuDrawable;
-//    protected static Drawable menuDrawableFiltered;
 
-    private GestureButtonStyle style;
+    private final GestureButtonStyle style, filterStyle;
     private final ArrayList<ActionButton> buttonActions;
     private final int ID;
     public Abstract_Action_ShowView aktActionView;
     private boolean hasContextMenu;
     private GestureHelp gestureHelper;
     private Drawable gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
+    private final ViewManager viewManager;
 
     public ArrayList<ActionButton> getButtonActions() {
         return buttonActions;
@@ -72,12 +70,22 @@ public class GestureButton extends Button {
     }
 
 
-    public GestureButton(String styleName) {
+    public GestureButton(String styleName, ViewManager viewManager) {
         style = VisUI.getSkin().get(styleName, GestureButtonStyle.class);
         style.checked = style.select;
+
+        filterStyle = new GestureButtonStyle();
+        filterStyle.down = style.down;
+        filterStyle.checked = style.checked;
+        filterStyle.up = style.up;
+        if (style.downFiltered != null) filterStyle.down = style.downFiltered;
+        if (style.selectFilterd != null) filterStyle.checked = style.selectFilterd;
+        if (style.upFiltered != null) filterStyle.up = style.upFiltered;
+
+        this.viewManager = viewManager;
         this.setStyle(style);
         this.ID = idCounter++;
-        buttonActions = new ArrayList<ActionButton>();
+        buttonActions = new ArrayList<>();
 
         //remove all Listeners
         Array<EventListener> listeners = this.getListeners();
@@ -226,9 +234,9 @@ public class GestureButton extends Button {
                 if (ba.isDefaultAction()) {
                     AbstractAction action = ba.getAction();
 
-                    if(action instanceof Abstract_Action_ShowView){
+                    if (action instanceof Abstract_Action_ShowView) {
                         //check if target view not actView
-                       Class clazz= ((Abstract_Action_ShowView)action).getViewClass();
+                        Class clazz = ((Abstract_Action_ShowView) action).getViewClass();
                         if (clazz.isAssignableFrom(CB.viewmanager.getActView().getClass())) {
                             actionExecuted = false;
                             break;
@@ -247,7 +255,7 @@ public class GestureButton extends Button {
 
             // if no default action seted, show context-menu from view (like long click)
             if (!actionExecuted) {
-                longPress(event.getTarget(), x, y,true);
+                longPress(event.getTarget(), x, y, true);
             }
             return true;
         }
@@ -360,7 +368,20 @@ public class GestureButton extends Button {
     }
 
 
+    private boolean isLastFiltered = false;
+
     public void draw(Batch batch, float parentAlpha) {
+
+        //check if filter changed
+        if (viewManager.isFilters() != isLastFiltered) {
+            if (viewManager.isFilters() && style.upFiltered != null) {
+                this.setStyle(filterStyle);
+            } else {
+                this.setStyle(style);
+            }
+            isLastFiltered = viewManager.isFilters();
+        }
+
         super.draw(batch, parentAlpha);
 
         if (hasContextMenu && isChecked()) {
@@ -368,12 +389,19 @@ public class GestureButton extends Button {
             Vector2 stagePos = new Vector2();
             this.localToStageCoordinates(stagePos);
 
-            boolean isFiltered = false; //TODO set filtered!
+            boolean isFiltered = viewManager.isFilters();
 
-            if (!isFiltered && style.hasMenu != null)
+            if (!isFiltered && style.hasMenu != null) {
                 style.hasMenu.draw(batch, stagePos.x, stagePos.y, this.getWidth(), this.getHeight());
-            if (isFiltered && style.hasFilteredMenu != null)
+            }
+
+            if (isFiltered && style.hasFilteredMenu != null) {
                 style.hasFilteredMenu.draw(batch, stagePos.x, stagePos.y, this.getWidth(), this.getHeight());
+            } else {
+                if (style.hasMenu != null) {
+                    style.hasMenu.draw(batch, stagePos.x, stagePos.y, this.getWidth(), this.getHeight());
+                }
+            }
         }
     }
 }

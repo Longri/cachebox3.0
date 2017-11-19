@@ -22,5 +22,5 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
  * Created by Longri on 13.02.2017.
  */
 public class GestureButtonStyle extends Button.ButtonStyle {
-    public Drawable select,hasMenu,hasFilteredMenu;
+    public Drawable select, selectFilterd, upFiltered, downFiltered, hasMenu, hasFilteredMenu;
 }
