@@ -40,15 +40,15 @@ public class ImmutableCache extends AbstractCache {
 
     // Masks
     public final static short MASK_HAS_HINT = 1 << 0;
-    public final static short MASK_CORECTED_COORDS = 1 << 1;
-    public final static short MASK_ARCHIVED = 1 << 2;
-    public final static short MASK_AVAILABLE = 1 << 3;
-    public final static short MASK_FAVORITE = 1 << 4;
-    public final static short MASK_FOUND = 1 << 5;
-    public final static short MASK_IS_LIVE = 1 << 6;
-    public final static short MASK_SOLVER1CHANGED = 1 << 7;
-    public final static short MASK_HAS_USER_DATA = 1 << 8;
-    public final static short MASK_LISTING_CHANGED = 1 << 9;
+    public final static short MASK_CORECTED_COORDS = 1 << 1; //   2
+    public final static short MASK_ARCHIVED = 1 << 2;        //   4
+    public final static short MASK_AVAILABLE = 1 << 3;       //   8
+    public final static short MASK_FAVORITE = 1 << 4;        //  16
+    public final static short MASK_FOUND = 1 << 5;           //  32
+    public final static short MASK_IS_LIVE = 1 << 6;         //  64
+    public final static short MASK_SOLVER1CHANGED = 1 << 7;  // 128
+    public final static short MASK_HAS_USER_DATA = 1 << 8;   // 256
+    public final static short MASK_LISTING_CHANGED = 1 << 9; // 512
     private Array<AbstractWaypoint> waypoints;
 
     public ImmutableCache(double latitude, double longitude) {

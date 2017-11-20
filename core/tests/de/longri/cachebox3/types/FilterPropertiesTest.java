@@ -16,7 +16,10 @@
 package de.longri.cachebox3.types;
 
 
+import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,8 +29,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Created by Longri on 19.02.17.
  */
 class FilterPropertiesTest {
+    static Database testDb;
+
     static {
         TestUtils.initialGdx();
+        testDb = new Database(Database.DatabaseType.CacheBox3);
+        try {
+            testDb.startUp(TestUtils.getResourceFileHandle("testsResources/cacheboxTestDB.db3"));
+        } catch (SQLiteGdxException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -93,6 +104,7 @@ class FilterPropertiesTest {
                 FilterInstances.ALL.toString(),
                 "FilterInstances.ALL 'All Caches' =>toString");
 
+        assertFilteredReadedDB(FilterInstances.ALL);
 
     }
 
@@ -154,6 +166,8 @@ class FilterPropertiesTest {
         assertEquals("{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.ALL.toString(),
                 "FilterInstances.ALL 'All Caches' =>toString");
+
+        assertFilteredReadedDB(FilterInstances.ACTIVE);
     }
 
     @Test
@@ -218,6 +232,10 @@ class FilterPropertiesTest {
                 FilterInstances.QUICK.toString(),
                 "presets[2] 'Quick Cache' =>toString");
 
+        assertEquals("BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='NAME') and Difficulty >= 2.0 and Difficulty <= 5.0 and Terrain >= 2.0 and Terrain <= 5.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,3,4) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
+                FilterInstances.QUICK.getSqlWhere("NAME"), "SqlWhere must Equals");
+
+        assertFilteredReadedDB(FilterInstances.QUICK);
     }
 
 
@@ -284,8 +302,10 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"types\":\"true,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false\",\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,2.5,1.0,2.5,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
-                FilterInstances.QUICK.toString(), "presets[3] 'Fetch some Travelbugs' =>toString");
+                "{\"types\":\"true,true,true,false,false,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,true,false\",\"caches\":\"0,-1,-1,0,1,0,0,0,0,1.0,3.0,1.0,3.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                FilterInstances.WITHTB.toString(), "presets[3] 'Fetch some Travelbugs' =>toString");
+
+        assertFilteredReadedDB(FilterInstances.WITHTB);
     }
 
     @Test
@@ -347,6 +367,8 @@ class FilterPropertiesTest {
         assertEquals("{\"types\":\"true,true,true,false,false,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,true,false\",\"caches\":\"0,-1,-1,0,0,0,0,0,0,1.0,3.0,1.0,3.0,2.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.DROPTB.toString(),
                 "presets[4] 'Drop off Travelbugs' =>toString");
+
+        assertFilteredReadedDB(FilterInstances.DROPTB);
     }
 
     @Test
@@ -409,6 +431,8 @@ class FilterPropertiesTest {
                 "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"-1,-1,-1,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,3.5,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.HIGHLIGHTS.toString(),
                 "presets[5] 'Highlights' =>toString");
+
+        assertFilteredReadedDB(FilterInstances.HIGHLIGHTS);
     }
 
     @Test
@@ -471,6 +495,8 @@ class FilterPropertiesTest {
                 "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,1,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.FAVORITES.toString(),
                 "presets[6] 'Favoriten' =>toString");
+
+        assertFilteredReadedDB(FilterInstances.FAVORITES);
     }
 
     @Test
@@ -532,6 +558,11 @@ class FilterPropertiesTest {
         assertEquals(
                 "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,-1,-1,0,-1,-1,-1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.TOARCHIVE.toString(), "presets[7] 'prepare to archive' =>toString");
+
+        assertEquals("~BooleanStore & 788= 788 and (not Owner='NAME') and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
+                FilterInstances.TOARCHIVE.getSqlWhere("NAME"), "SqlWhere must Equals");
+
+        assertFilteredReadedDB(FilterInstances.TOARCHIVE);
     }
 
     @Test
@@ -593,6 +624,9 @@ class FilterPropertiesTest {
         assertEquals(
                 "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.LISTINGCHANGED.toString(), "presets[8] 'Listing Changed' =>toString");
+
+        assertFilteredReadedDB(FilterInstances.LISTINGCHANGED);
+
     }
 
     @Test
@@ -654,10 +688,12 @@ class FilterPropertiesTest {
         assertEquals(
                 "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 defaultCtor.toString(), "default constructor =>toString");
+
+        assertFilteredReadedDB(defaultCtor);
     }
 
     @Test
-    public void chehkSqlWhere() {
+    void chehkSqlWhere() {
 
         FilterProperties[] filters = new FilterProperties[]{FilterInstances.ACTIVE, FilterInstances.ALL,
                 FilterInstances.BEGINNER, FilterInstances.DROPTB, FilterInstances.FAVORITES, FilterInstances.HIGHLIGHTS,
@@ -666,21 +702,35 @@ class FilterPropertiesTest {
 
         String[] SqlStringList = new String[]
                 {
-                        "~BooleanStore & 44= 44 and (not Owner='User') and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
                         "Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22)",
-                        "~BooleanStore & 44= 44 and (not Owner='User') and Difficulty >= 2.0 and Difficulty <= 4.0 and Terrain >= 2.0 and Terrain <= 4.0 and Size >= 2.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
-                        "~BooleanStore & 12= 12 and Difficulty >= 2.0 and Difficulty <= 6.0 and Terrain >= 2.0 and Terrain <= 6.0 and Size >= 2.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,5,6,7,9,10,21) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty >= 2.0 and Difficulty <= 4.0 and Terrain >= 2.0 and Terrain <= 4.0 and Size >= 2.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and Difficulty >= 2.0 and Difficulty <= 6.0 and Terrain >= 2.0 and Terrain <= 6.0 and Size >= 2.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,5,6,7,9,10,21) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
                         "BooleanStore & 16= 16 and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
-                        "~BooleanStore & 44= 44 and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 350.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 350.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
                         "BooleanStore & 512= 512 and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
-                        "~BooleanStore & 44= 44 and (not Owner='User') and Difficulty >= 2.0 and Difficulty <= 5.0 and Terrain >= 2.0 and Terrain <= 5.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,3,4) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty >= 2.0 and Difficulty <= 5.0 and Terrain >= 2.0 and Terrain <= 5.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,3,4) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
                         "~BooleanStore & 788= 788 and (not Owner='User') and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
-                        "~BooleanStore & 12= 12 and NumTravelbugs > 0 and Difficulty >= 2.0 and Difficulty <= 6.0 and Terrain >= 2.0 and Terrain <= 6.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,5,6,7,9,10,21) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )"
+                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and NumTravelbugs > 0 and Difficulty >= 2.0 and Difficulty <= 6.0 and Terrain >= 2.0 and Terrain <= 6.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,5,6,7,9,10,21) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )"
                 };
 
         for (int i = 0; i < filters.length; i++) {
             assertEquals(SqlStringList[i], filters[i].getSqlWhere("User"), "presets[" + i + "] '=>getSqlWhere(\"User\")");
         }
     }
+
+
+    private void assertFilteredReadedDB(FilterProperties properties) {
+        CacheList list = new CacheList();
+        CacheList3DAO dao = new CacheList3DAO();
+        dao.readCacheList(testDb, list, properties.getSqlWhere("NAME"), false, false);
+
+        int n = list.size;
+        while (n-- > 0) {
+            AbstractCache cache = list.get(n);
+            assertThat("Filter has to pass", properties.passed(cache));
+        }
+    }
+
 
 }

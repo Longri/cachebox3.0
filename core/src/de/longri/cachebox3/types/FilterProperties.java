@@ -355,9 +355,9 @@ public class FilterProperties {
             if (Favorites == -1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, true, bitstoreMustNot);
 
-            if (NotAvailable == 1)
-                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, true, bitstoreMust);
             if (NotAvailable == -1)
+                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, true, bitstoreMust);
+            if (NotAvailable == 1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, true, bitstoreMustNot);
 
             if (Archived == 1)
@@ -592,9 +592,9 @@ public class FilterProperties {
      * @return
      */
     private boolean chkFilterBoolean(int propertyValue, boolean found) {
-        // -1= Cache.{attribute} == False
-        // 0= Cache.{attribute} == False|True
-        // 1= Cache.{attribute} == True
+        // -1 = Cache.{attribute} == False
+        //  0 = Cache.{attribute} == False|True
+        //  1 = Cache.{attribute} == True
 
         if (propertyValue != 0) {
             if (propertyValue != (found ? 1 : -1))
