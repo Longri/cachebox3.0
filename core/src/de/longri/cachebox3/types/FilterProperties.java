@@ -339,23 +339,47 @@ public class FilterProperties {
 
             ArrayList<String> andParts = new ArrayList<String>();
 
-            if (Finds == 1)
-                andParts.add("Found=1");
-            if (Finds == -1)
-                andParts.add("(Found=0 or Found is null)");
+            short bitstoreMust = 0;
+            short bitstoreMustNot = 0;
+
 
             //TODO Bitwise equals [BooleanStore & MASK_FOUND != 0] for true
             //TODO Bitwise equals [BooleanStore & MASK_FOUND == 0] for false
+            if (Finds == 1)
+                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, true, bitstoreMust);//andParts.add("Found=1");
+            if (Finds == -1)
+                bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, true, bitstoreMustNot);//andParts.add("(Found=0 or Found is null)");
+
+            if (Favorites == 1)
+                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, true, bitstoreMust);
+            if (Favorites == -1)
+                bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, true, bitstoreMustNot);
 
             if (NotAvailable == 1)
-                andParts.add("Available=0");
+                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, true, bitstoreMust);
             if (NotAvailable == -1)
-                andParts.add("Available=1");
+                bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, true, bitstoreMustNot);
 
             if (Archived == 1)
-                andParts.add("Archived=1");
+                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_ARCHIVED, true, bitstoreMust);
             if (Archived == -1)
-                andParts.add("Archived=0");
+                bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_ARCHIVED, true, bitstoreMustNot);
+
+            if (ListingChanged == 1)
+                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_LISTING_CHANGED, true, bitstoreMust);
+            if (ListingChanged == -1)
+                bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_LISTING_CHANGED, true, bitstoreMustNot);
+
+            if (HasUserData == 1)
+                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, true, bitstoreMust);
+            if (HasUserData == -1)
+                bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, true, bitstoreMustNot);
+
+            if (bitstoreMust > 0)
+                andParts.add("BooleanStore & " + bitstoreMust + "= " + bitstoreMust);
+            if (bitstoreMustNot > 0)
+                andParts.add("~BooleanStore & " + bitstoreMustNot + "= " + bitstoreMustNot);
+
 
             if (Own == 1)
                 andParts.add("(Owner='" + userName + "')");
@@ -367,25 +391,12 @@ public class FilterProperties {
             if (ContainsTravelbugs == -1)
                 andParts.add("NumTravelbugs = 0");
 
-            if (Favorites == 1)
-                andParts.add("Favorit=1");
-            if (Favorites == -1)
-                andParts.add("(Favorit=0 or Favorit is null)");
-
-            if (ListingChanged == 1)
-                andParts.add("ListingChanged=1");
-            if (ListingChanged == -1)
-                andParts.add("(ListingChanged=0 or ListingChanged is null)");
 
             if (WithManualWaypoint == 1)
                 andParts.add(" ID in (select CacheId FROM Waypoint WHERE UserWaypoint = 1)");
             if (WithManualWaypoint == -1)
                 andParts.add(" NOT ID in (select CacheId FROM Waypoint WHERE UserWaypoint = 1)");
 
-            if (HasUserData == 1)
-                andParts.add("HasUserData=1");
-            if (HasUserData == -1)
-                andParts.add("(HasUserData = 0 or HasUserData is null)");
 
             andParts.add("Difficulty >= " + String.valueOf(MinDifficulty * 2));
             andParts.add("Difficulty <= " + String.valueOf(MaxDifficulty * 2));
