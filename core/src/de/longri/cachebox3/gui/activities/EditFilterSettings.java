@@ -86,8 +86,18 @@ public class EditFilterSettings extends ActivityBase {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
+                actViewTable = presetListView;
+                viewCell.setActor(actViewTable);
                 EditFilterSettings.this.invalidate();
                 EditFilterSettings.this.layout();
+
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        CB.requestRendering();
+                    }
+                });
+
             }
         });
     }

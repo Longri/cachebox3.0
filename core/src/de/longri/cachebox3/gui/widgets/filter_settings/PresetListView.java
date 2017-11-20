@@ -103,8 +103,8 @@ public class PresetListView extends Table {
             @Override
             public void selectionChanged() {
                 ListViewItem item = presetListView.getSelectedItem();
-                if(item instanceof PresetItem){
-                    filterSettings.filterProperties.set(((PresetItem)item).entry.filterProperties);
+                if (item instanceof PresetItem) {
+                    filterSettings.filterProperties.set(((PresetItem) item).entry.filterProperties);
                 }
             }
         });
@@ -218,6 +218,8 @@ public class PresetListView extends Table {
             super(listIndex);
             CharSequenceButton btn = new CharSequenceButton(Translation.get("AddOwnFilterPreset"));
 
+            btn.getLabel().setWrap(true);
+
             this.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
                     final int selected = presetListView.getSelectedItem().getListIndex();
@@ -234,6 +236,14 @@ public class PresetListView extends Table {
                 }
             });
             this.add(btn).expand().fill();
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+            //clear Background
+            this.setBackground((Drawable) null);
+
+            super.draw(batch, parentAlpha);
         }
 
         @Override
