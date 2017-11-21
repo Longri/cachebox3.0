@@ -17,6 +17,7 @@ package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.utils.*;
 import de.longri.cachebox3.CB;
+import org.oscim.utils.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,9 +55,9 @@ public class FilterProperties {
 
     public boolean isHistory;
 
-    public boolean[] mCacheTypes;
+    private final boolean[] mCacheTypes = new boolean[CacheTypes.values().length];
 
-    public int[] mAttributes;
+    private final int[] mAttributes = new int[Attributes.values().length];
 
     public LongArray GPXFilenameIds;
 
@@ -80,6 +81,7 @@ public class FilterProperties {
      * @param properties
      */
     public FilterProperties(FilterProperties properties) {
+        initCreation();
         this.set(properties);
     }
 
@@ -105,10 +107,7 @@ public class FilterProperties {
 
         this.hasCorrectedCoordinates.set(0);
         isHistory = false;
-        mCacheTypes = new boolean[CacheTypes.values().length];
         Arrays.fill(mCacheTypes, true);
-
-        mAttributes = new int[Attributes.values().length]; // !!! attention: Attributes 0 not used
         Arrays.fill(mAttributes, 0);
 
         GPXFilenameIds = new LongArray();
@@ -165,11 +164,11 @@ public class FilterProperties {
                 hasCorrectedCoordinates.set(Integer.parseInt(parts[cnt++]));
             }
 
-            mCacheTypes = parseCacheTypes(json.getString("types"));
+            System.arraycopy(parseCacheTypes(json.getString("types")),0,mCacheTypes,0,mCacheTypes.length);
 
             String attributes = json.getString("attributes");
             parts = attributes.split(SEPARATOR);
-            mAttributes = new int[Attributes.values().length];
+
             mAttributes[0] = 0; // gibts nicht
             int og = parts.length;
             if (parts.length == mAttributes.length) {
@@ -630,9 +629,9 @@ public class FilterProperties {
 
         this.hasCorrectedCoordinates.set(properties.hasCorrectedCoordinates.get());
         isHistory = properties.isHistory;
-        mCacheTypes = Arrays.copyOf(properties.mCacheTypes, properties.mCacheTypes.length);
 
-        mAttributes = Arrays.copyOf(properties.mAttributes, properties.mAttributes.length);
+        System.arraycopy(properties.mCacheTypes, 0, mCacheTypes, 0, mCacheTypes.length);
+        System.arraycopy(properties.mAttributes, 0, mAttributes, 0, mAttributes.length);
 
         filterName = properties.filterName;
         filterGcCode = properties.filterGcCode;

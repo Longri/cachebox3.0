@@ -168,6 +168,23 @@ public class FilterSetListView extends Table {
         public IntPropertyListView(int listIndex, final IntProperty property, Drawable icon, CharSequence name) {
             super(listIndex);
 
+            this.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    int value = property.get();
+
+                    if (value == -1)
+                        value = 0;
+                    else if (value == 0)
+                        value = 1;
+                    else if (value == 1)
+                        value = -1;
+
+                    property.set(value);
+
+                }
+            });
+
             this.setVisible(false);
 
             //Left icon

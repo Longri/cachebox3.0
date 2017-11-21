@@ -2985,7 +2985,11 @@
       "Favorites": "favIcon",
       "PrepareToArchive": "archived",
       "ListingChanged": "warning",
-      "AllCaches": "erth"
+      "AllCaches": "erth",
+      "CheckNo": "check_off",
+      "CheckOff": "check_disabled",
+      "Check": "check_on",
+      "Available": "tempDisabled"
     }
   }
 }

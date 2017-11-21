@@ -145,6 +145,10 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
     }
 
     public void setNewFilter(FilterProperties filter) {
+        this.setNewFilter(filter, false);
+    }
+
+    public void setNewFilter(FilterProperties filter, boolean dontLoad) {
         synchronized (isFilters) {
             if (!actFilter.equals(filter)) {
 
@@ -157,7 +161,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
                 Config.FilterNew.setValue(actFilter.toString());
                 Config.AcceptChanges();
 
-                CB.loadFilteredCacheList();
+                if (!dontLoad) CB.loadFilteredCacheList();
             }
         }
     }

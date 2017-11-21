@@ -20,6 +20,10 @@ package de.longri.cachebox3.types;
  */
 public class IntProperty extends Property<Integer> {
 
+    public IntProperty() {
+        value = new Integer(0);
+    }
+
     @Override
     protected boolean isEquals(Integer other) {
         return value == other;

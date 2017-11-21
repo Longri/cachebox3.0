@@ -75,7 +75,7 @@ public class PresetListView extends Table {
         this.filterSettings = editFilterSettings;
         final int selected = fillPresetList();
 
-        presetListView = new ListView(true,false);
+        presetListView = new ListView(true, false);
         presetListView.setSelectable(ListView.SelectableType.SINGLE);
         this.add(presetListView).expand().fill();
         presetListView.setEmptyString("EmptyList");
@@ -286,13 +286,19 @@ public class PresetListView extends Table {
 
                 // Category Filterungen aus Filter entfernen
                 int pos = aktFilter.indexOf("^");
-                aktFilter = aktFilter.substring(0, pos);
+                if (pos >= 0)
+                    aktFilter = aktFilter.substring(0, pos);
 
                 uF += text + ";" + aktFilter + "#";
                 Config.UserFilter.setValue(uF);
                 Config.AcceptChanges();
                 fillPresetList();
-                presetListView.dataSetChanged();
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        presetListView.dataSetChanged();
+                    }
+                });
             }
 
             @Override

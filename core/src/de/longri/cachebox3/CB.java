@@ -491,8 +491,13 @@ public class CB {
         CB.Categories = new Categories();
 
         String filter = Config.FilterNew.getValue();
-        CB.viewmanager.setNewFilter(new FilterProperties(filter));
-        String sqlWhere = CB.viewmanager.getActFilter().getSqlWhere(Config.GcLogin.getValue());
+        String sqlWhere = "";
+        try {
+            CB.viewmanager.setNewFilter(new FilterProperties(filter),true);
+            sqlWhere = CB.viewmanager.getActFilter().getSqlWhere(Config.GcLogin.getValue());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Database.Data.gpxFilenameUpdateCacheCount();
 
