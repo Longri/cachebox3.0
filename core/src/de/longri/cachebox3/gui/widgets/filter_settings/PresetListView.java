@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.widgets.filter_settings;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -29,11 +30,9 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.activities.EditFilterSettings;
-import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
-import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
+import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
+import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
@@ -44,6 +43,7 @@ import de.longri.cachebox3.settings.types.SettingString;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
+import de.longri.cachebox3.utils.CharSequenceUtil;
 
 /**
  * Created by Longri on 16.11.2017.
@@ -175,7 +175,7 @@ public class PresetListView extends Table {
                     int pos = entry.indexOf(";");
                     String name = entry.substring(0, pos);
                     String filter = entry.substring(pos + 1);
-                    presetEntries.add(new PresetEntry(name, style.userFilter, new FilterProperties(filter)));
+                    presetEntries.add(new PresetEntry(true, name, style.userFilter, new FilterProperties(filter)));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -185,8 +185,59 @@ public class PresetListView extends Table {
         //add listViewItems
         for (int i = 0, n = presetEntries.size; i < n; i++) {
             PresetEntry entry = presetEntries.get(i);
-            PresetItem item = new PresetItem(i, entry);
+            final PresetItem item = new PresetItem(i, entry);
             presetListItems.add(item);
+
+            if (entry.userPreset) {
+                item.addListener(new ClickLongClickListener() {
+
+                    @Override
+                    public boolean clicked(InputEvent event, float x, float y) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean longClicked(Actor actor, float x, float y) {
+//                        , )
+                        MessageBox.show(Translation.get("?DelUserPreset"),
+                                Translation.get("DelUserPreset"), MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Warning, new OnMsgBoxClickListener() {
+                                    @Override
+                                    public boolean onClick(int which, Object data) {
+
+                                        if (which == ButtonDialog.BUTTON_POSITIVE) {
+                                            presetListItems.removeValue(item, true);
+
+                                            CharSequence itemName = item.entry.name;
+
+                                            String userEntrys[] = Config.UserFilter.getValue().split(SettingString.STRING_SPLITTER);
+
+                                            String newUserEntris = "";
+                                            for (String entry : userEntrys) {
+                                                int pos = entry.indexOf(";");
+                                                String name = entry.substring(0, pos);
+                                                if (!CharSequenceUtil.equals(name, itemName))
+                                                    newUserEntris += entry + SettingString.STRING_SPLITTER;
+                                            }
+                                            Config.UserFilter.setValue(newUserEntris);
+                                            Config.AcceptChanges();
+                                            fillPresetList();
+                                            Gdx.app.postRunnable(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    presetListView.dataSetChanged();
+                                                }
+                                            });
+                                        }
+
+                                        return true;
+                                    }
+                                }
+                        );
+                        return false;
+                    }
+                });
+            }
         }
 
         // add a Button of the end of list, to create UserItem
@@ -209,7 +260,7 @@ public class PresetListView extends Table {
     }
 
     private void presetEntriesAdd(String name, Drawable icon, FilterProperties filter) {
-        presetEntries.add(new PresetEntry(Translation.get(name), icon, filter));
+        presetEntries.add(new PresetEntry(false, Translation.get(name), icon, filter));
     }
 
     class ButtonListViewItem extends ListViewItem {
@@ -335,11 +386,13 @@ public class PresetListView extends Table {
         final CharSequence name;
         final Drawable icon;
         final FilterProperties filterProperties;
+        final boolean userPreset;
 
-        PresetEntry(CharSequence name, Drawable icon, FilterProperties filterProperties) {
+        PresetEntry(boolean userPreset, CharSequence name, Drawable icon, FilterProperties filterProperties) {
             this.name = name;
             this.icon = icon;
             this.filterProperties = filterProperties;
+            this.userPreset = userPreset;
         }
     }
 
