@@ -38,4 +38,8 @@ public class FilterStyle {
     public Drawable ListingChanged;
     public Drawable AllCaches;
     public Drawable userFilter;
+    public Drawable CheckNo;
+    public Drawable CheckOff;
+    public Drawable Check;
+    public Drawable Available;
 }
