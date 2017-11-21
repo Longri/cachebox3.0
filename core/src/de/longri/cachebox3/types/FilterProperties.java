@@ -30,15 +30,18 @@ public class FilterProperties {
     private final static String SEPARATOR = ",";
     private final static String GPXSEPARATOR = "^";
 
-    public int Finds;
-    public int NotAvailable;
-    public int Archived;
-    public int Own;
-    public int ContainsTravelbugs;
-    public int Favorites;
-    public int ListingChanged;
-    public int WithManualWaypoint;
-    public int HasUserData;
+    // Properties can changed from 'General' section
+    public final IntProperty NotAvailable = new IntProperty();
+    public final IntProperty Archived = new IntProperty();
+    public final IntProperty Finds = new IntProperty();
+    public final IntProperty Own = new IntProperty();
+    public final IntProperty ContainsTravelbugs = new IntProperty();
+    public final IntProperty Favorites = new IntProperty();
+    public final IntProperty HasUserData = new IntProperty();
+    public final IntProperty ListingChanged = new IntProperty();
+    public final IntProperty WithManualWaypoint = new IntProperty();
+    public final IntProperty hasCorrectedCoordinates = new IntProperty();
+
 
     public float MinDifficulty;
     public float MaxDifficulty;
@@ -49,7 +52,6 @@ public class FilterProperties {
     public float MinRating;
     public float MaxRating;
 
-    public int hasCorrectedCoordinates;
     public boolean isHistory;
 
     public boolean[] mCacheTypes;
@@ -82,15 +84,15 @@ public class FilterProperties {
     }
 
     private void initCreation() {
-        Finds = 0;
-        NotAvailable = 0;
-        Archived = 0;
-        Own = 0;
-        ContainsTravelbugs = 0;
-        Favorites = 0;
-        ListingChanged = 0;
-        WithManualWaypoint = 0;
-        HasUserData = 0;
+        Finds.set(0);
+        NotAvailable.set(0);
+        Archived.set(0);
+        Own.set(0);
+        ContainsTravelbugs.set(0);
+        Favorites.set(0);
+        ListingChanged.set(0);
+        WithManualWaypoint.set(0);
+        HasUserData.set(0);
 
         MinDifficulty = 1;
         MaxDifficulty = 5;
@@ -101,7 +103,7 @@ public class FilterProperties {
         MinRating = 0;
         MaxRating = 5;
 
-        this.hasCorrectedCoordinates = 0;
+        this.hasCorrectedCoordinates.set(0);
         isHistory = false;
         mCacheTypes = new boolean[CacheTypes.values().length];
         Arrays.fill(mCacheTypes, true);
@@ -138,15 +140,15 @@ public class FilterProperties {
             String caches = json.getString("caches");
             String[] parts = caches.split(SEPARATOR);
             int cnt = 0;
-            Finds = Integer.parseInt(parts[cnt++]);
-            NotAvailable = Integer.parseInt(parts[cnt++]);
-            Archived = Integer.parseInt(parts[cnt++]);
-            Own = Integer.parseInt(parts[cnt++]);
-            ContainsTravelbugs = Integer.parseInt(parts[cnt++]);
-            Favorites = Integer.parseInt(parts[cnt++]);
-            HasUserData = Integer.parseInt(parts[cnt++]);
-            ListingChanged = Integer.parseInt(parts[cnt++]);
-            WithManualWaypoint = Integer.parseInt(parts[cnt++]);
+            Finds.set(Integer.parseInt(parts[cnt++]));
+            NotAvailable.set(Integer.parseInt(parts[cnt++]));
+            Archived.set(Integer.parseInt(parts[cnt++]));
+            Own.set(Integer.parseInt(parts[cnt++]));
+            ContainsTravelbugs.set(Integer.parseInt(parts[cnt++]));
+            Favorites.set(Integer.parseInt(parts[cnt++]));
+            HasUserData.set(Integer.parseInt(parts[cnt++]));
+            ListingChanged.set(Integer.parseInt(parts[cnt++]));
+            WithManualWaypoint.set(Integer.parseInt(parts[cnt++]));
 
             MinDifficulty = Float.parseFloat(parts[cnt++]);
             MaxDifficulty = Float.parseFloat(parts[cnt++]);
@@ -158,9 +160,9 @@ public class FilterProperties {
             MaxRating = Float.parseFloat(parts[cnt++]);
 
             if (parts.length == 17) {
-                this.hasCorrectedCoordinates = 0;
+                this.hasCorrectedCoordinates.set(0);
             } else {
-                hasCorrectedCoordinates = Integer.parseInt(parts[cnt++]);
+                hasCorrectedCoordinates.set(Integer.parseInt(parts[cnt++]));
             }
 
             mCacheTypes = parseCacheTypes(json.getString("types"));
@@ -345,34 +347,34 @@ public class FilterProperties {
 
             //TODO Bitwise equals [BooleanStore & MASK_FOUND != 0] for true
             //TODO Bitwise equals [BooleanStore & MASK_FOUND == 0] for false
-            if (Finds == 1)
+            if (Finds.get() == 1)
                 bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, true, bitstoreMust);//andParts.add("Found=1");
-            if (Finds == -1)
+            if (Finds.get() == -1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, true, bitstoreMustNot);//andParts.add("(Found=0 or Found is null)");
 
-            if (Favorites == 1)
+            if (Favorites.get() == 1)
                 bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, true, bitstoreMust);
-            if (Favorites == -1)
+            if (Favorites.get() == -1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, true, bitstoreMustNot);
 
-            if (NotAvailable == -1)
+            if (NotAvailable.get() == -1)
                 bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, true, bitstoreMust);
-            if (NotAvailable == 1)
+            if (NotAvailable.get() == 1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, true, bitstoreMustNot);
 
-            if (Archived == 1)
+            if (Archived.get() == 1)
                 bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_ARCHIVED, true, bitstoreMust);
-            if (Archived == -1)
+            if (Archived.get() == -1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_ARCHIVED, true, bitstoreMustNot);
 
-            if (ListingChanged == 1)
+            if (ListingChanged.get() == 1)
                 bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_LISTING_CHANGED, true, bitstoreMust);
-            if (ListingChanged == -1)
+            if (ListingChanged.get() == -1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_LISTING_CHANGED, true, bitstoreMustNot);
 
-            if (HasUserData == 1)
+            if (HasUserData.get() == 1)
                 bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, true, bitstoreMust);
-            if (HasUserData == -1)
+            if (HasUserData.get() == -1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, true, bitstoreMustNot);
 
             if (bitstoreMust > 0)
@@ -381,20 +383,20 @@ public class FilterProperties {
                 andParts.add("~BooleanStore & " + bitstoreMustNot + "= " + bitstoreMustNot);
 
 
-            if (Own == 1)
+            if (Own.get() == 1)
                 andParts.add("(Owner='" + userName + "')");
-            if (Own == -1)
+            if (Own.get() == -1)
                 andParts.add("(not Owner='" + userName + "')");
 
-            if (ContainsTravelbugs == 1)
+            if (ContainsTravelbugs.get() == 1)
                 andParts.add("NumTravelbugs > 0");
-            if (ContainsTravelbugs == -1)
+            if (ContainsTravelbugs.get() == -1)
                 andParts.add("NumTravelbugs = 0");
 
 
-            if (WithManualWaypoint == 1)
+            if (WithManualWaypoint.get() == 1)
                 andParts.add(" ID in (select CacheId FROM Waypoint WHERE UserWaypoint = 1)");
-            if (WithManualWaypoint == -1)
+            if (WithManualWaypoint.get() == -1)
                 andParts.add(" NOT ID in (select CacheId FROM Waypoint WHERE UserWaypoint = 1)");
 
 
@@ -407,7 +409,6 @@ public class FilterProperties {
             andParts.add("Rating >= " + String.valueOf(MinRating * 100));
             andParts.add("Rating <= " + String.valueOf(MaxRating * 100));
 
-            FilterInstances.hasCorrectedCoordinates = hasCorrectedCoordinates;
 
             String csvTypes = "";
             for (int i = 0; i < mCacheTypes.length; i++) {
@@ -591,13 +592,13 @@ public class FilterProperties {
      * @param found
      * @return
      */
-    private boolean chkFilterBoolean(int propertyValue, boolean found) {
+    private boolean chkFilterBoolean(IntProperty propertyValue, boolean found) {
         // -1 = Cache.{attribute} == False
         //  0 = Cache.{attribute} == False|True
         //  1 = Cache.{attribute} == True
 
-        if (propertyValue != 0) {
-            if (propertyValue != (found ? 1 : -1))
+        if (propertyValue.get() != 0) {
+            if (propertyValue.get() != (found ? 1 : -1))
                 return true;
         }
         return false;
@@ -608,15 +609,15 @@ public class FilterProperties {
     }
 
     public void set(FilterProperties properties) {
-        Finds = properties.Finds;
-        NotAvailable = properties.NotAvailable;
-        Archived = properties.Archived;
-        Own = properties.Own;
-        ContainsTravelbugs = properties.ContainsTravelbugs;
-        Favorites = properties.Favorites;
-        ListingChanged = properties.ListingChanged;
-        WithManualWaypoint = properties.WithManualWaypoint;
-        HasUserData = properties.HasUserData;
+        Finds.set(properties.Finds.get());
+        NotAvailable.set(properties.NotAvailable.get());
+        Archived.set(properties.Archived.get());
+        Own.set(properties.Own.get());
+        ContainsTravelbugs.set(properties.ContainsTravelbugs.get());
+        Favorites.set(properties.Favorites.get());
+        ListingChanged.set(properties.ListingChanged.get());
+        WithManualWaypoint.set(properties.WithManualWaypoint.get());
+        HasUserData.set(properties.HasUserData.get());
 
         MinDifficulty = properties.MinDifficulty;
         MaxDifficulty = properties.MaxDifficulty;
@@ -627,7 +628,7 @@ public class FilterProperties {
         MinRating = properties.MinRating;
         MaxRating = properties.MaxRating;
 
-        this.hasCorrectedCoordinates = properties.hasCorrectedCoordinates;
+        this.hasCorrectedCoordinates.set(properties.hasCorrectedCoordinates.get());
         isHistory = properties.isHistory;
         mCacheTypes = Arrays.copyOf(properties.mCacheTypes, properties.mCacheTypes.length);
 

@@ -30,6 +30,7 @@ import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.IntProperty;
 
 /**
  * Created by Longri on 16.11.2017.
@@ -67,15 +68,13 @@ public class FilterSetListView extends Table {
             }
         };
 
-        setListView = new ListView(listViewAdapter,true,false);
+        setListView = new ListView(listViewAdapter, true, false);
         setListView.setSelectable(ListView.SelectableType.NONE);
 
         this.add(setListView).expand().fill();
         setListView.setEmptyString("EmptyList");
 
         fillList();
-
-
 
     }
 
@@ -143,5 +142,16 @@ public class FilterSetListView extends Table {
         }
     }
 
+    class IntPropertyListView extends ListViewItem {
+
+        public IntPropertyListView(int listIndex, IntProperty property, Drawable icon, CharSequence name) {
+            super(listIndex);
+        }
+
+        @Override
+        public void dispose() {
+
+        }
+    }
 
 }

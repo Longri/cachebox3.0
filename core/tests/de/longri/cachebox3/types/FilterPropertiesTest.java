@@ -46,15 +46,15 @@ class FilterPropertiesTest {
 
 
         // chk FilterInstances.ALL 'All Caches'
-        assertThat("FilterInstances.ALL 'All Caches' => Finds", 0 == FilterInstances.ALL.Finds);
-        assertThat("FilterInstances.ALL 'All Caches' => NotAvailable", 0 == FilterInstances.ALL.NotAvailable);
-        assertThat("FilterInstances.ALL 'All Caches' => Archived", 0 == FilterInstances.ALL.Archived);
-        assertThat("FilterInstances.ALL 'All Caches' => Own", 0 == FilterInstances.ALL.Own);
-        assertThat("FilterInstances.ALL 'All Caches' => ContainsTravelbugs", 0 == FilterInstances.ALL.ContainsTravelbugs);
-        assertThat("FilterInstances.ALL 'All Caches' => Favorites", 0 == FilterInstances.ALL.Favorites);
-        assertThat("FilterInstances.ALL 'All Caches' => HasUserData", 0 == FilterInstances.ALL.HasUserData);
-        assertThat("FilterInstances.ALL 'All Caches' => ListingChanged", 0 == FilterInstances.ALL.ListingChanged);
-        assertThat("FilterInstances.ALL 'All Caches' => WithManualWaypoint", 0 == FilterInstances.ALL.WithManualWaypoint);
+        assertThat("FilterInstances.ALL 'All Caches' => Finds", 0 == FilterInstances.ALL.Finds.get());
+        assertThat("FilterInstances.ALL 'All Caches' => NotAvailable", 0 == FilterInstances.ALL.NotAvailable.get());
+        assertThat("FilterInstances.ALL 'All Caches' => Archived", 0 == FilterInstances.ALL.Archived.get());
+        assertThat("FilterInstances.ALL 'All Caches' => Own", 0 == FilterInstances.ALL.Own.get());
+        assertThat("FilterInstances.ALL 'All Caches' => ContainsTravelbugs", 0 == FilterInstances.ALL.ContainsTravelbugs.get());
+        assertThat("FilterInstances.ALL 'All Caches' => Favorites", 0 == FilterInstances.ALL.Favorites.get());
+        assertThat("FilterInstances.ALL 'All Caches' => HasUserData", 0 == FilterInstances.ALL.HasUserData.get());
+        assertThat("FilterInstances.ALL 'All Caches' => ListingChanged", 0 == FilterInstances.ALL.ListingChanged.get());
+        assertThat("FilterInstances.ALL 'All Caches' => WithManualWaypoint", 0 == FilterInstances.ALL.WithManualWaypoint.get());
         assertThat("FilterInstances.ALL 'All Caches' => MinDifficulty", 1.0f == FilterInstances.ALL.MinDifficulty);
         assertThat("FilterInstances.ALL 'All Caches' => MaxDifficulty", 5.0f == FilterInstances.ALL.MaxDifficulty);
         assertThat("FilterInstances.ALL 'All Caches' => MinTerrain", 1.0f == FilterInstances.ALL.MinTerrain);
@@ -110,15 +110,15 @@ class FilterPropertiesTest {
 
     @Test
     void checkPresetACTIVE() {
-        assertThat("presets[1] 'All Caches to find' => Finds", -1 == FilterInstances.ACTIVE.Finds);
-        assertThat("presets[1] 'All Caches to find' => NotAvailable", -1 == FilterInstances.ACTIVE.NotAvailable);
-        assertThat("presets[1] 'All Caches to find' => Archived", -1 == FilterInstances.ACTIVE.Archived);
-        assertThat("presets[1] 'All Caches to find' => Own", -1 == FilterInstances.ACTIVE.Own);
-        assertThat("presets[1] 'All Caches to find' => ContainsTravelbugs", 0 == FilterInstances.ACTIVE.ContainsTravelbugs);
-        assertThat("presets[1] 'All Caches to find' => Favorites", 0 == FilterInstances.ACTIVE.Favorites);
-        assertThat("presets[1] 'All Caches to find' => HasUserData", 0 == FilterInstances.ACTIVE.HasUserData);
-        assertThat("presets[1] 'All Caches to find' => ListingChanged", 0 == FilterInstances.ACTIVE.ListingChanged);
-        assertThat("presets[1] 'All Caches to find' => WithManualWaypoint", 0 == FilterInstances.ACTIVE.WithManualWaypoint);
+        assertThat("presets[1] 'All Caches to find' => Finds", -1 == FilterInstances.ACTIVE.Finds.get());
+        assertThat("presets[1] 'All Caches to find' => NotAvailable", -1 == FilterInstances.ACTIVE.NotAvailable.get());
+        assertThat("presets[1] 'All Caches to find' => Archived", -1 == FilterInstances.ACTIVE.Archived.get());
+        assertThat("presets[1] 'All Caches to find' => Own", -1 == FilterInstances.ACTIVE.Own.get());
+        assertThat("presets[1] 'All Caches to find' => ContainsTravelbugs", 0 == FilterInstances.ACTIVE.ContainsTravelbugs.get());
+        assertThat("presets[1] 'All Caches to find' => Favorites", 0 == FilterInstances.ACTIVE.Favorites.get());
+        assertThat("presets[1] 'All Caches to find' => HasUserData", 0 == FilterInstances.ACTIVE.HasUserData.get());
+        assertThat("presets[1] 'All Caches to find' => ListingChanged", 0 == FilterInstances.ACTIVE.ListingChanged.get());
+        assertThat("presets[1] 'All Caches to find' => WithManualWaypoint", 0 == FilterInstances.ACTIVE.WithManualWaypoint.get());
         assertThat("presets[1] 'All Caches to find' => MinDifficulty", 1.0f == FilterInstances.ACTIVE.MinDifficulty);
         assertThat("presets[1] 'All Caches to find' => MaxDifficulty", 5.0f == FilterInstances.ACTIVE.MaxDifficulty);
         assertThat("presets[1] 'All Caches to find' => MinTerrain", 1.0f == FilterInstances.ACTIVE.MinTerrain);
@@ -172,15 +172,15 @@ class FilterPropertiesTest {
 
     @Test
     void checkPresetQUICK() {
-        assertThat("presets[2] 'Quick Cache' => Finds", -1 == FilterInstances.QUICK.Finds);
-        assertThat("presets[2] 'Quick Cache' => NotAvailable", -1 == FilterInstances.QUICK.NotAvailable);
-        assertThat("presets[2] 'Quick Cache' => Archived", -1 == FilterInstances.QUICK.Archived);
-        assertThat("presets[2] 'Quick Cache' => Own", -1 == FilterInstances.QUICK.Own);
-        assertThat("presets[2] 'Quick Cache' => ContainsTravelbugs", 0 == FilterInstances.QUICK.ContainsTravelbugs);
-        assertThat("presets[2] 'Quick Cache' => Favorites", 0 == FilterInstances.QUICK.Favorites);
-        assertThat("presets[2] 'Quick Cache' => HasUserData", 0 == FilterInstances.QUICK.HasUserData);
-        assertThat("presets[2] 'Quick Cache' => ListingChanged", 0 == FilterInstances.QUICK.ListingChanged);
-        assertThat("presets[2] 'Quick Cache' => WithManualWaypoint", 0 == FilterInstances.QUICK.WithManualWaypoint);
+        assertThat("presets[2] 'Quick Cache' => Finds", -1 == FilterInstances.QUICK.Finds.get());
+        assertThat("presets[2] 'Quick Cache' => NotAvailable", -1 == FilterInstances.QUICK.NotAvailable.get());
+        assertThat("presets[2] 'Quick Cache' => Archived", -1 == FilterInstances.QUICK.Archived.get());
+        assertThat("presets[2] 'Quick Cache' => Own", -1 == FilterInstances.QUICK.Own.get());
+        assertThat("presets[2] 'Quick Cache' => ContainsTravelbugs", 0 == FilterInstances.QUICK.ContainsTravelbugs.get());
+        assertThat("presets[2] 'Quick Cache' => Favorites", 0 == FilterInstances.QUICK.Favorites.get());
+        assertThat("presets[2] 'Quick Cache' => HasUserData", 0 == FilterInstances.QUICK.HasUserData.get());
+        assertThat("presets[2] 'Quick Cache' => ListingChanged", 0 == FilterInstances.QUICK.ListingChanged.get());
+        assertThat("presets[2] 'Quick Cache' => WithManualWaypoint", 0 == FilterInstances.QUICK.WithManualWaypoint.get());
         assertThat("presets[2] 'Quick Cache' => MinDifficulty", 1.0f == FilterInstances.QUICK.MinDifficulty);
         assertThat("presets[2] 'Quick Cache' => MaxDifficulty", 2.5f == FilterInstances.QUICK.MaxDifficulty);
         assertThat("presets[2] 'Quick Cache' => MinTerrain", 1.0f == FilterInstances.QUICK.MinTerrain);
@@ -246,15 +246,15 @@ class FilterPropertiesTest {
 
     @Test
     void checkPresetWITHTB() {
-        assertThat("presets[3] 'Fetch some Travelbugs' => Finds", 0 == FilterInstances.WITHTB.Finds);
-        assertThat("presets[3] 'Fetch some Travelbugs' => NotAvailable", -1 == FilterInstances.WITHTB.NotAvailable);
-        assertThat("presets[3] 'Fetch some Travelbugs' => Archived", -1 == FilterInstances.WITHTB.Archived);
-        assertThat("presets[3] 'Fetch some Travelbugs' => Own", 0 == FilterInstances.WITHTB.Own);
-        assertThat("presets[3] 'Fetch some Travelbugs' => ContainsTravelbugs", 1 == FilterInstances.WITHTB.ContainsTravelbugs);
-        assertThat("presets[3] 'Fetch some Travelbugs' => Favorites", 0 == FilterInstances.WITHTB.Favorites);
-        assertThat("presets[3] 'Fetch some Travelbugs' => HasUserData", 0 == FilterInstances.WITHTB.HasUserData);
-        assertThat("presets[3] 'Fetch some Travelbugs' => ListingChanged", 0 == FilterInstances.WITHTB.ListingChanged);
-        assertThat("presets[3] 'Fetch some Travelbugs' => WithManualWaypoint", 0 == FilterInstances.WITHTB.WithManualWaypoint);
+        assertThat("presets[3] 'Fetch some Travelbugs' => Finds", 0 == FilterInstances.WITHTB.Finds.get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => NotAvailable", -1 == FilterInstances.WITHTB.NotAvailable.get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => Archived", -1 == FilterInstances.WITHTB.Archived.get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => Own", 0 == FilterInstances.WITHTB.Own.get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => ContainsTravelbugs", 1 == FilterInstances.WITHTB.ContainsTravelbugs.get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => Favorites", 0 == FilterInstances.WITHTB.Favorites.get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => HasUserData", 0 == FilterInstances.WITHTB.HasUserData.get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => ListingChanged", 0 == FilterInstances.WITHTB.ListingChanged.get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => WithManualWaypoint", 0 == FilterInstances.WITHTB.WithManualWaypoint.get());
         assertThat("presets[3] 'Fetch some Travelbugs' => MinDifficulty", 1.0f == FilterInstances.WITHTB.MinDifficulty);
         assertThat("presets[3] 'Fetch some Travelbugs' => MaxDifficulty", 3.0f == FilterInstances.WITHTB.MaxDifficulty);
         assertThat("presets[3] 'Fetch some Travelbugs' => MinTerrain", 1.0f == FilterInstances.WITHTB.MinTerrain);
@@ -310,15 +310,15 @@ class FilterPropertiesTest {
 
     @Test
     void checkPresetDROPTB() {
-        assertThat("presets[4] 'Drop off Travelbugs' => Finds", 0 == FilterInstances.DROPTB.Finds);
-        assertThat("presets[4] 'Drop off Travelbugs' => NotAvailable", -1 == FilterInstances.DROPTB.NotAvailable);
-        assertThat("presets[4] 'Drop off Travelbugs' => Archived", -1 == FilterInstances.DROPTB.Archived);
-        assertThat("presets[4] 'Drop off Travelbugs' => Own", 0 == FilterInstances.DROPTB.Own);
-        assertThat("presets[4] 'Drop off Travelbugs' => ContainsTravelbugs", 0 == FilterInstances.DROPTB.ContainsTravelbugs);
-        assertThat("presets[4] 'Drop off Travelbugs' => Favorites", 0 == FilterInstances.DROPTB.Favorites);
-        assertThat("presets[4] 'Drop off Travelbugs' => HasUserData", 0 == FilterInstances.DROPTB.HasUserData);
-        assertThat("presets[4] 'Drop off Travelbugs' => ListingChanged", 0 == FilterInstances.DROPTB.ListingChanged);
-        assertThat("presets[4] 'Drop off Travelbugs' => WithManualWaypoint", 0 == FilterInstances.DROPTB.WithManualWaypoint);
+        assertThat("presets[4] 'Drop off Travelbugs' => Finds", 0 == FilterInstances.DROPTB.Finds.get());
+        assertThat("presets[4] 'Drop off Travelbugs' => NotAvailable", -1 == FilterInstances.DROPTB.NotAvailable.get());
+        assertThat("presets[4] 'Drop off Travelbugs' => Archived", -1 == FilterInstances.DROPTB.Archived.get());
+        assertThat("presets[4] 'Drop off Travelbugs' => Own", 0 == FilterInstances.DROPTB.Own.get());
+        assertThat("presets[4] 'Drop off Travelbugs' => ContainsTravelbugs", 0 == FilterInstances.DROPTB.ContainsTravelbugs.get());
+        assertThat("presets[4] 'Drop off Travelbugs' => Favorites", 0 == FilterInstances.DROPTB.Favorites.get());
+        assertThat("presets[4] 'Drop off Travelbugs' => HasUserData", 0 == FilterInstances.DROPTB.HasUserData.get());
+        assertThat("presets[4] 'Drop off Travelbugs' => ListingChanged", 0 == FilterInstances.DROPTB.ListingChanged.get());
+        assertThat("presets[4] 'Drop off Travelbugs' => WithManualWaypoint", 0 == FilterInstances.DROPTB.WithManualWaypoint.get());
         assertThat("presets[4] 'Drop off Travelbugs' => MinDifficulty", 1.0f == FilterInstances.DROPTB.MinDifficulty);
         assertThat("presets[4] 'Drop off Travelbugs' => MaxDifficulty", 3.0f == FilterInstances.DROPTB.MaxDifficulty);
         assertThat("presets[4] 'Drop off Travelbugs' => MinTerrain", 1.0f == FilterInstances.DROPTB.MinTerrain);
@@ -373,15 +373,15 @@ class FilterPropertiesTest {
 
     @Test
     void checkPresetHIGHLIGHTS() {
-        assertThat("presets[5] 'Highlights' => Finds", -1 == FilterInstances.HIGHLIGHTS.Finds);
-        assertThat("presets[5] 'Highlights' => NotAvailable", -1 == FilterInstances.HIGHLIGHTS.NotAvailable);
-        assertThat("presets[5] 'Highlights' => Archived", -1 == FilterInstances.HIGHLIGHTS.Archived);
-        assertThat("presets[5] 'Highlights' => Own", 0 == FilterInstances.HIGHLIGHTS.Own);
-        assertThat("presets[5] 'Highlights' => ContainsTravelbugs", 0 == FilterInstances.HIGHLIGHTS.ContainsTravelbugs);
-        assertThat("presets[5] 'Highlights' => Favorites", 0 == FilterInstances.HIGHLIGHTS.Favorites);
-        assertThat("presets[5] 'Highlights' => HasUserData", 0 == FilterInstances.HIGHLIGHTS.HasUserData);
-        assertThat("presets[5] 'Highlights' => ListingChanged", 0 == FilterInstances.HIGHLIGHTS.ListingChanged);
-        assertThat("presets[5] 'Highlights' => WithManualWaypoint", 0 == FilterInstances.HIGHLIGHTS.WithManualWaypoint);
+        assertThat("presets[5] 'Highlights' => Finds", -1 == FilterInstances.HIGHLIGHTS.Finds.get());
+        assertThat("presets[5] 'Highlights' => NotAvailable", -1 == FilterInstances.HIGHLIGHTS.NotAvailable.get());
+        assertThat("presets[5] 'Highlights' => Archived", -1 == FilterInstances.HIGHLIGHTS.Archived.get());
+        assertThat("presets[5] 'Highlights' => Own", 0 == FilterInstances.HIGHLIGHTS.Own.get());
+        assertThat("presets[5] 'Highlights' => ContainsTravelbugs", 0 == FilterInstances.HIGHLIGHTS.ContainsTravelbugs.get());
+        assertThat("presets[5] 'Highlights' => Favorites", 0 == FilterInstances.HIGHLIGHTS.Favorites.get());
+        assertThat("presets[5] 'Highlights' => HasUserData", 0 == FilterInstances.HIGHLIGHTS.HasUserData.get());
+        assertThat("presets[5] 'Highlights' => ListingChanged", 0 == FilterInstances.HIGHLIGHTS.ListingChanged.get());
+        assertThat("presets[5] 'Highlights' => WithManualWaypoint", 0 == FilterInstances.HIGHLIGHTS.WithManualWaypoint.get());
         assertThat("presets[5] 'Highlights' => MinDifficulty", 1.0f == FilterInstances.HIGHLIGHTS.MinDifficulty);
         assertThat("presets[5] 'Highlights' => MaxDifficulty", 5.0f == FilterInstances.HIGHLIGHTS.MaxDifficulty);
         assertThat("presets[5] 'Highlights' => MinTerrain", 1.0f == FilterInstances.HIGHLIGHTS.MinTerrain);
@@ -437,15 +437,15 @@ class FilterPropertiesTest {
 
     @Test
     void checkPresetVAFORITES() {
-        assertThat("presets[6] 'Favoriten' => Finds", 0 == FilterInstances.FAVORITES.Finds);
-        assertThat("presets[6] 'Favoriten' => NotAvailable", 0 == FilterInstances.FAVORITES.NotAvailable);
-        assertThat("presets[6] 'Favoriten' => Archived", 0 == FilterInstances.FAVORITES.Archived);
-        assertThat("presets[6] 'Favoriten' => Own", 0 == FilterInstances.FAVORITES.Own);
-        assertThat("presets[6] 'Favoriten' => ContainsTravelbugs", 0 == FilterInstances.FAVORITES.ContainsTravelbugs);
-        assertThat("presets[6] 'Favoriten' => Favorites", 1 == FilterInstances.FAVORITES.Favorites);
-        assertThat("presets[6] 'Favoriten' => HasUserData", 0 == FilterInstances.FAVORITES.HasUserData);
-        assertThat("presets[6] 'Favoriten' => ListingChanged", 0 == FilterInstances.FAVORITES.ListingChanged);
-        assertThat("presets[6] 'Favoriten' => WithManualWaypoint", 0 == FilterInstances.FAVORITES.WithManualWaypoint);
+        assertThat("presets[6] 'Favoriten' => Finds", 0 == FilterInstances.FAVORITES.Finds.get());
+        assertThat("presets[6] 'Favoriten' => NotAvailable", 0 == FilterInstances.FAVORITES.NotAvailable.get());
+        assertThat("presets[6] 'Favoriten' => Archived", 0 == FilterInstances.FAVORITES.Archived.get());
+        assertThat("presets[6] 'Favoriten' => Own", 0 == FilterInstances.FAVORITES.Own.get());
+        assertThat("presets[6] 'Favoriten' => ContainsTravelbugs", 0 == FilterInstances.FAVORITES.ContainsTravelbugs.get());
+        assertThat("presets[6] 'Favoriten' => Favorites", 1 == FilterInstances.FAVORITES.Favorites.get());
+        assertThat("presets[6] 'Favoriten' => HasUserData", 0 == FilterInstances.FAVORITES.HasUserData.get());
+        assertThat("presets[6] 'Favoriten' => ListingChanged", 0 == FilterInstances.FAVORITES.ListingChanged.get());
+        assertThat("presets[6] 'Favoriten' => WithManualWaypoint", 0 == FilterInstances.FAVORITES.WithManualWaypoint.get());
         assertThat("presets[6] 'Favoriten' => MinDifficulty", 1.0f == FilterInstances.FAVORITES.MinDifficulty);
         assertThat("presets[6] 'Favoriten' => MaxDifficulty", 5.0f == FilterInstances.FAVORITES.MaxDifficulty);
         assertThat("presets[6] 'Favoriten' => MinTerrain", 1.0f == FilterInstances.FAVORITES.MinTerrain);
@@ -501,15 +501,15 @@ class FilterPropertiesTest {
 
     @Test
     void checkPresetTOARCHIVE() {
-        assertThat("presets[7] 'prepare to archive' => Finds", 0 == FilterInstances.TOARCHIVE.Finds);
-        assertThat("presets[7] 'prepare to archive' => NotAvailable", 0 == FilterInstances.TOARCHIVE.NotAvailable);
-        assertThat("presets[7] 'prepare to archive' => Archived", -1 == FilterInstances.TOARCHIVE.Archived);
-        assertThat("presets[7] 'prepare to archive' => Own", -1 == FilterInstances.TOARCHIVE.Own);
-        assertThat("presets[7] 'prepare to archive' => ContainsTravelbugs", 0 == FilterInstances.TOARCHIVE.ContainsTravelbugs);
-        assertThat("presets[7] 'prepare to archive' => Favorites", -1 == FilterInstances.TOARCHIVE.Favorites);
-        assertThat("presets[7] 'prepare to archive' => HasUserData", -1 == FilterInstances.TOARCHIVE.HasUserData);
-        assertThat("presets[7] 'prepare to archive' => ListingChanged", -1 == FilterInstances.TOARCHIVE.ListingChanged);
-        assertThat("presets[7] 'prepare to archive' => WithManualWaypoint", 0 == FilterInstances.TOARCHIVE.WithManualWaypoint);
+        assertThat("presets[7] 'prepare to archive' => Finds", 0 == FilterInstances.TOARCHIVE.Finds.get());
+        assertThat("presets[7] 'prepare to archive' => NotAvailable", 0 == FilterInstances.TOARCHIVE.NotAvailable.get());
+        assertThat("presets[7] 'prepare to archive' => Archived", -1 == FilterInstances.TOARCHIVE.Archived.get());
+        assertThat("presets[7] 'prepare to archive' => Own", -1 == FilterInstances.TOARCHIVE.Own.get());
+        assertThat("presets[7] 'prepare to archive' => ContainsTravelbugs", 0 == FilterInstances.TOARCHIVE.ContainsTravelbugs.get());
+        assertThat("presets[7] 'prepare to archive' => Favorites", -1 == FilterInstances.TOARCHIVE.Favorites.get());
+        assertThat("presets[7] 'prepare to archive' => HasUserData", -1 == FilterInstances.TOARCHIVE.HasUserData.get());
+        assertThat("presets[7] 'prepare to archive' => ListingChanged", -1 == FilterInstances.TOARCHIVE.ListingChanged.get());
+        assertThat("presets[7] 'prepare to archive' => WithManualWaypoint", 0 == FilterInstances.TOARCHIVE.WithManualWaypoint.get());
         assertThat("presets[7] 'prepare to archive' => MinDifficulty", 1.0f == FilterInstances.TOARCHIVE.MinDifficulty);
         assertThat("presets[7] 'prepare to archive' => MaxDifficulty", 5.0f == FilterInstances.TOARCHIVE.MaxDifficulty);
         assertThat("presets[7] 'prepare to archive' => MinTerrain", 1.0f == FilterInstances.TOARCHIVE.MinTerrain);
@@ -567,15 +567,15 @@ class FilterPropertiesTest {
 
     @Test
     void checkPresetLISTINGCHANGED() {
-        assertThat("presets[8] 'Listing Changed' => Finds", 0 == FilterInstances.LISTINGCHANGED.Finds);
-        assertThat("presets[8] 'Listing Changed' => NotAvailable", 0 == FilterInstances.LISTINGCHANGED.NotAvailable);
-        assertThat("presets[8] 'Listing Changed' => Archived", 0 == FilterInstances.LISTINGCHANGED.Archived);
-        assertThat("presets[8] 'Listing Changed' => Own", 0 == FilterInstances.LISTINGCHANGED.Own);
-        assertThat("presets[8] 'Listing Changed' => ContainsTravelbugs", 0 == FilterInstances.LISTINGCHANGED.ContainsTravelbugs);
-        assertThat("presets[8] 'Listing Changed' => Favorites", 0 == FilterInstances.LISTINGCHANGED.Favorites);
-        assertThat("presets[8] 'Listing Changed' => HasUserData", 0 == FilterInstances.LISTINGCHANGED.HasUserData);
-        assertThat("presets[8] 'Listing Changed' => ListingChanged", 1 == FilterInstances.LISTINGCHANGED.ListingChanged);
-        assertThat("presets[8] 'Listing Changed' => WithManualWaypoint", 0 == FilterInstances.LISTINGCHANGED.WithManualWaypoint);
+        assertThat("presets[8] 'Listing Changed' => Finds", 0 == FilterInstances.LISTINGCHANGED.Finds.get());
+        assertThat("presets[8] 'Listing Changed' => NotAvailable", 0 == FilterInstances.LISTINGCHANGED.NotAvailable.get());
+        assertThat("presets[8] 'Listing Changed' => Archived", 0 == FilterInstances.LISTINGCHANGED.Archived.get());
+        assertThat("presets[8] 'Listing Changed' => Own", 0 == FilterInstances.LISTINGCHANGED.Own.get());
+        assertThat("presets[8] 'Listing Changed' => ContainsTravelbugs", 0 == FilterInstances.LISTINGCHANGED.ContainsTravelbugs.get());
+        assertThat("presets[8] 'Listing Changed' => Favorites", 0 == FilterInstances.LISTINGCHANGED.Favorites.get());
+        assertThat("presets[8] 'Listing Changed' => HasUserData", 0 == FilterInstances.LISTINGCHANGED.HasUserData.get());
+        assertThat("presets[8] 'Listing Changed' => ListingChanged", 1 == FilterInstances.LISTINGCHANGED.ListingChanged.get());
+        assertThat("presets[8] 'Listing Changed' => WithManualWaypoint", 0 == FilterInstances.LISTINGCHANGED.WithManualWaypoint.get());
         assertThat("presets[8] 'Listing Changed' => MinDifficulty", 1.0f == FilterInstances.LISTINGCHANGED.MinDifficulty);
         assertThat("presets[8] 'Listing Changed' => MaxDifficulty", 5.0f == FilterInstances.LISTINGCHANGED.MaxDifficulty);
         assertThat("presets[8] 'Listing Changed' => MinTerrain", 1.0f == FilterInstances.LISTINGCHANGED.MinTerrain);
@@ -633,15 +633,15 @@ class FilterPropertiesTest {
     void checkDefault() {
         FilterProperties defaultCtor = new FilterProperties();
 
-        assertThat("default constructor => Finds", 0 == defaultCtor.Finds);
-        assertThat("default constructor => NotAvailable", 0 == defaultCtor.NotAvailable);
-        assertThat("default constructor => Archived", 0 == defaultCtor.Archived);
-        assertThat("default constructor => Own", 0 == defaultCtor.Own);
-        assertThat("default constructor => ContainsTravelbugs", 0 == defaultCtor.ContainsTravelbugs);
-        assertThat("default constructor => Favorites", 0 == defaultCtor.Favorites);
-        assertThat("default constructor => HasUserData", 0 == defaultCtor.HasUserData);
-        assertThat("default constructor => ListingChanged", 0 == defaultCtor.ListingChanged);
-        assertThat("default constructor => WithManualWaypoint", 0 == defaultCtor.WithManualWaypoint);
+        assertThat("default constructor => Finds", 0 == defaultCtor.Finds.get());
+        assertThat("default constructor => NotAvailable", 0 == defaultCtor.NotAvailable.get());
+        assertThat("default constructor => Archived", 0 == defaultCtor.Archived.get());
+        assertThat("default constructor => Own", 0 == defaultCtor.Own.get());
+        assertThat("default constructor => ContainsTravelbugs", 0 == defaultCtor.ContainsTravelbugs.get());
+        assertThat("default constructor => Favorites", 0 == defaultCtor.Favorites.get());
+        assertThat("default constructor => HasUserData", 0 == defaultCtor.HasUserData.get());
+        assertThat("default constructor => ListingChanged", 0 == defaultCtor.ListingChanged.get());
+        assertThat("default constructor => WithManualWaypoint", 0 == defaultCtor.WithManualWaypoint.get());
         assertThat("default constructor => MinDifficulty", 1.0f == defaultCtor.MinDifficulty);
         assertThat("default constructor => MaxDifficulty", 5.0f == defaultCtor.MaxDifficulty);
         assertThat("default constructor => MinTerrain", 1.0f == defaultCtor.MinTerrain);

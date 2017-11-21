@@ -179,7 +179,7 @@ public class FilterInstances {
             "\"filtername\":\"\"" + //
             "}");
     public static FilterProperties HISTORY = new FilterProperties(); // == ALL, isHistory wird vor Verwendung gesetzt daher nicht final
-    public static int hasCorrectedCoordinates = 0;
+
 
     private final static String setCacheTypes(boolean with) {
         String result = "";
