@@ -84,7 +84,7 @@ public class ListView extends WidgetGroup {
     }
 
     public ListView(boolean dontDisposeItems) {
-        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems, false);
+        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems, true);
     }
 
     public ListView(Adapter listViewAdapter) {
@@ -92,7 +92,7 @@ public class ListView extends WidgetGroup {
     }
 
     public ListView(Adapter listViewAdapter, boolean dontDisposeItems) {
-        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems, false);
+        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems, true);
         this.adapter = listViewAdapter;
         this.listCount = adapter.getCount();
     }
@@ -102,6 +102,11 @@ public class ListView extends WidgetGroup {
         this.adapter = listViewAdapter;
         this.listCount = adapter.getCount();
     }
+
+    public ListView( boolean dontDisposeItems, boolean itemsHaveSameHeight) {
+        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems, itemsHaveSameHeight);
+    }
+
 
     private ListView(ListView.ListViewStyle style, boolean dontDisposeItems, boolean itemsHaveSameHeight) {
         this.style = style;
@@ -441,7 +446,10 @@ public class ListView extends WidgetGroup {
             // set the position of this item
             if (yPos >= 0) view.setPosition(0, yPos);
 
-            if (!reAdd) itemHeights.add(view.getHeight() + padBottom + padTop);
+            if (!reAdd) {
+                float addHeight = itemsHaveSameHeight ? view.getHeight() : adapter.getItemSize(index);
+                itemHeights.add(addHeight + padBottom + padTop);
+            }
         }
     }
 

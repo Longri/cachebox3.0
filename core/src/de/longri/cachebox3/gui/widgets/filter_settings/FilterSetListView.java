@@ -15,14 +15,17 @@
  */
 package de.longri.cachebox3.gui.widgets.filter_settings;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.activities.EditFilterSettings;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.views.listview.Adapter;
@@ -31,6 +34,9 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.IntProperty;
+import de.longri.cachebox3.types.Property;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 16.11.2017.
@@ -64,7 +70,8 @@ public class FilterSetListView extends Table {
 
             @Override
             public float getItemSize(int index) {
-                return listViewItems.get(index).getHeight();
+                ListViewItem item = listViewItems.get(index);
+                return item.isVisible() ? item.getHeight() : 0;
             }
         };
 
@@ -88,11 +95,25 @@ public class FilterSetListView extends Table {
 
     private void addGeneralItems() {
 
-        ClickListener listener = new ClickListener() {
+        final AtomicBoolean sectionVisible = new AtomicBoolean(false);
 
+        final IntPropertyListView available = new IntPropertyListView(listViewItems.size + 1,
+                filterSettings.filterProperties.NotAvailable, style.Available, Translation.get("disabled"));
+
+
+        ClickListener listener = new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                boolean visible = !sectionVisible.get();
+                sectionVisible.set(visible);
+                available.setVisible(visible);
+
+                setListView.invalidate();
+                setListView.layout(true);
+            }
         };
 
         listViewItems.add(new ButtonListViewItem(listViewItems.size, Translation.get("General"), listener));
+        listViewItems.add(available);
     }
 
     private void addDTGcVoteItems() {
@@ -144,8 +165,42 @@ public class FilterSetListView extends Table {
 
     class IntPropertyListView extends ListViewItem {
 
-        public IntPropertyListView(int listIndex, IntProperty property, Drawable icon, CharSequence name) {
+        public IntPropertyListView(int listIndex, final IntProperty property, Drawable icon, CharSequence name) {
             super(listIndex);
+
+            this.setVisible(false);
+
+            //Left icon
+            final Image iconImage = new Image(icon, Scaling.none);
+            this.add(iconImage).center().padRight(CB.scaledSizes.MARGIN_HALF);
+
+            //Center name text
+            final Label label = new VisLabel(name);
+            label.setWrap(true);
+            this.add(label).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
+
+            //Right checkBox
+            final Image checkImage = new Image(style.CheckNo);
+            this.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+
+            property.setChangeListener(new Property.PropertyChangedListener() {
+                @Override
+                public void propertyChanged() {
+                    switch (property.get()) {
+                        case -1:
+                            checkImage.setDrawable(style.CheckOff);
+                            break;
+                        case 0:
+                            checkImage.setDrawable(style.CheckNo);
+                            break;
+                        case 1:
+                            checkImage.setDrawable(style.Check);
+                            break;
+                        default:
+                            checkImage.setDrawable(style.CheckNo);
+                    }
+                }
+            });
         }
 
         @Override

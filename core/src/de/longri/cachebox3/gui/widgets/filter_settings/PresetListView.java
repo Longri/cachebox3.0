@@ -75,7 +75,7 @@ public class PresetListView extends Table {
         this.filterSettings = editFilterSettings;
         final int selected = fillPresetList();
 
-        presetListView = new ListView();
+        presetListView = new ListView(true,false);
         presetListView.setSelectable(ListView.SelectableType.SINGLE);
         this.add(presetListView).expand().fill();
         presetListView.setEmptyString("EmptyList");
