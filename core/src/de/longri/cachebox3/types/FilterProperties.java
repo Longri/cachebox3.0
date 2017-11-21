@@ -17,7 +17,6 @@ package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.utils.*;
 import de.longri.cachebox3.CB;
-import org.oscim.utils.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,9 +54,9 @@ public class FilterProperties {
 
     public boolean isHistory;
 
-    private final boolean[] mCacheTypes = new boolean[CacheTypes.values().length];
+    final boolean[] cacheTypes = new boolean[CacheTypes.values().length];
 
-    private final int[] mAttributes = new int[Attributes.values().length];
+    final int[] attributes = new int[Attributes.values().length];
 
     public LongArray GPXFilenameIds;
 
@@ -107,8 +106,8 @@ public class FilterProperties {
 
         this.hasCorrectedCoordinates.set(0);
         isHistory = false;
-        Arrays.fill(mCacheTypes, true);
-        Arrays.fill(mAttributes, 0);
+        Arrays.fill(cacheTypes, true);
+        Arrays.fill(attributes, 0);
 
         GPXFilenameIds = new LongArray();
         filterName = "";
@@ -164,21 +163,21 @@ public class FilterProperties {
                 hasCorrectedCoordinates.set(Integer.parseInt(parts[cnt++]));
             }
 
-            System.arraycopy(parseCacheTypes(json.getString("types")),0,mCacheTypes,0,mCacheTypes.length);
+            System.arraycopy(parseCacheTypes(json.getString("types")),0, cacheTypes,0, cacheTypes.length);
 
             String attributes = json.getString("attributes");
             parts = attributes.split(SEPARATOR);
 
-            mAttributes[0] = 0; // gibts nicht
+            this.attributes[0] = 0; // gibts nicht
             int og = parts.length;
-            if (parts.length == mAttributes.length) {
+            if (parts.length == this.attributes.length) {
                 og = parts.length - 1; // falls doch schon mal mit mehr gespeichert
             }
             for (int i = 0; i < (og); i++)
-                mAttributes[i + 1] = Integer.parseInt(parts[i]);
+                this.attributes[i + 1] = Integer.parseInt(parts[i]);
             // aus älteren Versionen
-            for (int i = og; i < mAttributes.length - 1; i++)
-                mAttributes[i + 1] = 0;
+            for (int i = og; i < this.attributes.length - 1; i++)
+                this.attributes[i + 1] = 0;
 
             GPXFilenameIds = new LongArray();
             String gpxfilenames = json.getString("gpxfilenameids");
@@ -258,10 +257,10 @@ public class FilterProperties {
 
             // add Cache Types
             String tmp = "";
-            for (int i = 0; i < mCacheTypes.length; i++) {
+            for (int i = 0; i < cacheTypes.length; i++) {
                 if (i > 0)
                     tmp += SEPARATOR;
-                tmp += String.valueOf(mCacheTypes[i]);
+                tmp += String.valueOf(cacheTypes[i]);
             }
             json.writeValue("types", tmp);
 
@@ -284,10 +283,10 @@ public class FilterProperties {
 
             // add Cache Attributes
             tmp = "";
-            for (int i = 1; i < mAttributes.length; i++) {
+            for (int i = 1; i < attributes.length; i++) {
                 if (tmp.length() > 0)
                     tmp += SEPARATOR;
-                tmp += String.valueOf(mAttributes[i]);
+                tmp += String.valueOf(attributes[i]);
             }
             json.writeValue("attributes", tmp);
 
@@ -410,8 +409,8 @@ public class FilterProperties {
 
 
             String csvTypes = "";
-            for (int i = 0; i < mCacheTypes.length; i++) {
-                if (mCacheTypes[i])
+            for (int i = 0; i < cacheTypes.length; i++) {
+                if (cacheTypes[i])
                     csvTypes += String.valueOf(i) + ",";
             }
             if (csvTypes.length() > 0) {
@@ -419,17 +418,17 @@ public class FilterProperties {
                 andParts.add("Type in (" + csvTypes + ")");
             }
 
-            for (int i = 1; i < mAttributes.length; i++) {
-                if (mAttributes[i] != 0) {
+            for (int i = 1; i < attributes.length; i++) {
+                if (attributes[i] != 0) {
                     if (i < 62) {
                         long shift = DLong.UL1 << (i);
-                        if (mAttributes[i] == 1)
+                        if (attributes[i] == 1)
                             andParts.add("(AttributesPositive & " + shift + ") > 0");
                         else
                             andParts.add("(AttributesNegative &  " + shift + ") > 0");
                     } else {
                         long shift = DLong.UL1 << (i - 61);
-                        if (mAttributes[i] == 1)
+                        if (attributes[i] == 1)
                             andParts.add("(AttributesPositiveHigh &  " + shift + ") > 0");
                         else
                             andParts.add("(AttributesNegativeHigh & " + shift + ") > 0");
@@ -521,17 +520,17 @@ public class FilterProperties {
         if (!hasCorrectedCoordinates.isEquals(filter.hasCorrectedCoordinates))
             return false;
 
-        for (int i = 0; i < mCacheTypes.length; i++) {
-            if (filter.mCacheTypes.length <= i)
+        for (int i = 0; i < cacheTypes.length; i++) {
+            if (filter.cacheTypes.length <= i)
                 break;
-            if (filter.mCacheTypes[i] != this.mCacheTypes[i])
+            if (filter.cacheTypes[i] != this.cacheTypes[i])
                 return false; // nicht gleich!!!
         }
 
-        for (int i = 1; i < mAttributes.length; i++) {
-            if (filter.mAttributes.length <= i)
+        for (int i = 1; i < attributes.length; i++) {
+            if (filter.attributes.length <= i)
                 break;
-            if (filter.mAttributes[i] != this.mAttributes[i])
+            if (filter.attributes[i] != this.attributes[i])
                 return false; // nicht gleich!!!
         }
 
@@ -580,7 +579,7 @@ public class FilterProperties {
             return false;
         // TODO implement => if (chkFilterBoolean(this.WithManualWaypoint, cache.)) return false;
         // TODO ? the other restrictions?
-        if (!this.mCacheTypes[abstractCache.getType().ordinal()])
+        if (!this.cacheTypes[abstractCache.getType().ordinal()])
             return false;
 
         return true;
@@ -630,8 +629,8 @@ public class FilterProperties {
         this.hasCorrectedCoordinates.set(properties.hasCorrectedCoordinates.get());
         isHistory = properties.isHistory;
 
-        System.arraycopy(properties.mCacheTypes, 0, mCacheTypes, 0, mCacheTypes.length);
-        System.arraycopy(properties.mAttributes, 0, mAttributes, 0, mAttributes.length);
+        System.arraycopy(properties.cacheTypes, 0, cacheTypes, 0, cacheTypes.length);
+        System.arraycopy(properties.attributes, 0, attributes, 0, attributes.length);
 
         filterName = properties.filterName;
         filterGcCode = properties.filterGcCode;
