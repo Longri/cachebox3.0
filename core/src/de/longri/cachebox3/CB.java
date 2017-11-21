@@ -493,10 +493,8 @@ public class CB {
         String filter = Config.FilterNew.getValue();
         CB.viewmanager.setNewFilter(new FilterProperties(filter));
         String sqlWhere = CB.viewmanager.getActFilter().getSqlWhere(Config.GcLogin.getValue());
-//        sqlWhere = FilterInstances.ACTIVE.getSqlWhere(Config.GcLogin.getValue());
 
         Database.Data.gpxFilenameUpdateCacheCount();
-
 
         log.debug("Read CacheList");
         CacheList tmpCacheList = new CacheList();

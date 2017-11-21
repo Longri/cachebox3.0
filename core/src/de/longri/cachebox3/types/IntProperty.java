@@ -26,6 +26,11 @@ public class IntProperty extends Property<Integer> {
     }
 
     @Override
+    protected boolean isEquals(Property<Integer> other) {
+        return value == other.value;
+    }
+
+    @Override
     public String toString() {
         return value.toString();
     }

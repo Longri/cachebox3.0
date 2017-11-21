@@ -483,23 +483,23 @@ public class FilterProperties {
      * @return
      */
     public boolean equals(FilterProperties filter) {
-        if (Finds != filter.Finds)
+        if (!Finds.isEquals(filter.Finds))
             return false;
-        if (NotAvailable != filter.NotAvailable)
+        if (!NotAvailable.isEquals(filter.NotAvailable))
             return false;
-        if (Archived != filter.Archived)
+        if (!Archived.isEquals(filter.Archived))
             return false;
-        if (Own != filter.Own)
+        if (!Own.isEquals(filter.Own))
             return false;
-        if (ContainsTravelbugs != filter.ContainsTravelbugs)
+        if (!ContainsTravelbugs.isEquals(filter.ContainsTravelbugs))
             return false;
-        if (Favorites != filter.Favorites)
+        if (!Favorites.isEquals(filter.Favorites))
             return false;
-        if (ListingChanged != filter.ListingChanged)
+        if (!ListingChanged.isEquals(filter.ListingChanged))
             return false;
-        if (WithManualWaypoint != filter.WithManualWaypoint)
+        if (!WithManualWaypoint.isEquals(filter.WithManualWaypoint))
             return false;
-        if (HasUserData != filter.HasUserData)
+        if (!HasUserData.isEquals(filter.HasUserData))
             return false;
 
         if (MinDifficulty != filter.MinDifficulty)
@@ -519,7 +519,7 @@ public class FilterProperties {
         if (MaxRating != filter.MaxRating)
             return false;
 
-        if (hasCorrectedCoordinates != filter.hasCorrectedCoordinates)
+        if (!hasCorrectedCoordinates.isEquals(filter.hasCorrectedCoordinates))
             return false;
 
         for (int i = 0; i < mCacheTypes.length; i++) {

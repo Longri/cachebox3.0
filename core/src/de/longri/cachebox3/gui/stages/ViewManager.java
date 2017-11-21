@@ -147,6 +147,9 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
     public void setNewFilter(FilterProperties filter) {
         synchronized (isFilters) {
             if (!actFilter.equals(filter)) {
+
+                log.debug("set New Filter", filter);
+
                 actFilter = filter;
                 isFilters.set(!actFilter.equals(FilterInstances.ALL));
 

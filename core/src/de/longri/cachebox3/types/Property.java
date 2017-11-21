@@ -39,6 +39,8 @@ public abstract class Property<T> {
 
     protected abstract boolean isEquals(T other);
 
+    protected abstract boolean isEquals(Property<T> other);
+
     public void setChangeListener(PropertyChangedListener listener) {
         changedListener = listener;
     }
