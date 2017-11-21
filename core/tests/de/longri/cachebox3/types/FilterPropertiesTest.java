@@ -232,7 +232,7 @@ class FilterPropertiesTest {
                 FilterInstances.QUICK.toString(),
                 "presets[2] 'Quick Cache' =>toString");
 
-        assertEquals("BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='NAME') and Difficulty >= 2.0 and Difficulty <= 5.0 and Terrain >= 2.0 and Terrain <= 5.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,3,4) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
+        assertEquals("BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='NAME') and Difficulty <= 5.0 and Terrain <= 5.0 and Type in (0,3,4)",
                 FilterInstances.QUICK.getSqlWhere("NAME"), "SqlWhere must Equals");
 
         assertFilteredReadedDB(FilterInstances.QUICK);
@@ -559,7 +559,7 @@ class FilterPropertiesTest {
                 "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,-1,-1,0,-1,-1,-1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.TOARCHIVE.toString(), "presets[7] 'prepare to archive' =>toString");
 
-        assertEquals("~BooleanStore & 788= 788 and (not Owner='NAME') and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
+        assertEquals("~BooleanStore & 788= 788 and (not Owner='NAME')",
                 FilterInstances.TOARCHIVE.getSqlWhere("NAME"), "SqlWhere must Equals");
 
         assertFilteredReadedDB(FilterInstances.TOARCHIVE);
@@ -702,16 +702,16 @@ class FilterPropertiesTest {
 
         String[] SqlStringList = new String[]
                 {
-                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
-                        "Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22)",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty >= 2.0 and Difficulty <= 4.0 and Terrain >= 2.0 and Terrain <= 4.0 and Size >= 2.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and Difficulty >= 2.0 and Difficulty <= 6.0 and Terrain >= 2.0 and Terrain <= 6.0 and Size >= 2.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,5,6,7,9,10,21) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
-                        "BooleanStore & 16= 16 and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 350.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
-                        "BooleanStore & 512= 512 and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty >= 2.0 and Difficulty <= 5.0 and Terrain >= 2.0 and Terrain <= 5.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,3,4) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
-                        "~BooleanStore & 788= 788 and (not Owner='User') and Difficulty >= 2.0 and Difficulty <= 10.0 and Terrain >= 2.0 and Terrain <= 10.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and NumTravelbugs > 0 and Difficulty >= 2.0 and Difficulty <= 6.0 and Terrain >= 2.0 and Terrain <= 6.0 and Size >= 0.0 and Size <= 4.0 and Rating >= 0.0 and Rating <= 500.0 and Type in (0,1,2,5,6,7,9,10,21) and name like '%%' and GcCode like '%%' and ( PlacedBy like '%%' or Owner like '%%' )"
+                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User')",
+                        "",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty <= 4.0 and Terrain <= 4.0 and Size >= 2.0 and Type in (0)",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and Difficulty <= 6.0 and Terrain <= 6.0 and Size >= 2.0 and Type in (0,1,2,5,6,7,9,10,21)",
+                        "BooleanStore & 16= 16",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and Rating >= 350.0",
+                        "BooleanStore & 512= 512",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty <= 5.0 and Terrain <= 5.0 and Type in (0,3,4)",
+                        "~BooleanStore & 788= 788 and (not Owner='User')",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and NumTravelbugs > 0 and Difficulty <= 6.0 and Terrain <= 6.0 and Type in (0,1,2,5,6,7,9,10,21)"
                 };
 
         for (int i = 0; i < filters.length; i++) {

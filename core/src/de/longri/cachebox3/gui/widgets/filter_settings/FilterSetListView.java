@@ -99,6 +99,11 @@ public class FilterSetListView extends Table {
 
         final IntPropertyListView available = new IntPropertyListView(listViewItems.size + 1,
                 filterSettings.filterProperties.NotAvailable, style.Available, Translation.get("disabled"));
+        final IntPropertyListView archived = new IntPropertyListView(listViewItems.size + 1,
+                filterSettings.filterProperties.Archived, style.PrepareToArchive, Translation.get("archived"));
+        final IntPropertyListView finds = new IntPropertyListView(listViewItems.size + 1,
+                filterSettings.filterProperties.Finds, style.finds, Translation.get("myfinds"));
+
 
 
         ClickListener listener = new ClickListener() {
@@ -106,6 +111,8 @@ public class FilterSetListView extends Table {
                 boolean visible = !sectionVisible.get();
                 sectionVisible.set(visible);
                 available.setVisible(visible);
+                archived.setVisible(visible);
+                finds.setVisible(visible);
 
                 setListView.invalidate();
                 setListView.layout(true);
@@ -114,6 +121,9 @@ public class FilterSetListView extends Table {
 
         listViewItems.add(new ButtonListViewItem(listViewItems.size, Translation.get("General"), listener));
         listViewItems.add(available);
+        listViewItems.add(archived);
+        listViewItems.add(finds);
+
     }
 
     private void addDTGcVoteItems() {

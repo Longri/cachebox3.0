@@ -163,7 +163,7 @@ public class FilterProperties {
                 hasCorrectedCoordinates.set(Integer.parseInt(parts[cnt++]));
             }
 
-            System.arraycopy(parseCacheTypes(json.getString("types")),0, cacheTypes,0, cacheTypes.length);
+            System.arraycopy(parseCacheTypes(json.getString("types")), 0, cacheTypes, 0, cacheTypes.length);
 
             String attributes = json.getString("attributes");
             parts = attributes.split(SEPARATOR);
@@ -398,22 +398,26 @@ public class FilterProperties {
                 andParts.add(" NOT ID in (select CacheId FROM Waypoint WHERE UserWaypoint = 1)");
 
 
-            andParts.add("Difficulty >= " + String.valueOf(MinDifficulty * 2));
-            andParts.add("Difficulty <= " + String.valueOf(MaxDifficulty * 2));
-            andParts.add("Terrain >= " + String.valueOf(MinTerrain * 2));
-            andParts.add("Terrain <= " + String.valueOf(MaxTerrain * 2));
-            andParts.add("Size >= " + String.valueOf(MinContainerSize));
-            andParts.add("Size <= " + String.valueOf(MaxContainerSize));
-            andParts.add("Rating >= " + String.valueOf(MinRating * 100));
-            andParts.add("Rating <= " + String.valueOf(MaxRating * 100));
+            if (MinDifficulty > 1) andParts.add("Difficulty >= " + String.valueOf(MinDifficulty * 2));
+            if (MaxDifficulty < 5) andParts.add("Difficulty <= " + String.valueOf(MaxDifficulty * 2));
+            if (MinTerrain > 1) andParts.add("Terrain >= " + String.valueOf(MinTerrain * 2));
+            if (MaxTerrain < 5) andParts.add("Terrain <= " + String.valueOf(MaxTerrain * 2));
+            if (MinContainerSize > 0) andParts.add("Size >= " + String.valueOf(MinContainerSize));
+            if (MaxContainerSize < 4) andParts.add("Size <= " + String.valueOf(MaxContainerSize));
+            if (MinRating > 0) andParts.add("Rating >= " + String.valueOf(MinRating * 100));
+            if (MaxRating < 5) andParts.add("Rating <= " + String.valueOf(MaxRating * 100));
 
 
             String csvTypes = "";
+            int count = 0;
             for (int i = 0; i < cacheTypes.length; i++) {
-                if (cacheTypes[i])
+                if (cacheTypes[i]) {
                     csvTypes += String.valueOf(i) + ",";
+                    count++;
+                }
+
             }
-            if (csvTypes.length() > 0) {
+            if (count < cacheTypes.length && csvTypes.length() > 0) {
                 csvTypes = csvTypes.substring(0, csvTypes.length() - 1);
                 andParts.add("Type in (" + csvTypes + ")");
             }
@@ -447,16 +451,15 @@ public class FilterProperties {
                 }
             }
 
-            if (filterName != "") {
+            if (!filterName.equals("")) {
                 andParts.add("name like '%" + filterName + "%'");
             }
-            if (filterGcCode != "") {
+            if (!filterGcCode.equals("")) {
                 andParts.add("GcCode like '%" + filterGcCode + "%'");
             }
-            if (filterOwner != "") {
+            if (!filterOwner.equals("")) {
                 andParts.add("( PlacedBy like '%" + filterOwner + "%' or Owner like '%" + filterOwner + "%' )");
             }
-
             return join(" and ", andParts);
         }
     }

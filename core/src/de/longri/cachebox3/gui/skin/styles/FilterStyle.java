@@ -42,4 +42,5 @@ public class FilterStyle {
     public Drawable CheckOff;
     public Drawable Check;
     public Drawable Available;
+    public Drawable finds;
 }
