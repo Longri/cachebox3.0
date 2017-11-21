@@ -75,7 +75,7 @@ public class EditFilterSettings extends ActivityBase {
         this.defaults().pad(CB.scaledSizes.MARGIN);
 
         presetListView = new PresetListView(this, style);
-        filterSetListView = new FilterSetListView();
+        filterSetListView = new FilterSetListView(this, style);
         categoriesListView = new CategoriesListView();
         textFilterView = new TextFilterView();
 
