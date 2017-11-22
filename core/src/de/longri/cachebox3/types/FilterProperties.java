@@ -334,9 +334,9 @@ public class FilterProperties {
 
 
             if (WithManualWaypoint.get() == 1)
-                andParts.add(" ID in (select CacheId FROM Waypoint WHERE UserWaypoint = 1)");
+                andParts.add(" ID in (select CacheId FROM Waypoints WHERE UserWaypoint = 1)");
             if (WithManualWaypoint.get() == -1)
-                andParts.add(" NOT ID in (select CacheId FROM Waypoint WHERE UserWaypoint = 1)");
+                andParts.add(" NOT ID in (select CacheId FROM Waypoints WHERE UserWaypoint = 1)");
 
 
             if (MinDifficulty > 1) andParts.add("Difficulty >= " + String.valueOf(MinDifficulty * 2));

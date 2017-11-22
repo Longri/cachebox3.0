@@ -43,4 +43,9 @@ public class FilterStyle {
     public Drawable Check;
     public Drawable Available;
     public Drawable finds;
+    public Drawable own;
+    public Drawable TB;
+    public Drawable HasUserData;
+    public Drawable ManualWaypoint;
+    public Drawable CoorectedCoord;
 }

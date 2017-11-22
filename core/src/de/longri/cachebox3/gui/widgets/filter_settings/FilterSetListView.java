@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Longri on 16.11.2017.
  */
-public class FilterSetListView extends Table implements EditFilterSettings.OnShow{
+public class FilterSetListView extends Table implements EditFilterSettings.OnShow {
 
     private final Logger log = LoggerFactory.getLogger(FilterSetListView.class);
 
@@ -105,10 +105,24 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
 
         final IntPropertyListView available = new IntPropertyListView(listViewItems.size + 1,
                 filterSettings.filterProperties.NotAvailable, style.Available, Translation.get("disabled"));
-        final IntPropertyListView archived = new IntPropertyListView(listViewItems.size + 1,
+        final IntPropertyListView archived = new IntPropertyListView(listViewItems.size + 2,
                 filterSettings.filterProperties.Archived, style.PrepareToArchive, Translation.get("archived"));
-        final IntPropertyListView finds = new IntPropertyListView(listViewItems.size + 1,
+        final IntPropertyListView finds = new IntPropertyListView(listViewItems.size + 3,
                 filterSettings.filterProperties.Finds, style.finds, Translation.get("myfinds"));
+        final IntPropertyListView own = new IntPropertyListView(listViewItems.size + 4,
+                filterSettings.filterProperties.Own, style.own, Translation.get("myowncaches"));
+        final IntPropertyListView withTb = new IntPropertyListView(listViewItems.size + 5,
+                filterSettings.filterProperties.ContainsTravelbugs, style.TB, Translation.get("withtrackables"));
+        final IntPropertyListView favorites = new IntPropertyListView(listViewItems.size + 5,
+                filterSettings.filterProperties.Favorites, style.Favorites, Translation.get("Favorites"));
+        final IntPropertyListView hasUserData = new IntPropertyListView(listViewItems.size + 5,
+                filterSettings.filterProperties.HasUserData, style.HasUserData, Translation.get("hasuserdata"));
+        final IntPropertyListView listingChanged = new IntPropertyListView(listViewItems.size + 5,
+                filterSettings.filterProperties.ListingChanged, style.ListingChanged, Translation.get("ListingChanged"));
+        final IntPropertyListView manualwaypoint = new IntPropertyListView(listViewItems.size + 5,
+                filterSettings.filterProperties.WithManualWaypoint, style.ManualWaypoint, Translation.get("manualwaypoint"));
+        final IntPropertyListView corrected = new IntPropertyListView(listViewItems.size + 5,
+                filterSettings.filterProperties.hasCorrectedCoordinates, style.CoorectedCoord, Translation.get("hasCorrectedCoordinates"));
 
 
         ClickListener listener = new ClickListener() {
@@ -118,6 +132,13 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 available.setVisible(visible);
                 archived.setVisible(visible);
                 finds.setVisible(visible);
+                own.setVisible(visible);
+                withTb.setVisible(visible);
+                favorites.setVisible(visible);
+                hasUserData.setVisible(visible);
+                listingChanged.setVisible(visible);
+                manualwaypoint.setVisible(visible);
+                corrected.setVisible(visible);
 
                 setListView.invalidate();
                 setListView.layout(true);
@@ -128,6 +149,13 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         listViewItems.add(available);
         listViewItems.add(archived);
         listViewItems.add(finds);
+        listViewItems.add(own);
+        listViewItems.add(withTb);
+        listViewItems.add(favorites);
+        listViewItems.add(hasUserData);
+        listViewItems.add(listingChanged);
+        listViewItems.add(manualwaypoint);
+        listViewItems.add(corrected);
 
     }
 
