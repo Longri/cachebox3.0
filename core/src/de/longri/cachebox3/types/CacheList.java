@@ -31,6 +31,7 @@ import java.util.Iterator;
 public class CacheList extends Array<AbstractCache> {
 
     public boolean ResortAtWork = false;
+    private int unFilteredSize;
 
     public AbstractCache GetCacheByGcCode(String GcCode) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
@@ -481,5 +482,13 @@ public class CacheList extends Array<AbstractCache> {
                 if (((AbstractCache) items[i]).getId() == id) return get(i);
             return null;
         }
+    }
+
+    public void setUnfilteredSize(int count) {
+        this.unFilteredSize = count;
+    }
+
+    public int getUnFilteredSize() {
+        return this.unFilteredSize;
     }
 }

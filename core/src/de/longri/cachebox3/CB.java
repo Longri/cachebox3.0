@@ -502,11 +502,10 @@ public class CB {
         Database.Data.gpxFilenameUpdateCacheCount();
 
         log.debug("Read CacheList");
-        CacheList tmpCacheList = new CacheList();
+        Database.Data.Query.clear();
 
-        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, tmpCacheList, sqlWhere, false, Config.ShowAllWaypoints.getValue());
-        log.debug("Readed " + tmpCacheList.size + "Caches into CacheList");
-        Database.Data.Query = tmpCacheList;
+        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, Database.Data.Query, sqlWhere, false, Config.ShowAllWaypoints.getValue());
+        log.debug("Readed " + Database.Data.Query.size + "Caches into CacheList");
 
         // set selectedCache from last selected Cache
         String sGc = Config.LastSelectedCache.getValue();

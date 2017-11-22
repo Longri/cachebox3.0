@@ -77,7 +77,7 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
     public PresetListView(EditFilterSettings editFilterSettings, FilterStyle style) {
         this.style = style;
         this.filterSettings = editFilterSettings;
-        final int selected = fillPresetList();
+        fillPresetList();
 
         presetListView = new ListView(true, false);
         presetListView.setSelectable(ListView.SelectableType.SINGLE);
@@ -89,16 +89,7 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
                 setListViewAdapter();
                 presetListView.pack();
                 presetListView.invalidateHierarchy();
-                if (selected > -1) {
-                    presetListView.setSelection(selected);
-                    presetListView.setSelectedItemVisible(true);
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            CB.requestRendering();
-                        }
-                    });
-                }
+                setSelected();
             }
         });
 
@@ -113,6 +104,39 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
                 }
             }
         });
+    }
+
+    private void setSelected() {
+
+        //setSelection
+        int n = presetListItems.size;
+        FilterProperties actFilter = filterSettings.filterProperties;
+        int selectedIndex = -1;
+        while (n-- > 0) {
+            ListViewItem item = presetListItems.get(n);
+            if (item instanceof PresetItem) {
+                if (((PresetItem) item).entry.filterProperties.equals(actFilter)) {
+                    selectedIndex = n;
+                    break;
+                }
+            }
+        }
+
+        if (selectedIndex > -1) {
+            presetListView.setSelection(selectedIndex);
+            presetListView.setSelectedItemVisible(true);
+
+            //maybe set filter name
+            String name = ((PresetItem) presetListItems.get(selectedIndex)).entry.name.toString();
+            filterSettings.filterProperties.setName(name);
+
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    CB.requestRendering();
+                }
+            });
+        }
     }
 
     private void setListViewAdapter() {
@@ -146,7 +170,7 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
         this.layout();
     }
 
-    private int fillPresetList() {
+    private void fillPresetList() {
         if (presetEntries != null)
             presetEntries.clear();
         else
@@ -253,21 +277,6 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
 
         // add a Button of the end of list, to create UserItem
         presetListItems.add(new ButtonListViewItem(presetListItems.size));
-
-        //setSelection
-        int n = presetListItems.size;
-        FilterProperties actFilter = CB.viewmanager.getActFilter();
-        int selectedIndex = -1;
-        while (n-- > 0) {
-            ListViewItem item = presetListItems.get(n);
-            if (item instanceof PresetItem) {
-                if (((PresetItem) item).entry.filterProperties.equals(actFilter)) {
-                    selectedIndex = n;
-                    break;
-                }
-            }
-        }
-        return selectedIndex;
     }
 
     private void presetEntriesAdd(String name, Drawable icon, FilterProperties filter) {
@@ -277,6 +286,7 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
     @Override
     public void onShow() {
         fillPresetList();
+        setSelected();
     }
 
     class ButtonListViewItem extends ListViewItem {
@@ -289,17 +299,7 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
 
             this.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
-                    final int selected = presetListView.getSelectedItem().getListIndex();
                     addUserPreset();
-
-                    // can't select this item, so select the last
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            presetListView.setSelection(selected);
-                            presetListView.setSelectedItemVisible(true);
-                        }
-                    });
                 }
             });
             this.add(btn).expand().fill();
@@ -309,7 +309,6 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
         public void draw(Batch batch, float parentAlpha) {
             //clear Background
             this.setBackground((Drawable) null);
-
             super.draw(batch, parentAlpha);
         }
 
@@ -368,6 +367,7 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
                     @Override
                     public void run() {
                         presetListView.dataSetChanged();
+                        setSelected();
                     }
                 });
             }

@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.actions.show_vies;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
@@ -29,9 +30,25 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 
 
     public Action_Show_CacheList() {
-        super(CacheListView.class, IMPLEMENTED, "cacheList", "  (" + String.valueOf(Database.Data.Query.size) + ")", MenuID.AID_SHOW_CACHELIST);
+        super(CacheListView.class, IMPLEMENTED, "cacheList", null, MenuID.AID_SHOW_CACHELIST);
     }
 
+    private final StringBuilder sb = new StringBuilder();
+
+    public String getNameExtention() {
+
+        int unFiltered = Database.Data.Query.getUnFilteredSize();
+
+        sb.length = 0; // reset StringBuilder
+        sb.append("  (");
+        sb.append(Integer.toString(Database.Data.Query.size));
+        if (unFiltered != Database.Data.Query.size) {
+            sb.append("/");
+            sb.append(Integer.toString(unFiltered));
+        }
+        sb.append(")");
+        return sb.toString();
+    }
 
     @Override
     public void execute() {

@@ -82,7 +82,6 @@ class WaypointLayerTest {
         skin.add("disabledOverlay", mapStar, MapWayPointItemStyle.class);
         skin.add("mapStar", mapStar, MapWayPointItemStyle.class);
         Database.Data = new Database(Database.DatabaseType.CacheBox3);
-        Database.Data.Query = new CacheList();
         if (VisUI.isLoaded()) VisUI.dispose();
         VisUI.load(skin);
         LinkedHashMap<Object, TextureRegion> textureRegionMap = MapView.createTextureAtlasRegions();
@@ -248,7 +247,6 @@ class WaypointLayerTest {
         skin.add("mapParkingArea", mapParkingArea, MapWayPointItemStyle.class);
         skin.add("mapMultiQuestion", mapMultiQuestion, MapWayPointItemStyle.class);
         Database.Data = new Database(Database.DatabaseType.CacheBox3);
-        Database.Data.Query = new CacheList();
 
         if (VisUI.isLoaded()) VisUI.dispose();
         VisUI.load(skin);

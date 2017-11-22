@@ -45,7 +45,7 @@ public class Database {
     public static Database Drafts;
     public static Database Settings;
     private SQLiteGdxDatabase myDB;
-    public CacheList Query;
+    public final CacheList Query;
 
     /**
      * @return Set To CB.Categories
@@ -186,9 +186,14 @@ public class Database {
                 break;
             case Drafts:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseDraftChange;
+                Query = null;
                 break;
             case Settings:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseSettingsChange;
+                Query = null;
+                break;
+            default:
+                Query = null;
         }
     }
 
@@ -856,6 +861,14 @@ public class Database {
         }
     }
 
+    public int getCacheCountOnThisDB() {
+        try {
+            return getCacheCount(this.myDB);
+        } catch (SQLiteGdxException e) {
+            return -1;
+        }
+    }
+
 
     // Static methods ##############################################################################################
 
@@ -864,27 +877,31 @@ public class Database {
         try {
             SQLiteGdxDatabase tempDB = SQLiteGdxDatabaseFactory.getNewDatabase(Gdx.files.absolute(absolutePath));
             tempDB.openOrCreateDatabase();
-
-            //get schema version
-            SQLiteGdxDatabaseCursor cursor = tempDB.rawQuery("SELECT Value FROM Config WHERE [Key] like ?", new String[]{"DatabaseSchemeVersionWin"});
-            cursor.moveToFirst();
-            int version = Integer.parseInt(cursor.getString(0));
-
-            if (version < 1028) {
-                cursor = tempDB.rawQuery("SELECT COUNT(*) FROM caches", null);
-            } else {
-                cursor = tempDB.rawQuery("SELECT COUNT(*) FROM CacheCoreInfo", null);
-            }
-
-
-            cursor.moveToFirst();
-            int count = cursor.getInt(0);
-            cursor.close();
+            int count = getCacheCount(tempDB);
             tempDB.closeDatabase();
             return count;
         } catch (Exception exc) {
             return -1;
         }
+    }
+
+    private static int getCacheCount(SQLiteGdxDatabase tempDB) throws SQLiteGdxException {
+        //get schema version
+        SQLiteGdxDatabaseCursor cursor = tempDB.rawQuery("SELECT Value FROM Config WHERE [Key] like ?", new String[]{"DatabaseSchemeVersionWin"});
+        cursor.moveToFirst();
+        int version = Integer.parseInt(cursor.getString(0));
+
+        if (version < 1028) {
+            cursor = tempDB.rawQuery("SELECT COUNT(*) FROM caches", null);
+        } else {
+            cursor = tempDB.rawQuery("SELECT COUNT(*) FROM CacheCoreInfo", null);
+        }
+
+
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count;
     }
 
     public static boolean createNewDB(Database database, FileHandle rootFolder, String newDB_Name, Boolean ownRepository) {
