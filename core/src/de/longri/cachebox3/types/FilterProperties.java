@@ -107,6 +107,12 @@ public class FilterProperties {
         try {
             JsonValue json = new JsonReader().parse(serialization);
             this.name = json.getString("name", "?");
+            if (this.name.equals("?")) {
+                if (name != null && !name.isEmpty()) {
+                    this.name = name;
+                }
+            }
+
             try {
                 isHistory = json.getBoolean("isHistory");
             } catch (Exception e) {

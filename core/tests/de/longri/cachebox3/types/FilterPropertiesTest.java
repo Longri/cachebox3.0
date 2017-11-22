@@ -100,7 +100,7 @@ class FilterPropertiesTest {
         assertEquals("", FilterInstances.ALL.filterOwner, "FilterInstances.ALL 'All Caches' => filterOwner");
 
 
-        assertEquals("{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+        assertEquals("{\"name\":\"ALL\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.ALL.getJsonString(),
                 "FilterInstances.ALL 'All Caches' =>toString");
 
@@ -163,8 +163,8 @@ class FilterPropertiesTest {
         assertEquals("", FilterInstances.ACTIVE.filterGcCode, "presets[1] 'All Caches to find' => filterGcCode");
         assertEquals("", FilterInstances.ACTIVE.filterOwner, "presets[1] 'All Caches to find' => filterOwner");
 
-        assertEquals("{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
-                FilterInstances.ALL.getJsonString(),
+        assertEquals("{\"name\":\"ACTIVE\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                FilterInstances.ACTIVE.getJsonString(),
                 "FilterInstances.ALL 'All Caches' =>toString");
 
         assertFilteredReadedDB(FilterInstances.ACTIVE);
@@ -228,7 +228,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"types\":\"true,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false\",\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,2.5,1.0,2.5,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"QUICK\",\"types\":\"true,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false\",\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,2.5,1.0,2.5,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.QUICK.getJsonString(),
                 "presets[2] 'Quick Cache' =>toString");
 
@@ -302,7 +302,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"types\":\"true,true,true,false,false,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,true,false\",\"caches\":\"0,-1,-1,0,1,0,0,0,0,1.0,3.0,1.0,3.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"WITHTB\",\"types\":\"true,true,true,false,false,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,true,false\",\"caches\":\"0,-1,-1,0,1,0,0,0,0,1.0,3.0,1.0,3.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.WITHTB.getJsonString(), "presets[3] 'Fetch some Travelbugs' =>toString");
 
         assertFilteredReadedDB(FilterInstances.WITHTB);
@@ -364,7 +364,7 @@ class FilterPropertiesTest {
         assertEquals("", FilterInstances.DROPTB.filterOwner, "presets[4] 'Drop off Travelbugs' => filterOwner");
 
 
-        assertEquals("{\"types\":\"true,true,true,false,false,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,true,false\",\"caches\":\"0,-1,-1,0,0,0,0,0,0,1.0,3.0,1.0,3.0,2.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+        assertEquals("{\"name\":\"DROPTB\",\"types\":\"true,true,true,false,false,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,true,false\",\"caches\":\"0,-1,-1,0,0,0,0,0,0,1.0,3.0,1.0,3.0,2.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.DROPTB.getJsonString(),
                 "presets[4] 'Drop off Travelbugs' =>toString");
 
@@ -428,7 +428,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"-1,-1,-1,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,3.5,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"HIGHLIGHTS\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"-1,-1,-1,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,3.5,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.HIGHLIGHTS.getJsonString(),
                 "presets[5] 'Highlights' =>toString");
 
@@ -492,7 +492,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,1,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"FAVORITES\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,1,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.FAVORITES.getJsonString(),
                 "presets[6] 'Favoriten' =>toString");
 
@@ -556,7 +556,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,-1,-1,0,-1,-1,-1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"TOARCHIVE\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,-1,-1,0,-1,-1,-1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.TOARCHIVE.getJsonString(), "presets[7] 'prepare to archive' =>toString");
 
         assertEquals("~BooleanStore & 788= 788 and (not Owner='NAME')",
@@ -622,7 +622,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"LISTINGCHANGED\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.LISTINGCHANGED.getJsonString(), "presets[8] 'Listing Changed' =>toString");
 
         assertFilteredReadedDB(FilterInstances.LISTINGCHANGED);
@@ -686,7 +686,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"ALL\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 defaultCtor.getJsonString(), "default constructor =>toString");
 
         assertFilteredReadedDB(defaultCtor);
