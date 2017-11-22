@@ -101,7 +101,7 @@ class FilterPropertiesTest {
 
 
         assertEquals("{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
-                FilterInstances.ALL.toString(),
+                FilterInstances.ALL.getJsonString(),
                 "FilterInstances.ALL 'All Caches' =>toString");
 
         assertFilteredReadedDB(FilterInstances.ALL);
@@ -164,7 +164,7 @@ class FilterPropertiesTest {
         assertEquals("", FilterInstances.ACTIVE.filterOwner, "presets[1] 'All Caches to find' => filterOwner");
 
         assertEquals("{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
-                FilterInstances.ALL.toString(),
+                FilterInstances.ALL.getJsonString(),
                 "FilterInstances.ALL 'All Caches' =>toString");
 
         assertFilteredReadedDB(FilterInstances.ACTIVE);
@@ -229,7 +229,7 @@ class FilterPropertiesTest {
 
         assertEquals(
                 "{\"types\":\"true,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false\",\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,2.5,1.0,2.5,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
-                FilterInstances.QUICK.toString(),
+                FilterInstances.QUICK.getJsonString(),
                 "presets[2] 'Quick Cache' =>toString");
 
         assertEquals("BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='NAME') and Difficulty <= 5.0 and Terrain <= 5.0 and Type in (0,3,4)",
@@ -303,7 +303,7 @@ class FilterPropertiesTest {
 
         assertEquals(
                 "{\"types\":\"true,true,true,false,false,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,true,false\",\"caches\":\"0,-1,-1,0,1,0,0,0,0,1.0,3.0,1.0,3.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
-                FilterInstances.WITHTB.toString(), "presets[3] 'Fetch some Travelbugs' =>toString");
+                FilterInstances.WITHTB.getJsonString(), "presets[3] 'Fetch some Travelbugs' =>toString");
 
         assertFilteredReadedDB(FilterInstances.WITHTB);
     }
@@ -365,7 +365,7 @@ class FilterPropertiesTest {
 
 
         assertEquals("{\"types\":\"true,true,true,false,false,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,true,false\",\"caches\":\"0,-1,-1,0,0,0,0,0,0,1.0,3.0,1.0,3.0,2.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
-                FilterInstances.DROPTB.toString(),
+                FilterInstances.DROPTB.getJsonString(),
                 "presets[4] 'Drop off Travelbugs' =>toString");
 
         assertFilteredReadedDB(FilterInstances.DROPTB);
@@ -429,7 +429,7 @@ class FilterPropertiesTest {
 
         assertEquals(
                 "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"-1,-1,-1,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,3.5,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
-                FilterInstances.HIGHLIGHTS.toString(),
+                FilterInstances.HIGHLIGHTS.getJsonString(),
                 "presets[5] 'Highlights' =>toString");
 
         assertFilteredReadedDB(FilterInstances.HIGHLIGHTS);
@@ -493,7 +493,7 @@ class FilterPropertiesTest {
 
         assertEquals(
                 "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,1,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
-                FilterInstances.FAVORITES.toString(),
+                FilterInstances.FAVORITES.getJsonString(),
                 "presets[6] 'Favoriten' =>toString");
 
         assertFilteredReadedDB(FilterInstances.FAVORITES);
@@ -557,7 +557,7 @@ class FilterPropertiesTest {
 
         assertEquals(
                 "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,-1,-1,0,-1,-1,-1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
-                FilterInstances.TOARCHIVE.toString(), "presets[7] 'prepare to archive' =>toString");
+                FilterInstances.TOARCHIVE.getJsonString(), "presets[7] 'prepare to archive' =>toString");
 
         assertEquals("~BooleanStore & 788= 788 and (not Owner='NAME')",
                 FilterInstances.TOARCHIVE.getSqlWhere("NAME"), "SqlWhere must Equals");
@@ -623,7 +623,7 @@ class FilterPropertiesTest {
 
         assertEquals(
                 "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
-                FilterInstances.LISTINGCHANGED.toString(), "presets[8] 'Listing Changed' =>toString");
+                FilterInstances.LISTINGCHANGED.getJsonString(), "presets[8] 'Listing Changed' =>toString");
 
         assertFilteredReadedDB(FilterInstances.LISTINGCHANGED);
 
@@ -687,7 +687,7 @@ class FilterPropertiesTest {
 
         assertEquals(
                 "{\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
-                defaultCtor.toString(), "default constructor =>toString");
+                defaultCtor.getJsonString(), "default constructor =>toString");
 
         assertFilteredReadedDB(defaultCtor);
     }

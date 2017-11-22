@@ -333,7 +333,7 @@ public class PresetListView extends Table {
             @Override
             public void input(String text) {
                 String uF = Config.UserFilter.getValue();
-                String aktFilter = filterSettings.filterProperties.toString();
+                String aktFilter = filterSettings.filterProperties.getJsonString();
 
                 // Category Filterungen aus Filter entfernen
                 int pos = aktFilter.indexOf("^");

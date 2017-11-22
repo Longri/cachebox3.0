@@ -238,82 +238,6 @@ public class FilterProperties {
         return false;
     }
 
-    /**
-     * a String to save in the database
-     *
-     * @return
-     */
-    @Override
-    public String toString() {
-        String result = "";
-
-        try {
-            StringWriter stringWriter = new StringWriter();
-            JsonWriter writer = new JsonWriter(stringWriter);
-            Json json = new Json();
-            json.setOutputType(JsonWriter.OutputType.json);
-            json.setWriter(writer);
-            json.writeObjectStart();
-
-            // add Cache Types
-            String tmp = "";
-            for (int i = 0; i < cacheTypes.length; i++) {
-                if (i > 0)
-                    tmp += SEPARATOR;
-                tmp += String.valueOf(cacheTypes[i]);
-            }
-            json.writeValue("types", tmp);
-
-            // add Cache properties
-            json.writeValue("caches",
-                    String.valueOf(Finds) + SEPARATOR + String.valueOf(NotAvailable) + SEPARATOR + String.valueOf(Archived) + SEPARATOR + String.valueOf(Own) + SEPARATOR + String.valueOf(ContainsTravelbugs) + SEPARATOR + String.valueOf(Favorites)
-                            + SEPARATOR + String.valueOf(HasUserData) + SEPARATOR + String.valueOf(ListingChanged) + SEPARATOR + String.valueOf(WithManualWaypoint) + SEPARATOR + String.valueOf(MinDifficulty) + SEPARATOR
-                            + String.valueOf(MaxDifficulty) + SEPARATOR + String.valueOf(MinTerrain) + SEPARATOR + String.valueOf(MaxTerrain) + SEPARATOR + String.valueOf(MinContainerSize) + SEPARATOR + String.valueOf(MaxContainerSize) + SEPARATOR
-                            + String.valueOf(MinRating) + SEPARATOR + String.valueOf(MaxRating) + SEPARATOR + String.valueOf(this.hasCorrectedCoordinates));
-
-            // Filter GCCode
-            json.writeValue("filtergc", filterGcCode);
-
-            // GPX Filenames
-            tmp = "";
-            for (int i = 0; i <= GPXFilenameIds.size - 1; i++) {
-                tmp += GPXSEPARATOR + String.valueOf(GPXFilenameIds.get(i));
-            }
-            json.writeValue("gpxfilenameids", tmp);
-
-            // add Cache Attributes
-            tmp = "";
-            for (int i = 1; i < attributes.length; i++) {
-                if (tmp.length() > 0)
-                    tmp += SEPARATOR;
-                tmp += String.valueOf(attributes[i]);
-            }
-            json.writeValue("attributes", tmp);
-
-            // Filter name
-            json.writeValue("filtername", filterName);
-
-            // History
-            json.writeValue("isHistory", isHistory);
-
-            // Categories
-            tmp = "";
-            for (int i = 0, n = Categories.size; i < n; i++) {
-                tmp += GPXSEPARATOR + Categories.items[i];
-            }
-            json.writeValue("categories", tmp);
-
-            // Filter Owner
-            json.writeValue("filterowner", filterOwner);
-
-            json.writeObjectEnd();
-            result = stringWriter.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("JSON toString", e);
-        }
-        return result;
-    }
 
     /**
      * Gibt den SQL Where String dieses Filters zurück
@@ -641,5 +565,86 @@ public class FilterProperties {
 
         Categories = new LongArray();
         GPXFilenameIds = new LongArray();
+    }
+
+    @Override
+    public String toString() {
+        return "Filter:";
+    }
+
+    /**
+     * a String to save in the database
+     *
+     * @return
+     */
+    public String getJsonString() {
+        String result = "";
+
+        try {
+            StringWriter stringWriter = new StringWriter();
+            JsonWriter writer = new JsonWriter(stringWriter);
+            Json json = new Json();
+            json.setOutputType(JsonWriter.OutputType.json);
+            json.setWriter(writer);
+            json.writeObjectStart();
+
+            // add Cache Types
+            String tmp = "";
+            for (int i = 0; i < cacheTypes.length; i++) {
+                if (i > 0)
+                    tmp += SEPARATOR;
+                tmp += String.valueOf(cacheTypes[i]);
+            }
+            json.writeValue("types", tmp);
+
+            // add Cache properties
+            json.writeValue("caches",
+                    String.valueOf(Finds) + SEPARATOR + String.valueOf(NotAvailable) + SEPARATOR + String.valueOf(Archived) + SEPARATOR + String.valueOf(Own) + SEPARATOR + String.valueOf(ContainsTravelbugs) + SEPARATOR + String.valueOf(Favorites)
+                            + SEPARATOR + String.valueOf(HasUserData) + SEPARATOR + String.valueOf(ListingChanged) + SEPARATOR + String.valueOf(WithManualWaypoint) + SEPARATOR + String.valueOf(MinDifficulty) + SEPARATOR
+                            + String.valueOf(MaxDifficulty) + SEPARATOR + String.valueOf(MinTerrain) + SEPARATOR + String.valueOf(MaxTerrain) + SEPARATOR + String.valueOf(MinContainerSize) + SEPARATOR + String.valueOf(MaxContainerSize) + SEPARATOR
+                            + String.valueOf(MinRating) + SEPARATOR + String.valueOf(MaxRating) + SEPARATOR + String.valueOf(this.hasCorrectedCoordinates));
+
+            // Filter GCCode
+            json.writeValue("filtergc", filterGcCode);
+
+            // GPX Filenames
+            tmp = "";
+            for (int i = 0; i <= GPXFilenameIds.size - 1; i++) {
+                tmp += GPXSEPARATOR + String.valueOf(GPXFilenameIds.get(i));
+            }
+            json.writeValue("gpxfilenameids", tmp);
+
+            // add Cache Attributes
+            tmp = "";
+            for (int i = 1; i < attributes.length; i++) {
+                if (tmp.length() > 0)
+                    tmp += SEPARATOR;
+                tmp += String.valueOf(attributes[i]);
+            }
+            json.writeValue("attributes", tmp);
+
+            // Filter name
+            json.writeValue("filtername", filterName);
+
+            // History
+            json.writeValue("isHistory", isHistory);
+
+            // Categories
+            tmp = "";
+            for (int i = 0, n = Categories.size; i < n; i++) {
+                tmp += GPXSEPARATOR + Categories.items[i];
+            }
+            json.writeValue("categories", tmp);
+
+            // Filter Owner
+            json.writeValue("filterowner", filterOwner);
+
+            json.writeObjectEnd();
+            result = stringWriter.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("JSON toString", e);
+        }
+        return result;
     }
 }
