@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Longri on 16.11.2017.
  */
-public class FilterSetListView extends Table {
+public class FilterSetListView extends Table implements EditFilterSettings.OnShow{
 
     private final Logger log = LoggerFactory.getLogger(FilterSetListView.class);
 
@@ -51,12 +51,13 @@ public class FilterSetListView extends Table {
     private final FilterStyle style;
     private final EditFilterSettings filterSettings;
     private final Array<ListViewItem> listViewItems = new Array<>();
+    private final Adapter listViewAdapter;
 
     public FilterSetListView(EditFilterSettings editFilterSettings, FilterStyle style) {
         this.style = style;
         this.filterSettings = editFilterSettings;
 
-        Adapter listViewAdapter = new Adapter() {
+        listViewAdapter = new Adapter() {
             @Override
             public int getCount() {
                 return listViewItems.size;
@@ -95,6 +96,7 @@ public class FilterSetListView extends Table {
         addDTGcVoteItems();
         addCachTypeItems();
         addAttributeItems();
+        setListView.setAdapter(listViewAdapter);
     }
 
     private void addGeneralItems() {
@@ -153,6 +155,11 @@ public class FilterSetListView extends Table {
         listViewItems.add(new ButtonListViewItem(listViewItems.size, Translation.get("Attributes"), listener));
     }
 
+    @Override
+    public void onShow() {
+        fillList();
+    }
+
     class ButtonListViewItem extends ListViewItem {
 
         public ButtonListViewItem(int listIndex, CharSequence text, ClickListener clickListener) {
@@ -178,9 +185,14 @@ public class FilterSetListView extends Table {
 
     class IntPropertyListView extends ListViewItem {
 
+        final IntProperty property;
+        final Image checkImage;
+
+
         public IntPropertyListView(int listIndex, final IntProperty property, Drawable icon, final CharSequence name) {
             super(listIndex);
 
+            this.property = property;
 
             this.setVisible(false);
 
@@ -194,8 +206,10 @@ public class FilterSetListView extends Table {
             this.add(label).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
 
             //Right checkBox
-            final Image checkImage = new Image(style.CheckNo);
+            checkImage = new Image(style.CheckNo);
             this.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+
+            this.setCheckImage();
 
             this.addListener(new ClickListener() {
                 @Override
@@ -219,15 +233,23 @@ public class FilterSetListView extends Table {
 
                     //property changed, so set name to "?"
                     filterSettings.filterProperties.setName("?");
+                    setCheckImage();
+                }
+            });
+        }
 
+        private void setCheckImage() {
+            CB.postOnMainThread(new Runnable() {
+                @Override
+                public void run() {
                     switch (property.get()) {
-                        case 1:
+                        case -1:
                             checkImage.setDrawable(style.CheckOff);
                             break;
-                        case -1:
+                        case 0:
                             checkImage.setDrawable(style.CheckNo);
                             break;
-                        case 0:
+                        case 1:
                             checkImage.setDrawable(style.Check);
                             break;
                         default:

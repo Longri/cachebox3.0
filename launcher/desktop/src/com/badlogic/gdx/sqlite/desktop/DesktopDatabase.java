@@ -154,6 +154,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         if (myDB == null)
             return;
         try {
+            if (myDB.getAutoCommit()) return;
             myDB.setAutoCommit(autoCommit);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -389,8 +390,8 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         try {
             log.trace("set Transaction Successful");
 
-            if (myDB != null){
-                if(myDB.getAutoCommit()){
+            if (myDB != null) {
+                if (myDB.getAutoCommit()) {
                     myDB.setAutoCommit(false);
                 }
                 myDB.commit();

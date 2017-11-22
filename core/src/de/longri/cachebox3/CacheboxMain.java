@@ -62,8 +62,11 @@ public class CacheboxMain extends ApplicationAdapter {
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
 
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
+        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
+        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
+        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.PresetListView");
+
+
 
         EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
         EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");

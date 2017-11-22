@@ -42,6 +42,9 @@ public class EditFilterSettings extends ActivityBase {
 
     private final Logger log = LoggerFactory.getLogger(EditFilterSettings.class);
 
+    public static interface OnShow {
+        void onShow();
+    }
 
     private CharSequenceButton tglBtnPreset;
     private CharSequenceButton tglBtnSet;
@@ -140,6 +143,7 @@ public class EditFilterSettings extends ActivityBase {
             viewCell.setActor(actViewTable);
             EditFilterSettings.this.invalidate();
             EditFilterSettings.this.layout();
+            ((OnShow) actViewTable).onShow();
         }
     };
 

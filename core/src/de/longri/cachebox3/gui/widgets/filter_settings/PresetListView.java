@@ -44,25 +44,29 @@ import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.CharSequenceUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 16.11.2017.
  */
-public class PresetListView extends Table {
+public class PresetListView extends Table implements EditFilterSettings.OnShow {
 
-    public static final FilterProperties[] presets = new FilterProperties[]{ //
-            FilterInstances.HISTORY, //
-            FilterInstances.ACTIVE, //
-            FilterInstances.QUICK, //
-            FilterInstances.BEGINNER, //
-            FilterInstances.WITHTB, //
-            FilterInstances.DROPTB, //
-            FilterInstances.HIGHLIGHTS, //
-            FilterInstances.FAVORITES, //
-            FilterInstances.TOARCHIVE, //
-            FilterInstances.LISTINGCHANGED, //
-            FilterInstances.ALL, //
-    };
+    private final Logger log = LoggerFactory.getLogger(PresetListView.class);
+
+//    public static final FilterProperties[] presets = new FilterProperties[]{ //
+//            FilterInstances.HISTORY, //
+//            FilterInstances.ACTIVE, //
+//            FilterInstances.QUICK, //
+//            FilterInstances.BEGINNER, //
+//            FilterInstances.WITHTB, //
+//            FilterInstances.DROPTB, //
+//            FilterInstances.HIGHLIGHTS, //
+//            FilterInstances.FAVORITES, //
+//            FilterInstances.TOARCHIVE, //
+//            FilterInstances.LISTINGCHANGED, //
+//            FilterInstances.ALL, //
+//    };
 
     private final ListView presetListView;
     private final FilterStyle style;
@@ -105,6 +109,7 @@ public class PresetListView extends Table {
                 ListViewItem item = presetListView.getSelectedItem();
                 if (item instanceof PresetItem) {
                     filterSettings.filterProperties.set(((PresetItem) item).entry.filterProperties);
+                    log.debug("Set EditFilterSettings to Preset {}", filterSettings.filterProperties.toString());
                 }
             }
         });
@@ -267,6 +272,11 @@ public class PresetListView extends Table {
 
     private void presetEntriesAdd(String name, Drawable icon, FilterProperties filter) {
         presetEntries.add(new PresetEntry(false, Translation.get(name), icon, filter));
+    }
+
+    @Override
+    public void onShow() {
+        fillPresetList();
     }
 
     class ButtonListViewItem extends ListViewItem {

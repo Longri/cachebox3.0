@@ -32,9 +32,12 @@ public abstract class Property<T> {
     }
 
     public void set(T newValue) {
-        if (changedListener != null && !isEquals(newValue))
+        if (changedListener != null && !isEquals(newValue)) {
+            value = newValue;
             changedListener.propertyChanged();
-        value = newValue;
+        } else {
+            value = newValue;
+        }
     }
 
     protected abstract boolean isEquals(T other);

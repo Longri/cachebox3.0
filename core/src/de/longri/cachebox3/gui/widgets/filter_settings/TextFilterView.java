@@ -17,14 +17,20 @@ package de.longri.cachebox3.gui.widgets.filter_settings;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import de.longri.cachebox3.gui.activities.EditFilterSettings;
 
 /**
  * Created by Longri on 16.11.2017.
  */
-public class TextFilterView extends Table {
+public class TextFilterView extends Table implements EditFilterSettings.OnShow {
 
     public TextFilterView() {
         VisLabel label = new VisLabel("TextFilterView");
         this.add(label).expand().fill();
+    }
+
+    @Override
+    public void onShow() {
+
     }
 }
