@@ -388,8 +388,13 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
     public void setTransactionSuccessful() {
         try {
             log.trace("set Transaction Successful");
-            if (myDB != null)
+
+            if (myDB != null){
+                if(myDB.getAutoCommit()){
+                    myDB.setAutoCommit(false);
+                }
                 myDB.commit();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
