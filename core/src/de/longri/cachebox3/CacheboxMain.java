@@ -47,6 +47,7 @@ import java.text.NumberFormat;
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
 import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
+import static org.slf4j.impl.LibgdxLoggerFactory.INCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -60,6 +61,9 @@ public class CacheboxMain extends ApplicationAdapter {
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
+
+//        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
+//        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
 
         EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
         EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");

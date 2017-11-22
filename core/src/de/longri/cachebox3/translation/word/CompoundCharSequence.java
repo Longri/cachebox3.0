@@ -88,7 +88,7 @@ public class CompoundCharSequence implements CharSequence {
         //remove all without first
         int end = items.size;
         if (end > 1)
-            items.removeRange(1, end);
+            items.removeRange(1, end-1);
     }
 
 

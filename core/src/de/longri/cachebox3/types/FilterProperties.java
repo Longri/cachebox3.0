@@ -30,6 +30,9 @@ public class FilterProperties {
     private final static String SEPARATOR = ",";
     private final static String GPXSEPARATOR = "^";
 
+    // name for debug
+    private String name;
+
     // Properties can changed from 'General' section
     public final IntProperty NotAvailable = new IntProperty();
     public final IntProperty Archived = new IntProperty();
@@ -70,7 +73,8 @@ public class FilterProperties {
      * creates the FilterProperties with default values.
      * For default nothing is filtered!
      */
-    public FilterProperties() {
+    public FilterProperties(String name) {
+        this.name = name;
         initCreation();
     }
 
@@ -79,43 +83,12 @@ public class FilterProperties {
      *
      * @param properties
      */
-    public FilterProperties(FilterProperties properties) {
+    public FilterProperties(String name, FilterProperties properties) {
+        this.name = name;
         initCreation();
         this.set(properties);
     }
 
-    private void initCreation() {
-        Finds.set(0);
-        NotAvailable.set(0);
-        Archived.set(0);
-        Own.set(0);
-        ContainsTravelbugs.set(0);
-        Favorites.set(0);
-        ListingChanged.set(0);
-        WithManualWaypoint.set(0);
-        HasUserData.set(0);
-
-        MinDifficulty = 1;
-        MaxDifficulty = 5;
-        MinTerrain = 1;
-        MaxTerrain = 5;
-        MinContainerSize = 0;
-        MaxContainerSize = 4;
-        MinRating = 0;
-        MaxRating = 5;
-
-        this.hasCorrectedCoordinates.set(0);
-        isHistory = false;
-        Arrays.fill(cacheTypes, true);
-        Arrays.fill(attributes, 0);
-
-        GPXFilenameIds = new LongArray();
-        filterName = "";
-        filterGcCode = "";
-        filterOwner = "";
-
-        Categories = new LongArray();
-    }
 
     /**
      * creates the FilterProperties from a serialization-String
@@ -123,13 +96,17 @@ public class FilterProperties {
      *
      * @param serialization
      */
-    public FilterProperties(String serialization) {
+    public FilterProperties(String name, String serialization) {
+
         if (serialization.length() == 0) {
             initCreation();
+            this.name = (name == null || name.isEmpty()) ? "ALL" : name;
             return;
         }
+
         try {
             JsonValue json = new JsonReader().parse(serialization);
+            this.name = json.getString("name", "?");
             try {
                 isHistory = json.getBoolean("isHistory");
             } catch (Exception e) {
@@ -205,8 +182,42 @@ public class FilterProperties {
                 }
             }
         } catch (Exception e) {
-            log.error("Json Version FilterProperties(" + serialization + ")", e);
+            e.printStackTrace();
         }
+
+    }
+
+    private void initCreation() {
+        Finds.set(0);
+        NotAvailable.set(0);
+        Archived.set(0);
+        Own.set(0);
+        ContainsTravelbugs.set(0);
+        Favorites.set(0);
+        ListingChanged.set(0);
+        WithManualWaypoint.set(0);
+        HasUserData.set(0);
+
+        MinDifficulty = 1;
+        MaxDifficulty = 5;
+        MinTerrain = 1;
+        MaxTerrain = 5;
+        MinContainerSize = 0;
+        MaxContainerSize = 4;
+        MinRating = 0;
+        MaxRating = 5;
+
+        this.hasCorrectedCoordinates.set(0);
+        isHistory = false;
+        Arrays.fill(cacheTypes, true);
+        Arrays.fill(attributes, 0);
+
+        GPXFilenameIds = new LongArray();
+        filterName = "";
+        filterGcCode = "";
+        filterOwner = "";
+
+        Categories = new LongArray();
     }
 
     private boolean[] parseCacheTypes(String types) {
@@ -530,10 +541,11 @@ public class FilterProperties {
     }
 
     public FilterProperties copy() {
-        return new FilterProperties(this);
+        return new FilterProperties(this.name, this);
     }
 
     public void set(FilterProperties properties) {
+        this.name = properties.name;
         Finds.set(properties.Finds.get());
         NotAvailable.set(properties.NotAvailable.get());
         Archived.set(properties.Archived.get());
@@ -569,7 +581,7 @@ public class FilterProperties {
 
     @Override
     public String toString() {
-        return "Filter:";
+        return "Filter '" + this.name + "' SQL-WHERE: " + getSqlWhere("UserName");
     }
 
     /**
@@ -587,6 +599,9 @@ public class FilterProperties {
             json.setOutputType(JsonWriter.OutputType.json);
             json.setWriter(writer);
             json.writeObjectStart();
+
+            // Filter Name
+            json.writeValue("name", this.name);
 
             // add Cache Types
             String tmp = "";
@@ -646,5 +661,9 @@ public class FilterProperties {
             log.error("JSON toString", e);
         }
         return result;
+    }
+
+    public void setName(String newName) {
+        this.name = newName;
     }
 }

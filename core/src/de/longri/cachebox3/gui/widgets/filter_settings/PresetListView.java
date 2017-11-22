@@ -175,7 +175,7 @@ public class PresetListView extends Table {
                     int pos = entry.indexOf(";");
                     String name = entry.substring(0, pos);
                     String filter = entry.substring(pos + 1);
-                    presetEntries.add(new PresetEntry(true, name, style.userFilter, new FilterProperties(filter)));
+                    presetEntries.add(new PresetEntry(true, name, style.userFilter, new FilterProperties(name, filter)));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -198,8 +198,14 @@ public class PresetListView extends Table {
 
                     @Override
                     public boolean longClicked(Actor actor, float x, float y) {
-//                        , )
-                        MessageBox.show(Translation.get("?DelUserPreset"),
+
+                        String name = "";
+
+                        if (actor instanceof PresetItem) {
+                            name = ((PresetItem) actor).entry.name.toString();
+                        }
+
+                        MessageBox.show(Translation.get("?DelUserPreset", "\n'" + name + "'"),
                                 Translation.get("DelUserPreset"), MessageBoxButtons.YesNo,
                                 MessageBoxIcon.Warning, new OnMsgBoxClickListener() {
                                     @Override
@@ -332,6 +338,10 @@ public class PresetListView extends Table {
         Input.TextInputListener listener = new Input.TextInputListener() {
             @Override
             public void input(String text) {
+
+                //set name of filter
+                filterSettings.filterProperties.setName(text);
+
                 String uF = Config.UserFilter.getValue();
                 String aktFilter = filterSettings.filterProperties.getJsonString();
 
@@ -340,7 +350,7 @@ public class PresetListView extends Table {
                 if (pos >= 0)
                     aktFilter = aktFilter.substring(0, pos);
 
-                uF += text + ";" + aktFilter + "#";
+                uF += text + ";" + aktFilter + SettingString.STRING_SPLITTER;
                 Config.UserFilter.setValue(uF);
                 Config.AcceptChanges();
                 fillPresetList();

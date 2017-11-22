@@ -35,6 +35,8 @@ import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.IntProperty;
 import de.longri.cachebox3.types.Property;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -42,6 +44,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by Longri on 16.11.2017.
  */
 public class FilterSetListView extends Table {
+
+    private final Logger log = LoggerFactory.getLogger(FilterSetListView.class);
 
     private final ListView setListView;
     private final FilterStyle style;
@@ -103,7 +107,6 @@ public class FilterSetListView extends Table {
                 filterSettings.filterProperties.Archived, style.PrepareToArchive, Translation.get("archived"));
         final IntPropertyListView finds = new IntPropertyListView(listViewItems.size + 1,
                 filterSettings.filterProperties.Finds, style.finds, Translation.get("myfinds"));
-
 
 
         ClickListener listener = new ClickListener() {
@@ -175,25 +178,9 @@ public class FilterSetListView extends Table {
 
     class IntPropertyListView extends ListViewItem {
 
-        public IntPropertyListView(int listIndex, final IntProperty property, Drawable icon, CharSequence name) {
+        public IntPropertyListView(int listIndex, final IntProperty property, Drawable icon, final CharSequence name) {
             super(listIndex);
 
-            this.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    int value = property.get();
-
-                    if (value == -1)
-                        value = 0;
-                    else if (value == 0)
-                        value = 1;
-                    else if (value == 1)
-                        value = -1;
-
-                    property.set(value);
-
-                }
-            });
 
             this.setVisible(false);
 
@@ -210,21 +197,41 @@ public class FilterSetListView extends Table {
             final Image checkImage = new Image(style.CheckNo);
             this.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
+            this.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    int value = property.get();
+
+                    if (value == -1)
+                        value = 0;
+                    else if (value == 0)
+                        value = 1;
+                    else if (value == 1)
+                        value = -1;
+                    property.set(value);
+                }
+            });
+
             property.setChangeListener(new Property.PropertyChangedListener() {
                 @Override
                 public void propertyChanged() {
+                    log.debug("Property {} changed to {}", name, property.get());
+
+                    //property changed, so set name to "?"
+                    filterSettings.filterProperties.setName("?");
+
                     switch (property.get()) {
-                        case -1:
+                        case 1:
                             checkImage.setDrawable(style.CheckOff);
                             break;
-                        case 0:
+                        case -1:
                             checkImage.setDrawable(style.CheckNo);
                             break;
-                        case 1:
+                        case 0:
                             checkImage.setDrawable(style.Check);
                             break;
                         default:
-                            checkImage.setDrawable(style.CheckNo);
+                            throw new RuntimeException("Unknown filter property state");
                     }
                 }
             });

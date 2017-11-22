@@ -20,10 +20,10 @@ import java.util.Arrays;
 public class FilterInstances {
 
     // All Caches 0
-    public final static FilterProperties ALL = new FilterProperties();
+    public final static FilterProperties ALL = new FilterProperties("ALL");
 
     // All Caches to find 1
-    public final static FilterProperties ACTIVE = new FilterProperties("{" + //
+    public final static FilterProperties ACTIVE = new FilterProperties("ACTIVE","{" + //
             "\"gpxfilenameids\":\"\"," + //
             "\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\"," + //"
             "\"filtergc\":\"\"," + //
@@ -51,7 +51,7 @@ public class FilterInstances {
         return tmp;
     }
 
-    public final static FilterProperties QUICK = new FilterProperties("{" + //
+    public final static FilterProperties QUICK = new FilterProperties("QUICK","{" + //
             "\"gpxfilenameids\":\"\"," + //
             "\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,2.5,1.0,2.5,0.0,4.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
@@ -77,7 +77,7 @@ public class FilterInstances {
         return tmp;
     }
 
-    public final static FilterProperties BEGINNER = new FilterProperties("{" + //
+    public final static FilterProperties BEGINNER = new FilterProperties("BEGINNER","{" + //
             "\"gpxfilenameids\":\"\"," + //
             "\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,2.0,1.0,2.0,2.0,4.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
@@ -89,7 +89,7 @@ public class FilterInstances {
             "}");
 
     // Fetch some Travelbugs 3
-    public final static FilterProperties WITHTB = new FilterProperties("{" + //
+    public final static FilterProperties WITHTB = new FilterProperties("WITHTB","{" + //
             "\"gpxfilenameids\":\"\"," + //
             "\"caches\":\"0,-1,-1,0,1,0,0,0,0,1.0,3.0,1.0,3.0,0.0,4.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
@@ -120,7 +120,7 @@ public class FilterInstances {
         return tmp;
     }
 
-    public final static FilterProperties DROPTB = new FilterProperties("{" + //
+    public final static FilterProperties DROPTB = new FilterProperties("DROPTB","{" + //
             "\"gpxfilenameids\":\"\"," + //
             "\"caches\":\"0,-1,-1,0,0,0,0,0,0,1.0,3.0,1.0,3.0,2.0,4.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
@@ -132,7 +132,7 @@ public class FilterInstances {
             "}");
 
     // Highlights 5
-    public final static FilterProperties HIGHLIGHTS = new FilterProperties("{" + //
+    public final static FilterProperties HIGHLIGHTS = new FilterProperties("HIGHLIGHTS","{" + //
             "\"gpxfilenameids\":\"\"," + //
             "\"caches\":\"-1,-1,-1,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,3.5,5.0\"," + //
             "\"filtergc\":\"\"," + //
@@ -144,7 +144,7 @@ public class FilterInstances {
             "}");
 
     // Favoriten
-    public final static FilterProperties FAVORITES = new FilterProperties("{" + //
+    public final static FilterProperties FAVORITES = new FilterProperties("FAVORITES","{" + //
             "\"gpxfilenameids\":\"\"," + //
             "\"caches\":\"0,0,0,0,0,1,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
@@ -156,7 +156,7 @@ public class FilterInstances {
             "}");
 
     // prepare to archive
-    public final static FilterProperties TOARCHIVE = new FilterProperties("{" + //
+    public final static FilterProperties TOARCHIVE = new FilterProperties("TOARCHIVE","{" + //
             "\"gpxfilenameids\":\"\"," + //
             "\"caches\":\"0,0,-1,-1,0,-1,-1,-1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
@@ -168,7 +168,7 @@ public class FilterInstances {
             "}");
 
     // Listing Changed
-    public final static FilterProperties LISTINGCHANGED = new FilterProperties("{" + //
+    public final static FilterProperties LISTINGCHANGED = new FilterProperties("LISTINGCHANGED","{" + //
             "\"gpxfilenameids\":\"\"," + //
             "\"caches\":\"0,0,0,0,0,0,0,1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
@@ -178,7 +178,7 @@ public class FilterInstances {
             "\"types\":\"" + setCacheTypes(true) + "\"," + //
             "\"filtername\":\"\"" + //
             "}");
-    public static FilterProperties HISTORY = new FilterProperties(); // == ALL, isHistory wird vor Verwendung gesetzt daher nicht final
+    public static FilterProperties HISTORY = new FilterProperties("HISTORY"); // == ALL, isHistory wird vor Verwendung gesetzt daher nicht final
 
 
     private final static String setCacheTypes(boolean with) {

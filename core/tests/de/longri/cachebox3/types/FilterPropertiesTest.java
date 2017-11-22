@@ -631,7 +631,7 @@ class FilterPropertiesTest {
 
     @Test
     void checkDefault() {
-        FilterProperties defaultCtor = new FilterProperties();
+        FilterProperties defaultCtor = new FilterProperties("ALL");
 
         assertThat("default constructor => Finds", 0 == defaultCtor.Finds.get());
         assertThat("default constructor => NotAvailable", 0 == defaultCtor.NotAvailable.get());

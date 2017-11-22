@@ -493,7 +493,7 @@ public class CB {
         String filter = Config.FilterNew.getValue();
         String sqlWhere = "";
         try {
-            CB.viewmanager.setNewFilter(new FilterProperties(filter),true);
+            CB.viewmanager.setNewFilter(new FilterProperties("?",filter),true);
             sqlWhere = CB.viewmanager.getActFilter().getSqlWhere(Config.GcLogin.getValue());
         } catch (Exception e) {
             e.printStackTrace();
