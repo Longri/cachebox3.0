@@ -55,14 +55,14 @@ class FilterPropertiesTest {
         assertThat("FilterInstances.ALL 'All Caches' => HasUserData", 0 == FilterInstances.ALL.HasUserData.get());
         assertThat("FilterInstances.ALL 'All Caches' => ListingChanged", 0 == FilterInstances.ALL.ListingChanged.get());
         assertThat("FilterInstances.ALL 'All Caches' => WithManualWaypoint", 0 == FilterInstances.ALL.WithManualWaypoint.get());
-        assertThat("FilterInstances.ALL 'All Caches' => MinDifficulty", 1.0f == FilterInstances.ALL.MinDifficulty);
-        assertThat("FilterInstances.ALL 'All Caches' => MaxDifficulty", 5.0f == FilterInstances.ALL.MaxDifficulty);
-        assertThat("FilterInstances.ALL 'All Caches' => MinTerrain", 1.0f == FilterInstances.ALL.MinTerrain);
-        assertThat("FilterInstances.ALL 'All Caches' => MaxTerrain", 5.0f == FilterInstances.ALL.MaxTerrain);
-        assertThat("FilterInstances.ALL 'All Caches' => MinContainerSize", 0.0f == FilterInstances.ALL.MinContainerSize);
-        assertThat("FilterInstances.ALL 'All Caches' => MaxContainerSize", 4.0f == FilterInstances.ALL.MaxContainerSize);
-        assertThat("FilterInstances.ALL 'All Caches' => MinRating", 0.0f == FilterInstances.ALL.MinRating);
-        assertThat("FilterInstances.ALL 'All Caches' => MaxRating", 5.0f == FilterInstances.ALL.MaxRating);
+        assertThat("FilterInstances.ALL 'All Caches' => MinDifficulty", 1.0f == FilterInstances.ALL.MinDifficulty.get() / 2F);
+        assertThat("FilterInstances.ALL 'All Caches' => MaxDifficulty", 5.0f == FilterInstances.ALL.MaxDifficulty.get() / 2F);
+        assertThat("FilterInstances.ALL 'All Caches' => MinTerrain", 1.0f == FilterInstances.ALL.MinTerrain.get() / 2F);
+        assertThat("FilterInstances.ALL 'All Caches' => MaxTerrain", 5.0f == FilterInstances.ALL.MaxTerrain.get() / 2F);
+        assertThat("FilterInstances.ALL 'All Caches' => MinContainerSize", 0.0f == FilterInstances.ALL.MinContainerSize.get() / 2F);
+        assertThat("FilterInstances.ALL 'All Caches' => MaxContainerSize", 4.0f == FilterInstances.ALL.MaxContainerSize.get() / 2F);
+        assertThat("FilterInstances.ALL 'All Caches' => MinRating", 0.0f == FilterInstances.ALL.MinRating.get() / 2F);
+        assertThat("FilterInstances.ALL 'All Caches' => MaxRating", 5.0f == FilterInstances.ALL.MaxRating.get() / 2F);
 
         // CacheTypes
         assertThat("FilterInstances.ALL 'All Caches' => cacheType.length", 23 == FilterInstances.ALL.cacheTypes.length);
@@ -119,14 +119,14 @@ class FilterPropertiesTest {
         assertThat("presets[1] 'All Caches to find' => HasUserData", 0 == FilterInstances.ACTIVE.HasUserData.get());
         assertThat("presets[1] 'All Caches to find' => ListingChanged", 0 == FilterInstances.ACTIVE.ListingChanged.get());
         assertThat("presets[1] 'All Caches to find' => WithManualWaypoint", 0 == FilterInstances.ACTIVE.WithManualWaypoint.get());
-        assertThat("presets[1] 'All Caches to find' => MinDifficulty", 1.0f == FilterInstances.ACTIVE.MinDifficulty);
-        assertThat("presets[1] 'All Caches to find' => MaxDifficulty", 5.0f == FilterInstances.ACTIVE.MaxDifficulty);
-        assertThat("presets[1] 'All Caches to find' => MinTerrain", 1.0f == FilterInstances.ACTIVE.MinTerrain);
-        assertThat("presets[1] 'All Caches to find' => MaxTerrain", 5.0f == FilterInstances.ACTIVE.MaxTerrain);
-        assertThat("presets[1] 'All Caches to find' => MinContainerSize", 0.0f == FilterInstances.ACTIVE.MinContainerSize);
-        assertThat("presets[1] 'All Caches to find' => MaxContainerSize", 4.0f == FilterInstances.ACTIVE.MaxContainerSize);
-        assertThat("presets[1] 'All Caches to find' => MinRating", 0.0f == FilterInstances.ACTIVE.MinRating);
-        assertThat("presets[1] 'All Caches to find' => MaxRating", 5.0f == FilterInstances.ACTIVE.MaxRating);
+        assertThat("presets[1] 'All Caches to find' => MinDifficulty", 1.0f == FilterInstances.ACTIVE.MinDifficulty.get() / 2F);
+        assertThat("presets[1] 'All Caches to find' => MaxDifficulty", 5.0f == FilterInstances.ACTIVE.MaxDifficulty.get() / 2F);
+        assertThat("presets[1] 'All Caches to find' => MinTerrain", 1.0f == FilterInstances.ACTIVE.MinTerrain.get() / 2F);
+        assertThat("presets[1] 'All Caches to find' => MaxTerrain", 5.0f == FilterInstances.ACTIVE.MaxTerrain.get() / 2F);
+        assertThat("presets[1] 'All Caches to find' => MinContainerSize", 0.0f == FilterInstances.ACTIVE.MinContainerSize.get() / 2F);
+        assertThat("presets[1] 'All Caches to find' => MaxContainerSize", 4.0f == FilterInstances.ACTIVE.MaxContainerSize.get() / 2F);
+        assertThat("presets[1] 'All Caches to find' => MinRating", 0.0f == FilterInstances.ACTIVE.MinRating.get() / 2F);
+        assertThat("presets[1] 'All Caches to find' => MaxRating", 5.0f == FilterInstances.ACTIVE.MaxRating.get() / 2F);
 
         // CacheTypes
         assertThat("presets[1] 'All Caches to find' => cacheType.length", 23 == FilterInstances.ACTIVE.cacheTypes.length);
@@ -181,14 +181,14 @@ class FilterPropertiesTest {
         assertThat("presets[2] 'Quick Cache' => HasUserData", 0 == FilterInstances.QUICK.HasUserData.get());
         assertThat("presets[2] 'Quick Cache' => ListingChanged", 0 == FilterInstances.QUICK.ListingChanged.get());
         assertThat("presets[2] 'Quick Cache' => WithManualWaypoint", 0 == FilterInstances.QUICK.WithManualWaypoint.get());
-        assertThat("presets[2] 'Quick Cache' => MinDifficulty", 1.0f == FilterInstances.QUICK.MinDifficulty);
-        assertThat("presets[2] 'Quick Cache' => MaxDifficulty", 2.5f == FilterInstances.QUICK.MaxDifficulty);
-        assertThat("presets[2] 'Quick Cache' => MinTerrain", 1.0f == FilterInstances.QUICK.MinTerrain);
-        assertThat("presets[2] 'Quick Cache' => MaxTerrain", 2.5f == FilterInstances.QUICK.MaxTerrain);
-        assertThat("presets[2] 'Quick Cache' => MinContainerSize", 0.0f == FilterInstances.QUICK.MinContainerSize);
-        assertThat("presets[2] 'Quick Cache' => MaxContainerSize", 4.0f == FilterInstances.QUICK.MaxContainerSize);
-        assertThat("presets[2] 'Quick Cache' => MinRating", 0.0f == FilterInstances.QUICK.MinRating);
-        assertThat("presets[2] 'Quick Cache' => MaxRating", 5.0f == FilterInstances.QUICK.MaxRating);
+        assertThat("presets[2] 'Quick Cache' => MinDifficulty", 1.0f == FilterInstances.QUICK.MinDifficulty.get() / 2F);
+        assertThat("presets[2] 'Quick Cache' => MaxDifficulty", 2.5f == FilterInstances.QUICK.MaxDifficulty.get() / 2F);
+        assertThat("presets[2] 'Quick Cache' => MinTerrain", 1.0f == FilterInstances.QUICK.MinTerrain.get() / 2F);
+        assertThat("presets[2] 'Quick Cache' => MaxTerrain", 2.5f == FilterInstances.QUICK.MaxTerrain.get() / 2F);
+        assertThat("presets[2] 'Quick Cache' => MinContainerSize", 0.0f == FilterInstances.QUICK.MinContainerSize.get() / 2F);
+        assertThat("presets[2] 'Quick Cache' => MaxContainerSize", 4.0f == FilterInstances.QUICK.MaxContainerSize.get() / 2F);
+        assertThat("presets[2] 'Quick Cache' => MinRating", 0.0f == FilterInstances.QUICK.MinRating.get() / 2F);
+        assertThat("presets[2] 'Quick Cache' => MaxRating", 5.0f == FilterInstances.QUICK.MaxRating.get() / 2F);
 
         // CacheTypes
         assertThat("presets[2] 'Quick Cache' => cacheType.length", 23 == FilterInstances.QUICK.cacheTypes.length);
@@ -232,7 +232,7 @@ class FilterPropertiesTest {
                 FilterInstances.QUICK.getJsonString(),
                 "presets[2] 'Quick Cache' =>toString");
 
-        assertEquals("BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='NAME') and Difficulty <= 5.0 and Terrain <= 5.0 and Type in (0,3,4)",
+        assertEquals("BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='NAME') and Difficulty <= 5 and Terrain <= 5 and Type in (0,3,4)",
                 FilterInstances.QUICK.getSqlWhere("NAME"), "SqlWhere must Equals");
 
         assertFilteredReadedDB(FilterInstances.QUICK);
@@ -255,14 +255,14 @@ class FilterPropertiesTest {
         assertThat("presets[3] 'Fetch some Travelbugs' => HasUserData", 0 == FilterInstances.WITHTB.HasUserData.get());
         assertThat("presets[3] 'Fetch some Travelbugs' => ListingChanged", 0 == FilterInstances.WITHTB.ListingChanged.get());
         assertThat("presets[3] 'Fetch some Travelbugs' => WithManualWaypoint", 0 == FilterInstances.WITHTB.WithManualWaypoint.get());
-        assertThat("presets[3] 'Fetch some Travelbugs' => MinDifficulty", 1.0f == FilterInstances.WITHTB.MinDifficulty);
-        assertThat("presets[3] 'Fetch some Travelbugs' => MaxDifficulty", 3.0f == FilterInstances.WITHTB.MaxDifficulty);
-        assertThat("presets[3] 'Fetch some Travelbugs' => MinTerrain", 1.0f == FilterInstances.WITHTB.MinTerrain);
-        assertThat("presets[3] 'Fetch some Travelbugs' => MaxTerrain", 3.0f == FilterInstances.WITHTB.MaxTerrain);
-        assertThat("presets[3] 'Fetch some Travelbugs' => MinContainerSize", 0.0f == FilterInstances.WITHTB.MinContainerSize);
-        assertThat("presets[3] 'Fetch some Travelbugs' => MaxContainerSize", 4.0f == FilterInstances.WITHTB.MaxContainerSize);
-        assertThat("presets[3] 'Fetch some Travelbugs' => MinRating", 0.0f == FilterInstances.WITHTB.MinRating);
-        assertThat("presets[3] 'Fetch some Travelbugs' => MaxRating", 5.0f == FilterInstances.WITHTB.MaxRating);
+        assertThat("presets[3] 'Fetch some Travelbugs' => MinDifficulty", 1.0f == FilterInstances.WITHTB.MinDifficulty.get() / 2F);
+        assertThat("presets[3] 'Fetch some Travelbugs' => MaxDifficulty", 3.0f == FilterInstances.WITHTB.MaxDifficulty.get() / 2F);
+        assertThat("presets[3] 'Fetch some Travelbugs' => MinTerrain", 1.0f == FilterInstances.WITHTB.MinTerrain.get() / 2F);
+        assertThat("presets[3] 'Fetch some Travelbugs' => MaxTerrain", 3.0f == FilterInstances.WITHTB.MaxTerrain.get() / 2F);
+        assertThat("presets[3] 'Fetch some Travelbugs' => MinContainerSize", 0.0f == FilterInstances.WITHTB.MinContainerSize.get() / 2F);
+        assertThat("presets[3] 'Fetch some Travelbugs' => MaxContainerSize", 4.0f == FilterInstances.WITHTB.MaxContainerSize.get() / 2F);
+        assertThat("presets[3] 'Fetch some Travelbugs' => MinRating", 0.0f == FilterInstances.WITHTB.MinRating.get() / 2F);
+        assertThat("presets[3] 'Fetch some Travelbugs' => MaxRating", 5.0f == FilterInstances.WITHTB.MaxRating.get() / 2F);
 
         // CacheTypes
         assertThat("presets[3] 'Fetch some Travelbugs' => cacheType.length", 23 == FilterInstances.WITHTB.cacheTypes.length);
@@ -319,14 +319,14 @@ class FilterPropertiesTest {
         assertThat("presets[4] 'Drop off Travelbugs' => HasUserData", 0 == FilterInstances.DROPTB.HasUserData.get());
         assertThat("presets[4] 'Drop off Travelbugs' => ListingChanged", 0 == FilterInstances.DROPTB.ListingChanged.get());
         assertThat("presets[4] 'Drop off Travelbugs' => WithManualWaypoint", 0 == FilterInstances.DROPTB.WithManualWaypoint.get());
-        assertThat("presets[4] 'Drop off Travelbugs' => MinDifficulty", 1.0f == FilterInstances.DROPTB.MinDifficulty);
-        assertThat("presets[4] 'Drop off Travelbugs' => MaxDifficulty", 3.0f == FilterInstances.DROPTB.MaxDifficulty);
-        assertThat("presets[4] 'Drop off Travelbugs' => MinTerrain", 1.0f == FilterInstances.DROPTB.MinTerrain);
-        assertThat("presets[4] 'Drop off Travelbugs' => MaxTerrain", 3.0f == FilterInstances.DROPTB.MaxTerrain);
-        assertThat("presets[4] 'Drop off Travelbugs' => MinContainerSize", 2.0f == FilterInstances.DROPTB.MinContainerSize);
-        assertThat("presets[4] 'Drop off Travelbugs' => MaxContainerSize", 4.0f == FilterInstances.DROPTB.MaxContainerSize);
-        assertThat("presets[4] 'Drop off Travelbugs' => MinRating", 0.0f == FilterInstances.DROPTB.MinRating);
-        assertThat("presets[4] 'Drop off Travelbugs' => MaxRating", 5.0f == FilterInstances.DROPTB.MaxRating);
+        assertThat("presets[4] 'Drop off Travelbugs' => MinDifficulty", 1.0f == FilterInstances.DROPTB.MinDifficulty.get() / 2F);
+        assertThat("presets[4] 'Drop off Travelbugs' => MaxDifficulty", 3.0f == FilterInstances.DROPTB.MaxDifficulty.get() / 2F);
+        assertThat("presets[4] 'Drop off Travelbugs' => MinTerrain", 1.0f == FilterInstances.DROPTB.MinTerrain.get() / 2F);
+        assertThat("presets[4] 'Drop off Travelbugs' => MaxTerrain", 3.0f == FilterInstances.DROPTB.MaxTerrain.get() / 2F);
+        assertThat("presets[4] 'Drop off Travelbugs' => MinContainerSize", 2.0f == FilterInstances.DROPTB.MinContainerSize.get() / 2F);
+        assertThat("presets[4] 'Drop off Travelbugs' => MaxContainerSize", 4.0f == FilterInstances.DROPTB.MaxContainerSize.get() / 2F);
+        assertThat("presets[4] 'Drop off Travelbugs' => MinRating", 0.0f == FilterInstances.DROPTB.MinRating.get() / 2F);
+        assertThat("presets[4] 'Drop off Travelbugs' => MaxRating", 5.0f == FilterInstances.DROPTB.MaxRating.get() / 2F);
 
         // CacheTypes
         assertThat("presets[4] 'Drop off Travelbugs' => cacheType.length", 23 == FilterInstances.DROPTB.cacheTypes.length);
@@ -382,14 +382,14 @@ class FilterPropertiesTest {
         assertThat("presets[5] 'Highlights' => HasUserData", 0 == FilterInstances.HIGHLIGHTS.HasUserData.get());
         assertThat("presets[5] 'Highlights' => ListingChanged", 0 == FilterInstances.HIGHLIGHTS.ListingChanged.get());
         assertThat("presets[5] 'Highlights' => WithManualWaypoint", 0 == FilterInstances.HIGHLIGHTS.WithManualWaypoint.get());
-        assertThat("presets[5] 'Highlights' => MinDifficulty", 1.0f == FilterInstances.HIGHLIGHTS.MinDifficulty);
-        assertThat("presets[5] 'Highlights' => MaxDifficulty", 5.0f == FilterInstances.HIGHLIGHTS.MaxDifficulty);
-        assertThat("presets[5] 'Highlights' => MinTerrain", 1.0f == FilterInstances.HIGHLIGHTS.MinTerrain);
-        assertThat("presets[5] 'Highlights' => MaxTerrain", 5.0f == FilterInstances.HIGHLIGHTS.MaxTerrain);
-        assertThat("presets[5] 'Highlights' => MinContainerSize", 0.0f == FilterInstances.HIGHLIGHTS.MinContainerSize);
-        assertThat("presets[5] 'Highlights' => MaxContainerSize", 4.0f == FilterInstances.HIGHLIGHTS.MaxContainerSize);
-        assertThat("presets[5] 'Highlights' => MinRating", 3.5f == FilterInstances.HIGHLIGHTS.MinRating);
-        assertThat("presets[5] 'Highlights' => MaxRating", 5.0f == FilterInstances.HIGHLIGHTS.MaxRating);
+        assertThat("presets[5] 'Highlights' => MinDifficulty", 1.0f == FilterInstances.HIGHLIGHTS.MinDifficulty.get() / 2F);
+        assertThat("presets[5] 'Highlights' => MaxDifficulty", 5.0f == FilterInstances.HIGHLIGHTS.MaxDifficulty.get() / 2F);
+        assertThat("presets[5] 'Highlights' => MinTerrain", 1.0f == FilterInstances.HIGHLIGHTS.MinTerrain.get() / 2F);
+        assertThat("presets[5] 'Highlights' => MaxTerrain", 5.0f == FilterInstances.HIGHLIGHTS.MaxTerrain.get() / 2F);
+        assertThat("presets[5] 'Highlights' => MinContainerSize", 0.0f == FilterInstances.HIGHLIGHTS.MinContainerSize.get() / 2F);
+        assertThat("presets[5] 'Highlights' => MaxContainerSize", 4.0f == FilterInstances.HIGHLIGHTS.MaxContainerSize.get() / 2F);
+        assertThat("presets[5] 'Highlights' => MinRating", 3.5f == FilterInstances.HIGHLIGHTS.MinRating.get() / 2F);
+        assertThat("presets[5] 'Highlights' => MaxRating", 5.0f == FilterInstances.HIGHLIGHTS.MaxRating.get() / 2F);
 
         // CacheTypes
         assertThat("presets[5] 'Highlights' => cacheType.length", 23 == FilterInstances.HIGHLIGHTS.cacheTypes.length);
@@ -446,14 +446,14 @@ class FilterPropertiesTest {
         assertThat("presets[6] 'Favoriten' => HasUserData", 0 == FilterInstances.FAVORITES.HasUserData.get());
         assertThat("presets[6] 'Favoriten' => ListingChanged", 0 == FilterInstances.FAVORITES.ListingChanged.get());
         assertThat("presets[6] 'Favoriten' => WithManualWaypoint", 0 == FilterInstances.FAVORITES.WithManualWaypoint.get());
-        assertThat("presets[6] 'Favoriten' => MinDifficulty", 1.0f == FilterInstances.FAVORITES.MinDifficulty);
-        assertThat("presets[6] 'Favoriten' => MaxDifficulty", 5.0f == FilterInstances.FAVORITES.MaxDifficulty);
-        assertThat("presets[6] 'Favoriten' => MinTerrain", 1.0f == FilterInstances.FAVORITES.MinTerrain);
-        assertThat("presets[6] 'Favoriten' => MaxTerrain", 5.0f == FilterInstances.FAVORITES.MaxTerrain);
-        assertThat("presets[6] 'Favoriten' => MinContainerSize", 0.0f == FilterInstances.FAVORITES.MinContainerSize);
-        assertThat("presets[6] 'Favoriten' => MaxContainerSize", 4.0f == FilterInstances.FAVORITES.MaxContainerSize);
-        assertThat("presets[6] 'Favoriten' => MinRating", 0.0f == FilterInstances.FAVORITES.MinRating);
-        assertThat("presets[6] 'Favoriten' => MaxRating", 5.0f == FilterInstances.FAVORITES.MaxRating);
+        assertThat("presets[6] 'Favoriten' => MinDifficulty", 1.0f == FilterInstances.FAVORITES.MinDifficulty.get() / 2F);
+        assertThat("presets[6] 'Favoriten' => MaxDifficulty", 5.0f == FilterInstances.FAVORITES.MaxDifficulty.get() / 2F);
+        assertThat("presets[6] 'Favoriten' => MinTerrain", 1.0f == FilterInstances.FAVORITES.MinTerrain.get() / 2F);
+        assertThat("presets[6] 'Favoriten' => MaxTerrain", 5.0f == FilterInstances.FAVORITES.MaxTerrain.get() / 2F);
+        assertThat("presets[6] 'Favoriten' => MinContainerSize", 0.0f == FilterInstances.FAVORITES.MinContainerSize.get() / 2F);
+        assertThat("presets[6] 'Favoriten' => MaxContainerSize", 4.0f == FilterInstances.FAVORITES.MaxContainerSize.get() / 2F);
+        assertThat("presets[6] 'Favoriten' => MinRating", 0.0f == FilterInstances.FAVORITES.MinRating.get() / 2F);
+        assertThat("presets[6] 'Favoriten' => MaxRating", 5.0f == FilterInstances.FAVORITES.MaxRating.get() / 2F);
 
         // CacheTypes
         assertThat("presets[6] 'Favoriten' => cacheType.length", 23 == FilterInstances.FAVORITES.cacheTypes.length);
@@ -510,14 +510,14 @@ class FilterPropertiesTest {
         assertThat("presets[7] 'prepare to archive' => HasUserData", -1 == FilterInstances.TOARCHIVE.HasUserData.get());
         assertThat("presets[7] 'prepare to archive' => ListingChanged", -1 == FilterInstances.TOARCHIVE.ListingChanged.get());
         assertThat("presets[7] 'prepare to archive' => WithManualWaypoint", 0 == FilterInstances.TOARCHIVE.WithManualWaypoint.get());
-        assertThat("presets[7] 'prepare to archive' => MinDifficulty", 1.0f == FilterInstances.TOARCHIVE.MinDifficulty);
-        assertThat("presets[7] 'prepare to archive' => MaxDifficulty", 5.0f == FilterInstances.TOARCHIVE.MaxDifficulty);
-        assertThat("presets[7] 'prepare to archive' => MinTerrain", 1.0f == FilterInstances.TOARCHIVE.MinTerrain);
-        assertThat("presets[7] 'prepare to archive' => MaxTerrain", 5.0f == FilterInstances.TOARCHIVE.MaxTerrain);
-        assertThat("presets[7] 'prepare to archive' => MinContainerSize", 0.0f == FilterInstances.TOARCHIVE.MinContainerSize);
-        assertThat("presets[7] 'prepare to archive' => MaxContainerSize", 4.0f == FilterInstances.TOARCHIVE.MaxContainerSize);
-        assertThat("presets[7] 'prepare to archive' => MinRating", 0.0f == FilterInstances.TOARCHIVE.MinRating);
-        assertThat("presets[7] 'prepare to archive' => MaxRating", 5.0f == FilterInstances.TOARCHIVE.MaxRating);
+        assertThat("presets[7] 'prepare to archive' => MinDifficulty", 1.0f == FilterInstances.TOARCHIVE.MinDifficulty.get() / 2F);
+        assertThat("presets[7] 'prepare to archive' => MaxDifficulty", 5.0f == FilterInstances.TOARCHIVE.MaxDifficulty.get() / 2F);
+        assertThat("presets[7] 'prepare to archive' => MinTerrain", 1.0f == FilterInstances.TOARCHIVE.MinTerrain.get() / 2F);
+        assertThat("presets[7] 'prepare to archive' => MaxTerrain", 5.0f == FilterInstances.TOARCHIVE.MaxTerrain.get() / 2F);
+        assertThat("presets[7] 'prepare to archive' => MinContainerSize", 0.0f == FilterInstances.TOARCHIVE.MinContainerSize.get() / 2F);
+        assertThat("presets[7] 'prepare to archive' => MaxContainerSize", 4.0f == FilterInstances.TOARCHIVE.MaxContainerSize.get() / 2F);
+        assertThat("presets[7] 'prepare to archive' => MinRating", 0.0f == FilterInstances.TOARCHIVE.MinRating.get() / 2F);
+        assertThat("presets[7] 'prepare to archive' => MaxRating", 5.0f == FilterInstances.TOARCHIVE.MaxRating.get() / 2F);
 
         // CacheTypes
         assertThat("presets[7] 'prepare to archive' => cacheType.length", 23 == FilterInstances.TOARCHIVE.cacheTypes.length);
@@ -576,14 +576,14 @@ class FilterPropertiesTest {
         assertThat("presets[8] 'Listing Changed' => HasUserData", 0 == FilterInstances.LISTINGCHANGED.HasUserData.get());
         assertThat("presets[8] 'Listing Changed' => ListingChanged", 1 == FilterInstances.LISTINGCHANGED.ListingChanged.get());
         assertThat("presets[8] 'Listing Changed' => WithManualWaypoint", 0 == FilterInstances.LISTINGCHANGED.WithManualWaypoint.get());
-        assertThat("presets[8] 'Listing Changed' => MinDifficulty", 1.0f == FilterInstances.LISTINGCHANGED.MinDifficulty);
-        assertThat("presets[8] 'Listing Changed' => MaxDifficulty", 5.0f == FilterInstances.LISTINGCHANGED.MaxDifficulty);
-        assertThat("presets[8] 'Listing Changed' => MinTerrain", 1.0f == FilterInstances.LISTINGCHANGED.MinTerrain);
-        assertThat("presets[8] 'Listing Changed' => MaxTerrain", 5.0f == FilterInstances.LISTINGCHANGED.MaxTerrain);
-        assertThat("presets[8] 'Listing Changed' => MinContainerSize", 0.0f == FilterInstances.LISTINGCHANGED.MinContainerSize);
-        assertThat("presets[8] 'Listing Changed' => MaxContainerSize", 4.0f == FilterInstances.LISTINGCHANGED.MaxContainerSize);
-        assertThat("presets[8] 'Listing Changed' => MinRating", 0.0f == FilterInstances.LISTINGCHANGED.MinRating);
-        assertThat("presets[8] 'Listing Changed' => MaxRating", 5.0f == FilterInstances.LISTINGCHANGED.MaxRating);
+        assertThat("presets[8] 'Listing Changed' => MinDifficulty", 1.0f == FilterInstances.LISTINGCHANGED.MinDifficulty.get() / 2F);
+        assertThat("presets[8] 'Listing Changed' => MaxDifficulty", 5.0f == FilterInstances.LISTINGCHANGED.MaxDifficulty.get() / 2F);
+        assertThat("presets[8] 'Listing Changed' => MinTerrain", 1.0f == FilterInstances.LISTINGCHANGED.MinTerrain.get() / 2F);
+        assertThat("presets[8] 'Listing Changed' => MaxTerrain", 5.0f == FilterInstances.LISTINGCHANGED.MaxTerrain.get() / 2F);
+        assertThat("presets[8] 'Listing Changed' => MinContainerSize", 0.0f == FilterInstances.LISTINGCHANGED.MinContainerSize.get() / 2F);
+        assertThat("presets[8] 'Listing Changed' => MaxContainerSize", 4.0f == FilterInstances.LISTINGCHANGED.MaxContainerSize.get() / 2F);
+        assertThat("presets[8] 'Listing Changed' => MinRating", 0.0f == FilterInstances.LISTINGCHANGED.MinRating.get() / 2F);
+        assertThat("presets[8] 'Listing Changed' => MaxRating", 5.0f == FilterInstances.LISTINGCHANGED.MaxRating.get() / 2F);
 
         // CacheTypes
         assertThat("presets[8] 'Listing Changed' => cacheType.length", 23 == FilterInstances.LISTINGCHANGED.cacheTypes.length);
@@ -642,14 +642,14 @@ class FilterPropertiesTest {
         assertThat("default constructor => HasUserData", 0 == defaultCtor.HasUserData.get());
         assertThat("default constructor => ListingChanged", 0 == defaultCtor.ListingChanged.get());
         assertThat("default constructor => WithManualWaypoint", 0 == defaultCtor.WithManualWaypoint.get());
-        assertThat("default constructor => MinDifficulty", 1.0f == defaultCtor.MinDifficulty);
-        assertThat("default constructor => MaxDifficulty", 5.0f == defaultCtor.MaxDifficulty);
-        assertThat("default constructor => MinTerrain", 1.0f == defaultCtor.MinTerrain);
-        assertThat("default constructor => MaxTerrain", 5.0f == defaultCtor.MaxTerrain);
-        assertThat("default constructor => MinContainerSize", 0.0f == defaultCtor.MinContainerSize);
-        assertThat("default constructor => MaxContainerSize", 4.0f == defaultCtor.MaxContainerSize);
-        assertThat("default constructor => MinRating", 0.0f == defaultCtor.MinRating);
-        assertThat("default constructor => MaxRating", 5.0f == defaultCtor.MaxRating);
+        assertThat("default constructor => MinDifficulty", 1.0f == defaultCtor.MinDifficulty.get() / 2F);
+        assertThat("default constructor => MaxDifficulty", 5.0f == defaultCtor.MaxDifficulty.get() / 2F);
+        assertThat("default constructor => MinTerrain", 1.0f == defaultCtor.MinTerrain.get() / 2F);
+        assertThat("default constructor => MaxTerrain", 5.0f == defaultCtor.MaxTerrain.get() / 2F);
+        assertThat("default constructor => MinContainerSize", 0.0f == defaultCtor.MinContainerSize.get() / 2F);
+        assertThat("default constructor => MaxContainerSize", 4.0f == defaultCtor.MaxContainerSize.get() / 2F);
+        assertThat("default constructor => MinRating", 0.0f == defaultCtor.MinRating.get() / 2F);
+        assertThat("default constructor => MaxRating", 5.0f == defaultCtor.MaxRating.get() / 2F);
 
         // CacheTypes
         assertThat("default constructor => cacheType.length", 23 == defaultCtor.cacheTypes.length);
@@ -704,14 +704,14 @@ class FilterPropertiesTest {
                 {
                         "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User')",
                         "",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty <= 4.0 and Terrain <= 4.0 and Size >= 2.0 and Type in (0)",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and Difficulty <= 6.0 and Terrain <= 6.0 and Size >= 2.0 and Type in (0,1,2,5,6,7,9,10,21)",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty <= 4 and Terrain <= 4 and Size >= 2 and Type in (0)",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and Difficulty <= 6 and Terrain <= 6 and Size >= 2 and Type in (0,1,2,5,6,7,9,10,21)",
                         "BooleanStore & 16= 16",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and Rating >= 350.0",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and Rating >= 350",
                         "BooleanStore & 512= 512",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty <= 5.0 and Terrain <= 5.0 and Type in (0,3,4)",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty <= 5 and Terrain <= 5 and Type in (0,3,4)",
                         "~BooleanStore & 788= 788 and (not Owner='User')",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and NumTravelbugs > 0 and Difficulty <= 6.0 and Terrain <= 6.0 and Type in (0,1,2,5,6,7,9,10,21)"
+                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and NumTravelbugs > 0 and Difficulty <= 6 and Terrain <= 6 and Type in (0,1,2,5,6,7,9,10,21)"
                 };
 
         for (int i = 0; i < filters.length; i++) {

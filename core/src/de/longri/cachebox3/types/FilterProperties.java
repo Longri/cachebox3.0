@@ -46,14 +46,14 @@ public class FilterProperties {
     public final IntProperty hasCorrectedCoordinates = new IntProperty();
 
 
-    public float MinDifficulty;
-    public float MaxDifficulty;
-    public float MinTerrain;
-    public float MaxTerrain;
-    public float MinContainerSize;
-    public float MaxContainerSize;
-    public float MinRating;
-    public float MaxRating;
+    public final IntProperty MinDifficulty = new IntProperty();
+    public final IntProperty MaxDifficulty = new IntProperty();
+    public final IntProperty MinTerrain = new IntProperty();
+    public final IntProperty MaxTerrain = new IntProperty();
+    public final IntProperty MinContainerSize = new IntProperty();
+    public final IntProperty MaxContainerSize = new IntProperty();
+    public final IntProperty MinRating = new IntProperty();
+    public final IntProperty MaxRating = new IntProperty();
 
     public boolean isHistory;
 
@@ -131,14 +131,14 @@ public class FilterProperties {
             ListingChanged.set(Integer.parseInt(parts[cnt++]));
             WithManualWaypoint.set(Integer.parseInt(parts[cnt++]));
 
-            MinDifficulty = Float.parseFloat(parts[cnt++]);
-            MaxDifficulty = Float.parseFloat(parts[cnt++]);
-            MinTerrain = Float.parseFloat(parts[cnt++]);
-            MaxTerrain = Float.parseFloat(parts[cnt++]);
-            MinContainerSize = Float.parseFloat(parts[cnt++]);
-            MaxContainerSize = Float.parseFloat(parts[cnt++]);
-            MinRating = Float.parseFloat(parts[cnt++]);
-            MaxRating = Float.parseFloat(parts[cnt++]);
+            MinDifficulty.set((int) (Float.parseFloat(parts[cnt++]) * 2));
+            MaxDifficulty.set((int) (Float.parseFloat(parts[cnt++]) * 2));
+            MinTerrain.set((int) (Float.parseFloat(parts[cnt++]) * 2));
+            MaxTerrain.set((int) (Float.parseFloat(parts[cnt++]) * 2));
+            MinContainerSize.set((int) (Float.parseFloat(parts[cnt++]) * 2));
+            MaxContainerSize.set((int) (Float.parseFloat(parts[cnt++]) * 2));
+            MinRating.set((int) (Float.parseFloat(parts[cnt++]) * 2));
+            MaxRating.set((int) (Float.parseFloat(parts[cnt++]) * 2));
 
             if (parts.length == 17) {
                 this.hasCorrectedCoordinates.set(0);
@@ -204,14 +204,14 @@ public class FilterProperties {
         WithManualWaypoint.set(0);
         HasUserData.set(0);
 
-        MinDifficulty = 1;
-        MaxDifficulty = 5;
-        MinTerrain = 1;
-        MaxTerrain = 5;
-        MinContainerSize = 0;
-        MaxContainerSize = 4;
-        MinRating = 0;
-        MaxRating = 5;
+        MinDifficulty.set(2);
+        MaxDifficulty.set(10);
+        MinTerrain.set(2);
+        MaxTerrain.set(10);
+        MinContainerSize.set(0);
+        MaxContainerSize.set(8);
+        MinRating.set(0);
+        MaxRating.set(10);
 
         this.hasCorrectedCoordinates.set(0);
         isHistory = false;
@@ -339,14 +339,16 @@ public class FilterProperties {
                 andParts.add(" NOT ID in (select CacheId FROM Waypoints WHERE UserWaypoint = 1)");
 
 
-            if (MinDifficulty > 1) andParts.add("Difficulty >= " + String.valueOf(MinDifficulty * 2));
-            if (MaxDifficulty < 5) andParts.add("Difficulty <= " + String.valueOf(MaxDifficulty * 2));
-            if (MinTerrain > 1) andParts.add("Terrain >= " + String.valueOf(MinTerrain * 2));
-            if (MaxTerrain < 5) andParts.add("Terrain <= " + String.valueOf(MaxTerrain * 2));
-            if (MinContainerSize > 0) andParts.add("Size >= " + String.valueOf(MinContainerSize));
-            if (MaxContainerSize < 4) andParts.add("Size <= " + String.valueOf(MaxContainerSize));
-            if (MinRating > 0) andParts.add("Rating >= " + String.valueOf(MinRating * 100));
-            if (MaxRating < 5) andParts.add("Rating <= " + String.valueOf(MaxRating * 100));
+            if (MinDifficulty.get() / 2f > 1) andParts.add("Difficulty >= " + String.valueOf(MinDifficulty.get()));
+            if (MaxDifficulty.get() / 2f < 5) andParts.add("Difficulty <= " + String.valueOf(MaxDifficulty.get()));
+            if (MinTerrain.get() / 2f > 1) andParts.add("Terrain >= " + String.valueOf(MinTerrain.get()));
+            if (MaxTerrain.get() / 2f < 5) andParts.add("Terrain <= " + String.valueOf(MaxTerrain.get()));
+            if (MinContainerSize.get() / 2f > 0) andParts.add("Size >= " + String.valueOf(MinContainerSize.get() / 2));
+            if (MaxContainerSize.get() / 2f < 4) andParts.add("Size <= " + String.valueOf(MaxContainerSize.get() / 2));
+            if (MinRating.get() / 2f > 0)
+                andParts.add("Rating >= " + String.valueOf((int)( MinRating.get() / 2f * 100)));
+            if (MaxRating.get() / 2f < 5)
+                andParts.add("Rating <= " + String.valueOf((int)( MaxRating.get() / 2f * 100)));
 
 
             String csvTypes = "";
@@ -562,14 +564,14 @@ public class FilterProperties {
         WithManualWaypoint.set(properties.WithManualWaypoint.get());
         HasUserData.set(properties.HasUserData.get());
 
-        MinDifficulty = properties.MinDifficulty;
-        MaxDifficulty = properties.MaxDifficulty;
-        MinTerrain = properties.MinTerrain;
-        MaxTerrain = properties.MaxTerrain;
-        MinContainerSize = properties.MinContainerSize;
-        MaxContainerSize = properties.MaxContainerSize;
-        MinRating = properties.MinRating;
-        MaxRating = properties.MaxRating;
+        MinDifficulty.set(properties.MinDifficulty.get());
+        MaxDifficulty.set(properties.MaxDifficulty.get());
+        MinTerrain.set(properties.MinTerrain.get());
+        MaxTerrain.set(properties.MaxTerrain.get());
+        MinContainerSize.set(properties.MinContainerSize.get());
+        MaxContainerSize.set(properties.MaxContainerSize.get());
+        MinRating.set(properties.MinRating.get());
+        MaxRating.set(properties.MaxRating.get());
 
         this.hasCorrectedCoordinates.set(properties.hasCorrectedCoordinates.get());
         isHistory = properties.isHistory;
@@ -620,10 +622,20 @@ public class FilterProperties {
 
             // add Cache properties
             json.writeValue("caches",
-                    String.valueOf(Finds) + SEPARATOR + String.valueOf(NotAvailable) + SEPARATOR + String.valueOf(Archived) + SEPARATOR + String.valueOf(Own) + SEPARATOR + String.valueOf(ContainsTravelbugs) + SEPARATOR + String.valueOf(Favorites)
-                            + SEPARATOR + String.valueOf(HasUserData) + SEPARATOR + String.valueOf(ListingChanged) + SEPARATOR + String.valueOf(WithManualWaypoint) + SEPARATOR + String.valueOf(MinDifficulty) + SEPARATOR
-                            + String.valueOf(MaxDifficulty) + SEPARATOR + String.valueOf(MinTerrain) + SEPARATOR + String.valueOf(MaxTerrain) + SEPARATOR + String.valueOf(MinContainerSize) + SEPARATOR + String.valueOf(MaxContainerSize) + SEPARATOR
-                            + String.valueOf(MinRating) + SEPARATOR + String.valueOf(MaxRating) + SEPARATOR + String.valueOf(this.hasCorrectedCoordinates));
+                    String.valueOf(Finds) + SEPARATOR + String.valueOf(NotAvailable) + SEPARATOR
+                            + String.valueOf(Archived) + SEPARATOR + String.valueOf(Own) + SEPARATOR
+                            + String.valueOf(ContainsTravelbugs) + SEPARATOR + String.valueOf(Favorites)
+                            + SEPARATOR + String.valueOf(HasUserData) + SEPARATOR + String.valueOf(ListingChanged)
+                            + SEPARATOR + String.valueOf(WithManualWaypoint) + SEPARATOR
+                            + String.valueOf(MinDifficulty.get() / 2F) + SEPARATOR
+                            + String.valueOf(MaxDifficulty.get() / 2F) + SEPARATOR
+                            + String.valueOf(MinTerrain.get() / 2F) + SEPARATOR
+                            + String.valueOf(MaxTerrain.get() / 2F) + SEPARATOR
+                            + String.valueOf(MinContainerSize.get() / 2F) + SEPARATOR
+                            + String.valueOf(MaxContainerSize.get() / 2F) + SEPARATOR
+                            + String.valueOf(MinRating.get() / 2F) + SEPARATOR
+                            + String.valueOf(MaxRating.get() / 2F) + SEPARATOR
+                            + String.valueOf(this.hasCorrectedCoordinates));
 
             // Filter GCCode
             json.writeValue("filtergc", filterGcCode);

@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.widgets.filter_settings;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -25,14 +26,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.activities.EditFilterSettings;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.FloatProperty;
 import de.longri.cachebox3.types.IntProperty;
 import de.longri.cachebox3.types.Property;
 import org.slf4j.Logger;
@@ -113,15 +117,15 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 filterSettings.filterProperties.Own, style.own, Translation.get("myowncaches"));
         final IntPropertyListView withTb = new IntPropertyListView(listViewItems.size + 5,
                 filterSettings.filterProperties.ContainsTravelbugs, style.TB, Translation.get("withtrackables"));
-        final IntPropertyListView favorites = new IntPropertyListView(listViewItems.size + 5,
+        final IntPropertyListView favorites = new IntPropertyListView(listViewItems.size + 6,
                 filterSettings.filterProperties.Favorites, style.Favorites, Translation.get("Favorites"));
-        final IntPropertyListView hasUserData = new IntPropertyListView(listViewItems.size + 5,
+        final IntPropertyListView hasUserData = new IntPropertyListView(listViewItems.size + 7,
                 filterSettings.filterProperties.HasUserData, style.HasUserData, Translation.get("hasuserdata"));
-        final IntPropertyListView listingChanged = new IntPropertyListView(listViewItems.size + 5,
+        final IntPropertyListView listingChanged = new IntPropertyListView(listViewItems.size + 8,
                 filterSettings.filterProperties.ListingChanged, style.ListingChanged, Translation.get("ListingChanged"));
-        final IntPropertyListView manualwaypoint = new IntPropertyListView(listViewItems.size + 5,
+        final IntPropertyListView manualwaypoint = new IntPropertyListView(listViewItems.size + 9,
                 filterSettings.filterProperties.WithManualWaypoint, style.ManualWaypoint, Translation.get("manualwaypoint"));
-        final IntPropertyListView corrected = new IntPropertyListView(listViewItems.size + 5,
+        final IntPropertyListView corrected = new IntPropertyListView(listViewItems.size + 10,
                 filterSettings.filterProperties.hasCorrectedCoordinates, style.CoorectedCoord, Translation.get("hasCorrectedCoordinates"));
 
 
@@ -163,11 +167,23 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
 
         final AtomicBoolean sectionVisible = new AtomicBoolean(false);
 
-        ClickListener listener = new ClickListener() {
+        final AdjustableStarListViewItem minDificulty = new AdjustableStarListViewItem(listViewItems.size + 1,
+                filterSettings.filterProperties.MinDifficulty, Translation.get("disabled"));
 
+
+        ClickListener listener = new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                boolean visible = !sectionVisible.get();
+                sectionVisible.set(visible);
+                minDificulty.setVisible(visible);
+
+                setListView.invalidate();
+                setListView.layout(true);
+            }
         };
 
         listViewItems.add(new ButtonListViewItem(listViewItems.size, "D / T" + String.format("%n") + "GC-Vote", listener));
+        listViewItems.add(minDificulty);
     }
 
     private void addCachTypeItems() {
@@ -289,6 +305,57 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 }
             });
         }
+
+        @Override
+        public void dispose() {
+
+        }
+    }
+
+    class AdjustableStarListViewItem extends ListViewItem {
+
+        final IntProperty property;
+        final AdjustableStarWidget adjustableWidget;
+
+        public AdjustableStarListViewItem(int listIndex, final IntProperty property, final CharSequence name) {
+            super(listIndex);
+
+            this.property = property;
+            this.setVisible(false);
+
+            this.adjustableWidget = new AdjustableStarWidget(name);
+            this.add(this.adjustableWidget).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
+
+            property.setChangeListener(new Property.PropertyChangedListener() {
+                @Override
+                public void propertyChanged() {
+                    log.debug("Property {} changed to {}", name, property.get());
+
+                    //property changed, so set name to "?"
+                    filterSettings.filterProperties.setName("?");
+                }
+            });
+
+
+            // ListViewItem catch the ClickEvent from Button
+            // So we reroute the event to the Button!
+            this.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (event.getTarget().getParent() instanceof VisTextButton) {
+                        Array<EventListener> listeners = event.getTarget().getParent().getListeners();
+                        int n = listeners.size;
+                        while (n-- > 0) {
+                            EventListener listener = listeners.get(n);
+                            if (listener instanceof ClickListener) {
+                                ((ClickListener) listener).clicked(event, x, y);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
 
         @Override
         public void dispose() {
