@@ -43,6 +43,7 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.DraftEntry;
 import de.longri.cachebox3.types.DraftList;
+import de.longri.cachebox3.types.IntProperty;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -91,7 +92,7 @@ public class EditDrafts extends ActivityBase {
         contentTable = new VisTable();
         setDraft(note, returnListener, isNewDraft);
         if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
-            gcVoteWidget = new AdjustableStarWidget(Translation.get("maxRating"));
+            gcVoteWidget = new AdjustableStarWidget(Translation.get("maxRating"),new IntProperty());
             gcVoteWidget.setBackground(CB.getSkin().get(ListView.ListViewStyle.class).firstItem);
         }
 

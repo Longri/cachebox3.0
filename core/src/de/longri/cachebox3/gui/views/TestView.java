@@ -51,6 +51,7 @@ import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Attributes;
+import de.longri.cachebox3.types.IntProperty;
 import de.longri.cachebox3.types.LogTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -179,7 +180,8 @@ public class TestView extends AbstractView {
 
         {// test AdjustableStarWidget
 
-            final AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget("Title");
+            IntProperty property = new IntProperty();
+            final AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget("Title", property);
             adjustableStarWidget.setValue(6);
 
 

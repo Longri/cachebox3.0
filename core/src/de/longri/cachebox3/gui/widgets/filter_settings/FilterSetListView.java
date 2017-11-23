@@ -36,7 +36,6 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.FloatProperty;
 import de.longri.cachebox3.types.IntProperty;
 import de.longri.cachebox3.types.Property;
 import org.slf4j.Logger;
@@ -86,6 +85,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
 
         setListView = new ListView(listViewAdapter, true, false);
         setListView.setSelectable(ListView.SelectableType.NONE);
+
 
         this.add(setListView).expand().fill();
         setListView.setEmptyString("EmptyList");
@@ -168,7 +168,21 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         final AtomicBoolean sectionVisible = new AtomicBoolean(false);
 
         final AdjustableStarListViewItem minDificulty = new AdjustableStarListViewItem(listViewItems.size + 1,
-                filterSettings.filterProperties.MinDifficulty, Translation.get("disabled"));
+                filterSettings.filterProperties.MinDifficulty, Translation.get("minDifficulty"));
+        final AdjustableStarListViewItem maxDificulty = new AdjustableStarListViewItem(listViewItems.size + 1,
+                filterSettings.filterProperties.MaxDifficulty, Translation.get("maxDifficulty"));
+        final AdjustableStarListViewItem minTerrain = new AdjustableStarListViewItem(listViewItems.size + 1,
+                filterSettings.filterProperties.MinTerrain, Translation.get("minTerrain"));
+        final AdjustableStarListViewItem maxTerrain = new AdjustableStarListViewItem(listViewItems.size + 1,
+                filterSettings.filterProperties.MaxTerrain, Translation.get("maxTerrain"));
+        final AdjustableStarListViewItem minContainerSize = new AdjustableStarListViewItem(listViewItems.size + 1,
+                filterSettings.filterProperties.MinContainerSize, Translation.get("minContainerSize"));
+        final AdjustableStarListViewItem maxContainerSize = new AdjustableStarListViewItem(listViewItems.size + 1,
+                filterSettings.filterProperties.MaxContainerSize, Translation.get("maxContainerSize"));
+        final AdjustableStarListViewItem minRating = new AdjustableStarListViewItem(listViewItems.size + 1,
+                filterSettings.filterProperties.MinRating, Translation.get("minRating"));
+        final AdjustableStarListViewItem maxRating = new AdjustableStarListViewItem(listViewItems.size + 1,
+                filterSettings.filterProperties.MaxRating, Translation.get("maxRating"));
 
 
         ClickListener listener = new ClickListener() {
@@ -176,6 +190,13 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 boolean visible = !sectionVisible.get();
                 sectionVisible.set(visible);
                 minDificulty.setVisible(visible);
+                maxDificulty.setVisible(visible);
+                minTerrain.setVisible(visible);
+                maxTerrain.setVisible(visible);
+                minContainerSize.setVisible(visible);
+                maxContainerSize.setVisible(visible);
+                minRating.setVisible(visible);
+                maxRating.setVisible(visible);
 
                 setListView.invalidate();
                 setListView.layout(true);
@@ -184,6 +205,13 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
 
         listViewItems.add(new ButtonListViewItem(listViewItems.size, "D / T" + String.format("%n") + "GC-Vote", listener));
         listViewItems.add(minDificulty);
+        listViewItems.add(maxDificulty);
+        listViewItems.add(minTerrain);
+        listViewItems.add(maxTerrain);
+        listViewItems.add(minContainerSize);
+        listViewItems.add(maxContainerSize);
+        listViewItems.add(minRating);
+        listViewItems.add(maxRating);
     }
 
     private void addCachTypeItems() {
@@ -323,7 +351,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
             this.property = property;
             this.setVisible(false);
 
-            this.adjustableWidget = new AdjustableStarWidget(name);
+            this.adjustableWidget = new AdjustableStarWidget(name, property);
             this.add(this.adjustableWidget).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
 
             property.setChangeListener(new Property.PropertyChangedListener() {
@@ -337,13 +365,16 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
             });
 
 
-            // ListViewItem catch the ClickEvent from Button
+            // ListViewItem catch the ClickEvent from Button/Label
             // So we reroute the event to the Button!
             this.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (event.getTarget().getParent() instanceof VisTextButton) {
-                        Array<EventListener> listeners = event.getTarget().getParent().getListeners();
+                    if (event.getTarget() instanceof VisTextButton
+                            || event.getTarget().getParent() instanceof VisTextButton) {
+
+                        Array<EventListener> listeners = event.getTarget() instanceof VisTextButton ?
+                                event.getTarget().getListeners() : event.getTarget().getParent().getListeners();
                         int n = listeners.size;
                         while (n-- > 0) {
                             EventListener listener = listeners.get(n);

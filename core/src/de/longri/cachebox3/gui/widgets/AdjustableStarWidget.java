@@ -23,6 +23,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.types.IntProperty;
 
 /**
  * Created by Longri on 02.09.2017.
@@ -30,21 +31,21 @@ import de.longri.cachebox3.CB;
 public class AdjustableStarWidget extends Table {
 
     private final Stars starsWidget;
-    private final VisTextButton plusBtn, minusBtn;
-    private int value = 0;
+    private final IntProperty value;
     private final VisLabel valueLabel;
 
 
-    public AdjustableStarWidget(CharSequence title) {
+    public AdjustableStarWidget(CharSequence title, IntProperty valueProperty) {
+        this.value = valueProperty;
 
-        starsWidget = new Stars(value);
-        minusBtn = new VisTextButton("-") {
+        starsWidget = new Stars(value.get());
+        VisTextButton minusBtn = new VisTextButton("-") {
             @Override
             public float getPrefWidth() {
                 return this.getPrefHeight();
             }
         };
-        plusBtn = new VisTextButton("+") {
+        VisTextButton plusBtn = new VisTextButton("+") {
             @Override
             public float getPrefWidth() {
                 return this.getPrefHeight();
@@ -56,7 +57,7 @@ public class AdjustableStarWidget extends Table {
         centerTable.add(titleLabel).left().expandX().fillX();
         centerTable.row();
         centerTable.add(starsWidget).left().expandX().fillX();
-        valueLabel = new VisLabel(Double.toString(value / 2));
+        valueLabel = new VisLabel(Double.toString(value.get() / 2));
 
         this.add(minusBtn).left().padRight(new Value.Fixed(CB.scaledSizes.MARGINx4));
         this.add(centerTable).left().expandX().fillX().padRight(new Value.Fixed(CB.scaledSizes.MARGIN));
@@ -65,7 +66,7 @@ public class AdjustableStarWidget extends Table {
 
         plusBtn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                int newValue = value + 1;
+                int newValue = value.get() + 1;
                 if (newValue > 10) newValue = 0;
                 setValue(newValue);
             }
@@ -73,7 +74,7 @@ public class AdjustableStarWidget extends Table {
 
         minusBtn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                int newValue = value - 1;
+                int newValue = value.get() - 1;
                 if (newValue < 0) newValue = 10;
                 setValue(newValue);
             }
@@ -84,10 +85,10 @@ public class AdjustableStarWidget extends Table {
         CB.postAsync(new Runnable() {
             @Override
             public void run() {
-                if (AdjustableStarWidget.this.value != value) {
-                    AdjustableStarWidget.this.value = value;
-                    valueLabel.setText(Double.toString((double) AdjustableStarWidget.this.value / 2.0));
-                    starsWidget.setValue(AdjustableStarWidget.this.value);
+                if (AdjustableStarWidget.this.value.get() != value) {
+                    AdjustableStarWidget.this.value.set(value);
+                    valueLabel.setText(Double.toString((double) AdjustableStarWidget.this.value.get() / 2.0));
+                    starsWidget.setValue(AdjustableStarWidget.this.value.get());
                     AdjustableStarWidget.this.invalidateHierarchy();
                 }
             }
@@ -95,6 +96,6 @@ public class AdjustableStarWidget extends Table {
     }
 
     public int getValue() {
-        return this.value;
+        return this.value.get();
     }
 }
