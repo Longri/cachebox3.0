@@ -103,7 +103,7 @@ public class ListView extends WidgetGroup {
         this.listCount = adapter.getCount();
     }
 
-    public ListView( boolean dontDisposeItems, boolean itemsHaveSameHeight) {
+    public ListView(boolean dontDisposeItems, boolean itemsHaveSameHeight) {
         this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems, itemsHaveSameHeight);
     }
 
@@ -343,21 +343,23 @@ public class ListView extends WidgetGroup {
             float itemHeight = itemHeights.items[0];
             completeHeight = itemHeight;
             for (int i = 0; i < this.listCount; i++) {
-                if (i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount)) {
-                    completeHeight += itemHeights.items[i];
-                } else {
-                    completeHeight += itemHeight;
-                    itemHeights.add(itemHeight);
+                if (adapter.getView(i).isVisible()){
+                    if (i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount)) {
+                        completeHeight += itemHeights.items[i];
+                    } else {
+                        completeHeight += itemHeight;
+                        itemHeights.add(itemHeight);
+                    }
                 }
-
             }
         } else {
             for (int i = 0; i < this.listCount; i++) {
                 addItem(i, false, -1);
             }
             //layout itemGroup
-            for (int i = 0; i < this.listCount; i++) { //calculate complete height of all Items
-                completeHeight += itemHeights.items[i];
+            for (int i = 0; i < this.listCount; i++) { //calculate complete height of all visible Items
+                if (adapter.getView(i).isVisible())
+                    completeHeight += itemHeights.items[i];
             }
         }
 
@@ -370,15 +372,16 @@ public class ListView extends WidgetGroup {
         float yPos = completeHeight;
 
         Actor[] actors = itemGroup.getChildren().items;
-        for (int i = 0; i < this.listCount; i++) {// calculate Y position of all Items
-            yPos -= itemHeights.get(i);
-            itemYPos.add(yPos);
-            if (itemsHaveSameHeight && i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount)) {
-                actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
-            } else if (!itemsHaveSameHeight) {
-                actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
+        for (int i = 0; i < this.listCount; i++) {// calculate Y position of all visible Items
+            if (adapter.getView(i).isVisible()){
+                yPos -= itemHeights.get(i);
+                itemYPos.add(yPos);
+                if (itemsHaveSameHeight && i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount)) {
+                    actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
+                } else if (!itemsHaveSameHeight) {
+                    actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
+                }
             }
-
         }
 
         scrollPane = new VisScrollPane(itemGroup, style);

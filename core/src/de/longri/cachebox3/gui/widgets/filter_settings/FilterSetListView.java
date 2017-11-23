@@ -160,6 +160,9 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
     }
 
     private void addDTGcVoteItems() {
+
+        final AtomicBoolean sectionVisible = new AtomicBoolean(false);
+
         ClickListener listener = new ClickListener() {
 
         };
