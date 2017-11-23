@@ -343,7 +343,7 @@ public class ListView extends WidgetGroup {
             float itemHeight = itemHeights.items[0];
             completeHeight = itemHeight;
             for (int i = 0; i < this.listCount; i++) {
-                if (adapter.getView(i).isVisible()){
+                if (adapter.getView(i).isVisible()) {
                     if (i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount)) {
                         completeHeight += itemHeights.items[i];
                     } else {
@@ -373,7 +373,7 @@ public class ListView extends WidgetGroup {
 
         Actor[] actors = itemGroup.getChildren().items;
         for (int i = 0; i < this.listCount; i++) {// calculate Y position of all visible Items
-            if (adapter.getView(i).isVisible()){
+            if (adapter.getView(i).isVisible()) {
                 yPos -= itemHeights.get(i);
                 itemYPos.add(yPos);
                 if (itemsHaveSameHeight && i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount)) {
@@ -384,10 +384,21 @@ public class ListView extends WidgetGroup {
             }
         }
 
-        scrollPane = new VisScrollPane(itemGroup, style);
+        scrollPane = new VisScrollPane(itemGroup, style) {
+            @Override
+            public Actor hit(float x, float y, boolean touchable) {
+                Actor actor = super.hit(x, y, touchable);
+                if (actor == scrollPane) {
+                    actor = itemGroup.hit(x, (itemGroup.getHeight() - (scrollPane.getScrollY() + scrollPane.getHeight())) + y, touchable);
+                }
+                return actor;
+            }
+        };
         scrollPane.setOverscroll(false, true);
         scrollPane.setFlickScroll(true);
         scrollPane.setVariableSizeKnobs(false);
+        scrollPane.setCancelTouchFocus(true);
+        scrollPane.setupFadeScrollBars(1f, 0.5f);
         setScrollPaneBounds();
 
         if (this.getChildren().size > 0) throw new RuntimeException("Childs not Empty");
