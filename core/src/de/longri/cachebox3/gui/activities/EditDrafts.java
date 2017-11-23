@@ -27,7 +27,6 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
@@ -92,7 +91,7 @@ public class EditDrafts extends ActivityBase {
         contentTable = new VisTable();
         setDraft(note, returnListener, isNewDraft);
         if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
-            gcVoteWidget = new AdjustableStarWidget(Translation.get("maxRating"),new IntProperty());
+            gcVoteWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, Translation.get("maxRating"), new IntProperty());
             gcVoteWidget.setBackground(CB.getSkin().get(ListView.ListViewStyle.class).firstItem);
         }
 

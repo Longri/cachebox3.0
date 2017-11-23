@@ -43,6 +43,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static de.longri.cachebox3.gui.widgets.AdjustableStarWidget.Type.STAR;
+import static de.longri.cachebox3.gui.widgets.AdjustableStarWidget.Type.SIZE;
+
 /**
  * Created by Longri on 16.11.2017.
  */
@@ -168,21 +171,21 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         final AtomicBoolean sectionVisible = new AtomicBoolean(false);
 
         final AdjustableStarListViewItem minDificulty = new AdjustableStarListViewItem(listViewItems.size + 1,
-                filterSettings.filterProperties.MinDifficulty, Translation.get("minDifficulty"));
+                filterSettings.filterProperties.MinDifficulty, Translation.get("minDifficulty"), STAR);
         final AdjustableStarListViewItem maxDificulty = new AdjustableStarListViewItem(listViewItems.size + 1,
-                filterSettings.filterProperties.MaxDifficulty, Translation.get("maxDifficulty"));
+                filterSettings.filterProperties.MaxDifficulty, Translation.get("maxDifficulty"), STAR);
         final AdjustableStarListViewItem minTerrain = new AdjustableStarListViewItem(listViewItems.size + 1,
-                filterSettings.filterProperties.MinTerrain, Translation.get("minTerrain"));
+                filterSettings.filterProperties.MinTerrain, Translation.get("minTerrain"), STAR);
         final AdjustableStarListViewItem maxTerrain = new AdjustableStarListViewItem(listViewItems.size + 1,
-                filterSettings.filterProperties.MaxTerrain, Translation.get("maxTerrain"));
+                filterSettings.filterProperties.MaxTerrain, Translation.get("maxTerrain"), STAR);
         final AdjustableStarListViewItem minContainerSize = new AdjustableStarListViewItem(listViewItems.size + 1,
-                filterSettings.filterProperties.MinContainerSize, Translation.get("minContainerSize"));
+                filterSettings.filterProperties.MinContainerSize, Translation.get("minContainerSize"), SIZE);
         final AdjustableStarListViewItem maxContainerSize = new AdjustableStarListViewItem(listViewItems.size + 1,
-                filterSettings.filterProperties.MaxContainerSize, Translation.get("maxContainerSize"));
+                filterSettings.filterProperties.MaxContainerSize, Translation.get("maxContainerSize"), SIZE);
         final AdjustableStarListViewItem minRating = new AdjustableStarListViewItem(listViewItems.size + 1,
-                filterSettings.filterProperties.MinRating, Translation.get("minRating"));
+                filterSettings.filterProperties.MinRating, Translation.get("minRating"), STAR);
         final AdjustableStarListViewItem maxRating = new AdjustableStarListViewItem(listViewItems.size + 1,
-                filterSettings.filterProperties.MaxRating, Translation.get("maxRating"));
+                filterSettings.filterProperties.MaxRating, Translation.get("maxRating"), STAR);
 
 
         ClickListener listener = new ClickListener() {
@@ -345,13 +348,13 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         final IntProperty property;
         final AdjustableStarWidget adjustableWidget;
 
-        public AdjustableStarListViewItem(int listIndex, final IntProperty property, final CharSequence name) {
+        public AdjustableStarListViewItem(int listIndex, final IntProperty property, final CharSequence name, AdjustableStarWidget.Type type) {
             super(listIndex);
 
             this.property = property;
             this.setVisible(false);
 
-            this.adjustableWidget = new AdjustableStarWidget(name, property);
+            this.adjustableWidget = new AdjustableStarWidget(type, name, property);
             this.add(this.adjustableWidget).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
 
             property.setChangeListener(new Property.PropertyChangedListener() {

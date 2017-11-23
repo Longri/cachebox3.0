@@ -25,7 +25,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 /**
  * Created by Longri on 07.09.2016.
  */
-public class Stars extends VisTable {
+public class Stars extends AbstractIntValueChangedWidget {
 
     private final Image image1, image2, image3, image4, image5;
 

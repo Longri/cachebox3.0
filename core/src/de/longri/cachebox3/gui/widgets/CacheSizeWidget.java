@@ -26,11 +26,12 @@ import de.longri.cachebox3.types.CacheSizes;
 /**
  * Created by Longri on 08.09.2016.
  */
-public class CacheSizeWidget extends Widget {
-    private final Drawable sizeDrawable;
+public class CacheSizeWidget extends AbstractIntValueChangedWidget {
+    private Drawable sizeDrawable;
+    private final Skin skin;
 
     public CacheSizeWidget(CacheSizes size) {
-        Skin skin = VisUI.getSkin();
+        skin = VisUI.getSkin();
 
         switch (size) {
             case other:
@@ -53,6 +54,11 @@ public class CacheSizeWidget extends Widget {
         }
     }
 
+    public CacheSizeWidget(int value) {
+        skin = VisUI.getSkin();
+        setValue(value);
+    }
+
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         Color color = batch.getColor();
@@ -71,4 +77,26 @@ public class CacheSizeWidget extends Widget {
         return sizeDrawable.getMinHeight();
     }
 
+    @Override
+    public void setValue(int value) {
+        switch (value) {
+            case 0:
+                sizeDrawable = skin.getDrawable("other");
+                break;
+            case 1:
+                sizeDrawable = skin.getDrawable("micro");
+                break;
+            case 2:
+                sizeDrawable = skin.getDrawable("small");
+                break;
+            case 3:
+                sizeDrawable = skin.getDrawable("regular");
+                break;
+            case 4:
+                sizeDrawable = skin.getDrawable("large");
+                break;
+            default:
+                sizeDrawable = skin.getDrawable("other"); // unknown
+        }
+    }
 }

@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
@@ -23,6 +24,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.IntProperty;
 
 /**
@@ -30,15 +32,24 @@ import de.longri.cachebox3.types.IntProperty;
  */
 public class AdjustableStarWidget extends Table {
 
-    private final Stars starsWidget;
+    private final AbstractIntValueChangedWidget starsWidget;
     private final IntProperty value;
     private final VisLabel valueLabel;
+    private final int maxValue;
+    private final int minValue;
+    private final Type type;
+
+    public enum Type {
+        STAR, SIZE
+    }
 
 
-    public AdjustableStarWidget(CharSequence title, IntProperty valueProperty) {
+    public AdjustableStarWidget(Type type, CharSequence title, IntProperty valueProperty) {
+        this.type = type;
         this.value = valueProperty;
-
-        starsWidget = new Stars(value.get());
+        maxValue = type == Type.STAR ? 10 : 5;
+        minValue = type == Type.STAR ? 0 : 1;
+        starsWidget = type == Type.STAR ? new Stars(value.get()) : new CacheSizeWidget(value.get());
         VisTextButton minusBtn = new VisTextButton("-") {
             @Override
             public float getPrefWidth() {
@@ -56,18 +67,28 @@ public class AdjustableStarWidget extends Table {
         VisLabel titleLabel = new VisLabel(title);
         centerTable.add(titleLabel).left().expandX().fillX();
         centerTable.row();
-        centerTable.add(starsWidget).left().expandX().fillX();
+        VisTable line = new VisTable();
+        line.add(starsWidget).left();
+
         valueLabel = new VisLabel(Double.toString(value.get() / 2));
+        if (type == Type.SIZE) {
+            line.add((Actor) null).expandX().fillX();
+            line.add(valueLabel).padRight(CB.scaledSizes.MARGINx4);
+        } else {
+            line.add((Actor) null).expandX().fillX();
+        }
+
+        centerTable.add(line).left().expandX().fillX();
 
         this.add(minusBtn).left().padRight(new Value.Fixed(CB.scaledSizes.MARGINx4));
         this.add(centerTable).left().expandX().fillX().padRight(new Value.Fixed(CB.scaledSizes.MARGIN));
-        this.add(valueLabel).right().padRight(new Value.Fixed(CB.scaledSizes.MARGINx4));
+        if (type == Type.STAR) this.add(valueLabel).right().padRight(new Value.Fixed(CB.scaledSizes.MARGINx4));
         this.add(plusBtn).right();
 
         plusBtn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 int newValue = value.get() + 1;
-                if (newValue > 10) newValue = 0;
+                if (newValue > maxValue) newValue = minValue;
                 setValue(newValue);
             }
         });
@@ -75,19 +96,29 @@ public class AdjustableStarWidget extends Table {
         minusBtn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 int newValue = value.get() - 1;
-                if (newValue < 0) newValue = 10;
+                if (newValue < minValue) newValue = maxValue;
                 setValue(newValue);
             }
         });
+
+        setValue(valueProperty.get(), true);
     }
 
-    public void setValue(final int value) {
+    public void setValue(int value) {
+        setValue(value, false);
+    }
+
+    private void setValue(final int value, final boolean force) {
         CB.postAsync(new Runnable() {
             @Override
             public void run() {
-                if (AdjustableStarWidget.this.value.get() != value) {
+                if (force || AdjustableStarWidget.this.value.get() != value) {
                     AdjustableStarWidget.this.value.set(value);
-                    valueLabel.setText(Double.toString((double) AdjustableStarWidget.this.value.get() / 2.0));
+                    if (type == Type.SIZE) {
+                        valueLabel.setText(CacheSizes.parseInt(AdjustableStarWidget.this.value.get()).toString());
+                    } else {
+                        valueLabel.setText(Double.toString((double) AdjustableStarWidget.this.value.get() / 2.0));
+                    }
                     starsWidget.setValue(AdjustableStarWidget.this.value.get());
                     AdjustableStarWidget.this.invalidateHierarchy();
                 }

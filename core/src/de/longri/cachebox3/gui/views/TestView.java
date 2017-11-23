@@ -181,7 +181,7 @@ public class TestView extends AbstractView {
         {// test AdjustableStarWidget
 
             IntProperty property = new IntProperty();
-            final AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget("Title", property);
+            final AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR,"Title", property);
             adjustableStarWidget.setValue(6);
 
 
