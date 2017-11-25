@@ -128,6 +128,7 @@ public abstract class Search extends PostRequest {
     private final int CACHE_LIMITS_ARRAY = 4;
     private final int IMAGE_ARRAY = 5;
     private final int WAY_POINT_ARRAY = 6;
+    private final int STATUS = 7;
     private boolean isUserWaypoint = false;
     private final ICancel iCancel;
 
@@ -184,6 +185,7 @@ public abstract class Search extends PostRequest {
             e.printStackTrace();
         }
 
+        final ApiResultState[] resultState = new ApiResultState[]{ApiResultState.IO};
         JsonStreamParser parser = new JsonStreamParser() {
 
             @Override
@@ -252,6 +254,10 @@ public abstract class Search extends PostRequest {
                 super.startObject(name);
                 // System.out.println("Start Object " + name);
 
+                if (name != null && SWITCH == 0 && name.equals("Status")) {
+                    SWITCH = STATUS;
+                }
+
                 switch (SWITCH) {
                     case CACHE_ARRAY:
                         if (actCache == null) {
@@ -279,8 +285,6 @@ public abstract class Search extends PostRequest {
                         }
                         break;
                 }
-
-
                 objectStack.add(name);
             }
 
@@ -407,6 +411,16 @@ public abstract class Search extends PostRequest {
                         } else if (COMMENT.equals(name)) {
                             actWayPoint.setDescription(value);
                         }
+                        break;
+                    case STATUS:
+                        if (name.equals("StatusMessage") && value.contains("expired")) {
+                            // break reading and set ApiResultState
+                            resultState[0] = ApiResultState.EXPIRED_API_KEY;
+                            this.cancel();
+                        } else {
+                            SWITCH = 0;
+                        }
+                        break;
                 }
 
 
@@ -519,13 +533,16 @@ public abstract class Search extends PostRequest {
 
         };
         parser.parse(stream, length);
+
+        final ApiResultState finalState = resultState[0];
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 log.debug("Ready parse Json! Wait for Async DB writer");
                 asyncExecutor.dispose();
                 log.debug("Async DB writer is ready! Callback!");
-                readyCallBack.callBack(ApiResultState.IO);
+                readyCallBack.callBack(finalState);
             }
         });
         thread.start();
@@ -581,21 +598,21 @@ public abstract class Search extends PostRequest {
     static int getCacheSize(int containerTypeId) {
         switch (containerTypeId) {
             case 1:
-                return 0; // Unknown
+                return 4; // Unknown
             case 2:
-                return 1; // Micro
+                return 0; // Micro
             case 3:
-                return 3; // Regular
+                return 2; // Regular
             case 4:
-                return 4; // Large
+                return 3; // Large
             case 5:
                 return 5; // Virtual
             case 6:
-                return 0; // Other
+                return 4; // Other
             case 8:
-                return 2;
+                return 1; // Small
             default:
-                return 0;
+                return 6;
 
         }
     }

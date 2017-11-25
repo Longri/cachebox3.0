@@ -16,27 +16,31 @@
 package de.longri.cachebox3.types;
 
 public enum CacheSizes {
-    other, // 0
-    micro, // 1
-    small, // 2
-    regular, // 3
-    large // 4
-    // virtual, // 0 - Achtung, hier habe ich einen neuen Wert eingefügt
-    // other // 6 - Achtung, hier habe ich einen neuen Wert eingefügt
+    micro,     // 0
+    small,     // 1
+    regular,   // 2
+    large,     // 3
+    other,     // 4
+    virtual,   // 5
+    notChosen, // 6
     ;
 
     public static CacheSizes parseInt(int value) {
         switch (value) {
-            case 1:
+            case 0:
                 return CacheSizes.micro;
-            case 2:
+            case 1:
                 return CacheSizes.small;
-            case 3:
+            case 2:
                 return CacheSizes.regular;
-            case 4:
+            case 3:
                 return CacheSizes.large;
-            default:
+            case 4:
                 return CacheSizes.other;
+            case 5:
+                return CacheSizes.virtual;
+            default:
+                return CacheSizes.notChosen;
         }
     }
 

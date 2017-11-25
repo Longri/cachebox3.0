@@ -27,6 +27,7 @@ import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.lists.CB_List;
+import javafx.scene.layout.VBox;
 import org.junit.jupiter.api.Test;
 import travis.EXCLUDE_FROM_TRAVIS;
 
@@ -132,6 +133,8 @@ class SearchGcOwnerTest {
         searchGC.handleHttpResponse(response, new GenericCallBack<ApiResultState>() {
             @Override
             public void callBack(ApiResultState value) {
+
+                assertEquals(value, ApiResultState.IO);
 
                 assertEquals(23, cacheList.size);
                 AbstractCache abstractCache = cacheList.first();
@@ -265,6 +268,9 @@ class SearchGcOwnerTest {
                 public void callBack(ApiResultState value) {
 
                     try {
+
+                        assertEquals(value, ApiResultState.IO);
+
                         assertEquals(22, cacheList.size);
                         AbstractCache abstractCache = cacheList.first();
 

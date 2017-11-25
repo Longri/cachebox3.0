@@ -37,6 +37,7 @@ public class AdjustableStarWidget extends Table {
     private final VisLabel valueLabel;
     private final int maxValue;
     private final int minValue;
+    private final int step;
     private final Type type;
 
     public enum Type {
@@ -49,6 +50,7 @@ public class AdjustableStarWidget extends Table {
         this.value = valueProperty;
         maxValue = type == Type.STAR ? 10 : 5;
         minValue = type == Type.STAR ? 0 : 1;
+        step = type == Type.STAR ? 1 : 1;
         starsWidget = type == Type.STAR ? new Stars(value.get()) : new CacheSizeWidget(value.get());
         VisTextButton minusBtn = new VisTextButton("-") {
             @Override
@@ -87,7 +89,7 @@ public class AdjustableStarWidget extends Table {
 
         plusBtn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                int newValue = value.get() + 1;
+                int newValue = value.get() + step;
                 if (newValue > maxValue) newValue = minValue;
                 setValue(newValue);
             }
@@ -95,7 +97,7 @@ public class AdjustableStarWidget extends Table {
 
         minusBtn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                int newValue = value.get() - 1;
+                int newValue = value.get() - step;
                 if (newValue < minValue) newValue = maxValue;
                 setValue(newValue);
             }
@@ -113,13 +115,15 @@ public class AdjustableStarWidget extends Table {
             @Override
             public void run() {
                 if (force || AdjustableStarWidget.this.value.get() != value) {
-                    AdjustableStarWidget.this.value.set(value);
+
                     if (type == Type.SIZE) {
-                        valueLabel.setText(CacheSizes.parseInt(AdjustableStarWidget.this.value.get()).toString());
+                        valueLabel.setText(CacheSizes.parseInt(value).toString());
+                        starsWidget.setValue(value);
                     } else {
-                        valueLabel.setText(Double.toString((double) AdjustableStarWidget.this.value.get() / 2.0));
+                        valueLabel.setText(Double.toString((double) value / 2.0));
+                        starsWidget.setValue(value);
                     }
-                    starsWidget.setValue(AdjustableStarWidget.this.value.get());
+                    AdjustableStarWidget.this.value.set(value);
                     AdjustableStarWidget.this.invalidateHierarchy();
                 }
             }

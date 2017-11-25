@@ -209,7 +209,7 @@ public class FilterProperties {
         MinTerrain.set(2);
         MaxTerrain.set(10);
         MinContainerSize.set(0);
-        MaxContainerSize.set(8);
+        MaxContainerSize.set(4);
         MinRating.set(0);
         MaxRating.set(10);
 

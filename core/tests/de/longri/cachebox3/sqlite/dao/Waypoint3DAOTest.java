@@ -73,23 +73,23 @@ class Waypoint3DAOTest {
 
         Waypoint3DAO dao = new Waypoint3DAO();
         Array<AbstractWaypoint> waypoints = dao.getWaypointsFromCacheID(cb3Database, null, true);
-        assertThat("TestDB must have 16 Waypoints but has:" + waypoints.size, waypoints.size == 16);
+        assertThat("TestDB must have 282 Waypoints but has:" + waypoints.size, waypoints.size == 282);
 
-        waypoints = dao.getWaypointsFromCacheID(cb3Database, 0L, true);
-        assertThat("TestDB must have 11 Waypoints but has:" + waypoints.size, waypoints.size == 11);
+        waypoints = dao.getWaypointsFromCacheID(cb3Database, 20919627218633543L, true);
+        assertThat("TestDB must have 6 Waypoints but has:" + waypoints.size, waypoints.size == 6);
 
         AbstractWaypoint wp = waypoints.get(1);
-        assertThat("Waypoint.GcCode must be 'P079QV7' but was: '" + wp.getGcCode() + "'", wp.getGcCode().equals("P079QV7"));
-        assertThat("Waypoint.Latitude must be '54.411916' but was: '" + TestUtils.roundDoubleCoordinate(wp.getLatitude()) + "'", TestUtils.roundDoubleCoordinate(wp.getLatitude()) == 54.411916);
-        assertThat("Waypoint.Longitude must be '11.101833' but was: '" + TestUtils.roundDoubleCoordinate(wp.getLongitude()) + "'", TestUtils.roundDoubleCoordinate(wp.getLongitude()) == 11.101833);
-        assertThat("Waypoint.Type must be 'ParkingArea' but was: '" + wp.getType() + "'", wp.getType() == CacheTypes.ParkingArea);
-        assertThat("Waypoint.Start must be 'true' but was: '" + wp.isStart() + "'", wp.isStart());
-        assertThat("Waypoint.SyncExcluded must be 'true' but was: '" + wp.isSyncExcluded() + "'", wp.isSyncExcluded());
-        assertThat("Waypoint.UserWaypoint must be 'true' but was: '" + wp.isUserWaypoint() + "'", wp.isUserWaypoint());
-        assertThat("Waypoint.Title must be 'öffentlicher Parkplatz' but was: '" + wp.getTitle() + "'", wp.getTitle().equals("öffentlicher Parkplatz"));
+        assertThat("Waypoint.GcCode must be 'S23EJRJ' but was: '" + wp.getGcCode() + "'", wp.getGcCode().equals("S23EJRJ"));
+        assertThat("Waypoint.Latitude must be '52.507768' but was: '" + TestUtils.roundDoubleCoordinate(wp.getLatitude()) + "'", TestUtils.roundDoubleCoordinate(wp.getLatitude()) == 52.507768);
+        assertThat("Waypoint.Longitude must be '13.465333' but was: '" + TestUtils.roundDoubleCoordinate(wp.getLongitude()) + "'", TestUtils.roundDoubleCoordinate(wp.getLongitude()) == 13.465333);
+        assertThat("Waypoint.Type must be 'Question to Answer' but was: '" + wp.getType() + "'", wp.getType() == CacheTypes.MultiQuestion);
+        assertThat("Waypoint.Start must be 'false' but was: '" + wp.isStart() + "'", !wp.isStart());
+        assertThat("Waypoint.SyncExcluded must be 'false' but was: '" + wp.isSyncExcluded() + "'", !wp.isSyncExcluded());
+        assertThat("Waypoint.UserWaypoint must be 'false' but was: '" + wp.isUserWaypoint() + "'", !wp.isUserWaypoint());
+        assertThat("Waypoint.Title must be 'Stage 2' but was: '" + wp.getTitle() + "'", wp.getTitle().equals("Stage 2"));
 
-        assertThat("Waypoint.Description must be 'WP Desc' but was: '" + wp.getDescription(cb3Database) + "'", wp.getDescription(cb3Database).equals("WP Desc"));
-        assertThat("Waypoint.Clue must be 'WP Clue' but was: '" + wp.getClue(cb3Database) + "'", wp.getClue(cb3Database).equals("WP Clue"));
+        assertThat("Waypoint.Description must be 'Wohin geht der Mann im Hauseingang Nr. 9? Der erste Buchstabe wird gesucht' but was: '" + wp.getDescription(cb3Database) + "'", wp.getDescription(cb3Database).equals("Wohin geht der Mann im Hauseingang Nr. 9? Der erste Buchstabe wird gesucht"));
+        assertThat("Waypoint.Clue must be '' but was: '" + wp.getClue(cb3Database) + "'", wp.getClue(cb3Database).equals(""));
 
     }
 

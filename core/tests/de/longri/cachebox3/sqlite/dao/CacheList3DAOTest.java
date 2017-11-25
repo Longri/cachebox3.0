@@ -21,6 +21,7 @@ import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheList;
+import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -62,7 +63,7 @@ class CacheList3DAOTest {
 
     @AfterAll
     static void cleanUpRecources() {
-        cb3Database.close();
+//        cb3Database.close();
         assertThat("TestDB must be deleted after cleanup", copyDbFileHandle.delete());
     }
 
@@ -72,18 +73,41 @@ class CacheList3DAOTest {
 
         AbstractCacheListDAO DAO = new CacheList3DAO();
         CacheList caches = DAO.readCacheList(cb3Database, null, "", true, true);
-        assertThat("CacheList must have 33 Caches but has:" + caches.size, caches.size == 33);
+        assertThat("CacheList must have 731 Caches but has:" + caches.size, caches.size == 731);
 
-        AbstractCache cache = caches.getCacheById(24827321826689620L);
+        AbstractCache cache = caches.getCacheById(14731588679189319L);
         assertThat("Cache must have one Waypoint but has:" + cache.getWaypoints().size, cache.getWaypoints().size == 1);
+
+
+        {// check conversion of CacheSizes
+            AbstractCache cache1 = caches.GetCacheByGcCode("GC1Z18H");
+            assertThat("CacheSize must be 'Other', but was: " + cache1.getSize().toString(), cache1.getSize() == CacheSizes.other);
+
+            cache1 = caches.GetCacheByGcCode("GC2DCGK");
+            assertThat("CacheSize must be 'Micro', but was: " + cache1.getSize().toString(), cache1.getSize() == CacheSizes.micro);
+
+            cache1 = caches.GetCacheByGcCode("GC5Q51E");
+            assertThat("CacheSize must be 'Small', but was: " + cache1.getSize().toString(), cache1.getSize() == CacheSizes.small);
+
+            cache1 = caches.GetCacheByGcCode("GC3CTWZ");
+            assertThat("CacheSize must be 'Regular', but was: " + cache1.getSize().toString(), cache1.getSize() == CacheSizes.regular);
+
+            cache1 = caches.GetCacheByGcCode("GC58TMQ");
+            assertThat("CacheSize must be 'Large', but was: " + cache1.getSize().toString(), cache1.getSize() == CacheSizes.large);
+        }
+
 
 
         // read Caches by Type
         String where = "Type=" + CacheTypes.Multi.ordinal();
         DAO.readCacheList(cb3Database, caches, where, true, true);
-        assertThat("CacheList must have 7 Caches but has:" + caches.size, caches.size == 7);
+        assertThat("CacheList must have 117 Caches but has:" + caches.size, caches.size == 117);
 
-        System.out.println(ClassLayout.parseInstance(cache).toPrintable());
+
+
+
+
+
     }
 
 }

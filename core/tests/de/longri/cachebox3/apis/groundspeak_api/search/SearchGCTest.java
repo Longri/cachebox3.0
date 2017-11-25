@@ -125,6 +125,8 @@ class SearchGCTest {
             @Override
             public void callBack(ApiResultState value) {
 
+                assertEquals(value, ApiResultState.IO);
+
                 assertEquals(1, cacheList.size);
                 AbstractCache abstractCache = cacheList.pop();
 
@@ -212,6 +214,78 @@ class SearchGCTest {
 
 
     @Test
+    void parseJsonExpiredResult() throws IOException {
+        final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGc_ExpiredResult.txt");
+        final CB_List<AbstractCache> cacheList = new CB_List<>();
+        final CB_List<LogEntry> logList = new CB_List<>();
+        final CB_List<ImageEntry> imageList = new CB_List<>();
+        final SearchGC searchGC = new SearchGC(apiKey, "GC1T33T") {
+            protected void writeLogToDB(final LogEntry logEntry) {
+                logList.add(logEntry);
+            }
+
+            protected void writeImagEntryToDB(final ImageEntry imageEntry) {
+                imageList.add(imageEntry);
+            }
+
+            protected void writeCacheToDB(final AbstractCache cache) {
+                cacheList.add(cache);
+            }
+        };
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
+
+        Net.HttpResponse response = new Net.HttpResponse() {
+            @Override
+            public byte[] getResult() {
+                return new byte[0];
+            }
+
+            @Override
+            public String getResultAsString() {
+                return null;
+            }
+
+            @Override
+            public InputStream getResultAsStream() {
+                return resultStream;
+            }
+
+            @Override
+            public HttpStatus getStatus() {
+                return null;
+            }
+
+            @Override
+            public String getHeader(String name) {
+                return null;
+            }
+
+            @Override
+            public Map<String, List<String>> getHeaders() {
+                return null;
+            }
+        };
+
+        searchGC.handleHttpResponse(response, new GenericCallBack<ApiResultState>() {
+            @Override
+            public void callBack(ApiResultState value) {
+                assertTrue(value == ApiResultState.EXPIRED_API_KEY, "ApiResult must be 'Key Expired'");
+                WAIT.set(false);
+            }
+        });
+
+        while (WAIT.get()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+
+    @Test
     void testOnline() {
         if (isDummy) return;
         final CB_List<AbstractCache> cacheList = new CB_List<>();
@@ -238,6 +312,8 @@ class SearchGCTest {
         searchGC.postRequest(new GenericCallBack<ApiResultState>() {
             @Override
             public void callBack(ApiResultState value) {
+
+                assertEquals(value, ApiResultState.IO);
 
                 assertEquals(1, cacheList.size);
                 AbstractCache abstractCache = cacheList.pop();

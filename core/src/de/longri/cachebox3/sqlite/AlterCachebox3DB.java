@@ -84,18 +84,22 @@ public class AlterCachebox3DB {
                 database.execSQL(schemaStrings.COPY_WAYPOINTS_FROM_V2_TO_V3);
                 database.execSQL(schemaStrings.COPY_WAYPOINTS_TEXT_FROM_V2_TO_V3);
 
+
+                // get List of all ID's for conversion
+                // get list of Id's
+                Array<Long> allIds = new Array<>();
+                SQLiteGdxDatabaseCursor cursor = database.rawQuery("SELECT id from CacheCoreInfo", null);
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    long id = cursor.getLong(0);
+                    allIds.add(id);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+
+
                 //convert Boolean values to Short
                 {
-                    // get list of Id's
-                    Array<Long> allIds = new Array<>();
-                    SQLiteGdxDatabaseCursor cursor = database.rawQuery("SELECT id from CacheCoreInfo", null);
-                    cursor.moveToFirst();
-                    while (!cursor.isAfterLast()) {
-                        long id = cursor.getLong(0);
-                        allIds.add(id);
-                        cursor.moveToNext();
-                    }
-
                     //read all boolean for id
                     int i = 0;
                     int n = allIds.size;
@@ -136,7 +140,11 @@ public class AlterCachebox3DB {
                         i++;
                         cursor.close();
                     }
+                }
 
+                {// Convert CacheSizes
+                    database.execSQL("UPDATE CacheCoreInfo SET Size = Size - 1");
+                    database.execSQL("UPDATE CacheCoreInfo SET Size = 4 WHERE Size<0");
                 }
 
 
