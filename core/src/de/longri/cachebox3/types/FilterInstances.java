@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ public class FilterInstances {
     public final static FilterProperties ALL = new FilterProperties("ALL");
 
     // All Caches to find 1
-    public final static FilterProperties ACTIVE = new FilterProperties("ACTIVE","{" + //
+    public final static FilterProperties ACTIVE = new FilterProperties("ACTIVE", "{" + //
             "\"gpxfilenameids\":\"\"," + //
-            "\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\"," + //"
+            "\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,6.0,0.0,5.0,0\"," + //"
             "\"filtergc\":\"\"," + //
             "\"filterowner\":\"\"," + //
             "\"categories\":\"\"," + //
@@ -51,9 +51,9 @@ public class FilterInstances {
         return tmp;
     }
 
-    public final static FilterProperties QUICK = new FilterProperties("QUICK","{" + //
+    public final static FilterProperties QUICK = new FilterProperties("QUICK", "{" + //
             "\"gpxfilenameids\":\"\"," + //
-            "\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,2.5,1.0,2.5,0.0,4.0,0.0,5.0,0\"," + //
+            "\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,2.5,1.0,2.5,0.0,6.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
             "\"filterowner\":\"\"," + //
             "\"categories\":\"\"," + //
@@ -77,9 +77,9 @@ public class FilterInstances {
         return tmp;
     }
 
-    public final static FilterProperties BEGINNER = new FilterProperties("BEGINNER","{" + //
+    public final static FilterProperties BEGINNER = new FilterProperties("BEGINNER", "{" + //
             "\"gpxfilenameids\":\"\"," + //
-            "\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,2.0,1.0,2.0,2.0,4.0,0.0,5.0,0\"," + //
+            "\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,2.0,1.0,2.0,2.0,6.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
             "\"filterowner\":\"\"," + //
             "\"categories\":\"\"," + //
@@ -89,9 +89,9 @@ public class FilterInstances {
             "}");
 
     // Fetch some Travelbugs 3
-    public final static FilterProperties WITHTB = new FilterProperties("WITHTB","{" + //
+    public final static FilterProperties WITHTB = new FilterProperties("WITHTB", "{" + //
             "\"gpxfilenameids\":\"\"," + //
-            "\"caches\":\"0,-1,-1,0,1,0,0,0,0,1.0,3.0,1.0,3.0,0.0,4.0,0.0,5.0,0\"," + //
+            "\"caches\":\"0,-1,-1,0,1,0,0,0,0,1.0,3.0,1.0,3.0,0.0,6.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
             "\"filterowner\":\"\"," + //
             "\"categories\":\"\"," + //
@@ -120,9 +120,9 @@ public class FilterInstances {
         return tmp;
     }
 
-    public final static FilterProperties DROPTB = new FilterProperties("DROPTB","{" + //
+    public final static FilterProperties DROPTB = new FilterProperties("DROPTB", "{" + //
             "\"gpxfilenameids\":\"\"," + //
-            "\"caches\":\"0,-1,-1,0,0,0,0,0,0,1.0,3.0,1.0,3.0,2.0,4.0,0.0,5.0,0\"," + //
+            "\"caches\":\"0,-1,-1,0,0,0,0,0,0,1.0,3.0,1.0,3.0,1.0,6.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
             "\"filterowner\":\"\"," + //
             "\"categories\":\"\"," + //
@@ -132,9 +132,9 @@ public class FilterInstances {
             "}");
 
     // Highlights 5
-    public final static FilterProperties HIGHLIGHTS = new FilterProperties("HIGHLIGHTS","{" + //
+    public final static FilterProperties HIGHLIGHTS = new FilterProperties("HIGHLIGHTS", "{" + //
             "\"gpxfilenameids\":\"\"," + //
-            "\"caches\":\"-1,-1,-1,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,3.5,5.0\"," + //
+            "\"caches\":\"-1,-1,-1,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,6.0,3.5,5.0\"," + //
             "\"filtergc\":\"\"," + //
             "\"filterowner\":\"\"," + //
             "\"categories\":\"\"," + //
@@ -144,9 +144,9 @@ public class FilterInstances {
             "}");
 
     // Favoriten
-    public final static FilterProperties FAVORITES = new FilterProperties("FAVORITES","{" + //
+    public final static FilterProperties FAVORITES = new FilterProperties("FAVORITES", "{" + //
             "\"gpxfilenameids\":\"\"," + //
-            "\"caches\":\"0,0,0,0,0,1,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\"," + //
+            "\"caches\":\"0,0,0,0,0,1,0,0,0,1.0,5.0,1.0,5.0,0.0,6.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
             "\"filterowner\":\"\"," + //
             "\"categories\":\"\"," + //
@@ -156,9 +156,9 @@ public class FilterInstances {
             "}");
 
     // prepare to archive
-    public final static FilterProperties TOARCHIVE = new FilterProperties("TOARCHIVE","{" + //
+    public final static FilterProperties TOARCHIVE = new FilterProperties("TOARCHIVE", "{" + //
             "\"gpxfilenameids\":\"\"," + //
-            "\"caches\":\"0,0,-1,-1,0,-1,-1,-1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\"," + //
+            "\"caches\":\"0,0,-1,-1,0,-1,-1,-1,0,1.0,5.0,1.0,5.0,0.0,6.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
             "\"filterowner\":\"\"," + //
             "\"categories\":\"\"," + //
@@ -168,9 +168,9 @@ public class FilterInstances {
             "}");
 
     // Listing Changed
-    public final static FilterProperties LISTINGCHANGED = new FilterProperties("LISTINGCHANGED","{" + //
+    public final static FilterProperties LISTINGCHANGED = new FilterProperties("LISTINGCHANGED", "{" + //
             "\"gpxfilenameids\":\"\"," + //
-            "\"caches\":\"0,0,0,0,0,0,0,1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\"," + //
+            "\"caches\":\"0,0,0,0,0,0,0,1,0,1.0,5.0,1.0,5.0,0.0,6.0,0.0,5.0,0\"," + //
             "\"filtergc\":\"\"," + //
             "\"filterowner\":\"\"," + //
             "\"categories\":\"\"," + //

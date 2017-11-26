@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -135,8 +135,8 @@ public class FilterProperties {
             MaxDifficulty.set((int) (Float.parseFloat(parts[cnt++]) * 2));
             MinTerrain.set((int) (Float.parseFloat(parts[cnt++]) * 2));
             MaxTerrain.set((int) (Float.parseFloat(parts[cnt++]) * 2));
-            MinContainerSize.set((int) (Float.parseFloat(parts[cnt++]) * 2));
-            MaxContainerSize.set((int) (Float.parseFloat(parts[cnt++]) * 2));
+            MinContainerSize.set((int) (Float.parseFloat(parts[cnt++])));
+            MaxContainerSize.set((int) (Float.parseFloat(parts[cnt++])));
             MinRating.set((int) (Float.parseFloat(parts[cnt++]) * 2));
             MaxRating.set((int) (Float.parseFloat(parts[cnt++]) * 2));
 
@@ -209,7 +209,7 @@ public class FilterProperties {
         MinTerrain.set(2);
         MaxTerrain.set(10);
         MinContainerSize.set(0);
-        MaxContainerSize.set(4);
+        MaxContainerSize.set(6);
         MinRating.set(0);
         MaxRating.set(10);
 
@@ -343,12 +343,12 @@ public class FilterProperties {
             if (MaxDifficulty.get() / 2f < 5) andParts.add("Difficulty <= " + String.valueOf(MaxDifficulty.get()));
             if (MinTerrain.get() / 2f > 1) andParts.add("Terrain >= " + String.valueOf(MinTerrain.get()));
             if (MaxTerrain.get() / 2f < 5) andParts.add("Terrain <= " + String.valueOf(MaxTerrain.get()));
-            if (MinContainerSize.get() / 2f > 0) andParts.add("Size >= " + String.valueOf(MinContainerSize.get() / 2));
-            if (MaxContainerSize.get() / 2f < 4) andParts.add("Size <= " + String.valueOf(MaxContainerSize.get() / 2));
+            if (MinContainerSize.get() > 0) andParts.add("Size >= " + String.valueOf(MinContainerSize.get()));
+            if (MaxContainerSize.get() < 6) andParts.add("Size <= " + String.valueOf(MaxContainerSize.get()));
             if (MinRating.get() / 2f > 0)
-                andParts.add("Rating >= " + String.valueOf((int)( MinRating.get() / 2f * 100)));
+                andParts.add("Rating >= " + String.valueOf((int) (MinRating.get() / 2f * 100)));
             if (MaxRating.get() / 2f < 5)
-                andParts.add("Rating <= " + String.valueOf((int)( MaxRating.get() / 2f * 100)));
+                andParts.add("Rating <= " + String.valueOf((int) (MaxRating.get() / 2f * 100)));
 
 
             String csvTypes = "";
@@ -631,8 +631,8 @@ public class FilterProperties {
                             + String.valueOf(MaxDifficulty.get() / 2F) + SEPARATOR
                             + String.valueOf(MinTerrain.get() / 2F) + SEPARATOR
                             + String.valueOf(MaxTerrain.get() / 2F) + SEPARATOR
-                            + String.valueOf(MinContainerSize.get() / 2F) + SEPARATOR
-                            + String.valueOf(MaxContainerSize.get() / 2F) + SEPARATOR
+                            + String.valueOf((float) MinContainerSize.get()) + SEPARATOR
+                            + String.valueOf((float) MaxContainerSize.get()) + SEPARATOR
                             + String.valueOf(MinRating.get() / 2F) + SEPARATOR
                             + String.valueOf(MaxRating.get() / 2F) + SEPARATOR
                             + String.valueOf(this.hasCorrectedCoordinates));

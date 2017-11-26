@@ -44,7 +44,6 @@ class FilterPropertiesTest {
     @Test
     void checkPresetALL() {
 
-
         // chk FilterInstances.ALL 'All Caches'
         assertThat("FilterInstances.ALL 'All Caches' => Finds", 0 == FilterInstances.ALL.Finds.get());
         assertThat("FilterInstances.ALL 'All Caches' => NotAvailable", 0 == FilterInstances.ALL.NotAvailable.get());
@@ -59,8 +58,8 @@ class FilterPropertiesTest {
         assertThat("FilterInstances.ALL 'All Caches' => MaxDifficulty", 5.0f == FilterInstances.ALL.MaxDifficulty.get() / 2F);
         assertThat("FilterInstances.ALL 'All Caches' => MinTerrain", 1.0f == FilterInstances.ALL.MinTerrain.get() / 2F);
         assertThat("FilterInstances.ALL 'All Caches' => MaxTerrain", 5.0f == FilterInstances.ALL.MaxTerrain.get() / 2F);
-        assertThat("FilterInstances.ALL 'All Caches' => MinContainerSize", 0.0f == FilterInstances.ALL.MinContainerSize.get() / 2F);
-        assertThat("FilterInstances.ALL 'All Caches' => MaxContainerSize", 4.0f == FilterInstances.ALL.MaxContainerSize.get() / 2F);
+        assertThat("FilterInstances.ALL 'All Caches' => MinContainerSize", 0.0f == FilterInstances.ALL.MinContainerSize.get());
+        assertThat("FilterInstances.ALL 'All Caches' => MaxContainerSize", 6.0f == FilterInstances.ALL.MaxContainerSize.get());
         assertThat("FilterInstances.ALL 'All Caches' => MinRating", 0.0f == FilterInstances.ALL.MinRating.get() / 2F);
         assertThat("FilterInstances.ALL 'All Caches' => MaxRating", 5.0f == FilterInstances.ALL.MaxRating.get() / 2F);
 
@@ -100,9 +99,13 @@ class FilterPropertiesTest {
         assertEquals("", FilterInstances.ALL.filterOwner, "FilterInstances.ALL 'All Caches' => filterOwner");
 
 
-        assertEquals("{\"name\":\"ALL\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+        assertEquals("{\"name\":\"ALL\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,6.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.ALL.getJsonString(),
                 "FilterInstances.ALL 'All Caches' =>toString");
+
+        assertEquals("",
+                FilterInstances.ALL.getSqlWhere("NAME"), "SqlWhere must Equals");
+
 
         assertFilteredReadedDB(FilterInstances.ALL);
 
@@ -123,8 +126,8 @@ class FilterPropertiesTest {
         assertThat("presets[1] 'All Caches to find' => MaxDifficulty", 5.0f == FilterInstances.ACTIVE.MaxDifficulty.get() / 2F);
         assertThat("presets[1] 'All Caches to find' => MinTerrain", 1.0f == FilterInstances.ACTIVE.MinTerrain.get() / 2F);
         assertThat("presets[1] 'All Caches to find' => MaxTerrain", 5.0f == FilterInstances.ACTIVE.MaxTerrain.get() / 2F);
-        assertThat("presets[1] 'All Caches to find' => MinContainerSize", 0.0f == FilterInstances.ACTIVE.MinContainerSize.get() / 2F);
-        assertThat("presets[1] 'All Caches to find' => MaxContainerSize", 4.0f == FilterInstances.ACTIVE.MaxContainerSize.get() / 2F);
+        assertThat("presets[1] 'All Caches to find' => MinContainerSize", 0.0f == FilterInstances.ACTIVE.MinContainerSize.get());
+        assertThat("presets[1] 'All Caches to find' => MaxContainerSize", 6.0f == FilterInstances.ACTIVE.MaxContainerSize.get());
         assertThat("presets[1] 'All Caches to find' => MinRating", 0.0f == FilterInstances.ACTIVE.MinRating.get() / 2F);
         assertThat("presets[1] 'All Caches to find' => MaxRating", 5.0f == FilterInstances.ACTIVE.MaxRating.get() / 2F);
 
@@ -163,7 +166,7 @@ class FilterPropertiesTest {
         assertEquals("", FilterInstances.ACTIVE.filterGcCode, "presets[1] 'All Caches to find' => filterGcCode");
         assertEquals("", FilterInstances.ACTIVE.filterOwner, "presets[1] 'All Caches to find' => filterOwner");
 
-        assertEquals("{\"name\":\"ACTIVE\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+        assertEquals("{\"name\":\"ACTIVE\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,6.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.ACTIVE.getJsonString(),
                 "FilterInstances.ALL 'All Caches' =>toString");
 
@@ -185,8 +188,8 @@ class FilterPropertiesTest {
         assertThat("presets[2] 'Quick Cache' => MaxDifficulty", 2.5f == FilterInstances.QUICK.MaxDifficulty.get() / 2F);
         assertThat("presets[2] 'Quick Cache' => MinTerrain", 1.0f == FilterInstances.QUICK.MinTerrain.get() / 2F);
         assertThat("presets[2] 'Quick Cache' => MaxTerrain", 2.5f == FilterInstances.QUICK.MaxTerrain.get() / 2F);
-        assertThat("presets[2] 'Quick Cache' => MinContainerSize", 0.0f == FilterInstances.QUICK.MinContainerSize.get() / 2F);
-        assertThat("presets[2] 'Quick Cache' => MaxContainerSize", 4.0f == FilterInstances.QUICK.MaxContainerSize.get() / 2F);
+        assertThat("presets[2] 'Quick Cache' => MinContainerSize", 0.0f == FilterInstances.QUICK.MinContainerSize.get());
+        assertThat("presets[2] 'Quick Cache' => MaxContainerSize", 6.0f == FilterInstances.QUICK.MaxContainerSize.get());
         assertThat("presets[2] 'Quick Cache' => MinRating", 0.0f == FilterInstances.QUICK.MinRating.get() / 2F);
         assertThat("presets[2] 'Quick Cache' => MaxRating", 5.0f == FilterInstances.QUICK.MaxRating.get() / 2F);
 
@@ -228,7 +231,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"name\":\"QUICK\",\"types\":\"true,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false\",\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,2.5,1.0,2.5,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"QUICK\",\"types\":\"true,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false\",\"caches\":\"-1,-1,-1,-1,0,0,0,0,0,1.0,2.5,1.0,2.5,0.0,6.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.QUICK.getJsonString(),
                 "presets[2] 'Quick Cache' =>toString");
 
@@ -259,8 +262,8 @@ class FilterPropertiesTest {
         assertThat("presets[3] 'Fetch some Travelbugs' => MaxDifficulty", 3.0f == FilterInstances.WITHTB.MaxDifficulty.get() / 2F);
         assertThat("presets[3] 'Fetch some Travelbugs' => MinTerrain", 1.0f == FilterInstances.WITHTB.MinTerrain.get() / 2F);
         assertThat("presets[3] 'Fetch some Travelbugs' => MaxTerrain", 3.0f == FilterInstances.WITHTB.MaxTerrain.get() / 2F);
-        assertThat("presets[3] 'Fetch some Travelbugs' => MinContainerSize", 0.0f == FilterInstances.WITHTB.MinContainerSize.get() / 2F);
-        assertThat("presets[3] 'Fetch some Travelbugs' => MaxContainerSize", 4.0f == FilterInstances.WITHTB.MaxContainerSize.get() / 2F);
+        assertThat("presets[3] 'Fetch some Travelbugs' => MinContainerSize", 0.0f == FilterInstances.WITHTB.MinContainerSize.get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => MaxContainerSize", 6.0f == FilterInstances.WITHTB.MaxContainerSize.get());
         assertThat("presets[3] 'Fetch some Travelbugs' => MinRating", 0.0f == FilterInstances.WITHTB.MinRating.get() / 2F);
         assertThat("presets[3] 'Fetch some Travelbugs' => MaxRating", 5.0f == FilterInstances.WITHTB.MaxRating.get() / 2F);
 
@@ -302,7 +305,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"name\":\"WITHTB\",\"types\":\"true,true,true,false,false,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,true,false\",\"caches\":\"0,-1,-1,0,1,0,0,0,0,1.0,3.0,1.0,3.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"WITHTB\",\"types\":\"true,true,true,false,false,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,true,false\",\"caches\":\"0,-1,-1,0,1,0,0,0,0,1.0,3.0,1.0,3.0,0.0,6.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.WITHTB.getJsonString(), "presets[3] 'Fetch some Travelbugs' =>toString");
 
         assertFilteredReadedDB(FilterInstances.WITHTB);
@@ -323,8 +326,8 @@ class FilterPropertiesTest {
         assertThat("presets[4] 'Drop off Travelbugs' => MaxDifficulty", 3.0f == FilterInstances.DROPTB.MaxDifficulty.get() / 2F);
         assertThat("presets[4] 'Drop off Travelbugs' => MinTerrain", 1.0f == FilterInstances.DROPTB.MinTerrain.get() / 2F);
         assertThat("presets[4] 'Drop off Travelbugs' => MaxTerrain", 3.0f == FilterInstances.DROPTB.MaxTerrain.get() / 2F);
-        assertThat("presets[4] 'Drop off Travelbugs' => MinContainerSize", 2.0f == FilterInstances.DROPTB.MinContainerSize.get() / 2F);
-        assertThat("presets[4] 'Drop off Travelbugs' => MaxContainerSize", 4.0f == FilterInstances.DROPTB.MaxContainerSize.get() / 2F);
+        assertThat("presets[4] 'Drop off Travelbugs' => MinContainerSize", 1.0f == FilterInstances.DROPTB.MinContainerSize.get());
+        assertThat("presets[4] 'Drop off Travelbugs' => MaxContainerSize", 6.0f == FilterInstances.DROPTB.MaxContainerSize.get());
         assertThat("presets[4] 'Drop off Travelbugs' => MinRating", 0.0f == FilterInstances.DROPTB.MinRating.get() / 2F);
         assertThat("presets[4] 'Drop off Travelbugs' => MaxRating", 5.0f == FilterInstances.DROPTB.MaxRating.get() / 2F);
 
@@ -364,7 +367,7 @@ class FilterPropertiesTest {
         assertEquals("", FilterInstances.DROPTB.filterOwner, "presets[4] 'Drop off Travelbugs' => filterOwner");
 
 
-        assertEquals("{\"name\":\"DROPTB\",\"types\":\"true,true,true,false,false,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,true,false\",\"caches\":\"0,-1,-1,0,0,0,0,0,0,1.0,3.0,1.0,3.0,2.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+        assertEquals("{\"name\":\"DROPTB\",\"types\":\"true,true,true,false,false,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,true,false\",\"caches\":\"0,-1,-1,0,0,0,0,0,0,1.0,3.0,1.0,3.0,1.0,6.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.DROPTB.getJsonString(),
                 "presets[4] 'Drop off Travelbugs' =>toString");
 
@@ -386,8 +389,8 @@ class FilterPropertiesTest {
         assertThat("presets[5] 'Highlights' => MaxDifficulty", 5.0f == FilterInstances.HIGHLIGHTS.MaxDifficulty.get() / 2F);
         assertThat("presets[5] 'Highlights' => MinTerrain", 1.0f == FilterInstances.HIGHLIGHTS.MinTerrain.get() / 2F);
         assertThat("presets[5] 'Highlights' => MaxTerrain", 5.0f == FilterInstances.HIGHLIGHTS.MaxTerrain.get() / 2F);
-        assertThat("presets[5] 'Highlights' => MinContainerSize", 0.0f == FilterInstances.HIGHLIGHTS.MinContainerSize.get() / 2F);
-        assertThat("presets[5] 'Highlights' => MaxContainerSize", 4.0f == FilterInstances.HIGHLIGHTS.MaxContainerSize.get() / 2F);
+        assertThat("presets[5] 'Highlights' => MinContainerSize", 0.0f == FilterInstances.HIGHLIGHTS.MinContainerSize.get());
+        assertThat("presets[5] 'Highlights' => MaxContainerSize", 6.0f == FilterInstances.HIGHLIGHTS.MaxContainerSize.get());
         assertThat("presets[5] 'Highlights' => MinRating", 3.5f == FilterInstances.HIGHLIGHTS.MinRating.get() / 2F);
         assertThat("presets[5] 'Highlights' => MaxRating", 5.0f == FilterInstances.HIGHLIGHTS.MaxRating.get() / 2F);
 
@@ -428,7 +431,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"name\":\"HIGHLIGHTS\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"-1,-1,-1,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,3.5,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"HIGHLIGHTS\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"-1,-1,-1,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,6.0,3.5,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.HIGHLIGHTS.getJsonString(),
                 "presets[5] 'Highlights' =>toString");
 
@@ -450,8 +453,8 @@ class FilterPropertiesTest {
         assertThat("presets[6] 'Favoriten' => MaxDifficulty", 5.0f == FilterInstances.FAVORITES.MaxDifficulty.get() / 2F);
         assertThat("presets[6] 'Favoriten' => MinTerrain", 1.0f == FilterInstances.FAVORITES.MinTerrain.get() / 2F);
         assertThat("presets[6] 'Favoriten' => MaxTerrain", 5.0f == FilterInstances.FAVORITES.MaxTerrain.get() / 2F);
-        assertThat("presets[6] 'Favoriten' => MinContainerSize", 0.0f == FilterInstances.FAVORITES.MinContainerSize.get() / 2F);
-        assertThat("presets[6] 'Favoriten' => MaxContainerSize", 4.0f == FilterInstances.FAVORITES.MaxContainerSize.get() / 2F);
+        assertThat("presets[6] 'Favoriten' => MinContainerSize", 0.0f == FilterInstances.FAVORITES.MinContainerSize.get());
+        assertThat("presets[6] 'Favoriten' => MaxContainerSize", 6.0f == FilterInstances.FAVORITES.MaxContainerSize.get());
         assertThat("presets[6] 'Favoriten' => MinRating", 0.0f == FilterInstances.FAVORITES.MinRating.get() / 2F);
         assertThat("presets[6] 'Favoriten' => MaxRating", 5.0f == FilterInstances.FAVORITES.MaxRating.get() / 2F);
 
@@ -492,7 +495,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"name\":\"FAVORITES\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,1,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"FAVORITES\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,1,0,0,0,1.0,5.0,1.0,5.0,0.0,6.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.FAVORITES.getJsonString(),
                 "presets[6] 'Favoriten' =>toString");
 
@@ -514,8 +517,8 @@ class FilterPropertiesTest {
         assertThat("presets[7] 'prepare to archive' => MaxDifficulty", 5.0f == FilterInstances.TOARCHIVE.MaxDifficulty.get() / 2F);
         assertThat("presets[7] 'prepare to archive' => MinTerrain", 1.0f == FilterInstances.TOARCHIVE.MinTerrain.get() / 2F);
         assertThat("presets[7] 'prepare to archive' => MaxTerrain", 5.0f == FilterInstances.TOARCHIVE.MaxTerrain.get() / 2F);
-        assertThat("presets[7] 'prepare to archive' => MinContainerSize", 0.0f == FilterInstances.TOARCHIVE.MinContainerSize.get() / 2F);
-        assertThat("presets[7] 'prepare to archive' => MaxContainerSize", 4.0f == FilterInstances.TOARCHIVE.MaxContainerSize.get() / 2F);
+        assertThat("presets[7] 'prepare to archive' => MinContainerSize", 0.0f == FilterInstances.TOARCHIVE.MinContainerSize.get());
+        assertThat("presets[7] 'prepare to archive' => MaxContainerSize", 6.0f == FilterInstances.TOARCHIVE.MaxContainerSize.get());
         assertThat("presets[7] 'prepare to archive' => MinRating", 0.0f == FilterInstances.TOARCHIVE.MinRating.get() / 2F);
         assertThat("presets[7] 'prepare to archive' => MaxRating", 5.0f == FilterInstances.TOARCHIVE.MaxRating.get() / 2F);
 
@@ -556,7 +559,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"name\":\"TOARCHIVE\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,-1,-1,0,-1,-1,-1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"TOARCHIVE\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,-1,-1,0,-1,-1,-1,0,1.0,5.0,1.0,5.0,0.0,6.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.TOARCHIVE.getJsonString(), "presets[7] 'prepare to archive' =>toString");
 
         assertEquals("~BooleanStore & 788= 788 and (not Owner='NAME')",
@@ -580,8 +583,8 @@ class FilterPropertiesTest {
         assertThat("presets[8] 'Listing Changed' => MaxDifficulty", 5.0f == FilterInstances.LISTINGCHANGED.MaxDifficulty.get() / 2F);
         assertThat("presets[8] 'Listing Changed' => MinTerrain", 1.0f == FilterInstances.LISTINGCHANGED.MinTerrain.get() / 2F);
         assertThat("presets[8] 'Listing Changed' => MaxTerrain", 5.0f == FilterInstances.LISTINGCHANGED.MaxTerrain.get() / 2F);
-        assertThat("presets[8] 'Listing Changed' => MinContainerSize", 0.0f == FilterInstances.LISTINGCHANGED.MinContainerSize.get() / 2F);
-        assertThat("presets[8] 'Listing Changed' => MaxContainerSize", 4.0f == FilterInstances.LISTINGCHANGED.MaxContainerSize.get() / 2F);
+        assertThat("presets[8] 'Listing Changed' => MinContainerSize", 0.0f == FilterInstances.LISTINGCHANGED.MinContainerSize.get());
+        assertThat("presets[8] 'Listing Changed' => MaxContainerSize", 6.0f == FilterInstances.LISTINGCHANGED.MaxContainerSize.get());
         assertThat("presets[8] 'Listing Changed' => MinRating", 0.0f == FilterInstances.LISTINGCHANGED.MinRating.get() / 2F);
         assertThat("presets[8] 'Listing Changed' => MaxRating", 5.0f == FilterInstances.LISTINGCHANGED.MaxRating.get() / 2F);
 
@@ -622,7 +625,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"name\":\"LISTINGCHANGED\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,1,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"LISTINGCHANGED\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,1,0,1.0,5.0,1.0,5.0,0.0,6.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.LISTINGCHANGED.getJsonString(), "presets[8] 'Listing Changed' =>toString");
 
         assertFilteredReadedDB(FilterInstances.LISTINGCHANGED);
@@ -646,8 +649,8 @@ class FilterPropertiesTest {
         assertThat("default constructor => MaxDifficulty", 5.0f == defaultCtor.MaxDifficulty.get() / 2F);
         assertThat("default constructor => MinTerrain", 1.0f == defaultCtor.MinTerrain.get() / 2F);
         assertThat("default constructor => MaxTerrain", 5.0f == defaultCtor.MaxTerrain.get() / 2F);
-        assertThat("default constructor => MinContainerSize", 0.0f == defaultCtor.MinContainerSize.get() / 2F);
-        assertThat("default constructor => MaxContainerSize", 4.0f == defaultCtor.MaxContainerSize.get() / 2F);
+        assertThat("default constructor => MinContainerSize", 0.0f == defaultCtor.MinContainerSize.get());
+        assertThat("default constructor => MaxContainerSize", 6.0f == defaultCtor.MaxContainerSize.get());
         assertThat("default constructor => MinRating", 0.0f == defaultCtor.MinRating.get() / 2F);
         assertThat("default constructor => MaxRating", 5.0f == defaultCtor.MaxRating.get() / 2F);
 
@@ -686,7 +689,7 @@ class FilterPropertiesTest {
 
 
         assertEquals(
-                "{\"name\":\"ALL\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,4.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                "{\"name\":\"ALL\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,6.0,0.0,5.0,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 defaultCtor.getJsonString(), "default constructor =>toString");
 
         assertFilteredReadedDB(defaultCtor);
@@ -705,7 +708,7 @@ class FilterPropertiesTest {
                         "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User')",
                         "",
                         "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty <= 4 and Terrain <= 4 and Size >= 2 and Type in (0)",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and Difficulty <= 6 and Terrain <= 6 and Size >= 2 and Type in (0,1,2,5,6,7,9,10,21)",
+                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and Difficulty <= 6 and Terrain <= 6 and Size >= 1 and Type in (0,1,2,5,6,7,9,10,21)",
                         "BooleanStore & 16= 16",
                         "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and Rating >= 350",
                         "BooleanStore & 512= 512",

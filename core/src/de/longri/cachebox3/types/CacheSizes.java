@@ -90,6 +90,10 @@ public enum CacheSizes {
                 return "Regular";
             case small:
                 return "Small";
+            case notChosen:
+                return "Not Chosen";
+            case virtual:
+                return "Virtual";
             default:
                 break;
 
