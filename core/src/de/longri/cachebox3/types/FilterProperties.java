@@ -456,21 +456,25 @@ public class FilterProperties {
         if (!HasUserData.isEquals(filter.HasUserData))
             return false;
 
-        if (MinDifficulty != filter.MinDifficulty)
+        if (MinDifficulty.get() != filter.MinDifficulty.get())
             return false;
-        if (MaxDifficulty != filter.MaxDifficulty)
+        if (MaxDifficulty.get() != filter.MaxDifficulty.get())
             return false;
-        if (MinTerrain != filter.MinTerrain)
+        if (MinTerrain.get() != filter.MinTerrain.get())
             return false;
-        if (MaxTerrain != filter.MaxTerrain)
+        if (MaxTerrain.get() != filter.MaxTerrain.get())
             return false;
-        if (MinContainerSize != filter.MinContainerSize)
+        if (MinContainerSize.get() != filter.MinContainerSize.get())
             return false;
-        if (MaxContainerSize != filter.MaxContainerSize)
+        if (MaxContainerSize.get() != filter.MaxContainerSize.get())
             return false;
-        if (MinRating != filter.MinRating)
+        if (MinRating.get() != filter.MinRating.get())
             return false;
-        if (MaxRating != filter.MaxRating)
+        if (MaxRating.get() != filter.MaxRating.get())
+            return false;
+        if (MinFavPoints.get() != filter.MinFavPoints.get())
+            return false;
+        if (MaxFavPoints.get() != filter.MaxFavPoints.get())
             return false;
 
         if (!hasCorrectedCoordinates.isEquals(filter.hasCorrectedCoordinates))
