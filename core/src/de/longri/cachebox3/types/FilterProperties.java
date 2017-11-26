@@ -55,6 +55,9 @@ public class FilterProperties {
     public final IntProperty MinRating = new IntProperty();
     public final IntProperty MaxRating = new IntProperty();
 
+    public final IntProperty MinFavPoints = new IntProperty();
+    public final IntProperty MaxFavPoints = new IntProperty();
+
     public boolean isHistory;
 
     final boolean[] cacheTypes = new boolean[CacheTypes.values().length];
@@ -139,8 +142,10 @@ public class FilterProperties {
             MaxContainerSize.set((int) (Float.parseFloat(parts[cnt++])));
             MinRating.set((int) (Float.parseFloat(parts[cnt++]) * 2));
             MaxRating.set((int) (Float.parseFloat(parts[cnt++]) * 2));
+            MinFavPoints.set(Integer.parseInt(parts[cnt++]));
+            MaxFavPoints.set(Integer.parseInt(parts[cnt++]));
 
-            if (parts.length == 17) {
+            if (parts.length == 19) {
                 this.hasCorrectedCoordinates.set(0);
             } else {
                 hasCorrectedCoordinates.set(Integer.parseInt(parts[cnt++]));
@@ -212,6 +217,8 @@ public class FilterProperties {
         MaxContainerSize.set(6);
         MinRating.set(0);
         MaxRating.set(10);
+        MinFavPoints.set(-1);
+        MaxFavPoints.set(-1);
 
         this.hasCorrectedCoordinates.set(0);
         isHistory = false;
@@ -349,6 +356,9 @@ public class FilterProperties {
                 andParts.add("Rating >= " + String.valueOf((int) (MinRating.get() / 2f * 100)));
             if (MaxRating.get() / 2f < 5)
                 andParts.add("Rating <= " + String.valueOf((int) (MaxRating.get() / 2f * 100)));
+
+            if (MinFavPoints.get() >= 0) andParts.add("FavPoints >= " + String.valueOf(MinFavPoints.get()));
+            if (MaxFavPoints.get() >= 0) andParts.add("FavPoints <= " + String.valueOf(MinFavPoints.get()));
 
 
             String csvTypes = "";
@@ -573,6 +583,9 @@ public class FilterProperties {
         MinRating.set(properties.MinRating.get());
         MaxRating.set(properties.MaxRating.get());
 
+        MinFavPoints.set(properties.MinFavPoints.get());
+        MaxFavPoints.set(properties.MaxFavPoints.get());
+
         this.hasCorrectedCoordinates.set(properties.hasCorrectedCoordinates.get());
         isHistory = properties.isHistory;
 
@@ -635,6 +648,8 @@ public class FilterProperties {
                             + String.valueOf((float) MaxContainerSize.get()) + SEPARATOR
                             + String.valueOf(MinRating.get() / 2F) + SEPARATOR
                             + String.valueOf(MaxRating.get() / 2F) + SEPARATOR
+                            + String.valueOf(MinFavPoints.get()) + SEPARATOR
+                            + String.valueOf(MaxFavPoints.get()) + SEPARATOR
                             + String.valueOf(this.hasCorrectedCoordinates));
 
             // Filter GCCode
