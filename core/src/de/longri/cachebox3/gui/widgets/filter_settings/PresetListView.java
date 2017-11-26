@@ -54,20 +54,6 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
 
     private final Logger log = LoggerFactory.getLogger(PresetListView.class);
 
-//    public static final FilterProperties[] presets = new FilterProperties[]{ //
-//            FilterInstances.HISTORY, //
-//            FilterInstances.ACTIVE, //
-//            FilterInstances.QUICK, //
-//            FilterInstances.BEGINNER, //
-//            FilterInstances.WITHTB, //
-//            FilterInstances.DROPTB, //
-//            FilterInstances.HIGHLIGHTS, //
-//            FilterInstances.FAVORITES, //
-//            FilterInstances.TOARCHIVE, //
-//            FilterInstances.LISTINGCHANGED, //
-//            FilterInstances.ALL, //
-//    };
-
     private final ListView presetListView;
     private final FilterStyle style;
     private Array<PresetEntry> presetEntries;

@@ -49,6 +49,12 @@ public class CacheSizeWidget extends AbstractIntValueChangedWidget {
             case large:
                 sizeDrawable = skin.getDrawable("large");
                 break;
+            case notChosen:
+                sizeDrawable = skin.getDrawable("notChosen");
+                break;
+            case virtual:
+                sizeDrawable = skin.getDrawable("virtualSize");
+                break;
             default:
                 sizeDrawable = skin.getDrawable("other"); // unknown
         }
@@ -81,19 +87,25 @@ public class CacheSizeWidget extends AbstractIntValueChangedWidget {
     public void setValue(int value) {
         switch (value) {
             case 0:
-                sizeDrawable = skin.getDrawable("other");
-                break;
-            case 1:
                 sizeDrawable = skin.getDrawable("micro");
                 break;
-            case 2:
+            case 1:
                 sizeDrawable = skin.getDrawable("small");
                 break;
-            case 3:
+            case 2:
                 sizeDrawable = skin.getDrawable("regular");
                 break;
-            case 4:
+            case 3:
                 sizeDrawable = skin.getDrawable("large");
+                break;
+            case 4:
+                sizeDrawable = skin.getDrawable("other");
+                break;
+            case 5:
+                sizeDrawable = skin.getDrawable("virtualSize");
+                break;
+            case 6:
+                sizeDrawable = skin.getDrawable("notChosen");
                 break;
             default:
                 sizeDrawable = skin.getDrawable("other"); // unknown

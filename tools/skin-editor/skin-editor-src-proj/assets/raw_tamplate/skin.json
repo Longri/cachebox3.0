@@ -1556,6 +1556,10 @@
       "path": "svg/nl.svg",
       "scale": 0.08
     },
+    "notChosen": {
+      "path": "svg/notChosen.svg",
+      "scale": 0.25
+    },
     "notFound": {
       "path": "svg/log1icon.svg",
       "scale": 0.098
@@ -1734,7 +1738,11 @@
     },
     "virtual": {
       "path": "svg/virtual.svg",
-      "scale": 0.2
+      "scale": 0.3
+    },
+    "virtualSize": {
+      "path": "svg/virtualSize.svg",
+      "scale": 0.25
     },
     "warning": {
       "path": "svg/warning.svg",
@@ -2985,7 +2993,11 @@
       "Favorites": "favIcon",
       "PrepareToArchive": "archived",
       "ListingChanged": "warning",
-      "AllCaches": "erth"
+      "AllCaches": "erth",
+      "CheckNo": "check_off",
+      "CheckOff": "check_disabled",
+      "Check": "check_on",
+      "Available": "tempDisabled"
     }
   }
 }

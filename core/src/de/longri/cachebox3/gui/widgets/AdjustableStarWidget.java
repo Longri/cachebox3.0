@@ -48,8 +48,8 @@ public class AdjustableStarWidget extends Table {
     public AdjustableStarWidget(Type type, CharSequence title, IntProperty valueProperty) {
         this.type = type;
         this.value = valueProperty;
-        maxValue = type == Type.STAR ? 10 : 5;
-        minValue = type == Type.STAR ? 0 : 1;
+        maxValue = type == Type.STAR ? 10 : 6;
+        minValue = type == Type.STAR ? 0 : 0;
         step = type == Type.STAR ? 1 : 1;
         starsWidget = type == Type.STAR ? new Stars(value.get()) : new CacheSizeWidget(value.get());
         VisTextButton minusBtn = new VisTextButton("-") {

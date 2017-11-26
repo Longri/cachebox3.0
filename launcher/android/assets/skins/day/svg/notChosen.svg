@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="257" height="75" viewBox="0 0 257.00 75.00" enable-background="new 0 0 257.00 75.00" xml:space="preserve">
+	<rect x="10.7501" y="44.1669" fill="#DADADA" fill-opacity="1" stroke-width="0.2" stroke-linejoin="miter" width="16.9167" height="16.9166"/>
+	<rect x="80.3334" y="22.1669" fill="#DADADA" fill-opacity="1" stroke-width="0.2" stroke-linejoin="miter" width="38.6667" height="38.6667"/>
+	<rect x="130.667" y="15.8003" fill="#DADADA" fill-opacity="1" stroke-width="0.2" stroke-linejoin="miter" width="45" height="45"/>
+	<rect x="188.667" y="10.0836" fill="#BEBDBD" fill-opacity="1" stroke-width="0.2" stroke-linejoin="miter" width="62.4668" height="56.7111"/>
+	<rect x="39.2668" y="32.8003" fill="#CED0D3" fill-opacity="1" stroke-width="0.2" stroke-linejoin="miter" width="28.4333" height="28.4333"/>
+	<rect x="3.36438" y="7.16689" fill="none" stroke-width="6" stroke-linejoin="miter" stroke="#ABABAB" stroke-opacity="1" width="249.636" height="62.6667"/>
+	<g>
+		<path fill="#861D23" fill-opacity="1" stroke-linejoin="round" d="M 212.859,25.6339L 214.678,27.5833L 211.754,30.3126L 209.935,28.3631L 212.859,25.6339 Z M 216.498,29.5328L 218.318,31.4823L 215.393,34.2116L 213.574,32.2621L 216.498,29.5328 Z M 220.137,33.4318L 221.957,35.3813L 219.032,38.1105L 217.213,36.1611L 220.137,33.4318 Z M 223.776,37.3307L 225.596,39.2802L 222.671,42.0095L 220.852,40.06L 223.776,37.3307 Z M 227.415,41.2297L 229.234,43.1792L 226.31,45.9085L 224.491,43.959L 227.415,41.2297 Z M 231.054,45.1287L 232.874,47.0781L 229.949,49.8074L 228.13,47.8579L 231.054,45.1287 Z M 234.693,49.0276L 236.513,50.9771L 233.589,53.7064L 231.769,51.7569L 234.693,49.0276 Z M 209.22,21.7349L 211.039,23.6844L 208.115,26.4137L 206.296,24.4642L 209.22,21.7349 Z "/>
+		<path fill="#861D23" fill-opacity="1" stroke-linejoin="round" d="M 233.724,29.2007L 231.774,31.0202L 229.045,28.096L 230.994,26.2765L 233.724,29.2007 Z M 229.825,32.8397L 227.875,34.6592L 225.146,31.735L 227.095,29.9155L 229.825,32.8397 Z M 225.925,36.4787L 223.976,38.2982L 221.247,35.374L 223.196,33.5545L 225.925,36.4787 Z M 222.026,40.1178L 220.077,41.9373L 217.348,39.0131L 219.297,37.1936L 222.026,40.1178 Z M 218.128,43.7568L 216.178,45.5763L 213.449,42.6521L 215.398,40.8326L 218.128,43.7568 Z M 214.229,47.3958L 212.279,49.2153L 209.55,46.2911L 211.5,44.4716L 214.229,47.3958 Z M 210.33,51.0349L 208.38,52.8544L 205.651,49.9302L 207.6,48.1106L 210.33,51.0349 Z M 237.622,25.5616L 235.673,27.3812L 232.944,24.4569L 234.893,22.6374L 237.622,25.5616 Z "/>
+	</g>
+</svg>
