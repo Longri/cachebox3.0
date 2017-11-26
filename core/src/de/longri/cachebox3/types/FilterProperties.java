@@ -533,6 +533,19 @@ public class FilterProperties {
             return false;
         if (chkFilterBoolean(this.hasCorrectedCoordinates, abstractCache.hasCorrectedCoordinates()))
             return false;
+
+        if (this.MinDifficulty.get() / 2f > abstractCache.getDifficulty()) return false;
+        if (this.MaxDifficulty.get() / 2f < abstractCache.getDifficulty()) return false;
+        if (this.MinTerrain.get() / 2f > abstractCache.getTerrain()) return false;
+        if (this.MaxTerrain.get() / 2f < abstractCache.getTerrain()) return false;
+        if (this.MinContainerSize.get() > abstractCache.getSize().ordinal()) return false;
+        if (this.MaxContainerSize.get() < abstractCache.getSize().ordinal()) return false;
+        if (this.MinRating.get() / 2f > abstractCache.getRating()) return false;
+        if (this.MaxRating.get() / 2f < abstractCache.getRating()) return false;
+        if (this.MinFavPoints.get() >= 0 && this.MinFavPoints.get() > abstractCache.getFavoritePoints()) return false;
+        if (this.MaxFavPoints.get() >= 0 && this.MaxFavPoints.get() < abstractCache.getFavoritePoints()) return false;
+
+
         // TODO implement => if (chkFilterBoolean(this.WithManualWaypoint, cache.)) return false;
         // TODO ? the other restrictions?
         if (!this.cacheTypes[abstractCache.getType().ordinal()])
