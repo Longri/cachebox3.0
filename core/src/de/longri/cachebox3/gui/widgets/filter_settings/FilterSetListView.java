@@ -40,6 +40,7 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.BooleanProperty;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.IntProperty;
 import de.longri.cachebox3.types.Property;
@@ -571,6 +572,72 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
 
                         AdjustableFavPointListViewItem.this.property.set(value);
                         AdjustableFavPointListViewItem.this.invalidateHierarchy();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void dispose() {
+
+        }
+    }
+
+    class BooleanPropertyListView extends ListViewItem {
+
+        final BooleanProperty property;
+        final Image checkImage;
+
+
+        public BooleanPropertyListView(int listIndex, final BooleanProperty property, Drawable icon, final CharSequence name) {
+            super(listIndex);
+
+            this.property = property;
+
+            this.setVisible(false);
+
+            //Left icon
+            final Image iconImage = new Image(icon, Scaling.none);
+            this.add(iconImage).center().padRight(CB.scaledSizes.MARGIN_HALF);
+
+            //Center name text
+            final Label label = new VisLabel(name);
+            label.setWrap(true);
+            this.add(label).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
+
+            //Right checkBox
+            checkImage = new Image(style.CheckNo);
+            this.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+
+            this.setCheckImage();
+
+            this.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    property.set(!property.get());
+                }
+            });
+
+            property.setChangeListener(new Property.PropertyChangedListener() {
+                @Override
+                public void propertyChanged() {
+                    log.debug("Property {} changed to {}", name, property.get());
+
+                    //property changed, so set name to "?"
+                    filterSettings.filterProperties.setName("?");
+                    setCheckImage();
+                }
+            });
+        }
+
+        private void setCheckImage() {
+            CB.postOnMainThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(property.get()){
+                        checkImage.setDrawable(style.Check);
+                    }else{
+                        checkImage.setDrawable(style.CheckOff);
                     }
                 }
             });

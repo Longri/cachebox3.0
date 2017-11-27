@@ -67,18 +67,18 @@ class FilterPropertiesTest {
 
         // CacheTypes
         assertThat("FilterInstances.ALL 'All Caches' => cacheType.length", 23 == FilterInstances.ALL.cacheTypes.length);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[0]''?", FilterInstances.ALL.cacheTypes[0]);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[1]''?", FilterInstances.ALL.cacheTypes[1]);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[2]''?", FilterInstances.ALL.cacheTypes[2]);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[3]''?", FilterInstances.ALL.cacheTypes[3]);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[4]''?", FilterInstances.ALL.cacheTypes[4]);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[5]''?", FilterInstances.ALL.cacheTypes[5]);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[6]''?", FilterInstances.ALL.cacheTypes[6]);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[7]''?", FilterInstances.ALL.cacheTypes[7]);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[8]''?", FilterInstances.ALL.cacheTypes[8]);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[9]''?", FilterInstances.ALL.cacheTypes[9]);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[10]''?", FilterInstances.ALL.cacheTypes[10]);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[12]'GIGA'", FilterInstances.ALL.cacheTypes[21]);
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[0]''?", FilterInstances.ALL.cacheTypes[0].get());
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[1]''?", FilterInstances.ALL.cacheTypes[1].get());
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[2]''?", FilterInstances.ALL.cacheTypes[2].get());
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[3]''?", FilterInstances.ALL.cacheTypes[3].get());
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[4]''?", FilterInstances.ALL.cacheTypes[4].get());
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[5]''?", FilterInstances.ALL.cacheTypes[5].get());
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[6]''?", FilterInstances.ALL.cacheTypes[6].get());
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[7]''?", FilterInstances.ALL.cacheTypes[7].get());
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[8]''?", FilterInstances.ALL.cacheTypes[8].get());
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[9]''?", FilterInstances.ALL.cacheTypes[9].get());
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[10]''?", FilterInstances.ALL.cacheTypes[10].get());
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[12]'GIGA'", FilterInstances.ALL.cacheTypes[21].get());
 
         // AttributesFilter
         int AtributeLength = 68;
@@ -137,18 +137,18 @@ class FilterPropertiesTest {
 
         // CacheTypes
         assertThat("presets[1] 'All Caches to find' => cacheType.length", 23 == FilterInstances.ACTIVE.cacheTypes.length);
-        assertThat("presets[1] 'All Caches to find' => cacheType[0]''?", FilterInstances.ACTIVE.cacheTypes[0]);
-        assertThat("presets[1] 'All Caches to find' => cacheType[1]''?", FilterInstances.ACTIVE.cacheTypes[1]);
-        assertThat("presets[1] 'All Caches to find' => cacheType[2]''?", FilterInstances.ACTIVE.cacheTypes[2]);
-        assertThat("presets[1] 'All Caches to find' => cacheType[3]''?", FilterInstances.ACTIVE.cacheTypes[3]);
-        assertThat("presets[1] 'All Caches to find' => cacheType[4]''?", FilterInstances.ACTIVE.cacheTypes[4]);
-        assertThat("presets[1] 'All Caches to find' => cacheType[5]''?", FilterInstances.ACTIVE.cacheTypes[5]);
-        assertThat("presets[1] 'All Caches to find' => cacheType[6]''?", FilterInstances.ACTIVE.cacheTypes[6]);
-        assertThat("presets[1] 'All Caches to find' => cacheType[7]''?", FilterInstances.ACTIVE.cacheTypes[7]);
-        assertThat("presets[1] 'All Caches to find' => cacheType[8]''?", FilterInstances.ACTIVE.cacheTypes[8]);
-        assertThat("presets[1] 'All Caches to find' => cacheType[9]''?", FilterInstances.ACTIVE.cacheTypes[9]);
-        assertThat("presets[1] 'All Caches to find' => cacheType[10]''?", FilterInstances.ACTIVE.cacheTypes[10]);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[12]'GIGA'", FilterInstances.ACTIVE.cacheTypes[21]);
+        assertThat("presets[1] 'All Caches to find' => cacheType[0]''?", FilterInstances.ACTIVE.cacheTypes[0].get());
+        assertThat("presets[1] 'All Caches to find' => cacheType[1]''?", FilterInstances.ACTIVE.cacheTypes[1].get());
+        assertThat("presets[1] 'All Caches to find' => cacheType[2]''?", FilterInstances.ACTIVE.cacheTypes[2].get());
+        assertThat("presets[1] 'All Caches to find' => cacheType[3]''?", FilterInstances.ACTIVE.cacheTypes[3].get());
+        assertThat("presets[1] 'All Caches to find' => cacheType[4]''?", FilterInstances.ACTIVE.cacheTypes[4].get());
+        assertThat("presets[1] 'All Caches to find' => cacheType[5]''?", FilterInstances.ACTIVE.cacheTypes[5].get());
+        assertThat("presets[1] 'All Caches to find' => cacheType[6]''?", FilterInstances.ACTIVE.cacheTypes[6].get());
+        assertThat("presets[1] 'All Caches to find' => cacheType[7]''?", FilterInstances.ACTIVE.cacheTypes[7].get());
+        assertThat("presets[1] 'All Caches to find' => cacheType[8]''?", FilterInstances.ACTIVE.cacheTypes[8].get());
+        assertThat("presets[1] 'All Caches to find' => cacheType[9]''?", FilterInstances.ACTIVE.cacheTypes[9].get());
+        assertThat("presets[1] 'All Caches to find' => cacheType[10]''?", FilterInstances.ACTIVE.cacheTypes[10].get());
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[12]'GIGA'", FilterInstances.ACTIVE.cacheTypes[21].get());
 
         // AttributesFilter
         int AtributeLength = 68;
@@ -202,18 +202,18 @@ class FilterPropertiesTest {
 
         // CacheTypes
         assertThat("presets[2] 'Quick Cache' => cacheType.length", 23 == FilterInstances.QUICK.cacheTypes.length);
-        assertThat("presets[2] 'Quick Cache' => cacheType[0]''?", FilterInstances.QUICK.cacheTypes[0]);
-        assertThat("presets[2] 'Quick Cache' => cacheType[1]''?", !FilterInstances.QUICK.cacheTypes[1]);
-        assertThat("presets[2] 'Quick Cache' => cacheType[2]''?", !FilterInstances.QUICK.cacheTypes[2]);
-        assertThat("presets[2] 'Quick Cache' => cacheType[3]''?", FilterInstances.QUICK.cacheTypes[3]);
-        assertThat("presets[2] 'Quick Cache' => cacheType[4]''?", FilterInstances.QUICK.cacheTypes[4]);
-        assertThat("presets[2] 'Quick Cache' => cacheType[5]''?", !FilterInstances.QUICK.cacheTypes[5]);
-        assertThat("presets[2] 'Quick Cache' => cacheType[6]''?", !FilterInstances.QUICK.cacheTypes[6]);
-        assertThat("presets[2] 'Quick Cache' => cacheType[7]''?", !FilterInstances.QUICK.cacheTypes[7]);
-        assertThat("presets[2] 'Quick Cache' => cacheType[8]''?", !FilterInstances.QUICK.cacheTypes[8]);
-        assertThat("presets[2] 'Quick Cache' => cacheType[9]''?", !FilterInstances.QUICK.cacheTypes[9]);
-        assertThat("presets[2] 'Quick Cache' => cacheType[10]''?", !FilterInstances.QUICK.cacheTypes[10]);
-        assertThat("FilterInstances.ALL 'All Caches' => cacheType[12]'GIGA'", !FilterInstances.QUICK.cacheTypes[21]);
+        assertThat("presets[2] 'Quick Cache' => cacheType[0]''?", FilterInstances.QUICK.cacheTypes[0].get());
+        assertThat("presets[2] 'Quick Cache' => cacheType[1]''?", !FilterInstances.QUICK.cacheTypes[1].get());
+        assertThat("presets[2] 'Quick Cache' => cacheType[2]''?", !FilterInstances.QUICK.cacheTypes[2].get());
+        assertThat("presets[2] 'Quick Cache' => cacheType[3]''?", FilterInstances.QUICK.cacheTypes[3].get());
+        assertThat("presets[2] 'Quick Cache' => cacheType[4]''?", FilterInstances.QUICK.cacheTypes[4].get());
+        assertThat("presets[2] 'Quick Cache' => cacheType[5]''?", !FilterInstances.QUICK.cacheTypes[5].get());
+        assertThat("presets[2] 'Quick Cache' => cacheType[6]''?", !FilterInstances.QUICK.cacheTypes[6].get());
+        assertThat("presets[2] 'Quick Cache' => cacheType[7]''?", !FilterInstances.QUICK.cacheTypes[7].get());
+        assertThat("presets[2] 'Quick Cache' => cacheType[8]''?", !FilterInstances.QUICK.cacheTypes[8].get());
+        assertThat("presets[2] 'Quick Cache' => cacheType[9]''?", !FilterInstances.QUICK.cacheTypes[9].get());
+        assertThat("presets[2] 'Quick Cache' => cacheType[10]''?", !FilterInstances.QUICK.cacheTypes[10].get());
+        assertThat("FilterInstances.ALL 'All Caches' => cacheType[12]'GIGA'", !FilterInstances.QUICK.cacheTypes[21].get());
 
 
         // AttributesFilter
@@ -279,18 +279,18 @@ class FilterPropertiesTest {
 
         // CacheTypes
         assertThat("presets[3] 'Fetch some Travelbugs' => cacheType.length", 23 == FilterInstances.WITHTB.cacheTypes.length);
-        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[0]''?", FilterInstances.WITHTB.cacheTypes[0]);
-        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[1]''?", FilterInstances.WITHTB.cacheTypes[1]);
-        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[2]''?", FilterInstances.WITHTB.cacheTypes[2]);
-        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[3]''?", !FilterInstances.WITHTB.cacheTypes[3]);
-        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[4]''?", !FilterInstances.WITHTB.cacheTypes[4]);
-        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[5]''?", FilterInstances.WITHTB.cacheTypes[5]);
-        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[6]''?", FilterInstances.WITHTB.cacheTypes[6]);
-        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[7]''?", FilterInstances.WITHTB.cacheTypes[7]);
-        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[8]''?", !FilterInstances.WITHTB.cacheTypes[8]);
-        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[9]''?", FilterInstances.WITHTB.cacheTypes[9]);
-        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[10]''?", FilterInstances.WITHTB.cacheTypes[10]);
-        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[22]'GIGA'", FilterInstances.WITHTB.cacheTypes[21]);
+        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[0]''?", FilterInstances.WITHTB.cacheTypes[0].get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[1]''?", FilterInstances.WITHTB.cacheTypes[1].get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[2]''?", FilterInstances.WITHTB.cacheTypes[2].get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[3]''?", !FilterInstances.WITHTB.cacheTypes[3].get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[4]''?", !FilterInstances.WITHTB.cacheTypes[4].get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[5]''?", FilterInstances.WITHTB.cacheTypes[5].get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[6]''?", FilterInstances.WITHTB.cacheTypes[6].get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[7]''?", FilterInstances.WITHTB.cacheTypes[7].get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[8]''?", !FilterInstances.WITHTB.cacheTypes[8].get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[9]''?", FilterInstances.WITHTB.cacheTypes[9].get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[10]''?", FilterInstances.WITHTB.cacheTypes[10].get());
+        assertThat("presets[3] 'Fetch some Travelbugs' => cacheType[22]'GIGA'", FilterInstances.WITHTB.cacheTypes[21].get());
 
 
         // AttributesFilter
@@ -345,18 +345,18 @@ class FilterPropertiesTest {
 
         // CacheTypes
         assertThat("presets[4] 'Drop off Travelbugs' => cacheType.length", 23 == FilterInstances.DROPTB.cacheTypes.length);
-        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[0]''?", FilterInstances.DROPTB.cacheTypes[0]);
-        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[1]''?", FilterInstances.DROPTB.cacheTypes[1]);
-        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[2]''?", FilterInstances.DROPTB.cacheTypes[2]);
-        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[3]''?", !FilterInstances.DROPTB.cacheTypes[3]);
-        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[4]''?", !FilterInstances.DROPTB.cacheTypes[4]);
-        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[5]''?", FilterInstances.DROPTB.cacheTypes[5]);
-        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[6]''?", FilterInstances.DROPTB.cacheTypes[6]);
-        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[7]''?", FilterInstances.DROPTB.cacheTypes[7]);
-        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[8]''?", !FilterInstances.DROPTB.cacheTypes[8]);
-        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[9]''?", FilterInstances.DROPTB.cacheTypes[9]);
-        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[10]''?", FilterInstances.DROPTB.cacheTypes[10]);
-        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[11]'Giga'", FilterInstances.DROPTB.cacheTypes[21]);
+        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[0]''?", FilterInstances.DROPTB.cacheTypes[0].get());
+        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[1]''?", FilterInstances.DROPTB.cacheTypes[1].get());
+        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[2]''?", FilterInstances.DROPTB.cacheTypes[2].get());
+        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[3]''?", !FilterInstances.DROPTB.cacheTypes[3].get());
+        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[4]''?", !FilterInstances.DROPTB.cacheTypes[4].get());
+        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[5]''?", FilterInstances.DROPTB.cacheTypes[5].get());
+        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[6]''?", FilterInstances.DROPTB.cacheTypes[6].get());
+        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[7]''?", FilterInstances.DROPTB.cacheTypes[7].get());
+        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[8]''?", !FilterInstances.DROPTB.cacheTypes[8].get());
+        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[9]''?", FilterInstances.DROPTB.cacheTypes[9].get());
+        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[10]''?", FilterInstances.DROPTB.cacheTypes[10].get());
+        assertThat("presets[4] 'Drop off Travelbugs' => cacheType[11]'Giga'", FilterInstances.DROPTB.cacheTypes[21].get());
 
         // AttributesFilter
         int AtributeLength = 68;
@@ -411,18 +411,18 @@ class FilterPropertiesTest {
 
         // CacheTypes
         assertThat("presets[5] 'Highlights' => cacheType.length", 23 == FilterInstances.HIGHLIGHTS.cacheTypes.length);
-        assertThat("presets[5] 'Highlights' => cacheType[0]''?", FilterInstances.HIGHLIGHTS.cacheTypes[0]);
-        assertThat("presets[5] 'Highlights' => cacheType[1]''?", FilterInstances.HIGHLIGHTS.cacheTypes[1]);
-        assertThat("presets[5] 'Highlights' => cacheType[2]''?", FilterInstances.HIGHLIGHTS.cacheTypes[2]);
-        assertThat("presets[5] 'Highlights' => cacheType[3]''?", FilterInstances.HIGHLIGHTS.cacheTypes[3]);
-        assertThat("presets[5] 'Highlights' => cacheType[4]''?", FilterInstances.HIGHLIGHTS.cacheTypes[4]);
-        assertThat("presets[5] 'Highlights' => cacheType[5]''?", FilterInstances.HIGHLIGHTS.cacheTypes[5]);
-        assertThat("presets[5] 'Highlights' => cacheType[6]''?", FilterInstances.HIGHLIGHTS.cacheTypes[6]);
-        assertThat("presets[5] 'Highlights' => cacheType[7]''?", FilterInstances.HIGHLIGHTS.cacheTypes[7]);
-        assertThat("presets[5] 'Highlights' => cacheType[8]''?", FilterInstances.HIGHLIGHTS.cacheTypes[8]);
-        assertThat("presets[5] 'Highlights' => cacheType[9]''?", FilterInstances.HIGHLIGHTS.cacheTypes[9]);
-        assertThat("presets[5] 'Highlights' => cacheType[10]''?", FilterInstances.HIGHLIGHTS.cacheTypes[10]);
-        assertThat("presets[5] 'Highlights' => cacheType[11]'Munzee'", FilterInstances.HIGHLIGHTS.cacheTypes[11]);
+        assertThat("presets[5] 'Highlights' => cacheType[0]''?", FilterInstances.HIGHLIGHTS.cacheTypes[0].get());
+        assertThat("presets[5] 'Highlights' => cacheType[1]''?", FilterInstances.HIGHLIGHTS.cacheTypes[1].get());
+        assertThat("presets[5] 'Highlights' => cacheType[2]''?", FilterInstances.HIGHLIGHTS.cacheTypes[2].get());
+        assertThat("presets[5] 'Highlights' => cacheType[3]''?", FilterInstances.HIGHLIGHTS.cacheTypes[3].get());
+        assertThat("presets[5] 'Highlights' => cacheType[4]''?", FilterInstances.HIGHLIGHTS.cacheTypes[4].get());
+        assertThat("presets[5] 'Highlights' => cacheType[5]''?", FilterInstances.HIGHLIGHTS.cacheTypes[5].get());
+        assertThat("presets[5] 'Highlights' => cacheType[6]''?", FilterInstances.HIGHLIGHTS.cacheTypes[6].get());
+        assertThat("presets[5] 'Highlights' => cacheType[7]''?", FilterInstances.HIGHLIGHTS.cacheTypes[7].get());
+        assertThat("presets[5] 'Highlights' => cacheType[8]''?", FilterInstances.HIGHLIGHTS.cacheTypes[8].get());
+        assertThat("presets[5] 'Highlights' => cacheType[9]''?", FilterInstances.HIGHLIGHTS.cacheTypes[9].get());
+        assertThat("presets[5] 'Highlights' => cacheType[10]''?", FilterInstances.HIGHLIGHTS.cacheTypes[10].get());
+        assertThat("presets[5] 'Highlights' => cacheType[11]'Munzee'", FilterInstances.HIGHLIGHTS.cacheTypes[11].get());
 
         // AttributesFilter
         int AtributeLength = 68;
@@ -477,18 +477,18 @@ class FilterPropertiesTest {
 
         // CacheTypes
         assertThat("presets[6] 'Favoriten' => cacheType.length", 23 == FilterInstances.FAVORITES.cacheTypes.length);
-        assertThat("presets[6] 'Favoriten' => cacheType[0]''?", FilterInstances.FAVORITES.cacheTypes[0]);
-        assertThat("presets[6] 'Favoriten' => cacheType[1]''?", FilterInstances.FAVORITES.cacheTypes[1]);
-        assertThat("presets[6] 'Favoriten' => cacheType[2]''?", FilterInstances.FAVORITES.cacheTypes[2]);
-        assertThat("presets[6] 'Favoriten' => cacheType[3]''?", FilterInstances.FAVORITES.cacheTypes[3]);
-        assertThat("presets[6] 'Favoriten' => cacheType[4]''?", FilterInstances.FAVORITES.cacheTypes[4]);
-        assertThat("presets[6] 'Favoriten' => cacheType[5]''?", FilterInstances.FAVORITES.cacheTypes[5]);
-        assertThat("presets[6] 'Favoriten' => cacheType[6]''?", FilterInstances.FAVORITES.cacheTypes[6]);
-        assertThat("presets[6] 'Favoriten' => cacheType[7]''?", FilterInstances.FAVORITES.cacheTypes[7]);
-        assertThat("presets[6] 'Favoriten' => cacheType[8]''?", FilterInstances.FAVORITES.cacheTypes[8]);
-        assertThat("presets[6] 'Favoriten' => cacheType[9]''?", FilterInstances.FAVORITES.cacheTypes[9]);
-        assertThat("presets[6] 'Favoriten' => cacheType[10]''?", FilterInstances.FAVORITES.cacheTypes[10]);
-        assertThat("presets[6] 'Favoriten' => cacheType[11]'Munzee'", FilterInstances.FAVORITES.cacheTypes[11]);
+        assertThat("presets[6] 'Favoriten' => cacheType[0]''?", FilterInstances.FAVORITES.cacheTypes[0].get());
+        assertThat("presets[6] 'Favoriten' => cacheType[1]''?", FilterInstances.FAVORITES.cacheTypes[1].get());
+        assertThat("presets[6] 'Favoriten' => cacheType[2]''?", FilterInstances.FAVORITES.cacheTypes[2].get());
+        assertThat("presets[6] 'Favoriten' => cacheType[3]''?", FilterInstances.FAVORITES.cacheTypes[3].get());
+        assertThat("presets[6] 'Favoriten' => cacheType[4]''?", FilterInstances.FAVORITES.cacheTypes[4].get());
+        assertThat("presets[6] 'Favoriten' => cacheType[5]''?", FilterInstances.FAVORITES.cacheTypes[5].get());
+        assertThat("presets[6] 'Favoriten' => cacheType[6]''?", FilterInstances.FAVORITES.cacheTypes[6].get());
+        assertThat("presets[6] 'Favoriten' => cacheType[7]''?", FilterInstances.FAVORITES.cacheTypes[7].get());
+        assertThat("presets[6] 'Favoriten' => cacheType[8]''?", FilterInstances.FAVORITES.cacheTypes[8].get());
+        assertThat("presets[6] 'Favoriten' => cacheType[9]''?", FilterInstances.FAVORITES.cacheTypes[9].get());
+        assertThat("presets[6] 'Favoriten' => cacheType[10]''?", FilterInstances.FAVORITES.cacheTypes[10].get());
+        assertThat("presets[6] 'Favoriten' => cacheType[11]'Munzee'", FilterInstances.FAVORITES.cacheTypes[11].get());
 
         // AttributesFilter
         int AtributeLength = 68;
@@ -543,18 +543,18 @@ class FilterPropertiesTest {
 
         // CacheTypes
         assertThat("presets[7] 'prepare to archive' => cacheType.length", 23 == FilterInstances.TOARCHIVE.cacheTypes.length);
-        assertThat("presets[7] 'prepare to archive' => cacheType[0]''?", FilterInstances.TOARCHIVE.cacheTypes[0]);
-        assertThat("presets[7] 'prepare to archive' => cacheType[1]''?", FilterInstances.TOARCHIVE.cacheTypes[1]);
-        assertThat("presets[7] 'prepare to archive' => cacheType[2]''?", FilterInstances.TOARCHIVE.cacheTypes[2]);
-        assertThat("presets[7] 'prepare to archive' => cacheType[3]''?", FilterInstances.TOARCHIVE.cacheTypes[3]);
-        assertThat("presets[7] 'prepare to archive' => cacheType[4]''?", FilterInstances.TOARCHIVE.cacheTypes[4]);
-        assertThat("presets[7] 'prepare to archive' => cacheType[5]''?", FilterInstances.TOARCHIVE.cacheTypes[5]);
-        assertThat("presets[7] 'prepare to archive' => cacheType[6]''?", FilterInstances.TOARCHIVE.cacheTypes[6]);
-        assertThat("presets[7] 'prepare to archive' => cacheType[7]''?", FilterInstances.TOARCHIVE.cacheTypes[7]);
-        assertThat("presets[7] 'prepare to archive' => cacheType[8]''?", FilterInstances.TOARCHIVE.cacheTypes[8]);
-        assertThat("presets[7] 'prepare to archive' => cacheType[9]''?", FilterInstances.TOARCHIVE.cacheTypes[9]);
-        assertThat("presets[7] 'prepare to archive' => cacheType[10]''?", FilterInstances.TOARCHIVE.cacheTypes[10]);
-        assertThat("presets[7] 'prepare to archive' => cacheType[11]'Munzee'", FilterInstances.TOARCHIVE.cacheTypes[11]);
+        assertThat("presets[7] 'prepare to archive' => cacheType[0]''?", FilterInstances.TOARCHIVE.cacheTypes[0].get());
+        assertThat("presets[7] 'prepare to archive' => cacheType[1]''?", FilterInstances.TOARCHIVE.cacheTypes[1].get());
+        assertThat("presets[7] 'prepare to archive' => cacheType[2]''?", FilterInstances.TOARCHIVE.cacheTypes[2].get());
+        assertThat("presets[7] 'prepare to archive' => cacheType[3]''?", FilterInstances.TOARCHIVE.cacheTypes[3].get());
+        assertThat("presets[7] 'prepare to archive' => cacheType[4]''?", FilterInstances.TOARCHIVE.cacheTypes[4].get());
+        assertThat("presets[7] 'prepare to archive' => cacheType[5]''?", FilterInstances.TOARCHIVE.cacheTypes[5].get());
+        assertThat("presets[7] 'prepare to archive' => cacheType[6]''?", FilterInstances.TOARCHIVE.cacheTypes[6].get());
+        assertThat("presets[7] 'prepare to archive' => cacheType[7]''?", FilterInstances.TOARCHIVE.cacheTypes[7].get());
+        assertThat("presets[7] 'prepare to archive' => cacheType[8]''?", FilterInstances.TOARCHIVE.cacheTypes[8].get());
+        assertThat("presets[7] 'prepare to archive' => cacheType[9]''?", FilterInstances.TOARCHIVE.cacheTypes[9].get());
+        assertThat("presets[7] 'prepare to archive' => cacheType[10]''?", FilterInstances.TOARCHIVE.cacheTypes[10].get());
+        assertThat("presets[7] 'prepare to archive' => cacheType[11]'Munzee'", FilterInstances.TOARCHIVE.cacheTypes[11].get());
 
         // AttributesFilter
         int AtributeLength = 68;
@@ -611,18 +611,18 @@ class FilterPropertiesTest {
 
         // CacheTypes
         assertThat("presets[8] 'Listing Changed' => cacheType.length", 23 == FilterInstances.LISTINGCHANGED.cacheTypes.length);
-        assertThat("presets[8] 'Listing Changed' => cacheType[0]''?", FilterInstances.LISTINGCHANGED.cacheTypes[0]);
-        assertThat("presets[8] 'Listing Changed' => cacheType[1]''?", FilterInstances.LISTINGCHANGED.cacheTypes[1]);
-        assertThat("presets[8] 'Listing Changed' => cacheType[2]''?", FilterInstances.LISTINGCHANGED.cacheTypes[2]);
-        assertThat("presets[8] 'Listing Changed' => cacheType[3]''?", FilterInstances.LISTINGCHANGED.cacheTypes[3]);
-        assertThat("presets[8] 'Listing Changed' => cacheType[4]''?", FilterInstances.LISTINGCHANGED.cacheTypes[4]);
-        assertThat("presets[8] 'Listing Changed' => cacheType[5]''?", FilterInstances.LISTINGCHANGED.cacheTypes[5]);
-        assertThat("presets[8] 'Listing Changed' => cacheType[6]''?", FilterInstances.LISTINGCHANGED.cacheTypes[6]);
-        assertThat("presets[8] 'Listing Changed' => cacheType[7]''?", FilterInstances.LISTINGCHANGED.cacheTypes[7]);
-        assertThat("presets[8] 'Listing Changed' => cacheType[8]''?", FilterInstances.LISTINGCHANGED.cacheTypes[8]);
-        assertThat("presets[8] 'Listing Changed' => cacheType[9]''?", FilterInstances.LISTINGCHANGED.cacheTypes[9]);
-        assertThat("presets[8] 'Listing Changed' => cacheType[10]''?", FilterInstances.LISTINGCHANGED.cacheTypes[10]);
-        assertThat("presets[8] 'Listing Changed' => cacheType[11]'Munzee'", FilterInstances.LISTINGCHANGED.cacheTypes[11]);
+        assertThat("presets[8] 'Listing Changed' => cacheType[0]''?", FilterInstances.LISTINGCHANGED.cacheTypes[0].get());
+        assertThat("presets[8] 'Listing Changed' => cacheType[1]''?", FilterInstances.LISTINGCHANGED.cacheTypes[1].get());
+        assertThat("presets[8] 'Listing Changed' => cacheType[2]''?", FilterInstances.LISTINGCHANGED.cacheTypes[2].get());
+        assertThat("presets[8] 'Listing Changed' => cacheType[3]''?", FilterInstances.LISTINGCHANGED.cacheTypes[3].get());
+        assertThat("presets[8] 'Listing Changed' => cacheType[4]''?", FilterInstances.LISTINGCHANGED.cacheTypes[4].get());
+        assertThat("presets[8] 'Listing Changed' => cacheType[5]''?", FilterInstances.LISTINGCHANGED.cacheTypes[5].get());
+        assertThat("presets[8] 'Listing Changed' => cacheType[6]''?", FilterInstances.LISTINGCHANGED.cacheTypes[6].get());
+        assertThat("presets[8] 'Listing Changed' => cacheType[7]''?", FilterInstances.LISTINGCHANGED.cacheTypes[7].get());
+        assertThat("presets[8] 'Listing Changed' => cacheType[8]''?", FilterInstances.LISTINGCHANGED.cacheTypes[8].get());
+        assertThat("presets[8] 'Listing Changed' => cacheType[9]''?", FilterInstances.LISTINGCHANGED.cacheTypes[9].get());
+        assertThat("presets[8] 'Listing Changed' => cacheType[10]''?", FilterInstances.LISTINGCHANGED.cacheTypes[10].get());
+        assertThat("presets[8] 'Listing Changed' => cacheType[11]'Munzee'", FilterInstances.LISTINGCHANGED.cacheTypes[11].get());
 
         // AttributesFilter
         int AtributeLength = 68;
@@ -679,18 +679,18 @@ class FilterPropertiesTest {
 
         // CacheTypes
         assertThat("default constructor => cacheType.length", 23 == defaultCtor.cacheTypes.length);
-        assertThat("default constructor => cacheType[0]''?", defaultCtor.cacheTypes[0]);
-        assertThat("default constructor => cacheType[1]''?", defaultCtor.cacheTypes[1]);
-        assertThat("default constructor => cacheType[2]''?", defaultCtor.cacheTypes[2]);
-        assertThat("default constructor => cacheType[3]''?", defaultCtor.cacheTypes[3]);
-        assertThat("default constructor => cacheType[4]''?", defaultCtor.cacheTypes[4]);
-        assertThat("default constructor => cacheType[5]''?", defaultCtor.cacheTypes[5]);
-        assertThat("default constructor => cacheType[6]''?", defaultCtor.cacheTypes[6]);
-        assertThat("default constructor => cacheType[7]''?", defaultCtor.cacheTypes[7]);
-        assertThat("default constructor => cacheType[8]''?", defaultCtor.cacheTypes[8]);
-        assertThat("default constructor => cacheType[9]''?", defaultCtor.cacheTypes[9]);
-        assertThat("default constructor => cacheType[10]''?", defaultCtor.cacheTypes[10]);
-        assertThat("default constructor => cacheType[11]'Munzee'", defaultCtor.cacheTypes[11]);
+        assertThat("default constructor => cacheType[0]''?", defaultCtor.cacheTypes[0].get());
+        assertThat("default constructor => cacheType[1]''?", defaultCtor.cacheTypes[1].get());
+        assertThat("default constructor => cacheType[2]''?", defaultCtor.cacheTypes[2].get());
+        assertThat("default constructor => cacheType[3]''?", defaultCtor.cacheTypes[3].get());
+        assertThat("default constructor => cacheType[4]''?", defaultCtor.cacheTypes[4].get());
+        assertThat("default constructor => cacheType[5]''?", defaultCtor.cacheTypes[5].get());
+        assertThat("default constructor => cacheType[6]''?", defaultCtor.cacheTypes[6].get());
+        assertThat("default constructor => cacheType[7]''?", defaultCtor.cacheTypes[7].get());
+        assertThat("default constructor => cacheType[8]''?", defaultCtor.cacheTypes[8].get());
+        assertThat("default constructor => cacheType[9]''?", defaultCtor.cacheTypes[9].get());
+        assertThat("default constructor => cacheType[10]''?", defaultCtor.cacheTypes[10].get());
+        assertThat("default constructor => cacheType[11]'Munzee'", defaultCtor.cacheTypes[11].get());
 
         // AttributesFilter
         int AtributeLength = 68;

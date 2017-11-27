@@ -60,7 +60,7 @@ public class FilterProperties {
 
     public boolean isHistory;
 
-    final boolean[] cacheTypes = new boolean[CacheTypes.values().length];
+    final BooleanProperty[] cacheTypes = new BooleanProperty[CacheTypes.values().length];
 
     final int[] attributes = new int[Attributes.values().length];
 
@@ -222,7 +222,12 @@ public class FilterProperties {
 
         this.hasCorrectedCoordinates.set(0);
         isHistory = false;
-        Arrays.fill(cacheTypes, true);
+
+        int n = cacheTypes.length;
+        while (n-- > 0) {
+            cacheTypes[n] = new BooleanProperty(true);
+        }
+
         Arrays.fill(attributes, 0);
 
         GPXFilenameIds = new LongArray();
@@ -233,12 +238,12 @@ public class FilterProperties {
         Categories = new LongArray();
     }
 
-    private boolean[] parseCacheTypes(String types) {
+    private BooleanProperty[] parseCacheTypes(String types) {
         String[] parts = types.split(SEPARATOR);
-        final boolean[] result = new boolean[CacheTypes.values().length];
+        final BooleanProperty[] result = new BooleanProperty[CacheTypes.values().length];
 
         for (int i = 0; i < result.length; i++) {
-            result[i] = Boolean.parseBoolean(parts[i]);
+            result[i] = new BooleanProperty(Boolean.parseBoolean(parts[i]));
         }
 
         return result;
@@ -364,7 +369,7 @@ public class FilterProperties {
             String csvTypes = "";
             int count = 0;
             for (int i = 0; i < cacheTypes.length; i++) {
-                if (cacheTypes[i]) {
+                if (cacheTypes[i].get()) {
                     csvTypes += String.valueOf(i) + ",";
                     count++;
                 }
@@ -550,9 +555,7 @@ public class FilterProperties {
         if (this.MaxFavPoints.get() >= 0 && this.MaxFavPoints.get() < abstractCache.getFavoritePoints()) return false;
 
 
-        // TODO implement => if (chkFilterBoolean(this.WithManualWaypoint, cache.)) return false;
-        // TODO ? the other restrictions?
-        if (!this.cacheTypes[abstractCache.getType().ordinal()])
+        if (!this.cacheTypes[abstractCache.getType().ordinal()].get())
             return false;
 
         return true;
