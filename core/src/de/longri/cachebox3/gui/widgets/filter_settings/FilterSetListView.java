@@ -658,7 +658,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                     if (property.get()) {
                         checkImage.setDrawable(style.Check);
                     } else {
-                        checkImage.setDrawable(style.CheckOff);
+                        checkImage.setDrawable(style.CheckNo);
                     }
                 }
             });
