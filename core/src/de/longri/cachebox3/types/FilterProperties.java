@@ -62,7 +62,7 @@ public class FilterProperties {
 
     public final BooleanProperty[] cacheTypes = new BooleanProperty[CacheTypes.values().length];
 
-    final int[] attributes = new int[Attributes.values().length];
+    public final IntProperty[] attributes = new IntProperty[Attributes.values().length];
 
     public LongArray GPXFilenameIds;
 
@@ -156,16 +156,20 @@ public class FilterProperties {
             String attributes = json.getString("attributes");
             parts = attributes.split(SEPARATOR);
 
-            this.attributes[0] = 0; // gibts nicht
+            //initial attribute properties
+            int n = this.attributes.length;
+            while (n-- > 0) {
+                this.attributes[n] = new IntProperty();
+            }
+
+            this.attributes[0].set(0); // don't exist
             int og = parts.length;
             if (parts.length == this.attributes.length) {
                 og = parts.length - 1; // falls doch schon mal mit mehr gespeichert
             }
             for (int i = 0; i < (og); i++)
-                this.attributes[i + 1] = Integer.parseInt(parts[i]);
-            // aus älteren Versionen
-            for (int i = og; i < this.attributes.length - 1; i++)
-                this.attributes[i + 1] = 0;
+                this.attributes[i + 1].set(Integer.parseInt(parts[i]));
+
 
             GPXFilenameIds = new LongArray();
             String gpxfilenames = json.getString("gpxfilenameids");
@@ -228,7 +232,10 @@ public class FilterProperties {
             cacheTypes[n] = new BooleanProperty(true);
         }
 
-        Arrays.fill(attributes, 0);
+        n = attributes.length;
+        while (n-- > 0) {
+            attributes[n] = new IntProperty();
+        }
 
         GPXFilenameIds = new LongArray();
         filterName = "";
@@ -295,9 +302,6 @@ public class FilterProperties {
             short bitstoreMust = 0;
             short bitstoreMustNot = 0;
 
-
-            //TODO Bitwise equals [BooleanStore & MASK_FOUND != 0] for true
-            //TODO Bitwise equals [BooleanStore & MASK_FOUND == 0] for false
             if (Finds.get() == 1)
                 bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, true, bitstoreMust);//andParts.add("Found=1");
             if (Finds.get() == -1)
@@ -381,16 +385,16 @@ public class FilterProperties {
             }
 
             for (int i = 1; i < attributes.length; i++) {
-                if (attributes[i] != 0) {
+                if (attributes[i].get() != 0) {
                     if (i < 62) {
                         long shift = DLong.UL1 << (i);
-                        if (attributes[i] == 1)
+                        if (attributes[i].get() == 1)
                             andParts.add("(AttributesPositive & " + shift + ") > 0");
                         else
                             andParts.add("(AttributesNegative &  " + shift + ") > 0");
                     } else {
                         long shift = DLong.UL1 << (i - 61);
-                        if (attributes[i] == 1)
+                        if (attributes[i].get() == 1)
                             andParts.add("(AttributesPositiveHigh &  " + shift + ") > 0");
                         else
                             andParts.add("(AttributesNegativeHigh & " + shift + ") > 0");
@@ -495,7 +499,7 @@ public class FilterProperties {
         for (int i = 1; i < attributes.length; i++) {
             if (filter.attributes.length <= i)
                 break;
-            if (filter.attributes[i] != this.attributes[i])
+            if (filter.attributes[i].get() != this.attributes[i].get())
                 return false; // nicht gleich!!!
         }
 
@@ -558,6 +562,8 @@ public class FilterProperties {
         if (!this.cacheTypes[abstractCache.getType().ordinal()].get())
             return false;
 
+        //todo passed Attributes
+
         return true;
     }
 
@@ -609,13 +615,15 @@ public class FilterProperties {
         this.hasCorrectedCoordinates.set(properties.hasCorrectedCoordinates.get());
         isHistory = properties.isHistory;
 
-        int n= cacheTypes.length;
-        while (n-->0){
+        int n = cacheTypes.length;
+        while (n-- > 0) {
             cacheTypes[n].set(properties.cacheTypes[n].get());
         }
 
-
-        System.arraycopy(properties.attributes, 0, attributes, 0, attributes.length);
+        n = attributes.length;
+        while (n-- > 0) {
+            attributes[n].set(properties.attributes[n].get());
+        }
 
         filterName = properties.filterName;
         filterGcCode = properties.filterGcCode;
@@ -692,7 +700,7 @@ public class FilterProperties {
             for (int i = 1; i < attributes.length; i++) {
                 if (tmp.length() > 0)
                     tmp += SEPARATOR;
-                tmp += String.valueOf(attributes[i]);
+                tmp += String.valueOf(attributes[i].get());
             }
             json.writeValue("attributes", tmp);
 

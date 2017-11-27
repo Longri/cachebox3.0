@@ -91,7 +91,7 @@ class FilterPropertiesTest {
 
         for (int i = 0; i < AtributeLength; i++) {
             assertThat("FilterInstances.ALL 'All Caches' => attributesFilter[" + i + "]", attributesFilter[i] ==
-                    FilterInstances.ALL.attributes[i]);
+                    FilterInstances.ALL.attributes[i].get());
         }
 
         assertThat("FilterInstances.ALL 'All Caches' => GPXFilenameIds.size", 0 == FilterInstances.ALL.GPXFilenameIds.size);
@@ -161,7 +161,7 @@ class FilterPropertiesTest {
 
         for (int i = 0; i < AtributeLength; i++) {
             assertThat("presets[1] 'All Caches to find' => attributesFilter[" + i + "]", attributesFilter[i] ==
-                    FilterInstances.ACTIVE.attributes[i]);
+                    FilterInstances.ACTIVE.attributes[i].get());
         }
 
         assertThat("presets[1] 'All Caches to find' => GPXFilenameIds.size", 0 == FilterInstances.ACTIVE.GPXFilenameIds.size);
@@ -227,7 +227,7 @@ class FilterPropertiesTest {
 
         for (int i = 0; i < AtributeLength; i++) {
             assertThat("presets[2] 'Quick Cache' => attributesFilter[" + i + "]", attributesFilter[i] ==
-                    FilterInstances.QUICK.attributes[i]);
+                    FilterInstances.QUICK.attributes[i].get());
         }
 
         assertThat("presets[2] 'Quick Cache' => GPXFilenameIds.size", 0 == FilterInstances.QUICK.GPXFilenameIds.size);
@@ -304,7 +304,7 @@ class FilterPropertiesTest {
 
         for (int i = 0; i < AtributeLength; i++) {
             assertThat("presets[3] 'Fetch some Travelbugs' => attributesFilter[" + i + "]", attributesFilter[i] ==
-                    FilterInstances.QUICK.attributes[i]);
+                    FilterInstances.QUICK.attributes[i].get());
         }
 
         assertThat("presets[3] 'Fetch some Travelbugs' => GPXFilenameIds.size", 0 == FilterInstances.WITHTB.GPXFilenameIds.size);
@@ -369,7 +369,7 @@ class FilterPropertiesTest {
 
         for (int i = 0; i < AtributeLength; i++) {
             assertThat("presets[4] 'Drop off Travelbugs' => attributesFilter[" + i + "]", attributesFilter[i] ==
-                    FilterInstances.DROPTB.attributes[i]);
+                    FilterInstances.DROPTB.attributes[i].get());
         }
 
         assertThat("presets[4] 'Drop off Travelbugs' => GPXFilenameIds.size", 0 == FilterInstances.DROPTB.GPXFilenameIds.size);
@@ -435,7 +435,7 @@ class FilterPropertiesTest {
 
         for (int i = 0; i < AtributeLength; i++) {
             assertThat("presets[5] 'Highlights' => attributesFilter[" + i + "]", attributesFilter[i] ==
-                    FilterInstances.HIGHLIGHTS.attributes[i]);
+                    FilterInstances.HIGHLIGHTS.attributes[i].get());
         }
 
         assertThat("presets[5] 'Highlights' => GPXFilenameIds.size", 0 == FilterInstances.HIGHLIGHTS.GPXFilenameIds.size);
@@ -501,7 +501,7 @@ class FilterPropertiesTest {
 
         for (int i = 0; i < AtributeLength; i++) {
             assertThat("presets[6] 'Favoriten' => attributesFilter[" + i + "]", attributesFilter[i] ==
-                    FilterInstances.FAVORITES.attributes[i]);
+                    FilterInstances.FAVORITES.attributes[i].get());
         }
 
         assertThat("presets[6] 'Favoriten' => GPXFilenameIds.size", 0 == FilterInstances.FAVORITES.GPXFilenameIds.size);
@@ -567,7 +567,7 @@ class FilterPropertiesTest {
 
         for (int i = 0; i < AtributeLength; i++) {
             assertThat("presets[7] 'prepare to archive' => attributesFilter[" + i + "]", attributesFilter[i] ==
-                    FilterInstances.TOARCHIVE.attributes[i]);
+                    FilterInstances.TOARCHIVE.attributes[i].get());
         }
 
         assertThat("presets[7] 'prepare to archive' => GPXFilenameIds.size", 0 == FilterInstances.TOARCHIVE.GPXFilenameIds.size);
@@ -635,7 +635,7 @@ class FilterPropertiesTest {
 
         for (int i = 0; i < AtributeLength; i++) {
             assertThat("presets[8] 'Listing Changed' => attributesFilter[" + i + "]", attributesFilter[i] ==
-                    FilterInstances.LISTINGCHANGED.attributes[i]);
+                    FilterInstances.LISTINGCHANGED.attributes[i].get());
         }
 
         assertThat("presets[8] 'Listing Changed' => GPXFilenameIds.size", 0 == FilterInstances.LISTINGCHANGED.GPXFilenameIds.size);
@@ -701,7 +701,7 @@ class FilterPropertiesTest {
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
         for (int i = 0; i < AtributeLength; i++) {
-            assertThat("default constructor => attributesFilter[" + i + "]", attributesFilter[i] == defaultCtor.attributes[i]);
+            assertThat("default constructor => attributesFilter[" + i + "]", attributesFilter[i] == defaultCtor.attributes[i].get());
         }
 
         assertThat("default constructor => GPXFilenameIds.size", 0 == defaultCtor.GPXFilenameIds.size);
