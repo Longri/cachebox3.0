@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets.filter_settings;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -28,11 +29,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.activities.EditFilterSettings;
+import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
@@ -44,6 +47,7 @@ import de.longri.cachebox3.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.naming.directory.Attribute;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.gui.widgets.AdjustableStarWidget.Type.STAR;
@@ -65,7 +69,6 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
     public FilterSetListView(EditFilterSettings editFilterSettings, FilterStyle style) {
         this.style = style;
         this.filterSettings = editFilterSettings;
-
         listViewAdapter = new Adapter() {
             @Override
             public int getCount() {
@@ -88,16 +91,11 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 return item.isVisible() ? item.getHeight() : 0;
             }
         };
-
         setListView = new ListView(listViewAdapter, true, false);
         setListView.setSelectable(ListView.SelectableType.NONE);
-
-
         this.add(setListView).expand().fill();
         setListView.setEmptyString("EmptyList");
-
         fillList();
-
     }
 
     private void fillList() {
@@ -107,11 +105,23 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         addCachTypeItems();
         addAttributeItems();
         setListView.setAdapter(listViewAdapter);
+        //Toggle all sections
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                int n = listViewItems.size;
+                while (n-- > 0) {
+                    if (listViewItems.get(n) instanceof ButtonListViewItem) {
+                        ((ButtonListViewItem) listViewItems.get(n)).toggle();
+                    }
+                }
+            }
+        });
     }
 
     private void addGeneralItems() {
 
-        final AtomicBoolean sectionVisible = new AtomicBoolean(false);
+        final AtomicBoolean sectionVisible = new AtomicBoolean(true);
 
         final IntPropertyListView available = new IntPropertyListView(listViewItems.size + 1,
                 filterSettings.filterProperties.NotAvailable, style.Available, Translation.get("disabled"));
@@ -171,7 +181,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
 
     private void addDTGcVoteItems() {
 
-        final AtomicBoolean sectionVisible = new AtomicBoolean(false);
+        final AtomicBoolean sectionVisible = new AtomicBoolean(true);
 
         final AdjustableStarListViewItem minDificulty = new AdjustableStarListViewItem(listViewItems.size + 1,
                 filterSettings.filterProperties.MinDifficulty, Translation.get("minDifficulty"), STAR);
@@ -230,15 +240,15 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
     }
 
     private void addCachTypeItems() {
-        final AtomicBoolean sectionVisible = new AtomicBoolean(false);
+        final AtomicBoolean sectionVisible = new AtomicBoolean(true);
         final Array<BooleanPropertyListView> itemList = new Array<>();
         final int idx = listViewItems.size + 1;
 
         for (int i = 0, n = filterSettings.filterProperties.cacheTypes.length; i < n; i++) {
             CacheTypes type = CacheTypes.get(i);
-            if(type.isCache())
-            itemList.add(new BooleanPropertyListView(idx + i,
-                    filterSettings.filterProperties.cacheTypes[i], type.getDrawable(), type.getName()));
+            if (type.isCache())
+                itemList.add(new BooleanPropertyListView(idx + i,
+                        filterSettings.filterProperties.cacheTypes[i], type.getDrawable(), type.getName()));
         }
 
         ClickListener listener = new ClickListener() {
@@ -256,17 +266,45 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         };
 
         listViewItems.add(new ButtonListViewItem(listViewItems.size, Translation.get("CacheTypes"), listener));
-        for(int i=0,n=itemList.size;i<n;i++){
+        for (int i = 0, n = itemList.size; i < n; i++) {
             listViewItems.add(itemList.get(i));
         }
     }
 
     private void addAttributeItems() {
-        ClickListener listener = new ClickListener() {
 
+        final AtomicBoolean sectionVisible = new AtomicBoolean(true);
+
+        final Array<IntPropertyListView> itemList = new Array<>();
+        final int idx = listViewItems.size + 1;
+
+        final AttributesStyle attStyle = VisUI.getSkin().get("CompassView", AttributesStyle.class);
+
+        for (int i = 0, n = filterSettings.filterProperties.attributes.length; i < n; i++) {
+            Attributes attribute = Attributes.values()[i];
+            itemList.add(new IntPropertyListView(idx + i,
+                    filterSettings.filterProperties.attributes[i], attribute.getDrawable(attStyle),
+                    Translation.get("att_" + i + "_1")));
+        }
+
+        final ClickListener listener = new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                final boolean visible = !sectionVisible.get();
+                sectionVisible.set(visible);
+                int n = itemList.size;
+                while (n-- > 0) {
+                    itemList.get(n).setVisible(visible);
+                }
+
+                setListView.invalidate();
+                setListView.layout(true);
+            }
         };
 
         listViewItems.add(new ButtonListViewItem(listViewItems.size, Translation.get("Attributes"), listener));
+        for (int i = 0, n = itemList.size; i < n; i++) {
+            listViewItems.add(itemList.get(i));
+        }
     }
 
     @Override
@@ -276,8 +314,11 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
 
     class ButtonListViewItem extends ListViewItem {
 
+        final ClickListener clickListener;
+
         public ButtonListViewItem(int listIndex, CharSequence text, ClickListener clickListener) {
             super(listIndex);
+            this.clickListener = clickListener;
             CharSequenceButton btn = new CharSequenceButton(text);
             btn.getLabel().setWrap(true);
             this.addListener(clickListener);
@@ -295,6 +336,10 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         public void dispose() {
 
         }
+
+        public void toggle() {
+            clickListener.clicked(null, 0, 0);
+        }
     }
 
     class IntPropertyListView extends ListViewItem {
@@ -307,8 +352,6 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
             super(listIndex);
 
             this.property = property;
-
-            this.setVisible(false);
 
             //Left icon
             final Image iconImage = new Image(icon, Scaling.none);
@@ -388,7 +431,6 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
             super(listIndex);
 
             this.property = property;
-            this.setVisible(false);
 
             this.adjustableWidget = new AdjustableStarWidget(type, name, property);
             this.add(this.adjustableWidget).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
@@ -448,7 +490,6 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
             this.name = name;
             valueLabel = new VisLabel(Integer.toString(property.get()));
             valueLabel.setAlignment(Align.center);
-            this.setVisible(false);
 
 
             property.setChangeListener(new Property.PropertyChangedListener() {
@@ -614,8 +655,6 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
             super(listIndex);
 
             this.property = property;
-
-            this.setVisible(false);
 
             //Left icon
             final Image iconImage = new Image(icon, Scaling.none);

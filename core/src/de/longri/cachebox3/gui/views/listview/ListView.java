@@ -126,7 +126,7 @@ public class ListView extends WidgetGroup {
             for (int i = 0, n = childs.size; i < n; i++) {
                 ListViewItem item = (ListViewItem) childs.get(i);
                 tempClickRec.set(item.getX(), item.getY(), item.getWidth(), item.getHeight());
-                if (tempClickRec.contains(x, y)) {
+                if (item.isVisible() && tempClickRec.contains(x, y)) {
                     // item Clicked
                     Array<EventListener> listeners = item.getListeners();
                     log.debug("ListViewItem {} clicked | Item has {} listener", item.getListIndex(), listeners.size);
