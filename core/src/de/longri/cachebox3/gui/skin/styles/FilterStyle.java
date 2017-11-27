@@ -48,4 +48,5 @@ public class FilterStyle {
     public Drawable HasUserData;
     public Drawable ManualWaypoint;
     public Drawable CoorectedCoord;
+    public Drawable FavPoints;
 }

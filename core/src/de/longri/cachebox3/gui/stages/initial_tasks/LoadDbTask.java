@@ -46,26 +46,45 @@ public class LoadDbTask extends AbstractInitTask {
                 // initial DB
                 Database.Data = new Database(Database.DatabaseType.CacheBox3);
 
-                Action_Show_SelectDB_Dialog selectDbDialog = new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.FORCE_SHOW);
+                final Action_Show_SelectDB_Dialog selectDbDialog = new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.FORCE_SHOW);
 
                 // search number of DB3 files
-                FileList fileList = null;
-                try {
-                    fileList = new FileList(CB.WorkPath, "DB3");
-                } catch (Exception ex) {
-                    log.error("search number of DB3 files", ex);
-                }
+                final FileList fileList  = new FileList(CB.WorkPath, "DB3");
+
                 if ((fileList.size > 1) && Config.MultiDBAsk.getValue()) {
                     selectDbDialog.execute();
-                    //TODO wait for return;
                 } else {
-                    if (fileList.size == 0) {
-                        Config.DatabaseName.setValue("cachebox.db3");
-                    } else {
-                        Config.DatabaseName.setValue(Utils.GetFileName(fileList.get(0).getName()));
-                    }
-                    EventHandler.fire(new IncrementProgressEvent(10,"load db"));
-                    selectDbDialog.loadSelectedDB();
+
+
+                    CB.postAsync(new Runnable() {
+                        @Override
+                        public void run() {
+                            //wait for initial viewmanager
+
+                            while (CB.viewmanager==null){
+                                try {
+                                    Thread.sleep(20);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            Gdx.app.postRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (fileList.size == 0) {
+                                        Config.DatabaseName.setValue("cachebox.db3");
+                                    } else {
+                                        Config.DatabaseName.setValue(Utils.GetFileName(fileList.get(0).getName()));
+                                    }
+                                    EventHandler.fire(new IncrementProgressEvent(10,"load db"));
+                                    selectDbDialog.loadSelectedDB();
+                                }
+                            });
+                        }
+                    });
+
+
                 }
             }
         });

@@ -358,7 +358,7 @@ public class FilterProperties {
                 andParts.add("Rating <= " + String.valueOf((int) (MaxRating.get() / 2f * 100)));
 
             if (MinFavPoints.get() >= 0) andParts.add("FavPoints >= " + String.valueOf(MinFavPoints.get()));
-            if (MaxFavPoints.get() >= 0) andParts.add("FavPoints <= " + String.valueOf(MinFavPoints.get()));
+            if (MaxFavPoints.get() >= 0) andParts.add("FavPoints <= " + String.valueOf(MaxFavPoints.get()));
 
 
             String csvTypes = "";

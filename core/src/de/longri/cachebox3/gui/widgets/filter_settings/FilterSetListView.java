@@ -16,16 +16,20 @@
 package de.longri.cachebox3.gui.widgets.filter_settings;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.activities.EditFilterSettings;
@@ -36,6 +40,7 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.IntProperty;
 import de.longri.cachebox3.types.Property;
 import org.slf4j.Logger;
@@ -172,20 +177,25 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
 
         final AdjustableStarListViewItem minDificulty = new AdjustableStarListViewItem(listViewItems.size + 1,
                 filterSettings.filterProperties.MinDifficulty, Translation.get("minDifficulty"), STAR);
-        final AdjustableStarListViewItem maxDificulty = new AdjustableStarListViewItem(listViewItems.size + 1,
+        final AdjustableStarListViewItem maxDificulty = new AdjustableStarListViewItem(listViewItems.size + 2,
                 filterSettings.filterProperties.MaxDifficulty, Translation.get("maxDifficulty"), STAR);
-        final AdjustableStarListViewItem minTerrain = new AdjustableStarListViewItem(listViewItems.size + 1,
+        final AdjustableStarListViewItem minTerrain = new AdjustableStarListViewItem(listViewItems.size + 3,
                 filterSettings.filterProperties.MinTerrain, Translation.get("minTerrain"), STAR);
-        final AdjustableStarListViewItem maxTerrain = new AdjustableStarListViewItem(listViewItems.size + 1,
+        final AdjustableStarListViewItem maxTerrain = new AdjustableStarListViewItem(listViewItems.size + 4,
                 filterSettings.filterProperties.MaxTerrain, Translation.get("maxTerrain"), STAR);
-        final AdjustableStarListViewItem minContainerSize = new AdjustableStarListViewItem(listViewItems.size + 1,
+        final AdjustableStarListViewItem minContainerSize = new AdjustableStarListViewItem(listViewItems.size + 5,
                 filterSettings.filterProperties.MinContainerSize, Translation.get("minContainerSize"), SIZE);
-        final AdjustableStarListViewItem maxContainerSize = new AdjustableStarListViewItem(listViewItems.size + 1,
+        final AdjustableStarListViewItem maxContainerSize = new AdjustableStarListViewItem(listViewItems.size + 6,
                 filterSettings.filterProperties.MaxContainerSize, Translation.get("maxContainerSize"), SIZE);
-        final AdjustableStarListViewItem minRating = new AdjustableStarListViewItem(listViewItems.size + 1,
+        final AdjustableStarListViewItem minRating = new AdjustableStarListViewItem(listViewItems.size + 7,
                 filterSettings.filterProperties.MinRating, Translation.get("minRating"), STAR);
-        final AdjustableStarListViewItem maxRating = new AdjustableStarListViewItem(listViewItems.size + 1,
+        final AdjustableStarListViewItem maxRating = new AdjustableStarListViewItem(listViewItems.size + 8,
                 filterSettings.filterProperties.MaxRating, Translation.get("maxRating"), STAR);
+
+        final AdjustableFavPointListViewItem minFav = new AdjustableFavPointListViewItem(listViewItems.size + 9,
+                filterSettings.filterProperties.MinFavPoints, Translation.get("minFavPoints"));
+        final AdjustableFavPointListViewItem maxFav = new AdjustableFavPointListViewItem(listViewItems.size + 10,
+                filterSettings.filterProperties.MaxFavPoints, Translation.get("maxFavPoints"));
 
 
         ClickListener listener = new ClickListener() {
@@ -200,6 +210,8 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 maxContainerSize.setVisible(visible);
                 minRating.setVisible(visible);
                 maxRating.setVisible(visible);
+                minFav.setVisible(visible);
+                maxFav.setVisible(visible);
 
                 setListView.invalidate();
                 setListView.layout(true);
@@ -215,6 +227,8 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         listViewItems.add(maxContainerSize);
         listViewItems.add(minRating);
         listViewItems.add(maxRating);
+        listViewItems.add(minFav);
+        listViewItems.add(maxFav);
     }
 
     private void addCachTypeItems() {
@@ -390,6 +404,177 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
             });
         }
 
+
+        @Override
+        public void dispose() {
+
+        }
+    }
+
+    class AdjustableFavPointListViewItem extends ListViewItem {
+
+        final IntProperty property;
+        final CharSequence name;
+        final VisLabel valueLabel;
+
+        final int minValue = -1;
+
+
+        public AdjustableFavPointListViewItem(int listIndex, final IntProperty property, final CharSequence name) {
+            super(listIndex);
+            this.property = property;
+            this.name = name;
+            valueLabel = new VisLabel(Integer.toString(property.get()));
+            valueLabel.setAlignment(Align.center);
+            this.setVisible(false);
+
+
+            property.setChangeListener(new Property.PropertyChangedListener() {
+                @Override
+                public void propertyChanged() {
+                    log.debug("Property {} changed to {}", name, property.get());
+
+                    //property changed, so set name to "?"
+                    filterSettings.filterProperties.setName("?");
+                }
+            });
+
+
+            // ListViewItem catch the ClickEvent from Button/Label
+            // So we reroute the event to the Button!
+            this.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (event.getTarget() instanceof VisTextButton
+                            || event.getTarget().getParent() instanceof VisTextButton) {
+
+                        Array<EventListener> listeners = event.getTarget() instanceof VisTextButton ?
+                                event.getTarget().getListeners() : event.getTarget().getParent().getListeners();
+                        int n = listeners.size;
+                        while (n-- > 0) {
+                            EventListener listener = listeners.get(n);
+                            if (listener instanceof ClickListener) {
+                                ((ClickListener) listener).clicked(event, x, y);
+                            }
+                        }
+                    }
+                }
+            });
+
+
+            creatLayout();
+            setValue(property.get(), true);
+        }
+
+        VisTextButton minusBtn2;
+        VisTextButton plusBtn2;
+
+
+        private void creatLayout() {
+            VisTextButton minusBtn = new VisTextButton("-") {
+                @Override
+                public float getPrefWidth() {
+                    return this.getPrefHeight();
+                }
+            };
+            VisTextButton plusBtn = new VisTextButton("+") {
+                @Override
+                public float getPrefWidth() {
+                    return this.getPrefHeight();
+                }
+            };
+            minusBtn2 = new VisTextButton("--") {
+                @Override
+                public float getPrefWidth() {
+                    if (this.isVisible())
+                        return this.getPrefHeight();
+                    return 0;
+                }
+            };
+            plusBtn2 = new VisTextButton("++") {
+                @Override
+                public float getPrefWidth() {
+                    if (this.isVisible())
+                        return this.getPrefHeight();
+                    return 0;
+                }
+            };
+
+            plusBtn.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    int newValue = property.get() + 1;
+                    setValue(newValue);
+                }
+            });
+
+            minusBtn.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    int newValue = property.get() - 1;
+                    if (newValue < minValue) newValue = minValue;
+                    setValue(newValue);
+                }
+            });
+
+            plusBtn2.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    int newValue = property.get() + 10;
+                    setValue(newValue);
+                }
+            });
+
+            minusBtn2.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    int newValue = property.get() - 10;
+                    if (newValue < minValue) newValue = minValue;
+                    setValue(newValue);
+                }
+            });
+
+            VisLabel titleLabel = new VisLabel(name);
+            titleLabel.setAlignment(Align.center);
+            this.add(titleLabel).left().expandX().fillX();
+            this.row();
+
+            VisTable line = new VisTable();
+            Image faveIcon = new Image(style.FavPoints);
+            line.add(minusBtn2).left().padRight(CB.scaledSizes.MARGIN);
+            line.add(minusBtn).left();
+            line.add(faveIcon).left().padLeft(CB.scaledSizes.MARGINx2);
+            line.add(valueLabel).expandX().fillX();
+            line.add(plusBtn).right();
+            line.add(plusBtn2).right().padLeft(CB.scaledSizes.MARGIN);
+            this.add(line).left().expandX().fillX();
+        }
+
+        public void setValue(int value) {
+            setValue(value, false);
+        }
+
+        private void setValue(final int value, final boolean force) {
+            CB.postAsync(new Runnable() {
+                @Override
+                public void run() {
+                    if (force || AdjustableFavPointListViewItem.this.property.get() != value) {
+                        if (value == -1) {
+                            valueLabel.setText(Translation.get("DoesntMatter"));
+                        } else {
+                            valueLabel.setText(Integer.toString(value));
+                        }
+
+                        if (value < 0) {
+                            minusBtn2.setVisible(false);
+                            plusBtn2.setVisible(false);
+                        } else {
+                            minusBtn2.setVisible(true);
+                            plusBtn2.setVisible(true);
+                        }
+
+                        AdjustableFavPointListViewItem.this.property.set(value);
+                        AdjustableFavPointListViewItem.this.invalidateHierarchy();
+                    }
+                }
+            });
+        }
 
         @Override
         public void dispose() {

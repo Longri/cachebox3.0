@@ -896,6 +896,10 @@
       "path": "svg/favpoint.svg",
       "scale": 0.2
     },
+    "favpointFilter": {
+      "path": "svg/favpoint.svg",
+      "scale": 0.43
+    },
     "fieldnoteListIcon": {
       "path": "svg/fieldnoteListIcon.svg",
       "scale": 0.18
@@ -2997,7 +3001,9 @@
       "CheckNo": "check_off",
       "CheckOff": "check_disabled",
       "Check": "check_on",
-      "Available": "tempDisabled"
+      "Available": "tempDisabled",
+      "finds": "found",
+      "FavPoints": "favpointFilter"
     }
   }
 }
