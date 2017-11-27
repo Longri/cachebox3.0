@@ -232,6 +232,9 @@ public enum CacheTypes implements SelectBoxItem {
             case Giga:
                 drawable = style.giga;
                 break;
+            case LabCache:
+                drawable = style.labCache;
+                break;
             default:
                 drawable = null;
         }
@@ -332,5 +335,9 @@ public enum CacheTypes implements SelectBoxItem {
 
     public static CacheTypes get(int index) {
         return CacheTypes.values()[index];
+    }
+
+    public boolean isCache() {
+        return isCache;
     }
 }

@@ -40,10 +40,7 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.BooleanProperty;
-import de.longri.cachebox3.types.CacheSizes;
-import de.longri.cachebox3.types.IntProperty;
-import de.longri.cachebox3.types.Property;
+import de.longri.cachebox3.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -201,7 +198,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
 
         ClickListener listener = new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                boolean visible = !sectionVisible.get();
+                final boolean visible = !sectionVisible.get();
                 sectionVisible.set(visible);
                 minDificulty.setVisible(visible);
                 maxDificulty.setVisible(visible);
@@ -233,11 +230,35 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
     }
 
     private void addCachTypeItems() {
-        ClickListener listener = new ClickListener() {
+        final AtomicBoolean sectionVisible = new AtomicBoolean(false);
+        final Array<BooleanPropertyListView> itemList = new Array<>();
+        final int idx = listViewItems.size + 1;
 
+        for (int i = 0, n = filterSettings.filterProperties.cacheTypes.length; i < n; i++) {
+            CacheTypes type = CacheTypes.get(i);
+            if(type.isCache())
+            itemList.add(new BooleanPropertyListView(idx + i,
+                    filterSettings.filterProperties.cacheTypes[i], type.getDrawable(), type.getName()));
+        }
+
+        ClickListener listener = new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                final boolean visible = !sectionVisible.get();
+                sectionVisible.set(visible);
+                int n = itemList.size;
+                while (n-- > 0) {
+                    itemList.get(n).setVisible(visible);
+                }
+
+                setListView.invalidate();
+                setListView.layout(true);
+            }
         };
 
         listViewItems.add(new ButtonListViewItem(listViewItems.size, Translation.get("CacheTypes"), listener));
+        for(int i=0,n=itemList.size;i<n;i++){
+            listViewItems.add(itemList.get(i));
+        }
     }
 
     private void addAttributeItems() {
@@ -634,9 +655,9 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
             CB.postOnMainThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(property.get()){
+                    if (property.get()) {
                         checkImage.setDrawable(style.Check);
-                    }else{
+                    } else {
                         checkImage.setDrawable(style.CheckOff);
                     }
                 }

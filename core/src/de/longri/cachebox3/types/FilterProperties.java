@@ -60,7 +60,7 @@ public class FilterProperties {
 
     public boolean isHistory;
 
-    final BooleanProperty[] cacheTypes = new BooleanProperty[CacheTypes.values().length];
+    public final BooleanProperty[] cacheTypes = new BooleanProperty[CacheTypes.values().length];
 
     final int[] attributes = new int[Attributes.values().length];
 
@@ -488,7 +488,7 @@ public class FilterProperties {
         for (int i = 0; i < cacheTypes.length; i++) {
             if (filter.cacheTypes.length <= i)
                 break;
-            if (filter.cacheTypes[i] != this.cacheTypes[i])
+            if (filter.cacheTypes[i].get() != this.cacheTypes[i].get())
                 return false; // nicht gleich!!!
         }
 
@@ -609,7 +609,12 @@ public class FilterProperties {
         this.hasCorrectedCoordinates.set(properties.hasCorrectedCoordinates.get());
         isHistory = properties.isHistory;
 
-        System.arraycopy(properties.cacheTypes, 0, cacheTypes, 0, cacheTypes.length);
+        int n= cacheTypes.length;
+        while (n-->0){
+            cacheTypes[n].set(properties.cacheTypes[n].get());
+        }
+
+
         System.arraycopy(properties.attributes, 0, attributes, 0, attributes.length);
 
         filterName = properties.filterName;
