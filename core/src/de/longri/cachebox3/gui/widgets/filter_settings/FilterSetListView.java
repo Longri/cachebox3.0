@@ -280,7 +280,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
 
         final AttributesStyle attStyle = VisUI.getSkin().get("CompassView", AttributesStyle.class);
 
-        for (int i = 0, n = filterSettings.filterProperties.attributes.length; i < n; i++) {
+        for (int i = 1, n = filterSettings.filterProperties.attributes.length; i < n; i++) {
             Attributes attribute = Attributes.values()[i];
             itemList.add(new IntPropertyListView(idx + i,
                     filterSettings.filterProperties.attributes[i], attribute.getDrawable(attStyle),
@@ -321,8 +321,25 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
             this.clickListener = clickListener;
             CharSequenceButton btn = new CharSequenceButton(text);
             btn.getLabel().setWrap(true);
+
+            // add own clicklistener for detect Click and scroll this Item to top of ListView
+            this.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    final float scrollPos = setListView.getScrollPos();
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            log.debug("Scroll to Pos {}", scrollPos);
+                            setListView.setScrollPos(scrollPos, false);
+                        }
+                    });
+                }
+            });
+
             this.addListener(clickListener);
             this.add(btn).expand().fill();
+
+
         }
 
         @Override

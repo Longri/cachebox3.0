@@ -717,7 +717,14 @@ public class ListView extends WidgetGroup {
     }
 
     public void setScrollPos(float scrollPos) {
-        if (scrollPane != null) scrollPane.setScrollY(scrollPos);
+        this.setScrollPos(scrollPos, true);
+    }
+
+    public void setScrollPos(float scrollPos, boolean withAnimation) {
+        if (scrollPane != null) {
+            scrollPane.setScrollY(scrollPos);
+            if (!withAnimation) scrollPane.updateVisualScroll();
+        }
         CB.requestRendering();
     }
 

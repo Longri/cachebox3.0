@@ -177,8 +177,12 @@ public class EditFilterSettings extends ActivityBase {
 
         tglTbl.add(tglBtnPreset).expandX().fillX();
         tglTbl.add(tglBtnSet).expandX().fillX();
-        tglTbl.add(tglBtnCategory).expandX().fillX();
-        tglTbl.add(tglBtnText).expandX().fillX();
+
+        //ISSUE (#167 implement Filter for Category)
+//        tglTbl.add(tglBtnCategory).expandX().fillX();
+
+        //ISSUE (#168 implement Filter for Text(CacheName/GcCode/OwnerName))
+//        tglTbl.add(tglBtnText).expandX().fillX();
 
         this.add(tglTbl).width(new Value.Fixed(Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2));
     }
