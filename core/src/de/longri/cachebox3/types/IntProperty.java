@@ -38,4 +38,8 @@ public class IntProperty extends Property<Integer> {
     public String toString() {
         return value.toString();
     }
+
+    public int getInt() {
+        return value.intValue();
+    }
 }

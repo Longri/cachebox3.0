@@ -302,34 +302,34 @@ public class FilterProperties {
             short bitstoreMust = 0;
             short bitstoreMustNot = 0;
 
-            if (Finds.get() == 1)
+            if (Finds.getInt() == 1)
                 bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, true, bitstoreMust);//andParts.add("Found=1");
-            if (Finds.get() == -1)
+            if (Finds.getInt() == -1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, true, bitstoreMustNot);//andParts.add("(Found=0 or Found is null)");
 
-            if (Favorites.get() == 1)
+            if (Favorites.getInt() == 1)
                 bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, true, bitstoreMust);
-            if (Favorites.get() == -1)
+            if (Favorites.getInt() == -1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, true, bitstoreMustNot);
 
-            if (NotAvailable.get() == -1)
+            if (NotAvailable.getInt() == -1)
                 bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, true, bitstoreMust);
-            if (NotAvailable.get() == 1)
+            if (NotAvailable.getInt() == 1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, true, bitstoreMustNot);
 
-            if (Archived.get() == 1)
+            if (Archived.getInt() == 1)
                 bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_ARCHIVED, true, bitstoreMust);
-            if (Archived.get() == -1)
+            if (Archived.getInt() == -1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_ARCHIVED, true, bitstoreMustNot);
 
-            if (ListingChanged.get() == 1)
+            if (ListingChanged.getInt() == 1)
                 bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_LISTING_CHANGED, true, bitstoreMust);
-            if (ListingChanged.get() == -1)
+            if (ListingChanged.getInt() == -1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_LISTING_CHANGED, true, bitstoreMustNot);
 
-            if (HasUserData.get() == 1)
+            if (HasUserData.getInt() == 1)
                 bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, true, bitstoreMust);
-            if (HasUserData.get() == -1)
+            if (HasUserData.getInt() == -1)
                 bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, true, bitstoreMustNot);
 
             if (bitstoreMust > 0)
@@ -338,36 +338,36 @@ public class FilterProperties {
                 andParts.add("~BooleanStore & " + bitstoreMustNot + "= " + bitstoreMustNot);
 
 
-            if (Own.get() == 1)
+            if (Own.getInt() == 1)
                 andParts.add("(Owner='" + userName + "')");
-            if (Own.get() == -1)
+            if (Own.getInt() == -1)
                 andParts.add("(not Owner='" + userName + "')");
 
-            if (ContainsTravelbugs.get() == 1)
+            if (ContainsTravelbugs.getInt() == 1)
                 andParts.add("NumTravelbugs > 0");
-            if (ContainsTravelbugs.get() == -1)
+            if (ContainsTravelbugs.getInt() == -1)
                 andParts.add("NumTravelbugs = 0");
 
 
-            if (WithManualWaypoint.get() == 1)
+            if (WithManualWaypoint.getInt() == 1)
                 andParts.add(" ID in (select CacheId FROM Waypoints WHERE UserWaypoint = 1)");
-            if (WithManualWaypoint.get() == -1)
+            if (WithManualWaypoint.getInt() == -1)
                 andParts.add(" NOT ID in (select CacheId FROM Waypoints WHERE UserWaypoint = 1)");
 
 
-            if (MinDifficulty.get() / 2f > 1) andParts.add("Difficulty >= " + String.valueOf(MinDifficulty.get()));
-            if (MaxDifficulty.get() / 2f < 5) andParts.add("Difficulty <= " + String.valueOf(MaxDifficulty.get()));
-            if (MinTerrain.get() / 2f > 1) andParts.add("Terrain >= " + String.valueOf(MinTerrain.get()));
-            if (MaxTerrain.get() / 2f < 5) andParts.add("Terrain <= " + String.valueOf(MaxTerrain.get()));
-            if (MinContainerSize.get() > 0) andParts.add("Size >= " + String.valueOf(MinContainerSize.get()));
-            if (MaxContainerSize.get() < 6) andParts.add("Size <= " + String.valueOf(MaxContainerSize.get()));
-            if (MinRating.get() / 2f > 0)
-                andParts.add("Rating >= " + String.valueOf((int) (MinRating.get() / 2f * 100)));
-            if (MaxRating.get() / 2f < 5)
-                andParts.add("Rating <= " + String.valueOf((int) (MaxRating.get() / 2f * 100)));
+            if (MinDifficulty.getInt() / 2f > 1) andParts.add("Difficulty >= " + String.valueOf(MinDifficulty.getInt()));
+            if (MaxDifficulty.getInt() / 2f < 5) andParts.add("Difficulty <= " + String.valueOf(MaxDifficulty.getInt()));
+            if (MinTerrain.getInt() / 2f > 1) andParts.add("Terrain >= " + String.valueOf(MinTerrain.getInt()));
+            if (MaxTerrain.getInt() / 2f < 5) andParts.add("Terrain <= " + String.valueOf(MaxTerrain.getInt()));
+            if (MinContainerSize.getInt() > 0) andParts.add("Size >= " + String.valueOf(MinContainerSize.getInt()));
+            if (MaxContainerSize.getInt() < 6) andParts.add("Size <= " + String.valueOf(MaxContainerSize.getInt()));
+            if (MinRating.getInt() / 2f > 0)
+                andParts.add("Rating >= " + String.valueOf((int) (MinRating.getInt() / 2f * 100)));
+            if (MaxRating.getInt() / 2f < 5)
+                andParts.add("Rating <= " + String.valueOf((int) (MaxRating.getInt() / 2f * 100)));
 
-            if (MinFavPoints.get() >= 0) andParts.add("FavPoints >= " + String.valueOf(MinFavPoints.get()));
-            if (MaxFavPoints.get() >= 0) andParts.add("FavPoints <= " + String.valueOf(MaxFavPoints.get()));
+            if (MinFavPoints.getInt() >= 0) andParts.add("FavPoints >= " + String.valueOf(MinFavPoints.getInt()));
+            if (MaxFavPoints.getInt() >= 0) andParts.add("FavPoints <= " + String.valueOf(MaxFavPoints.getInt()));
 
 
             String csvTypes = "";
@@ -387,17 +387,17 @@ public class FilterProperties {
 
             boolean mustJoin = false;
             for (int i = 1; i < attributes.length; i++) {
-                if (attributes[i].get() != 0) {
+                if (attributes[i].getInt() != 0) {
                     mustJoin = true;
                     if (i < 62) {
                         long shift = DLong.UL1 << (i);
-                        if (attributes[i].get() == 1)
+                        if (attributes[i].getInt() == 1)
                             andParts.add("(attr.AttributesPositive & " + shift + ") > 0");
                         else
                             andParts.add("(attr.AttributesNegative &  " + shift + ") > 0");
                     } else {
                         long shift = DLong.UL1 << (i - 61);
-                        if (attributes[i].get() == 1)
+                        if (attributes[i].getInt() == 1)
                             andParts.add("(attr.AttributesPositiveHigh &  " + shift + ") > 0");
                         else
                             andParts.add("(attr.AttributesNegativeHigh & " + shift + ") > 0");
@@ -479,25 +479,25 @@ public class FilterProperties {
         if (!HasUserData.isEquals(filter.HasUserData))
             return false;
 
-        if (MinDifficulty.get() != filter.MinDifficulty.get())
+        if (MinDifficulty.getInt() != filter.MinDifficulty.getInt())
             return false;
-        if (MaxDifficulty.get() != filter.MaxDifficulty.get())
+        if (MaxDifficulty.getInt() != filter.MaxDifficulty.getInt())
             return false;
-        if (MinTerrain.get() != filter.MinTerrain.get())
+        if (MinTerrain.getInt() != filter.MinTerrain.getInt())
             return false;
-        if (MaxTerrain.get() != filter.MaxTerrain.get())
+        if (MaxTerrain.getInt() != filter.MaxTerrain.getInt())
             return false;
-        if (MinContainerSize.get() != filter.MinContainerSize.get())
+        if (MinContainerSize.getInt() != filter.MinContainerSize.getInt())
             return false;
-        if (MaxContainerSize.get() != filter.MaxContainerSize.get())
+        if (MaxContainerSize.getInt() != filter.MaxContainerSize.getInt())
             return false;
-        if (MinRating.get() != filter.MinRating.get())
+        if (MinRating.getInt() != filter.MinRating.getInt())
             return false;
-        if (MaxRating.get() != filter.MaxRating.get())
+        if (MaxRating.getInt() != filter.MaxRating.getInt())
             return false;
-        if (MinFavPoints.get() != filter.MinFavPoints.get())
+        if (MinFavPoints.getInt() != filter.MinFavPoints.getInt())
             return false;
-        if (MaxFavPoints.get() != filter.MaxFavPoints.get())
+        if (MaxFavPoints.getInt() != filter.MaxFavPoints.getInt())
             return false;
 
         if (!hasCorrectedCoordinates.isEquals(filter.hasCorrectedCoordinates))
@@ -513,7 +513,7 @@ public class FilterProperties {
         for (int i = 1; i < attributes.length; i++) {
             if (filter.attributes.length <= i)
                 break;
-            if (filter.attributes[i].get() != this.attributes[i].get())
+            if (filter.attributes[i].getInt() != this.attributes[i].getInt())
                 return false; // nicht gleich!!!
         }
 
@@ -561,16 +561,16 @@ public class FilterProperties {
         if (chkFilterBoolean(this.hasCorrectedCoordinates, abstractCache.hasCorrectedCoordinates()))
             return false;
 
-        if (this.MinDifficulty.get() / 2f > abstractCache.getDifficulty()) return false;
-        if (this.MaxDifficulty.get() / 2f < abstractCache.getDifficulty()) return false;
-        if (this.MinTerrain.get() / 2f > abstractCache.getTerrain()) return false;
-        if (this.MaxTerrain.get() / 2f < abstractCache.getTerrain()) return false;
-        if (this.MinContainerSize.get() > abstractCache.getSize().ordinal()) return false;
-        if (this.MaxContainerSize.get() < abstractCache.getSize().ordinal()) return false;
-        if (this.MinRating.get() / 2f > abstractCache.getRating()) return false;
-        if (this.MaxRating.get() / 2f < abstractCache.getRating()) return false;
-        if (this.MinFavPoints.get() >= 0 && this.MinFavPoints.get() > abstractCache.getFavoritePoints()) return false;
-        if (this.MaxFavPoints.get() >= 0 && this.MaxFavPoints.get() < abstractCache.getFavoritePoints()) return false;
+        if (this.MinDifficulty.getInt() / 2f > abstractCache.getDifficulty()) return false;
+        if (this.MaxDifficulty.getInt() / 2f < abstractCache.getDifficulty()) return false;
+        if (this.MinTerrain.getInt() / 2f > abstractCache.getTerrain()) return false;
+        if (this.MaxTerrain.getInt() / 2f < abstractCache.getTerrain()) return false;
+        if (this.MinContainerSize.getInt() > abstractCache.getSize().ordinal()) return false;
+        if (this.MaxContainerSize.getInt() < abstractCache.getSize().ordinal()) return false;
+        if (this.MinRating.getInt() / 2f > abstractCache.getRating()) return false;
+        if (this.MaxRating.getInt() / 2f < abstractCache.getRating()) return false;
+        if (this.MinFavPoints.getInt() >= 0 && this.MinFavPoints.getInt() > abstractCache.getFavoritePoints()) return false;
+        if (this.MaxFavPoints.getInt() >= 0 && this.MaxFavPoints.getInt() < abstractCache.getFavoritePoints()) return false;
 
 
         if (!this.cacheTypes[abstractCache.getType().ordinal()].get())
@@ -591,8 +591,8 @@ public class FilterProperties {
         //  0 = Cache.{attribute} == False|True
         //  1 = Cache.{attribute} == True
 
-        if (propertyValue.get() != 0) {
-            if (propertyValue.get() != (found ? 1 : -1))
+        if (propertyValue.getInt() != 0) {
+            if (propertyValue.getInt() != (found ? 1 : -1))
                 return true;
         }
         return false;
@@ -604,29 +604,29 @@ public class FilterProperties {
 
     public void set(FilterProperties properties) {
         this.name = properties.name;
-        Finds.set(properties.Finds.get());
-        NotAvailable.set(properties.NotAvailable.get());
-        Archived.set(properties.Archived.get());
-        Own.set(properties.Own.get());
-        ContainsTravelbugs.set(properties.ContainsTravelbugs.get());
-        Favorites.set(properties.Favorites.get());
-        ListingChanged.set(properties.ListingChanged.get());
-        WithManualWaypoint.set(properties.WithManualWaypoint.get());
-        HasUserData.set(properties.HasUserData.get());
+        Finds.set(properties.Finds.getInt());
+        NotAvailable.set(properties.NotAvailable.getInt());
+        Archived.set(properties.Archived.getInt());
+        Own.set(properties.Own.getInt());
+        ContainsTravelbugs.set(properties.ContainsTravelbugs.getInt());
+        Favorites.set(properties.Favorites.getInt());
+        ListingChanged.set(properties.ListingChanged.getInt());
+        WithManualWaypoint.set(properties.WithManualWaypoint.getInt());
+        HasUserData.set(properties.HasUserData.getInt());
 
-        MinDifficulty.set(properties.MinDifficulty.get());
-        MaxDifficulty.set(properties.MaxDifficulty.get());
-        MinTerrain.set(properties.MinTerrain.get());
-        MaxTerrain.set(properties.MaxTerrain.get());
-        MinContainerSize.set(properties.MinContainerSize.get());
-        MaxContainerSize.set(properties.MaxContainerSize.get());
-        MinRating.set(properties.MinRating.get());
-        MaxRating.set(properties.MaxRating.get());
+        MinDifficulty.set(properties.MinDifficulty.getInt());
+        MaxDifficulty.set(properties.MaxDifficulty.getInt());
+        MinTerrain.set(properties.MinTerrain.getInt());
+        MaxTerrain.set(properties.MaxTerrain.getInt());
+        MinContainerSize.set(properties.MinContainerSize.getInt());
+        MaxContainerSize.set(properties.MaxContainerSize.getInt());
+        MinRating.set(properties.MinRating.getInt());
+        MaxRating.set(properties.MaxRating.getInt());
 
-        MinFavPoints.set(properties.MinFavPoints.get());
-        MaxFavPoints.set(properties.MaxFavPoints.get());
+        MinFavPoints.set(properties.MinFavPoints.getInt());
+        MaxFavPoints.set(properties.MaxFavPoints.getInt());
 
-        this.hasCorrectedCoordinates.set(properties.hasCorrectedCoordinates.get());
+        this.hasCorrectedCoordinates.set(properties.hasCorrectedCoordinates.getInt());
         isHistory = properties.isHistory;
 
         int n = cacheTypes.length;
@@ -636,7 +636,7 @@ public class FilterProperties {
 
         n = attributes.length;
         while (n-- > 0) {
-            attributes[n].set(properties.attributes[n].get());
+            attributes[n].set(properties.attributes[n].getInt());
         }
 
         filterName = properties.filterName;
@@ -687,16 +687,16 @@ public class FilterProperties {
                             + String.valueOf(ContainsTravelbugs) + SEPARATOR + String.valueOf(Favorites)
                             + SEPARATOR + String.valueOf(HasUserData) + SEPARATOR + String.valueOf(ListingChanged)
                             + SEPARATOR + String.valueOf(WithManualWaypoint) + SEPARATOR
-                            + String.valueOf(MinDifficulty.get() / 2F) + SEPARATOR
-                            + String.valueOf(MaxDifficulty.get() / 2F) + SEPARATOR
-                            + String.valueOf(MinTerrain.get() / 2F) + SEPARATOR
-                            + String.valueOf(MaxTerrain.get() / 2F) + SEPARATOR
-                            + String.valueOf((float) MinContainerSize.get()) + SEPARATOR
-                            + String.valueOf((float) MaxContainerSize.get()) + SEPARATOR
-                            + String.valueOf(MinRating.get() / 2F) + SEPARATOR
-                            + String.valueOf(MaxRating.get() / 2F) + SEPARATOR
-                            + String.valueOf(MinFavPoints.get()) + SEPARATOR
-                            + String.valueOf(MaxFavPoints.get()) + SEPARATOR
+                            + String.valueOf(MinDifficulty.getInt() / 2F) + SEPARATOR
+                            + String.valueOf(MaxDifficulty.getInt() / 2F) + SEPARATOR
+                            + String.valueOf(MinTerrain.getInt() / 2F) + SEPARATOR
+                            + String.valueOf(MaxTerrain.getInt() / 2F) + SEPARATOR
+                            + String.valueOf((float) MinContainerSize.getInt()) + SEPARATOR
+                            + String.valueOf((float) MaxContainerSize.getInt()) + SEPARATOR
+                            + String.valueOf(MinRating.getInt() / 2F) + SEPARATOR
+                            + String.valueOf(MaxRating.getInt() / 2F) + SEPARATOR
+                            + String.valueOf(MinFavPoints.getInt()) + SEPARATOR
+                            + String.valueOf(MaxFavPoints.getInt()) + SEPARATOR
                             + String.valueOf(this.hasCorrectedCoordinates));
 
             // Filter GCCode
@@ -714,7 +714,7 @@ public class FilterProperties {
             for (int i = 1; i < attributes.length; i++) {
                 if (tmp.length() > 0)
                     tmp += SEPARATOR;
-                tmp += String.valueOf(attributes[i].get());
+                tmp += String.valueOf(attributes[i].getInt());
             }
             json.writeValue("attributes", tmp);
 

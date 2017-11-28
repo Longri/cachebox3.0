@@ -51,7 +51,7 @@ public class AdjustableStarWidget extends Table {
         maxValue = type == Type.STAR ? 10 : 6;
         minValue = type == Type.STAR ? 0 : 0;
         step = type == Type.STAR ? 1 : 1;
-        starsWidget = type == Type.STAR ? new Stars(value.get()) : new CacheSizeWidget(value.get());
+        starsWidget = type == Type.STAR ? new Stars(value.getInt()) : new CacheSizeWidget(value.getInt());
         VisTextButton minusBtn = new VisTextButton("-") {
             @Override
             public float getPrefWidth() {
@@ -72,7 +72,7 @@ public class AdjustableStarWidget extends Table {
         VisTable line = new VisTable();
         line.add(starsWidget).left();
 
-        valueLabel = new VisLabel(Double.toString(value.get() / 2));
+        valueLabel = new VisLabel(Double.toString(value.getInt() / 2));
         if (type == Type.SIZE) {
             line.add((Actor) null).expandX().fillX();
             line.add(valueLabel).padRight(CB.scaledSizes.MARGINx4);
@@ -89,7 +89,7 @@ public class AdjustableStarWidget extends Table {
 
         plusBtn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                int newValue = value.get() + step;
+                int newValue = value.getInt() + step;
                 if (newValue > maxValue) newValue = minValue;
                 setValue(newValue);
             }
@@ -97,13 +97,13 @@ public class AdjustableStarWidget extends Table {
 
         minusBtn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                int newValue = value.get() - step;
+                int newValue = value.getInt() - step;
                 if (newValue < minValue) newValue = maxValue;
                 setValue(newValue);
             }
         });
 
-        setValue(valueProperty.get(), true);
+        setValue(valueProperty.getInt(), true);
     }
 
     public void setValue(int value) {
@@ -114,7 +114,7 @@ public class AdjustableStarWidget extends Table {
         CB.postAsync(new Runnable() {
             @Override
             public void run() {
-                if (force || AdjustableStarWidget.this.value.get() != value) {
+                if (force || AdjustableStarWidget.this.value.getInt() != value) {
 
                     if (type == Type.SIZE) {
                         valueLabel.setText(CacheSizes.parseInt(value).toString());
@@ -131,6 +131,6 @@ public class AdjustableStarWidget extends Table {
     }
 
     public int getValue() {
-        return this.value.get();
+        return this.value.getInt();
     }
 }

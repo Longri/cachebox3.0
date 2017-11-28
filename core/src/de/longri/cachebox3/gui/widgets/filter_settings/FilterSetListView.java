@@ -371,7 +371,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
             this.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    int value = property.get();
+                    int value = property.getInt();
 
                     if (value == -1)
                         value = 0;
@@ -386,7 +386,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
             property.setChangeListener(new Property.PropertyChangedListener() {
                 @Override
                 public void propertyChanged() {
-                    log.debug("Property {} changed to {}", name, property.get());
+                    log.debug("Property {} changed to {}", name, property.getInt());
 
                     //property changed, so set name to "?"
                     filterSettings.filterProperties.setName("?");
@@ -399,7 +399,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
             CB.postOnMainThread(new Runnable() {
                 @Override
                 public void run() {
-                    switch (property.get()) {
+                    switch (property.getInt()) {
                         case -1:
                             checkImage.setDrawable(style.CheckOff);
                             break;
