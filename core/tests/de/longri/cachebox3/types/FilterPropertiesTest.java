@@ -35,7 +35,7 @@ class FilterPropertiesTest {
         TestUtils.initialGdx();
         testDb = new Database(Database.DatabaseType.CacheBox3);
         try {
-            testDb.startUp(TestUtils.getResourceFileHandle("testsResources/cacheboxTestDB.db3"));
+            testDb.startUp(TestUtils.getResourceFileHandle("testsResources/Database/cacheboxFilterTestDB.db3"));
         } catch (SQLiteGdxException e) {
             e.printStackTrace();
         }
@@ -105,7 +105,7 @@ class FilterPropertiesTest {
                 FilterInstances.ALL.getJsonString(),
                 "FilterInstances.ALL 'All Caches' =>toString");
 
-        assertEquals("",
+        assertEquals("SELECT * FROM CacheCoreInfo",
                 FilterInstances.ALL.getSqlWhere("NAME"), "SqlWhere must Equals");
 
 
@@ -242,7 +242,7 @@ class FilterPropertiesTest {
                 FilterInstances.QUICK.getJsonString(),
                 "presets[2] 'Quick Cache' =>toString");
 
-        assertEquals("BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='NAME') and Difficulty <= 5 and Terrain <= 5 and Type in (0,3,4)",
+        assertEquals("SELECT * FROM CacheCoreInfo core WHERE BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='NAME') and Difficulty <= 5 and Terrain <= 5 and Type in (0,3,4)",
                 FilterInstances.QUICK.getSqlWhere("NAME"), "SqlWhere must Equals");
 
         assertFilteredReadedDB(FilterInstances.QUICK);
@@ -581,7 +581,7 @@ class FilterPropertiesTest {
                 "{\"name\":\"TOARCHIVE\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,-1,-1,0,-1,-1,-1,0,1.0,5.0,1.0,5.0,0.0,6.0,0.0,5.0,-1,-1,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
                 FilterInstances.TOARCHIVE.getJsonString(), "presets[7] 'prepare to archive' =>toString");
 
-        assertEquals("~BooleanStore & 788= 788 and (not Owner='NAME')",
+        assertEquals("SELECT * FROM CacheCoreInfo core WHERE ~BooleanStore & 788= 788 and (not Owner='NAME')",
                 FilterInstances.TOARCHIVE.getSqlWhere("NAME"), "SqlWhere must Equals");
 
         assertFilteredReadedDB(FilterInstances.TOARCHIVE);
@@ -719,6 +719,78 @@ class FilterPropertiesTest {
     }
 
     @Test
+    void checkAttributeFilter() {
+        FilterProperties attributeFilter = new FilterProperties("ALL");
+
+        attributeFilter.attributes[1].set(-1);
+        attributeFilter.attributes[3].set(1);
+
+        assertThat("default constructor => Finds", 0 == attributeFilter.Finds.get());
+        assertThat("default constructor => NotAvailable", 0 == attributeFilter.NotAvailable.get());
+        assertThat("default constructor => Archived", 0 == attributeFilter.Archived.get());
+        assertThat("default constructor => Own", 0 == attributeFilter.Own.get());
+        assertThat("default constructor => ContainsTravelbugs", 0 == attributeFilter.ContainsTravelbugs.get());
+        assertThat("default constructor => Favorites", 0 == attributeFilter.Favorites.get());
+        assertThat("default constructor => HasUserData", 0 == attributeFilter.HasUserData.get());
+        assertThat("default constructor => ListingChanged", 0 == attributeFilter.ListingChanged.get());
+        assertThat("default constructor => WithManualWaypoint", 0 == attributeFilter.WithManualWaypoint.get());
+        assertThat("default constructor => MinDifficulty", 1.0f == attributeFilter.MinDifficulty.get() / 2F);
+        assertThat("default constructor => MaxDifficulty", 5.0f == attributeFilter.MaxDifficulty.get() / 2F);
+        assertThat("default constructor => MinTerrain", 1.0f == attributeFilter.MinTerrain.get() / 2F);
+        assertThat("default constructor => MaxTerrain", 5.0f == attributeFilter.MaxTerrain.get() / 2F);
+        assertThat("default constructor => MinContainerSize", 0.0f == attributeFilter.MinContainerSize.get());
+        assertThat("default constructor => MaxContainerSize", 6.0f == attributeFilter.MaxContainerSize.get());
+        assertThat("default constructor => MinRating", 0.0f == attributeFilter.MinRating.get() / 2F);
+        assertThat("default constructor => MaxRating", 5.0f == attributeFilter.MaxRating.get() / 2F);
+        assertThat("default constructor => MinFavPoints", -1 == attributeFilter.MinFavPoints.get());
+        assertThat("default constructor => MinFavPoints", -1 == attributeFilter.MaxFavPoints.get());
+
+        // CacheTypes
+        assertThat("default constructor => cacheType.length", 23 == attributeFilter.cacheTypes.length);
+        assertThat("default constructor => cacheType[0]''?", attributeFilter.cacheTypes[0].get());
+        assertThat("default constructor => cacheType[1]''?", attributeFilter.cacheTypes[1].get());
+        assertThat("default constructor => cacheType[2]''?", attributeFilter.cacheTypes[2].get());
+        assertThat("default constructor => cacheType[3]''?", attributeFilter.cacheTypes[3].get());
+        assertThat("default constructor => cacheType[4]''?", attributeFilter.cacheTypes[4].get());
+        assertThat("default constructor => cacheType[5]''?", attributeFilter.cacheTypes[5].get());
+        assertThat("default constructor => cacheType[6]''?", attributeFilter.cacheTypes[6].get());
+        assertThat("default constructor => cacheType[7]''?", attributeFilter.cacheTypes[7].get());
+        assertThat("default constructor => cacheType[8]''?", attributeFilter.cacheTypes[8].get());
+        assertThat("default constructor => cacheType[9]''?", attributeFilter.cacheTypes[9].get());
+        assertThat("default constructor => cacheType[10]''?", attributeFilter.cacheTypes[10].get());
+        assertThat("default constructor => cacheType[11]'Munzee'", attributeFilter.cacheTypes[11].get());
+
+        // AttributesFilter
+        int AtributeLength = 68;
+        assertThat("default constructor => attributesFilter.length", AtributeLength == attributeFilter.attributes.length);
+
+        int[] attributesFilter = new int[]
+                {0, -1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+        for (int i = 0; i < AtributeLength; i++) {
+            assertThat("default constructor => attributesFilter[" + i + "]", attributesFilter[i] == attributeFilter.attributes[i].get());
+        }
+
+        assertThat("default constructor => GPXFilenameIds.size", 0 == attributeFilter.GPXFilenameIds.size);
+        assertThat("default constructor => Categories.size", 0 == attributeFilter.Categories.size);
+        assertThat("default constructor => filterName", "" == attributeFilter.filterName);
+        assertThat("default constructor => filterGcCode", "" == attributeFilter.filterGcCode);
+        assertThat("default constructor => filterOwner", "" == attributeFilter.filterOwner);
+
+
+        assertEquals(
+                "{\"name\":\"ALL\",\"types\":\"true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true\",\"caches\":\"0,0,0,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,6.0,0.0,5.0,-1,-1,0\",\"filtergc\":\"\",\"gpxfilenameids\":\"\",\"attributes\":\"-1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"filtername\":\"\",\"isHistory\":false,\"categories\":\"\",\"filterowner\":\"\"}",
+                attributeFilter.getJsonString(), "default constructor =>toString");
+
+        assertEquals("SELECT * FROM CacheCoreInfo core JOIN Attributes attr ON attr.Id = core.Id WHERE (attr.AttributesNegative &  2) > 0 and (attr.AttributesPositive & 8) > 0",
+                attributeFilter.getSqlWhere("NAME"), "SqlWhere must Equals");
+
+
+        assertFilteredReadedDB(attributeFilter);
+    }
+
+    @Test
     void chehkSqlWhere() {
 
         FilterProperties[] filters = new FilterProperties[]{FilterInstances.ACTIVE, FilterInstances.ALL,
@@ -728,16 +800,16 @@ class FilterPropertiesTest {
 
         String[] SqlStringList = new String[]
                 {
-                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User')",
-                        "",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty <= 4 and Terrain <= 4 and Size >= 2 and Type in (0)",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and Difficulty <= 6 and Terrain <= 6 and Size >= 1 and Type in (0,1,2,5,6,7,9,10,21)",
-                        "BooleanStore & 16= 16",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and Rating >= 350 and FavPoints >= 50",
-                        "BooleanStore & 512= 512",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty <= 5 and Terrain <= 5 and Type in (0,3,4)",
-                        "~BooleanStore & 788= 788 and (not Owner='User')",
-                        "BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and NumTravelbugs > 0 and Difficulty <= 6 and Terrain <= 6 and Type in (0,1,2,5,6,7,9,10,21)"
+                        "SELECT * FROM CacheCoreInfo core WHERE BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User')",
+                        "SELECT * FROM CacheCoreInfo",
+                        "SELECT * FROM CacheCoreInfo core WHERE BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty <= 4 and Terrain <= 4 and Size >= 2 and Type in (0)",
+                        "SELECT * FROM CacheCoreInfo core WHERE BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and Difficulty <= 6 and Terrain <= 6 and Size >= 1 and Type in (0,1,2,5,6,7,9,10,21)",
+                        "SELECT * FROM CacheCoreInfo core WHERE BooleanStore & 16= 16",
+                        "SELECT * FROM CacheCoreInfo core WHERE BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and Rating >= 350 and FavPoints >= 50",
+                        "SELECT * FROM CacheCoreInfo core WHERE BooleanStore & 512= 512",
+                        "SELECT * FROM CacheCoreInfo core WHERE BooleanStore & 8= 8 and ~BooleanStore & 36= 36 and (not Owner='User') and Difficulty <= 5 and Terrain <= 5 and Type in (0,3,4)",
+                        "SELECT * FROM CacheCoreInfo core WHERE ~BooleanStore & 788= 788 and (not Owner='User')",
+                        "SELECT * FROM CacheCoreInfo core WHERE BooleanStore & 8= 8 and ~BooleanStore & 4= 4 and NumTravelbugs > 0 and Difficulty <= 6 and Terrain <= 6 and Type in (0,1,2,5,6,7,9,10,21)"
                 };
 
         for (int i = 0; i < filters.length; i++) {

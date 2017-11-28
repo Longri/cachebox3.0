@@ -384,20 +384,23 @@ public class FilterProperties {
                 andParts.add("Type in (" + csvTypes + ")");
             }
 
+
+            boolean mustJoin = false;
             for (int i = 1; i < attributes.length; i++) {
                 if (attributes[i].get() != 0) {
+                    mustJoin = true;
                     if (i < 62) {
                         long shift = DLong.UL1 << (i);
                         if (attributes[i].get() == 1)
-                            andParts.add("(AttributesPositive & " + shift + ") > 0");
+                            andParts.add("(attr.AttributesPositive & " + shift + ") > 0");
                         else
-                            andParts.add("(AttributesNegative &  " + shift + ") > 0");
+                            andParts.add("(attr.AttributesNegative &  " + shift + ") > 0");
                     } else {
                         long shift = DLong.UL1 << (i - 61);
                         if (attributes[i].get() == 1)
-                            andParts.add("(AttributesPositiveHigh &  " + shift + ") > 0");
+                            andParts.add("(attr.AttributesPositiveHigh &  " + shift + ") > 0");
                         else
-                            andParts.add("(AttributesNegativeHigh & " + shift + ") > 0");
+                            andParts.add("(attr.AttributesNegativeHigh & " + shift + ") > 0");
                     }
                 }
             }
@@ -422,7 +425,18 @@ public class FilterProperties {
             if (!filterOwner.equals("")) {
                 andParts.add("( PlacedBy like '%" + filterOwner + "%' or Owner like '%" + filterOwner + "%' )");
             }
-            return join(" and ", andParts);
+
+            String statement;
+            if (mustJoin) {
+                statement = "SELECT * FROM CacheCoreInfo core JOIN Attributes attr ON attr.Id = core.Id WHERE " + join(" and ", andParts);
+            } else {
+                if(andParts.size()==0){
+                    statement = "SELECT * FROM CacheCoreInfo";
+                }else{
+                    statement = "SELECT * FROM CacheCoreInfo core WHERE " + join(" and ", andParts);
+                }
+            }
+            return statement;
         }
     }
 

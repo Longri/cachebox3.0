@@ -747,7 +747,10 @@ public class DraftsView extends AbstractView {
         // suche den Cache aus der DB.
         // Nicht aus der aktuellen Query, da dieser herausgefiltert sein könnte
         CacheList lCaches = new CacheList();
-        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, lCaches, "Id = " + aktDraft.CacheId, false, false);
+
+        String statement = "SELECT * FROM CacheCoreInfo core WHERE Id = " + aktDraft.CacheId;
+
+        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, lCaches, statement, false, false);
         if (lCaches.size > 0)
             tmpAbstractCache = lCaches.get(0);
         final AbstractCache abstractCache = tmpAbstractCache;
@@ -859,7 +862,8 @@ public class DraftsView extends AbstractView {
         // suche den Cache aus der DB.
         // Nicht aus der aktuellen Query, da dieser herausgefiltert sein könnte
         CacheList lCaches = new CacheList();
-        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, lCaches, "Id = " + aktDraft.CacheId, false, false);
+        String statement = "SELECT * FROM CacheCoreInfo core WHERE Id = " + aktDraft.CacheId;
+        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, lCaches, statement, false, false);
         AbstractCache tmpCache = null;
         if (lCaches.size > 0)
             tmpCache = lCaches.get(0);

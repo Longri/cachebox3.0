@@ -34,9 +34,11 @@ public class CacheList3DAO extends AbstractCacheListDAO {
     private final Logger log = LoggerFactory.getLogger(CacheList3DAO.class);
 
     @Override
-    public CacheList readCacheList(Database database, CacheList cacheList, String where, boolean fullDetails, boolean loadAllWaypoints) {
+    public CacheList readCacheList(Database database, CacheList cacheList, String statement, boolean fullDetails, boolean loadAllWaypoints) {
 
-        String statement = "SELECT * from CacheCoreInfo" + (where == null || where.isEmpty() ? "" : " WHERE " + where);
+        if (statement == null || statement.isEmpty()) {
+            statement = "SELECT * from CacheCoreInfo";
+        }
 
         if (cacheList == null) {
             cacheList = new CacheList();

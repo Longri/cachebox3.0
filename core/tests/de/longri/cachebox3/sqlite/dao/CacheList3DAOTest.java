@@ -99,8 +99,8 @@ class CacheList3DAOTest {
 
 
         // read Caches by Type
-        String where = "Type=" + CacheTypes.Multi.ordinal();
-        DAO.readCacheList(cb3Database, caches, where, true, true);
+        String statement = "SELECT * FROM CacheCoreInfo core WHERE Type=" + CacheTypes.Multi.ordinal();
+        DAO.readCacheList(cb3Database, caches, statement, true, true);
         assertThat("CacheList must have 117 Caches but has:" + caches.size, caches.size == 117);
 
 
