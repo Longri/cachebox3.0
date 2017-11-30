@@ -388,6 +388,11 @@ public class OptionsPane extends Table {
                         styles.put("compassViewStyle", compassViewStyle);
                     }
 
+                    if (widgetStyle.equals("com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle")) {
+                        CircularProgressStyle circularProgressStyle = game.skinProject.get("circularProgressStyle", CircularProgressStyle.class);
+                        styles.put("circularProgressStyle", circularProgressStyle);
+                    }
+
                     if (styles == null || styles.size == 0) {
                         Gdx.app.error("OptionsPane", "No styles defined for this widget type");
 

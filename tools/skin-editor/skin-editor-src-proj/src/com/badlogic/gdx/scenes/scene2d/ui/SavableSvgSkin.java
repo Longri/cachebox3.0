@@ -87,7 +87,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.ApiButtonStyle.class);
-        items.add(ProgressBar.ProgressBarStyle.class);
+        items.add(com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.SelectBoxStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.EditTextStyle.class);
@@ -102,6 +102,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.DraftListItemStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.FilterStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.CircularProgressStyle.class);
 
 
         SvgSkinUtil.saveSkin(this, items, skinFile);

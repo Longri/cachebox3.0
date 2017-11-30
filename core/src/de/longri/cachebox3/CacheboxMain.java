@@ -34,6 +34,7 @@ import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.listview.ListView;
+import de.longri.cachebox3.gui.widgets.CircularProgressWidget;
 import de.longri.cachebox3.gui.widgets.GeometryDrawableWidget;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -69,9 +70,8 @@ public class CacheboxMain extends ApplicationAdapter {
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.PresetListView");
-        INCLUDE_LIST.add(GeometryDrawableWidget.class.getName());
-        INCLUDE_LIST.add(GeometryDrawable.class.getName());
-        INCLUDE_LIST.add(Circle.class.getName());
+        INCLUDE_LIST.add(CircularProgressWidget.class.getName());
+
 
 
         EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
