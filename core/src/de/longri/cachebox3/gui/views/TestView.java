@@ -16,9 +16,12 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
@@ -38,6 +41,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.dialogs.*;
+import de.longri.cachebox3.gui.drawables.geometry.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
@@ -46,6 +50,7 @@ import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
+import de.longri.cachebox3.gui.widgets.GeometryDrawableWidget;
 import de.longri.cachebox3.gui.widgets.ProgressBar;
 import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
@@ -79,8 +84,41 @@ public class TestView extends AbstractView {
     protected void createIconTable() {
         this.clear();
         VisTable contentTable = new VisTable();
+
+        contentTable.setDebug(true);
+        contentTable.setRound(false);
+
         scrollPane = new VisScrollPane(contentTable);
         float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
+
+        {// test Circle Drawable Widget
+            float radius = CB.getScaledFloat(25);
+
+            Circle circle = new Circle(radius, radius, radius);
+            CircularSegment circleSegment = new CircularSegment(radius, radius, radius, 0, 90);
+            Ring ring = new Ring(radius, radius, radius / 2, radius);
+            RingSegment ringSegment = new RingSegment(radius, radius, radius / 2, radius, 0, 90);
+            GeometryDrawable geometryDrawable = new GeometryDrawable(ringSegment, Color.RED, radius * 2, radius * 2);
+            GeometryDrawableWidget drawableWidget = new GeometryDrawableWidget(geometryDrawable);
+
+            drawableWidget.setColor(1, 0, 0, 0f);
+            drawableWidget.addAction(Actions.fadeIn(2));
+//            drawableWidget.addAction(Actions.sizeTo(radius, radius, 3));
+            drawableWidget.setSize(radius*4, radius*4);
+
+            VisLabel label3 = new VisLabel("Circle Drawable Test");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            contentTable.add(drawableWidget).pad(20);
+            contentTable.row();
+
+        }
 
 
         {// test Spinner with MessageBox Icons
@@ -181,7 +219,7 @@ public class TestView extends AbstractView {
         {// test AdjustableStarWidget
 
             IntProperty property = new IntProperty();
-            final AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR,"Title", property);
+            final AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, "Title", property);
             adjustableStarWidget.setValue(6);
 
 

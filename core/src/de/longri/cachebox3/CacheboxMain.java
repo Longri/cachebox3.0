@@ -28,10 +28,13 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.gui.drawables.geometry.Circle;
+import de.longri.cachebox3.gui.drawables.geometry.GeometryDrawable;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.listview.ListView;
+import de.longri.cachebox3.gui.widgets.GeometryDrawableWidget;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import org.oscim.backend.CanvasAdapter;
@@ -63,10 +66,12 @@ public class CacheboxMain extends ApplicationAdapter {
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
 
-        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
-        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
-        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.PresetListView");
-        INCLUDE_LIST.add(ListView.class.getName());
+//        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
+//        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
+//        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.PresetListView");
+        INCLUDE_LIST.add(GeometryDrawableWidget.class.getName());
+        INCLUDE_LIST.add(GeometryDrawable.class.getName());
+        INCLUDE_LIST.add(Circle.class.getName());
 
 
         EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");

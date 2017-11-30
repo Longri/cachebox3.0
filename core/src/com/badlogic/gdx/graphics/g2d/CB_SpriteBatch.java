@@ -31,7 +31,7 @@ import java.util.Arrays;
  * <p>
  * Created by longri on 16.07.17.
  */
-public class CB_SpriteBatch extends SpriteBatch {
+public class CB_SpriteBatch extends PolygonSpriteBatch {
 
     private final Logger log = LoggerFactory.getLogger(CB_SpriteBatch.class);
     private final float DRAW_SCALE_TOLERANCE = Math.max(1.5f, Math.min(3.0f, CB.getScaledFloat(1.2f)));
