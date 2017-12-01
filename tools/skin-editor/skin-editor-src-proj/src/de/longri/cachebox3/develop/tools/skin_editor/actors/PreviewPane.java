@@ -27,13 +27,18 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Keys;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
+import de.longri.cachebox3.gui.skin.styles.CircularProgressStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
+import de.longri.cachebox3.gui.skin.styles.ScaledSize;
+import de.longri.cachebox3.gui.widgets.CircularProgressWidget;
+import de.longri.cachebox3.utils.ScaledSizes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.oscim.backend.canvas.Bitmap;
@@ -227,18 +232,65 @@ public class PreviewPane extends Table {
 
                     } else if (widget.equals("ProgressBar")) { // ProgressBar
 
-                        ProgressBarStyle progressStyle = game.skinProject.get(key, ProgressBarStyle.class);
-
-                        // Check for edge-case: fields knob and knobBefore are optional but at least one should be specified
-                        if (progressStyle.knob == null && progressStyle.knobBefore == null) {
-                            throw new IllegalArgumentException("Fields 'knob' and 'knobBefore' in ProgressBarStyle are both optional but at least one should be specified");
+                        ProgressBarStyle progressStyle = null;
+                        CircularProgressStyle circProgressStyle = null;
+                        try {
+                            progressStyle = game.skinProject.get(key, ProgressBarStyle.class);
+                        } catch (Exception e) {
+                            circProgressStyle = game.skinProject.get(key, CircularProgressStyle.class);
                         }
 
-                        ProgressBar w = new ProgressBar(0, 100, 5, false, progressStyle);
-                        w.setValue(50);
-                        w.addListener(stopTouchDown);
+                        Widget w = null;
 
-                        add(w).pad(10).width(220).padBottom(20).expandX().fillX().row();
+                        if (progressStyle != null) {
+                            // Check for edge-case: fields knob and knobBefore are optional but at least one should be specified
+                            if (progressStyle.knob == null && progressStyle.knobBefore == null) {
+                                throw new IllegalArgumentException("Fields 'knob' and 'knobBefore' in ProgressBarStyle are both optional but at least one should be specified");
+                            }
+
+                            w = new ProgressBar(0, 100, 5, false, progressStyle);
+                            ((ProgressBar) w).setValue(50);
+                            w.addListener(stopTouchDown);
+                            add(w).pad(10).width(220).padBottom(20).expandX().fillX().row();
+
+                        } else {
+
+                            // must set Scaled sizes
+                            // calculate scaled sizes
+                            float button_width = CB.getScaledFloat(game.skinProject.get("button_width", ScaledSize.class).value);
+                            float button_height = CB.getScaledFloat(game.skinProject.get("button_height", ScaledSize.class).value);
+                            float button_width_wide = CB.getScaledFloat(game.skinProject.get("button_width_wide", ScaledSize.class).value);
+                            float margin = CB.getScaledFloat(game.skinProject.get("margin", ScaledSize.class).value);
+                            float check_box_height = CB.getScaledFloat(game.skinProject.get("check_box_height", ScaledSize.class).value);
+                            float window_margin = CB.getScaledFloat(game.skinProject.get("check_box_height", ScaledSize.class).value);
+                            CB.scaledSizes = new ScaledSizes(button_width, button_height, button_width_wide, margin,
+                                    check_box_height, window_margin);
+
+
+                            CircularProgressWidget c1 = new CircularProgressWidget(circProgressStyle);
+                            CircularProgressWidget c2 = new CircularProgressWidget(circProgressStyle);
+                            CircularProgressWidget c3 = new CircularProgressWidget(circProgressStyle);
+
+                            c1.setProgressMax(-1);
+
+                            c2.setProgressMax(100);
+                            c2.setProgress(50);
+
+                            c3.setProgressMax(100);
+                            c3.setProgress(100);
+
+                            Table line = new VisTable();
+
+                            line.defaults().pad(CB.scaledSizes.MARGIN);
+
+                            line.add(c1);
+                            line.add(c2);
+                            line.add(c3);
+
+
+                            add(line).row();
+                        }
+
 
                     } else if (widget.equals("Slider")) { // Slider
 

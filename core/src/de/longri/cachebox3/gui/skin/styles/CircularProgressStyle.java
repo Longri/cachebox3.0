@@ -29,4 +29,5 @@ public class CircularProgressStyle {
     public BitmapFont textFont;
     public Color textFontColor;
     public float scaledPreferedRadius;
+    public Color progressColor;
 }

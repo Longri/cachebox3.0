@@ -1804,6 +1804,33 @@
       "b": 0.05490196,
       "a": 0.7764706
     },
+    "circleProgressBack": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 1
+    },
+    "circleProgressBorder": {
+      "a": 1
+    },
+    "circleProgressTextBack": {
+      "r": 0.29411766,
+      "g": 0.36862746,
+      "b": 0.28235295,
+      "a": 0.29803923
+    },
+    "circleProgressUnknown": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 1
+    },
+    "circularProgressColor": {
+      "r": 0.7176471,
+      "g": 0.9411765,
+      "b": 0.7137255,
+      "a": 1
+    },
     "coordinateValuesFocus": {
       "r": 0.07450981,
       "g": 0.54901963,
@@ -3004,6 +3031,20 @@
       "Available": "tempDisabled",
       "finds": "found",
       "FavPoints": "favpointFilter"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.CircularProgressStyle": {
+    "circularProgressStyle": {
+      "readyDrawable": "check_on",
+      "borderColor": "circleProgressBorder",
+      "backgroundColor": "circleProgressBack",
+      "textBackgroundColor": "circleProgressTextBack",
+      "textBorderColor": "circleProgressBorder",
+      "unknownColor": "circleProgressUnknown",
+      "textFont": "normal_font",
+      "textFontColor": "font_color",
+      "scaledPreferedRadius": 50,
+      "progressColor": "circularProgressColor"
     }
   }
 }

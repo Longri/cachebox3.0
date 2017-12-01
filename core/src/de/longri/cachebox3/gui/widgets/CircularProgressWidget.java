@@ -17,6 +17,8 @@ package de.longri.cachebox3.gui.widgets;
 
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.kotcrab.vis.ui.VisUI;
@@ -49,7 +51,11 @@ public class CircularProgressWidget extends Widget {
     private Drawtype drawtype = Drawtype.UNKNOWN;
 
     public CircularProgressWidget() {
-        style = VisUI.getSkin().get("circularProgressStyle", CircularProgressStyle.class);
+        this(VisUI.getSkin().get("circularProgressStyle", CircularProgressStyle.class));
+    }
+
+    public CircularProgressWidget(CircularProgressStyle style) {
+        this.style = style;
         this.prefSize = CB.getScaledFloat(style.scaledPreferedRadius) * 2;
         setSize(this.prefSize, this.prefSize);
     }
@@ -100,37 +106,69 @@ public class CircularProgressWidget extends Widget {
     }
 
     private void drawReady(Batch batch, float parentAlpha) {
-
+        style.readyDrawable.draw(batch, getX(), getY(), getWidth(), getHeight());
     }
 
-    private GeometryDrawable progressDrawableBorder, progressDrawable;
+    private GeometryDrawable backgroundDrawable, progressDrawableBorder, progressDrawable, valueBorder, valueBackground;
     private int lastProgress = -1;
     private CircularSegment circSeg;
+    private float textWidth, textHeight, textCenter, textRadius;
+    private BitmapFontCache fontCache;
 
     private void drawProgress(Batch batch, float parentAlpha) {
 
         float radius = getPrefHeight();
 
+        if (valueBorder == null) {
+            fontCache = new BitmapFontCache(style.textFont);
+            fontCache.setText("100%", 0, 0);
+            fontCache.setColor(style.textFontColor);
+            GlyphLayout glyphLayout = fontCache.getLayouts().get(0);
+            textWidth = glyphLayout.width;
+            textHeight = glyphLayout.height;
+            textRadius = textWidth + CB.scaledSizes.MARGIN;
+
+
+            Ring ring = new Ring(textRadius, textRadius, textRadius - CB.getScaledFloat(2), textRadius);
+            valueBorder = new GeometryDrawable(ring, style.textBorderColor.cpy(), textRadius, textRadius);
+
+            Circle circle = new Circle(textRadius, textRadius, textRadius);
+            valueBackground = new GeometryDrawable(circle, style.textBackgroundColor.cpy(), textRadius, textRadius);
+            textCenter = (radius / 2) - (textRadius / 2);
+        }
+
+
         if (progressDrawableBorder == null) {
             Ring ring = new Ring(radius, radius, radius - CB.getScaledFloat(2), radius);
             progressDrawableBorder = new GeometryDrawable(ring, style.borderColor.cpy(), radius, radius);
+            Circle circ = new Circle(radius, radius, radius);
+            backgroundDrawable = new GeometryDrawable(circ, style.backgroundColor, radius, radius);
         }
 
         if (lastProgress != progress) {
             float startAngle = (360 - 3.60f * progress) + 90;
             if (circSeg == null) {
                 circSeg = new CircularSegment(radius, radius, radius, startAngle, 90, true);
-                progressDrawable = new GeometryDrawable(circSeg, style.backgroundColor.cpy(), radius, radius);
+                progressDrawable = new GeometryDrawable(circSeg, style.progressColor, radius, radius);
             } else {
                 circSeg.setAngles(startAngle, 90, true);
                 progressDrawable.setDirty();
             }
+
+
+            fontCache.setText(Integer.toString(progress) + "%",
+                    getX() + CB.scaledSizes.MARGIN + (radius / 2) - (textWidth / 2),
+                    getY() + (radius / 2) + (textHeight / 2));
             lastProgress = progress;
         }
 
 
+        backgroundDrawable.draw(batch, getX(), getY(), getWidth(), getHeight());
         progressDrawableBorder.draw(batch, getX(), getY(), getWidth(), getHeight());
         progressDrawable.draw(batch, getX(), getY(), getWidth(), getHeight());
+        valueBorder.draw(batch, getX() + textCenter, getY() + textCenter, textRadius, textRadius);
+        valueBackground.draw(batch, getX() + textCenter, getY() + textCenter, textRadius, textRadius);
+        fontCache.draw(batch);
 
     }
 
