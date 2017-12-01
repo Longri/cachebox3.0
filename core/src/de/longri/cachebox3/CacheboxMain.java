@@ -29,6 +29,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.drawables.geometry.Circle;
+import de.longri.cachebox3.gui.drawables.geometry.CircularSegment;
 import de.longri.cachebox3.gui.drawables.geometry.GeometryDrawable;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
@@ -69,9 +70,8 @@ public class CacheboxMain extends ApplicationAdapter {
 
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.PresetListView");
+        INCLUDE_LIST.add(CircularSegment.class.getName());
         INCLUDE_LIST.add(CircularProgressWidget.class.getName());
-
 
 
         EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");

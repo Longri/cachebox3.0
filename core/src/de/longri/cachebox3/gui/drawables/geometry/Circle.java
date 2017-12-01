@@ -43,7 +43,7 @@ public class Circle implements IGeometry {
     /**
      * false, if vertices and triangle indices are calculated for actual circle values;
      */
-    protected boolean isDirty = true;
+    protected AtomicBoolean isDirty = new AtomicBoolean(true);
 
     /**
      * Constructor
@@ -91,7 +91,7 @@ public class Circle implements IGeometry {
     public void setCenterX(float x) {
         if (centerX == x) return;
         centerX = x;
-        isDirty = true;
+        isDirty.set(true);
     }
 
     /**
@@ -104,7 +104,7 @@ public class Circle implements IGeometry {
     public void setCenterY(float y) {
         if (centerY == y) return;
         centerY = y;
-        isDirty = true;
+        isDirty.set(true);
     }
 
     /**
@@ -117,7 +117,7 @@ public class Circle implements IGeometry {
     public void setRadius(float r) {
         if (radius == r) return;
         radius = r;
-        isDirty = true;
+        isDirty.set(true);
     }
 
     /**
@@ -128,7 +128,7 @@ public class Circle implements IGeometry {
      */
     @Override
     public void compute() {
-        if (!isDirty)
+        if (!isDirty.get())
             return; // Nothing todo
 
         // calculate segment count
@@ -173,7 +173,7 @@ public class Circle implements IGeometry {
         triangleIndices[triangleIndex++] = verticeIdex;
         triangleIndices[triangleIndex++] = 1;
 
-        isDirty = false;
+        isDirty.set(false);
     }
 
     @Override
@@ -185,14 +185,14 @@ public class Circle implements IGeometry {
 
     @Override
     public float[] getVertices() {
-        if (isDirty)
+        if (isDirty.get())
             compute();
         return vertices;
     }
 
     @Override
     public short[] getTriangles() {
-        if (isDirty)
+        if (isDirty.get())
             compute();
         return triangleIndices;
     }

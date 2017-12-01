@@ -90,7 +90,7 @@ public class TestView extends AbstractView {
 
         {// test Circle Drawable Widget
 
-            CircularProgressWidget circPro = new CircularProgressWidget();
+            final CircularProgressWidget circPro = new CircularProgressWidget();
 
             VisLabel label3 = new VisLabel("CircularProgress Test");
             Table lineTable = new Table();
@@ -103,6 +103,35 @@ public class TestView extends AbstractView {
 
             contentTable.add(circPro).pad(20);
             contentTable.row();
+
+            circPro.setProgressMax(100);
+            circPro.setProgress(0);
+
+            CB.postAsync(new Runnable() {
+                float value = 0;
+
+                @Override
+                public void run() {
+                    while (showing.get()) {
+                        value += 1f;
+                        if (value >= 200) value = 0;
+                        final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
+                        CB.postOnMainThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                circPro.setProgressMax(progressValue == 0 ? -1 : 100);
+                                circPro.setProgress((int) progressValue);
+                            }
+                        });
+                        Gdx.graphics.requestRendering();
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
 
         }
 

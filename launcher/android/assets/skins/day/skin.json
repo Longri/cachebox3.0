@@ -1804,6 +1804,13 @@
       "b": 0.05490196,
       "a": 0.7764706
     },
+    "circleProgressBack": {
+      "g": 0.32156864,
+      "a": 1
+    },
+    "circleProgressBorder": {
+      "a": 1
+    },
     "circleProgressUnknown": {
       "r": 1,
       "g": 1,
@@ -3014,6 +3021,8 @@
   },
   "de.longri.cachebox3.gui.skin.styles.CircularProgressStyle": {
     "circularProgressStyle": {
+      "borderColor": "circleProgressBorder",
+      "backgroundColor": "circleProgressBack",
       "unknownColor": "circleProgressUnknown",
       "textFont": "normal_font",
       "textFontColor": "font_color",

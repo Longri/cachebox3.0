@@ -153,6 +153,9 @@ public class GeometryDrawable implements Drawable, Disposable {
                 return;
 
             if (po == null) {
+
+                if (vertices == null || vertices.length == 0) return;
+
                 if (texReg == null)
                     createTexRegFromPixMap();
                 po = new PolygonRegion(texReg, vertices, triangles);
@@ -250,5 +253,9 @@ public class GeometryDrawable implements Drawable, Disposable {
 
     public float getHeight() {
         return height;
+    }
+
+    public void setDirty() {
+        setVerticesTriangles();
     }
 }

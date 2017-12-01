@@ -22,7 +22,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.drawables.geometry.Circle;
+import de.longri.cachebox3.gui.drawables.geometry.CircularSegment;
 import de.longri.cachebox3.gui.drawables.geometry.GeometryDrawable;
+import de.longri.cachebox3.gui.drawables.geometry.Ring;
 import de.longri.cachebox3.gui.skin.styles.CircularProgressStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +60,7 @@ public class CircularProgressWidget extends Widget {
     }
 
     public void setProgress(int value) {
-        progress = value;
+        progress = (int) (100.0 / (double) progressMax * (double) value);
         checkState();
     }
 
@@ -101,7 +103,34 @@ public class CircularProgressWidget extends Widget {
 
     }
 
+    private GeometryDrawable progressDrawableBorder, progressDrawable;
+    private int lastProgress = -1;
+    private CircularSegment circSeg;
+
     private void drawProgress(Batch batch, float parentAlpha) {
+
+        float radius = getPrefHeight();
+
+        if (progressDrawableBorder == null) {
+            Ring ring = new Ring(radius, radius, radius - CB.getScaledFloat(2), radius);
+            progressDrawableBorder = new GeometryDrawable(ring, style.borderColor.cpy(), radius, radius);
+        }
+
+        if (lastProgress != progress) {
+            float startAngle = (360 - 3.60f * progress) + 90;
+            if (circSeg == null) {
+                circSeg = new CircularSegment(radius, radius, radius, startAngle, 90, true);
+                progressDrawable = new GeometryDrawable(circSeg, style.backgroundColor.cpy(), radius, radius);
+            } else {
+                circSeg.setAngles(startAngle, 90, true);
+                progressDrawable.setDirty();
+            }
+            lastProgress = progress;
+        }
+
+
+        progressDrawableBorder.draw(batch, getX(), getY(), getWidth(), getHeight());
+        progressDrawable.draw(batch, getX(), getY(), getWidth(), getHeight());
 
     }
 
@@ -123,7 +152,7 @@ public class CircularProgressWidget extends Widget {
             // set Alphas
             int n = unknownAplhas.length;
             while (n-- > 0) {
-                unknownAplhas[n] += 0.1;
+                unknownAplhas[n] += 0.05;
                 if (unknownAplhas[n] > 2.0) unknownAplhas[n] = 0;
             }
 
@@ -131,6 +160,9 @@ public class CircularProgressWidget extends Widget {
     }
 
     private void drawUnknown(Batch batch, float parentAlpha) {
+
+        // drawing has animation so call request rendering
+        CB.requestRendering();
 
         if (unknownDrawable == null) {
             unknownRadius = getPrefHeight() / 8;

@@ -16,183 +16,156 @@
 package de.longri.cachebox3.gui.drawables.geometry;
 
 import com.badlogic.gdx.math.MathUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Holds the center point and radius of a circle geometry and the start and end angle of the segment. <br>
  * <br>
  * With the method compute() will calculate the vertices and triangle indices.
- * 
+ *
  * @author Longri
  */
 public class CircularSegment extends Circle {
-	private float start;
-	private float end;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param x
-	 *            center.x
-	 * @param y
-	 *            center.y
-	 * @param r
-	 *            radius
-	 * @param startAngle
-	 *            start angle of the segment
-	 * @param endAngle
-	 *            end angle of the segment
-	 */
-	public CircularSegment(float x, float y, float r, float startAngle, float endAngle) {
-		super(x, y, r);
-		this.start = startAngle;
-		this.end = endAngle;
-		chkStartEnd();
-	}
+    private static final Logger log = LoggerFactory.getLogger(CircularSegment.class);
 
-	/**
-	 * Constructor
-	 * 
-	 * @param x
-	 *            center.x
-	 * @param y
-	 *            center.y
-	 * @param r
-	 *            radius
-	 * @param startAngle
-	 *            start angle of the segment
-	 * @param endAngle
-	 *            end angle of the segment
-	 * @param compute
-	 *            true for call compute() with constructor
-	 */
-	public CircularSegment(float x, float y, float r, float startAngle, float endAngle, boolean compute) {
-		this(x, y, r, startAngle, endAngle);
-		if (compute)
-			compute();
-	}
+    private float start;
+    private float end;
+    private boolean CW = false;
 
-	/**
-	 * Set the start angle value of this segment.<br>
-	 * <br>
-	 * After change the vertices and triangles must new calculated!
-	 * 
-	 * @param startAngle
-	 */
-	public void setStartAngle(float startAngle) {
-		this.start = startAngle;
-		chkStartEnd();
-		isDirty = true;
-	}
+    /**
+     * Constructor
+     *
+     * @param x          center.x
+     * @param y          center.y
+     * @param r          radius
+     * @param startAngle start angle of the segment
+     * @param endAngle   end angle of the segment
+     */
+    public CircularSegment(float x, float y, float r, float startAngle, float endAngle) {
+        super(x, y, r);
+        setAngles(startAngle, endAngle);
+    }
 
-	/**
-	 * Set the end angle value of this segment.<br>
-	 * <br>
-	 * After change the vertices and triangles must new calculated!
-	 * 
-	 * @param endAngle
-	 */
-	public void setEndAngle(float endAngle) {
-		this.end = endAngle;
-		chkStartEnd();
-		isDirty = true;
-	}
+    /**
+     * Constructor
+     *
+     * @param x          center.x
+     * @param y          center.y
+     * @param r          radius
+     * @param startAngle start angle of the segment
+     * @param endAngle   end angle of the segment
+     * @param compute    true for call compute() with constructor
+     */
+    public CircularSegment(float x, float y, float r, float startAngle, float endAngle, boolean compute) {
+        this(x, y, r, startAngle, endAngle);
+        if (compute)
+            compute();
+    }
 
-	private void chkStartEnd() {
-		while (start < 0)
-			start += 360;
+    public void setAngles(float startAngle, float endAngle) {
+        setAngles(startAngle, endAngle, false);
+    }
 
-		while (end <= 0)
-			end += 360;
+    public void setAngles(float startAngle, float endAngle, boolean compute) {
+        if (startAngle > endAngle) {
+            float seg = 360 - (startAngle - endAngle);
+            endAngle = startAngle + seg;
+            CW = true;
+        } else {
+            CW = false;
+        }
+        this.start = startAngle;
+        this.end = endAngle;
+        isDirty.set(true);
+        if (compute)
+            compute();
+    }
 
-		while (start >= 360)
-			start -= 360;
+    /**
+     * Calculate the vertices of this circle with a minimum segment length of 10. <br>
+     * OR a minimum segment count of 18. <br>
+     * <br>
+     * For every segment are compute a triangle from the segment start, end and the center of this circle.
+     */
+    @Override
+    public void compute() {
+        synchronized (isDirty) {
 
-		while (end > 360)
-			end -= 360;
+            if (!isDirty.get())
+                return; // Nothing to do
 
-	}
+            if (start == end) return;
 
-	/**
-	 * Calculate the vertices of this circle with a minimum segment length of 10. <br>
-	 * OR a minimum segment count of 18. <br>
-	 * <br>
-	 * For every segment are compute a triangle from the segment start, end and the center of this circle.
-	 */
-	@Override
-	public void compute() {
-		if (!isDirty)
-			return; // Nothing to do
+            // calculate segment count
+            double alpha = (360 * MIN_CIRCLE_SEGMENTH_LENGTH) / (MathUtils.PI2 * radius);
+            int segmente = Math.max(MIN_CIRCLE_SEGMENTH_COUNT, (int) (360 / alpha));
 
-		chkStartEnd();
+            // calculate begin and end
+            float length = end - start;
+            segmente = (int) ((segmente * (Math.abs(length) / 360) + 0.6));
+            float thetaBegin = start;
+            float thetaEnd = end;
 
-		// calculate segment count
-		double alpha = (360 * MIN_CIRCLE_SEGMENTH_LENGTH) / (MathUtils.PI2 * radius);
-		int segmente = Math.max(MIN_CIRCLE_SEGMENTH_COUNT, (int) (360 / alpha));
+            // calculate theta step
+            double thetaStep = length / segmente;
 
-		// calculate beginn and end
-		float length = end - start;
-		segmente = (int) ((segmente * (Math.abs(length) / 360) + 0.5));
-		float thetaBeginn = start;
-		float thetaEnd = end;
+            segmente++;
 
-		// calculate theta step
-		double thetaStep = length / segmente;
+            // initialize arrays
+            vertices = new float[(segmente + 1) * 2];
+            triangleIndices = new short[(segmente) * 3];
 
-		segmente++;
+            int index = 0;
 
-		// initialize arrays
-		vertices = new float[(segmente + 1) * 2];
-		triangleIndices = new short[(segmente) * 3];
+            // first point is the center point
+            vertices[index++] = centerX;
+            vertices[index++] = centerY;
 
-		int index = 0;
+            int triangleIndex = 0;
+            short verticeIdex = 1;
+            boolean beginnTriangles = false;
 
-		// first point is the center point
-		vertices[index++] = centerX;
-		vertices[index++] = centerY;
+            try {
+                for (float i = thetaBegin; !(i > thetaEnd + (CW ? thetaStep : 0)); i += thetaStep) {
+                    float rad = MathUtils.degreesToRadians * i;
 
-		int triangleIndex = 0;
-		short verticeIdex = 1;
-		boolean beginnTriangles = false;
+                    if (index >= vertices.length) break;
 
-		for (float i = thetaBeginn; !(i > thetaEnd); i += thetaStep) {
+                    vertices[index++] = centerX + radius * MathUtils.cos(rad);
+                    vertices[index++] = centerY + radius * MathUtils.sin(rad);
 
-			float rad = MathUtils.degreesToRadians * i;
+                    if (!beginnTriangles) {
+                        if (index % 6 == 0)
+                            beginnTriangles = true;
+                    }
 
-			vertices[index++] = centerX + radius * MathUtils.cos(rad);
-			vertices[index++] = centerY + radius * MathUtils.sin(rad);
+                    if (beginnTriangles) {
+                        triangleIndices[triangleIndex++] = 0;
+                        triangleIndices[triangleIndex++] = verticeIdex++;
+                        triangleIndices[triangleIndex++] = verticeIdex;
+                    }
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                vertices = null;
+                triangleIndices = null;
+            }
+            isDirty.set(false);
+        }
+    }
 
-			if (!beginnTriangles) {
-				if (index % 6 == 0)
-					beginnTriangles = true;
-			}
+    @Override
+    public float[] getVertices() {
+        if (isDirty.get())
+            compute();
+        return vertices;
+    }
 
-			if (beginnTriangles) {
-				triangleIndices[triangleIndex++] = 0;
-				triangleIndices[triangleIndex++] = verticeIdex++;
-				triangleIndices[triangleIndex++] = verticeIdex;
-			}
-
-		}
-
-		// last triangle
-		// triangleIndices[triangleIndex++] = 0;
-		// triangleIndices[triangleIndex++] = verticeIdex;
-		// triangleIndices[triangleIndex++] = 1;
-
-		isDirty = false;
-	}
-
-	@Override
-	public float[] getVertices() {
-		if (isDirty)
-			compute();
-		return vertices;
-	}
-
-	@Override
-	public short[] getTriangles() {
-		if (isDirty)
-			compute();
-		return triangleIndices;
-	}
+    @Override
+    public short[] getTriangles() {
+        if (isDirty.get())
+            compute();
+        return triangleIndices;
+    }
 }
