@@ -38,7 +38,10 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.Window;
+import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.drawables.geometry.*;
@@ -48,6 +51,7 @@ import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
+import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.*;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
@@ -106,6 +110,39 @@ public class TestView extends AbstractView {
 
             circPro.setProgressMax(100);
             circPro.setProgress(0);
+
+            circPro.addListener(new ClickLongClickListener() {
+                @Override
+                public boolean clicked(InputEvent event, float x, float y) {
+
+                    final BlockUiProgress_Activity activity = new BlockUiProgress_Activity();
+                    activity.show();
+                    CB.postAsync(new Runnable() {
+                        float value = 0;
+
+                        @Override
+                        public void run() {
+                            while (value < 200) {
+                                value += 1f;
+                                final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
+                                EventHandler.fire(new IncrementProgressEvent((int) progressValue,
+                                        "", progressValue == 0 ? -1 : 100));
+                                try {
+                                    Thread.sleep(50);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+                    return true;
+                }
+
+                @Override
+                public boolean longClicked(Actor actor, float x, float y) {
+                    return true;
+                }
+            });
 
             CB.postAsync(new Runnable() {
                 float value = 0;

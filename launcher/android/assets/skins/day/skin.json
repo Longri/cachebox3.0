@@ -2312,6 +2312,7 @@
   },
   "de.longri.cachebox3.gui.ActivityBase$ActivityBaseStyle": {
     "default": {
+      "stageBackground": "dialog_stage_background",
       "background": "activityBack_drawable"
     }
   },

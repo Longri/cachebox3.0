@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
@@ -45,7 +46,8 @@ public class ActivityBase extends Window implements Showable {
             throw new RuntimeException("Don't instance a ActivityBase on non GL Thread");
         }
         this.style = style;
-        this.setStageBackground(style.background);
+        this.setBackground(style.background);
+        this.setStageBackground(style.stageBackground);
     }
 
 
@@ -59,6 +61,11 @@ public class ActivityBase extends Window implements Showable {
 
     public void onHide() {
 
+    }
+
+    @Override
+    public void draw(Batch batch,float parentAlpha){
+        super.draw(batch, parentAlpha);
     }
 
     public void show() {
@@ -82,7 +89,7 @@ public class ActivityBase extends Window implements Showable {
     }
 
     public static class ActivityBaseStyle {
-        public Drawable background;
+        public Drawable background, stageBackground;
     }
 
     @Override

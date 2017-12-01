@@ -113,6 +113,7 @@ public class Window extends Table implements Disposable {
 
     public void draw(Batch batch, float parentAlpha) {
         if (stageBackground != null) drawStageBackground(batch, parentAlpha);
+        drawBackground(batch, parentAlpha, getX(), getY());
         super.drawChildren(batch, parentAlpha);
     }
 

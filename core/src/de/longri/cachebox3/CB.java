@@ -358,6 +358,21 @@ public class CB {
         return Database.Data.Query.GetCacheById(cacheId);
     }
 
+    public static void postAsyncDelayd(final long delay, final Runnable runnable) {
+        postAsync(new Runnable() {
+            @Override
+            public void run() {
+                TimerTask task=new TimerTask() {
+                    @Override
+                    public void run() {
+                        runnable.run();
+                    }
+                };
+                new Timer().schedule(task,delay);
+            }
+        });
+    }
+
     public static void postAsync(final Runnable runnable) {
         asyncExecutor.submit(new AsyncTask<Void>() {
             @Override
@@ -554,3 +569,4 @@ public class CB {
     }
 
 }
+
