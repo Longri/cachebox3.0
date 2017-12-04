@@ -62,6 +62,10 @@ public class AlterCachebox3DB {
         try {
             if (lastDatabaseSchemeVersion <= 1028) {
                 // Convert DB from version ACB2 to CB3
+
+                //add column desired on Config Table
+                database.execSQL("ALTER TABLE Config ADD desired ntext;");
+
                 //create new Tables
                 DatabaseSchema schemaStrings = new DatabaseSchema();
                 database.execSQL(schemaStrings.CACHE_CORE_INFO);

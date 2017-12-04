@@ -15,21 +15,48 @@
  */
 package de.longri.cachebox3.gui.activities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.widgets.CircularProgressWidget;
+import de.longri.cachebox3.translation.word.CompoundCharSequence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Created by Longri on 01.12.2017.
  */
 public class BlockUiProgress_Activity extends ActivityBase implements IncrementProgressListener {
 
+    private Logger log = LoggerFactory.getLogger(BlockUiProgress_Activity.class);
     private final CircularProgressWidget progress = new CircularProgressWidget();
+    private final Label msgLabel;
 
     public BlockUiProgress_Activity() {
+        this("");
+    }
+
+    public BlockUiProgress_Activity(CharSequence msg) {
         super("BlockUiActivity");
+
+//        this.setDebug(true);
+        msgLabel = new VisLabel(msg);
+        Label.LabelStyle msgDefaultStyle = msgLabel.getStyle();
+        Label.LabelStyle newStyle = new Label.LabelStyle();
+        newStyle.fontColor = Color.WHITE;
+        newStyle.font = msgDefaultStyle.font;
+        msgLabel.setStyle(newStyle);
+        msgLabel.setAlignment(Align.center);
+
+        this.add(msgLabel).expandX().fillX().pad(CB.scaledSizes.MARGINx4);
+        this.row();
         this.add(progress);
         this.setBackground((Drawable) null);
     }
@@ -37,21 +64,30 @@ public class BlockUiProgress_Activity extends ActivityBase implements IncrementP
     @Override
     public void onShow() {
         EventHandler.add(this);
+        log.debug("OnShow: set Continues rendering");
+        Gdx.graphics.setContinuousRendering(true);
     }
 
     @Override
     public void onHide() {
         EventHandler.remove(this);
+        log.debug("OnHide");
+        Gdx.graphics.setContinuousRendering(false);
     }
 
 
     @Override
     public void incrementProgress(IncrementProgressEvent event) {
+
         int value = event.progressIncrement.incrementValue;
         int max = event.progressIncrement.incrementMaxValue;
+        String msg = event.progressIncrement.msg;
+//        log.debug("Increment Progress: {} / {} max: {}", msg, value, max);
         progress.setProgressMax(max);
         progress.setProgress(value);
+        msgLabel.setText(msg);
         if (value > 0 && value >= max) {
+            log.debug("Increment Progress: post Finish");
             CB.postAsyncDelayd(500, new Runnable() {
                 @Override
                 public void run() {

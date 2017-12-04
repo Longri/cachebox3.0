@@ -30,6 +30,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.GpsEventHelper;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
+import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.dialogs.GetApiKeyQuestionDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
@@ -502,6 +503,14 @@ public class CB {
     }
 
     public static void loadFilteredCacheList() {
+
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                new BlockUiProgress_Activity(Translation.get("LoadCacheList")).show();
+            }
+        });
+
         Config.ReadFromDB(true);
         CB.Categories = new Categories();
 
@@ -563,9 +572,6 @@ public class CB {
                 }
             });
         }
-
-        //Fire progress changed event for progress changed on Splash
-        EventHandler.fire(new IncrementProgressEvent(10, "load db"));
     }
 
 }

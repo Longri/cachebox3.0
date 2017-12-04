@@ -89,16 +89,6 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
     }
 
     public void loadSelectedDB() {
-        if (CB.viewmanager != null) {
-            CB.postAsync(new Runnable() {
-                @Override
-                public void run() {
-                    CB.viewmanager.toast(Translation.get("LoadDB"), ViewManager.ToastLength.WAIT);
-                    CB.requestRendering();
-                }
-            });
-        }
-
         if (Database.Data != null) {
             if (Database.Data.Query != null) Database.Data.Query.clear();
             if (Database.Data.isStarted()) Database.Data.close();
@@ -121,10 +111,7 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
                 Database.Data.Query.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
             }
         });
-
-
         CB.loadFilteredCacheList();
-
     }
 
 }

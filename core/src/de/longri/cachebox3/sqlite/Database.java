@@ -168,6 +168,10 @@ public class Database {
         return "";
     }
 
+    public FileHandle getFileHandle() {
+        return databasePath;
+    }
+
 
     public enum DatabaseType {
         CacheBox3, Drafts, Settings

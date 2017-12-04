@@ -130,13 +130,9 @@ public class ImmutableCache extends AbstractCache {
     private final CacheSizes size;
     private final float difficulty, terrain;
 
-    public ImmutableCache(SQLiteGdxDatabaseCursor cursor) {
-        this(cursor, null);
-    }
 
-    public ImmutableCache(SQLiteGdxDatabaseCursor cursor, final Database waypointDatabase) {
-        this(waypointDatabase,
-                cursor.getDouble(1), cursor.getDouble(2),
+    public ImmutableCache(SQLiteGdxDatabaseCursor cursor) {
+        this(cursor.getDouble(1), cursor.getDouble(2),
                 cursor.getLong(0), cursor.getShort(3),
                 cursor.getShort(4), cursor.getShort(5),
                 cursor.getShort(6), cursor.getShort(7),
@@ -146,28 +142,13 @@ public class ImmutableCache extends AbstractCache {
                 cursor.getShort(14), cursor.getInt(15));
     }
 
-    public ImmutableCache(final Database waypointDatabase,
-                          double latitude, double longitude, long id,
+    public ImmutableCache(double latitude, double longitude, long id,
                           short sizeOrigin, short difficulty, short terrain,
                           short typeOrigin, short rating, short numTravelbugs,
                           String gcCode, String name, String placedBy, String owner,
                           String gcId, short booleanStore, int favPoints) {
         super(latitude, longitude);
         this.id = id;
-
-        //load Waypoints async
-        if (waypointDatabase != null) {
-            CB.postAsync(new Runnable() {
-                @Override
-                public void run() {
-                    AbstractWaypointDAO WpDAO = DaoFactory.WAYPOINT_DAO;
-                    Array<AbstractWaypoint> waypoints = WpDAO.getWaypointsFromCacheID(waypointDatabase, ImmutableCache.this.id, true);
-                    ImmutableCache.this.setWaypoints(waypoints);
-                }
-            });
-        }
-
-
         this.size = CacheSizes.parseInt(sizeOrigin);
         this.difficulty = (float) difficulty / 2.0f;
         this.terrain = (float) terrain / 2.0f;

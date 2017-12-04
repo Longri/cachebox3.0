@@ -37,12 +37,12 @@ public class IncrementProgressEvent extends AbstractEvent<IncrementProgressEvent
 
     public IncrementProgressEvent(int incrementValue, String msg) {
         super(IncrementProgressEvent.ProgressIncrement.class);
-        this.progressIncrement = new ProgressIncrement(incrementValue,msg,0);
+        this.progressIncrement = new ProgressIncrement(incrementValue,msg,-1);
     }
 
     public IncrementProgressEvent(int incrementValue, String msg, short id) {
         super(IncrementProgressEvent.ProgressIncrement.class, id);
-        this.progressIncrement = new ProgressIncrement(incrementValue,msg, 0);
+        this.progressIncrement = new ProgressIncrement(incrementValue,msg, -1);
     }
 
     public IncrementProgressEvent(int incrementValue, String msg, int incrementMaxValue) {

@@ -149,27 +149,25 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
     }
 
     public void setNewFilter(FilterProperties filter, boolean dontLoad) {
-        synchronized (isFilters) {
-            if (!actFilter.equals(filter)) {
+        if (!actFilter.equals(filter)) {
 
-                log.debug("set New Filter: {}", filter.toString());
+            log.debug("set New Filter: {}", filter.toString());
 
-                actFilter = filter;
-                isFilters.set(!actFilter.equals(FilterInstances.ALL));
+            actFilter = filter;
+            isFilters.set(!actFilter.equals(FilterInstances.ALL));
 
-                // store filter to config
-                Config.FilterNew.setValue(actFilter.getJsonString());
-                Config.AcceptChanges();
+            // store filter to config
+            Config.FilterNew.setValue(actFilter.getJsonString());
+            Config.AcceptChanges();
 
-                if (!dontLoad) CB.loadFilteredCacheList();
+            if (!dontLoad){
+                CB.loadFilteredCacheList();
             }
         }
     }
 
     public boolean isFilters() {
-        synchronized (isFilters) {
-            return isFilters.get();
-        }
+        return isFilters.get();
     }
 
     private String terrDiffToShortString(float value) {
