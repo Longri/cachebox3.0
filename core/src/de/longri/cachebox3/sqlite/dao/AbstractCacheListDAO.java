@@ -23,7 +23,9 @@ import de.longri.cachebox3.types.CacheList;
  * Created by Longri on 20.10.2017.
  */
 public abstract class AbstractCacheListDAO {
-    public abstract CacheList readCacheList(Database database, CacheList cacheList, String where, boolean fullDetails, boolean loadAllWaypoints);
+    public abstract void readCacheList(Database database, CacheList cacheList, String where, boolean fullDetails, boolean loadAllWaypoints);
 
     public abstract AbstractCache reloadCache(Database database, CacheList cacheList, AbstractCache selectedCache);
+
+    public abstract int getFilteredCacheCount(Database database, String statement);
 }

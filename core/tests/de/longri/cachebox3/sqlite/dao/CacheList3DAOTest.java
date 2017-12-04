@@ -72,7 +72,17 @@ class CacheList3DAOTest {
     void readCacheList() {
 
         AbstractCacheListDAO DAO = new CacheList3DAO();
-        CacheList caches = DAO.readCacheList(cb3Database, null, "", true, true);
+        CacheList caches=new CacheList();
+
+        DAO.readCacheList(cb3Database, caches, "", true, true);
+
+        // Cachelist is Async loading, so wait a moment
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         assertThat("CacheList must have 731 Caches but has:" + caches.size, caches.size == 731);
 
         AbstractCache cache = caches.getCacheById(14731588679189319L);
@@ -101,6 +111,14 @@ class CacheList3DAOTest {
         // read Caches by Type
         String statement = "SELECT * FROM CacheCoreInfo core WHERE Type=" + CacheTypes.Multi.ordinal();
         DAO.readCacheList(cb3Database, caches, statement, true, true);
+
+        // Cachelist is Async loading, so wait a moment
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         assertThat("CacheList must have 117 Caches but has:" + caches.size, caches.size == 117);
 
 

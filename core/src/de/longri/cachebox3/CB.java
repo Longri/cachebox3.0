@@ -362,13 +362,13 @@ public class CB {
         postAsync(new Runnable() {
             @Override
             public void run() {
-                TimerTask task=new TimerTask() {
+                TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
                         runnable.run();
                     }
                 };
-                new Timer().schedule(task,delay);
+                new Timer().schedule(task, delay);
             }
         });
     }

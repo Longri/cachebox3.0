@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.SelectDB_Activity;
 import de.longri.cachebox3.gui.menu.MenuID;
@@ -113,7 +114,15 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
         }
 
         //store unfiltered cache size
-        Database.Data.Query.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+
+        CB.postAsync(new Runnable() {
+            @Override
+            public void run() {
+                Database.Data.Query.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+            }
+        });
+
+
         CB.loadFilteredCacheList();
 
     }

@@ -823,6 +823,13 @@ class FilterPropertiesTest {
         CacheList3DAO dao = new CacheList3DAO();
         dao.readCacheList(testDb, list, properties.getSqlWhere("NAME"), false, false);
 
+        // Cachelist is Async loading, so wait a moment
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         int n = list.size;
         while (n-- > 0) {
             AbstractCache cache = list.get(n);

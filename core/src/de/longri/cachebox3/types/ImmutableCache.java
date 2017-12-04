@@ -17,8 +17,10 @@ package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.AbstractWaypointDAO;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,25 +130,60 @@ public class ImmutableCache extends AbstractCache {
     private final CacheSizes size;
     private final float difficulty, terrain;
 
-
     public ImmutableCache(SQLiteGdxDatabaseCursor cursor) {
-        super(cursor.getDouble(1), cursor.getDouble(2));
-        this.id = cursor.getLong(0);
-        short sizeOrigin = cursor.getShort(3);
+        this(cursor, null);
+    }
+
+    public ImmutableCache(SQLiteGdxDatabaseCursor cursor, final Database waypointDatabase) {
+        this(waypointDatabase,
+                cursor.getDouble(1), cursor.getDouble(2),
+                cursor.getLong(0), cursor.getShort(3),
+                cursor.getShort(4), cursor.getShort(5),
+                cursor.getShort(6), cursor.getShort(7),
+                cursor.getShort(8), cursor.getString(9),
+                cursor.getString(10), cursor.getString(11),
+                cursor.getString(12), cursor.getString(13),
+                cursor.getShort(14), cursor.getInt(15));
+    }
+
+    public ImmutableCache(final Database waypointDatabase,
+                          double latitude, double longitude, long id,
+                          short sizeOrigin, short difficulty, short terrain,
+                          short typeOrigin, short rating, short numTravelbugs,
+                          String gcCode, String name, String placedBy, String owner,
+                          String gcId, short booleanStore, int favPoints) {
+        super(latitude, longitude);
+        this.id = id;
+
+        //load Waypoints async
+        if (waypointDatabase != null) {
+            CB.postAsync(new Runnable() {
+                @Override
+                public void run() {
+                    AbstractWaypointDAO WpDAO = DaoFactory.WAYPOINT_DAO;
+                    Array<AbstractWaypoint> waypoints = WpDAO.getWaypointsFromCacheID(waypointDatabase, ImmutableCache.this.id, true);
+                    ImmutableCache.this.setWaypoints(waypoints);
+                }
+            });
+        }
+
+
         this.size = CacheSizes.parseInt(sizeOrigin);
-        this.difficulty = (float) cursor.getShort(4) / 2.0f;
-        this.terrain = (float) cursor.getShort(5) / 2.0f;
-        short typeOrigin = cursor.getShort(6);
+        this.difficulty = (float) difficulty / 2.0f;
+        this.terrain = (float) terrain / 2.0f;
         this.type = CacheTypes.get(typeOrigin);
-        this.rating = (short) (cursor.getShort(7) / 100);
-        this.numTravelbugs = cursor.getShort(8);
-        this.gcCode = new CharSequenceArray(cursor.getString(9));
-        this.name = new CharSequenceArray(cursor.getString(10).trim());
-        this.placedBy = new CharSequenceArray(cursor.getString(11));
-        this.owner = new CharSequenceArray(cursor.getString(12));
-        this.gcId = new CharSequenceArray(cursor.getString(13));
-        this.booleanStore = cursor.getShort(14);
-        this.favPoints = cursor.getInt(15);
+        this.rating = (short) (rating / 100);
+        this.numTravelbugs = numTravelbugs;
+
+        this.gcCode = new CharSequenceArray(gcCode);
+        this.name = new CharSequenceArray(name.trim());
+        this.placedBy = new CharSequenceArray(placedBy);
+        this.owner = new CharSequenceArray(owner);
+        this.gcId = new CharSequenceArray(gcId);
+
+        this.booleanStore = booleanStore;
+        this.favPoints = favPoints;
+
     }
 
     //################################################################################

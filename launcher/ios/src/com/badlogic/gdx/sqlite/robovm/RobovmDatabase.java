@@ -75,15 +75,15 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
         if (myDB == null)
             return null;
 
-//        if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
-//            StringBuilder sb = new StringBuilder("RAW_QUERY :" + sql + " ARGs= ");
-//            if (args != null) {
-//                for (String arg : args)
-//                    sb.append(arg + ", ");
-//            } else
-//                sb.append("NULL");
-//            log.debug(sb.toString());
-//        }
+        if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
+            StringBuilder sb = new StringBuilder("RAW_QUERY :" + sql + " ARGs= ");
+            if (args != null) {
+                for (String arg : args)
+                    sb.append(arg + ", ");
+            } else
+                sb.append("NULL");
+            log.debug(sb.toString());
+        }
 
         ResultSet rs = null;
         PreparedStatement statement = null;
@@ -97,6 +97,10 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
             }
             rs = statement.executeQuery();
         } catch (SQLException e) {
+            log.error("SqlException with SQL: {}",sql);
+            e.printStackTrace();
+        }catch(NegativeArraySizeException e){
+            log.error("SqlException with SQL: {}",sql);
             e.printStackTrace();
         }
 
