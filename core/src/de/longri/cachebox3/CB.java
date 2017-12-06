@@ -28,7 +28,6 @@ import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.GpsEventHelper;
-import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.dialogs.GetApiKeyQuestionDialog;
@@ -44,7 +43,6 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.CacheList;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.ICancel;
@@ -511,7 +509,7 @@ public class CB {
             }
         });
 
-        Config.ReadFromDB(true);
+        Config.readFromDB(true);
         CB.Categories = new Categories();
 
         String filter = Config.FilterNew.getValue();

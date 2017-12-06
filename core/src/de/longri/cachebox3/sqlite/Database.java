@@ -53,28 +53,29 @@ public class Database {
     public Categories gpxFilenameUpdateCacheCount() {
         // welche GPXFilenamen sind in der DB erfasst
         beginTransaction();
+        SQLiteGdxDatabaseCursor cursor = null;
         try {
-            SQLiteGdxDatabaseCursor reader = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from CacheInfo where GPXFilename_ID is not null Group by GPXFilename_ID", null);
-            reader.moveToFirst();
+            cursor = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from CacheInfo where GPXFilename_ID is not null Group by GPXFilename_ID", null);
+            cursor.moveToFirst();
 
-            while (reader.isAfterLast() == false) {
-                long GPXFilename_ID = reader.getLong(0);
-                long CacheCount = reader.getLong(1);
+            while (cursor.isAfterLast() == false) {
+                long GPXFilename_ID = cursor.getLong(0);
+                long CacheCount = cursor.getLong(1);
 
                 Parameters val = new Parameters();
                 val.put("CacheCount", CacheCount);
                 update("GPXFilenames", val, "ID = " + GPXFilename_ID, null);
 
-                reader.moveToNext();
+                cursor.moveToNext();
             }
 
             delete("GPXFilenames", "Cachecount is NULL or CacheCount = 0", null);
             delete("GPXFilenames", "ID not in (Select GPXFilename_ID From CacheInfo)", null);
-            reader.close();
             setTransactionSuccessful();
         } catch (Exception e) {
 
         } finally {
+            if (cursor != null) cursor.close();
             endTransaction();
         }
 
@@ -100,14 +101,17 @@ public class Database {
         SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(abstractCache.getId()) + "\"", null);
 
 
-        reader.moveToFirst();
-        while (!reader.isAfterLast()) {
-            LogEntry logent = getLogEntry(abstractCache, reader, true);
-            if (logent != null)
-                result.add(logent);
-            reader.moveToNext();
+        try {
+            reader.moveToFirst();
+            while (!reader.isAfterLast()) {
+                LogEntry logent = getLogEntry(abstractCache, reader, true);
+                if (logent != null)
+                    result.add(logent);
+                reader.moveToNext();
+            }
+        } finally {
+            reader.close();
         }
-        reader.close();
         return result;
     }
 
@@ -290,24 +294,24 @@ public class Database {
         }
 
         int result = -1;
-        SQLiteGdxDatabaseCursor c = null;
+        SQLiteGdxDatabaseCursor cursor = null;
         try {
-            c = rawQuery("select Value from Config where [Key] like ?", new String[]{"DatabaseSchemeVersionWin"});
+            cursor = rawQuery("select Value from Config where [Key] like ?", new String[]{"DatabaseSchemeVersionWin"});
         } catch (Exception exc) {
             return -1;
         }
         try {
-            c.moveToFirst();
-            while (!c.isAfterLast()) {
-                String databaseSchemeVersion = c.getString(0);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String databaseSchemeVersion = cursor.getString(0);
                 result = Integer.parseInt(databaseSchemeVersion);
-                c.moveToNext();
+                cursor.moveToNext();
             }
         } catch (Exception exc) {
             result = -1;
         }
-        if (c != null) {
-            c.close();
+        if (cursor != null) {
+            cursor.close();
         }
 
         return result;
@@ -377,24 +381,24 @@ public class Database {
 
     public String readConfigString(String key) throws Exception {
         String result = "";
-        SQLiteGdxDatabaseCursor c = null;
+        SQLiteGdxDatabaseCursor cursor = null;
         boolean found = false;
         try {
-            c = rawQuery("select Value from Config where [Key] like ?", new String[]{key});
+            cursor = rawQuery("select Value from Config where [Key] like ?", new String[]{key});
         } catch (Exception exc) {
             throw new Exception("not in DB");
         }
         try {
-            c.moveToFirst();
-            while (!c.isAfterLast()) {
-                result = c.getString(0);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                result = cursor.getString(0);
                 found = true;
-                c.moveToNext();
+                cursor.moveToNext();
             }
         } catch (Exception exc) {
             throw new Exception("not in DB");
         } finally {
-            c.close();
+            cursor.close();
         }
 
         if (!found)
@@ -405,24 +409,26 @@ public class Database {
 
     public String readConfigLongString(String key) throws Exception {
         String result = "";
-        SQLiteGdxDatabaseCursor c = null;
+        SQLiteGdxDatabaseCursor cursor = null;
         boolean found = false;
         try {
-            c = rawQuery("select LongString from Config where [Key] like ?", new String[]{key});
+            cursor = rawQuery("select LongString from Config where [Key] like ?", new String[]{key});
         } catch (Exception exc) {
             throw new Exception("not in DB");
         }
         try {
-            c.moveToFirst();
-            while (!c.isAfterLast()) {
-                result = c.getString(0);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                result = cursor.getString(0);
                 found = true;
-                c.moveToNext();
+                cursor.moveToNext();
             }
         } catch (Exception exc) {
             throw new Exception("not in DB");
+        } finally {
+            cursor.close();
         }
-        c.close();
+
 
         if (!found)
             throw new Exception("not in DB");
@@ -443,24 +449,26 @@ public class Database {
 
     public String readConfigDesiredString(String key) throws Exception {
         String result = "";
-        SQLiteGdxDatabaseCursor c = null;
+        SQLiteGdxDatabaseCursor cursor = null;
         boolean found = false;
         try {
-            c = rawQuery("select desired from Config where [Key] like ?", new String[]{key});
+            cursor = rawQuery("select desired from Config where [Key] like ?", new String[]{key});
         } catch (Exception exc) {
             throw new Exception("not in DB");
         }
         try {
-            c.moveToFirst();
-            while (!c.isAfterLast()) {
-                result = c.getString(0);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                result = cursor.getString(0);
                 found = true;
-                c.moveToNext();
+                cursor.moveToNext();
             }
         } catch (Exception exc) {
             throw new Exception("not in DB");
+        } finally {
+            cursor.close();
         }
-        c.close();
+
 
         if (!found)
             throw new Exception("not in DB");
@@ -575,19 +583,19 @@ public class Database {
 
 
     public static boolean waypointExists(String gcCode) {
-        SQLiteGdxDatabaseCursor c = Database.Data.rawQuery("select GcCode from Waypoints where GcCode=?", new String[]{gcCode});
+        SQLiteGdxDatabaseCursor cursor = Database.Data.rawQuery("select GcCode from Waypoints where GcCode=?", new String[]{gcCode});
         {
-            c.moveToFirst();
-            while (!c.isAfterLast()) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
 
                 try {
-                    c.close();
+                    cursor.close();
                     return true;
                 } catch (Exception e) {
                     return false;
                 }
             }
-            c.close();
+            cursor.close();
 
             return false;
         }
@@ -610,12 +618,13 @@ public class Database {
 
     public static String getNote(long cacheId) {
         String resultString = "";
-        SQLiteGdxDatabaseCursor c = Database.Data.rawQuery("select Notes from Caches where Id=?", new String[]{String.valueOf(cacheId)});
-        c.moveToFirst();
-        while (!c.isAfterLast()) {
-            resultString = c.getString(0);
+        SQLiteGdxDatabaseCursor cursor = Database.Data.rawQuery("select Notes from Caches where Id=?", new String[]{String.valueOf(cacheId)});
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            resultString = cursor.getString(0);
             break;
         }
+        cursor.close();
         return resultString;
     }
 
@@ -640,17 +649,20 @@ public class Database {
     }
 
     public static String getSolver(long cacheId) {
+        SQLiteGdxDatabaseCursor cursor = null;
         try {
             String resultString = "";
-            SQLiteGdxDatabaseCursor c = Database.Data.rawQuery("select Solver from Caches where Id=?", new String[]{String.valueOf(cacheId)});
-            c.moveToFirst();
-            while (!c.isAfterLast()) {
-                resultString = c.getString(0);
+            cursor = Database.Data.rawQuery("select Solver from Caches where Id=?", new String[]{String.valueOf(cacheId)});
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                resultString = cursor.getString(0);
                 break;
             }
             return resultString;
         } catch (Exception ex) {
             return "";
+        } finally {
+            if (cursor != null) cursor.close();
         }
     }
 
@@ -693,20 +705,23 @@ public class Database {
         // get CacheId's from Caches with older logs and having more logs than minToKeep
         // #############################################################################
         {
+            SQLiteGdxDatabaseCursor cursor = null;
             try {
                 String command = "SELECT cacheid FROM logs WHERE Timestamp < '" + TimeStamp + "' GROUP BY CacheId HAVING COUNT(Id) > " + String.valueOf(minToKeep);
                 log.debug(command);
-                SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(command, null);
-                reader.moveToFirst();
-                while (!reader.isAfterLast()) {
-                    long tmp = reader.getLong(0);
+                cursor = Database.Data.rawQuery(command, null);
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    long tmp = cursor.getLong(0);
                     if (!oldLogCaches.contains(tmp))
-                        oldLogCaches.add(reader.getLong(0));
-                    reader.moveToNext();
+                        oldLogCaches.add(cursor.getLong(0));
+                    cursor.moveToNext();
                 }
-                reader.close();
+                cursor.close();
             } catch (Exception ex) {
                 log.error("deleteOldLogs", ex);
+            } finally {
+                if (cursor != null) cursor.close();
             }
         }
 
@@ -714,6 +729,7 @@ public class Database {
         // get Logs
         // ###################################################
         {
+            SQLiteGdxDatabaseCursor cursor=null;
             try {
                 beginTransaction();
                 for (long oldLogCache : oldLogCaches) {
@@ -721,13 +737,13 @@ public class Database {
                     String command = "select id from logs where cacheid = " + String.valueOf(oldLogCache) + " order by Timestamp desc";
                     log.debug(command);
                     int count = 0;
-                    SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery(command, null);
-                    reader.moveToFirst();
-                    while (!reader.isAfterLast()) {
+                    cursor = Database.Data.rawQuery(command, null);
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
                         if (count == minToKeep)
                             break;
-                        minLogIds.add(reader.getLong(0));
-                        reader.moveToNext();
+                        minLogIds.add(cursor.getLong(0));
+                        cursor.moveToNext();
                         count++;
                     }
                     StringBuilder sb = new StringBuilder();
@@ -746,6 +762,7 @@ public class Database {
             } catch (Exception ex) {
                 log.error("deleteOldLogs", ex);
             } finally {
+                if (cursor != null) cursor.close();
                 endTransaction();
             }
         }
@@ -894,7 +911,7 @@ public class Database {
         SQLiteGdxDatabaseCursor cursor = tempDB.rawQuery("SELECT Value FROM Config WHERE [Key] like ?", new String[]{"DatabaseSchemeVersionWin"});
         cursor.moveToFirst();
         int version = Integer.parseInt(cursor.getString(0));
-
+        cursor.close();
         if (version < 1028) {
             cursor = tempDB.rawQuery("SELECT COUNT(*) FROM caches", null);
         } else {

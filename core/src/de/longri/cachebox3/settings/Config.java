@@ -32,7 +32,7 @@ public class Config extends Settings {
     static final Logger log = LoggerFactory.getLogger(Config.class);
 
     public static void AcceptChanges() {
-        WriteToDB();
+        writeToDB();
     }
 
     /**
@@ -40,7 +40,7 @@ public class Config extends Settings {
      *
      * @return
      */
-    public static boolean WriteToDB() {
+    private static boolean writeToDB() {
 
         CB.postOnMainThread(new Runnable() {
             @Override
@@ -48,21 +48,21 @@ public class Config extends Settings {
                 // Write into DB
                 de.longri.cachebox3.settings.types.SettingsDAO dao = new de.longri.cachebox3.settings.types.SettingsDAO();
 
-                Database Data = Database.Data;
-                Database SettingsDB = Database.Settings;
+                Database data = Database.Data;
+                Database settingsDB = Database.Settings;
 
-                if (Data == null || SettingsDB == null || !Data.isStarted() || !SettingsDB.isStarted())
+                if (data == null || settingsDB == null || !data.isStarted() || !settingsDB.isStarted())
                     return;
 
                 try {
-                    if (Data != null)
-                        Data.beginTransaction();
+                    if (data != null)
+                        data.beginTransaction();
                 } catch (Exception ex) {
                     // do not change Data now!
-                    Data = null;
+                    data = null;
                 }
 
-                SettingsDB.beginTransaction();
+                settingsDB.beginTransaction();
 
                 boolean needRestart = false;
 
@@ -73,13 +73,13 @@ public class Config extends Settings {
                             continue; // is not changed -> do not
 
                         if (de.longri.cachebox3.settings.types.SettingStoreType.Local == setting.getStoreType()) {
-                            if (Data != null)
-                                dao.writeToDatabase(Data, setting);
+                            if (data != null)
+                                dao.writeToDatabase(data, setting);
                         } else if (de.longri.cachebox3.settings.types.SettingStoreType.Global == setting.getStoreType() || (!de.longri.cachebox3.settings.types.PlatformSettings.canUsePlatformSettings() && de.longri.cachebox3.settings.types.SettingStoreType.Platform == setting.getStoreType())) {
-                            dao.writeToDatabase(SettingsDB, setting);
+                            dao.writeToDatabase(settingsDB, setting);
                         } else if (de.longri.cachebox3.settings.types.SettingStoreType.Platform == setting.getStoreType()) {
                             dao.writeToPlatformSettings(setting);
-                            dao.writeToDatabase(SettingsDB, setting);
+                            dao.writeToDatabase(settingsDB, setting);
                         }
 
                         if (setting.needRestart()) {
@@ -100,15 +100,15 @@ public class Config extends Settings {
                         setting.clearDirty();
 
                     }
-                    if (Data != null)
-                        Data.setTransactionSuccessful();
-                    SettingsDB.setTransactionSuccessful();
+                    if (data != null)
+                        data.setTransactionSuccessful();
+                    settingsDB.setTransactionSuccessful();
 
                     return;
                 } finally {
-                    SettingsDB.endTransaction();
-                    if (Data != null)
-                        Data.endTransaction();
+                    settingsDB.endTransaction();
+                    if (data != null)
+                        data.endTransaction();
                 }
 
             }
@@ -116,7 +116,7 @@ public class Config extends Settings {
         return false;
     }
 
-    public static void ReadFromDB(boolean wait) {
+    public static void readFromDB(boolean wait) {
         CB.postOnMainThread(new Runnable() {
             @Override
             public void run() {
