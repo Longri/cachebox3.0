@@ -25,10 +25,11 @@ public class Translation {
     }
 
     public static boolean isInitial() {
-        return translation.isInitial();
+        return  translation != null &&translation.isInitial();
     }
 
     public static String getLangNameFromFile(String path) throws IOException {
         return translation.getLangNameFromFile(path);
     }
+
 }

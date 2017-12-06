@@ -77,11 +77,9 @@ import java.sql.SQLException;
      */
      SQLiteGdxDatabaseCursor rawQuery(String sql, String[] args) throws SQLiteGdxException;
 
-     void setAutoCommit(boolean autoCommit);
+     void beginTransaction();
 
      void endTransaction();
-
-     void setTransactionSuccessful();
 
      long insert(String tablename, Database.Parameters val);
 

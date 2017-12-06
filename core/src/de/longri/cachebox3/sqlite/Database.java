@@ -71,7 +71,6 @@ public class Database {
 
             delete("GPXFilenames", "Cachecount is NULL or CacheCount = 0", null);
             delete("GPXFilenames", "ID not in (Select GPXFilename_ID From CacheInfo)", null);
-            setTransactionSuccessful();
         } catch (Exception e) {
 
         } finally {
@@ -145,11 +144,6 @@ public class Database {
         }
         return retLogEntry;
     }
-
-    public void disableAutoCommit() {
-        myDB.setAutoCommit(false);
-    }
-
 
     public CharSequence getCharSequence(String sql, String[] args) {
         return new CharSequenceArray(getString(sql, args));
@@ -257,6 +251,7 @@ public class Database {
         log.debug("Initial database: " + Utils.GetFileName(databasePath));
         initialize();
 
+        endTransaction();
         int databaseSchemeVersion = getDatabaseSchemeVersion();
         log.debug("DatabaseSchemeVersion: " + databaseSchemeVersion);
         if (databaseSchemeVersion < latestDatabaseChange) {
@@ -548,7 +543,6 @@ public class Database {
                     if (lastDatabaseSchemeVersion < 1007) {
                         execSQL("ALTER TABLE [FieldNotes] ADD COLUMN [directLog] BOOLEAN DEFAULT 'false' NULL");
                     }
-                    setTransactionSuccessful();
                 } catch (Exception exc) {
                     log.error("alterDatabase", exc);
                 } finally {
@@ -571,7 +565,6 @@ public class Database {
                         // Long Text Field for long Strings
                         execSQL("ALTER TABLE [Config] ADD [desired] ntext NULL;");
                     }
-                    setTransactionSuccessful();
                 } catch (Exception exc) {
                     log.error("alterDatabase", exc);
                 } finally {
@@ -758,7 +751,7 @@ public class Database {
                     log.debug(delCommand);
                     Database.Data.execSQL(delCommand);
                 }
-                setTransactionSuccessful();
+                endTransaction();
             } catch (Exception ex) {
                 log.error("deleteOldLogs", ex);
             } finally {
@@ -798,7 +791,6 @@ public class Database {
             log.debug("create data base: " + databasePath);
             myDB = SQLiteGdxDatabaseFactory.getNewDatabase(databasePath);
             myDB.openOrCreateDatabase();
-            myDB.setTransactionSuccessful();
             myDB.closeDatabase();
 
         } catch (Exception exc) {
@@ -841,13 +833,7 @@ public class Database {
     public void beginTransaction() {
         // log.trace("begin transaction");
         if (myDB != null)
-            myDB.setAutoCommit(false);
-    }
-
-    public void setTransactionSuccessful() {
-        //  log.trace("begin transaction");
-        if (myDB != null)
-            myDB.setTransactionSuccessful();
+            myDB.beginTransaction();
     }
 
     public void endTransaction() {

@@ -161,7 +161,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         }
         cacheList.clear();
 
-        final String msg = Translation.get("LoadCacheList").toString();
+        final String msg = Translation.isInitial() ? Translation.get("LoadCacheList").toString() : "";
         final int count = getFilteredCacheCount(database, statement);
         EventHandler.fire(new IncrementProgressEvent(0, msg, count));
 

@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
@@ -97,31 +98,22 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
         }
     }
 
+    private final AtomicBoolean transactionActive = new AtomicBoolean(false);
+
     @Override
-    public void setAutoCommit(boolean autoCommit) {
-        if (autoCommit) {
-            database.endTransaction();
-        } else {
+    public void beginTransaction() {
+        synchronized (transactionActive) {
+            if (transactionActive.get()) return;
             database.beginTransaction();
+            transactionActive.set(true);
         }
     }
-
 
     @Override
     public void endTransaction() {
-        try {
+        synchronized (transactionActive) {
             database.endTransaction();
-        } catch (Exception e) {
-            //e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void setTransactionSuccessful() {
-        try {
-            database.setTransactionSuccessful();
-        } catch (Exception e) {
-            //e.printStackTrace();
+            transactionActive.set(false);
         }
     }
 

@@ -138,10 +138,6 @@ public class SettingsList extends ArrayList<SettingBase<?>> {
                 setting.clearDirty();
 
             }
-            if (data != null)
-                data.setTransactionSuccessful();
-            settings.setTransactionSuccessful();
-
             return needRestart;
         } finally {
             settings.endTransaction();

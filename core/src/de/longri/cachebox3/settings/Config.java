@@ -100,10 +100,6 @@ public class Config extends Settings {
                         setting.clearDirty();
 
                     }
-                    if (data != null)
-                        data.setTransactionSuccessful();
-                    settingsDB.setTransactionSuccessful();
-
                     return;
                 } finally {
                     settingsDB.endTransaction();

@@ -158,23 +158,19 @@ public class AlterCachebox3DB {
                 //Delete Data from Waypont
                 database.execSQL("DELETE FROM Waypoint;");
 
-                database.setTransactionSuccessful();
                 database.endTransaction();
 
                 //drop alt Table Caches, Waypoint (Close and reopen connection)
                 database.close();
                 database.open();
-                database.disableAutoCommit();
                 database.execSQL("DROP TABLE Caches;");
                 database.execSQL("DROP TABLE Waypoint;");
 
 
                 //execute VACUUM
-                database.setTransactionSuccessful();
                 database.endTransaction();
                 database.close();
                 database.open();
-                database.disableAutoCommit();
                 database.execSQL("end transaction");
                 database.execSQL("VACUUM");
             }

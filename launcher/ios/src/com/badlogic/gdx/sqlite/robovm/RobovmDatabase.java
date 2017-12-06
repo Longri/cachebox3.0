@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 03.08.16.
@@ -135,15 +136,6 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
         }
 
         return new RobovmCursor(rs, rowcount, statement);
-    }
-
-    @Override
-    public void setAutoCommit(boolean autoCommit) {
-        try {
-            myDB.setAutoCommit(autoCommit);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -347,39 +339,29 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
 
     }
 
-//    @Override
-//    public void beginTransaction() {
-//        try {
-//            log.trace("begin transaction");
-//            if (myDB != null)
-//                myDB.setAutoCommit(false);
-//        } catch (SQLException e) {
-//
-//            e.printStackTrace();
-//        }
-//    }
+
+    private final AtomicBoolean transactionActive = new AtomicBoolean(false);
 
     @Override
-    public void setTransactionSuccessful() {
-        try {
-            log.trace("set Transaction Successful");
-            if (myDB != null)
-                myDB.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public void beginTransaction() {
+        synchronized (transactionActive) {
+            if (transactionActive.get()) return;
+            try {
+                execSQL("BEGIN;");
+            } catch (Exception e) {
+                execSQL("COMMIT;");
+                execSQL("BEGIN;");
+            }
+            transactionActive.set(true);
         }
     }
 
     @Override
     public void endTransaction() {
-        try {
-            log.trace("endTransaction");
-            if (myDB != null)
-                myDB.setAutoCommit(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        synchronized (transactionActive) {
+            execSQL("COMMIT;");
+            transactionActive.set(false);
         }
-
     }
 
     @Override

@@ -46,7 +46,7 @@ public class DesktopCursor implements SQLiteGdxDatabaseCursor {
     }
 
     private void setIsOpen() {
-        if (isOpen.get()) throw new RuntimeException("Last Coursor not closed");
+//        if (isOpen.get()) throw new RuntimeException("Last Coursor not closed");
         isOpen.set(true);
     }
 
