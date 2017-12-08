@@ -58,11 +58,11 @@ public class AlterCachebox3DB {
             new AlterCacheboxDB().alterCacheboxDB(database, DatabaseVersions.LatestDatabaseChange);
         }
 
-        database.beginTransaction();
+
         try {
             if (lastDatabaseSchemeVersion <= 1028) {
                 // Convert DB from version ACB2 to CB3
-
+                database.beginTransaction();
                 //add column desired on Config Table
                 database.execSQL("ALTER TABLE Config ADD desired ntext;");
 
@@ -74,6 +74,8 @@ public class AlterCachebox3DB {
                 database.execSQL(schemaStrings.CACHE_INFO);
                 database.execSQL(schemaStrings.WAYPOINTS);
                 database.execSQL(schemaStrings.WAYPOINTS_TEXT);
+
+                database.execSQL(schemaStrings.CACHE_CORE_INFO_IX_ID);
 
                 //drop alt Tables
                 database.execSQL("DROP TABLE CelltowerLocation;");
@@ -171,7 +173,6 @@ public class AlterCachebox3DB {
                 database.endTransaction();
                 database.close();
                 database.open();
-                database.execSQL("end transaction");
                 database.execSQL("VACUUM");
             }
 

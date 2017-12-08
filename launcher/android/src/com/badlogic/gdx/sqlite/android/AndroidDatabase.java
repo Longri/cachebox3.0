@@ -112,7 +112,11 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
     @Override
     public void endTransaction() {
         synchronized (transactionActive) {
-            database.endTransaction();
+            try {
+                database.endTransaction();
+            } catch (Exception e) {
+
+            }
             transactionActive.set(false);
         }
     }

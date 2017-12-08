@@ -381,7 +381,11 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
     @Override
     public void endTransaction() {
         synchronized (transactionActive) {
-            execSQL("COMMIT;");
+            try {
+                execSQL("COMMIT;");
+            } catch (Exception e) {
+
+            }
             transactionActive.set(false);
         }
     }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Database {
@@ -282,7 +283,11 @@ public class Database {
     }
 
 
+    private AtomicInteger shemaVersion = new AtomicInteger(-1);
+
     protected int getDatabaseSchemeVersion() {
+
+        if (shemaVersion.get() >= 0) return shemaVersion.get();
 
         if (!isTableExists("Config")) {
             return -1;
@@ -308,7 +313,7 @@ public class Database {
         if (cursor != null) {
             cursor.close();
         }
-
+        shemaVersion.set(result);
         return result;
     }
 
@@ -329,6 +334,7 @@ public class Database {
             val.put("Key", "DatabaseSchemeVersion");
             insert("Config", val);
         }
+        shemaVersion.set(latestDatabaseChange);
     }
 
     public boolean isTableExists(String tableName) {
@@ -443,6 +449,9 @@ public class Database {
     }
 
     public String readConfigDesiredString(String key) throws Exception {
+
+        if (shemaVersion.get() < 1028) return null;
+
         String result = "";
         SQLiteGdxDatabaseCursor cursor = null;
         boolean found = false;
@@ -722,7 +731,7 @@ public class Database {
         // get Logs
         // ###################################################
         {
-            SQLiteGdxDatabaseCursor cursor=null;
+            SQLiteGdxDatabaseCursor cursor = null;
             try {
                 beginTransaction();
                 for (long oldLogCache : oldLogCaches) {

@@ -21,6 +21,9 @@ package de.longri.cachebox3.sqlite;
  * Created by Longri on 18.10.2017.
  */
 public class DatabaseSchema {
+    public static final String CACHE_CORE_INFO_IX_ID = "CREATE INDEX idx_id ON CacheCoreInfo (\n" +
+            "    Id COLLATE BINARY ASC\n" +
+            ");";
     public final String CACHE_CORE_INFO = "CREATE TABLE CacheCoreInfo (\n" +
             " Id     BIGINT         NOT NULL\n" +
             "      PRIMARY KEY,\n" +
