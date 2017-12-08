@@ -500,7 +500,7 @@ public class CB {
         }
     }
 
-    public static void loadFilteredCacheList() {
+    public static void loadFilteredCacheList(FilterProperties filter) {
 
         Gdx.app.postRunnable(new Runnable() {
             @Override
@@ -509,17 +509,23 @@ public class CB {
             }
         });
 
+        log.debug("load filtered Cache list");
+
         Config.readFromDB(true);
         CB.Categories = new Categories();
 
-        String filter = Config.FilterNew.getValue();
         String sqlWhere = "";
         if (CB.viewmanager != null) {
-            try {
-                CB.viewmanager.setNewFilter(new FilterProperties("?", filter), true);
-                sqlWhere = CB.viewmanager.getActFilter().getSqlWhere(Config.GcLogin.getValue());
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (filter == null) {
+                String filterString = Config.FilterNew.getValue();
+                try {
+                    CB.viewmanager.setNewFilter(new FilterProperties("?", filterString), true);
+                    sqlWhere = CB.viewmanager.getActFilter().getSqlWhere(Config.GcLogin.getValue());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                sqlWhere = filter.getSqlWhere(Config.GcLogin.getValue());
             }
         }
 

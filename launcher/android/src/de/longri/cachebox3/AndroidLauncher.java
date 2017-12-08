@@ -152,7 +152,7 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
                                 orientation = ringBuffer.add((float) Math.toDegrees(orientationValues[0]));
                                 if (Math.abs(lastOrientation - orientation) > minChange) {
                                     CB.eventHelper.setMagneticCompassHeading(orientation);
-                                    log.debug("orientation: {}", orientation);
+                                    log.trace("orientation: {}", orientation);
                                     lastOrientation = orientation;
                                 }
                             }

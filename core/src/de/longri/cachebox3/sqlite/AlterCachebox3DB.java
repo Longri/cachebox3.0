@@ -61,8 +61,11 @@ public class AlterCachebox3DB {
 
         try {
             if (lastDatabaseSchemeVersion <= 1028) {
+
+                log.debug("Convert Database from ACB to CB3");
+
                 // Convert DB from version ACB2 to CB3
-                database.beginTransaction();
+//                database.beginTransaction();
                 //add column desired on Config Table
                 database.execSQL("ALTER TABLE Config ADD desired ntext;");
 
@@ -160,7 +163,7 @@ public class AlterCachebox3DB {
                 //Delete Data from Waypont
                 database.execSQL("DELETE FROM Waypoint;");
 
-                database.endTransaction();
+//                database.endTransaction();
 
                 //drop alt Table Caches, Waypoint (Close and reopen connection)
                 database.close();
@@ -170,10 +173,11 @@ public class AlterCachebox3DB {
 
 
                 //execute VACUUM
-                database.endTransaction();
+//                database.endTransaction();
                 database.close();
                 database.open();
                 database.execSQL("VACUUM");
+                log.debug("FINISH Convert Database from ACB to CB3");
             }
 
 

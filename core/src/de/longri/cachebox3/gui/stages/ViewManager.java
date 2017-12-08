@@ -161,7 +161,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
             Config.AcceptChanges();
 
             if (!dontLoad){
-                CB.loadFilteredCacheList();
+                CB.loadFilteredCacheList(filter);
             }
         }
     }

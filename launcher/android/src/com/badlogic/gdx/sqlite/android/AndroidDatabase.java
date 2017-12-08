@@ -115,7 +115,7 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
             try {
                 database.endTransaction();
             } catch (Exception e) {
-
+                log.error("End Transaction ");
             }
             transactionActive.set(false);
         }
