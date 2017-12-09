@@ -17,6 +17,7 @@ package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.sqlite.Database;
@@ -28,6 +29,7 @@ import de.longri.cachebox3.types.ImmutableCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -151,6 +153,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
         long startTime = System.currentTimeMillis();
 
+
         if (statement == null || statement.isEmpty()) {
             statement = "SELECT * from CacheCoreInfo";
         }
@@ -160,63 +163,61 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         }
         cacheList.clear();
 
+
+        final AtomicBoolean finishStackFill = new AtomicBoolean(false);
         final String msg = Translation.isInitial() ? Translation.get("LoadCacheList").toString() : "";
         final int count = getFilteredCacheCount(database, statement);
-        EventHandler.fire(new IncrementProgressEvent(0, msg, count));
-
         final AtomicInteger cacheCount = new AtomicInteger(0);
+
+        final ImmutableCache.CursorData[] cursorDataStack = new ImmutableCache.CursorData[count];
+        final AtomicInteger writeCount = new AtomicInteger(-1);
+        final AtomicInteger readCount = new AtomicInteger(-1);
+        final AtomicBoolean asyncCacheLoadReady = new AtomicBoolean(false);
+        CB.postAsync(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+
+                    if (readCount.get() < writeCount.get()) {
+                        int idx = readCount.incrementAndGet();
+                        cacheList.add(new ImmutableCache(cursorDataStack[idx]));
+                        EventHandler.fire(new IncrementProgressEvent(cacheCount.incrementAndGet(), msg, count));
+                    } else {
+                        if (finishStackFill.get()) {
+                            break;
+                        }
+                        log.debug("WAIT FOR CACHE DATA");
+                    }
+                }
+                asyncCacheLoadReady.set(true);
+            }
+        });
+
+        EventHandler.fire(new IncrementProgressEvent(0, msg, count));
 
         SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, null);
         cursor.moveToFirst();
 
-        final AtomicInteger postCount = new AtomicInteger(0);
-        final AtomicInteger readyCount = new AtomicInteger(0);
+
         while (!cursor.isAfterLast()) {
-            cacheList.add(new ImmutableCache(cursor));
-            EventHandler.fire(new IncrementProgressEvent(cacheCount.incrementAndGet(), msg, count));
-//            postCount.incrementAndGet();
-//            final double latitude = cursor.getDouble(1);
-//            final double longitude = cursor.getDouble(2);
-//            final long id = cursor.getLong(0);
-//            final short sizeOrigin = cursor.getShort(3);
-//            final short difficulty = cursor.getShort(4);
-//            final short terrain = cursor.getShort(5);
-//            final short typeOrigin = cursor.getShort(6);
-//            final short rating = cursor.getShort(7);
-//            final short numTravelbugs = cursor.getShort(8);
-//            final String gcCode = cursor.getString(9);
-//            final String name = cursor.getString(10);
-//            final String placedBy = cursor.getString(11);
-//            final String owner = cursor.getString(12);
-//            final String gcId = cursor.getString(13);
-//            final short booleanStore = cursor.getShort(14);
-//            final int favPoints = cursor.getInt(15);
-//
-//            CB.postAsync(new Runnable() {
-//                @Override
-//                public void run() {
-//                    cacheList.add(new ImmutableCache(
-//                            latitude, longitude, id, sizeOrigin, difficulty, terrain, typeOrigin,
-//                            rating, numTravelbugs, gcCode, name, placedBy, owner, gcId,
-//                            booleanStore, favPoints));
-//                    readyCount.incrementAndGet();
-//                    EventHandler.fire(new IncrementProgressEvent(cacheCount.incrementAndGet(), msg, count));
-//                }
-//            });
-
-
+//            cacheList.add(new ImmutableCache(cursor));
+//            EventHandler.fire(new IncrementProgressEvent(cacheCount.incrementAndGet(), msg, count));
+            cursorDataStack[writeCount.get() + 1] = new ImmutableCache.CursorData(cursor);
+            writeCount.incrementAndGet();
             cursor.moveToNext();
         }
         cursor.close();
 
-//        //wait for Async ready
-//        while (postCount.get() > readyCount.get()) {
-//            try {
-//                Thread.sleep(20);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        finishStackFill.set(true);
+
+        //wait for Async ready
+        while (!asyncCacheLoadReady.get()) {
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
 
         if (!loadAllWaypoints) {
