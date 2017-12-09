@@ -149,7 +149,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 //    }
 
     @Override
-    public void readCacheList(Database database, final CacheList cacheList, String statement, boolean fullDetails, boolean loadAllWaypoints) {
+    public void readCacheList(final Database database, final CacheList cacheList, String statement, boolean fullDetails, boolean loadAllWaypoints) {
 
         long startTime = System.currentTimeMillis();
 
@@ -196,20 +196,27 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         EventHandler.fire(new IncrementProgressEvent(0, msg, count));
 
         int offset = 0;
+        final String finalStatement = statement;
 
         while (offset < count) {
-            String query = statement + " LIMIT "
+            final int finalOffset=offset;
+            Runnable runnable = new Runnable() {
+                public void run() {
+                    String query = finalStatement + " LIMIT "
                             + Integer.toString(LIMIT) + " OFFSET "
-                            + offset;
-            SQLiteGdxDatabaseCursor cursor = database.rawQuery(query, null);
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                cursorDataStack[writeCount.get() + 1] = new ImmutableCache.CursorData(cursor);
-                writeCount.incrementAndGet();
-                cursor.moveToNext();
-            }
-            cursor.close();
-            offset+=LIMIT;
+                            + finalOffset;
+                    SQLiteGdxDatabaseCursor cursor = database.rawQuery(query, null);
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        cursorDataStack[writeCount.get() + 1] = new ImmutableCache.CursorData(cursor);
+                        writeCount.incrementAndGet();
+                        cursor.moveToNext();
+                    }
+                    cursor.close();
+                }
+            };
+            runnable.run();
+            offset += LIMIT;
         }
 
         finishStackFill.set(true);
