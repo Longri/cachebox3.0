@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CacheList3DAO extends AbstractCacheListDAO {
 
     private final Logger log = LoggerFactory.getLogger(CacheList3DAO.class);
-    private final int LIMIT = 500;
+    private final int LIMIT = 100;
 
 //    @Override
 //    public void readCacheList(final Database database, final CacheList cacheList, String statement, boolean fullDetails, final boolean loadAllWaypoints) {
@@ -151,7 +151,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
     @Override
     public void readCacheList(final Database database, final CacheList cacheList, String statement, boolean fullDetails, boolean loadAllWaypoints) {
 
-        long startTime = System.currentTimeMillis();
+        final long startTime = System.currentTimeMillis();
 
 
         if (statement == null || statement.isEmpty()) {
@@ -176,10 +176,29 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         CB.postAsync(new Runnable() {
             @Override
             public void run() {
+
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                int tryCount = 0;
+
                 while (true) {
 
                     if (readCount.get() < writeCount.get()) {
                         int idx = readCount.incrementAndGet();
+                        if (cursorDataStack[idx] == null) {
+                            if (tryCount > 5) {
+                                // ignore this Cache
+                                log.warn("Cache index: {} are ignored", idx);
+                                continue;
+                            }
+                            readCount.decrementAndGet();
+                            tryCount++;
+                            continue;
+                        }
                         cacheList.add(new ImmutableCache(cursorDataStack[idx]));
                         EventHandler.fire(new IncrementProgressEvent(cacheCount.incrementAndGet(), msg, count));
                     } else {
@@ -190,6 +209,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                     }
                 }
                 asyncCacheLoadReady.set(true);
+                log.debug("asyncCacheLoadReady after {} ms",  System.currentTimeMillis() - startTime);
             }
         });
 
@@ -197,9 +217,9 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
         int offset = 0;
         final String finalStatement = statement;
-
+        final AtomicInteger runningAsyncTasks = new AtomicInteger(0);
         while (offset < count) {
-            final int finalOffset=offset;
+            final int finalOffset = offset;
             Runnable runnable = new Runnable() {
                 public void run() {
                     String query = finalStatement + " LIMIT "
@@ -208,18 +228,23 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                     SQLiteGdxDatabaseCursor cursor = database.rawQuery(query, null);
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
-                        cursorDataStack[writeCount.get() + 1] = new ImmutableCache.CursorData(cursor);
-                        writeCount.incrementAndGet();
+                        ImmutableCache.CursorData data = new ImmutableCache.CursorData(cursor);
+                        cursorDataStack[writeCount.incrementAndGet()] = data;
                         cursor.moveToNext();
                     }
                     cursor.close();
+                    if (runningAsyncTasks.decrementAndGet() == 0) {
+                        finishStackFill.set(true);
+                        log.debug("finishStackFill after {} ms",  System.currentTimeMillis() - startTime);
+                    }
                 }
             };
-            runnable.run();
+
+            CB.postAsync(runnable);
+            runningAsyncTasks.incrementAndGet();
             offset += LIMIT;
         }
 
-        finishStackFill.set(true);
 
         //wait for Async ready
         while (!asyncCacheLoadReady.get()) {
