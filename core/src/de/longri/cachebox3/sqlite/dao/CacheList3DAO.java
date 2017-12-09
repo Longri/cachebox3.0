@@ -15,19 +15,16 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
-import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Array;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
-import de.longri.cachebox3.types.ImmutableCache;
 import de.longri.cachebox3.types.CacheList;
+import de.longri.cachebox3.types.ImmutableCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -152,6 +149,8 @@ public class CacheList3DAO extends AbstractCacheListDAO {
     @Override
     public void readCacheList(Database database, final CacheList cacheList, String statement, boolean fullDetails, boolean loadAllWaypoints) {
 
+        long startTime = System.currentTimeMillis();
+
         if (statement == null || statement.isEmpty()) {
             statement = "SELECT * from CacheCoreInfo";
         }
@@ -220,7 +219,11 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 //        }
 
 
-        if (!loadAllWaypoints) return;
+        if (!loadAllWaypoints) {
+            float loadingTime = System.currentTimeMillis() - startTime;
+            log.debug("Load {} Caches in {}ms ! Without Waypoints", cacheList.size, loadingTime);
+            return;
+        }
 
         //read waypoints
         Array<AbstractWaypoint> waypoints = new Waypoint3DAO().getWaypointsFromCacheID(database, null, true);
@@ -240,6 +243,9 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             }
             cache.setWaypoints(cachewaypoints);
         }
+
+        float loadingTime = System.currentTimeMillis() - startTime;
+        log.debug("Load {} Caches in {}ms ! With Waypoints", cacheList.size, loadingTime);
     }
 
     @Override
