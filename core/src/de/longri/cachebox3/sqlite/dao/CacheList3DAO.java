@@ -173,6 +173,10 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         final AtomicInteger writeCount = new AtomicInteger(-1);
         final AtomicInteger readCount = new AtomicInteger(-1);
         final AtomicBoolean asyncCacheLoadReady = new AtomicBoolean(false);
+
+
+        final int progressEventcount = count / 200; // fire event every 2% changes
+
         CB.postAsync(new Runnable() {
             @Override
             public void run() {
@@ -184,6 +188,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                 }
 
                 int tryCount = 0;
+                int progressFireCount = 0;
 
                 while (true) {
 
@@ -200,7 +205,13 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                             continue;
                         }
                         cacheList.add(new ImmutableCache(cursorDataStack[idx]));
-                        EventHandler.fire(new IncrementProgressEvent(cacheCount.incrementAndGet(), msg, count));
+
+                        int actCacheCount = cacheCount.incrementAndGet();
+                        progressFireCount++;
+                        if (progressFireCount >= progressEventcount) {
+                            EventHandler.fire(new IncrementProgressEvent(actCacheCount, msg, count));
+                            progressFireCount = 0;
+                        }
                     } else {
                         if (finishStackFill.get()) {
                             break;
@@ -209,7 +220,8 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                     }
                 }
                 asyncCacheLoadReady.set(true);
-                log.debug("asyncCacheLoadReady after {} ms",  System.currentTimeMillis() - startTime);
+                EventHandler.fire(new IncrementProgressEvent(cacheCount.get(), msg, count));
+                log.debug("asyncCacheLoadReady after {} ms", System.currentTimeMillis() - startTime);
             }
         });
 
@@ -235,7 +247,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                     cursor.close();
                     if (runningAsyncTasks.decrementAndGet() == 0) {
                         finishStackFill.set(true);
-                        log.debug("finishStackFill after {} ms",  System.currentTimeMillis() - startTime);
+                        log.debug("finishStackFill after {} ms", System.currentTimeMillis() - startTime);
                     }
                 }
             };
