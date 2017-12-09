@@ -186,7 +186,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                         if (finishStackFill.get()) {
                             break;
                         }
-                        log.debug("WAIT FOR CACHE DATA");
+//                        log.debug("WAIT FOR CACHE DATA");
                     }
                 }
                 asyncCacheLoadReady.set(true);
@@ -195,18 +195,22 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
         EventHandler.fire(new IncrementProgressEvent(0, msg, count));
 
-        SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, null);
-        cursor.moveToFirst();
+        int offset = 0;
 
-
-        while (!cursor.isAfterLast()) {
-//            cacheList.add(new ImmutableCache(cursor));
-//            EventHandler.fire(new IncrementProgressEvent(cacheCount.incrementAndGet(), msg, count));
-            cursorDataStack[writeCount.get() + 1] = new ImmutableCache.CursorData(cursor);
-            writeCount.incrementAndGet();
-            cursor.moveToNext();
+        while (offset < count) {
+            String query = statement + " LIMIT "
+                            + Integer.toString(LIMIT) + " OFFSET "
+                            + offset;
+            SQLiteGdxDatabaseCursor cursor = database.rawQuery(query, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                cursorDataStack[writeCount.get() + 1] = new ImmutableCache.CursorData(cursor);
+                writeCount.incrementAndGet();
+                cursor.moveToNext();
+            }
+            cursor.close();
+            offset+=LIMIT;
         }
-        cursor.close();
 
         finishStackFill.set(true);
 
