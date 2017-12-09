@@ -509,7 +509,7 @@ public class CB {
             }
         });
 
-        log.debug("load filtered Cache list");
+        log.debug("load filtered Cache list on Thread[{}]", Thread.currentThread().getName());
 
         Config.readFromDB(true);
         CB.Categories = new Categories();

@@ -557,10 +557,12 @@ public class ListView extends WidgetGroup {
 
         synchronized (indexList) {
 
-            if (listCount != adapter.getCount()) {
-                //adapter has changed!
-                log.debug("List count({}) has changed to {}! set Adapter new!", listCount, adapter.getCount());
-                setAdapter(this.adapter);
+            // check adapter has changed only on top stage
+            if(CB.viewmanager.isTop(this.getStage())){
+                if (listCount != adapter.getCount()) {
+                    log.debug("List count({}) has changed to {}! set Adapter new!", listCount, adapter.getCount());
+                    setAdapter(this.adapter);
+                }
             }
 
 

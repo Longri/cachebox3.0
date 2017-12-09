@@ -59,6 +59,7 @@ public class StageManager {
 
     public static final InputEvent BACK_KEY_INPUT_EVENT = new InputEvent();
     private static final Array<ClickListener> backKeyClickListener = new Array<>();
+    private static NamedStage zOrderTopStage;
 
     public static void draw() {
 
@@ -112,7 +113,6 @@ public class StageManager {
 
             String lastName = actStage.getName();
             if (lastName.equals(actor.getName())) {
-
                 // don't show double
                 return;
             }
@@ -158,7 +158,9 @@ public class StageManager {
         log.debug("InputProzessors:" + inputMultiplexer.getProcessors().toString());
 
         if (debug) writeDrawSequence = true;
+        setTopStage();
     }
+
 
     public static void showOnActStage(Actor actor) {
         Stage stage = stageList.get(stageList.size - 1);
@@ -197,7 +199,15 @@ public class StageManager {
         }
         log.debug("InputProzessors:" + inputMultiplexer.getProcessors().toString());
         if (debug) writeDrawSequence = true;
+        setTopStage();
+    }
 
+    private static void setTopStage() {
+        if (stageList.size > 0) {
+            zOrderTopStage = stageList.get(stageList.size - 1);
+        } else {
+            zOrderTopStage = mainStage;
+        }
     }
 
     public static void setMainStage(NamedStage stage) {
@@ -281,5 +291,9 @@ public class StageManager {
             // fire only last
             backKeyClickListener.peek().clicked(BACK_KEY_INPUT_EVENT, -1, -1);
         }
+    }
+
+    public static boolean isTop(Stage stage) {
+        return zOrderTopStage == stage;
     }
 }

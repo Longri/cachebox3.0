@@ -100,15 +100,14 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
             return;
         }
 
-        //store unfiltered cache size
-
         CB.postAsync(new Runnable() {
             @Override
             public void run() {
                 Database.Data.Query.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+                log.debug("Call loadFilteredCacheList()");
+                CB.loadFilteredCacheList(null);
             }
         });
-        CB.loadFilteredCacheList(null);
     }
 
 }

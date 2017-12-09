@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.views.listview;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.widget.VisTable;
+import de.longri.cachebox3.CB;
 
 /**
  * Created by Longri on 31.08.2016.
@@ -74,7 +75,8 @@ public abstract class ListViewItem extends VisTable implements Disposable {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         if (onDrawListener != null) {
-            onDrawListener.onDraw(this);
+            if (CB.viewmanager.isTop(this.getStage()))
+                onDrawListener.onDraw(this);
         }
     }
 
