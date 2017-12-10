@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -192,11 +192,15 @@ public class CacheList extends Array<AbstractCache> {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
             for (int i = 0, n = this.size; i < n; i++) {
                 AbstractCache cache = this.get(i);
-                if (!cache.isLive())
-                    cache.dispose(); // don't dispose LiveCaches
+                cache.dispose();
             }
             super.clear();
         }
+    }
+
+    public void clear(int newCapacity) {
+        this.clear();
+        this.resize(newCapacity);
     }
 
     public Array<String> getGcCodes() {
