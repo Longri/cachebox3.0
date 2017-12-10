@@ -180,7 +180,6 @@ public class DraftEntry {
         args.put("directLog", isDirectLog);
         try {
             Database.Drafts.insertWithConflictReplace("Fieldnotes", args);
-            Database.Drafts.endTransaction();
         } catch (Exception exc) {
             exc.printStackTrace();
             return;

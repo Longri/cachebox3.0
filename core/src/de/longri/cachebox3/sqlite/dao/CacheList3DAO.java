@@ -167,8 +167,11 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         final AtomicBoolean finishStackFill = new AtomicBoolean(false);
         final String msg = Translation.isInitial() ? Translation.get("LoadCacheList").toString() : "";
         final int count = getFilteredCacheCount(database, statement);
-        final AtomicInteger cacheCount = new AtomicInteger(0);
+        if (count == 0) return;
 
+        cacheList.ensureCapacity(count);
+
+        final AtomicInteger cacheCount = new AtomicInteger(0);
         final ImmutableCache.CursorData[] cursorDataStack = new ImmutableCache.CursorData[count];
         final AtomicInteger writeCount = new AtomicInteger(-1);
         final AtomicInteger readCount = new AtomicInteger(-1);
@@ -195,10 +198,15 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                     if (readCount.get() < writeCount.get()) {
                         int idx = readCount.incrementAndGet();
                         if (cursorDataStack[idx] == null) {
-                            if (tryCount > 5) {
+                            if (tryCount > 1000) {
                                 // ignore this Cache
                                 log.warn("Cache index: {} are ignored", idx);
                                 continue;
+                            }
+                            try {
+                                Thread.sleep(5);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
                             readCount.decrementAndGet();
                             tryCount++;
