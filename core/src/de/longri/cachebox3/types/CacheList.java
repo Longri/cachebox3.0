@@ -213,6 +213,15 @@ public class CacheList extends Array<AbstractCache> {
         }
     }
 
+    public void add(AbstractCache ca, boolean withoutLiveReplaceCheck) {
+        synchronized ((Object) this.items) {
+            if (withoutLiveReplaceCheck) {
+                super.add(ca);
+            } else {
+                this.add(ca);
+            }
+        }
+    }
 
     public void add(AbstractCache ca) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  

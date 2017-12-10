@@ -212,7 +212,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                             tryCount++;
                             continue;
                         }
-                        cacheList.add(new ImmutableCache(cursorDataStack[idx]));
+                        cacheList.add(new ImmutableCache(cursorDataStack[idx]),true);
 
                         int actCacheCount = cacheCount.incrementAndGet();
                         progressFireCount++;
