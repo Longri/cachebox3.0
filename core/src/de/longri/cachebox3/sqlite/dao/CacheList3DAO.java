@@ -161,15 +161,18 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         if (cacheList == null) {
             throw new RuntimeException("CacheList can't be NULL");
         }
-        cacheList.clear();
 
 
         final AtomicBoolean finishStackFill = new AtomicBoolean(false);
         final String msg = Translation.isInitial() ? Translation.get("LoadCacheList").toString() : "";
         final int count = getFilteredCacheCount(database, statement);
-        if (count == 0) return;
+        if (count == 0) {
+            cacheList.clear(5);
+            EventHandler.fire(new IncrementProgressEvent(100, msg, 100));
+            return;
+        }
 
-        cacheList.ensureCapacity(count);
+        cacheList.clear(count);
 
         final AtomicInteger cacheCount = new AtomicInteger(0);
         final ImmutableCache.CursorData[] cursorDataStack = new ImmutableCache.CursorData[count];

@@ -44,6 +44,7 @@ import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Categories;
+import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.ScaledSizes;
@@ -519,7 +520,15 @@ public class CB {
             if (filter == null) {
                 String filterString = Config.FilterNew.getValue();
                 try {
-                    CB.viewmanager.setNewFilter(new FilterProperties("?", filterString), true);
+                    FilterProperties filterProperties = null;
+                    try {
+                        filterProperties = new FilterProperties("?", filterString);
+                    } catch (Exception e) {
+                        log.warn("Can't instance FilterProperties with FilterString: {}", filterString);
+                        filterProperties = FilterInstances.ALL;
+                    }
+
+                    CB.viewmanager.setNewFilter(filterProperties, true);
                     sqlWhere = CB.viewmanager.getActFilter().getSqlWhere(Config.GcLogin.getValue());
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -532,10 +541,8 @@ public class CB {
         Database.Data.gpxFilenameUpdateCacheCount();
 
         log.debug("Read CacheList");
-        Database.Data.Query.clear();
-
         DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, Database.Data.Query, sqlWhere, false, Config.ShowAllWaypoints.getValue());
-        log.debug("Readed " + Database.Data.Query.size + "Caches into CacheList");
+        log.debug("Readed " + Database.Data.Query.size + " Caches into CacheList");
 
         // set selectedCache from last selected Cache
         String sGc = Config.LastSelectedCache.getValue();

@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by Longri on 03.08.16.
  */
 public class RobovmDatabase implements SQLiteGdxDatabase {
-    final static Logger log = LoggerFactory.getLogger(RobovmDatabase.class);
+    final  Logger log ;
     private final FileHandle dbFileHandle;
 
     Connection myDB = null;
@@ -40,6 +40,7 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
 
     public RobovmDatabase(FileHandle dbFileHandle) throws ClassNotFoundException {
         this.dbFileHandle = dbFileHandle;
+        log = LoggerFactory.getLogger("iOSDB " + dbFileHandle.nameWithoutExtension());
     }
 
     @Override

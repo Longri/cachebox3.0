@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class AndroidDatabase implements SQLiteGdxDatabase {
 
-    final Logger log = LoggerFactory.getLogger(AndroidDatabase.class);
+    final Logger log ;
     private SQLiteDatabaseHelper helper;
     private SQLiteDatabase database;
     private Context context;
@@ -50,6 +50,7 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
     public AndroidDatabase(Context context, FileHandle dbFileHandle) {
         this.context = context;
         this.dbFileHandle = dbFileHandle;
+        log = LoggerFactory.getLogger("AndroidDB " + dbFileHandle.nameWithoutExtension());
     }
 
     @Override
@@ -100,11 +101,41 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
 
     private final AtomicBoolean transactionActive = new AtomicBoolean(false);
 
+//    @Override
+//    public void beginTransaction() {
+//        synchronized (transactionActive) {
+//            if (transactionActive.get()) return;
+//            database.beginTransaction();
+//            transactionActive.set(true);
+//        }
+//    }
+//
+//    @Override
+//    public void endTransaction() {
+//        synchronized (transactionActive) {
+//            try {
+//                database.endTransaction();
+//            } catch (Exception e) {
+//                log.error("End Transaction ");
+//            }
+//            transactionActive.set(false);
+//        }
+//    }
+
     @Override
     public void beginTransaction() {
         synchronized (transactionActive) {
             if (transactionActive.get()) return;
-            database.beginTransaction();
+            try {
+                execSQL("BEGIN;");
+            } catch (Exception e) {
+                try {
+                    execSQL("COMMIT;");
+                    execSQL("BEGIN;");
+                } catch (SQLiteGdxException e1) {
+                    log.error("beginTransaction", e1);
+                }
+            }
             transactionActive.set(true);
         }
     }
@@ -113,9 +144,9 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
     public void endTransaction() {
         synchronized (transactionActive) {
             try {
-                database.endTransaction();
+                execSQL("COMMIT;");
             } catch (Exception e) {
-                log.error("End Transaction ");
+                log.error("endTransaction", e);
             }
             transactionActive.set(false);
         }

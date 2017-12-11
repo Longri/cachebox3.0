@@ -338,6 +338,16 @@ public class SelectDB_Activity extends ActivityBase {
                         CB.wait(WAIT);
                         if (!CONVERT.get()) return;
 
+                        finish();
+
+                        //Show BlockUiActivity
+                        CB.postOnMainThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new BlockUiProgress_Activity(Translation.get("DB_Convert")).show();
+                            }
+                        });
+
                         //copy Db to *.db3.old
                         FileHandle target = dbFile.parent().child(name + ".old");
                         dbFile.copyTo(target);
@@ -361,7 +371,7 @@ public class SelectDB_Activity extends ActivityBase {
 
                 Config.DatabaseName.setValue(name);
                 Config.AcceptChanges();
-                finish();
+
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -94,9 +94,6 @@ public class Window extends Table implements Disposable {
 
     public void hide() {
         clearActions();
-        // addCaptureListener(IgnoreTouchInputListener.INSTANCE);
-        addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
-
         StageManager.removeAllWithActStage();
 
         if (this.windowCloseListener != null) {
@@ -109,6 +106,7 @@ public class Window extends Table implements Disposable {
 
         dispose();
         log.debug("Hide Window: {}", this.getName());
+        CB.requestRendering();
     }
 
     public void draw(Batch batch, float parentAlpha) {

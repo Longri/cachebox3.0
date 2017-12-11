@@ -112,6 +112,7 @@ public class AlterCachebox3DB {
                     //read all boolean for id
                     int i = 0;
                     int n = allIds.size;
+                    database.beginTransaction();
                     while (n-- > 0) {
                         cursor = database.rawQuery("SELECT Archived, Available, Found, VotePending, Favorit, " +
                                 "HasUserData, ListingChanged, ImagesUpdated, DescriptionImagesUpdated, " +
@@ -149,6 +150,7 @@ public class AlterCachebox3DB {
                         i++;
                         cursor.close();
                     }
+                    database.endTransaction();
                 }
 
                 {// Convert CacheSizes

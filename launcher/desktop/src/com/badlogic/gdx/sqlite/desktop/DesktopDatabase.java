@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by Longri on 03.08.16.
  */
 public class DesktopDatabase implements SQLiteGdxDatabase {
-    final static Logger log = LoggerFactory.getLogger(DesktopDatabase.class);
+    final Logger log;
     private final FileHandle dbFileHandle;
 
     Connection myDB = null;
@@ -42,6 +42,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
 
     public DesktopDatabase(FileHandle dbFileHandle) throws ClassNotFoundException {
         this.dbFileHandle = dbFileHandle;
+        log = LoggerFactory.getLogger("DeskDB " + dbFileHandle.nameWithoutExtension());
         System.setProperty("sqlite.purejava", "true");
         Class.forName("org.sqlite.JDBC");
     }
