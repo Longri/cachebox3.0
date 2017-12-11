@@ -78,7 +78,7 @@ public class DatabaseSchema {
 
     public final String COPY_DATA_FROM_V2_TO_V3 = "INSERT INTO CacheCoreInfo (Id, Latitude, Longitude, Size, Difficulty, Terrain, Type, Rating, NumTravelbugs, GcCode, Name, PlacedBy, Owner, GcId, Vote, BooleanStore)\n" +
             "SELECT Id, Latitude, Longitude, Size, Difficulty, Terrain, Type, Rating, NumTravelbugs, GcCode, Name, PlacedBy, Owner, GcId, Vote, \n" +
-            "(IfNull(ListingChanged,0)*512 + IfNull(HasUserData,0)*256 + IfNull(Found,0)*32 + IfNull(Favorit,0)*16 + IfNull(Available,0)*8 + IfNull(Archived,0)*4 + IfNull(CorrectedCoordinates,0)*2 + + CASE WHEN LENGTH(TRIM(IfNull(Hint,'  '))) > 1 THEN 1 ELSE 0 END)\n" +
+            "(IfNull(ListingChanged,0)*512 + IfNull(HasUserData,0)*256 + IfNull(Found,0)*32 + IfNull(Favorit,0)*16 + IfNull(Available,0)*8 + IfNull(Archived,0)*4 + IfNull(CorrectedCoordinates,0)*2 + CASE WHEN LENGTH(TRIM(IfNull(Hint,'  '))) > 1 THEN 1 ELSE 0 END)\n" +
             "FROM Caches;";
 
     public final String COPY_ATTRIBUTES_FROM_V2_TO_V3 = "INSERT INTO Attributes (" +
