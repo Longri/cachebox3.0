@@ -99,57 +99,17 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
         }
     }
 
-    private final AtomicBoolean transactionActive = new AtomicBoolean(false);
-
-//    @Override
-//    public void beginTransaction() {
-//        synchronized (transactionActive) {
-//            if (transactionActive.get()) return;
-//            database.beginTransaction();
-//            transactionActive.set(true);
-//        }
-//    }
-//
-//    @Override
-//    public void endTransaction() {
-//        synchronized (transactionActive) {
-//            try {
-//                database.endTransaction();
-//            } catch (Exception e) {
-//                log.error("End Transaction ");
-//            }
-//            transactionActive.set(false);
-//        }
-//    }
-
     @Override
     public void beginTransaction() {
-        synchronized (transactionActive) {
-            if (transactionActive.get()) return;
-            try {
-                execSQL("BEGIN;");
-            } catch (Exception e) {
-                try {
-                    execSQL("COMMIT;");
-                    execSQL("BEGIN;");
-                } catch (SQLiteGdxException e1) {
-                    log.error("beginTransaction", e1);
-                }
-            }
-            transactionActive.set(true);
-        }
+            if (database.inTransaction()) return;
+            database.beginTransaction();
     }
 
     @Override
     public void endTransaction() {
-        synchronized (transactionActive) {
-            try {
-                execSQL("COMMIT;");
-            } catch (Exception e) {
-                log.error("endTransaction", e);
-            }
-            transactionActive.set(false);
-        }
+        if (!database.inTransaction()) return;
+        database.setTransactionSuccessful();
+        database.endTransaction();
     }
 
     @Override

@@ -252,7 +252,7 @@ public class Database {
         log.debug("Initial database: " + Utils.GetFileName(databasePath));
         initialize();
 
-        endTransaction();
+//        endTransaction();
         int databaseSchemeVersion = getDatabaseSchemeVersion();
         log.debug("DatabaseSchemeVersion: " + databaseSchemeVersion);
         if (databaseSchemeVersion < latestDatabaseChange) {

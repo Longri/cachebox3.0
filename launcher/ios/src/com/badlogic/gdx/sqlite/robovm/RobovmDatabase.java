@@ -347,6 +347,14 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
     public void beginTransaction() {
         synchronized (transactionActive) {
             if (transactionActive.get()) return;
+
+            try {
+                if(!myDB.getAutoCommit())return;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+
             try {
                 execSQL("BEGIN;");
             } catch (Exception e) {

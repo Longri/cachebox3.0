@@ -73,7 +73,7 @@ public class CircularProgressWidget extends Widget {
     private void checkState() {
         if (progressMax < 0) {
             drawtype = Drawtype.UNKNOWN;
-        } else if (progress >= progressMax) {
+        } else if (progress >= 100) {
             drawtype = Drawtype.READY;
         } else {
             drawtype = Drawtype.PROGRESS;
