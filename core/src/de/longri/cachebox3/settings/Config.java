@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.settings;
 
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.settings.types.*;
@@ -116,9 +118,40 @@ public class Config extends Settings {
         CB.postOnMainThread(new Runnable() {
             @Override
             public void run() {
-                Database Data = Database.Data;
-                Database SettingsDB = Database.Settings;
+                Database data = Database.Data;
+                Database settingsDB = Database.Settings;
                 // Read from DB
+
+                //load all config entries hold in DB
+                ObjectMap<String, DbSettingValues> localMap = new ObjectMap<>();
+                ObjectMap<String, DbSettingValues> globalMap = new ObjectMap<>();
+
+                if (data != null) {
+                    SQLiteGdxDatabaseCursor cursor = data.rawQuery("SELECT * FROM Config", null);
+                    cursor.moveToFirst();
+                    while (cursor.next()) {
+                        String key = cursor.getString(0);
+                        DbSettingValues values = new DbSettingValues();
+                        values.value = cursor.getString(1);
+                        values.longString = cursor.getString(2);
+                        values.desired = cursor.getString(3);
+                        localMap.put(key, values);
+                    }
+                }
+
+                if (settingsDB != null) {
+                    SQLiteGdxDatabaseCursor cursor = settingsDB.rawQuery("SELECT * FROM Config", null);
+                    cursor.moveToFirst();
+                    while (cursor.next()) {
+                        String key = cursor.getString(0);
+                        DbSettingValues values = new DbSettingValues();
+                        values.value = cursor.getString(1);
+                        values.longString = cursor.getString(1);
+                        values.desired = cursor.getString(1);
+                        globalMap.put(key, values);
+                    }
+                }
+
 
                 de.longri.cachebox3.settings.types.SettingsDAO dao = new de.longri.cachebox3.settings.types.SettingsDAO();
                 for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
@@ -129,42 +162,26 @@ public class Config extends Settings {
                     boolean isPlattformoverride = false;
 
                     if (de.longri.cachebox3.settings.types.SettingStoreType.Local == setting.getStoreType()) {
-                        if (Data == null)
+                        if (data == null)
                             setting.loadDefault();
-                        else
-                            setting = dao.readFromDatabase(Data, setting);
-                    } else if (de.longri.cachebox3.settings.types.SettingStoreType.Global == setting.getStoreType() || (!PlatformSettings.canUsePlatformSettings() && de.longri.cachebox3.settings.types.SettingStoreType.Platform == setting.getStoreType())) {
-                        setting = dao.readFromDatabase(SettingsDB, setting);
-                    } else if (SettingStoreType.Platform == setting.getStoreType()) {
-                        isPlatform = true;
-                        de.longri.cachebox3.settings.types.SettingBase<?> cpy = setting.copy();
-                        cpy = dao.readFromDatabase(SettingsDB, cpy);
-                        setting = dao.readFromPlatformSetting(setting);
-
-                        // chk for Value on User.db3 and cleared Platform Value
-
-                        if (setting instanceof de.longri.cachebox3.settings.types.SettingString) {
-                            de.longri.cachebox3.settings.types.SettingString st = (SettingString) setting;
-
-                            if (st.getValue().length() == 0) {
-                                // Platform Settings are empty use db3 value or default
-                                setting = dao.readFromDatabase(SettingsDB, setting);
-                                dao.writeToPlatformSettings(setting);
-                            }
-                        } else if (!cpy.getValue().equals(setting.getValue())) {
-                            if (setting.getValue().equals(setting.getDefaultValue())) {
-                                // override Platformsettings with UserDBSettings
-                                setting.setValueFrom(cpy);
-                                dao.writeToPlatformSettings(setting);
-                                setting.clearDirty();
-                                isPlattformoverride = true;
+                        else {
+                            DbSettingValues values = localMap.get(setting.name);
+                            if (values == null) {
+                                setting.loadDefault();
                             } else {
-                                // override UserDBSettings with Platformsettings
-                                cpy.setValueFrom(setting);
-                                dao.writeToDatabase(SettingsDB, cpy);
-                                cpy.clearDirty();
+                                setting.fromDBString(values.longString == null ? values.value : values.longString);
                             }
                         }
+                    } else if (de.longri.cachebox3.settings.types.SettingStoreType.Global == setting.getStoreType() || (!PlatformSettings.canUsePlatformSettings() && de.longri.cachebox3.settings.types.SettingStoreType.Platform == setting.getStoreType())) {
+                        DbSettingValues values = localMap.get(setting.name);
+                        if (values == null) {
+                            setting.loadDefault();
+                        } else {
+                            setting.fromDBString(values.longString == null ? values.value : values.longString);
+                        }
+                    } else if (SettingStoreType.Platform == setting.getStoreType()) {
+                        isPlatform = true;
+                        setting = dao.readFromPlatformSetting(setting);
                     }
 
                     if (setting instanceof SettingEncryptedString) {// Don't write encrypted settings in to a log file
@@ -213,5 +230,17 @@ public class Config extends Settings {
         }
     }
 
+
+    private static class DbSettingValues {
+//        CREATE TABLE Config (
+//            [Key]      NVARCHAR (30)  NOT NULL,
+//            Value      NVARCHAR (255),
+//            LongString NTEXT,
+//            desired    NTEXT
+//        );
+
+        private String value, longString, desired;
+
+    }
 
 }
