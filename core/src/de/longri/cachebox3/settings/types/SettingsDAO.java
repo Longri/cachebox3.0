@@ -16,17 +16,27 @@
 package de.longri.cachebox3.settings.types;
 
 
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.sqlite.Database;
 
 public class SettingsDAO {
     public void writeToDatabase(Database database, SettingBase<?> setting) {
-        String dbString = setting.toDBString();
-        if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
-            database.WriteConfigLongString(setting.name, dbString);
-        } else
-            database.writeConfigString(setting.name, dbString);
 
-        database.writeConfigDesiredString(setting.name, Long.toString(setting.expiredTime));
+        if (setting.isDefault()) {
+            //delete entry from Database if exist
+            SQLiteGdxDatabaseCursor cursor = database.rawQuery("SELECT * FROM Config WHERE Key=?" ,new String[]{ setting.name});
+            if (cursor.getCount() > 0)
+                database.execSQL("DELETE FROM Config WHERE Key='" + setting.name+"'");
+        } else {
+            String dbString = setting.toDBString();
+            if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
+                database.WriteConfigLongString(setting.name, dbString);
+            } else
+                database.writeConfigString(setting.name, dbString);
+            database.writeConfigDesiredString(setting.name, Long.toString(setting.expiredTime));
+        }
+
+
     }
 
     public SettingBase<?> readFromDatabase(Database database, SettingBase<?> setting) {

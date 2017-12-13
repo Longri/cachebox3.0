@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Database {
-    private final static Logger log = LoggerFactory.getLogger(Database.class);
+    private Logger log;
     public static Database Data;
     public static Database Drafts;
     public static Database Settings;
@@ -221,6 +221,8 @@ public class Database {
 
 
     public boolean startUp(FileHandle databasePath) throws SQLiteGdxException {
+
+        log = LoggerFactory.getLogger("DB:" + databasePath.nameWithoutExtension());
 
         FileHandle parentDirectory = databasePath.parent();
 
@@ -840,13 +842,13 @@ public class Database {
     }
 
     public void beginTransaction() {
-        // log.trace("begin transaction");
+        log.debug("begin transaction");
         if (myDB != null)
             myDB.beginTransaction();
     }
 
     public void endTransaction() {
-        // log.trace("begin transaction");
+        log.debug("end transaction");
         if (myDB != null)
             myDB.endTransaction();
     }
@@ -921,6 +923,9 @@ public class Database {
     }
 
     public static boolean createNewDB(Database database, FileHandle rootFolder, String newDB_Name, Boolean ownRepository) {
+
+        final Logger logger = LoggerFactory.getLogger("CREATE NEW DB");
+
         if (CB.viewmanager != null) CB.viewmanager.setNewFilter(FilterInstances.ALL); // in case of JUnit
         FileHandle dbFile = rootFolder.child(newDB_Name + ".db3");
         try {
@@ -929,7 +934,7 @@ public class Database {
             database.close();
             database.startUp(dbFile);
         } catch (SQLiteGdxException e) {
-            log.error("Create new DB", e);
+            logger.error("Create new DB", e);
             return true;
         }
         // OwnRepository?
@@ -941,7 +946,7 @@ public class Database {
             Config.SpoilerFolderLocal.setValue(folder + "Spoilers");
             Config.TileCacheFolderLocal.setValue(folder + "Cache");
             Config.AcceptChanges();
-            log.debug(
+            logger.debug(
                     newDB_Name + " has own Repository:\n" + //
                             Config.DescriptionImageFolderLocal.getValue() + ", \n" + //
                             Config.MapPackFolderLocal.getValue() + ", \n" + //
@@ -955,7 +960,7 @@ public class Database {
             creationOK = creationOK && Utils.createDirectory(Config.SpoilerFolderLocal.getValue());
             creationOK = creationOK && Utils.createDirectory(Config.TileCacheFolderLocal.getValue());
             if (!creationOK)
-                log.debug(
+                logger.debug(
                         "Problem with creation of one of the Directories:" + //
                                 Config.DescriptionImageFolderLocal.getValue() + ", " + //
                                 Config.MapPackFolderLocal.getValue() + ", " + //

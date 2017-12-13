@@ -162,13 +162,13 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             statement = myDB.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
-
+            log.error("Execute error:", e);
             e.printStackTrace();
         } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
-
+                log.error("Statement close error:", e);
                 e.printStackTrace();
             }
         }
@@ -369,18 +369,10 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
     public void beginTransaction() {
         synchronized (transactionActive) {
             if (transactionActive.get()) return;
-
             try {
-                if(!myDB.getAutoCommit())return;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                execSQL("BEGIN;");
+                myDB.setAutoCommit(false);
             } catch (Exception e) {
-                execSQL("COMMIT;");
-                execSQL("BEGIN;");
+                log.error("Can't Begin transaction");
             }
             transactionActive.set(true);
         }
@@ -389,10 +381,12 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
     @Override
     public void endTransaction() {
         synchronized (transactionActive) {
-            try {
-                execSQL("COMMIT;");
-            } catch (Exception e) {
 
+            try {
+                myDB.commit();
+                myDB.setAutoCommit(true);
+            } catch (Exception e) {
+                log.error("Can't COMMIT transaction");
             }
             transactionActive.set(false);
         }

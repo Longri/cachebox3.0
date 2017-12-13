@@ -91,61 +91,58 @@ public class SettingsList extends ArrayList<SettingBase<?>> {
         return new SettingsDAO();
     }
 
-    /**
-     * Return true, if setting changes need restart
-     *
-     * @return
-     */
-    public boolean WriteToDB() {
-
-        Database settings = Database.Settings;
-        Database data = Database.Data;
-
-        // Write into DB
-        SettingsDAO dao = createSettingsDAO();
-        settings.beginTransaction();
-
-        try {
-            if (data != null)
-                data.beginTransaction();
-        } catch (Exception ex) {
-            // do not change Data now!
-            data = null;
-        }
-
-        boolean needRestart = false;
-
-        try {
-            for (Iterator<SettingBase<?>> it = this.iterator(); it.hasNext(); ) {
-                SettingBase<?> setting = it.next();
-                if (!setting.isDirty())
-                    continue; // is not changed -> do not
-
-                if (SettingStoreType.Local == setting.getStoreType()) {
-                    if (data != null)
-                        dao.writeToDatabase(data, setting);
-                } else if (SettingStoreType.Global == setting.getStoreType() || (!PlatformSettings.canUsePlatformSettings() && SettingStoreType.Platform == setting.getStoreType())) {
-                    dao.writeToDatabase(settings, setting);
-                } else if (SettingStoreType.Platform == setting.getStoreType()) {
-                    dao.writeToPlatformSettings(setting);
-                    dao.writeToDatabase(settings, setting);
-                }
-
-                if (setting.needRestart) {
-                    needRestart = true;
-                }
-
-                setting.clearDirty();
-
-            }
-            return needRestart;
-        } finally {
-            settings.endTransaction();
-            if (data != null)
-                data.endTransaction();
-        }
-
-    }
+//    /**
+//     * Return true, if setting changes need restart
+//     *
+//     * @return
+//     */
+//    public boolean WriteToDB() {
+//
+//        Database settings = Database.Settings;
+//        Database data = Database.Data;
+//
+//        // Write into DB
+//        SettingsDAO dao = createSettingsDAO();
+//        settings.beginTransaction();
+//
+//        try {
+//            if (data != null)
+//                data.beginTransaction();
+//        } catch (Exception ex) {
+//            // do not change Data now!
+//            data = null;
+//        }
+//
+//        boolean needRestart = false;
+//
+//        try {
+//            for (Iterator<SettingBase<?>> it = this.iterator(); it.hasNext(); ) {
+//                SettingBase<?> setting = it.next();
+//                if (!setting.isDirty())
+//                    continue; // is not changed -> do not
+//
+//                if (SettingStoreType.Local == setting.getStoreType()) {
+//                    if (data != null)
+//                        dao.writeToDatabase(data, setting);
+//                } else if (SettingStoreType.Global == setting.getStoreType()) {
+//                    dao.writeToDatabase(settings, setting);
+//                }
+//
+//                if (setting.needRestart) {
+//                    needRestart = true;
+//                }
+//
+//                setting.clearDirty();
+//
+//            }
+//            return needRestart;
+//        } finally {
+//            settings.endTransaction();
+//            if (data != null)
+//                data.endTransaction();
+//        }
+//
+//    }
 
     public void LoadFromLastValue() {
         for (Iterator<SettingBase<?>> it = this.iterator(); it.hasNext(); ) {

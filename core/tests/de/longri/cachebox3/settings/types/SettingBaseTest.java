@@ -38,7 +38,7 @@ class SettingBaseTest {
     }
 
     public static final SettingBool testBool = (SettingBool) SettingsList.addSetting(new SettingBool("testBool"
-            , SettingCategory.RememberAsk, SettingMode.Normal, false, SettingStoreType.Platform,
+            , SettingCategory.RememberAsk, SettingMode.Normal, false, SettingStoreType.Global,
             SettingUsage.ACB,true));
 
 
