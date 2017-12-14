@@ -99,20 +99,16 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             log.debug(sb.toString());
         }
 
+        if (args != null) {
+            for (String arg : args)
+                sql = sql.replaceFirst("\\?", "'" + arg + "'");
+        }
 
         ResultSet rs = null;
         PreparedStatement statement = null;
         try {
-
             statement = myDB.prepareStatement(sql);
-
-            if (args != null) {
-                for (int i = 0; i < args.length; i++) {
-                    statement.setString(i + 1, args[i]);
-                }
-            }
             rs = statement.executeQuery();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -122,18 +118,9 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         int rowcount = 0;
         PreparedStatement statement2 = null;
         try {
-
             statement2 = myDB.prepareStatement("select count(*) from (" + sql + ")");
-
-            if (args != null) {
-                for (int i = 0; i < args.length; i++) {
-                    statement2.setString(i + 1, args[i]);
-                }
-            }
             rs2 = statement2.executeQuery();
-
             rs2.next();
-
             rowcount = Integer.parseInt(rs2.getString(1));
             statement2.close();
         } catch (SQLException e) {
@@ -142,11 +129,9 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             try {
                 if (statement2 != null) statement2.close();
             } catch (SQLException e) {
-
                 e.printStackTrace();
             }
         }
-
         return new DesktopCursor(rs, rowcount, statement);
     }
 
