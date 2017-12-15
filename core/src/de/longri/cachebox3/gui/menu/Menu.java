@@ -231,9 +231,9 @@ public class Menu extends Window {
         mainMenuWidgetGroup.addActor(this);
 
         if (this.parentMenu == null) {
-            StageManager.showOnNewStage(mainMenuWidgetGroup);
+            showingStage = StageManager.showOnNewStage(mainMenuWidgetGroup);
         } else {
-            StageManager.showOnActStage(mainMenuWidgetGroup);
+            showingStage = StageManager.showOnActStage(mainMenuWidgetGroup);
         }
 
         if (this.parentMenu == null)
@@ -267,7 +267,7 @@ public class Menu extends Window {
         if (!isShowing) return;
         if (this.parentMenu != null) {
             if (all) {
-                StageManager.removeAllWithActStage();
+                StageManager.removeAllWithActStage(showingStage);
                 StageManager.unRegisterForBackKey(backClickListener);
             } else {
                 float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;

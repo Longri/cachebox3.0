@@ -338,8 +338,6 @@ public class SelectDB_Activity extends ActivityBase {
                         CB.wait(WAIT);
                         if (!CONVERT.get()) return;
 
-                        finish();
-
                         //Show BlockUiActivity
                         CB.postOnMainThread(new Runnable() {
                             @Override
@@ -363,7 +361,7 @@ public class SelectDB_Activity extends ActivityBase {
                         e.printStackTrace();
                     }
                 }
-
+                finish();
 
                 Config.MultiDBAutoStartTime.setValue(autoStartTime);
                 Config.MultiDBAsk.setValue(autoStartTime >= 0);

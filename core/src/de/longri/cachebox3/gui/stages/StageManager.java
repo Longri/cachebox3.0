@@ -62,7 +62,7 @@ public class StageManager {
     private static NamedStage zOrderTopStage;
 
     public static void draw() {
-        synchronized (stageList){
+        synchronized (stageList) {
             if (stageList.size < 2) {
                 mainStage.act();
                 mainStage.draw();
@@ -105,15 +105,15 @@ public class StageManager {
         if (debug) writeDrawSequence = true;
     }
 
-    public static void showOnNewStage(final Actor actor) {
-        synchronized (stageList){
+    public static NamedStage showOnNewStage(final Actor actor) {
+        synchronized (stageList) {
             if (stageList.size > 0) {
                 NamedStage actStage = stageList.get(stageList.size - 1);
 
                 String lastName = actStage.getName();
                 if (lastName.equals(actor.getName())) {
                     // don't show double
-                    return;
+                    return actStage;
                 }
             } else {
                 if (mainStage instanceof ViewManager) {
@@ -158,19 +158,30 @@ public class StageManager {
 
             if (debug) writeDrawSequence = true;
             setTopStage();
+            return newStage;
         }
     }
 
-
-    public static void showOnActStage(Actor actor) {
-        Stage stage = stageList.get(stageList.size - 1);
+    public static NamedStage showOnActStage(Actor actor) {
+        NamedStage stage = stageList.get(stageList.size - 1);
         stage.addActor(actor);
+        return stage;
     }
 
-    public static void removeAllWithActStage() {
-        synchronized (stageList){
+    public static void removeAllWithActStage(NamedStage showingStage) {
+        synchronized (stageList) {
             if (stageList.size == 0) return;
             NamedStage stage = stageList.pop();
+
+            if (showingStage != stage) {
+                stageList.add(stage);
+                if (showingStage.getActors().size > 1) {
+                    //todo remove only actor
+                } else {
+                    stageList.removeValue(showingStage, true);
+                }
+                stage = showingStage;
+            }
 
             log.debug("remove Stage: " + stage.getName());
             log.debug("Stage list: " + stageList.toString());
@@ -194,7 +205,6 @@ public class StageManager {
                         descriptionView.onShow();
                         log.debug("Call DescriptionView.onShow() for restore view");
                     }
-
                     viewManager.getActView().onShow();
                 }
             }
