@@ -16,7 +16,6 @@
 package de.longri.cachebox3.translation;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.utils.CharSequenceUtil;

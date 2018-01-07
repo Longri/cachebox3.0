@@ -17,10 +17,10 @@ package de.longri.cachebox3.settings.types;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Calendar;
