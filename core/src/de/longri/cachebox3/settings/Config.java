@@ -15,13 +15,13 @@
  */
 package de.longri.cachebox3.settings;
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.settings.types.SettingEncryptedString;
 import de.longri.cachebox3.settings.types.SettingsList;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,7 +120,7 @@ public class Config extends Settings {
                 ObjectMap<String, DbSettingValues> globalMap = new ObjectMap<>();
 
                 if (data != null) {
-                    SQLiteGdxDatabaseCursor cursor = data.rawQuery("SELECT * FROM Config", null);
+                    GdxSqliteCursor cursor = data.rawQuery("SELECT * FROM Config", null);
                     cursor.moveToFirst();
                     while (cursor.next()) {
                         String key = cursor.getString(0);
@@ -133,7 +133,7 @@ public class Config extends Settings {
                 }
 
                 if (settingsDB != null) {
-                    SQLiteGdxDatabaseCursor cursor = settingsDB.rawQuery("SELECT * FROM Config", null);
+                    GdxSqliteCursor cursor = settingsDB.rawQuery("SELECT * FROM Config", null);
                     cursor.moveToFirst();
                     while (cursor.next()) {
                         String key = cursor.getString(0);

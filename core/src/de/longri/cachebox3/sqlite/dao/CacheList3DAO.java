@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
@@ -26,6 +25,7 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheList;
 import de.longri.cachebox3.types.ImmutableCache;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,7 +86,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 //                    String query = finalStatement + " LIMIT "
 //                            + Integer.toString(LIMIT) + " OFFSET "
 //                            + offset;
-//                    SQLiteGdxDatabaseCursor cursor = asyncDb.rawQuery(query, null);
+//                    GdxSqliteCursor cursor = asyncDb.rawQuery(query, null);
 //                    cursor.moveToFirst();
 //                    while (!cursor.isAfterLast()) {
 //                        postCount.incrementAndGet();
@@ -215,7 +215,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                             tryCount++;
                             continue;
                         }
-                        cacheList.add(new ImmutableCache(cursorDataStack[idx]),true);
+                        cacheList.add(new ImmutableCache(cursorDataStack[idx]), true);
 
                         int actCacheCount = cacheCount.incrementAndGet();
                         progressFireCount++;
@@ -248,7 +248,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                     String query = finalStatement + " LIMIT "
                             + Integer.toString(LIMIT) + " OFFSET "
                             + finalOffset;
-                    SQLiteGdxDatabaseCursor cursor = database.rawQuery(query, null);
+                    GdxSqliteCursor cursor = database.rawQuery(query, null);
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
                         ImmutableCache.CursorData data = new ImmutableCache.CursorData(cursor);
@@ -263,8 +263,15 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                 }
             };
 
-            CB.postAsync(runnable);
+            boolean useThreading = true;
+
             runningAsyncTasks.incrementAndGet();
+            if (useThreading) {
+                CB.postAsync(runnable);
+            } else {
+                runnable.run();
+            }
+
             offset += LIMIT;
         }
 
@@ -312,7 +319,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
     public AbstractCache reloadCache(Database database, CacheList cacheList, AbstractCache cache) {
         String statement = "SELECT * from CacheCoreInfo WHERE id=?";
 
-        SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, new String[]{Long.toString(cache.getId())});
+        GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{Long.toString(cache.getId())});
         cursor.moveToFirst();
         ImmutableCache newCache = null;
         while (!cursor.isAfterLast()) {
@@ -345,7 +352,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         } else {
             statement = statement.replace("SELECT *", "SELECT COUNT(*)");
         }
-        SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, null);
+        GdxSqliteCursor cursor = database.rawQuery(statement, null);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();

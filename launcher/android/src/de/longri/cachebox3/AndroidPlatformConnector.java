@@ -35,8 +35,6 @@ import android.widget.TextView;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
-import com.badlogic.gdx.sqlite.android.AndroidDatabaseManager;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.translation.Translation;
 import org.oscim.android.canvas.AndroidRealSvgBitmap;
@@ -64,7 +62,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
         this.application = app;
         this.context = app.getContext();
         platformConnector = this;
-        SQLiteGdxDatabaseFactory.setDatabaseManager(new AndroidDatabaseManager());
         this.handle = new Handler();
         this.flashLight = new AndroidFlashLight(this.context);
     }

@@ -15,10 +15,10 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Database.Parameters;
 import de.longri.cachebox3.types.ImageEntry;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +57,7 @@ public class ImageDAO {
     public ArrayList<ImageEntry> getImagesForCache(String GcCode) {
         ArrayList<ImageEntry> images = new ArrayList<ImageEntry>();
 
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, GcCode, name, Description, ImageUrl, IsCacheImage from Images where GcCode=?", new String[]{GcCode});
+        GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, GcCode, name, Description, ImageUrl, IsCacheImage from Images where GcCode=?", new String[]{GcCode});
         if (reader.getCount() > 0) {
             reader.moveToFirst();
             while (!reader.isAfterLast()) {
@@ -84,7 +84,7 @@ public class ImageDAO {
     public ArrayList<ImageEntry> getDescriptionImagesForCache(String GcCode) {
         ArrayList<ImageEntry> images = new ArrayList<ImageEntry>();
 
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, GcCode, name, Description, ImageUrl, IsCacheImage from Images where GcCode=? and IsCacheImage=1", new String[]{GcCode});
+        GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, GcCode, name, Description, ImageUrl, IsCacheImage from Images where GcCode=? and IsCacheImage=1", new String[]{GcCode});
 
         if (reader == null)
             return images;
@@ -103,7 +103,7 @@ public class ImageDAO {
     public ArrayList<String> getImageURLsForCache(String GcCode) {
         ArrayList<String> images = new ArrayList<String>();
 
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select ImageUrl from Images where GcCode=?", new String[]{GcCode});
+        GdxSqliteCursor reader = Database.Data.rawQuery("select ImageUrl from Images where GcCode=?", new String[]{GcCode});
 
         if (reader == null)
             return images;
@@ -120,7 +120,7 @@ public class ImageDAO {
     public int getImageCount(String whereClause) {
         int count = 0;
 
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select count(id) from Images where GcCode in (select GcCode from Caches " + ((whereClause.length() > 0) ? "where " + whereClause : whereClause) + ")", null);
+        GdxSqliteCursor reader = Database.Data.rawQuery("select count(id) from Images where GcCode in (select GcCode from Caches " + ((whereClause.length() > 0) ? "where " + whereClause : whereClause) + ")", null);
 
         if (reader == null)
             return 0;

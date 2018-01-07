@@ -16,9 +16,9 @@
 package de.longri.cachebox3.types;
 
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,7 +86,7 @@ public class DraftEntry {
         fillType();
     }
 
-    DraftEntry(SQLiteGdxDatabaseCursor reader) {
+    DraftEntry(GdxSqliteCursor reader) {
         CacheId = reader.getLong(0);
         gcCode = reader.getString(1).trim();
         CacheName = reader.getString(2);
@@ -185,7 +185,7 @@ public class DraftEntry {
             return;
         }
         // search Draft Id
-        SQLiteGdxDatabaseCursor reader = Database.Drafts
+        GdxSqliteCursor reader = Database.Drafts
                 .rawQuery("select CacheId, GcCode, Name, CacheType, Timestamp, Type, FoundNumber, Comment, Id, Url, Uploaded, gc_Vote, TbFieldNote, TbName, TbIconUrl, TravelBugCode, TrackingNumber, directLog from FieldNotes where GcCode='" + gcCode
                         + "' and Type=" + type.getGcLogTypeId(), null);
 
@@ -238,7 +238,7 @@ public class DraftEntry {
 
     public void deleteFromDatabase() {
         try {
-            Database.Drafts.delete("FieldNotes", "Id=" + Id, null);
+            Database.Drafts.delete("FieldNotes", "Id=" + Id);
             Database.Drafts.endTransaction();
         } catch (Exception exc) {
             return;

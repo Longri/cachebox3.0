@@ -18,10 +18,10 @@ package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -100,7 +100,7 @@ public class DraftList extends Array<DraftEntry> {
                 }
             }
 
-            SQLiteGdxDatabaseCursor reader = null;
+            GdxSqliteCursor reader = null;
             try {
                 reader = Database.Drafts.rawQuery(sql, null);
             } catch (Exception exc) {

@@ -21,8 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.utils.UnitFormatter;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -77,7 +77,7 @@ public class Trackable implements Comparable<Trackable> {
      *
      * @param reader
      */
-    public Trackable(SQLiteGdxDatabaseCursor reader) {
+    public Trackable(GdxSqliteCursor reader) {
         try {
             Id = reader.getInt(0);
             Archived = reader.getInt(1) != 0;

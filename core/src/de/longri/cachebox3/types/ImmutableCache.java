@@ -15,11 +15,11 @@
  */
 package de.longri.cachebox3.types;
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,7 +129,7 @@ public class ImmutableCache extends AbstractCache {
     private final float difficulty, terrain;
 
 
-    public ImmutableCache(SQLiteGdxDatabaseCursor cursor) {
+    public ImmutableCache(GdxSqliteCursor cursor) {
         this(new CursorData(cursor));
     }
 
@@ -440,7 +440,7 @@ public class ImmutableCache extends AbstractCache {
 
     @Override
     public Array<Attributes> getAttributes(Database database) {
-        SQLiteGdxDatabaseCursor cursor = database.rawQuery("SELECT * FROM Attributes WHERE Id=?", new String[]{String.valueOf(this.id)});
+        GdxSqliteCursor cursor = database.rawQuery("SELECT * FROM Attributes WHERE Id=?", new String[]{String.valueOf(this.id)});
         DLong attributesPositive;
         DLong attributesNegative;
         if (cursor != null) {
@@ -746,7 +746,7 @@ public class ImmutableCache extends AbstractCache {
         final short booleanStore;
         final int favPoints;
 
-        public CursorData(SQLiteGdxDatabaseCursor cursor) {
+        public CursorData(GdxSqliteCursor cursor) {
             id = cursor.getLong(0);
             latitude = cursor.getDouble(1);
             longitude = cursor.getDouble(2);

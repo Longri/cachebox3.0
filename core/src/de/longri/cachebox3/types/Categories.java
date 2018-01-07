@@ -17,10 +17,10 @@ package de.longri.cachebox3.types;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Database.Parameters;
 import de.longri.cachebox3.utils.MoveableList;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 public class Categories extends MoveableList<Category> {
     /**
@@ -71,7 +71,7 @@ public class Categories extends MoveableList<Category> {
 
         long Category_ID = 0;
 
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("Select max(ID) from Category", null);
+        GdxSqliteCursor reader = Database.Data.rawQuery("Select max(ID) from Category", null);
         reader.moveToFirst();
         if (!reader.isAfterLast()) {
             Category_ID = reader.getLong(0);

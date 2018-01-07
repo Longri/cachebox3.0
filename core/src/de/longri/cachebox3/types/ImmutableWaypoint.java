@@ -15,9 +15,9 @@
  */
 package de.longri.cachebox3.types;
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 /**
  * Created by Longri on 19.10.2017.
@@ -30,7 +30,7 @@ public class ImmutableWaypoint extends AbstractWaypoint {
     private final boolean isStart, syncExclude, userWaypoint;
 
 
-    public ImmutableWaypoint(SQLiteGdxDatabaseCursor cursor) {
+    public ImmutableWaypoint(GdxSqliteCursor cursor) {
         super(cursor.getDouble(2), cursor.getDouble(3));
         this.cacheId = cursor.getLong(0);
         this.gcCode = new CharSequenceArray(cursor.getString(1));

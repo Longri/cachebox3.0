@@ -15,12 +15,12 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.ImmutableCache;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -197,7 +197,7 @@ public class Cache3DAO extends AbstractCacheDAO {
     @Override
     public AbstractCache getFromDbByCacheId(Database database, long cacheID, boolean withWaypoints) {
         String statement = "SELECT * from CacheCoreInfo WHERE Id=?";
-        SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(cacheID)});
+        GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(cacheID)});
         cursor.moveToFirst();
         if (!cursor.isAfterLast()) {
             AbstractCache cache = new ImmutableCache(cursor);

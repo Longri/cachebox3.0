@@ -16,8 +16,8 @@
 package de.longri.cachebox3.types;
 
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -72,7 +72,7 @@ public class ImageEntry implements Serializable {
 	/**
 	 * @param reader
      */
-	public ImageEntry(SQLiteGdxDatabaseCursor reader) {
+	public ImageEntry(GdxSqliteCursor reader) {
 		CacheId = reader.getLong(0);
 		GcCode = reader.getString(1).trim();
 		Name = reader.getString(2);
