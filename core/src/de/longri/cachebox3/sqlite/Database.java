@@ -1104,7 +1104,7 @@ public class Database {
 
     private static int getCacheCount(GdxSqlite tempDB) throws SQLiteGdxException {
         //get schema version
-        GdxSqliteCursor cursor = tempDB.rawQuery("SELECT Value FROM Config WHERE [Key] like DatabaseSchemeVersionWin");
+        GdxSqliteCursor cursor = tempDB.rawQuery("SELECT Value FROM Config WHERE [Key] like 'DatabaseSchemeVersionWin'");
         cursor.moveToFirst();
         int version = Integer.parseInt(cursor.getString(0));
         cursor.close();

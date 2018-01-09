@@ -38,13 +38,16 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         String where = cacheID == null ? GET_ALL_WAYPOINTS : GET_ALL_WAYPOINTS_FROM_CACHE;
         Array<AbstractWaypoint> waypoints = new Array<>();
         GdxSqliteCursor cursor = database.rawQuery(where, args);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            ImmutableWaypoint wp = new ImmutableWaypoint(cursor);
-            waypoints.add(wp);
-            cursor.moveToNext();
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                ImmutableWaypoint wp = new ImmutableWaypoint(cursor);
+                waypoints.add(wp);
+                cursor.moveToNext();
+            }
+            cursor.close();
         }
-        cursor.close();
+
         return waypoints;
     }
 

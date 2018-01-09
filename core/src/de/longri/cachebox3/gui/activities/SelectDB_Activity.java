@@ -311,7 +311,7 @@ public class SelectDB_Activity extends ActivityBase {
                     tempDB.openOrCreateDatabase();
 
                     //get schema version
-                    cursor = tempDB.rawQuery("DatabaseSchemeVersionWin");
+                    cursor = tempDB.rawQuery("SELECT Value FROM Config WHERE [Key] like 'DatabaseSchemeVersionWin'");
                     cursor.moveToFirst();
                     int version = Integer.parseInt(cursor.getString(0));
 

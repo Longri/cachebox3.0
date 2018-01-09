@@ -264,9 +264,10 @@ class Waypoint3DAOTest {
 
         //check is also deleted from WaypointsText table
         GdxSqliteCursor cursor = cb3Database.rawQuery("SELECT * FROM WaypointsText WHERE GcCode='GCCCCCX'", null);
-        cursor.moveToFirst();
-        assertThat("Waypoint must also deleted from WaypointsText table", cursor.isAfterLast());
-
+        if (cursor!=null) {
+            cursor.moveToFirst();
+            assertThat("Waypoint must also deleted from WaypointsText table", cursor.isAfterLast());
+        }
     }
 
     private void assertWp(String msg, AbstractWaypoint wp) {
