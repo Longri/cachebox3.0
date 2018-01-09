@@ -133,6 +133,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
 
             //read booleanStore of Cache
             GdxSqliteCursor cursor = database.rawQuery("SELECT BooleanStore from CacheCoreInfo WHERE Id=?", cacheIdString);
+            if (cursor == null) return; // Cache not exists
             cursor.moveToFirst();
             short booleanStore = cursor.getShort(0);
             cursor.close();
