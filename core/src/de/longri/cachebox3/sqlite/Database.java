@@ -53,7 +53,7 @@ public class Database {
      */
     public Categories gpxFilenameUpdateCacheCount() {
         // welche GPXFilenamen sind in der DB erfasst
-        beginTransaction();
+//        beginTransaction();
         GdxSqliteCursor cursor = null;
         try {
             cursor = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from CacheInfo where GPXFilename_ID is not null Group by GPXFilename_ID", null);
@@ -76,7 +76,7 @@ public class Database {
 
         } finally {
             if (cursor != null) cursor.close();
-            endTransaction();
+//            endTransaction();
         }
 
         //TODO ???

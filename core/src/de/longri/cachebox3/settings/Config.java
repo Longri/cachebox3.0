@@ -58,9 +58,9 @@ public class Config extends Settings {
                     return;
 
 
-                if (data != null)
-                    data.beginTransaction();
-                settingsDB.beginTransaction();
+//                if (data != null)
+//                    data.beginTransaction();
+//                settingsDB.beginTransaction();
 
                 boolean needRestart = false;
 
@@ -97,9 +97,9 @@ public class Config extends Settings {
                     }
                     return;
                 } finally {
-                    settingsDB.endTransaction();
-                    if (data != null)
-                        data.endTransaction();
+//                    settingsDB.endTransaction();
+//                    if (data != null)
+//                        data.endTransaction();
                 }
 
             }
