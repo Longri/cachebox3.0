@@ -28,12 +28,13 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 03.08.16.
  */
 public class DesktopDatabase implements SQLiteGdxDatabase {
-    final static Logger log = LoggerFactory.getLogger(DesktopDatabase.class);
+    final Logger log;
     private final FileHandle dbFileHandle;
 
     Connection myDB = null;
@@ -41,6 +42,7 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
 
     public DesktopDatabase(FileHandle dbFileHandle) throws ClassNotFoundException {
         this.dbFileHandle = dbFileHandle;
+        log = LoggerFactory.getLogger("DeskDB " + dbFileHandle.nameWithoutExtension());
         System.setProperty("sqlite.purejava", "true");
         Class.forName("org.sqlite.JDBC");
     }
@@ -97,20 +99,16 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             log.debug(sb.toString());
         }
 
+        if (args != null) {
+            for (String arg : args)
+                sql = sql.replaceFirst("\\?", "'" + arg + "'");
+        }
 
         ResultSet rs = null;
         PreparedStatement statement = null;
         try {
-
             statement = myDB.prepareStatement(sql);
-
-            if (args != null) {
-                for (int i = 0; i < args.length; i++) {
-                    statement.setString(i + 1, args[i]);
-                }
-            }
             rs = statement.executeQuery();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -120,18 +118,9 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
         int rowcount = 0;
         PreparedStatement statement2 = null;
         try {
-
             statement2 = myDB.prepareStatement("select count(*) from (" + sql + ")");
-
-            if (args != null) {
-                for (int i = 0; i < args.length; i++) {
-                    statement2.setString(i + 1, args[i]);
-                }
-            }
             rs2 = statement2.executeQuery();
-
             rs2.next();
-
             rowcount = Integer.parseInt(rs2.getString(1));
             statement2.close();
         } catch (SQLException e) {
@@ -140,25 +129,10 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             try {
                 if (statement2 != null) statement2.close();
             } catch (SQLException e) {
-
                 e.printStackTrace();
             }
         }
-
         return new DesktopCursor(rs, rowcount, statement);
-    }
-
-
-    @Override
-    public void setAutoCommit(boolean autoCommit) {
-        if (myDB == null)
-            return;
-        try {
-            if (myDB.getAutoCommit()) return;
-            myDB.setAutoCommit(autoCommit);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -173,13 +147,13 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
             statement = myDB.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
-
+            log.error("Execute error:", e);
             e.printStackTrace();
         } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
-
+                log.error("Statement close error:", e);
                 e.printStackTrace();
             }
         }
@@ -373,44 +347,34 @@ public class DesktopDatabase implements SQLiteGdxDatabase {
 
     }
 
-//    @Override
-//    public void beginTransaction() {
-//        try {
-//            log.trace("begin transaction");
-//            if (myDB != null)
-//                myDB.setAutoCommit(false);
-//        } catch (SQLException e) {
-//
-//            e.printStackTrace();
-//        }
-//    }
+
+    private final AtomicBoolean transactionActive = new AtomicBoolean(false);
 
     @Override
-    public void setTransactionSuccessful() {
-        try {
-            log.trace("set Transaction Successful");
-
-            if (myDB != null) {
-                if (myDB.getAutoCommit()) {
-                    myDB.setAutoCommit(false);
-                }
-                myDB.commit();
+    public void beginTransaction() {
+        synchronized (transactionActive) {
+            if (transactionActive.get()) return;
+            try {
+                myDB.setAutoCommit(false);
+            } catch (Exception e) {
+                log.error("Can't Begin transaction");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            transactionActive.set(true);
         }
     }
 
     @Override
     public void endTransaction() {
-        try {
-            log.trace("endTransaction");
-            if (myDB != null)
-                myDB.setAutoCommit(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        synchronized (transactionActive) {
 
+            try {
+                myDB.commit();
+                myDB.setAutoCommit(true);
+            } catch (Exception e) {
+                log.error("Can't COMMIT transaction");
+            }
+            transactionActive.set(false);
+        }
     }
 
     @Override

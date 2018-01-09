@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -148,28 +149,32 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         this.setNewFilter(filter, false);
     }
 
-    public void setNewFilter(FilterProperties filter, boolean dontLoad) {
-        synchronized (isFilters) {
-            if (!actFilter.equals(filter)) {
+    public void setNewFilter(final FilterProperties filter, boolean dontLoad) {
+        if (!actFilter.equals(filter)) {
 
-                log.debug("set New Filter: {}", filter.toString());
+            log.debug("set New Filter: {}", filter.toString());
 
-                actFilter = filter;
-                isFilters.set(!actFilter.equals(FilterInstances.ALL));
+            actFilter = filter;
+            isFilters.set(!actFilter.equals(FilterInstances.ALL));
 
-                // store filter to config
-                Config.FilterNew.setValue(actFilter.getJsonString());
-                Config.AcceptChanges();
+            // store filter to config
+            Config.FilterNew.setValue(actFilter.getJsonString());
+            Config.AcceptChanges();
 
-                if (!dontLoad) CB.loadFilteredCacheList();
+            if (!dontLoad){
+                CB.postAsync(new Runnable() {
+                    @Override
+                    public void run() {
+                        log.debug("Call loadFilteredCacheList()");
+                        CB.loadFilteredCacheList(filter);
+                    }
+                });
             }
         }
     }
 
     public boolean isFilters() {
-        synchronized (isFilters) {
-            return isFilters.get();
-        }
+        return isFilters.get();
     }
 
     private String terrDiffToShortString(float value) {
@@ -378,6 +383,10 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
     public AbstractAction getAction_Show_Quit() {
         return action_show_quit;
+    }
+
+    public boolean isTop(Stage stage) {
+        return StageManager.isTop(stage);
     }
 
 

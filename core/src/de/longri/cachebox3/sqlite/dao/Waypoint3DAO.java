@@ -135,7 +135,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
             SQLiteGdxDatabaseCursor cursor = database.rawQuery("SELECT BooleanStore from CacheCoreInfo WHERE Id=?", cacheIdString);
             cursor.moveToFirst();
             short booleanStore = cursor.getShort(0);
-
+            cursor.close();
             if (ImmutableCache.getMaskValue(ImmutableCache.MASK_HAS_USER_DATA, booleanStore)) {
                 // HasUserData is set, return!
                 return;

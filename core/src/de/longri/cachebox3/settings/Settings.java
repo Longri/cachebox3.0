@@ -26,9 +26,9 @@ import de.longri.cachebox3.utils.HSV_Color;
 public class Settings extends Settings_Skin {
 
     // NORMAL visible
-    public static final SettingString GcLogin = (SettingString) SettingsList.addSetting(new SettingString("GcLogin", SettingCategory.Login, NORMAL, "", SettingStoreType.Platform, SettingUsage.ALL));
+    public static final SettingString GcLogin = (SettingString) SettingsList.addSetting(new SettingString("GcLogin", SettingCategory.Login, NORMAL, "", SettingStoreType.Global, SettingUsage.ALL));
     public static final SettingEnum<Language> localisation = (SettingEnum<Language>) SettingsList.addSetting(new SettingEnum("localisation", SettingCategory.Locale, NORMAL, Language.en_GB, SettingStoreType.Global, SettingUsage.ALL, Language.en_GB));
-    public static final SettingBool showGestureHelp = (SettingBool) SettingsList.addSetting(new SettingBool("showGestureHelp", SettingCategory.RememberAsk, NORMAL, true, SettingStoreType.Platform, SettingUsage.ACB));
+    public static final SettingBool showGestureHelp = (SettingBool) SettingsList.addSetting(new SettingBool("showGestureHelp", SettingCategory.RememberAsk, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
 
 
     // EXPERT visible
@@ -41,12 +41,12 @@ public class Settings extends Settings_Skin {
 
 
     // DEVELOPER visible
-    public static final SettingEncryptedString GcAPI = (SettingEncryptedString) SettingsList.addSetting(new SettingEncryptedString("GcAPI", SettingCategory.Login, DEVELOPER, "", SettingStoreType.Platform, SettingUsage.ALL));
+    public static final SettingEncryptedString GcAPI = (SettingEncryptedString) SettingsList.addSetting(new SettingEncryptedString("GcAPI", SettingCategory.Login, DEVELOPER, "", SettingStoreType.Global, SettingUsage.ALL));
 
 
     // NEVER visible
 
-    public static final SettingEncryptedString GcAPIStaging = (SettingEncryptedString) SettingsList.addSetting(new SettingEncryptedString("GcAPIStaging", SettingCategory.Login, NEVER, "", SettingStoreType.Platform, SettingUsage.ALL));
+    public static final SettingEncryptedString GcAPIStaging = (SettingEncryptedString) SettingsList.addSetting(new SettingEncryptedString("GcAPIStaging", SettingCategory.Login, NEVER, "", SettingStoreType.Global, SettingUsage.ALL));
     public static final SettingFolder DescriptionImageFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("DescriptionImageFolder", SettingCategory.Folder, NEVER,  "?/repository/images", SettingStoreType.Global, SettingUsage.ALL, true));
     public static final SettingFolder DescriptionImageFolderLocal = (SettingFolder) SettingsList.addSetting(new SettingFolder("DescriptionImageFolderLocal", SettingCategory.Folder, NEVER, "", SettingStoreType.Local, SettingUsage.ALL, true));
     public static final SettingFolder SpoilerFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("SpoilerFolder", SettingCategory.Folder, NEVER,  "?/repository/spoilers", SettingStoreType.Global, SettingUsage.ALL, true));
@@ -96,7 +96,7 @@ public class Settings extends Settings_Skin {
 
 
     // AudioSettings
-    public static final SettingInt AppRaterlaunchCount = (SettingInt) SettingsList.addSetting(new SettingInt("AppRaterlaunchCount", SettingCategory.Internal, NEVER, 0, SettingStoreType.Platform, SettingUsage.ACB));
+    public static final SettingInt AppRaterlaunchCount = (SettingInt) SettingsList.addSetting(new SettingInt("AppRaterlaunchCount", SettingCategory.Internal, NEVER, 0, SettingStoreType.Global, SettingUsage.ACB));
 
     public static final SettingsAudio Approach = (SettingsAudio) SettingsList.addSetting(new SettingsAudio("Approach", SettingCategory.Sounds, NEVER, new Audio("data/sound/Approach.ogg", false, false, 1.0f), SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingsAudio GPS_lose = (SettingsAudio) SettingsList.addSetting(new SettingsAudio("GPS_lose", SettingCategory.Sounds, NEVER, new Audio("data/sound/GPS_lose.ogg", false, false, 1.0f), SettingStoreType.Global, SettingUsage.ACB));
@@ -125,7 +125,7 @@ public class Settings extends Settings_Skin {
     public static final SettingString GrabbedTemplate = (SettingString) SettingsList.addSetting(new SettingLongString("GrabbedTemplate", SettingCategory.Templates, NORMAL, GRABED, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingString PickedTemplate = (SettingString) SettingsList.addSetting(new SettingLongString("PickedTemplate", SettingCategory.Templates, NORMAL, PICKED, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingFile DraftsGarminPath = (SettingFile) SettingsList.addSetting(new SettingFile("DraftsGarminPath", SettingCategory.Folder, DEVELOPER,  "?/user/geocache_visits.txt", SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingEncryptedString GcVotePassword = (SettingEncryptedString) SettingsList.addSetting(new SettingEncryptedString("GcVotePassword", SettingCategory.Login, NORMAL, "", SettingStoreType.Platform, SettingUsage.ALL));
+    public static final SettingEncryptedString GcVotePassword = (SettingEncryptedString) SettingsList.addSetting(new SettingEncryptedString("GcVotePassword", SettingCategory.Login, NORMAL, "", SettingStoreType.Global, SettingUsage.ALL));
 
     public static final SettingInt VibrateTime = (SettingInt) SettingsList.addSetting(new SettingInt("VibrateTime", SettingCategory.Misc, EXPERT, 20, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool VibrateFeedback = (SettingBool) SettingsList.addSetting(new SettingBool("VibrateFeedback", SettingCategory.Misc, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
@@ -144,7 +144,7 @@ public class Settings extends Settings_Skin {
 //    public static final SettingInt LiveMaxCount = (SettingInt) SettingsList.addSetting(new SettingInt("LiveMaxCount", SettingCategory.LiveMap, EXPERT, 350, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool LiveExcludeFounds = (SettingBool) SettingsList.addSetting(new SettingBool("LiveExcludeFounds", SettingCategory.LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool LiveExcludeOwn = (SettingBool) SettingsList.addSetting(new SettingBool("LiveExcludeOwn", SettingCategory.LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool showSandbox = (SettingBool) SettingsList.addSetting(new SettingBool("showSandbox", SettingCategory.RememberAsk, NORMAL, false, SettingStoreType.Platform, SettingUsage.ACB));
+//    public static final SettingBool showSandbox = (SettingBool) SettingsList.addSetting(new SettingBool("showSandbox", SettingCategory.RememberAsk, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingInt HardwareCompassLevel = (SettingInt) SettingsList.addSetting(new SettingInt("HardwareCompassLevel", SettingCategory.Gps, NORMAL, 5, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool HardwareCompass = (SettingBool) SettingsList.addSetting(new SettingBool("HardwareCompass", SettingCategory.Gps, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingInt gpsUpdateTime = (SettingInt) SettingsList.addSetting(new SettingInt("gpsUpdateTime", SettingCategory.Gps, NORMAL, 500, SettingStoreType.Global, SettingUsage.ACB));
@@ -162,13 +162,13 @@ public class Settings extends Settings_Skin {
 //    public static final SettingString CacheHistory = (SettingString) SettingsList.addSetting(new SettingString("CacheHistory", SettingCategory.Misc, NEVER, "", SettingStoreType.Local, SettingUsage.ALL));
 //    public static final SettingString NavigationProvider = (SettingString) SettingsList.addSetting(new SettingString("NavigationProvider", SettingCategory.Internal, DEVELOPER, "http://openls.geog.uni-heidelberg.de/testing2015/route?", SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingString SpoilersDescriptionTags = (SettingString) SettingsList.addSetting(new SettingString("SpoilersDescriptionTags", SettingCategory.Internal, DEVELOPER, "", SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingString GcJoker = (SettingString) SettingsList.addSetting(new SettingString("GcJoker", SettingCategory.Login, NORMAL, "", SettingStoreType.Platform, SettingUsage.ALL));
+//    public static final SettingString GcJoker = (SettingString) SettingsList.addSetting(new SettingString("GcJoker", SettingCategory.Login, NORMAL, "", SettingStoreType.Global, SettingUsage.ALL));
 //    public static final SettingStringArray Navis = (SettingStringArray) SettingsList.addSetting(new SettingStringArray("Navis", SettingCategory.Misc, NORMAL, "Google", SettingStoreType.Global, SettingUsage.ACB, navis));
 //    public static final SettingBool ShowFieldnotesCMwithFirstShow = (SettingBool) SettingsList.addSetting(new SettingBool("ShowFieldnotesCMwithFirstShow", SettingCategory.Fieldnotes, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool ShowFieldnotesAsDefaultView = (SettingBool) SettingsList.addSetting(new SettingBool("ShowFieldnotesAsDefaultView", SettingCategory.Fieldnotes, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool LiveMapEnabeld = (SettingBool) SettingsList.addSetting(new SettingBool("LiveMapEnabeld", SettingCategory.LiveMap, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool AppRaterDontShowAgain = (SettingBool) SettingsList.addSetting(new SettingBool("AppRaterDontShowAgain", SettingCategory.RememberAsk, NORMAL, false, SettingStoreType.Platform, SettingUsage.ACB));
-//    public static final SettingString AppRaterFirstLunch = (SettingString) SettingsList.addSetting(new SettingString("AppRaterFirstLunch", SettingCategory.Internal, NEVER, "0", SettingStoreType.Platform, SettingUsage.ACB));
+//    public static final SettingBool AppRaterDontShowAgain = (SettingBool) SettingsList.addSetting(new SettingBool("AppRaterDontShowAgain", SettingCategory.RememberAsk, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
+//    public static final SettingString AppRaterFirstLunch = (SettingString) SettingsList.addSetting(new SettingString("AppRaterFirstLunch", SettingCategory.Internal, NEVER, "0", SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool GestureOn = (SettingBool) SettingsList.addSetting(new SettingBool("GestureOn", SettingCategory.Misc, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingColor LiveMapBackgroundColor = (SettingColor) SettingsList.addSetting(new SettingColor("LiveMapBackgroundColor", SettingCategory.LiveMap, NORMAL, new HSV_Color(0.8f, 0.8f, 1f, 1f), SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingLongString Filter = (SettingLongString) SettingsList.addSetting(new SettingLongString("Filter", SettingCategory.Misc, NEVER, FilterProperties.presets[0].toString(), SettingStoreType.Local, SettingUsage.ALL));
@@ -185,10 +185,10 @@ public class Settings extends Settings_Skin {
 //    public static final SettingBool dynamicFilterAtSearch = (SettingBool) SettingsList.addSetting(new SettingBool("dynamicFilterAtSearch", SettingCategory.Misc, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool DeleteLogs = (SettingBool) SettingsList.addSetting(new SettingBool("DeleteLogs", SettingCategory.Internal, DEVELOPER, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool CompactDB = (SettingBool) SettingsList.addSetting(new SettingBool("CompactDB", SettingCategory.Internal, DEVELOPER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool AskAgain = (SettingBool) SettingsList.addSetting(new SettingBool("AskAgain", SettingCategory.RememberAsk, NORMAL, true, SettingStoreType.Platform, SettingUsage.ALL));
+//    public static final SettingBool AskAgain = (SettingBool) SettingsList.addSetting(new SettingBool("AskAgain", SettingCategory.RememberAsk, NORMAL, true, SettingStoreType.Global, SettingUsage.ALL));
 //    public static final SettingBool RememberAsk_Get_API_Key = (SettingBool) SettingsList.addSetting(new SettingBool("RememberAsk_Get_API_Key", SettingCategory.RememberAsk, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool Ask_Switch_GPS_ON = (SettingBool) SettingsList.addSetting(new SettingBool("Ask_Switch_GPS_ON", SettingCategory.RememberAsk, NORMAL, true, SettingStoreType.Platform, SettingUsage.ALL));
-//    public static final SettingBool TB_DirectLog = (SettingBool) SettingsList.addSetting(new SettingBool("TB_DirectLog", SettingCategory.Internal, NEVER, true, SettingStoreType.Platform, SettingUsage.ALL));
+//    public static final SettingBool Ask_Switch_GPS_ON = (SettingBool) SettingsList.addSetting(new SettingBool("Ask_Switch_GPS_ON", SettingCategory.RememberAsk, NORMAL, true, SettingStoreType.Global, SettingUsage.ALL));
+//    public static final SettingBool TB_DirectLog = (SettingBool) SettingsList.addSetting(new SettingBool("TB_DirectLog", SettingCategory.Internal, NEVER, true, SettingStoreType.Global, SettingUsage.ALL));
 //    public static final SettingInt LogMaxMonthAge = (SettingInt) SettingsList.addSetting(new SettingInt("LogMaxMonthAge", SettingCategory.Internal, DEVELOPER, 6, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingInt LogMinCount = (SettingInt) SettingsList.addSetting(new SettingInt("LogMinCount", SettingCategory.Internal, DEVELOPER, 99999, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingInt installRev = (SettingInt) SettingsList.addSetting(new SettingInt("installRev", SettingCategory.Internal, NEVER, 0, SettingStoreType.Global, SettingUsage.ACB));

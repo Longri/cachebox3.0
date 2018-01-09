@@ -91,141 +91,58 @@ public class SettingsList extends ArrayList<SettingBase<?>> {
         return new SettingsDAO();
     }
 
-    /**
-     * Return true, if setting changes need restart
-     *
-     * @return
-     */
-    public boolean WriteToDB() {
-
-        Database settings = Database.Settings;
-        Database data = Database.Data;
-
-        // Write into DB
-        SettingsDAO dao = createSettingsDAO();
-        settings.beginTransaction();
-
-        try {
-            if (data != null)
-                data.beginTransaction();
-        } catch (Exception ex) {
-            // do not change Data now!
-            data = null;
-        }
-
-        boolean needRestart = false;
-
-        try {
-            for (Iterator<SettingBase<?>> it = this.iterator(); it.hasNext(); ) {
-                SettingBase<?> setting = it.next();
-                if (!setting.isDirty())
-                    continue; // is not changed -> do not
-
-                if (SettingStoreType.Local == setting.getStoreType()) {
-                    if (data != null)
-                        dao.writeToDatabase(data, setting);
-                } else if (SettingStoreType.Global == setting.getStoreType() || (!PlatformSettings.canUsePlatformSettings() && SettingStoreType.Platform == setting.getStoreType())) {
-                    dao.writeToDatabase(settings, setting);
-                } else if (SettingStoreType.Platform == setting.getStoreType()) {
-                    dao.writeToPlatformSettings(setting);
-                    dao.writeToDatabase(settings, setting);
-                }
-
-                if (setting.needRestart) {
-                    needRestart = true;
-                }
-
-                setting.clearDirty();
-
-            }
-            if (data != null)
-                data.setTransactionSuccessful();
-            settings.setTransactionSuccessful();
-
-            return needRestart;
-        } finally {
-            settings.endTransaction();
-            if (data != null)
-                data.endTransaction();
-        }
-
-    }
-
-    public void ReadFromDB() {
-
-        Database settings = Database.Settings;
-        Database data = Database.Data;
-
-        SettingsDAO dao = new SettingsDAO();
-        for (Iterator<SettingBase<?>> it = this.iterator(); it.hasNext(); ) {
-            SettingBase<?> setting = it.next();
-            String debugString;
-
-            boolean isPlatform = false;
-            boolean isPlattformoverride = false;
-
-            if (SettingStoreType.Local == setting.getStoreType()) {
-                if (data == null)
-                    setting.loadDefault();
-                else
-                    setting = dao.readFromDatabase(data, setting);
-            } else if (SettingStoreType.Global == setting.getStoreType() || (!PlatformSettings.canUsePlatformSettings() && SettingStoreType.Platform == setting.getStoreType())) {
-                setting = dao.readFromDatabase(settings, setting);
-            } else if (SettingStoreType.Platform == setting.getStoreType()) {
-                isPlatform = true;
-                SettingBase<?> cpy = setting.copy();
-                cpy = dao.readFromDatabase(settings, cpy);
-                setting = dao.readFromPlatformSetting(setting);
-
-                // chk for Value on User.db3 and cleared Platform Value
-
-                if (setting instanceof SettingString) {
-                    SettingString st = (SettingString) setting;
-
-                    if (st.value.length() == 0) {
-                        // Platform Settings are empty use db3 value or default
-                        setting = dao.readFromDatabase(settings, setting);
-                        dao.writeToPlatformSettings(setting);
-                    }
-                } else if (!cpy.value.equals(setting.value)) {
-                    if (setting.value.equals(setting.defaultValue)) {
-                        // override Platformsettings with UserDBSettings
-                        setting.setValueFrom(cpy);
-                        dao.writeToPlatformSettings(setting);
-                        setting.clearDirty();
-                        isPlattformoverride = true;
-                    } else {
-                        // override UserDBSettings with Platformsettings
-                        cpy.setValueFrom(setting);
-                        dao.writeToDatabase(settings, cpy);
-                        cpy.clearDirty();
-                    }
-                }
-            }
-
-            if (setting instanceof SettingEncryptedString) {// Don't write encrypted settings in to a log file
-                debugString = "*******";
-            } else {
-                debugString = setting.value.toString();
-            }
-
-            if (isPlatform) {
-                if (isPlattformoverride) {
-                    log.debug("Override Platform setting [" + setting.name + "] from DB to: " + debugString);
-                } else {
-                    log.debug("Override PlatformDB setting [" + setting.name + "] from Platform to: " + debugString);
-                }
-            } else {
-                if (!setting.value.equals(setting.defaultValue)) {
-                    log.debug("Change " + setting.getStoreType() + " setting [" + setting.name + "] to: " + debugString);
-                } else {
-                    log.debug("Default " + setting.getStoreType() + " setting [" + setting.name + "] to: " + debugString);
-                }
-            }
-        }
-        log.debug("Settings are loaded");
-        isLoaded = true;
-    }
+//    /**
+//     * Return true, if setting changes need restart
+//     *
+//     * @return
+//     */
+//    public boolean WriteToDB() {
+//
+//        Database settings = Database.Settings;
+//        Database data = Database.Data;
+//
+//        // Write into DB
+//        SettingsDAO dao = createSettingsDAO();
+//        settings.beginTransaction();
+//
+//        try {
+//            if (data != null)
+//                data.beginTransaction();
+//        } catch (Exception ex) {
+//            // do not change Data now!
+//            data = null;
+//        }
+//
+//        boolean needRestart = false;
+//
+//        try {
+//            for (Iterator<SettingBase<?>> it = this.iterator(); it.hasNext(); ) {
+//                SettingBase<?> setting = it.next();
+//                if (!setting.isDirty())
+//                    continue; // is not changed -> do not
+//
+//                if (SettingStoreType.Local == setting.getStoreType()) {
+//                    if (data != null)
+//                        dao.writeToDatabase(data, setting);
+//                } else if (SettingStoreType.Global == setting.getStoreType()) {
+//                    dao.writeToDatabase(settings, setting);
+//                }
+//
+//                if (setting.needRestart) {
+//                    needRestart = true;
+//                }
+//
+//                setting.clearDirty();
+//
+//            }
+//            return needRestart;
+//        } finally {
+//            settings.endTransaction();
+//            if (data != null)
+//                data.endTransaction();
+//        }
+//
+//    }
 
     public void LoadFromLastValue() {
         for (Iterator<SettingBase<?>> it = this.iterator(); it.hasNext(); ) {

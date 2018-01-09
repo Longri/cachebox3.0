@@ -59,38 +59,39 @@ public class StageManager {
 
     public static final InputEvent BACK_KEY_INPUT_EVENT = new InputEvent();
     private static final Array<ClickListener> backKeyClickListener = new Array<>();
+    private static NamedStage zOrderTopStage;
 
     public static void draw() {
+        synchronized (stageList) {
+            if (stageList.size < 2) {
+                mainStage.act();
+                mainStage.draw();
+                if (writeDrawSequence) log.debug("draw mainStage");
+            }
 
-        if (stageList.size < 2) {
-            mainStage.act();
-            mainStage.draw();
-            if (writeDrawSequence) log.debug("draw mainStage");
-        }
-
-        if (stageList.size == 1) {
-            Stage stage = stageList.get(0);
-            stage.act();
-            stage.draw();
-            if (writeDrawSequence) log.debug("draw Stage level 0");
-        } else if (stageList.size >= 1) {
-            for (int idx = stageList.size - 1; idx < stageList.size; idx++) {
-                Stage stage = stageList.get(idx);
+            if (stageList.size == 1) {
+                Stage stage = stageList.get(0);
                 stage.act();
                 stage.draw();
-                if (writeDrawSequence) log.debug("draw Stage level " + idx);
+                if (writeDrawSequence) log.debug("draw Stage level 0");
+            } else if (stageList.size >= 1) {
+                for (int idx = stageList.size - 1; idx < stageList.size; idx++) {
+                    Stage stage = stageList.get(idx);
+                    stage.act();
+                    stage.draw();
+                    if (writeDrawSequence) log.debug("draw Stage level " + idx);
+                }
             }
-        }
 
-        // draw toastStage at last over all
-        if (toastStage.getActors().size > 0) {
-            toastStage.act();
-            toastStage.draw();
-            if (writeDrawSequence) log.debug("draw Toast Stage");
+            // draw toastStage at last over all
+            if (toastStage.getActors().size > 0) {
+                toastStage.act();
+                toastStage.draw();
+                if (writeDrawSequence) log.debug("draw Toast Stage");
+            }
+            if (writeDrawSequence) log.debug("END stage drawing");
+            writeDrawSequence = false;
         }
-        if (writeDrawSequence) log.debug("END stage drawing");
-        writeDrawSequence = false;
-
     }
 
     public static void addToastActor(Actor actor) {
@@ -104,100 +105,121 @@ public class StageManager {
         if (debug) writeDrawSequence = true;
     }
 
-    public static void showOnNewStage(final Actor actor) {
+    public static NamedStage showOnNewStage(final Actor actor) {
+        synchronized (stageList) {
+            if (stageList.size > 0) {
+                NamedStage actStage = stageList.get(stageList.size - 1);
 
-
-        if (stageList.size > 0) {
-            NamedStage actStage = stageList.get(stageList.size - 1);
-
-            String lastName = actStage.getName();
-            if (lastName.equals(actor.getName())) {
-
-                // don't show double
-                return;
-            }
-        } else {
-            if (mainStage instanceof ViewManager) {
-                ViewManager viewManager = (ViewManager) mainStage;
-                if (viewManager.getActView() instanceof MapView) {
-                    // handle MapView on ViewManagerStage
-                    MapView mapView = (MapView) viewManager.getActView();
-                    mapView.setInputListener(false);
-                    log.debug("remove input listener from MapView");
-                } else if (viewManager.getActView() instanceof DescriptionView) {
-                    // handle DescriptionView on ViewManagerStage
-                    DescriptionView descriptionView = (DescriptionView) viewManager.getActView();
-                    descriptionView.onHide();
-                    log.debug("Call DescriptionView.onHide() for showing overlay stage");
+                String lastName = actStage.getName();
+                if (lastName.equals(actor.getName())) {
+                    // don't show double
+                    return actStage;
+                }
+            } else {
+                if (mainStage instanceof ViewManager) {
+                    ViewManager viewManager = (ViewManager) mainStage;
+                    if (viewManager.getActView() instanceof MapView) {
+                        // handle MapView on ViewManagerStage
+                        MapView mapView = (MapView) viewManager.getActView();
+                        mapView.setInputListener(false);
+                        log.debug("remove input listener from MapView");
+                    } else if (viewManager.getActView() instanceof DescriptionView) {
+                        // handle DescriptionView on ViewManagerStage
+                        DescriptionView descriptionView = (DescriptionView) viewManager.getActView();
+                        descriptionView.onHide();
+                        log.debug("Call DescriptionView.onHide() for showing overlay stage");
+                    }
                 }
             }
+
+
+            NamedStage newStage = new NamedStage(actor.getName(), viewport, batch);
+            newStage.addActor(actor);
+            newStage.setKeyboardFocus(actor);
+            newStage.setScrollFocus(actor);
+
+
+            stageList.add(newStage);
+            log.debug("add new Stage: " + newStage.getName());
+            log.debug("Stage list: " + stageList.toString());
+
+            //switch input processor to window stage
+
+            if (stageList.size > 1) {
+                inputMultiplexer.removeProcessor(stageList.get(stageList.size - 2));
+            } else {
+                inputMultiplexer.removeProcessor(mainStage);
+            }
+
+
+            addNonDoubleInputProzessor(newStage);
+
+            log.debug("InputProzessors:" + inputMultiplexer.getProcessors().toString());
+
+            if (debug) writeDrawSequence = true;
+            setTopStage();
+            return newStage;
         }
-
-
-        NamedStage newStage = new NamedStage(actor.getName(), viewport, batch);
-        newStage.addActor(actor);
-        newStage.setKeyboardFocus(actor);
-        newStage.setScrollFocus(actor);
-
-
-        stageList.add(newStage);
-        log.debug("add new Stage: " + newStage.getName());
-        log.debug("Stage list: " + stageList.toString());
-
-        //switch input processor to window stage
-
-        if (stageList.size > 1) {
-            inputMultiplexer.removeProcessor(stageList.get(stageList.size - 2));
-        } else {
-            inputMultiplexer.removeProcessor(mainStage);
-        }
-
-
-        addNonDoubleInputProzessor(newStage);
-
-        log.debug("InputProzessors:" + inputMultiplexer.getProcessors().toString());
-
-        if (debug) writeDrawSequence = true;
     }
 
-    public static void showOnActStage(Actor actor) {
-        Stage stage = stageList.get(stageList.size - 1);
+    public static NamedStage showOnActStage(Actor actor) {
+        NamedStage stage = stageList.get(stageList.size - 1);
         stage.addActor(actor);
+        return stage;
     }
 
-    public static void removeAllWithActStage() {
-        if (stageList.size == 0) return;
-        NamedStage stage = stageList.pop();
+    public static void removeAllWithActStage(NamedStage showingStage) {
+        synchronized (stageList) {
+            if (stageList.size == 0) return;
+            NamedStage stage = stageList.pop();
 
-        log.debug("remove Stage: " + stage.getName());
-        log.debug("Stage list: " + stageList.toString());
-
-        //switch input processor to main stage
-        inputMultiplexer.removeProcessor(stage);
-        if (stageList.size > 0) {
-            addNonDoubleInputProzessor(stageList.get(stageList.size - 1));
-        } else {
-            addNonDoubleInputProzessor(mainStage);
-            {
-                ViewManager viewManager = (ViewManager) mainStage;
-                if (viewManager.getActView() instanceof MapView) {
-                    // handle MapView on ViewManagerStage
-                    MapView mapView = (MapView) viewManager.getActView();
-                    mapView.setInputListener(true);
-                    log.debug("Enable input listener for MapView");
-                } else if (viewManager.getActView() instanceof DescriptionView) {
-                    // handle DescriptionView on ViewManagerStage
-                    DescriptionView descriptionView = (DescriptionView) viewManager.getActView();
-                    descriptionView.onShow();
-                    log.debug("Call DescriptionView.onShow() for restore view");
+            if (showingStage != stage) {
+                stageList.add(stage);
+                if (showingStage.getActors().size > 1) {
+                    //todo remove only actor
+                } else {
+                    stageList.removeValue(showingStage, true);
                 }
-
-                viewManager.getActView().onShow();
+                stage = showingStage;
             }
-        }
-        log.debug("InputProzessors:" + inputMultiplexer.getProcessors().toString());
-        if (debug) writeDrawSequence = true;
 
+            log.debug("remove Stage: " + stage.getName());
+            log.debug("Stage list: " + stageList.toString());
+
+            //switch input processor to main stage
+            inputMultiplexer.removeProcessor(stage);
+            if (stageList.size > 0) {
+                addNonDoubleInputProzessor(stageList.get(stageList.size - 1));
+            } else {
+                addNonDoubleInputProzessor(mainStage);
+                {
+                    ViewManager viewManager = (ViewManager) mainStage;
+                    if (viewManager.getActView() instanceof MapView) {
+                        // handle MapView on ViewManagerStage
+                        MapView mapView = (MapView) viewManager.getActView();
+                        mapView.setInputListener(true);
+                        log.debug("Enable input listener for MapView");
+                    } else if (viewManager.getActView() instanceof DescriptionView) {
+                        // handle DescriptionView on ViewManagerStage
+                        DescriptionView descriptionView = (DescriptionView) viewManager.getActView();
+                        descriptionView.onShow();
+                        log.debug("Call DescriptionView.onShow() for restore view");
+                    }
+                    viewManager.getActView().onShow();
+                }
+            }
+            log.debug("InputProzessors:" + inputMultiplexer.getProcessors().toString());
+            if (debug) writeDrawSequence = true;
+            setTopStage();
+        }
+    }
+
+    private static void setTopStage() {
+        if (stageList.size > 0) {
+            zOrderTopStage = stageList.get(stageList.size - 1);
+        } else {
+            zOrderTopStage = mainStage;
+        }
     }
 
     public static void setMainStage(NamedStage stage) {
@@ -281,5 +303,9 @@ public class StageManager {
             // fire only last
             backKeyClickListener.peek().clicked(BACK_KEY_INPUT_EVENT, -1, -1);
         }
+    }
+
+    public static boolean isTop(Stage stage) {
+        return zOrderTopStage == stage;
     }
 }

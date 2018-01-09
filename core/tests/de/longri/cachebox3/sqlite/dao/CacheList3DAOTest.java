@@ -63,7 +63,7 @@ class CacheList3DAOTest {
 
     @AfterAll
     static void cleanUpRecources() {
-//        cb3Database.close();
+        cb3Database.close();
         assertThat("TestDB must be deleted after cleanup", copyDbFileHandle.delete());
     }
 
@@ -72,7 +72,7 @@ class CacheList3DAOTest {
     void readCacheList() {
 
         AbstractCacheListDAO DAO = new CacheList3DAO();
-        CacheList caches=new CacheList();
+        CacheList caches = new CacheList();
 
         DAO.readCacheList(cb3Database, caches, "", true, true);
 
@@ -107,7 +107,6 @@ class CacheList3DAOTest {
         }
 
 
-
         // read Caches by Type
         String statement = "SELECT * FROM CacheCoreInfo core WHERE Type=" + CacheTypes.Multi.ordinal();
         DAO.readCacheList(cb3Database, caches, statement, true, true);
@@ -120,10 +119,6 @@ class CacheList3DAOTest {
         }
 
         assertThat("CacheList must have 117 Caches but has:" + caches.size, caches.size == 117);
-
-
-
-
 
 
     }

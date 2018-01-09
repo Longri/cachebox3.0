@@ -21,6 +21,9 @@ package de.longri.cachebox3.sqlite;
  * Created by Longri on 18.10.2017.
  */
 public class DatabaseSchema {
+    public static final String CACHE_CORE_INFO_IX_ID = "CREATE INDEX idx_id ON CacheCoreInfo (\n" +
+            "    Id COLLATE BINARY ASC\n" +
+            ");";
     public final String CACHE_CORE_INFO = "CREATE TABLE CacheCoreInfo (\n" +
             " Id     BIGINT         NOT NULL\n" +
             "      PRIMARY KEY,\n" +
@@ -73,25 +76,24 @@ public class DatabaseSchema {
             "    \n" +
             "   );";
 
-    public final String COPY_DATA_FROM_V2_TO_V3 = "INSERT INTO CacheCoreInfo (" +
-            "Id, Latitude, Longitude, Size, Difficulty, Terrain, Type, Rating, NumTravelbugs, GcCode, Name, PlacedBy, Owner, GcId, Vote)\n" +
-            "SELECT " +
-            "Id, Latitude, Longitude, Size, Difficulty, Terrain, Type, Rating, NumTravelbugs, GcCode, Name, PlacedBy, Owner, GcId, Vote\n" +
+    public final String COPY_DATA_FROM_V2_TO_V3 = "INSERT OR IGNORE INTO CacheCoreInfo (Id, Latitude, Longitude, Size, Difficulty, Terrain, Type, Rating, NumTravelbugs, GcCode, Name, PlacedBy, Owner, GcId, Vote, BooleanStore)\n" +
+            "SELECT Id, Latitude, Longitude, Size, Difficulty, Terrain, Type, Rating, NumTravelbugs, GcCode, Name, PlacedBy, Owner, GcId, Vote, \n" +
+            "(IfNull(ListingChanged,0)*512 + IfNull(HasUserData,0)*256 + IfNull(Found,0)*32 + IfNull(Favorit,0)*16 + IfNull(Available,0)*8 + IfNull(Archived,0)*4 + IfNull(CorrectedCoordinates,0)*2 + CASE WHEN LENGTH(TRIM(IfNull(Hint,'  '))) > 1 THEN 1 ELSE 0 END)\n" +
             "FROM Caches;";
 
-    public final String COPY_ATTRIBUTES_FROM_V2_TO_V3 = "INSERT INTO Attributes (" +
+    public final String COPY_ATTRIBUTES_FROM_V2_TO_V3 = "INSERT OR IGNORE INTO Attributes (" +
             "Id, AttributesPositive, AttributesNegative, AttributesPositiveHigh, AttributesNegativeHigh)" +
             "SELECT " +
             "Id, AttributesPositive, AttributesNegative, AttributesPositiveHigh, AttributesNegativeHigh\n" +
             "FROM Caches;";
 
-    public final String COPY_TEXT_FROM_V2_TO_V3 = "INSERT INTO CacheText (" +
+    public final String COPY_TEXT_FROM_V2_TO_V3 = "INSERT OR IGNORE INTO CacheText (" +
             "Id, Url, Hint, Description, Notes, Solver, ShortDescription)" +
             "SELECT " +
             "Id, Url, Hint, Description, Notes, Solver, ShortDescription\n" +
             "FROM Caches;";
 
-    public final String COPY_CACHEINFO_FROM_V2_TO_V3 = "INSERT INTO CacheInfo (" +
+    public final String COPY_CACHEINFO_FROM_V2_TO_V3 = "INSERT OR IGNORE INTO CacheInfo (" +
             "Id, DateHidden, FirstImported, TourName, GPXFilename_Id, ListingCheckSum, state, country, ApiStatus)" +
             "SELECT " +
             "Id, DateHidden, FirstImported, TourName, GPXFilename_Id, ListingCheckSum, state, country, ApiStatus\n" +
@@ -211,13 +213,13 @@ public class DatabaseSchema {
             ");";
 
 
-    public final String COPY_WAYPOINTS_FROM_V2_TO_V3 = "INSERT INTO Waypoints (" +
+    public final String COPY_WAYPOINTS_FROM_V2_TO_V3 = "INSERT OR IGNORE INTO Waypoints (" +
             "CacheId, GcCode, Latitude, Longitude, Type, IsStart, SyncExclude, UserWaypoint, Title)" +
             "SELECT " +
             "CacheId, GcCode, Latitude, Longitude, Type, IsStart, SyncExclude, UserWaypoint, Title\n" +
             "FROM Waypoint;";
 
-    public final String COPY_WAYPOINTS_TEXT_FROM_V2_TO_V3 = "INSERT INTO WaypointsText (" +
+    public final String COPY_WAYPOINTS_TEXT_FROM_V2_TO_V3 = "INSERT OR IGNORE INTO WaypointsText (" +
             "GcCode, Description, Clue)" +
             "SELECT " +
             "GcCode, Description, Clue\n" +

@@ -221,8 +221,6 @@ public class AlterCacheboxDB {
                 // Long Text Field for long Strings
                 database.execSQL("ALTER TABLE [Config] ADD [desired] ntext NULL;");
             }
-
-            database.setTransactionSuccessful();
         } catch (Exception exc) {
             log.error("alterDatabase", exc);
         } finally {

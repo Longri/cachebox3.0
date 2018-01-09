@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.stages.NamedStage;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.utils.Showable;
 import org.slf4j.Logger;
@@ -78,11 +79,13 @@ public class Window extends Table implements Disposable {
         return this.stageBackground;
     }
 
+    protected NamedStage showingStage;
+
     public void show() {
         clearActions();
         pack();
 
-        StageManager.showOnNewStage(this);
+        showingStage = StageManager.showOnNewStage(this);
         addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
 
         if (this instanceof Showable) {
@@ -94,10 +97,7 @@ public class Window extends Table implements Disposable {
 
     public void hide() {
         clearActions();
-        // addCaptureListener(IgnoreTouchInputListener.INSTANCE);
-        addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
-
-        StageManager.removeAllWithActStage();
+        StageManager.removeAllWithActStage(showingStage);
 
         if (this.windowCloseListener != null) {
             this.windowCloseListener.windowClosed();
@@ -109,6 +109,7 @@ public class Window extends Table implements Disposable {
 
         dispose();
         log.debug("Hide Window: {}", this.getName());
+        CB.requestRendering();
     }
 
     public void draw(Batch batch, float parentAlpha) {

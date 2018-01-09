@@ -126,7 +126,7 @@ public class TestView extends AbstractView {
                                 value += 1f;
                                 final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
                                 EventHandler.fire(new IncrementProgressEvent((int) progressValue,
-                                        "", progressValue == 0 ? -1 : 100));
+                                        "Progress Test Label", progressValue == 0 ? -1 : 100));
                                 try {
                                     Thread.sleep(50);
                                 } catch (InterruptedException e) {

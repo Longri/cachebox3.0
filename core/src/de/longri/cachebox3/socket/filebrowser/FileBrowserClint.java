@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -171,7 +172,12 @@ public class FileBrowserClint {
 
                 int left = progressHandler != null ? 0 : -1;
                 while ((theByte = bis.read()) != -1) {
-                    bos.write(theByte);
+                    try {
+                        bos.write(theByte);
+                    } catch (IOException e) {
+                        //TODO handle broken Pipe with "java.net.SocketException: Broken pipe (Write failed)"
+                        e.printStackTrace();
+                    }
 
                     if (sendet % 1024 == left) {
                         progressHandler.updateProgress("", sendet, completeLength);

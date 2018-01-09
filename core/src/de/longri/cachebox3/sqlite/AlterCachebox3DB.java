@@ -15,9 +15,6 @@
  */
 package de.longri.cachebox3.sqlite;
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
-import com.badlogic.gdx.utils.Array;
-import de.longri.cachebox3.types.ImmutableCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,10 +55,17 @@ public class AlterCachebox3DB {
             new AlterCacheboxDB().alterCacheboxDB(database, DatabaseVersions.LatestDatabaseChange);
         }
 
-        database.beginTransaction();
+
         try {
             if (lastDatabaseSchemeVersion <= 1028) {
+
+                log.debug("Convert Database from ACB to CB3");
+
                 // Convert DB from version ACB2 to CB3
+//                database.beginTransaction();
+                //add column desired on Config Table
+                database.execSQL("ALTER TABLE Config ADD desired ntext;");
+
                 //create new Tables
                 DatabaseSchema schemaStrings = new DatabaseSchema();
                 database.execSQL(schemaStrings.CACHE_CORE_INFO);
@@ -70,6 +74,8 @@ public class AlterCachebox3DB {
                 database.execSQL(schemaStrings.CACHE_INFO);
                 database.execSQL(schemaStrings.WAYPOINTS);
                 database.execSQL(schemaStrings.WAYPOINTS_TEXT);
+
+                database.execSQL(schemaStrings.CACHE_CORE_INFO_IX_ID);
 
                 //drop alt Tables
                 database.execSQL("DROP TABLE CelltowerLocation;");
@@ -84,69 +90,10 @@ public class AlterCachebox3DB {
                 database.execSQL(schemaStrings.COPY_WAYPOINTS_FROM_V2_TO_V3);
                 database.execSQL(schemaStrings.COPY_WAYPOINTS_TEXT_FROM_V2_TO_V3);
 
-
-                // get List of all ID's for conversion
-                // get list of Id's
-                Array<Long> allIds = new Array<>();
-                SQLiteGdxDatabaseCursor cursor = database.rawQuery("SELECT id from CacheCoreInfo", null);
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    long id = cursor.getLong(0);
-                    allIds.add(id);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-
-
-                //convert Boolean values to Short
-                {
-                    //read all boolean for id
-                    int i = 0;
-                    int n = allIds.size;
-                    while (n-- > 0) {
-                        cursor = database.rawQuery("SELECT Archived, Available, Found, VotePending, Favorit, " +
-                                "HasUserData, ListingChanged, ImagesUpdated, DescriptionImagesUpdated, " +
-                                "CorrectedCoordinates, Hint" +
-                                " from Caches WHERE Id=?", new String[]{String.valueOf(allIds.get(i))});
-                        cursor.moveToFirst();
-                        boolean Archived = cursor.getInt(0) != 0;
-                        boolean Available = cursor.getInt(1) != 0;
-                        boolean Found = cursor.getInt(2) != 0;
-                        boolean VotePending = cursor.getInt(3) != 0;
-                        boolean Favorit = cursor.getInt(4) != 0;
-                        boolean HasUserData = cursor.getInt(5) != 0;
-                        boolean ListingChanged = cursor.getInt(6) != 0;
-                        boolean ImagesUpdated = cursor.getInt(7) != 0;
-                        boolean DescriptionImagesUpdated = cursor.getInt(8) != 0;
-                        boolean CorrectedCoordinates = cursor.getInt(9) != 0;
-                        String hint = cursor.getString(10);
-                        boolean hasHint = hint != null && hint.length() > 0;
-
-                        short bitFlags = 0;
-                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_ARCHIVED, Archived, bitFlags);
-                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, Available, bitFlags);
-                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, Found, bitFlags);
-                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, Favorit, bitFlags);
-                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, HasUserData, bitFlags);
-                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_LISTING_CHANGED, ListingChanged, bitFlags);
-                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_CORECTED_COORDS, CorrectedCoordinates, bitFlags);
-                        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_HINT, hasHint, bitFlags);
-
-                        //Store bitFlags
-                        Database.Parameters args = new Database.Parameters();
-                        args.put("BooleanStore", bitFlags);
-                        database.update("CacheCoreInfo", args, "id=" + String.valueOf(allIds.get(i)), null);
-
-                        i++;
-                        cursor.close();
-                    }
-                }
-
                 {// Convert CacheSizes
                     database.execSQL("UPDATE CacheCoreInfo SET Size = Size - 1");
                     database.execSQL("UPDATE CacheCoreInfo SET Size = 4 WHERE Size<0");
                 }
-
 
                 //Delete Data from Caches
                 database.execSQL("DELETE FROM Caches;");
@@ -154,25 +101,18 @@ public class AlterCachebox3DB {
                 //Delete Data from Waypont
                 database.execSQL("DELETE FROM Waypoint;");
 
-                database.setTransactionSuccessful();
-                database.endTransaction();
-
                 //drop alt Table Caches, Waypoint (Close and reopen connection)
                 database.close();
                 database.open();
-                database.disableAutoCommit();
                 database.execSQL("DROP TABLE Caches;");
                 database.execSQL("DROP TABLE Waypoint;");
 
 
                 //execute VACUUM
-                database.setTransactionSuccessful();
-                database.endTransaction();
                 database.close();
                 database.open();
-                database.disableAutoCommit();
-                database.execSQL("end transaction");
                 database.execSQL("VACUUM");
+                log.debug("FINISH Convert Database from ACB to CB3");
             }
 
 

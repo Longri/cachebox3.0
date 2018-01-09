@@ -17,10 +17,8 @@ package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.AbstractWaypointDAO;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,59 +128,29 @@ public class ImmutableCache extends AbstractCache {
     private final CacheSizes size;
     private final float difficulty, terrain;
 
+
     public ImmutableCache(SQLiteGdxDatabaseCursor cursor) {
-        this(cursor, null);
+        this(new CursorData(cursor));
     }
 
-    public ImmutableCache(SQLiteGdxDatabaseCursor cursor, final Database waypointDatabase) {
-        this(waypointDatabase,
-                cursor.getDouble(1), cursor.getDouble(2),
-                cursor.getLong(0), cursor.getShort(3),
-                cursor.getShort(4), cursor.getShort(5),
-                cursor.getShort(6), cursor.getShort(7),
-                cursor.getShort(8), cursor.getString(9),
-                cursor.getString(10), cursor.getString(11),
-                cursor.getString(12), cursor.getString(13),
-                cursor.getShort(14), cursor.getInt(15));
-    }
+    public ImmutableCache( CursorData data) {
+        super(data.latitude, data.longitude);
+        this.id = data.id;
+        this.size = CacheSizes.parseInt(data.sizeOrigin);
+        this.difficulty = (float) data.difficulty / 2.0f;
+        this.terrain = (float) data.terrain / 2.0f;
+        this.type = CacheTypes.get(data.typeOrigin);
+        this.rating = (short) (data.rating / 100);
+        this.numTravelbugs = data.numTravelbugs;
 
-    public ImmutableCache(final Database waypointDatabase,
-                          double latitude, double longitude, long id,
-                          short sizeOrigin, short difficulty, short terrain,
-                          short typeOrigin, short rating, short numTravelbugs,
-                          String gcCode, String name, String placedBy, String owner,
-                          String gcId, short booleanStore, int favPoints) {
-        super(latitude, longitude);
-        this.id = id;
+        this.gcCode = new CharSequenceArray(data.gcCode);
+        this.name = new CharSequenceArray(data.name.trim());
+        this.placedBy = new CharSequenceArray(data.placedBy);
+        this.owner = new CharSequenceArray(data.owner);
+        this.gcId = new CharSequenceArray(data.gcId);
 
-        //load Waypoints async
-        if (waypointDatabase != null) {
-            CB.postAsync(new Runnable() {
-                @Override
-                public void run() {
-                    AbstractWaypointDAO WpDAO = DaoFactory.WAYPOINT_DAO;
-                    Array<AbstractWaypoint> waypoints = WpDAO.getWaypointsFromCacheID(waypointDatabase, ImmutableCache.this.id, true);
-                    ImmutableCache.this.setWaypoints(waypoints);
-                }
-            });
-        }
-
-
-        this.size = CacheSizes.parseInt(sizeOrigin);
-        this.difficulty = (float) difficulty / 2.0f;
-        this.terrain = (float) terrain / 2.0f;
-        this.type = CacheTypes.get(typeOrigin);
-        this.rating = (short) (rating / 100);
-        this.numTravelbugs = numTravelbugs;
-
-        this.gcCode = new CharSequenceArray(gcCode);
-        this.name = new CharSequenceArray(name.trim());
-        this.placedBy = new CharSequenceArray(placedBy);
-        this.owner = new CharSequenceArray(owner);
-        this.gcId = new CharSequenceArray(gcId);
-
-        this.booleanStore = booleanStore;
-        this.favPoints = favPoints;
+        this.booleanStore = data.booleanStore;
+        this.favPoints = data.favPoints;
 
     }
 
@@ -760,4 +728,42 @@ public class ImmutableCache extends AbstractCache {
     }
 
 
+    public static class CursorData {
+        final long id;
+        final double latitude;
+        final double longitude;
+        final short sizeOrigin;
+        final short difficulty;
+        final short terrain;
+        final short typeOrigin;
+        final short rating;
+        final short numTravelbugs;
+        final String gcCode;
+        final String name;
+        final String placedBy;
+        final String owner;
+        final String gcId;
+        final short booleanStore;
+        final int favPoints;
+
+        public CursorData(SQLiteGdxDatabaseCursor cursor) {
+            id = cursor.getLong(0);
+            latitude = cursor.getDouble(1);
+            longitude = cursor.getDouble(2);
+            sizeOrigin = cursor.getShort(3);
+            difficulty = cursor.getShort(4);
+            terrain = cursor.getShort(5);
+            typeOrigin = cursor.getShort(6);
+            rating = cursor.getShort(7);
+            numTravelbugs = cursor.getShort(8);
+            gcCode = cursor.getString(9);
+            name = cursor.getString(10);
+            placedBy = cursor.getString(11);
+            owner = cursor.getString(12);
+            gcId = cursor.getString(13);
+            booleanStore = cursor.getShort(14);
+            favPoints = cursor.getInt(15);
+
+        }
+    }
 }

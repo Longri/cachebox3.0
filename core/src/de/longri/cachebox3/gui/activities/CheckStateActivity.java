@@ -262,7 +262,6 @@ public class CheckStateActivity extends ActivityBase {
                         changedCount.incrementAndGet();
                 } while (iterator.hasNext());
 
-                Database.Data.setTransactionSuccessful();
                 Database.Data.endTransaction();
 
                 //state check complete, close activity

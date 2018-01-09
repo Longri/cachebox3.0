@@ -28,8 +28,8 @@ import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.GpsEventHelper;
-import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
+import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.dialogs.GetApiKeyQuestionDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
@@ -43,8 +43,8 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.CacheList;
 import de.longri.cachebox3.types.Categories;
+import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.ScaledSizes;
@@ -501,28 +501,48 @@ public class CB {
         }
     }
 
-    public static void loadFilteredCacheList() {
-        Config.ReadFromDB(true);
+    public static void loadFilteredCacheList(FilterProperties filter) {
+
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                new BlockUiProgress_Activity(Translation.get("LoadCacheList")).show();
+            }
+        });
+
+        log.debug("load filtered Cache list on Thread[{}]", Thread.currentThread().getName());
+
+        Config.readFromDB(true);
         CB.Categories = new Categories();
 
-        String filter = Config.FilterNew.getValue();
         String sqlWhere = "";
         if (CB.viewmanager != null) {
-            try {
-                CB.viewmanager.setNewFilter(new FilterProperties("?", filter), true);
-                sqlWhere = CB.viewmanager.getActFilter().getSqlWhere(Config.GcLogin.getValue());
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (filter == null) {
+                String filterString = Config.FilterNew.getValue();
+                try {
+                    FilterProperties filterProperties = null;
+                    try {
+                        filterProperties = new FilterProperties("?", filterString);
+                    } catch (Exception e) {
+                        log.warn("Can't instance FilterProperties with FilterString: {}", filterString);
+                        filterProperties = FilterInstances.ALL;
+                    }
+
+                    CB.viewmanager.setNewFilter(filterProperties, true);
+                    sqlWhere = CB.viewmanager.getActFilter().getSqlWhere(Config.GcLogin.getValue());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                sqlWhere = filter.getSqlWhere(Config.GcLogin.getValue());
             }
         }
 
         Database.Data.gpxFilenameUpdateCacheCount();
 
         log.debug("Read CacheList");
-        Database.Data.Query.clear();
-
         DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, Database.Data.Query, sqlWhere, false, Config.ShowAllWaypoints.getValue());
-        log.debug("Readed " + Database.Data.Query.size + "Caches into CacheList");
+        log.debug("Readed " + Database.Data.Query.size + " Caches into CacheList");
 
         // set selectedCache from last selected Cache
         String sGc = Config.LastSelectedCache.getValue();
@@ -563,9 +583,6 @@ public class CB {
                 }
             });
         }
-
-        //Fire progress changed event for progress changed on Splash
-        EventHandler.fire(new IncrementProgressEvent(10, "load db"));
     }
 
 }

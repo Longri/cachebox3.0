@@ -70,7 +70,7 @@ public class InitialWorkPathTask extends AbstractInitTask {
 
         //load settings
         EventHandler.fire(new IncrementProgressEvent(1,"load settings"));
-        Config.ReadFromDB(false);
+        Config.readFromDB(false);
 
 
 

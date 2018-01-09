@@ -38,7 +38,7 @@ class SettingBaseTest {
     }
 
     public static final SettingBool testBool = (SettingBool) SettingsList.addSetting(new SettingBool("testBool"
-            , SettingCategory.RememberAsk, SettingMode.Normal, false, SettingStoreType.Platform,
+            , SettingCategory.RememberAsk, SettingMode.Normal, false, SettingStoreType.Global,
             SettingUsage.ACB,true));
 
 
@@ -93,7 +93,7 @@ class SettingBaseTest {
         Database.Settings = new Database(Database.DatabaseType.Settings);
         Database.Settings.startUp(configFileHandle);
 
-        Config.ReadFromDB(false);
+        Config.readFromDB(false);
         assertThat("", testBool.getValue());
         assertThat("Setting must not desired", !testBool.isExpired());
 
@@ -110,7 +110,7 @@ class SettingBaseTest {
         Database.Settings = new Database(Database.DatabaseType.Settings);
         Database.Settings.startUp(configFileHandle);
 
-        Config.ReadFromDB(false);
+        Config.readFromDB(false);
         assertThat("", testBool.getValue());
         assertThat("Setting must desired", testBool.isExpired());
 

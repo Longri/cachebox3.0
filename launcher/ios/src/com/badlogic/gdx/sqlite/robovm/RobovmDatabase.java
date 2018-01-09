@@ -16,9 +16,12 @@
 package com.badlogic.gdx.sqlite.robovm;
 
 import SQLite.JDBCDriver;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.sql.SQLiteGdxDatabase;
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.sqlite.Database.Parameters;
 import org.slf4j.Logger;
@@ -26,12 +29,13 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 03.08.16.
  */
 public class RobovmDatabase implements SQLiteGdxDatabase {
-    final static Logger log = LoggerFactory.getLogger(RobovmDatabase.class);
+    final Logger log;
     private final FileHandle dbFileHandle;
 
     Connection myDB = null;
@@ -39,6 +43,7 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
 
     public RobovmDatabase(FileHandle dbFileHandle) throws ClassNotFoundException {
         this.dbFileHandle = dbFileHandle;
+        log = LoggerFactory.getLogger("iOSDB " + dbFileHandle.nameWithoutExtension());
     }
 
     @Override
@@ -61,6 +66,7 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
 
     @Override
     public void closeDatabase() {
+        if (myDB == null) return;
         try {
             myDB.close();
             myDB = null;
@@ -85,22 +91,17 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
             log.debug(sb.toString());
         }
 
+        if (args != null) {
+            for (String arg : args)
+                sql = sql.replaceFirst("\\?", "'" + arg + "'");
+        }
+
         ResultSet rs = null;
         PreparedStatement statement = null;
         try {
-
             statement = myDB.prepareStatement(sql);
-            if (args != null) {
-                for (int i = 0; i < args.length; i++) {
-                    statement.setString(i + 1, args[i]);
-                }
-            }
             rs = statement.executeQuery();
         } catch (SQLException e) {
-            log.error("SqlException with SQL: {}",sql);
-            e.printStackTrace();
-        }catch(NegativeArraySizeException e){
-            log.error("SqlException with SQL: {}",sql);
             e.printStackTrace();
         }
 
@@ -109,41 +110,21 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
         int rowcount = 0;
         PreparedStatement statement2 = null;
         try {
-
             statement2 = myDB.prepareStatement("select count(*) from (" + sql + ")");
-
-            if (args != null) {
-                for (int i = 0; i < args.length; i++) {
-                    statement2.setString(i + 1, args[i]);
-                }
-            }
             rs2 = statement2.executeQuery();
-
             rs2.next();
-
             rowcount = Integer.parseInt(rs2.getString(1));
             statement2.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                statement2.close();
+                if (statement2 != null) statement2.close();
             } catch (SQLException e) {
-
                 e.printStackTrace();
             }
         }
-
         return new RobovmCursor(rs, rowcount, statement);
-    }
-
-    @Override
-    public void setAutoCommit(boolean autoCommit) {
-        try {
-            myDB.setAutoCommit(autoCommit);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -151,18 +132,20 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
         if (myDB == null)
             return;
 
+        log.debug("execSQL : " + sql);
+
         Statement statement = null;
         try {
             statement = myDB.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
-
+            log.error("Execute error:", e);
             e.printStackTrace();
         } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
-
+                log.error("Statement close error:", e);
                 e.printStackTrace();
             }
         }
@@ -207,7 +190,10 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
         }
 
         if (!whereClause.isEmpty()) {
-            sql.append(" where ");
+            if (!whereClause.toLowerCase().contains("where")) {
+                sql.append(" WHERE");
+            }
+            sql.append(" ");
             sql.append(whereClause);
         }
         PreparedStatement st = null;
@@ -229,12 +215,16 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
             return st.executeUpdate();
 
         } catch (SQLException e) {
+            if (e.getMessage().contains("near")) {
+                log.error("UPDATE:", sql.toString());
+            } else {
+                log.error("UPDATE:", e);
+            }
             return 0;
         } finally {
             try {
-                st.close();
+                if (st != null) st.close();
             } catch (SQLException e) {
-
                 e.printStackTrace();
             }
         }
@@ -286,10 +276,11 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
             return st.execute() ? 0 : 1;
 
         } catch (SQLException e) {
+            log.error("INSERT", e);
             return 0;
         } finally {
             try {
-                st.close();
+                if (st != null) st.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -335,6 +326,7 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
             return st.executeUpdate();
 
         } catch (SQLException e) {
+            log.error("DELETE", e);
             return 0;
         } finally {
             try {
@@ -347,39 +339,34 @@ public class RobovmDatabase implements SQLiteGdxDatabase {
 
     }
 
-//    @Override
-//    public void beginTransaction() {
-//        try {
-//            log.trace("begin transaction");
-//            if (myDB != null)
-//                myDB.setAutoCommit(false);
-//        } catch (SQLException e) {
-//
-//            e.printStackTrace();
-//        }
-//    }
+
+    private final AtomicBoolean transactionActive = new AtomicBoolean(false);
 
     @Override
-    public void setTransactionSuccessful() {
-        try {
-            log.trace("set Transaction Successful");
-            if (myDB != null)
-                myDB.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public void beginTransaction() {
+        synchronized (transactionActive) {
+            if (transactionActive.get()) return;
+            try {
+                myDB.setAutoCommit(false);
+            } catch (Exception e) {
+                log.error("Can't Begin transaction");
+            }
+            transactionActive.set(true);
         }
     }
 
     @Override
     public void endTransaction() {
-        try {
-            log.trace("endTransaction");
-            if (myDB != null)
-                myDB.setAutoCommit(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        synchronized (transactionActive) {
 
+            try {
+                myDB.commit();
+                myDB.setAutoCommit(true);
+            } catch (Exception e) {
+                log.error("Can't COMMIT transaction");
+            }
+            transactionActive.set(false);
+        }
     }
 
     @Override

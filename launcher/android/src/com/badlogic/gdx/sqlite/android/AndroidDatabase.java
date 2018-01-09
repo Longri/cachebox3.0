@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author M Rafay Aleem (2014)-(https://github.com/mrafayaleem/gdx-sqlite)
@@ -38,7 +39,7 @@ import java.util.Map;
  */
 public class AndroidDatabase implements SQLiteGdxDatabase {
 
-    final Logger log = LoggerFactory.getLogger(AndroidDatabase.class);
+    final Logger log ;
     private SQLiteDatabaseHelper helper;
     private SQLiteDatabase database;
     private Context context;
@@ -49,6 +50,7 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
     public AndroidDatabase(Context context, FileHandle dbFileHandle) {
         this.context = context;
         this.dbFileHandle = dbFileHandle;
+        log = LoggerFactory.getLogger("AndroidDB " + dbFileHandle.nameWithoutExtension());
     }
 
     @Override
@@ -98,31 +100,16 @@ public class AndroidDatabase implements SQLiteGdxDatabase {
     }
 
     @Override
-    public void setAutoCommit(boolean autoCommit) {
-        if (autoCommit) {
-            database.endTransaction();
-        } else {
+    public void beginTransaction() {
+            if (database.inTransaction()) return;
             database.beginTransaction();
-        }
     }
-
 
     @Override
     public void endTransaction() {
-        try {
-            database.endTransaction();
-        } catch (Exception e) {
-            //e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void setTransactionSuccessful() {
-        try {
-            database.setTransactionSuccessful();
-        } catch (Exception e) {
-            //e.printStackTrace();
-        }
+        if (!database.inTransaction()) return;
+        database.setTransactionSuccessful();
+        database.endTransaction();
     }
 
     @Override

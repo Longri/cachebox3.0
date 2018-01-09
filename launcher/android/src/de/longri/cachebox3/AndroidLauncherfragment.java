@@ -17,6 +17,7 @@ package de.longri.cachebox3;
 
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,4 +86,61 @@ public class AndroidLauncherfragment extends AndroidFragmentApplication implemen
             }
         });
     }
+
+
+    //#####################################################################
+    // override Log methods to pipe the log output from Locat to Console
+    //#####################################################################
+
+    @Override
+    public void debug (String tag, String message) {
+        if (logLevel >= LOG_DEBUG) {
+            //Log.d(tag, message);
+            System.out.println(message);
+        }
+    }
+
+    @Override
+    public void debug (String tag, String message, Throwable exception) {
+        if (logLevel >= LOG_DEBUG) {
+            //Log.d(tag, message, exception);
+            System.out.println(message);
+        }
+    }
+
+    @Override
+    public void log (String tag, String message) {
+        if (logLevel >= LOG_INFO){
+            //Log.i(tag, message);
+            System.out.println(message);
+        }
+
+    }
+
+    @Override
+    public void log (String tag, String message, Throwable exception) {
+        if (logLevel >= LOG_INFO) {
+            //Log.i(tag, message, exception);
+            System.out.println(message);
+        }
+
+    }
+
+    @Override
+    public void error (String tag, String message) {
+        if (logLevel >= LOG_ERROR) {
+            //Log.e(tag, message);
+            System.out.println(message);
+        }
+    }
+
+    @Override
+    public void error (String tag, String message, Throwable exception) {
+        if (logLevel >= LOG_ERROR){
+            //Log.e(tag, message, exception);
+            System.out.println(message);
+        }
+    }
+
+
 }

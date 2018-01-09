@@ -15,9 +15,12 @@
  */
 package de.longri.cachebox3.settings;
 
+import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
+import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
-import de.longri.cachebox3.settings.types.*;
+import de.longri.cachebox3.settings.types.SettingEncryptedString;
+import de.longri.cachebox3.settings.types.SettingsList;
 import de.longri.cachebox3.sqlite.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +35,7 @@ public class Config extends Settings {
     static final Logger log = LoggerFactory.getLogger(Config.class);
 
     public static void AcceptChanges() {
-        WriteToDB();
+        writeToDB();
     }
 
     /**
@@ -40,29 +43,24 @@ public class Config extends Settings {
      *
      * @return
      */
-    public static boolean WriteToDB() {
+    private static boolean writeToDB() {
 
-        CB.postOnMainThread(new Runnable() {
+        CB.postAsync(new Runnable() {
             @Override
             public void run() {
                 // Write into DB
                 de.longri.cachebox3.settings.types.SettingsDAO dao = new de.longri.cachebox3.settings.types.SettingsDAO();
 
-                Database Data = Database.Data;
-                Database SettingsDB = Database.Settings;
+                Database data = Database.Data;
+                Database settingsDB = Database.Settings;
 
-                if (Data == null || SettingsDB == null || !Data.isStarted() || !SettingsDB.isStarted())
+                if (data == null || settingsDB == null || !data.isStarted() || !settingsDB.isStarted())
                     return;
 
-                try {
-                    if (Data != null)
-                        Data.beginTransaction();
-                } catch (Exception ex) {
-                    // do not change Data now!
-                    Data = null;
-                }
 
-                SettingsDB.beginTransaction();
+                if (data != null)
+                    data.beginTransaction();
+                settingsDB.beginTransaction();
 
                 boolean needRestart = false;
 
@@ -73,13 +71,10 @@ public class Config extends Settings {
                             continue; // is not changed -> do not
 
                         if (de.longri.cachebox3.settings.types.SettingStoreType.Local == setting.getStoreType()) {
-                            if (Data != null)
-                                dao.writeToDatabase(Data, setting);
-                        } else if (de.longri.cachebox3.settings.types.SettingStoreType.Global == setting.getStoreType() || (!de.longri.cachebox3.settings.types.PlatformSettings.canUsePlatformSettings() && de.longri.cachebox3.settings.types.SettingStoreType.Platform == setting.getStoreType())) {
-                            dao.writeToDatabase(SettingsDB, setting);
-                        } else if (de.longri.cachebox3.settings.types.SettingStoreType.Platform == setting.getStoreType()) {
-                            dao.writeToPlatformSettings(setting);
-                            dao.writeToDatabase(SettingsDB, setting);
+                            if (data != null)
+                                dao.writeToDatabase(data, setting);
+                        } else if (de.longri.cachebox3.settings.types.SettingStoreType.Global == setting.getStoreType()) {
+                            dao.writeToDatabase(settingsDB, setting);
                         }
 
                         if (setting.needRestart()) {
@@ -100,96 +95,91 @@ public class Config extends Settings {
                         setting.clearDirty();
 
                     }
-                    if (Data != null)
-                        Data.setTransactionSuccessful();
-                    SettingsDB.setTransactionSuccessful();
-
                     return;
                 } finally {
-                    SettingsDB.endTransaction();
-                    if (Data != null)
-                        Data.endTransaction();
+                    settingsDB.endTransaction();
+                    if (data != null)
+                        data.endTransaction();
                 }
 
             }
-        }, false);
+        });
         return false;
     }
 
-    public static void ReadFromDB(boolean wait) {
+    public static void readFromDB(boolean wait) {
         CB.postOnMainThread(new Runnable() {
             @Override
             public void run() {
-                Database Data = Database.Data;
-                Database SettingsDB = Database.Settings;
+                Database data = Database.Data;
+                Database settingsDB = Database.Settings;
                 // Read from DB
 
-                de.longri.cachebox3.settings.types.SettingsDAO dao = new de.longri.cachebox3.settings.types.SettingsDAO();
+                //load all config entries hold in DB
+                ObjectMap<String, DbSettingValues> localMap = new ObjectMap<>();
+                ObjectMap<String, DbSettingValues> globalMap = new ObjectMap<>();
+
+                if (data != null) {
+                    SQLiteGdxDatabaseCursor cursor = data.rawQuery("SELECT * FROM Config", null);
+                    cursor.moveToFirst();
+                    while (cursor.next()) {
+                        String key = cursor.getString(0);
+                        DbSettingValues values = new DbSettingValues();
+                        values.value = cursor.getString(1);
+                        values.longString = cursor.getString(2);
+                        values.desired = cursor.getString(3);
+                        localMap.put(key, values);
+                    }
+                }
+
+                if (settingsDB != null) {
+                    SQLiteGdxDatabaseCursor cursor = settingsDB.rawQuery("SELECT * FROM Config", null);
+                    cursor.moveToFirst();
+                    while (cursor.next()) {
+                        String key = cursor.getString(0);
+                        DbSettingValues values = new DbSettingValues();
+                        values.value = cursor.getString(1);
+                        values.longString = cursor.getString(2);
+                        values.desired = cursor.getString(3);
+                        globalMap.put(key, values);
+                    }
+                }
+
+
                 for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
                     de.longri.cachebox3.settings.types.SettingBase<?> setting = it.next();
-                    String debugString;
 
-                    boolean isPlatform = false;
-                    boolean isPlattformoverride = false;
 
                     if (de.longri.cachebox3.settings.types.SettingStoreType.Local == setting.getStoreType()) {
-                        if (Data == null)
+                        if (data == null)
                             setting.loadDefault();
-                        else
-                            setting = dao.readFromDatabase(Data, setting);
-                    } else if (de.longri.cachebox3.settings.types.SettingStoreType.Global == setting.getStoreType() || (!PlatformSettings.canUsePlatformSettings() && de.longri.cachebox3.settings.types.SettingStoreType.Platform == setting.getStoreType())) {
-                        setting = dao.readFromDatabase(SettingsDB, setting);
-                    } else if (SettingStoreType.Platform == setting.getStoreType()) {
-                        isPlatform = true;
-                        de.longri.cachebox3.settings.types.SettingBase<?> cpy = setting.copy();
-                        cpy = dao.readFromDatabase(SettingsDB, cpy);
-                        setting = dao.readFromPlatformSetting(setting);
-
-                        // chk for Value on User.db3 and cleared Platform Value
-
-                        if (setting instanceof de.longri.cachebox3.settings.types.SettingString) {
-                            de.longri.cachebox3.settings.types.SettingString st = (SettingString) setting;
-
-                            if (st.getValue().length() == 0) {
-                                // Platform Settings are empty use db3 value or default
-                                setting = dao.readFromDatabase(SettingsDB, setting);
-                                dao.writeToPlatformSettings(setting);
-                            }
-                        } else if (!cpy.getValue().equals(setting.getValue())) {
-                            if (setting.getValue().equals(setting.getDefaultValue())) {
-                                // override Platformsettings with UserDBSettings
-                                setting.setValueFrom(cpy);
-                                dao.writeToPlatformSettings(setting);
-                                setting.clearDirty();
-                                isPlattformoverride = true;
+                        else {
+                            DbSettingValues values = localMap.get(setting.name);
+                            if (values == null) {
+                                setting.loadDefault();
                             } else {
-                                // override UserDBSettings with Platformsettings
-                                cpy.setValueFrom(setting);
-                                dao.writeToDatabase(SettingsDB, cpy);
-                                cpy.clearDirty();
+                                setting.fromDBString(values.longString == null ? values.value : values.longString);
                             }
                         }
-                    }
-
-                    if (setting instanceof SettingEncryptedString) {// Don't write encrypted settings in to a log file
-                        debugString = "*******";
-                    } else {
-                        debugString = setting.getValue().toString();
-                    }
-
-                    if (isPlatform) {
-                        if (isPlattformoverride) {
-                            log.debug("Override Platform setting [" + setting.name + "] from DB to: " + debugString);
+                    } else if (de.longri.cachebox3.settings.types.SettingStoreType.Global == setting.getStoreType()) {
+                        DbSettingValues values = globalMap.get(setting.name);
+                        if (values == null) {
+                            setting.loadDefault();
                         } else {
-                            log.debug("Override PlatformDB setting [" + setting.name + "] from Platform to: " + debugString);
-                        }
-                    } else {
-                        if (!setting.getValue().equals(setting.getDefaultValue())) {
-                            log.debug("Change " + setting.getStoreType() + " setting [" + setting.name + "] to: " + debugString);
-                        } else {
-                            log.debug("Default " + setting.getStoreType() + " setting [" + setting.name + "] to: " + debugString);
+                            setting.fromDBString(values.longString == null ? values.value : values.longString);
                         }
                     }
+
+                    if (!setting.isDefault()) {
+                        String debugString;
+                        if (setting instanceof SettingEncryptedString) {// Don't write encrypted settings in to a log file
+                            debugString = "*******";
+                        } else {
+                            debugString = setting.getValue().toString();
+                        }
+                        log.debug("Change " + setting.getStoreType() + " setting [" + setting.name + "] to: " + debugString);
+                    }
+
                 }
                 log.debug("Settings are loaded");
             }
@@ -217,5 +207,17 @@ public class Config extends Settings {
         }
     }
 
+
+    private static class DbSettingValues {
+//        CREATE TABLE Config (
+//            [Key]      NVARCHAR (30)  NOT NULL,
+//            Value      NVARCHAR (255),
+//            LongString NTEXT,
+//            desired    NTEXT
+//        );
+
+        private String value, longString, desired;
+
+    }
 
 }

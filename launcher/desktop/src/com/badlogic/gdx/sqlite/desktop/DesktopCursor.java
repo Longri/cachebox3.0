@@ -20,6 +20,7 @@ import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -34,12 +35,19 @@ public class DesktopCursor implements SQLiteGdxDatabaseCursor {
     public DesktopCursor(ResultSet rs, PreparedStatement ps) {
         this.rs = rs;
         this.ps = ps;
+        setIsOpen();
     }
 
     public DesktopCursor(ResultSet rs, int rowcount, PreparedStatement ps) {
         this.rs = rs;
         this.rowcount = rowcount;
         this.ps = ps;
+        setIsOpen();
+    }
+
+    private void setIsOpen() {
+//        if (isOpen.get()) throw new RuntimeException("Last Coursor not closed");
+        isOpen.set(true);
     }
 
     @Override
@@ -76,8 +84,14 @@ public class DesktopCursor implements SQLiteGdxDatabaseCursor {
         }
     }
 
+
+    private static final AtomicBoolean isOpen = new AtomicBoolean();
+
     @Override
     public void close() {
+
+        isOpen.set(false);
+
         try {
             if (rs != null)
                 rs.close();
