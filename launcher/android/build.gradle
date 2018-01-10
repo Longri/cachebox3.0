@@ -1,5 +1,5 @@
 android {
-    buildToolsVersion '25.0.3'
+    buildToolsVersion '27.0.3'
     compileSdkVersion 24
     sourceSets {
         main {
@@ -28,6 +28,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
     productFlavors {
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+        preDexLibraries = false
     }
 }
 // called every time gradle gets executed, takes the native dependencies of

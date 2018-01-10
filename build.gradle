@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        google()
         mavenLocal()
         mavenCentral()
         jcenter()
@@ -167,6 +168,15 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
+
+        compile "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
+        natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-armeabi"
+        natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-armeabi-v7a"
+        natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-arm64-v8a"
+        natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-x86"
+        natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-x86_64"
+
+
         compile 'com.caverock:androidsvg:1.2.2-beta-1'
         compile 'com.android.support:support-v4:23.3.0'
         compile 'org.sqldroid:sqldroid:1.0.3'
