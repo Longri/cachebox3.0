@@ -1,6 +1,5 @@
 buildscript {
     repositories {
-        google()
         mavenLocal()
         mavenCentral()
         jcenter()
@@ -102,7 +101,7 @@ project(":cb3-file-transfer") {
 
     dependencies {
         compile project(":core")
-
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
 
         //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])
