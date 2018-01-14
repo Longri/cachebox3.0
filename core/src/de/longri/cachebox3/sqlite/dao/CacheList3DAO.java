@@ -248,7 +248,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                     String query = finalStatement + " LIMIT "
                             + Integer.toString(LIMIT) + " OFFSET "
                             + finalOffset;
-                    GdxSqliteCursor cursor = database.rawQuery(query, null);
+                    GdxSqliteCursor cursor = database.rawQuery(query,(String[])null);
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
                         ImmutableCache.CursorData data = new ImmutableCache.CursorData(cursor);
@@ -352,7 +352,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         } else {
             statement = statement.replace("SELECT *", "SELECT COUNT(*)");
         }
-        GdxSqliteCursor cursor = database.rawQuery(statement, null);
+        GdxSqliteCursor cursor = database.rawQuery(statement, (String[])null);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();

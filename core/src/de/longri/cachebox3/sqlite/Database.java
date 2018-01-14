@@ -55,7 +55,7 @@ public class Database {
 //        beginTransaction();
         GdxSqliteCursor cursor = null;
         try {
-            cursor = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from CacheInfo where GPXFilename_ID is not null Group by GPXFilename_ID", null);
+            cursor = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from CacheInfo where GPXFilename_ID is not null Group by GPXFilename_ID", (String[]) null);
             cursor.moveToFirst();
 
             while (cursor.isAfterLast() == false) {
@@ -97,7 +97,7 @@ public class Database {
 
         //TODO Qerry with args not working on iOS
 //      GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId=@cacheid order by Timestamp desc", new String[]{Long.toString(cache.Id)});
-        GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(abstractCache.getId()) + "\"", null);
+        GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(abstractCache.getId()) + "\"", (String[]) null);
 
 
         try {
@@ -342,7 +342,7 @@ public class Database {
         GdxSqliteCursor cursor = null;
         try {
             cursor = rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='" + tableName
-                    + "' COLLATE NOCASE", null);
+                    + "' COLLATE NOCASE", (String[]) null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String name = cursor.getString(0);
@@ -712,7 +712,7 @@ public class Database {
             try {
                 String command = "SELECT cacheid FROM logs WHERE Timestamp < '" + TimeStamp + "' GROUP BY CacheId HAVING COUNT(Id) > " + String.valueOf(minToKeep);
                 log.debug(command);
-                cursor = Database.Data.rawQuery(command, null);
+                cursor = Database.Data.rawQuery(command, (String[]) null);
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     long tmp = cursor.getLong(0);
@@ -740,7 +740,7 @@ public class Database {
                     String command = "select id from logs where cacheid = " + String.valueOf(oldLogCache) + " order by Timestamp desc";
                     log.debug(command);
                     int count = 0;
-                    cursor = Database.Data.rawQuery(command, null);
+                    cursor = Database.Data.rawQuery(command, (String[]) null);
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
                         if (count == minToKeep)
@@ -823,6 +823,11 @@ public class Database {
             log.error("rawQuerry:" + sql, e);
         }
         return null;
+    }
+
+    public synchronized void rawQuery(String sql, GdxSqlite.RowCallback callback) {
+        if (myDB == null) return;
+        myDB.rawQuery(sql, callback);
     }
 
     public void execSQL(String sql) {

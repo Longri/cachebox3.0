@@ -24,9 +24,9 @@ public class SettingsDAO {
 
         if (setting.isDefault()) {
             //delete entry from Database if exist
-            GdxSqliteCursor cursor = database.rawQuery("SELECT * FROM Config WHERE Key=?" ,new String[]{ setting.name});
-            if (cursor.getCount() > 0)
-                database.execSQL("DELETE FROM Config WHERE Key='" + setting.name+"'");
+            GdxSqliteCursor cursor = database.rawQuery("SELECT * FROM Config WHERE Key=?", new String[]{setting.name});
+            if (cursor != null && cursor.getCount() > 0)
+                database.execSQL("DELETE FROM Config WHERE Key='" + setting.name + "'");
         } else {
             String dbString = setting.toDBString();
             if (setting instanceof SettingLongString || setting instanceof SettingStringList) {

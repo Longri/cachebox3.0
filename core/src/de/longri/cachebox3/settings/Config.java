@@ -120,7 +120,7 @@ public class Config extends Settings {
                 ObjectMap<String, DbSettingValues> globalMap = new ObjectMap<>();
 
                 if (data != null) {
-                    GdxSqliteCursor cursor = data.rawQuery("SELECT * FROM Config", null);
+                    GdxSqliteCursor cursor = data.rawQuery("SELECT * FROM Config", (String[]) null);
                     cursor.moveToFirst();
                     while (cursor.next()) {
                         String key = cursor.getString(0);
@@ -133,7 +133,7 @@ public class Config extends Settings {
                 }
 
                 if (settingsDB != null) {
-                    GdxSqliteCursor cursor = settingsDB.rawQuery("SELECT * FROM Config", null);
+                    GdxSqliteCursor cursor = settingsDB.rawQuery("SELECT * FROM Config", (String[]) null);
                     cursor.moveToFirst();
                     while (cursor.next()) {
                         String key = cursor.getString(0);

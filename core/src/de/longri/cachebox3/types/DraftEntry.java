@@ -187,7 +187,7 @@ public class DraftEntry {
         // search Draft Id
         GdxSqliteCursor reader = Database.Drafts
                 .rawQuery("select CacheId, GcCode, Name, CacheType, Timestamp, Type, FoundNumber, Comment, Id, Url, Uploaded, gc_Vote, TbFieldNote, TbName, TbIconUrl, TravelBugCode, TrackingNumber, directLog from FieldNotes where GcCode='" + gcCode
-                        + "' and Type=" + type.getGcLogTypeId(), null);
+                        + "' and Type=" + type.getGcLogTypeId(), (String[]) null);
 
         if (reader == null) {
             log.error("Can't find updated Draft on DB");

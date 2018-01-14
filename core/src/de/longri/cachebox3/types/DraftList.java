@@ -102,7 +102,7 @@ public class DraftList extends Array<DraftEntry> {
 
             GdxSqliteCursor reader = null;
             try {
-                reader = Database.Drafts.rawQuery(sql, null);
+                reader = Database.Drafts.rawQuery(sql, (String[]) null);
             } catch (Exception exc) {
                 log.error("loadDrafts", exc);
             }
@@ -164,7 +164,7 @@ public class DraftList extends Array<DraftEntry> {
             writer.flush();
             writer.close();
         } catch (Exception e) {
-            log.error("can't create visit.txt",e);
+            log.error("can't create visit.txt", e);
             e.printStackTrace();
         }
     }

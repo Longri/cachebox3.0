@@ -19,8 +19,6 @@
         </resource>
     </resources>
     <forceLinkClasses>
-        <pattern>com.badlogic.gdx.sqlite.robovm.RobovmDatabaseManager</pattern>
-        <pattern>SQLite.**</pattern>
         <pattern>com.badlogic.gdx.scenes.scene2d.ui.*</pattern>
         <pattern>com.badlogic.gdx.graphics.g3d.particles.**</pattern>
         <pattern>com.android.okhttp.HttpHandler</pattern>
@@ -40,6 +38,8 @@
     <libs>
         <lib>z</lib>
         <lib>build/native/libvtm-jni.a</lib>  <!--vtm native -->
+        <lib>build/native/META-INF/robovm/ios/libs/libGdxSqlite.a</lib>  <!--GdxSqlite native -->
+        <lib>build/native/META-INF/robovm/ios/libs/libsqlitecustom.a</lib>  <!--GdxSqlite native -->
     </libs>
     <frameworkPaths>
         <path>build/native</path>  <!--SVGgh framework path -->

@@ -70,7 +70,7 @@ public class CategoryDAO {
 
         long Category_ID = 0;
 
-        GdxSqliteCursor reader = Database.Data.rawQuery("Select max(ID) from Category", null);
+        GdxSqliteCursor reader = Database.Data.rawQuery("Select max(ID) from Category", (String[]) null);
         reader.moveToFirst();
         if (reader.isAfterLast() == false) {
             Category_ID = reader.getLong(0);
@@ -101,7 +101,7 @@ public class CategoryDAO {
 
         long GPXFilename_ID = 0;
 
-        GdxSqliteCursor reader = Database.Data.rawQuery("Select max(ID) from GpxFilenames", null);
+        GdxSqliteCursor reader = Database.Data.rawQuery("Select max(ID) from GpxFilenames", (String[]) null);
         reader.moveToFirst();
         if (reader.isAfterLast() == false) {
             GPXFilename_ID = reader.getLong(0);

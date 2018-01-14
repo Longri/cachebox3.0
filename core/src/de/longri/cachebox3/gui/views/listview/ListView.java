@@ -343,7 +343,7 @@ public class ListView extends WidgetGroup {
             float itemHeight = itemHeights.items[0];
             completeHeight = itemHeight;
             for (int i = 0; i < this.listCount; i++) {
-                if (adapter.getView(i).isVisible()) {
+                if (adapter.getView(i) != null && adapter.getView(i).isVisible()) {
                     if (i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount)) {
                         completeHeight += itemHeights.items[i];
                     } else {
@@ -373,7 +373,7 @@ public class ListView extends WidgetGroup {
 
         Actor[] actors = itemGroup.getChildren().items;
         for (int i = 0; i < this.listCount; i++) {// calculate Y position of all visible Items
-            if (adapter.getView(i).isVisible()) {
+            if (adapter.getView(i) != null && adapter.getView(i).isVisible()) {
                 yPos -= itemHeights.get(i);
                 itemYPos.add(yPos);
                 if (itemsHaveSameHeight && i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount)) {
@@ -558,7 +558,7 @@ public class ListView extends WidgetGroup {
         synchronized (indexList) {
 
             // check adapter has changed only on top stage
-            if(CB.viewmanager.isTop(this.getStage())){
+            if (CB.viewmanager.isTop(this.getStage())) {
                 if (listCount != adapter.getCount()) {
                     log.debug("List count({}) has changed to {}! set Adapter new!", listCount, adapter.getCount());
                     setAdapter(this.adapter);

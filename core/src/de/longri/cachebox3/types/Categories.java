@@ -71,7 +71,7 @@ public class Categories extends MoveableList<Category> {
 
         long Category_ID = 0;
 
-        GdxSqliteCursor reader = Database.Data.rawQuery("Select max(ID) from Category", null);
+        GdxSqliteCursor reader = Database.Data.rawQuery("Select max(ID) from Category", (String[]) null);
         reader.moveToFirst();
         if (!reader.isAfterLast()) {
             Category_ID = reader.getLong(0);

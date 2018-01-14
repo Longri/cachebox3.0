@@ -120,7 +120,7 @@ public class ImageDAO {
     public int getImageCount(String whereClause) {
         int count = 0;
 
-        GdxSqliteCursor reader = Database.Data.rawQuery("select count(id) from Images where GcCode in (select GcCode from Caches " + ((whereClause.length() > 0) ? "where " + whereClause : whereClause) + ")", null);
+        GdxSqliteCursor reader = Database.Data.rawQuery("select count(id) from Images where GcCode in (select GcCode from Caches " + ((whereClause.length() > 0) ? "where " + whereClause : whereClause) + ")", (String[]) null);
 
         if (reader == null)
             return 0;

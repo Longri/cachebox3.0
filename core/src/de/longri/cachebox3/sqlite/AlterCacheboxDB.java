@@ -29,9 +29,9 @@ import java.util.Map;
  */
 public class AlterCacheboxDB {
 
-    private final static Logger log= LoggerFactory.getLogger(AlterCacheboxDB.class);
+    private final static Logger log = LoggerFactory.getLogger(AlterCacheboxDB.class);
 
-    public  void alterCacheboxDB(Database database, int lastDatabaseSchemeVersion) {
+    public void alterCacheboxDB(Database database, int lastDatabaseSchemeVersion) {
         database.beginTransaction();
         try {
             if (lastDatabaseSchemeVersion <= 0) {
@@ -101,7 +101,7 @@ public class AlterCacheboxDB {
                 HashMap<String, Long> categories = new HashMap<String, Long>();
 
                 try {
-                    GdxSqliteCursor reader = database.rawQuery("select ID, GPXFilename from GPXFilenames", null);
+                    GdxSqliteCursor reader = database.rawQuery("select ID, GPXFilename from GPXFilenames", (String[]) null);
                     reader.moveToFirst();
                     while (!reader.isAfterLast()) {
                         long id = reader.getLong(0);
@@ -259,5 +259,5 @@ public class AlterCacheboxDB {
 
         return result;
     }
-    
+
 }
