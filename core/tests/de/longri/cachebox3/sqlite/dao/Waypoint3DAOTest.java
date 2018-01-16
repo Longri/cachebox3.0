@@ -263,7 +263,7 @@ class Waypoint3DAOTest {
         assertThat("Waypoint list must be empty", waypoints3.size == 0);
 
         //check is also deleted from WaypointsText table
-        GdxSqliteCursor cursor = cb3Database.rawQuery("SELECT * FROM WaypointsText WHERE GcCode='GCCCCCX'", null);
+        GdxSqliteCursor cursor = cb3Database.rawQuery("SELECT * FROM WaypointsText WHERE GcCode='GCCCCCX'",(String[]) null);
         if (cursor!=null) {
             cursor.moveToFirst();
             assertThat("Waypoint must also deleted from WaypointsText table", cursor.isAfterLast());
