@@ -18,6 +18,7 @@ package de.longri.cachebox3.sqlite;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
@@ -56,26 +57,37 @@ public class Database {
         GdxSqliteCursor cursor = null;
         try {
             cursor = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from CacheInfo where GPXFilename_ID is not null Group by GPXFilename_ID", (String[]) null);
-            cursor.moveToFirst();
 
-            while (cursor.isAfterLast() == false) {
-                long GPXFilename_ID = cursor.getLong(0);
-                long CacheCount = cursor.getLong(1);
+            if (cursor != null) {
+                cursor.moveToFirst();
 
-                Parameters val = new Parameters();
-                val.put("CacheCount", CacheCount);
-                update("GPXFilenames", val, "ID = " + GPXFilename_ID, null);
+                ObjectMap<Long, Parameters> set = new ObjectMap<>();
+                while (cursor.isAfterLast() == false) {
+                    long gpxFilename_ID = cursor.getLong(0);
+                    long cacheCount = cursor.getLong(1);
 
-                cursor.moveToNext();
+                    Parameters val = new Parameters();
+                    val.put("CacheCount", cacheCount);
+                    set.put(gpxFilename_ID, val);
+                    cursor.moveToNext();
+                }
+
+                cursor.close();
+
+                if (!myDB.isInTransaction())
+                    beginTransaction();
+                for (ObjectMap.Entry entry : set) {
+                    update("GPXFilenames", (Parameters) entry.value, "ID = " + entry.key, null);
+                }
             }
-
+            if (!myDB.isInTransaction())
+                beginTransaction();
             delete("GPXFilenames", "Cachecount is NULL or CacheCount = 0");
             delete("GPXFilenames", "ID not in (Select GPXFilename_ID From CacheInfo)");
         } catch (Exception e) {
-
+            e.printStackTrace();
         } finally {
-            if (cursor != null) cursor.close();
-//            endTransaction();
+            endTransaction();
         }
 
         //TODO ???
@@ -839,7 +851,7 @@ public class Database {
     }
 
 
-    public long update(String tablename, Parameters val, String whereClause, String[] whereArgs) {
+    public synchronized long update(String tablename, Parameters val, String whereClause, String[] whereArgs) {
 
 
         if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
