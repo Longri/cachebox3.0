@@ -309,10 +309,11 @@ public class Database {
         int result = -1;
         GdxSqliteCursor cursor = null;
         try {
-            cursor = rawQuery("select Value from Config where [Key] like ?", new String[]{"DatabaseSchemeVersionWin"});
+            cursor = rawQuery("select Value from Config where [Key] like 'DatabaseSchemeVersionWin'");
         } catch (Exception exc) {
             return -1;
         }
+        if (cursor == null) return -1;
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {

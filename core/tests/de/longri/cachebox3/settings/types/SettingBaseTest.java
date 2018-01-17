@@ -39,7 +39,7 @@ class SettingBaseTest {
 
     public static final SettingBool testBool = (SettingBool) SettingsList.addSetting(new SettingBool("testBool"
             , SettingCategory.RememberAsk, SettingMode.Normal, false, SettingStoreType.Global,
-            SettingUsage.ACB,true));
+            SettingUsage.ACB, true));
 
 
     @Test
@@ -63,7 +63,7 @@ class SettingBaseTest {
         assertThat("Setting must not desired", testBool.isExpired());
 
         long now = Calendar.getInstance().getTimeInMillis();
-        long desired = now + 1000 ;// future 1 sec
+        long desired = now + 1000;// future 1 sec
 
         testBool.setExpiredTime(desired);
         try {
@@ -81,8 +81,8 @@ class SettingBaseTest {
         assertThat("Setting must desired", testBool.isExpired());
 
 
-         now = Calendar.getInstance().getTimeInMillis();
-         desired = now + 1000 ;// future 10 sec
+        now = Calendar.getInstance().getTimeInMillis();
+        desired = now + 1000;// future 10 sec
 
         testBool.setExpiredTime(desired);
 
@@ -96,6 +96,11 @@ class SettingBaseTest {
         Config.readFromDB(false);
         assertThat("", testBool.getValue());
         assertThat("Setting must not desired", !testBool.isExpired());
+
+
+        //change a setting and check if stored after reload
+        Config.showGestureHelp.setValue(false);
+
 
         // close config DB and reload
         Config.AcceptChanges();
@@ -113,6 +118,11 @@ class SettingBaseTest {
         Config.readFromDB(false);
         assertThat("", testBool.getValue());
         assertThat("Setting must desired", testBool.isExpired());
+
+
+        //check changed setting
+        assertThat("Setting must changed to false", !Config.showGestureHelp.getValue());
+
 
         //clean up test file's
         configFileHandle.delete();
