@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.sqlite;
 
+import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,71 +64,70 @@ public class AlterCachebox3DB {
                 log.debug("Convert Database from ACB to CB3");
 
                 // Convert DB from version ACB2 to CB3
-//                database.beginTransaction();
                 //add column desired on Config Table
-
                 boolean isExist = false;
                 GdxSqliteCursor cursor = database.rawQuery("PRAGMA table_info(Config)");
                 cursor.moveToFirst();
-                while (cursor.next()){
-                    if(cursor.getString(1).equals("desired")){
+                while (cursor.next()) {
+                    if (cursor.getString(1).equals("desired")) {
                         isExist = true;
                         break;
                     }
                 }
 
-                if(!isExist)database.execSQL("ALTER TABLE Config ADD desired ntext;");
+                DatabaseSchema schemaStrings = new DatabaseSchema();
+                StringBuilder sb = new StringBuilder();
+
+                sb.append("BEGIN TRANSACTION;").append("\n");
+
+                if (!isExist)
+                    sb.append("ALTER TABLE Config ADD desired ntext;").append("\n");
 
                 //create new Tables
-                DatabaseSchema schemaStrings = new DatabaseSchema();
-                database.execSQL(schemaStrings.CACHE_CORE_INFO);
-                database.execSQL(schemaStrings.ATTRIBUTES);
-                database.execSQL(schemaStrings.TEXT);
-                database.execSQL(schemaStrings.CACHE_INFO);
-                database.execSQL(schemaStrings.WAYPOINTS);
-                database.execSQL(schemaStrings.WAYPOINTS_TEXT);
 
-                database.execSQL(schemaStrings.CACHE_CORE_INFO_IX_ID);
+                sb.append(schemaStrings.CACHE_CORE_INFO).append("\n");
+                sb.append(schemaStrings.ATTRIBUTES).append("\n");
+                sb.append(schemaStrings.TEXT).append("\n");
+                sb.append(schemaStrings.CACHE_INFO).append("\n");
+                sb.append(schemaStrings.WAYPOINTS).append("\n");
+                sb.append(schemaStrings.WAYPOINTS_TEXT).append("\n");
+
+                sb.append(schemaStrings.CACHE_CORE_INFO_IX_ID).append("\n");
 
                 //drop alt Tables
-                database.execSQL("DROP TABLE CelltowerLocation;");
-                database.execSQL("DROP TABLE Locations;");
-                database.execSQL("DROP TABLE SdfExport;");
+                sb.append("DROP TABLE CelltowerLocation;").append("\n");
+                sb.append("DROP TABLE Locations;").append("\n");
+                sb.append("DROP TABLE SdfExport;").append("\n");
 
                 //copy values
-                database.execSQL(schemaStrings.COPY_DATA_FROM_V2_TO_V3);
-                database.execSQL(schemaStrings.COPY_ATTRIBUTES_FROM_V2_TO_V3);
-                database.execSQL(schemaStrings.COPY_CACHEINFO_FROM_V2_TO_V3);
-                database.execSQL(schemaStrings.COPY_TEXT_FROM_V2_TO_V3);
-                database.execSQL(schemaStrings.COPY_WAYPOINTS_FROM_V2_TO_V3);
-                database.execSQL(schemaStrings.COPY_WAYPOINTS_TEXT_FROM_V2_TO_V3);
+                sb.append(schemaStrings.COPY_DATA_FROM_V2_TO_V3).append("\n");
+                sb.append(schemaStrings.COPY_ATTRIBUTES_FROM_V2_TO_V3).append("\n");
+                sb.append(schemaStrings.COPY_CACHEINFO_FROM_V2_TO_V3).append("\n");
+                sb.append(schemaStrings.COPY_TEXT_FROM_V2_TO_V3).append("\n");
+                sb.append(schemaStrings.COPY_WAYPOINTS_FROM_V2_TO_V3).append("\n");
+                sb.append(schemaStrings.COPY_WAYPOINTS_TEXT_FROM_V2_TO_V3).append("\n");
 
                 {// Convert CacheSizes
-                    database.execSQL("UPDATE CacheCoreInfo SET Size = Size - 1");
-                    database.execSQL("UPDATE CacheCoreInfo SET Size = 4 WHERE Size<0");
+                    sb.append("UPDATE CacheCoreInfo SET Size = Size - 1;").append("\n");
+                    sb.append("UPDATE CacheCoreInfo SET Size = 4 WHERE Size<0;").append("\n");
                 }
 
                 //Delete Data from Caches
-                database.execSQL("DELETE FROM Caches;");
+                sb.append("DELETE FROM Caches;").append("\n");
 
                 //Delete Data from Waypont
-                database.execSQL("DELETE FROM Waypoint;");
+                sb.append("DELETE FROM Waypoint;").append("\n");
 
-                //drop alt Table Caches, Waypoint (Close and reopen connection)
-                database.close();
-                database.open();
-                database.execSQL("DROP TABLE Caches;");
-                database.execSQL("DROP TABLE Waypoint;");
+                sb.append("DROP TABLE Caches;").append("\n");
+                sb.append("DROP TABLE Waypoint;").append("\n");
+                sb.append("END TRANSACTION;").append("\n");
+                sb.append("VACUUM").append("\n");
 
 
-                //execute VACUUM
-                database.close();
-                database.open();
-                database.execSQL("VACUUM");
+                //EXECUTE combined SQL
+                database.execSQL(sb.toString());
                 log.debug("FINISH Convert Database from ACB to CB3");
             }
-
-
         } catch (Exception exc) {
             log.error("alterDatabase", exc);
         } finally {
