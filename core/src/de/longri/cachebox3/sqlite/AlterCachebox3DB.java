@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.sqlite;
 
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,14 +58,25 @@ public class AlterCachebox3DB {
 
 
         try {
-            if (lastDatabaseSchemeVersion <= 1028) {
+            if (lastDatabaseSchemeVersion < 1028) {
 
                 log.debug("Convert Database from ACB to CB3");
 
                 // Convert DB from version ACB2 to CB3
 //                database.beginTransaction();
                 //add column desired on Config Table
-                database.execSQL("ALTER TABLE Config ADD desired ntext;");
+
+                boolean isExist = false;
+                GdxSqliteCursor cursor = database.rawQuery("PRAGMA table_info(Config)");
+                cursor.moveToFirst();
+                while (cursor.next()){
+                    if(cursor.getString(1).equals("desired")){
+                        isExist = true;
+                        break;
+                    }
+                }
+
+                if(!isExist)database.execSQL("ALTER TABLE Config ADD desired ntext;");
 
                 //create new Tables
                 DatabaseSchema schemaStrings = new DatabaseSchema();

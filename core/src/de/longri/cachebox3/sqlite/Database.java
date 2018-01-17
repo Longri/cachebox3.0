@@ -820,6 +820,15 @@ public class Database {
         }
     }
 
+    public synchronized GdxSqliteCursor rawQuery(String sql) {
+        if (myDB == null) return null;
+        try {
+            return myDB.rawQuery(sql);
+        } catch (SQLiteGdxException e) {
+            log.error("rawQuerry:" + sql, e);
+        }
+        return null;
+    }
 
     public synchronized GdxSqliteCursor rawQuery(String sql, String[] args) {
         if (myDB == null) return null;
