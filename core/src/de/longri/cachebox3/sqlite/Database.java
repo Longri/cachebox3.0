@@ -920,11 +920,8 @@ public class Database {
                     st.bind(j + k + 1, whereArgs[k]);
                 }
             }
-
-            //TODO return st.executeUpdate();
-
             st.commit();
-
+            return myDB.changes();
 
         } catch (SQLiteGdxException e) {
             if (e.getMessage().contains("near")) {
@@ -940,9 +937,6 @@ public class Database {
                 e.printStackTrace();
             }
         }
-
-
-        return 1;
     }
 
     public long insert(String tablename, Parameters val) {
@@ -985,8 +979,7 @@ public class Database {
 
             log.debug("INSERT: " + sql);
             st.commit();
-            return 1;
-
+            return myDB.changes();
         } catch (SQLiteGdxException e) {
             log.error("INSERT", e);
             return 0;
@@ -999,7 +992,7 @@ public class Database {
         }
     }
 
-    public void delete(String tablename, String whereClause) {
+    public int delete(String tablename, String whereClause) {
         StringBuilder sql = new StringBuilder();
 
         sql.append("delete from ");
@@ -1011,6 +1004,7 @@ public class Database {
         }
 
         myDB.execSQL(sql.toString());
+        return myDB.changes();
     }
 
     public void beginTransaction() {

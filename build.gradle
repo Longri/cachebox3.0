@@ -19,7 +19,7 @@ allprojects {
     version = '3.0'
     ext {
         appName = "Cachebox 3.0"
-        gdxVersion = '1.9.8-SNAPSHOT'
+        gdxVersion = '1.9.9-SNAPSHOT'
 //        gdxVersion = '1.9.6'
         roboVMVersion = '2.3.4-SNAPSHOT'
         box2DLightsVersion = '1.4'
@@ -28,8 +28,8 @@ allprojects {
         visUiVersion = '1.4.0-SNAPSHOT'
         vtmVersion = 'master-SNAPSHOT'
 //        vtmVersion = '0.8.0'
-        slf4jLibgdxVersion = '1.9.7-SNAPSHOT'
-        gdxSqliteVersion = '0.4.2-SNAPSHOT'
+        slf4jLibgdxVersion = '1.9.8-SNAPSHOT'
+        gdxSqliteVersion = '0.5.0-SNAPSHOT'
     }
 
 

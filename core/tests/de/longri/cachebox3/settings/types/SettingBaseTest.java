@@ -49,6 +49,12 @@ class SettingBaseTest {
         FileHandle configFileHandle = Gdx.files.local("testConfig.db3");
         if (configFileHandle.exists()) configFileHandle.delete();
 
+        // configs are stored on config db and DATA, create a DATA DB
+        FileHandle dataFileHandle = Gdx.files.local("testData.db3");
+        if (dataFileHandle.exists()) dataFileHandle.delete();
+
+        Database.Data = new Database(Database.DatabaseType.CacheBox3);
+        Database.Data.startUp(dataFileHandle);
 
         Database.Settings = new Database(Database.DatabaseType.Settings);
         Database.Settings.startUp(configFileHandle);
@@ -93,7 +99,7 @@ class SettingBaseTest {
         Database.Settings = new Database(Database.DatabaseType.Settings);
         Database.Settings.startUp(configFileHandle);
 
-        Config.readFromDB(false);
+        Config.readFromDB(true);
         assertThat("", testBool.getValue());
         assertThat("Setting must not desired", !testBool.isExpired());
 
@@ -104,18 +110,25 @@ class SettingBaseTest {
 
         // close config DB and reload
         Config.AcceptChanges();
-        Database.Settings.close();
-        //wait 10sec
+
+        //wait 5sec
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Database.Settings.close();
+        try {
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+
         Database.Settings = new Database(Database.DatabaseType.Settings);
         Database.Settings.startUp(configFileHandle);
 
-        Config.readFromDB(false);
+        Config.readFromDB(true);
         assertThat("", testBool.getValue());
         assertThat("Setting must desired", testBool.isExpired());
 
