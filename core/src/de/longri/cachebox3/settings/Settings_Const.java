@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General protected License (GPL);
@@ -23,7 +23,8 @@ import de.longri.cachebox3.settings.types.SettingsList;
 public abstract class Settings_Const {
 
     static {
-        new SettingsList();
+        if (SettingsList.that == null)
+            new SettingsList();
     }
 
     protected static final de.longri.cachebox3.settings.types.SettingMode DEVELOPER = de.longri.cachebox3.settings.types.SettingMode.DEVELOPER;

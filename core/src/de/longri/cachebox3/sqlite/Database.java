@@ -455,11 +455,6 @@ public class Database {
         Parameters val = new Parameters();
         val.put("desired", value);
         long anz = update("Config", val, "[Key] like '" + key + "'", null);
-        if (anz <= 0) {
-            // Update not possible because Key does not exist
-            val.put("Key", key);
-            insert("Config", val);
-        }
     }
 
     public String readConfigDesiredString(String key) throws Exception {
@@ -927,7 +922,7 @@ public class Database {
             if (e.getMessage().contains("near")) {
                 log.error("UPDATE:", sql.toString());
             } else {
-                log.error("UPDATE:", e);
+                log.error("UPDATE:" + sql.toString(), e);
             }
             return 0;
         } finally {

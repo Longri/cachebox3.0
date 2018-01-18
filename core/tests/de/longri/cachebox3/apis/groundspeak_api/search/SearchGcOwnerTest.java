@@ -271,7 +271,7 @@ class SearchGcOwnerTest {
 
                         assertEquals(value, ApiResultState.IO);
 
-                        assertEquals(22, cacheList.size);
+                        assertEquals(21, cacheList.size);
                         AbstractCache abstractCache = cacheList.first();
 
                         assertEquals(false, abstractCache.isArchived());
@@ -325,7 +325,7 @@ class SearchGcOwnerTest {
 
 
                         //check Logs
-                        assertEquals(220, logList.size);
+                        assertEquals(210, logList.size);
                         LogEntry logEntry = logList.first();
 
                         assertEquals(AbstractCache.GenerateCacheId(abstractCache.getGcCode().toString()), logEntry.CacheId);

@@ -15,18 +15,17 @@
  */
 package de.longri.cachebox3.apis.groundspeak_api.search;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import de.longri.cachebox3.gui.widgets.IconButton;
 import de.longri.cachebox3.utils.ICancel;
 
-import java.util.ArrayList;
 
 /**
  * @author Hubert
  * @author Longri
  */
 public class SearchGC extends Search {
-    ArrayList<String> gcCodes;
+    Array<String> gcCodes;
 
     /**
      * @param gcApiKey valid encrypted Api-Key
@@ -34,7 +33,7 @@ public class SearchGC extends Search {
     public SearchGC(String gcApiKey, String gcCode) {
         super(gcApiKey, 1, (byte) 2, null);
         // single Cache will full loaded
-        this.gcCodes = new ArrayList<>();
+        this.gcCodes = new Array<>();
         this.gcCodes.add(gcCode);
     }
 
@@ -44,17 +43,17 @@ public class SearchGC extends Search {
     public SearchGC(String gcApiKey, String gcCode, ICancel iCancel) {
         super(gcApiKey, 1, (byte) 2, iCancel);
         // single Cache will full loaded
-        this.gcCodes = new ArrayList<>();
+        this.gcCodes = new Array<>();
         this.gcCodes.add(gcCode);
     }
 
-    public SearchGC(String gcApiKey, ArrayList<String> gcCodes, byte apiState) {
-        super(gcApiKey, gcCodes.size(), apiState, null);
+    public SearchGC(String gcApiKey, Array<String> gcCodes, byte apiState) {
+        super(gcApiKey, gcCodes.size, apiState, null);
         this.gcCodes = gcCodes;
     }
 
-    public SearchGC(String gcApiKey, ArrayList<String> gcCodes, byte apiState, ICancel iCancel) {
-        super(gcApiKey, gcCodes.size(), apiState, iCancel);
+    public SearchGC(String gcApiKey, Array<String> gcCodes, byte apiState, ICancel iCancel) {
+        super(gcApiKey, gcCodes.size, apiState, iCancel);
         this.gcCodes = gcCodes;
     }
 

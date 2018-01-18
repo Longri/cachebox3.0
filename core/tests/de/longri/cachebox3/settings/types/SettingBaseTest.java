@@ -34,7 +34,8 @@ class SettingBaseTest {
 
     static {
         TestUtils.initialGdx();
-        new SettingsList();
+        if (SettingsList.that == null)
+            new SettingsList();
     }
 
     public static final SettingBool testBool = (SettingBool) SettingsList.addSetting(new SettingBool("testBool"
@@ -94,6 +95,12 @@ class SettingBaseTest {
 
         // close config DB and reload
         Config.AcceptChanges();
+        //wait 5sec
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Database.Settings.close();
 
         Database.Settings = new Database(Database.DatabaseType.Settings);

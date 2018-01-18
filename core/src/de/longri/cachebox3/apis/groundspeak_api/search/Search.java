@@ -137,6 +137,8 @@ public abstract class Search extends PostRequest {
      */
     private byte apiState;
 
+    public boolean fireProgressEvent = true;
+
     /**
      * @param gcApiKey valid encrypted Api-Key
      * @param number   MaxPerPage size for this request
@@ -164,14 +166,16 @@ public abstract class Search extends PostRequest {
 
 
         //fire progress event for begin parsing
-        ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
-        progress.progress = 1;
-        progress.caches = 0;
-        progress.wayPoints = 0;
-        progress.logs = 0;
-        progress.images = 0;
-        progress.msg = "Start parsing result";
-        EventHandler.fire(new ImportProgressChangedEvent(progress));
+        if (fireProgressEvent) {
+            ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
+            progress.progress = 1;
+            progress.caches = 0;
+            progress.wayPoints = 0;
+            progress.logs = 0;
+            progress.images = 0;
+            progress.msg = "Start parsing result";
+            EventHandler.fire(new ImportProgressChangedEvent(progress));
+        }
 
 
         try {
@@ -304,15 +308,17 @@ public abstract class Search extends PostRequest {
 
                             //add final Cache instance
                             writeCacheToDB(actCache);
+                            if (fireProgressEvent) {
+                                ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
+                                progress.progress = this.getProgress();
+                                progress.caches = ++cacheCount;
+                                progress.wayPoints = waypointCount;
+                                progress.logs = logCount;
+                                progress.images = imageCount;
+                                progress.msg = "store Cache: " + actCache.toString();
+                                EventHandler.fire(new ImportProgressChangedEvent(progress));
+                            }
 
-                            ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
-                            progress.progress = this.getProgress();
-                            progress.caches = ++cacheCount;
-                            progress.wayPoints = waypointCount;
-                            progress.logs = logCount;
-                            progress.images = imageCount;
-                            progress.msg = "store Cache: " + actCache.toString();
-                            EventHandler.fire(new ImportProgressChangedEvent(progress));
 
                             actCache = null;
                             log.debug("Stream parse new Cache StreamAvailable:{}/{}");

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.CheckCacheStateParser;
+import de.longri.cachebox3.apis.groundspeak_api.search.SearchGC;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.settings.Config;
@@ -37,11 +38,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.GS_LIVE_URL;
 import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.STAGING_GS_LIVE_URL;
@@ -396,6 +395,79 @@ public class GroundspeakAPI {
         result.handled();
         return parseResult;
     }
+
+    public static ApiResultState getGeocacheStatusFavoritePoints(final Array<AbstractCache> caches, final ICancel icancel,final CheckCacheStateParser.ProgressIncrement progressIncrement) {
+        ApiResultState chk = chkMembership(false);
+        if (chk.isErrorState())
+            return chk;
+
+        if (caches.size >= 50) throw new RuntimeException("Cache count must les then 50");
+
+        waitApiCallLimit();
+
+        Array<String> gcCodes = new Array<>();
+        for (AbstractCache ca : caches) {
+            gcCodes.add(ca.getGcCode().toString());
+        }
+
+        final AtomicInteger idx = new AtomicInteger(0);
+        final SearchGC searchGC = new SearchGC(getAccessToken(), gcCodes, (byte) 2, icancel) {
+            protected void writeCacheToDB(final AbstractCache cache) {
+                boolean search = false;
+                boolean over = false;
+                while (search) {
+                    AbstractCache ca = caches.get(idx.getAndIncrement());
+                    if (ca.getId() == cache.getId()) {
+                        search = false;
+                        ca.setAvailable(cache.isAvailable());
+                        ca.setArchived(cache.isArchived());
+                        cache.setNumTravelbugs(cache.getNumTravelbugs());
+                        cache.setFavoritePoints(cache.getFavoritePoints());
+                        progressIncrement.increment();
+                    } else {
+                        if (idx.get() >= caches.size) {
+                            if (over) {
+                                search = false;// not found
+                            } else {
+                                idx.set(0);// new iteration
+                            }
+                        }
+                    }
+                }
+            }
+
+            protected void writeLogToDB(final LogEntry logEntry) {
+                //do nothing
+            }
+
+            protected void writeImagEntryToDB(final ImageEntry imageEntry) {
+                //do nothing
+            }
+
+        };
+
+
+        final ApiResultState result[] = new ApiResultState[1];
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
+        searchGC.fireProgressEvent = false;
+        searchGC.postRequest(new GenericCallBack<ApiResultState>() {
+            @Override
+            public void callBack(ApiResultState value) {
+                result[0] = value;
+                WAIT.set(false);
+            }
+        }, 0);
+
+        while (WAIT.get()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return result[0];
+    }
+
 //
 //    /**
 //     * Gets the Logs for the given Cache
@@ -1066,8 +1138,6 @@ public class GroundspeakAPI {
         list = null;
         return ApiResultState.API_ERROR;
     }
-
-
 
 
 //

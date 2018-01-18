@@ -65,7 +65,7 @@ public class CheckStateActivity extends ActivityBase {
 
     private static final Logger log = LoggerFactory.getLogger(CheckStateActivity.class);
 
-    private final int blockSize = 108; // The API leaves only a maximum of 110 per request!
+    private final int blockSize;
     private final CharSequenceButton bCancel;
     private final VisLabel lblTitle;
     private final Image gsLogo;
@@ -74,9 +74,13 @@ public class CheckStateActivity extends ActivityBase {
     private final Image workAnimation;
     private final VisProgressBar progressBar;
     private final AtomicBoolean canceled = new AtomicBoolean(false);
+    private final boolean withFavPoi;
 
-    public CheckStateActivity() {
+    public CheckStateActivity(boolean withFavPoi) {
         super("CheckStateActivity");
+
+        blockSize = withFavPoi ? 48 : 108; // The API leaves only a maximum of 110 per request or 50 with search(Favepoint)!
+
         bCancel = new CharSequenceButton(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
         lblTitle = new VisLabel(Translation.get("chkApiState"));
@@ -91,7 +95,7 @@ public class CheckStateActivity extends ActivityBase {
         setWorkAnimationVisible(false);
 
         this.setStageBackground(new ColorDrawable(VisUI.getSkin().getColor("dialog_background")));
-//        this.setDebug(true, true);
+        this.withFavPoi = withFavPoi;
     }
 
     @Override
@@ -227,20 +231,39 @@ public class CheckStateActivity extends ActivityBase {
                         index++;
                     } while (Iterator2.hasNext());
 
-                    result = GroundspeakAPI.getGeocacheStatus(chkList100, new ICancel() {
-                        @Override
-                        public boolean cancel() {
-                            return canceled.get();
-                        }
-                    }, new CheckCacheStateParser.ProgressIncrement() {
-                        @Override
-                        public void increment() {
-                            // send Progress Change Msg
-                            ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
-                            progress.progress = (int) (100f / ((float) chkList.size / (float) progressIncrement.incrementAndGet()));
-                            EventHandler.fire(new ImportProgressChangedEvent(progress));
-                        }
-                    });
+
+                    if (withFavPoi) {
+                        result = GroundspeakAPI.getGeocacheStatusFavoritePoints(chkList100, new ICancel() {
+                            @Override
+                            public boolean cancel() {
+                                return canceled.get();
+                            }
+                        }, new CheckCacheStateParser.ProgressIncrement() {
+                            @Override
+                            public void increment() {
+                                // send Progress Change Msg
+                                ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
+                                progress.progress = (int) (100f / ((float) chkList.size / (float) progressIncrement.incrementAndGet()));
+                                EventHandler.fire(new ImportProgressChangedEvent(progress));
+                            }
+                        });
+                    } else {
+                        result = GroundspeakAPI.getGeocacheStatus(chkList100, new ICancel() {
+                            @Override
+                            public boolean cancel() {
+                                return canceled.get();
+                            }
+                        }, new CheckCacheStateParser.ProgressIncrement() {
+                            @Override
+                            public void increment() {
+                                // send Progress Change Msg
+                                ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
+                                progress.progress = (int) (100f / ((float) chkList.size / (float) progressIncrement.incrementAndGet()));
+                                EventHandler.fire(new ImportProgressChangedEvent(progress));
+                            }
+                        });
+                    }
+
                     if (result.isErrorState())
                         break;// API Error
                     addedReturnList.addAll(chkList100);
@@ -299,6 +322,7 @@ public class CheckStateActivity extends ActivityBase {
             }
         });
     }
+
 
     @Override
     public void dispose() {
