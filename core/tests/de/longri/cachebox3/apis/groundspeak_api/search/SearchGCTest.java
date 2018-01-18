@@ -379,4 +379,84 @@ class SearchGCTest {
 
     }
 
+    @Test
+    public void testOnlineLite() {
+        if (isDummy) return;
+        final CB_List<AbstractCache> cacheList = new CB_List<>();
+        final CB_List<LogEntry> logList = new CB_List<>();
+        final CB_List<ImageEntry> imageList = new CB_List<>();
+        final SearchGC searchGC = new SearchGC(apiKey, "GC1T33T") {
+            protected void writeLogToDB(final LogEntry logEntry) {
+                logList.add(logEntry);
+            }
+
+            protected void writeImagEntryToDB(final ImageEntry imageEntry) {
+                imageList.add(imageEntry);
+            }
+
+            protected void writeCacheToDB(final AbstractCache cache) {
+                cacheList.add(cache);
+            }
+        };
+
+        searchGC.setIsLite(true);
+
+        //results
+        final long gpxFilenameId = 10;
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
+
+        searchGC.postRequest(new GenericCallBack<ApiResultState>() {
+            @Override
+            public void callBack(ApiResultState value) {
+
+                assertEquals(value, ApiResultState.IO);
+
+                assertEquals(1, cacheList.size);
+                AbstractCache abstractCache = cacheList.pop();
+
+                assertEquals(false, abstractCache.isArchived());
+                assertEquals(true, abstractCache.isAvailable());
+                assertEquals("GC1T33T", abstractCache.getGcCode());
+                assertEquals(0, abstractCache.getWaypoints().size);
+                assertEquals(CacheTypes.Traditional, abstractCache.getType());
+                assertEquals(CacheSizes.other, abstractCache.getSize());
+                assertEquals(null, abstractCache.getCountry());
+                assertEquals(3f, abstractCache.getDifficulty());
+                assertEquals(null, abstractCache.getHint(Database.Data));
+                assertEquals(12, abstractCache.getFavoritePoints());
+                assertEquals(true, abstractCache.isFound());
+                assertEquals("1260177", abstractCache.getGcId());
+                assertEquals(null, abstractCache.getLongDescription(Database.Data));
+                assertEquals("Nur ein Berg", abstractCache.getName());
+                assertEquals("Wurzellisel", abstractCache.getOwner());
+                assertEquals("Wurzellisel", abstractCache.getPlacedBy());
+                assertEquals(null, abstractCache.getShortDescription(Database.Data));
+                assertEquals(2f, abstractCache.getTerrain());
+                assertEquals("http://coord.info/GC1T33T", abstractCache.getUrl(Database.Data));
+                assertEquals(2, abstractCache.getApiState());
+                assertEquals(52.579267, abstractCache.getLatitude());
+                assertEquals(13.381983, abstractCache.getLongitude());
+
+                // Attribute Tests
+
+                ArrayList<Attributes> positiveList = new ArrayList<>();
+                ArrayList<Attributes> negativeList = new ArrayList<>();
+
+                TestUtils.assetCacheAttributes(abstractCache, positiveList, negativeList);
+
+
+                WAIT.set(false);
+            }
+        }, gpxFilenameId);
+
+        while (WAIT.get()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }

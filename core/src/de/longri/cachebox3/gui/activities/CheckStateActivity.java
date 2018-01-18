@@ -37,10 +37,7 @@ import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.CheckC
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.Window;
-import de.longri.cachebox3.gui.dialogs.ButtonDialog;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
-import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
+import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.stages.StageManager;
@@ -251,6 +248,17 @@ public class CheckStateActivity extends ActivityBase {
                     stop += blockSize + 1;
 
                 } while (chkList100.size == blockSize + 1);
+
+                if (addedReturnList.size == 0) {
+                    //no result
+                    if (result.isErrorState()) {
+                        CB.checkApiResultState(result);
+                    }
+                    EventHandler.remove(limitListener);
+                    finish();
+                    return;
+                }
+
 
                 //Write changes to DB
                 final AtomicInteger changedCount = new AtomicInteger(0);

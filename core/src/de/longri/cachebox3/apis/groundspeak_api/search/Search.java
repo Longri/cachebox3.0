@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -320,6 +320,8 @@ public abstract class Search extends PostRequest {
                         break;
                     case ATTRIBUTE_ARRAY:
                         actAttribute = Attributes.getAttributeEnumByGcComId(attributeID);
+                        if (actAttribute == Attributes.Default)
+                            break;
                         if (isOn) {
                             // System.out.println("add positive Attribute: " + actAttribute);
                             actCache.addAttributePositive(actAttribute);
@@ -363,6 +365,9 @@ public abstract class Search extends PostRequest {
             public void string(String name, String value) {
                 if (iCancel != null && iCancel.cancel()) this.cancel();
                 super.string(name, value);
+
+                if (value.equals("null"))
+                    value = null;
 
                 switch (SWITCH) {
                     case CACHE_ARRAY:
@@ -674,7 +679,7 @@ public abstract class Search extends PostRequest {
         Date date = new Date();
         try {
             int date1 = value.indexOf(DATE_START);
-            int date2 = value.indexOf("-");
+            int date2 = value.lastIndexOf("-");
             String dateString = value.substring(date1 + DATE_START.length(), date2);
             if (dateString.startsWith("\"")) dateString = dateString.substring(1);
             date = new Date(Long.valueOf(dateString));
