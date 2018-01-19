@@ -147,6 +147,7 @@ class SettingBaseTest {
 
         //clean up test file's
         configFileHandle.delete();
+        dataFileHandle.delete();
 
     }
 

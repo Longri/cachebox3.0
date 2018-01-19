@@ -163,12 +163,10 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             throw new RuntimeException("CacheList can't be NULL");
         }
 
-
-        final AtomicBoolean finishStackFill = new AtomicBoolean(false);
         final String msg = Translation.isInitial() ? Translation.get("LoadCacheList").toString() : "";
         final int count = getFilteredCacheCount(database, statement);
         if (count == 0) {
-            cacheList.clear(5);
+            cacheList.clear();
             EventHandler.fire(new IncrementProgressEvent(100, msg, 100));
             return;
         }
@@ -176,9 +174,8 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         cacheList.clear(count);
 
         final AtomicInteger cacheCount = new AtomicInteger(0);
-        final ImmutableCache.CursorData[] cursorDataStack = new ImmutableCache.CursorData[count];
-        final AtomicInteger writeCount = new AtomicInteger(-1);
-        final AtomicInteger readCount = new AtomicInteger(-1);
+        final Array<ImmutableCache.CursorData> cursorDataStack = new Array<>();
+        final AtomicBoolean finishFillStack = new AtomicBoolean(false);
         final AtomicBoolean asyncCacheLoadReady = new AtomicBoolean(false);
 
 
@@ -188,47 +185,32 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             @Override
             public void run() {
 
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
                 int tryCount = 0;
                 int progressFireCount = 0;
 
-                while (true) {
+                // wait for first values
+                while (cursorDataStack.size <= 0) {
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-                    if (readCount.get() < writeCount.get()) {
-                        int idx = readCount.incrementAndGet();
-                        if (cursorDataStack[idx] == null) {
-                            if (tryCount > 1000) {
-                                // ignore this Cache
-                                log.warn("Cache index: {} are ignored", idx);
-                                continue;
-                            }
-                            try {
-                                Thread.sleep(5);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            readCount.decrementAndGet();
-                            tryCount++;
-                            continue;
-                        }
-                        cacheList.add(new ImmutableCache(cursorDataStack[idx]), true);
-
+                while (!finishFillStack.get() || (cursorDataStack.size > 0)) {
+                    ImmutableCache.CursorData data;
+                    synchronized (cursorDataStack) {
+                        if (cursorDataStack.size == 0) continue;
+                        data = cursorDataStack.pop();
+                    }
+                    if (data != null) {
+                        cacheList.add(new ImmutableCache(data), true);
                         int actCacheCount = cacheCount.incrementAndGet();
                         progressFireCount++;
                         if (progressFireCount >= progressEventcount) {
                             EventHandler.fire(new IncrementProgressEvent(actCacheCount, msg, count));
                             progressFireCount = 0;
                         }
-                    } else {
-                        if (finishStackFill.get()) {
-                            break;
-                        }
-//                        log.debug("WAIT FOR CACHE DATA");
                     }
                 }
                 asyncCacheLoadReady.set(true);
@@ -252,22 +234,17 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                     GdxSqliteCursor cursor = database.rawQuery(query, (String[]) null);
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
-                        ImmutableCache.CursorData data = new ImmutableCache.CursorData(cursor);
-                        cursorDataStack[writeCount.incrementAndGet()] = data;
+                        synchronized (cursorDataStack) {
+                            cursorDataStack.add(new ImmutableCache.CursorData(cursor));
+                        }
                         cursor.moveToNext();
                     }
                     cursor.close();
-                    if (runningAsyncTasks.decrementAndGet() == 0) {
-                        finishStackFill.set(true);
-                        log.debug("finishStackFill after {} ms", System.currentTimeMillis() - startTime);
-                    }
                 }
             };
 
-            boolean useThreading = true;
 
-            runningAsyncTasks.incrementAndGet();
-            if (useThreading) {
+            if (true) {
                 CB.postAsync(runnable);
             } else {
                 runnable.run();
@@ -275,6 +252,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
             offset += LIMIT;
         }
+        finishFillStack.set(true);
 
 
         //wait for Async ready

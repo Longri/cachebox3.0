@@ -78,7 +78,7 @@ class CacheList3DAOTest {
 
         // Cachelist is Async loading, so wait a moment
         try {
-            Thread.sleep(4000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -113,7 +113,7 @@ class CacheList3DAOTest {
 
         // Cachelist is Async loading, so wait a moment
         try {
-            Thread.sleep(4000);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

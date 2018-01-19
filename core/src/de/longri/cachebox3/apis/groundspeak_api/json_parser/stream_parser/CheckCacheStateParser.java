@@ -139,21 +139,23 @@ public class CheckCacheStateParser {
         };
 
         final AtomicBoolean chkCancel = new AtomicBoolean(true);
-        CB.postAsync(new NamedRunnable("CheckCacheStateParser") {
-            @Override
-            public void run() {
-                while (chkCancel.get()) {
-                    if (icancel.cancel()) {
-                        parser.cancel();
-                    }
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+        if (icancel != null) {
+            CB.postAsync(new NamedRunnable("CheckCacheStateParser") {
+                @Override
+                public void run() {
+                    while (chkCancel.get()) {
+                        if (icancel.cancel()) {
+                            parser.cancel();
+                        }
+                        try {
+                            Thread.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
         parser.parse(stream);
         chkCancel.set(false);

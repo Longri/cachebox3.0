@@ -119,7 +119,9 @@ public class DatabaseSchema {
 
 
     public final String CONFIG_TABLE = "CREATE TABLE Config (\n" +
-            "    [Key]      NVARCHAR (30)  NOT NULL,\n" +
+            "    [Key]      NVARCHAR (30)  NOT NULL\n" +
+            "                              PRIMARY KEY\n" +
+            "                              UNIQUE,\n" +
             "    Value      NVARCHAR (255),\n" +
             "    LongString NTEXT,\n" +
             "    desired    NTEXT\n" +
