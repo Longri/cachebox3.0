@@ -45,7 +45,7 @@ public class Database {
     public static Database Data;
     public static Database Drafts;
     public static Database Settings;
-    private GdxSqlite myDB;
+    public GdxSqlite myDB;
     public final CacheList Query;
 
     /**
@@ -582,6 +582,23 @@ public class Database {
                     if (lastDatabaseSchemeVersion < 1003) {
                         // Long Text Field for long Strings
                         execSQL("ALTER TABLE [Config] ADD [desired] ntext NULL;");
+                    }
+                    if (lastDatabaseSchemeVersion < 1004) {
+                        // add primary key on [Key]
+                        String CREATE = "CREATE TABLE ConfigCopy (\n" +
+                                "    [Key]      NVARCHAR (30)  NOT NULL\n" +
+                                "                              PRIMARY KEY\n" +
+                                "                              UNIQUE,\n" +
+                                "    Value      NVARCHAR (255),\n" +
+                                "    LongString NTEXT,\n" +
+                                "    desired    NTEXT\n" +
+                                ");";
+                        String COPY = "INSERT INTO ConfigCopy SELECT * FROM Config;";
+                        String DROP = "DROP TABLE Config;";
+                        String RENAME = "ALTER TABLE ConfigCopy RENAME TO Config;";
+
+                        String SQL = CREATE + COPY + DROP + RENAME;
+                        execSQL(SQL);
                     }
                 } catch (Exception exc) {
                     log.error("alterDatabase", exc);

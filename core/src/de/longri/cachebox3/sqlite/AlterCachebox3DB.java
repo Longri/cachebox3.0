@@ -133,6 +133,7 @@ public class AlterCachebox3DB {
         } finally {
 
         }
+        change Config table add PRIMARY KEY
     }
 
 

@@ -15,14 +15,15 @@
  */
 package de.longri.cachebox3.settings;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
-import de.longri.cachebox3.settings.types.SettingEncryptedString;
-import de.longri.cachebox3.settings.types.SettingsList;
+import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
+import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,10 @@ public class Config extends Settings {
     static final Logger log = LoggerFactory.getLogger(Config.class);
 
     public static void AcceptChanges() {
-        writeToDB();
+        if (settingsList.dirtyList.size > 0)
+            writeToDB();
+        else
+            log.debug("no Setting are dirty, don't write to DB");
     }
 
 
@@ -55,67 +59,111 @@ public class Config extends Settings {
             return false;
         }
         inWrite.set(true);
+        final Array<SettingBase<?>> dirtyList = new Array<>();
+        while (settingsList.dirtyList.size > 0) {
+            dirtyList.add(settingsList.dirtyList.pop());
+        }
+
+
         CB.postAsync(new NamedRunnable("Config") {
             @Override
             public void run() {
                 // Write into DB
                 de.longri.cachebox3.settings.types.SettingsDAO dao = new de.longri.cachebox3.settings.types.SettingsDAO();
 
-                Database data = Database.Data;
-                Database settingsDB = Database.Settings;
+                final Database data = Database.Data;
+                final Database settingsDB = Database.Settings;
 
                 if (data == null || settingsDB == null || !data.isStarted() || !settingsDB.isStarted())
                     return;
 
 
-//                if (data != null)
-//                    data.beginTransaction();
-//                settingsDB.beginTransaction();
+                //splitt into local and global list!
+                final Array<SettingBase<?>> localList = new Array<>();
+                final Array<SettingBase<?>> globalList = new Array<>();
+                boolean isAPI = false;
+                while (dirtyList.size > 0) {
+                    SettingBase<?> setting = dirtyList.pop();
+                    if (setting.name.equals("GcAPIStaging") || setting.name.equals("GcAPI")) {
+                        isAPI = true;
+                    }
+                    if (setting.getStoreType() == SettingStoreType.Local) {
+                        localList.add(setting);
+                    } else {
+                        globalList.add(setting);
+                    }
+                }
 
-                boolean needRestart = false;
+                final AtomicBoolean WAITLOCAL = new AtomicBoolean(true);
+                final AtomicBoolean WAITGLOBAL = new AtomicBoolean(true);
 
-                try {
-                    for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = settingsList.iterator(); it.hasNext(); ) {
-                        de.longri.cachebox3.settings.types.SettingBase<?> setting = it.next();
-                        if (!setting.isDirty())
-                            continue; // is not changed -> do not
+                CB.postAsync(new NamedRunnable("write settings local") {
+                    @Override
+                    public void run() {
+                        writeToDB(data, localList, WAITLOCAL);
+                    }
+                });
 
-                        if (de.longri.cachebox3.settings.types.SettingStoreType.Local == setting.getStoreType()) {
-                            if (data != null)
-                                dao.writeToDatabase(data, setting);
-                        } else if (de.longri.cachebox3.settings.types.SettingStoreType.Global == setting.getStoreType()) {
-                            dao.writeToDatabase(settingsDB, setting);
-                        }
+                CB.postAsync(new NamedRunnable("write settings global") {
+                    @Override
+                    public void run() {
+                        writeToDB(settingsDB, globalList, WAITGLOBAL);
+                    }
+                });
 
-                        if (setting.needRestart()) {
-                            needRestart = true;
-                        }
-
-
-                        if (setting.name.equals("GcAPIStaging") || setting.name.equals("GcAPI")) {
+                while (WAITGLOBAL.get() || WAITLOCAL.get()) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (isAPI) {
+                    CB.postOnMainThread(new Runnable() {
+                        @Override
+                        public void run() {
                             //reset ApiKey validation
                             GroundspeakAPI.resetApiIsChecked();
 
                             //set config stored MemberChipType as expired
                             Calendar cal = Calendar.getInstance();
+
                             Config.memberChipType.setExpiredTime(cal.getTimeInMillis());
+                            Config.AcceptChanges();
                         }
+                    });
 
-
-                        setting.clearDirty();
-
-                    }
-                    log.debug("Finish write Config to DB!");
-                } finally {
-//                    settingsDB.endTransaction();
-//                    if (data != null)
-//                        data.endTransaction();
                 }
                 inWrite.set(false);
             }
 
         });
         return false;
+    }
+
+    private static void writeToDB(Database db, Array<SettingBase<?>> settingsList, AtomicBoolean wait) {
+        final GdxSqlitePreparedStatement deleteStatement = db.myDB.prepare("DELETE FROM Config WHERE [Key] = ?;");
+        final GdxSqlitePreparedStatement insertStatement = db.myDB.prepare("INSERT OR REPLACE INTO Config VALUES(?,?,?,?) ;");
+
+        db.myDB.beginTransaction();
+        while (settingsList.size > 0) {
+            SettingBase<?> setting = settingsList.pop();
+            if (setting.isDefault()) {
+                deleteStatement.bind(setting.getName()).commit().reset();
+            } else {
+                if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
+                    insertStatement.bind(setting.getName(), null, setting.getValue()
+                            , Long.toBinaryString(setting.expiredTime)).commit().reset();
+                } else {
+                    insertStatement.bind(setting.getName(), setting.getValue(), null
+                            , Long.toBinaryString(setting.expiredTime)).commit().reset();
+                }
+            }
+        }
+        db.myDB.endTransaction();
+        deleteStatement.close();
+        insertStatement.close();
+        wait.set(false);
     }
 
     public static void readFromDB(boolean wait) {
@@ -157,7 +205,7 @@ public class Config extends Settings {
                 }
 
 
-                for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it =settingsList.iterator(); it.hasNext(); ) {
+                for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = settingsList.iterator(); it.hasNext(); ) {
                     de.longri.cachebox3.settings.types.SettingBase<?> setting = it.next();
 
 

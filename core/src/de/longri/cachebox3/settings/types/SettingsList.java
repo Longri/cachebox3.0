@@ -31,7 +31,7 @@ public class SettingsList extends Array<SettingBase<?>> {
 
 
     private boolean isLoaded = false;
-    private final Array<SettingBase<?>> dirtyList = new Array<>();
+    public final Array<SettingBase<?>> dirtyList = new Array<>();
 
     public SettingsList() {
 

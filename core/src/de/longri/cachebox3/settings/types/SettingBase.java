@@ -47,7 +47,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     private static int indexCount = 0;
     private int index = -1;
 
-    protected long expiredTime = -1L;
+    public long expiredTime = -1L;
 
     public SettingBase(String name, SettingCategory category, SettingMode modus, SettingStoreType StoreType, SettingUsage usage, boolean desired) {
 
@@ -86,7 +86,8 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     }
 
     void setDirty() {
-        this.dirtyList.add(this);
+        if (!this.dirtyList.contains(this, true))
+            this.dirtyList.add(this);
         fireChangedEvent();
     }
 
