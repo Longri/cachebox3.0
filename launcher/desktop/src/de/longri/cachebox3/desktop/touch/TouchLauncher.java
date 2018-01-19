@@ -34,6 +34,8 @@ import org.oscim.awt.AwtGraphics;
 import org.oscim.backend.GLAdapter;
 import org.oscim.gdx.GdxAssets;
 import org.oscim.gdx.LwjglGL20;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLogger;
 
 import javax.swing.*;
@@ -43,6 +45,7 @@ public class TouchLauncher {
         System.setProperty("org.lwjgl.util.NoChecks", "true");
         LibgdxLogger.PROPERTIES_FILE_HANDLE = new LwjglFileHandle(LibgdxLogger.CONFIGURATION_FILE, Files.FileType.Local);
 
+        final Logger log = LoggerFactory.getLogger("MAIN-LOOP");
 
         CommandLine cmd = getCommandLine(args);
 
@@ -92,13 +95,33 @@ public class TouchLauncher {
         }
 
 
-
         initVtm();
 
         // Don't change this LogLevel
         // Cachebox use the slf4j implematation for LibGdx as Log engine.
         // so set LogLevel on CB.class if you wont (USED_LOG_LEVEL)
-        new LwjglApplication(new CacheboxMain(), config).setLogLevel(LwjglApplication.LOG_DEBUG);
+        new LwjglApplication(new CacheboxMain(), config) {
+            public boolean executeRunnables() {
+                long start = System.currentTimeMillis();
+                synchronized (runnables) {
+                    for (int i = runnables.size - 1; i >= 0; i--)
+                        executedRunnables.add(runnables.get(i));
+                    runnables.clear();
+                }
+                if (executedRunnables.size == 0) return false;
+                do
+                    executedRunnables.pop().run();
+                while (executedRunnables.size > 0);
+
+                long executionTime = System.currentTimeMillis() - start;
+
+                if (executionTime > 100) {
+                    log.warn("Blocked MAIN-LOOp for {}ms",executionTime);
+                }
+
+                return true;
+            }
+        }.setLogLevel(LwjglApplication.LOG_DEBUG);
 
         if (cmd.hasOption("transfer")) {
             new Thread(new Runnable() {

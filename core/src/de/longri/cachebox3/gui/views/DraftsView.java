@@ -47,6 +47,7 @@ import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -203,7 +204,7 @@ public class DraftsView extends AbstractView {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                CB.postAsync(new Runnable() {
+                CB.postAsync(new NamedRunnable("DraftsView") {
                     @Override
                     public void run() {
                         // wait for Layout ready

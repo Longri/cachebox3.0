@@ -26,6 +26,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.IntProperty;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 /**
  * Created by Longri on 02.09.2017.
@@ -111,7 +112,7 @@ public class AdjustableStarWidget extends Table {
     }
 
     private void setValue(final int value, final boolean force) {
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("AdjustStarWidget") {
             @Override
             public void run() {
                 if (force || AdjustableStarWidget.this.value.getInt() != value) {

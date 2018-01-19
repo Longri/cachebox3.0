@@ -44,6 +44,7 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -161,7 +162,7 @@ public class ReloadCacheActivity extends ActivityBase {
         EventHandler.add(progressListener);
         importRuns = true;
 
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("ReloadCacheActivity") {
             @Override
             public void run() {
                 ApiCallLimitListener limitListener = new ApiCallLimitListener() {

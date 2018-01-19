@@ -50,6 +50,7 @@ import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -175,7 +176,7 @@ public class CheckStateActivity extends ActivityBase {
         EventHandler.add(progressListener);
         importRuns = true;
 
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("CheckStateActivitie") {
             @Override
             public void run() {
 

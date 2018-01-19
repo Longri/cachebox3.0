@@ -21,12 +21,14 @@ import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.settings.types.SettingEncryptedString;
 import de.longri.cachebox3.settings.types.SettingsList;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 02.08.16.
@@ -38,14 +40,22 @@ public class Config extends Settings {
         writeToDB();
     }
 
+
+    static final AtomicBoolean inWrite = new AtomicBoolean(false);
+
     /**
      * Return true, if setting changes need restart
      *
      * @return
      */
-    private static boolean writeToDB() {
-
-        CB.postAsync(new Runnable() {
+    private static synchronized boolean writeToDB() {
+        log.debug("Start write Config to DB!");
+        if (inWrite.get()) {
+            log.warn("Config is in write state, can't run again");
+            return false;
+        }
+        inWrite.set(true);
+        CB.postAsync(new NamedRunnable("Config") {
             @Override
             public void run() {
                 // Write into DB
@@ -65,7 +75,7 @@ public class Config extends Settings {
                 boolean needRestart = false;
 
                 try {
-                    for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
+                    for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = settingsList.iterator(); it.hasNext(); ) {
                         de.longri.cachebox3.settings.types.SettingBase<?> setting = it.next();
                         if (!setting.isDirty())
                             continue; // is not changed -> do not
@@ -95,14 +105,15 @@ public class Config extends Settings {
                         setting.clearDirty();
 
                     }
-                    return;
+                    log.debug("Finish write Config to DB!");
                 } finally {
 //                    settingsDB.endTransaction();
 //                    if (data != null)
 //                        data.endTransaction();
                 }
-
+                inWrite.set(false);
             }
+
         });
         return false;
     }
@@ -146,7 +157,7 @@ public class Config extends Settings {
                 }
 
 
-                for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
+                for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it =settingsList.iterator(); it.hasNext(); ) {
                     de.longri.cachebox3.settings.types.SettingBase<?> setting = it.next();
 
 
@@ -187,21 +198,21 @@ public class Config extends Settings {
     }
 
     public static void LoadFromLastValue() {
-        for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
+        for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = settingsList.iterator(); it.hasNext(); ) {
             de.longri.cachebox3.settings.types.SettingBase<?> setting = it.next();
             setting.loadFromLastValue();
         }
     }
 
     public static void SaveToLastValue() {
-        for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = de.longri.cachebox3.settings.types.SettingsList.that.iterator(); it.hasNext(); ) {
+        for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = settingsList.iterator(); it.hasNext(); ) {
             de.longri.cachebox3.settings.types.SettingBase<?> setting = it.next();
             setting.saveToLastValue();
         }
     }
 
     public static void LoadAllDefaultValues() {
-        for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = SettingsList.that.iterator(); it.hasNext(); ) {
+        for (Iterator<de.longri.cachebox3.settings.types.SettingBase<?>> it = settingsList.iterator(); it.hasNext(); ) {
             de.longri.cachebox3.settings.types.SettingBase<?> setting = it.next();
             setting.loadDefault();
         }

@@ -41,6 +41,7 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.FileList;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.gdx.sqlite.GdxSqlite;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import de.longri.gdx.sqlite.SQLiteGdxException;
@@ -291,7 +292,7 @@ public class SelectDB_Activity extends ActivityBase {
 
     private void selectDB() {
 
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("SelectDB_Activity") {
             @Override
             public void run() {
                 if (lvFiles.getSelectedItem() == null) {

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -16,6 +16,7 @@
 package de.longri.cachebox3.settings.types;
 
 
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.lists.CB_List;
 
@@ -41,10 +42,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     protected T lastValue;
     protected boolean needRestart = false;
 
-    /**
-     * saves whether this setting is changed and needs to be saved
-     */
-    protected boolean dirty;
+    Array<SettingBase<?>> dirtyList;
 
     private static int indexCount = 0;
     private int index = -1;
@@ -60,7 +58,6 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
         this.mode = modus;
         this.storeType = StoreType;
         this.usage = usage;
-        this.dirty = false;
         this.index = indexCount++;
         if (desired) {
             //set to zero (value -1 means that this setting has no desired value)
@@ -85,12 +82,16 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     }
 
     public boolean isDirty() {
-        return dirty;
+        return this.dirtyList.contains(this, true);
     }
 
-    public void setDirty() {
-        dirty = true;
+    void setDirty() {
+        this.dirtyList.add(this);
         fireChangedEvent();
+    }
+
+    public void clearDirty() {
+        this.dirtyList.removeValue(this, true);
     }
 
     public void setExpiredTime(long time) {
@@ -103,9 +104,6 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
         return Calendar.getInstance().getTimeInMillis() > expiredTime;
     }
 
-    public void clearDirty() {
-        dirty = false;
-    }
 
     public String getName() {
         return name;

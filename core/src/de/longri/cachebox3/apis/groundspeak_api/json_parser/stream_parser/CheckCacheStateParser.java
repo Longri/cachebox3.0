@@ -21,6 +21,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -138,7 +139,7 @@ public class CheckCacheStateParser {
         };
 
         final AtomicBoolean chkCancel = new AtomicBoolean(true);
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("CheckCacheStateParser") {
             @Override
             public void run() {
                 while (chkCancel.get()) {

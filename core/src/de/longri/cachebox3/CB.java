@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.kotcrab.vis.ui.VisUI;
@@ -47,6 +48,7 @@ import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.ICancel;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.ScaledSizes;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.CanvasAdapter;
@@ -61,6 +63,7 @@ import java.util.LinkedHashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Static class
@@ -358,8 +361,8 @@ public class CB {
         return Database.Data.Query.GetCacheById(cacheId);
     }
 
-    public static void postAsyncDelayd(final long delay, final Runnable runnable) {
-        postAsync(new Runnable() {
+    public static void postAsyncDelayd(final long delay, final NamedRunnable runnable) {
+        postAsync(new NamedRunnable("delayed runnable: " + runnable.name) {
             @Override
             public void run() {
                 TimerTask task = new TimerTask() {
@@ -373,13 +376,23 @@ public class CB {
         });
     }
 
-    public static void postAsync(final Runnable runnable) {
+    final static AtomicInteger executeCount = new AtomicInteger(0);
+    final static Array<String> runningRunnables = new Array<>();
+
+    public static void postAsync(final NamedRunnable runnable) {
+        runningRunnables.add(runnable.name);
+        log.debug("Submit Async execute count {} runs: {}", executeCount.incrementAndGet(), runningRunnables.toString());
+
         asyncExecutor.submit(new AsyncTask<Void>() {
             @Override
             public Void call() throws Exception {
                 try {
                     runnable.run();
+                    runningRunnables.removeValue(runnable.name, false);
+                    log.debug("Ready Async executed runnable, count {} runs: {}", executeCount.decrementAndGet(), runningRunnables.toString());
                 } catch (final Exception e) {
+                    e.printStackTrace();
+                    executeCount.decrementAndGet();
                     // throw on main thread, async executor will catch them
                     Gdx.app.postRunnable(new Runnable() {
                         @Override

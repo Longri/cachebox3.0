@@ -31,6 +31,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.*;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.NetUtils;
 import de.longri.cachebox3.utils.json_parser.DraftUploadResultParser;
 import de.longri.cachebox3.utils.lists.CB_List;
@@ -309,7 +310,7 @@ public class GroundspeakAPI {
 
         // try to get type from settings
         if (Config.memberChipType.isExpired()) {
-            CB.postAsync(new Runnable() {
+            CB.postAsync(new NamedRunnable("GroundspeakAPI") {
                 @Override
                 public void run() {
                     log.debug(("API is not checked, call API check"));

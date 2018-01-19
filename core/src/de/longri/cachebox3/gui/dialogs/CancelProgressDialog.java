@@ -23,6 +23,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.widgets.ProgressBar;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 
 /**
@@ -69,7 +70,7 @@ public class CancelProgressDialog extends ButtonDialog {
         super.show();
 
         //start runnable async
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("CancelProgressDialog") {
             @Override
             public void run() {
                 progressCancelRunnable.run();

@@ -25,6 +25,7 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheList;
 import de.longri.cachebox3.types.ImmutableCache;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -183,7 +184,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
         final int progressEventcount = count / 200; // fire event every 2% changes
 
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("CacheList3DAO:readCacheList1") {
             @Override
             public void run() {
 
@@ -243,12 +244,12 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         final AtomicInteger runningAsyncTasks = new AtomicInteger(0);
         while (offset < count) {
             final int finalOffset = offset;
-            Runnable runnable = new Runnable() {
+            NamedRunnable runnable = new NamedRunnable("CacheList3DAO:readCacheList2") {
                 public void run() {
                     String query = finalStatement + " LIMIT "
                             + Integer.toString(LIMIT) + " OFFSET "
                             + finalOffset;
-                    GdxSqliteCursor cursor = database.rawQuery(query,(String[])null);
+                    GdxSqliteCursor cursor = database.rawQuery(query, (String[]) null);
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
                         ImmutableCache.CursorData data = new ImmutableCache.CursorData(cursor);
@@ -352,7 +353,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         } else {
             statement = statement.replace("SELECT *", "SELECT COUNT(*)");
         }
-        GdxSqliteCursor cursor = database.rawQuery(statement, (String[])null);
+        GdxSqliteCursor cursor = database.rawQuery(statement, (String[]) null);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();

@@ -23,6 +23,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.interfaces.ProgressHandler;
 import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
 import de.longri.cachebox3.socket.filebrowser.ServerFile;
+import de.longri.cachebox3.utils.NamedRunnable;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -362,13 +363,14 @@ public class FileBrowserPane extends BorderPane {
 
                 final AtomicBoolean WAIT_READY = new AtomicBoolean(true);
 
-                CB.postAsync(new Runnable() {
+                CB.postAsync(new NamedRunnable("FileBrowserPane") {
                     @Override
                     public void run() {
                         clint.sendFiles(progressHandler, path, workingDir, files);
                         WAIT_READY.set(false);
                     }
                 });
+
 
                 while (WAIT_READY.get()) {
                     try {

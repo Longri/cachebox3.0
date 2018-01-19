@@ -44,6 +44,7 @@ import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheWithWP;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +92,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     private void addNewListView() {
         log.debug("Start Thread add new listView");
         ON_LAYOUT_WORK.set(true);
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("CacheListView:addNewListView") {
             @Override
             public void run() {
                 CacheListView.this.clear();
@@ -222,7 +223,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     private void disposeListView() {
         final ListView disposeListView = this.listView;
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("CacheListView:disposeListView") {
             @Override
             public void run() {
                 disposeListView.dispose();
@@ -351,7 +352,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 //                        sync.show();
                         return true;
                     case MenuID.MI_MANAGE_DB:
-                        CB.postAsync(new Runnable() {
+                        CB.postAsync(new NamedRunnable("CacheListView:showSelectDbDialog") {
                             @Override
                             public void run() {
                                 new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.ASK).execute();
@@ -369,10 +370,10 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 //                        }
                         return true;
                     case MenuID.MI_CHK_STATE_API:
-                        new CheckStateActivity(true).show();
+                        new CheckStateActivity(false).show();
                         return true;
 
-                        //todo implement
+                    //todo implement
 //                    case MenuID.MI_CHK_STATE_API_FAV_POI:
 //                        new CheckStateActivity(false).show();
 //                        return true;

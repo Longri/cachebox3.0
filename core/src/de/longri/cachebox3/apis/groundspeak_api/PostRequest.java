@@ -23,6 +23,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.ICancel;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.LoggerFactory;
 
 import java.io.StringWriter;
@@ -55,7 +56,7 @@ public abstract class PostRequest {
     }
 
     protected void post(final GenericCallBack<ApiResultState> readyCallBack, final ICancel iCancel) {
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("PostRequest") {
             @Override
             public void run() {
                 waitApiCallLimit(iCancel);
@@ -83,7 +84,7 @@ public abstract class PostRequest {
                 final AtomicBoolean checkCancel = new AtomicBoolean(iCancel != null);
                 if (checkCancel.get()) {
                     //start cancel listener
-                    CB.postAsync(new Runnable() {
+                    CB.postAsync(new NamedRunnable("PostRequest cancelListener") {
                         @Override
                         public void run() {
                             while (checkCancel.get()) {

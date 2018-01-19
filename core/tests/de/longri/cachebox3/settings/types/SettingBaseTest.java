@@ -34,11 +34,10 @@ class SettingBaseTest {
 
     static {
         TestUtils.initialGdx();
-        if (SettingsList.that == null)
-            new SettingsList();
+
     }
 
-    public static final SettingBool testBool = (SettingBool) SettingsList.addSetting(new SettingBool("testBool"
+    private static final SettingBool testBool = (SettingBool) Config.settingsList.addSetting(new SettingBool("testBool"
             , SettingCategory.RememberAsk, SettingMode.Normal, false, SettingStoreType.Global,
             SettingUsage.ACB, true));
 
@@ -94,6 +93,8 @@ class SettingBaseTest {
         testBool.setExpiredTime(desired);
 
         // close config DB and reload
+        Config.AcceptChanges();
+        Config.AcceptChanges();
         Config.AcceptChanges();
         //wait 5sec
         try {
