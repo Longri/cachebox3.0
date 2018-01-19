@@ -168,10 +168,10 @@ public class Config extends Settings {
                 } else {
                     if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
                         insertStatement.bind(setting.getName(), null, setting.getValue()
-                                , Long.toBinaryString(setting.expiredTime)).commit().reset();
+                                , Long.toString(setting.expiredTime)).commit().reset();
                     } else {
                         insertStatement.bind(setting.getName(), setting.getValue(), null
-                                , Long.toBinaryString(setting.expiredTime)).commit().reset();
+                                , Long.toString(setting.expiredTime)).commit().reset();
                     }
                 }
             } catch (Exception e) {
