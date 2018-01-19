@@ -55,8 +55,17 @@ public class Config extends Settings {
     private static synchronized boolean writeToDB() {
         log.debug("Start write Config to DB!");
         if (inWrite.get()) {
-            log.warn("Config is in write state, can't run again");
-            return false;
+            log.warn("Config is in write state, can't run again! try again at 1 sec");
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (inWrite.get()){
+                log.warn("Config is in write state, can't run again!");
+                return false;
+            }
         }
         inWrite.set(true);
         final Array<SettingBase<?>> dirtyList = new Array<>();
@@ -68,73 +77,78 @@ public class Config extends Settings {
         CB.postAsync(new NamedRunnable("Config") {
             @Override
             public void run() {
-                // Write into DB
-                de.longri.cachebox3.settings.types.SettingsDAO dao = new de.longri.cachebox3.settings.types.SettingsDAO();
+                try {
+                    // Write into DB
+                    SettingsDAO dao = new SettingsDAO();
 
-                final Database data = Database.Data;
-                final Database settingsDB = Database.Settings;
+                    final Database data = Database.Data;
+                    final Database settingsDB = Database.Settings;
 
-                if (data == null || settingsDB == null || !data.isStarted() || !settingsDB.isStarted())
-                    return;
+                    if (data == null || settingsDB == null || !data.isStarted() || !settingsDB.isStarted())
+                        return;
 
 
-                //splitt into local and global list!
-                final Array<SettingBase<?>> localList = new Array<>();
-                final Array<SettingBase<?>> globalList = new Array<>();
-                boolean isAPI = false;
-                while (dirtyList.size > 0) {
-                    SettingBase<?> setting = dirtyList.pop();
-                    if (setting.name.equals("GcAPIStaging") || setting.name.equals("GcAPI")) {
-                        isAPI = true;
+                    //splitt into local and global list!
+                    final Array<SettingBase<?>> localList = new Array<>();
+                    final Array<SettingBase<?>> globalList = new Array<>();
+                    boolean isAPI = false;
+                    while (dirtyList.size > 0) {
+                        SettingBase<?> setting = dirtyList.pop();
+                        if (setting.name.equals("GcAPIStaging") || setting.name.equals("GcAPI")) {
+                            isAPI = true;
+                        }
+                        if (setting.getStoreType() == SettingStoreType.Local) {
+                            localList.add(setting);
+                        } else {
+                            globalList.add(setting);
+                        }
                     }
-                    if (setting.getStoreType() == SettingStoreType.Local) {
-                        localList.add(setting);
-                    } else {
-                        globalList.add(setting);
-                    }
-                }
 
-                final AtomicBoolean WAITLOCAL = new AtomicBoolean(true);
-                final AtomicBoolean WAITGLOBAL = new AtomicBoolean(true);
+                    final AtomicBoolean WAITLOCAL = new AtomicBoolean(true);
+                    final AtomicBoolean WAITGLOBAL = new AtomicBoolean(true);
 
-                CB.postAsync(new NamedRunnable("write settings local") {
-                    @Override
-                    public void run() {
-                        writeToDB(data, localList, WAITLOCAL);
-                    }
-                });
-
-                CB.postAsync(new NamedRunnable("write settings global") {
-                    @Override
-                    public void run() {
-                        writeToDB(settingsDB, globalList, WAITGLOBAL);
-                    }
-                });
-
-                while (WAITGLOBAL.get() || WAITLOCAL.get()) {
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (isAPI) {
-                    CB.postOnMainThread(new Runnable() {
+                    CB.postAsync(new NamedRunnable("write settings local") {
                         @Override
                         public void run() {
-                            //reset ApiKey validation
-                            GroundspeakAPI.resetApiIsChecked();
-
-                            //set config stored MemberChipType as expired
-                            Calendar cal = Calendar.getInstance();
-
-                            Config.memberChipType.setExpiredTime(cal.getTimeInMillis());
-                            Config.AcceptChanges();
+                            writeToDB(data, localList, WAITLOCAL);
                         }
                     });
 
+                    CB.postAsync(new NamedRunnable("write settings global") {
+                        @Override
+                        public void run() {
+                            writeToDB(settingsDB, globalList, WAITGLOBAL);
+                        }
+                    });
+
+                    while (WAITGLOBAL.get() || WAITLOCAL.get()) {
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (isAPI) {
+                        CB.postOnMainThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //reset ApiKey validation
+                                GroundspeakAPI.resetApiIsChecked();
+
+                                //set config stored MemberChipType as expired
+                                Calendar cal = Calendar.getInstance();
+
+                                Config.memberChipType.setExpiredTime(cal.getTimeInMillis());
+                                Config.AcceptChanges();
+                            }
+                        });
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    inWrite.set(false);
                 }
-                inWrite.set(false);
             }
 
         });
@@ -143,21 +157,25 @@ public class Config extends Settings {
 
     private static void writeToDB(Database db, Array<SettingBase<?>> settingsList, AtomicBoolean wait) {
         final GdxSqlitePreparedStatement deleteStatement = db.myDB.prepare("DELETE FROM Config WHERE [Key] = ?;");
-        final GdxSqlitePreparedStatement insertStatement = db.myDB.prepare("INSERT OR REPLACE INTO Config VALUES(?,?,?,?) ;");
+        final GdxSqlitePreparedStatement insertStatement = db.myDB.prepare("REPLACE INTO Config VALUES(?,?,?,?) ;");
 
         db.myDB.beginTransaction();
         while (settingsList.size > 0) {
             SettingBase<?> setting = settingsList.pop();
-            if (setting.isDefault()) {
-                deleteStatement.bind(setting.getName()).commit().reset();
-            } else {
-                if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
-                    insertStatement.bind(setting.getName(), null, setting.getValue()
-                            , Long.toBinaryString(setting.expiredTime)).commit().reset();
+            try {
+                if (setting.isDefault()) {
+                    deleteStatement.bind(setting.getName()).commit().reset();
                 } else {
-                    insertStatement.bind(setting.getName(), setting.getValue(), null
-                            , Long.toBinaryString(setting.expiredTime)).commit().reset();
+                    if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
+                        insertStatement.bind(setting.getName(), null, setting.getValue()
+                                , Long.toBinaryString(setting.expiredTime)).commit().reset();
+                    } else {
+                        insertStatement.bind(setting.getName(), setting.getValue(), null
+                                , Long.toBinaryString(setting.expiredTime)).commit().reset();
+                    }
                 }
+            } catch (Exception e) {
+                log.error("Store Setting", e);
             }
         }
         db.myDB.endTransaction();

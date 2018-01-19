@@ -244,7 +244,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             };
 
 
-            if (true) {
+            if (false) {
                 CB.postAsync(runnable);
             } else {
                 runnable.run();

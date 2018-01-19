@@ -52,8 +52,6 @@ public class Database {
      * @return Set To CB.Categories
      */
     public Categories gpxFilenameUpdateCacheCount() {
-        // welche GPXFilenamen sind in der DB erfasst
-//        beginTransaction();
         GdxSqliteCursor cursor = null;
         try {
             cursor = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from CacheInfo where GPXFilename_ID is not null Group by GPXFilename_ID", (String[]) null);
@@ -71,26 +69,19 @@ public class Database {
                     set.put(gpxFilename_ID, val);
                     cursor.moveToNext();
                 }
-
                 cursor.close();
 
-                if (!myDB.isInTransaction())
-                    beginTransaction();
                 for (ObjectMap.Entry entry : set) {
                     update("GPXFilenames", (Parameters) entry.value, "ID = " + entry.key, null);
                 }
             }
-            if (!myDB.isInTransaction())
-                beginTransaction();
+
             delete("GPXFilenames", "Cachecount is NULL or CacheCount = 0");
             delete("GPXFilenames", "ID not in (Select GPXFilename_ID From CacheInfo)");
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            endTransaction();
         }
 
-        //TODO ???
         Categories categories = new Categories();
         return categories;
     }
@@ -106,11 +97,7 @@ public class Database {
         if (abstractCache == null) // if no cache is selected!
             return result;
 
-
-        //TODO Qerry with args not working on iOS
-//      GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId=@cacheid order by Timestamp desc", new String[]{Long.toString(cache.Id)});
         GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(abstractCache.getId()) + "\"", (String[]) null);
-
 
         try {
             reader.moveToFirst();
@@ -1174,7 +1161,7 @@ public class Database {
             Config.MapPackFolderLocal.setValue(folder + "Maps");
             Config.SpoilerFolderLocal.setValue(folder + "Spoilers");
             Config.TileCacheFolderLocal.setValue(folder + "Cache");
-            if (dontStoreConfig == null){
+            if (dontStoreConfig == null) {
                 Config.AcceptChanges();
             }
             logger.debug(
