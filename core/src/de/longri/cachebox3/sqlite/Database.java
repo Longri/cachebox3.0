@@ -1153,15 +1153,13 @@ public class Database {
         return count;
     }
 
-    public static boolean createNewDB(Database database, FileHandle rootFolder, String newDB_Name, Boolean ownRepository) {
+    public static boolean createNewDB(Database database, FileHandle rootFolder, String newDB_Name, boolean ownRepository, boolean... dontStoreConfig) {
 
         final Logger logger = LoggerFactory.getLogger("CREATE NEW DB");
 
         if (CB.viewmanager != null) CB.viewmanager.setNewFilter(FilterInstances.ALL); // in case of JUnit
         FileHandle dbFile = rootFolder.child(newDB_Name + ".db3");
         try {
-            GdxSqlite db = new GdxSqlite(dbFile);
-            db.openOrCreateDatabase();
             database.close();
             database.startUp(dbFile);
         } catch (SQLiteGdxException e) {
@@ -1176,7 +1174,9 @@ public class Database {
             Config.MapPackFolderLocal.setValue(folder + "Maps");
             Config.SpoilerFolderLocal.setValue(folder + "Spoilers");
             Config.TileCacheFolderLocal.setValue(folder + "Cache");
-            Config.AcceptChanges();
+            if (dontStoreConfig == null){
+                Config.AcceptChanges();
+            }
             logger.debug(
                     newDB_Name + " has own Repository:\n" + //
                             Config.DescriptionImageFolderLocal.getValue() + ", \n" + //

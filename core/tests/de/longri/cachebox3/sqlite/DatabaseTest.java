@@ -50,7 +50,7 @@ class DatabaseTest {
         // test for issue #165
 
         Database testDb = new Database(Database.DatabaseType.CacheBox3);
-        Database.createNewDB(testDb, workpath, "testDB", true);
+        Database.createNewDB(testDb, workpath, "createNewDB", true,true);
 
         assertThat("Database schema version must be last version", testDb.getDatabaseSchemeVersion() == DatabaseVersions.LatestDatabaseChange);
 
@@ -59,8 +59,18 @@ class DatabaseTest {
         String[] tableNames = new String[]{"Config", "Category", "GPXFilenames", "Images",
                 "Logs", "PocketQueries", "Replication", "TbLogs", "Trackable", "CacheCoreInfo",
                 "Attributes", "CacheText", "CacheInfo", "Waypoints", "WaypointsText"};
-        for (String tableName : tableNames)
-            assertThat("Table '" + tableName + "' must exist", testDb.isTableExists(tableName));
+        for (String tableName : tableNames) {
+
+            boolean exist = false;
+            try {
+                exist = testDb.isTableExists(tableName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            assertThat("Table '" + tableName + "' must exist", exist);
+
+        }
 
     }
 
