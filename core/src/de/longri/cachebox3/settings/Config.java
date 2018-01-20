@@ -189,10 +189,10 @@ public class Config extends Settings {
                         deleteStatement.bind(setting.getName()).commit().reset();
                     } else {
                         if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
-                            insertStatement.bind(setting.getName(), null, setting.getValue()
+                            insertStatement.bind(setting.getName(), null, setting.toDBString()
                                     , Long.toString(setting.expiredTime)).commit().reset();
                         } else {
-                            insertStatement.bind(setting.getName(), setting.getValue(), null
+                            insertStatement.bind(setting.getName(), setting.toDBString(), null
                                     , Long.toString(setting.expiredTime)).commit().reset();
                         }
                     }
