@@ -62,7 +62,7 @@ public class Config extends Settings {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (inWrite.get()){
+            if (inWrite.get()) {
                 log.warn("Config is in write state, can't run again!");
                 return false;
             }
@@ -204,7 +204,8 @@ public class Config extends Settings {
                         DbSettingValues values = new DbSettingValues();
                         values.value = cursor.getString(1);
                         values.longString = cursor.getString(2);
-                        values.desired = cursor.getString(3);
+                        if (cursor.getColumnCount() > 3)
+                            values.desired = cursor.getString(3);
                         localMap.put(key, values);
                     }
                 }
@@ -217,7 +218,8 @@ public class Config extends Settings {
                         DbSettingValues values = new DbSettingValues();
                         values.value = cursor.getString(1);
                         values.longString = cursor.getString(2);
-                        values.desired = cursor.getString(3);
+                        if (cursor.getColumnCount() > 3)
+                            values.desired = cursor.getString(3);
                         globalMap.put(key, values);
                     }
                 }

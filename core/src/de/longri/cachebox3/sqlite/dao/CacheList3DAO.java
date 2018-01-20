@@ -26,6 +26,7 @@ import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheList;
 import de.longri.cachebox3.types.ImmutableCache;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.gdx.sqlite.GdxSqlite;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -173,97 +174,26 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
         cacheList.clear(count);
 
-        final AtomicInteger cacheCount = new AtomicInteger(0);
-        final Array<ImmutableCache.CursorData> cursorDataStack = new Array<>();
-        final AtomicBoolean finishFillStack = new AtomicBoolean(false);
-        final AtomicBoolean asyncCacheLoadReady = new AtomicBoolean(false);
-
-
         final int progressEventcount = count / 200; // fire event every 2% changes
 
-        CB.postAsync(new NamedRunnable("CacheList3DAO:readCacheList1") {
+        database.rawQuery(statement, new GdxSqlite.RowCallback() {
+            int progressFireCount = 0;
+            int actCacheCount = 0;
+
             @Override
-            public void run() {
-
-                int tryCount = 0;
-                int progressFireCount = 0;
-
-                // wait for first values
-                while (cursorDataStack.size <= 0) {
-                    try {
-                        Thread.sleep(20);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+            public void newRow(String[] columnName, Object[] value, int[] types) {
+                cacheList.add(new ImmutableCache(value));
+                actCacheCount++;
+                progressFireCount++;
+                if (progressFireCount >= progressEventcount) {
+                    EventHandler.fire(new IncrementProgressEvent(actCacheCount, msg, count));
+                    progressFireCount = 0;
                 }
-
-                while (!finishFillStack.get() || (cursorDataStack.size > 0)) {
-                    ImmutableCache.CursorData data;
-                    synchronized (cursorDataStack) {
-                        if (cursorDataStack.size == 0) continue;
-                        data = cursorDataStack.pop();
-                    }
-                    if (data != null) {
-                        cacheList.add(new ImmutableCache(data), true);
-                        int actCacheCount = cacheCount.incrementAndGet();
-                        progressFireCount++;
-                        if (progressFireCount >= progressEventcount) {
-                            EventHandler.fire(new IncrementProgressEvent(actCacheCount, msg, count));
-                            progressFireCount = 0;
-                        }
-                    }
-                }
-                asyncCacheLoadReady.set(true);
-                EventHandler.fire(new IncrementProgressEvent(cacheCount.get(), msg, count));
-                log.debug("asyncCacheLoadReady after {} ms", System.currentTimeMillis() - startTime);
             }
         });
 
-        EventHandler.fire(new IncrementProgressEvent(0, msg, count));
-
-        int offset = 0;
-        final String finalStatement = statement;
-        final AtomicInteger runningAsyncTasks = new AtomicInteger(0);
-        while (offset < count) {
-            final int finalOffset = offset;
-            NamedRunnable runnable = new NamedRunnable("CacheList3DAO:readCacheList2") {
-                public void run() {
-                    String query = finalStatement + " LIMIT "
-                            + Integer.toString(LIMIT) + " OFFSET "
-                            + finalOffset;
-                    GdxSqliteCursor cursor = database.rawQuery(query, (String[]) null);
-                    cursor.moveToFirst();
-                    while (!cursor.isAfterLast()) {
-                        synchronized (cursorDataStack) {
-                            cursorDataStack.add(new ImmutableCache.CursorData(cursor));
-                        }
-                        cursor.moveToNext();
-                    }
-                    cursor.close();
-                }
-            };
-
-
-            if (false) {
-                CB.postAsync(runnable);
-            } else {
-                runnable.run();
-            }
-
-            offset += LIMIT;
-        }
-        finishFillStack.set(true);
-
-
-        //wait for Async ready
-        while (!asyncCacheLoadReady.get()) {
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
+        EventHandler.fire(new IncrementProgressEvent(count, msg, count));
+        log.debug("CacheLoadReady after {} ms", System.currentTimeMillis() - startTime);
 
         if (!loadAllWaypoints) {
             float loadingTime = System.currentTimeMillis() - startTime;

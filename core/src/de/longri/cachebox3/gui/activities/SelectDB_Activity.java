@@ -133,6 +133,9 @@ public class SelectDB_Activity extends ActivityBase {
                                     return true;
                                 Config.AcceptChanges();
                                 Config.DatabaseName.setValue(NewDB_Name + ".db3");
+
+                                Database.Data.Query.clear();
+
                                 finish();
                                 break;
                             case ButtonDialog.BUTTON_NEUTRAL: // cancel clicked
@@ -365,8 +368,6 @@ public class SelectDB_Activity extends ActivityBase {
 
                 Config.MultiDBAutoStartTime.setValue(autoStartTime);
                 Config.MultiDBAsk.setValue(autoStartTime >= 0);
-
-
                 Config.DatabaseName.setValue(name);
                 Config.AcceptChanges();
 

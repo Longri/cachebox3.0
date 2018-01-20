@@ -100,6 +100,7 @@ public class ImmutableCache extends AbstractCache {
         this.booleanStore = bitStore;
     }
 
+
     public static boolean getMaskValue(short mask, short bitFlags) {
         return (bitFlags & mask) == mask;
     }
@@ -133,7 +134,7 @@ public class ImmutableCache extends AbstractCache {
         this(new CursorData(cursor));
     }
 
-    public ImmutableCache( CursorData data) {
+    public ImmutableCache(CursorData data) {
         super(data.latitude, data.longitude);
         this.id = data.id;
         this.size = CacheSizes.parseInt(data.sizeOrigin);
@@ -152,6 +153,26 @@ public class ImmutableCache extends AbstractCache {
         this.booleanStore = data.booleanStore;
         this.favPoints = data.favPoints;
 
+    }
+
+    public ImmutableCache(Object[] values) {
+        super((double) values[1], (double) values[2]);
+        this.id = (long) values[0];
+        this.size = CacheSizes.parseInt(((Long) values[3]).intValue());
+        this.difficulty = (float) ((Long) values[4]) / 2.0f;
+        this.terrain = (float) ((Long) values[5]) / 2.0f;
+        this.type = CacheTypes.get(((Long) values[6]).intValue());
+        this.rating = (short) (((Long) values[7]).shortValue() / 100);
+        this.numTravelbugs = ((Long) values[8]).shortValue();
+
+        this.gcCode = new CharSequenceArray((String) values[9]);
+        this.name = new CharSequenceArray((String) values[10]);
+        this.placedBy = new CharSequenceArray((String) values[11]);
+        this.owner = new CharSequenceArray((String) values[12]);
+        this.gcId = new CharSequenceArray((String) values[13]);
+
+        this.booleanStore = ((Long) values[14]).shortValue();
+        this.favPoints = values[15] == null ? 0 : ((Long) values[15]).intValue();
     }
 
     //################################################################################

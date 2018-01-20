@@ -228,6 +228,8 @@ public class Database {
             throw new SQLiteGdxException("Directory for DB doesn't exist: " + parentDirectory.file().getAbsolutePath());
         }
 
+        //reset version
+        shemaVersion.set(-1);
 
         log.debug("startUp Database: " + Utils.GetFileName(databasePath));
         if (myDB != null) {
