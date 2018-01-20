@@ -124,7 +124,7 @@ public class Config extends Settings {
                     }
 
                     if (globalList.size > 0) {
-                        if (data == null || settingsDB == null || !data.isStarted() || !settingsDB.isStarted()) {
+                        if (!(settingsDB == null || !settingsDB.isStarted())) {
                             log.debug("Start Async writing Config to global");
                             CB.postAsync(new NamedRunnable("write settings global") {
                                 @Override
