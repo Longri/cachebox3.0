@@ -387,7 +387,9 @@ public class CB {
             @Override
             public Void call() throws Exception {
                 try {
+                    log.debug("Start runnable: {}", runnable.name);
                     runnable.run();
+                    log.debug("Finish runnable: {}", runnable.name);
                     runningRunnables.removeValue(runnable.name, false);
                     log.debug("Ready Async executed runnable, count {} runs: {}", executeCount.decrementAndGet(), runningRunnables.toString());
                 } catch (final Exception e) {

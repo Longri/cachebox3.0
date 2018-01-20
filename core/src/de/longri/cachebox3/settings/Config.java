@@ -53,7 +53,6 @@ public class Config extends Settings {
      * @return
      */
     private static synchronized boolean writeToDB() {
-        log.debug("Start write Config to DB!");
         if (inWrite.get()) {
             log.warn("Config is in write state, can't run again! try again at 1 sec");
 
@@ -67,13 +66,15 @@ public class Config extends Settings {
                 return false;
             }
         }
+        log.debug("Start write Config to DB!");
+        log.debug("Set Config in write to true");
         inWrite.set(true);
         final Array<SettingBase<?>> dirtyList = new Array<>();
         while (settingsList.dirtyList.size > 0) {
             dirtyList.add(settingsList.dirtyList.pop());
         }
 
-
+        log.debug("Start Async writing {} settings changed", dirtyList.size);
         CB.postAsync(new NamedRunnable("Config") {
             @Override
             public void run() {
@@ -83,9 +84,6 @@ public class Config extends Settings {
 
                     final Database data = Database.Data;
                     final Database settingsDB = Database.Settings;
-
-                    if (data == null || settingsDB == null || !data.isStarted() || !settingsDB.isStarted())
-                        return;
 
 
                     //splitt into local and global list!
@@ -107,19 +105,40 @@ public class Config extends Settings {
                     final AtomicBoolean WAITLOCAL = new AtomicBoolean(true);
                     final AtomicBoolean WAITGLOBAL = new AtomicBoolean(true);
 
-                    CB.postAsync(new NamedRunnable("write settings local") {
-                        @Override
-                        public void run() {
-                            writeToDB(data, localList, WAITLOCAL);
-                        }
-                    });
 
-                    CB.postAsync(new NamedRunnable("write settings global") {
-                        @Override
-                        public void run() {
-                            writeToDB(settingsDB, globalList, WAITGLOBAL);
+                    if (localList.size > 0) {
+                        if (!(data == null || !data.isStarted())) {
+                            log.debug("Start Async writing Config to local");
+                            CB.postAsync(new NamedRunnable("write settings local") {
+                                @Override
+                                public void run() {
+                                    writeToDB(data, localList, WAITLOCAL);
+                                }
+                            });
+                        } else {
+                            log.warn("Can't write local Config, DB's not started");
+                            WAITLOCAL.set(false);
                         }
-                    });
+                    } else {
+                        WAITLOCAL.set(false);
+                    }
+
+                    if (globalList.size > 0) {
+                        if (data == null || settingsDB == null || !data.isStarted() || !settingsDB.isStarted()) {
+                            log.debug("Start Async writing Config to global");
+                            CB.postAsync(new NamedRunnable("write settings global") {
+                                @Override
+                                public void run() {
+                                    writeToDB(settingsDB, globalList, WAITGLOBAL);
+                                }
+                            });
+                        } else {
+                            log.warn("Can't write global Config, DB's not started");
+                            WAITGLOBAL.set(false);
+                        }
+                    } else {
+                        WAITGLOBAL.set(false);
+                    }
 
                     while (WAITGLOBAL.get() || WAITLOCAL.get()) {
                         try {
@@ -129,6 +148,7 @@ public class Config extends Settings {
                         }
                     }
                     if (isAPI) {
+                        log.debug("ApiKey changed, reset ApiCheck and set new expired time");
                         CB.postOnMainThread(new Runnable() {
                             @Override
                             public void run() {
@@ -145,8 +165,9 @@ public class Config extends Settings {
 
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error("Error on store Config", e);
                 } finally {
+                    log.debug("Set Config in write to false");
                     inWrite.set(false);
                 }
             }
@@ -156,31 +177,33 @@ public class Config extends Settings {
     }
 
     private static void writeToDB(Database db, Array<SettingBase<?>> settingsList, AtomicBoolean wait) {
-        final GdxSqlitePreparedStatement deleteStatement = db.myDB.prepare("DELETE FROM Config WHERE [Key] = ?;");
-        final GdxSqlitePreparedStatement insertStatement = db.myDB.prepare("REPLACE INTO Config VALUES(?,?,?,?) ;");
+        if (settingsList != null && settingsList.size > 0) {
+            final GdxSqlitePreparedStatement deleteStatement = db.myDB.prepare("DELETE FROM Config WHERE [Key] = ?;");
+            final GdxSqlitePreparedStatement insertStatement = db.myDB.prepare("REPLACE INTO Config VALUES(?,?,?,?) ;");
 
-        db.myDB.beginTransaction();
-        while (settingsList.size > 0) {
-            SettingBase<?> setting = settingsList.pop();
-            try {
-                if (setting.isDefault()) {
-                    deleteStatement.bind(setting.getName()).commit().reset();
-                } else {
-                    if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
-                        insertStatement.bind(setting.getName(), null, setting.getValue()
-                                , Long.toString(setting.expiredTime)).commit().reset();
+            db.myDB.beginTransaction();
+            while (settingsList.size > 0) {
+                SettingBase<?> setting = settingsList.pop();
+                try {
+                    if (setting.isDefault()) {
+                        deleteStatement.bind(setting.getName()).commit().reset();
                     } else {
-                        insertStatement.bind(setting.getName(), setting.getValue(), null
-                                , Long.toString(setting.expiredTime)).commit().reset();
+                        if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
+                            insertStatement.bind(setting.getName(), null, setting.getValue()
+                                    , Long.toString(setting.expiredTime)).commit().reset();
+                        } else {
+                            insertStatement.bind(setting.getName(), setting.getValue(), null
+                                    , Long.toString(setting.expiredTime)).commit().reset();
+                        }
                     }
+                } catch (Exception e) {
+                    log.error("Store Setting", e);
                 }
-            } catch (Exception e) {
-                log.error("Store Setting", e);
             }
+            db.myDB.endTransaction();
+            deleteStatement.close();
+            insertStatement.close();
         }
-        db.myDB.endTransaction();
-        deleteStatement.close();
-        insertStatement.close();
         wait.set(false);
     }
 
