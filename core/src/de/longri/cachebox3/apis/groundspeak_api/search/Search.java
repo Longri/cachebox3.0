@@ -724,7 +724,11 @@ public abstract class Search extends PostRequest {
                     aktCache = null;
 
                 if (aktCache == null) {
-                    aktCache = DaoFactory.CACHE_DAO.getFromDbByCacheId(Database.Data, abstractCache.getId(), true);
+                    try {
+                        aktCache = DaoFactory.CACHE_DAO.getFromDbByCacheId(Database.Data, abstractCache.getId(), true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 // If Cache into DB, extract saved rating

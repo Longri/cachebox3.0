@@ -17,9 +17,9 @@ package de.longri.cachebox3.utils;
 
 /**
  * Interface for void cancel()
- * 
+ *
  * @author Longri
  */
 public interface ICancel {
-	public boolean cancel();
+    boolean cancel();
 }

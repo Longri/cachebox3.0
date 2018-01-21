@@ -198,6 +198,7 @@ public class Cache3DAO extends AbstractCacheDAO {
     public AbstractCache getFromDbByCacheId(Database database, long cacheID, boolean withWaypoints) {
         String statement = "SELECT * from CacheCoreInfo WHERE Id=?";
         GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(cacheID)});
+        if (cursor == null) return null;
         cursor.moveToFirst();
         if (!cursor.isAfterLast()) {
             AbstractCache cache = new ImmutableCache(cursor);

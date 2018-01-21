@@ -25,21 +25,23 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.CheckCacheStateParser;
 import de.longri.cachebox3.apis.groundspeak_api.search.SearchGC;
 import de.longri.cachebox3.callbacks.GenericCallBack;
-import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.*;
-import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.ImageEntry;
+import de.longri.cachebox3.types.LogEntry;
+import de.longri.cachebox3.types.Trackable;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.NetUtils;
 import de.longri.cachebox3.utils.json_parser.DraftUploadResultParser;
-import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -259,11 +261,11 @@ public class GroundspeakAPI {
     /**
      * This method must call before every API-Call, for check any call restrictions!
      */
-    public static void waitApiCallLimit() {
-        waitApiCallLimit(null);
+    public static int waitApiCallLimit() {
+       return waitApiCallLimit(null);
     }
 
-    public static void waitApiCallLimit(ICancel iCancel) {
+    public static int waitApiCallLimit(ICancel iCancel) {
 
         //Don't call and block GL thread
         if (CB.isMainThread()) throw new RuntimeException("Don't call and block GL thread");
@@ -272,6 +274,12 @@ public class GroundspeakAPI {
             if (Config.apiCallLimit.isExpired() || Config.apiCallLimit.getValue() < 1) {
                 // get api limits from groundspeak
                 int callsPerMinute = GetApiLimits.getLimit();
+
+                if(callsPerMinute==-1){
+                    // connection error, call cancel and give feedback
+                    return -1;
+                }
+
                 Calendar cal = Calendar.getInstance();
                 if (callsPerMinute < 1) {
                     callsPerMinute = Config.apiCallLimit.getDefaultValue();
@@ -296,6 +304,7 @@ public class GroundspeakAPI {
             apiCallLimit = new Limit(Config.apiCallLimit.getValue(), Calendar.MINUTE, 1);
         }
         apiCallLimit.waitForCall(iCancel);
+        return 0;
     }
 
 

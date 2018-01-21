@@ -59,7 +59,10 @@ public abstract class PostRequest {
         CB.postAsync(new NamedRunnable("PostRequest") {
             @Override
             public void run() {
-                waitApiCallLimit(iCancel);
+                if (waitApiCallLimit(iCancel) == -1) {
+                    readyCallBack.callBack(ApiResultState.API_ERROR);
+                    return;
+                }
 
                 if (iCancel != null && iCancel.cancel()) readyCallBack.callBack(ApiResultState.CANCELED);
                 String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;

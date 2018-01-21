@@ -28,7 +28,12 @@ public class GetApiLimits {
         //  for debug: String result = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING, httpGet, null);
 
         ApiLimitParser parser = new ApiLimitParser();
-        int parseResult = parser.parseCallsPerMinute(result.stream);
+        int parseResult = 0;
+        try {
+            parseResult = parser.parseCallsPerMinute(result.stream);
+        } catch (Exception e) {
+            parseResult=-1;
+        }
         result.handled();
         return parseResult;
     }

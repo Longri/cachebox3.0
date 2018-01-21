@@ -19,6 +19,11 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
+import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
@@ -28,6 +33,7 @@ import de.longri.cachebox3.types.ImmutableCache;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.gdx.sqlite.GdxSqlite;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
+import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -176,21 +182,51 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
         final int progressEventcount = count / 200; // fire event every 2% changes
 
-        database.rawQuery(statement, new GdxSqlite.RowCallback() {
-            int progressFireCount = 0;
-            int actCacheCount = 0;
+        try {
+            database.rawQuery(statement, new GdxSqlite.RowCallback() {
+                int progressFireCount = 0;
+                int actCacheCount = 0;
 
-            @Override
-            public void newRow(String[] columnName, Object[] value, int[] types) {
-                cacheList.add(new ImmutableCache(value));
-                actCacheCount++;
-                progressFireCount++;
-                if (progressFireCount >= progressEventcount) {
-                    EventHandler.fire(new IncrementProgressEvent(actCacheCount, msg, count));
-                    progressFireCount = 0;
+                @Override
+                public void newRow(String[] columnName, Object[] value, int[] types) {
+                    cacheList.add(new ImmutableCache(value));
+                    actCacheCount++;
+                    progressFireCount++;
+                    if (progressFireCount >= progressEventcount) {
+                        EventHandler.fire(new IncrementProgressEvent(actCacheCount, msg, count));
+                        progressFireCount = 0;
+                    }
                 }
+            });
+        } catch (SQLiteGdxException e) {
+            if (e.getMessage().equals("database disk image is malformed")) {
+                // if the DB malformed, we inform the User
+
+                CB.scheduleOnMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MessageBox.show(Translation.get("ErrDbStartup"), Translation.get("corruptDB"), MessageBoxButtons.OK, MessageBoxIcon.Error, new OnMsgBoxClickListener() {
+                            @Override
+                            public boolean onClick(int which, Object data) {
+                                //show select DB Dialog
+                                CB.postAsync(new NamedRunnable("CacheList3DAO:showSelectDbDialog") {
+                                    @Override
+                                    public void run() {
+                                        new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.ASK).execute();
+                                    }
+                                });
+                                return true;
+                            }
+                        });
+                    }
+                }, 500);
+                return;
+            } else {
+                e.printStackTrace();
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         EventHandler.fire(new IncrementProgressEvent(count, msg, count));
         log.debug("CacheLoadReady after {} ms", System.currentTimeMillis() - startTime);

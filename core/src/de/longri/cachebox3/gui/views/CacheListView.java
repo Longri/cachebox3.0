@@ -370,7 +370,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 //                        }
                         return true;
                     case MenuID.MI_CHK_STATE_API:
-                        new CheckStateActivity(false).show();
+                        new CheckStateActivity(true).show();
                         return true;
 
                     //todo implement
