@@ -206,11 +206,11 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setPlacedBy(String value);
 
-    public abstract Date getDateHidden();
+    public abstract Date getDateHidden(Database database);
 
     public abstract void setDateHidden(Date date);
 
-    public abstract byte getApiState();
+    public abstract byte getApiState(Database database);
 
     public abstract void setApiState(byte value);
 
@@ -234,7 +234,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setUrl(String value);
 
-    public abstract String getCountry();
+    public abstract String getCountry(Database database);
 
     public abstract void setCountry(String value);
 
@@ -354,4 +354,6 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     public abstract short getBooleanStore();
 
     public abstract AbstractCache getImmutable();
+
+    public abstract AbstractCache getCopy();
 }

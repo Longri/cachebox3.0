@@ -15,16 +15,22 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.LogEntry;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
+import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 
 public class LogDAO {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(ImageDAO.class);
+    private final static org.slf4j.Logger log = LoggerFactory.getLogger(ImageDAO.class);
+    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
     public synchronized void WriteToDatabase(LogEntry logEntry) {
         Database.Parameters args = new Database.Parameters();
@@ -78,4 +84,45 @@ public class LogDAO {
         Database.Data.execSQL(SQL);
     }
 
+    public void writeToDB(Database database, Array<LogEntry> logList) {
+        //create statements
+        GdxSqlitePreparedStatement REPLACE_LOGS = database.myDB.prepare("REPLACE INTO Logs VALUES(?,?,?,?,?,?) ;");
+
+        database.myDB.beginTransaction();
+        try {
+            for (LogEntry entry : logList) {
+                REPLACE_LOGS.bind(
+                        entry.Id,
+                        entry.CacheId,
+                        iso8601Format.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
+                        entry.Finder,
+                        entry.Type,
+                        entry.Comment
+                ).commit().reset();
+            }
+        } finally {
+            database.myDB.endTransaction();
+        }
+
+
+    }
+
+    public Array<LogEntry> getLogs(Database database, Integer cacheId) {
+        Array<LogEntry> logList = new Array<>();
+
+        String sql;
+        if (cacheId == null) {
+            sql = "SELECT * FROM Logs";
+        } else {
+            sql = "SELECT * FROM Logs WHERE CacheId=" + Integer.toString(cacheId) + "'";
+        }
+
+        GdxSqliteCursor cursor = database.myDB.rawQuery(sql);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            logList.add(new LogEntry(cursor));
+            cursor.moveToNext();
+        }
+        return logList;
+    }
 }

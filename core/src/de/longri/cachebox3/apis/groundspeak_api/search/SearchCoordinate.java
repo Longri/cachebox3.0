@@ -18,6 +18,7 @@ package de.longri.cachebox3.apis.groundspeak_api.search;
 
 import com.badlogic.gdx.utils.Json;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.ICancel;
 
 /**
@@ -33,14 +34,14 @@ public class SearchCoordinate extends Search {
      * @param number   MaxPerPage size for this request
      * @param apiState 0 = unknown, 1 = Basic Member, 2 = Premium Member
      */
-    public SearchCoordinate(String gcApiKey, int number, Coordinate pos, float distanceInMeters, byte apiState) {
-        super(gcApiKey, number, apiState, null);
+    public SearchCoordinate(Database database, String gcApiKey, int number, Coordinate pos, float distanceInMeters, byte apiState) {
+        super(database, gcApiKey, number, apiState, null);
         this.pos = pos;
         this.distanceInMeters = distanceInMeters;
     }
 
-    public SearchCoordinate(String gcApiKey, int number, Coordinate pos, float distanceInMeters, byte apiState, ICancel iCancel) {
-        super(gcApiKey, number, apiState, iCancel);
+    public SearchCoordinate(Database database, String gcApiKey, int number, Coordinate pos, float distanceInMeters, byte apiState, ICancel iCancel) {
+        super(database, gcApiKey, number, apiState, iCancel);
         this.pos = pos;
         this.distanceInMeters = distanceInMeters;
     }

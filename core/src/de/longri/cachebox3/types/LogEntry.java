@@ -16,64 +16,91 @@
 package de.longri.cachebox3.types;
 
 
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LogEntry implements Serializable {
 
-	private static final long serialVersionUID = -4269566289864187308L;
+    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	/**
-	 * Benutzername des Loggers
-	 */
-	public String Finder = "";
+    /**
+     * Benutzername des Loggers
+     */
+    public String Finder = "";
 
-	/**
-	 * Logtyp, z.B. "Found it!"
-	 */
-	public LogTypes Type;
+    /**
+     * Logtyp, z.B. "Found it!"
+     */
+    public LogTypes Type;
 
-	// /**
-	// * Index des zu verwendenden Bildchens
-	// */
-	// public int TypeIcon = -1;
 
-	/**
-	 * Geschriebener Text
-	 */
-	public String Comment = "";
+    /**
+     * Geschriebener Text
+     */
+    public String Comment = "";
 
-	/**
-	 * Zeitpunkt
-	 */
-	public Date Timestamp = new Date(0);
+    /**
+     * Zeitpunkt
+     */
+    public Date Timestamp = new Date(0);
 
-	/**
-	 * Id des Caches
-	 */
-	public long CacheId = -1;
+    /**
+     * Id des Caches
+     */
+    public long CacheId = -1;
 
-	/**
-	 * Id des Logs
-	 */
-	public long Id = -1;
+    /**
+     * Id des Logs
+     */
+    public long Id = -1;
 
-	public void clear() {
-		Finder = "";
-		Type = null;
-		// TypeIcon = -1;
-		Comment = "";
-		Timestamp = new Date(0);
-		CacheId = -1;
-		Id = -1;
-	}
+    public LogEntry(GdxSqliteCursor cursor) {
+        this.Id = cursor.getLong(0);
+        this.CacheId = cursor.getLong(1);
 
-	public void dispose() {
-		Finder = null;
-		Type = null;
-		Comment = null;
-		Timestamp = null;
-	}
+        try {
+            this.Timestamp = iso8601Format.parse(cursor.getString(2));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
+        this.Finder = cursor.getString(3);
+        this.Type = LogTypes.values()[cursor.getInt(4)];
+        this.Comment = cursor.getString(5);
+    }
+
+    public LogEntry() {
+    }
+
+    public void clear() {
+        Finder = "";
+        Type = null;
+        Comment = "";
+        Timestamp = new Date(0);
+        CacheId = -1;
+        Id = -1;
+    }
+
+    public void dispose() {
+        Finder = null;
+        Type = null;
+        Comment = null;
+        Timestamp = null;
+    }
+
+    public LogEntry copy() {
+        LogEntry ret = new LogEntry();
+        ret.Finder = Finder;
+        ret.Type = Type;
+        ret.Comment = Comment;
+        ret.Timestamp = Timestamp;
+        ret.CacheId = CacheId;
+        ret.Id = Id;
+        return ret;
+    }
 }

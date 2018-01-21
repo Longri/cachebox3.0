@@ -170,6 +170,7 @@ public class Database {
     }
 
 
+
     public enum DatabaseType {
         CacheBox3, Drafts, Settings
     }

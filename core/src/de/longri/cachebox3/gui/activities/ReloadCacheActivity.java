@@ -41,6 +41,7 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
@@ -179,7 +180,7 @@ public class ReloadCacheActivity extends ActivityBase {
 
                 AbstractCache actCache = EventHandler.getSelectedCache();
                 if (actCache != null) {
-                    final SearchGC searchGC = new SearchGC(GroundspeakAPI.getAccessToken(), actCache.getGcCode().toString(),
+                    final SearchGC searchGC = new SearchGC(Database.Data, GroundspeakAPI.getAccessToken(), actCache.getGcCode().toString(),
                             new ICancel() {
                                 @Override
                                 public boolean cancel() {

@@ -17,6 +17,7 @@ package de.longri.cachebox3.apis.groundspeak_api.search;
 
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.net.HttpStatus;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import de.longri.cachebox3.TestUtils;
@@ -25,8 +26,11 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
+import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.lists.CB_List;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import javafx.scene.layout.VBox;
 import org.junit.jupiter.api.Test;
 import travis.EXCLUDE_FROM_TRAVIS;
@@ -61,7 +65,8 @@ class SearchGcOwnerTest {
                 isDummy ? null : apiKey);
 
         Coordinate searchCoord = new CoordinateGPS(52.581892, 13.398128); // Home of Katipa(like Longri)
-        SearchGCOwner searchGC = new SearchGCOwner(apiKey, 30, searchCoord, 50000, "bros", (byte) 2);
+        Database testDB = TestUtils.getTestDB();
+        SearchGCOwner searchGC = new SearchGCOwner(testDB, apiKey, 30, searchCoord, 50000, "bros", (byte) 2);
 
         StringWriter writer = new StringWriter();
         Json json = new Json(JsonWriter.OutputType.json);
@@ -70,6 +75,8 @@ class SearchGcOwnerTest {
 
         String actual = writer.toString();
         assertEquals(expected, actual);
+        testDB.close();
+        testDB.getFileHandle().delete();
     }
 
 
@@ -78,22 +85,9 @@ class SearchGcOwnerTest {
         final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGcOwner_result.txt");
         Coordinate searchCoord = new CoordinateGPS(52.581892, 13.398128); // Home of Katipa(like Longri)
 
+        final Database testDB = TestUtils.getTestDB();
+        final SearchGCOwner searchGC = new SearchGCOwner(testDB, apiKey, 30, searchCoord, 50000, "bros", (byte) 2) {
 
-        final CB_List<AbstractCache> cacheList = new CB_List<>();
-        final CB_List<LogEntry> logList = new CB_List<>();
-        final CB_List<ImageEntry> imageList = new CB_List<>();
-        final SearchGCOwner searchGC = new SearchGCOwner(apiKey, 30, searchCoord, 50000, "bros", (byte) 2) {
-            protected void writeLogToDB(final LogEntry logEntry) {
-                logList.add(logEntry);
-            }
-
-            protected void writeImagEntryToDB(final ImageEntry imageEntry) {
-                imageList.add(imageEntry);
-            }
-
-            protected void writeCacheToDB(final AbstractCache cache) {
-                cacheList.add(cache);
-            }
         };
 
         final AtomicBoolean WAIT = new AtomicBoolean(true);
@@ -134,28 +128,32 @@ class SearchGcOwnerTest {
             @Override
             public void callBack(ApiResultState value) {
 
+                CacheList3DAO list3DAO = new CacheList3DAO();
+                CacheList cacheList = new CacheList();
+                list3DAO.readCacheList(testDB, cacheList, null, true, true);
+
                 assertEquals(value, ApiResultState.IO);
 
                 assertEquals(23, cacheList.size);
-                AbstractCache abstractCache = cacheList.first();
+                AbstractCache abstractCache = cacheList.get(0);
 
                 assertEquals(false, abstractCache.isArchived());
                 assertEquals(true, abstractCache.isAvailable());
-                assertEquals("GC18JGX", abstractCache.getGcCode());
+                assertEquals("GC18JGX", abstractCache.getGcCode().toString());
                 assertEquals(2, abstractCache.getWaypoints().size);
 
-                AbstractWaypoint waypoint = abstractCache.getWaypoints().first();
-                assertEquals("PA18JGX", waypoint.getGcCode());
-                assertEquals("Parkmöglichkeit", waypoint.getDescription(Database.Data));
-                assertEquals("Parking", waypoint.getTitle());
+                AbstractWaypoint waypoint = abstractCache.getWaypoints().peek();
+                assertEquals("PA18JGX", waypoint.getGcCode().toString());
+                assertEquals("Parkmöglichkeit", waypoint.getDescription(testDB).toString());
+                assertEquals("Parking", waypoint.getTitle().toString());
                 assertEquals(CacheTypes.ParkingArea, waypoint.getType());
                 assertEquals(52.633667, waypoint.getLatitude());
                 assertEquals(13.375917, waypoint.getLongitude());
 
-                AbstractWaypoint userWaypoint = abstractCache.getWaypoints().peek();
-                assertEquals("CO18JGX", userWaypoint.getGcCode());
-                assertEquals("", userWaypoint.getDescription(Database.Data));
-                assertEquals("Corrected Coordinates (API)", userWaypoint.getTitle());
+                AbstractWaypoint userWaypoint = abstractCache.getWaypoints().first();
+                assertEquals("CO18JGX", userWaypoint.getGcCode().toString());
+                assertEquals("", userWaypoint.getDescription(testDB).toString());
+                assertEquals("Corrected Coordinates (API)", userWaypoint.getTitle().toString());
                 assertEquals(CacheTypes.Final, userWaypoint.getType());
                 assertEquals(52.616666666666667, userWaypoint.getLatitude());
                 assertEquals(13.366666666666667, userWaypoint.getLongitude());
@@ -163,21 +161,21 @@ class SearchGcOwnerTest {
 
                 assertEquals(CacheTypes.Traditional, abstractCache.getType());
                 assertEquals(CacheSizes.small, abstractCache.getSize());
-                assertEquals("Germany", abstractCache.getCountry());
-                assertEquals(new Date(1200211200000L), abstractCache.getDateHidden());
+                assertEquals("Germany", abstractCache.getCountry(testDB));
+                assertEquals(new Date(1200211200000L), abstractCache.getDateHidden(testDB));
                 assertEquals(1.5f, abstractCache.getDifficulty());
-                assertEquals("bücken!", abstractCache.getHint(Database.Data));
+                assertEquals("bücken!", abstractCache.getHint(testDB).toString());
                 assertEquals(0, abstractCache.getFavoritePoints());
                 assertEquals(false, abstractCache.isFound());
-                assertEquals("768551", abstractCache.getGcId());
-                assertTrue(abstractCache.getLongDescription(Database.Data).startsWith("Vom empfohlenen Parkplatz beträgt die Wegstrecke etwa 500 m. Der Cac"));
-                assertEquals("Weideblick", abstractCache.getName());
-                assertEquals("bros", abstractCache.getOwner());
-                assertEquals("bros", abstractCache.getPlacedBy());
-                assertEquals("Ein weiterer Cache im Tegeler Fließtal", abstractCache.getShortDescription(Database.Data));
+                assertEquals("768551", abstractCache.getGcId().toString());
+                assertTrue(abstractCache.getLongDescription(testDB).startsWith("Vom empfohlenen Parkplatz beträgt die Wegstrecke etwa 500 m. Der Cac"));
+                assertEquals("Weideblick", abstractCache.getName().toString());
+                assertEquals("bros", abstractCache.getOwner().toString());
+                assertEquals("bros", abstractCache.getPlacedBy().toString());
+                assertEquals("Ein weiterer Cache im Tegeler Fließtal", abstractCache.getShortDescription(testDB));
                 assertEquals(2f, abstractCache.getTerrain());
-                assertEquals("http://coord.info/GC18JGX", abstractCache.getUrl(Database.Data));
-                assertEquals(2, abstractCache.getApiState());
+                assertEquals("http://coord.info/GC18JGX", abstractCache.getUrl(testDB));
+                assertEquals(2, abstractCache.getApiState(testDB));
                 assertEquals(52.62965, abstractCache.getLatitude());
                 assertEquals(13.372317, abstractCache.getLongitude());
 
@@ -199,7 +197,10 @@ class SearchGcOwnerTest {
 
                 }
 
-                TestUtils.assetCacheAttributes(abstractCache, positiveList, negativeList);
+                TestUtils.assetCacheAttributes(testDB, abstractCache, positiveList, negativeList);
+
+                LogDAO dao = new LogDAO();
+                Array<LogEntry> logList = dao.getLogs(testDB, null);
 
 
                 //check Logs
@@ -213,7 +214,7 @@ class SearchGcOwnerTest {
                 assertEquals(new Date(1492455600000L), logEntry.Timestamp);
                 assertEquals("w2kurlgeo", logEntry.Finder);
 
-                logEntry = logList.last();
+                logEntry = logList.get(logList.size-1);
 
                 assertEquals(AbstractCache.GenerateCacheId("GC3FHRP"), logEntry.CacheId);
                 assertEquals(664057049, logEntry.Id);
@@ -234,6 +235,8 @@ class SearchGcOwnerTest {
                 e.printStackTrace();
             }
         }
+        testDB.close();
+        testDB.getFileHandle().delete();
     }
 
 
@@ -244,7 +247,8 @@ class SearchGcOwnerTest {
         final CB_List<AbstractCache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();
-        final SearchGCOwner searchGC = new SearchGCOwner(apiKey, 30, searchCoord, 50000, "bros", (byte) 2) {
+        final Database testDB = TestUtils.getTestDB();
+        final SearchGCOwner searchGC = new SearchGCOwner(testDB, apiKey, 30, searchCoord, 50000, "bros", (byte) 2) {
             protected void writeLogToDB(final LogEntry logEntry) {
                 logList.add(logEntry);
             }
@@ -281,7 +285,7 @@ class SearchGcOwnerTest {
 
                         AbstractWaypoint waypoint = abstractCache.getWaypoints().first();
                         assertEquals("PA18JGX", waypoint.getGcCode());
-                        assertEquals("Parkmöglichkeit", waypoint.getDescription(Database.Data));
+                        assertEquals("Parkmöglichkeit", waypoint.getDescription(testDB));
                         assertEquals("Parking", waypoint.getTitle());
                         assertEquals(CacheTypes.ParkingArea, waypoint.getType());
                         assertEquals(52.633667, waypoint.getLatitude());
@@ -289,21 +293,21 @@ class SearchGcOwnerTest {
 
                         assertEquals(CacheTypes.Traditional, abstractCache.getType());
                         assertEquals(CacheSizes.small, abstractCache.getSize());
-                        assertEquals("Germany", abstractCache.getCountry());
-                        assertEquals(new Date(1200211200000L), abstractCache.getDateHidden());
+                        assertEquals("Germany", abstractCache.getCountry(testDB));
+                        assertEquals(new Date(1200211200000L), abstractCache.getDateHidden(testDB));
                         assertEquals(1.5f, abstractCache.getDifficulty());
-                        assertEquals("bücken!", abstractCache.getHint(Database.Data));
+                        assertEquals("bücken!", abstractCache.getHint(testDB));
                         assertEquals(0, abstractCache.getFavoritePoints());
                         assertEquals(false, abstractCache.isFound());
                         assertEquals("768551", abstractCache.getGcId());
-                        assertTrue(abstractCache.getLongDescription(Database.Data).startsWith("Vom empfohlenen Parkplatz beträgt die Wegstrecke etwa 500 m. Der Cac"));
+                        assertTrue(abstractCache.getLongDescription(testDB).startsWith("Vom empfohlenen Parkplatz beträgt die Wegstrecke etwa 500 m. Der Cac"));
                         assertEquals("Weideblick", abstractCache.getName());
                         assertEquals("bros", abstractCache.getOwner());
                         assertEquals("bros", abstractCache.getPlacedBy());
-                        assertEquals("Ein weiterer Cache im Tegeler Fließtal", abstractCache.getShortDescription(Database.Data));
+                        assertEquals("Ein weiterer Cache im Tegeler Fließtal", abstractCache.getShortDescription(testDB));
                         assertEquals(2f, abstractCache.getTerrain());
-                        assertEquals("http://coord.info/GC18JGX", abstractCache.getUrl(Database.Data));
-                        assertEquals(2, abstractCache.getApiState());
+                        assertEquals("http://coord.info/GC18JGX", abstractCache.getUrl(testDB));
+                        assertEquals(2, abstractCache.getApiState(testDB));
                         assertEquals(52.62965, abstractCache.getLatitude());
                         assertEquals(13.372317, abstractCache.getLongitude());
 
@@ -321,7 +325,7 @@ class SearchGcOwnerTest {
                             positiveList.add(Attributes.Bicycles);
                         }
 
-                        TestUtils.assetCacheAttributes(abstractCache, positiveList, negativeList);
+                        TestUtils.assetCacheAttributes(testDB, abstractCache, positiveList, negativeList);
 
 
                         //check Logs
@@ -350,6 +354,8 @@ class SearchGcOwnerTest {
                 e.printStackTrace();
             }
         }
+        testDB.close();
+        testDB.getFileHandle().delete();
 
     }
 

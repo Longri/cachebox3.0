@@ -91,13 +91,13 @@ public class Cache3DAO extends AbstractCacheDAO {
         //Write to CacheInfo table
         args.clear();
         if (!update) args.put("Id", abstractCache.getId());
-        args.put("DateHidden", iso8601Format.format(abstractCache.getDateHidden() == null ? new Date() : abstractCache.getDateHidden()));
+        args.put("DateHidden", iso8601Format.format(abstractCache.getDateHidden(database) == null ? new Date() : abstractCache.getDateHidden(database)));
         args.put("FirstImported", iso8601Format.format(new Date()));
         args.put("TourName", abstractCache.getTourName());
         args.put("GPXFilename_Id", abstractCache.getGPXFilename_ID());
         args.put("state", abstractCache.getState());
-        args.put("country", abstractCache.getCountry());
-        args.put("ApiStatus", abstractCache.getApiState());
+        args.put("country", abstractCache.getCountry(database));
+        args.put("ApiStatus", abstractCache.getApiState(database));
 
         if (update) {
             if (database.update("CacheInfo", args, "WHERE id=?", new String[]{Long.toString(abstractCache.getId())}) <= 0) {

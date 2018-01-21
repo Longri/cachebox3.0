@@ -26,6 +26,7 @@ import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.CheckC
 import de.longri.cachebox3.apis.groundspeak_api.search.SearchGC;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.types.LogEntry;
@@ -421,7 +422,7 @@ public class GroundspeakAPI {
         }
 
         final AtomicInteger idx = new AtomicInteger(0);
-        final SearchGC searchGC = new SearchGC(getAccessToken(), gcCodes, (byte) 2, icancel) {
+        final SearchGC searchGC = new SearchGC(Database.Data,getAccessToken(), gcCodes, (byte) 2, icancel) {
             protected void writeCacheToDB(final AbstractCache cache) {
                 boolean search = false;
                 boolean over = false;

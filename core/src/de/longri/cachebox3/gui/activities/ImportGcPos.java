@@ -44,6 +44,7 @@ import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Category;
 import de.longri.cachebox3.types.GpxFilename;
@@ -417,7 +418,7 @@ public class ImportGcPos extends ActivityBase {
 
                 log.debug("Api state = {}", apiState);
                 log.debug("Search at Coordinate:{}", actSearchPos);
-                final SearchCoordinate searchC = new SearchCoordinate(GroundspeakAPI.getAccessToken(),
+                final SearchCoordinate searchC = new SearchCoordinate(Database.Data, GroundspeakAPI.getAccessToken(),
                         50, actSearchPos, radius * 1000,
                         apiState, new ICancel() {
                     @Override

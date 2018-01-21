@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.JsonWriter;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.sqlite.Database;
 import org.junit.jupiter.api.Test;
 import travis.EXCLUDE_FROM_TRAVIS;
 
@@ -58,7 +59,8 @@ class SearchCoordinateTest {
             apiState = 1;
         }
 
-        SearchCoordinate searchCoordinate = new SearchCoordinate(apiKey, 50
+        Database testDB = TestUtils.getTestDB();
+        SearchCoordinate searchCoordinate = new SearchCoordinate(testDB, apiKey, 50
                 , LONGRI_HOME_COORDS, 50000, apiState);
 
         StringWriter writer = new StringWriter();
@@ -69,6 +71,8 @@ class SearchCoordinateTest {
         String actual = writer.toString();
         assertEquals(expected, actual);
 
+        testDB.close();
+        testDB.getFileHandle().delete();
 
     }
 

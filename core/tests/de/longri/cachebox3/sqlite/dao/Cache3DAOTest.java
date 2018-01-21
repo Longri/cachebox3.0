@@ -349,7 +349,6 @@ class Cache3DAOTest {
         cache.setLongDescription(cb3Database, should_LongDescription);
         cache.setShortDescription(cb3Database, should_ShortDescription);
         cache.setHint(cb3Database, should_Hint);
-        cache.setAttributes(should_attributes);
 
         assertCache("MutableCache", cache);
 

@@ -17,6 +17,7 @@ package de.longri.cachebox3.apis.groundspeak_api.search;
 
 
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.sqlite.Database;
 
 /**
  * Search Caches around a coordinate with lite state for showing on LiveMap. <br>
@@ -28,8 +29,8 @@ import de.longri.cachebox3.locator.Coordinate;
 public class SearchLiveMap extends SearchCoordinate {
 
 
-    public SearchLiveMap(String gcApiKey, int number, Coordinate coordinate, float distanceInMeters) {
-        super(gcApiKey, number, coordinate, distanceInMeters, (byte) 1);
+    public SearchLiveMap(Database database, String gcApiKey, int number, Coordinate coordinate, float distanceInMeters) {
+        super(database, gcApiKey, number, coordinate, distanceInMeters, (byte) 1);
         // live Caches will be loaded as Lite version
         geocacheLogCount = 0;
         trackableLogCount = 0;

@@ -28,4 +28,6 @@ public abstract class AbstractCacheListDAO {
     public abstract AbstractCache reloadCache(Database database, CacheList cacheList, AbstractCache selectedCache);
 
     public abstract int getFilteredCacheCount(Database database, String statement);
+
+    public abstract void writeToDB(Database database, CacheList cacheList);
 }

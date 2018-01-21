@@ -46,7 +46,9 @@ public class DatabaseSchema {
             " );       ";
 
     public final String ATTRIBUTES = "CREATE TABLE Attributes (\n" +
-            "   Id                         BIGINT,\n" +
+            "   Id                         BIGINT\n" +
+            "                              PRIMARY KEY\n" +
+            "                              UNIQUE,\n" +
             "  AttributesPositive        BIGINT,\n" +
             "  AttributesNegative       BIGINT,\n" +
             "  AttributesPositiveHigh    BIGINT         DEFAULT 0,\n" +
@@ -54,7 +56,9 @@ public class DatabaseSchema {
             " );";
 
     public final String TEXT = "CREATE TABLE CacheText (\n" +
-            "   Id                         BIGINT,\n" +
+            "   Id                         BIGINT\n" +
+            "                              PRIMARY KEY\n" +
+            "                              UNIQUE,\n" +
             "   Url                        NVARCHAR (255),\n" +
             "   Hint                       NTEXT,\n" +
             "   Description                NTEXT,\n" +
@@ -64,7 +68,9 @@ public class DatabaseSchema {
             "  );";
 
     public final String CACHE_INFO = "CREATE TABLE CacheInfo (\n" +
-            "    Id                         BIGINT,\n" +
+            "    Id                         BIGINT\n" +
+            "                              PRIMARY KEY\n" +
+            "                              UNIQUE,\n" +
             "    DateHidden                DATETIME,\n" +
             "    FirstImported              DATETIME,\n" +
             "    TourName                   NCHAR (255),\n" +
@@ -101,7 +107,9 @@ public class DatabaseSchema {
 
     public final String WAYPOINTS = "CREATE TABLE Waypoints (\n" +
             "    CacheId      BIGINT,\n" +
-            "    GcCode       NVARCHAR (12), \n" +
+            "    GcCode       NVARCHAR (12) \n" +
+            "                              PRIMARY KEY\n" +
+            "                              UNIQUE,\n" +
             "    Latitude     FLOAT,\n" +
             "    Longitude    FLOAT,\n" +
             "    Type         SMALLINT,\n" +
@@ -112,7 +120,9 @@ public class DatabaseSchema {
             ");";
 
     public final String WAYPOINTS_TEXT = "CREATE TABLE WaypointsText (\n" +
-            "    GcCode       NVARCHAR (12), \n" +
+            "    GcCode       NVARCHAR (12) \n" +
+            "                              PRIMARY KEY\n" +
+            "                              UNIQUE,\n" +
             "    Description  NTEXT,\n" +
             "    Clue         NTEXT\n" +
             ");";
