@@ -103,8 +103,6 @@ public class LogDAO {
         } finally {
             database.myDB.endTransaction();
         }
-
-
     }
 
     public Array<LogEntry> getLogs(Database database, Integer cacheId) {

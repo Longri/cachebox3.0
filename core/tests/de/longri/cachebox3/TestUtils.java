@@ -172,8 +172,11 @@ public class TestUtils {
     public static Database getTestDB() {
 
         FileHandle dbFiileHandle = Gdx.files.local("testDBfile" + Integer.toString(dbCount++));
-        Database database = new Database(Database.DatabaseType.CacheBox3);
 
+        //delete if exist
+        dbFiileHandle.delete();
+
+        Database database = new Database(Database.DatabaseType.CacheBox3);
         database.startUp(dbFiileHandle);
 
         return database;

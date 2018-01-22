@@ -1,6 +1,7 @@
 package travis;
 
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.settings.Config;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,4 +32,10 @@ public class EXCLUDE_FROM_TRAVIS {
 
     public static final boolean VALUE = readFailer || p.getProperty("ExcludeOnTravis", "true").equals("true");
     public static final String GcAPI = p.getProperty("GcAPI", DUMMY_API_KEY);
+
+    static {
+        //store api to config
+        Config.GcAPIStaging.setValue("A"+GcAPI);
+        Config.GcAPI.setValue("A"+GcAPI);
+    }
 }

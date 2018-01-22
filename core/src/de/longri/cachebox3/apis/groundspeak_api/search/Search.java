@@ -29,10 +29,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
-import de.longri.cachebox3.sqlite.dao.DaoFactory;
-import de.longri.cachebox3.sqlite.dao.ImageDAO;
-import de.longri.cachebox3.sqlite.dao.LogDAO;
+import de.longri.cachebox3.sqlite.dao.*;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
@@ -62,6 +59,7 @@ public abstract class Search extends PostRequest {
     private long gpxFilenameId;
     private AbstractCache actCache;
     private AbstractWaypoint actWayPoint;
+    private Trackable actTrackable;
     private LogEntry actLog;
     private Array<Attributes> attributes;
     private Attributes actAttribute;
@@ -72,13 +70,21 @@ public abstract class Search extends PostRequest {
     private final String ATTRIBUTES = "Attributes";
     private final String OWNER = "Owner";
     private final String IMAGES = "Images";
+    private final String TRACKABLES = "Trackables";
+    private final String TRACKABLELOGS = "TrackableLogs";
 
     private final String ATTRIBUTE_ID = "AttributeTypeID";
     private final String IS_ON = "IsOn";
     private final String NEW_CACHE = "NEW_CACHE";
     private final String NEW_LOG = "NEW_LOG";
     private final String NEW_WAY_POINT = "NEW_WAY_POINT";
+    private final String NEW_TRACKABLE = "NEW_TRACKABLE";
     private final String CODE = "Code";
+    private final String CURRENT_GOAL = "CurrentGoal";
+    private final String CURRENT_CACHE_CODE = "CurrentGeocacheCode";
+    private final String DATE_CREATED = "DateCreated";
+    private final String DESCRIPTION = "Description";
+    private final String ICON_URL = "IconUrl";
     private final String CACHE_TYPE = "CacheType";
     private final String CACHE_TYPE_ID = "GeocacheTypeId";
     private final String CONTAINER_TYPE_ID = "ContainerTypeId";
@@ -91,14 +97,17 @@ public abstract class Search extends PostRequest {
     private final String ARCHIVED = "Archived";
     private final String AVAILABLE = "Available";
     private final String ID = "ID";
+    private final String I_D = "Id";
     private final String LONG_DESC = "LongDescription";
     private final String NAME = "Name";
+    private final String TRACKING_CODE = "TrackingCode";
     private final String USER_NAME = "UserName";
     private final String PLACED_BY = "PlacedBy";
     private final String SHORT_DESC = "ShortDescription";
     private final String DESC = "Description";
     private final String TERRAIN = "Terrain";
     private final String URL = "Url";
+    private final String TYPE_NAME = "TBTypeName";
     private final String LAT = "Latitude";
     private final String LON = "Longitude";
     private final String CACHE_LIMITS = "CacheLimits";
@@ -131,6 +140,8 @@ public abstract class Search extends PostRequest {
     private final int IMAGE_ARRAY = 5;
     private final int WAY_POINT_ARRAY = 6;
     private final int STATUS = 7;
+    private final int TRACKABLE_ARRAY = 8;
+    private final int TRACKABLE_LOG_ARRAY = 9;
     private boolean isUserWaypoint = false;
     private final ICancel iCancel;
 
@@ -197,6 +208,7 @@ public abstract class Search extends PostRequest {
         final ApiResultState[] resultState = new ApiResultState[]{ApiResultState.IO};
         final CacheList tmpCacheList = new CacheList();
         final Array<LogEntry> logList = new Array<>();
+        final Array<Trackable> trackableList = new Array<>();
         JsonStreamParser parser = new JsonStreamParser() {
 
             @Override
@@ -205,7 +217,7 @@ public abstract class Search extends PostRequest {
                 if (iCancel != null && iCancel.cancel()) this.cancel();
 
                 super.startArray(name);
-                // System.out.println("Start array " + name);
+//                System.out.println("Start array " + name);
                 arrayStack.add(name);
                 objectStack.add(name);
                 if (ATTRIBUTES.equals(name)) {
@@ -219,6 +231,10 @@ public abstract class Search extends PostRequest {
                     SWITCH = LOG_ARRAY;
                 } else if (IMAGES.equals(name)) {
                     SWITCH = IMAGE_ARRAY;
+                } else if (TRACKABLES.equals(name)) {
+                    SWITCH = TRACKABLE_ARRAY;
+                } else if (TRACKABLELOGS.equals(name)) {
+                    SWITCH = TRACKABLE_LOG_ARRAY;
                 } else if (ADDITIONAL_WAYPOINTS.equals(name)) {
                     SWITCH = WAY_POINT_ARRAY;
                 } else if (USER_WAYPOINTS.equals(name)) {
@@ -247,6 +263,10 @@ public abstract class Search extends PostRequest {
                         SWITCH = LOG_ARRAY;
                     } else if (IMAGES.equals(actArray)) {
                         SWITCH = IMAGE_ARRAY;
+                    } else if (TRACKABLES.equals(actArray)) {
+                        SWITCH = TRACKABLE_ARRAY;
+                    } else if (TRACKABLELOGS.equals(actArray)) {
+                        SWITCH = TRACKABLE_LOG_ARRAY;
                     } else if (ADDITIONAL_WAYPOINTS.equals(name)) {
                         SWITCH = WAY_POINT_ARRAY;
                     } else if (USER_WAYPOINTS.equals(name)) {
@@ -263,7 +283,7 @@ public abstract class Search extends PostRequest {
             public void startObject(String name) {
                 if (iCancel != null && iCancel.cancel()) this.cancel();
                 super.startObject(name);
-                // System.out.println("Start Object " + name);
+//                System.out.println("Start Object " + name);
 
                 if (name != null && SWITCH == 0 && name.equals("Status")) {
                     SWITCH = STATUS;
@@ -295,6 +315,13 @@ public abstract class Search extends PostRequest {
                             name = NEW_WAY_POINT;
                         }
                         break;
+                    case TRACKABLE_ARRAY:
+                        if (actTrackable == null) {
+                            //System.out.println("NEW_WayPoint");
+                            actTrackable = new Trackable();
+                            name = NEW_TRACKABLE;
+                        }
+                        break;
                 }
                 objectStack.add(name);
             }
@@ -304,7 +331,7 @@ public abstract class Search extends PostRequest {
                 if (iCancel != null && iCancel.cancel()) this.cancel();
                 super.pop();
                 String name = objectStack.pop();
-                // System.out.println("pop " + name);
+//                System.out.println("pop " + name);
 
 
                 switch (SWITCH) {
@@ -346,7 +373,6 @@ public abstract class Search extends PostRequest {
                     case LOG_ARRAY:
                         if (NEW_LOG.equals(name)) {
                             // System.out.println("add Log entry ");
-                            //TODO handle as list writeLogToDB(actLog);
                             logList.add(actLog.copy());
                             logCount++;
                             actLog = null;
@@ -371,6 +397,14 @@ public abstract class Search extends PostRequest {
                             actCache.getWaypoints().add(new MutableWaypoint(Search.this.database, actWayPoint));
                             waypointCount++;
                             actWayPoint = null;
+                        }
+                        break;
+                    case TRACKABLE_ARRAY:
+                        if (NEW_TRACKABLE.equals(name)) {
+//                            System.out.println("add Trackable ");
+                            actTrackable.setCacheId(actCache.getId());
+                            trackableList.add(actTrackable);
+                            actTrackable = null;
                         }
                         break;
                 }
@@ -441,6 +475,29 @@ public abstract class Search extends PostRequest {
                             SWITCH = 0;
                         }
                         break;
+                    case TRACKABLE_ARRAY:
+                        if (CODE.equals(name)) {
+                            actTrackable.setGcCode(value);
+                        } else if (CURRENT_GOAL.equals(name)) {
+                            actTrackable.setCurrenGoal(value);
+                        } else if (CURRENT_CACHE_CODE.equals(name)) {
+                            actTrackable.setCurrentCacheCode(value);
+                        } else if (DATE_CREATED.equals(name)) {
+                            actTrackable.setDateCreated(getDateFromLongString(value));
+                        } else if (DESCRIPTION.equals(name)) {
+                            actTrackable.setDescription(value);
+                        } else if (NAME.equals(name)) {
+                            actTrackable.setName(value);
+                        } else if (TRACKING_CODE.equals(name)) {
+                            actTrackable.setTrackingCode(value);
+                        } else if (URL.equals(name)) {
+                            actTrackable.setUrl(value);
+                        } else if (TYPE_NAME.equals(name)) {
+                            actTrackable.setTypeName(value);
+                        }else if (ICON_URL.equals(name)) {
+                            actTrackable.setIconUrl(value);
+                        }
+                        break;
                 }
 
 
@@ -482,6 +539,7 @@ public abstract class Search extends PostRequest {
                 if (iCancel != null && iCancel.cancel()) this.cancel();
                 super.number(name, value, stringValue);
 
+
                 switch (SWITCH) {
                     case CACHE_ARRAY:
                         if (CACHE_TYPE_ID.equals(name)) {
@@ -516,6 +574,14 @@ public abstract class Search extends PostRequest {
                         if (WAYPOINT_TYPE_ID.equals(name)) {
                             actWayPoint.setType(getCacheType((int) value));
                         }
+                    case TRACKABLE_ARRAY:
+
+                        if (objectStack.peek().equals("OriginalOwner"))
+                            break;
+                        if (I_D.equals(name)) {
+                            actTrackable.setId(value);
+                        }
+                        break;
                 }
 
 
@@ -546,6 +612,11 @@ public abstract class Search extends PostRequest {
                     case LOG_ARRAY:
 
                         break;
+                    case TRACKABLE_ARRAY:
+                        if (ARCHIVED.equals(name)) {
+                            actTrackable.setArchived(value);
+                        }
+                        break;
                 }
 
 
@@ -561,6 +632,8 @@ public abstract class Search extends PostRequest {
         LogDAO logdao = new LogDAO();
         logdao.writeToDB(this.database, logList);
 
+        TrackableDao tbDao = new TrackableDao();
+        tbDao.writeToDB(this.database, trackableList);
 
         final ApiResultState finalState = resultState[0];
 
