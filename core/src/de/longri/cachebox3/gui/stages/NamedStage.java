@@ -47,4 +47,12 @@ public class NamedStage extends Stage {
     public String toString() {
         return "Stage: " + name;
     }
+
+    @Override
+    public void draw() {
+        if (getBatch().isDrawing()) {
+            getBatch().end();
+        }
+        super.draw();
+    }
 }

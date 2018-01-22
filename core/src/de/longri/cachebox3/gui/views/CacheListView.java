@@ -162,19 +162,19 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
                 CacheListView.this.listView = new ListView(listViewAdapter, false, true);
                 synchronized (CacheListView.this.listView) {
-                    listView.setEmptyString(Translation.get("EmptyCacheList"));
-                    listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
-                    addActor(listView);
-                    listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
-                    listView.setSelectable(ListView.SelectableType.SINGLE);
+                    CacheListView.this.listView.setEmptyString(Translation.get("EmptyCacheList"));
+                    CacheListView.this.listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
+                    addActor(CacheListView.this.listView);
+                    CacheListView.this.listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
+                    CacheListView.this.listView.setSelectable(ListView.SelectableType.SINGLE);
                     CB.requestRendering();
                 }
 
                 // add selection changed event listener
-                listView.addSelectionChangedEventListner(new ListView.SelectionChangedEvent() {
+                CacheListView.this.listView.addSelectionChangedEventListner(new ListView.SelectionChangedEvent() {
                     @Override
                     public void selectionChanged() {
-                        CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
+                        CacheListItem selectedItem = (CacheListItem) CacheListView.this.listView.getSelectedItem();
                         int selectedItemListIndex = selectedItem.getListIndex();
 
                         AbstractCache cache = Database.Data.Query.get(selectedItemListIndex);
@@ -197,8 +197,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         try {
                             if (selectedIndex >= Database.Data.Query.size)
                                 selectedIndex = 0;// select first item, if Cache not found
-                            listView.setSelection(selectedIndex);
-                            listView.setSelectedItemVisible(false);
+                            CacheListView.this.listView.setSelection(selectedIndex);
+                            CacheListView.this.listView.setSelectedItemVisible(false);
                         } catch (Exception e) {
                             log.error("setSelected index", e);
                         }

@@ -74,105 +74,100 @@ public class Config extends Settings {
             dirtyList.add(settingsList.dirtyList.pop());
         }
 
-        log.debug("Start Async writing {} settings changed", dirtyList.size);
-        CB.postAsync(new NamedRunnable("Config") {
-            @Override
-            public void run() {
-                try {
-                    // Write into DB
-                    SettingsDAO dao = new SettingsDAO();
+        log.debug("Start writing {} settings changed", dirtyList.size);
 
-                    final Database data = Database.Data;
-                    final Database settingsDB = Database.Settings;
+        try {
+            // Write into DB
+            SettingsDAO dao = new SettingsDAO();
+
+            final Database data = Database.Data;
+            final Database settingsDB = Database.Settings;
 
 
-                    //splitt into local and global list!
-                    final Array<SettingBase<?>> localList = new Array<>();
-                    final Array<SettingBase<?>> globalList = new Array<>();
-                    boolean isAPI = false;
-                    while (dirtyList.size > 0) {
-                        SettingBase<?> setting = dirtyList.pop();
-                        if (setting.name.equals("GcAPIStaging") || setting.name.equals("GcAPI")) {
-                            isAPI = true;
-                        }
-                        if (setting.getStoreType() == SettingStoreType.Local) {
-                            localList.add(setting);
-                        } else {
-                            globalList.add(setting);
-                        }
-                    }
-
-                    final AtomicBoolean WAITLOCAL = new AtomicBoolean(true);
-                    final AtomicBoolean WAITGLOBAL = new AtomicBoolean(true);
-
-
-                    if (localList.size > 0) {
-                        if (!(data == null || !data.isStarted())) {
-                            log.debug("Start Async writing Config to local");
-                            CB.postAsync(new NamedRunnable("write settings local") {
-                                @Override
-                                public void run() {
-                                    writeToDB(data, localList, WAITLOCAL);
-                                }
-                            });
-                        } else {
-                            log.warn("Can't write local Config, DB's not started");
-                            WAITLOCAL.set(false);
-                        }
-                    } else {
-                        WAITLOCAL.set(false);
-                    }
-
-                    if (globalList.size > 0) {
-                        if (!(settingsDB == null || !settingsDB.isStarted())) {
-                            log.debug("Start Async writing Config to global");
-                            CB.postAsync(new NamedRunnable("write settings global") {
-                                @Override
-                                public void run() {
-                                    writeToDB(settingsDB, globalList, WAITGLOBAL);
-                                }
-                            });
-                        } else {
-                            log.warn("Can't write global Config, DB's not started");
-                            WAITGLOBAL.set(false);
-                        }
-                    } else {
-                        WAITGLOBAL.set(false);
-                    }
-
-                    while (WAITGLOBAL.get() || WAITLOCAL.get()) {
-                        try {
-                            Thread.sleep(50);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (isAPI) {
-                        log.debug("ApiKey changed, reset ApiCheck and set new expired time");
-                        CB.postOnMainThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //reset ApiKey validation
-                                GroundspeakAPI.resetApiIsChecked();
-
-                                //set config stored MemberChipType as expired
-                                Calendar cal = Calendar.getInstance();
-
-                                Config.memberChipType.setExpiredTime(cal.getTimeInMillis());
-                                Config.AcceptChanges();
-                            }
-                        });
-
-                    }
-                } catch (Exception e) {
-                    log.error("Error on store Config", e);
-                } finally {
-                    log.debug("Set Config in write to false");
-                    inWrite.set(false);
+            //splitt into local and global list!
+            final Array<SettingBase<?>> localList = new Array<>();
+            final Array<SettingBase<?>> globalList = new Array<>();
+            boolean isAPI = false;
+            while (dirtyList.size > 0) {
+                SettingBase<?> setting = dirtyList.pop();
+                if (setting.name.equals("GcAPIStaging") || setting.name.equals("GcAPI")) {
+                    isAPI = true;
+                }
+                if (setting.getStoreType() == SettingStoreType.Local) {
+                    localList.add(setting);
+                } else {
+                    globalList.add(setting);
                 }
             }
 
-        });
+            final AtomicBoolean WAITLOCAL = new AtomicBoolean(true);
+            final AtomicBoolean WAITGLOBAL = new AtomicBoolean(true);
+
+
+            if (localList.size > 0) {
+                if (!(data == null || !data.isStarted())) {
+                    log.debug("Start Async writing Config to local");
+                    CB.postAsync(new NamedRunnable("write settings local") {
+                        @Override
+                        public void run() {
+                            writeToDB(data, localList, WAITLOCAL);
+                        }
+                    });
+                } else {
+                    log.warn("Can't write local Config, DB's not started");
+                    WAITLOCAL.set(false);
+                }
+            } else {
+                WAITLOCAL.set(false);
+            }
+
+            if (globalList.size > 0) {
+                if (!(settingsDB == null || !settingsDB.isStarted())) {
+                    log.debug("Start Async writing Config to global");
+                    CB.postAsync(new NamedRunnable("write settings global") {
+                        @Override
+                        public void run() {
+                            writeToDB(settingsDB, globalList, WAITGLOBAL);
+                        }
+                    });
+                } else {
+                    log.warn("Can't write global Config, DB's not started");
+                    WAITGLOBAL.set(false);
+                }
+            } else {
+                WAITGLOBAL.set(false);
+            }
+
+            while (WAITGLOBAL.get() || WAITLOCAL.get()) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (isAPI) {
+                log.debug("ApiKey changed, reset ApiCheck and set new expired time");
+                CB.postOnMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //reset ApiKey validation
+                        GroundspeakAPI.resetApiIsChecked();
+
+                        //set config stored MemberChipType as expired
+                        Calendar cal = Calendar.getInstance();
+
+                        Config.memberChipType.setExpiredTime(cal.getTimeInMillis());
+                        Config.AcceptChanges();
+                    }
+                });
+
+            }
+        } catch (Exception e) {
+            log.error("Error on store Config", e);
+        } finally {
+            log.debug("Set Config in write to false");
+            inWrite.set(false);
+        }
         return false;
     }
 

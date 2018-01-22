@@ -558,7 +558,7 @@ public class ListView extends WidgetGroup {
         synchronized (indexList) {
 
             // check adapter has changed only on top stage
-            if (CB.viewmanager.isTop(this.getStage())) {
+            if (CB.viewmanager != null && CB.viewmanager.isTop(this.getStage())) {
                 if (listCount != adapter.getCount()) {
                     log.debug("List count({}) has changed to {}! set Adapter new!", listCount, adapter.getCount());
                     setAdapter(this.adapter);
