@@ -213,11 +213,6 @@ public class Cache3DAO extends AbstractCacheDAO {
     }
 
     @Override
-    public boolean updateDatabaseCacheState(Database database, AbstractCache writeTmp) {
-        return false;
-    }
-
-    @Override
     public void writeCacheBooleanStore(Database database, int newBooleanStore, long id) {
         Database.Parameters args = new Database.Parameters();
         args.put("BooleanStore", newBooleanStore);

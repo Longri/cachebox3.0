@@ -370,13 +370,12 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 //                        }
                         return true;
                     case MenuID.MI_CHK_STATE_API:
-                        new CheckStateActivity(true).show();
+                        new CheckStateActivity(false).show();
                         return true;
 
-                    //todo implement
-//                    case MenuID.MI_CHK_STATE_API_FAV_POI:
-//                        new CheckStateActivity(false).show();
-//                        return true;
+                    case MenuID.MI_CHK_STATE_API_FAV_POI:
+                        new CheckStateActivity(true).show();
+                        return true;
 
                     case MenuID.MI_NEW_CACHE:
                         if (editCache == null)
@@ -419,6 +418,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
 
         cm.addItem(MenuID.MI_CHK_STATE_API, "chkState", CB.getSkin().getMenuIcon.GC_Live);
+        cm.addItem(MenuID.MI_CHK_STATE_API_FAV_POI, "chkFavPoints", CB.getSkin().getMenuIcon.GC_Live);
+
         //ISSUE (#118 add new Cache) cm.addItem(MenuID.MI_NEW_CACHE, "MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon);
         //ISSUE (#119 add delete Cache Dialog) cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSkin().getMenuIcon.deleteIcon);
 

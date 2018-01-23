@@ -446,15 +446,6 @@ public class GroundspeakAPI {
                     }
                 }
             }
-
-            protected void writeLogToDB(final LogEntry logEntry) {
-                //do nothing
-            }
-
-            protected void writeImagEntryToDB(final ImageEntry imageEntry) {
-                //do nothing
-            }
-
         };
 
 

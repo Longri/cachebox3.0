@@ -105,6 +105,7 @@ public class CheckCacheStateParser {
                 super.pop();
                 if (GeocacheStatusesArray && newCache) {
                     AbstractCache abstractCache = getCache(caches, cacheCode);
+                    abstractCache.isChanged.set(false);
                     abstractCache.setArchived(archived);
                     abstractCache.setAvailable(available);
                     abstractCache.setNumTravelbugs(trackableCount);
@@ -165,6 +166,9 @@ public class CheckCacheStateParser {
 
 
     private static AbstractCache getCache(Array<AbstractCache> caches, String gcCode) {
+
+        //TODO improve, store last search idx
+
         for (int i = 0, n = caches.size; i < n; i++) {
             if (caches.get(i).getGcCode().equals(gcCode)) return caches.get(i);
         }

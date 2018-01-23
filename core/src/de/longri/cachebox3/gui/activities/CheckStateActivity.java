@@ -29,7 +29,6 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
@@ -37,7 +36,10 @@ import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.CheckC
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.Window;
-import de.longri.cachebox3.gui.dialogs.*;
+import de.longri.cachebox3.gui.dialogs.ButtonDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.stages.StageManager;
@@ -45,12 +47,12 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -286,15 +288,24 @@ public class CheckStateActivity extends ActivityBase {
 
                 //Write changes to DB
                 final AtomicInteger changedCount = new AtomicInteger(0);
-                Database.Data.beginTransaction();
-                Iterator<AbstractCache> iterator = addedReturnList.iterator();
-                do {
-                    AbstractCache writeTmp = iterator.next();
-                    if (DaoFactory.CACHE_DAO.updateDatabaseCacheState(Database.Data, writeTmp))
-                        changedCount.incrementAndGet();
-                } while (iterator.hasNext());
+                String sql = "UPDATE CacheCoreInfo SET BooleanStore = ? , NumTravelbugs = ? WHERE id = ? ;";
+                GdxSqlitePreparedStatement REPLACE_ATTRIBUTES = Database.Data.myDB.prepare(sql);
 
-                Database.Data.endTransaction();
+                Database.Data.myDB.beginTransaction();
+                try {
+                    for (AbstractCache ca : addedReturnList) {
+                        if (ca.isChanged.get()) {
+                            changedCount.incrementAndGet();
+                            REPLACE_ATTRIBUTES.bind(
+                                    ca.getBooleanStore(),
+                                    ca.getNumTravelbugs(),
+                                    ca.getId()
+                            ).commit().reset();
+                        }
+                    }
+                } finally {
+                    Database.Data.myDB.endTransaction();
+                }
 
                 //state check complete, close activity
                 EventHandler.remove(limitListener);
@@ -313,6 +324,15 @@ public class CheckStateActivity extends ActivityBase {
                             public boolean onClick(int which, Object data) {
                                 if (which == ButtonDialog.BUTTON_POSITIVE) {
                                     hide();
+                                    //Reload Cachelist if any changed
+                                    if (changedCount.get() > 0) {
+                                        CB.postAsync(new NamedRunnable("CheckStateActivity:finish reload cachelist") {
+                                            @Override
+                                            public void run() {
+                                                CB.loadFilteredCacheList(null);
+                                            }
+                                        });
+                                    }
                                 }
                                 return true;
                             }

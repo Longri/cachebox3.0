@@ -302,6 +302,8 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public void setArchived(boolean archived) {
+        if (this.archived != archived)
+            isChanged.set(true);
         this.archived = archived;
     }
 
@@ -312,6 +314,8 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public void setAvailable(boolean available) {
+        if (this.available != available)
+            isChanged.set(true);
         this.available = available;
     }
 
@@ -642,6 +646,8 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public void setNumTravelbugs(int numTravelbugs) {
+        if (this.numTravelbugs != numTravelbugs)
+            isChanged.set(true);
         this.numTravelbugs = (short) numTravelbugs;
     }
 

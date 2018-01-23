@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2011-2015 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -259,4 +259,5 @@ public class MenuID {
 
     public static final int AID_HELP = 209;
     public static final int AID_START_FILE_TRANSFER = 210;
+    public static final int MI_CHK_STATE_API_FAV_POI = 211;
 }
