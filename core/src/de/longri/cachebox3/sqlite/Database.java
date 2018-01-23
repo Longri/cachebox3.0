@@ -48,6 +48,11 @@ public class Database {
     public GdxSqlite myDB;
     public final CacheList Query;
 
+    public Database(GdxSqlite db) {
+        Query = new CacheList();
+        myDB = db;
+    }
+
     /**
      * @return Set To CB.Categories
      */
@@ -168,7 +173,6 @@ public class Database {
     public FileHandle getFileHandle() {
         return databasePath;
     }
-
 
 
     public enum DatabaseType {

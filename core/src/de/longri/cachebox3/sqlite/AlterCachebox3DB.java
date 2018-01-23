@@ -33,31 +33,10 @@ public class AlterCachebox3DB {
             //create new Database
             DatabaseSchema schemaStrings = new DatabaseSchema();
 
-            StringBuilder sb = new StringBuilder();
-
-            sb.append("BEGIN TRANSACTION;").append("\n");
-            
-            sb.append(schemaStrings.CONFIG_TABLE).append("\n");
-            sb.append(schemaStrings.CATEGORY_TABLE).append("\n");
-            sb.append(schemaStrings.GPX_FILE_NAMES).append("\n");
-            sb.append(schemaStrings.IMAGES).append("\n");
-            sb.append(schemaStrings.LOGS).append("\n");
-            sb.append(schemaStrings.POCKET_QUERIES).append("\n");
-            sb.append(schemaStrings.REPLICATION).append("\n");
-            sb.append(schemaStrings.TB_LOGS).append("\n");
-            sb.append(schemaStrings.TRACKABLE).append("\n");
-            sb.append(schemaStrings.CACHE_CORE_INFO).append("\n");
-            sb.append(schemaStrings.ATTRIBUTES).append("\n");
-            sb.append(schemaStrings.TEXT).append("\n");
-            sb.append(schemaStrings.CACHE_INFO).append("\n");
-            sb.append(schemaStrings.WAYPOINTS).append("\n");
-            sb.append(schemaStrings.WAYPOINTS_TEXT).append("\n");
-
-            sb.append("END TRANSACTION;").append("\n");
-
+            String sql = schemaStrings.getEmptyNewDB();
 
             //EXECUTE combined SQL
-            database.execSQL(sb.toString());
+            database.execSQL(sql);
 
             return;
         }

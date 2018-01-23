@@ -288,7 +288,7 @@ public class CheckStateActivity extends ActivityBase {
 
                 //Write changes to DB
                 final AtomicInteger changedCount = new AtomicInteger(0);
-                String sql = "UPDATE CacheCoreInfo SET BooleanStore = ? , NumTravelbugs = ? WHERE id = ? ;";
+                String sql = "UPDATE CacheCoreInfo SET BooleanStore = ? , NumTravelbugs = ? , FavPoints = ? WHERE id = ? ;";
                 GdxSqlitePreparedStatement REPLACE_ATTRIBUTES = Database.Data.myDB.prepare(sql);
 
                 Database.Data.myDB.beginTransaction();
@@ -299,6 +299,7 @@ public class CheckStateActivity extends ActivityBase {
                             REPLACE_ATTRIBUTES.bind(
                                     ca.getBooleanStore(),
                                     ca.getNumTravelbugs(),
+                                    ca.getFavoritePoints(),
                                     ca.getId()
                             ).commit().reset();
                         }

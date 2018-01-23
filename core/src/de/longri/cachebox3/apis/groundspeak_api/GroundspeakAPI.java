@@ -27,14 +27,13 @@ import de.longri.cachebox3.apis.groundspeak_api.search.SearchGC;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.ImageEntry;
-import de.longri.cachebox3.types.LogEntry;
-import de.longri.cachebox3.types.Trackable;
+import de.longri.cachebox3.sqlite.DatabaseSchema;
+import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.NetUtils;
 import de.longri.cachebox3.utils.json_parser.DraftUploadResultParser;
+import de.longri.gdx.sqlite.GdxSqlite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -263,7 +262,7 @@ public class GroundspeakAPI {
      * This method must call before every API-Call, for check any call restrictions!
      */
     public static int waitApiCallLimit() {
-       return waitApiCallLimit(null);
+        return waitApiCallLimit(null);
     }
 
     public static int waitApiCallLimit(ICancel iCancel) {
@@ -276,7 +275,7 @@ public class GroundspeakAPI {
                 // get api limits from groundspeak
                 int callsPerMinute = GetApiLimits.getLimit();
 
-                if(callsPerMinute==-1){
+                if (callsPerMinute == -1) {
                     // connection error, call cancel and give feedback
                     return -1;
                 }
@@ -407,7 +406,7 @@ public class GroundspeakAPI {
         return parseResult;
     }
 
-    public static ApiResultState getGeocacheStatusFavoritePoints(final Array<AbstractCache> caches, final ICancel icancel,final CheckCacheStateParser.ProgressIncrement progressIncrement) {
+    public static ApiResultState getGeocacheStatusFavoritePoints(final Array<AbstractCache> caches, final ICancel icancel, final CheckCacheStateParser.ProgressIncrement progressIncrement) {
         ApiResultState chk = chkMembership(false);
         if (chk.isErrorState())
             return chk;
@@ -422,31 +421,16 @@ public class GroundspeakAPI {
         }
 
         final AtomicInteger idx = new AtomicInteger(0);
-        final SearchGC searchGC = new SearchGC(Database.Data,getAccessToken(), gcCodes, (byte) 2, icancel) {
-            protected void writeCacheToDB(final AbstractCache cache) {
-                boolean search = false;
-                boolean over = false;
-                while (search) {
-                    AbstractCache ca = caches.get(idx.getAndIncrement());
-                    if (ca.getId() == cache.getId()) {
-                        search = false;
-                        ca.setAvailable(cache.isAvailable());
-                        ca.setArchived(cache.isArchived());
-                        cache.setNumTravelbugs(cache.getNumTravelbugs());
-                        cache.setFavoritePoints(cache.getFavoritePoints());
-                        progressIncrement.increment();
-                    } else {
-                        if (idx.get() >= caches.size) {
-                            if (over) {
-                                search = false;// not found
-                            } else {
-                                idx.set(0);// new iteration
-                            }
-                        }
-                    }
-                }
-            }
-        };
+
+        //create inMemory DB
+        GdxSqlite db = new GdxSqlite();
+        db.openOrCreateDatabase();
+        final DatabaseSchema sh = new DatabaseSchema();
+        db.execSQL(sh.getEmptyNewDB());
+
+        Database tmp = new Database(db);
+
+        final SearchGC searchGC = new SearchGC(tmp, getAccessToken(), gcCodes, (byte) 2, icancel);
 
 
         final ApiResultState result[] = new ApiResultState[1];
@@ -467,600 +451,38 @@ public class GroundspeakAPI {
                 e.printStackTrace();
             }
         }
+
+
+        //Store result from inMemory DB
+
+        tmp.myDB.rawQuery("SELECT Id, BooleanStore, FavPoints, NumTravelbugs FROM CacheCoreInfo", new GdxSqlite.RowCallback() {
+            @Override
+            public void newRow(String[] columnName, Object[] value, int[] types) {
+                //get cache from in list
+                AbstractCache cache = null;
+                long id = (long) value[0];
+                for (AbstractCache ca : caches) {
+                    if (ca.getId() == id) {
+                        cache = ca;
+                        break;
+                    }
+                }
+
+                if (cache != null) {
+                    cache.isChanged.set(false);
+                    short booleanStore = ((Long) value[1]).shortValue();
+                    cache.setArchived(ImmutableCache.getMaskValue(ImmutableCache.MASK_ARCHIVED, booleanStore));
+                    cache.setAvailable(ImmutableCache.getMaskValue(ImmutableCache.MASK_AVAILABLE, booleanStore));
+                    cache.setNumTravelbugs(((Long) value[3]).intValue());
+                    cache.setFavoritePoints(((Long) value[2]).intValue());
+                    if (progressIncrement != null) progressIncrement.increment();
+                }
+            }
+        });
+
         return result[0];
     }
 
-//
-//    /**
-//     * Gets the Logs for the given Cache
-//     *
-//     * @param Staging
-//     *            Config.settings.StagingAPI.getValue()
-//     * @param accessToken
-//     * @param conectionTimeout
-//     *            Config.settings.conection_timeout.getValue()
-//     * @param socketTimeout
-//     *            Config.settings.socket_timeout.getValue()
-//     * @param cache
-//     * @return
-//     */
-//    public static int GetGeocacheLogsByCache(Cache cache, ArrayList<LogEntry> logList, boolean all, cancelRunnable cancelRun) {
-//	String finders = Config.Friends.getValue();
-//	String[] finder = finders.split("\\|");
-//	ArrayList<String> finderList = new ArrayList<String>();
-//	for (String f : finder) {
-//	    finderList.add(f);
-//	}
-//
-//	if (cache == null)
-//	    return -3;
-//	int chk = chkMembership(false);
-//	if (chk < 0)
-//	    return chk;
-//
-//	try {
-//	    Thread.sleep(1000);
-//	} catch (InterruptedException e1) {
-//	    e1.printStackTrace();
-//	}
-//
-//	int start = 1;
-//	int count = 30;
-//
-//	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-//	while (!cancelRun.cancel() && (finderList.size() > 0 || all))
-//	// Schleife, solange bis entweder keine Logs mehr geladen werden oder bis alle Logs aller Finder geladen sind.
-//	{
-//	    try {
-//		String requestString = "";
-//		requestString += "&AccessToken=" + getAccessToken();
-//		requestString += "&CacheCode=" + cache.getGcCode();
-//		requestString += "&StartIndex=" + start;
-//		requestString += "&MaxPerPage=" + count;
-//		HttpGet httppost = new HttpGet(URL + "GetGeocacheLogsByCacheCode?format=json" + requestString);
-//
-//		// set time outs
-//		HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
-//		HttpUtils.socketTimeout = Config.socket_timeout.getValue();
-//
-//		// Execute HTTP Post Request
-//		String result = HttpUtils.Execute(httppost, cancelRun);
-//
-//		if (result.contains("The service is unavailable")) {
-//		    return API_IS_UNAVAILABLE;
-//		}
-//		try
-//		// Parse JSON Result
-//		{
-//		    JSONTokener tokener = new JSONTokener(result);
-//		    JSONObject json = (JSONObject) tokener.nextValue();
-//		    JSONObject status = json.getJSONObject("Status");
-//		    if (status.getInt("StatusCode") == 0) {
-//			result = "";
-//			JSONArray geocacheLogs = json.getJSONArray("Logs");
-//			for (int ii = 0; ii < geocacheLogs.length(); ii++) {
-//			    JSONObject jLogs = (JSONObject) geocacheLogs.get(ii);
-//			    JSONObject jFinder = (JSONObject) jLogs.get("Finder");
-//			    JSONObject jLogType = (JSONObject) jLogs.get("LogType");
-//			    LogEntry log = new LogEntry();
-//			    log.CacheId = cache.Id;
-//			    log.Comment = jLogs.getString("LogText");
-//			    log.Finder = jFinder.getString("UserName");
-//			    if (!finderList.contains(log.Finder)) {
-//				continue;
-//			    }
-//			    finderList.remove(log.Finder);
-//			    log.Id = jLogs.getInt("ID");
-//			    log.Timestamp = new Date();
-//			    try {
-//				String dateCreated = jLogs.getString("VisitDate");
-//				int date1 = dateCreated.indexOf("/Date(");
-//				int date2 = dateCreated.indexOf("-");
-//				String date = (String) dateCreated.subSequence(date1 + 6, date2);
-//				log.Timestamp = new Date(Long.valueOf(date));
-//			    } catch (Exception exc) {
-//				log.error("SearchForGeocaches_ParseLogDate", exc);
-//			    }
-//			    log.Type = LogTypes.GC2CB_LogType(jLogType.getInt("WptLogTypeId"));
-//			    logList.add(log);
-//
-//			}
-//
-//			if ((geocacheLogs.length() < count) || (finderList.size() == 0)) {
-//			    return 0; // alle Logs des Caches geladen oder alle gesuchten Finder gefunden
-//			}
-//		    } else {
-//			result = "StatusCode = " + status.getInt("StatusCode") + "\n";
-//			result += status.getString("StatusMessage") + "\n";
-//			result += status.getString("ExceptionDetails");
-//			LastAPIError = result;
-//			return (-1);
-//		    }
-//
-//		} catch (JSONException e) {
-//		    e.printStackTrace();
-//		}
-//
-//	    } catch (ConnectTimeoutException e) {
-//		log.error("GetGeocacheLogsByCache ConnectTimeoutException", e);
-//		return CONNECTION_TIMEOUT;
-//	    } catch (UnsupportedEncodingException e) {
-//		log.error("GetGeocacheLogsByCache UnsupportedEncodingException", e);
-//		return ERROR;
-//	    } catch (ClientProtocolException e) {
-//		log.error("GetGeocacheLogsByCache ClientProtocolException", e);
-//		return ERROR;
-//	    } catch (IOException e) {
-//		log.error("GetGeocacheLogsByCache IOException", e);
-//		return ERROR;
-//	    }
-//	    // die nächsten Logs laden
-//	    start += count;
-//	}
-//	return (-1);
-//    }
-//
-//    /**
-//     * returns Status Code (0 -> OK)
-//     *
-//     */
-//    public static int GetCacheLimits(ICancel icancel) {
-//	if (CachesLeft > -1)
-//	    return 0;
-//
-//	int chk = chkMembership(false);
-//	if (chk < 0)
-//	    return chk;
-//
-//	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-//
-//	LastAPIError = "";
-//	// zum Abfragen der CacheLimits einfach nach einem Cache suchen, der
-//	// nicht existiert.
-//	// dadurch wird der Zähler nicht erhöht, die Limits aber zurückgegeben.
-//	try {
-//	    HttpPost httppost = new HttpPost(URL + "SearchForGeocaches?format=json");
-//	    try {
-//		JSONObject request = new JSONObject();
-//		request.put("AccessToken", getAccessToken());
-//		request.put("IsLight", false);
-//		request.put("StartIndex", 0);
-//		request.put("MaxPerPage", 1);
-//		request.put("GeocacheLogCount", 0);
-//		request.put("TrackableLogCount", 0);
-//		JSONObject requestcc = new JSONObject();
-//		JSONArray requesta = new JSONArray();
-//		requesta.put("GCZZZZZ");
-//		requestcc.put("CacheCodes", requesta);
-//		request.put("CacheCode", requestcc);
-//
-//		String requestString = request.toString();
-//
-//		httppost.setEntity(new ByteArrayEntity(requestString.getBytes("UTF8")));
-//
-//		// set time outs
-//		HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
-//		HttpUtils.socketTimeout = Config.socket_timeout.getValue();
-//
-//		// Execute HTTP Post Request
-//		String result = HttpUtils.Execute(httppost, icancel);
-//
-//		if (result.contains("The service is unavailable")) {
-//		    return API_IS_UNAVAILABLE;
-//		}
-//		// Parse JSON Result
-//
-//		JSONTokener tokener = new JSONTokener(result);
-//		JSONObject json = (JSONObject) tokener.nextValue();
-//		int status = checkCacheStatus(json, false);
-//		// hier keine Überprüfung des Status, da dieser z.B. 118
-//		// (Überschreitung des Limits) sein kann, aber der CacheStatus
-//		// aber trotzdem drin ist.
-//		return status;
-//	    } catch (JSONException e) {
-//		e.printStackTrace();
-//		LastAPIError = "API Error: " + e.getMessage();
-//		return -2;
-//	    }
-//
-//	} catch (ConnectTimeoutException e) {
-//	    log.error("getGeocacheStatus ConnectTimeoutException", e);
-//	    return CONNECTION_TIMEOUT;
-//	} catch (UnsupportedEncodingException e) {
-//	    log.error("getGeocacheStatus UnsupportedEncodingException", e);
-//	    return ERROR;
-//	} catch (ClientProtocolException e) {
-//	    log.error("getGeocacheStatus ClientProtocolException", e);
-//	    return ERROR;
-//	} catch (IOException e) {
-//	    log.error("getGeocacheStatus IOException", e);
-//	    return ERROR;
-//	}
-//    }
-//
-//    // liest den CacheStatus aus dem gegebenen json Object aus.
-//    // darin ist gespeichert, wie viele Full Caches schon geladen wurden und wie
-//    // viele noch frei sind
-//    static int checkCacheStatus(JSONObject json, boolean isLite) {
-//	LastAPIError = "";
-//	try {
-//	    JSONObject cacheLimits = json.getJSONObject("CacheLimits");
-//	    if (isLite) {
-//		CachesLeftLite = cacheLimits.getInt("CachesLeft");
-//		CurrentCacheCountLite = cacheLimits.getInt("CurrentCacheCount");
-//		MaxCacheCountLite = cacheLimits.getInt("MaxCacheCount");
-//		CacheStatusLiteValid = true;
-//	    } else {
-//		CachesLeft = cacheLimits.getInt("CachesLeft");
-//		CurrentCacheCount = cacheLimits.getInt("CurrentCacheCount");
-//		MaxCacheCount = cacheLimits.getInt("MaxCacheCount");
-//		CacheStatusValid = true;
-//	    }
-//	    return 0;
-//	} catch (Exception e) {
-//	    e.printStackTrace();
-//	    System.out.println(e.getMessage());
-//	    LastAPIError = "API Error: " + e.getMessage();
-//	    return -4;
-//	}
-//    }
-//
-
-    //    }
-//
-//    /**
-//     * Ruft die Liste der TBs ab, die im Besitz des Users sind
-//     *
-//     * @param Staging
-//     *            Config.settings.StagingAPI.getValue()
-//     * @param String
-//     *            accessToken
-//     * @param conectionTimeout
-//     *            Config.settings.conection_timeout.getValue()
-//     * @param socketTimeout
-//     *            Config.settings.socket_timeout.getValue()
-//     * @param TbList
-//     *            list
-//     * @return
-//     */
-//    public static int getMyTbList(TbList list, ICancel icancel) {
-//	int chk = chkMembership(false);
-//	if (chk < 0)
-//	    return chk;
-//
-//	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-//
-//	try {
-//	    HttpPost httppost = new HttpPost(URL + "GetUsersTrackables?format=json");
-//	    try {
-//		/*
-//			"AccessToken":"String content",
-//			"StartIndex":2147483647,
-//			"MaxPerPage":2147483647,
-//			"TrackableLogsCount":2147483647,
-//			"CollectionOnly":true
-//		*/
-//		JSONObject request = new JSONObject();
-//		request.put("AccessToken", getAccessToken());
-//		request.put("MaxPerPage", 30);
-//
-//		String requestString = request.toString();
-//
-//		httppost.setEntity(new ByteArrayEntity(requestString.getBytes("UTF8")));
-//
-//		// set time outs
-//		HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
-//		HttpUtils.socketTimeout = Config.socket_timeout.getValue();
-//
-//		// Execute HTTP Post Request
-//		String result = HttpUtils.Execute(httppost, icancel);
-//
-//		if (result.contains("The service is unavailable")) {
-//		    return API_IS_UNAVAILABLE;
-//		}
-//
-//		// Parse JSON Result
-//		JSONTokener tokener = new JSONTokener(result);
-//		JSONObject json = (JSONObject) tokener.nextValue();
-//		JSONObject status = json.getJSONObject("Status");
-//		if (status.getInt("StatusCode") == 0) {
-//		    LastAPIError = "";
-//		    JSONArray jTrackables = json.getJSONArray("Trackables");
-//
-//		    for (int ii = 0; ii < jTrackables.length(); ii++) {
-//			JSONObject jTrackable = (JSONObject) jTrackables.get(ii);
-//			boolean InCollection = false;
-//			try {
-//			    InCollection = jTrackable.getBoolean("InCollection");
-//			} catch (JSONException e) {
-//			}
-//			if (!InCollection)
-//			    list.add(new Trackable(jTrackable));
-//		    }
-//		    return 0;
-//		} else {
-//		    LastAPIError = "";
-//		    LastAPIError = "StatusCode = " + status.getInt("StatusCode") + "\n";
-//		    LastAPIError += status.getString("StatusMessage") + "\n";
-//		    LastAPIError += status.getString("ExceptionDetails");
-//
-//		    return (-1);
-//		}
-//
-//	    } catch (JSONException e) {
-//		e.printStackTrace();
-//	    }
-//
-//	} catch (ConnectTimeoutException e) {
-//	    log.error("getGeocacheStatus ConnectTimeoutException", e);
-//	    return CONNECTION_TIMEOUT;
-//	} catch (UnsupportedEncodingException e) {
-//	    log.error("getGeocacheStatus UnsupportedEncodingException", e);
-//	    return ERROR;
-//	} catch (ClientProtocolException e) {
-//	    log.error("getGeocacheStatus ClientProtocolException", e);
-//	    return ERROR;
-//	} catch (IOException e) {
-//	    log.error("getGeocacheStatus IOException", e);
-//	    return ERROR;
-//	}
-//
-//	return (-1);
-//    }
-//
-//    /**
-//     * @param Staging
-//     *            Config.settings.StagingAPI.getValue()
-//     * @param accessToken
-//     * @param TrackingCode
-//     * @param TB
-//     * @param conectionTimeout
-//     *            Config.settings.conection_timeout.getValue()
-//     * @param socketTimeout
-//     *            Config.settings.socket_timeout.getValue()
-//     * @return
-//     */
-//    public static int getTBbyTreckNumber(String TrackingCode, ByRef<Trackable> TB, ICancel icancel) {
-//	int chk = chkMembership(false);
-//	if (chk < 0)
-//	    return chk;
-//
-//	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-//
-//	try {
-//	    HttpGet httppost = new HttpGet(URL + "GetTrackablesByTrackingNumber?AccessToken=" + getAccessToken(true) + "&trackingNumber=" + TrackingCode + "&format=json");
-//
-//	    // set time outs
-//	    HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
-//	    HttpUtils.socketTimeout = Config.socket_timeout.getValue();
-//
-//	    // Execute HTTP Post Request
-//	    String result = HttpUtils.Execute(httppost, icancel);
-//
-//	    if (result.contains("The service is unavailable")) {
-//		return API_IS_UNAVAILABLE;
-//	    }
-//	    try
-//	    // Parse JSON Result
-//	    {
-//		JSONTokener tokener = new JSONTokener(result);
-//		JSONObject json = (JSONObject) tokener.nextValue();
-//		JSONObject status = json.getJSONObject("Status");
-//		if (status.getInt("StatusCode") == 0) {
-//		    LastAPIError = "";
-//		    JSONArray jTrackables = json.getJSONArray("Trackables");
-//
-//		    for (int i = 0; i < jTrackables.length();) {
-//			JSONObject jTrackable = (JSONObject) jTrackables.get(i);
-//			TB.set(new Trackable(jTrackable));
-//			TB.get().setTrackingCode(TrackingCode);
-//			return IO;
-//		    }
-//		} else {
-//		    LastAPIError = "";
-//		    LastAPIError = "StatusCode = " + status.getInt("StatusCode") + "\n";
-//		    LastAPIError += status.getString("StatusMessage") + "\n";
-//		    LastAPIError += status.getString("ExceptionDetails");
-//		    TB = null;
-//		    return ERROR;
-//		}
-//
-//	    } catch (JSONException e) {
-//		e.printStackTrace();
-//	    }
-//
-//	} catch (ConnectTimeoutException e) {
-//	    log.error("getTBbyTreckNumber ConnectTimeoutException", e);
-//	    TB = null;
-//	    return CONNECTION_TIMEOUT;
-//	} catch (UnsupportedEncodingException e) {
-//	    log.error("getTBbyTreckNumber UnsupportedEncodingException", e);
-//	    TB = null;
-//	    return ERROR;
-//	} catch (ClientProtocolException e) {
-//	    log.error("getTBbyTreckNumber ClientProtocolException", e);
-//	    TB = null;
-//	    return ERROR;
-//	} catch (IOException e) {
-//	    log.error("getTBbyTreckNumber IOException", e);
-//	    TB = null;
-//	    return ERROR;
-//	}
-//
-//	TB = null;
-//	return ERROR;
-//    }
-//
-//    /**
-//     * @param Staging
-//     *            Config.settings.StagingAPI.getValue()
-//     * @param accessToken
-//     * @param TrackingNumber
-//     * @param TB
-//     * @param conectionTimeout
-//     *            Config.settings.conection_timeout.getValue()
-//     * @param socketTimeout
-//     *            Config.settings.socket_timeout.getValue()
-//     * @return
-//     */
-//    public static int getTBbyTbCode(String TrackingNumber, ByRef<Trackable> TB, ICancel icancel) {
-//	int chk = chkMembership(false);
-//	if (chk < 0)
-//	    return chk;
-//	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-//
-//	try {
-//	    HttpGet httppost = new HttpGet(URL + "GetTrackablesByTBCode?AccessToken=" + getAccessToken(true) + "&tbCode=" + TrackingNumber + "&format=json");
-//
-//	    // set time outs
-//	    HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
-//	    HttpUtils.socketTimeout = Config.socket_timeout.getValue();
-//
-//	    // Execute HTTP Post Request
-//	    String result = HttpUtils.Execute(httppost, icancel);
-//
-//	    if (result.contains("The service is unavailable")) {
-//		return API_IS_UNAVAILABLE;
-//	    }
-//	    try
-//	    // Parse JSON Result
-//	    {
-//		JSONTokener tokener = new JSONTokener(result);
-//		JSONObject json = (JSONObject) tokener.nextValue();
-//		JSONObject status = json.getJSONObject("Status");
-//		if (status.getInt("StatusCode") == 0) {
-//		    LastAPIError = "";
-//		    JSONArray jTrackables = json.getJSONArray("Trackables");
-//
-//		    for (int ii = 0; ii < jTrackables.length();) {
-//			JSONObject jTrackable = (JSONObject) jTrackables.get(ii);
-//			TB.set(new Trackable(jTrackable));
-//			return IO;
-//		    }
-//		} else {
-//		    LastAPIError = "";
-//		    LastAPIError = "StatusCode = " + status.getInt("StatusCode") + "\n";
-//		    LastAPIError += status.getString("StatusMessage") + "\n";
-//		    LastAPIError += status.getString("ExceptionDetails");
-//
-//		    return ERROR;
-//		}
-//
-//	    } catch (JSONException e) {
-//		e.printStackTrace();
-//	    }
-//
-//	} catch (ConnectTimeoutException e) {
-//	    log.error("getTBbyTbCode ConnectTimeoutException", e);
-//	    TB = null;
-//	    return CONNECTION_TIMEOUT;
-//	} catch (UnsupportedEncodingException e) {
-//	    log.error("getTBbyTbCode UnsupportedEncodingException", e);
-//	    TB = null;
-//	    return ERROR;
-//	} catch (ClientProtocolException e) {
-//	    log.error("getTBbyTbCode ClientProtocolException", e);
-//	    TB = null;
-//	    return ERROR;
-//	} catch (IOException e) {
-//	    log.error("getTBbyTbCode IOException", e);
-//	    TB = null;
-//	    return ERROR;
-//	}
-//
-//	TB = null;
-//	return ERROR;
-//
-//    }
-//
-//    /**
-//     * Ruft die Liste der Bilder ab, die in einem Cache sind
-//     *
-//     * @param Staging
-//     *            Config.settings.StagingAPI.getValue()
-//     * @param String
-//     *            accessToken
-//     * @param TbList
-//     *            list
-//     * @return
-//     */
-//    public static int getImagesForGeocache(String cacheCode, ArrayList<String> images, ICancel icancel) {
-//	int chk = chkMembership(false);
-//	if (chk < 0)
-//	    return chk;
-//
-//	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-//
-//	try {
-//	    HttpGet httppost = new HttpGet(URL + "GetImagesForGeocache?AccessToken=" + getAccessToken() + "&CacheCode=" + cacheCode + "&format=json");
-//
-//	    // set time outs
-//	    HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
-//	    HttpUtils.socketTimeout = Config.socket_timeout.getValue();
-//
-//	    // Execute HTTP Post Request
-//	    String result = HttpUtils.Execute(httppost, icancel);
-//
-//	    if (result.contains("The service is unavailable")) {
-//		return API_IS_UNAVAILABLE;
-//	    }
-//	    try
-//	    // Parse JSON Result
-//	    {
-//		JSONTokener tokener = new JSONTokener(result);
-//		JSONObject json = (JSONObject) tokener.nextValue();
-//		JSONObject status = json.getJSONObject("Status");
-//		if (status.getInt("StatusCode") == 0) {
-//		    LastAPIError = "";
-//		    JSONArray jImages = json.getJSONArray("Images");
-//
-//		    for (int ii = 0; ii < jImages.length(); ii++) {
-//			JSONObject jImage = (JSONObject) jImages.get(ii);
-//			images.add(jImage.getString("Url"));
-//		    }
-//		    return 0;
-//		} else {
-//		    LastAPIError = "";
-//		    LastAPIError = "StatusCode = " + status.getInt("StatusCode") + "\n";
-//		    LastAPIError += status.getString("StatusMessage") + "\n";
-//		    LastAPIError += status.getString("ExceptionDetails");
-//
-//		    return (-1);
-//		}
-//
-//	    } catch (JSONException e) {
-//		e.printStackTrace();
-//	    }
-//
-//	} catch (ConnectTimeoutException e) {
-//	    log.error("getImagesForGeocache ConnectTimeoutException", e);
-//	    return CONNECTION_TIMEOUT;
-//	} catch (UnsupportedEncodingException e) {
-//	    log.error("getImagesForGeocache UnsupportedEncodingException", e);
-//	    return ERROR;
-//	} catch (ClientProtocolException e) {
-//	    log.error("getImagesForGeocache ClientProtocolException", e);
-//	    return ERROR;
-//	} catch (IOException e) {
-//	    log.error("getImagesForGeocache IOException", e);
-//	    return ERROR;
-//	}
-//
-//	return (-1);
-//    }
-//
-//    /**
-//     * @param Staging
-//     *            Config.settings.StagingAPI.getValue()
-//     * @param accessToken
-//     * @param cacheCode
-//     * @param list
-//     * @param conectionTimeout
-//     *            Config.settings.conection_timeout.getValue()
-//     * @param socketTimeout
-//     *            Config.settings.socket_timeout.getValue()
-//     * @return
-//     */
     public static ApiResultState getAllImageLinks(String cacheCode, HashMap<String, URI> list, ICancel icancel) {
         ApiResultState chk = chkMembership(false);
         if (chk.isErrorState())
