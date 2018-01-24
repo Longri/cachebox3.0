@@ -22,6 +22,7 @@ import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -69,63 +70,101 @@ class JsonStreamParserTest {
                 "testsResources/88085380.txt",
         };
 
+
+//        String Exclude = "[Geocaches, GeocacheLogs]";
+        String Exclude = "";
+
+
         for (String path : testFiles) {
             if (path == null || path.isEmpty()) continue;
 
             log.debug(" ---Parse file " + path);
             StringBuilder sb2 = new StringBuilder();
             StringBuilder sb = new StringBuilder();
-            parse(path, sb, sb2);
+            parse(Exclude, path, sb, sb2);
             assertEquals(sb.toString(), sb2.toString());
             log.debug(" --------------------------- ");
         }
 
     }
 
-    private void parse(String file, final StringBuilder sb, final StringBuilder sb2) throws FileNotFoundException {
+    private void parse(final String Exclude, String file, final StringBuilder sb, final StringBuilder sb2) throws FileNotFoundException {
         long start = System.currentTimeMillis();
 
         InputStream stream = TestUtils.getResourceRequestStream(file);
         long dummyLength = 1;
+
+        final Array<String> ex = new Array<>();
+        final AtomicBoolean isExclude = new AtomicBoolean(false);
         new GdxJsonReader() {
             public void startArray(String name) {
                 super.startArray(name);
-                sb.appendLine("startArray " + name);
+                ex.add(name);
+                if (ex.toString().equals(Exclude)) {
+                    isExclude.set(true);
+                } else {
+                    sb.appendLine("startArray " + name);
+                }
             }
+
 
             public void endArray(String name) {
                 super.endArray(name);
-                sb.appendLine("endArray " + name);
+                if (ex.toString().equals(Exclude)) {
+                    isExclude.set(false);
+                }
+                ex.pop();
+                if (!isExclude.get()) {
+                    sb.appendLine("endArray " + name);
+                }
             }
 
             public void startObject(String name) {
                 super.startObject(name);
-                sb.appendLine("startObject " + name);
+                if (!isExclude.get()) {
+                    sb.appendLine("startObject " + name);
+                }
             }
 
             public void pop() {
                 super.pop();
-                sb.appendLine("pop ");
+                if (!isExclude.get()) {
+                    sb.appendLine("pop ");
+                }
+
+                if (ex.size > 0 && this.root != null && this.root.name != null && this.root.name.equals(ex.peek())) {
+                    endArray(this.root.name);
+                }
+
+
             }
 
             public void string(String name, String value) {
                 super.string(name, value);
-                sb.appendLine("string " + name + "  " + value);
+                if (!isExclude.get()) {
+                    sb.appendLine("string " + name + "  " + value);
+                }
             }
 
             public void number(String name, double value, String stringValue) {
                 super.number(name, value, stringValue);
-                sb.appendLine("number(Double) " + name + "  " + value);
+                if (!isExclude.get()) {
+                    sb.appendLine("number(Double) " + name + "  " + value);
+                }
             }
 
             public void number(String name, long value, String stringValue) {
                 super.number(name, value, stringValue);
-                sb.appendLine("number(Long) " + name + "  " + value);
+                if (!isExclude.get()) {
+                    sb.appendLine("number(Long) " + name + "  " + value);
+                }
             }
 
             public void bool(String name, boolean value) {
                 super.bool(name, value);
-                sb.appendLine("bool " + name + "  " + value);
+                if (!isExclude.get()) {
+                    sb.appendLine("bool " + name + "  " + value);
+                }
             }
         }.parse(stream, dummyLength);
 
@@ -140,7 +179,7 @@ class JsonStreamParserTest {
             }
 
             public void endArray(String name) {
-               // will not call on original JasonParser sb2.appendLine("endArray " + name);
+                sb2.appendLine("endArray " + name);
             }
 
             public void startObject(String name) {
