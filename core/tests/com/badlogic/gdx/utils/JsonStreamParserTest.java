@@ -71,24 +71,29 @@ class JsonStreamParserTest {
         };
 
 
-//        String Exclude = "[Geocaches, GeocacheLogs]";
-        String Exclude = "";
+        String Exclude = "[Geocaches, GeocacheLogs]";
+//        String Exclude = "";
 
 
-        for (String path : testFiles) {
-            if (path == null || path.isEmpty()) continue;
+        String[] excludeList = new String[]{"", "[Geocaches, GeocacheLogs]", "[Geocaches, Attributes]"};
 
-            log.debug(" ---Parse file " + path);
-            StringBuilder sb2 = new StringBuilder();
-            StringBuilder sb = new StringBuilder();
-            parse(Exclude, path, sb, sb2);
-            assertEquals(sb.toString(), sb2.toString());
-            log.debug(" --------------------------- ");
+        for (String exclude : excludeList) {
+            for (String path : testFiles) {
+                if (path == null || path.isEmpty()) continue;
+
+                log.debug(" ---Parse file " + path + "------- EXCLUD:" + exclude);
+                StringBuilder sb2 = new StringBuilder();
+                StringBuilder sb = new StringBuilder();
+                parse(exclude, path, sb, sb2);
+                assertEquals(sb.toString(), sb2.toString());
+                log.debug(" --------------------------- ");
+            }
         }
+
 
     }
 
-    private void parse(final String Exclude, String file, final StringBuilder sb, final StringBuilder sb2) throws FileNotFoundException {
+    private void parse(final String exclude, String file, final StringBuilder sb, final StringBuilder sb2) throws FileNotFoundException {
         long start = System.currentTimeMillis();
 
         InputStream stream = TestUtils.getResourceRequestStream(file);
@@ -100,23 +105,26 @@ class JsonStreamParserTest {
             public void startArray(String name) {
                 super.startArray(name);
                 ex.add(name);
-                if (ex.toString().equals(Exclude)) {
+                if (ex.toString().equals(exclude)) {
                     isExclude.set(true);
                 } else {
-                    sb.appendLine("startArray " + name);
+                    if (!isExclude.get()) {
+                        sb.appendLine("startArray " + name);
+                    }
                 }
             }
 
 
             public void endArray(String name) {
                 super.endArray(name);
-                if (ex.toString().equals(Exclude)) {
-                    isExclude.set(false);
-                }
-                ex.pop();
                 if (!isExclude.get()) {
                     sb.appendLine("endArray " + name);
                 }
+                if (ex.toString().equals(exclude)) {
+                    isExclude.set(false);
+                }
+                ex.pop();
+
             }
 
             public void startObject(String name) {
@@ -173,7 +181,7 @@ class JsonStreamParserTest {
         start = System.currentTimeMillis();
         stream = TestUtils.getResourceRequestStream(file);
 
-        new JsonStreamParser() {
+        JsonStreamParser jsonStreamParser = new JsonStreamParser() {
             public void startArray(String name) {
                 sb2.appendLine("startArray " + name);
             }
@@ -205,7 +213,10 @@ class JsonStreamParserTest {
             public void bool(String name, boolean value) {
                 sb2.appendLine("bool " + name + "  " + value);
             }
-        }.parse(stream, dummyLength);
+        };
+        jsonStreamParser.setExclude(exclude);
+
+        jsonStreamParser.parse(stream, dummyLength);
 
         log.debug("Parse time JsonStreamParser: {}", System.currentTimeMillis() - start);
     }

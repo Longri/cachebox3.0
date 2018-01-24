@@ -25,6 +25,7 @@ import java.io.Reader;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Longri on 18.04.2017.
@@ -45,6 +46,10 @@ public class JsonStreamParser implements JsonParser {
     private int lastPeek;
     private int lastNameStart = -1;
     private final AtomicBoolean CANCELD = new AtomicBoolean(false);
+    private String exclude;
+    private final AtomicBoolean isExclude = new AtomicBoolean(false);
+    private final AtomicInteger isExcludeCount = new AtomicInteger(0);
+    private AtomicBoolean noHandleForNextValue = new AtomicBoolean(false);
 
     public JsonValue parse(final InputStream input) {
         return parse(input, 1);
@@ -144,59 +149,91 @@ public class JsonStreamParser implements JsonParser {
         lastNameStart = -1;
         lastPeek = -1;
         int offset = 0;
+        boolean incommingExclude = isExclude.get();
+        noHandleForNextValue.set(false);
         while (!CANCELD.get() && offset < data.length) {
             int peek = searchPeek(data, offset);
             if (peek == -1) return offset;
-            int nameStart = searchNameBefore(data, peek);
-            if (nameStart == -1)
-                actName = null;
-            else {
-                actName = getName(data, nameStart);
-            }
 
-            boolean noValue = false;
-            switch (data[peek]) {
-                case '{':
-                case '[':
-                    noValue = true;
-            }
-            if (!noValue) {
-
-                if (!(actName == null && lastPeek == -1)) {
-                    String valueString = getValue(data, nameStart + (actName != null ? actName.length() : lastPeek + 2), peek);
-                    if (valueString != null) {
-                        try {
-                            handleValue(actName, valueString);
-                        } catch (Exception e) {
-                            log.error("Error with parse value near {} value;'{}'", actName, valueString);
-                        }
-                        offset = peek + 1;
-                    }
-                }
-            }
-
-            if (peek >= 0) {
-                switch (data[peek]) {
-                    case '{':
-                        startObject(actName);
-                        break;
-                    case '[':
-                        startArray(actName);
-                        arrayNameStack.add(actName);
-                        break;
-                    case '}':
-                        pop();
-                        break;
-                    case ']':
-                        pop();
-                        endArray(arrayNameStack.pop());
-                        break;
-                    case ',':
-                }
+            if (isExclude.get()) {
                 offset = peek + 1;
                 lastPeek = peek;
+
+                if (data[peek] == '[') {
+                    isExcludeCount.incrementAndGet();
+                } else if (data[peek] == ']') {
+                    if (isExcludeCount.decrementAndGet() < 0) {
+                        isExclude.set(false);
+                        return peek;
+
+                    }
+                }
+
             } else {
-                break;
+                int nameStart = searchNameBefore(data, peek);
+                if (nameStart == -1)
+                    actName = null;
+                else {
+                    actName = getName(data, nameStart);
+                }
+
+                boolean noValue = false;
+                switch (data[peek]) {
+                    case '{':
+                    case '[':
+                        noValue = true;
+                }
+                if (!noValue) {
+                    if (!(actName == null && lastPeek == -1)) {
+                        String valueString = getValue(data, nameStart + (actName != null ? actName.length() : lastPeek + 2), peek);
+                        if (valueString != null) {
+                            if (!noHandleForNextValue.get() && !isExclude.get()) {
+                                try {
+                                    handleValue(actName, valueString);
+                                } catch (Exception e) {
+                                    log.error("Error with parse value near {} value;'{}'", actName, valueString);
+                                }
+                            } else {
+                                noHandleForNextValue.set(false);
+                            }
+                            offset = peek + 1;
+                        }
+                    }
+                }
+
+                if (peek >= 0) {
+                    switch (data[peek]) {
+                        case '{':
+                            startObject(actName);
+                            break;
+                        case '[':
+                            arrayNameStack.add(actName);
+                            if (this.exclude != null && exclude.equals(arrayNameStack.toString())) {
+                                isExclude.set(true);
+                                isExcludeCount.set(0);
+                                break;
+                            }
+                            startArray(actName);
+
+                            break;
+                        case '}':
+                            pop();
+                            break;
+                        case ']':
+                            if (arrayNameStack.toString().equals(exclude)) {
+                                arrayNameStack.pop();
+                            }else{
+                                pop();
+                                endArray(arrayNameStack.pop());
+                            }
+                            break;
+                        case ',':
+                    }
+                    offset = peek + 1;
+                    lastPeek = peek;
+                } else {
+                    break;
+                }
             }
         }
         return offset;
@@ -349,7 +386,6 @@ public class JsonStreamParser implements JsonParser {
                 continue;
             }
 
-
             switch (data[i]) {
                 case ':':
                     end = false;
@@ -454,5 +490,9 @@ public class JsonStreamParser implements JsonParser {
 
     public int getProgress() {
         return (int) percent;
+    }
+
+    public void setExclude(String exclude) {
+        this.exclude = exclude;
     }
 }
