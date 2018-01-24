@@ -20,6 +20,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
 import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.BuildInfo;
@@ -103,9 +104,13 @@ public class TestUtils {
         return stream;
     }
 
-    public static void assetCacheAttributes(AbstractCache abstractCache, ArrayList<Attributes> positiveList, ArrayList<Attributes> negativeList) {
+    public static void assetCacheAttributes(Database database, AbstractCache abstractCache, ArrayList<Attributes> positiveList, ArrayList<Attributes> negativeList) {
         Iterator<Attributes> positiveIterator = positiveList.iterator();
         Iterator<Attributes> negativeIterator = negativeList.iterator();
+
+
+        abstractCache = abstractCache.getMutable(database);
+
 
         while (positiveIterator.hasNext()) {
             assertThat("Attribute wrong", abstractCache.isAttributePositiveSet((Attributes) positiveIterator.next()));
@@ -160,5 +165,20 @@ public class TestUtils {
 
         FileHandle fileHandle = Gdx.files.absolute(file.getAbsolutePath());
         return fileHandle;
+    }
+
+    static int dbCount = 0;
+
+    public static Database getTestDB() {
+
+        FileHandle dbFiileHandle = Gdx.files.local("testDBfile" + Integer.toString(dbCount++));
+
+        //delete if exist
+        dbFiileHandle.delete();
+
+        Database database = new Database(Database.DatabaseType.CacheBox3);
+        database.startUp(dbFiileHandle);
+
+        return database;
     }
 }

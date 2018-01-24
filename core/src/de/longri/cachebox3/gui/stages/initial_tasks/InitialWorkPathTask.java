@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.stages.initial_tasks;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.events.EventHandler;
@@ -25,6 +24,7 @@ import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.CreateCbDirectoryStructure;
+import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.slf4j.Logger;

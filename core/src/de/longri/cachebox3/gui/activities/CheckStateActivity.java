@@ -29,7 +29,6 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
@@ -48,11 +47,12 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
+import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +68,7 @@ public class CheckStateActivity extends ActivityBase {
 
     private static final Logger log = LoggerFactory.getLogger(CheckStateActivity.class);
 
-    private final int blockSize = 108; // The API leaves only a maximum of 110 per request!
+    private final int blockSize;
     private final CharSequenceButton bCancel;
     private final VisLabel lblTitle;
     private final Image gsLogo;
@@ -77,9 +77,13 @@ public class CheckStateActivity extends ActivityBase {
     private final Image workAnimation;
     private final VisProgressBar progressBar;
     private final AtomicBoolean canceled = new AtomicBoolean(false);
+    private final boolean withFavPoi;
 
-    public CheckStateActivity() {
+    public CheckStateActivity(boolean withFavPoi) {
         super("CheckStateActivity");
+
+        blockSize = withFavPoi ? 48 : 108; // The API leaves only a maximum of 110 per request or 50 with search(Favepoint)!
+
         bCancel = new CharSequenceButton(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
         lblTitle = new VisLabel(Translation.get("chkApiState"));
@@ -94,7 +98,7 @@ public class CheckStateActivity extends ActivityBase {
         setWorkAnimationVisible(false);
 
         this.setStageBackground(new ColorDrawable(VisUI.getSkin().getColor("dialog_background")));
-//        this.setDebug(true, true);
+        this.withFavPoi = withFavPoi;
     }
 
     @Override
@@ -174,7 +178,7 @@ public class CheckStateActivity extends ActivityBase {
         EventHandler.add(progressListener);
         importRuns = true;
 
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("CheckStateActivitie") {
             @Override
             public void run() {
 
@@ -230,20 +234,39 @@ public class CheckStateActivity extends ActivityBase {
                         index++;
                     } while (Iterator2.hasNext());
 
-                    result = GroundspeakAPI.getGeocacheStatus(chkList100, new ICancel() {
-                        @Override
-                        public boolean cancel() {
-                            return canceled.get();
-                        }
-                    }, new CheckCacheStateParser.ProgressIncrement() {
-                        @Override
-                        public void increment() {
-                            // send Progress Change Msg
-                            ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
-                            progress.progress = (int) (100f / ((float) chkList.size / (float) progressIncrement.incrementAndGet()));
-                            EventHandler.fire(new ImportProgressChangedEvent(progress));
-                        }
-                    });
+
+                    if (withFavPoi) {
+                        result = GroundspeakAPI.getGeocacheStatusFavoritePoints(chkList100, new ICancel() {
+                            @Override
+                            public boolean cancel() {
+                                return canceled.get();
+                            }
+                        }, new CheckCacheStateParser.ProgressIncrement() {
+                            @Override
+                            public void increment() {
+                                // send Progress Change Msg
+                                ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
+                                progress.progress = (int) (100f / ((float) chkList.size / (float) progressIncrement.incrementAndGet()));
+                                EventHandler.fire(new ImportProgressChangedEvent(progress));
+                            }
+                        });
+                    } else {
+                        result = GroundspeakAPI.getGeocacheStatus(chkList100, new ICancel() {
+                            @Override
+                            public boolean cancel() {
+                                return canceled.get();
+                            }
+                        }, new CheckCacheStateParser.ProgressIncrement() {
+                            @Override
+                            public void increment() {
+                                // send Progress Change Msg
+                                ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
+                                progress.progress = (int) (100f / ((float) chkList.size / (float) progressIncrement.incrementAndGet()));
+                                EventHandler.fire(new ImportProgressChangedEvent(progress));
+                            }
+                        });
+                    }
+
                     if (result.isErrorState())
                         break;// API Error
                     addedReturnList.addAll(chkList100);
@@ -252,17 +275,38 @@ public class CheckStateActivity extends ActivityBase {
 
                 } while (chkList100.size == blockSize + 1);
 
+                if (addedReturnList.size == 0) {
+                    //no result
+                    if (result.isErrorState()) {
+                        CB.checkApiResultState(result);
+                    }
+                    EventHandler.remove(limitListener);
+                    finish();
+                    return;
+                }
+
+
                 //Write changes to DB
                 final AtomicInteger changedCount = new AtomicInteger(0);
-                Database.Data.beginTransaction();
-                Iterator<AbstractCache> iterator = addedReturnList.iterator();
-                do {
-                    AbstractCache writeTmp = iterator.next();
-                    if (DaoFactory.CACHE_DAO.updateDatabaseCacheState(Database.Data, writeTmp))
-                        changedCount.incrementAndGet();
-                } while (iterator.hasNext());
+                String sql = "UPDATE CacheCoreInfo SET BooleanStore = ? , NumTravelbugs = ? , FavPoints = ? WHERE id = ? ;";
+                GdxSqlitePreparedStatement REPLACE_ATTRIBUTES = Database.Data.myDB.prepare(sql);
 
-                Database.Data.endTransaction();
+                Database.Data.myDB.beginTransaction();
+                try {
+                    for (AbstractCache ca : addedReturnList) {
+                        if (ca.isChanged.get()) {
+                            changedCount.incrementAndGet();
+                            REPLACE_ATTRIBUTES.bind(
+                                    ca.getBooleanStore(),
+                                    ca.getNumTravelbugs(),
+                                    ca.getFavoritePoints(),
+                                    ca.getId()
+                            ).commit().reset();
+                        }
+                    }
+                } finally {
+                    Database.Data.myDB.endTransaction();
+                }
 
                 //state check complete, close activity
                 EventHandler.remove(limitListener);
@@ -281,6 +325,15 @@ public class CheckStateActivity extends ActivityBase {
                             public boolean onClick(int which, Object data) {
                                 if (which == ButtonDialog.BUTTON_POSITIVE) {
                                     hide();
+                                    //Reload Cachelist if any changed
+                                    if (changedCount.get() > 0) {
+                                        CB.postAsync(new NamedRunnable("CheckStateActivity:finish reload cachelist") {
+                                            @Override
+                                            public void run() {
+                                                CB.loadFilteredCacheList(null);
+                                            }
+                                        });
+                                    }
                                 }
                                 return true;
                             }
@@ -291,6 +344,7 @@ public class CheckStateActivity extends ActivityBase {
             }
         });
     }
+
 
     @Override
     public void dispose() {

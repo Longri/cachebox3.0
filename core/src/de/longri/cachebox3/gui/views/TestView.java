@@ -59,6 +59,7 @@ import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.IntProperty;
 import de.longri.cachebox3.types.LogTypes;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,7 +118,7 @@ public class TestView extends AbstractView {
 
                     final BlockUiProgress_Activity activity = new BlockUiProgress_Activity();
                     activity.show();
-                    CB.postAsync(new Runnable() {
+                    CB.postAsync(new NamedRunnable("TestView:CircleProgress") {
                         float value = 0;
 
                         @Override
@@ -144,7 +145,7 @@ public class TestView extends AbstractView {
                 }
             });
 
-            CB.postAsync(new Runnable() {
+            CB.postAsync(new NamedRunnable("TestView:CircleProgress") {
                 float value = 0;
 
                 @Override
@@ -459,7 +460,7 @@ public class TestView extends AbstractView {
             contentTable.add(progress1).width(new Value.Fixed(contentWidth)).pad(20);
             contentTable.row();
 
-            CB.postAsync(new Runnable() {
+            CB.postAsync(new NamedRunnable("TestView:Progress") {
                 float value = 0;
 
                 @Override

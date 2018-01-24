@@ -15,12 +15,12 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.ImmutableCache;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,13 +91,13 @@ public class Cache3DAO extends AbstractCacheDAO {
         //Write to CacheInfo table
         args.clear();
         if (!update) args.put("Id", abstractCache.getId());
-        args.put("DateHidden", iso8601Format.format(abstractCache.getDateHidden() == null ? new Date() : abstractCache.getDateHidden()));
+        args.put("DateHidden", iso8601Format.format(abstractCache.getDateHidden(database) == null ? new Date() : abstractCache.getDateHidden(database)));
         args.put("FirstImported", iso8601Format.format(new Date()));
         args.put("TourName", abstractCache.getTourName());
         args.put("GPXFilename_Id", abstractCache.getGPXFilename_ID());
         args.put("state", abstractCache.getState());
-        args.put("country", abstractCache.getCountry());
-        args.put("ApiStatus", abstractCache.getApiState());
+        args.put("country", abstractCache.getCountry(database));
+        args.put("ApiStatus", abstractCache.getApiState(database));
 
         if (update) {
             if (database.update("CacheInfo", args, "WHERE id=?", new String[]{Long.toString(abstractCache.getId())}) <= 0) {
@@ -197,7 +197,8 @@ public class Cache3DAO extends AbstractCacheDAO {
     @Override
     public AbstractCache getFromDbByCacheId(Database database, long cacheID, boolean withWaypoints) {
         String statement = "SELECT * from CacheCoreInfo WHERE Id=?";
-        SQLiteGdxDatabaseCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(cacheID)});
+        GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(cacheID)});
+        if (cursor == null) return null;
         cursor.moveToFirst();
         if (!cursor.isAfterLast()) {
             AbstractCache cache = new ImmutableCache(cursor);
@@ -209,11 +210,6 @@ public class Cache3DAO extends AbstractCacheDAO {
         }
         cursor.close();
         return null;
-    }
-
-    @Override
-    public boolean updateDatabaseCacheState(Database database, AbstractCache writeTmp) {
-        return false;
     }
 
     @Override

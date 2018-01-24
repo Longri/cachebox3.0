@@ -22,10 +22,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.sql.SQLiteGdxDatabase;
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
-import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
@@ -45,6 +41,10 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.FileList;
+import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.gdx.sqlite.GdxSqlite;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
+import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -133,6 +133,9 @@ public class SelectDB_Activity extends ActivityBase {
                                     return true;
                                 Config.AcceptChanges();
                                 Config.DatabaseName.setValue(NewDB_Name + ".db3");
+
+                                Database.Data.Query.clear();
+
                                 finish();
                                 break;
                             case ButtonDialog.BUTTON_NEUTRAL: // cancel clicked
@@ -292,7 +295,7 @@ public class SelectDB_Activity extends ActivityBase {
 
     private void selectDB() {
 
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("SelectDB_Activity") {
             @Override
             public void run() {
                 if (lvFiles.getSelectedItem() == null) {
@@ -304,15 +307,15 @@ public class SelectDB_Activity extends ActivityBase {
 
 
                 // if Database schema version <1028 we ask the User for convert
-                SQLiteGdxDatabase tempDB = null;
-                SQLiteGdxDatabaseCursor cursor = null;
+                GdxSqlite tempDB = null;
+                GdxSqliteCursor cursor = null;
                 try {
                     FileHandle dbFile = Gdx.files.absolute(CB.WorkPath).child(name);
-                    tempDB = SQLiteGdxDatabaseFactory.getNewDatabase(dbFile);
+                    tempDB = new GdxSqlite(dbFile);
                     tempDB.openOrCreateDatabase();
 
                     //get schema version
-                    cursor = tempDB.rawQuery("SELECT Value FROM Config WHERE [Key] like ?", new String[]{"DatabaseSchemeVersionWin"});
+                    cursor = tempDB.rawQuery("SELECT Value FROM Config WHERE [Key] like 'DatabaseSchemeVersionWin'");
                     cursor.moveToFirst();
                     int version = Integer.parseInt(cursor.getString(0));
 
@@ -365,8 +368,6 @@ public class SelectDB_Activity extends ActivityBase {
 
                 Config.MultiDBAutoStartTime.setValue(autoStartTime);
                 Config.MultiDBAsk.setValue(autoStartTime >= 0);
-
-
                 Config.DatabaseName.setValue(name);
                 Config.AcceptChanges();
 

@@ -21,6 +21,15 @@ task copyNatives() {
                 into outputDir
             }
         }
+
+        if (jar.name.endsWith("natives-ios.jar")) outputDir = file("build/native/")
+        if (outputDir != null) {
+            copy {
+                from zipTree(jar)
+                into outputDir
+            }
+        }
+
     }
     //override Svggh lib
     copy {

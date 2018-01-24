@@ -16,9 +16,9 @@
 package de.longri.cachebox3.translation.word;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.utils.CharSequenceUtil;
+import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jol.info.ClassLayout;

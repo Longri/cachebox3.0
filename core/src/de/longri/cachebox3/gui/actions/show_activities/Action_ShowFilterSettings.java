@@ -23,6 +23,7 @@ import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.activities.EditFilterSettings;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.types.FilterProperties;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 public class Action_ShowFilterSettings extends AbstractAction {
 
@@ -39,7 +40,7 @@ public class Action_ShowFilterSettings extends AbstractAction {
     public void execute() {
         EditFilterSettings edFi = new EditFilterSettings(CB.viewmanager.getActFilter()) {
             public void callBack(final FilterProperties properties) {
-                CB.postAsync(new Runnable() {
+                CB.postAsync(new NamedRunnable("Action_ShowFilterSettings") {
                     @Override
                     public void run() {
                         CB.viewmanager.setNewFilter(properties);

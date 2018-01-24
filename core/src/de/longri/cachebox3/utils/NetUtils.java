@@ -30,6 +30,7 @@ public class NetUtils {
 
     public abstract static class StreamHandleObject {
         public InputStream stream;
+
         public abstract void handled();
     }
 
@@ -37,8 +38,8 @@ public class NetUtils {
         log.debug("Send Post request");
         final AtomicBoolean WAIT = new AtomicBoolean(true);
         final Object[] result = new Object[1];
-        if(icancel!=null){
-            CB.postAsync(new Runnable() {
+        if (icancel != null) {
+            CB.postAsync(new NamedRunnable("NetUtils:postAndWait1") {
                 @Override
                 public void run() {
                     while (WAIT.get()) {
@@ -63,7 +64,7 @@ public class NetUtils {
                     log.debug("redirection");
                     final String redirection = httpResponse.getHeader("Location");
                     if (redirection != null) {
-                        CB.postAsync(new Runnable() {
+                        CB.postAsync(new NamedRunnable("NetUtils:postAndWait2") {
                             @Override
                             public void run() {
                                 isRedirection.set(true);

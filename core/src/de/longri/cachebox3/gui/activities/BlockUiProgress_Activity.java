@@ -26,6 +26,7 @@ import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.widgets.CircularProgressWidget;
 import de.longri.cachebox3.translation.word.CompoundCharSequence;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +89,7 @@ public class BlockUiProgress_Activity extends ActivityBase implements IncrementP
         msgLabel.setText(msg);
         if (value > 0 && value >= max) {
             log.debug("Increment Progress: post Finish");
-            CB.postAsyncDelayd(500, new Runnable() {
+            CB.postAsyncDelayd(500, new NamedRunnable("BlockUiProgress:Close") {
                 @Override
                 public void run() {
                     BlockUiProgress_Activity.this.finish();

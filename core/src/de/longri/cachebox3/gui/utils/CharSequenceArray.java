@@ -28,8 +28,10 @@ public class CharSequenceArray extends CharArray implements CharSequence {
     private int hash;
 
     public CharSequenceArray(String string) {
-        for (int i = 0, n = string.length(); i < n; i++) {
-            this.add(string.charAt(i));
+        if (string != null) {
+            for (int i = 0, n = string.length(); i < n; i++) {
+                this.add(string.charAt(i));
+            }
         }
     }
 

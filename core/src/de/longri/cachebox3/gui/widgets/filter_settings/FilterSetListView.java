@@ -44,6 +44,7 @@ import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -631,7 +632,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         }
 
         private void setValue(final int value, final boolean force) {
-            CB.postAsync(new Runnable() {
+            CB.postAsync(new NamedRunnable("FilterSetListView") {
                 @Override
                 public void run() {
                     if (force || AdjustableFavPointListViewItem.this.property.get() != value) {

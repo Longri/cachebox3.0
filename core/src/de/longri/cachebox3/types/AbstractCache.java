@@ -21,6 +21,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MathUtils;
 
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 16.10.2017.
@@ -29,6 +30,8 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     public AbstractCache(double latitude, double longitude) {
         super(latitude, longitude);
     }
+
+    public AtomicBoolean isChanged = new AtomicBoolean(false);
 
     public static long GenerateCacheId(String GcCode) {
         long result = 0;
@@ -206,11 +209,11 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setPlacedBy(String value);
 
-    public abstract Date getDateHidden();
+    public abstract Date getDateHidden(Database database);
 
     public abstract void setDateHidden(Date date);
 
-    public abstract byte getApiState();
+    public abstract byte getApiState(Database database);
 
     public abstract void setApiState(byte value);
 
@@ -234,7 +237,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setUrl(String value);
 
-    public abstract String getCountry();
+    public abstract String getCountry(Database database);
 
     public abstract void setCountry(String value);
 
@@ -354,4 +357,6 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     public abstract short getBooleanStore();
 
     public abstract AbstractCache getImmutable();
+
+    public abstract AbstractCache getCopy();
 }

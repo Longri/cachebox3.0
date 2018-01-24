@@ -75,7 +75,7 @@ public abstract class ListViewItem extends VisTable implements Disposable {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         if (onDrawListener != null) {
-            if (CB.viewmanager.isTop(this.getStage()))
+            if (CB.viewmanager != null && CB.viewmanager.isTop(this.getStage()))
                 onDrawListener.onDraw(this);
         }
     }

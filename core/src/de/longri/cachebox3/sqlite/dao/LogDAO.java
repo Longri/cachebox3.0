@@ -15,18 +15,24 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.LogEntry;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
+import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 
 public class LogDAO {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(ImageDAO.class);
+    private final static org.slf4j.Logger log = LoggerFactory.getLogger(ImageDAO.class);
+    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public void WriteToDatabase(LogEntry logEntry) {
+
+    public synchronized void WriteToDatabase(LogEntry logEntry) {
         Database.Parameters args = new Database.Parameters();
         args.put("Id", logEntry.Id);
         args.put("Finder", logEntry.Finder);
@@ -44,7 +50,7 @@ public class LogDAO {
 
     }
 
-    public void WriteImports(Iterator<LogEntry> logIterator) {
+    public synchronized void WriteImports(Iterator<LogEntry> logIterator) {
         while (logIterator.hasNext()) {
             LogEntry log = logIterator.next();
             try {
@@ -65,7 +71,7 @@ public class LogDAO {
     /**
      * Delete all Logs without exist Cache
      */
-    public void ClearOrphanedLogs() {
+    public synchronized void ClearOrphanedLogs() {
         String SQL = "DELETE  FROM  Logs WHERE  NOT EXISTS (SELECT * FROM Caches c WHERE  Logs.CacheId = c.Id)";
         Database.Data.execSQL(SQL);
     }
@@ -73,9 +79,48 @@ public class LogDAO {
     /**
      * Delete all Logs for Cache
      */
-    public void deleteLogs(long cacheId) {
+    public synchronized void deleteLogs(long cacheId) {
         String SQL = "DELETE  FROM  Logs WHERE Logs.CacheId = " + cacheId;
         Database.Data.execSQL(SQL);
     }
 
+    public void writeToDB(Database database, Array<LogEntry> logList) {
+        //create statements
+        GdxSqlitePreparedStatement REPLACE_LOGS = database.myDB.prepare("REPLACE INTO Logs VALUES(?,?,?,?,?,?) ;");
+
+        database.myDB.beginTransaction();
+        try {
+            for (LogEntry entry : logList) {
+                REPLACE_LOGS.bind(
+                        entry.Id,
+                        entry.CacheId,
+                        iso8601Format.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
+                        entry.Finder,
+                        entry.Type,
+                        entry.Comment
+                ).commit().reset();
+            }
+        } finally {
+            database.myDB.endTransaction();
+        }
+    }
+
+    public Array<LogEntry> getLogs(Database database, Integer cacheId) {
+        Array<LogEntry> logList = new Array<>();
+
+        String sql;
+        if (cacheId == null) {
+            sql = "SELECT * FROM Logs";
+        } else {
+            sql = "SELECT * FROM Logs WHERE CacheId=" + Integer.toString(cacheId) + "'";
+        }
+
+        GdxSqliteCursor cursor = database.myDB.rawQuery(sql);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            logList.add(new LogEntry(cursor));
+            cursor.moveToNext();
+        }
+        return logList;
+    }
 }

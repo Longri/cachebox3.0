@@ -68,5 +68,6 @@ gradle-app.setting
 .DS_Store
 Thumbs.db
 testConfig.db3
+testData.db3
 *.db3-journal
 

@@ -16,8 +16,6 @@
 package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
-import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.sqlite.Database;
@@ -25,6 +23,8 @@ import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.ImmutableWaypoint;
 import de.longri.cachebox3.types.MutableWaypoint;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
+import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -263,10 +263,11 @@ class Waypoint3DAOTest {
         assertThat("Waypoint list must be empty", waypoints3.size == 0);
 
         //check is also deleted from WaypointsText table
-        SQLiteGdxDatabaseCursor cursor = cb3Database.rawQuery("SELECT * FROM WaypointsText WHERE GcCode='GCCCCCX'", null);
-        cursor.moveToFirst();
-        assertThat("Waypoint must also deleted from WaypointsText table", cursor.isAfterLast());
-
+        GdxSqliteCursor cursor = cb3Database.rawQuery("SELECT * FROM WaypointsText WHERE GcCode='GCCCCCX'",(String[]) null);
+        if (cursor!=null) {
+            cursor.moveToFirst();
+            assertThat("Waypoint must also deleted from WaypointsText table", cursor.isAfterLast());
+        }
     }
 
     private void assertWp(String msg, AbstractWaypoint wp) {

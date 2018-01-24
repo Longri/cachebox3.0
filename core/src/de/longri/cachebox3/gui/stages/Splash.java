@@ -36,6 +36,7 @@ import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.events.IncrementProgressListener;
 import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.gui.stages.initial_tasks.*;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -190,7 +191,7 @@ public class Splash extends NamedStage {
             EventHandler.add(incrementProgressListener);
 
             //Run Loader Tasks at a separate thread
-            CB.postAsync(new Runnable() {
+            CB.postAsync(new NamedRunnable("Splash") {
                 @Override
                 public void run() {
                     for (AbstractInitTask task : initTaskList) {

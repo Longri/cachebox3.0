@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.sqlite;
 
+import com.badlogic.gdx.utils.StringBuilder;
+
 /**
  * Holds the SQL create strings for create a new Database with actual schema
  * <p>
@@ -46,7 +48,9 @@ public class DatabaseSchema {
             " );       ";
 
     public final String ATTRIBUTES = "CREATE TABLE Attributes (\n" +
-            "   Id                         BIGINT,\n" +
+            "   Id                         BIGINT\n" +
+            "                              PRIMARY KEY\n" +
+            "                              UNIQUE,\n" +
             "  AttributesPositive        BIGINT,\n" +
             "  AttributesNegative       BIGINT,\n" +
             "  AttributesPositiveHigh    BIGINT         DEFAULT 0,\n" +
@@ -54,7 +58,9 @@ public class DatabaseSchema {
             " );";
 
     public final String TEXT = "CREATE TABLE CacheText (\n" +
-            "   Id                         BIGINT,\n" +
+            "   Id                         BIGINT\n" +
+            "                              PRIMARY KEY\n" +
+            "                              UNIQUE,\n" +
             "   Url                        NVARCHAR (255),\n" +
             "   Hint                       NTEXT,\n" +
             "   Description                NTEXT,\n" +
@@ -64,7 +70,9 @@ public class DatabaseSchema {
             "  );";
 
     public final String CACHE_INFO = "CREATE TABLE CacheInfo (\n" +
-            "    Id                         BIGINT,\n" +
+            "    Id                         BIGINT\n" +
+            "                              PRIMARY KEY\n" +
+            "                              UNIQUE,\n" +
             "    DateHidden                DATETIME,\n" +
             "    FirstImported              DATETIME,\n" +
             "    TourName                   NCHAR (255),\n" +
@@ -101,7 +109,9 @@ public class DatabaseSchema {
 
     public final String WAYPOINTS = "CREATE TABLE Waypoints (\n" +
             "    CacheId      BIGINT,\n" +
-            "    GcCode       NVARCHAR (12), \n" +
+            "    GcCode       NVARCHAR (12) \n" +
+            "                              PRIMARY KEY\n" +
+            "                              UNIQUE,\n" +
             "    Latitude     FLOAT,\n" +
             "    Longitude    FLOAT,\n" +
             "    Type         SMALLINT,\n" +
@@ -112,14 +122,18 @@ public class DatabaseSchema {
             ");";
 
     public final String WAYPOINTS_TEXT = "CREATE TABLE WaypointsText (\n" +
-            "    GcCode       NVARCHAR (12), \n" +
+            "    GcCode       NVARCHAR (12) \n" +
+            "                              PRIMARY KEY\n" +
+            "                              UNIQUE,\n" +
             "    Description  NTEXT,\n" +
             "    Clue         NTEXT\n" +
             ");";
 
 
     public final String CONFIG_TABLE = "CREATE TABLE Config (\n" +
-            "    [Key]      NVARCHAR (30)  NOT NULL,\n" +
+            "    [Key]      NVARCHAR (30)  NOT NULL\n" +
+            "                              PRIMARY KEY\n" +
+            "                              UNIQUE,\n" +
             "    Value      NVARCHAR (255),\n" +
             "    LongString NTEXT,\n" +
             "    desired    NTEXT\n" +
@@ -224,4 +238,30 @@ public class DatabaseSchema {
             "SELECT " +
             "GcCode, Description, Clue\n" +
             "FROM Waypoint;";
+
+    public String getEmptyNewDB() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("BEGIN TRANSACTION;").append("\n");
+
+        sb.append(CONFIG_TABLE).append("\n");
+        sb.append(CATEGORY_TABLE).append("\n");
+        sb.append(GPX_FILE_NAMES).append("\n");
+        sb.append(IMAGES).append("\n");
+        sb.append(LOGS).append("\n");
+        sb.append(POCKET_QUERIES).append("\n");
+        sb.append(REPLICATION).append("\n");
+        sb.append(TB_LOGS).append("\n");
+        sb.append(TRACKABLE).append("\n");
+        sb.append(CACHE_CORE_INFO).append("\n");
+        sb.append(ATTRIBUTES).append("\n");
+        sb.append(TEXT).append("\n");
+        sb.append(CACHE_INFO).append("\n");
+        sb.append(WAYPOINTS).append("\n");
+        sb.append(WAYPOINTS_TEXT).append("\n");
+
+        sb.append("END TRANSACTION;").append("\n");
+
+        return sb.toString();
+    }
 }

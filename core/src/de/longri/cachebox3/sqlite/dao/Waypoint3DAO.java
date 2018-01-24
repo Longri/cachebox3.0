@@ -15,12 +15,12 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.UnitFormatter;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 /**
  * Created by Longri on 20.10.2017.
@@ -37,14 +37,17 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         String[] args = cacheID == null ? null : new String[]{String.valueOf(cacheID)};
         String where = cacheID == null ? GET_ALL_WAYPOINTS : GET_ALL_WAYPOINTS_FROM_CACHE;
         Array<AbstractWaypoint> waypoints = new Array<>();
-        SQLiteGdxDatabaseCursor cursor = database.rawQuery(where, args);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            ImmutableWaypoint wp = new ImmutableWaypoint(cursor);
-            waypoints.add(wp);
-            cursor.moveToNext();
+        GdxSqliteCursor cursor = database.rawQuery(where, args);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                ImmutableWaypoint wp = new ImmutableWaypoint(cursor);
+                waypoints.add(wp);
+                cursor.moveToNext();
+            }
+            cursor.close();
         }
-        cursor.close();
+
         return waypoints;
     }
 
@@ -106,10 +109,10 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
     public void delete(Database database, AbstractWaypoint waypoint) {
 
         //delete from Waypoints table
-        database.delete("Waypoints", "GcCode='" + waypoint.getGcCode() + "'", null);
+        database.delete("Waypoints", "GcCode='" + waypoint.getGcCode() + "'");
 
         //delete from WaypointsText table
-        database.delete("WaypointsText", "GcCode='" + waypoint.getGcCode() + "'", null);
+        database.delete("WaypointsText", "GcCode='" + waypoint.getGcCode() + "'");
     }
 
     private int createCheckSum(Database database, AbstractWaypoint WP) {
@@ -132,7 +135,8 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
             String[] cacheIdString = new String[]{String.valueOf(wp.getCacheId())};
 
             //read booleanStore of Cache
-            SQLiteGdxDatabaseCursor cursor = database.rawQuery("SELECT BooleanStore from CacheCoreInfo WHERE Id=?", cacheIdString);
+            GdxSqliteCursor cursor = database.rawQuery("SELECT BooleanStore from CacheCoreInfo WHERE Id=?", cacheIdString);
+            if (cursor == null) return; // Cache not exists
             cursor.moveToFirst();
             short booleanStore = cursor.getShort(0);
             cursor.close();

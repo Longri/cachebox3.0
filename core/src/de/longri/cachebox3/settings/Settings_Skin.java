@@ -40,15 +40,15 @@ public abstract class Settings_Skin extends Settings_Map {
 
     // NEVER visible
 
-    public static final SettingFolder SkinFolder = (SettingFolder) SettingsList.addSetting(new SettingFolder("SkinFolder", SettingCategory.Folder, NEVER, CB.WorkPath + "/skins", SettingStoreType.Global, SettingUsage.ACB, false));
-    public static final SettingBool nightMode = (SettingBool) SettingsList.addSetting(new SettingBool("nightMode", SettingCategory.Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingString daySkinName = (SettingString) SettingsList.addSetting(new SettingString("daySkinName", SettingCategory.Skin, NEVER, "internalDefault", SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingString nightSkinName = (SettingString) SettingsList.addSetting(new SettingString("nightSkinName", SettingCategory.Skin, NEVER, "internalNight", SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingFolder SkinFolder = (SettingFolder) Config.settingsList.addSetting(new SettingFolder("SkinFolder", SettingCategory.Folder, NEVER, CB.WorkPath + "/skins", SettingStoreType.Global, SettingUsage.ACB, false));
+    public static final SettingBool nightMode = (SettingBool) Config.settingsList.addSetting(new SettingBool("nightMode", SettingCategory.Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingString daySkinName = (SettingString) Config.settingsList.addSetting(new SettingString("daySkinName", SettingCategory.Skin, NEVER, "internalDefault", SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingString nightSkinName = (SettingString) Config.settingsList.addSetting(new SettingString("nightSkinName", SettingCategory.Skin, NEVER, "internalNight", SettingStoreType.Global, SettingUsage.ACB));
 
-//    public static final SettingBool useMipMap = (SettingBool) SettingsList.addSetting(new SettingBool("useMipMap", SettingCategory.Skin, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool dontUseAmbient = (SettingBool) SettingsList.addSetting(new SettingBool("dontUseAmbient", SettingCategory.Skin, EXPERT, true, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingInt ambientTime = (SettingInt) SettingsList.addSetting(new SettingInt("ambientTime", SettingCategory.Skin, EXPERT, 10, SettingStoreType.Global, SettingUsage.ACB));
+//    public static final SettingBool useMipMap = (SettingBool) Config.settingsList.addSetting(new SettingBool("useMipMap", SettingCategory.Skin, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
+//    public static final SettingBool dontUseAmbient = (SettingBool) Config.settingsList.addSetting(new SettingBool("dontUseAmbient", SettingCategory.Skin, EXPERT, true, SettingStoreType.Global, SettingUsage.ACB));
+//    public static final SettingInt ambientTime = (SettingInt) Config.settingsList.addSetting(new SettingInt("ambientTime", SettingCategory.Skin, EXPERT, 10, SettingStoreType.Global, SettingUsage.ACB));
 //
-//    public static final SettingColor SolvedMysteryColor = (SettingColor) SettingsList.addSetting(new SettingColor("SolvedMysteryColor", SettingCategory.Skin, EXPERT, new HSV_Color(0.2f, 1f, 0.2f, 1f), SettingStoreType.Global, SettingUsage.ACB));
+//    public static final SettingColor SolvedMysteryColor = (SettingColor) Config.settingsList.addSetting(new SettingColor("SolvedMysteryColor", SettingCategory.Skin, EXPERT, new HSV_Color(0.2f, 1f, 0.2f, 1f), SettingStoreType.Global, SettingUsage.ACB));
 
 }

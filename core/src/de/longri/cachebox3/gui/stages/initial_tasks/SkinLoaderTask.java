@@ -166,9 +166,11 @@ public final class SkinLoaderTask extends AbstractInitTask {
     private void storeAttributePng(SvgSkin skin, AttributesStyle style, FileHandle attFileHandle, Attributes value) {
 
         String imageName = value.getImageName() + ".png";
-        EventHandler.fire(new IncrementProgressEvent(1, "generate attribute image: " + imageName));
-        FileHandle storeFile = attFileHandle.child(imageName);
+       FileHandle storeFile = attFileHandle.child(imageName);
         if (storeFile.exists()) return;
+        EventHandler.fire(new IncrementProgressEvent(1, "generate attribute image: " + imageName));
+
+
 
         TextureRegionDrawable drawable = (TextureRegionDrawable) value.getDrawable(style);
         if (drawable == null) return;

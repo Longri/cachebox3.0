@@ -18,6 +18,7 @@ package de.longri.cachebox3.types;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
 
+import javax.naming.directory.Attribute;
 import java.util.Date;
 
 /**
@@ -53,6 +54,7 @@ public class MutableCache extends AbstractCache {
     private String country;
     private String url;
     private byte apiState;
+    private String state;
 
     public MutableCache(double latitude, double longitude) {
         super(latitude, longitude);
@@ -86,6 +88,44 @@ public class MutableCache extends AbstractCache {
         this.listingChanged = cache.isListingChanged();
         this.waypoints = cache.getWaypoints();
         this.correctedCoordinates = cache.hasCorrectedCoordinates();
+    }
+
+    public MutableCache(MutableCache cache) {
+        super(cache.getLatitude(), cache.getLongitude());
+        this.latitude = cache.getLatitude();
+        this.longitude = cache.getLongitude();
+        this.attributes = cache.attributes;
+        this.name = cache.getName() == null ? null : cache.getName().toString();
+        this.gcCode = cache.getGcCode() == null ? null : cache.getGcCode().toString();
+        this.placedBy = cache.getPlacedBy() == null ? null : cache.getPlacedBy().toString();
+        this.owner = cache.getOwner() == null ? null : cache.getOwner().toString();
+        this.gcId = cache.getGcId() == null ? null : cache.getGcId().toString();
+        this.rating = (short) (cache.getRating() * 2);
+        this.favPoints = cache.getFavoritePoints();
+        this.id = cache.getId();
+        this.type = cache.getType();
+        this.size = cache.getSize();
+        this.difficulty = cache.getDifficulty();
+        this.terrain = cache.getTerrain();
+        this.hasHint = cache.hasHint();
+        this.archived = cache.isArchived();
+        this.available = cache.isAvailable();
+        this.favorite = cache.isFavorite();
+        this.found = cache.isFound();
+        this.userData = cache.isHasUserData();
+        this.listingChanged = cache.isListingChanged();
+        this.waypoints = cache.getWaypoints();
+        this.correctedCoordinates = cache.hasCorrectedCoordinates();
+        this.country = cache.country;
+        this.dateHidden = cache.dateHidden;
+        this.hint = cache.hint;
+        this.longDescription = cache.longDescription;
+        this.shortDescription = cache.shortDescription;
+        this.url = cache.url;
+        this.apiState = cache.apiState;
+        this.attributes = cache.attributes;
+        this.attributesNegative = cache.attributesNegative;
+        this.attributesPositive = cache.attributesPositive;
     }
 
     public MutableCache(double latitude, double longitude, String name, CacheTypes type, String gcCode) {
@@ -262,6 +302,8 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public void setArchived(boolean archived) {
+        if (this.archived != archived)
+            isChanged.set(true);
         this.archived = archived;
     }
 
@@ -272,6 +314,8 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public void setAvailable(boolean available) {
+        if (this.available != available)
+            isChanged.set(true);
         this.available = available;
     }
 
@@ -356,7 +400,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public Date getDateHidden() {
+    public Date getDateHidden(Database database) {
         return this.dateHidden;
     }
 
@@ -366,7 +410,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public byte getApiState() {
+    public byte getApiState(Database database) {
         return this.apiState;
     }
 
@@ -426,7 +470,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getCountry() {
+    public String getCountry(Database database) {
         return this.country;
     }
 
@@ -437,12 +481,12 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public String getState() {
-        return null;
+        return this.state;
     }
 
     @Override
     public void setState(String value) {
-
+        this.state = value;
     }
 
     public void addAttributeNegative(Attributes attribute) {
@@ -509,12 +553,26 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public boolean isAttributePositiveSet(Attributes attribute) {
+        if (attributesPositive == null) {
+            if (this.attributes == null) return false;
+            for (Attributes at : this.attributes) {
+                if (at.isNegative()) this.addAttributeNegative(at);
+                else this.addAttributePositive(at);
+            }
+        }
         if (attributesPositive == null) return false;
         return attributesPositive.BitAndBiggerNull(Attributes.GetAttributeDlong(attribute));
     }
 
     @Override
     public boolean isAttributeNegativeSet(Attributes attribute) {
+        if (attributesNegative == null) {
+            if (this.attributes == null) return false;
+            for (Attributes at : this.attributes) {
+                if (at.isNegative()) this.addAttributeNegative(at);
+                else this.addAttributePositive(at);
+            }
+        }
         if (attributesNegative == null) return false;
         return attributesNegative.BitAndBiggerNull(Attributes.GetAttributeDlong(attribute));
     }
@@ -522,6 +580,8 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public void setFavoritePoints(int value) {
+        if (this.favPoints != favPoints)
+            isChanged.set(true);
         this.favPoints = value;
     }
 
@@ -588,6 +648,8 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public void setNumTravelbugs(int numTravelbugs) {
+        if (this.numTravelbugs != numTravelbugs)
+            isChanged.set(true);
         this.numTravelbugs = (short) numTravelbugs;
     }
 
@@ -610,6 +672,11 @@ public class MutableCache extends AbstractCache {
     @Override
     public AbstractCache getImmutable() {
         return new ImmutableCache(this);
+    }
+
+    @Override
+    public AbstractCache getCopy() {
+        return new MutableCache(this);
     }
 
     @Override

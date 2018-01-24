@@ -16,9 +16,9 @@
 package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

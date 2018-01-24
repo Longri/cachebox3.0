@@ -16,11 +16,11 @@
 package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
+import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.junit.jupiter.api.*;
 
 import java.util.Date;
@@ -349,7 +349,6 @@ class Cache3DAOTest {
         cache.setLongDescription(cb3Database, should_LongDescription);
         cache.setShortDescription(cb3Database, should_ShortDescription);
         cache.setHint(cb3Database, should_Hint);
-        cache.setAttributes(should_attributes);
 
         assertCache("MutableCache", cache);
 

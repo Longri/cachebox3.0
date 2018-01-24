@@ -122,7 +122,6 @@ public class SoundCache {
             handle = set.getValue().Class_Absolute ? Gdx.files.absolute(path) : Gdx.files.internal(path);
             if (handle != null && handle.exists()) {
                 set.loadDefault();
-                set.setDirty();
             }
         }
 

@@ -17,10 +17,10 @@ package de.longri.cachebox3.settings.types;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.SQLiteGdxException;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Calendar;
@@ -34,12 +34,12 @@ class SettingBaseTest {
 
     static {
         TestUtils.initialGdx();
-        new SettingsList();
+
     }
 
-    public static final SettingBool testBool = (SettingBool) SettingsList.addSetting(new SettingBool("testBool"
+    private static final SettingBool testBool = (SettingBool) Config.settingsList.addSetting(new SettingBool("testBool"
             , SettingCategory.RememberAsk, SettingMode.Normal, false, SettingStoreType.Global,
-            SettingUsage.ACB,true));
+            SettingUsage.ACB, true));
 
 
     @Test
@@ -49,6 +49,12 @@ class SettingBaseTest {
         FileHandle configFileHandle = Gdx.files.local("testConfig.db3");
         if (configFileHandle.exists()) configFileHandle.delete();
 
+        // configs are stored on config db and DATA, create a DATA DB
+        FileHandle dataFileHandle = Gdx.files.local("testData.db3");
+        if (dataFileHandle.exists()) dataFileHandle.delete();
+
+        Database.Data = new Database(Database.DatabaseType.CacheBox3);
+        Database.Data.startUp(dataFileHandle);
 
         Database.Settings = new Database(Database.DatabaseType.Settings);
         Database.Settings.startUp(configFileHandle);
@@ -63,7 +69,7 @@ class SettingBaseTest {
         assertThat("Setting must not desired", testBool.isExpired());
 
         long now = Calendar.getInstance().getTimeInMillis();
-        long desired = now + 1000 ;// future 1 sec
+        long desired = now + 1000;// future 1 sec
 
         testBool.setExpiredTime(desired);
         try {
@@ -81,41 +87,67 @@ class SettingBaseTest {
         assertThat("Setting must desired", testBool.isExpired());
 
 
-         now = Calendar.getInstance().getTimeInMillis();
-         desired = now + 1000 ;// future 10 sec
+        now = Calendar.getInstance().getTimeInMillis();
+        desired = now + 1000;// future 10 sec
 
         testBool.setExpiredTime(desired);
 
         // close config DB and reload
         Config.AcceptChanges();
+        Config.AcceptChanges();
+        Config.AcceptChanges();
+        //wait 5sec
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Database.Settings.close();
 
         Database.Settings = new Database(Database.DatabaseType.Settings);
         Database.Settings.startUp(configFileHandle);
 
-        Config.readFromDB(false);
+        Config.readFromDB(true);
         assertThat("", testBool.getValue());
         assertThat("Setting must not desired", !testBool.isExpired());
 
+
+        //change a setting and check if stored after reload
+        Config.showGestureHelp.setValue(false);
+
+
         // close config DB and reload
         Config.AcceptChanges();
-        Database.Settings.close();
-        //wait 10sec
+
+        //wait 5sec
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Database.Settings.close();
+        try {
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+
         Database.Settings = new Database(Database.DatabaseType.Settings);
         Database.Settings.startUp(configFileHandle);
 
-        Config.readFromDB(false);
+        Config.readFromDB(true);
         assertThat("", testBool.getValue());
         assertThat("Setting must desired", testBool.isExpired());
 
+
+        //check changed setting
+        assertThat("Setting must changed to false", !Config.showGestureHelp.getValue());
+
+
         //clean up test file's
         configFileHandle.delete();
+        dataFileHandle.delete();
 
     }
 

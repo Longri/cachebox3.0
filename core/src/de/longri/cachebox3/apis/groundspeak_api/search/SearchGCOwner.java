@@ -18,6 +18,7 @@ package de.longri.cachebox3.apis.groundspeak_api.search;
 
 import com.badlogic.gdx.utils.Json;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.sqlite.Database;
 
 /**
  * @author Hubert
@@ -26,8 +27,8 @@ import de.longri.cachebox3.locator.Coordinate;
 public class SearchGCOwner extends SearchCoordinate {
     public String OwnerName;
 
-    public SearchGCOwner(String gcApiKey, int number, Coordinate pos, float distanceInMeters, String ownerName, byte apiState) {
-        super(gcApiKey, number, pos, distanceInMeters, apiState);
+    public SearchGCOwner(Database database, String gcApiKey, int number, Coordinate pos, float distanceInMeters, String ownerName, byte apiState) {
+        super(database, gcApiKey, number, pos, distanceInMeters, apiState);
         this.OwnerName = ownerName;
     }
 

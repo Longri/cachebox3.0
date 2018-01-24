@@ -15,9 +15,9 @@
  */
 package de.longri.cachebox3.sqlite;
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.Category;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,9 +29,9 @@ import java.util.Map;
  */
 public class AlterCacheboxDB {
 
-    private final static Logger log= LoggerFactory.getLogger(AlterCacheboxDB.class);
+    private final static Logger log = LoggerFactory.getLogger(AlterCacheboxDB.class);
 
-    public  void alterCacheboxDB(Database database, int lastDatabaseSchemeVersion) {
+    public void alterCacheboxDB(Database database, int lastDatabaseSchemeVersion) {
         database.beginTransaction();
         try {
             if (lastDatabaseSchemeVersion <= 0) {
@@ -96,12 +96,12 @@ public class AlterCacheboxDB {
                 // GpxFilenames mit Kategorien verknüpfen
 
                 // alte Category Tabelle löschen
-                database.delete("Category", "", null);
+                database.delete("Category", "");
                 HashMap<Long, String> gpxFilenames = new HashMap<Long, String>();
                 HashMap<String, Long> categories = new HashMap<String, Long>();
 
                 try {
-                    SQLiteGdxDatabaseCursor reader = database.rawQuery("select ID, GPXFilename from GPXFilenames", null);
+                    GdxSqliteCursor reader = database.rawQuery("select ID, GPXFilename from GPXFilenames", (String[]) null);
                     reader.moveToFirst();
                     while (!reader.isAfterLast()) {
                         long id = reader.getLong(0);
@@ -157,7 +157,7 @@ public class AlterCacheboxDB {
                 // Groundspeak überein. Bei 16 und 45 wurde jeweils eine
                 // Nummber übersprungen
                 try {
-                    SQLiteGdxDatabaseCursor reader = database.rawQuery("select Id, AttributesPositive, AttributesNegative from Caches", new String[]{});
+                    GdxSqliteCursor reader = database.rawQuery("select Id, AttributesPositive, AttributesNegative from Caches", new String[]{});
                     reader.moveToFirst();
                     while (!reader.isAfterLast()) {
                         long id = reader.getLong(0);
@@ -259,5 +259,5 @@ public class AlterCacheboxDB {
 
         return result;
     }
-    
+
 }

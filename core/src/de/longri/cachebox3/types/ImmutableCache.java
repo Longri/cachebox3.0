@@ -15,14 +15,17 @@
  */
 package de.longri.cachebox3.types;
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -51,6 +54,7 @@ public class ImmutableCache extends AbstractCache {
     public final static short MASK_LISTING_CHANGED = 1 << 9; // 512
     private Array<AbstractWaypoint> waypoints;
 
+
     public ImmutableCache(double latitude, double longitude) {
         super(latitude, longitude);
         this.id = 0;
@@ -73,11 +77,11 @@ public class ImmutableCache extends AbstractCache {
 
     public ImmutableCache(AbstractCache cache) {
         super(cache.getLatitude(), cache.getLongitude());
-        this.name = cache.getName().toString();
-        this.gcCode = cache.getGcCode().toString();
-        this.placedBy = cache.getPlacedBy().toString();
-        this.owner = cache.getOwner().toString();
-        this.gcId = cache.getGcId().toString();
+        this.name = cache.getName() == null ? null : cache.getName().toString();
+        this.gcCode = cache.getGcCode() == null ? null : cache.getGcCode().toString();
+        this.placedBy = cache.getPlacedBy() == null ? null : cache.getPlacedBy().toString();
+        this.owner = cache.getOwner() == null ? null : cache.getOwner().toString();
+        this.gcId = cache.getGcId() == null ? null : cache.getGcId().toString();
         this.rating = (short) (cache.getRating() * 2);
         this.favPoints = cache.getFavoritePoints();
         this.id = cache.getId();
@@ -99,6 +103,7 @@ public class ImmutableCache extends AbstractCache {
         bitStore = setMaskValue(MASK_CORECTED_COORDS, cache.hasCorrectedCoordinates(), bitStore);
         this.booleanStore = bitStore;
     }
+
 
     public static boolean getMaskValue(short mask, short bitFlags) {
         return (bitFlags & mask) == mask;
@@ -129,28 +134,44 @@ public class ImmutableCache extends AbstractCache {
     private final float difficulty, terrain;
 
 
-    public ImmutableCache(SQLiteGdxDatabaseCursor cursor) {
-        this(new CursorData(cursor));
+    public ImmutableCache(GdxSqliteCursor cursor) {
+        super(cursor.getDouble(1), cursor.getDouble(2));
+        this.id = cursor.getLong(0);
+        this.size = CacheSizes.parseInt(cursor.getShort(3));
+        this.difficulty = (float) cursor.getShort(4) / 2.0f;
+        this.terrain = (float) cursor.getShort(5) / 2.0f;
+        this.type = CacheTypes.get(cursor.getShort(6));
+        this.rating = (short) (cursor.getShort(7) / 100);
+        this.numTravelbugs = cursor.getShort(8);
+
+        this.gcCode = new CharSequenceArray(cursor.getString(9));
+        this.name = new CharSequenceArray(cursor.getString(10).trim());
+        this.placedBy = new CharSequenceArray(cursor.getString(11));
+        this.owner = new CharSequenceArray(cursor.getString(12));
+        this.gcId = new CharSequenceArray(cursor.getString(13));
+
+        this.booleanStore = cursor.getShort(14);
+        this.favPoints = cursor.getInt(15);
     }
 
-    public ImmutableCache( CursorData data) {
-        super(data.latitude, data.longitude);
-        this.id = data.id;
-        this.size = CacheSizes.parseInt(data.sizeOrigin);
-        this.difficulty = (float) data.difficulty / 2.0f;
-        this.terrain = (float) data.terrain / 2.0f;
-        this.type = CacheTypes.get(data.typeOrigin);
-        this.rating = (short) (data.rating / 100);
-        this.numTravelbugs = data.numTravelbugs;
+    public ImmutableCache(Object[] values) {
+        super((double) values[1], (double) values[2]);
+        this.id = (long) values[0];
+        this.size = CacheSizes.parseInt(((Long) values[3]).intValue());
+        this.difficulty = (float) ((Long) values[4]) / 2.0f;
+        this.terrain = (float) ((Long) values[5]) / 2.0f;
+        this.type = CacheTypes.get(((Long) values[6]).intValue());
+        this.rating = (short) (((Long) values[7]).shortValue() / 100);
+        this.numTravelbugs = ((Long) values[8]).shortValue();
 
-        this.gcCode = new CharSequenceArray(data.gcCode);
-        this.name = new CharSequenceArray(data.name.trim());
-        this.placedBy = new CharSequenceArray(data.placedBy);
-        this.owner = new CharSequenceArray(data.owner);
-        this.gcId = new CharSequenceArray(data.gcId);
+        this.gcCode = new CharSequenceArray((String) values[9]);
+        this.name = new CharSequenceArray((String) values[10]);
+        this.placedBy = new CharSequenceArray((String) values[11]);
+        this.owner = new CharSequenceArray((String) values[12]);
+        this.gcId = new CharSequenceArray((String) values[13]);
 
-        this.booleanStore = data.booleanStore;
-        this.favPoints = data.favPoints;
+        this.booleanStore = ((Long) values[14]).shortValue();
+        this.favPoints = values[15] == null ? 0 : ((Long) values[15]).intValue();
 
     }
 
@@ -262,6 +283,26 @@ public class ImmutableCache extends AbstractCache {
     public Array<AbstractWaypoint> getWaypoints() {
         return this.waypoints;
     }
+
+
+    @Override
+    public String getCountry(Database database) {
+        return getStringFromDB(database, "SELECT country FROM CacheInfo WHERE Id=?");
+    }
+
+    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    @Override
+    public Date getDateHidden(Database database) {
+        String dateString = getStringFromDB(database, "SELECT DateHidden FROM CacheInfo WHERE Id=?");
+        try {
+            return iso8601Format.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new Date();
+    }
+
 
     @Override
     public void setWaypoints(Array<AbstractWaypoint> waypoints) {
@@ -433,6 +474,11 @@ public class ImmutableCache extends AbstractCache {
         throwNotChangeable("Url");
     }
 
+
+    @Override
+    public void setCountry(String value) {
+        throwNotChangeable("Country");
+    }
     //################################################################################
     //# properties that not retained at the class but read/write directly from/to DB
     ///###############################################################################
@@ -440,7 +486,7 @@ public class ImmutableCache extends AbstractCache {
 
     @Override
     public Array<Attributes> getAttributes(Database database) {
-        SQLiteGdxDatabaseCursor cursor = database.rawQuery("SELECT * FROM Attributes WHERE Id=?", new String[]{String.valueOf(this.id)});
+        GdxSqliteCursor cursor = database.rawQuery("SELECT * FROM Attributes WHERE Id=?", new String[]{String.valueOf(this.id)});
         DLong attributesPositive;
         DLong attributesNegative;
         if (cursor != null) {
@@ -569,15 +615,13 @@ public class ImmutableCache extends AbstractCache {
 
     }
 
-
     @Override
-    public Date getDateHidden() {
-        return null;
-    }
-
-
-    @Override
-    public byte getApiState() {
+    public byte getApiState(Database database) {
+        GdxSqliteCursor cursor = database.myDB.rawQuery("SELECT ApiStatus FROM CacheInfo WHERE Id='" + this.id + "'");
+        if (cursor != null) {
+            cursor.moveToFirst();
+            return cursor.getByte(0);
+        }
         return 0;
     }
 
@@ -626,16 +670,6 @@ public class ImmutableCache extends AbstractCache {
 
     }
 
-
-    @Override
-    public String getCountry() {
-        return null;
-    }
-
-    @Override
-    public void setCountry(String value) {
-
-    }
 
     @Override
     public String getState() {
@@ -721,49 +755,15 @@ public class ImmutableCache extends AbstractCache {
         return this;
     }
 
+    @Override
+    public AbstractCache getCopy() {
+        return new ImmutableCache(this);
+    }
+
 
     @Override
     public short getBooleanStore() {
         return this.booleanStore;
     }
 
-
-    public static class CursorData {
-        final long id;
-        final double latitude;
-        final double longitude;
-        final short sizeOrigin;
-        final short difficulty;
-        final short terrain;
-        final short typeOrigin;
-        final short rating;
-        final short numTravelbugs;
-        final String gcCode;
-        final String name;
-        final String placedBy;
-        final String owner;
-        final String gcId;
-        final short booleanStore;
-        final int favPoints;
-
-        public CursorData(SQLiteGdxDatabaseCursor cursor) {
-            id = cursor.getLong(0);
-            latitude = cursor.getDouble(1);
-            longitude = cursor.getDouble(2);
-            sizeOrigin = cursor.getShort(3);
-            difficulty = cursor.getShort(4);
-            terrain = cursor.getShort(5);
-            typeOrigin = cursor.getShort(6);
-            rating = cursor.getShort(7);
-            numTravelbugs = cursor.getShort(8);
-            gcCode = cursor.getString(9);
-            name = cursor.getString(10);
-            placedBy = cursor.getString(11);
-            owner = cursor.getString(12);
-            gcId = cursor.getString(13);
-            booleanStore = cursor.getShort(14);
-            favPoints = cursor.getInt(15);
-
-        }
-    }
 }

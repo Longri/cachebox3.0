@@ -16,8 +16,8 @@
 package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -61,7 +61,7 @@ public class Category extends ArrayList<GpxFilename> implements Comparable<Categ
 
         long GPXFilename_ID = 0;
 
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("Select max(ID) from GpxFilenames", null);
+        GdxSqliteCursor reader = Database.Data.rawQuery("Select max(ID) from GpxFilenames", (String[]) null);
         reader.moveToFirst();
         if (!reader.isAfterLast()) {
             GPXFilename_ID = reader.getLong(0);

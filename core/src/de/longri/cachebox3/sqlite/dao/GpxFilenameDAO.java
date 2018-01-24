@@ -15,8 +15,8 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
 import de.longri.cachebox3.types.GpxFilename;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -26,7 +26,7 @@ import java.util.Date;
 
 public class GpxFilenameDAO
 {
-	public GpxFilename ReadFromCursor(SQLiteGdxDatabaseCursor reader)
+	public GpxFilename ReadFromCursor(GdxSqliteCursor reader)
 	{
 		long id;
 		String gpxFileName;

@@ -17,69 +17,76 @@ package de.longri.cachebox3.sqlite;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.sql.SQLiteGdxDatabase;
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseCursor;
-import com.badlogic.gdx.sql.SQLiteGdxDatabaseFactory;
-import com.badlogic.gdx.sql.SQLiteGdxException;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.*;
+import de.longri.gdx.sqlite.GdxSqlite;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
+import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
+import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Database {
+
+
     private Logger log;
     public static Database Data;
     public static Database Drafts;
     public static Database Settings;
-    private SQLiteGdxDatabase myDB;
+    public GdxSqlite myDB;
     public final CacheList Query;
+
+    public Database(GdxSqlite db) {
+        Query = new CacheList();
+        myDB = db;
+    }
 
     /**
      * @return Set To CB.Categories
      */
     public Categories gpxFilenameUpdateCacheCount() {
-        // welche GPXFilenamen sind in der DB erfasst
-        beginTransaction();
-        SQLiteGdxDatabaseCursor cursor = null;
+        GdxSqliteCursor cursor = null;
         try {
-            cursor = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from CacheInfo where GPXFilename_ID is not null Group by GPXFilename_ID", null);
-            cursor.moveToFirst();
+            cursor = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from CacheInfo where GPXFilename_ID is not null Group by GPXFilename_ID", (String[]) null);
 
-            while (cursor.isAfterLast() == false) {
-                long GPXFilename_ID = cursor.getLong(0);
-                long CacheCount = cursor.getLong(1);
+            if (cursor != null) {
+                cursor.moveToFirst();
 
-                Parameters val = new Parameters();
-                val.put("CacheCount", CacheCount);
-                update("GPXFilenames", val, "ID = " + GPXFilename_ID, null);
+                ObjectMap<Long, Parameters> set = new ObjectMap<>();
+                while (cursor.isAfterLast() == false) {
+                    long gpxFilename_ID = cursor.getLong(0);
+                    long cacheCount = cursor.getLong(1);
 
-                cursor.moveToNext();
+                    Parameters val = new Parameters();
+                    val.put("CacheCount", cacheCount);
+                    set.put(gpxFilename_ID, val);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+
+                for (ObjectMap.Entry entry : set) {
+                    update("GPXFilenames", (Parameters) entry.value, "ID = " + entry.key, null);
+                }
             }
 
-            delete("GPXFilenames", "Cachecount is NULL or CacheCount = 0", null);
-            delete("GPXFilenames", "ID not in (Select GPXFilename_ID From CacheInfo)", null);
+            delete("GPXFilenames", "Cachecount is NULL or CacheCount = 0");
+            delete("GPXFilenames", "ID not in (Select GPXFilename_ID From CacheInfo)");
         } catch (Exception e) {
-
-        } finally {
-            if (cursor != null) cursor.close();
-            endTransaction();
+            e.printStackTrace();
         }
 
-        //TODO ???
         Categories categories = new Categories();
         return categories;
     }
@@ -95,11 +102,7 @@ public class Database {
         if (abstractCache == null) // if no cache is selected!
             return result;
 
-
-        //TODO Qerry with args not working on iOS
-//      SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId=@cacheid order by Timestamp desc", new String[]{Long.toString(cache.Id)});
-        SQLiteGdxDatabaseCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(abstractCache.getId()) + "\"", null);
-
+        GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(abstractCache.getId()) + "\"", (String[]) null);
 
         try {
             reader.moveToFirst();
@@ -115,7 +118,7 @@ public class Database {
         return result;
     }
 
-    private static LogEntry getLogEntry(AbstractCache abstractCache, SQLiteGdxDatabaseCursor reader, boolean filterBbCode) {
+    private static LogEntry getLogEntry(AbstractCache abstractCache, GdxSqliteCursor reader, boolean filterBbCode) {
         int intLogType = reader.getInt(3);
         if (intLogType < 0 || intLogType > 13)
             return null;
@@ -151,7 +154,7 @@ public class Database {
     }
 
     public String getString(String sql, String[] args) {
-        SQLiteGdxDatabaseCursor cursor = null;
+        GdxSqliteCursor cursor = null;
         try {
             cursor = this.rawQuery(sql, args);
             if (cursor != null) {
@@ -230,6 +233,8 @@ public class Database {
             throw new SQLiteGdxException("Directory for DB doesn't exist: " + parentDirectory.file().getAbsolutePath());
         }
 
+        //reset version
+        shemaVersion.set(-1);
 
         log.debug("startUp Database: " + Utils.GetFileName(databasePath));
         if (myDB != null) {
@@ -296,12 +301,13 @@ public class Database {
         }
 
         int result = -1;
-        SQLiteGdxDatabaseCursor cursor = null;
+        GdxSqliteCursor cursor = null;
         try {
-            cursor = rawQuery("select Value from Config where [Key] like ?", new String[]{"DatabaseSchemeVersionWin"});
+            cursor = rawQuery("select Value from Config where [Key] like 'DatabaseSchemeVersionWin'");
         } catch (Exception exc) {
             return -1;
         }
+        if (cursor == null) return -1;
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
@@ -340,10 +346,10 @@ public class Database {
     }
 
     public boolean isTableExists(String tableName) {
-        SQLiteGdxDatabaseCursor cursor = null;
+        GdxSqliteCursor cursor = null;
         try {
             cursor = rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='" + tableName
-                    + "' COLLATE NOCASE", null);
+                    + "' COLLATE NOCASE", (String[]) null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String name = cursor.getString(0);
@@ -384,7 +390,7 @@ public class Database {
 
     public String readConfigString(String key) throws Exception {
         String result = "";
-        SQLiteGdxDatabaseCursor cursor = null;
+        GdxSqliteCursor cursor = null;
         boolean found = false;
         try {
             cursor = rawQuery("select Value from Config where [Key] like ?", new String[]{key});
@@ -412,7 +418,7 @@ public class Database {
 
     public String readConfigLongString(String key) throws Exception {
         String result = "";
-        SQLiteGdxDatabaseCursor cursor = null;
+        GdxSqliteCursor cursor = null;
         boolean found = false;
         try {
             cursor = rawQuery("select LongString from Config where [Key] like ?", new String[]{key});
@@ -443,11 +449,6 @@ public class Database {
         Parameters val = new Parameters();
         val.put("desired", value);
         long anz = update("Config", val, "[Key] like '" + key + "'", null);
-        if (anz <= 0) {
-            // Update not possible because Key does not exist
-            val.put("Key", key);
-            insert("Config", val);
-        }
     }
 
     public String readConfigDesiredString(String key) throws Exception {
@@ -455,7 +456,7 @@ public class Database {
         if (shemaVersion.get() < 1028) return null;
 
         String result = "";
-        SQLiteGdxDatabaseCursor cursor = null;
+        GdxSqliteCursor cursor = null;
         boolean found = false;
         try {
             cursor = rawQuery("select desired from Config where [Key] like ?", new String[]{key});
@@ -576,6 +577,23 @@ public class Database {
                         // Long Text Field for long Strings
                         execSQL("ALTER TABLE [Config] ADD [desired] ntext NULL;");
                     }
+                    if (lastDatabaseSchemeVersion < 1004) {
+                        // add primary key on [Key]
+                        String CREATE = "CREATE TABLE ConfigCopy (\n" +
+                                "    [Key]      NVARCHAR (30)  NOT NULL\n" +
+                                "                              PRIMARY KEY\n" +
+                                "                              UNIQUE,\n" +
+                                "    Value      NVARCHAR (255),\n" +
+                                "    LongString NTEXT,\n" +
+                                "    desired    NTEXT\n" +
+                                ");";
+                        String COPY = "INSERT INTO ConfigCopy SELECT * FROM Config;";
+                        String DROP = "DROP TABLE Config;";
+                        String RENAME = "ALTER TABLE ConfigCopy RENAME TO Config;";
+
+                        String SQL = CREATE + COPY + DROP + RENAME;
+                        execSQL(SQL);
+                    }
                 } catch (Exception exc) {
                     log.error("alterDatabase", exc);
                 } finally {
@@ -587,7 +605,7 @@ public class Database {
 
 
     public static boolean waypointExists(String gcCode) {
-        SQLiteGdxDatabaseCursor cursor = Database.Data.rawQuery("select GcCode from Waypoints where GcCode=?", new String[]{gcCode});
+        GdxSqliteCursor cursor = Database.Data.rawQuery("select GcCode from Waypoints where GcCode=?", new String[]{gcCode});
         {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
@@ -622,7 +640,7 @@ public class Database {
 
     public static String getNote(long cacheId) {
         String resultString = "";
-        SQLiteGdxDatabaseCursor cursor = Database.Data.rawQuery("select Notes from Caches where Id=?", new String[]{String.valueOf(cacheId)});
+        GdxSqliteCursor cursor = Database.Data.rawQuery("select Notes from Caches where Id=?", new String[]{String.valueOf(cacheId)});
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             resultString = cursor.getString(0);
@@ -653,7 +671,7 @@ public class Database {
     }
 
     public static String getSolver(long cacheId) {
-        SQLiteGdxDatabaseCursor cursor = null;
+        GdxSqliteCursor cursor = null;
         try {
             String resultString = "";
             cursor = Database.Data.rawQuery("select Solver from Caches where Id=?", new String[]{String.valueOf(cacheId)});
@@ -709,11 +727,11 @@ public class Database {
         // get CacheId's from Caches with older logs and having more logs than minToKeep
         // #############################################################################
         {
-            SQLiteGdxDatabaseCursor cursor = null;
+            GdxSqliteCursor cursor = null;
             try {
                 String command = "SELECT cacheid FROM logs WHERE Timestamp < '" + TimeStamp + "' GROUP BY CacheId HAVING COUNT(Id) > " + String.valueOf(minToKeep);
                 log.debug(command);
-                cursor = Database.Data.rawQuery(command, null);
+                cursor = Database.Data.rawQuery(command, (String[]) null);
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     long tmp = cursor.getLong(0);
@@ -733,7 +751,7 @@ public class Database {
         // get Logs
         // ###################################################
         {
-            SQLiteGdxDatabaseCursor cursor = null;
+            GdxSqliteCursor cursor = null;
             try {
                 beginTransaction();
                 for (long oldLogCache : oldLogCaches) {
@@ -741,7 +759,7 @@ public class Database {
                     String command = "select id from logs where cacheid = " + String.valueOf(oldLogCache) + " order by Timestamp desc";
                     log.debug(command);
                     int count = 0;
-                    cursor = Database.Data.rawQuery(command, null);
+                    cursor = Database.Data.rawQuery(command, (String[]) null);
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
                         if (count == minToKeep)
@@ -782,7 +800,7 @@ public class Database {
 
             try {
                 log.debug("open data base: " + databasePath);
-                myDB = SQLiteGdxDatabaseFactory.getNewDatabase(databasePath);
+                myDB = new GdxSqlite(databasePath);
                 myDB.openOrCreateDatabase();
             } catch (Exception exc) {
                 log.error("Can't open Database", exc);
@@ -800,7 +818,7 @@ public class Database {
 
         try {
             log.debug("create data base: " + databasePath);
-            myDB = SQLiteGdxDatabaseFactory.getNewDatabase(databasePath);
+            myDB = new GdxSqlite(databasePath);
             myDB.openOrCreateDatabase();
             myDB.closeDatabase();
 
@@ -809,15 +827,35 @@ public class Database {
         }
     }
 
-
-    public SQLiteGdxDatabaseCursor rawQuery(String sql, String[] args) {
+    public synchronized GdxSqliteCursor rawQuery(String sql) {
         if (myDB == null) return null;
         try {
-            return myDB.rawQuery(sql, args);
+            return myDB.rawQuery(sql);
         } catch (SQLiteGdxException e) {
-            log.error("rawQuerry", e);
+            log.error("rawQuerry:" + sql, e);
         }
         return null;
+    }
+
+    public synchronized GdxSqliteCursor rawQuery(String sql, String[] args) {
+        if (myDB == null) return null;
+        try {
+
+            if (args != null) {
+                for (int i = 0; i < args.length; i++) {
+                    sql = sql.replaceFirst("\\?", "'" + args[i] + "'");
+                }
+            }
+            return myDB.rawQuery(sql);
+        } catch (SQLiteGdxException e) {
+            log.error("rawQuerry:" + sql, e);
+        }
+        return null;
+    }
+
+    public synchronized void rawQuery(String sql, GdxSqlite.RowCallback callback) {
+        if (myDB == null) return;
+        myDB.rawQuery(sql, callback);
     }
 
     public void execSQL(String sql) {
@@ -829,16 +867,150 @@ public class Database {
     }
 
 
-    public long update(String tablename, Parameters val, String whereClause, String[] whereArgs) {
-        return myDB.update(tablename, val, whereClause, whereArgs);
+    public synchronized long update(String tablename, Parameters val, String whereClause, String[] whereArgs) {
+
+
+        if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
+            StringBuilder sb = new StringBuilder("Update @ Table:" + tablename);
+            sb.append("Parameters:" + val.toString());
+            sb.append("WHERECLAUSE:" + whereClause);
+
+            if (whereArgs != null) {
+                for (String arg : whereArgs) {
+                    sb.append(arg + ", ");
+                }
+            }
+
+            log.debug(sb.toString());
+        }
+
+        if (myDB == null)
+            return 0;
+
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("update ");
+        sql.append(tablename);
+        sql.append(" set");
+
+        int i = 0;
+        for (Map.Entry<String, Object> entry : val.entrySet()) {
+            i++;
+            sql.append(" ");
+            sql.append(entry.getKey());
+            sql.append("=?");
+            if (i != val.size()) {
+                sql.append(",");
+            }
+        }
+
+        if (!whereClause.isEmpty()) {
+            if (!whereClause.toLowerCase().contains("where")) {
+                sql.append(" WHERE");
+            }
+            sql.append(" ");
+            sql.append(whereClause);
+        }
+        GdxSqlitePreparedStatement st = null;
+        try {
+            st = myDB.prepare(sql.toString());
+
+            int j = 0;
+            for (Map.Entry<String, Object> entry : val.entrySet()) {
+                j++;
+                st.bind(j, entry.getValue());
+            }
+
+            if (whereArgs != null) {
+                for (int k = 0; k < whereArgs.length; k++) {
+                    st.bind(j + k + 1, whereArgs[k]);
+                }
+            }
+            st.commit();
+            return myDB.changes();
+
+        } catch (SQLiteGdxException e) {
+            if (e.getMessage().contains("near")) {
+                log.error("UPDATE:", sql.toString());
+            } else {
+                log.error("UPDATE:" + sql.toString(), e);
+            }
+            return 0;
+        } finally {
+            try {
+                if (st != null) st.close();
+            } catch (SQLiteGdxException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public long insert(String tablename, Parameters val) {
-        return myDB.insert(tablename, val);
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("insert into ");
+        sql.append(tablename);
+        sql.append(" (");
+
+        int i = 0;
+        for (Map.Entry<String, Object> entry : val.entrySet()) {
+            i++;
+            sql.append(" ");
+            sql.append(entry.getKey());
+            if (i != val.size()) {
+                sql.append(",");
+            }
+        }
+
+        sql.append(" ) Values(");
+
+        for (int k = 1; k <= val.size(); k++) {
+            sql.append(" ");
+            sql.append("?");
+            if (k < val.size()) {
+                sql.append(",");
+            }
+        }
+
+        sql.append(" )");
+        GdxSqlitePreparedStatement st = null;
+        try {
+            st = myDB.prepare(sql.toString());
+
+            int j = 0;
+            for (Map.Entry<String, Object> entry : val.entrySet()) {
+                j++;
+                st.bind(j, entry.getValue());
+            }
+
+            log.debug("INSERT: " + sql);
+            st.commit();
+            return myDB.changes();
+        } catch (SQLiteGdxException e) {
+            log.error("INSERT", e);
+            return 0;
+        } finally {
+            try {
+                if (st != null) st.close();
+            } catch (SQLiteGdxException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public long delete(String tablename, String whereClause, String[] whereArgs) {
-        return myDB.delete(tablename, whereClause, whereArgs);
+    public int delete(String tablename, String whereClause) {
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("delete from ");
+        sql.append(tablename);
+
+        if (!whereClause.isEmpty()) {
+            sql.append(" where ");
+            sql.append(whereClause);
+        }
+
+        myDB.execSQL(sql.toString());
+        return myDB.changes();
     }
 
     public void beginTransaction() {
@@ -853,13 +1025,66 @@ public class Database {
             myDB.endTransaction();
     }
 
-    public long insertWithConflictReplace(String tablename, Parameters val) {
-        return myDB.insertWithConflictReplace(tablename, val);
+    public void insertWithConflictReplace(String tablename, Parameters val) {
+        insert(tablename, val, "INSERT OR REPLACE into ");
     }
 
-    public long insertWithConflictIgnore(String tablename, Parameters val) {
-        return myDB.insertWithConflictIgnore(tablename, val);
+    public void insertWithConflictIgnore(String tablename, Parameters val) {
+        insert(tablename, val, "INSERT OR IGNORE into ");
     }
+
+    private void insert(String tablename, Parameters val, String sqlInsert) {
+        StringBuilder sql = new StringBuilder();
+
+        sql.append(sqlInsert);
+        sql.append(tablename);
+        sql.append(" (");
+
+        int i = 0;
+        for (Map.Entry<String, Object> entry : val.entrySet()) {
+            i++;
+            sql.append(" ");
+            sql.append(entry.getKey());
+            if (i != val.size()) {
+                sql.append(",");
+            }
+        }
+
+        sql.append(" ) Values(");
+
+        for (int k = 1; k <= val.size(); k++) {
+            sql.append(" ");
+            sql.append("?");
+            if (k < val.size()) {
+                sql.append(",");
+            }
+        }
+
+        sql.append(" )");
+        GdxSqlitePreparedStatement st = null;
+        try {
+            st = myDB.prepare(sql.toString());
+
+            int j = 0;
+            for (Map.Entry<String, Object> entry : val.entrySet()) {
+                j++;
+                st.bind(j, entry.getValue());
+            }
+
+            st.commit();
+
+
+        } catch (SQLiteGdxException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                st.close();
+            } catch (SQLiteGdxException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public void close() {
         if (myDB == null) return;
@@ -893,7 +1118,7 @@ public class Database {
 
     public static int getCacheCountInDB(String absolutePath) {
         try {
-            SQLiteGdxDatabase tempDB = SQLiteGdxDatabaseFactory.getNewDatabase(Gdx.files.absolute(absolutePath));
+            GdxSqlite tempDB = new GdxSqlite(Gdx.files.absolute(absolutePath));
             tempDB.openOrCreateDatabase();
             int count = getCacheCount(tempDB);
             tempDB.closeDatabase();
@@ -903,16 +1128,16 @@ public class Database {
         }
     }
 
-    private static int getCacheCount(SQLiteGdxDatabase tempDB) throws SQLiteGdxException {
+    private static int getCacheCount(GdxSqlite tempDB) throws SQLiteGdxException {
         //get schema version
-        SQLiteGdxDatabaseCursor cursor = tempDB.rawQuery("SELECT Value FROM Config WHERE [Key] like ?", new String[]{"DatabaseSchemeVersionWin"});
+        GdxSqliteCursor cursor = tempDB.rawQuery("SELECT Value FROM Config WHERE [Key] like 'DatabaseSchemeVersionWin'");
         cursor.moveToFirst();
         int version = Integer.parseInt(cursor.getString(0));
         cursor.close();
         if (version < 1028) {
-            cursor = tempDB.rawQuery("SELECT COUNT(*) FROM caches", null);
+            cursor = tempDB.rawQuery("SELECT COUNT(*) FROM caches");
         } else {
-            cursor = tempDB.rawQuery("SELECT COUNT(*) FROM CacheCoreInfo", null);
+            cursor = tempDB.rawQuery("SELECT COUNT(*) FROM CacheCoreInfo");
         }
 
 
@@ -922,15 +1147,13 @@ public class Database {
         return count;
     }
 
-    public static boolean createNewDB(Database database, FileHandle rootFolder, String newDB_Name, Boolean ownRepository) {
+    public static boolean createNewDB(Database database, FileHandle rootFolder, String newDB_Name, boolean ownRepository, boolean... dontStoreConfig) {
 
         final Logger logger = LoggerFactory.getLogger("CREATE NEW DB");
 
         if (CB.viewmanager != null) CB.viewmanager.setNewFilter(FilterInstances.ALL); // in case of JUnit
         FileHandle dbFile = rootFolder.child(newDB_Name + ".db3");
         try {
-            SQLiteGdxDatabase db = SQLiteGdxDatabaseFactory.getNewDatabase(dbFile);
-            db.openOrCreateDatabase();
             database.close();
             database.startUp(dbFile);
         } catch (SQLiteGdxException e) {
@@ -945,7 +1168,9 @@ public class Database {
             Config.MapPackFolderLocal.setValue(folder + "Maps");
             Config.SpoilerFolderLocal.setValue(folder + "Spoilers");
             Config.TileCacheFolderLocal.setValue(folder + "Cache");
-            Config.AcceptChanges();
+            if (dontStoreConfig == null) {
+                Config.AcceptChanges();
+            }
             logger.debug(
                     newDB_Name + " has own Repository:\n" + //
                             Config.DescriptionImageFolderLocal.getValue() + ", \n" + //

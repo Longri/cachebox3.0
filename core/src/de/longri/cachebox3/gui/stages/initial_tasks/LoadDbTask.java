@@ -24,6 +24,7 @@ import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dial
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.FileList;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,19 +50,19 @@ public class LoadDbTask extends AbstractInitTask {
                 final Action_Show_SelectDB_Dialog selectDbDialog = new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.FORCE_SHOW);
 
                 // search number of DB3 files
-                final FileList fileList  = new FileList(CB.WorkPath, "DB3");
+                final FileList fileList = new FileList(CB.WorkPath, "DB3");
 
                 if ((fileList.size > 1) && Config.MultiDBAsk.getValue()) {
                     selectDbDialog.execute();
                 } else {
 
 
-                    CB.postAsync(new Runnable() {
+                    CB.postAsync(new NamedRunnable("LoadDbTask") {
                         @Override
                         public void run() {
                             //wait for initial viewmanager
 
-                            while (CB.viewmanager==null){
+                            while (CB.viewmanager == null) {
                                 try {
                                     Thread.sleep(20);
                                 } catch (InterruptedException e) {
@@ -77,7 +78,7 @@ public class LoadDbTask extends AbstractInitTask {
                                     } else {
                                         Config.DatabaseName.setValue(Utils.GetFileName(fileList.get(0).getName()));
                                     }
-                                    EventHandler.fire(new IncrementProgressEvent(10,"load db"));
+                                    EventHandler.fire(new IncrementProgressEvent(10, "load db"));
                                     selectDbDialog.loadSelectedDB();
                                 }
                             });

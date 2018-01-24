@@ -45,6 +45,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -162,7 +163,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
             Config.AcceptChanges();
 
             if (!dontLoad){
-                CB.postAsync(new Runnable() {
+                CB.postAsync(new NamedRunnable("ViewManager") {
                     @Override
                     public void run() {
                         log.debug("Call loadFilteredCacheList()");

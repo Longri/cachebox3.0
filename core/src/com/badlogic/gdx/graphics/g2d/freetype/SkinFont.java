@@ -21,14 +21,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.tools.bmfont.BitmapFontWriter;
-import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
-import de.longri.cachebox3.gui.stages.initial_tasks.AbstractInitTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,25 +108,25 @@ public class SkinFont extends BitmapFont {
         FreeTypeFontGenerator.FreeTypeBitmapFontData data = generator.generateData(parameter);
         BitmapFont font = generator.generateFont(parameter, data);
 
-        if (cachePath != null) {
-            FileHandle cacheFontPath = cachePath.child(tempName + ".fnt");
-            BitmapFontWriter.FontInfo info = new BitmapFontWriter.FontInfo();
-            info.padding = new BitmapFontWriter.Padding(1, 1, 1, 1);
-
-            Array<PixmapPacker.Page> pages = parameter.packer.getPages();
-            String[] names;
-            if (pages.size == 1) {
-                names = new String[]{tempName + ".png"};
-            } else {
-                names = new String[pages.size];
-                for (int i = 0, n = pages.size; i < n; i++) {
-                    names[i] = tempName + "_" + Integer.toString(i) + ".png";
-                }
-            }
-
-            BitmapFontWriter.writeFont(data, names, cacheFontPath, info, PAGE_SIZE, PAGE_SIZE);
-            BitmapFontWriter.writePixmaps(pages, cachePath, tempName);
-        }
+//        if (cachePath != null) {
+//            FileHandle cacheFontPath = cachePath.child(tempName + ".fnt");
+//            BitmapFontWriter.FontInfo info = new BitmapFontWriter.FontInfo();
+//            info.padding = new BitmapFontWriter.Padding(1, 1, 1, 1);
+//
+//            Array<PixmapPacker.Page> pages = parameter.packer.getPages();
+//            String[] names;
+//            if (pages.size == 1) {
+//                names = new String[]{tempName + ".png"};
+//            } else {
+//                names = new String[pages.size];
+//                for (int i = 0, n = pages.size; i < n; i++) {
+//                    names[i] = tempName + "_" + Integer.toString(i) + ".png";
+//                }
+//            }
+//
+//            BitmapFontWriter.writeFont(data, names, cacheFontPath, info, PAGE_SIZE, PAGE_SIZE);
+//            BitmapFontWriter.writePixmaps(pages, cachePath, tempName);
+//        }
         return font;
     }
 
