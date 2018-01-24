@@ -135,6 +135,11 @@ public class JsonStreamParser implements JsonParser {
      * @return
      */
     private int parse(char[] data) {
+
+        if (data[data.length - 1] == '\\') {
+            return 0;
+        }
+
         String actName = null;
         lastNameStart = -1;
         lastPeek = -1;
@@ -336,7 +341,7 @@ public class JsonStreamParser implements JsonParser {
                 switch (data[i]) {
                     case '"':
                         // check if escaped
-                        if (data[i - 1] == '\\')
+                        if (i >= 1 && data[i - 1] == '\\')
                             continue;
                         isString = false;
                         break;
@@ -352,7 +357,7 @@ public class JsonStreamParser implements JsonParser {
                 case '"':
                     if (end) {
                         // check if escaped
-                        if (data[i - 1] == '\\')
+                        if (i >= 1 && data[i - 1] == '\\')
                             continue;
                         isString = true;
                         break;
@@ -380,7 +385,7 @@ public class JsonStreamParser implements JsonParser {
                 switch (data[i]) {
                     case '"':
                         // check if escaped
-                        if (i > 1 && data[i - 1] == '\\')
+                        if (i >= 1 && data[i - 1] == '\\')
                             continue;
                         isString = false;
                         break;
@@ -391,7 +396,7 @@ public class JsonStreamParser implements JsonParser {
             switch (data[i]) {
                 case '"':
                     // check if escaped
-                    if (i > 1 && data[i - 1] == '\\')
+                    if (i >= 1 && data[i - 1] == '\\')
                         continue;
                     isString = true;
                     break;
