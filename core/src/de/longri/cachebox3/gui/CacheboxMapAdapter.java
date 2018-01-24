@@ -24,6 +24,7 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.utils.EQUALS;
 import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.core.MapPosition;
 import org.oscim.event.Event;
 import org.oscim.event.Gesture;
@@ -213,7 +214,7 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         //force reload
         this.updateMap(true);
 
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("CacheboxMapAdapter") {
             @Override
             public void run() {
                 Settings_Map.CurrentMapLayer.setValue(new String[]{baseMap.name});

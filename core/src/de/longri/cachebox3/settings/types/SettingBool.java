@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -22,7 +22,7 @@ public class SettingBool extends SettingBase<Boolean> {
     }
 
     public SettingBool(String name, SettingCategory category, SettingMode modus, boolean defaultValue, SettingStoreType StoreType, SettingUsage usage, boolean desired) {
-        super(name, category, modus, StoreType, usage,desired);
+        super(name, category, modus, StoreType, usage, desired);
         this.defaultValue = defaultValue;
         this.value = defaultValue;
     }
@@ -35,7 +35,7 @@ public class SettingBool extends SettingBase<Boolean> {
     @Override
     public boolean fromDBString(String dbString) {
         try {
-            value = Boolean.valueOf(dbString);
+            value = dbString.equals("1") ? true : Boolean.valueOf(dbString);
             return true;
         } catch (Exception ex) {
             value = defaultValue;

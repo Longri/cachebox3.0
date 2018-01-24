@@ -100,58 +100,60 @@ public class Trackable implements Comparable<Trackable> {
                 e.printStackTrace();
             }
             String sDate = reader.getString(6);
-            DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
-                DateCreated = iso8601Format.parse(sDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if (sDate != null && !sDate.isEmpty()) {
+                DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    DateCreated = iso8601Format.parse(sDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
 
             try {
-                Description = reader.getString(7).trim();
+                Description = reader.getString(7);
             } catch (Exception e) {
 
                 e.printStackTrace();
             }
             try {
-                IconUrl = reader.getString(8).trim();
+                IconUrl = reader.getString(8);
             } catch (Exception e) {
 
                 e.printStackTrace();
             }
             try {
-                ImageUrl = reader.getString(9).trim();
+                ImageUrl = reader.getString(9);
             } catch (Exception e) {
 
                 e.printStackTrace();
             }
             try {
-                Name = reader.getString(10).trim();
+                Name = reader.getString(10);
             } catch (Exception e) {
 
                 e.printStackTrace();
             }
             try {
-                OwnerName = reader.getString(11).trim();
+                OwnerName = reader.getString(11);
             } catch (Exception e) {
 
                 e.printStackTrace();
             }
             try {
-                Url = reader.getString(12).trim();
+                Url = reader.getString(12);
             } catch (Exception e) {
 
                 e.printStackTrace();
             }
-            try {
-                TypeName = reader.getString(13).trim();
-            } catch (Exception e1) {
-
-                e1.printStackTrace();
-            }
+//            try {
+//                TypeName = reader.getString(13);
+//            } catch (Exception e1) {
+//
+//                e1.printStackTrace();
+//            }
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
     }
@@ -252,14 +254,14 @@ public class Trackable implements Comparable<Trackable> {
 //        }
 //    }
 
-	/*
-	 * Getter
-	 */
+    /*
+     * Getter
+     */
 
     final SimpleDateFormat postFormater = new SimpleDateFormat("dd.MM.yyyy");
 
     public String getTravelDistance() {
-        return UnitFormatter.distanceString(TravelDistance,false);
+        return UnitFormatter.distanceString(TravelDistance, false);
     }
 
     public String getBirth() {
@@ -342,17 +344,17 @@ public class Trackable implements Comparable<Trackable> {
         return this.TrackingCode;
     }
 
-	/*
-	 * Setter
-	 */
+    /*
+     * Setter
+     */
 
     public void setTrackingCode(String trackingCode) {
         this.TrackingCode = trackingCode;
     }
 
-	/*
-	 * Methods
-	 */
+    /*
+     * Methods
+     */
 
     /**
      * Generiert eine Eindeutige ID aus den ASCII values des GcCodes. <br>
@@ -377,9 +379,9 @@ public class Trackable implements Comparable<Trackable> {
         return result;
     }
 
-	/*
-	 * Overrides
-	 */
+    /*
+     * Overrides
+     */
 
     @Override
     public int compareTo(Trackable T2) {
@@ -413,8 +415,7 @@ public class Trackable implements Comparable<Trackable> {
      * 75 - Visit<br>
      *
      * @param type
-     * @param userName
-     *            Config.settings.GcLogin.getValue()
+     * @param userName Config.settings.GcLogin.getValue()
      * @return
      */
     public boolean isLogTypePosible(LogTypes type, String userName) {
@@ -455,5 +456,66 @@ public class Trackable implements Comparable<Trackable> {
             return true;
 
         return false;
+    }
+
+    public void setCacheId(long id) {
+        this.CacheId = id;
+    }
+
+    public void setArchived(boolean value) {
+        this.Archived = value;
+    }
+
+    public void setId(Long value) {
+        this.Id = value.intValue();
+    }
+
+    public void setGcCode(String value) {
+        this.GcCode = value;
+    }
+
+    public String getCurrenGoal() {
+        return this.CurrentGoal;
+    }
+
+
+    public void setCurrenGoal(String value) {
+        this.CurrentGoal = value;
+    }
+
+    public void setCurrentCacheCode(String value) {
+        this.CurrentGeocacheCode = value;
+    }
+
+    public void setDateCreated(Date date) {
+        this.DateCreated = date;
+    }
+
+    public void setDescription(String value) {
+        this.Description = value;
+    }
+
+    public void setIconUrl(String value) {
+        this.IconUrl = value;
+    }
+
+    public void setName(String value) {
+        this.Name = value;
+    }
+
+    public void setUrl(String value) {
+        this.Url = value;
+    }
+
+    public void setTypeName(String value) {
+        this.TypeName = value;
+    }
+
+    public String getDescription() {
+        return this.Description;
+    }
+
+    public void setImageUrl(String value) {
+        this.ImageUrl = value;
     }
 }

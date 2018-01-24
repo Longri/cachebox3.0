@@ -45,15 +45,18 @@ public class Database {
     public static Database Data;
     public static Database Drafts;
     public static Database Settings;
-    private GdxSqlite myDB;
+    public GdxSqlite myDB;
     public final CacheList Query;
+
+    public Database(GdxSqlite db) {
+        Query = new CacheList();
+        myDB = db;
+    }
 
     /**
      * @return Set To CB.Categories
      */
     public Categories gpxFilenameUpdateCacheCount() {
-        // welche GPXFilenamen sind in der DB erfasst
-//        beginTransaction();
         GdxSqliteCursor cursor = null;
         try {
             cursor = rawQuery("select GPXFilename_ID, Count(*) as CacheCount from CacheInfo where GPXFilename_ID is not null Group by GPXFilename_ID", (String[]) null);
@@ -71,26 +74,19 @@ public class Database {
                     set.put(gpxFilename_ID, val);
                     cursor.moveToNext();
                 }
-
                 cursor.close();
 
-                if (!myDB.isInTransaction())
-                    beginTransaction();
                 for (ObjectMap.Entry entry : set) {
                     update("GPXFilenames", (Parameters) entry.value, "ID = " + entry.key, null);
                 }
             }
-            if (!myDB.isInTransaction())
-                beginTransaction();
+
             delete("GPXFilenames", "Cachecount is NULL or CacheCount = 0");
             delete("GPXFilenames", "ID not in (Select GPXFilename_ID From CacheInfo)");
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            endTransaction();
         }
 
-        //TODO ???
         Categories categories = new Categories();
         return categories;
     }
@@ -106,11 +102,7 @@ public class Database {
         if (abstractCache == null) // if no cache is selected!
             return result;
 
-
-        //TODO Qerry with args not working on iOS
-//      GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId=@cacheid order by Timestamp desc", new String[]{Long.toString(cache.Id)});
         GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(abstractCache.getId()) + "\"", (String[]) null);
-
 
         try {
             reader.moveToFirst();
@@ -241,6 +233,8 @@ public class Database {
             throw new SQLiteGdxException("Directory for DB doesn't exist: " + parentDirectory.file().getAbsolutePath());
         }
 
+        //reset version
+        shemaVersion.set(-1);
 
         log.debug("startUp Database: " + Utils.GetFileName(databasePath));
         if (myDB != null) {
@@ -455,11 +449,6 @@ public class Database {
         Parameters val = new Parameters();
         val.put("desired", value);
         long anz = update("Config", val, "[Key] like '" + key + "'", null);
-        if (anz <= 0) {
-            // Update not possible because Key does not exist
-            val.put("Key", key);
-            insert("Config", val);
-        }
     }
 
     public String readConfigDesiredString(String key) throws Exception {
@@ -587,6 +576,23 @@ public class Database {
                     if (lastDatabaseSchemeVersion < 1003) {
                         // Long Text Field for long Strings
                         execSQL("ALTER TABLE [Config] ADD [desired] ntext NULL;");
+                    }
+                    if (lastDatabaseSchemeVersion < 1004) {
+                        // add primary key on [Key]
+                        String CREATE = "CREATE TABLE ConfigCopy (\n" +
+                                "    [Key]      NVARCHAR (30)  NOT NULL\n" +
+                                "                              PRIMARY KEY\n" +
+                                "                              UNIQUE,\n" +
+                                "    Value      NVARCHAR (255),\n" +
+                                "    LongString NTEXT,\n" +
+                                "    desired    NTEXT\n" +
+                                ");";
+                        String COPY = "INSERT INTO ConfigCopy SELECT * FROM Config;";
+                        String DROP = "DROP TABLE Config;";
+                        String RENAME = "ALTER TABLE ConfigCopy RENAME TO Config;";
+
+                        String SQL = CREATE + COPY + DROP + RENAME;
+                        execSQL(SQL);
                     }
                 } catch (Exception exc) {
                     log.error("alterDatabase", exc);
@@ -927,7 +933,7 @@ public class Database {
             if (e.getMessage().contains("near")) {
                 log.error("UPDATE:", sql.toString());
             } else {
-                log.error("UPDATE:", e);
+                log.error("UPDATE:" + sql.toString(), e);
             }
             return 0;
         } finally {
@@ -1141,15 +1147,13 @@ public class Database {
         return count;
     }
 
-    public static boolean createNewDB(Database database, FileHandle rootFolder, String newDB_Name, Boolean ownRepository) {
+    public static boolean createNewDB(Database database, FileHandle rootFolder, String newDB_Name, boolean ownRepository, boolean... dontStoreConfig) {
 
         final Logger logger = LoggerFactory.getLogger("CREATE NEW DB");
 
         if (CB.viewmanager != null) CB.viewmanager.setNewFilter(FilterInstances.ALL); // in case of JUnit
         FileHandle dbFile = rootFolder.child(newDB_Name + ".db3");
         try {
-            GdxSqlite db = new GdxSqlite(dbFile);
-            db.openOrCreateDatabase();
             database.close();
             database.startUp(dbFile);
         } catch (SQLiteGdxException e) {
@@ -1164,7 +1168,9 @@ public class Database {
             Config.MapPackFolderLocal.setValue(folder + "Maps");
             Config.SpoilerFolderLocal.setValue(folder + "Spoilers");
             Config.TileCacheFolderLocal.setValue(folder + "Cache");
-            Config.AcceptChanges();
+            if (dontStoreConfig == null) {
+                Config.AcceptChanges();
+            }
             logger.debug(
                     newDB_Name + " has own Repository:\n" + //
                             Config.DescriptionImageFolderLocal.getValue() + ", \n" + //

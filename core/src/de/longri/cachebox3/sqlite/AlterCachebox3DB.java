@@ -33,21 +33,10 @@ public class AlterCachebox3DB {
             //create new Database
             DatabaseSchema schemaStrings = new DatabaseSchema();
 
-            database.execSQL(schemaStrings.CONFIG_TABLE);
-            database.execSQL(schemaStrings.CATEGORY_TABLE);
-            database.execSQL(schemaStrings.GPX_FILE_NAMES);
-            database.execSQL(schemaStrings.IMAGES);
-            database.execSQL(schemaStrings.LOGS);
-            database.execSQL(schemaStrings.POCKET_QUERIES);
-            database.execSQL(schemaStrings.REPLICATION);
-            database.execSQL(schemaStrings.TB_LOGS);
-            database.execSQL(schemaStrings.TRACKABLE);
-            database.execSQL(schemaStrings.CACHE_CORE_INFO);
-            database.execSQL(schemaStrings.ATTRIBUTES);
-            database.execSQL(schemaStrings.TEXT);
-            database.execSQL(schemaStrings.CACHE_INFO);
-            database.execSQL(schemaStrings.WAYPOINTS);
-            database.execSQL(schemaStrings.WAYPOINTS_TEXT);
+            String sql = schemaStrings.getEmptyNewDB();
+
+            //EXECUTE combined SQL
+            database.execSQL(sql);
 
             return;
         }
@@ -130,8 +119,28 @@ public class AlterCachebox3DB {
             }
         } catch (Exception exc) {
             log.error("alterDatabase", exc);
-        } finally {
+        }
 
+        try {
+            if (lastDatabaseSchemeVersion < 1029) {
+                // add primary key on [Key]
+                String CREATE = "CREATE TABLE ConfigCopy (\n" +
+                        "    [Key]      NVARCHAR (30)  NOT NULL\n" +
+                        "                              PRIMARY KEY\n" +
+                        "                              UNIQUE,\n" +
+                        "    Value      NVARCHAR (255),\n" +
+                        "    LongString NTEXT,\n" +
+                        "    desired    NTEXT\n" +
+                        ");";
+                String COPY = "INSERT INTO ConfigCopy SELECT * FROM Config;";
+                String DROP = "DROP TABLE Config;";
+                String RENAME = "ALTER TABLE ConfigCopy RENAME TO Config;";
+
+                String SQL = CREATE + COPY + DROP + RENAME;
+                database.execSQL(SQL);
+            }
+        } catch (Exception exc) {
+            log.error("alterDatabase", exc);
         }
     }
 

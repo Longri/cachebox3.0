@@ -44,6 +44,7 @@ import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheWithWP;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +92,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     private void addNewListView() {
         log.debug("Start Thread add new listView");
         ON_LAYOUT_WORK.set(true);
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("CacheListView:addNewListView") {
             @Override
             public void run() {
                 CacheListView.this.clear();
@@ -161,19 +162,19 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
                 CacheListView.this.listView = new ListView(listViewAdapter, false, true);
                 synchronized (CacheListView.this.listView) {
-                    listView.setEmptyString(Translation.get("EmptyCacheList"));
-                    listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
-                    addActor(listView);
-                    listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
-                    listView.setSelectable(ListView.SelectableType.SINGLE);
+                    CacheListView.this.listView.setEmptyString(Translation.get("EmptyCacheList"));
+                    CacheListView.this.listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
+                    addActor(CacheListView.this.listView);
+                    CacheListView.this.listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
+                    CacheListView.this.listView.setSelectable(ListView.SelectableType.SINGLE);
                     CB.requestRendering();
                 }
 
                 // add selection changed event listener
-                listView.addSelectionChangedEventListner(new ListView.SelectionChangedEvent() {
+                CacheListView.this.listView.addSelectionChangedEventListner(new ListView.SelectionChangedEvent() {
                     @Override
                     public void selectionChanged() {
-                        CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
+                        CacheListItem selectedItem = (CacheListItem) CacheListView.this.listView.getSelectedItem();
                         int selectedItemListIndex = selectedItem.getListIndex();
 
                         AbstractCache cache = Database.Data.Query.get(selectedItemListIndex);
@@ -196,8 +197,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         try {
                             if (selectedIndex >= Database.Data.Query.size)
                                 selectedIndex = 0;// select first item, if Cache not found
-                            listView.setSelection(selectedIndex);
-                            listView.setSelectedItemVisible(false);
+                            CacheListView.this.listView.setSelection(selectedIndex);
+                            CacheListView.this.listView.setSelectedItemVisible(false);
                         } catch (Exception e) {
                             log.error("setSelected index", e);
                         }
@@ -222,7 +223,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     private void disposeListView() {
         final ListView disposeListView = this.listView;
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("CacheListView:disposeListView") {
             @Override
             public void run() {
                 disposeListView.dispose();
@@ -351,7 +352,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 //                        sync.show();
                         return true;
                     case MenuID.MI_MANAGE_DB:
-                        CB.postAsync(new Runnable() {
+                        CB.postAsync(new NamedRunnable("CacheListView:showSelectDbDialog") {
                             @Override
                             public void run() {
                                 new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.ASK).execute();
@@ -369,7 +370,11 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 //                        }
                         return true;
                     case MenuID.MI_CHK_STATE_API:
-                        new CheckStateActivity().show();
+                        new CheckStateActivity(false).show();
+                        return true;
+
+                    case MenuID.MI_CHK_STATE_API_FAV_POI:
+                        new CheckStateActivity(true).show();
                         return true;
 
                     case MenuID.MI_NEW_CACHE:
@@ -413,6 +418,8 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
 
         cm.addItem(MenuID.MI_CHK_STATE_API, "chkState", CB.getSkin().getMenuIcon.GC_Live);
+        cm.addItem(MenuID.MI_CHK_STATE_API_FAV_POI, "chkFavPoints", CB.getSkin().getMenuIcon.GC_Live);
+
         //ISSUE (#118 add new Cache) cm.addItem(MenuID.MI_NEW_CACHE, "MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon);
         //ISSUE (#119 add delete Cache Dialog) cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSkin().getMenuIcon.deleteIcon);
 

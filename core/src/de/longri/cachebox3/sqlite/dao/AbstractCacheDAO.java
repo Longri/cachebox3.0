@@ -31,12 +31,5 @@ public abstract class AbstractCacheDAO {
 
     public abstract AbstractCache getFromDbByCacheId(Database database, long CacheID, boolean withWaypoints);
 
-    /**
-     * hier wird nur die Status Abfrage zurück geschrieben und gegebenen Falls die Replication Informationen geschrieben.
-     *
-     * @param writeTmp
-     */
-    public abstract boolean updateDatabaseCacheState(Database database, AbstractCache writeTmp);
-
     public abstract void writeCacheBooleanStore(Database data, int newBooleanStore, long id);
 }

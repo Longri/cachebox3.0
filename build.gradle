@@ -29,7 +29,7 @@ allprojects {
         vtmVersion = 'master-SNAPSHOT'
 //        vtmVersion = '0.8.0'
         slf4jLibgdxVersion = '1.9.8-SNAPSHOT'
-        gdxSqliteVersion = '0.5.0-SNAPSHOT'
+        gdxSqliteVersion = '0.5.5-SNAPSHOT'
     }
 
 

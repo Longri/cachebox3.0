@@ -17,6 +17,7 @@ package de.longri.cachebox3.apis.groundspeak_api.search;
 
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.DataBuffer;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonStreamParser;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
@@ -28,9 +29,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.DaoFactory;
-import de.longri.cachebox3.sqlite.dao.ImageDAO;
-import de.longri.cachebox3.sqlite.dao.LogDAO;
+import de.longri.cachebox3.sqlite.dao.*;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
@@ -60,6 +59,7 @@ public abstract class Search extends PostRequest {
     private long gpxFilenameId;
     private AbstractCache actCache;
     private AbstractWaypoint actWayPoint;
+    private Trackable actTrackable;
     private LogEntry actLog;
     private Array<Attributes> attributes;
     private Attributes actAttribute;
@@ -70,13 +70,21 @@ public abstract class Search extends PostRequest {
     private final String ATTRIBUTES = "Attributes";
     private final String OWNER = "Owner";
     private final String IMAGES = "Images";
+    private final String TRACKABLES = "Trackables";
+    private final String TRACKABLELOGS = "TrackableLogs";
 
     private final String ATTRIBUTE_ID = "AttributeTypeID";
     private final String IS_ON = "IsOn";
     private final String NEW_CACHE = "NEW_CACHE";
     private final String NEW_LOG = "NEW_LOG";
     private final String NEW_WAY_POINT = "NEW_WAY_POINT";
+    private final String NEW_TRACKABLE = "NEW_TRACKABLE";
     private final String CODE = "Code";
+    private final String CURRENT_GOAL = "CurrentGoal";
+    private final String CURRENT_CACHE_CODE = "CurrentGeocacheCode";
+    private final String DATE_CREATED = "DateCreated";
+    private final String DESCRIPTION = "Description";
+    private final String ICON_URL = "IconUrl";
     private final String CACHE_TYPE = "CacheType";
     private final String CACHE_TYPE_ID = "GeocacheTypeId";
     private final String CONTAINER_TYPE_ID = "ContainerTypeId";
@@ -89,14 +97,17 @@ public abstract class Search extends PostRequest {
     private final String ARCHIVED = "Archived";
     private final String AVAILABLE = "Available";
     private final String ID = "ID";
+    private final String I_D = "Id";
     private final String LONG_DESC = "LongDescription";
     private final String NAME = "Name";
+    private final String TRACKING_CODE = "TrackingCode";
     private final String USER_NAME = "UserName";
     private final String PLACED_BY = "PlacedBy";
     private final String SHORT_DESC = "ShortDescription";
     private final String DESC = "Description";
     private final String TERRAIN = "Terrain";
     private final String URL = "Url";
+    private final String TYPE_NAME = "TBTypeName";
     private final String LAT = "Latitude";
     private final String LON = "Longitude";
     private final String CACHE_LIMITS = "CacheLimits";
@@ -129,6 +140,8 @@ public abstract class Search extends PostRequest {
     private final int IMAGE_ARRAY = 5;
     private final int WAY_POINT_ARRAY = 6;
     private final int STATUS = 7;
+    private final int TRACKABLE_ARRAY = 8;
+    private final int TRACKABLE_LOG_ARRAY = 9;
     private boolean isUserWaypoint = false;
     private final ICancel iCancel;
 
@@ -137,12 +150,16 @@ public abstract class Search extends PostRequest {
      */
     private byte apiState;
 
+    public boolean fireProgressEvent = true;
+    private final Database database;
+
+
     /**
      * @param gcApiKey valid encrypted Api-Key
      * @param number   MaxPerPage size for this request
      * @param apiState 0 = unknown, 1 = Basic Member, 2 = Premium Member
      */
-    Search(String gcApiKey, int number, byte apiState, ICancel iCancel) {
+    Search(Database data, String gcApiKey, int number, byte apiState, ICancel iCancel) {
         super(gcApiKey, iCancel);
         this.iCancel = iCancel;
         if (number > 50)
@@ -150,6 +167,7 @@ public abstract class Search extends PostRequest {
 
         this.number = number;
         this.apiState = apiState;
+        database = data;
     }
 
     @Override
@@ -164,14 +182,16 @@ public abstract class Search extends PostRequest {
 
 
         //fire progress event for begin parsing
-        ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
-        progress.progress = 1;
-        progress.caches = 0;
-        progress.wayPoints = 0;
-        progress.logs = 0;
-        progress.images = 0;
-        progress.msg = "Start parsing result";
-        EventHandler.fire(new ImportProgressChangedEvent(progress));
+        if (fireProgressEvent) {
+            ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
+            progress.progress = 1;
+            progress.caches = 0;
+            progress.wayPoints = 0;
+            progress.logs = 0;
+            progress.images = 0;
+            progress.msg = "Start parsing result";
+            EventHandler.fire(new ImportProgressChangedEvent(progress));
+        }
 
 
         try {
@@ -186,6 +206,9 @@ public abstract class Search extends PostRequest {
         }
 
         final ApiResultState[] resultState = new ApiResultState[]{ApiResultState.IO};
+        final CacheList tmpCacheList = new CacheList();
+        final Array<LogEntry> logList = new Array<>();
+        final Array<Trackable> trackableList = new Array<>();
         JsonStreamParser parser = new JsonStreamParser() {
 
             @Override
@@ -194,7 +217,7 @@ public abstract class Search extends PostRequest {
                 if (iCancel != null && iCancel.cancel()) this.cancel();
 
                 super.startArray(name);
-                // System.out.println("Start array " + name);
+//                System.out.println("Start array " + name);
                 arrayStack.add(name);
                 objectStack.add(name);
                 if (ATTRIBUTES.equals(name)) {
@@ -208,6 +231,10 @@ public abstract class Search extends PostRequest {
                     SWITCH = LOG_ARRAY;
                 } else if (IMAGES.equals(name)) {
                     SWITCH = IMAGE_ARRAY;
+                } else if (TRACKABLES.equals(name)) {
+                    SWITCH = TRACKABLE_ARRAY;
+                } else if (TRACKABLELOGS.equals(name)) {
+                    SWITCH = TRACKABLE_LOG_ARRAY;
                 } else if (ADDITIONAL_WAYPOINTS.equals(name)) {
                     SWITCH = WAY_POINT_ARRAY;
                 } else if (USER_WAYPOINTS.equals(name)) {
@@ -236,6 +263,10 @@ public abstract class Search extends PostRequest {
                         SWITCH = LOG_ARRAY;
                     } else if (IMAGES.equals(actArray)) {
                         SWITCH = IMAGE_ARRAY;
+                    } else if (TRACKABLES.equals(actArray)) {
+                        SWITCH = TRACKABLE_ARRAY;
+                    } else if (TRACKABLELOGS.equals(actArray)) {
+                        SWITCH = TRACKABLE_LOG_ARRAY;
                     } else if (ADDITIONAL_WAYPOINTS.equals(name)) {
                         SWITCH = WAY_POINT_ARRAY;
                     } else if (USER_WAYPOINTS.equals(name)) {
@@ -252,7 +283,7 @@ public abstract class Search extends PostRequest {
             public void startObject(String name) {
                 if (iCancel != null && iCancel.cancel()) this.cancel();
                 super.startObject(name);
-                // System.out.println("Start Object " + name);
+//                System.out.println("Start Object " + name);
 
                 if (name != null && SWITCH == 0 && name.equals("Status")) {
                     SWITCH = STATUS;
@@ -284,6 +315,13 @@ public abstract class Search extends PostRequest {
                             name = NEW_WAY_POINT;
                         }
                         break;
+                    case TRACKABLE_ARRAY:
+                        if (actTrackable == null) {
+                            //System.out.println("NEW_WayPoint");
+                            actTrackable = new Trackable();
+                            name = NEW_TRACKABLE;
+                        }
+                        break;
                 }
                 objectStack.add(name);
             }
@@ -293,7 +331,7 @@ public abstract class Search extends PostRequest {
                 if (iCancel != null && iCancel.cancel()) this.cancel();
                 super.pop();
                 String name = objectStack.pop();
-                // System.out.println("pop " + name);
+//                System.out.println("pop " + name);
 
 
                 switch (SWITCH) {
@@ -303,16 +341,18 @@ public abstract class Search extends PostRequest {
                             actCache.setApiState(apiState);
 
                             //add final Cache instance
-                            writeCacheToDB(actCache);
+                            tmpCacheList.add(actCache.getCopy(), true);
+                            if (fireProgressEvent) {
+                                ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
+                                progress.progress = this.getProgress();
+                                progress.caches = ++cacheCount;
+                                progress.wayPoints = waypointCount;
+                                progress.logs = logCount;
+                                progress.images = imageCount;
+                                progress.msg = "store Cache: " + actCache.toString();
+                                EventHandler.fire(new ImportProgressChangedEvent(progress));
+                            }
 
-                            ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
-                            progress.progress = this.getProgress();
-                            progress.caches = ++cacheCount;
-                            progress.wayPoints = waypointCount;
-                            progress.logs = logCount;
-                            progress.images = imageCount;
-                            progress.msg = "store Cache: " + actCache.toString();
-                            EventHandler.fire(new ImportProgressChangedEvent(progress));
 
                             actCache = null;
                             log.debug("Stream parse new Cache StreamAvailable:{}/{}");
@@ -333,7 +373,7 @@ public abstract class Search extends PostRequest {
                     case LOG_ARRAY:
                         if (NEW_LOG.equals(name)) {
                             // System.out.println("add Log entry ");
-                            writeLogToDB(actLog);
+                            logList.add(actLog.copy());
                             logCount++;
                             actLog = null;
                         }
@@ -353,9 +393,18 @@ public abstract class Search extends PostRequest {
                             //add final Waypoint instance
                             if (actCache.getWaypoints() == null)
                                 actCache.setWaypoints(new Array<AbstractWaypoint>());
-                            actCache.getWaypoints().add(new MutableWaypoint(Database.Data, actWayPoint));
+                            actWayPoint.setCacheId(actCache.getId());
+                            actCache.getWaypoints().add(new MutableWaypoint(Search.this.database, actWayPoint));
                             waypointCount++;
                             actWayPoint = null;
+                        }
+                        break;
+                    case TRACKABLE_ARRAY:
+                        if (NEW_TRACKABLE.equals(name)) {
+//                            System.out.println("add Trackable ");
+                            actTrackable.setCacheId(actCache.getId());
+                            trackableList.add(actTrackable);
+                            actTrackable = null;
                         }
                         break;
                 }
@@ -372,7 +421,7 @@ public abstract class Search extends PostRequest {
                 switch (SWITCH) {
                     case CACHE_ARRAY:
                         if (LONG_DESC.equals(name)) {
-                            actCache.setLongDescription(Database.Data, value);
+                            actCache.setLongDescription(Search.this.database, value);
                         } else if (CODE.equals(name)) {
                             actCache.setGcCode(value);
                             actCache.setId(AbstractCache.GenerateCacheId(actCache.getGcCode().toString()));
@@ -381,7 +430,7 @@ public abstract class Search extends PostRequest {
                         } else if (DATE_HIDDEN.equals(name)) {
                             actCache.setDateHidden(getDateFromLongString(value));
                         } else if (HINT.equals(name)) {
-                            actCache.setHint(Database.Data, value);
+                            actCache.setHint(Search.this.database, value);
                         } else if (ID.equals(name)) {
                             actCache.setGcId(value);
                         } else if (NAME.equals(name)) {
@@ -391,7 +440,7 @@ public abstract class Search extends PostRequest {
                         } else if (PLACED_BY.equals(name)) {
                             actCache.setPlacedBy(value);
                         } else if (SHORT_DESC.equals(name)) {
-                            actCache.setShortDescription(Database.Data, value);
+                            actCache.setShortDescription(Search.this.database, value);
                         } else if (URL.equals(name)) {
                             actCache.setUrl(value);
                         }
@@ -424,6 +473,29 @@ public abstract class Search extends PostRequest {
                             this.cancel();
                         } else {
                             SWITCH = 0;
+                        }
+                        break;
+                    case TRACKABLE_ARRAY:
+                        if (CODE.equals(name)) {
+                            actTrackable.setGcCode(value);
+                        } else if (CURRENT_GOAL.equals(name)) {
+                            actTrackable.setCurrenGoal(value);
+                        } else if (CURRENT_CACHE_CODE.equals(name)) {
+                            actTrackable.setCurrentCacheCode(value);
+                        } else if (DATE_CREATED.equals(name)) {
+                            actTrackable.setDateCreated(getDateFromLongString(value));
+                        } else if (DESCRIPTION.equals(name)) {
+                            actTrackable.setDescription(value);
+                        } else if (NAME.equals(name)) {
+                            actTrackable.setName(value);
+                        } else if (TRACKING_CODE.equals(name)) {
+                            actTrackable.setTrackingCode(value);
+                        } else if (URL.equals(name)) {
+                            actTrackable.setUrl(value);
+                        } else if (TYPE_NAME.equals(name)) {
+                            actTrackable.setTypeName(value);
+                        }else if (ICON_URL.equals(name)) {
+                            actTrackable.setIconUrl(value);
                         }
                         break;
                 }
@@ -467,6 +539,7 @@ public abstract class Search extends PostRequest {
                 if (iCancel != null && iCancel.cancel()) this.cancel();
                 super.number(name, value, stringValue);
 
+
                 switch (SWITCH) {
                     case CACHE_ARRAY:
                         if (CACHE_TYPE_ID.equals(name)) {
@@ -501,6 +574,14 @@ public abstract class Search extends PostRequest {
                         if (WAYPOINT_TYPE_ID.equals(name)) {
                             actWayPoint.setType(getCacheType((int) value));
                         }
+                    case TRACKABLE_ARRAY:
+
+                        if (objectStack.peek().equals("OriginalOwner"))
+                            break;
+                        if (I_D.equals(name)) {
+                            actTrackable.setId(value);
+                        }
+                        break;
                 }
 
 
@@ -531,6 +612,11 @@ public abstract class Search extends PostRequest {
                     case LOG_ARRAY:
 
                         break;
+                    case TRACKABLE_ARRAY:
+                        if (ARCHIVED.equals(name)) {
+                            actTrackable.setArchived(value);
+                        }
+                        break;
                 }
 
 
@@ -538,6 +624,16 @@ public abstract class Search extends PostRequest {
 
         };
         parser.parse(stream, length);
+
+
+        CacheList3DAO dao = new CacheList3DAO();
+        dao.writeToDB(this.database, tmpCacheList);
+
+        LogDAO logdao = new LogDAO();
+        logdao.writeToDB(this.database, logList);
+
+        TrackableDao tbDao = new TrackableDao();
+        tbDao.writeToDB(this.database, trackableList);
 
         final ApiResultState finalState = resultState[0];
 
@@ -689,250 +785,6 @@ public abstract class Search extends PostRequest {
         return date;
     }
 
-    protected void writeLogToDB(final LogEntry logEntry) {
-        asyncExecutor.submit(new AsyncTask<Void>() {
-            @Override
-            public Void call() throws Exception {
-                logDAO.WriteToDatabase(logEntry);
-                return null;
-            }
-        });
-    }
-
-    protected void writeImagEntryToDB(final ImageEntry imageEntry) {
-        imageDAO.WriteToDatabase(imageEntry, false);
-        //TODO start download ?
-    }
-
-
     AsyncExecutor asyncExecutor = new AsyncExecutor(20);
 
-    protected void writeCacheToDB(final AbstractCache abstractCache) {
-
-        asyncExecutor.submit(new AsyncTask<Void>() {
-            @Override
-            public Void call() throws Exception {
-                AbstractCache aktCache = Database.Data.Query.GetCacheById(abstractCache.getId());
-
-                if (aktCache != null && aktCache.isLive())
-                    aktCache = null;
-
-                if (aktCache == null) {
-                    aktCache = DaoFactory.CACHE_DAO.getFromDbByCacheId(Database.Data, abstractCache.getId(), true);
-                }
-
-                // If Cache into DB, extract saved rating
-                if (aktCache != null) {
-                    abstractCache.setRating(aktCache.getRating());
-                }
-
-                //if Cache not in DB insert else Update
-                if (aktCache == null || !DaoFactory.CACHE_DAO.updateDatabase(Database.Data, abstractCache)) {
-                    DaoFactory.CACHE_DAO.writeToDatabase(Database.Data, abstractCache);
-                }
-
-                // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
-                if (abstractCache.getTmpNote() != null) {
-                    String oldNote = Database.getNote(abstractCache.getId());
-                    String newNote = "";
-                    if (oldNote == null) {
-                        oldNote = "";
-                    }
-                    String begin = "<Import from Geocaching.com>";
-                    String end = "</Import from Geocaching.com>";
-                    int iBegin = oldNote.indexOf(begin);
-                    int iEnd = oldNote.indexOf(end);
-                    if ((iBegin >= 0) && (iEnd > iBegin)) {
-                        // Note from Groundspeak already in Database
-                        // -> Replace only this part in whole Note
-                        newNote = oldNote.substring(0, iBegin - 1) + System.getProperty("line.separator"); // Copy the old part of Note before
-                        // the beginning of the groundspeak
-                        // block
-                        newNote += begin + System.getProperty("line.separator");
-                        newNote += abstractCache.getTmpNote();
-                        newNote += System.getProperty("line.separator") + end;
-                        newNote += oldNote.substring(iEnd + end.length(), oldNote.length());
-                    } else {
-                        newNote = oldNote + System.getProperty("line.separator");
-                        newNote += begin + System.getProperty("line.separator");
-                        newNote += abstractCache.getTmpNote();
-                        newNote += System.getProperty("line.separator") + end;
-                    }
-                    abstractCache.setTmpNote(newNote);
-                    Database.setNote(abstractCache.getId(), abstractCache.getTmpNote());
-                }
-
-                // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
-                abstractCache.setLongDescription(Database.Data, "");
-
-
-                for (int i = 0, n = abstractCache.getWaypoints().size; i < n; i++) {
-                    // must Cast to Full Waypoint. If Waypoint, is wrong created!
-                    AbstractWaypoint waypoint = abstractCache.getWaypoints().get(i);
-
-                    //set CacheId
-                    waypoint.setCacheId(abstractCache.getId());
-
-                    boolean update = true;
-
-                    // don't refresh wp if aktCache.wp is user changed
-                    if (aktCache != null) {
-                        if (aktCache.getWaypoints() != null) {
-                            for (int j = 0, m = aktCache.getWaypoints().size; j < m; j++) {
-                                AbstractWaypoint wp = aktCache.getWaypoints().get(j);
-                                if (wp.getGcCode().toString().equalsIgnoreCase(waypoint.getGcCode().toString())) {
-                                    if (wp.isUserWaypoint())
-                                        update = false;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    if (update) {
-                        // do not store replication information when importing caches with GC api
-                        if (!DaoFactory.WAYPOINT_DAO.updateDatabase(Database.Data, waypoint)) {
-                            DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, waypoint); // do not store replication information here
-                        }
-                    }
-
-                }
-
-                if (aktCache == null) {
-                    Database.Data.Query.add(abstractCache.getImmutable());
-                } else {
-                    Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(abstractCache.getId()), false);
-                    Database.Data.Query.add(abstractCache.getImmutable());
-                }
-                return null;
-            }
-        });
-
-
-    }
-
-
-//TODO try ASYNC write to DB
-
-//    private void writeLogToDB(final LogEntry logEntry) {
-//        CB.postAsync(new Runnable() {
-//            @Override
-//            public void run() {
-//                importedLogs++;
-//                logDAO.writeToDatabase(logEntry);
-//            }
-//        });
-//    }
-//
-//    private void writeImagEntryToDB(final ImageEntry imageEntry) {
-//        CB.postAsync(new Runnable() {
-//            @Override
-//            public void run() {
-//                imageDAO.writeToDatabase(imageEntry, false);
-//                //TODO start download ?
-//            }
-//        });
-//    }
-//
-//    private void writeCacheToDB(final Cache cache) {
-//
-//        CB.postAsync(new Runnable() {
-//            @Override
-//            public void run() {
-//                importedCaches++;
-//
-//                Cache aktCache = Database.Data.Query.GetCacheById(cache.Id);
-//
-//                if (aktCache != null && aktCache.isLive())
-//                    aktCache = null;
-//
-//                if (aktCache == null) {
-//                    aktCache = cacheDAO.getFromDbByCacheId(cache.Id);
-//                }
-//                // Read Detail Info of Cache if not available
-//                if ((aktCache != null) && (aktCache.detail == null)) {
-//                    aktCache.loadDetail();
-//                }
-//                // If Cache into DB, extract saved rating
-//                if (aktCache != null) {
-//                    cache.Rating = aktCache.Rating;
-//                }
-//
-//                // Falls das Update nicht klappt (Cache noch nicht in der DB) Insert machen
-//                if (!cacheDAO.updateDatabase(cache)) {
-//                    cacheDAO.writeToDatabase(cache);
-//                }
-//
-//                // Notes von Groundspeak überprüfen und evtl. in die DB an die vorhandenen Notes anhängen
-//                if (cache.getTmpNote() != null) {
-//                    String oldNote = Database.getNote(cache.Id);
-//                    String newNote = "";
-//                    if (oldNote == null) {
-//                        oldNote = "";
-//                    }
-//                    String begin = "<Import from Geocaching.com>";
-//                    String end = "</Import from Geocaching.com>";
-//                    int iBegin = oldNote.indexOf(begin);
-//                    int iEnd = oldNote.indexOf(end);
-//                    if ((iBegin >= 0) && (iEnd > iBegin)) {
-//                        // Note from Groundspeak already in Database
-//                        // -> Replace only this part in whole Note
-//                        newNote = oldNote.substring(0, iBegin - 1) + System.getProperty("line.separator"); // Copy the old part of Note before
-//                        // the beginning of the groundspeak
-//                        // block
-//                        newNote += begin + System.getProperty("line.separator");
-//                        newNote += cache.getTmpNote();
-//                        newNote += System.getProperty("line.separator") + end;
-//                        newNote += oldNote.substring(iEnd + end.length(), oldNote.length());
-//                    } else {
-//                        newNote = oldNote + System.getProperty("line.separator");
-//                        newNote += begin + System.getProperty("line.separator");
-//                        newNote += cache.getTmpNote();
-//                        newNote += System.getProperty("line.separator") + end;
-//                    }
-//                    cache.setTmpNote(newNote);
-//                    Database.setNote(cache.Id, cache.getTmpNote());
-//                }
-//
-//                // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
-//                cache.setLongDescription("");
-//
-//
-//                for (int i = 0, n = cache.waypoints.size; i < n; i++) {
-//                    // must Cast to Full Waypoint. If Waypoint, is wrong createt!
-//                    Waypoint waypoint = cache.waypoints.get(i);
-//                    boolean update = true;
-//
-//                    // dont refresh wp if aktCache.wp is user changed
-//                    if (aktCache != null) {
-//                        if (aktCache.waypoints != null) {
-//                            for (int j = 0, m = aktCache.waypoints.size; j < m; j++) {
-//                                Waypoint wp = aktCache.waypoints.get(j);
-//                                if (wp.getGcCode().equalsIgnoreCase(waypoint.getGcCode())) {
-//                                    if (wp.IsUserWaypoint)
-//                                        update = false;
-//                                    break;
-//                                }
-//                            }
-//                        }
-//                    }
-//
-//                    if (update) {
-//                        // do not store replication information when importing caches with GC api
-//                        if (!waypointDAO.updateDatabase(waypoint, false)) {
-//                            waypointDAO.writeToDatabase(waypoint, false); // do not store replication information here
-//                        }
-//                    }
-//
-//                }
-//
-//                if (aktCache == null) {
-//                    Database.Data.Query.add(cache);
-//                } else {
-//                    Database.Data.Query.removeValue(Database.Data.Query.GetCacheById(cache.Id), false);
-//                    Database.Data.Query.add(cache);
-//                }
-//            }
-//        });
-//    }
 }

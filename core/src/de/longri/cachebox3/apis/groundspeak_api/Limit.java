@@ -21,6 +21,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.ApiCallLimitEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.utils.ICancel;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +89,7 @@ public class Limit {
 
         this.checkRuns.set(true);
         log.debug("start check");
-        CB.postAsync(new Runnable() {
+        CB.postAsync(new NamedRunnable("Limit") {
             @Override
             public void run() {
 

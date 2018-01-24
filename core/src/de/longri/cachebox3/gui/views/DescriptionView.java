@@ -42,6 +42,7 @@ import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.NetUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -247,7 +248,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
             String cacheHtml = actCache.getLongDescription(Database.Data) + actCache.getShortDescription(Database.Data);
             String html = "";
-            if (actCache.getApiState() == 1)// GC.com API lite
+            if (actCache.getApiState(Database.Data) == 1)// GC.com API lite
             { // Load Standard HTML
                 log.debug("load is Lite html");
                 String nodesc = Translation.get("GC_NoDescription").toString();
@@ -284,7 +285,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
 
         if (nonLocalImages.size() > 0) {
-            CB.postAsync(new Runnable() {
+            CB.postAsync(new NamedRunnable("DescriptionView") {
                 @Override
                 public void run() {
                     //download and store

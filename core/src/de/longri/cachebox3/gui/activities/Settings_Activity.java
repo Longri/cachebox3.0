@@ -460,7 +460,7 @@ public class Settings_Activity extends ActivityBase {
         boolean expert = Config.SettingsShowAll.getValue() || Config.SettingsShowExpert.getValue();
         boolean developer = Config.SettingsShowAll.getValue();
 
-        for (SettingBase<?> setting : SettingsList.that) {
+        for (SettingBase<?> setting : Config.settingsList) {
             if (setting.getCategory() == category) {
                 boolean show = false;
 

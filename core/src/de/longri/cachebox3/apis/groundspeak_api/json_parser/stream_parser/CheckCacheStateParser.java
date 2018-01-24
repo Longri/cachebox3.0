@@ -21,6 +21,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -104,6 +105,7 @@ public class CheckCacheStateParser {
                 super.pop();
                 if (GeocacheStatusesArray && newCache) {
                     AbstractCache abstractCache = getCache(caches, cacheCode);
+                    abstractCache.isChanged.set(false);
                     abstractCache.setArchived(archived);
                     abstractCache.setAvailable(available);
                     abstractCache.setNumTravelbugs(trackableCount);
@@ -138,21 +140,23 @@ public class CheckCacheStateParser {
         };
 
         final AtomicBoolean chkCancel = new AtomicBoolean(true);
-        CB.postAsync(new Runnable() {
-            @Override
-            public void run() {
-                while (chkCancel.get()) {
-                    if (icancel.cancel()) {
-                        parser.cancel();
-                    }
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+        if (icancel != null) {
+            CB.postAsync(new NamedRunnable("CheckCacheStateParser") {
+                @Override
+                public void run() {
+                    while (chkCancel.get()) {
+                        if (icancel.cancel()) {
+                            parser.cancel();
+                        }
+                        try {
+                            Thread.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
         parser.parse(stream);
         chkCancel.set(false);
@@ -162,6 +166,9 @@ public class CheckCacheStateParser {
 
 
     private static AbstractCache getCache(Array<AbstractCache> caches, String gcCode) {
+
+        //TODO improve, store last search idx
+
         for (int i = 0, n = caches.size; i < n; i++) {
             if (caches.get(i).getGcCode().equals(gcCode)) return caches.get(i);
         }

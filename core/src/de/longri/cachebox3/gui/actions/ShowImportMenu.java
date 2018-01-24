@@ -21,6 +21,7 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 /**
  * Created by Longri on 12.04.2017.
@@ -69,7 +70,7 @@ public class ShowImportMenu extends Menu {
 //                        imp.show();
                         return true;
                     case MenuID.MI_IMPORT_GS_API_POSITION:
-                        CB.postAsync(new Runnable() {
+                        CB.postAsync(new NamedRunnable("ShowImportMenu") {
                             @Override
                             public void run() {
                                 if (!CB.checkApiKeyNeeded()) {

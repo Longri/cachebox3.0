@@ -34,10 +34,10 @@ class SettingBaseTest {
 
     static {
         TestUtils.initialGdx();
-        new SettingsList();
+
     }
 
-    public static final SettingBool testBool = (SettingBool) SettingsList.addSetting(new SettingBool("testBool"
+    private static final SettingBool testBool = (SettingBool) Config.settingsList.addSetting(new SettingBool("testBool"
             , SettingCategory.RememberAsk, SettingMode.Normal, false, SettingStoreType.Global,
             SettingUsage.ACB, true));
 
@@ -94,6 +94,14 @@ class SettingBaseTest {
 
         // close config DB and reload
         Config.AcceptChanges();
+        Config.AcceptChanges();
+        Config.AcceptChanges();
+        //wait 5sec
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Database.Settings.close();
 
         Database.Settings = new Database(Database.DatabaseType.Settings);
@@ -139,6 +147,7 @@ class SettingBaseTest {
 
         //clean up test file's
         configFileHandle.delete();
+        dataFileHandle.delete();
 
     }
 

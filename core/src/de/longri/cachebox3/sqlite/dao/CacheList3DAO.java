@@ -19,16 +19,28 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
+import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheList;
 import de.longri.cachebox3.types.ImmutableCache;
+import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.gdx.sqlite.GdxSqlite;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
+import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
+import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -39,114 +51,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CacheList3DAO extends AbstractCacheListDAO {
 
     private final Logger log = LoggerFactory.getLogger(CacheList3DAO.class);
-    private final int LIMIT = 100;
-
-//    @Override
-//    public void readCacheList(final Database database, final CacheList cacheList, String statement, boolean fullDetails, final boolean loadAllWaypoints) {
-//
-//        if (cacheList == null) throw new RuntimeException("CacheList can't be NULL");
-//
-//        if (statement == null || statement.isEmpty()) {
-//            statement = "SELECT * from CacheCoreInfo";
-//        }
-//
-//        final String msg = Translation.get("LoadCacheList").toString();
-//
-//        final int count = DaoFactory.CACHE_LIST_DAO.getFilteredCacheCount(database, statement);
-//        EventHandler.fire(new IncrementProgressEvent(0, msg, count));
-//
-//        cacheList.clear();
-//
-//        final String finalStatement = statement;
-//        int limitOffset = 0;
-//        int debugCount = 0;
-//
-//        final AtomicInteger postCount = new AtomicInteger(0);
-//        final AtomicInteger readyCount = new AtomicInteger(0);
-//        final AtomicInteger cacheCount = new AtomicInteger(0);
-//
-//        final FileHandle dbFileHandle = database.getFileHandle();
-//
-//
-//        while (limitOffset < count) {
-//            debugCount++;
-//            postCount.incrementAndGet();
-//            final String offset = Integer.toString(limitOffset);
-//
-//           final Database asyncDb = new Database(Database.DatabaseType.CacheBox3);
-//            try {
-//                asyncDb.startUp(dbFileHandle);
-//            } catch (SQLiteGdxException e) {
-//                e.printStackTrace();
-//            }
-//
-//            CB.postAsync(new Runnable() {
-//                @Override
-//                public void run() {
-//                    String query = finalStatement + " LIMIT "
-//                            + Integer.toString(LIMIT) + " OFFSET "
-//                            + offset;
-//                    GdxSqliteCursor cursor = asyncDb.rawQuery(query, null);
-//                    cursor.moveToFirst();
-//                    while (!cursor.isAfterLast()) {
-//                        postCount.incrementAndGet();
-//                        final double latitude = cursor.getDouble(1);
-//                        final double longitude = cursor.getDouble(2);
-//                        final long id = cursor.getLong(0);
-//                        final short sizeOrigin = cursor.getShort(3);
-//                        final short difficulty = cursor.getShort(4);
-//                        final short terrain = cursor.getShort(5);
-//                        final short typeOrigin = cursor.getShort(6);
-//                        final short rating = cursor.getShort(7);
-//                        final short numTravelbugs = cursor.getShort(8);
-//                        final String gcCode = cursor.getString(9);
-//                        final String name = cursor.getString(10);
-//                        final String placedBy = cursor.getString(11);
-//                        final String owner = cursor.getString(12);
-//                        final String gcId = cursor.getString(13);
-//                        final short booleanStore = cursor.getShort(14);
-//                        final int favPoints = cursor.getInt(15);
-//
-////                        CB.postAsync(new Runnable() {
-////                            @Override
-////                            public void run() {
-////                                cacheList.add(new ImmutableCache(loadAllWaypoints ? database : null,
-////                                        latitude, longitude, id, sizeOrigin, difficulty, terrain, typeOrigin,
-////                                        rating, numTravelbugs, gcCode, name, placedBy, owner, gcId,
-////                                        booleanStore, favPoints));
-////                                readyCount.incrementAndGet();
-////                                EventHandler.fire(new IncrementProgressEvent(cacheCount.incrementAndGet(), msg, count));
-////                            }
-////                        });
-//
-//
-//                        cacheList.add(new ImmutableCache(loadAllWaypoints ? asyncDb : null,
-//                                latitude, longitude, id, sizeOrigin, difficulty, terrain, typeOrigin,
-//                                rating, numTravelbugs, gcCode, name, placedBy, owner, gcId,
-//                                booleanStore, favPoints));
-//                        readyCount.incrementAndGet();
-//                        EventHandler.fire(new IncrementProgressEvent(cacheCount.incrementAndGet(), msg, count));
-//
-//                        cursor.moveToNext();
-//
-//                    }
-//                    cursor.close();
-//                }
-//            });
-//            limitOffset += LIMIT;
-//            readyCount.incrementAndGet();
-//        }
-//
-//        log.debug("finish post all {} async loading posts", debugCount);
-//        while (postCount.get() > readyCount.get()) {
-//            try {
-//                Thread.sleep(20);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        log.debug("finish post all {} async loading posts", debugCount);
-//    }
+    private final DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public void readCacheList(final Database database, final CacheList cacheList, String statement, boolean fullDetails, boolean loadAllWaypoints) {
@@ -162,129 +67,66 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             throw new RuntimeException("CacheList can't be NULL");
         }
 
-
-        final AtomicBoolean finishStackFill = new AtomicBoolean(false);
         final String msg = Translation.isInitial() ? Translation.get("LoadCacheList").toString() : "";
         final int count = getFilteredCacheCount(database, statement);
         if (count == 0) {
-            cacheList.clear(5);
+            cacheList.clear();
             EventHandler.fire(new IncrementProgressEvent(100, msg, 100));
             return;
         }
 
         cacheList.clear(count);
 
-        final AtomicInteger cacheCount = new AtomicInteger(0);
-        final ImmutableCache.CursorData[] cursorDataStack = new ImmutableCache.CursorData[count];
-        final AtomicInteger writeCount = new AtomicInteger(-1);
-        final AtomicInteger readCount = new AtomicInteger(-1);
-        final AtomicBoolean asyncCacheLoadReady = new AtomicBoolean(false);
-
-
         final int progressEventcount = count / 200; // fire event every 2% changes
 
-        CB.postAsync(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                int tryCount = 0;
+        try {
+            database.rawQuery(statement, new GdxSqlite.RowCallback() {
                 int progressFireCount = 0;
+                int actCacheCount = 0;
 
-                while (true) {
-
-                    if (readCount.get() < writeCount.get()) {
-                        int idx = readCount.incrementAndGet();
-                        if (cursorDataStack[idx] == null) {
-                            if (tryCount > 1000) {
-                                // ignore this Cache
-                                log.warn("Cache index: {} are ignored", idx);
-                                continue;
-                            }
-                            try {
-                                Thread.sleep(5);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            readCount.decrementAndGet();
-                            tryCount++;
-                            continue;
-                        }
-                        cacheList.add(new ImmutableCache(cursorDataStack[idx]), true);
-
-                        int actCacheCount = cacheCount.incrementAndGet();
-                        progressFireCount++;
-                        if (progressFireCount >= progressEventcount) {
-                            EventHandler.fire(new IncrementProgressEvent(actCacheCount, msg, count));
-                            progressFireCount = 0;
-                        }
-                    } else {
-                        if (finishStackFill.get()) {
-                            break;
-                        }
-//                        log.debug("WAIT FOR CACHE DATA");
+                @Override
+                public void newRow(String[] columnName, Object[] value, int[] types) {
+                    cacheList.add(new ImmutableCache(value));
+                    actCacheCount++;
+                    progressFireCount++;
+                    if (progressFireCount >= progressEventcount) {
+                        EventHandler.fire(new IncrementProgressEvent(actCacheCount, msg, count));
+                        progressFireCount = 0;
                     }
                 }
-                asyncCacheLoadReady.set(true);
-                EventHandler.fire(new IncrementProgressEvent(cacheCount.get(), msg, count));
-                log.debug("asyncCacheLoadReady after {} ms", System.currentTimeMillis() - startTime);
-            }
-        });
+            });
+        } catch (SQLiteGdxException e) {
+            if (e.getMessage().equals("database disk image is malformed")) {
+                // if the DB malformed, we inform the User
 
-        EventHandler.fire(new IncrementProgressEvent(0, msg, count));
-
-        int offset = 0;
-        final String finalStatement = statement;
-        final AtomicInteger runningAsyncTasks = new AtomicInteger(0);
-        while (offset < count) {
-            final int finalOffset = offset;
-            Runnable runnable = new Runnable() {
-                public void run() {
-                    String query = finalStatement + " LIMIT "
-                            + Integer.toString(LIMIT) + " OFFSET "
-                            + finalOffset;
-                    GdxSqliteCursor cursor = database.rawQuery(query,(String[])null);
-                    cursor.moveToFirst();
-                    while (!cursor.isAfterLast()) {
-                        ImmutableCache.CursorData data = new ImmutableCache.CursorData(cursor);
-                        cursorDataStack[writeCount.incrementAndGet()] = data;
-                        cursor.moveToNext();
+                CB.scheduleOnMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MessageBox.show(Translation.get("ErrDbStartup"), Translation.get("corruptDB"), MessageBoxButtons.OK, MessageBoxIcon.Error, new OnMsgBoxClickListener() {
+                            @Override
+                            public boolean onClick(int which, Object data) {
+                                //show select DB Dialog
+                                CB.postAsync(new NamedRunnable("CacheList3DAO:showSelectDbDialog") {
+                                    @Override
+                                    public void run() {
+                                        new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.ASK).execute();
+                                    }
+                                });
+                                return true;
+                            }
+                        });
                     }
-                    cursor.close();
-                    if (runningAsyncTasks.decrementAndGet() == 0) {
-                        finishStackFill.set(true);
-                        log.debug("finishStackFill after {} ms", System.currentTimeMillis() - startTime);
-                    }
-                }
-            };
-
-            boolean useThreading = true;
-
-            runningAsyncTasks.incrementAndGet();
-            if (useThreading) {
-                CB.postAsync(runnable);
+                }, 500);
+                return;
             } else {
-                runnable.run();
-            }
-
-            offset += LIMIT;
-        }
-
-
-        //wait for Async ready
-        while (!asyncCacheLoadReady.get()) {
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        EventHandler.fire(new IncrementProgressEvent(count, msg, count));
+        log.debug("CacheLoadReady after {} ms", System.currentTimeMillis() - startTime);
 
         if (!loadAllWaypoints) {
             float loadingTime = System.currentTimeMillis() - startTime;
@@ -352,10 +194,124 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         } else {
             statement = statement.replace("SELECT *", "SELECT COUNT(*)");
         }
-        GdxSqliteCursor cursor = database.rawQuery(statement, (String[])null);
+        GdxSqliteCursor cursor = database.rawQuery(statement, (String[]) null);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();
         return count;
+    }
+
+    @Override
+    public void writeToDB(Database database, CacheList cacheList) {
+        //create statements
+        GdxSqlitePreparedStatement REPLACE_CORE_INFO = database.myDB.prepare("REPLACE INTO CacheCoreInfo VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ;");
+        GdxSqlitePreparedStatement REPLACE_INFO = database.myDB.prepare("REPLACE INTO CacheInfo VALUES(?,?,?,?,?,?,?,?,?) ;");
+        GdxSqlitePreparedStatement REPLACE_CACHE_TEXT = database.myDB.prepare("REPLACE INTO CacheText VALUES(?,?,?,?,?,?,?) ;");
+        GdxSqlitePreparedStatement REPLACE_ATTRIBUTES = database.myDB.prepare("REPLACE INTO Attributes VALUES(?,?,?,?,?) ;");
+
+        database.myDB.beginTransaction();
+        try {
+            for (AbstractCache ca : cacheList) {
+                REPLACE_CORE_INFO.bind(
+                        ca.getId(),
+                        ca.getLatitude(),
+                        ca.getLongitude(),
+                        ca.getSize().ordinal(),
+                        ((int) (ca.getDifficulty() * 2)),
+                        ((int) (ca.getTerrain() * 2)),
+                        ca.getType().ordinal(),
+                        ((int) (ca.getRating() * 200)),
+                        ca.getNumTravelbugs(),
+                        ca.getGcCode(),
+                        ca.getName(),
+                        ca.getPlacedBy(),
+                        ca.getOwner(),
+                        ca.getGcId(),
+                        ca.getBooleanStore(),
+                        ca.getFavoritePoints(),
+                        (int) (ca.getRating() * 2)
+                ).commit().reset();
+
+                REPLACE_ATTRIBUTES.bind(
+                        ca.getId(),
+                        ca.getAttributesPositive() == null ? 0 : ca.getAttributesPositive().getLow(),
+                        ca.getAttributesNegative() == null ? 0 : ca.getAttributesNegative().getLow(),
+                        ca.getAttributesPositive() == null ? 0 : ca.getAttributesPositive().getHigh(),
+                        ca.getAttributesNegative() == null ? 0 : ca.getAttributesNegative().getHigh()
+                ).commit().reset();
+
+                REPLACE_INFO.bind(
+                        ca.getId(),
+                        iso8601Format.format(ca.getDateHidden(database) == null ? new Date() : ca.getDateHidden(database)),
+                        iso8601Format.format(new Date()),
+                        ca.getTourName(),
+                        ca.getGPXFilename_ID(),
+                        null, //todo handle listing checksum
+                        ca.getState(),
+                        ca.getCountry(database),
+                        ca.getApiState(database)
+                ).commit().reset();
+
+
+                REPLACE_CACHE_TEXT.bind(
+                        ca.getId(),
+                        ca.getUrl(database),
+                        ca.getHint(database),
+                        ca.getLongDescription(database),
+                        ca.getTmpNote(),
+                        ca.getTmpSolver(),
+                        ca.getShortDescription(database)
+                ).commit().reset();
+
+
+            }
+        } finally {
+            database.myDB.endTransaction();
+        }
+
+
+        //store Waypoints
+        Array<AbstractWaypoint> allWaypoints = new Array<>();
+        for (AbstractCache ca : cacheList) {
+            //store Waypoints
+            Array<AbstractWaypoint> waypoints = ca.getWaypoints();
+            if (waypoints != null) {
+                int n = waypoints.size;
+                while (n-- > 0) {
+                    AbstractWaypoint wp = waypoints.get(n);
+                    wp.setCacheId(ca.getId());
+                    allWaypoints.add(wp);
+                }
+            }
+        }
+
+        GdxSqlitePreparedStatement REPLACE_WAYPOINTS = database.myDB.prepare("REPLACE INTO Waypoints VALUES(?,?,?,?,?,?,?,?,?) ;");
+        GdxSqlitePreparedStatement REPLACE_WAYPOINTS_TEXT = database.myDB.prepare("REPLACE INTO WaypointsText VALUES(?,?,?) ;");
+
+        database.myDB.beginTransaction();
+        try {
+            for (AbstractWaypoint wp : allWaypoints) {
+                REPLACE_WAYPOINTS.bind(
+                        wp.getCacheId(),
+                        wp.getGcCode(),
+                        wp.getLatitude(),
+                        wp.getLongitude(),
+                        wp.getType().ordinal(),
+                        wp.isStart(),
+                        wp.isSyncExcluded(),
+                        wp.isUserWaypoint(),
+                        wp.getTitle()
+                ).commit().reset();
+
+                REPLACE_WAYPOINTS_TEXT.bind(
+                        wp.getGcCode(),
+                        wp.getDescription(database),
+                        wp.getClue(database)
+                ).commit().reset();
+            }
+        } finally {
+            database.myDB.endTransaction();
+        }
+
     }
 }

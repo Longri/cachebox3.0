@@ -31,7 +31,7 @@ public class ImageDAO {
      * @param image
      * @param ignoreExisting
      */
-    public void WriteToDatabase(ImageEntry image, Boolean ignoreExisting) {
+    public synchronized void WriteToDatabase(ImageEntry image, Boolean ignoreExisting) {
         Parameters args = new Parameters();
         args.put("CacheId", image.CacheId);
         args.put("GcCode", image.GcCode);
@@ -73,7 +73,7 @@ public class ImageDAO {
     /**
      * @param GcCode
      */
-    public void deleteImagesForCache(String GcCode) {
+    public synchronized void deleteImagesForCache(String GcCode) {
         Database.Data.execSQL("DELETE from Images where GcCode = '" + GcCode + "'");
     }
 
@@ -117,7 +117,7 @@ public class ImageDAO {
         return images;
     }
 
-    public int getImageCount(String whereClause) {
+    public synchronized int getImageCount(String whereClause) {
         int count = 0;
 
         GdxSqliteCursor reader = Database.Data.rawQuery("select count(id) from Images where GcCode in (select GcCode from Caches " + ((whereClause.length() > 0) ? "where " + whereClause : whereClause) + ")", (String[]) null);
