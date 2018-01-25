@@ -368,7 +368,7 @@ public class GroundspeakAPI {
 
         if (caches.size >= 110) throw new RuntimeException("Cache count must les then 110");
 
-        waitApiCallLimit();
+        waitApiCallLimit(icancel);
         String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
         Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
@@ -395,12 +395,18 @@ public class GroundspeakAPI {
         requestString += "}";
 
         httpPost.setContent(requestString);
-        NetUtils.StreamHandleObject result = (NetUtils.StreamHandleObject) NetUtils.postAndWait(NetUtils.ResultType.STREAM, httpPost, icancel);
+        NetUtils.StreamHandleObject result = null;
+        result = (NetUtils.StreamHandleObject) NetUtils.postAndWait(NetUtils.ResultType.STREAM, httpPost, icancel);
+
+//        String debugStringResult = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING, httpPost, icancel);
+
+
         if (icancel.cancel()) {
             if (result != null) result.handled();
             return ApiResultState.CANCELED;
         }
         CheckCacheStateParser parser = new CheckCacheStateParser();
+
         ApiResultState parseResult = parser.parse(result.stream, caches, icancel, progressIncrement);
         result.handled();
         return parseResult;
@@ -413,7 +419,7 @@ public class GroundspeakAPI {
 
         if (caches.size >= 50) throw new RuntimeException("Cache count must les then 50");
 
-        waitApiCallLimit();
+        waitApiCallLimit(icancel);
 
         Array<String> gcCodes = new Array<>();
         for (AbstractCache ca : caches) {
@@ -431,7 +437,7 @@ public class GroundspeakAPI {
         Database tmp = new Database(db);
 
         final SearchGC searchGC = new SearchGC(tmp, getAccessToken(), gcCodes, (byte) 2, icancel);
-
+        searchGC.setIsLite(true);
 
         final ApiResultState result[] = new ApiResultState[1];
         final AtomicBoolean WAIT = new AtomicBoolean(true);
@@ -564,28 +570,13 @@ public class GroundspeakAPI {
     }
 
 
-//
-
-    //
-//    /**
-//     * Returns True if the APY-Key INVALID
-//     *
-//     * @param Staging
-//     *            Config.settings.StagingAPI.getValue()
-//     * @param accessToken
-//     * @param conectionTimeout
-//     *            Config.settings.conection_timeout.getValue()
-//     * @param socketTimeout
-//     *            Config.settings.socket_timeout.getValue()
-//     * @return 0=false 1=true
-//     */
     public static ApiResultState chkMembership(boolean withoutMsg) {
         if (API_isChecked) {
+            log.debug("Membership ist checked, return stored state {}", membershipType.getState());
             return membershipType;
         }
         final ApiResultState[] ret = {ApiResultState.UNKNOWN};
         if (getAccessToken().length() > 0) {
-
 
             final AtomicBoolean WAIT = new AtomicBoolean(true);
             getMembershipType(new GenericCallBack<ApiResultState>() {

@@ -177,6 +177,8 @@ public abstract class Search extends PostRequest {
 
     @Override
     protected void handleHttpResponse(Net.HttpResponse httpResponse, final GenericCallBack<ApiResultState> readyCallBack) {
+//        String debugResult = httpResponse.getResultAsString();
+
         final InputStream stream = httpResponse.getResultAsStream();
         long length = 1;
 
@@ -471,6 +473,10 @@ public abstract class Search extends PostRequest {
                             // break reading and set ApiResultState
                             resultState[0] = ApiResultState.EXPIRED_API_KEY;
                             this.cancel();
+                        } else if (name.equals("StatusMessage") && value.contains("download limit")) {
+                            // break reading and set ApiResultState
+                            resultState[0] = ApiResultState.API_DOWNLOAD_LIMIT;
+                            this.cancel();
                         } else {
                             SWITCH = 0;
                         }
@@ -494,7 +500,7 @@ public abstract class Search extends PostRequest {
                             actTrackable.setUrl(value);
                         } else if (TYPE_NAME.equals(name)) {
                             actTrackable.setTypeName(value);
-                        }else if (ICON_URL.equals(name)) {
+                        } else if (ICON_URL.equals(name)) {
                             actTrackable.setIconUrl(value);
                         }
                         break;

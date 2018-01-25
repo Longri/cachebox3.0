@@ -51,7 +51,7 @@ public class Limit {
         long now = cal.getTimeInMillis();
         cal.add(calendarField, calendarAnmount);
         long amount = cal.getTimeInMillis();
-        thradSleepTime = (amount - now) / callsPerCalendarValue;
+        thradSleepTime = ((amount - now) / callsPerCalendarValue)*4;
     }
 
     public synchronized void waitForCall() {
@@ -110,7 +110,7 @@ public class Limit {
                         log.error("at remove calls from stack");
                         calls.clear();
                     }
-                    log.debug("wait for free slot {}", calls.size);
+                    log.debug("{} call's at the last minute", calls.size);
                     isFull.set(calls.size >= callsPerCalendarValue);
 
                     try {

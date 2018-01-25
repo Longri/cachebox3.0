@@ -82,7 +82,8 @@ public class CheckStateActivity extends ActivityBase {
     public CheckStateActivity(boolean withFavPoi) {
         super("CheckStateActivity");
 
-        blockSize = withFavPoi ? 48 : 108; // The API leaves only a maximum of 110 per request or 50 with search(Favepoint)!
+        // The API leaves only a maximum of 110 per request or 50 with search(Favepoint)!
+        blockSize = withFavPoi ? 48 : 108;
 
         bCancel = new CharSequenceButton(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
@@ -234,6 +235,7 @@ public class CheckStateActivity extends ActivityBase {
                         index++;
                     } while (Iterator2.hasNext());
 
+                    log.debug("CheckState {} call start: {} stop: {}  from:{}", withFavPoi ? "with FavePoints" : "without FavePoints", start, stop, chkList.size);
 
                     if (withFavPoi) {
                         result = GroundspeakAPI.getGeocacheStatusFavoritePoints(chkList100, new ICancel() {
@@ -289,14 +291,14 @@ public class CheckStateActivity extends ActivityBase {
                 //Write changes to DB
                 final AtomicInteger changedCount = new AtomicInteger(0);
                 String sql = "UPDATE CacheCoreInfo SET BooleanStore = ? , NumTravelbugs = ? , FavPoints = ? WHERE id = ? ;";
-                GdxSqlitePreparedStatement REPLACE_ATTRIBUTES = Database.Data.myDB.prepare(sql);
+                GdxSqlitePreparedStatement REPLACE_STATUS = Database.Data.myDB.prepare(sql);
 
                 Database.Data.myDB.beginTransaction();
                 try {
                     for (AbstractCache ca : addedReturnList) {
                         if (ca.isChanged.get()) {
                             changedCount.incrementAndGet();
-                            REPLACE_ATTRIBUTES.bind(
+                            REPLACE_STATUS.bind(
                                     ca.getBooleanStore(),
                                     ca.getNumTravelbugs(),
                                     ca.getFavoritePoints(),
@@ -307,6 +309,9 @@ public class CheckStateActivity extends ActivityBase {
                 } finally {
                     Database.Data.myDB.endTransaction();
                 }
+
+
+                int changes = Database.Data.myDB.changes();
 
                 //state check complete, close activity
                 EventHandler.remove(limitListener);

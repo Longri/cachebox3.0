@@ -32,6 +32,8 @@ import de.longri.cachebox3.events.GpsEventHelper;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.dialogs.GetApiKeyQuestionDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.map.MapMode;
@@ -450,9 +452,21 @@ public class CB {
             }, 300);// wait for closing ProgressDialog before show msg
             return true;
         }
+
+        if (result == ApiResultState.API_DOWNLOAD_LIMIT) {
+            CB.scheduleOnMainThread(new Runnable() {
+                @Override
+                public void run() {
+                    MessageBox.show(Translation.get("Limit_msg")//Message
+                            , Translation.get("Limit_title")//Title
+                            , MessageBoxButtons.OK
+                            , MessageBoxIcon.Error, null);
+                }
+            }, 300);// wait for closing ProgressDialog before show msg
+            return true;
+        }
         return false;
     }
-
 
     public static boolean checkApiKeyNeeded() {
         if (Config.GcAPI.getValue() == null || Config.GcAPI.getValue().isEmpty()) {
