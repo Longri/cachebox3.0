@@ -75,9 +75,23 @@ class JsonStreamParserTest {
 //        String Exclude = "";
 
 
-        String[] excludeList = new String[]{"", "[Geocaches, GeocacheLogs]", "[Geocaches, Attributes]"};
+        Array<String> exEmpty = new Array<>();
 
-        for (String exclude : excludeList) {
+        Array<String> exLogs = new Array<>();
+        exLogs.add("[Geocaches, GeocacheLogs]");
+
+        Array<String> exAttribute = new Array<>();
+        exAttribute.add("[Geocaches, Attributes]");
+
+        Array<String> multiExclude = new Array<>();
+        multiExclude.add("[Geocaches, Attributes]");
+        multiExclude.add("[Geocaches, GeocacheLogs]");
+
+        Array<String>[] excludeList = new Array[]{exEmpty, exLogs, exAttribute, multiExclude};
+
+//
+
+        for (Array<String> exclude : excludeList) {
             for (String path : testFiles) {
                 if (path == null || path.isEmpty()) continue;
 
@@ -93,7 +107,7 @@ class JsonStreamParserTest {
 
     }
 
-    private void parse(final String exclude, String file, final StringBuilder sb, final StringBuilder sb2) throws FileNotFoundException {
+    private void parse(final Array<String> exclude, String file, final StringBuilder sb, final StringBuilder sb2) throws FileNotFoundException {
         long start = System.currentTimeMillis();
 
         InputStream stream = TestUtils.getResourceRequestStream(file);
@@ -102,10 +116,22 @@ class JsonStreamParserTest {
         final Array<String> ex = new Array<>();
         final AtomicBoolean isExclude = new AtomicBoolean(false);
         new GdxJsonReader() {
+
+            boolean isExclude() {
+
+                for (String exc : exclude) {
+                    if (ex.toString().equals(exc)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+
             public void startArray(String name) {
                 super.startArray(name);
                 ex.add(name);
-                if (ex.toString().equals(exclude)) {
+                if (isExclude()) {
                     isExclude.set(true);
                 } else {
                     if (!isExclude.get()) {
@@ -120,7 +146,7 @@ class JsonStreamParserTest {
                 if (!isExclude.get()) {
                     sb.appendLine("endArray " + name);
                 }
-                if (ex.toString().equals(exclude)) {
+                if (isExclude()) {
                     isExclude.set(false);
                 }
                 ex.pop();

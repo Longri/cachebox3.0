@@ -46,7 +46,7 @@ public class JsonStreamParser implements JsonParser {
     private int lastPeek;
     private int lastNameStart = -1;
     private final AtomicBoolean CANCELD = new AtomicBoolean(false);
-    private String exclude;
+    private Array<String> exclude;
     private final AtomicBoolean isExclude = new AtomicBoolean(false);
     private final AtomicInteger isExcludeCount = new AtomicInteger(0);
     private AtomicBoolean noHandleForNextValue = new AtomicBoolean(false);
@@ -57,6 +57,17 @@ public class JsonStreamParser implements JsonParser {
 
     public void cancel() {
         CANCELD.set(true);
+    }
+
+    private boolean ifExclude() {
+        if (this.exclude == null) return false;
+        String stack = arrayNameStack.toString();
+        for (String exc : exclude) {
+            if (exc != null && stack.equals(exc)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -208,7 +219,7 @@ public class JsonStreamParser implements JsonParser {
                             break;
                         case '[':
                             arrayNameStack.add(actName);
-                            if (this.exclude != null && exclude.equals(arrayNameStack.toString())) {
+                            if (ifExclude()) {
                                 isExclude.set(true);
                                 isExcludeCount.set(0);
                                 break;
@@ -220,9 +231,9 @@ public class JsonStreamParser implements JsonParser {
                             pop();
                             break;
                         case ']':
-                            if (arrayNameStack.toString().equals(exclude)) {
+                            if (ifExclude()) {
                                 arrayNameStack.pop();
-                            }else{
+                            } else {
                                 pop();
                                 endArray(arrayNameStack.pop());
                             }
@@ -492,7 +503,7 @@ public class JsonStreamParser implements JsonParser {
         return (int) percent;
     }
 
-    public void setExclude(String exclude) {
+    public void setExclude(Array<String> exclude) {
         this.exclude = exclude;
     }
 }
