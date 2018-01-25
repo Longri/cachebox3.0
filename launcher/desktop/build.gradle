@@ -27,6 +27,15 @@ task launcherJar(type: Jar, dependsOn: classes) {
     with jar
 }
 
+task copyAssets(type: Copy) {
+    from("../android/assets")
+    into("workingDir")
+}
+
+
+tasks.withType(org.gradle.api.tasks.compile.JavaCompile) {
+    compileTask -> compileTask.dependsOn copyAssets
+}
 
 eclipse {
     project {

@@ -900,6 +900,10 @@
       "path": "svg/favpoint.svg",
       "scale": 0.43
     },
+    "favpoint_menu": {
+      "path": "svg/favpoint.svg",
+      "scale": 0.45
+    },
     "fieldnoteListIcon": {
       "path": "svg/fieldnoteListIcon.svg",
       "scale": 0.18
@@ -2312,7 +2316,6 @@
   },
   "de.longri.cachebox3.gui.ActivityBase$ActivityBaseStyle": {
     "default": {
-      "stageBackground": "dialog_stage_background",
       "background": "activityBack_drawable"
     }
   },
@@ -2603,7 +2606,7 @@
       "deleteAllDrafts": "deleteIcon",
       "edit": "edit",
       "fileTransfer": "fileTransfer",
-      "favPoint": "favpoint",
+      "favPoint": "favpoint_menu",
       "favorit": "favIcon",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
