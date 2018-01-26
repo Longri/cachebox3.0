@@ -342,7 +342,7 @@ public class SelectDB_Activity extends ActivityBase {
                         if (!CONVERT.get()) return;
 
                         //Show BlockUiActivity
-                        CB.postOnMainThread(new Runnable() {
+                        CB.postOnMainThread(new NamedRunnable("SelectDbActivity") {
                             @Override
                             public void run() {
                                 new BlockUiProgress_Activity(Translation.get("DB_Convert")).show();

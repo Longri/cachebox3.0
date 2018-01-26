@@ -215,7 +215,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     @Override
     public void onShow() {
-        CB.postOnMainThread(new Runnable() {
+        CB.postOnMainThread(new NamedRunnable("DescriptionView") {
             @Override
             public void run() {
                 showPlatformWebView();
@@ -317,7 +317,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
-        CB.postOnMainThread(new Runnable() {
+        CB.postOnMainThread(new NamedRunnable("DescriptionView") {
             @Override
             public void run() {
                 showPlatformWebView();

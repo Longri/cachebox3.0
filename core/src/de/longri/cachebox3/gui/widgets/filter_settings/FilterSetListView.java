@@ -414,7 +414,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         }
 
         private void setCheckImage() {
-            CB.postOnMainThread(new Runnable() {
+            CB.postOnMainThread(new NamedRunnable("FilterSetListViw:SetCheckImage") {
                 @Override
                 public void run() {
                     switch (property.getInt()) {
@@ -709,7 +709,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         }
 
         private void setCheckImage() {
-            CB.postOnMainThread(new Runnable() {
+            CB.postOnMainThread(new NamedRunnable("FilterSetListView:checkImage") {
                 @Override
                 public void run() {
                     if (property.get()) {

@@ -49,6 +49,7 @@ import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.MutableWaypoint;
 import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -360,7 +361,7 @@ public class WaypointView extends AbstractView {
     }
 
     private void showEditWpDialog(final AbstractWaypoint newWP, final boolean showCoords, final boolean onlyShow) {
-        CB.postOnMainThread(new Runnable() {
+        CB.postOnMainThread(new NamedRunnable("WaypointView") {
             @Override
             public void run() {
                 AbstractWaypoint mutable = newWP.getMutable(Database.Data);

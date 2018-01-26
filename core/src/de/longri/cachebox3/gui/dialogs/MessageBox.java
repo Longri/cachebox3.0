@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.dialogs;
 
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 /**
  * Created by Longri on 02.09.2017.
@@ -31,10 +32,10 @@ public class MessageBox {
         show(message, null, MessageBoxButtons.OK, null, null);
     }
 
-    public static void show(final CharSequence message,final CharSequence title, final MessageBoxButtons buttons, final MessageBoxIcon icon,
+    public static void show(final CharSequence message, final CharSequence title, final MessageBoxButtons buttons, final MessageBoxIcon icon,
                             final OnMsgBoxClickListener clickListener) {
 
-        CB.postOnMainThread(new Runnable() {
+        CB.postOnMainThread(new NamedRunnable("MessageBox") {
             @Override
             public void run() {
                 new ButtonDialog(NAME, message, title, buttons, icon, clickListener).show();

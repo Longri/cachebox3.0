@@ -31,6 +31,7 @@ import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.LogEntry;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +66,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
     }
 
     private void setListViewAdapter() {
-        CB.postOnMainThread(new Runnable() {
+        CB.postOnMainThread(new NamedRunnable("LogListView") {
             @Override
             public void run() {
                 if (actGcCode == null || !actGcCode.equals(EventHandler.getSelectedCache().getGcCode())) {

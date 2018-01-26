@@ -35,6 +35,7 @@ import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
 import de.longri.cachebox3.gui.stages.initial_tasks.AbstractInitTask;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SkinColor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +75,7 @@ public class SvgSkinUtil {
                         e.printStackTrace();
                     }
                     final FileHandle finalCachedTexturatlasFileHandle = cachedTexturatlasFileHandle;
-                    CB.postOnMainThread(new Runnable() {
+                    CB.postOnMainThread(new NamedRunnable("SvgSkinUtil") {
                         @Override
                         public void run() {
                             atlas[0] = new TextureAtlas(finalCachedTexturatlasFileHandle);
@@ -137,7 +138,7 @@ public class SvgSkinUtil {
             e.printStackTrace();
         }
 
-        CB.postOnMainThread(new Runnable() {
+        CB.postOnMainThread(new NamedRunnable("SvgSkinUtil") {
             @Override
             public void run() {
                 atlas[0] = packer.generateTextureAtlas(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest, true);
