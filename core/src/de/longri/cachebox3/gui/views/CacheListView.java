@@ -114,6 +114,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
             @Override
             public void run() {
                 CacheListView.this.clear();
+                CacheListView.this.addActor(c1);
                 createdItems = new ListViewItem[Database.Data.Query.size];
                 Adapter listViewAdapter = new Adapter() {
 
@@ -255,7 +256,6 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                 });
             }
         });
-
     }
 
     @Override
@@ -278,14 +278,15 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     @Override
     public void dispose() {
-        disposeListView();
+        if (this.listView != null) this.listView.dispose();
+        this.listView = null;
         CacheListChangedEventList.Remove(this);
         EventHandler.remove(this);
         if (listView != null) listView.dispose();
         listView = null;
         int n = createdItems.length;
         while (--n >= 0) {
-            createdItems[n].dispose();
+            if (createdItems[n] != null) createdItems[n].dispose();
             createdItems[n] = null;
         }
         createdItems = null;
