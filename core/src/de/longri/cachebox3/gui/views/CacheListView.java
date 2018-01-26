@@ -95,8 +95,9 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     public synchronized void layout() {
         log.debug("Layout");
         super.layout();
-        if (listView == null) addNewListView();
-        log.debug("Finish Layout");
+        if (listView == null) {
+            addNewListView();
+        }
     }
 
     public void resort() {
@@ -209,7 +210,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     }
                 });
 
-                Gdx.app.postRunnable(new NamedRunnable("CacheListView:setSelection") {
+                CB.postOnMainThread(new NamedRunnable("CacheListView:setSelection") {
                     @Override
                     public void run() {
                         int selectedIndex = 0;
@@ -243,8 +244,16 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         CB.postAsync(new NamedRunnable("Test Add") {
             @Override
             public void run() {
-                CB.wait(ON_LAYOUT_WORK);
-                log.warn("add ListView to Actor");
+
+                while (CacheListView.this.listView == null || CacheListView.this.listView.layoutAtWork()) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                CacheListView.this.removeActor(c1);
                 addActor(CacheListView.this.listView);
                 CB.requestRendering();
                 CB.postAsyncDelayd(100, new NamedRunnable("Test Add") {
