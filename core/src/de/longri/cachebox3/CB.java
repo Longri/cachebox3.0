@@ -317,7 +317,7 @@ public class CB {
     }
 
 
-    public static void scheduleOnMainThread(final Runnable runnable, long delay) {
+    public static void scheduleOnMainThread(final NamedRunnable runnable, long delay) {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -330,17 +330,17 @@ public class CB {
     }
 
 
-    public static void postOnMainThread(final Runnable runnable) {
+    public static void postOnMainThread(final NamedRunnable runnable) {
         postOnMainThread(runnable, false);
     }
 
-    public static void postOnMainThread(final Runnable runnable, boolean wait) {
+    public static void postOnMainThread(final NamedRunnable runnable, boolean wait) {
         if (isMainThread()) {
             runnable.run();
             return;
         }
         final AtomicBoolean WAIT = new AtomicBoolean(wait);
-        Gdx.app.postRunnable(new Runnable() {
+        Gdx.app.postRunnable(new NamedRunnable(runnable.name) {
             @Override
             public void run() {
                 runnable.run();
@@ -428,7 +428,7 @@ public class CB {
         }
 
         if (result == ApiResultState.EXPIRED_API_KEY) {
-            CB.scheduleOnMainThread(new Runnable() {
+            CB.scheduleOnMainThread(new NamedRunnable("CB: ExpiredApiKey") {
                 @Override
                 public void run() {
                     String msg = Translation.get("apiKeyExpired") + "\n\n"
@@ -441,7 +441,7 @@ public class CB {
         }
 
         if (result == ApiResultState.MEMBERSHIP_TYPE_INVALID) {
-            CB.scheduleOnMainThread(new Runnable() {
+            CB.scheduleOnMainThread(new NamedRunnable("CB:Invalid membership") {
                 @Override
                 public void run() {
                     String msg = Translation.get("apiKeyInvalid") + "\n\n"
@@ -454,7 +454,7 @@ public class CB {
         }
 
         if (result == ApiResultState.API_DOWNLOAD_LIMIT) {
-            CB.scheduleOnMainThread(new Runnable() {
+            CB.scheduleOnMainThread(new NamedRunnable("DownloadLimit") {
                 @Override
                 public void run() {
                     MessageBox.show(Translation.get("Limit_msg")//Message
@@ -470,7 +470,7 @@ public class CB {
 
     public static boolean checkApiKeyNeeded() {
         if (Config.GcAPI.getValue() == null || Config.GcAPI.getValue().isEmpty()) {
-            Gdx.app.postRunnable(new Runnable() {
+            postOnMainThread(new NamedRunnable("CB:checkApiKeyNeeded") {
                 @Override
                 public void run() {
                     new GetApiKeyQuestionDialog().show();
@@ -605,7 +605,7 @@ public class CB {
             CacheListView cacheListView = (CacheListView) CB.viewmanager.getActView();
             cacheListView.setWaitToastLength(ViewManager.ToastLength.WAIT);
         } else {
-            Gdx.app.postRunnable(new Runnable() {
+            Gdx.app.postRunnable(new NamedRunnable("CB:Toast") {
                 @Override
                 public void run() {
                     ViewManager.ToastLength.WAIT.close();

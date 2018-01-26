@@ -16,13 +16,14 @@
 package de.longri.cachebox3.types;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Predicate;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 import java.util.Calendar;
 import java.util.Comparator;
@@ -174,7 +175,7 @@ public class CacheList extends Array<AbstractCache> {
             // Cursor.Current = Cursors.Default;
             this.ResortAtWork = false;
 
-            Gdx.app.postRunnable(new Runnable() {
+            CB.postOnMainThread(new NamedRunnable("CacheList:Fire changed event") {
                 @Override
                 public void run() {
 //             TODO   CacheListChangedEventList.Call();

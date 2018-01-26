@@ -99,7 +99,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             if (e.getMessage().equals("database disk image is malformed")) {
                 // if the DB malformed, we inform the User
 
-                CB.scheduleOnMainThread(new Runnable() {
+                CB.scheduleOnMainThread(new NamedRunnable("CacheList3DAO") {
                     @Override
                     public void run() {
                         MessageBox.show(Translation.get("ErrDbStartup"), Translation.get("corruptDB"), MessageBoxButtons.OK, MessageBoxIcon.Error, new OnMsgBoxClickListener() {
