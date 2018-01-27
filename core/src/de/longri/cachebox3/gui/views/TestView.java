@@ -16,12 +16,9 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
@@ -44,7 +41,6 @@ import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.dialogs.*;
-import de.longri.cachebox3.gui.drawables.geometry.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
@@ -95,10 +91,10 @@ public class TestView extends AbstractView {
 
         {// test FloatControl
 
-            final FloatControl floatControl = new FloatControl(0f, 100f, 1f, new FloatControl.ValueChangeListener() {
+            final FloatControl floatControl = new FloatControl(0f, 100f, 1f, true, new FloatControl.ValueChangeListener() {
                 @Override
-                public void valueChanged(int value) {
-
+                public void valueChanged(float value, boolean dragged) {
+                    log.debug("FloatControl value changed to {} with drag {}", value, dragged);
                 }
             });
 
@@ -115,10 +111,10 @@ public class TestView extends AbstractView {
             contentTable.add(floatControl).width(new Value.Fixed(contentWidth)).pad(20);
             contentTable.row();
 
-            final FloatControl floatControl2 = new FloatControl(0f, 100f, 1f, new FloatControl.ValueChangeListener() {
+            final FloatControl floatControl2 = new FloatControl(0f, 100f, 1f, false, new FloatControl.ValueChangeListener() {
                 @Override
-                public void valueChanged(int value) {
-
+                public void valueChanged(float value, boolean dragged) {
+                    log.debug("FloatControl value changed to {} with drag {}", value, dragged);
                 }
             });
 
