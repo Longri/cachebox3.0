@@ -36,6 +36,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -54,6 +55,7 @@ import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.ApiButton;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.FloatControl;
 import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
@@ -569,10 +571,43 @@ public class Settings_Activity extends ActivityBase {
 
         // add label with category name, align left
         table.left();
+
+        VisTable nameSliderTable = new VisTable();
+
         VisLabel label = new VisLabel(Translation.get(audioName), nameStyle);
         label.setWrap(true);
         label.setAlignment(Align.left);
-        table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        nameSliderTable.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        nameSliderTable.row();
+        final FloatControl floatControl = new FloatControl(0f, 1f, 0.001f, true, new FloatControl.ValueChangeListener() {
+            @Override
+            public void valueChanged(float value, boolean dragged) {
+                if (!dragged) {
+
+                    //TODO set value as property with change to setting.dirty
+                    Audio newAudio = new Audio(setting.getValue());
+                    newAudio.Volume = value;
+                    setting.setValue(newAudio);
+
+                    if (audioName.equalsIgnoreCase("GlobalVolume"))
+                        SoundCache.play(SoundCache.Sounds.Global, true);
+                    if (audioName.equalsIgnoreCase("Approach"))
+                        SoundCache.play(SoundCache.Sounds.Approach, true);
+                    if (audioName.equalsIgnoreCase("GPS_lose"))
+                        SoundCache.play(SoundCache.Sounds.GPS_lose, true);
+                    if (audioName.equalsIgnoreCase("GPS_fix"))
+                        SoundCache.play(SoundCache.Sounds.GPS_fix, true);
+                    if (audioName.equalsIgnoreCase("AutoResortSound"))
+                        SoundCache.play(SoundCache.Sounds.AutoResortSound, true);
+                }
+            }
+        });
+        nameSliderTable.add(floatControl).expandX().fillX();
+
+        floatControl.setValue(setting.getValue().Volume);
+
+
+        table.add(nameSliderTable).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
         // add check icon
         final Image[] checkImage = new Image[1];

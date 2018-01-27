@@ -53,36 +53,46 @@ public class SoundCache {
                 if (GPS_lose == null)
                     log.warn("Sound {} not loaded, can't play", sound.name());
 
-                if ((ignoreMute || !Config.GPS_lose.getValue().Mute) && GPS_lose != null)
+                if ((ignoreMute || !Config.GPS_lose.getValue().Mute) && GPS_lose != null) {
+                    if (GPS_lose.isPlaying()) GPS_lose.stop();
                     GPS_lose.play();
+                }
                 break;
             case GPS_fix:
                 if (GPS_fix == null)
                     log.warn("Sound {} not loaded, can't play", sound.name());
 
-                if ((ignoreMute || !Config.GPS_fix.getValue().Mute) && GPS_fix != null)
+                if ((ignoreMute || !Config.GPS_fix.getValue().Mute) && GPS_fix != null) {
+                    if (GPS_lose.isPlaying()) GPS_lose.stop();
                     GPS_fix.play();
+                }
                 break;
             case Approach:
                 if (Approach == null)
                     log.warn("Sound {} not loaded, can't play", sound.name());
 
-                if ((ignoreMute || !Config.Approach.getValue().Mute) && Approach != null)
+                if ((ignoreMute || !Config.Approach.getValue().Mute) && Approach != null) {
+                    if (Approach.isPlaying()) Approach.stop();
                     Approach.play();
+                }
                 break;
             case AutoResortSound:
                 if (AutoResort == null)
                     log.warn("Sound {} not loaded, can't play", sound.name());
 
-                if ((ignoreMute || !Config.AutoResortSound.getValue().Mute) && AutoResort != null)
+                if ((ignoreMute || !Config.AutoResortSound.getValue().Mute) && AutoResort != null) {
+                    if (AutoResort.isPlaying()) AutoResort.stop();
                     AutoResort.play();
+                }
                 break;
             case Global:
                 if (GlobalVolumeSound == null)
                     log.warn("Sound {} not loaded, can't play", sound.name());
 
-                if ((ignoreMute || !Config.GlobalVolume.getValue().Mute) && GlobalVolumeSound != null)
+                if ((ignoreMute || !Config.GlobalVolume.getValue().Mute) && GlobalVolumeSound != null) {
+                    if (GlobalVolumeSound.isPlaying()) GlobalVolumeSound.stop();
                     GlobalVolumeSound.play();
+                }
                 break;
         }
     }
