@@ -103,6 +103,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.skin.styles.DraftListItemStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.FilterStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.CircularProgressStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.FloatControlStyle.class);
 
 
         SvgSkinUtil.saveSkin(this, items, skinFile);

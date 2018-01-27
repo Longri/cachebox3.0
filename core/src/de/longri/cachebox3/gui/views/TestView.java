@@ -93,6 +93,68 @@ public class TestView extends AbstractView {
         scrollPane = new VisScrollPane(contentTable);
         float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
 
+        {// test FloatControl
+
+            final FloatControl floatControl = new FloatControl(0f, 100f, 1f, new FloatControl.ValueChangeListener() {
+                @Override
+                public void valueChanged(int value) {
+
+                }
+            });
+
+
+            VisLabel label3 = new VisLabel("FloatControl");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            contentTable.add(floatControl).width(new Value.Fixed(contentWidth)).pad(20);
+            contentTable.row();
+
+            final FloatControl floatControl2 = new FloatControl(0f, 100f, 1f, new FloatControl.ValueChangeListener() {
+                @Override
+                public void valueChanged(int value) {
+
+                }
+            });
+
+            floatControl2.setValue(30f);
+
+            contentTable.add(floatControl2).width(new Value.Fixed(contentWidth)).pad(20);
+            contentTable.row();
+
+            CB.postAsync(new NamedRunnable("TestView:Progress") {
+                float value = 0;
+
+                @Override
+                public void run() {
+                    while (showing.get()) {
+                        value += 1f;
+                        if (value >= 200) value = 0;
+                        final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
+                        CB.postOnMainThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                floatControl.setValue(progressValue);
+                            }
+                        });
+                        Gdx.graphics.requestRendering();
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+
+        }
+
+
         {// test Circle Drawable Widget
 
             final CircularProgressWidget circPro = new CircularProgressWidget();
