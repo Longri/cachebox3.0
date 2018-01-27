@@ -59,6 +59,7 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CharSequenceUtil;
+import de.longri.cachebox3.utils.SoundCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -520,7 +521,7 @@ public class Settings_Activity extends ActivityBase {
 //        } else if (setting instanceof SettingsListButtonSkinSpinner) {
 //            return getSkinSpinnerView((SettingsListButtonSkinSpinner<?>) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingsAudio) {
-            return getAudioView((de.longri.cachebox3.settings.types.SettingsAudio) setting);
+            return getAudioView(listIndex, (de.longri.cachebox3.settings.types.SettingsAudio) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingColor) {
             return getColorView((de.longri.cachebox3.settings.types.SettingColor) setting);
         }
@@ -557,8 +558,78 @@ public class Settings_Activity extends ActivityBase {
         return null;
     }
 
-    private ListViewItem getAudioView(de.longri.cachebox3.settings.types.SettingsAudio setting) {
-        return null;
+    private ListViewItem getAudioView(int listIndex, final de.longri.cachebox3.settings.types.SettingsAudio setting) {
+        ListViewItem table = new ListViewItem(listIndex) {
+            @Override
+            public void dispose() {
+            }
+        };
+
+        final String audioName = setting.getName();
+
+        // add label with category name, align left
+        table.left();
+        VisLabel label = new VisLabel(Translation.get(audioName), nameStyle);
+        label.setWrap(true);
+        label.setAlignment(Align.left);
+        table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        // add check icon
+        final Image[] checkImage = new Image[1];
+
+
+        if (setting.getValue().Mute) {
+            checkImage[0] = new Image(CB.getSprite("check_on"));
+        } else {
+            checkImage[0] = new Image(CB.getSprite("check_off"));
+        }
+        table.add(checkImage[0]).width(checkImage[0].getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+
+        // add clicklistener
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.getType() == InputEvent.Type.touchUp) {
+                    //play sound
+
+                    if (audioName.equalsIgnoreCase("GlobalVolume"))
+                        SoundCache.play(SoundCache.Sounds.Global, true);
+                    if (audioName.equalsIgnoreCase("Approach"))
+                        SoundCache.play(SoundCache.Sounds.Approach, true);
+                    if (audioName.equalsIgnoreCase("GPS_lose"))
+                        SoundCache.play(SoundCache.Sounds.GPS_lose, true);
+                    if (audioName.equalsIgnoreCase("GPS_fix"))
+                        SoundCache.play(SoundCache.Sounds.GPS_fix, true);
+                    if (audioName.equalsIgnoreCase("AutoResortSound"))
+                        SoundCache.play(SoundCache.Sounds.AutoResortSound, true);
+
+                    event.stop();
+                }
+            }
+        });
+
+
+        // add description line if description exist
+        CharSequence description = Translation.get("Desc_" + setting.getName());
+        if (!CharSequenceUtil.contains(description, "$ID:")) {
+            table.row();
+            VisLabel desclabel = new VisLabel(description, descStyle);
+            desclabel.setWrap(true);
+            desclabel.setAlignment(Align.left);
+            table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        }
+
+        // add defaultValue line
+
+        table.row();
+
+
+        VisLabel desclabel = new VisLabel("default: " + String.valueOf(((int) (setting.getDefaultValue().Volume) * 100))
+                + "%", defaultValuStyle);
+        desclabel.setWrap(true);
+        desclabel.setAlignment(Align.left);
+        table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        return table;
     }
 
     private ListViewItem getStringView(int listIndex, final SettingString setting) {

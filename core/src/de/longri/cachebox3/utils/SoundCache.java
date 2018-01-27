@@ -42,27 +42,45 @@ public class SoundCache {
     }
 
     public static void play(Sounds sound, boolean ignoreMute) {
+
+        log.debug("play Sound: {} ", sound.name());
+
         if (Config.GlobalVolume.getValue().Mute && !ignoreMute)
             return;
 
         switch (sound) {
             case GPS_lose:
+                if (GPS_lose == null)
+                    log.warn("Sound {} not loaded, can't play", sound.name());
+
                 if ((ignoreMute || !Config.GPS_lose.getValue().Mute) && GPS_lose != null)
                     GPS_lose.play();
                 break;
             case GPS_fix:
+                if (GPS_fix == null)
+                    log.warn("Sound {} not loaded, can't play", sound.name());
+
                 if ((ignoreMute || !Config.GPS_fix.getValue().Mute) && GPS_fix != null)
                     GPS_fix.play();
                 break;
             case Approach:
+                if (Approach == null)
+                    log.warn("Sound {} not loaded, can't play", sound.name());
+
                 if ((ignoreMute || !Config.Approach.getValue().Mute) && Approach != null)
                     Approach.play();
                 break;
             case AutoResortSound:
+                if (AutoResort == null)
+                    log.warn("Sound {} not loaded, can't play", sound.name());
+
                 if ((ignoreMute || !Config.AutoResortSound.getValue().Mute) && AutoResort != null)
                     AutoResort.play();
                 break;
             case Global:
+                if (GlobalVolumeSound == null)
+                    log.warn("Sound {} not loaded, can't play", sound.name());
+
                 if ((ignoreMute || !Config.GlobalVolume.getValue().Mute) && GlobalVolumeSound != null)
                     GlobalVolumeSound.play();
                 break;
@@ -70,6 +88,8 @@ public class SoundCache {
     }
 
     public static void loadSounds() {
+
+        log.debug("Load Sounds");
 
         GlobalVolumeSound = getMusikFromSetting(Config.GlobalVolume);
         Approach = getMusikFromSetting(Config.Approach);
@@ -87,6 +107,8 @@ public class SoundCache {
     }
 
     public static void setVolumes() {
+
+        log.debug("set Volumes");
 
         // calc volume Global and own
         float GlobalVolume = Config.GlobalVolume.getValue().Volume;
