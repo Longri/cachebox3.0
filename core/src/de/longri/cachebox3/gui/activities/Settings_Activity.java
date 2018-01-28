@@ -20,6 +20,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -614,9 +615,9 @@ public class Settings_Activity extends ActivityBase {
 
 
         if (setting.getValue().Mute) {
-            checkImage[0] = new Image(CB.getSprite("check_on"));
+            checkImage[0] = new Image(style.soundMute);
         } else {
-            checkImage[0] = new Image(CB.getSprite("check_off"));
+            checkImage[0] = new Image(style.soundOn);
         }
         table.add(checkImage[0]).width(checkImage[0].getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
@@ -624,19 +625,28 @@ public class Settings_Activity extends ActivityBase {
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (event.getType() == InputEvent.Type.touchUp) {
-                    //play sound
 
-                    if (audioName.equalsIgnoreCase("GlobalVolume"))
-                        SoundCache.play(SoundCache.Sounds.Global, true);
-                    if (audioName.equalsIgnoreCase("Approach"))
-                        SoundCache.play(SoundCache.Sounds.Approach, true);
-                    if (audioName.equalsIgnoreCase("GPS_lose"))
-                        SoundCache.play(SoundCache.Sounds.GPS_lose, true);
-                    if (audioName.equalsIgnoreCase("GPS_fix"))
-                        SoundCache.play(SoundCache.Sounds.GPS_fix, true);
-                    if (audioName.equalsIgnoreCase("AutoResortSound"))
-                        SoundCache.play(SoundCache.Sounds.AutoResortSound, true);
+                    //if clicked on Mute control?
 
+                    if (event.getTarget() == checkImage[0]) {
+                        Audio newAudio = new Audio(setting.getValue());
+                        newAudio.Mute = !newAudio.Mute;
+                        setting.setValue(newAudio);
+                        checkImage[0].setDrawable(newAudio.Mute ? style.soundMute : style.soundOn);
+                    } else {
+                        //play sound
+
+                        if (audioName.equalsIgnoreCase("GlobalVolume"))
+                            SoundCache.play(SoundCache.Sounds.Global, true);
+                        if (audioName.equalsIgnoreCase("Approach"))
+                            SoundCache.play(SoundCache.Sounds.Approach, true);
+                        if (audioName.equalsIgnoreCase("GPS_lose"))
+                            SoundCache.play(SoundCache.Sounds.GPS_lose, true);
+                        if (audioName.equalsIgnoreCase("GPS_fix"))
+                            SoundCache.play(SoundCache.Sounds.GPS_fix, true);
+                        if (audioName.equalsIgnoreCase("AutoResortSound"))
+                            SoundCache.play(SoundCache.Sounds.AutoResortSound, true);
+                    }
                     event.stop();
                 }
             }
@@ -1028,9 +1038,9 @@ public class Settings_Activity extends ActivityBase {
         // add check icon
         final Image[] checkImage = new Image[1];
         if (setting.getValue()) {
-            checkImage[0] = new Image(CB.getSprite("check_on"));
+            checkImage[0] = new Image(style.checkOn);
         } else {
-            checkImage[0] = new Image(CB.getSprite("check_off"));
+            checkImage[0] = new Image(style.checkOff);
         }
         table.add(checkImage[0]).width(checkImage[0].getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
@@ -1040,9 +1050,9 @@ public class Settings_Activity extends ActivityBase {
                 if (event.getType() == InputEvent.Type.touchUp) {
                     setting.setValue(!setting.getValue());
                     if (setting.getValue()) {
-                        checkImage[0].setDrawable(new SpriteDrawable(CB.getSprite("check_on")));
+                        checkImage[0].setDrawable(style.checkOn);
                     } else {
-                        checkImage[0].setDrawable(new SpriteDrawable(CB.getSprite("check_off")));
+                        checkImage[0].setDrawable(style.checkOff);
                     }
                     event.cancel();
                 }
@@ -1110,7 +1120,7 @@ public class Settings_Activity extends ActivityBase {
     }
 
     public static class SettingsActivityStyle extends ActivityBaseStyle {
-        public Drawable nextIcon, backIcon, soundOn, soundMute, option_select, option_back;
+        public Drawable nextIcon, backIcon, checkOn, checkOff, soundOn, soundMute, option_select, option_back;
         public BitmapFont nameFont, descFont, defaultValueFont, valueFont;
         public Color nameFontColor, descFontColor, defaultValueFontColor, valueFontColor;
     }

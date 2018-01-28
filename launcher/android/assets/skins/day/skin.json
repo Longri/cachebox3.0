@@ -2324,6 +2324,10 @@
     "default": {
       "nextIcon": "menu_for",
       "backIcon": "menu_back",
+      "checkOn": "check_on",
+      "checkOff": "check_off",
+      "soundOn": "check_on",
+      "soundMute": "deleteIcon",
       "nameFont": "normal_font",
       "descFont": "settings_desc_font",
       "defaultValueFont": "settings_default_value_font",
