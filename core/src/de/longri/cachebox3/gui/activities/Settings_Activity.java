@@ -20,6 +20,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -36,6 +37,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -54,11 +56,13 @@ import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.ApiButton;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.FloatControl;
 import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CharSequenceUtil;
+import de.longri.cachebox3.utils.SoundCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -520,7 +524,7 @@ public class Settings_Activity extends ActivityBase {
 //        } else if (setting instanceof SettingsListButtonSkinSpinner) {
 //            return getSkinSpinnerView((SettingsListButtonSkinSpinner<?>) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingsAudio) {
-            return getAudioView((de.longri.cachebox3.settings.types.SettingsAudio) setting);
+            return getAudioView(listIndex, (de.longri.cachebox3.settings.types.SettingsAudio) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingColor) {
             return getColorView((de.longri.cachebox3.settings.types.SettingColor) setting);
         }
@@ -557,8 +561,115 @@ public class Settings_Activity extends ActivityBase {
         return null;
     }
 
-    private ListViewItem getAudioView(de.longri.cachebox3.settings.types.SettingsAudio setting) {
-        return null;
+    private ListViewItem getAudioView(int listIndex, final de.longri.cachebox3.settings.types.SettingsAudio setting) {
+        ListViewItem table = new ListViewItem(listIndex) {
+            @Override
+            public void dispose() {
+            }
+        };
+
+        final String audioName = setting.getName();
+
+        // add label with category name, align left
+        table.left();
+
+        VisTable nameSliderTable = new VisTable();
+
+        VisLabel label = new VisLabel(Translation.get(audioName), nameStyle);
+        label.setWrap(true);
+        label.setAlignment(Align.left);
+        nameSliderTable.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        nameSliderTable.row();
+        final FloatControl floatControl = new FloatControl(0f, 1f, 0.001f, true, new FloatControl.ValueChangeListener() {
+            @Override
+            public void valueChanged(float value, boolean dragged) {
+                if (!dragged) {
+
+                    //TODO set value as property with change to setting.dirty
+                    Audio newAudio = new Audio(setting.getValue());
+                    newAudio.Volume = value;
+                    setting.setValue(newAudio);
+
+                    if (audioName.equalsIgnoreCase("GlobalVolume"))
+                        SoundCache.play(SoundCache.Sounds.Global, true);
+                    if (audioName.equalsIgnoreCase("Approach"))
+                        SoundCache.play(SoundCache.Sounds.Approach, true);
+                    if (audioName.equalsIgnoreCase("GPS_lose"))
+                        SoundCache.play(SoundCache.Sounds.GPS_lose, true);
+                    if (audioName.equalsIgnoreCase("GPS_fix"))
+                        SoundCache.play(SoundCache.Sounds.GPS_fix, true);
+                    if (audioName.equalsIgnoreCase("AutoResortSound"))
+                        SoundCache.play(SoundCache.Sounds.AutoResortSound, true);
+                }
+            }
+        });
+        nameSliderTable.add(floatControl).expandX().fillX();
+        floatControl.setValue(setting.getValue().Volume);
+        table.add(nameSliderTable).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        // add check icon
+        final Image[] checkImage = new Image[1];
+
+
+        if (setting.getValue().Mute) {
+            checkImage[0] = new Image(style.soundMute);
+        } else {
+            checkImage[0] = new Image(style.soundOn);
+        }
+        table.add(checkImage[0]).width(checkImage[0].getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+
+        // add clicklistener
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.getType() == InputEvent.Type.touchUp) {
+
+                    //if clicked on Mute control?
+
+                    if (event.getTarget() == checkImage[0]) {
+                        Audio newAudio = new Audio(setting.getValue());
+                        newAudio.Mute = !newAudio.Mute;
+                        setting.setValue(newAudio);
+                        checkImage[0].setDrawable(newAudio.Mute ? style.soundMute : style.soundOn);
+                    } else {
+                        //play sound
+
+                        if (audioName.equalsIgnoreCase("GlobalVolume"))
+                            SoundCache.play(SoundCache.Sounds.Global, true);
+                        if (audioName.equalsIgnoreCase("Approach"))
+                            SoundCache.play(SoundCache.Sounds.Approach, true);
+                        if (audioName.equalsIgnoreCase("GPS_lose"))
+                            SoundCache.play(SoundCache.Sounds.GPS_lose, true);
+                        if (audioName.equalsIgnoreCase("GPS_fix"))
+                            SoundCache.play(SoundCache.Sounds.GPS_fix, true);
+                        if (audioName.equalsIgnoreCase("AutoResortSound"))
+                            SoundCache.play(SoundCache.Sounds.AutoResortSound, true);
+                    }
+                    event.stop();
+                }
+            }
+        });
+
+
+        // add description line if description exist
+        CharSequence description = Translation.get("Desc_" + setting.getName());
+        if (!CharSequenceUtil.contains(description, "$ID:")) {
+            table.row();
+            VisLabel desclabel = new VisLabel(description, descStyle);
+            desclabel.setWrap(true);
+            desclabel.setAlignment(Align.left);
+            table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        }
+
+        // add defaultValue line
+
+        table.row();
+        VisLabel desclabel = new VisLabel("default: " + String.valueOf(((int) (setting.getDefaultValue().Volume) * 100))
+                + "%", defaultValuStyle);
+        desclabel.setWrap(true);
+        desclabel.setAlignment(Align.left);
+        table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        return table;
     }
 
     private ListViewItem getStringView(int listIndex, final SettingString setting) {
@@ -719,7 +830,7 @@ public class Settings_Activity extends ActivityBase {
             table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
         }
 
-        // add valualue line
+        // add value line
 
         table.row();
         final VisLabel valuelabel = new VisLabel("Value: " + String.valueOf(setting.getValue()), valueStyle);
@@ -922,9 +1033,9 @@ public class Settings_Activity extends ActivityBase {
         // add check icon
         final Image[] checkImage = new Image[1];
         if (setting.getValue()) {
-            checkImage[0] = new Image(CB.getSprite("check_on"));
+            checkImage[0] = new Image(style.checkOn);
         } else {
-            checkImage[0] = new Image(CB.getSprite("check_off"));
+            checkImage[0] = new Image(style.checkOff);
         }
         table.add(checkImage[0]).width(checkImage[0].getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
@@ -934,9 +1045,9 @@ public class Settings_Activity extends ActivityBase {
                 if (event.getType() == InputEvent.Type.touchUp) {
                     setting.setValue(!setting.getValue());
                     if (setting.getValue()) {
-                        checkImage[0].setDrawable(new SpriteDrawable(CB.getSprite("check_on")));
+                        checkImage[0].setDrawable(style.checkOn);
                     } else {
-                        checkImage[0].setDrawable(new SpriteDrawable(CB.getSprite("check_off")));
+                        checkImage[0].setDrawable(style.checkOff);
                     }
                     event.cancel();
                 }
@@ -1004,7 +1115,7 @@ public class Settings_Activity extends ActivityBase {
     }
 
     public static class SettingsActivityStyle extends ActivityBaseStyle {
-        public Drawable nextIcon, backIcon, option_select, option_back;
+        public Drawable nextIcon, backIcon, checkOn, checkOff, soundOn, soundMute, option_select, option_back;
         public BitmapFont nameFont, descFont, defaultValueFont, valueFont;
         public Color nameFontColor, descFontColor, defaultValueFontColor, valueFontColor;
     }

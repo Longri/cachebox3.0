@@ -281,6 +281,13 @@ widgets/LogTypes
   orig: 48, 48
   offset: 0, 0
   index: -1
+widgets/Setting
+  rotate: false
+  xy: 1, 171
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
 widgets/CheckBox
   rotate: false
   xy: 256, 249

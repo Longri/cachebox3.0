@@ -18,9 +18,13 @@ package de.longri.cachebox3.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.SettingsAudio;
+import org.oscim.backend.CanvasAdapter;
+import org.oscim.backend.Platform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,45 +35,93 @@ public class SoundCache {
         GPS_lose, GPS_fix, Approach, AutoResortSound, Global
     }
 
-    private static Music GlobalVolumeSound;
-    private static Music GPS_lose;
-    private static Music GPS_fix;
-    private static Music Approach;
-    private static Music AutoResort;
+    private static Sound GlobalVolumeSound;
+    private static Sound GPS_lose;
+    private static Sound GPS_fix;
+    private static Sound Approach;
+    private static Sound AutoResort;
+    private static float globalVolume;
+    private static float approachVolume;
+    private static float gpsFixVolume;
+    private static float gpsLoseVolume;
+    private static float autoResortVolume;
+
 
     public static void play(Sounds sound) {
         play(sound, false);
     }
 
     public static void play(Sounds sound, boolean ignoreMute) {
+
+        //if ignoreMute, the command comes from the settings, so let's turn the volume up again!
+        if (ignoreMute) setVolumes();
+
+        log.debug("play Sound: {} ", sound.name());
+
         if (Config.GlobalVolume.getValue().Mute && !ignoreMute)
             return;
 
         switch (sound) {
             case GPS_lose:
-                if ((ignoreMute || !Config.GPS_lose.getValue().Mute) && GPS_lose != null)
-                    GPS_lose.play();
+                if (GPS_lose == null)
+                    log.warn("Sound {} not loaded, can't play", sound.name());
+
+                if ((ignoreMute || !Config.GPS_lose.getValue().Mute) && GPS_lose != null) {
+                    GPS_lose.stop();
+                    GPS_lose.play(gpsLoseVolume);
+                }
                 break;
             case GPS_fix:
-                if ((ignoreMute || !Config.GPS_fix.getValue().Mute) && GPS_fix != null)
-                    GPS_fix.play();
+                if (GPS_fix == null)
+                    log.warn("Sound {} not loaded, can't play", sound.name());
+
+                if ((ignoreMute || !Config.GPS_fix.getValue().Mute) && GPS_fix != null) {
+                    GPS_fix.stop();
+                    GPS_fix.play(gpsFixVolume);
+                }
                 break;
             case Approach:
-                if ((ignoreMute || !Config.Approach.getValue().Mute) && Approach != null)
-                    Approach.play();
+                if (Approach == null)
+                    log.warn("Sound {} not loaded, can't play", sound.name());
+
+                if ((ignoreMute || !Config.Approach.getValue().Mute) && Approach != null) {
+                    Approach.stop();
+                    Approach.play(approachVolume);
+                }
                 break;
             case AutoResortSound:
-                if ((ignoreMute || !Config.AutoResortSound.getValue().Mute) && AutoResort != null)
-                    AutoResort.play();
+                if (AutoResort == null)
+                    log.warn("Sound {} not loaded, can't play", sound.name());
+
+                if ((ignoreMute || !Config.AutoResortSound.getValue().Mute) && AutoResort != null) {
+                    AutoResort.stop();
+                    AutoResort.play(autoResortVolume);
+                }
                 break;
             case Global:
-                if ((ignoreMute || !Config.GlobalVolume.getValue().Mute) && GlobalVolumeSound != null)
-                    GlobalVolumeSound.play();
+                if (GlobalVolumeSound == null)
+                    log.warn("Sound {} not loaded, can't play", sound.name());
+
+                if ((ignoreMute || !Config.GlobalVolume.getValue().Mute) && GlobalVolumeSound != null) {
+                    GlobalVolumeSound.stop();
+                    GlobalVolumeSound.play(globalVolume);
+                }
                 break;
         }
     }
 
     public static void loadSounds() {
+
+        log.debug("Load Sounds");
+
+        //on iOS we must copy musik files to tmp folder
+        if (CanvasAdapter.platform == Platform.IOS) {
+            FileHandle dataFileHandle = Gdx.files.absolute(CB.WorkPath + "/data");
+            dataFileHandle.mkdirs();
+            FileHandle soundFolder = Gdx.files.internal("sound");
+            soundFolder.copyTo(dataFileHandle);
+        }
+
 
         GlobalVolumeSound = getMusikFromSetting(Config.GlobalVolume);
         Approach = getMusikFromSetting(Config.Approach);
@@ -86,21 +138,17 @@ public class SoundCache {
         setVolumes();
     }
 
+
     public static void setVolumes() {
 
-        // calc volume Global and own
-        float GlobalVolume = Config.GlobalVolume.getValue().Volume;
+        log.debug("set Volumes");
 
-        if (GlobalVolumeSound != null)
-            GlobalVolumeSound.setVolume(GlobalVolume);
-        if (Approach != null)
-            Approach.setVolume(Config.Approach.getValue().Volume * GlobalVolume);
-        if (GPS_fix != null)
-            GPS_fix.setVolume(Config.GPS_fix.getValue().Volume * GlobalVolume);
-        if (GPS_lose != null)
-            GPS_lose.setVolume(Config.GPS_lose.getValue().Volume * GlobalVolume);
-        if (AutoResort != null)
-            AutoResort.setVolume(Config.AutoResortSound.getValue().Volume * GlobalVolume);
+        globalVolume = Config.GlobalVolume.getValue().Volume;
+        approachVolume = Config.Approach.getValue().Volume * globalVolume;
+        gpsFixVolume = Config.GPS_fix.getValue().Volume * globalVolume;
+        gpsLoseVolume = Config.GPS_lose.getValue().Volume * globalVolume;
+        autoResortVolume = Config.AutoResortSound.getValue().Volume * globalVolume;
+
     }
 
     private static IChanged changedListener = new IChanged() {
@@ -112,10 +160,14 @@ public class SoundCache {
 
     };
 
-    private static Music getMusikFromSetting(SettingsAudio set) {
+    private static Sound getMusikFromSetting(SettingsAudio set) {
         String path = set.getValue().Path;
-
-        FileHandle handle = set.getValue().Class_Absolute ? Gdx.files.absolute(path) : Gdx.files.internal(path);
+        FileHandle handle;
+        if (CanvasAdapter.platform == Platform.IOS) {
+            handle = Gdx.files.absolute(CB.WorkPath + "/data/" + path);
+        } else {
+            handle = set.getValue().Class_Absolute ? Gdx.files.absolute(path) : Gdx.files.internal(path);
+        }
 
         if (handle == null || !handle.exists() || handle.isDirectory() || path.length() == 0) {
             path = set.getDefaultValue().Path;
@@ -130,11 +182,12 @@ public class SoundCache {
             return null;
         }
 
-        Music ret;
+
+        Sound ret;
         try {
-            ret = Gdx.audio.newMusic(handle);
+            ret = Gdx.audio.newSound(handle);
         } catch (Exception e) {
-            log.error("LoadSound: " + set.getValue().Path);
+            log.error("LoadSound: " + set.getValue().Path, e);
             return null;
         }
         return ret;

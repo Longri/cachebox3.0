@@ -900,10 +900,6 @@
       "path": "svg/favpoint.svg",
       "scale": 0.43
     },
-    "favpoint_menu": {
-      "path": "svg/favpoint.svg",
-      "scale": 0.45
-    },
     "fieldnoteListIcon": {
       "path": "svg/fieldnoteListIcon.svg",
       "scale": 0.18
@@ -2134,6 +2130,10 @@
       "up": "drawable_default_button",
       "down": "drawable_default_button_pressed"
     },
+    "floatControl": {
+      "up": "drawable_default_button",
+      "down": "drawable_default_button_pressed"
+    },
     "toggle": {
       "up": "drawable_default_button",
       "checked": "drawable_default_button_pressed"
@@ -2316,13 +2316,18 @@
   },
   "de.longri.cachebox3.gui.ActivityBase$ActivityBaseStyle": {
     "default": {
-      "background": "activityBack_drawable"
+      "background": "activityBack_drawable",
+      "stageBackground": "dialog_stage_background"
     }
   },
   "de.longri.cachebox3.gui.activities.Settings_Activity$SettingsActivityStyle": {
     "default": {
       "nextIcon": "menu_for",
       "backIcon": "menu_back",
+      "checkOn": "check_on",
+      "checkOff": "check_off",
+      "soundOn": "check_on",
+      "soundMute": "deleteIcon",
       "nameFont": "normal_font",
       "descFont": "settings_desc_font",
       "defaultValueFont": "settings_default_value_font",
@@ -2606,7 +2611,7 @@
       "deleteAllDrafts": "deleteIcon",
       "edit": "edit",
       "fileTransfer": "fileTransfer",
-      "favPoint": "favpoint_menu",
+      "favPoint": "favpointFilter",
       "favorit": "favIcon",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
@@ -2720,6 +2725,10 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle": {
     "default": {
+      "background": "progress_back_9_Patch",
+      "knobBefore": "progress_foreground_9_Patch"
+    },
+    "floatProgress": {
       "background": "progress_back_9_Patch",
       "knobBefore": "progress_foreground_9_Patch"
     }
@@ -3049,6 +3058,12 @@
       "textFontColor": "font_color",
       "scaledPreferedRadius": 50,
       "progressColor": "circularProgressColor"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.FloatControlStyle": {
+    "default": {
+      "progressBarStyle": "floatProgress",
+      "buttonStyle": "floatControl"
     }
   }
 }

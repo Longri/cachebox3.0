@@ -24,6 +24,7 @@ import de.longri.cachebox3.translation.SequenceTranslationHandler;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.translation.StringTranslationHandler;
 import de.longri.cachebox3.utils.IChanged;
+import de.longri.cachebox3.utils.SoundCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +58,11 @@ public final class TranslationLoaderTask extends AbstractInitTask {
                 loadTranslation();
             }
         });
+
+
+        //load sounds
+        SoundCache.loadSounds();
+
     }
 
     @Override

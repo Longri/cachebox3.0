@@ -16,12 +16,9 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
@@ -44,7 +41,6 @@ import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.dialogs.*;
-import de.longri.cachebox3.gui.drawables.geometry.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
@@ -92,6 +88,68 @@ public class TestView extends AbstractView {
 
         scrollPane = new VisScrollPane(contentTable);
         float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
+
+        {// test FloatControl
+
+            final FloatControl floatControl = new FloatControl(0f, 100f, 1f, true, new FloatControl.ValueChangeListener() {
+                @Override
+                public void valueChanged(float value, boolean dragged) {
+                    log.debug("FloatControl value changed to {} with drag {}", value, dragged);
+                }
+            });
+
+
+            VisLabel label3 = new VisLabel("FloatControl");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            contentTable.add(floatControl).width(new Value.Fixed(contentWidth)).pad(20);
+            contentTable.row();
+
+            final FloatControl floatControl2 = new FloatControl(0f, 100f, 1f, false, new FloatControl.ValueChangeListener() {
+                @Override
+                public void valueChanged(float value, boolean dragged) {
+                    log.debug("FloatControl value changed to {} with drag {}", value, dragged);
+                }
+            });
+
+            floatControl2.setValue(30f);
+
+            contentTable.add(floatControl2).width(new Value.Fixed(contentWidth)).pad(20);
+            contentTable.row();
+
+            CB.postAsync(new NamedRunnable("TestView:Progress") {
+                float value = 0;
+
+                @Override
+                public void run() {
+                    while (showing.get()) {
+                        value += 1f;
+                        if (value >= 200) value = 0;
+                        final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
+                        CB.postOnMainThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                floatControl.setValue(progressValue);
+                            }
+                        });
+                        Gdx.graphics.requestRendering();
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+
+        }
+
 
         {// test Circle Drawable Widget
 

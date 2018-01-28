@@ -90,7 +90,7 @@ public class DraftEntry {
         CacheId = reader.getLong(0);
         gcCode = reader.getString(1).trim();
         CacheName = reader.getString(2);
-        cacheType = CacheTypes.get(reader.getInt(3));
+        //FIXME wrong entry on DB (ClassCastException: java.lang.String cannot be cast to java.lang.Long)  cacheType = CacheTypes.get(reader.getInt(3));
         String sDate = reader.getString(4);
         DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
