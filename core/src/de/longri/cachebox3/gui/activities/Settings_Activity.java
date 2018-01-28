@@ -1110,7 +1110,7 @@ public class Settings_Activity extends ActivityBase {
     }
 
     public static class SettingsActivityStyle extends ActivityBaseStyle {
-        public Drawable nextIcon, backIcon, option_select, option_back;
+        public Drawable nextIcon, backIcon, soundOn, soundMute, option_select, option_back;
         public BitmapFont nameFont, descFont, defaultValueFont, valueFont;
         public Color nameFontColor, descFontColor, defaultValueFontColor, valueFontColor;
     }
