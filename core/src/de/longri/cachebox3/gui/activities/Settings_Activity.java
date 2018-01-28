@@ -604,10 +604,7 @@ public class Settings_Activity extends ActivityBase {
             }
         });
         nameSliderTable.add(floatControl).expandX().fillX();
-
         floatControl.setValue(setting.getValue().Volume);
-
-
         table.add(nameSliderTable).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
         // add check icon
@@ -666,8 +663,6 @@ public class Settings_Activity extends ActivityBase {
         // add defaultValue line
 
         table.row();
-
-
         VisLabel desclabel = new VisLabel("default: " + String.valueOf(((int) (setting.getDefaultValue().Volume) * 100))
                 + "%", defaultValuStyle);
         desclabel.setWrap(true);
@@ -835,7 +830,7 @@ public class Settings_Activity extends ActivityBase {
             table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
         }
 
-        // add valualue line
+        // add value line
 
         table.row();
         final VisLabel valuelabel = new VisLabel("Value: " + String.valueOf(setting.getValue()), valueStyle);
