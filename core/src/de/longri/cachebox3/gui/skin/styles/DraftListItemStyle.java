@@ -30,5 +30,6 @@ public class DraftListItemStyle {
     public LogTypesStyle typeStyle;
     public CacheTypeStyle cacheTypeStyle;
     public Drawable headerBackground;
-    public Drawable upploadedOverlay;
+    public Drawable uploadedOverlay;
+    public Drawable uploadedIcon;
 }

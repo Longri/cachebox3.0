@@ -1,5 +1,9 @@
 {
   "com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg": {
+    "DraftUploaded": {
+      "path": "svg/UPLOADFIELDNOTE.svg",
+      "scale": 0.1
+    },
     "Mapstate.car": {
       "path": "svg/map-state-car.svg",
       "scale": 0.75
@@ -3020,7 +3024,8 @@
       "descriptionFontColor": "font_color",
       "typeStyle": "logViewLogStyles",
       "cacheTypeStyle": "cacheList",
-      "headerBackground": "list_rec_header_9_Patch"
+      "headerBackground": "list_rec_header_9_Patch",
+      "uploadedIcon": "DraftUploaded"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.FilterStyle": {
@@ -3061,9 +3066,6 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.FloatControlStyle": {
-    "default": {
-      "progressBarStyle": "floatProgress",
-      "buttonStyle": "floatControl"
-    }
+    "default": {}
   }
 }

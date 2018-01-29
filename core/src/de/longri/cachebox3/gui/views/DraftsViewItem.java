@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.views;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -67,6 +68,7 @@ public class DraftsViewItem extends ListViewItem {
 
         headerTable = new VisTable();
         headerTable.add(new Image(this.entry.type.getDrawable(style.typeStyle)));
+        if (entry.uploaded) headerTable.add(new Image(style.uploadedIcon));
         headerTable.add((Actor) null).left().padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
 
         String foundNumber = "";
@@ -81,6 +83,9 @@ public class DraftsViewItem extends ListViewItem {
         this.add(headerTable).left().expandX().fillX();
 
         this.row().padTop(CB.scaledSizes.MARGINx4);
+
+        VisTable entryTable = new VisTable();
+
 
         VisTable cacheTable = new VisTable();
 
@@ -104,13 +109,19 @@ public class DraftsViewItem extends ListViewItem {
         cacheTable.add(gcLabel).padRight(CB.scaledSizes.MARGIN).expandX().fillX();
 
 
-        this.add(cacheTable).top().expandX().fillX();
-        this.row().padTop(CB.scaledSizes.MARGINx4);
+        entryTable.add(cacheTable).top().expandX().fillX();
+        entryTable.row().padTop(CB.scaledSizes.MARGINx4);
 
 
         VisLabel commentLabel = new VisLabel(entry.comment, commentLabelStyle);
         commentLabel.setWrap(true);
-        this.add(commentLabel).expand().fill();
+        entryTable.add(commentLabel).expand().fill();
+
+
+        if (entry.uploaded) entryTable.setColor(new Color(1, 1, 1, 0.4f));
+
+
+        this.add(entryTable).expand().fill();
 
         super.layout();
         needsLayout = false;
@@ -119,8 +130,10 @@ public class DraftsViewItem extends ListViewItem {
     @Override
     protected void drawBackground(Batch batch, float parentAlpha, float x, float y) {
         super.drawBackground(batch, parentAlpha, x, y);
+        super.drawBackground(batch, 0.4f, x, y);
         if (style.headerBackground != null && headerTable != null) {
             float height = headerTable.getHeight() + this.getPadTop() + this.getPadBottom();
+            batch.setColor(1, 1, 1, 1);
             style.headerBackground.draw(batch, x, y + (getHeight() - height), getWidth(), height);
         }
     }
@@ -129,9 +142,9 @@ public class DraftsViewItem extends ListViewItem {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        if (entry.uploaded && style.upploadedOverlay != null) {
+        if (entry.uploaded && style.uploadedOverlay != null) {
             //draw uploaded overlay
-            style.upploadedOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
+            style.uploadedOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
         }
     }
 
