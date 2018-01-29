@@ -1,4 +1,5 @@
 [3.2.x]
+- 🌟 add: Draft's (FieldNotes)
 - 🌟 add: File transfer over own App
 - 🌟 add: Sounds for Approach, Resort, lose GPS ...
 - 🌟 add: Handle Drafts
@@ -23,4 +24,3 @@
 - 🌟 add: Map view (vtm)
 - 🌟 add: Settings view
 - 🌟 add: Import over API ( by position map or gps)
-- 🐞 fix -

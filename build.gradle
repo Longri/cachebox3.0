@@ -60,7 +60,6 @@ project(":desktop") {
 
         compile "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-desktop"
 
-
         //vtm
         compile "org.mapsforge:vtm-gdx:$vtmVersion"
         compile("org.mapsforge:vtm-desktop:$vtmVersion") {
@@ -218,7 +217,6 @@ project(":ios") {
         compile "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
         natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-ios"
 
-
         //include libs
 //        compile fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -284,4 +282,30 @@ project(":core") {
 
 tasks.eclipse.doLast {
     delete ".project"
+}
+
+task compositeReadme {
+    doFirst {
+
+        def header = file('doc/readmeHeader.md').getText("UTF-8")
+        def desc = file('doc/readmeDesc.md').getText("UTF-8")
+        def change = file('doc/CHANGES.md').getText("UTF-8")
+
+        // save the combined build info into assets/build.info file
+        def result_line = header + "\n\n" + desc + "\n\n####changes:\n\n" + change
+
+
+        Writer out = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(new File("$projectDir", 'README.md')), "UTF-8"))
+        try {
+            out.write(result_line)
+        } finally {
+            out.close()
+        }
+
+    }
+}
+
+tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn compositeReadme
 }
