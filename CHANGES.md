@@ -1,7 +1,12 @@
 [3.2.x]
 - 🌟 add: File transfer over own App
 - 🌟 add: Sounds for Approach, Resort, lose GPS ...
-- 🐞 fix -
+- 🌟 add: Handle Drafts
+- 🌟 add: add Filter view
+- 🌟 add: add Waypoint projection
+- 🌟 add: use BackKey on Android
+- 🎯 improve SQLite implementation
+- 🐞 fix: Char drawing on small displays
 
 [3.1.977]
 - 🌟 add: Compass view
