@@ -78,11 +78,15 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         circProgressStyle.unknownColor = Color.BLACK;
         circProgressStyle.scaledPreferedRadius = 100;
 
+        float size = Gdx.graphics.getWidth() / 2;
+        float x = size / 2;
+        float y = (Gdx.graphics.getHeight() / 2) - size;
+
         c1 = new CircularProgressWidget(circProgressStyle);
-        c1.setSize(100, 100);
+        c1.setSize(size, size);
         c1.setProgress(-1);
         this.addActor(c1);
-        c1.setPosition(50, 50);
+        c1.setPosition(x, y);
 
         //register as cacheListChanged eventListener
         CacheListChangedEventList.Add(this);

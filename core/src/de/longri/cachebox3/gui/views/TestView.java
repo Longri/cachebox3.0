@@ -132,7 +132,7 @@ public class TestView extends AbstractView {
                         value += 1f;
                         if (value >= 200) value = 0;
                         final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
-                        CB.postOnMainThread(new Runnable() {
+                        CB.postOnMainThread(new NamedRunnable("TestView") {
                             @Override
                             public void run() {
                                 floatControl.setValue(progressValue);
