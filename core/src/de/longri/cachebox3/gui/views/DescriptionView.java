@@ -343,24 +343,20 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 switch (item.getMenuItemId()) {
                     case MenuID.MI_FAVORIT:
                         if (EventHandler.getSelectedCache() == null) {
-
                             new ButtonDialog("NoCacheSelect", Translation.get("NoCacheSelect"), Translation.get("Error"),
                                     MessageBoxButtons.OKCancel, MessageBoxIcon.Error, null).show();
                             return true;
                         }
 
-                        EventHandler.getSelectedCache().setFavorite(!EventHandler.getSelectedCache().isFavorite());
+                        AbstractCache selectedCache = EventHandler.getSelectedCache().getMutable(Database.Data);
 
-                        DaoFactory.CACHE_DAO.updateDatabase(Database.Data, EventHandler.getSelectedCache());
+                        selectedCache.setFavorite(!selectedCache.isFavorite());
+
+                        DaoFactory.CACHE_DAO.updateDatabase(Database.Data, selectedCache);
 
                         // Update Query
-                        Database.Data.Query.GetCacheById(EventHandler.getSelectedCache().getId()).setFavorite(EventHandler.getSelectedCache().isFavorite());
-
-                        // Update View
-                        //TODO update
-//                        if (TabMainView.descriptionView != null)
-//                            TabMainView.descriptionView.onShow();
-
+                        Database.Data.Query.removeValue(EventHandler.getSelectedCache(), true);
+                        Database.Data.Query.add(selectedCache);
                         CacheListChangedEventList.Call();
                         return true;
                     case MenuID.MI_RELOAD_CACHE:
@@ -375,13 +371,14 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
         boolean isSelected = (EventHandler.getSelectedCache() != null);
 
-        //ISSUE (#126 handle own favorites)  mi = cm.addItem(MenuID.MI_FAVORIT, "Favorite", CB.getSkin().getMenuIcon.favorit);
-//        mi.setCheckable(true);
-//        if (isSelected) {
-//            mi.setChecked(EventHandler.getSelectedCache().isFavorite());
-//        } else {
-//            mi.setEnabled(false);
-//        }
+        //ISSUE (#126 handle own favorites)
+        mi = cm.addItem(MenuID.MI_FAVORIT, "Favorite", CB.getSkin().getMenuIcon.favorit);
+        mi.setCheckable(true);
+        if (isSelected) {
+            mi.setChecked(EventHandler.getSelectedCache().isFavorite());
+        } else {
+            mi.setEnabled(false);
+        }
 
         boolean selectedCacheIsNoGC = false;
         if (isSelected)

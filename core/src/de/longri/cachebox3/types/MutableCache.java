@@ -55,6 +55,7 @@ public class MutableCache extends AbstractCache {
     private String url;
     private byte apiState;
     private String state;
+    private String note;
 
     public MutableCache(double latitude, double longitude) {
         super(latitude, longitude);
@@ -88,6 +89,15 @@ public class MutableCache extends AbstractCache {
         this.listingChanged = cache.isListingChanged();
         this.waypoints = cache.getWaypoints();
         this.correctedCoordinates = cache.hasCorrectedCoordinates();
+
+        this.longDescription = cache.getLongDescription(database);
+        this.shortDescription = cache.getShortDescription(database);
+        this.hint = cache.getHint(database).toString();
+        this.url = cache.getUrl(database);
+        this.dateHidden = cache.getDateHidden(database);
+        this.state = cache.getState();
+        this.country = cache.getCountry(database);
+        this.apiState = cache.getApiState(database);
     }
 
     public MutableCache(MutableCache cache) {
@@ -431,12 +441,12 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public String getTmpNote() {
-        return null;
+        return this.note;
     }
 
     @Override
     public void setTmpNote(String value) {
-
+        this.note = value;
     }
 
     @Override
