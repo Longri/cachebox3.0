@@ -580,7 +580,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public void setFavoritePoints(int value) {
-        if (this.favPoints != favPoints)
+        if (this.favPoints != value)
             isChanged.set(true);
         this.favPoints = value;
     }

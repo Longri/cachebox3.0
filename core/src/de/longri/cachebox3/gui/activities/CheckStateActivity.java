@@ -310,9 +310,6 @@ public class CheckStateActivity extends ActivityBase {
                     Database.Data.myDB.endTransaction();
                 }
 
-
-                int changes = Database.Data.myDB.changes();
-
                 //state check complete, close activity
                 EventHandler.remove(limitListener);
                 finish();
