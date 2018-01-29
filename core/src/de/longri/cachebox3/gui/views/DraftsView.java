@@ -93,7 +93,7 @@ public class DraftsView extends AbstractView {
     }
 
     private void setListViewAdapter() {
-        CB.postOnMainThread(new Runnable() {
+        CB.postOnMainThread(new NamedRunnable("DraftsView") {
             @Override
             public void run() {
                 listView.setAdapter(listViewAdapter);
@@ -308,7 +308,7 @@ public class DraftsView extends AbstractView {
 
                         if (!UploadMeldung.equals("")) {
                             final String finalUploadMeldung = UploadMeldung;
-                            CB.scheduleOnMainThread(new Runnable() {
+                            CB.scheduleOnMainThread(new NamedRunnable("DraftsView") {
                                 @Override
                                 public void run() {
                                     MessageBox.show(finalUploadMeldung, Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
@@ -316,7 +316,7 @@ public class DraftsView extends AbstractView {
                                 }
                             }, 300);
                         } else {
-                            CB.scheduleOnMainThread(new Runnable() {
+                            CB.scheduleOnMainThread(new NamedRunnable("DraftsView") {
                                 @Override
                                 public void run() {
                                     MessageBox.show(Translation.get("uploadFinished"), Translation.get("uploadDrafts"), MessageBoxButtons.OK, MessageBoxIcon.GC_Live, null);
@@ -939,7 +939,7 @@ public class DraftsView extends AbstractView {
 
 
     public void notifyDataSetChanged() {
-        CB.postOnMainThread(new Runnable() {
+        CB.postOnMainThread(new NamedRunnable("DraftsView") {
             @Override
             public void run() {
                 loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);

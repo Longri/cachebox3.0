@@ -152,7 +152,7 @@ public class ReloadCacheActivity extends ActivityBase {
         final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
             @Override
             public void progressChanged(final ImportProgressChangedEvent event) {
-                CB.postOnMainThread(new Runnable() {
+                CB.postOnMainThread(new NamedRunnable("ReloadCacheActivity") {
                     @Override
                     public void run() {
                         progressBar.setValue(event.progress.progress);

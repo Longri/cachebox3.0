@@ -342,7 +342,7 @@ public class SelectDB_Activity extends ActivityBase {
                         if (!CONVERT.get()) return;
 
                         //Show BlockUiActivity
-                        CB.postOnMainThread(new Runnable() {
+                        CB.postOnMainThread(new NamedRunnable("SelectDbActivity") {
                             @Override
                             public void run() {
                                 new BlockUiProgress_Activity(Translation.get("DB_Convert")).show();
@@ -419,11 +419,17 @@ public class SelectDB_Activity extends ActivityBase {
 
 
         @Override
-        public ListViewItem getView(int listIndex) {
-            SelectDBItem v = new SelectDBItem(listIndex, files.get(listIndex), fileInfos[listIndex], VisUI.getSkin().get("default", SelectDbStyle.class));
-            v.pack();
-            v.layout();
-            return v;
+        public ListViewItem getView(final int listIndex) {
+            final SelectDBItem[] v = new SelectDBItem[1];
+            CB.postOnMainThread(new NamedRunnable("Create SelectDb_Item") {
+                @Override
+                public void run() {
+                    v[0] = new SelectDBItem(listIndex, files.get(listIndex), fileInfos[listIndex], VisUI.getSkin().get("default", SelectDbStyle.class));
+                    v[0].pack();
+                    v[0].layout();
+                }
+            }, true);
+            return v[0];
         }
 
         @Override

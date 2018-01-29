@@ -168,7 +168,7 @@ public class CheckStateActivity extends ActivityBase {
         final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
             @Override
             public void progressChanged(final ImportProgressChangedEvent event) {
-                CB.postOnMainThread(new Runnable() {
+                CB.postOnMainThread(new NamedRunnable("CheckStateActivity") {
                     @Override
                     public void run() {
                         progressBar.setValue(event.progress.progress);
@@ -317,7 +317,7 @@ public class CheckStateActivity extends ActivityBase {
                 EventHandler.remove(limitListener);
                 finish();
 
-                CB.postOnMainThread(new Runnable() {
+                CB.postOnMainThread(new NamedRunnable("CheckStateActivity:") {
                     @Override
                     public void run() {
                         //Give feedback and say what updated!

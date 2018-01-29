@@ -162,7 +162,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
             Config.FilterNew.setValue(actFilter.getJsonString());
             Config.AcceptChanges();
 
-            if (!dontLoad){
+            if (!dontLoad) {
                 CB.postAsync(new NamedRunnable("ViewManager") {
                     @Override
                     public void run() {
@@ -194,16 +194,22 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         log.debug("show view:" + view.getName());
 
         if (actView != null) {
-            log.debug("remove and dispose actView" + actView.getName());
-            this.getRoot().removeActor(actView);
-            actView.onHide();
-            actView.dispose();
+            final AbstractView dispView = actView;
+            log.debug("remove and dispose actView" + dispView.getName());
+            this.getRoot().removeActor(dispView);
+            CB.postAsync(new NamedRunnable("Dispose last View") {
+                @Override
+                public void run() {
+                    dispView.onHide();
+                    dispView.dispose();
 
-            SnapshotArray<Actor> childs = actView.getChildren();
-            for (int i = 0, n = childs.size - 1; i < n; i++) {
-                actView.removeChild(childs.get(i));
-            }
-            childs.clear();
+                    SnapshotArray<Actor> childs = dispView.getChildren();
+                    for (int i = 0, n = childs.size - 1; i < n; i++) {
+                        dispView.removeChild(childs.get(i));
+                    }
+                    childs.clear();
+                }
+            });
         }
 
         this.actView = view;

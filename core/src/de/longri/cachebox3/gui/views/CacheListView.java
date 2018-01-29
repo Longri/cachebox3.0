@@ -16,8 +16,10 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.*;
@@ -32,10 +34,12 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.gui.skin.styles.CircularProgressStyle;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.CircularProgressWidget;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
@@ -56,15 +60,29 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class CacheListView extends AbstractView implements CacheListChangedEventListener, PositionChangedListener, OrientationChangedListener {
     final static Logger log = LoggerFactory.getLogger(CacheListView.class);
+    private final CircularProgressWidget c1;
     private ListView listView;
     private final float result[] = new float[4];
     private final AtomicBoolean ON_LAYOUT_WORK = new AtomicBoolean(false);
+
+    private ListViewItem[] createdItems;
 
     private ViewManager.ToastLength WAIT_TOAST_LENGTH = ViewManager.ToastLength.WAIT;
 
     public CacheListView() {
         super("CacheListView CacheCount: " + Database.Data.Query.size);
-        CB.viewmanager.toast(Translation.get("LoadCacheList"), WAIT_TOAST_LENGTH);
+
+
+        CircularProgressStyle circProgressStyle = new CircularProgressStyle();
+
+        circProgressStyle.unknownColor = Color.BLACK;
+        circProgressStyle.scaledPreferedRadius = 100;
+
+        c1 = new CircularProgressWidget(circProgressStyle);
+        c1.setSize(100, 100);
+        c1.setProgress(-1);
+        this.addActor(c1);
+        c1.setPosition(50, 50);
 
         //register as cacheListChanged eventListener
         CacheListChangedEventList.Add(this);
@@ -77,8 +95,9 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     public synchronized void layout() {
         log.debug("Layout");
         super.layout();
-        if (listView == null) addNewListView();
-        log.debug("Finish Layout");
+        if (listView == null) {
+            addNewListView();
+        }
     }
 
     public void resort() {
@@ -92,10 +111,12 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     private void addNewListView() {
         log.debug("Start Thread add new listView");
         ON_LAYOUT_WORK.set(true);
-        CB.postAsync(new NamedRunnable("CacheListView:addNewListView") {
+        CB.postAsync(new NamedRunnable("CacheListView:create new Full ListView") {
             @Override
             public void run() {
                 CacheListView.this.clear();
+                CacheListView.this.addActor(c1);
+                createdItems = new ListViewItem[Database.Data.Query.size];
                 Adapter listViewAdapter = new Adapter() {
 
                     boolean outDated = false;
@@ -107,10 +128,15 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     }
 
                     @Override
+
                     public ListViewItem getView(int index) {
-                        if (outDated) return null;
-                        if (Database.Data.Query.size == 0) return null;
-                        return CacheListItem.getListItem(index, Database.Data.Query.get(index));
+                        if (outDated || Database.Data.Query.size == 0) {
+                            createdItems[index] = null;
+                            return null;
+                        }
+                        ListViewItem item = CacheListItem.getListItem(index, Database.Data.Query.get(index));
+                        createdItems[index] = item;
+                        return item;
                     }
 
                     @Override
@@ -151,24 +177,24 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     }
 
                     @Override
-                    public float getItemSize(int position) {
-                        return 0;
+                    public float getItemSize(int index) {
+                        if (createdItems[index] == null) return 0;
+                        return createdItems[index].getPrefHeight();
                     }
                 };
 
                 if (CacheListView.this.listView != null) {
+                    log.warn("Dispose ListView");
                     disposeListView();
                 }
 
-                CacheListView.this.listView = new ListView(listViewAdapter, false, true);
-                synchronized (CacheListView.this.listView) {
-                    CacheListView.this.listView.setEmptyString(Translation.get("EmptyCacheList"));
-                    CacheListView.this.listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
-                    addActor(CacheListView.this.listView);
-                    CacheListView.this.listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
-                    CacheListView.this.listView.setSelectable(ListView.SelectableType.SINGLE);
-                    CB.requestRendering();
-                }
+                CacheListView.this.listView = new ListView(listViewAdapter, false, false);
+
+                CacheListView.this.listView.setEmptyString(Translation.get("EmptyCacheList"));
+                CacheListView.this.listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
+
+                CacheListView.this.listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
+                CacheListView.this.listView.setSelectable(ListView.SelectableType.SINGLE);
 
                 // add selection changed event listener
                 CacheListView.this.listView.addSelectionChangedEventListner(new ListView.SelectionChangedEvent() {
@@ -184,7 +210,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     }
                 });
 
-                Gdx.app.postRunnable(new Runnable() {
+                CB.postOnMainThread(new NamedRunnable("CacheListView:setSelection") {
                     @Override
                     public void run() {
                         int selectedIndex = 0;
@@ -209,10 +235,36 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         WAIT_TOAST_LENGTH = null;
                     }
                 });
-                CB.requestRendering();
             }
         });
+
+
         CB.requestRendering();
+
+        CB.postAsync(new NamedRunnable("Test Add") {
+            @Override
+            public void run() {
+
+                while (CacheListView.this.listView == null || CacheListView.this.listView.layoutAtWork()) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                CacheListView.this.removeActor(c1);
+                addActor(CacheListView.this.listView);
+                CB.requestRendering();
+                CB.postAsyncDelayd(100, new NamedRunnable("Test Add") {
+                    @Override
+                    public void run() {
+                        // request another rendering for set selection
+                        CB.requestRendering();
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -235,11 +287,18 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     @Override
     public void dispose() {
-        disposeListView();
+        if (this.listView != null) this.listView.dispose();
+        this.listView = null;
         CacheListChangedEventList.Remove(this);
         EventHandler.remove(this);
         if (listView != null) listView.dispose();
         listView = null;
+        int n = createdItems.length;
+        while (--n >= 0) {
+            if (createdItems[n] != null) createdItems[n].dispose();
+            createdItems[n] = null;
+        }
+        createdItems = null;
     }
 
     /**

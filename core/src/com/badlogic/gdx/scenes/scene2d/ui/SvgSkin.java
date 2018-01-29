@@ -37,6 +37,7 @@ import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
 import de.longri.cachebox3.gui.skin.styles.IconsStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.gui.views.listview.ListView;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.LoggerFactory;
@@ -413,7 +414,7 @@ public class SvgSkin extends Skin {
                         e.printStackTrace();
                     }
 
-                    CB.postOnMainThread(new Runnable() {
+                    CB.postOnMainThread(new NamedRunnable("SvgSkin") {
                         @Override
                         public void run() {
                             FileHandle cacheFileHandle = Gdx.files.absolute(CB.WorkPath + SvgSkinUtil.TMP_UI_ATLAS_PATH + name);

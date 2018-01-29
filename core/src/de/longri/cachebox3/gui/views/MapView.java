@@ -56,6 +56,7 @@ import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.settings.types.SettingBool;
 import de.longri.cachebox3.utils.IChanged;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
@@ -178,7 +179,7 @@ public class MapView extends AbstractView {
                     final Coordinate wpCoord = EventHandler.getSelectedCoord();
                     if (wpCoord == null) {
                         // we hav no selected WP, so switch MapMode to 'LOCK'
-                        CB.postOnMainThread(new Runnable() {
+                        CB.postOnMainThread(new NamedRunnable("MapView") {
                             @Override
                             public void run() {
                                 mapStateButton.setMapMode(MapMode.LOCK, true, new Event());

@@ -34,9 +34,11 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.utils.CB_RectF;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.NONE;
 import static de.longri.cachebox3.gui.views.listview.ListView.SelectableType.SINGLE;
@@ -179,7 +181,7 @@ public class ListView extends WidgetGroup {
     };
 
     public synchronized void dispose() {
-
+        CB.wait(atWork);
         Object[] tmpItems = itemViews.begin();
         for (int i = 0, n = tmpItems.length; i < n; i++) {
             ListViewItem item = (ListViewItem) tmpItems[i];
@@ -290,6 +292,15 @@ public class ListView extends WidgetGroup {
             return;
         }
 
+        CB.postAsync(new NamedRunnable("AsyncLayout") {
+            @Override
+            public void run() {
+                asyncLayout();
+            }
+        });
+    }
+
+    private void asyncLayout() {
         this.clearChildren();
         itemHeights.clear();
         itemYPos.clear();
@@ -335,10 +346,7 @@ public class ListView extends WidgetGroup {
         if (itemsHaveSameHeight) {
 
             //initial with only 10 items, for speedup initial
-            for (int i = 0; i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount); i++) {
-                addItem(i, false, -1);
-            }
-
+            addListItems(Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount));
 
             float itemHeight = itemHeights.items[0];
             completeHeight = itemHeight;
@@ -353,9 +361,7 @@ public class ListView extends WidgetGroup {
                 }
             }
         } else {
-            for (int i = 0; i < this.listCount; i++) {
-                addItem(i, false, -1);
-            }
+            addListItems(this.listCount);
             //layout itemGroup
             for (int i = 0; i < this.listCount; i++) { //calculate complete height of all visible Items
                 if (adapter.getView(i).isVisible())
@@ -408,6 +414,40 @@ public class ListView extends WidgetGroup {
         needsLayout = false;
         atWork.set(false);
         log.debug("Finish Layout Items");
+
+        CB.requestRendering();
+        CB.postAsyncDelayd(100, new NamedRunnable("ListView-Request ready rendering") {
+            @Override
+            public void run() {
+                CB.requestRendering();
+            }
+        });
+    }
+
+    private void addListItems(int count) {
+        //split into 250 blocks
+
+        int SPLIT = 100;
+
+        int split = (count / SPLIT) + 1;
+        final AtomicInteger actSplitEndCount = new AtomicInteger(SPLIT);
+        final AtomicInteger addedCount = new AtomicInteger(0);
+
+        for (int i = 0; i < split; i++) {
+            if (actSplitEndCount.get() > count) actSplitEndCount.set(count);
+            CB.postOnMainThread(new NamedRunnable("Test Add") {
+                @Override
+                public void run() {
+                    for (int j = addedCount.get(); j < actSplitEndCount.get(); j++) {
+                        addItem(j, false, -1);
+                    }
+                }
+            }, true);
+            addedCount.set(addedCount.get() + SPLIT);
+            actSplitEndCount.set(actSplitEndCount.get() + SPLIT);
+        }
+
+
     }
 
     private void addItem(final int index, final boolean reAdd, final float yPos) {
@@ -415,18 +455,21 @@ public class ListView extends WidgetGroup {
         if (CB.isMainThread()) {
             addItemThreadSave(index, reAdd, yPos);
         } else {
-            Gdx.app.postRunnable(new Runnable() {
+
+            CB.postOnMainThread(new NamedRunnable("ListView add Item Thread save") {
                 @Override
                 public void run() {
                     addItemThreadSave(index, reAdd, yPos);
                 }
-            });
+            }, true);
         }
     }
 
     protected void addItemThreadSave(final int index, boolean reAdd, final float yPos) {
 
         synchronized (indexList) {
+
+            if (adapter == null) return;
 
             // set Item background
             ListViewItem view = adapter.getView(index);

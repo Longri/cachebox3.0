@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.Showable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -69,7 +70,7 @@ public class ActivityBase extends Window implements Showable {
     }
 
     public void show() {
-        CB.postOnMainThread(new Runnable() {
+        CB.postOnMainThread(new NamedRunnable("ActivityBase") {
             @Override
             public void run() {
                 ActivityBase.super.show();

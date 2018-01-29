@@ -109,14 +109,15 @@ public class TouchLauncher {
                     runnables.clear();
                 }
                 if (executedRunnables.size == 0) return false;
+                final String arryString = executedRunnables.toString();
                 do
                     executedRunnables.pop().run();
                 while (executedRunnables.size > 0);
 
                 long executionTime = System.currentTimeMillis() - start;
 
-                if (executionTime > 100) {
-                    log.warn("Blocked MAIN-LOOp for {}ms",executionTime);
+                if (executionTime > 200) {
+                    log.warn("Blocked MAIN-LOOp for {}ms => {}", executionTime, arryString);
                 }
 
                 return true;

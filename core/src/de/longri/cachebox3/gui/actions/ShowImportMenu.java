@@ -74,7 +74,7 @@ public class ShowImportMenu extends Menu {
                             @Override
                             public void run() {
                                 if (!CB.checkApiKeyNeeded()) {
-                                    CB.postOnMainThread(new Runnable() {
+                                    CB.postOnMainThread(new NamedRunnable("ShowImportMenu") {
                                         @Override
                                         public void run() {
                                             new ImportGcPos().show();
