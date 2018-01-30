@@ -164,7 +164,7 @@ public class Coordinate extends LatLong {
      * @param dest the destination location
      * @return the initial bearing in degrees
      */
-    public float bearingTo(Coordinate dest, CalculationType type) {
+    public float bearingTo(LatLong dest, CalculationType type) {
         synchronized (mResults) {
             // See if we already have the result
             // if (getLatitude() != mLat1 || getLongitude() != mLon1 || dest.getLatitude() != mLat2 || dest.getLongitude() != mLon2)
@@ -191,7 +191,7 @@ public class Coordinate extends LatLong {
      * @param coord
      * @return
      */
-    public float distance(Coordinate coord, CalculationType type) {
+    public float distance(LatLong coord, CalculationType type) {
         // float[] dist = new float[1];
         MathUtils.computeDistanceAndBearing(type, getLatitude(), getLongitude(), coord.getLatitude(), coord.getLongitude(), mResults);
         return mResults[0];

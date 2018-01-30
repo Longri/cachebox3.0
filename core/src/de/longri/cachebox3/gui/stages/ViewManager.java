@@ -40,6 +40,7 @@ import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.GestureButton;
 import de.longri.cachebox3.gui.widgets.Slider;
+import de.longri.cachebox3.locator.GlobalLocationReceiver;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
@@ -84,6 +85,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
     private FilterProperties actFilter = FilterInstances.ALL;
     private final AtomicBoolean isFilters = new AtomicBoolean(false);
+    private final GlobalLocationReceiver locationReceiver;
 
     public ViewManager(final CacheboxMain main, Viewport viewport, Batch batch) {
         super("ViewManager", viewport, batch);
@@ -139,6 +141,10 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
         //set selected Cache to slider
         selectedCacheChanged(new de.longri.cachebox3.events.SelectedCacheChangedEvent(de.longri.cachebox3.events.EventHandler.getSelectedCache()));
+
+        //initial global location receiver
+        locationReceiver = new GlobalLocationReceiver();
+
     }
 
 
