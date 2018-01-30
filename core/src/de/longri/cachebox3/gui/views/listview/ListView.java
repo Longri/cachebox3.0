@@ -382,11 +382,7 @@ public class ListView extends WidgetGroup {
             if (adapter.getView(i) != null && adapter.getView(i).isVisible()) {
                 yPos -= itemHeights.get(i);
                 itemYPos.add(yPos);
-                if (itemsHaveSameHeight && i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount)) {
-                    actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
-                } else if (!itemsHaveSameHeight) {
-                    actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
-                }
+                actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
             }
         }
 
