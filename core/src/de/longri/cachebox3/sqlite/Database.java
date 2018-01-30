@@ -869,6 +869,10 @@ public class Database {
 
     public synchronized long update(String tablename, Parameters val, String whereClause, String[] whereArgs) {
 
+        if (val == null || val.size() <= 0) {
+            //nothing to update
+            return 0;
+        }
 
         if (CB.isLogLevel(CB.LOG_LEVEL_DEBUG)) {
             StringBuilder sb = new StringBuilder("Update @ Table:" + tablename);
