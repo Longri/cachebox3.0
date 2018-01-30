@@ -1680,9 +1680,17 @@
       "path": "svg/sortIcon.svg",
       "scale": 0.18
     },
+    "soundOff": {
+      "path": "svg/soundOff.svg",
+      "scale": 0.18
+    },
+    "soundOn": {
+      "path": "svg/soundOn.svg",
+      "scale": 0.18
+    },
     "star": {
       "path": "svg/star.svg",
-      "scale": 0.25
+      "scale": 1
     },
     "star0": {
       "path": "svg/star0.svg",
@@ -2330,8 +2338,8 @@
       "backIcon": "menu_back",
       "checkOn": "check_on",
       "checkOff": "check_off",
-      "soundOn": "check_on",
-      "soundMute": "deleteIcon",
+      "soundOn": "soundOn",
+      "soundMute": "soundOff",
       "nameFont": "normal_font",
       "descFont": "settings_desc_font",
       "defaultValueFont": "settings_default_value_font",
@@ -3066,6 +3074,9 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.FloatControlStyle": {
-    "default": {}
+    "default": {
+      "progressBarStyle": "floatProgress",
+      "buttonStyle": "default"
+    }
   }
 }

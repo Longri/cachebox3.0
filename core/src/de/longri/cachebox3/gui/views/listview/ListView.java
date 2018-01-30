@@ -382,7 +382,9 @@ public class ListView extends WidgetGroup {
             if (adapter.getView(i) != null && adapter.getView(i).isVisible()) {
                 yPos -= itemHeights.get(i);
                 itemYPos.add(yPos);
-                actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
+                if (actors[i] != null) {
+                    actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
+                }
             }
         }
 

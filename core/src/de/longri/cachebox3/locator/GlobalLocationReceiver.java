@@ -126,14 +126,12 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         // set approach sound if the distance low
         AbstractCache selectedCache = EventHandler.getSelectedCache();
         AbstractWaypoint selectedWaypoint = EventHandler.getSelectedWaypoint();
-
-        if (selectedCache != null) {
-            LatLong pos = EventHandler.getMyPosition();
+        LatLong pos = EventHandler.getMyPosition();
+        if (selectedCache != null && pos != null) {
             float distance = selectedCache.distance(pos, MathUtils.CalculationType.FAST);
             if (selectedWaypoint != null) {
                 distance = selectedWaypoint.distance(pos, MathUtils.CalculationType.FAST);
             }
-
             boolean value = distance < Config.SoundApproachDistance.getValue();
             approachSoundCompleted.set(value);
 //            GlobalCore.switchToCompassCompleted = value;
