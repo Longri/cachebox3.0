@@ -357,6 +357,9 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                         // Update Query
                         Database.Data.Query.removeValue(EventHandler.getSelectedCache(), true);
                         Database.Data.Query.add(selectedCache);
+
+                        //update EventHandler
+                        EventHandler.updateSelectedCache(selectedCache);
                         CacheListChangedEventList.Call();
                         return true;
                     case MenuID.MI_RELOAD_CACHE:

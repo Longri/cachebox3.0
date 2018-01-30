@@ -258,4 +258,11 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (cache == null || !cache.equals(getSelectedCache())) fire(new SelectedCacheChangedEvent(cache));
         if (wp == null || !wp.equals(getSelectedWaypoint())) fire(new SelectedWayPointChangedEvent(wp));
     }
+
+    public static void updateSelectedCache(AbstractCache selectedCache) {
+        if (INSTANCE.selectedCache.getId() != selectedCache.getId()) {
+            log.warn("update Selected Cache with new Cache! Fire Change Event?");
+        }
+        INSTANCE.selectedCache = selectedCache;
+    }
 }
