@@ -18,13 +18,16 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.GetName;
+import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.events.EventHandler;
@@ -285,6 +288,11 @@ public class MapView extends AbstractView {
                 super.onMapEvent(e, mapPosition);
                 if (e == Map.MOVE_EVENT) {
 //                    log.debug("Map.MOVE_EVENT");
+                    if (infoBubble != null && infoItem != null) {
+                        infoBubble.setPosition(mapHalfWith + infoItem.drawX,
+                                MapView.this.getHeight() - (mapHalfHeight + infoItem.drawY));
+                    }
+
                     if (CB.mapMode != MapMode.FREE)
                         mapStateButton.setMapMode(MapMode.FREE, new Event());
                 } else if (e == Map.TILT_EVENT) {
@@ -461,6 +469,9 @@ public class MapView extends AbstractView {
         map.viewport().setScreenSize((int) this.getWidth(), (int) this.getHeight());
         main.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
 
+        mapHalfWith = map.getWidth() / 2;
+        mapHalfHeight = map.getHeight() / 2;
+
         // set position of MapScaleBar
         setMapScaleBarOffset(CB.scaledSizes.MARGIN, CB.scaledSizes.MARGIN_HALF);
 
@@ -513,7 +524,7 @@ public class MapView extends AbstractView {
 
         directLineLayer = new DirectLineLayer(map);
         mapScaleBarLayer = new MapScaleBarLayer(map, mapScaleBar);
-        wayPointLayer = new WaypointLayer(map, CB.textureRegionMap);
+        wayPointLayer = new WaypointLayer(this, map, CB.textureRegionMap);
         myLocationAccuracy = new LocationAccuracyLayer(map);
         myLocationLayer = new LocationLayer(map, CB.textureRegionMap);
 
@@ -895,5 +906,18 @@ public class MapView extends AbstractView {
         setting.setValue(!setting.getValue());
         Config.AcceptChanges();
         setNewSettings();
+    }
+
+    private MapWayPointItem infoItem = null;
+    private Actor infoBubble;
+    float mapHalfWith;
+    float mapHalfHeight;
+
+    public void clickOnItem(MapWayPointItem item) {
+        infoBubble = new VisTextButton("");
+        MapView.this.addActor(infoBubble);
+        infoItem = item;
+        infoBubble.setPosition(mapHalfWith + infoItem.drawX, this.getHeight() - (mapHalfHeight + infoItem.drawY));
+        CB.requestRendering();
     }
 }

@@ -29,6 +29,7 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.renderer.WaypointLayerRenderer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
+import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.ClusterRunnable;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxDouble;
@@ -82,15 +83,19 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     private final TextureRegion middleDisabled;
     private final TextureRegion largeDisabled;
 
+    private final MapView mapView;
+
 
     private double lastDistance = Double.MIN_VALUE;
     private double lastFactor = 2.0;
 
     private ClusterRunnable.Task lastTask;
 
-    public WaypointLayer(Map map, LinkedHashMap<Object, TextureRegion> textureRegionMap) {
+    public WaypointLayer(MapView mapView, Map map, LinkedHashMap<Object, TextureRegion> textureRegionMap) {
         super(map);
         log.debug("Create new INSTANCE");
+
+        this.mapView = mapView;
 
         mClusterRenderer = new WaypointLayerRenderer(this, null);
         mRenderer = mClusterRenderer;
@@ -477,15 +482,21 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         boolean run(MapWayPointItem aIndex);
     }
 
+
     private boolean onItemSingleTap(MapWayPointItem item) {
         log.debug("Click on: " + item);
 
         //set as selected cache/wp
-        if (item.dataObject instanceof AbstractCache) {
-            de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedCacheChangedEvent((AbstractCache) item.dataObject));
-        } else if (item.dataObject instanceof AbstractWaypoint) {
-            AbstractWaypoint wp = (AbstractWaypoint) item.dataObject;
-            de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedWayPointChangedEvent(wp));
+//        if (item.dataObject instanceof AbstractCache) {
+//            de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedCacheChangedEvent((AbstractCache) item.dataObject));
+//        } else if (item.dataObject instanceof AbstractWaypoint) {
+//            AbstractWaypoint wp = (AbstractWaypoint) item.dataObject;
+//            de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedWayPointChangedEvent(wp));
+//        }
+
+
+        if (item.dataObject instanceof AbstractCache || item.dataObject instanceof AbstractWaypoint) {
+            mapView.clickOnItem(item);
         }
         return true;
     }
