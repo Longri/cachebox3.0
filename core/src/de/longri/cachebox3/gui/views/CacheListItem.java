@@ -15,20 +15,12 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
-import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
-import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
-import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
-import de.longri.cachebox3.gui.widgets.Stars;
-import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.CacheSizes;
+import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.LogTypes;
 
 /**
  * Created by Longri on 05.09.2016.
@@ -65,153 +57,35 @@ public class CacheListItem extends ListViewItem implements Disposable {
         return listViewItem;
     }
 
-
-    private final CacheListItemStyle style;
-    private final CacheTypes type;
-    private final CharSequence cacheName;
-    private boolean needsLayout = true;
-    private Image arrowImage;
-    private VisLabel distanceLabel;
-    private boolean distanceOrBearingChanged = true;
-    private final int difficulty;
-    private final int terrain;
-    private final int vote;
-    private final CacheSizes size;
-    private final String shortSizeString;
-    private final Drawable leftInfoIcon, rightInfoIcon;
-    private final boolean isAvailable;
-    private final int favPoints;
+    private final CacheItem cacheItem;
 
 
     private CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
                           int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
                           LogTypes rightLogType, boolean isAvailable, int favPoints) {
         super(listIndex);
-        this.difficulty = difficulty;
-        this.terrain = terrain;
-        this.vote = vote;
-        this.size = size;
-        this.shortSizeString = shortSizeString;
-        this.style = VisUI.getSkin().get("cacheListItems", CacheListItemStyle.class);
-        this.type = type;
-        this.cacheName = cacheName;
-        this.leftInfoIcon = leftLogType == null ? null : leftLogType.getDrawable(style.logTypesStyle);
-        this.rightInfoIcon = rightLogType == null ? null : rightLogType.getDrawable(style.logTypesStyle);
-        this.isAvailable = isAvailable;
-        this.favPoints = favPoints;
+        cacheItem = new CacheItem(type, cacheName, difficulty, terrain, vote, size, shortSizeString, leftLogType, rightLogType, isAvailable, favPoints);
+        this.add(cacheItem).expand().fill();
     }
 
-
-    public synchronized void layout() {
-        if (!needsLayout) {
-            super.layout();
-            return;
-        }
-
-        this.clear();
-
-        VisTable iconTable = new VisTable();
-        iconTable.add(type.getCacheWidget(style.typeStyle, leftInfoIcon, rightInfoIcon));
-        iconTable.pack();
-        iconTable.layout();
-
-        this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGIN);
-
-
-        Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
-        nameLabelStyle.font = this.style.nameFont;
-        nameLabelStyle.fontColor = isAvailable ? this.style.nameFontColor : this.style.notAvailableColor == null ? this.style.nameFontColor : this.style.notAvailableColor;
-        VisLabel nameLabel = new VisLabel(cacheName, nameLabelStyle);
-        nameLabel.setWrap(true);
-        this.add(nameLabel).top().expandX().fillX();
-
-
-        VisTable arrowTable = new VisTable();
-
-        arrowImage = new Image(this.style.arrow);
-        arrowImage.setOrigin(this.style.arrow.getMinWidth() / 2, this.style.arrow.getMinHeight() / 2);
-
-        Label.LabelStyle distanceLabelStyle = new Label.LabelStyle();
-        distanceLabelStyle.font = this.style.distanceFont;
-        distanceLabelStyle.fontColor = this.style.distanceFontColor;
-        distanceLabel = new VisLabel("---- --", distanceLabelStyle);
-
-        arrowTable.add(arrowImage);
-        arrowTable.row();
-        arrowTable.add(distanceLabel).padTop(CB.scaledSizes.MARGIN);
-        this.add(arrowTable).right();
-
-        this.row();
-
-        VisTable line1 = new VisTable();
-        VisLabel dLabel = new VisLabel("D", distanceLabelStyle);
-        line1.left();
-        line1.add(dLabel);
-        Stars difficultyStars = new Stars(this.difficulty);
-        line1.add(difficultyStars);
-        VisLabel sLabel = new VisLabel(shortSizeString, distanceLabelStyle);
-        line1.add(sLabel).padLeft(CB.scaledSizes.MARGIN);
-        CacheSizeWidget sizeWidget = new CacheSizeWidget(this.size);
-        line1.add(sizeWidget).padLeft(CB.scaledSizes.MARGIN_HALF);
-
-
-        this.add(line1).colspan(3).align(Align.left);
-        this.row();
-
-        VisTable line2 = new VisTable();
-        VisLabel tLabel = new VisLabel("T", distanceLabelStyle);
-        line2.left();
-        line2.add(tLabel);
-        Stars terrainStars = new Stars(this.terrain);
-        line2.add(terrainStars);
-
-        VisLabel vLabel = new VisLabel("GcV", distanceLabelStyle);
-        line2.add(vLabel).padLeft(CB.scaledSizes.MARGIN);
-        Stars vStars = new Stars(this.vote);
-        line2.add(vStars);
-
-        if (this.favPoints > 0) {
-            // don't show we have no favpoint info's
-            Image favpointIcon = new Image(CB.getSkin().getMenuIcon.favPoint);
-            line2.add(favpointIcon).padLeft(CB.scaledSizes.MARGIN).align(Align.top);
-            VisLabel fLabel = new VisLabel("x" + Integer.toString(this.favPoints), distanceLabelStyle);
-            line2.add(fLabel);
-        }
-
-
-        this.add(line2).colspan(3).align(Align.left);
-
-        super.layout();
-        needsLayout = false;
-    }
 
     public boolean update(float bearing, CharSequence distance) {
-        if (!distanceOrBearingChanged) return false;
-        arrowImage.setRotation(bearing);
-        distanceLabel.setText(distance);
+        if (!cacheItem.distanceOrBearingChanged) return false;
+        cacheItem.arrowImage.setRotation(bearing);
+        cacheItem.distanceLabel.setText(distance);
 
-        arrowImage.layout();
-        distanceLabel.layout();
-        distanceOrBearingChanged = false;
+        cacheItem.arrowImage.layout();
+        cacheItem.distanceLabel.layout();
+        cacheItem.distanceOrBearingChanged = false;
         return true;
     }
 
     public void posOrBearingChanged() {
-        distanceOrBearingChanged = true;
+        cacheItem.distanceOrBearingChanged = true;
     }
 
     @Override
     public synchronized void dispose() {
-        if (arrowImage != null) {
-            arrowImage.setDrawable(null);
-            arrowImage.clear();
-        }
-        arrowImage = null;
-
-        if (distanceLabel != null) {
-            distanceLabel.setText(null);
-            distanceLabel.clear();
-        }
-        distanceLabel = null;
+        cacheItem.dispose();
     }
 }

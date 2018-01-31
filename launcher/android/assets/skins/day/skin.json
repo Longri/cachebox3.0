@@ -1698,7 +1698,7 @@
     },
     "star": {
       "path": "svg/star.svg",
-      "scale": 1
+      "scale": 0.25
     },
     "star0": {
       "path": "svg/star0.svg",
