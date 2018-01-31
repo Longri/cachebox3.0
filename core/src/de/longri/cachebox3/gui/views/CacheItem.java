@@ -122,7 +122,7 @@ public class CacheItem extends VisTable implements Disposable {
         line1.add(difficultyStars);
         VisLabel sLabel = new VisLabel(shortSizeString, distanceLabelStyle);
         line1.add(sLabel).padLeft(CB.scaledSizes.MARGIN);
-        CacheSizeWidget sizeWidget = new CacheSizeWidget(this.size);
+        CacheSizeWidget sizeWidget = new CacheSizeWidget(this.size, style.cacheSizeStyle);
         line1.add(sizeWidget).padLeft(CB.scaledSizes.MARGIN_HALF);
 
 

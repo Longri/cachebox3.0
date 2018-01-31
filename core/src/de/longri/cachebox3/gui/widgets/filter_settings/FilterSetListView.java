@@ -36,6 +36,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.activities.EditFilterSettings;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
+import de.longri.cachebox3.gui.skin.styles.CacheSizeStyle;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.skin.styles.StarsStyle;
 import de.longri.cachebox3.gui.views.listview.Adapter;
@@ -452,7 +453,8 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
             this.property = property;
 
             StarsStyle starsStyle = VisUI.getSkin().get("cachelist", StarsStyle.class);
-            this.adjustableWidget = new AdjustableStarWidget(type, name, property, starsStyle);
+            CacheSizeStyle cacheSizeStyle = VisUI.getSkin().get("cachelist", CacheSizeStyle.class);
+            this.adjustableWidget = new AdjustableStarWidget(type, name, property, starsStyle, cacheSizeStyle);
             this.add(this.adjustableWidget).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
 
             property.setChangeListener(new Property.PropertyChangedListener() {

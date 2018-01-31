@@ -49,8 +49,6 @@ public class Stars extends AbstractIntValueChangedWidget {
             throw new RuntimeException("value must between 0-10! it was:" + Integer.toString(value));
         }
 
-
-        Skin skin = VisUI.getSkin();
         Drawable star1 = value >= 2 ? style.star : value >= 1 ? style.star_half : style.star0;
         Drawable star2 = value >= 4 ? style.star : value >= 3 ? style.star_half : style.star0;
         Drawable star3 = value >= 6 ? style.star : value >= 5 ? style.star_half : style.star0;

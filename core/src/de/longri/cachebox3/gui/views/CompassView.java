@@ -187,7 +187,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
             lineTable.add(difficultyStars);
             VisLabel sLabel = new VisLabel(actAbstractCache.getSize().toShortString(), infoStyle);
             lineTable.add(sLabel).padLeft(CB.scaledSizes.MARGIN);
-            CacheSizeWidget sizeWidget = new CacheSizeWidget(actAbstractCache.getSize());
+            CacheSizeWidget sizeWidget = new CacheSizeWidget(actAbstractCache.getSize(), style.cacheSizeStyle);
             lineTable.add(sizeWidget).padLeft(CB.scaledSizes.MARGIN_HALF);
             VisLabel tLabel = new VisLabel("T", infoStyle);
             lineTable.left();

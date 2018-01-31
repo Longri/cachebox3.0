@@ -44,10 +44,7 @@ import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
-import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
-import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
-import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
-import de.longri.cachebox3.gui.skin.styles.StarsStyle;
+import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.*;
@@ -364,7 +361,9 @@ public class TestView extends AbstractView {
 
             IntProperty property = new IntProperty();
             StarsStyle starsStyle = VisUI.getSkin().get("cachelist", StarsStyle.class);
-            final AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, "Title", property, starsStyle);
+            CacheSizeStyle cacheSizeStyle = VisUI.getSkin().get("cachelist", CacheSizeStyle.class);
+            final AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR,
+                    "Title", property, starsStyle, cacheSizeStyle);
             adjustableStarWidget.setValue(6);
 
 

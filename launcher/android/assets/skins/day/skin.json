@@ -672,9 +672,33 @@
       "path": "svg/bubble.svg",
       "scale": 2
     },
+    "bubble_large": {
+      "path": "svg/large.svg",
+      "scale": 1
+    },
+    "bubble_micro": {
+      "path": "svg/micro.svg",
+      "scale": 1
+    },
+    "bubble_notChosen": {
+      "path": "svg/notChosen.svg",
+      "scale": 1
+    },
+    "bubble_other": {
+      "path": "svg/other.svg",
+      "scale": 1
+    },
+    "bubble_regular": {
+      "path": "svg/regular.svg",
+      "scale": 1
+    },
     "bubble_selected": {
       "path": "svg/bubble_selected.svg",
       "scale": 2
+    },
+    "bubble_small": {
+      "path": "svg/small.svg",
+      "scale": 1
     },
     "bubble_star": {
       "path": "svg/star.svg",
@@ -687,6 +711,10 @@
     "bubble_star_half": {
       "path": "svg/star_half.svg",
       "scale": 0.16
+    },
+    "bubble_virtualSize": {
+      "path": "svg/virtualSize.svg",
+      "scale": 1
     },
     "button_bar_back": {
       "path": "svg/button_bar_back.svg",
@@ -2166,6 +2194,38 @@
       "bottom": 13
     }
   },
+  "de.longri.cachebox3.gui.skin.styles.StarsStyle": {
+    "bubble": {
+      "star": "bubble_star",
+      "star_half": "bubble_star_half",
+      "star0": "bubble_star0"
+    },
+    "cachelist": {
+      "star": "star",
+      "star_half": "star_half",
+      "star0": "star0"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.CacheSizeStyle": {
+    "bubble": {
+      "other": "bubble_other",
+      "notChosen": "bubble_notChosen",
+      "virtualSize": "bubble_virtualSize",
+      "large": "bubble_large",
+      "regular": "bubble_regular",
+      "small": "bubble_small",
+      "micro": "bubble_micro"
+    },
+    "cachelist": {
+      "other": "other",
+      "notChosen": "notChosen",
+      "virtualSize": "virtualSize",
+      "large": "large",
+      "regular": "regular",
+      "small": "small",
+      "micro": "micro"
+    }
+  },
   "de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle": {
     "download-animation": {
       "frames": [
@@ -2619,18 +2679,6 @@
       "large": "selectOverlay"
     }
   },
-  "de.longri.cachebox3.gui.skin.styles.StarsStyle": {
-    "bubble": {
-      "star": "bubble_star",
-      "star_half": "bubble_star_half",
-      "star0": "bubble_star0"
-    },
-    "cachelist": {
-      "star": "star",
-      "star_half": "star_half",
-      "star0": "star0"
-    }
-  },
   "de.longri.cachebox3.gui.skin.styles.ScaledSize": {
     "button_height": {
       "value": 58.531246
@@ -2842,7 +2890,9 @@
       "infoColor": "font_color",
       "frameNorthOrient": "compass_1_frame",
       "scale": "compass_1_scale",
-      "arrow": "compass_1_arrow"
+      "arrow": "compass_1_arrow",
+      "starStyle": "cachelist",
+      "cacheSizeStyle": "cachelist"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.AttributesStyle": {
@@ -3064,7 +3114,8 @@
       "distanceFontColor": "font_color",
       "typeStyle": "cacheList",
       "logTypesStyle": "cacheListViewLogTypes",
-      "starStyle":"bubble"
+      "starStyle": "bubble",
+      "cacheSizeStyle": "bubble"
     },
     "cacheListItems": {
       "nameFont": "normal_font",
@@ -3075,7 +3126,8 @@
       "distanceFontColor": "font_color",
       "typeStyle": "cacheList",
       "logTypesStyle": "cacheListViewLogTypes",
-      "starStyle":"cachelist"
+      "starStyle": "cachelist",
+      "cacheSizeStyle": "cachelist"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle": {
@@ -3159,5 +3211,4 @@
       "offsetX": -13
     }
   }
-
 }

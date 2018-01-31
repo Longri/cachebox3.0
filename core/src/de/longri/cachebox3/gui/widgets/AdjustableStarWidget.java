@@ -24,6 +24,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.skin.styles.CacheSizeStyle;
 import de.longri.cachebox3.gui.skin.styles.StarsStyle;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.IntProperty;
@@ -47,13 +48,13 @@ public class AdjustableStarWidget extends Table {
     }
 
 
-    public AdjustableStarWidget(Type type, CharSequence title, IntProperty valueProperty, StarsStyle style) {
+    public AdjustableStarWidget(Type type, CharSequence title, IntProperty valueProperty, StarsStyle starsStyletyle, CacheSizeStyle cacheSizeStyle) {
         this.type = type;
         this.value = valueProperty;
         maxValue = type == Type.STAR ? 10 : 6;
         minValue = type == Type.STAR ? 0 : 0;
         step = type == Type.STAR ? 1 : 1;
-        starsWidget = type == Type.STAR ? new Stars(value.getInt(), style) : new CacheSizeWidget(value.getInt());
+        starsWidget = type == Type.STAR ? new Stars(value.getInt(), starsStyletyle) : new CacheSizeWidget(value.getInt(), cacheSizeStyle);
         VisTextButton minusBtn = new VisTextButton("-") {
             @Override
             public float getPrefWidth() {

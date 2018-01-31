@@ -16,4 +16,5 @@ public class CacheListItemStyle {
     public CacheTypeStyle typeStyle;
     public LogTypesStyle logTypesStyle;
     public StarsStyle starStyle;
+    public CacheSizeStyle cacheSizeStyle;
 }
