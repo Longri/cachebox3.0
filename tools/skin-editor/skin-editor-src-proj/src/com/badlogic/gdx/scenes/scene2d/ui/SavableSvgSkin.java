@@ -18,10 +18,7 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
-import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
-import de.longri.cachebox3.gui.skin.styles.LanguageStyle;
-import de.longri.cachebox3.gui.skin.styles.LogListItemStyle;
-import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
+import de.longri.cachebox3.gui.skin.styles.*;
 
 /**
  * Created by Longri on 12.01.2017.
@@ -104,6 +101,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.skin.styles.FilterStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.CircularProgressStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.FloatControlStyle.class);
+        items.add(MapBubbleStyle.class);
 
 
         SvgSkinUtil.saveSkin(this, items, skinFile);

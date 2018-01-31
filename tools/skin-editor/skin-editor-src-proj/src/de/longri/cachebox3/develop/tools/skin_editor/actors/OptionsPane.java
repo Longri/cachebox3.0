@@ -360,6 +360,9 @@ public class OptionsPane extends Table {
 
                         DirectLineRendererStyle directLineRendererStyle = game.skinProject.get("directLine", DirectLineRendererStyle.class);
                         styles.put("directline", directLineRendererStyle);
+
+                        MapBubbleStyle mapBubbleStyle = game.skinProject.get("bubble", MapBubbleStyle.class);
+                        styles.put("bubble", mapBubbleStyle);
                     }
 
                     if (widgetStyle.equals("de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle")) {
@@ -558,7 +561,7 @@ public class OptionsPane extends Table {
         minus.addListener(new ClickListener() {
 
             public void clicked(InputEvent event, float x, float y) {
-                int newSize = (array != null ? array.size : 0) -1;
+                int newSize = (array != null ? array.size : 0) - 1;
                 Array<TextureAtlas.AtlasRegion> newArray = new Array<TextureAtlas.AtlasRegion>(newSize);
                 for (int i = 0, n = newSize; i < n; i++) {
                     newArray.add(array.get(i));
@@ -922,7 +925,7 @@ public class OptionsPane extends Table {
         Drawable drawable = null;
         String resourceName = null;
         if (field.get(currentStyle) instanceof Array) {
-            if(region!=null){
+            if (region != null) {
                 drawable = new TextureRegionDrawable(region);
                 resourceName = region.name;
             }

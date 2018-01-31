@@ -49,6 +49,7 @@ import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
+import de.longri.cachebox3.gui.widgets.MapBubble;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
@@ -289,8 +290,8 @@ public class MapView extends AbstractView {
                 if (e == Map.MOVE_EVENT) {
 //                    log.debug("Map.MOVE_EVENT");
                     if (infoBubble != null && infoItem != null) {
-                        infoBubble.setPosition(mapHalfWith + infoItem.drawX,
-                                MapView.this.getHeight() - (mapHalfHeight + infoItem.drawY));
+                        infoBubble.setPosition(mapHalfWith + infoItem.drawX + infoBubble.getOffsetX(),
+                                (this.getHeight() - (mapHalfHeight + infoItem.drawY)) + infoBubble.getOffsetY());
                     }
 
                     if (CB.mapMode != MapMode.FREE)
@@ -909,15 +910,20 @@ public class MapView extends AbstractView {
     }
 
     private MapWayPointItem infoItem = null;
-    private Actor infoBubble;
+    private MapBubble infoBubble;
     float mapHalfWith;
     float mapHalfHeight;
 
     public void clickOnItem(MapWayPointItem item) {
-        infoBubble = new VisTextButton("");
+        infoBubble = new MapBubble();
+
+        infoBubble.pack();
+        infoBubble.layout();
+
         MapView.this.addActor(infoBubble);
         infoItem = item;
-        infoBubble.setPosition(mapHalfWith + infoItem.drawX, this.getHeight() - (mapHalfHeight + infoItem.drawY));
+        infoBubble.setPosition(mapHalfWith + infoItem.drawX + infoBubble.getOffsetX(),
+                (this.getHeight() - (mapHalfHeight + infoItem.drawY)) + infoBubble.getOffsetY());
         CB.requestRendering();
     }
 }

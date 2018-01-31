@@ -89,6 +89,25 @@ public class TestView extends AbstractView {
         scrollPane = new VisScrollPane(contentTable);
         float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
 
+        {// test Map Info Bubble
+
+            MapBubble mapBubble = new MapBubble();
+
+            VisLabel label3 = new VisLabel("Map Info Bubble");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            contentTable.add(mapBubble).width(new Value.Fixed(contentWidth)).pad(20);
+            contentTable.row();
+
+        }
+
+
         {// test FloatControl
 
             final FloatControl floatControl = new FloatControl(0f, 100f, 1f, true, new FloatControl.ValueChangeListener() {
