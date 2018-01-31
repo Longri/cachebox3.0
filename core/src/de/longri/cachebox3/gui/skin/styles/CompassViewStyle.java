@@ -26,4 +26,5 @@ public class CompassViewStyle extends CompassStyle {
     public Drawable splitHandle, background, splitBackground, distanceBackground;
     public BitmapFont distnaceFont, accurateFont, infoFont;
     public Color distanceColor, accurateColor, infoColor;
+    public StarsStyle starStyle;
 }

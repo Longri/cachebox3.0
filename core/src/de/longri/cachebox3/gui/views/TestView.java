@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
+import de.longri.cachebox3.gui.skin.styles.StarsStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.*;
@@ -362,7 +363,8 @@ public class TestView extends AbstractView {
         {// test AdjustableStarWidget
 
             IntProperty property = new IntProperty();
-            final AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, "Title", property);
+            StarsStyle starsStyle = VisUI.getSkin().get("cachelist", StarsStyle.class);
+            final AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, "Title", property, starsStyle);
             adjustableStarWidget.setValue(6);
 
 

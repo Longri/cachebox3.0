@@ -37,6 +37,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.activities.EditFilterSettings;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
+import de.longri.cachebox3.gui.skin.styles.StarsStyle;
 import de.longri.cachebox3.gui.views.listview.Adapter;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
@@ -450,7 +451,8 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
 
             this.property = property;
 
-            this.adjustableWidget = new AdjustableStarWidget(type, name, property);
+            StarsStyle starsStyle = VisUI.getSkin().get("cachelist", StarsStyle.class);
+            this.adjustableWidget = new AdjustableStarWidget(type, name, property, starsStyle);
             this.add(this.adjustableWidget).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
 
             property.setChangeListener(new Property.PropertyChangedListener() {

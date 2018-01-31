@@ -253,6 +253,13 @@ widgets/Button
   orig: 48, 48
   offset: 0, 0
   index: -1
+widgets/CacheListItem
+  rotate: false
+  xy: 1, 171
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
 widgets/CacheTypes
   rotate: false
   xy: 1, 171
@@ -282,6 +289,13 @@ widgets/LogTypes
   offset: 0, 0
   index: -1
 widgets/Setting
+  rotate: false
+  xy: 1, 171
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+widgets/StarStyle
   rotate: false
   xy: 1, 171
   size: 48, 48

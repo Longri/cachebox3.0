@@ -20,15 +20,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
-import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Stars;
-import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.LogTypes;
@@ -99,16 +96,19 @@ public class CacheItem extends VisTable implements Disposable {
 
         VisTable arrowTable = new VisTable();
 
-        arrowImage = new Image(this.style.arrow);
-        arrowImage.setOrigin(this.style.arrow.getMinWidth() / 2, this.style.arrow.getMinHeight() / 2);
+        if (this.style.arrow != null) {
+            arrowImage = new Image(this.style.arrow);
+            arrowImage.setOrigin(this.style.arrow.getMinWidth() / 2, this.style.arrow.getMinHeight() / 2);
+            arrowTable.add(arrowImage);
+            arrowTable.row();
+        }
 
         Label.LabelStyle distanceLabelStyle = new Label.LabelStyle();
         distanceLabelStyle.font = this.style.distanceFont;
         distanceLabelStyle.fontColor = this.style.distanceFontColor;
         distanceLabel = new VisLabel("---- --", distanceLabelStyle);
 
-        arrowTable.add(arrowImage);
-        arrowTable.row();
+
         arrowTable.add(distanceLabel).padTop(CB.scaledSizes.MARGIN);
         this.add(arrowTable).right();
 
@@ -118,7 +118,7 @@ public class CacheItem extends VisTable implements Disposable {
         VisLabel dLabel = new VisLabel("D", distanceLabelStyle);
         line1.left();
         line1.add(dLabel);
-        Stars difficultyStars = new Stars(this.difficulty);
+        Stars difficultyStars = new Stars(this.difficulty, style.starStyle);
         line1.add(difficultyStars);
         VisLabel sLabel = new VisLabel(shortSizeString, distanceLabelStyle);
         line1.add(sLabel).padLeft(CB.scaledSizes.MARGIN);
@@ -133,12 +133,12 @@ public class CacheItem extends VisTable implements Disposable {
         VisLabel tLabel = new VisLabel("T", distanceLabelStyle);
         line2.left();
         line2.add(tLabel);
-        Stars terrainStars = new Stars(this.terrain);
+        Stars terrainStars = new Stars(this.terrain, style.starStyle);
         line2.add(terrainStars);
 
         VisLabel vLabel = new VisLabel("GcV", distanceLabelStyle);
         line2.add(vLabel).padLeft(CB.scaledSizes.MARGIN);
-        Stars vStars = new Stars(this.vote);
+        Stars vStars = new Stars(this.vote, style.starStyle);
         line2.add(vStars);
 
         if (this.favPoints > 0) {

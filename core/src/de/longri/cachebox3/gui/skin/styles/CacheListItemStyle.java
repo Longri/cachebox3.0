@@ -15,4 +15,5 @@ public class CacheListItemStyle {
     public Color distanceFontColor;
     public CacheTypeStyle typeStyle;
     public LogTypesStyle logTypesStyle;
+    public StarsStyle starStyle;
 }

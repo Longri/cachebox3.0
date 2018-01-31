@@ -50,6 +50,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.skin.styles.ColorDrawableStyle.class);
         items.add(com.badlogic.gdx.graphics.g2d.BitmapFont.class);
         items.add(SvgNinePatchDrawable.class);
+        items.add(StarsStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle.class);
@@ -102,6 +103,7 @@ public class SavableSvgSkin extends SvgSkin {
         items.add(de.longri.cachebox3.gui.skin.styles.CircularProgressStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.FloatControlStyle.class);
         items.add(MapBubbleStyle.class);
+
 
 
         SvgSkinUtil.saveSkin(this, items, skinFile);

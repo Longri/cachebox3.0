@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisTable;
+import de.longri.cachebox3.gui.skin.styles.StarsStyle;
 
 /**
  * Created by Longri on 07.09.2016.
@@ -28,8 +28,10 @@ import com.kotcrab.vis.ui.widget.VisTable;
 public class Stars extends AbstractIntValueChangedWidget {
 
     private final Image image1, image2, image3, image4, image5;
+    private final StarsStyle style;
 
-    public Stars(int value) {
+    public Stars(int value, StarsStyle style) {
+        this.style = style;
 
         this.add(image1 = new Image()).left();
         this.add(image2 = new Image()).left();
@@ -49,11 +51,11 @@ public class Stars extends AbstractIntValueChangedWidget {
 
 
         Skin skin = VisUI.getSkin();
-        Drawable star1 = value >= 2 ? skin.getDrawable("star") : value >= 1 ? skin.getDrawable("star_half") : skin.getDrawable("star0");
-        Drawable star2 = value >= 4 ? skin.getDrawable("star") : value >= 3 ? skin.getDrawable("star_half") : skin.getDrawable("star0");
-        Drawable star3 = value >= 6 ? skin.getDrawable("star") : value >= 5 ? skin.getDrawable("star_half") : skin.getDrawable("star0");
-        Drawable star4 = value >= 8 ? skin.getDrawable("star") : value >= 7 ? skin.getDrawable("star_half") : skin.getDrawable("star0");
-        Drawable star5 = value == 10 ? skin.getDrawable("star") : value >= 9 ? skin.getDrawable("star_half") : skin.getDrawable("star0");
+        Drawable star1 = value >= 2 ? style.star : value >= 1 ? style.star_half : style.star0;
+        Drawable star2 = value >= 4 ? style.star : value >= 3 ? style.star_half : style.star0;
+        Drawable star3 = value >= 6 ? style.star : value >= 5 ? style.star_half : style.star0;
+        Drawable star4 = value >= 8 ? style.star : value >= 7 ? style.star_half : style.star0;
+        Drawable star5 = value == 10 ? style.star : value >= 9 ? style.star_half : style.star0;
 
         setImage(image1, star1);
         setImage(image2, star2);
