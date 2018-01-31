@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
 import de.longri.cachebox3.gui.skin.styles.MapBubbleStyle;
 import de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle;
@@ -54,9 +55,8 @@ public class MapBubble extends VisTable {
         this.cache = cache;
         this.waypoint = waypoint;
         style = VisUI.getSkin().get("bubble", MapBubbleStyle.class);
-        this.setBackground(style.background);
 
-
+        boolean isSelected = false;
         if (cache != null) {
 
             LogTypes left = null;
@@ -81,7 +81,7 @@ public class MapBubble extends VisTable {
                     (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
                     (int) Math.min(cache.getRating() * 2, 5 * 2), cache.getSize(),
                     cache.getSize().toShortString(), left, right, isAvailable, cache.getFavoritePoints(), style);
-
+            isSelected = cache == EventHandler.getSelectedCache();
         } else if (waypoint != null) {
 
             WayPointListItemStyle style = VisUI.getSkin().get("bubble", WayPointListItemStyle.class);
@@ -89,12 +89,19 @@ public class MapBubble extends VisTable {
             content = new WayPointItem(waypoint.getType(),
                     waypoint.getGcCode().toString(), waypoint.getTitle().toString(),
                     waypoint.getDescription(Database.Data), waypoint.FormatCoordinate(), style);
+            isSelected = waypoint == EventHandler.getSelectedWaypoint();
+
         } else {
             content = null;
         }
 
         this.add(content).expand().fill();
+        this.setBackground(isSelected ? style.selectedBackground : style.background);
 
+    }
+
+    public MapBubble(Object dataObject) {
+        this(dataObject instanceof AbstractCache ? (AbstractCache) dataObject : null, dataObject instanceof AbstractWaypoint ? (AbstractWaypoint) dataObject : null);
     }
 
     public float getOffsetX() {

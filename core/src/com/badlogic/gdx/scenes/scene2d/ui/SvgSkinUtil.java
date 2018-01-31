@@ -343,6 +343,12 @@ public class SvgSkinUtil {
                             } else if (valueObject instanceof LogTypesStyle) {
                                 String objName = resolveObjectName(skin, LogTypesStyle.class, valueObject);
                                 json.writeValue(field.getName(), objName);
+                            } else if (valueObject instanceof ProgressBar.ProgressBarStyle) {
+                                String objName = resolveObjectName(skin, ProgressBar.ProgressBarStyle.class, valueObject);
+                                json.writeValue(field.getName(), objName);
+                            } else if (valueObject instanceof Button.ButtonStyle) {
+                                String objName = resolveObjectName(skin, Button.ButtonStyle.class, valueObject);
+                                json.writeValue(field.getName(), objName);
                             } else if (valueObject instanceof Array) {
                                 String arrayName = field.getName();
                                 json.writeArrayStart(arrayName);
@@ -352,9 +358,7 @@ public class SvgSkinUtil {
                                     String objName = resolveObjectName(skin, TextureRegion.class, obj);
                                     json.writeValue(objName);
                                 }
-                                ;
                                 json.writeArrayEnd();
-
                             } else {
                                 throw new IllegalArgumentException("resource object type is unknown: " + valueObject.getClass().getCanonicalName());
                             }

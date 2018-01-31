@@ -915,7 +915,12 @@ public class MapView extends AbstractView {
     float mapHalfHeight;
 
     public void clickOnItem(MapWayPointItem item) {
-        infoBubble = new MapBubble();
+
+        if (infoBubble != null) {
+            MapView.this.removeActor(infoBubble);
+        }
+
+        infoBubble = new MapBubble(item.dataObject);
 
         infoBubble.pack();
         infoBubble.layout();

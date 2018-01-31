@@ -3032,7 +3032,7 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.CacheListItemStyle": {
-    "cacheListItems": {
+    "bubble": {
       "nameFont": "normal_font",
       "nameFontColor": "font_color",
       "notAvailableColor": "notAvailable",
@@ -3042,7 +3042,7 @@
       "typeStyle": "cacheList",
       "logTypesStyle": "cacheListViewLogTypes"
     },
-    "bubble": {
+    "cacheListItems": {
       "nameFont": "normal_font",
       "nameFontColor": "font_color",
       "notAvailableColor": "notAvailable",
@@ -3130,6 +3130,7 @@
   "de.longri.cachebox3.gui.skin.styles.MapBubbleStyle": {
     "bubble": {
       "background": "bubble_9_Patch",
+      "selectedBackground": "bubble_selected_9_Patch",
       "offsetX": -13
     }
   }
