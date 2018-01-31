@@ -443,9 +443,14 @@ public class MapView extends AbstractView {
         CacheboxMain.drawMap = false;
         map.clearMap();
         map.destroy();
-        TextureBucket.pool.clear();
-        TextItem.pool.clear();
-        TextureItem.disposeTextures();
+        CB.postOnMainThread(new NamedRunnable("MapView:dispose texture items") {
+            @Override
+            public void run() {
+                TextureBucket.pool.clear();
+                TextItem.pool.clear();
+                TextureItem.disposeTextures();
+            }
+        });
 
         main.mMapRenderer = null;
         map = null;

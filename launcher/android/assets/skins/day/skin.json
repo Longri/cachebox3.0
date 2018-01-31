@@ -674,23 +674,23 @@
     },
     "bubble_large": {
       "path": "svg/large.svg",
-      "scale": 1
+      "scale": 0.16
     },
     "bubble_micro": {
       "path": "svg/micro.svg",
-      "scale": 1
+      "scale": 0.16
     },
     "bubble_notChosen": {
       "path": "svg/notChosen.svg",
-      "scale": 1
+      "scale": 0.16
     },
     "bubble_other": {
       "path": "svg/other.svg",
-      "scale": 1
+      "scale": 0.16
     },
     "bubble_regular": {
       "path": "svg/regular.svg",
-      "scale": 1
+      "scale": 0.16
     },
     "bubble_selected": {
       "path": "svg/bubble_selected.svg",
@@ -698,7 +698,7 @@
     },
     "bubble_small": {
       "path": "svg/small.svg",
-      "scale": 1
+      "scale": 0.16
     },
     "bubble_star": {
       "path": "svg/star.svg",
@@ -714,7 +714,7 @@
     },
     "bubble_virtualSize": {
       "path": "svg/virtualSize.svg",
-      "scale": 1
+      "scale": 0.16
     },
     "button_bar_back": {
       "path": "svg/button_bar_back.svg",
@@ -2888,11 +2888,11 @@
       "distanceColor": "font_color",
       "accurateColor": "font_color",
       "infoColor": "font_color",
+      "starStyle": "cachelist",
+      "cacheSizeStyle": "cachelist",
       "frameNorthOrient": "compass_1_frame",
       "scale": "compass_1_scale",
-      "arrow": "compass_1_arrow",
-      "starStyle": "cachelist",
-      "cacheSizeStyle": "cachelist"
+      "arrow": "compass_1_arrow"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.AttributesStyle": {
