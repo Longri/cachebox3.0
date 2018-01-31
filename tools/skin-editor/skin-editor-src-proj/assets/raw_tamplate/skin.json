@@ -1698,7 +1698,7 @@
     },
     "star": {
       "path": "svg/star.svg",
-      "scale": 1
+      "scale": 0.25
     },
     "star0": {
       "path": "svg/star0.svg",
@@ -1974,10 +1974,10 @@
       "right": 18,
       "top": 18,
       "bottom": 26,
-      "leftWidth": 0,
-      "rightWidth": 0,
-      "topHeight": 0,
-      "bottomHeight": 0
+      "leftWidth": 10,
+      "rightWidth": 10,
+      "topHeight": 10,
+      "bottomHeight": 18
     },
     "bubble_selected_9_Patch": {
       "name": "bubble_selected",
@@ -1985,10 +1985,10 @@
       "right": 18,
       "top": 18,
       "bottom": 26,
-      "leftWidth": 0,
-      "rightWidth": 0,
-      "topHeight": 0,
-      "bottomHeight": 0
+      "leftWidth": 10,
+      "rightWidth": 10,
+      "topHeight": 10,
+      "bottomHeight": 18
     },
     "default_button_9_Patch": {
       "name": "default_button",
@@ -3041,10 +3041,28 @@
       "distanceFontColor": "font_color",
       "typeStyle": "cacheList",
       "logTypesStyle": "cacheListViewLogTypes"
+    },
+    "bubble": {
+      "nameFont": "normal_font",
+      "nameFontColor": "font_color",
+      "notAvailableColor": "notAvailable",
+      "arrow": "arrow-compass",
+      "distanceFont": "settings_default_value_font",
+      "distanceFontColor": "font_color",
+      "typeStyle": "cacheList",
+      "logTypesStyle": "cacheListViewLogTypes"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle": {
     "WayPointListItems": {
+      "nameFont": "normal_font",
+      "nameFontColor": "font_color",
+      "arrow": "arrow-compass",
+      "distanceFont": "settings_default_value_font",
+      "distanceFontColor": "font_color",
+      "typeStyle": "cacheList"
+    },
+    "bubble": {
       "nameFont": "normal_font",
       "nameFontColor": "font_color",
       "arrow": "arrow-compass",

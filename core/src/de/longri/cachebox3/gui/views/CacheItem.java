@@ -38,7 +38,7 @@ import de.longri.cachebox3.types.LogTypes;
  */
 public class CacheItem extends VisTable implements Disposable {
 
-    private final CacheListItemStyle style;
+    final CacheListItemStyle style;
     private final CacheTypes type;
     private final CharSequence cacheName;
     private boolean needsLayout = true;
@@ -55,19 +55,19 @@ public class CacheItem extends VisTable implements Disposable {
     private final int favPoints;
 
 
-    public CacheItem( CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
-                      int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
-                      LogTypes rightLogType, boolean isAvailable, int favPoints) {
+    public CacheItem(CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
+                     int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
+                     LogTypes rightLogType, boolean isAvailable, int favPoints, CacheListItemStyle style) {
         this.difficulty = difficulty;
         this.terrain = terrain;
         this.vote = vote;
         this.size = size;
         this.shortSizeString = shortSizeString;
-        this.style = VisUI.getSkin().get("cacheListItems", CacheListItemStyle.class);
+        this.style = style;
         this.type = type;
         this.cacheName = cacheName;
-        this.leftInfoIcon = leftLogType == null ? null : leftLogType.getDrawable(style.logTypesStyle);
-        this.rightInfoIcon = rightLogType == null ? null : rightLogType.getDrawable(style.logTypesStyle);
+        this.leftInfoIcon = leftLogType == null ? null : leftLogType.getDrawable(this.style.logTypesStyle);
+        this.rightInfoIcon = rightLogType == null ? null : rightLogType.getDrawable(this.style.logTypesStyle);
         this.isAvailable = isAvailable;
         this.favPoints = favPoints;
     }

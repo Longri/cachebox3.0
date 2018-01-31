@@ -16,6 +16,8 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.utils.Disposable;
+import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractWaypoint;
@@ -37,7 +39,8 @@ public class WayPointListItem extends ListViewItem implements Disposable {
     private WayPointListItem(int listIndex, CacheTypes type, CharSequence wayPointGcCode, CharSequence wayPointTitle,
                              CharSequence description, CharSequence coord) {
         super(listIndex);
-        this.wayPointItem = new WayPointItem(type, wayPointGcCode, wayPointTitle, description, coord);
+        WayPointListItemStyle style = VisUI.getSkin().get("WayPointListItems", WayPointListItemStyle.class);
+        this.wayPointItem = new WayPointItem(type, wayPointGcCode, wayPointTitle, description, coord, style);
         this.add(wayPointItem).expand().fill();
     }
 

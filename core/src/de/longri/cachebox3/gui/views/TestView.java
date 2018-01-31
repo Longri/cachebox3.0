@@ -52,9 +52,7 @@ import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.*;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.IntProperty;
-import de.longri.cachebox3.types.LogTypes;
+import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +89,19 @@ public class TestView extends AbstractView {
 
         {// test Map Info Bubble
 
-            MapBubble mapBubble = new MapBubble();
+            AbstractCache cache = new MutableCache(0, 0);
+            cache.setSize(CacheSizes.regular);
+            cache.setType(CacheTypes.Traditional);
+            cache.setName("CacheName");
+            cache.setOwner("CacheOwner");
+//            cache.setFavoritePoints(1345); //TODO debug!
+            CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache);
+
+            ListView.ListViewStyle style = VisUI.getSkin().get(ListView.ListViewStyle.class);
+
+            cacheListItem.setBackground(style.firstItem);
+
+            MapBubble mapBubble = new MapBubble(cache);
 
             VisLabel label3 = new VisLabel("Map Info Bubble");
             Table lineTable = new Table();
@@ -102,7 +112,10 @@ public class TestView extends AbstractView {
             contentTable.add(lineTable).left().expandX().fillX();
             contentTable.row();
 
-            contentTable.add(mapBubble).width(new Value.Fixed(contentWidth)).pad(20);
+            contentTable.add(cacheListItem).width(new Value.Fixed(contentWidth * 1.2f)).pad(5);
+            contentTable.row();
+
+            contentTable.add(mapBubble).pad(20);
             contentTable.row();
 
         }

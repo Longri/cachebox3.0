@@ -16,6 +16,8 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.utils.Disposable;
+import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
 import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheSizes;
@@ -64,7 +66,9 @@ public class CacheListItem extends ListViewItem implements Disposable {
                           int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
                           LogTypes rightLogType, boolean isAvailable, int favPoints) {
         super(listIndex);
-        cacheItem = new CacheItem(type, cacheName, difficulty, terrain, vote, size, shortSizeString, leftLogType, rightLogType, isAvailable, favPoints);
+        CacheListItemStyle style = VisUI.getSkin().get("cacheListItems", CacheListItemStyle.class);
+        cacheItem = new CacheItem(type, cacheName, difficulty, terrain, vote, size, shortSizeString,
+                leftLogType, rightLogType, isAvailable, favPoints,style);
         this.add(cacheItem).expand().fill();
     }
 
@@ -88,4 +92,5 @@ public class CacheListItem extends ListViewItem implements Disposable {
     public synchronized void dispose() {
         cacheItem.dispose();
     }
+
 }

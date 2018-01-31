@@ -46,9 +46,9 @@ public class WayPointItem extends VisTable implements Disposable {
     boolean distanceOrBearingChanged = true;
 
     public WayPointItem(CacheTypes type, CharSequence wayPointGcCode, CharSequence wayPointTitle,
-                        CharSequence description, CharSequence coord) {
+                        CharSequence description, CharSequence coord, WayPointListItemStyle style) {
         super();
-        this.style = VisUI.getSkin().get("WayPointListItems", WayPointListItemStyle.class);
+        this.style = style;
         this.type = type;
         this.wayPointGcCode = wayPointGcCode;
 

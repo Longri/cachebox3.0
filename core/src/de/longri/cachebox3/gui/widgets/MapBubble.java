@@ -17,9 +17,15 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
+import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
 import de.longri.cachebox3.gui.skin.styles.MapBubbleStyle;
+import de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle;
+import de.longri.cachebox3.gui.views.CacheItem;
+import de.longri.cachebox3.gui.views.WayPointItem;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
+import de.longri.cachebox3.types.LogTypes;
 
 /**
  * Created by Longri on 31.01.2018.
@@ -30,7 +36,7 @@ public class MapBubble extends VisTable {
     private final AbstractCache cache;
     private final AbstractWaypoint waypoint;
 
-    private float leftPatch;
+    private final VisTable content;
 
     public MapBubble() {
         this(null, null);
@@ -49,6 +55,46 @@ public class MapBubble extends VisTable {
         this.waypoint = waypoint;
         style = VisUI.getSkin().get("bubble", MapBubbleStyle.class);
         this.setBackground(style.background);
+
+
+        if (cache != null) {
+
+            LogTypes left = null;
+            LogTypes right = null;
+            boolean isAvailable = true;
+            if (cache.isFound()) {
+                left = LogTypes.found;
+            }
+
+            if (!cache.isAvailable()) {
+                right = LogTypes.temporarily_disabled;
+                isAvailable = false;
+            }
+
+            if (cache.isArchived()) {
+                right = LogTypes.archived;
+                isAvailable = false;
+            }
+
+            CacheListItemStyle style = VisUI.getSkin().get("bubble", CacheListItemStyle.class);
+            content = new CacheItem(cache.getType(), cache.getName(),
+                    (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
+                    (int) Math.min(cache.getRating() * 2, 5 * 2), cache.getSize(),
+                    cache.getSize().toShortString(), left, right, isAvailable, cache.getFavoritePoints(), style);
+
+        } else if (waypoint != null) {
+
+            WayPointListItemStyle style = VisUI.getSkin().get("bubble", WayPointListItemStyle.class);
+
+            content = new WayPointItem(waypoint.getType(),
+                    waypoint.getGcCode().toString(), waypoint.getTitle().toString(),
+                    waypoint.getDescription(Database.Data), waypoint.FormatCoordinate(), style);
+        } else {
+            content = null;
+        }
+
+        this.add(content).expand().fill();
+
     }
 
     public float getOffsetX() {
