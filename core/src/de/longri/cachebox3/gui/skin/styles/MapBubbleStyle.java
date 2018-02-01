@@ -23,4 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 public class MapBubbleStyle {
     public Drawable background, selectedBackground;
     public float offsetX, offsetY;
+    public float minWidth;
+    public CacheListItemStyle cacheListItemStyle;
+    public WayPointListItemStyle wayPointListItemStyle;
 }

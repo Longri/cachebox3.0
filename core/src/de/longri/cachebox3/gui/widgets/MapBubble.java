@@ -112,4 +112,9 @@ public class MapBubble extends VisTable {
         return style.offsetY;
     }
 
+
+    public float getMinWidth() {
+        if (style.minWidth <= 0) return super.getWidth();
+        return style.minWidth;
+    }
 }

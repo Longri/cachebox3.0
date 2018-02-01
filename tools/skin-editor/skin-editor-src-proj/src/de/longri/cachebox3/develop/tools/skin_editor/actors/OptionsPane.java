@@ -36,10 +36,12 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
+import de.longri.cachebox3.develop.tools.skin_editor.StyleTypes;
 import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.utils.SkinColor;
@@ -494,10 +496,63 @@ public class OptionsPane extends Table {
                 } else if (field.getType().isEnum()) {
                     actor = getEnumActor(field, obj);
                 } else {
-                    Gdx.app.log("OptionsPane", "Unknown type: " + name);
-                    if (!(currentStyle instanceof AbstractIconStyle)) {
-                        actor = new Label("Unknown Type", game.skin);
+
+                    //if Type any Style
+                    String fullName = field.getType().getName();
+                    for (Class clazz : StyleTypes.items) {
+                        if (clazz.getName().equals(fullName)) {
+                            //get all Styles
+                            final ObjectMap allStyles = game.skinProject.getAll(clazz);
+
+                            Array<String> itemList = new Array<String>();
+                            itemList.add(""); //empty entry, for not set
+                            for (Object styleName : allStyles.keys())
+                                itemList.add((String) styleName);
+                            final VisSelectBox<String> selectBox = new VisSelectBox();
+                            selectBox.setItems(itemList);
+
+                            String selectedName = SvgSkinUtil.resolveObjectName(game.skinProject, clazz, field.get(currentStyle));
+                            if (selectedName == null) selectedName = "";
+                            selectBox.setSelected(selectedName);
+
+                            selectBox.addListener(new ChangeListener() {
+
+                                @Override
+                                public void changed(ChangeEvent event, Actor actor) {
+
+                                    String selection = (String) ((SelectBox) actor).getSelected();
+                                    try {
+
+                                        Object selectionObject = null;
+                                        for (Object object : allStyles.values()) {
+                                            if (selection.equals(object.toString())) {
+                                                selectionObject = object;
+                                                break;
+                                            }
+                                        }
+                                        field.set(currentStyle, selectionObject);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    game.screenMain.saveToSkin();
+                                    refresh(true);
+                                    game.screenMain.paneOptions.updateSelectedTableFields();
+                                    game.screenMain.panePreview.refresh();
+                                }
+
+                            });
+
+
+                            actor = selectBox;
+
+                        }
                     }
+
+//                    Gdx.app.log("OptionsPane", "Unknown type: " + name);
+//                    if (!(currentStyle instanceof AbstractIconStyle)) {
+//                        actor = new Label("Unknown Type", game.skin);
+//                    }
                 }
 
                 if (actor != null) {
