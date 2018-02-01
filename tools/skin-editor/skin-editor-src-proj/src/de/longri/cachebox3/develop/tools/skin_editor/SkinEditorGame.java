@@ -129,7 +129,7 @@ public class SkinEditorGame extends Game {
     }
 
 
-    public String resolveWidgetPackageName(String widget) {
+    public static String resolveWidgetPackageName(String widget) {
         if (widget.equals("MapWayPointItem")) {
             return "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle";
         } else if (widget.equals("GestureButton")) {

@@ -353,6 +353,12 @@ public class SvgSkinUtil {
                             } else if (valueObject instanceof StarsStyle) {
                                 String objName = resolveObjectName(skin, StarsStyle.class, valueObject);
                                 json.writeValue(field.getName(), objName);
+                            } else if (valueObject instanceof CacheListItemStyle) {
+                                String objName = resolveObjectName(skin, CacheListItemStyle.class, valueObject);
+                                json.writeValue(field.getName(), objName);
+                            } else if (valueObject instanceof WayPointListItemStyle) {
+                                String objName = resolveObjectName(skin, WayPointListItemStyle.class, valueObject);
+                                json.writeValue(field.getName(), objName);
                             } else if (valueObject instanceof Array) {
                                 String arrayName = field.getName();
                                 json.writeArrayStart(arrayName);

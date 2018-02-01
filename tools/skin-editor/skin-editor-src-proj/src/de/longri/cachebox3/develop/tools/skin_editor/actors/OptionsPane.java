@@ -527,7 +527,7 @@ public class OptionsPane extends Table {
                                     }
 
                                     game.screenMain.saveToSkin();
-                                    refresh(true, selection);
+                                    refresh(true, currentStyle.getClass().getSimpleName());
                                     game.screenMain.paneOptions.updateSelectedTableFields();
                                     game.screenMain.panePreview.refresh();
                                 }

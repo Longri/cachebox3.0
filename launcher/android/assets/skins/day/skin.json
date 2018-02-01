@@ -3083,6 +3083,9 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle": {
+    "bubble": {
+      "traditional": "mapTraditional1"
+    },
     "cacheList": {
       "traditional": "traddi",
       "multi": "multi",
@@ -3214,7 +3217,9 @@
     "bubble": {
       "background": "bubble_9_Patch",
       "selectedBackground": "bubble_selected_9_Patch",
-      "offsetX": -13
+      "offsetX": -13,
+      "cacheListItemStyle": "bubble",
+      "wayPointListItemStyle": "bubble"
     }
   }
 }

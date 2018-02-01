@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.mobidevelop.maps.editor.ui.utils.Tooltips;
@@ -73,7 +74,8 @@ public class WidgetsBar extends Table {
         styleNames.sort();
 
         selectBox.setItems(styleNames);
-        add(selectBox).pad(2.5f).height(new Value.Fixed(buttonSize));
+        add((Actor) null).expandX().fillX();
+        add(selectBox).pad(2.5f).height(new Value.Fixed(buttonSize)).align(Align.right);
 
         selectBox.addListener(new ChangeListener() {
             @Override
