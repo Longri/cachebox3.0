@@ -125,7 +125,7 @@ public class FontPickerDialog extends Dialog {
                         // Since we have reloaded everything we have to get
                         // field back
 
-                        game.screenMain.paneOptions.refreshSelection();
+//                        game.screenMain.paneOptions.refreshSelection();
                         field.set(game.screenMain.paneOptions.currentStyle, font);
 
                     } catch (Exception e) {

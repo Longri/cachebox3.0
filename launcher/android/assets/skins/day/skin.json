@@ -672,6 +672,10 @@
       "path": "svg/bubble.svg",
       "scale": 2
     },
+    "bubble_favpoint": {
+      "path": "svg/favpoint.svg",
+      "scale": 0.16
+    },
     "bubble_large": {
       "path": "svg/large.svg",
       "scale": 0.16
@@ -3110,6 +3114,7 @@
       "nameFont": "mapPanelUnit",
       "nameFontColor": "font_color",
       "notAvailableColor": "notAvailable",
+      "favoritPoints": "bubble_favpoint",
       "distanceFont": "AboutInfo",
       "distanceFontColor": "font_color",
       "typeStyle": "cacheList",

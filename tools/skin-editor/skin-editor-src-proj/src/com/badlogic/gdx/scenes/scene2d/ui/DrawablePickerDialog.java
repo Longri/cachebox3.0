@@ -606,7 +606,7 @@ public class DrawablePickerDialog extends Dialog {
                     try {
                         // Since we have reloaded everything we have to get
                         // field back
-                        game.screenMain.paneOptions.refreshSelection();
+//                        game.screenMain.paneOptions.refreshSelection();
 
                         if (field.getType() == Array.class) {
                             Object value = field.get(game.screenMain.paneOptions.currentStyle);

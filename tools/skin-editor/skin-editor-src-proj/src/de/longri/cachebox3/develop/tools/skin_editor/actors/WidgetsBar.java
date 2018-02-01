@@ -15,13 +15,19 @@
  ******************************************************************************/
 package de.longri.cachebox3.develop.tools.skin_editor.actors;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.mobidevelop.maps.editor.ui.utils.Tooltips;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
+import de.longri.cachebox3.develop.tools.skin_editor.StyleTypes;
 import de.longri.cachebox3.utils.SkinColor;
+
 
 /**
  * A table representing the buttons panel at the top
@@ -49,7 +55,7 @@ public class WidgetsBar extends Table {
      *
      */
     public void initializeButtons() {
-
+        float buttonSize = 30;
         group = new ButtonGroup();
 
         Tooltips.TooltipStyle styleTooltip = new Tooltips.TooltipStyle(game.skin.getFont("default-font"),
@@ -93,8 +99,9 @@ public class WidgetsBar extends Table {
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
-
-                    game.screenMain.paneOptions.refresh(withStyle);
+                    String widget = button.getUserObject().toString();
+                    String widgetStyle = game.resolveWidgetPackageName(widget);
+                    game.screenMain.paneOptions.refresh(true, widgetStyle);
 
                 }
 
@@ -102,9 +109,31 @@ public class WidgetsBar extends Table {
 
             group.add(button);
 
-            float buttonSize = 30;
+
             add(button).pad(2.5f).width(new Value.Fixed(buttonSize)).height(new Value.Fixed(buttonSize));
         }
+
+
+        //ComboBox with all Styles
+        Array<String> styleNames = new Array();
+        for (Class clazz : StyleTypes.items) {
+            styleNames.add(clazz.getSimpleName());
+        }
+
+        final VisSelectBox<String> selectBox = new VisSelectBox();
+
+        styleNames.sort();
+
+        selectBox.setItems(styleNames);
+        add(selectBox).pad(2.5f).height(new Value.Fixed(buttonSize));
+
+        selectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                String selected = ((VisSelectBox<String>) actor).getSelected();
+                game.screenMain.paneOptions.refresh(true, selected);
+            }
+        });
 
 
     }
