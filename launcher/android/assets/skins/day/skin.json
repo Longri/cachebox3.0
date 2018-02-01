@@ -672,6 +672,10 @@
       "path": "svg/bubble.svg",
       "scale": 2
     },
+    "bubble_favpoint": {
+      "path": "svg/favpoint.svg",
+      "scale": 0.16
+    },
     "bubble_large": {
       "path": "svg/large.svg",
       "scale": 0.16
@@ -3079,6 +3083,9 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle": {
+    "bubble": {
+      "traditional": "mapTraditional1"
+    },
     "cacheList": {
       "traditional": "traddi",
       "multi": "multi",
@@ -3110,6 +3117,7 @@
       "nameFont": "mapPanelUnit",
       "nameFontColor": "font_color",
       "notAvailableColor": "notAvailable",
+      "favoritPoints": "bubble_favpoint",
       "distanceFont": "AboutInfo",
       "distanceFontColor": "font_color",
       "typeStyle": "cacheList",
@@ -3209,7 +3217,9 @@
     "bubble": {
       "background": "bubble_9_Patch",
       "selectedBackground": "bubble_selected_9_Patch",
-      "offsetX": -13
+      "offsetX": -13,
+      "cacheListItemStyle": "bubble",
+      "wayPointListItemStyle": "bubble"
     }
   }
 }

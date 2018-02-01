@@ -45,7 +45,7 @@ public class SkinEditorGame extends Game {
     public final static String[] widgets = {"MapWayPointItem", "Sizes", "Icons", "MenuIcons", "Filter", "Label", "EditText", "Button",
             "GestureButton", "TextButton", "FileChooser", "Compass", "CacheTypes", "AttributeTypes", "LogTypes", "CheckBox", "TextField", "ListView",
             "SelectBox", "ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree", "Animation", "Language"
-            ,"Setting", "CacheListItem","StarStyle","CacheSizeStyle"};
+            , "Setting", "CacheListItem", "StarStyle", "CacheSizeStyle"};
 
     public SpriteBatch batch;
     public SavableSvgSkin skin;
@@ -129,7 +129,7 @@ public class SkinEditorGame extends Game {
     }
 
 
-    public String resolveWidgetPackageName(String widget) {
+    public static String resolveWidgetPackageName(String widget) {
         if (widget.equals("MapWayPointItem")) {
             return "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle";
         } else if (widget.equals("GestureButton")) {
@@ -173,6 +173,12 @@ public class SkinEditorGame extends Game {
         } else if (widget.equals("CacheSizeStyle")) {
             return "de.longri.cachebox3.gui.skin.styles.CacheSizeStyle";
         } else {
+
+            for (Class clazz : StyleTypes.items) {
+                if (clazz.getSimpleName().equals(widget)) {
+                    return clazz.getName();
+                }
+            }
             return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
         }
 
