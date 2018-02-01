@@ -446,8 +446,8 @@ public class OptionsPane extends Table {
      */
     private void updateTableFields(final String style) {
 
-        ImageButton button = (ImageButton) game.screenMain.barWidgets.group.getChecked();
-        String widget = button.getUserObject().toString();
+        String widget = game.screenMain.barWidgets.selectedStyle;
+        String widgetStyle = game.resolveWidgetPackageName(widget);
 
         Gdx.app.log("OptionsPane", "Update fields table for widget: " + widget + ", style: " + style);
         tableFields.clear();
