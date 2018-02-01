@@ -3122,6 +3122,7 @@
       "nameFontColor": "font_color",
       "notAvailableColor": "notAvailable",
       "arrow": "arrow-compass",
+      "favoritPoints": "favpoint",
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",
       "typeStyle": "cacheList",

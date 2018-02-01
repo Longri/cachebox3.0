@@ -143,7 +143,7 @@ public class CacheItem extends VisTable implements Disposable {
 
         if (this.favPoints > 0) {
             // don't show we have no favpoint info's
-            Image favpointIcon = new Image(CB.getSkin().getMenuIcon.favPoint);
+            Image favpointIcon = new Image(style.favoritPoints);
             line2.add(favpointIcon).padLeft(CB.scaledSizes.MARGIN).align(Align.top);
             VisLabel fLabel = new VisLabel("x" + Integer.toString(this.favPoints), distanceLabelStyle);
             line2.add(fLabel);

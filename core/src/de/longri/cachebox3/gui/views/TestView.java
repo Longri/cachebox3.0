@@ -92,7 +92,7 @@ public class TestView extends AbstractView {
             cache.setType(CacheTypes.Traditional);
             cache.setName("CacheName");
             cache.setOwner("CacheOwner");
-//            cache.setFavoritePoints(1345); //TODO debug!
+            cache.setFavoritePoints(1345); //TODO debug!
             CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache);
 
             ListView.ListViewStyle style = VisUI.getSkin().get(ListView.ListViewStyle.class);
