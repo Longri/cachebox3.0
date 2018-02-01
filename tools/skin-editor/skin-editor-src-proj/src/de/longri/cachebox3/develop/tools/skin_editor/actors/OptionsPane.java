@@ -499,7 +499,7 @@ public class OptionsPane extends Table {
 
                     //if Type any Style
                     String fullName = field.getType().getName();
-                    for (Class clazz : StyleTypes.items) {
+                    for (final Class clazz : StyleTypes.items) {
                         if (clazz.getName().equals(fullName)) {
                             //get all Styles
                             final ObjectMap allStyles = game.skinProject.getAll(clazz);
@@ -525,7 +525,8 @@ public class OptionsPane extends Table {
 
                                         Object selectionObject = null;
                                         for (Object object : allStyles.values()) {
-                                            if (selection.equals(object.toString())) {
+                                            String selectedName = SvgSkinUtil.resolveObjectName(game.skinProject, clazz, object);
+                                            if (selection.equals(selectedName)) {
                                                 selectionObject = object;
                                                 break;
                                             }
