@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
@@ -925,10 +926,13 @@ public class MapView extends AbstractView {
             MapView.this.removeActor(infoBubble);
         }
 
-        infoBubble = new MapBubble(item.dataObject);
+        VisTable table = new VisTable();
 
-        infoBubble.pack();
+        infoBubble = new MapBubble(item.dataObject);
+        table.add(infoBubble).expand().fill();
         infoBubble.layout();
+        table.layout();
+
 
         MapView.this.addActor(infoBubble);
         infoItem = item;

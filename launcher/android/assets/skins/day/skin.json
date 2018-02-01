@@ -672,6 +672,14 @@
       "path": "svg/bubble.svg",
       "scale": 2
     },
+    "bubbleNotFound": {
+      "path": "svg/log1icon.svg",
+      "scale": 0.06
+    },
+    "bubble_archived": {
+      "path": "svg/archived.svg",
+      "scale": 0.06
+    },
     "bubble_favpoint": {
       "path": "svg/favpoint.svg",
       "scale": 0.16
@@ -715,6 +723,10 @@
     "bubble_star_half": {
       "path": "svg/star_half.svg",
       "scale": 0.16
+    },
+    "bubble_tempDisabled": {
+      "path": "svg/tempDisabled.svg",
+      "scale": 0.06
     },
     "bubble_virtualSize": {
       "path": "svg/virtualSize.svg",
@@ -3050,6 +3062,10 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LogTypesStyle": {
+    "buuble_LogTypes": {
+      "found": "mapFound0",
+      "temporarily_disabled": "bubble_tempDisabled"
+    },
     "cacheListViewLogTypes": {
       "found": "found",
       "didnt_find": "notFound",
@@ -3084,7 +3100,29 @@
   },
   "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle": {
     "bubble": {
-      "traditional": "mapTraditional1"
+      "traditional": "mapTraditional1",
+      "multi": "mapMulti1",
+      "mystery": "mapMystery1",
+      "camera": "mapCamera1",
+      "earth": "mapEarth1",
+      "event": "mapEvent1",
+      "megaEvent": "mapMegaEvent1",
+      "cito": "mapCITO1",
+      "virtual": "mapVirtual1",
+      "letterbox": "mapLetterbox1",
+      "wherigo": "mapWherigo1",
+      "referencePoint": "mapReferencePoint1",
+      "wikipedia": "mapWikipedia1",
+      "undefined": "mapUndefined1",
+      "multiStage": "mapMultiStage1",
+      "multiQuestion": "mapMultiQuestion1",
+      "trailhead": "mapTrailhead1",
+      "parkingArea": "mapParkingArea1",
+      "Final": "mapFinal1",
+      "cache": "mapCache1",
+      "myParking": "mapParkingArea1",
+      "giga": "mapGiga1",
+      "labCache": "mapLabCache1"
     },
     "cacheList": {
       "traditional": "traddi",
@@ -3120,8 +3158,8 @@
       "favoritPoints": "bubble_favpoint",
       "distanceFont": "AboutInfo",
       "distanceFontColor": "font_color",
-      "typeStyle": "cacheList",
-      "logTypesStyle": "cacheListViewLogTypes",
+      "typeStyle": "bubble",
+      "logTypesStyle": "buuble_LogTypes",
       "starStyle": "bubble",
       "cacheSizeStyle": "bubble"
     },
@@ -3218,6 +3256,7 @@
       "background": "bubble_9_Patch",
       "selectedBackground": "bubble_selected_9_Patch",
       "offsetX": -13,
+      "minWidth": 300,
       "cacheListItemStyle": "bubble",
       "wayPointListItemStyle": "bubble"
     }

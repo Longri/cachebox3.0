@@ -28,22 +28,32 @@ import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
  */
 public class CacheWidget extends Widget {
 
-    private final static float prefSize = CB.getScaledFloat(45);
-    private final static float logTypeIconSize = CB.getScaledFloat(25);
+
     private final Drawable typeIcon, leftInfoIcon, rightInfoIcon;
     private boolean needsLayout = true, hasInfoIcon;
     private float typeIconX, leftIconX, rightIconX;
     private float typeIconY, leftIconY, rightIconY;
     private float typeIconWidth, infoIconWidth;
     private float typeIconHeight, infoIconHeight;
+    private float logTypeIconSize;
+    private float prefSize;
 
 
     public CacheWidget(CacheTypes cacheType, CacheTypeStyle style, Drawable leftInfoIcon, Drawable rightInfoIcon) {
         this.typeIcon = cacheType.getDrawable(style);
+        prefSize = typeIcon.getMinHeight();
         this.leftInfoIcon = leftInfoIcon;
         this.rightInfoIcon = rightInfoIcon;
-        hasInfoIcon = leftInfoIcon != null || rightInfoIcon != null;
-
+        if (leftInfoIcon != null) {
+            hasInfoIcon = true;
+            logTypeIconSize = leftInfoIcon.getMinWidth();
+        } else if (rightInfoIcon != null) {
+            hasInfoIcon = true;
+            logTypeIconSize = rightInfoIcon.getMinWidth();
+        } else {
+            hasInfoIcon = false;
+            logTypeIconSize = 0;
+        }
     }
 
     @Override

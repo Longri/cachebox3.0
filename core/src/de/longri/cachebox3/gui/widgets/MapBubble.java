@@ -76,19 +76,16 @@ public class MapBubble extends VisTable {
                 isAvailable = false;
             }
 
-            CacheListItemStyle style = VisUI.getSkin().get("bubble", CacheListItemStyle.class);
             content = new CacheItem(cache.getType(), cache.getName(),
                     (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
                     (int) Math.min(cache.getRating() * 2, 5 * 2), cache.getSize(),
-                    cache.getSize().toShortString(), left, right, isAvailable, cache.getFavoritePoints(), style);
+                    cache.getSize().toShortString(), left, right, isAvailable, cache.getFavoritePoints(), style.cacheListItemStyle);
             isSelected = cache == EventHandler.getSelectedCache();
         } else if (waypoint != null) {
 
-            WayPointListItemStyle style = VisUI.getSkin().get("bubble", WayPointListItemStyle.class);
-
             content = new WayPointItem(waypoint.getType(),
                     waypoint.getGcCode().toString(), waypoint.getTitle().toString(),
-                    waypoint.getDescription(Database.Data), waypoint.FormatCoordinate(), style);
+                    waypoint.getDescription(Database.Data), waypoint.FormatCoordinate(), style.wayPointListItemStyle);
             isSelected = waypoint == EventHandler.getSelectedWaypoint();
 
         } else {
