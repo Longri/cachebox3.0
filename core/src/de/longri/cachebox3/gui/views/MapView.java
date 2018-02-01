@@ -19,9 +19,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.GetName;
 import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -32,6 +34,8 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedCacheChangedEvent;
+import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.map.MapMode;
@@ -60,6 +64,8 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.settings.types.SettingBool;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.CanvasAdapter;
@@ -920,7 +926,7 @@ public class MapView extends AbstractView {
     float mapHalfWith;
     float mapHalfHeight;
 
-    public void clickOnItem(MapWayPointItem item) {
+    public void clickOnItem(final MapWayPointItem item) {
 
         if (infoBubble != null) {
             MapView.this.removeActor(infoBubble);
@@ -939,5 +945,31 @@ public class MapView extends AbstractView {
         infoBubble.setPosition(mapHalfWith + infoItem.drawX + infoBubble.getOffsetX(),
                 (this.getHeight() - (mapHalfHeight + infoItem.drawY)) + infoBubble.getOffsetY());
         CB.requestRendering();
+
+        infoBubble.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                // select this cache/waypoint and close bubble
+
+                Object obj = item.dataObject;
+                if (obj instanceof AbstractCache) {
+                    AbstractCache cache = (AbstractCache) obj;
+                    EventHandler.fire(new SelectedCacheChangedEvent(cache));
+                } else if (obj instanceof AbstractWaypoint) {
+                    AbstractWaypoint waypoint = (AbstractWaypoint) obj;
+                    EventHandler.fire(new SelectedWayPointChangedEvent(waypoint));
+                }
+
+                CB.postOnMainThread(new NamedRunnable("remove info bubble") {
+                    @Override
+                    public void run() {
+                        MapView.this.removeActor(infoBubble);
+                        infoBubble = null;
+                    }
+                });
+
+            }
+        });
+
+
     }
 }
