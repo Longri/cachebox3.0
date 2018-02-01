@@ -85,7 +85,7 @@ public class MapBubble extends VisTable {
 
             content = new WayPointItem(waypoint.getType(),
                     waypoint.getGcCode().toString(), waypoint.getTitle().toString(),
-                    waypoint.getDescription(Database.Data), waypoint.FormatCoordinate(), style.wayPointListItemStyle);
+                    "", waypoint.FormatCoordinate(), style.wayPointListItemStyle);
             isSelected = waypoint == EventHandler.getSelectedWaypoint();
 
         } else {

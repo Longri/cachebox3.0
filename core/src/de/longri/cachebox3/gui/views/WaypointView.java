@@ -113,7 +113,7 @@ public class WaypointView extends AbstractView {
                 Adapter listViewAdapter = new Adapter() {
                     @Override
                     public int getCount() {
-                        if (actAbstractCache == null) return 0;
+                        if (actAbstractCache == null || actAbstractCache.getWaypoints() == null) return 0;
                         return actAbstractCache.getWaypoints().size + 1;
                     }
 

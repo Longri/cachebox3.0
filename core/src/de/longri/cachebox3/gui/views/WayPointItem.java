@@ -101,13 +101,12 @@ public class WayPointItem extends VisTable implements Disposable {
         this.add(contentTable).top().expandX().fillX();
 
         VisTable arrowTable = new VisTable();
+        if (this.style.arrow != null) {
+            arrowImage.setOrigin(this.style.arrow.getMinWidth() / 2, this.style.arrow.getMinHeight() / 2);
+            arrowTable.add(arrowImage);
+            arrowTable.row();
+        }
 
-
-        arrowImage.setOrigin(this.style.arrow.getMinWidth() / 2, this.style.arrow.getMinHeight() / 2);
-
-
-        arrowTable.add(arrowImage);
-        arrowTable.row();
         arrowTable.add(distanceLabel).padTop(CB.scaledSizes.MARGIN);
         this.add(arrowTable).right();
         super.layout();

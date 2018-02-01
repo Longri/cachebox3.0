@@ -3187,12 +3187,11 @@
       "typeStyle": "cacheList"
     },
     "bubble": {
-      "nameFont": "normal_font",
+      "nameFont": "mapPanelUnit",
       "nameFontColor": "font_color",
-      "arrow": "arrow-compass",
-      "distanceFont": "settings_default_value_font",
+      "distanceFont": "AboutInfo",
       "distanceFontColor": "font_color",
-      "typeStyle": "cacheList"
+      "typeStyle": "bubble"
     },
     "logListItems": {}
   },
