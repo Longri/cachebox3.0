@@ -18,7 +18,6 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.GetName;
@@ -30,7 +29,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.events.EventHandler;
@@ -190,7 +188,7 @@ public class MapView extends AbstractView {
                     final Coordinate wpCoord = EventHandler.getSelectedCoord();
                     if (wpCoord == null) {
                         // we hav no selected WP, so switch MapMode to 'LOCK'
-                        CB.postOnMainThread(new NamedRunnable("MapView") {
+                        CB.postOnGlThread(new NamedRunnable("MapView") {
                             @Override
                             public void run() {
                                 mapStateButton.setMapMode(MapMode.LOCK, true, new Event());
@@ -450,7 +448,7 @@ public class MapView extends AbstractView {
         CacheboxMain.drawMap = false;
         map.clearMap();
         map.destroy();
-        CB.postOnMainThread(new NamedRunnable("MapView:dispose texture items") {
+        CB.postOnGlThread(new NamedRunnable("MapView:dispose texture items") {
             @Override
             public void run() {
                 TextureBucket.pool.clear();
@@ -959,7 +957,7 @@ public class MapView extends AbstractView {
                     EventHandler.fire(new SelectedWayPointChangedEvent(waypoint));
                 }
 
-                CB.postOnMainThread(new NamedRunnable("remove info bubble") {
+                CB.postOnGlThread(new NamedRunnable("remove info bubble") {
                     @Override
                     public void run() {
                         MapView.this.removeActor(infoBubble);

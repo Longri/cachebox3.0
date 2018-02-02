@@ -41,8 +41,6 @@ import org.slf4j.LoggerFactory;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -99,7 +97,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             if (e.getMessage().equals("database disk image is malformed")) {
                 // if the DB malformed, we inform the User
 
-                CB.scheduleOnMainThread(new NamedRunnable("CacheList3DAO") {
+                CB.scheduleOnGlThread(new NamedRunnable("CacheList3DAO") {
                     @Override
                     public void run() {
                         MessageBox.show(Translation.get("ErrDbStartup"), Translation.get("corruptDB"), MessageBoxButtons.OK, MessageBoxIcon.Error, new OnMsgBoxClickListener() {

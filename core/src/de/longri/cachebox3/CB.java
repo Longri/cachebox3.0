@@ -291,37 +291,37 @@ public class CB {
 
 
     // GL-Thread check
-    private static Thread MAIN_THREAD;
+    private static Thread GL_THREAD;
 
     public static void assertMainThread() {
-        if (MAIN_THREAD != Thread.currentThread()) {
+        if (GL_THREAD != Thread.currentThread()) {
             throw new RuntimeException("Access from non-GL thread!");
         }
     }
 
-    public static boolean isMainThread() {
-        return MAIN_THREAD == Thread.currentThread();
+    public static boolean isGlThread() {
+        return GL_THREAD == Thread.currentThread();
     }
 
     public static void initThreadCheck() {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                MAIN_THREAD = Thread.currentThread();
+                GL_THREAD = Thread.currentThread();
             }
         });
     }
 
-    public static void setMainThread(Thread mainThread) {
-        MAIN_THREAD = mainThread;
+    public static void setGlThread(Thread glThread) {
+        GL_THREAD = glThread;
     }
 
 
-    public static void scheduleOnMainThread(final NamedRunnable runnable, long delay) {
+    public static void scheduleOnGlThread(final NamedRunnable runnable, long delay) {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                postOnMainThread(runnable);
+                postOnGlThread(runnable);
                 requestRendering();
             }
         };
@@ -330,12 +330,12 @@ public class CB {
     }
 
 
-    public static void postOnMainThread(final NamedRunnable runnable) {
-        postOnMainThread(runnable, false);
+    public static void postOnGlThread(final NamedRunnable runnable) {
+        postOnGlThread(runnable, false);
     }
 
-    public static void postOnMainThread(final NamedRunnable runnable, boolean wait) {
-        if (isMainThread()) {
+    public static void postOnGlThread(final NamedRunnable runnable, boolean wait) {
+        if (isGlThread()) {
             runnable.run();
             return;
         }
@@ -357,10 +357,6 @@ public class CB {
             }
         }
         return;
-    }
-
-    public static AbstractCache getCacheFromId(long cacheId) {
-        return Database.Data.Query.GetCacheById(cacheId);
     }
 
     public static void postAsyncDelayd(final long delay, final NamedRunnable runnable) {
@@ -428,7 +424,7 @@ public class CB {
         }
 
         if (result == ApiResultState.EXPIRED_API_KEY) {
-            CB.scheduleOnMainThread(new NamedRunnable("CB: ExpiredApiKey") {
+            CB.scheduleOnGlThread(new NamedRunnable("CB: ExpiredApiKey") {
                 @Override
                 public void run() {
                     String msg = Translation.get("apiKeyExpired") + "\n\n"
@@ -441,7 +437,7 @@ public class CB {
         }
 
         if (result == ApiResultState.MEMBERSHIP_TYPE_INVALID) {
-            CB.scheduleOnMainThread(new NamedRunnable("CB:Invalid membership") {
+            CB.scheduleOnGlThread(new NamedRunnable("CB:Invalid membership") {
                 @Override
                 public void run() {
                     String msg = Translation.get("apiKeyInvalid") + "\n\n"
@@ -454,7 +450,7 @@ public class CB {
         }
 
         if (result == ApiResultState.API_DOWNLOAD_LIMIT) {
-            CB.scheduleOnMainThread(new NamedRunnable("DownloadLimit") {
+            CB.scheduleOnGlThread(new NamedRunnable("DownloadLimit") {
                 @Override
                 public void run() {
                     MessageBox.show(Translation.get("Limit_msg")//Message
@@ -470,7 +466,7 @@ public class CB {
 
     public static boolean checkApiKeyNeeded() {
         if (Config.GcAPI.getValue() == null || Config.GcAPI.getValue().isEmpty()) {
-            postOnMainThread(new NamedRunnable("CB:checkApiKeyNeeded") {
+            postOnGlThread(new NamedRunnable("CB:checkApiKeyNeeded") {
                 @Override
                 public void run() {
                     new GetApiKeyQuestionDialog().show();
@@ -492,7 +488,7 @@ public class CB {
 
 
         while (wait.get()) {
-            if (CB.isMainThread()) {
+            if (CB.isGlThread()) {
                 throw new RuntimeException("Don't block main thread with check API key!");
             }
 
@@ -614,5 +610,18 @@ public class CB {
         }
     }
 
+    public static void postOnMainThreadDelayed(int delay, final NamedRunnable runnable) {
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                postOnMainThread(runnable);
+            }
+        };
+        new Timer().schedule(task, delay);
+    }
+
+    public static void postOnMainThread(NamedRunnable runnable) {
+        PlatformConnector.postOnMainThread(runnable);
+    }
 }
 

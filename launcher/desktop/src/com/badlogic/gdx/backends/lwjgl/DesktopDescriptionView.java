@@ -182,6 +182,11 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
     }
 
     @Override
+    public boolean isPageVisible() {
+        return true;
+    }
+
+    @Override
     public void setBounding(final float x, final float y, final float width, final float height, final int screenHeight) {
         Gdx.app.postRunnable(new Runnable() {
             @Override
@@ -248,6 +253,16 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
             }
         }
         return (float) value.get();
+    }
+
+    @Override
+    public float getScale() {
+        return 0;
+    }
+
+    @Override
+    public void setScale(float scale) {
+
     }
 
 //    /**

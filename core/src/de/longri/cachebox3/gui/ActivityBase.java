@@ -18,7 +18,6 @@ package de.longri.cachebox3.gui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -43,7 +42,7 @@ public class ActivityBase extends Window implements Showable {
 
     public ActivityBase(String name, ActivityBaseStyle style) {
         super(name);
-        if (!CB.isMainThread()) {
+        if (!CB.isGlThread()) {
             throw new RuntimeException("Don't instance a ActivityBase on non GL Thread");
         }
         this.style = style;
@@ -70,7 +69,7 @@ public class ActivityBase extends Window implements Showable {
     }
 
     public void show() {
-        CB.postOnMainThread(new NamedRunnable("ActivityBase") {
+        CB.postOnGlThread(new NamedRunnable("ActivityBase") {
             @Override
             public void run() {
                 ActivityBase.super.show();

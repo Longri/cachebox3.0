@@ -433,7 +433,7 @@ public class ListView extends WidgetGroup {
 
         for (int i = 0; i < split; i++) {
             if (actSplitEndCount.get() > count) actSplitEndCount.set(count);
-            CB.postOnMainThread(new NamedRunnable("Test Add") {
+            CB.postOnGlThread(new NamedRunnable("Test Add") {
                 @Override
                 public void run() {
                     for (int j = addedCount.get(); j < actSplitEndCount.get(); j++) {
@@ -450,11 +450,11 @@ public class ListView extends WidgetGroup {
 
     private void addItem(final int index, final boolean reAdd, final float yPos) {
 
-        if (CB.isMainThread()) {
+        if (CB.isGlThread()) {
             addItemThreadSave(index, reAdd, yPos);
         } else {
 
-            CB.postOnMainThread(new NamedRunnable("ListView add Item Thread save") {
+            CB.postOnGlThread(new NamedRunnable("ListView add Item Thread save") {
                 @Override
                 public void run() {
                     addItemThreadSave(index, reAdd, yPos);

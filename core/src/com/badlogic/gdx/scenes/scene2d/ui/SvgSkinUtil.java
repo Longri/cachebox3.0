@@ -32,7 +32,6 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.drawables.*;
 import de.longri.cachebox3.gui.skin.styles.*;
-import de.longri.cachebox3.gui.stages.initial_tasks.AbstractInitTask;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SkinColor;
 import org.slf4j.Logger;
@@ -73,7 +72,7 @@ public class SvgSkinUtil {
                         e.printStackTrace();
                     }
                     final FileHandle finalCachedTexturatlasFileHandle = cachedTexturatlasFileHandle;
-                    CB.postOnMainThread(new NamedRunnable("SvgSkinUtil") {
+                    CB.postOnGlThread(new NamedRunnable("SvgSkinUtil") {
                         @Override
                         public void run() {
                             atlas[0] = new TextureAtlas(finalCachedTexturatlasFileHandle);
@@ -136,7 +135,7 @@ public class SvgSkinUtil {
             e.printStackTrace();
         }
 
-        CB.postOnMainThread(new NamedRunnable("SvgSkinUtil") {
+        CB.postOnGlThread(new NamedRunnable("SvgSkinUtil") {
             @Override
             public void run() {
                 atlas[0] = packer.generateTextureAtlas(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest, true);

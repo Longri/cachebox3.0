@@ -66,7 +66,7 @@ public class SkinEditorGame extends Game {
     @Override
     public void create() {
 
-        CB.setMainThread(Thread.currentThread());
+        CB.setGlThread(Thread.currentThread());
 
         opt = new OptionalChecker();
 

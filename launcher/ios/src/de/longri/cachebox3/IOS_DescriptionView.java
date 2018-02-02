@@ -103,6 +103,16 @@ public class IOS_DescriptionView extends UIViewController implements UIWebViewDe
     }
 
     @Override
+    public float getScale() {
+        return 0;
+    }
+
+    @Override
+    public void setScale(float scale) {
+
+    }
+
+    @Override
     public void setHtml(String html) {
         log.debug("show html");
         webView.loadHTML(html, null);
@@ -125,6 +135,11 @@ public class IOS_DescriptionView extends UIViewController implements UIWebViewDe
     @Override
     public void setShouldOverrideUrlLoadingCallBack(GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack) {
         this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
+    }
+
+    @Override
+    public boolean isPageVisible() {
+        return true;
     }
 
 

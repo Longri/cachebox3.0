@@ -175,7 +175,7 @@ public class CacheList extends Array<AbstractCache> {
             // Cursor.Current = Cursors.Default;
             this.ResortAtWork = false;
 
-            CB.postOnMainThread(new NamedRunnable("CacheList:Fire changed event") {
+            CB.postOnGlThread(new NamedRunnable("CacheList:Fire changed event") {
                 @Override
                 public void run() {
 //             TODO   CacheListChangedEventList.Call();

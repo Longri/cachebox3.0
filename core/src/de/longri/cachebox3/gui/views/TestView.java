@@ -162,7 +162,7 @@ public class TestView extends AbstractView {
                         value += 1f;
                         if (value >= 200) value = 0;
                         final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
-                        CB.postOnMainThread(new NamedRunnable("TestView") {
+                        CB.postOnGlThread(new NamedRunnable("TestView") {
                             @Override
                             public void run() {
                                 floatControl.setValue(progressValue);
@@ -242,7 +242,7 @@ public class TestView extends AbstractView {
                         value += 1f;
                         if (value >= 200) value = 0;
                         final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
-                        CB.postOnMainThread(new NamedRunnable("TestView") {
+                        CB.postOnGlThread(new NamedRunnable("TestView") {
                             @Override
                             public void run() {
                                 circPro.setProgressMax(progressValue == 0 ? -1 : 100);
@@ -560,7 +560,7 @@ public class TestView extends AbstractView {
                         value += 1f;
                         if (value >= 200) value = 0;
                         final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
-                        CB.postOnMainThread(new NamedRunnable("TestView") {
+                        CB.postOnGlThread(new NamedRunnable("TestView") {
                             @Override
                             public void run() {
                                 progress1.setValue(progressValue);

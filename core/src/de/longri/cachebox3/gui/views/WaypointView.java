@@ -362,7 +362,7 @@ public class WaypointView extends AbstractView {
     }
 
     private void showEditWpDialog(final AbstractWaypoint newWP, final boolean showCoords, final boolean onlyShow) {
-        CB.postOnMainThread(new NamedRunnable("WaypointView") {
+        CB.postOnGlThread(new NamedRunnable("WaypointView") {
             @Override
             public void run() {
                 AbstractWaypoint mutable = newWP.getMutable(Database.Data);

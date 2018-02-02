@@ -147,7 +147,7 @@ public class Config extends Settings {
             }
             if (isAPI) {
                 log.debug("ApiKey changed, reset ApiCheck and set new expired time");
-                CB.postOnMainThread(new NamedRunnable("Config") {
+                CB.postOnGlThread(new NamedRunnable("Config") {
                     @Override
                     public void run() {
                         //reset ApiKey validation
@@ -203,7 +203,7 @@ public class Config extends Settings {
     }
 
     public static void readFromDB(boolean wait) {
-        CB.postOnMainThread(new NamedRunnable("Config") {
+        CB.postOnGlThread(new NamedRunnable("Config") {
             @Override
             public void run() {
                 Database data = Database.Data;

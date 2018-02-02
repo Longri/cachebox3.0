@@ -268,7 +268,7 @@ public class GroundspeakAPI {
     public static int waitApiCallLimit(ICancel iCancel) {
 
         //Don't call and block GL thread
-        if (CB.isMainThread()) throw new RuntimeException("Don't call and block GL thread");
+        if (CB.isGlThread()) throw new RuntimeException("Don't call and block GL thread");
 
         if (apiCallLimit == null) {
             if (Config.apiCallLimit.isExpired() || Config.apiCallLimit.getValue() < 1) {
@@ -703,7 +703,7 @@ public class GroundspeakAPI {
             });
         else WAIT.set(false);
 
-        if (CB.isMainThread())
+        if (CB.isGlThread())
             throw new RuntimeException("Call isPremiumMember() not on Main Thread, this will block for wait on a online result");
 
         while (WAIT.get()) {

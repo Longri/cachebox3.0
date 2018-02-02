@@ -60,7 +60,8 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     private static final Logger log = LoggerFactory.getLogger(DescriptionView.class);
 
     private static long lastCacheId;
-    private static float lastX, lastY;
+    private static float lastX, lastY, lastScale;
+    private PlatformDescriptionView view;
 
     private final LinkedList<String> nonLocalImages = new LinkedList<String>();
     private final LinkedList<String> nonLocalImagesUrl = new LinkedList<String>();
@@ -163,10 +164,6 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         }
     };
 
-
-    private PlatformDescriptionView view;
-
-
     public DescriptionView() {
         super("DescriptionView");
         EventHandler.add(this);
@@ -203,8 +200,13 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     @Override
     public void dispose() {
         EventHandler.remove(this);
-        PlatformConnector.setDescriptionViewToNULL();
-        view = null;
+        CB.postOnMainThreadDelayed(100, new NamedRunnable("DescriptionView:dispose") {
+            @Override
+            public void run() {
+                PlatformConnector.setDescriptionViewToNULL();
+                view = null;
+            }
+        });
     }
 
     @Override
@@ -215,7 +217,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     @Override
     public void onShow() {
-        CB.postOnMainThread(new NamedRunnable("DescriptionView") {
+        CB.postOnGlThread(new NamedRunnable("DescriptionView") {
             @Override
             public void run() {
                 showPlatformWebView();
@@ -272,14 +274,37 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
             if (lastCacheId == actCache.getId()) {
                 // restore last scroll position
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        if (view != null) {// maybe is disposed now
-                            view.setScrollPosition(lastX, lastY);
+                if (view != null) {
+                    CB.postAsync(new NamedRunnable("Test Add") {
+                        @Override
+                        public void run() {
+
+                            while (view != null && !view.isPageVisible()) {
+                                try {
+                                    Thread.sleep(20);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            if (view == null) return;
+
+                            CB.postOnMainThreadDelayed(100, new NamedRunnable("DescriptionView:set scale") {
+                                @Override
+                                public void run() {
+                                    log.debug("Set scale: {}", lastScale);
+                                    view.setScale(lastScale);
+                                    CB.postOnMainThreadDelayed(200, new NamedRunnable("DescriptionView:set pos") {
+                                        @Override
+                                        public void run() {
+                                            log.debug("Set x: {} y: {} ", lastX, lastY);
+                                            view.setScrollPosition(lastX, lastY);
+                                        }
+                                    });
+                                }
+                            });
                         }
-                    }
-                }, 0.15f);
+                    });
+                }
             }
         }
 
@@ -307,17 +332,25 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     @Override
     public void onHide() {
         super.onHide();
-        if (EventHandler.getSelectedCache() != null) {
-            lastCacheId = EventHandler.getSelectedCache().getId();
-            lastX = view.getScrollPositionX();
-            lastY = view.getScrollPositionY();
-            view.close();
+        final AbstractCache selectedCache = EventHandler.getSelectedCache();
+        if (selectedCache != null) {
+            CB.postOnMainThread(new NamedRunnable("DescriptionView:hide view") {
+                @Override
+                public void run() {
+                    lastCacheId = selectedCache.getId();
+                    lastX = view.getScrollPositionX();
+                    lastY = view.getScrollPositionY();
+                    lastScale = view.getScale();
+                    log.debug("store last X: {} Y: {} scale: {}", lastX, lastY, lastScale);
+                    view.close();
+                }
+            });
         }
     }
 
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
-        CB.postOnMainThread(new NamedRunnable("DescriptionView") {
+        CB.postOnGlThread(new NamedRunnable("DescriptionView") {
             @Override
             public void run() {
                 showPlatformWebView();

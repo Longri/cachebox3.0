@@ -28,7 +28,6 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
@@ -152,7 +151,7 @@ public class ReloadCacheActivity extends ActivityBase {
         final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
             @Override
             public void progressChanged(final ImportProgressChangedEvent event) {
-                CB.postOnMainThread(new NamedRunnable("ReloadCacheActivity") {
+                CB.postOnGlThread(new NamedRunnable("ReloadCacheActivity") {
                     @Override
                     public void run() {
                         progressBar.setValue(event.progress.progress);

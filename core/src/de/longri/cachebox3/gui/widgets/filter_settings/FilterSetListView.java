@@ -17,13 +17,11 @@ package de.longri.cachebox3.gui.widgets.filter_settings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
@@ -50,7 +48,6 @@ import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.naming.directory.Attribute;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.gui.widgets.AdjustableStarWidget.Type.STAR;
@@ -416,7 +413,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         }
 
         private void setCheckImage() {
-            CB.postOnMainThread(new NamedRunnable("FilterSetListViw:SetCheckImage") {
+            CB.postOnGlThread(new NamedRunnable("FilterSetListViw:SetCheckImage") {
                 @Override
                 public void run() {
                     switch (property.getInt()) {
@@ -713,7 +710,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         }
 
         private void setCheckImage() {
-            CB.postOnMainThread(new NamedRunnable("FilterSetListView:checkImage") {
+            CB.postOnGlThread(new NamedRunnable("FilterSetListView:checkImage") {
                 @Override
                 public void run() {
                     if (property.get()) {
