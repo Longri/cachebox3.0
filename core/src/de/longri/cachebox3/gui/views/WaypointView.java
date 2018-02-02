@@ -348,6 +348,7 @@ public class WaypointView extends AbstractView {
         try {
             newGcCode = Database.createFreeGcCode(EventHandler.getSelectedCache().getGcCode().toString());
         } catch (Exception e) {
+            log.error("can't generate GcCode! can't show EditWaypoint Activity");
             return;
         }
         if (coordinate == null)
