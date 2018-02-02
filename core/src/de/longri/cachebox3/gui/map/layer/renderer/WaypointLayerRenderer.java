@@ -235,6 +235,8 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
             for (TextureRegion region : textureRegions) {
                 SymbolItem s = SymbolItem.pool.get();
                 s.set(it.x, it.y, region, true);
+                it.item.drawX = it.x;
+                it.item.drawY = it.y;
 
                 //set center offset
                 s.offset = CENTER_OFFSET;
@@ -274,7 +276,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
         tmp[index] = it;
         it.item = mWaypointLayer.createItem(index);
 
-            /* pre-project points */
+        /* pre-project points */
 
         double lat, lon;
         if (it.item instanceof Cluster) {

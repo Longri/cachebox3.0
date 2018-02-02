@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -44,17 +44,13 @@ import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
-import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
-import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
-import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
+import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.*;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.IntProperty;
-import de.longri.cachebox3.types.LogTypes;
+import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,6 +84,40 @@ public class TestView extends AbstractView {
 
         scrollPane = new VisScrollPane(contentTable);
         float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
+
+        {// test Map Info Bubble
+
+            AbstractCache cache = new MutableCache(0, 0);
+            cache.setSize(CacheSizes.regular);
+            cache.setType(CacheTypes.Traditional);
+            cache.setName("CacheName");
+            cache.setOwner("CacheOwner");
+            cache.setFavoritePoints(1345); //TODO debug!
+            CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache);
+
+            ListView.ListViewStyle style = VisUI.getSkin().get(ListView.ListViewStyle.class);
+
+            cacheListItem.setBackground(style.firstItem);
+
+            MapBubble mapBubble = new MapBubble(cache);
+
+            VisLabel label3 = new VisLabel("Map Info Bubble");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            contentTable.add(cacheListItem).width(new Value.Fixed(contentWidth * 1.2f)).pad(5);
+            contentTable.row();
+
+            contentTable.add(mapBubble).pad(20);
+            contentTable.row();
+
+        }
+
 
         {// test FloatControl
 
@@ -132,7 +162,7 @@ public class TestView extends AbstractView {
                         value += 1f;
                         if (value >= 200) value = 0;
                         final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
-                        CB.postOnMainThread(new NamedRunnable("TestView") {
+                        CB.postOnGlThread(new NamedRunnable("TestView") {
                             @Override
                             public void run() {
                                 floatControl.setValue(progressValue);
@@ -212,7 +242,7 @@ public class TestView extends AbstractView {
                         value += 1f;
                         if (value >= 200) value = 0;
                         final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
-                        CB.postOnMainThread(new NamedRunnable("TestView") {
+                        CB.postOnGlThread(new NamedRunnable("TestView") {
                             @Override
                             public void run() {
                                 circPro.setProgressMax(progressValue == 0 ? -1 : 100);
@@ -330,7 +360,10 @@ public class TestView extends AbstractView {
         {// test AdjustableStarWidget
 
             IntProperty property = new IntProperty();
-            final AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, "Title", property);
+            StarsStyle starsStyle = VisUI.getSkin().get("cachelist", StarsStyle.class);
+            CacheSizeStyle cacheSizeStyle = VisUI.getSkin().get("cachelist", CacheSizeStyle.class);
+            final AdjustableStarWidget adjustableStarWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR,
+                    "Title", property, starsStyle, cacheSizeStyle);
             adjustableStarWidget.setValue(6);
 
 
@@ -527,7 +560,7 @@ public class TestView extends AbstractView {
                         value += 1f;
                         if (value >= 200) value = 0;
                         final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
-                        CB.postOnMainThread(new NamedRunnable("TestView") {
+                        CB.postOnGlThread(new NamedRunnable("TestView") {
                             @Override
                             public void run() {
                                 progress1.setValue(progressValue);

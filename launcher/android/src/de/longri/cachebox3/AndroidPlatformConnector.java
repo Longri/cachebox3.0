@@ -37,6 +37,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.android.canvas.AndroidRealSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -237,6 +238,12 @@ public class AndroidPlatformConnector extends PlatformConnector {
             application.getActivity().finishAffinity();
         }
         Gdx.app.exit();
+    }
+
+    @Override
+    protected void _postOnMainThread(NamedRunnable runnable) {
+        Handler mainHandler = new Handler(context.getMainLooper());
+        mainHandler.post(runnable);
     }
 
     @Override

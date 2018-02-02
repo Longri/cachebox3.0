@@ -668,6 +668,70 @@
       "path": "svg/beginner.svg",
       "scale": 0.16
     },
+    "bubble": {
+      "path": "svg/bubble.svg",
+      "scale": 2
+    },
+    "bubbleNotFound": {
+      "path": "svg/log1icon.svg",
+      "scale": 0.06
+    },
+    "bubble_archived": {
+      "path": "svg/archived.svg",
+      "scale": 0.06
+    },
+    "bubble_favpoint": {
+      "path": "svg/favpoint.svg",
+      "scale": 0.16
+    },
+    "bubble_large": {
+      "path": "svg/large.svg",
+      "scale": 0.16
+    },
+    "bubble_micro": {
+      "path": "svg/micro.svg",
+      "scale": 0.16
+    },
+    "bubble_notChosen": {
+      "path": "svg/notChosen.svg",
+      "scale": 0.16
+    },
+    "bubble_other": {
+      "path": "svg/other.svg",
+      "scale": 0.16
+    },
+    "bubble_regular": {
+      "path": "svg/regular.svg",
+      "scale": 0.16
+    },
+    "bubble_selected": {
+      "path": "svg/bubble_selected.svg",
+      "scale": 2
+    },
+    "bubble_small": {
+      "path": "svg/small.svg",
+      "scale": 0.16
+    },
+    "bubble_star": {
+      "path": "svg/star.svg",
+      "scale": 0.16
+    },
+    "bubble_star0": {
+      "path": "svg/star0.svg",
+      "scale": 0.16
+    },
+    "bubble_star_half": {
+      "path": "svg/star_half.svg",
+      "scale": 0.16
+    },
+    "bubble_tempDisabled": {
+      "path": "svg/tempDisabled.svg",
+      "scale": 0.06
+    },
+    "bubble_virtualSize": {
+      "path": "svg/virtualSize.svg",
+      "scale": 0.16
+    },
     "button_bar_back": {
       "path": "svg/button_bar_back.svg",
       "scale": 1.695
@@ -1690,7 +1754,7 @@
     },
     "star": {
       "path": "svg/star.svg",
-      "scale": 1
+      "scale": 0.25
     },
     "star0": {
       "path": "svg/star0.svg",
@@ -1960,6 +2024,28 @@
       "top": 11,
       "bottom": 11
     },
+    "bubble_9_Patch": {
+      "name": "bubble",
+      "left": 24,
+      "right": 18,
+      "top": 18,
+      "bottom": 26,
+      "leftWidth": 10,
+      "rightWidth": 10,
+      "topHeight": 10,
+      "bottomHeight": 18
+    },
+    "bubble_selected_9_Patch": {
+      "name": "bubble_selected",
+      "left": 24,
+      "right": 18,
+      "top": 18,
+      "bottom": 26,
+      "leftWidth": 10,
+      "rightWidth": 10,
+      "topHeight": 10,
+      "bottomHeight": 18
+    },
     "default_button_9_Patch": {
       "name": "default_button",
       "left": 8,
@@ -2122,6 +2208,38 @@
       "right": 13,
       "top": 13,
       "bottom": 13
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.StarsStyle": {
+    "bubble": {
+      "star": "bubble_star",
+      "star_half": "bubble_star_half",
+      "star0": "bubble_star0"
+    },
+    "cachelist": {
+      "star": "star",
+      "star_half": "star_half",
+      "star0": "star0"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.CacheSizeStyle": {
+    "bubble": {
+      "other": "bubble_other",
+      "notChosen": "bubble_notChosen",
+      "virtualSize": "bubble_virtualSize",
+      "large": "bubble_large",
+      "regular": "bubble_regular",
+      "small": "bubble_small",
+      "micro": "bubble_micro"
+    },
+    "cachelist": {
+      "other": "other",
+      "notChosen": "notChosen",
+      "virtualSize": "virtualSize",
+      "large": "large",
+      "regular": "regular",
+      "small": "small",
+      "micro": "micro"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle": {
@@ -2786,6 +2904,8 @@
       "distanceColor": "font_color",
       "accurateColor": "font_color",
       "infoColor": "font_color",
+      "starStyle": "cachelist",
+      "cacheSizeStyle": "cachelist",
       "frameNorthOrient": "compass_1_frame",
       "scale": "compass_1_scale",
       "arrow": "compass_1_arrow"
@@ -2942,6 +3062,10 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LogTypesStyle": {
+    "buuble_LogTypes": {
+      "found": "mapFound0",
+      "temporarily_disabled": "bubble_tempDisabled"
+    },
     "cacheListViewLogTypes": {
       "found": "found",
       "didnt_find": "notFound",
@@ -2975,6 +3099,31 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle": {
+    "bubble": {
+      "traditional": "mapTraditional1",
+      "multi": "mapMulti1",
+      "mystery": "mapMystery1",
+      "camera": "mapCamera1",
+      "earth": "mapEarth1",
+      "event": "mapEvent1",
+      "megaEvent": "mapMegaEvent1",
+      "cito": "mapCITO1",
+      "virtual": "mapVirtual1",
+      "letterbox": "mapLetterbox1",
+      "wherigo": "mapWherigo1",
+      "referencePoint": "mapReferencePoint1",
+      "wikipedia": "mapWikipedia1",
+      "undefined": "mapUndefined1",
+      "multiStage": "mapMultiStage1",
+      "multiQuestion": "mapMultiQuestion1",
+      "trailhead": "mapTrailhead1",
+      "parkingArea": "mapParkingArea1",
+      "Final": "mapFinal1",
+      "cache": "mapCache1",
+      "myParking": "mapParkingArea1",
+      "giga": "mapGiga1",
+      "labCache": "mapLabCache1"
+    },
     "cacheList": {
       "traditional": "traddi",
       "multi": "multi",
@@ -3002,15 +3151,30 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.CacheListItemStyle": {
+    "bubble": {
+      "nameFont": "mapPanelUnit",
+      "nameFontColor": "font_color",
+      "notAvailableColor": "notAvailable",
+      "favoritPoints": "bubble_favpoint",
+      "distanceFont": "AboutInfo",
+      "distanceFontColor": "font_color",
+      "typeStyle": "bubble",
+      "logTypesStyle": "buuble_LogTypes",
+      "starStyle": "bubble",
+      "cacheSizeStyle": "bubble"
+    },
     "cacheListItems": {
       "nameFont": "normal_font",
       "nameFontColor": "font_color",
       "notAvailableColor": "notAvailable",
       "arrow": "arrow-compass",
+      "favoritPoints": "favpoint",
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",
       "typeStyle": "cacheList",
-      "logTypesStyle": "cacheListViewLogTypes"
+      "logTypesStyle": "cacheListViewLogTypes",
+      "starStyle": "cachelist",
+      "cacheSizeStyle": "cachelist"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle": {
@@ -3021,6 +3185,13 @@
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",
       "typeStyle": "cacheList"
+    },
+    "bubble": {
+      "nameFont": "mapPanelUnit",
+      "nameFontColor": "font_color",
+      "distanceFont": "AboutInfo",
+      "distanceFontColor": "font_color",
+      "typeStyle": "bubble"
     },
     "logListItems": {}
   },
@@ -3077,6 +3248,16 @@
     "default": {
       "progressBarStyle": "floatProgress",
       "buttonStyle": "default"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.MapBubbleStyle": {
+    "bubble": {
+      "background": "bubble_9_Patch",
+      "selectedBackground": "bubble_selected_9_Patch",
+      "offsetX": -13,
+      "minWidth": 300,
+      "cacheListItemStyle": "bubble",
+      "wayPointListItemStyle": "bubble"
     }
   }
 }

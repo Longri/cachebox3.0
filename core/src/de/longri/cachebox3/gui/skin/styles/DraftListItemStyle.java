@@ -32,4 +32,6 @@ public class DraftListItemStyle {
     public Drawable headerBackground;
     public Drawable uploadedOverlay;
     public Drawable uploadedIcon;
+    public StarsStyle starStyle;
+    public CacheSizeStyle cacheSizeStyle;
 }

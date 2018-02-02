@@ -607,6 +607,7 @@ public class Database {
     public static boolean waypointExists(String gcCode) {
         GdxSqliteCursor cursor = Database.Data.rawQuery("select GcCode from Waypoints where GcCode=?", new String[]{gcCode});
         {
+            if (cursor == null) return false;
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
 

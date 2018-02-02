@@ -18,16 +18,22 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.GetName;
+import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedCacheChangedEvent;
+import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.map.MapMode;
@@ -46,6 +52,7 @@ import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
+import de.longri.cachebox3.gui.widgets.MapBubble;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
@@ -55,6 +62,8 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.settings.types.SettingBool;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.CanvasAdapter;
@@ -179,7 +188,7 @@ public class MapView extends AbstractView {
                     final Coordinate wpCoord = EventHandler.getSelectedCoord();
                     if (wpCoord == null) {
                         // we hav no selected WP, so switch MapMode to 'LOCK'
-                        CB.postOnMainThread(new NamedRunnable("MapView") {
+                        CB.postOnGlThread(new NamedRunnable("MapView") {
                             @Override
                             public void run() {
                                 mapStateButton.setMapMode(MapMode.LOCK, true, new Event());
@@ -285,6 +294,11 @@ public class MapView extends AbstractView {
                 super.onMapEvent(e, mapPosition);
                 if (e == Map.MOVE_EVENT) {
 //                    log.debug("Map.MOVE_EVENT");
+                    if (infoBubble != null && infoItem != null) {
+                        infoBubble.setPosition(mapHalfWith + infoItem.drawX + infoBubble.getOffsetX(),
+                                (this.getHeight() - (mapHalfHeight + infoItem.drawY)) + infoBubble.getOffsetY());
+                    }
+
                     if (CB.mapMode != MapMode.FREE)
                         mapStateButton.setMapMode(MapMode.FREE, new Event());
                 } else if (e == Map.TILT_EVENT) {
@@ -434,9 +448,14 @@ public class MapView extends AbstractView {
         CacheboxMain.drawMap = false;
         map.clearMap();
         map.destroy();
-        TextureBucket.pool.clear();
-        TextItem.pool.clear();
-        TextureItem.disposeTextures();
+        CB.postOnGlThread(new NamedRunnable("MapView:dispose texture items") {
+            @Override
+            public void run() {
+                TextureBucket.pool.clear();
+                TextItem.pool.clear();
+                TextureItem.disposeTextures();
+            }
+        });
 
         main.mMapRenderer = null;
         map = null;
@@ -460,6 +479,9 @@ public class MapView extends AbstractView {
         map.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
         map.viewport().setScreenSize((int) this.getWidth(), (int) this.getHeight());
         main.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
+
+        mapHalfWith = map.getWidth() / 2;
+        mapHalfHeight = map.getHeight() / 2;
 
         // set position of MapScaleBar
         setMapScaleBarOffset(CB.scaledSizes.MARGIN, CB.scaledSizes.MARGIN_HALF);
@@ -513,7 +535,7 @@ public class MapView extends AbstractView {
 
         directLineLayer = new DirectLineLayer(map);
         mapScaleBarLayer = new MapScaleBarLayer(map, mapScaleBar);
-        wayPointLayer = new WaypointLayer(map, CB.textureRegionMap);
+        wayPointLayer = new WaypointLayer(this, map, CB.textureRegionMap);
         myLocationAccuracy = new LocationAccuracyLayer(map);
         myLocationLayer = new LocationLayer(map, CB.textureRegionMap);
 
@@ -895,5 +917,57 @@ public class MapView extends AbstractView {
         setting.setValue(!setting.getValue());
         Config.AcceptChanges();
         setNewSettings();
+    }
+
+    private MapWayPointItem infoItem = null;
+    private MapBubble infoBubble;
+    float mapHalfWith;
+    float mapHalfHeight;
+
+    public void clickOnItem(final MapWayPointItem item) {
+
+        if (infoBubble != null) {
+            MapView.this.removeActor(infoBubble);
+        }
+
+        VisTable table = new VisTable();
+
+        infoBubble = new MapBubble(item.dataObject);
+        table.add(infoBubble).expand().fill();
+        infoBubble.layout();
+        table.layout();
+
+
+        MapView.this.addActor(infoBubble);
+        infoItem = item;
+        infoBubble.setPosition(mapHalfWith + infoItem.drawX + infoBubble.getOffsetX(),
+                (this.getHeight() - (mapHalfHeight + infoItem.drawY)) + infoBubble.getOffsetY());
+        CB.requestRendering();
+
+        infoBubble.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                // select this cache/waypoint and close bubble
+
+                Object obj = item.dataObject;
+                if (obj instanceof AbstractCache) {
+                    AbstractCache cache = (AbstractCache) obj;
+                    EventHandler.fire(new SelectedCacheChangedEvent(cache));
+                } else if (obj instanceof AbstractWaypoint) {
+                    AbstractWaypoint waypoint = (AbstractWaypoint) obj;
+                    EventHandler.fire(new SelectedWayPointChangedEvent(waypoint));
+                }
+
+                CB.postOnGlThread(new NamedRunnable("remove info bubble") {
+                    @Override
+                    public void run() {
+                        MapView.this.removeActor(infoBubble);
+                        infoBubble = null;
+                    }
+                });
+
+            }
+        });
+
+
     }
 }

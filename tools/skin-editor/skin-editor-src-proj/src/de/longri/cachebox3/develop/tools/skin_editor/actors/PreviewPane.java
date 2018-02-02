@@ -88,8 +88,7 @@ public class PreviewPane extends Table {
         log.debug("Refresh pane!");
         clear();
 
-        ImageButton button = (ImageButton) game.screenMain.barWidgets.group.getChecked();
-        String widget = button.getUserObject().toString();
+        String widget = game.screenMain.barWidgets.selectedStyle;
         String widgetStyle = game.resolveWidgetPackageName(widget);
 
         try {
@@ -145,8 +144,7 @@ public class PreviewPane extends Table {
 
     private void addDefaultPreview() throws ClassNotFoundException {
 
-        ImageButton button = (ImageButton) game.screenMain.barWidgets.group.getChecked();
-        String widget = button.getUserObject().toString();
+        String widget = game.screenMain.barWidgets.selectedStyle;
         String widgetStyle = game.resolveWidgetPackageName(widget);
         Class<?> style = Class.forName(widgetStyle);
 

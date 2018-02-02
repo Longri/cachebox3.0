@@ -17,11 +17,9 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.develop.tools.skin_editor.StyleTypes;
 import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
-import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
-import de.longri.cachebox3.gui.skin.styles.LanguageStyle;
-import de.longri.cachebox3.gui.skin.styles.LogListItemStyle;
-import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
+import de.longri.cachebox3.gui.skin.styles.*;
 
 /**
  * Created by Longri on 12.01.2017.
@@ -41,73 +39,7 @@ public class SavableSvgSkin extends SvgSkin {
      * Store all resources in the specified skin JSON file.
      */
     public boolean save(FileHandle skinFile) {
-
-
-        // Sort items
-        Array<Class> items = new Array<Class>();
-
-
-        //items for cachebox 3.0 skin
-        items.add(com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg.class);
-        items.add(de.longri.cachebox3.utils.SkinColor.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.ColorDrawableStyle.class);
-        items.add(com.badlogic.gdx.graphics.g2d.BitmapFont.class);
-        items.add(SvgNinePatchDrawable.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle.class);
-        items.add(com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle.class);
-        items.add(com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle.class);
-        items.add(de.longri.cachebox3.gui.widgets.ButtonBar.ButtonBarStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.GestureButtonStyle.class);
-        items.add(com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle.class);
-        items.add(com.kotcrab.vis.ui.widget.VisTextButton.VisTextButtonStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle.class);
-        items.add(com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle.class);
-        items.add(de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle.class);
-        items.add(de.longri.cachebox3.gui.menu.Menu.MenuStyle.class);
-        items.add(de.longri.cachebox3.gui.menu.MenuItem.MenuItemStyle.class);
-        items.add(de.longri.cachebox3.gui.help.HelpWindow.HelpWindowStyle.class);
-        items.add(de.longri.cachebox3.gui.help.GestureHelp.GestureHelpStyle.class);
-        items.add(de.longri.cachebox3.gui.ActivityBase.ActivityBaseStyle.class);
-        items.add(de.longri.cachebox3.gui.activities.Settings_Activity.SettingsActivityStyle.class);
-        items.add(com.kotcrab.vis.ui.widget.VisTextField.VisTextFieldStyle.class);
-        items.add(de.longri.cachebox3.gui.activities.SelectDB_Activity.SelectDbStyle.class);
-        items.add(com.kotcrab.vis.ui.widget.VisCheckBox.VisCheckBoxStyle.class);
-        items.add(de.longri.cachebox3.gui.widgets.Slider.SliderStyle.class);
-        items.add(de.longri.cachebox3.gui.widgets.QuickButtonList.QuickButtonListStyle.class);
-        items.add(de.longri.cachebox3.gui.widgets.MapStateButton.MapStateButtonStyle.class);
-        items.add(de.longri.cachebox3.gui.widgets.ZoomButton.ZoomButtonStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.ScaledSize.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.IconsStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.MenuIconStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.MapArrowStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.FileChooserStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.MapCenterCrossStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.CompassStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.ApiButtonStyle.class);
-        items.add(com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle.class);
-        items.add(com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.SelectBoxStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.EditTextStyle.class);
-        items.add(SplitPane.SplitPaneStyle.class);
-        items.add(CompassViewStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.AttributesStyle.class);
-        items.add(LanguageStyle.class);
-        items.add(LogTypesStyle.class);
-        items.add(LogListItemStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.CacheTypeStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.CacheListItemStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.DraftListItemStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.FilterStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.CircularProgressStyle.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.FloatControlStyle.class);
-
-
-        SvgSkinUtil.saveSkin(this, items, skinFile);
-
+        SvgSkinUtil.saveSkin(this, StyleTypes.items, skinFile);
         return true;
     }
 

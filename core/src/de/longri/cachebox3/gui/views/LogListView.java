@@ -66,7 +66,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
     }
 
     private void setListViewAdapter() {
-        CB.postOnMainThread(new NamedRunnable("LogListView") {
+        CB.postOnGlThread(new NamedRunnable("LogListView") {
             @Override
             public void run() {
                 if (actGcCode == null || !actGcCode.equals(EventHandler.getSelectedCache().getGcCode())) {

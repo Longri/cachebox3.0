@@ -211,7 +211,11 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
                     SnapshotArray<Actor> childs = dispView.getChildren();
                     for (int i = 0, n = childs.size - 1; i < n; i++) {
-                        dispView.removeChild(childs.get(i));
+                        try {
+                            dispView.removeChild(childs.get(i));
+                        } catch (Exception e) {
+
+                        }
                     }
                     childs.clear();
                 }

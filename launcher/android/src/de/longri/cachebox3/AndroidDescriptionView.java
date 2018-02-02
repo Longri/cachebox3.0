@@ -26,6 +26,8 @@ import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static de.longri.cachebox3.AndroidLauncher.androidLauncher;
 
 /**
@@ -39,7 +41,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     final String mimeType = "text/html";
     final String encoding = "utf-8";
     private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
-
+    private final AtomicBoolean pageVisible = new AtomicBoolean(false);
 
     public AndroidDescriptionView(Context context) {
         super(AndroidLauncher.androidLauncher, null, android.R.attr.webViewStyle);
@@ -74,11 +76,18 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
         public void onPageCommitVisible(WebView view, String url) {
             log.debug("onPageCommitVisible URL: {}", url);
+            pageVisible.set(true);
         }
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, url);
+        }
+
+        public void onScaleChanged(WebView view, float oldScale, float newScale) {
+            super.onScaleChanged(view, oldScale, newScale);
+            scale = newScale;
+            log.debug("Scale changed to {}", scale);
         }
     };
 
@@ -119,7 +128,20 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     }
 
     @Override
+    public float getScale() {
+        log.debug("return scale: {}", scale);
+        return scale;
+    }
+
+    @Override
+    public void setScale(float scale) {
+        log.debug("setScale: {} ", scale);
+        setInitialScale((int) (100 * scale));
+    }
+
+    @Override
     public void setHtml(final String html) {
+        pageVisible.set(false);
         androidLauncher.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -134,6 +156,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
     @Override
     public void display() {
+        log.debug("display webView");
         androidLauncher.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -144,6 +167,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
     @Override
     public void close() {
+        log.debug("close webView");
         androidLauncher.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -157,7 +181,13 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
         this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
     }
 
+    @Override
+    public boolean isPageVisible() {
+        return pageVisible.get();
+    }
+
     private Point scrollPos = new Point(0, 0);
+    private float scale = 4;
 
     @Override
     protected void onScrollChanged(int x, int y, int oldl, int oldt) {

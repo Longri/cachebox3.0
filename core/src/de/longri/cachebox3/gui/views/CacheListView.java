@@ -19,7 +19,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.*;
@@ -214,7 +213,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     }
                 });
 
-                CB.postOnMainThread(new NamedRunnable("CacheListView:setSelection") {
+                CB.postOnGlThread(new NamedRunnable("CacheListView:setSelection") {
                     @Override
                     public void run() {
                         int selectedIndex = 0;
@@ -227,8 +226,10 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                         try {
                             if (selectedIndex >= Database.Data.Query.size)
                                 selectedIndex = 0;// select first item, if Cache not found
-                            CacheListView.this.listView.setSelection(selectedIndex);
-                            CacheListView.this.listView.setSelectedItemVisible(false);
+                            if (Database.Data.Query.size > 0) {
+                                CacheListView.this.listView.setSelection(selectedIndex);
+                                CacheListView.this.listView.setSelectedItemVisible(false);
+                            }
                         } catch (Exception e) {
                             log.error("setSelected index", e);
                         }

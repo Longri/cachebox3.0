@@ -23,6 +23,7 @@ import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.PlatformDescriptionView;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.awt.DesktopRealSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -134,6 +135,11 @@ public class DesktopPlatformConnector extends PlatformConnector {
     @Override
     public void _callQuit() {
         Gdx.app.exit();
+    }
+
+    @Override
+    protected void _postOnMainThread(NamedRunnable runnable) {
+        SwingUtilities.invokeLater(runnable);
     }
 
     @Override

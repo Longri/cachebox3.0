@@ -91,7 +91,8 @@ public class EditDrafts extends ActivityBase {
         contentTable = new VisTable();
         setDraft(note, returnListener, isNewDraft);
         if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
-            gcVoteWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, Translation.get("maxRating"), new IntProperty());
+            gcVoteWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, Translation.get("maxRating"),
+                    new IntProperty(),itemStyle.starStyle,itemStyle.cacheSizeStyle);
             gcVoteWidget.setBackground(CB.getSkin().get(ListView.ListViewStyle.class).firstItem);
         }
 

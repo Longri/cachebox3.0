@@ -31,10 +31,7 @@ import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.drawables.*;
-import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
-import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
-import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
-import de.longri.cachebox3.gui.stages.initial_tasks.AbstractInitTask;
+import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SkinColor;
 import org.slf4j.Logger;
@@ -75,7 +72,7 @@ public class SvgSkinUtil {
                         e.printStackTrace();
                     }
                     final FileHandle finalCachedTexturatlasFileHandle = cachedTexturatlasFileHandle;
-                    CB.postOnMainThread(new NamedRunnable("SvgSkinUtil") {
+                    CB.postOnGlThread(new NamedRunnable("SvgSkinUtil") {
                         @Override
                         public void run() {
                             atlas[0] = new TextureAtlas(finalCachedTexturatlasFileHandle);
@@ -138,7 +135,7 @@ public class SvgSkinUtil {
             e.printStackTrace();
         }
 
-        CB.postOnMainThread(new NamedRunnable("SvgSkinUtil") {
+        CB.postOnGlThread(new NamedRunnable("SvgSkinUtil") {
             @Override
             public void run() {
                 atlas[0] = packer.generateTextureAtlas(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest, true);
@@ -343,6 +340,24 @@ public class SvgSkinUtil {
                             } else if (valueObject instanceof LogTypesStyle) {
                                 String objName = resolveObjectName(skin, LogTypesStyle.class, valueObject);
                                 json.writeValue(field.getName(), objName);
+                            } else if (valueObject instanceof ProgressBar.ProgressBarStyle) {
+                                String objName = resolveObjectName(skin, ProgressBar.ProgressBarStyle.class, valueObject);
+                                json.writeValue(field.getName(), objName);
+                            } else if (valueObject instanceof Button.ButtonStyle) {
+                                String objName = resolveObjectName(skin, Button.ButtonStyle.class, valueObject);
+                                json.writeValue(field.getName(), objName);
+                            } else if (valueObject instanceof CacheSizeStyle) {
+                                String objName = resolveObjectName(skin, CacheSizeStyle.class, valueObject);
+                                json.writeValue(field.getName(), objName);
+                            } else if (valueObject instanceof StarsStyle) {
+                                String objName = resolveObjectName(skin, StarsStyle.class, valueObject);
+                                json.writeValue(field.getName(), objName);
+                            } else if (valueObject instanceof CacheListItemStyle) {
+                                String objName = resolveObjectName(skin, CacheListItemStyle.class, valueObject);
+                                json.writeValue(field.getName(), objName);
+                            } else if (valueObject instanceof WayPointListItemStyle) {
+                                String objName = resolveObjectName(skin, WayPointListItemStyle.class, valueObject);
+                                json.writeValue(field.getName(), objName);
                             } else if (valueObject instanceof Array) {
                                 String arrayName = field.getName();
                                 json.writeArrayStart(arrayName);
@@ -352,9 +367,7 @@ public class SvgSkinUtil {
                                     String objName = resolveObjectName(skin, TextureRegion.class, obj);
                                     json.writeValue(objName);
                                 }
-                                ;
                                 json.writeArrayEnd();
-
                             } else {
                                 throw new IllegalArgumentException("resource object type is unknown: " + valueObject.getClass().getCanonicalName());
                             }

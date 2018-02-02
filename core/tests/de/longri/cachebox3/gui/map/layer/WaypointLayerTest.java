@@ -45,7 +45,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 class WaypointLayerTest {
 
-   static boolean exclude = EXCLUDE_FROM_TRAVIS.VALUE || EXCLUDE_FROM_TRAVIS.REPAIR;// TODO repair test
+    static boolean exclude = EXCLUDE_FROM_TRAVIS.VALUE || EXCLUDE_FROM_TRAVIS.REPAIR;// TODO repair test
 
     @BeforeAll
     static void beforeAll() {
@@ -85,7 +85,7 @@ class WaypointLayerTest {
         if (VisUI.isLoaded()) VisUI.dispose();
         VisUI.load(skin);
         LinkedHashMap<Object, TextureRegion> textureRegionMap = MapView.createTextureAtlasRegions();
-        WaypointLayer wpLayer = new WaypointLayer(null, textureRegionMap);
+        WaypointLayer wpLayer = new WaypointLayer(null, null, textureRegionMap);
         MutableCache testCache1 = new MutableCache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
         MutableCache testCache2 = new MutableCache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
         MutableCache testCache3 = new MutableCache(0.3, 0, "ImmutableCache", CacheTypes.Traditional, "GC3");
@@ -252,7 +252,7 @@ class WaypointLayerTest {
         VisUI.load(skin);
         LinkedHashMap<Object, TextureRegion> textureRegionMap = MapView.createTextureAtlasRegions();
 
-        WaypointLayer wpLayer = new WaypointLayer(null, textureRegionMap);
+        WaypointLayer wpLayer = new WaypointLayer(null, null, textureRegionMap);
         MutableCache testCache1 = new MutableCache(0.1, 0, "Cache1", CacheTypes.Traditional, "GC1");
         MutableCache testCache2 = new MutableCache(0.2, 0, "Cache2", CacheTypes.Traditional, "GC2");
         MutableCache testCache3 = new MutableCache(0.3, 0, "ImmutableCache", CacheTypes.Traditional, "GC3");

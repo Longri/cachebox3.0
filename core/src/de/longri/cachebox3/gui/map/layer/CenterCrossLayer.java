@@ -62,7 +62,7 @@ public class CenterCrossLayer extends GenericLayer implements Disposable {
         @Override
         public void update(GLViewport v) {
             buckets.clear();
-            if (!centerCrossLayer.isEnabled()) return;
+            if (centerCrossLayer == null || !centerCrossLayer.isEnabled()) return;
             mMapPosition.copy(v.pos);
             buckets.set(ll);
 

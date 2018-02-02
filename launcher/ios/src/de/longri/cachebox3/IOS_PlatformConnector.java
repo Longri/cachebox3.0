@@ -21,6 +21,7 @@ import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.ios.backend.IOS_RealSvgBitmap;
 import org.robovm.apple.avfoundation.AVCaptureDevice;
@@ -28,6 +29,7 @@ import org.robovm.apple.avfoundation.AVCaptureTorchMode;
 import org.robovm.apple.avfoundation.AVMediaType;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.coregraphics.CGSize;
+import org.robovm.apple.dispatch.DispatchQueue;
 import org.robovm.apple.foundation.NSErrorException;
 import org.robovm.apple.foundation.NSURL;
 import org.robovm.apple.uikit.*;
@@ -164,6 +166,11 @@ public class IOS_PlatformConnector extends PlatformConnector {
     @Override
     public void _callQuit() {
         Gdx.app.exit();
+    }
+
+    @Override
+    protected void _postOnMainThread(NamedRunnable runnable) {
+        DispatchQueue.getMainQueue().sync(runnable);
     }
 
     @Override

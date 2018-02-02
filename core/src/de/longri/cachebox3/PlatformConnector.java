@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.canvas.Bitmap;
 
 import java.io.IOException;
@@ -68,7 +69,7 @@ public abstract class PlatformConnector {
     protected abstract void descriptionViewToNull();
 
     public static void _openUrlExtern(final String link) {
-        if (CB.isMainThread()) {
+        if (CB.isGlThread()) {
             platformConnector.openUrlExtern(link);
         } else {
             Gdx.app.postRunnable(new Runnable() {
@@ -87,6 +88,12 @@ public abstract class PlatformConnector {
     }
 
     protected abstract void _callQuit();
+
+    protected abstract void _postOnMainThread(NamedRunnable runnable);
+
+    public static void postOnMainThread(NamedRunnable runnable) {
+        platformConnector._postOnMainThread(runnable);
+    }
 
     // SVG implementations #############################################################################################
     public enum SvgScaleType {

@@ -113,7 +113,7 @@ public class WaypointView extends AbstractView {
                 Adapter listViewAdapter = new Adapter() {
                     @Override
                     public int getCount() {
-                        if (actAbstractCache == null) return 0;
+                        if (actAbstractCache == null || actAbstractCache.getWaypoints() == null) return 0;
                         return actAbstractCache.getWaypoints().size + 1;
                     }
 
@@ -348,6 +348,7 @@ public class WaypointView extends AbstractView {
         try {
             newGcCode = Database.createFreeGcCode(EventHandler.getSelectedCache().getGcCode().toString());
         } catch (Exception e) {
+            log.error("can't generate GcCode! can't show EditWaypoint Activity");
             return;
         }
         if (coordinate == null)
@@ -361,7 +362,7 @@ public class WaypointView extends AbstractView {
     }
 
     private void showEditWpDialog(final AbstractWaypoint newWP, final boolean showCoords, final boolean onlyShow) {
-        CB.postOnMainThread(new NamedRunnable("WaypointView") {
+        CB.postOnGlThread(new NamedRunnable("WaypointView") {
             @Override
             public void run() {
                 AbstractWaypoint mutable = newWP.getMutable(Database.Data);

@@ -16,14 +16,14 @@
 package com.badlogic.gdx.scenes.scene2d.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -122,6 +122,82 @@ public class DrawablePickerDialog extends Dialog {
     }
 
 
+    private void importDrawable(final FileHandle selectedFile, final boolean copy) {
+        // ask for name of generated recource
+        String selectedFileName = selectedFile.name().substring(0, selectedFile.name().lastIndexOf("."));
+        final TextField nameTextField = new TextField(selectedFileName, game.skin);
+        Dialog dlg0 = new Dialog("Set resource name", game.skin) {
+
+            @Override
+            protected void result(Object object) {
+                if ((Boolean) object == false) {
+                    return;
+                }
+
+                final String finalResourceName = nameTextField.getText();
+                final TextField scaleValueTextField = new TextField(String.valueOf(1.0f), game.skin);
+                Dialog dlg = new Dialog("Set Scale Value", game.skin) {
+
+                    @Override
+                    protected void result(Object object) {
+                        if ((Boolean) object == false) {
+                            return;
+                        }
+
+                        float scalfactor = 0;
+                        String text = scaleValueTextField.getText();
+                        if (text.isEmpty() == false) {
+                            scalfactor = Float.valueOf(text);
+                        }
+                        String originalName = null;
+                        FileHandle orig = selectedFile;
+                        originalName = orig.name();
+                        if (copy) {
+                            // Copy the file
+                            FileHandle dest = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/svg/" + originalName);
+                            orig.copyTo(dest);
+                        }
+
+                        // write scaled svg section
+                        ScaledSvg scaledSvg = new ScaledSvg();
+                        scaledSvg.path = "svg/" + originalName;
+                        scaledSvg.scale = scalfactor;
+                        scaledSvg.setRegisterName(finalResourceName);
+                        game.skinProject.add(finalResourceName, scaledSvg);
+
+                        FileHandle projectFolder = new FileHandle("projects/" + game.screenMain.getcurrentProject());
+                        FileHandle projectFile = projectFolder.child("skin.json");
+                        game.skinProject.save(projectFile);
+
+                        game.screenMain.refreshResources();
+                        refresh();
+                        game.showMsgDlg("File successfully added to your project.", getStage());
+                    }
+                };
+
+                dlg.pad(20);
+                dlg.getContentTable().add("Float Value:");
+                dlg.getContentTable().add(scaleValueTextField).pad(20);
+                dlg.button("OK", true);
+                dlg.button("Cancel", false);
+                dlg.key(Input.Keys.ENTER, true);
+                dlg.key(Input.Keys.ESCAPE, false);
+                dlg.show(getStage());
+                getStage().setKeyboardFocus(scaleValueTextField);
+            }
+        };
+
+        dlg0.pad(20);
+        dlg0.getContentTable().add("Resource name:");
+        dlg0.getContentTable().add(nameTextField).pad(20);
+        dlg0.button("OK", true);
+        dlg0.button("Cancel", false);
+        dlg0.key(Input.Keys.ENTER, true);
+        dlg0.key(Input.Keys.ESCAPE, false);
+        dlg0.show(getStage());
+        getStage().setKeyboardFocus(nameTextField);
+    }
+
     private void initializeSelf() {
         this.clear();
         defaults().space(6);
@@ -204,79 +280,12 @@ public class DrawablePickerDialog extends Dialog {
                         }
 
                         prefs.putString("last_import_directory", selectedFile.parent().path());
+                        importDrawable(selectedFile, true);
 
-                        // ask for name of generated recource
-                        String selectedFileName = selectedFile.name().substring(0, selectedFile.name().lastIndexOf("."));
-                        final TextField nameTextField = new TextField(selectedFileName, game.skin);
-                        Dialog dlg0 = new Dialog("Set resource name", game.skin) {
 
-                            @Override
-                            protected void result(Object object) {
-                                if ((Boolean) object == false) {
-                                    return;
-                                }
-
-                                final String finalResourceName = nameTextField.getText();
-                                final TextField scaleValueTextField = new TextField(String.valueOf(1.0f), game.skin);
-                                Dialog dlg = new Dialog("Set Scale Value", game.skin) {
-
-                                    @Override
-                                    protected void result(Object object) {
-                                        if ((Boolean) object == false) {
-                                            return;
-                                        }
-
-                                        float scalfactor = 0;
-                                        String text = scaleValueTextField.getText();
-                                        if (text.isEmpty() == false) {
-                                            scalfactor = Float.valueOf(text);
-                                        }
-
-                                        // Copy the file
-                                        FileHandle orig = selectedFile;
-                                        String originalName = orig.name();
-                                        FileHandle dest = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/svg/" + originalName);
-                                        orig.copyTo(dest);
-
-                                        // write scaled svg section
-                                        ScaledSvg scaledSvg = new ScaledSvg();
-                                        scaledSvg.path = "svg/" + originalName;
-                                        scaledSvg.scale = scalfactor;
-                                        scaledSvg.setRegisterName(finalResourceName);
-                                        game.skinProject.add(finalResourceName, scaledSvg);
-
-                                        FileHandle projectFolder = new FileHandle("projects/" + game.screenMain.getcurrentProject());
-                                        FileHandle projectFile = projectFolder.child("skin.json");
-                                        game.skinProject.save(projectFile);
-
-                                        game.screenMain.refreshResources();
-                                        refresh();
-                                        game.showMsgDlg("File successfully added to your project.", getStage());
-                                    }
-                                };
-
-                                dlg.pad(20);
-                                dlg.getContentTable().add("Float Value:");
-                                dlg.getContentTable().add(scaleValueTextField).pad(20);
-                                dlg.button("OK", true);
-                                dlg.button("Cancel", false);
-                                dlg.key(com.badlogic.gdx.Input.Keys.ENTER, true);
-                                dlg.key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
-                                dlg.show(getStage());
-                                getStage().setKeyboardFocus(scaleValueTextField);
-                            }
-                        };
-
-                        dlg0.pad(20);
-                        dlg0.getContentTable().add("Resource name:");
-                        dlg0.getContentTable().add(nameTextField).pad(20);
-                        dlg0.button("OK", true);
-                        dlg0.button("Cancel", false);
-                        dlg0.key(com.badlogic.gdx.Input.Keys.ENTER, true);
-                        dlg0.key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
-                        dlg0.show(getStage());
-                        getStage().setKeyboardFocus(nameTextField);
                     }
+
+
                 });
 
                 fileChooser.setDirectory(prefs.getString("last_import_directory"));
@@ -491,9 +500,21 @@ public class DrawablePickerDialog extends Dialog {
             }
 
             Button buttonItem = new Button(game.skin);
-
             Image img = null;
-            InternalItem item = items.get(key);
+            final InternalItem item = items.get(key);
+
+            buttonItem.addListener(new ClickListener(Input.Buttons.RIGHT) {
+                public void clicked(InputEvent event, float x, float y) {
+                    //show Copy dialog Box
+                    if (item.skinInfo instanceof ScaledSvg) {
+                        ScaledSvg svg = (ScaledSvg) item.skinInfo;
+                        FileHandle fileHandle = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/" + svg.path);
+                        importDrawable(fileHandle, false);
+                    }
+
+                }
+            });
+
 
             img = new Image((Drawable) item.drawable);
 
@@ -509,6 +530,7 @@ public class DrawablePickerDialog extends Dialog {
 
                 private Event lastHandeldEvent;
 
+                @Override
                 public boolean handle(Event event) {
                     if (!(event instanceof ChangeEvent)) return false;
 
@@ -606,7 +628,7 @@ public class DrawablePickerDialog extends Dialog {
                     try {
                         // Since we have reloaded everything we have to get
                         // field back
-                        game.screenMain.paneOptions.refreshSelection();
+//                        game.screenMain.paneOptions.refreshSelection();
 
                         if (field.getType() == Array.class) {
                             Object value = field.get(game.screenMain.paneOptions.currentStyle);

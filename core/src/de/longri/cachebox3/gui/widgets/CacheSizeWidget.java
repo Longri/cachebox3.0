@@ -17,10 +17,9 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.gui.skin.styles.CacheSizeStyle;
 import de.longri.cachebox3.types.CacheSizes;
 
 /**
@@ -28,40 +27,41 @@ import de.longri.cachebox3.types.CacheSizes;
  */
 public class CacheSizeWidget extends AbstractIntValueChangedWidget {
     private Drawable sizeDrawable;
-    private final Skin skin;
+    private final CacheSizeStyle style;
 
-    public CacheSizeWidget(CacheSizes size) {
-        skin = VisUI.getSkin();
+    public CacheSizeWidget(CacheSizes size, CacheSizeStyle style) {
+        this.style = style;
+
 
         switch (size) {
             case other:
-                sizeDrawable = skin.getDrawable("other");
+                sizeDrawable = style.other;
                 break;
             case micro:
-                sizeDrawable = skin.getDrawable("micro");
+                sizeDrawable = style.micro;
                 break;
             case small:
-                sizeDrawable = skin.getDrawable("small");
+                sizeDrawable = style.small;
                 break;
             case regular:
-                sizeDrawable = skin.getDrawable("regular");
+                sizeDrawable = style.regular;
                 break;
             case large:
-                sizeDrawable = skin.getDrawable("large");
+                sizeDrawable = style.large;
                 break;
             case notChosen:
-                sizeDrawable = skin.getDrawable("notChosen");
+                sizeDrawable = style.notChosen;
                 break;
             case virtual:
-                sizeDrawable = skin.getDrawable("virtualSize");
+                sizeDrawable = style.virtualSize;
                 break;
             default:
-                sizeDrawable = skin.getDrawable("other"); // unknown
+                sizeDrawable = style.other; // unknown
         }
     }
 
-    public CacheSizeWidget(int value) {
-        skin = VisUI.getSkin();
+    public CacheSizeWidget(int value, CacheSizeStyle style) {
+        this.style = style;
         setValue(value);
     }
 
@@ -87,28 +87,28 @@ public class CacheSizeWidget extends AbstractIntValueChangedWidget {
     public void setValue(int value) {
         switch (value) {
             case 0:
-                sizeDrawable = skin.getDrawable("micro");
+                sizeDrawable = style.micro;
                 break;
             case 1:
-                sizeDrawable = skin.getDrawable("small");
+                sizeDrawable = style.small;
                 break;
             case 2:
-                sizeDrawable = skin.getDrawable("regular");
+                sizeDrawable = style.regular;
                 break;
             case 3:
-                sizeDrawable = skin.getDrawable("large");
+                sizeDrawable = style.large;
                 break;
             case 4:
-                sizeDrawable = skin.getDrawable("other");
+                sizeDrawable = style.other;
                 break;
             case 5:
-                sizeDrawable = skin.getDrawable("virtualSize");
+                sizeDrawable = style.virtualSize;
                 break;
             case 6:
-                sizeDrawable = skin.getDrawable("notChosen");
+                sizeDrawable = style.notChosen;
                 break;
             default:
-                sizeDrawable = skin.getDrawable("other"); // unknown
+                sizeDrawable = style.other; // unknown
         }
     }
 }

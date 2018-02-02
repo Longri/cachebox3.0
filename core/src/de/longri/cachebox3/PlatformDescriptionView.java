@@ -30,6 +30,10 @@ public interface PlatformDescriptionView {
 
     float getScrollPositionY();
 
+    float getScale();
+
+    void setScale(float scale);
+
     void setHtml(String html);
 
     void display();
@@ -37,4 +41,6 @@ public interface PlatformDescriptionView {
     void close();
 
     void setShouldOverrideUrlLoadingCallBack(GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack);
+
+    boolean isPageVisible();
 }

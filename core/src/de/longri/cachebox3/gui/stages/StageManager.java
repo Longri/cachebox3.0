@@ -308,4 +308,8 @@ public class StageManager {
     public static boolean isTop(Stage stage) {
         return zOrderTopStage == stage;
     }
+
+    public static boolean isMainStageOnlyDrawing() {
+        return stageList.size == 0;
+    }
 }

@@ -76,7 +76,7 @@ public class CancelProgressDialog extends ButtonDialog {
                 progressCancelRunnable.run();
 
                 //after finish, close Dialog
-                CB.postOnMainThread(new NamedRunnable("CancelProgressDialog") {
+                CB.postOnGlThread(new NamedRunnable("CancelProgressDialog") {
                     @Override
                     public void run() {
                         CancelProgressDialog.this.hide();

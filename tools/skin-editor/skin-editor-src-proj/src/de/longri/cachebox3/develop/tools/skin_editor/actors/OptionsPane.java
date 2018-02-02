@@ -36,10 +36,12 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.develop.tools.skin_editor.ColorPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
+import de.longri.cachebox3.develop.tools.skin_editor.StyleTypes;
 import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.utils.SkinColor;
@@ -198,7 +200,7 @@ public class OptionsPane extends Table {
 
                 // Now we really add it!
                 game.skinProject.remove((String) listStyles.getSelected(), currentStyle.getClass());
-                refresh(true);
+//                refresh(true);
                 game.screenMain.saveToSkin();
                 game.screenMain.panePreview.refresh();
 
@@ -256,7 +258,7 @@ public class OptionsPane extends Table {
                 }
                 //game.skinProject.add(text, game.skin.get("default", currentStyle.getClass()), currentStyle.getClass());
                 game.screenMain.saveToSkin();
-                refresh(true);
+                // refresh(true);
 
                 game.screenMain.panePreview.refresh();
 
@@ -279,13 +281,8 @@ public class OptionsPane extends Table {
     /**
      *
      */
-    public void refreshSelection() {
-
+    public void refreshSelection(String widgetStyle) {
         String key = listStyles.getSelected();
-
-        ImageButton button = (ImageButton) game.screenMain.barWidgets.group.getChecked();
-        String widget = button.getUserObject().toString();
-        String widgetStyle = game.resolveWidgetPackageName(widget);
         Gdx.app.log("OptionsPane", "Fetching style:" + widgetStyle);
 
         listItems.clear();
@@ -323,18 +320,14 @@ public class OptionsPane extends Table {
     /**
      *
      */
-    public void refresh(final boolean stylePane) {
-
+    public void refresh(final boolean stylePane, final String style) {
+        final String widgetStyle = game.resolveWidgetPackageName(style);
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
                 setStylePaneVisible(stylePane);
 
                 Gdx.app.log("OptionsPane", "Refresh");
-
-                ImageButton button = (ImageButton) game.screenMain.barWidgets.group.getChecked();
-                String widget = button.getUserObject().toString();
-                String widgetStyle = game.resolveWidgetPackageName(widget);
                 Gdx.app.log("OptionsPane", "Fetching style:" + widgetStyle);
 
                 listItems.clear();
@@ -360,6 +353,9 @@ public class OptionsPane extends Table {
 
                         DirectLineRendererStyle directLineRendererStyle = game.skinProject.get("directLine", DirectLineRendererStyle.class);
                         styles.put("directline", directLineRendererStyle);
+
+                        MapBubbleStyle mapBubbleStyle = game.skinProject.get("bubble", MapBubbleStyle.class);
+                        styles.put("bubble", mapBubbleStyle);
                     }
 
                     if (widgetStyle.equals("de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle")) {
@@ -450,8 +446,8 @@ public class OptionsPane extends Table {
      */
     private void updateTableFields(final String style) {
 
-        ImageButton button = (ImageButton) game.screenMain.barWidgets.group.getChecked();
-        String widget = button.getUserObject().toString();
+        String widget = game.screenMain.barWidgets.selectedStyle;
+        String widgetStyle = game.resolveWidgetPackageName(widget);
 
         Gdx.app.log("OptionsPane", "Update fields table for widget: " + widget + ", style: " + style);
         tableFields.clear();
@@ -491,9 +487,54 @@ public class OptionsPane extends Table {
                 } else if (field.getType().isEnum()) {
                     actor = getEnumActor(field, obj);
                 } else {
-                    Gdx.app.log("OptionsPane", "Unknown type: " + name);
-                    if (!(currentStyle instanceof AbstractIconStyle)) {
-                        actor = new Label("Unknown Type", game.skin);
+
+                    //if Type any Style
+                    String fullName = field.getType().getName();
+                    for (final Class clazz : StyleTypes.items) {
+                        if (clazz.getName().equals(fullName)) {
+                            //get all Styles
+                            final ObjectMap allStyles = game.skinProject.getAll(clazz);
+
+                            Array<String> itemList = new Array<String>();
+                            itemList.add(""); //empty entry, for not set
+                            for (Object styleName : allStyles.keys())
+                                itemList.add((String) styleName);
+                            final VisSelectBox<String> selectBox = new VisSelectBox();
+                            selectBox.setItems(itemList);
+
+                            String selectedName = SvgSkinUtil.resolveObjectName(game.skinProject, clazz, field.get(currentStyle));
+                            if (selectedName == null) selectedName = "";
+                            selectBox.setSelected(selectedName);
+
+                            selectBox.addListener(new ChangeListener() {
+
+                                @Override
+                                public void changed(ChangeEvent event, Actor actor) {
+
+                                    String selection = (String) ((SelectBox) actor).getSelected();
+                                    Object selectionObject = null;
+                                    try {
+                                        for (Object object : allStyles.values()) {
+                                            String selectedName = SvgSkinUtil.resolveObjectName(game.skinProject, clazz, object);
+                                            if (selection.equals(selectedName)) {
+                                                selectionObject = object;
+                                                break;
+                                            }
+                                        }
+                                        field.set(currentStyle, selectionObject);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    game.screenMain.saveToSkin();
+                                    refresh(true, currentStyle.getClass().getSimpleName());
+                                    game.screenMain.paneOptions.updateSelectedTableFields();
+                                    game.screenMain.panePreview.refresh();
+                                }
+
+                            });
+                            actor = selectBox;
+                        }
                     }
                 }
 
@@ -558,7 +599,7 @@ public class OptionsPane extends Table {
         minus.addListener(new ClickListener() {
 
             public void clicked(InputEvent event, float x, float y) {
-                int newSize = (array != null ? array.size : 0) -1;
+                int newSize = (array != null ? array.size : 0) - 1;
                 Array<TextureAtlas.AtlasRegion> newArray = new Array<TextureAtlas.AtlasRegion>(newSize);
                 for (int i = 0, n = newSize; i < n; i++) {
                     newArray.add(array.get(i));
@@ -637,7 +678,7 @@ public class OptionsPane extends Table {
                 }
 
                 game.screenMain.saveToSkin();
-                refresh(true);
+                refresh(true, selection);
                 game.screenMain.paneOptions.updateSelectedTableFields();
                 game.screenMain.panePreview.refresh();
             }
@@ -720,7 +761,7 @@ public class OptionsPane extends Table {
                 }
 
                 game.screenMain.saveToSkin();
-                refresh(true);
+                refresh(true, selection);
                 game.screenMain.paneOptions.updateSelectedTableFields();
                 game.screenMain.panePreview.refresh();
             }
@@ -768,7 +809,7 @@ public class OptionsPane extends Table {
                 }
 
                 game.screenMain.saveToSkin();
-                refresh(true);
+                refresh(true, selection);
                 game.screenMain.paneOptions.updateSelectedTableFields();
                 game.screenMain.panePreview.refresh();
             }
@@ -922,7 +963,7 @@ public class OptionsPane extends Table {
         Drawable drawable = null;
         String resourceName = null;
         if (field.get(currentStyle) instanceof Array) {
-            if(region!=null){
+            if (region != null) {
                 drawable = new TextureRegionDrawable(region);
                 resourceName = region.name;
             }
@@ -995,7 +1036,7 @@ public class OptionsPane extends Table {
                     }
 
                     game.screenMain.saveToSkin();
-                    refresh(true);
+//                    refresh(true);
                     game.screenMain.paneOptions.updateSelectedTableFields();
                     game.screenMain.panePreview.refresh();
                 }

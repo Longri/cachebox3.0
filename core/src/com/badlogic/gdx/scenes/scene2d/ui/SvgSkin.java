@@ -414,7 +414,7 @@ public class SvgSkin extends Skin {
                         e.printStackTrace();
                     }
 
-                    CB.postOnMainThread(new NamedRunnable("SvgSkin") {
+                    CB.postOnGlThread(new NamedRunnable("SvgSkin") {
                         @Override
                         public void run() {
                             FileHandle cacheFileHandle = Gdx.files.absolute(CB.WorkPath + SvgSkinUtil.TMP_UI_ATLAS_PATH + name);
