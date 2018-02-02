@@ -166,7 +166,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
         CB.stateTime += Gdx.graphics.getDeltaTime();
 
-        if (drawMap && mMapRenderer != null) {
+        if (drawMap && mMapRenderer != null && StageManager.isMainStageOnlyDrawing()) {
             GLState.enableVertexArrays(-1, -1);
 
             // set map position and size
