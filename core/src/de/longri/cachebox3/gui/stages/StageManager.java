@@ -126,9 +126,9 @@ public class StageManager {
                     } else if (viewManager.getActView() instanceof DescriptionView) {
                         // handle DescriptionView on ViewManagerStage
                         DescriptionView descriptionView = (DescriptionView) viewManager.getActView();
-                        descriptionView.onHide();
                         log.debug("Call DescriptionView.onHide() for showing overlay stage");
                     }
+                    viewManager.getActView().onHide();
                 }
             }
 
