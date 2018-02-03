@@ -15,8 +15,47 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * Created by Longri on 03.02.18.
  */
 public class ListViewItemLinkedList {
+
+    private final static float FACTOR = 100000;
+
+    private ListViewItem first;
+
+
+    private final ListViewAdapter adapter;
+    private final AtomicLong completeSize = new AtomicLong(0);
+
+    public ListViewItemLinkedList(ListViewAdapter adapter) {
+        this.adapter = adapter;
+
+        //create linked dummy list with size of first item
+        float size = adapter.getItemSize(0);
+        ListViewItem act = first = new DummyListViewItem(size);
+        for (int i = 0; i < adapter.getCount(); i++) {
+            ListViewItem item = new DummyListViewItem(size);
+            act.setNext(item);
+            item.setBefore(act);
+            act = item;
+        }
+        calcCompleteSize();
+    }
+
+    private void calcCompleteSize() {
+        float complete = 0;
+        ListViewItem act = first;
+        do {
+            complete += act.size;
+            act = act.next;
+        } while (act.next != null);
+        completeSize.set((long) (complete * FACTOR));
+    }
+
+    public float getCompleteSize() {
+        return completeSize.floatValue() / FACTOR;
+    }
 }
