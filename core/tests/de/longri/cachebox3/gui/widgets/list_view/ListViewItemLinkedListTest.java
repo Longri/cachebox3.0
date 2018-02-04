@@ -51,7 +51,7 @@ class ListViewItemLinkedListTest {
 
             @Override
             public ListViewItem getView(int index) {
-                DummyListViewItem item = new DummyListViewItem(index);
+                ListViewItem item = new ListViewItem(index);
                 item.setHeight(itemSize);
                 return item;
             }
@@ -106,6 +106,19 @@ class ListViewItemLinkedListTest {
             e.printStackTrace();
         }
 
+        assertThat("The child count should be " + childCount,
+                ((ScrollViewContainer) listView.scrollPane.getActor()).getChildren().size == childCount);
+
+
+        ((ListViewItemLinkedList) ((ScrollViewContainer) listView.scrollPane.getActor())).replaceDummy();
+        //child's will added on GlThread, so wait a moment
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        childCount = 26;
         assertThat("The child count should be " + childCount,
                 ((ScrollViewContainer) listView.scrollPane.getActor()).getChildren().size == childCount);
 

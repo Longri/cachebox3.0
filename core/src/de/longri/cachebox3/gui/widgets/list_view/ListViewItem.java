@@ -64,4 +64,13 @@ public class ListViewItem extends VisTable implements Disposable {
     public void setBefore(ListViewItem before) {
         this.before = before;
     }
+
+    public int getListIndex() {
+        return index;
+    }
+
+    @Override
+    public String toString() {
+        return "ListView Item: " + Integer.toString(this.index);
+    }
 }

@@ -16,22 +16,36 @@
 package de.longri.cachebox3.gui.widgets.list_view;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.utils.ClickLongClickListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 
 /**
  * Created by Longri on 03.02.18.
  */
 public class ListView extends WidgetGroup {
 
+    private final static Logger log = LoggerFactory.getLogger(ListView.class);
+
     final ListViewType type;
     final VisScrollPane scrollPane;
     final de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style;
     final ListViewItemLinkedList itemList;
+    final Array<SelectionChangedEvent> changedEventListeners = new Array<>();
+    final Array<ListViewItem> selectedItemList = new Array<>();
     float maxScrollChange = 0;
+    SelectableType selectionType;
+    ListViewAdapter adapter;
 
 
     public ListView(ListViewType type) {
@@ -45,6 +59,7 @@ public class ListView extends WidgetGroup {
                 style.pad > 0 ? style.pad : style.padRight,
                 style.pad > 0 ? style.pad : style.padTop,
                 style.pad > 0 ? style.pad : style.padBottom);
+        this.itemList.setOnDrawListener(this.onDrawListener);
         this.style = style;
         scrollPane = new VisScrollPane(itemList, style) {
 
@@ -91,6 +106,7 @@ public class ListView extends WidgetGroup {
     }
 
     public void setAdapter(ListViewAdapter adapter) {
+        this.adapter = adapter;
         itemList.setAdapter(adapter);
         maxScrollChange = adapter.getDefaultItemSize() * ListViewItemLinkedList.OVERLOAD;
         setScrollPaneBounds();
@@ -108,7 +124,6 @@ public class ListView extends WidgetGroup {
             itemList.setVisibleBounds(scrollPane.getScrollX(), scrollPane.getWidth());
         }
     }
-
 
     @Override
     protected void sizeChanged() {
@@ -162,4 +177,87 @@ public class ListView extends WidgetGroup {
         setItemVisibleBounds();
 
     }
+
+    public void addSelectionChangedEventListner(SelectionChangedEvent event) {
+        if (!changedEventListeners.contains(event, true))
+            changedEventListeners.add(event);
+    }
+
+    public void removeSelectionChangedEventListner(SelectionChangedEvent event) {
+        changedEventListeners.removeValue(event, true);
+    }
+
+    public void setSelectable(SelectableType selectionType) {
+        this.selectionType = selectionType;
+    }
+
+    private OnDrawListener onDrawListener = new OnDrawListener() {
+        @Override
+        public void onDraw(ListViewItem item) {
+
+            if (adapter != null) {
+                if (selectionType != NONE) {
+                    boolean isSelected = false;
+                    if (selectionType == SINGLE) {
+                        isSelected = selectedItemList.size == 1 && selectedItemList.contains(item, false);
+                    } else {
+                        isSelected = selectedItemList.contains(item, false);
+                    }
+
+                    if (isSelected) {
+                        item.setBackground(style.selectedItem);
+                    } else {
+                        if (style.secondItem != null && item.getListIndex() % 2 == 1) {
+                            item.setBackground(style.secondItem);
+                        } else {
+                            item.setBackground(style.firstItem);
+                        }
+                    }
+
+                    //add ClickListener
+                    item.addListener(onListItemClickListener);
+                }
+                try {
+                    adapter.update(item);
+                } catch (Exception e) {
+                    log.error("Update:", e);
+                }
+            }
+        }
+    };
+
+    ClickLongClickListener onListItemClickListener = new ClickLongClickListener() {
+        public boolean clicked(InputEvent event, float x, float y) {
+            if (event.getType() == InputEvent.Type.touchUp) {
+                if (selectionType != NONE) {
+                    ListViewItem item = ((ListViewItem) event.getListenerActor());
+
+                    if (selectionType == SINGLE) {
+                        if (!selectedItemList.contains(item, false)) {
+                            selectedItemList.clear();
+                            selectedItemList.add(item);
+                        }
+                    } else {
+                        if (selectedItemList.contains(item, false)) {
+                            selectedItemList.removeValue(item, true);
+                        } else {
+                            selectedItemList.add(item);
+                        }
+                    }
+                    CB.requestRendering();
+
+                    //call selection changed event
+                    for (int i = 0, n = changedEventListeners.size; i < n; i++) {
+                        changedEventListeners.get(i).selectionChanged();
+                    }
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean longClicked(Actor actor, float x, float y) {
+            return false;
+        }
+    };
 }
