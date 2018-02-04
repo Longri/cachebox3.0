@@ -19,7 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
-import de.longri.cachebox3.gui.views.listview.ScrollViewContainer;
+
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
 /**
  * Created by Longri on 03.02.18.
@@ -27,21 +28,25 @@ import de.longri.cachebox3.gui.views.listview.ScrollViewContainer;
 public class ListView extends WidgetGroup {
 
     final ListViewType type;
-    private final ScrollViewContainer itemGroup = new ScrollViewContainer();
-    private final VisScrollPane scrollPane;
-    private final de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style;
+    final VisScrollPane scrollPane;
+    final de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style;
+    final ListViewItemLinkedList itemList;
 
-    private ListViewItemLinkedList itemList;
 
     public ListView(ListViewType type) {
+        this(type, VisUI.getSkin().get("default", de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle.class));
+    }
+
+    public ListView(ListViewType type, de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style) {
         this.type = type;
-        this.style = VisUI.getSkin().get("default", de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle.class);
-        scrollPane = new VisScrollPane(itemGroup, style) {
+        this.itemList = new ListViewItemLinkedList(type);
+        this.style = style;
+        scrollPane = new VisScrollPane(itemList, style) {
             @Override
             public Actor hit(float x, float y, boolean touchable) {
                 Actor actor = super.hit(x, y, touchable);
                 if (actor == scrollPane) {
-                    actor = itemGroup.hit(x, (itemGroup.getHeight() - (scrollPane.getScrollY() + scrollPane.getHeight())) + y, touchable);
+                    actor = itemList.hit(x, (itemList.getHeight() - (scrollPane.getScrollY() + scrollPane.getHeight())) + y, touchable);
                 }
                 return actor;
             }
@@ -51,12 +56,22 @@ public class ListView extends WidgetGroup {
         scrollPane.setVariableSizeKnobs(false);
         scrollPane.setCancelTouchFocus(true);
         scrollPane.setupFadeScrollBars(1f, 0.5f);
-        setScrollPaneBounds();
+
     }
 
     public void setAdapter(ListViewAdapter adapter) {
-        itemList = new ListViewItemLinkedList(adapter);
+        itemList.setAdapter(adapter);
+        setScrollPaneBounds();
     }
+
+    private void setItemVisibleBounds() {
+        if (this.type == VERTICAL) {
+            itemList.setVisibleBounds(scrollPane.getScrollY(), scrollPane.getHeight());
+        } else {
+            itemList.setVisibleBounds(scrollPane.getScrollY(), scrollPane.getWidth());
+        }
+    }
+
 
     @Override
     protected void sizeChanged() {
@@ -75,12 +90,14 @@ public class ListView extends WidgetGroup {
     private void setScrollPaneBounds() {
         float paneHeight = this.getHeight();
         float paneYPos = 0;
-        if (this.getHeight() > itemList.getCompleteSize()) {
+        float completeSize = itemList.getCompleteSize();
+        if (this.getHeight() > completeSize) {
             //set on Top
-            paneHeight = itemList.getCompleteSize();
-            paneYPos = this.getHeight() - itemList.getCompleteSize();
+            paneHeight = completeSize;
+            paneYPos = this.getHeight() - completeSize;
         }
         scrollPane.setBounds(0, paneYPos, this.getWidth(), paneHeight);
+        setItemVisibleBounds();
     }
 
 }

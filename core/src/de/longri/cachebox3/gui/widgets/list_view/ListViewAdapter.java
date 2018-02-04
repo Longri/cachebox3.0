@@ -41,12 +41,11 @@ public interface ListViewAdapter {
     void update(ListViewItem view);
 
     /**
-     * Returns the size for calculating the position of an item.</br> </br>
+     * Returns the default size for calculating the position of an item.</br> </br>
      * For V_ListView => the height </br>
      * For H_ListView => the width
      *
-     * @param index The position of the item within the adapter's data set of the item whose view we want.
      * @return Returns the size for calculating the position of an item
      */
-    float getItemSize(int index);
+    float getDefaultItemSize();
 }

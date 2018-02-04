@@ -20,9 +20,13 @@ package de.longri.cachebox3.gui.widgets.list_view;
  */
 class DummyListViewItem extends ListViewItem {
 
-    DummyListViewItem(float size) {
-        this.size = size;
+    DummyListViewItem(int index) {
+        super(index);
     }
 
+    @Override
+    public String toString() {
+        return "Dummy Item: " + Integer.toString(this.index);
+    }
 
 }

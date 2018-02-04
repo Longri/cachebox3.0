@@ -28,7 +28,12 @@ public class ListViewItem extends VisTable implements Disposable {
     private OnDrawListener onDrawListener;
     ListViewItem next;
     ListViewItem before;
-    float size;
+    int index;
+
+    public ListViewItem(int index) {
+        this.index = index;
+    }
+
 
     @Override
     public void draw(Batch batch, float parentAlpha) {

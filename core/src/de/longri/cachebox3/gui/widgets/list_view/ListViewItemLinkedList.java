@@ -15,47 +15,153 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
-import java.util.concurrent.atomic.AtomicLong;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.views.listview.ScrollViewContainer;
+import de.longri.cachebox3.utils.NamedRunnable;
+
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
 /**
  * Created by Longri on 03.02.18.
  */
-public class ListViewItemLinkedList {
+public class ListViewItemLinkedList extends ScrollViewContainer {
 
-    private final static float FACTOR = 100000;
+    final static int OVERLOAD = 10;
 
+    private final ListViewType type;
     private ListViewItem first;
 
+    private ListViewAdapter adapter;
+    private float completeSize = 0;
 
-    private final ListViewAdapter adapter;
-    private final AtomicLong completeSize = new AtomicLong(0);
 
-    public ListViewItemLinkedList(ListViewAdapter adapter) {
+    ListViewItemLinkedList(ListViewType type) {
+        this.type = type;
+    }
+
+    public void setAdapter(ListViewAdapter adapter) {
         this.adapter = adapter;
 
         //create linked dummy list with size of first item
-        float size = adapter.getItemSize(0);
-        ListViewItem act = first = new DummyListViewItem(size);
-        for (int i = 0; i < adapter.getCount(); i++) {
-            ListViewItem item = new DummyListViewItem(size);
+        float size = adapter.getDefaultItemSize();
+        ListViewItem act = first = new DummyListViewItem(0);
+        if (type == VERTICAL) act.setHeight(size);
+        else act.setWidth(size);
+        for (int i = 1, n = adapter.getCount() + 1; i < n; i++) {
+            ListViewItem item = new DummyListViewItem(i);
             act.setNext(item);
             item.setBefore(act);
             act = item;
+            if (type == VERTICAL) act.setHeight(size);
+            else act.setWidth(size);
         }
         calcCompleteSize();
     }
 
     private void calcCompleteSize() {
-        float complete = 0;
+        completeSize = 0;
         ListViewItem act = first;
+        if (type == VERTICAL) act.setX(0);
+        else act.setY(0);
         do {
-            complete += act.size;
+            completeSize += (type == VERTICAL) ? act.getHeight() : act.getWidth();
             act = act.next;
+            if (type == VERTICAL) act.setY(completeSize);
+            else act.setX(completeSize);
         } while (act.next != null);
-        completeSize.set((long) (complete * FACTOR));
+
+        if (type == VERTICAL) this.setHeight(completeSize);
+        else this.setWidth(completeSize);
     }
 
-    public float getCompleteSize() {
-        return completeSize.floatValue() / FACTOR;
+
+    float getCompleteSize() {
+        return completeSize;
+    }
+
+    void setVisibleBounds(float scroll, float size) {
+
+        if (size == 0) {
+            CB.postOnGlThread(new NamedRunnable("add visible child items") {
+                @Override
+                public void run() {
+                    ListViewItemLinkedList.this.clearChildren();
+                }
+            });
+            return;
+        }
+
+
+        //search first visible
+        ListViewItem firstVisible = first;
+
+        if (this.type == VERTICAL) {
+            while (firstVisible.next != null) {
+                if (firstVisible.getY() >= scroll) {
+                    break;
+                }
+                firstVisible = firstVisible.next;
+            }
+        } else {
+            while (firstVisible.next != null) {
+                if (firstVisible.getX() >= scroll) {
+                    break;
+                }
+                firstVisible = firstVisible.next;
+            }
+        }
+
+        //search last visible
+        ListViewItem lastVisible = firstVisible;
+        float lastPos = scroll + size;
+
+        if (this.type == VERTICAL) {
+            while (lastVisible.next != null) {
+                if (lastVisible.getY() >= lastPos) {
+                    break;
+                }
+                lastVisible = lastVisible.next;
+            }
+        } else {
+            while (lastVisible.next != null) {
+                if (lastVisible.getX() >= lastPos) {
+                    break;
+                }
+                lastVisible = lastVisible.next;
+            }
+        }
+
+        //set overload
+        for (int i = 0; i < OVERLOAD; i++) {
+            if (firstVisible.before == null) {
+                break;
+            }
+            firstVisible = firstVisible.before;
+        }
+
+        for (int i = 0; i < OVERLOAD; i++) {
+            if (lastVisible.next == null) {
+                break;
+            }
+            lastVisible = lastVisible.next;
+        }
+
+        //add visible child items on glThread
+        final ListViewItem firstItem = firstVisible;
+        final ListViewItem lastItem = lastVisible;
+
+        CB.postOnGlThread(new NamedRunnable("add visible child items") {
+            @Override
+            public void run() {
+                ListViewItemLinkedList.this.clearChildren();
+                ListViewItem act = firstItem;
+                do {
+                    ListViewItemLinkedList.this.addActor(act);
+                    if (act == lastItem) break;
+                    act = act.next;
+                } while (act != null);
+            }
+        });
+
     }
 }
