@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
+import de.longri.cachebox3.CB;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
@@ -31,6 +32,7 @@ public class ListView extends WidgetGroup {
     final VisScrollPane scrollPane;
     final de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style;
     final ListViewItemLinkedList itemList;
+    float maxScrollChange = 0;
 
 
     public ListView(ListViewType type) {
@@ -42,6 +44,11 @@ public class ListView extends WidgetGroup {
         this.itemList = new ListViewItemLinkedList(type);
         this.style = style;
         scrollPane = new VisScrollPane(itemList, style) {
+
+
+            float lastFiredScrollX = 0;
+            float lastFiredScrollY = 0;
+
             @Override
             public Actor hit(float x, float y, boolean touchable) {
                 Actor actor = super.hit(x, y, touchable);
@@ -50,6 +57,25 @@ public class ListView extends WidgetGroup {
                 }
                 return actor;
             }
+
+            @Override
+            public void setScrollX(float scroll) {
+                super.setScrollX(scroll);
+                if (Math.abs(lastFiredScrollX - scroll) > maxScrollChange) {
+                    lastFiredScrollX = scroll;
+                    setItemVisibleBounds();
+                }
+            }
+
+            @Override
+            public void setScrollY(float scroll) {
+                super.setScrollY(scroll);
+                if (Math.abs(lastFiredScrollY - scroll) > maxScrollChange) {
+                    lastFiredScrollY = scroll;
+                    setItemVisibleBounds();
+                }
+            }
+
         };
         scrollPane.setOverscroll(false, true);
         scrollPane.setFlickScroll(true);
@@ -57,18 +83,26 @@ public class ListView extends WidgetGroup {
         scrollPane.setCancelTouchFocus(true);
         scrollPane.setupFadeScrollBars(1f, 0.5f);
 
+        this.addActor(scrollPane);
+
     }
 
     public void setAdapter(ListViewAdapter adapter) {
         itemList.setAdapter(adapter);
+        maxScrollChange = adapter.getDefaultItemSize() * ListViewItemLinkedList.OVERLOAD;
         setScrollPaneBounds();
+    }
+
+    @Override
+    public void layout() {
+        scrollPane.layout();
     }
 
     private void setItemVisibleBounds() {
         if (this.type == VERTICAL) {
             itemList.setVisibleBounds(scrollPane.getScrollY(), scrollPane.getHeight());
         } else {
-            itemList.setVisibleBounds(scrollPane.getScrollY(), scrollPane.getWidth());
+            itemList.setVisibleBounds(scrollPane.getScrollX(), scrollPane.getWidth());
         }
     }
 
@@ -97,7 +131,32 @@ public class ListView extends WidgetGroup {
             paneYPos = this.getHeight() - completeSize;
         }
         scrollPane.setBounds(0, paneYPos, this.getWidth(), paneHeight);
+        scrollPane.layout();
         setItemVisibleBounds();
     }
 
+    public float getScrollPos() {
+        if (this.type == VERTICAL) {
+            return scrollPane.getScrollY();
+        }
+        return scrollPane.getScrollX();
+    }
+
+    public void setScrollPos(float scrollPos) {
+        this.setScrollPos(scrollPos, true);
+    }
+
+    public void setScrollPos(float scrollPos, boolean withAnimation) {
+        if (scrollPane != null) {
+            if (this.type == VERTICAL) {
+                scrollPane.setScrollY(scrollPos);
+            } else {
+                scrollPane.setScrollX(scrollPos);
+            }
+
+            if (!withAnimation) scrollPane.updateVisualScroll();
+        }
+        setItemVisibleBounds();
+
+    }
 }

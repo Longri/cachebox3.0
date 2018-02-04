@@ -77,11 +77,26 @@ class ListViewItemLinkedListTest {
 
 
         listView.setSize(200, 500);
+        listView.layout();
 
         assertThat("ScrollPane with are wrong", listView.scrollPane.getWidth() == 200);
         assertThat("ScrollPane height are wrong", listView.scrollPane.getHeight() == 500);
 
         int childCount = (int) ((500 / defaultSize) + 2 + ListViewItemLinkedList.OVERLOAD);
+
+        //child's will added on GlThread, so wait a moment
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        assertThat("The child count should be " + childCount,
+                ((ScrollViewContainer) listView.scrollPane.getActor()).getChildren().size == childCount);
+
+        listView.setScrollPos(250, false);
+
+        childCount = (int) ((500 / defaultSize) + 1 + (ListViewItemLinkedList.OVERLOAD * 2));
 
         //child's will added on GlThread, so wait a moment
         try {
