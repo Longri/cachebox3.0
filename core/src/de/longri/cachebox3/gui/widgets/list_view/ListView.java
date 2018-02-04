@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
-import de.longri.cachebox3.CB;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
@@ -41,7 +40,11 @@ public class ListView extends WidgetGroup {
 
     public ListView(ListViewType type, de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style) {
         this.type = type;
-        this.itemList = new ListViewItemLinkedList(type);
+        this.itemList = new ListViewItemLinkedList(type,
+                style.pad > 0 ? style.pad : style.padLeft,
+                style.pad > 0 ? style.pad : style.padRight,
+                style.pad > 0 ? style.pad : style.padTop,
+                style.pad > 0 ? style.pad : style.padBottom);
         this.style = style;
         scrollPane = new VisScrollPane(itemList, style) {
 

@@ -31,12 +31,22 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     private final ListViewType type;
     private ListViewItem first;
 
+    ListViewItem firstVisibleItem;
+    ListViewItem lastVisibleItem;
+    float lastVisibleScrollSearch = 0;
+
     private ListViewAdapter adapter;
     private float completeSize = 0;
 
+    private final float padLeft, padRight, padTop, padBottom;
 
-    ListViewItemLinkedList(ListViewType type) {
+
+    ListViewItemLinkedList(ListViewType type, float padLeft, float padRight, float padTop, float padBottom) {
         this.type = type;
+        this.padLeft = padLeft;
+        this.padRight = padRight;
+        this.padTop = padTop;
+        this.padBottom = padBottom;
     }
 
     public void setAdapter(ListViewAdapter adapter) {
@@ -59,12 +69,14 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     }
 
     private void calcCompleteSize() {
-        completeSize = 0;
+        completeSize = (type == VERTICAL) ? padTop : padLeft;
         ListViewItem act = first;
         if (type == VERTICAL) act.setX(0);
         else act.setY(0);
         do {
-            completeSize += (type == VERTICAL) ? act.getHeight() : act.getWidth();
+            completeSize += (type == VERTICAL)
+                    ? act.getHeight() + padTop + padBottom
+                    : act.getWidth() + padLeft + padRight;
             act = act.next;
             if (type == VERTICAL) act.setY(completeSize);
             else act.setX(completeSize);
@@ -73,7 +85,6 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         if (type == VERTICAL) this.setHeight(completeSize);
         else this.setWidth(completeSize);
     }
-
 
     float getCompleteSize() {
         return completeSize;
@@ -93,23 +104,45 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
 
         //search first visible
-        ListViewItem firstVisible = first;
+        ListViewItem firstVisible = (firstVisibleItem == null || lastVisibleItem == null) ? first
+                : ((lastVisibleScrollSearch < scroll) ? lastVisibleItem : firstVisibleItem);
 
-        if (this.type == VERTICAL) {
-            while (firstVisible.next != null) {
-                if (firstVisible.getY() >= scroll) {
-                    break;
+        if (lastVisibleScrollSearch < scroll) {
+            if (this.type == VERTICAL) {
+                while (firstVisible.before != null) {
+                    if (firstVisible.getY() <= scroll) {
+                        break;
+                    }
+                    firstVisible = firstVisible.before;
                 }
-                firstVisible = firstVisible.next;
+            } else {
+                while (firstVisible.before != null) {
+                    if (firstVisible.getX() <= scroll) {
+                        break;
+                    }
+                    firstVisible = firstVisible.before;
+                }
             }
         } else {
-            while (firstVisible.next != null) {
-                if (firstVisible.getX() >= scroll) {
-                    break;
+            if (this.type == VERTICAL) {
+                while (firstVisible.next != null) {
+                    if (firstVisible.getY() >= scroll) {
+                        break;
+                    }
+                    firstVisible = firstVisible.next;
                 }
-                firstVisible = firstVisible.next;
+            } else {
+                while (firstVisible.next != null) {
+                    if (firstVisible.getX() >= scroll) {
+                        break;
+                    }
+                    firstVisible = firstVisible.next;
+                }
             }
         }
+
+        lastVisibleScrollSearch = scroll;
+
 
         //search last visible
         ListViewItem lastVisible = firstVisible;
@@ -130,6 +163,9 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                 lastVisible = lastVisible.next;
             }
         }
+
+        firstVisibleItem = firstVisible;
+        lastVisibleItem = lastVisible;
 
         //set overload
         for (int i = 0; i < OVERLOAD; i++) {

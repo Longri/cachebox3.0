@@ -39,6 +39,7 @@ class ListViewItemLinkedListTest {
         final float itemSize = 123.4f;
 
         de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style = new de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle();
+        style.pad = 10f;
 
         ListView listView = new ListView(VERTICAL, style);
 
@@ -66,8 +67,8 @@ class ListViewItemLinkedListTest {
             }
         });
 
-        int resultSize = (int) listView.scrollPane.getActor().getHeight();
-        int shouldSize = (int) (defaultSize * (float) itemCount);
+        int resultSize = (int) (listView.scrollPane.getActor().getHeight() / 10);
+        int shouldSize = (int) ((((defaultSize + style.pad + style.pad) * (float) itemCount) + style.pad) / 10);
 
         assertThat("Complete size was wrong", resultSize == shouldSize);
 
@@ -82,7 +83,7 @@ class ListViewItemLinkedListTest {
         assertThat("ScrollPane with are wrong", listView.scrollPane.getWidth() == 200);
         assertThat("ScrollPane height are wrong", listView.scrollPane.getHeight() == 500);
 
-        int childCount = (int) ((500 / defaultSize) + 2 + ListViewItemLinkedList.OVERLOAD);
+        int childCount = (int) ((500 / (defaultSize + style.pad + style.pad)) + 2 + ListViewItemLinkedList.OVERLOAD);
 
         //child's will added on GlThread, so wait a moment
         try {
@@ -96,7 +97,7 @@ class ListViewItemLinkedListTest {
 
         listView.setScrollPos(250, false);
 
-        childCount = (int) ((500 / defaultSize) + 1 + (ListViewItemLinkedList.OVERLOAD * 2));
+        childCount = (int) ((500 / (defaultSize + style.pad + style.pad)) - 1 + (ListViewItemLinkedList.OVERLOAD * 2));
 
         //child's will added on GlThread, so wait a moment
         try {
@@ -112,7 +113,7 @@ class ListViewItemLinkedListTest {
     }
 
     private ListViewItemLinkedList getListViewItemLinkedList(ListViewType type, final int count, final float size) {
-        ListViewItemLinkedList list = new ListViewItemLinkedList(type);
+        ListViewItemLinkedList list = new ListViewItemLinkedList(type, 0, 0, 0, 0);
 
         list.setAdapter(new ListViewAdapter() {
             @Override
