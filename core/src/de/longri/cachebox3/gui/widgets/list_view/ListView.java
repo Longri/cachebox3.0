@@ -260,4 +260,16 @@ public class ListView extends WidgetGroup {
             return false;
         }
     };
+
+    public void setSelection(int index) {
+        //TODO implement
+    }
+
+    public ListViewItem getSelectedItem() {
+        return null;//TODO implement
+    }
+
+    public void setSelectedItemVisible(boolean b) {
+        //TODO implement
+    }
 }

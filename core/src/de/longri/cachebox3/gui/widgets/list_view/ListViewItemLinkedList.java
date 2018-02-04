@@ -61,7 +61,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         ListViewItem act = first = new DummyListViewItem(0);
         if (type == VERTICAL) act.setHeight(size);
         else act.setWidth(size);
-        for (int i = 1, n = adapter.getCount() + 1; i < n; i++) {
+        for (int i = 1, n = adapter.getCount() - 1; i < n; i++) {
             ListViewItem item = new DummyListViewItem(i);
             act.setNext(item);
             item.setBefore(act);

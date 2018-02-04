@@ -21,13 +21,13 @@ class ListViewItemLinkedListTest {
         int count = 500;
         float size = 123.12f;
         int resultSize = (int) getListViewItemLinkedList(VERTICAL, count, size).getCompleteSize();
-        int shouldSize = (int) (size * (float) count);
+        int shouldSize = 61313;
         assertThat("Complete size was wrong", resultSize == shouldSize);
 
         count = 300;
         size = 23.13f;
         resultSize = (int) getListViewItemLinkedList(HORIZONTAL, count, size).getCompleteSize();
-        shouldSize = (int) (size * (float) count);
+        shouldSize = 6892;
         assertThat("Complete size was wrong", resultSize == shouldSize);
     }
 
@@ -67,8 +67,8 @@ class ListViewItemLinkedListTest {
             }
         });
 
-        int resultSize = (int) (listView.scrollPane.getActor().getHeight() / 10);
-        int shouldSize = (int) ((((defaultSize + style.pad + style.pad) * (float) itemCount) + style.pad) / 10);
+        int resultSize = (int) (listView.scrollPane.getActor().getHeight());
+        int shouldSize = 8030;
 
         assertThat("Complete size was wrong", resultSize == shouldSize);
 
