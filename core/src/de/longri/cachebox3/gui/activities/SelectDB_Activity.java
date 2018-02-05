@@ -272,7 +272,7 @@ public class SelectDB_Activity extends ActivityBase {
                     String lastModified = sdf.format(file.lastModified());
                     String fileSize = String.valueOf(file.length() / (1024 * 1024)) + "MB";
                     String cacheCount = String.valueOf(Database.getCacheCountInDB(file.getAbsolutePath()));
-                    fileInfos[index] = cacheCount + " Caches  " + fileSize + "    last use " + lastModified;
+                    fileInfos[index] = cacheCount + " Caches  " + fileSize + "#last use " + lastModified;
                     index++;
                 }
                 Gdx.graphics.requestRendering();
@@ -411,6 +411,11 @@ public class SelectDB_Activity extends ActivityBase {
         }
 
         @Override
+        public boolean isReverseOrder() {
+            return false;
+        }
+
+        @Override
         public int getCount() {
             return files.size;
         }
@@ -422,8 +427,7 @@ public class SelectDB_Activity extends ActivityBase {
 
         @Override
         public ListViewItem getView(final int listIndex) {
-            return new SelectDBItem(listIndex, files.get(listIndex), fileInfos[listIndex]
-                    , VisUI.getSkin().get("default", SelectDbStyle.class));
+            return new SelectDBItem(listIndex, files.get(listIndex), VisUI.getSkin().get("default", SelectDbStyle.class));
         }
 
         @Override

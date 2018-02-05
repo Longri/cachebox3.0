@@ -57,20 +57,34 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
     public void setAdapter(ListViewAdapter adapter) {
         this.adapter = adapter;
+        boolean reverse = adapter.isReverseOrder();
 
         //create linked dummy list with size of first item
         float size = adapter.getDefaultItemSize();
-        ListViewItem act = first = new DummyListViewItem(0);
+        ListViewItem act = first = new DummyListViewItem(reverse ? 0 : adapter.getCount() - 1);
         if (type == VERTICAL) act.setHeight(size);
         else act.setWidth(size);
-        for (int i = 1, n = adapter.getCount() - 1; i < n; i++) {
-            ListViewItem item = new DummyListViewItem(i);
-            act.setNext(item);
-            item.setBefore(act);
-            act = item;
-            if (type == VERTICAL) act.setHeight(size);
-            else act.setWidth(size);
+        if (reverse) {
+            for (int i = 1, n = adapter.getCount(); i < n; i++) {
+                ListViewItem item = new DummyListViewItem(i);
+                act.setNext(item);
+                item.setBefore(act);
+                act = item;
+                if (type == VERTICAL) act.setHeight(size);
+                else act.setWidth(size);
+            }
+        } else {
+            int count = adapter.getCount() - 1;
+            for (int i = 1, n = count + 1; i < n; i++) {
+                ListViewItem item = new DummyListViewItem(count - i);
+                act.setNext(item);
+                item.setBefore(act);
+                act = item;
+                if (type == VERTICAL) act.setHeight(size);
+                else act.setWidth(size);
+            }
         }
+
         calcCompleteSize();
     }
 

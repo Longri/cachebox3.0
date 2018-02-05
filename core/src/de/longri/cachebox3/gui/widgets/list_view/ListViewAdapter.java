@@ -21,6 +21,13 @@ package de.longri.cachebox3.gui.widgets.list_view;
 public interface ListViewAdapter {
 
     /**
+     * Return TRUE if you wont to reverse the order!
+     *
+     * @return true if reverse order
+     */
+    boolean isReverseOrder();
+
+    /**
      * How many items are in the data set represented by this Adapter.
      *
      * @return Count of items.
