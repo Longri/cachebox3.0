@@ -54,11 +54,17 @@ public class ListView extends WidgetGroup {
 
     public ListView(ListViewType type, de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style) {
         this.type = type;
-        this.itemList = new ListViewItemLinkedList(type,style,
+        this.itemList = new ListViewItemLinkedList(type, style,
                 style.pad > 0 ? style.pad : style.padLeft,
                 style.pad > 0 ? style.pad : style.padRight,
                 style.pad > 0 ? style.pad : style.padTop,
-                style.pad > 0 ? style.pad : style.padBottom);
+                style.pad > 0 ? style.pad : style.padBottom) {
+            @Override
+            public void sizeChanged() {
+                setScrollPaneBounds();
+            }
+
+        };
         this.itemList.setOnDrawListener(this.onDrawListener);
         this.style = style;
         scrollPane = new VisScrollPane(itemList, style) {
@@ -148,6 +154,9 @@ public class ListView extends WidgetGroup {
             paneHeight = completeSize;
             paneYPos = this.getHeight() - completeSize;
         }
+
+        this.setDebug(true, true);
+
         scrollPane.setBounds(0, paneYPos, this.getWidth(), paneHeight);
         scrollPane.layout();
         setItemVisibleBounds();
