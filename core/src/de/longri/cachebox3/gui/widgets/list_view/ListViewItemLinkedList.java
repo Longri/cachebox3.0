@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.widgets.list_view;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ScrollViewContainer;
 import de.longri.cachebox3.utils.NamedRunnable;
 
@@ -43,10 +44,11 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
     private final float padLeft, padRight, padTop, padBottom;
     private OnDrawListener onDrawListener;
+    private final ListView.ListViewStyle style;
 
-
-    ListViewItemLinkedList(ListViewType type, float padLeft, float padRight, float padTop, float padBottom) {
+    ListViewItemLinkedList(ListViewType type, ListView.ListViewStyle style, float padLeft, float padRight, float padTop, float padBottom) {
         this.type = type;
+        this.style = style;
         this.padLeft = padLeft;
         this.padRight = padRight;
         this.padTop = padTop;
@@ -226,6 +228,11 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                 //replace item from adapter
                 DummyListViewItem old = (DummyListViewItem) childs[n];
                 ListViewItem newItem = adapter.getView(old.index);
+                if (style.secondItem != null && old.index % 2 == 1) {
+                    newItem.setBackground(style.secondItem);
+                } else {
+                    newItem.setBackground(style.firstItem);
+                }
                 //set default sizes
                 float changedSize;
                 if (type == VERTICAL) {

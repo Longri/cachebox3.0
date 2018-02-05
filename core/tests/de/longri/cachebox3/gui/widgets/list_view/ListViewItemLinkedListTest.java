@@ -126,7 +126,7 @@ class ListViewItemLinkedListTest {
     }
 
     private ListViewItemLinkedList getListViewItemLinkedList(ListViewType type, final int count, final float size) {
-        ListViewItemLinkedList list = new ListViewItemLinkedList(type, 0, 0, 0, 0);
+        ListViewItemLinkedList list = new ListViewItemLinkedList(type, style, 0, 0, 0, 0);
 
         list.setAdapter(new ListViewAdapter() {
             @Override
