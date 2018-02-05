@@ -15,9 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.views.listview.ListView;
@@ -36,10 +34,10 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     private final ListViewType type;
     private ListViewItem first;
 
-    ListViewItem firstVisibleItem;
-    ListViewItem lastVisibleItem;
-    float lastVisibleScrollSearch = 0;
-    float lastVisibleSearchSize = 0;
+    private ListViewItem firstVisibleItem;
+    private ListViewItem lastVisibleItem;
+    private float lastVisibleScrollSearch = 0;
+    private float lastVisibleSearchSize = 0;
 
     private ListViewAdapter adapter;
     private float completeSize = 0;
@@ -49,9 +47,6 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     private final ListView.ListViewStyle style;
 
     ListViewItemLinkedList(ListViewType type, ListView.ListViewStyle style, float padLeft, float padRight, float padTop, float padBottom) {
-
-        this.setDebug(true);
-
         this.type = type;
         this.style = style;
         this.padLeft = padLeft;
@@ -298,10 +293,4 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         old.before = null;
         old.next = null;
     }
-
-//    protected void drawDebugBounds(ShapeRenderer shapes) {
-//        shapes.set(ShapeRenderer.ShapeType.Filled);
-//        shapes.setColor(Color.CYAN);
-//        shapes.rect(getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-//    }
 }

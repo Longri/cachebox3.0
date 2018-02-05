@@ -37,15 +37,15 @@ public class ListView extends WidgetGroup {
 
     private final static Logger log = LoggerFactory.getLogger(ListView.class);
 
-    final ListViewType type;
+    private final ListViewType type;
     final VisScrollPane scrollPane;
-    final de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style;
-    final ListViewItemLinkedList itemList;
-    final Array<SelectionChangedEvent> changedEventListeners = new Array<>();
-    final Array<ListViewItem> selectedItemList = new Array<>();
-    float maxScrollChange = 0;
-    SelectableType selectionType;
-    ListViewAdapter adapter;
+    private final de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style;
+    private final ListViewItemLinkedList itemList;
+    private final Array<SelectionChangedEvent> changedEventListeners = new Array<>();
+    private final Array<ListViewItem> selectedItemList = new Array<>();
+    private float maxScrollChange = 0;
+    private SelectableType selectionType;
+    private ListViewAdapter adapter;
 
 
     public ListView(ListViewType type) {
@@ -54,6 +54,7 @@ public class ListView extends WidgetGroup {
 
     public ListView(ListViewType type, de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style) {
         this.type = type;
+        this.style = style;
         this.itemList = new ListViewItemLinkedList(type, style,
                 style.pad > 0 ? style.pad : style.padLeft,
                 style.pad > 0 ? style.pad : style.padRight,
@@ -65,8 +66,40 @@ public class ListView extends WidgetGroup {
             }
 
         };
-        this.itemList.setOnDrawListener(this.onDrawListener);
-        this.style = style;
+        OnDrawListener onDrawListener = new OnDrawListener() {
+            @Override
+            public void onDraw(ListViewItem item) {
+                if (adapter != null) {
+                    if (selectionType != NONE) {
+                        boolean isSelected;
+                        if (selectionType == SINGLE) {
+                            isSelected = selectedItemList.size == 1 && selectedItemList.contains(item, false);
+                        } else {
+                            isSelected = selectedItemList.contains(item, false);
+                        }
+
+                        if (isSelected) {
+                            item.setBackground(ListView.this.style.selectedItem);
+                        } else {
+                            if (ListView.this.style.secondItem != null && item.getListIndex() % 2 == 1) {
+                                item.setBackground(ListView.this.style.secondItem);
+                            } else {
+                                item.setBackground(ListView.this.style.firstItem);
+                            }
+                        }
+
+                        //add ClickListener
+                        item.addListener(onListItemClickListener);
+                    }
+                    try {
+                        adapter.update(item);
+                    } catch (Exception e) {
+                        log.error("Update:", e);
+                    }
+                }
+            }
+        };
+        this.itemList.setOnDrawListener(onDrawListener);
         scrollPane = new VisScrollPane(itemList, style) {
 
 
@@ -154,9 +187,6 @@ public class ListView extends WidgetGroup {
             paneHeight = completeSize;
             paneYPos = this.getHeight() - completeSize;
         }
-
-        this.setDebug(true, true);
-
         scrollPane.setBounds(0, paneYPos, this.getWidth(), paneHeight);
         scrollPane.layout();
         setItemVisibleBounds();
@@ -200,42 +230,7 @@ public class ListView extends WidgetGroup {
         this.selectionType = selectionType;
     }
 
-    private OnDrawListener onDrawListener = new OnDrawListener() {
-        @Override
-        public void onDraw(ListViewItem item) {
-
-            if (adapter != null) {
-                if (selectionType != NONE) {
-                    boolean isSelected = false;
-                    if (selectionType == SINGLE) {
-                        isSelected = selectedItemList.size == 1 && selectedItemList.contains(item, false);
-                    } else {
-                        isSelected = selectedItemList.contains(item, false);
-                    }
-
-                    if (isSelected) {
-                        item.setBackground(style.selectedItem);
-                    } else {
-                        if (style.secondItem != null && item.getListIndex() % 2 == 1) {
-                            item.setBackground(style.secondItem);
-                        } else {
-                            item.setBackground(style.firstItem);
-                        }
-                    }
-
-                    //add ClickListener
-                    item.addListener(onListItemClickListener);
-                }
-                try {
-                    adapter.update(item);
-                } catch (Exception e) {
-                    log.error("Update:", e);
-                }
-            }
-        }
-    };
-
-    ClickLongClickListener onListItemClickListener = new ClickLongClickListener() {
+    private ClickLongClickListener onListItemClickListener = new ClickLongClickListener() {
         public boolean clicked(InputEvent event, float x, float y) {
             if (event.getType() == InputEvent.Type.touchUp) {
                 if (selectionType != NONE) {
@@ -271,14 +266,33 @@ public class ListView extends WidgetGroup {
     };
 
     public void setSelection(int index) {
-        //TODO implement
+        if (this.selectionType == NONE) return;
+        log.debug("Set selected item to index {}", index);
+        this.selectedItemList.clear();
+        ListViewItem item = adapter.getView(index);
+        this.selectedItemList.add(item);
+        CB.requestRendering();
     }
 
     public ListViewItem getSelectedItem() {
-        return null;//TODO implement
+        if (this.selectedItemList.size == 0) return null;
+        return this.selectedItemList.first();
     }
 
-    public void setSelectedItemVisible(boolean b) {
-        //TODO implement
+    public void setSelectedItemVisible(boolean withScroll) {
+
+        if (scrollPane == null) return;
+
+        //get pos of first selected
+        ListViewItem item = this.selectedItemList.size == 0 ? null : this.selectedItemList.get(0);
+        float scrollPos = 0;
+        if (item != null) {
+            int index = item.getListIndex() - 1;
+            scrollPos = index < 0 ? 0 : itemList.getCompleteSize() - ((type == VERTICAL) ? (item.getY() + item.getHeight()) : (item.getX() + item.getWidth()));
+        }
+        this.setScrollPos(scrollPos);
+        if (!withScroll) scrollPane.updateVisualScroll();
+        CB.requestRendering();
+        if (item != null) log.debug("Scroll to selected item {} at position {}", item.getListIndex(), scrollPos);
     }
 }

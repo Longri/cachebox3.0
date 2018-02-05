@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.widgets.list_view;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
@@ -28,6 +29,8 @@ public class ListViewItem extends VisTable implements Disposable {
     private OnDrawListener onDrawListener;
     ListViewItem next;
     ListViewItem before;
+    private float prefHeight = -1f;
+    private float prefWidth = -1f;
     int index;
 
     public ListViewItem(int index) {
@@ -49,7 +52,7 @@ public class ListViewItem extends VisTable implements Disposable {
 
     }
 
-    public OnDrawListener getOnDrawListener() {
+    private OnDrawListener getOnDrawListener() {
         return onDrawListener;
     }
 
@@ -74,9 +77,6 @@ public class ListViewItem extends VisTable implements Disposable {
         return "ListView Item: " + Integer.toString(this.index);
     }
 
-    float prefHeight = -1f;
-    float prefWidth = -1f;
-
     public void setPrefHeight(float height) {
         prefHeight = height;
     }
@@ -95,5 +95,15 @@ public class ListViewItem extends VisTable implements Disposable {
     public float getPrefWidth() {
         if (prefWidth == -1) return super.getPrefWidth();
         return prefWidth;
+    }
+
+    @Override
+    public void setBackground(Drawable drawable) {
+        super.setBackground(drawable);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof ListViewItem && (this.index == ((ListViewItem) o).index);
     }
 }
