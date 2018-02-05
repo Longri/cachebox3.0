@@ -21,13 +21,13 @@ class ListViewItemLinkedListTest {
         int count = 500;
         float size = 123.12f;
         int resultSize = (int) getListViewItemLinkedList(VERTICAL, count, size).getCompleteSize();
-        int shouldSize = 61313;
+        int shouldSize = 61560;
         assertThat("Complete size was wrong", resultSize == shouldSize);
 
         count = 300;
         size = 23.13f;
         resultSize = (int) getListViewItemLinkedList(HORIZONTAL, count, size).getCompleteSize();
-        shouldSize = 6892;
+        shouldSize = 6938;
         assertThat("Complete size was wrong", resultSize == shouldSize);
     }
 
@@ -44,6 +44,11 @@ class ListViewItemLinkedListTest {
         ListView listView = new ListView(VERTICAL, style);
 
         listView.setAdapter(new ListViewAdapter() {
+            @Override
+            public boolean isReverseOrder() {
+                return false;
+            }
+
             @Override
             public int getCount() {
                 return itemCount;
@@ -68,7 +73,7 @@ class ListViewItemLinkedListTest {
         });
 
         int resultSize = (int) (listView.scrollPane.getActor().getHeight());
-        int shouldSize = 8030;
+        int shouldSize = 8084;
 
         assertThat("Complete size was wrong", resultSize == shouldSize);
 
@@ -118,7 +123,7 @@ class ListViewItemLinkedListTest {
             e.printStackTrace();
         }
 
-        childCount = 26;
+        childCount = 35;
         assertThat("The child count should be " + childCount,
                 ((ScrollViewContainer) listView.scrollPane.getActor()).getChildren().size == childCount);
 
@@ -126,9 +131,19 @@ class ListViewItemLinkedListTest {
     }
 
     private ListViewItemLinkedList getListViewItemLinkedList(ListViewType type, final int count, final float size) {
+
+        de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style = new de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle();
+
+        style.pad = 1f;
+
         ListViewItemLinkedList list = new ListViewItemLinkedList(type, style, 0, 0, 0, 0);
 
         list.setAdapter(new ListViewAdapter() {
+            @Override
+            public boolean isReverseOrder() {
+                return false;
+            }
+
             @Override
             public int getCount() {
                 return count;
