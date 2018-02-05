@@ -229,19 +229,17 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                 //set default sizes
                 float changedSize;
                 if (type == VERTICAL) {
-                    newItem.setWidth(this.getWidth() - (padLeft + padRight));
+                    newItem.setPrefWidth(this.getWidth() - (padLeft + padRight));
+                    newItem.pack();
                     newItem.setX(padLeft);
                     newItem.setY(old.getY());
-                    //layout the new item
-                    newItem.layout();
-                    changedSize = old.getHeight() - childs[n].getHeight();
+                    changedSize = newItem.getHeight() - old.getHeight();
                 } else {
-                    newItem.setHeight(this.getHeight() - (padTop + padBottom));
-                    newItem.setY(padBottom);
+                    newItem.setPrefHeight(this.getHeight() - (padBottom + padTop));
+                    newItem.pack();
+                    newItem.setY(padTop);
                     newItem.setX(old.getX());
-                    //layout the new item
-                    newItem.layout();
-                    changedSize = old.getWidth() - childs[n].getWidth();
+                    changedSize = newItem.getWidth() - old.getWidth();
                 }
 
                 newItem.setOnDrawListener(this.onDrawListener);

@@ -73,4 +73,27 @@ public class ListViewItem extends VisTable implements Disposable {
     public String toString() {
         return "ListView Item: " + Integer.toString(this.index);
     }
+
+    float prefHeight = -1f;
+    float prefWidth = -1f;
+
+    public void setPrefHeight(float height) {
+        prefHeight = height;
+    }
+
+    public void setPrefWidth(float width) {
+        prefWidth = width;
+    }
+
+    @Override
+    public float getPrefHeight() {
+        if (prefHeight == -1) return super.getPrefHeight();
+        return prefHeight;
+    }
+
+    @Override
+    public float getPrefWidth() {
+        if (prefWidth == -1) return super.getPrefWidth();
+        return prefWidth;
+    }
 }
