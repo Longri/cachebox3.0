@@ -15,18 +15,26 @@ package de.longri.cachebox3.gui.widgets.list_view;
  * limitations under the License.
  */
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.freetype.SkinFont;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.drawables.ColorDrawable;
 
 /**
  * Created by Longri on 06.02.2018.
  */
 public class TestActivity extends ActivityBase {
 
-    final int COUNT = 8;
+    final int COUNT = 50;
 
 
     final TestOld old;
     final TestNew n_ew;
+    final VisTable info;
 
 
     public TestActivity() {
@@ -35,12 +43,15 @@ public class TestActivity extends ActivityBase {
         this.addActor(old);
         this.n_ew = new TestNew(COUNT);
         this.addActor(n_ew);
-        sizeChanged();
-
+        info = new VisTable();
+        info.setBackground(new ColorDrawable(Color.RED));
+        this.addActor(info);
         old.setScrollChangedListener(new ScrollChangedEvent() {
             @Override
             public void scrollChanged(float x, float y) {
                 n_ew.setScrollPos(y);
+                oldScrollPosLabel.setText("scroll: " + FloatString(y));
+                oldChildCountLabel.setText(old.getChildCount());
             }
         });
 
@@ -48,9 +59,47 @@ public class TestActivity extends ActivityBase {
             @Override
             public void scrollChanged(float x, float y) {
                 old.setScrollPos(y);
+                newScrollPosLabel.setText("scroll: " + FloatString(y));
+                newChildCountLabel.setText(n_ew.getChildCount());
             }
         });
+        sizeChanged();
+        layoutInfo();
+    }
 
+    private String FloatString(float value) {
+        int intVa = (int) (value * 100);
+        return Float.toString(intVa / 100f);
+    }
+
+    private VisLabel newScrollPosLabel;
+    private VisLabel oldScrollPosLabel;
+    private VisLabel newChildCountLabel;
+    private VisLabel oldChildCountLabel;
+
+    private void layoutInfo() {
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        String path = "skins/day/fonts/DroidSans.ttf";
+        labelStyle.fontColor = Color.BLACK;
+        labelStyle.font = new SkinFont(path, Gdx.files.internal(path), 14, null);
+
+        Label.LabelStyle label2Style = new Label.LabelStyle();
+        label2Style.fontColor = Color.BLACK;
+        label2Style.font = new SkinFont(path, Gdx.files.internal(path), 10, null);
+
+        info.add(new VisLabel("New ListView", labelStyle)).expandX().fillX();
+        info.add(new VisLabel("Old ListView", labelStyle)).expandX().fillX();
+        info.row();
+        newScrollPosLabel = new VisLabel("scroll:", label2Style);
+        oldScrollPosLabel = new VisLabel("scroll", label2Style);
+        info.add(newScrollPosLabel).expandX().fillX();
+        info.add(oldScrollPosLabel).expandX().fillX();
+
+        info.row();
+        newChildCountLabel = new VisLabel("childs:", label2Style);
+        oldChildCountLabel = new VisLabel("childs", label2Style);
+        info.add(newChildCountLabel).expandX().fillX();
+        info.add(oldChildCountLabel).expandX().fillX();
     }
 
     @Override
@@ -59,5 +108,6 @@ public class TestActivity extends ActivityBase {
         float height = this.getHeight() - 100;
         old.setBounds(half, 0, half, height);
         n_ew.setBounds(0, 0, half, height);
+        info.setBounds(0, height, this.getWidth(), this.getHeight() - height);
     }
 }

@@ -18,10 +18,15 @@ package de.longri.cachebox3.gui.widgets.list_view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.freetype.SkinFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
+
+import java.util.Arrays;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
@@ -89,6 +94,26 @@ public class TestNew extends WidgetGroup {
 
     public void setScrollPos(float y) {
         lv.setScrollPos(y);
+    }
+
+    public String getChildCount() {
+        Actor[] childs = ((Group) (lv.scrollPane.getActor())).getChildren().begin();
+        int[] idxArr = new int[childs.length];
+        int count = 0;
+        for (Actor act : childs) {
+            if (act == null) continue;
+            idxArr[count++] = ((ListViewItem) act).getListIndex();
+        }
+        ((Group) (lv.scrollPane.getActor())).getChildren().end();
+
+        Arrays.sort(idxArr);
+
+        try {
+            return "count:" + count + "  idx: " + idxArr[(idxArr.length - count) <= 0 ? 0 : idxArr.length - count] + "-" + idxArr[idxArr.length - 1];
+        } catch (Exception e) {
+            return "Error";
+        }
+
     }
 
     static class Item extends ListViewItem {

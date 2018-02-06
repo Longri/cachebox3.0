@@ -64,7 +64,7 @@ public class ListView extends WidgetGroup {
     private final FloatArray itemYPos = new FloatArray();
     private final boolean dontDisposeItems;
 
-    private VisScrollPane scrollPane;
+    public VisScrollPane scrollPane;
     private Drawable backgroundDrawable;
     private Adapter adapter;
     private SelectableType selectionType = NONE;
