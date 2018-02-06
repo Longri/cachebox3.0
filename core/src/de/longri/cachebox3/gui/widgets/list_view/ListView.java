@@ -15,13 +15,16 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +49,7 @@ public class ListView extends WidgetGroup {
     private float maxScrollChange = 0;
     private SelectableType selectionType;
     private ListViewAdapter adapter;
+    private Drawable backgroundDrawable;
 
 
     public ListView(ListViewType type) {
@@ -56,10 +60,10 @@ public class ListView extends WidgetGroup {
         this.type = type;
         this.style = style;
         this.itemList = new ListViewItemLinkedList(type, style,
-                style.pad > 0 ? style.pad : style.padLeft,
-                style.pad > 0 ? style.pad : style.padRight,
-                style.pad > 0 ? style.pad : style.padTop,
-                style.pad > 0 ? style.pad : style.padBottom) {
+                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padLeft),
+                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padRight),
+                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padTop),
+                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padBottom)) {
             @Override
             public void sizeChanged() {
                 setScrollPaneBounds();
@@ -294,5 +298,46 @@ public class ListView extends WidgetGroup {
         if (!withScroll) scrollPane.updateVisualScroll();
         CB.requestRendering();
         if (item != null) log.debug("Scroll to selected item {} at position {}", item.getListIndex(), scrollPos);
+    }
+
+    public void setBackground(Drawable background) {
+        this.backgroundDrawable = background;
+    }
+
+    public void draw(Batch batch, float parentAlpha) {
+        if (this.backgroundDrawable != null) {
+            backgroundDrawable.draw(batch, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        }
+        if (getStage() != null) super.draw(batch, parentAlpha);
+    }
+
+    private ScrollChangedEvent scrollChangedEventListener;
+    private float lastScrollX = -1;
+    private float lastScrollY = -1;
+
+    public void setScrollChangedListener(ScrollChangedEvent listener) {
+        this.scrollChangedEventListener = listener;
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        if (this.scrollChangedEventListener != null) {
+            boolean scrollChanged = false;
+            if (lastScrollX != scrollPane.getScrollX()) {
+                scrollChanged = true;
+                lastScrollX = scrollPane.getScrollX();
+            }
+
+            if (lastScrollY != scrollPane.getScrollY()) {
+                scrollChanged = true;
+                lastScrollY = scrollPane.getScrollY();
+            }
+
+            if (scrollChanged) {
+                this.scrollChangedEventListener.scrollChanged(lastScrollX, lastScrollY);
+            }
+        }
     }
 }

@@ -24,6 +24,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.SelectDB_Activity;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.gui.widgets.list_view.TestActivity;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -61,18 +62,25 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
         }
 
 
-        Gdx.app.postRunnable(new Runnable() {
+        CB.postOnGlThread(new NamedRunnable("test") {
             @Override
             public void run() {
-                final SelectDB_Activity selectDBDialog = new SelectDB_Activity(new SelectDB_Activity.IReturnListener() {
-                    @Override
-                    public void back() {
-                        returnFromSelectDB();
-                    }
-                }, Action_Show_SelectDB_Dialog.this.viewMode == ViewMode.FORCE_SHOW);
-                selectDBDialog.show();
+                new TestActivity().show();
             }
         });
+
+//        Gdx.app.postRunnable(new Runnable() {
+//            @Override
+//            public void run() {
+//                final SelectDB_Activity selectDBDialog = new SelectDB_Activity(new SelectDB_Activity.IReturnListener() {
+//                    @Override
+//                    public void back() {
+//                        returnFromSelectDB();
+//                    }
+//                }, Action_Show_SelectDB_Dialog.this.viewMode == ViewMode.FORCE_SHOW);
+//                selectDBDialog.show();
+//            }
+//        });
     }
 
 

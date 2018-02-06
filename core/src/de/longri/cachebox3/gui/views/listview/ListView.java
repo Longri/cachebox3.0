@@ -33,6 +33,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
+import de.longri.cachebox3.gui.widgets.list_view.ScrollChangedEvent;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.LoggerFactory;
@@ -350,7 +351,7 @@ public class ListView extends WidgetGroup {
 
             float itemHeight = itemHeights.items[0];
             completeHeight = itemHeight;
-            for (int i = 0; i < this.listCount; i++) {
+            for (int i = 1; i < this.listCount; i++) {
                 if (adapter.getView(i) != null && adapter.getView(i).isVisible()) {
                     if (i < Math.min(SAME_HEIGHT_INITIAL_COUNT, this.listCount)) {
                         completeHeight += itemHeights.items[i];
@@ -363,12 +364,13 @@ public class ListView extends WidgetGroup {
         } else {
             addListItems(this.listCount);
             //layout itemGroup
-            for (int i = 0; i < this.listCount; i++) { //calculate complete height of all visible Items
+            for (int i = 1; i < this.listCount; i++) { //calculate complete height of all visible Items
                 if (adapter.getView(i).isVisible())
                     completeHeight += itemHeights.items[i];
             }
         }
 
+        completeHeight +=  CB.getScaledFloat(style.pad > 0 ? style.pad : style.padBottom);
 
         itemGroup.setWidth(this.getWidth());
         itemGroup.setHeight(completeHeight);
@@ -815,4 +817,37 @@ public class ListView extends WidgetGroup {
         public BitmapFont emptyFont;
         public Color emptyFontColor;
     }
+
+
+    private ScrollChangedEvent scrollChangedEventListener;
+    private float lastScrollX = -1;
+    private float lastScrollY = -1;
+
+    public void setScrollChangedListener(ScrollChangedEvent listener) {
+        this.scrollChangedEventListener = listener;
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        if (this.scrollChangedEventListener != null) {
+            boolean scrollChanged = false;
+            if (lastScrollX != scrollPane.getScrollX()) {
+                scrollChanged = true;
+                lastScrollX = scrollPane.getScrollX();
+            }
+
+            if (lastScrollY != scrollPane.getScrollY()) {
+                scrollChanged = true;
+                lastScrollY = scrollPane.getScrollY();
+            }
+
+            if (scrollChanged) {
+                this.scrollChangedEventListener.scrollChanged(lastScrollX, lastScrollY);
+            }
+        }
+    }
+
+
 }
