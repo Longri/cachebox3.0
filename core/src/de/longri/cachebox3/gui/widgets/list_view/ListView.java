@@ -106,7 +106,6 @@ public class ListView extends WidgetGroup {
         this.itemList.setOnDrawListener(onDrawListener);
         scrollPane = new VisScrollPane(itemList, style) {
 
-
             float lastFiredScrollX = 0;
             float lastFiredScrollY = 0;
 
@@ -137,6 +136,16 @@ public class ListView extends WidgetGroup {
                 }
             }
 
+            @Override
+            public void sizeChanged() {
+                super.sizeChanged();
+
+                if (ListView.this.type == VERTICAL) {
+                    itemList.setWidth(ListView.this.getWidth());
+                } else {
+                    itemList.setHeight(ListView.this.getHeight());
+                }
+            }
         };
         scrollPane.setOverscroll(false, true);
         scrollPane.setFlickScroll(true);

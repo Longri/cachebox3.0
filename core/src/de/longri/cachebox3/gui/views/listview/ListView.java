@@ -370,7 +370,7 @@ public class ListView extends WidgetGroup {
             }
         }
 
-        completeHeight +=  CB.getScaledFloat(style.pad > 0 ? style.pad : style.padBottom);
+        completeHeight += CB.getScaledFloat(style.pad > 0 ? style.pad : style.padBottom);
 
         itemGroup.setWidth(this.getWidth());
         itemGroup.setHeight(completeHeight);
@@ -831,7 +831,7 @@ public class ListView extends WidgetGroup {
     public void act(float delta) {
         super.act(delta);
 
-        if (this.scrollChangedEventListener != null) {
+        if (this.scrollChangedEventListener != null && scrollPane != null) {
             boolean scrollChanged = false;
             if (lastScrollX != scrollPane.getScrollX()) {
                 scrollChanged = true;

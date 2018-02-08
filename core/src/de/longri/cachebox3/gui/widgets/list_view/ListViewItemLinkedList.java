@@ -22,6 +22,7 @@ import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ScrollViewContainer;
 import de.longri.cachebox3.utils.NamedRunnable;
 
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.HORIZONTAL;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
 /**
@@ -55,15 +56,57 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         this.padBottom = padBottom;
     }
 
+    @Override
+    public void setWidth(float width) {
+        super.setWidth(width);
+        if (type == VERTICAL) {
+            ListViewItem act = first;
+            float itemWidth = width - (padLeft + padRight);
+            while (act != null) {
+                act.setPrefWidth(itemWidth);
+                act.setWidth(itemWidth);
+                act = act.next;
+            }
+        }
+    }
+
+    @Override
+    public void setHeight(float height) {
+        super.setHeight(height);
+        if (type == HORIZONTAL) {
+            ListViewItem act = first;
+            float itemHeight = height - (padTop + padBottom);
+            while (act != null) {
+                act.setPrefHeight(itemHeight);
+                act.setHeight(itemHeight);
+                act = act.next;
+            }
+        }
+    }
+
     public void setAdapter(ListViewAdapter adapter) {
         this.adapter = adapter;
         boolean reverse = adapter.isReverseOrder();
 
+        if (adapter.getCount() <= 0) return;
+
         //create linked dummy list with size of first item
-        float size = adapter.getDefaultItemSize();
-        ListViewItem act = first = new DummyListViewItem(reverse ? 0 : adapter.getCount() - 1);
-        if (type == VERTICAL) act.setHeight(size);
-        else act.setWidth(size);
+        ListViewItem act = first = adapter.getView(reverse ? 0 : adapter.getCount() - 1);
+        first.setBackground(style.firstItem);
+        //set default sizes
+        float size;
+        if (type == VERTICAL) {
+            first.setPrefWidth(this.getWidth() - (padLeft + padRight));
+            first.pack();
+            first.setX(padLeft);
+            size = first.getHeight();
+        } else {
+            first.setPrefHeight(this.getHeight() - (padBottom + padTop));
+            first.pack();
+            first.setY(padTop);
+            size = first.getWidth();
+        }
+
         if (reverse) {
             for (int i = 1, n = adapter.getCount(); i < n; i++) {
                 ListViewItem item = new DummyListViewItem(i);
@@ -84,7 +127,6 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                 else act.setWidth(size);
             }
         }
-
         calcCompleteSize();
     }
 
@@ -110,8 +152,19 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         return completeSize;
     }
 
-    void setVisibleBounds(float scroll, float size) {
+    private int count = -1;
+    private boolean countChk = false;
 
+    private boolean checkCount() {
+        if (count < 0) {
+            count = adapter.getCount();
+            countChk = count > 0;
+        }
+        return countChk;
+    }
+
+    void setVisibleBounds(float scroll, float size) {
+        if (!checkCount()) return;
         if (size == 0) {
             CB.postOnGlThread(new NamedRunnable("LinkedList clear child items") {
                 @Override
@@ -306,5 +359,15 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         newItem.next = old.next;
         old.before = null;
         old.next = null;
+    }
+
+    int getDebugCount() {
+        ListViewItem act = first;
+        int count = 0;
+        while (act != null) {
+            count++;
+            act = act.next;
+        }
+        return count;
     }
 }
