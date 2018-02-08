@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.HORIZONTAL;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ListViewItemLinkedListTest {
 
@@ -130,11 +131,78 @@ class ListViewItemLinkedListTest {
 
     }
 
+    @Test
+    void ReplaceTest() {
+        de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style = new de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle();
+        style.pad = 10f;
+        ListViewItemLinkedList list = new ListViewItemLinkedList(VERTICAL, style, 0, 0, 0, 0);
+
+        list.setAdapter(new ListViewAdapter() {
+            @Override
+            public boolean isReverseOrder() {
+                return false;
+            }
+
+            @Override
+            public int getCount() {
+                return 10;
+            }
+
+            @Override
+            public ListViewItem getView(int index) {
+                return new ListViewItem(index);
+            }
+
+            @Override
+            public void update(ListViewItem view) {
+
+            }
+
+            @Override
+            public float getDefaultItemSize() {
+                return 0;
+            }
+        });
+
+        ListViewItem act = list.first;
+        int idx = 0;
+        while (act != null) {
+            assertEquals(idx++, act.getListIndex(), "");
+            act = act.next;
+        }
+
+        ListViewItem old = list.itemArray[4];
+        ListViewItem n_ew = new ListViewItem(old.getListIndex());
+        list.replaceItems(old, n_ew);
+
+        act = list.first;
+        idx = 0;
+        while (act != null) {
+            assertEquals(idx++, act.getListIndex(), "");
+            act = act.next;
+        }
+
+         old = list.itemArray[7];
+         n_ew = new ListViewItem(old.getListIndex());
+        list.replaceItems(old, n_ew);
+
+        act = list.first;
+        idx = 0;
+        while (act != null) {
+            assertEquals(idx++, act.getListIndex(), "");
+            act = act.next;
+        }
+
+
+    }
+
+
     private ListViewItemLinkedList getListViewItemLinkedList(ListViewType type, final int count, final float size) {
 
         de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style = new de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle();
 
         style.pad = 1f;
+
 
         ListViewItemLinkedList list = new ListViewItemLinkedList(type, style, 0, 0, 0, 0);
 
@@ -151,7 +219,7 @@ class ListViewItemLinkedListTest {
 
             @Override
             public ListViewItem getView(int index) {
-                return null;
+                return new ListViewItem(index);
             }
 
             @Override

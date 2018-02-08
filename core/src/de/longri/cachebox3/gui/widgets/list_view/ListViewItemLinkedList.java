@@ -33,7 +33,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     final static int OVERLOAD = 10;
 
     private final ListViewType type;
-    private ListViewItem first;
+    ListViewItem first;
 
     private ListViewItem firstVisibleItem;
     private ListViewItem lastVisibleItem;
@@ -46,6 +46,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     private final float padLeft, padRight, padTop, padBottom;
     private OnDrawListener onDrawListener;
     private final ListView.ListViewStyle style;
+    ListViewItem[] itemArray;
 
     ListViewItemLinkedList(ListViewType type, ListView.ListViewStyle style, float padLeft, float padRight, float padTop, float padBottom) {
         this.type = type;
@@ -86,13 +87,14 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
     public void setAdapter(ListViewAdapter adapter) {
         this.adapter = adapter;
-        boolean reverse = adapter.isReverseOrder();
+        if (!checkCount()) return;
 
-        if (adapter.getCount() <= 0) return;
+        itemArray = new ListViewItem[count];
 
         //create linked dummy list with size of first item
-        ListViewItem act = first = adapter.getView(reverse ? 0 : adapter.getCount() - 1);
+        ListViewItem act = first = adapter.getView(0);
         first.setBackground(style.firstItem);
+        itemArray[0] = first;
         //set default sizes
         float size;
         if (type == VERTICAL) {
@@ -107,7 +109,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
             size = first.getWidth();
         }
 
-        if (reverse) {
+
             for (int i = 1, n = adapter.getCount(); i < n; i++) {
                 ListViewItem item = new DummyListViewItem(i);
                 act.setNext(item);
@@ -115,18 +117,9 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                 act = item;
                 if (type == VERTICAL) act.setHeight(size);
                 else act.setWidth(size);
+                itemArray[i] = act;
             }
-        } else {
-            int count = adapter.getCount() - 1;
-            for (int i = 1, n = count + 1; i < n; i++) {
-                ListViewItem item = new DummyListViewItem(count - i);
-                act.setNext(item);
-                item.setBefore(act);
-                act = item;
-                if (type == VERTICAL) act.setHeight(size);
-                else act.setWidth(size);
-            }
-        }
+
         calcCompleteSize();
     }
 
@@ -176,45 +169,28 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         }
         lastVisibleSearchSize = size;
 
-        //search first visible
-        ListViewItem firstVisible = (firstVisibleItem == null || lastVisibleItem == null) ? first
-                : ((lastVisibleScrollSearch < scroll) ? lastVisibleItem : firstVisibleItem);
+        ListViewItem firstVisible = search(this.itemArray, scroll, scroll + size);
 
-        if (lastVisibleScrollSearch < scroll) {
-            if (this.type == VERTICAL) {
-                while (firstVisible.before != null) {
-                    if (firstVisible.getY() <= scroll) {
-                        break;
-                    }
-                    firstVisible = firstVisible.before;
+        if (firstVisible == null) return;
+
+        //search first visible
+
+
+        if (this.type == VERTICAL) {
+            while (firstVisible.next != null) {
+                if (firstVisible.getY() >= scroll) {
+                    break;
                 }
-            } else {
-                while (firstVisible.before != null) {
-                    if (firstVisible.getX() <= scroll) {
-                        break;
-                    }
-                    firstVisible = firstVisible.before;
-                }
+                firstVisible = firstVisible.next;
             }
         } else {
-            if (this.type == VERTICAL) {
-                while (firstVisible.next != null) {
-                    if (firstVisible.getY() >= scroll) {
-                        break;
-                    }
-                    firstVisible = firstVisible.next;
+            while (firstVisible.next != null) {
+                if (firstVisible.getX() >= scroll) {
+                    break;
                 }
-            } else {
-                while (firstVisible.next != null) {
-                    if (firstVisible.getX() >= scroll) {
-                        break;
-                    }
-                    firstVisible = firstVisible.next;
-                }
+                firstVisible = firstVisible.next;
             }
         }
-
-        lastVisibleScrollSearch = scroll;
 
 
         //search last visible
@@ -264,11 +240,11 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
             public void run() {
                 //TODO dispose old Item's, if it will not added any more
                 ListViewItemLinkedList.this.clearChildren();
-                ListViewItem act = firstItem;
+                ListViewItem act = lastItem;
                 do {
                     ListViewItemLinkedList.this.addActor(act);
-                    if (act == lastItem) break;
-                    act = act.next;
+                    if (act == firstItem) break;
+                    act = act.before;
                 } while (act != null);
             }
         });
@@ -287,7 +263,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
     void replaceDummy() {
         Actor[] childs = this.getChildren().begin();
-        int n = childs.length;
+        int n = this.getChildren().size;
         boolean anyChanges = false;
         while (n-- > 0) {
             if (childs[n] instanceof DummyListViewItem) {
@@ -342,11 +318,12 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         }
     }
 
-    private void replaceItems(ListViewItem old, ListViewItem newItem) {
+    void replaceItems(ListViewItem old, ListViewItem newItem) {
         //replace linked list items
         if (old == this.first) {
             first = newItem;
-        } else {
+        }
+        if (old.before != null) {
             old.before.next = newItem;
         }
 
@@ -357,8 +334,11 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
             firstVisibleItem = newItem;
 
         newItem.next = old.next;
+        newItem.before = old.before;
         old.before = null;
         old.next = null;
+
+        itemArray[old.getListIndex()] = newItem;
     }
 
     int getDebugCount() {
@@ -370,4 +350,37 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         }
         return count;
     }
+
+
+    static int NOT_FOUND = -1;
+
+    private static ListViewItem search(ListViewItem[] arr, float searchValue, float range) {
+        int left = 0;
+        int right = arr.length - 1;
+        int idx = binarySearch(arr, searchValue, range, left, right);
+
+        if (idx < 0 || idx >= arr.length) return null;
+        return arr[idx];
+    }
+
+    private static int binarySearch(ListViewItem[] arr, float searchValue, float range, int left, int right) {
+        if (right < left) {
+            return NOT_FOUND;
+        }
+		/*
+		int mid = mid = (left + right) / 2;
+		There is a bug in the above line;
+		Joshua Bloch suggests the following replacement:
+		*/
+        int mid = (left + right) >>> 1;
+        if (searchValue < arr[mid].getY() && range < arr[mid].getY()) {
+            return binarySearch(arr, searchValue, range, mid + 1, right);
+        } else if (searchValue > arr[mid].getY() && range > arr[mid].getY()) {
+            return binarySearch(arr, searchValue, range, left, mid - 1);
+        } else {
+            return mid;
+        }
+    }
+
+
 }
