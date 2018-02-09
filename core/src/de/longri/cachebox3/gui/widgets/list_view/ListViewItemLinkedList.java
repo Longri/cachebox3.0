@@ -173,22 +173,22 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         if (firstVisible == null) return;
 
         //search first visible
-
-//        if (this.type == VERTICAL) {
-//            for (int i = firstVisible.index, n = itemArray.length; i < n; i++) {
-//                firstVisible = itemArray[i];
-//                if (firstVisible.getY() >= search) {
-//                    break;
-//                }
-//            }
-//        } else {
-//            for (int i = firstVisible.index, n = itemArray.length; i < n; i++) {
-//                firstVisible = itemArray[i];
-//                if (firstVisible.getX() >= search) {
-//                    break;
-//                }
-//            }
-//        }
+        int findIdx = firstVisible.index;
+        if (this.type == VERTICAL) {
+            for (int i = findIdx; i >=0; i--) {
+                firstVisible = itemArray[i];
+                if (firstVisible.getY() >= search) {
+                    break;
+                }
+            }
+        } else {
+            for (int i = firstVisible.index; i >= 0; i--) {
+                firstVisible = itemArray[i];
+                if (firstVisible.getX() >= search) {
+                    break;
+                }
+            }
+        }
 
 
         //search last visible
@@ -196,14 +196,14 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         float lastPos = search - size;
 
         if (this.type == VERTICAL) {
-            for (int i = lastVisible.index, n = 0; i >= n; i--) {
+            for (int i = findIdx, n = itemArray.length; i < n; i++) {
                 lastVisible = itemArray[i];
                 if (lastVisible.getY() <= lastPos) {
                     break;
                 }
             }
         } else {
-            for (int i = lastVisible.index, n = 0; i >= n; i--) {
+            for (int i = findIdx, n = itemArray.length; i < n; i++) {
                 lastVisible = itemArray[i];
                 if (lastVisible.getX() <= lastPos) {
                     break;
@@ -224,7 +224,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
         //add visible child items on glThread
         final int firstItemIdx = firstVisible.index;
-        final int lastItemIdx = firstVisible.index;//lastVisible.index;
+        final int lastItemIdx = lastVisible.index;//lastVisible.index;
 
         CB.postOnGlThread(new NamedRunnable("add visible child items") {
             @Override
