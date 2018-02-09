@@ -173,7 +173,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                 && (lastVisibleScrollSearch - size < scroll)) {
             return;
         }
-       
+
         lastVisibleSearchSize = size;
         lastVisibleScrollSearch = scroll;
 
@@ -293,6 +293,8 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         Actor[] childs = this.getChildren().begin();
         int n = this.getChildren().size;
         boolean anyChanges = false;
+        Array<ListViewItem> oldItems = new Array<>();
+        Array<ListViewItem> newItems = new Array<>();
         while (n-- > 0) {
             if (childs[n] instanceof DummyListViewItem) {
                 anyChanges = true;
@@ -321,7 +323,8 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                 }
 
                 newItem.setOnDrawListener(this.onDrawListener);
-                childs[n] = newItem;
+                oldItems.add(old);
+                newItems.add(newItem);
                 replaceItems(old, newItem);
 
 
@@ -341,6 +344,14 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
             }
         }
         this.getChildren().end();
+
+        //remove old
+        for (Actor old : oldItems)
+            this.removeActor(old);
+
+        //add new
+        for (Actor n_ew : newItems)
+            this.addActor(n_ew);
 
         if (anyChanges) {
             setVisibleBounds(lastVisibleScrollSearch, this.lastVisibleSearchSize);
