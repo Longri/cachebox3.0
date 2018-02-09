@@ -23,6 +23,8 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ScrollViewContainer;
 import de.longri.cachebox3.utils.NamedRunnable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.HORIZONTAL;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
@@ -31,6 +33,7 @@ import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
  * Created by Longri on 03.02.18.
  */
 public class ListViewItemLinkedList extends ScrollViewContainer {
+    private final Logger log = LoggerFactory.getLogger(ListViewItemLinkedList.class);
 
     final static int OVERLOAD = 10;
 
@@ -39,7 +42,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
     private ListViewItem firstVisibleItem;
     private ListViewItem lastVisibleItem;
-    private float lastVisibleScrollSearch = 0;
+    private float lastVisibleScrollSearch = Float.MIN_VALUE;
     private float lastVisibleSearchSize = 0;
 
     private ListViewAdapter adapter;
@@ -164,6 +167,14 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
             });
             return;
         }
+
+        if (!(lastVisibleSearchSize != size)
+                && (lastVisibleScrollSearch + size > scroll)
+                && (lastVisibleScrollSearch - size < scroll)) {
+            return;
+        }
+        log.debug("Scroll changes, search visible Items");
+
         lastVisibleSearchSize = size;
         lastVisibleScrollSearch = scroll;
 
