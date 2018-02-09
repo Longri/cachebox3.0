@@ -17,6 +17,8 @@ package de.longri.cachebox3.gui.widgets.list_view;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ScrollViewContainer;
@@ -173,9 +175,9 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         if (firstVisible == null) return;
 
         //search first visible
-        int findIdx = firstVisible.index;
+        final int findIdx = firstVisible.index;
         if (this.type == VERTICAL) {
-            for (int i = findIdx; i >=0; i--) {
+            for (int i = findIdx; i >= 0; i--) {
                 firstVisible = itemArray[i];
                 if (firstVisible.getY() >= search) {
                     break;
@@ -215,24 +217,53 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         lastVisibleItem = lastVisible;
 
         //set overload
-//        int idx = firstVisible.index - OVERLOAD;
-//        if (idx < 0) idx = 0;
-//        firstVisible = itemArray[idx];
-//        idx = lastVisible.index + OVERLOAD;
-//        if (idx > itemArray.length - 1) idx = itemArray.length - 1;
-//        lastVisible = itemArray[idx];
+        int idx = firstVisible.index - OVERLOAD;
+        if (idx < 0) idx = 0;
+        firstVisible = itemArray[idx];
+        idx = lastVisible.index + OVERLOAD;
+        if (idx > itemArray.length - 1) idx = itemArray.length - 1;
+        lastVisible = itemArray[idx];
 
         //add visible child items on glThread
         final int firstItemIdx = firstVisible.index;
-        final int lastItemIdx = lastVisible.index;//lastVisible.index;
+        final int lastItemIdx = lastVisible.index;
 
         CB.postOnGlThread(new NamedRunnable("add visible child items") {
             @Override
             public void run() {
                 //TODO dispose old Item's, if it will not added any more
-                ListViewItemLinkedList.this.clearChildren();
+                Actor[] childs = ListViewItemLinkedList.this.getChildren().begin();
+                Array<ListViewItem> clearList = new Array<>();
+                IntArray addedItems = new IntArray();
+                for (int i = 0, n = ListViewItemLinkedList.this.getChildren().size; i < n; i++) {
+                    ListViewItem item = (ListViewItem) childs[i];
+                    if (item.index >= firstItemIdx && item.index <= lastItemIdx) {
+                        addedItems.add(item.index);
+                    } else {
+                        clearList.add(item);
+                    }
+                }
+                ListViewItemLinkedList.this.getChildren().end();
+
+                for (int i = 0; i < clearList.size; i++) {
+                    ListViewItem old = clearList.get(i);
+                    ListViewItemLinkedList.this.removeActor(old);
+                    int idx = old.index;
+                    ListViewItem dummy = new DummyListViewItem(idx);
+                    dummy.setX(old.getX());
+                    dummy.setY(old.getY());
+                    dummy.setWidth(old.getWidth());
+                    dummy.setHeight(old.getHeight());
+                    itemArray[idx] = dummy;
+
+                    old.dispose();
+                    old = null;
+                }
+
+
                 for (int i = firstItemIdx; i <= lastItemIdx; i++) {
-                    ListViewItemLinkedList.this.addActor(itemArray[i]);
+                    if (!addedItems.contains(i))
+                        ListViewItemLinkedList.this.addActor(itemArray[i]);
                 }
             }
         });
