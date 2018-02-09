@@ -123,6 +123,11 @@ public class TestNew extends WidgetGroup {
         public Item(int listIndex) {
             super(listIndex);
             VisLabel idxLabel = new VisLabel("idx: " + Integer.toString(listIndex));
+
+            if (listIndex == 2 || listIndex == 9 || listIndex == 24) {
+                idxLabel.setText("idx: " + Integer.toString(listIndex) + "\n\n second");
+            }
+
             this.add(idxLabel).expandX().fillX();
             pos = new VisLabel("", labelStyle);
             this.row();

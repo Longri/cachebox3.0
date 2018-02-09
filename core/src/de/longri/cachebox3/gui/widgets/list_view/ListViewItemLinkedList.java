@@ -173,8 +173,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                 && (lastVisibleScrollSearch - size < scroll)) {
             return;
         }
-        log.debug("Scroll changes, search visible Items");
-
+       
         lastVisibleSearchSize = size;
         lastVisibleScrollSearch = scroll;
 
@@ -242,7 +241,6 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         CB.postOnGlThread(new NamedRunnable("add visible child items") {
             @Override
             public void run() {
-                //TODO dispose old Item's, if it will not added any more
                 Actor[] childs = ListViewItemLinkedList.this.getChildren().begin();
                 Array<ListViewItem> clearList = new Array<>();
                 IntArray addedItems = new IntArray();
@@ -327,17 +325,19 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                 replaceItems(old, newItem);
 
 
-//                //set pos of following items
-//                for (int i = newItem.index + 1; i < itemArray.length; i++) {
-//                    if (type == VERTICAL) {
-//                        itemArray[i].setY(newItem.getY() + changedSize);
-//                    } else {
-//                        itemArray[i].setX(newItem.getX() + changedSize);
-//                    }
-//                }
-//                this.completeSize += changedSize;
-//                if (type == VERTICAL) this.setHeight(completeSize);
-//                else this.setWidth(completeSize);
+                if (changedSize != 0) {
+                    //set pos of items that are before
+                    for (int i = 0; i < newItem.index; i++) {
+                        if (type == VERTICAL) {
+                            itemArray[i].setY(itemArray[i].getY() + changedSize);
+                        } else {
+                            itemArray[i].setX(itemArray[i].getX() + changedSize);
+                        }
+                    }
+                    this.completeSize += changedSize;
+                    if (type == VERTICAL) this.setHeight(completeSize);
+                    else this.setWidth(completeSize);
+                }
             }
         }
         this.getChildren().end();
