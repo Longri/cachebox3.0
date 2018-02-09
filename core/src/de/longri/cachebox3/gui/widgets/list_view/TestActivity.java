@@ -29,7 +29,7 @@ import de.longri.cachebox3.gui.drawables.ColorDrawable;
  */
 public class TestActivity extends ActivityBase {
 
-    final int COUNT = 10;
+    final int COUNT = 50;
 
 
     final TestOld old;

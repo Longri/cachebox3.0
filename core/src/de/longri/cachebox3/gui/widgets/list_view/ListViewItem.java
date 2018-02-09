@@ -27,8 +27,7 @@ import de.longri.cachebox3.CB;
 public class ListViewItem extends VisTable implements Disposable {
 
     private OnDrawListener onDrawListener;
-    ListViewItem next;
-    ListViewItem before;
+
     private float prefHeight = -1f;
     private float prefWidth = -1f;
     int index;
@@ -60,13 +59,6 @@ public class ListViewItem extends VisTable implements Disposable {
         this.onDrawListener = onDrawListener;
     }
 
-    public void setNext(ListViewItem next) {
-        this.next = next;
-    }
-
-    public void setBefore(ListViewItem before) {
-        this.before = before;
-    }
 
     public int getListIndex() {
         return index;
