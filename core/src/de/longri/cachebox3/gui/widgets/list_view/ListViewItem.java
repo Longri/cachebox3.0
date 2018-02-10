@@ -31,6 +31,7 @@ public class ListViewItem extends VisTable implements Disposable {
     private float prefHeight = -1f;
     private float prefWidth = -1f;
     int index;
+    boolean isSelected = false;
 
     public ListViewItem(int index) {
         this.index = index;
@@ -97,5 +98,9 @@ public class ListViewItem extends VisTable implements Disposable {
     @Override
     public boolean equals(Object o) {
         return o instanceof ListViewItem && (this.index == ((ListViewItem) o).index);
+    }
+
+    public boolean isSelected() {
+        return isSelected;
     }
 }

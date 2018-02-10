@@ -249,10 +249,8 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                     if (item.index >= firstItemIdx && item.index <= lastItemIdx) {
                         addedItems.add(item.index);
                     } else {
-
-                        //TODO don't clear Item if selected
-
-                        clearList.add(item);
+                        if (!item.isSelected())
+                            clearList.add(item);
                     }
                 }
                 ListViewItemLinkedList.this.getChildren().end();

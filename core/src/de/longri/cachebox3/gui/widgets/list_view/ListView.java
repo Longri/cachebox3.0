@@ -251,12 +251,20 @@ public class ListView extends WidgetGroup {
 
                     if (selectionType == SINGLE) {
                         if (!selectedItemList.contains(item, false)) {
-                            selectedItemList.clear();
+                            if (selectedItemList.size > 0) {
+                                ListViewItem actSelected = selectedItemList.pop();
+                                actSelected.isSelected = false;
+                            }
                             selectedItemList.add(item);
+                            item.isSelected = true;
+                        } else {
+                            selectedItemList.clear();
+                            item.isSelected = false;
                         }
                     } else {
-                        if (selectedItemList.contains(item, false)) {
+                        if (selectedItemList.contains(item, true)) {
                             selectedItemList.removeValue(item, true);
+                            item.isSelected = false;
                         } else {
                             selectedItemList.add(item);
                         }
@@ -284,6 +292,7 @@ public class ListView extends WidgetGroup {
         this.selectedItemList.clear();
         ListViewItem item = itemList.getItem(index);
         this.selectedItemList.add(item);
+        item.isSelected = true;
         CB.requestRendering();
     }
 
