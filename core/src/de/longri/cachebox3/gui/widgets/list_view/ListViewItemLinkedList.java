@@ -126,6 +126,9 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     private void calcCompleteSize() {
         completeSize = (type == VERTICAL) ? padTop : padLeft;
         for (int i = itemArray.length - 1; i >= 0; i--) {
+            if (!itemArray[i].isVisible()) {
+                continue;
+            }
             if (type == VERTICAL) itemArray[i].setY(completeSize);
             else itemArray[i].setX(completeSize);
 
@@ -168,11 +171,11 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
             return;
         }
 
-        if (!(lastVisibleSearchSize != size)
-                && (lastVisibleScrollSearch + size > scroll)
-                && (lastVisibleScrollSearch - size < scroll)) {
-            return;
-        }
+//        if (!(lastVisibleSearchSize != size)
+//                && (lastVisibleScrollSearch + size > scroll)
+//                && (lastVisibleScrollSearch - size < scroll)) {
+//            return;
+//        }
 
         lastVisibleSearchSize = size;
         lastVisibleScrollSearch = scroll;
@@ -290,37 +293,46 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         replaceDummy();
     }
 
+    final Array<ListViewItem> oldItems = new Array<>();
+    final Array<ListViewItem> newItems = new Array<>();
+
     void replaceDummy() {
         Actor[] childs = this.getChildren().begin();
         int n = this.getChildren().size;
         boolean anyChanges = false;
-        Array<ListViewItem> oldItems = new Array<>();
-        Array<ListViewItem> newItems = new Array<>();
+        oldItems.clear();
+        newItems.clear();
+        boolean mustReCalcCompleteSize = false;
         while (n-- > 0) {
             if (childs[n] instanceof DummyListViewItem) {
                 anyChanges = true;
                 //replace item from adapter
                 DummyListViewItem old = (DummyListViewItem) childs[n];
                 ListViewItem newItem = adapter.getView(old.index);
-                replaceItems(oldItems, newItems, old, newItem);
+                if (replaceItems(oldItems, newItems, old, newItem)) {
+                    mustReCalcCompleteSize = true;
+                }
             }
         }
         this.getChildren().end();
 
-        //remove old
-        for (Actor old : oldItems)
-            this.removeActor(old);
-
-        //add new
-        for (Actor n_ew : newItems)
-            this.addActor(n_ew);
-
         if (anyChanges) {
+            //remove old
+            for (Actor old : oldItems)
+                this.removeActor(old);
+
+            //add new
+            for (Actor n_ew : newItems)
+                this.addActor(n_ew);
+
+            if (mustReCalcCompleteSize) {
+                calcCompleteSize();
+            }
             setVisibleBounds(lastVisibleScrollSearch, this.lastVisibleSearchSize);
         }
     }
 
-    private void replaceItems(Array<ListViewItem> oldItems, Array<ListViewItem> newItems, ListViewItem old, ListViewItem newItem) {
+    private boolean replaceItems(Array<ListViewItem> oldItems, Array<ListViewItem> newItems, ListViewItem old, ListViewItem newItem) {
         if (style.secondItem != null && old.index % 2 == 1) {
             newItem.setBackground(style.secondItem);
         } else {
@@ -371,6 +383,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
             if (type == VERTICAL) this.setHeight(completeSize);
             else this.setWidth(completeSize);
         }
+        return old.isVisible() != newItem.isVisible();
     }
 
     static int NOT_FOUND = -1;

@@ -50,6 +50,8 @@ public class ListView extends WidgetGroup {
     private SelectableType selectionType;
     private ListViewAdapter adapter;
     private Drawable backgroundDrawable;
+    private float lastFiredScrollX = 0;
+    private float lastFiredScrollY = 0;
 
 
     public ListView(ListViewType type) {
@@ -106,8 +108,6 @@ public class ListView extends WidgetGroup {
         this.itemList.setOnDrawListener(onDrawListener);
         scrollPane = new VisScrollPane(itemList, style) {
 
-            float lastFiredScrollX = 0;
-            float lastFiredScrollY = 0;
 
             @Override
             public Actor hit(float x, float y, boolean touchable) {
@@ -121,19 +121,13 @@ public class ListView extends WidgetGroup {
             @Override
             public void setScrollX(float scroll) {
                 super.setScrollX(scroll);
-                if (Math.abs(lastFiredScrollX - scroll) > maxScrollChange) {
-                    lastFiredScrollX = scroll;
-                    setItemVisibleBounds();
-                }
+
             }
 
             @Override
             public void setScrollY(float scroll) {
                 super.setScrollY(scroll);
-                if (Math.abs(lastFiredScrollY - scroll) > maxScrollChange) {
-                    lastFiredScrollY = scroll;
-                    setItemVisibleBounds();
-                }
+
             }
 
             @Override
@@ -160,7 +154,6 @@ public class ListView extends WidgetGroup {
     public void setAdapter(ListViewAdapter adapter) {
         this.adapter = adapter;
         itemList.setAdapter(adapter);
-        maxScrollChange = adapter.getDefaultItemSize() * ListViewItemLinkedList.OVERLOAD;
         setScrollPaneBounds();
     }
 
@@ -180,6 +173,7 @@ public class ListView extends WidgetGroup {
     @Override
     protected void sizeChanged() {
         if (scrollPane != null) {
+            maxScrollChange = type == VERTICAL ? this.getHeight() / 4 : this.getWidth() / 4;
             setScrollPaneBounds();
         } else {
 //            if (emptyLabel != null) {
@@ -357,5 +351,21 @@ public class ListView extends WidgetGroup {
                 this.scrollChangedEventListener.scrollChanged(lastScrollX, lastScrollY);
             }
         }
+
+        float scroll;
+        if (type == VERTICAL) {
+            scroll = scrollPane.getScrollY();
+            if (Math.abs(lastFiredScrollY - scroll) > maxScrollChange) {
+                lastFiredScrollY = scroll;
+                setItemVisibleBounds();
+            }
+        } else {
+            scroll = scrollPane.getScrollX();
+            if (Math.abs(lastFiredScrollX - scroll) > maxScrollChange) {
+                lastFiredScrollX = scroll;
+                setItemVisibleBounds();
+            }
+        }
+
     }
 }

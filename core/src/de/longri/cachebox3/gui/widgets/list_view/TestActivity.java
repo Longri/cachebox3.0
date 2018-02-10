@@ -31,24 +31,24 @@ import de.longri.cachebox3.utils.NamedRunnable;
  */
 public class TestActivity extends ActivityBase {
 
-    final int COUNT = 5;//10000;
+    final int COUNT = 8000;
 
 
-    final TestOld old;
-    final TestNew n_ew;
-    final VisTable info;
+    TestOld old;
+    TestNew n_ew;
+    VisTable info;
 
 
     public TestActivity() {
         super("TestActivity");
-        this.old = new TestOld(COUNT);
-        this.addActor(old);
+//        this.old = new TestOld(COUNT);
+//        this.addActor(old);
         this.n_ew = new TestNew(COUNT);
         this.addActor(n_ew);
         info = new VisTable();
         info.setBackground(new ColorDrawable(Color.RED));
         this.addActor(info);
-        old.setScrollChangedListener(new ScrollChangedEvent() {
+        if (old != null)  old.setScrollChangedListener(new ScrollChangedEvent() {
             @Override
             public void scrollChanged(float x, float y) {
                 n_ew.setScrollPos(y);
@@ -60,7 +60,7 @@ public class TestActivity extends ActivityBase {
         n_ew.setScrollChangedListener(new ScrollChangedEvent() {
             @Override
             public void scrollChanged(float x, float y) {
-                old.setScrollPos(y);
+                if (old != null) old.setScrollPos(y);
                 newScrollPosLabel.setText("scroll: " + FloatString(y));
                 newChildCountLabel.setText(n_ew.getChildCount());
             }
@@ -72,8 +72,8 @@ public class TestActivity extends ActivityBase {
         CB.postAsyncDelayd(500, new NamedRunnable("Test") {
             @Override
             public void run() {
-                n_ew.selectItem(COUNT/2);
-                old.selectItem(COUNT/2);
+                n_ew.selectItem(COUNT / 2);
+                if (old != null) old.selectItem(COUNT / 2);
             }
         });
 
@@ -118,7 +118,7 @@ public class TestActivity extends ActivityBase {
     public void sizeChanged() {
         float half = this.getWidth() / 2;
         float height = this.getHeight() - 100;
-        old.setBounds(half, 0, half, height);
+        if (old != null)  old.setBounds(half, 0, half, height);
         n_ew.setBounds(0, 0, half, height);
         info.setBounds(0, height, this.getWidth(), this.getHeight() - height);
     }
