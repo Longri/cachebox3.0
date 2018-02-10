@@ -137,7 +137,7 @@ public class TestOld extends WidgetGroup {
         int count = 0;
         for (Actor act : childs) {
             if (act == null) continue;
-            idxArr[count++] = ((ListViewItem) act).getListIndex();
+            idxArr[count++] = ((ListViewItemInterface) act).getListIndex();
         }
         ((Group) (lv.scrollPane.getActor())).getChildren().end();
 

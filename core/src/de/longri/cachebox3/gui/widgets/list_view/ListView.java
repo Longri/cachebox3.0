@@ -24,7 +24,6 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +44,7 @@ public class ListView extends WidgetGroup {
     private final de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style;
     private final ListViewItemLinkedList itemList;
     private final Array<SelectionChangedEvent> changedEventListeners = new Array<>();
-    private final Array<ListViewItem> selectedItemList = new Array<>();
+    private final Array<ListViewItemInterface> selectedItemList = new Array<>();
     private float maxScrollChange = 0;
     private SelectableType selectionType;
     private ListViewAdapter adapter;
@@ -246,19 +245,19 @@ public class ListView extends WidgetGroup {
                     if (selectionType == SINGLE) {
                         if (!selectedItemList.contains(item, false)) {
                             if (selectedItemList.size > 0) {
-                                ListViewItem actSelected = selectedItemList.pop();
-                                actSelected.isSelected = false;
+                                ListViewItemInterface actSelected = selectedItemList.pop();
+                                actSelected.setSelected(false);
                             }
                             selectedItemList.add(item);
-                            item.isSelected = true;
+                            item.setSelected(true);
                         } else {
                             selectedItemList.clear();
-                            item.isSelected = false;
+                            item.setSelected(false);
                         }
                     } else {
                         if (selectedItemList.contains(item, true)) {
                             selectedItemList.removeValue(item, true);
-                            item.isSelected = false;
+                            item.setSelected(false);
                         } else {
                             selectedItemList.add(item);
                         }
@@ -284,13 +283,13 @@ public class ListView extends WidgetGroup {
         if (this.selectionType == NONE) return;
         log.debug("Set selected item to index {}", index);
         this.selectedItemList.clear();
-        ListViewItem item = itemList.getItem(index);
+        ListViewItemInterface item = itemList.getItem(index);
         this.selectedItemList.add(item);
-        item.isSelected = true;
+        item.setSelected(true);
         CB.requestRendering();
     }
 
-    public ListViewItem getSelectedItem() {
+    public ListViewItemInterface getSelectedItem() {
         if (this.selectedItemList.size == 0) return null;
         return this.selectedItemList.first();
     }
@@ -300,7 +299,7 @@ public class ListView extends WidgetGroup {
         if (scrollPane == null) return;
 
         //get pos of first selected
-        ListViewItem item = this.selectedItemList.size == 0 ? null : this.selectedItemList.get(0);
+        ListViewItemInterface item = this.selectedItemList.size == 0 ? null : this.selectedItemList.get(0);
         float scrollPos = 0;
         if (item != null) {
             int index = item.getListIndex() - 1;

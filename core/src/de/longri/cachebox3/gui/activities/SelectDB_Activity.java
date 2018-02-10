@@ -411,11 +411,6 @@ public class SelectDB_Activity extends ActivityBase {
         }
 
         @Override
-        public boolean isReverseOrder() {
-            return false;
-        }
-
-        @Override
         public int getCount() {
             return files.size;
         }
@@ -434,11 +429,6 @@ public class SelectDB_Activity extends ActivityBase {
         public void update(ListViewItem view) {
             SelectDBItem dbItem = (SelectDBItem) view;
             dbItem.updateFileInfo(fileInfos[view.getListIndex()]);
-        }
-
-        @Override
-        public float getDefaultItemSize() {
-            return 30;
         }
 
     }

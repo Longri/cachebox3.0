@@ -15,18 +15,79 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+
 /**
  * Created by Longri on 03.02.18.
  */
-class DummyListViewItem extends ListViewItem {
+class DummyListViewItem extends Actor implements ListViewItemInterface {
+
+    private final int index;
+    private float prefHeight, prefWidth;
+    private boolean isSelected;
 
     DummyListViewItem(int index) {
-        super(index);
+        this.index = index;
     }
 
     @Override
     public String toString() {
-        return "Dummy Item: " + Integer.toString(this.index);
+        return "Dummy Item: " + Integer.toString(this.getListIndex());
     }
 
+    @Override
+    public void dispose() {
+
+    }
+
+    @Override
+    public int getListIndex() {
+        return this.index;
+    }
+
+    @Override
+    public float getPrefHeight() {
+        return prefHeight;
+    }
+
+    @Override
+    public float getPrefWidth() {
+        return prefWidth;
+    }
+
+    @Override
+    public void setBackground(Drawable drawable) {
+
+    }
+
+    @Override
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    @Override
+    public void setPrefWidth(float prefWidth) {
+        this.prefWidth = prefWidth;
+    }
+
+    @Override
+    public void pack() {
+
+    }
+
+    @Override
+    public void setPrefHeight(float prefHeight) {
+        this.prefHeight = prefHeight;
+    }
+
+    @Override
+    public void setOnDrawListener(OnDrawListener onDrawListener) {
+
+    }
+
+    @Override
+    public void setSelected(boolean selected) {
+        this.isSelected = selected;
+    }
 }

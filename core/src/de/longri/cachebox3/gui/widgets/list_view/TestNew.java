@@ -22,8 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.utils.IntArray;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
 
 import java.util.Arrays;
@@ -53,10 +53,6 @@ public class TestNew extends WidgetGroup {
         lv.setBackground(new ColorDrawable(Color.LIME));
 
         lv.setAdapter(new ListViewAdapter() {
-            @Override
-            public boolean isReverseOrder() {
-                return false;
-            }
 
             @Override
             public int getCount() {
@@ -77,11 +73,6 @@ public class TestNew extends WidgetGroup {
 
             }
 
-            @Override
-            public float getDefaultItemSize() {
-                return 30;
-            }
-
         });
 
         sizeChanged();
@@ -99,18 +90,17 @@ public class TestNew extends WidgetGroup {
 
     public String getChildCount() {
         Actor[] childs = ((Group) (lv.scrollPane.getActor())).getChildren().begin();
-        int[] idxArr = new int[childs.length];
-        int count = 0;
-        for (Actor act : childs) {
-            if (act == null) continue;
-            idxArr[count++] = ((ListViewItem) act).getListIndex();
+        IntArray idxArr = new IntArray();
+
+        for (int i = 0, n = ((Group) (lv.scrollPane.getActor())).getChildren().size; i < n; i++) {
+            idxArr.add(((ListViewItemInterface) childs[i]).getListIndex());
         }
         ((Group) (lv.scrollPane.getActor())).getChildren().end();
 
-        Arrays.sort(idxArr);
+        idxArr.sort();
 
         try {
-            return "count:" + count + "  idx: " + idxArr[(idxArr.length - count) <= 0 ? 0 : idxArr.length - count] + "-" + idxArr[idxArr.length - 1];
+            return "count:" + idxArr.size + "  idx: " + idxArr.first() + "-" + idxArr.peek();
         } catch (Exception e) {
             return "Error";
         }

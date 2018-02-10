@@ -31,7 +31,7 @@ import de.longri.cachebox3.utils.NamedRunnable;
  */
 public class TestActivity extends ActivityBase {
 
-    final int COUNT = 8000;
+    final int COUNT = 18000;
 
 
     TestOld old;
@@ -48,7 +48,7 @@ public class TestActivity extends ActivityBase {
         info = new VisTable();
         info.setBackground(new ColorDrawable(Color.RED));
         this.addActor(info);
-        if (old != null)  old.setScrollChangedListener(new ScrollChangedEvent() {
+        if (old != null) old.setScrollChangedListener(new ScrollChangedEvent() {
             @Override
             public void scrollChanged(float x, float y) {
                 n_ew.setScrollPos(y);
@@ -117,9 +117,9 @@ public class TestActivity extends ActivityBase {
     @Override
     public void sizeChanged() {
         float half = this.getWidth() / 2;
-        float height = this.getHeight() - 100;
-        if (old != null)  old.setBounds(half, 0, half, height);
-        n_ew.setBounds(0, 0, half, height);
+        float height = this.getHeight() - CB.getScaledFloat(100);
+        if (old != null) old.setBounds(half, 0, half, height);
+        n_ew.setBounds(0, 0, ((old != null) ? half : this.getWidth()), height);
         info.setBounds(0, height, this.getWidth(), this.getHeight() - height);
     }
 }

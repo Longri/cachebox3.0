@@ -24,14 +24,14 @@ import de.longri.cachebox3.CB;
 /**
  * Created by Longri on 03.02.18.
  */
-public class ListViewItem extends VisTable implements Disposable {
+public class ListViewItem extends VisTable implements Disposable, ListViewItemInterface {
 
     private OnDrawListener onDrawListener;
 
     private float prefHeight = -1f;
     private float prefWidth = -1f;
-    int index;
-    boolean isSelected = false;
+    private int index;
+    private boolean isSelected = false;
 
     public ListViewItem(int index) {
         this.index = index;
@@ -60,7 +60,13 @@ public class ListViewItem extends VisTable implements Disposable {
         this.onDrawListener = onDrawListener;
     }
 
+    @Override
+    public void setSelected(boolean selected) {
+        this.isSelected=selected;
+    }
 
+
+    @Override
     public int getListIndex() {
         return index;
     }
@@ -100,6 +106,7 @@ public class ListViewItem extends VisTable implements Disposable {
         return o instanceof ListViewItem && (this.index == ((ListViewItem) o).index);
     }
 
+    @Override
     public boolean isSelected() {
         return isSelected;
     }
