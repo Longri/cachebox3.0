@@ -65,6 +65,7 @@ public class TestOld extends WidgetGroup {
                 Item item = new Item(index);
                 item.setPrefWidth(TestOld.this.getWidth());
                 item.pack();
+                if (index % 5 == 1) item.setVisible(false);
                 return item;
             }
 
@@ -147,5 +148,10 @@ public class TestOld extends WidgetGroup {
         } catch (Exception e) {
             return "Error";
         }
+    }
+
+    public void selectItem(int idx) {
+        lv.setSelection(idx);
+        lv.setSelectedItemVisible(true);
     }
 }

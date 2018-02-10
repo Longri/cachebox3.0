@@ -249,6 +249,9 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                     if (item.index >= firstItemIdx && item.index <= lastItemIdx) {
                         addedItems.add(item.index);
                     } else {
+
+                        //TODO don't clear Item if selected
+
                         clearList.add(item);
                     }
                 }
@@ -301,46 +304,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                 //replace item from adapter
                 DummyListViewItem old = (DummyListViewItem) childs[n];
                 ListViewItem newItem = adapter.getView(old.index);
-                if (style.secondItem != null && old.index % 2 == 1) {
-                    newItem.setBackground(style.secondItem);
-                } else {
-                    newItem.setBackground(style.firstItem);
-                }
-                //set default sizes
-                float changedSize;
-                if (type == VERTICAL) {
-                    newItem.setPrefWidth(this.getWidth() - (padLeft + padRight));
-                    newItem.pack();
-                    newItem.setX(padLeft);
-                    newItem.setY(old.getY());
-                    changedSize = newItem.getHeight() - old.getHeight();
-                } else {
-                    newItem.setPrefHeight(this.getHeight() - (padBottom + padTop));
-                    newItem.pack();
-                    newItem.setY(padTop);
-                    newItem.setX(old.getX());
-                    changedSize = newItem.getWidth() - old.getWidth();
-                }
-
-                newItem.setOnDrawListener(this.onDrawListener);
-                oldItems.add(old);
-                newItems.add(newItem);
-                replaceItems(old, newItem);
-
-
-                if (changedSize != 0) {
-                    //set pos of items that are before
-                    for (int i = 0; i < newItem.index; i++) {
-                        if (type == VERTICAL) {
-                            itemArray[i].setY(itemArray[i].getY() + changedSize);
-                        } else {
-                            itemArray[i].setX(itemArray[i].getX() + changedSize);
-                        }
-                    }
-                    this.completeSize += changedSize;
-                    if (type == VERTICAL) this.setHeight(completeSize);
-                    else this.setWidth(completeSize);
-                }
+                replaceItems(oldItems, newItems, old, newItem);
             }
         }
         this.getChildren().end();
@@ -358,19 +322,57 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         }
     }
 
-    void replaceItems(ListViewItem old, ListViewItem newItem) {
-        //replace linked list items
+    private void replaceItems(Array<ListViewItem> oldItems, Array<ListViewItem> newItems, ListViewItem old, ListViewItem newItem) {
+        if (style.secondItem != null && old.index % 2 == 1) {
+            newItem.setBackground(style.secondItem);
+        } else {
+            newItem.setBackground(style.firstItem);
+        }
+        //set default sizes
+        float changedSize;
+        if (type == VERTICAL) {
+            newItem.setPrefWidth(this.getWidth() - (padLeft + padRight));
+            newItem.pack();
+            newItem.setX(padLeft);
+            newItem.setY(old.getY());
+            changedSize = newItem.getHeight() - old.getHeight();
+        } else {
+            newItem.setPrefHeight(this.getHeight() - (padBottom + padTop));
+            newItem.pack();
+            newItem.setY(padTop);
+            newItem.setX(old.getX());
+            changedSize = newItem.getWidth() - old.getWidth();
+        }
+
+        newItem.setOnDrawListener(this.onDrawListener);
+        if (oldItems != null && newItems != null) {
+            oldItems.add(old);
+            newItems.add(newItem);
+        }
         if (old == this.first) {
             first = newItem;
         }
-
         if (lastVisibleItem == old)
             lastVisibleItem = newItem;
 
         if (firstVisibleItem == old)
             firstVisibleItem = newItem;
-
         itemArray[old.getListIndex()] = newItem;
+
+
+        if (changedSize != 0) {
+            //set pos of items that are before
+            for (int i = 0; i < newItem.index; i++) {
+                if (type == VERTICAL) {
+                    itemArray[i].setY(itemArray[i].getY() + changedSize);
+                } else {
+                    itemArray[i].setX(itemArray[i].getX() + changedSize);
+                }
+            }
+            this.completeSize += changedSize;
+            if (type == VERTICAL) this.setHeight(completeSize);
+            else this.setWidth(completeSize);
+        }
     }
 
     static int NOT_FOUND = -1;
@@ -400,4 +402,13 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     }
 
 
+    public ListViewItem getItem(int index) {
+        ListViewItem item = itemArray[index];
+        if (item instanceof DummyListViewItem) {
+            ListViewItem newItem = adapter.getView(index);
+            replaceItems(null, null, item, newItem);
+            return newItem;
+        }
+        return item;
+    }
 }

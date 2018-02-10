@@ -68,6 +68,7 @@ public class TestNew extends WidgetGroup {
                 Item item = new Item(index);
                 item.setPrefWidth(TestNew.this.getWidth());
                 item.pack();
+                if (index % 5 == 1) item.setVisible(false);
                 return item;
             }
 
@@ -114,6 +115,11 @@ public class TestNew extends WidgetGroup {
             return "Error";
         }
 
+    }
+
+    public void selectItem(int idx) {
+        lv.setSelection(idx);
+        lv.setSelectedItemVisible(true);
     }
 
     static class Item extends ListViewItem {

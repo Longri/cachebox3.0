@@ -21,15 +21,17 @@ import com.badlogic.gdx.graphics.g2d.freetype.SkinFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 /**
  * Created by Longri on 06.02.2018.
  */
 public class TestActivity extends ActivityBase {
 
-    final int COUNT = 50;
+    final int COUNT = 5;//10000;
 
 
     final TestOld old;
@@ -65,6 +67,16 @@ public class TestActivity extends ActivityBase {
         });
         sizeChanged();
         layoutInfo();
+
+
+        CB.postAsyncDelayd(500, new NamedRunnable("Test") {
+            @Override
+            public void run() {
+                n_ew.selectItem(COUNT/2);
+                old.selectItem(COUNT/2);
+            }
+        });
+
     }
 
     private String FloatString(float value) {

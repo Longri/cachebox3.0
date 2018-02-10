@@ -293,7 +293,7 @@ public class ListView extends WidgetGroup {
             return;
         }
 
-        CB.postAsync(new NamedRunnable("AsyncLayout") {
+        CB.postOnGlThread(new NamedRunnable("AsyncLayout") {
             @Override
             public void run() {
                 asyncLayout();
@@ -379,15 +379,19 @@ public class ListView extends WidgetGroup {
         itemGroup.addCaptureListener(captureListener);
         float yPos = completeHeight;
 
-        Actor[] actors = itemGroup.getChildren().items;
-        for (int i = 0; i < this.listCount; i++) {// calculate Y position of all visible Items
-            if (adapter.getView(i) != null && adapter.getView(i).isVisible()) {
-                yPos -= itemHeights.get(i);
-                itemYPos.add(yPos);
-                if (actors.length > i && actors[i] != null) {
-                    actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
+        try {
+            Actor[] actors = itemGroup.getChildren().items;
+            for (int i = 0; i < this.listCount; i++) {// calculate Y position of all visible Items
+                if (adapter.getView(i) != null && adapter.getView(i).isVisible()) {
+                    yPos -= itemHeights.get(i);
+                    itemYPos.add(yPos);
+                    if (actors.length > i && actors[i] != null) {
+                        actors[i].setBounds(padLeft, yPos, this.getWidth() - (padLeft + padRight), itemHeights.get(i) - (padTop + padBottom));
+                    }
                 }
             }
+        } catch (Exception e) {
+            return;
         }
 
         scrollPane = new VisScrollPane(itemGroup, style) {

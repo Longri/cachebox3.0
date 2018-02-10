@@ -282,7 +282,7 @@ public class ListView extends WidgetGroup {
         if (this.selectionType == NONE) return;
         log.debug("Set selected item to index {}", index);
         this.selectedItemList.clear();
-        ListViewItem item = adapter.getView(index);
+        ListViewItem item = itemList.getItem(index);
         this.selectedItemList.add(item);
         CB.requestRendering();
     }
