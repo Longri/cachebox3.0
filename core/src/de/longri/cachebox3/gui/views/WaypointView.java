@@ -214,7 +214,7 @@ public class WaypointView extends AbstractView {
             }
         });
 
-        Gdx.app.postRunnable(new Runnable() {
+        CB.postOnNextGlThread(new Runnable() {
             @Override
             public void run() {
                 AbstractWaypoint wp = EventHandler.getSelectedWaypoint();
@@ -232,7 +232,6 @@ public class WaypointView extends AbstractView {
                         }
                     }
                 }
-                CB.requestRendering();
             }
         });
         log.debug("Finish Thread add new listView");

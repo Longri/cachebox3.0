@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -152,7 +153,12 @@ public class ListView extends WidgetGroup {
 
     }
 
+    long frameID = Long.MIN_VALUE;
+
     public void setAdapter(ListViewAdapter adapter) {
+
+        frameID = Gdx.graphics.getFrameId();
+
         this.adapter = adapter;
         itemList.setAdapter(adapter);
         setScrollPaneBounds();
@@ -279,6 +285,17 @@ public class ListView extends WidgetGroup {
     };
 
     public void setSelection(int index) {
+
+        if(frameID == Gdx.graphics.getFrameId()){
+            throw new RuntimeException("Adapter is set on this frame, call selection later like:\n " +
+                    "            CB.postOnNextGlThread(new Runnable() {\n" +
+                    "                @Override\n" +
+                    "                public void run() {\n" +
+                    "                    listView.setSelection(index);\n" +
+                    "                }\n" +
+                    "            });");
+        }
+
         if (this.selectionType == NONE) return;
         log.debug("Set selected item to index {}", index);
         this.selectedItemList.clear();

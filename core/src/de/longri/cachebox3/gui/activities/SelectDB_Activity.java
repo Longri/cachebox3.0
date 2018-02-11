@@ -105,7 +105,16 @@ public class SelectDB_Activity extends ActivityBase {
         lvFiles.setAdapter(lvAdapter);
         this.addActor(lvFiles);
 
-        if (selectedIndex > -1) lvFiles.setSelection(selectedIndex);
+        if (selectedIndex > -1) {
+            final int finalIdx = selectedIndex;
+            CB.postOnNextGlThread(new Runnable() {
+                @Override
+                public void run() {
+                    lvFiles.setSelection(finalIdx);
+                }
+            });
+
+        }
 
         bNew = new CharSequenceButton(Translation.get("NewDB"));
         bSelect = new CharSequenceButton(Translation.get("confirm"));

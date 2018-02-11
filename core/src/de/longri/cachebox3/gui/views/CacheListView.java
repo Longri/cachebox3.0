@@ -187,7 +187,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
             }
         });
 
-        CB.postOnGlThread(new NamedRunnable("CacheListView:setSelection") {
+        CB.postOnNextGlThread(new Runnable() {
             @Override
             public void run() {
                 int selectedIndex = 0;

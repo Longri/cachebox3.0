@@ -624,5 +624,20 @@ public class CB {
     public static void postOnMainThread(NamedRunnable runnable) {
         PlatformConnector.postOnMainThread(runnable);
     }
+
+    public static void postOnNextGlThread(final Runnable runnable) {
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        runnable.run();
+                        requestRendering();
+                    }
+                });
+            }
+        });
+    }
 }
 
