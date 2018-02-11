@@ -225,7 +225,7 @@ public class WaypointView extends AbstractView {
                 } else {
                     Array<AbstractWaypoint> waypoints = actAbstractCache.getWaypoints();
                     for (int i = 0; i < waypoints.size; i++) {
-                        if (waypoints.get(i).equals(wp.getGcCode())) {
+                        if (waypoints.get(i).getGcCode().equals(wp.getGcCode())) {
                             listView.setSelection(i + 1);
                             listView.setSelectedItemVisible(false);
                             break;
