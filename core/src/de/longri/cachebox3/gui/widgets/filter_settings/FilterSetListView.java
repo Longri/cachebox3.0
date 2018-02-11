@@ -109,12 +109,12 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                int n = listViewItems.size;
-                while (n-- > 0) {
-                    if (listViewItems.get(n) instanceof ButtonListViewItem) {
-                        ((ButtonListViewItem) listViewItems.get(n)).toggle();
-                    }
-                }
+//                int n = listViewItems.size;
+//                while (n-- > 0) {
+//                    if (listViewItems.get(n) instanceof ButtonListViewItem) {
+//                        ((ButtonListViewItem) listViewItems.get(n)).toggle();
+//                    }
+//                }
             }
         });
     }

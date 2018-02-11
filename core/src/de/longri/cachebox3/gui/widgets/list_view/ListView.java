@@ -395,4 +395,13 @@ public class ListView extends WidgetGroup {
     public void dispose() {
         //TODO implement
     }
+
+    public void dataSetChanged() {
+        CB.postOnNextGlThread(new Runnable() {
+            @Override
+            public void run() {
+                setAdapter(ListView.this.adapter);
+            }
+        });
+    }
 }
