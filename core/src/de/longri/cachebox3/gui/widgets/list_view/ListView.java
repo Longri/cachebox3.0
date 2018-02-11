@@ -21,10 +21,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
+import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -250,9 +252,6 @@ public class ListView extends WidgetGroup {
                             }
                             selectedItemList.add(item);
                             item.setSelected(true);
-                        } else {
-                            selectedItemList.clear();
-                            item.setSelected(false);
                         }
                     } else {
                         if (selectedItemList.contains(item, true)) {
@@ -366,5 +365,17 @@ public class ListView extends WidgetGroup {
             }
         }
 
+    }
+
+    public void setEmptyString(CharSequence emptyString) {
+        //TODO implement
+    }
+
+    public SnapshotArray<Actor> items() {
+        return itemList.getChildren();
+    }
+
+    public void dispose() {
+        //TODO implement
     }
 }

@@ -262,12 +262,13 @@ public class CB {
 
     public static void requestRendering() {
         Gdx.graphics.requestRendering();
-        Gdx.app.postRunnable(new Runnable() {
+        TimerTask renderRequestTask = new TimerTask() {
             @Override
             public void run() {
                 Gdx.graphics.requestRendering();
             }
-        });
+        };
+        new Timer().schedule(renderRequestTask, 100);
     }
 
 
@@ -293,7 +294,7 @@ public class CB {
     // GL-Thread check
     private static Thread GL_THREAD;
 
-    public static void assertMainThread() {
+    public static void assertGlThread() {
         if (GL_THREAD != Thread.currentThread()) {
             throw new RuntimeException("Access from non-GL thread!");
         }

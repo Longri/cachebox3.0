@@ -62,25 +62,25 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
         }
 
 
-        CB.postOnGlThread(new NamedRunnable("test") {
-            @Override
-            public void run() {
-                new TestActivity().show();
-            }
-        });
-
-//        Gdx.app.postRunnable(new Runnable() {
+//        CB.postOnGlThread(new NamedRunnable("test") {
 //            @Override
 //            public void run() {
-//                final SelectDB_Activity selectDBDialog = new SelectDB_Activity(new SelectDB_Activity.IReturnListener() {
-//                    @Override
-//                    public void back() {
-//                        returnFromSelectDB();
-//                    }
-//                }, Action_Show_SelectDB_Dialog.this.viewMode == ViewMode.FORCE_SHOW);
-//                selectDBDialog.show();
+//                new TestActivity().show();
 //            }
 //        });
+
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                final SelectDB_Activity selectDBDialog = new SelectDB_Activity(new SelectDB_Activity.IReturnListener() {
+                    @Override
+                    public void back() {
+                        returnFromSelectDB();
+                    }
+                }, Action_Show_SelectDB_Dialog.this.viewMode == ViewMode.FORCE_SHOW);
+                selectDBDialog.show();
+            }
+        });
     }
 
 

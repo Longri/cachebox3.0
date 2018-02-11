@@ -93,6 +93,8 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     }
 
     public void setAdapter(ListViewAdapter adapter) {
+        CB.assertGlThread();
+
         this.adapter = adapter;
         if (!checkCount()) return;
 
@@ -117,12 +119,14 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         }
 
 
-        for (int i = 1, n = adapter.getCount(); i < n; i++) {
+        for (int i = 0, n = adapter.getCount(); i < n; i++) {
             ListViewItemInterface item = new DummyListViewItem(i);
             if (type == VERTICAL) item.setHeight(size);
             else item.setWidth(size);
             itemArray[i] = item;
         }
+
+        first = itemArray[0];
 
         calcCompleteSize();
     }
