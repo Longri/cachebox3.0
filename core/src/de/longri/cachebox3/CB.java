@@ -262,13 +262,12 @@ public class CB {
 
     public static void requestRendering() {
         Gdx.graphics.requestRendering();
-        TimerTask renderRequestTask = new TimerTask() {
+        Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
                 Gdx.graphics.requestRendering();
             }
-        };
-        new Timer().schedule(renderRequestTask, 100);
+        });
     }
 
 

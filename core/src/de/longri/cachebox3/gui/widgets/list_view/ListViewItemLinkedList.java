@@ -163,6 +163,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
     private boolean checkCount() {
         if (count < 0) {
+            if (adapter == null) return false;
             count = adapter.getCount();
             countChk = count > 0;
         }
@@ -195,7 +196,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
         ListViewItemInterface firstVisible = search(this.type, this.itemArray, search - size, search);
         if (firstVisible == null) {
-            firstVisible=first;
+            firstVisible = first;
         }
 
         log.debug("Founded item index: {}", firstVisible.getListIndex());
@@ -431,7 +432,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     }
 
 
-     ListViewItemInterface getItem(int index) {
+    ListViewItemInterface getItem(int index) {
         ListViewItemInterface item = itemArray[index];
         if (item instanceof DummyListViewItem) {
             ListViewItem newItem = adapter.getView(index);
