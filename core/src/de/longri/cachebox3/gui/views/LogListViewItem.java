@@ -85,7 +85,7 @@ public class LogListViewItem extends ListViewItem {
 
         needsLayout = false;
     }
-    
+
     @Override
     public void dispose() {
 
