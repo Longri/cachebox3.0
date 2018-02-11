@@ -37,11 +37,11 @@ import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.CacheSizeStyle;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.skin.styles.StarsStyle;
-import de.longri.cachebox3.gui.views.listview.Adapter;
-import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -52,6 +52,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.gui.widgets.AdjustableStarWidget.Type.STAR;
 import static de.longri.cachebox3.gui.widgets.AdjustableStarWidget.Type.SIZE;
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
 
 /**
  * Created by Longri on 16.11.2017.
@@ -64,12 +66,12 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
     private final FilterStyle style;
     private final EditFilterSettings filterSettings;
     private final Array<ListViewItem> listViewItems = new Array<>();
-    private final Adapter listViewAdapter;
+    private final ListViewAdapter listViewAdapter;
 
     public FilterSetListView(EditFilterSettings editFilterSettings, FilterStyle style) {
         this.style = style;
         this.filterSettings = editFilterSettings;
-        listViewAdapter = new Adapter() {
+        listViewAdapter = new ListViewAdapter() {
             @Override
             public int getCount() {
                 return listViewItems.size;
@@ -85,17 +87,19 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
 
             }
 
-            @Override
-            public float getItemSize(int index) {
-                ListViewItem item = listViewItems.get(index);
-                return item.isVisible() ? item.getHeight() : 0;
-            }
         };
-        setListView = new ListView(listViewAdapter, true, false);
-        setListView.setSelectable(ListView.SelectableType.NONE);
+        setListView = new ListView(VERTICAL);
+        setListView.setSelectable(NONE);
         this.add(setListView).expand().fill();
         setListView.setEmptyString("EmptyList");
         fillList();
+
+        CB.postOnNextGlThread(new Runnable() {
+            @Override
+            public void run() {
+                setListView.setAdapter(listViewAdapter);
+            }
+        });
     }
 
     private void fillList() {
@@ -161,7 +165,6 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 corrected.setVisible(visible);
 
                 setListView.invalidate();
-                setListView.layout(true);
             }
         };
 
@@ -222,7 +225,6 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 maxFav.setVisible(visible);
 
                 setListView.invalidate();
-                setListView.layout(true);
             }
         };
 
@@ -261,7 +263,6 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 }
 
                 setListView.invalidate();
-                setListView.layout(true);
             }
         };
 
@@ -297,7 +298,6 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 }
 
                 setListView.invalidate();
-                setListView.layout(true);
             }
         };
 
