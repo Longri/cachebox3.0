@@ -36,15 +36,16 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
-import de.longri.cachebox3.gui.views.listview.Adapter;
-import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
 /**
  * Created by Longri on 13.08.16.
@@ -72,7 +73,7 @@ public class Menu extends Window {
     CB_List<ListViewItem> mItems = new CB_List();
     public MenuStyle style;
     final CharSequence name;
-    ListView listView;
+    protected ListView listView;
     OnItemClickListener onItemClickListener;
     private VisLabel titleLabel, parentTitleLabel;
     protected Menu parentMenu;
@@ -326,29 +327,29 @@ public class Menu extends Window {
         titleGroup.addListener(backClickListener);
 
         this.addActor(titleGroup);
-
-        Adapter listViewAdapter = new Adapter() {
+        this.reorganizeListIndexes();
+        listView = new ListView(VERTICAL);
+        CB.postOnNextGlThread(new Runnable() {
             @Override
-            public int getCount() {
-                return mItems.size;
-            }
+            public void run() {
+                listView.setAdapter(new ListViewAdapter() {
+                    @Override
+                    public int getCount() {
+                        return mItems.size;
+                    }
 
-            @Override
-            public ListViewItem getView(int index) {
-                return mItems.get(index);
-            }
+                    @Override
+                    public ListViewItem getView(int index) {
+                        return mItems.get(index);
+                    }
 
-            @Override
-            public void update(ListViewItem view) {
+                    @Override
+                    public void update(ListViewItem view) {
 
+                    }
+                });
             }
-
-            @Override
-            public float getItemSize(int index) {
-                return mItems.get(index).getHeight();
-            }
-        };
-        listView = new ListView(listViewAdapter);
+        });
         listView.setBackground(this.style.background);
         this.addActor(listView);
     }
@@ -359,14 +360,10 @@ public class Menu extends Window {
             ((MenuItem) item).initial();
             item.pack();
         }
-
-
         super.pack();
-
         float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (titleGroup.getHeight());
         listView.setBounds(((Gdx.graphics.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
                 CB.scaledSizes.WINDOW_WIDTH, maxListViewHeight);
-        listView.pack();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

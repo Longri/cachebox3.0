@@ -20,7 +20,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -32,13 +31,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
@@ -51,13 +48,13 @@ import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
 import de.longri.cachebox3.gui.skin.styles.SelectBoxStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.gui.views.listview.Adapter;
-import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.ApiButton;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.FloatControl;
 import de.longri.cachebox3.gui.widgets.SelectBox;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Translation;
@@ -67,6 +64,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
 /**
  * Created by Longri on 24.08.2016.
@@ -228,7 +227,7 @@ public class Settings_Activity extends ActivityBase {
         }
 
 
-        Adapter listViewAdapter = new Adapter() {
+        final ListViewAdapter listViewAdapter = new ListViewAdapter() {
             @Override
             public int getCount() {
                 return settingCategories.size;
@@ -245,13 +244,16 @@ public class Settings_Activity extends ActivityBase {
 
             }
 
-            @Override
-            public float getItemSize(int position) {
-                return 0;
-            }
         };
 
-        showListView(new ListView(listViewAdapter, true), Translation.get("setting"), true);
+        final ListView lv = new ListView(VERTICAL);
+        CB.postOnNextGlThread(new Runnable() {
+            @Override
+            public void run() {
+                lv.setAdapter(listViewAdapter);
+                showListView(lv, Translation.get("setting"), true);
+            }
+        });
     }
 
     private void showListView(ListView listView, CharSequence name, boolean animate) {
@@ -413,10 +415,10 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private void showCategory(SettingCategory category, boolean animate) {
+    private void showCategory(final SettingCategory category, final boolean animate) {
         log.debug("show settings categoriy: " + category.name());
 
-        Adapter listViewAdapter;
+        final ListViewAdapter listViewAdapter;
         final Array<SettingBase<?>> categorySettingsList = getSettingsOfCategory(category);
 
 
@@ -427,7 +429,7 @@ public class Settings_Activity extends ActivityBase {
 
         // show new ListView for this category
         final Array<ListViewItem> listViewItems = new Array<>();
-        listViewAdapter = new Adapter() {
+        listViewAdapter = new ListViewAdapter() {
             @Override
             public int getCount() {
                 return categorySettingsList.size;
@@ -447,15 +449,21 @@ public class Settings_Activity extends ActivityBase {
 
             }
 
-            @Override
-            public float getItemSize(int index) {
-                return 0;
-            }
+
         };
 
-        ListView newListView = new ListView(listViewAdapter);
-        newListView.setUserObject(category);
-        showListView(newListView, category.name(), animate);
+        final ListView newListView = new ListView(VERTICAL);
+
+        CB.postOnNextGlThread(new Runnable() {
+            @Override
+            public void run() {
+                newListView.setAdapter(listViewAdapter);
+                newListView.setUserObject(category);
+                showListView(newListView, category.name(), animate);
+            }
+        });
+
+
     }
 
     private Array<SettingBase<?>> getSettingsOfCategory(SettingCategory category) {
@@ -916,7 +924,7 @@ public class Settings_Activity extends ActivityBase {
                                 if (actor instanceof ListView) {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
-                                    listView.layout(FORCE);
+                                    listView.layout();
                                     Gdx.app.postRunnable(new Runnable() {
                                         @Override
                                         public void run() {
@@ -951,7 +959,7 @@ public class Settings_Activity extends ActivityBase {
                                 if (actor instanceof ListView) {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
-                                    listView.layout(FORCE);
+                                    listView.layout();
                                     Gdx.app.postRunnable(new Runnable() {
                                         @Override
                                         public void run() {
@@ -986,7 +994,7 @@ public class Settings_Activity extends ActivityBase {
                                 if (actor instanceof ListView) {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
-                                    listView.layout(FORCE);
+                                    listView.layout();
                                     Gdx.app.postRunnable(new Runnable() {
                                         @Override
                                         public void run() {

@@ -25,7 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.utils.SizeF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
