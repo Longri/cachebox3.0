@@ -181,7 +181,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         }
 
 
-        if (lastVisibleScrollSearch == scroll && lastVisibleSearchSize == size) {
+        if (ListViewItemLinkedList.this.hasChildren() && lastVisibleScrollSearch == scroll && lastVisibleSearchSize == size) {
             log.debug("RETURN TWICE CALL");
             return;
         }

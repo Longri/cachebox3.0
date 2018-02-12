@@ -24,7 +24,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.types.DraftEntry;
 
 import java.text.SimpleDateFormat;

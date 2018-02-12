@@ -36,9 +36,9 @@ import de.longri.cachebox3.gui.popUps.QuickDraftFeedbackPopUp;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.utils.TemplateFormatter;
-import de.longri.cachebox3.gui.views.listview.Adapter;
-import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -53,6 +53,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
+
 /**
  * Created by Longri on 14.09.2016.
  */
@@ -65,7 +67,7 @@ public class DraftsView extends AbstractView {
     private static DraftList draftEntries;
 
 
-    private final ListView listView = new ListView();
+    private final ListView listView = new ListView(VERTICAL);
     private final DraftListItemStyle itemStyle;
 
     private Array<ListViewItem> items;
@@ -106,7 +108,7 @@ public class DraftsView extends AbstractView {
         listView.setBounds(0, 0, this.getWidth(), this.getHeight());
     }
 
-    private Adapter listViewAdapter = new Adapter() {
+    private ListViewAdapter listViewAdapter = new ListViewAdapter() {
 
         @Override
         public int getCount() {
@@ -122,11 +124,6 @@ public class DraftsView extends AbstractView {
         public void update(ListViewItem view) {
             // set listener on Update, because Item is remove all listener with Layout
             view.addListener(clickLongClickListener);
-        }
-
-        @Override
-        public float getItemSize(int index) {
-            return items == null ? 0 : items.get(index).getHeight();
         }
     };
 
@@ -200,29 +197,10 @@ public class DraftsView extends AbstractView {
         for (DraftEntry entry : draftEntries) {
             items.add(new DraftsViewItem(idx++, entry, itemStyle));
         }
-
-        Gdx.app.postRunnable(new Runnable() {
+        CB.postOnNextGlThread(new Runnable() {
             @Override
             public void run() {
-                CB.postAsync(new NamedRunnable("DraftsView") {
-                    @Override
-                    public void run() {
-                        // wait for Layout ready
-                        while (listView.layoutAtWork()) {
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        Gdx.app.postRunnable(new Runnable() {
-                            @Override
-                            public void run() {
-                                listView.setAdapter(listViewAdapter);
-                            }
-                        });
-                    }
-                });
+                listView.setAdapter(listViewAdapter);
             }
         });
     }
