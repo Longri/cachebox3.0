@@ -33,7 +33,6 @@ import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.gui.skin.styles.*;
-import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;

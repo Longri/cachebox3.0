@@ -28,21 +28,13 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
-import de.longri.cachebox3.gui.drawables.geometry.Circle;
-import de.longri.cachebox3.gui.drawables.geometry.CircularSegment;
-import de.longri.cachebox3.gui.drawables.geometry.GeometryDrawable;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.widgets.CircularProgressWidget;
-import de.longri.cachebox3.gui.widgets.GeometryDrawableWidget;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GL;
-import org.oscim.backend.Platform;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
 import org.oscim.utils.Parameters;
@@ -54,7 +46,6 @@ import java.text.NumberFormat;
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
 import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
-import static org.slf4j.impl.LibgdxLoggerFactory.INCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
 
