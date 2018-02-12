@@ -28,6 +28,7 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.translation.word.CompoundCharSequence;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +71,12 @@ public class ListView extends WidgetGroup {
                 CB.getScaledFloat(style.pad > 0 ? style.pad : style.padBottom)) {
             @Override
             public void sizeChanged() {
-                setScrollPaneBounds();
+                CB.postOnNextGlThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setScrollPaneBounds();
+                    }
+                });
             }
 
         };
@@ -286,7 +292,7 @@ public class ListView extends WidgetGroup {
 
     public void setSelection(int index) {
 
-        if(frameID == Gdx.graphics.getFrameId()){
+        if (frameID == Gdx.graphics.getFrameId()) {
             throw new RuntimeException("Adapter is set on this frame, call selection later like:\n " +
                     "            CB.postOnNextGlThread(new Runnable() {\n" +
                     "                @Override\n" +

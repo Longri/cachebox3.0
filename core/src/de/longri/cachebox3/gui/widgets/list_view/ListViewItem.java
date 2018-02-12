@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.widgets.list_view;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 
@@ -62,7 +63,7 @@ public class ListViewItem extends VisTable implements Disposable, ListViewItemIn
 
     @Override
     public void setSelected(boolean selected) {
-        this.isSelected=selected;
+        this.isSelected = selected;
     }
 
 
@@ -73,7 +74,13 @@ public class ListViewItem extends VisTable implements Disposable, ListViewItemIn
 
     @Override
     public String toString() {
-        return "ListView Item: " + Integer.toString(this.index);
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Item: ");
+        sb.append(Integer.toString(this.index));
+        sb.append(" y: ").append(Float.toString(this.getY()));
+        sb.append(" h: ").append(Float.toString(this.getHeight()));
+        sb.append(" v: ").append(Boolean.toString(this.isVisible()));
+        return sb.toString();
     }
 
     public void setPrefHeight(float height) {
@@ -109,5 +116,9 @@ public class ListViewItem extends VisTable implements Disposable, ListViewItemIn
     @Override
     public boolean isSelected() {
         return isSelected;
+    }
+
+    public void setNewIndex(int index) {
+        this.index = index;
     }
 }

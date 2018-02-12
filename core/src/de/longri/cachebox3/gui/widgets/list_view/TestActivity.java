@@ -31,7 +31,7 @@ import de.longri.cachebox3.utils.NamedRunnable;
  */
 public class TestActivity extends ActivityBase {
 
-    final int COUNT = 18000;
+    final int COUNT = 30;
 
 
     TestOld old;
@@ -76,7 +76,6 @@ public class TestActivity extends ActivityBase {
                 if (old != null) old.selectItem(COUNT / 2);
             }
         });
-
     }
 
     private String FloatString(float value) {

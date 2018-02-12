@@ -94,8 +94,10 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
     public void setAdapter(ListViewAdapter adapter) {
         CB.assertGlThread();
-
+        this.clear();
         this.adapter = adapter;
+        count = -1;
+        countChk = false;
         if (!checkCount()) return;
 
         itemArray = new ListViewItemInterface[count];
@@ -127,17 +129,14 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         }
 
         first = itemArray[0];
-
         calcCompleteSize();
     }
 
-    private void calcCompleteSize() {
+    void calcCompleteSize() {
         log.debug("calc complete size");
+        CB.assertGlThread();
         completeSize = (type == VERTICAL) ? padTop : padLeft;
         for (int i = itemArray.length - 1; i >= 0; i--) {
-            if (!itemArray[i].isVisible()) {
-                continue;
-            }
             if (type == VERTICAL) itemArray[i].setY(completeSize);
             else itemArray[i].setX(completeSize);
 
@@ -145,7 +144,6 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                     ? itemArray[i].getHeight() + padTop + padBottom
                     : itemArray[i].getWidth() + padLeft + padRight;
             completeSize += size;
-
         }
         completeSize += (type == VERTICAL) ? padBottom : padRight;
 
@@ -286,7 +284,6 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                     dummy.setHeight(old.getHeight());
                     dummy.setVisible(old.isVisible());
                     itemArray[idx] = dummy;
-
                     old.dispose();
                 }
 
@@ -328,7 +325,17 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                 anyChanges = true;
                 //replace item from adapter
                 DummyListViewItem old = (DummyListViewItem) childs[n];
-                ListViewItemInterface newItem = adapter.getView(old.getListIndex());
+                int requestedIndex = old.getListIndex();
+                ListViewItemInterface newItem = adapter.getView(requestedIndex);
+                if (newItem == null) {
+                    throw new RuntimeException("Requested item " + requestedIndex + "was NULL");
+                }
+                if (newItem.getListIndex() != requestedIndex) {
+                    throw new RuntimeException("Wrong ListViewItem! expected " + requestedIndex + " ,but was " + newItem.getListIndex());
+                }
+                if (!newItem.isVisible()) {
+                    throw new RuntimeException("Don't add a non visible item to the ListViewAdapter");
+                }
                 if (replaceItems(oldItems, newItems, old, newItem)) {
                     mustReCalcCompleteSize = true;
                 }
@@ -354,6 +361,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
     private boolean replaceItems(Array<ListViewItemInterface> oldItems, Array<ListViewItemInterface> newItems,
                                  ListViewItemInterface old, ListViewItemInterface newItem) {
+        CB.assertGlThread();
         if (style.secondItem != null && old.getListIndex() % 2 == 1) {
             newItem.setBackground(style.secondItem);
         } else {
@@ -416,7 +424,8 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         return arr[idx];
     }
 
-    private static int binarySearch(ListViewType type, ListViewItemInterface[] arr, float searchValue, float range, int left, int right) {
+    private static int binarySearch(ListViewType type, ListViewItemInterface[] arr,
+                                    float searchValue, float range, int left, int right) {
         if (right < left) {
             return -1;
         }
