@@ -55,6 +55,7 @@ public class ListView extends WidgetGroup {
     private Drawable backgroundDrawable;
     private float lastFiredScrollX = 0;
     private float lastFiredScrollY = 0;
+    private long frameID = Long.MIN_VALUE;
 
 
     public ListView(ListViewType type) {
@@ -159,12 +160,8 @@ public class ListView extends WidgetGroup {
 
     }
 
-    long frameID = Long.MIN_VALUE;
-
     public void setAdapter(ListViewAdapter adapter) {
-
-        frameID = Gdx.graphics.getFrameId();
-
+        frameID = Gdx.graphics == null ? frameID++ : Gdx.graphics.getFrameId();
         this.adapter = adapter;
         itemList.setAdapter(adapter);
         setScrollPaneBounds();
@@ -292,7 +289,7 @@ public class ListView extends WidgetGroup {
 
     public void setSelection(int index) {
 
-        if (frameID == Gdx.graphics.getFrameId()) {
+        if (frameID == (Gdx.graphics == null ? frameID++ : Gdx.graphics.getFrameId())) {
             throw new RuntimeException("Adapter is set on this frame, call selection later like:\n " +
                     "            CB.postOnNextGlThread(new Runnable() {\n" +
                     "                @Override\n" +

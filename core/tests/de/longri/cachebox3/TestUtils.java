@@ -55,6 +55,7 @@ public class TestUtils {
         Gdx.app.setApplicationLogger(new LwjglApplicationLogger());
         CB.WorkPath = "!!!";
         VisUI.load(new Skin());
+        CB.initThreadCheck();
     }
 
     public static double roundDoubleCoordinate(double value) {

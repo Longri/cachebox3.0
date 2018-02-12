@@ -261,6 +261,7 @@ public class CB {
     }
 
     public static void requestRendering() {
+        if (Gdx.graphics == null) return;
         Gdx.graphics.requestRendering();
         Gdx.app.postRunnable(new Runnable() {
             @Override

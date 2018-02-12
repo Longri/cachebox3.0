@@ -334,7 +334,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                     throw new RuntimeException("Wrong ListViewItem! expected " + requestedIndex + " ,but was " + newItem.getListIndex());
                 }
                 if (!newItem.isVisible()) {
-                    throw new RuntimeException("Don't add a non visible item to the ListViewAdapter");
+                    throw new RuntimeException("Don't add a non visible item to the ListViewAdapter\nIf visibility is changed, set ListViewAdapter new!");
                 }
                 if (replaceItems(oldItems, newItems, old, newItem)) {
                     mustReCalcCompleteSize = true;
