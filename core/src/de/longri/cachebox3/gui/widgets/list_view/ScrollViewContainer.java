@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.views.listview;
+package de.longri.cachebox3.gui.widgets.list_view;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 
