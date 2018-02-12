@@ -32,6 +32,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.list_view.ScrollChangedEvent;
 import de.longri.cachebox3.utils.CB_RectF;
@@ -53,7 +54,7 @@ public class ListView extends WidgetGroup {
 
     private final static int OVERLOAD = 5;
     final CB_RectF tempClickRec = new CB_RectF();
-    private final ListView.ListViewStyle style;
+    private final ListViewStyle style;
     private final Array<ListViewItem> selectedItemList = new Array<ListViewItem>();
     private final SnapshotArray<ListViewItem> itemViews = new SnapshotArray<ListViewItem>();
     private final SnapshotArray<ListViewItem> clearList = new SnapshotArray<ListViewItem>();
@@ -87,7 +88,7 @@ public class ListView extends WidgetGroup {
     }
 
     public ListView(boolean dontDisposeItems) {
-        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems, true);
+        this(VisUI.getSkin().get("default", ListViewStyle.class), dontDisposeItems, true);
     }
 
     public ListView(Adapter listViewAdapter) {
@@ -95,23 +96,23 @@ public class ListView extends WidgetGroup {
     }
 
     public ListView(Adapter listViewAdapter, boolean dontDisposeItems) {
-        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems, true);
+        this(VisUI.getSkin().get("default", ListViewStyle.class), dontDisposeItems, true);
         this.adapter = listViewAdapter;
         this.listCount = adapter.getCount();
     }
 
     public ListView(Adapter listViewAdapter, boolean dontDisposeItems, boolean itemsHaveSameHeight) {
-        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems, itemsHaveSameHeight);
+        this(VisUI.getSkin().get("default", ListViewStyle.class), dontDisposeItems, itemsHaveSameHeight);
         this.adapter = listViewAdapter;
         this.listCount = adapter.getCount();
     }
 
     public ListView(boolean dontDisposeItems, boolean itemsHaveSameHeight) {
-        this(VisUI.getSkin().get("default", ListView.ListViewStyle.class), dontDisposeItems, itemsHaveSameHeight);
+        this(VisUI.getSkin().get("default", ListViewStyle.class), dontDisposeItems, itemsHaveSameHeight);
     }
 
 
-    private ListView(ListView.ListViewStyle style, boolean dontDisposeItems, boolean itemsHaveSameHeight) {
+    private ListView(ListViewStyle style, boolean dontDisposeItems, boolean itemsHaveSameHeight) {
         this.style = style;
         this.dontDisposeItems = dontDisposeItems;
         this.itemsHaveSameHeight = itemsHaveSameHeight;
@@ -815,14 +816,7 @@ public class ListView extends WidgetGroup {
         CB.requestRendering();
     }
 
-    public static class ListViewStyle extends ScrollPane.ScrollPaneStyle {
-        public Drawable firstItem, secondItem, selectedItem;
-        public float pad, padLeft, padRight, padTop, padBottom;
-        public BitmapFont emptyFont;
-        public Color emptyFontColor;
-    }
-
-
+    
     private ScrollChangedEvent scrollChangedEventListener;
     private float lastScrollX = -1;
     private float lastScrollY = -1;

@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.views.listview.ScrollViewContainer;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -50,13 +51,13 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
     private final float padLeft, padRight, padTop, padBottom;
     private OnDrawListener onDrawListener;
-    private final ListView.ListViewStyle style;
+    private final ListViewStyle style;
     ListViewItemInterface[] itemArray;
     private final Array<ListViewItemInterface> oldItems = new Array<>();
     private final Array<ListViewItemInterface> newItems = new Array<>();
 
 
-    ListViewItemLinkedList(ListViewType type, ListView.ListViewStyle style, float padLeft,
+    ListViewItemLinkedList(ListViewType type, ListViewStyle style, float padLeft,
                            float padRight, float padTop, float padBottom) {
         this.type = type;
         this.style = style;

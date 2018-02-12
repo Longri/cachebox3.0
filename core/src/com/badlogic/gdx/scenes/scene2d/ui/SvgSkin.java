@@ -32,10 +32,7 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
 import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
-import de.longri.cachebox3.gui.skin.styles.ColorDrawableStyle;
-import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
-import de.longri.cachebox3.gui.skin.styles.IconsStyle;
-import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
+import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SkinColor;
@@ -308,9 +305,9 @@ public class SvgSkin extends Skin {
             }
         });
 
-        json.setSerializer(ListView.ListViewStyle.class, new Json.ReadOnlySerializer<ListView.ListViewStyle>() {
-            public ListView.ListViewStyle read(Json json, JsonValue jsonData, Class type) {
-                ListView.ListViewStyle style = new ListView.ListViewStyle();
+        json.setSerializer(ListViewStyle.class, new Json.ReadOnlySerializer<ListViewStyle>() {
+            public ListViewStyle read(Json json, JsonValue jsonData, Class type) {
+                ListViewStyle style = new ListViewStyle();
 
                 String background, firstItem, secondItem, selectedItem, vScroll = null, vScrollKnob = null, hScroll = null, hScrollKnob = null;
 

@@ -49,7 +49,7 @@ public class StyleTypes {
         items.add(com.kotcrab.vis.ui.widget.VisTextButton.VisTextButtonStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle.class);
-        items.add(de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.ListViewStyle.class);
         items.add(de.longri.cachebox3.gui.menu.Menu.MenuStyle.class);
         items.add(de.longri.cachebox3.gui.menu.MenuItem.MenuItemStyle.class);
         items.add(de.longri.cachebox3.gui.help.HelpWindow.HelpWindowStyle.class);

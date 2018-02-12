@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -45,7 +46,7 @@ public class ListView extends WidgetGroup {
 
     private final ListViewType type;
     final VisScrollPane scrollPane;
-    private final de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style;
+    private final ListViewStyle style;
     private final ListViewItemLinkedList itemList;
     private final Array<SelectionChangedEvent> changedEventListeners = new Array<>();
     private final Array<ListViewItemInterface> selectedItemList = new Array<>();
@@ -59,10 +60,10 @@ public class ListView extends WidgetGroup {
 
 
     public ListView(ListViewType type) {
-        this(type, VisUI.getSkin().get("default", de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle.class));
+        this(type, VisUI.getSkin().get("default", ListViewStyle.class));
     }
 
-    public ListView(ListViewType type, de.longri.cachebox3.gui.views.listview.ListView.ListViewStyle style) {
+    public ListView(ListViewType type, ListViewStyle style) {
         this.type = type;
         this.style = style;
         this.itemList = new ListViewItemLinkedList(type, style,

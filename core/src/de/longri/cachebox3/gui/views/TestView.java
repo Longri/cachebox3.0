@@ -95,7 +95,7 @@ public class TestView extends AbstractView {
             cache.setFavoritePoints(1345); //TODO debug!
             CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache);
 
-            ListView.ListViewStyle style = VisUI.getSkin().get(ListView.ListViewStyle.class);
+            ListViewStyle style = VisUI.getSkin().get(ListViewStyle.class);
 
             cacheListItem.setBackground(style.firstItem);
 
@@ -367,7 +367,7 @@ public class TestView extends AbstractView {
             adjustableStarWidget.setValue(6);
 
 
-            ListView.ListViewStyle listViewStyle = CB.getSkin().get(ListView.ListViewStyle.class);
+            ListViewStyle listViewStyle = CB.getSkin().get(ListViewStyle.class);
             adjustableStarWidget.setBackground(listViewStyle.firstItem);
 
             VisLabel label3 = new VisLabel("AdjustableStarWidget");
