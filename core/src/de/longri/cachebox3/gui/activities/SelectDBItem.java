@@ -77,8 +77,7 @@ public class SelectDBItem extends ListViewItem {
     public void updateFileInfo(String fileInfo) {
         String[] split = fileInfo.split("#");
         lblInfo.setText(split[0]);
-//        lblInfoSize.setText(split[1]);
-        lblInfoSize.setText("ListIndex: " + this.getListIndex());
+        lblInfoSize.setText(split[1]);
         CB.requestRendering();
     }
 }
