@@ -33,8 +33,6 @@ public class TestActivity extends ActivityBase {
 
     final int COUNT = 30;
 
-
-    TestOld old;
     TestNew n_ew;
     VisTable info;
 
@@ -48,19 +46,11 @@ public class TestActivity extends ActivityBase {
         info = new VisTable();
         info.setBackground(new ColorDrawable(Color.RED));
         this.addActor(info);
-        if (old != null) old.setScrollChangedListener(new ScrollChangedEvent() {
-            @Override
-            public void scrollChanged(float x, float y) {
-                n_ew.setScrollPos(y);
-                oldScrollPosLabel.setText("scroll: " + FloatString(y));
-                oldChildCountLabel.setText(old.getChildCount());
-            }
-        });
+
 
         n_ew.setScrollChangedListener(new ScrollChangedEvent() {
             @Override
             public void scrollChanged(float x, float y) {
-                if (old != null) old.setScrollPos(y);
                 newScrollPosLabel.setText("scroll: " + FloatString(y));
                 newChildCountLabel.setText(n_ew.getChildCount());
             }
@@ -73,7 +63,6 @@ public class TestActivity extends ActivityBase {
             @Override
             public void run() {
                 n_ew.selectItem(COUNT / 2);
-                if (old != null) old.selectItem(COUNT / 2);
             }
         });
     }
@@ -117,8 +106,7 @@ public class TestActivity extends ActivityBase {
     public void sizeChanged() {
         float half = this.getWidth() / 2;
         float height = this.getHeight() - CB.getScaledFloat(100);
-        if (old != null) old.setBounds(half, 0, half, height);
-        n_ew.setBounds(0, 0, ((old != null) ? half : this.getWidth()), height);
+        n_ew.setBounds(0, 0, this.getWidth(), height);
         info.setBounds(0, height, this.getWidth(), this.getHeight() - height);
     }
 }

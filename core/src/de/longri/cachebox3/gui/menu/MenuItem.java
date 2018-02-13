@@ -264,6 +264,7 @@ public class MenuItem extends ListViewItem {
 
     public Menu getMoreMenu(Menu menu) {
         this.moreMenu.parentMenu = menu;
+        this.moreMenu.reorganizeListIndexes();
         return this.moreMenu;
     }
 

@@ -210,15 +210,14 @@ public class Menu extends Window {
     }
 
     public void show() {
+        reorganizeListIndexes();
         initialLayout();
         showWidgetGroup();
         if (this.parentMenu != null) {
             showAsChild();
         }
         this.setTouchable(Touchable.enabled);
-
         StageManager.registerForBackKey(backClickListener);
-
         log.debug("show menu: " + this.name);
     }
 

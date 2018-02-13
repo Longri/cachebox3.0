@@ -66,6 +66,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
 
 /**
  * Created by Longri on 24.08.2016.
@@ -247,6 +248,7 @@ public class Settings_Activity extends ActivityBase {
         };
 
         final ListView lv = new ListView(VERTICAL);
+        lv.setSelectable(NONE);
         CB.postOnNextGlThread(new Runnable() {
             @Override
             public void run() {
@@ -427,21 +429,27 @@ public class Settings_Activity extends ActivityBase {
             categorySettingsList.add(lgIn);
         }
 
+        //add only items they are not NULL
+       final Array<ListViewItem> items = new Array<>();
+        int idxCount = 0;
+        for (SettingBase<?> setting : categorySettingsList) {
+            ListViewItem listViewItem = getSettingItem(idxCount, setting);
+            if (listViewItem != null) {
+                items.add(listViewItem);
+                idxCount++;
+            }
+        }
+
         // show new ListView for this category
-        final Array<ListViewItem> listViewItems = new Array<>();
         listViewAdapter = new ListViewAdapter() {
             @Override
             public int getCount() {
-                return categorySettingsList.size;
+                return items.size;
             }
 
             @Override
             public ListViewItem getView(int index) {
-                if (listViewItems.size <= index) {
-                    final SettingBase<?> setting = categorySettingsList.get(index);
-                    listViewItems.add(getSettingItem(index, setting));
-                }
-                return listViewItems.get(index);
+                return items.get(index);
             }
 
             @Override
@@ -453,7 +461,7 @@ public class Settings_Activity extends ActivityBase {
         };
 
         final ListView newListView = new ListView(VERTICAL);
-
+        newListView.setSelectable(NONE);
         CB.postOnNextGlThread(new Runnable() {
             @Override
             public void run() {
@@ -504,11 +512,11 @@ public class Settings_Activity extends ActivityBase {
         if (setting instanceof de.longri.cachebox3.settings.types.SettingBool) {
             return getBoolView(listIndex, (de.longri.cachebox3.settings.types.SettingBool) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingIntArray) {
-            return getIntArrayView((de.longri.cachebox3.settings.types.SettingIntArray) setting);
+            return getIntArrayView(listIndex, (de.longri.cachebox3.settings.types.SettingIntArray) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingStringArray) {
-            return getStringArrayView((de.longri.cachebox3.settings.types.SettingStringArray) setting);
+            return getStringArrayView(listIndex, (de.longri.cachebox3.settings.types.SettingStringArray) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingTime) {
-            return getTimeView((de.longri.cachebox3.settings.types.SettingTime) setting);
+            return getTimeView(listIndex, (de.longri.cachebox3.settings.types.SettingTime) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingInt) {
             return getIntView(listIndex, (de.longri.cachebox3.settings.types.SettingInt) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingDouble) {
@@ -534,7 +542,7 @@ public class Settings_Activity extends ActivityBase {
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingsAudio) {
             return getAudioView(listIndex, (de.longri.cachebox3.settings.types.SettingsAudio) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingColor) {
-            return getColorView((de.longri.cachebox3.settings.types.SettingColor) setting);
+            return getColorView(listIndex, (de.longri.cachebox3.settings.types.SettingColor) setting);
         }
         return null;
     }
@@ -565,7 +573,7 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getColorView(de.longri.cachebox3.settings.types.SettingColor setting) {
+    private ListViewItem getColorView(int listIndex, de.longri.cachebox3.settings.types.SettingColor setting) {
         return null;
     }
 
@@ -1012,15 +1020,15 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getTimeView(de.longri.cachebox3.settings.types.SettingTime setting) {
+    private ListViewItem getTimeView(int listIndex, de.longri.cachebox3.settings.types.SettingTime setting) {
         return null;
     }
 
-    private ListViewItem getStringArrayView(de.longri.cachebox3.settings.types.SettingStringArray setting) {
+    private ListViewItem getStringArrayView(int listIndex, de.longri.cachebox3.settings.types.SettingStringArray setting) {
         return null;
     }
 
-    private ListViewItem getIntArrayView(de.longri.cachebox3.settings.types.SettingIntArray setting) {
+    private ListViewItem getIntArrayView(int listIndex, de.longri.cachebox3.settings.types.SettingIntArray setting) {
         return null;
     }
 

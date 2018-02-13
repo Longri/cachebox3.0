@@ -29,7 +29,7 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.Action_Show_Hint;
 import de.longri.cachebox3.gui.actions.Action_Switch_Torch;
 import de.longri.cachebox3.gui.actions.QuickActions;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 
 /**
  * Created by Longri on 09.09.16.
