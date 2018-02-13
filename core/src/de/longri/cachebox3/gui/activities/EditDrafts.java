@@ -33,8 +33,8 @@ import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
+import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
-import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
@@ -93,7 +93,7 @@ public class EditDrafts extends ActivityBase {
         if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
             gcVoteWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, Translation.get("maxRating"),
                     new IntProperty(),itemStyle.starStyle,itemStyle.cacheSizeStyle);
-            gcVoteWidget.setBackground(CB.getSkin().get(ListView.ListViewStyle.class).firstItem);
+            gcVoteWidget.setBackground(CB.getSkin().get(ListViewStyle.class).firstItem);
         }
 
         scrollPane = new VisScrollPane(contentTable);

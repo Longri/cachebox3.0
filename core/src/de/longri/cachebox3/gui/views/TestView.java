@@ -46,7 +46,6 @@ import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
-import de.longri.cachebox3.gui.views.listview.ListView;
 import de.longri.cachebox3.gui.widgets.*;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.translation.Translation;
@@ -95,7 +94,7 @@ public class TestView extends AbstractView {
             cache.setFavoritePoints(1345); //TODO debug!
             CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache);
 
-            ListView.ListViewStyle style = VisUI.getSkin().get(ListView.ListViewStyle.class);
+            ListViewStyle style = VisUI.getSkin().get(ListViewStyle.class);
 
             cacheListItem.setBackground(style.firstItem);
 
@@ -367,7 +366,7 @@ public class TestView extends AbstractView {
             adjustableStarWidget.setValue(6);
 
 
-            ListView.ListViewStyle listViewStyle = CB.getSkin().get(ListView.ListViewStyle.class);
+            ListViewStyle listViewStyle = CB.getSkin().get(ListViewStyle.class);
             adjustableStarWidget.setBackground(listViewStyle.firstItem);
 
             VisLabel label3 = new VisLabel("AdjustableStarWidget");

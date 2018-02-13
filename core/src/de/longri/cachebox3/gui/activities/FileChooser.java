@@ -27,21 +27,23 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
-import de.longri.cachebox3.gui.views.listview.Adapter;
-import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.translation.Translation;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.util.regex.Matcher;
+
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 
 /**
  * Created by Longri on 20.02.2017.
@@ -228,7 +230,7 @@ public class FileChooser extends ActivityBase {
         nameStyle.font = fileChooserStyle.itemNameFont;
         nameStyle.fontColor = fileChooserStyle.itemNameFontColor;
 
-        FileListAdapter listViewAdapter = new FileListAdapter(actFileList) {
+        final FileListAdapter listViewAdapter = new FileListAdapter(actFileList) {
 
             @Override
             public int getCount() {
@@ -244,12 +246,6 @@ public class FileChooser extends ActivityBase {
             public void update(ListViewItem view) {
 
             }
-
-            @Override
-            public float getItemSize(int position) {
-                return 0;
-            }
-
 
             private ListViewItem getEntryItem(final int index) {
 
@@ -338,13 +334,23 @@ public class FileChooser extends ActivityBase {
             }
 
         };
-        ListView listView = new ListView(listViewAdapter, true);
+        final ListView listView = new ListView(VERTICAL);
+
         listViewAdapter.listView = listView;
-        showListView(listView, this.actDir.name(), true);
+
+        CB.postOnNextGlThread(new Runnable() {
+            @Override
+            public void run() {
+                listView.setAdapter(listViewAdapter);
+                showListView(listView, FileChooser.this.actDir.name(), true);
+            }
+        });
+
+
     }
 
     private void select(ListView listView, int index) {
-        listView.setSelectable(ListView.SelectableType.SINGLE);
+        listView.setSelectable(SINGLE);
         listView.setSelection(index);
         this.checkButton();
     }
@@ -447,7 +453,7 @@ public class FileChooser extends ActivityBase {
         showingWidgetGroup.addAction(Actions.moveTo(CB.scaledSizes.MARGIN, y, Menu.MORE_MENU_ANIMATION_TIME));
     }
 
-    private abstract class FileListAdapter implements Adapter {
+    private abstract class FileListAdapter implements ListViewAdapter {
         protected final FileHandle[] fileList;
 
         protected FileListAdapter(FileHandle[] fileList) {

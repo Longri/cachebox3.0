@@ -20,7 +20,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -32,13 +31,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
@@ -51,13 +48,13 @@ import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
 import de.longri.cachebox3.gui.skin.styles.SelectBoxStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.gui.views.listview.Adapter;
-import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.ApiButton;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.FloatControl;
 import de.longri.cachebox3.gui.widgets.SelectBox;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Translation;
@@ -67,6 +64,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
 
 /**
  * Created by Longri on 24.08.2016.
@@ -228,7 +228,7 @@ public class Settings_Activity extends ActivityBase {
         }
 
 
-        Adapter listViewAdapter = new Adapter() {
+        final ListViewAdapter listViewAdapter = new ListViewAdapter() {
             @Override
             public int getCount() {
                 return settingCategories.size;
@@ -245,13 +245,17 @@ public class Settings_Activity extends ActivityBase {
 
             }
 
-            @Override
-            public float getItemSize(int position) {
-                return 0;
-            }
         };
 
-        showListView(new ListView(listViewAdapter, true), Translation.get("setting"), true);
+        final ListView lv = new ListView(VERTICAL);
+        lv.setSelectable(NONE);
+        CB.postOnNextGlThread(new Runnable() {
+            @Override
+            public void run() {
+                lv.setAdapter(listViewAdapter);
+                showListView(lv, Translation.get("setting"), true);
+            }
+        });
     }
 
     private void showListView(ListView listView, CharSequence name, boolean animate) {
@@ -413,10 +417,10 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private void showCategory(SettingCategory category, boolean animate) {
+    private void showCategory(final SettingCategory category, final boolean animate) {
         log.debug("show settings categoriy: " + category.name());
 
-        Adapter listViewAdapter;
+        final ListViewAdapter listViewAdapter;
         final Array<SettingBase<?>> categorySettingsList = getSettingsOfCategory(category);
 
 
@@ -425,21 +429,27 @@ public class Settings_Activity extends ActivityBase {
             categorySettingsList.add(lgIn);
         }
 
+        //add only items they are not NULL
+       final Array<ListViewItem> items = new Array<>();
+        int idxCount = 0;
+        for (SettingBase<?> setting : categorySettingsList) {
+            ListViewItem listViewItem = getSettingItem(idxCount, setting);
+            if (listViewItem != null) {
+                items.add(listViewItem);
+                idxCount++;
+            }
+        }
+
         // show new ListView for this category
-        final Array<ListViewItem> listViewItems = new Array<>();
-        listViewAdapter = new Adapter() {
+        listViewAdapter = new ListViewAdapter() {
             @Override
             public int getCount() {
-                return categorySettingsList.size;
+                return items.size;
             }
 
             @Override
             public ListViewItem getView(int index) {
-                if (listViewItems.size <= index) {
-                    final SettingBase<?> setting = categorySettingsList.get(index);
-                    listViewItems.add(getSettingItem(index, setting));
-                }
-                return listViewItems.get(index);
+                return items.get(index);
             }
 
             @Override
@@ -447,15 +457,21 @@ public class Settings_Activity extends ActivityBase {
 
             }
 
-            @Override
-            public float getItemSize(int index) {
-                return 0;
-            }
+
         };
 
-        ListView newListView = new ListView(listViewAdapter);
-        newListView.setUserObject(category);
-        showListView(newListView, category.name(), animate);
+        final ListView newListView = new ListView(VERTICAL);
+        newListView.setSelectable(NONE);
+        CB.postOnNextGlThread(new Runnable() {
+            @Override
+            public void run() {
+                newListView.setAdapter(listViewAdapter);
+                newListView.setUserObject(category);
+                showListView(newListView, category.name(), animate);
+            }
+        });
+
+
     }
 
     private Array<SettingBase<?>> getSettingsOfCategory(SettingCategory category) {
@@ -496,11 +512,11 @@ public class Settings_Activity extends ActivityBase {
         if (setting instanceof de.longri.cachebox3.settings.types.SettingBool) {
             return getBoolView(listIndex, (de.longri.cachebox3.settings.types.SettingBool) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingIntArray) {
-            return getIntArrayView((de.longri.cachebox3.settings.types.SettingIntArray) setting);
+            return getIntArrayView(listIndex, (de.longri.cachebox3.settings.types.SettingIntArray) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingStringArray) {
-            return getStringArrayView((de.longri.cachebox3.settings.types.SettingStringArray) setting);
+            return getStringArrayView(listIndex, (de.longri.cachebox3.settings.types.SettingStringArray) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingTime) {
-            return getTimeView((de.longri.cachebox3.settings.types.SettingTime) setting);
+            return getTimeView(listIndex, (de.longri.cachebox3.settings.types.SettingTime) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingInt) {
             return getIntView(listIndex, (de.longri.cachebox3.settings.types.SettingInt) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingDouble) {
@@ -526,7 +542,7 @@ public class Settings_Activity extends ActivityBase {
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingsAudio) {
             return getAudioView(listIndex, (de.longri.cachebox3.settings.types.SettingsAudio) setting);
         } else if (setting instanceof de.longri.cachebox3.settings.types.SettingColor) {
-            return getColorView((de.longri.cachebox3.settings.types.SettingColor) setting);
+            return getColorView(listIndex, (de.longri.cachebox3.settings.types.SettingColor) setting);
         }
         return null;
     }
@@ -557,7 +573,7 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getColorView(de.longri.cachebox3.settings.types.SettingColor setting) {
+    private ListViewItem getColorView(int listIndex, de.longri.cachebox3.settings.types.SettingColor setting) {
         return null;
     }
 
@@ -916,7 +932,7 @@ public class Settings_Activity extends ActivityBase {
                                 if (actor instanceof ListView) {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
-                                    listView.layout(FORCE);
+                                    listView.layout();
                                     Gdx.app.postRunnable(new Runnable() {
                                         @Override
                                         public void run() {
@@ -951,7 +967,7 @@ public class Settings_Activity extends ActivityBase {
                                 if (actor instanceof ListView) {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
-                                    listView.layout(FORCE);
+                                    listView.layout();
                                     Gdx.app.postRunnable(new Runnable() {
                                         @Override
                                         public void run() {
@@ -986,7 +1002,7 @@ public class Settings_Activity extends ActivityBase {
                                 if (actor instanceof ListView) {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
-                                    listView.layout(FORCE);
+                                    listView.layout();
                                     Gdx.app.postRunnable(new Runnable() {
                                         @Override
                                         public void run() {
@@ -1004,15 +1020,15 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getTimeView(de.longri.cachebox3.settings.types.SettingTime setting) {
+    private ListViewItem getTimeView(int listIndex, de.longri.cachebox3.settings.types.SettingTime setting) {
         return null;
     }
 
-    private ListViewItem getStringArrayView(de.longri.cachebox3.settings.types.SettingStringArray setting) {
+    private ListViewItem getStringArrayView(int listIndex, de.longri.cachebox3.settings.types.SettingStringArray setting) {
         return null;
     }
 
-    private ListViewItem getIntArrayView(de.longri.cachebox3.settings.types.SettingIntArray setting) {
+    private ListViewItem getIntArrayView(int listIndex, de.longri.cachebox3.settings.types.SettingIntArray setting) {
         return null;
     }
 

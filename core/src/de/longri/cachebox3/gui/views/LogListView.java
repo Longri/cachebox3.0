@@ -25,9 +25,10 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
-import de.longri.cachebox3.gui.views.listview.Adapter;
-import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.LogEntry;
@@ -37,15 +38,17 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Comparator;
 
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
+
 /**
  * Created by Longri on 24.07.16.
  */
 public class LogListView extends AbstractView implements SelectedCacheChangedListener {
     private static Logger log = LoggerFactory.getLogger(LogListView.class);
 
-    private final ListView listView = new ListView();
+    private final ListView listView = new ListView(VERTICAL);
+    Array<LogEntry> logEntries;
 
-    private Array<ListViewItem> items;
     private String actGcCode;
 
     public LogListView() {
@@ -66,16 +69,12 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
     }
 
     private void setListViewAdapter() {
-        CB.postOnGlThread(new NamedRunnable("LogListView") {
+        CB.postOnNextGlThread((new NamedRunnable("LogListView") {
             @Override
             public void run() {
                 if (actGcCode == null || !actGcCode.equals(EventHandler.getSelectedCache().getGcCode())) {
-                    Array<LogEntry> logEntries = Database.getLogs(EventHandler.getSelectedCache());
+                    logEntries = Database.getLogs(EventHandler.getSelectedCache());
                     actGcCode = EventHandler.getSelectedCache() == null ? "" : EventHandler.getSelectedCache().getGcCode().toString();
-                    if (items != null)
-                        items.clear();
-                    else
-                        items = new Array<>();
 
                     logEntries.sort(new Comparator<LogEntry>() {
                         @Override
@@ -83,14 +82,10 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
                             return o1.Timestamp.compareTo(o2.Timestamp) * -1;
                         }
                     });
-
-                    for (int i = 0, n = logEntries.size; i < n; i++) {
-                        items.add(new LogListViewItem(i, logEntries.get(i)));
-                    }
                 }
                 listView.setAdapter(listViewAdapter);
             }
-        });
+        }));
     }
 
     @Override
@@ -98,16 +93,16 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
         listView.setBounds(0, 0, this.getWidth(), this.getHeight());
     }
 
-    private Adapter listViewAdapter = new Adapter() {
+    private ListViewAdapter listViewAdapter = new ListViewAdapter() {
 
         @Override
         public int getCount() {
-            return items.size;
+            return logEntries == null ? 0 : logEntries.size;
         }
 
         @Override
         public ListViewItem getView(int index) {
-            return items.get(index);
+            return new LogListViewItem(index, logEntries.get(index));
         }
 
         @Override
@@ -115,10 +110,6 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
             // nothing to do
         }
 
-        @Override
-        public float getItemSize(int index) {
-            return items.get(index).getHeight();
-        }
     };
 
     @Override

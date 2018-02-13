@@ -22,7 +22,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.LogListItemStyle;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.types.LogEntry;
 
 import java.text.SimpleDateFormat;
@@ -40,17 +40,10 @@ public class LogListViewItem extends ListViewItem {
         super(listIndex);
         this.style = VisUI.getSkin().get("logListItems", LogListItemStyle.class);
         this.logEntry = logEntry;
+        internLayout();
     }
 
-    @Override
-    public synchronized void layout() {
-//        this.setDebug(true, false);
-        if (!needsLayout) {
-            super.layout();
-            return;
-        }
-
-        this.clear();
+    private void internLayout() {
 
         VisTable headerTable = new VisTable();
         headerTable.add(new Image(this.logEntry.Type.getDrawable(style.typeStyle)));
@@ -79,15 +72,19 @@ public class LogListViewItem extends ListViewItem {
         Label.LabelStyle commentLabelStyle = new Label.LabelStyle();
         commentLabelStyle.font = this.style.descriptionFont;
         commentLabelStyle.fontColor = this.style.descriptionFontColor;
-        VisLabel commentLabel = new VisLabel(logEntry.Comment, commentLabelStyle);
-        commentLabel.setWrap(true);
-        this.add(commentLabel).expand().fill();
 
+        String comment = logEntry.Comment;
+        int maxLength = 500;
+        for (int i = 0; i < comment.length(); i += maxLength) {
+            String subComment = comment.substring(i, Math.min(i + maxLength, comment.length()));
+            VisLabel commentLabel = new VisLabel(subComment, commentLabelStyle);
+            commentLabel.setWrap(true);
+            this.add(commentLabel).expand().fill();
+            this.row();
+        }
 
-        super.layout();
         needsLayout = false;
     }
-
 
     @Override
     public void dispose() {

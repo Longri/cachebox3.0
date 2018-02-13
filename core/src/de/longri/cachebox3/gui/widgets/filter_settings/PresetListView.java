@@ -33,11 +33,9 @@ import de.longri.cachebox3.gui.activities.EditFilterSettings;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
-import de.longri.cachebox3.gui.views.listview.Adapter;
-import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
+import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.SettingString;
 import de.longri.cachebox3.translation.Translation;
@@ -46,6 +44,9 @@ import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 
 /**
  * Created by Longri on 16.11.2017.
@@ -65,8 +66,8 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
         this.filterSettings = editFilterSettings;
         fillPresetList();
 
-        presetListView = new ListView(true, false);
-        presetListView.setSelectable(ListView.SelectableType.SINGLE);
+        presetListView = new ListView(VERTICAL);
+        presetListView.setSelectable(SINGLE);
         this.add(presetListView).expand().fill();
         presetListView.setEmptyString("EmptyList");
         Gdx.app.postRunnable(new Runnable() {
@@ -80,10 +81,10 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
         });
 
         //selection changed listener
-        presetListView.addSelectionChangedEventListner(new ListView.SelectionChangedEvent() {
+        presetListView.addSelectionChangedEventListner(new SelectionChangedEvent() {
             @Override
             public void selectionChanged() {
-                ListViewItem item = presetListView.getSelectedItem();
+                ListViewItemInterface item = presetListView.getSelectedItem();
                 if (item instanceof PresetItem) {
                     filterSettings.filterProperties.set(((PresetItem) item).entry.filterProperties);
                     log.debug("Set EditFilterSettings to Preset {}", filterSettings.filterProperties.toString());
@@ -93,41 +94,45 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
     }
 
     private void setSelected() {
+        CB.postOnNextGlThread(new Runnable() {
+            @Override
+            public void run() {
+                //setSelection
+                int n = presetListItems.size;
+                FilterProperties actFilter = filterSettings.filterProperties;
+                int selectedIndex = -1;
+                while (n-- > 0) {
+                    ListViewItem item = presetListItems.get(n);
+                    if (item instanceof PresetItem) {
+                        if (((PresetItem) item).entry.filterProperties.equals(actFilter)) {
+                            selectedIndex = n;
+                            break;
+                        }
+                    }
+                }
 
-        //setSelection
-        int n = presetListItems.size;
-        FilterProperties actFilter = filterSettings.filterProperties;
-        int selectedIndex = -1;
-        while (n-- > 0) {
-            ListViewItem item = presetListItems.get(n);
-            if (item instanceof PresetItem) {
-                if (((PresetItem) item).entry.filterProperties.equals(actFilter)) {
-                    selectedIndex = n;
-                    break;
+                if (selectedIndex > -1) {
+                    presetListView.setSelection(selectedIndex);
+                    presetListView.setSelectedItemVisible(true);
+
+                    //maybe set filter name
+                    String name = ((PresetItem) presetListItems.get(selectedIndex)).entry.name.toString();
+                    filterSettings.filterProperties.setName(name);
+
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            CB.requestRendering();
+                        }
+                    });
                 }
             }
-        }
-
-        if (selectedIndex > -1) {
-            presetListView.setSelection(selectedIndex);
-            presetListView.setSelectedItemVisible(true);
-
-            //maybe set filter name
-            String name = ((PresetItem) presetListItems.get(selectedIndex)).entry.name.toString();
-            filterSettings.filterProperties.setName(name);
-
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    CB.requestRendering();
-                }
-            });
-        }
+        });
     }
 
     private void setListViewAdapter() {
 
-        presetListView.setAdapter(new Adapter() {
+        presetListView.setAdapter(new ListViewAdapter() {
             @Override
             public int getCount() {
                 return presetListItems.size;
@@ -143,10 +148,6 @@ public class PresetListView extends Table implements EditFilterSettings.OnShow {
 
             }
 
-            @Override
-            public float getItemSize(int index) {
-                return presetListItems.get(index).getPrefHeight();
-            }
         });
 
     }

@@ -33,10 +33,10 @@ import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.gui.views.listview.Adapter;
-import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
@@ -53,6 +53,9 @@ import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 
 /**
  * Created by Longri on 29.08.2016.
@@ -96,13 +99,22 @@ public class SelectDB_Activity extends ActivityBase {
             index++;
         }
 
-        lvFiles = new ListView();
-        lvFiles.setSelectable(ListView.SelectableType.SINGLE);
+        lvFiles = new ListView(VERTICAL);
+        lvFiles.setSelectable(SINGLE);
         lvAdapter = new CustomAdapter(files);
         lvFiles.setAdapter(lvAdapter);
         this.addActor(lvFiles);
 
-        if (selectedIndex > -1) lvFiles.setSelection(selectedIndex);
+        if (selectedIndex > -1) {
+            final int finalIdx = selectedIndex;
+            CB.postOnNextGlThread(new Runnable() {
+                @Override
+                public void run() {
+                    lvFiles.setSelection(finalIdx);
+                }
+            });
+
+        }
 
         bNew = new CharSequenceButton(Translation.get("NewDB"));
         bSelect = new CharSequenceButton(Translation.get("confirm"));
@@ -248,7 +260,7 @@ public class SelectDB_Activity extends ActivityBase {
         bAutostart.setBounds(xPos, yPos, btnAreaWidth, btnHeight);
         yPos += CB.scaledSizes.MARGIN + btnHeight;
 
-        lvFiles.setBackground(null);
+//        lvFiles.setBackground(null);
         lvFiles.setBounds(CB.scaledSizes.MARGIN, yPos, getWidth() - CB.scaledSizes.MARGINx2, getHeight() - (yPos + CB.scaledSizes.MARGIN));
         needsLayout = false;
     }
@@ -257,7 +269,6 @@ public class SelectDB_Activity extends ActivityBase {
     public void sizeChanged() {
         needsLayout = true;
         layout();
-        lvFiles.dataSetChanged();
     }
 
     private void readCountAtThread() {
@@ -270,7 +281,7 @@ public class SelectDB_Activity extends ActivityBase {
                     String lastModified = sdf.format(file.lastModified());
                     String fileSize = String.valueOf(file.length() / (1024 * 1024)) + "MB";
                     String cacheCount = String.valueOf(Database.getCacheCountInDB(file.getAbsolutePath()));
-                    fileInfos[index] = cacheCount + " Caches  " + fileSize + "    last use " + lastModified;
+                    fileInfos[index] = cacheCount + " Caches  " + fileSize + "#last use " + lastModified;
                     index++;
                 }
                 Gdx.graphics.requestRendering();
@@ -391,7 +402,7 @@ public class SelectDB_Activity extends ActivityBase {
             bAutostart.setText(Translation.get("AutoStartTime", String.valueOf(autoStartTime)));
     }
 
-    private class CustomAdapter implements Adapter {
+    private class CustomAdapter implements ListViewAdapter {
 
         private FileList files;
 
@@ -420,27 +431,13 @@ public class SelectDB_Activity extends ActivityBase {
 
         @Override
         public ListViewItem getView(final int listIndex) {
-            final SelectDBItem[] v = new SelectDBItem[1];
-            CB.postOnGlThread(new NamedRunnable("Create SelectDb_Item") {
-                @Override
-                public void run() {
-                    v[0] = new SelectDBItem(listIndex, files.get(listIndex), fileInfos[listIndex], VisUI.getSkin().get("default", SelectDbStyle.class));
-                    v[0].pack();
-                    v[0].layout();
-                }
-            }, true);
-            return v[0];
+            return new SelectDBItem(listIndex, files.get(listIndex), VisUI.getSkin().get("default", SelectDbStyle.class));
         }
 
         @Override
         public void update(ListViewItem view) {
             SelectDBItem dbItem = (SelectDBItem) view;
             dbItem.updateFileInfo(fileInfos[view.getListIndex()]);
-        }
-
-        @Override
-        public float getItemSize(int position) {
-            return 0;
         }
 
     }

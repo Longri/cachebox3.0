@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.views.listview;
+package de.longri.cachebox3.gui.widgets.list_view;
 
 /**
- * Created by Longri on 30.08.2016.
+ * Created by Longri on 03.02.18.
  */
-public interface Adapter {
+public interface ListViewAdapter {
 
     /**
      * How many items are in the data set represented by this Adapter.
@@ -36,16 +36,8 @@ public interface Adapter {
     ListViewItem getView(int index);
 
     /**
-     * @param view
+     * @param view the ListViewItem for update
      */
     void update(ListViewItem view);
-
-    /**
-     * Gibt die Größe zur Berechnung der Position eines Items zurück.</br> </br>Für V_ListView => die Höhe </br>Für H_ListView => die Breite
-     *
-     * @param index
-     * @return
-     */
-    float getItemSize(int index);
 
 }

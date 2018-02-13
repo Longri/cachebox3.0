@@ -20,6 +20,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
@@ -37,9 +38,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
-import de.longri.cachebox3.gui.views.listview.Adapter;
-import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
@@ -53,6 +52,9 @@ import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -106,147 +108,133 @@ public class WaypointView extends AbstractView {
     private void addNewListView() {
 
         log.debug("Start Thread add new listView");
-        Thread thread = new Thread(new Runnable() {
+
+        WaypointView.this.clear();
+        ListViewAdapter listViewAdapter = new ListViewAdapter() {
             @Override
-            public void run() {
-                WaypointView.this.clear();
-                Adapter listViewAdapter = new Adapter() {
-                    @Override
-                    public int getCount() {
-                        if (actAbstractCache == null || actAbstractCache.getWaypoints() == null) return 0;
-                        return actAbstractCache.getWaypoints().size + 1;
-                    }
+            public int getCount() {
+                if (actAbstractCache == null || actAbstractCache.getWaypoints() == null) return 0;
+                return actAbstractCache.getWaypoints().size + 1;
+            }
 
-                    @Override
-                    public ListViewItem getView(int index) {
-                        if (index == 0) {
-                            return CacheListItem.getListItem(index, actAbstractCache);
-                        } else {
-                            final WayPointListItem item = WayPointListItem.getListItem(index, actAbstractCache.getWaypoints().get(index - 1));
-                            return item;
-                        }
-                    }
-
-                    @Override
-                    public void update(final ListViewItem view) {
-                        // set listener on Update, because Item is remove all listener with Layout
-                        view.addListener(clickLongClickListener);
-
-
-                        //get index from item
-                        int idx = view.getListIndex();
-
-                        Coordinate myPosition = EventHandler.getMyPosition();
-                        if (myPosition == null)
-                            return; // can't update without an position
-
-                        float heading = de.longri.cachebox3.events.EventHandler.getHeading();
-
-                        // get coordinate from Cache or from Waypoint
-                        Coordinate targetCoord = idx == 0 ? actAbstractCache : actAbstractCache.getWaypoints().get(idx - 1);
-
-                        //calculate distance and bearing
-                        float result[] = new float[4];
-                        MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST,
-                                myPosition.getLatitude(), myPosition.getLongitude(),
-                                targetCoord.getLatitude(), targetCoord.getLongitude(), result);
-
-
-                        //update item
-                        boolean changed;
-                        if (idx == 0) {
-                            changed = ((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0], true));
-                        } else {
-                            changed = ((WayPointListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0], true));
-                        }
-                        if (changed) {
-                            Gdx.app.postRunnable(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Gdx.graphics.requestRendering();
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public float getItemSize(int position) {
-                        return 0;
-                    }
-                };
-
-                if (WaypointView.this.listView != null) {
-                    disposeListView();
+            @Override
+            public ListViewItem getView(int index) {
+                if (index == 0) {
+                    return CacheListItem.getListItem(index, actAbstractCache);
+                } else {
+                    final WayPointListItem item = WayPointListItem.getListItem(index, actAbstractCache.getWaypoints().get(index - 1));
+                    return item;
                 }
+            }
 
-                WaypointView.this.listView = new ListView(listViewAdapter, false, true);
-                synchronized (WaypointView.this.listView) {
-                    listView.setBounds(0, 0, WaypointView.this.getWidth(), WaypointView.this.getHeight());
-                    addActor(listView);
-                    listView.setCullingArea(new Rectangle(0, 0, WaypointView.this.getWidth(), WaypointView.this.getHeight()));
-                    listView.setSelectable(ListView.SelectableType.SINGLE);
-                    CB.requestRendering();
+            @Override
+            public void update(final ListViewItem view) {
+                // set listener on Update, because Item is remove all listener with Layout
+                view.addListener(clickLongClickListener);
+
+
+                //get index from item
+                int idx = view.getListIndex();
+
+                Coordinate myPosition = EventHandler.getMyPosition();
+                if (myPosition == null)
+                    return; // can't update without an position
+
+                float heading = de.longri.cachebox3.events.EventHandler.getHeading();
+
+                // get coordinate from Cache or from Waypoint
+                Coordinate targetCoord = idx == 0 ? actAbstractCache : actAbstractCache.getWaypoints().get(idx - 1);
+
+                //calculate distance and bearing
+                float result[] = new float[4];
+                MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST,
+                        myPosition.getLatitude(), myPosition.getLongitude(),
+                        targetCoord.getLatitude(), targetCoord.getLongitude(), result);
+
+
+                //update item
+                boolean changed;
+                if (idx == 0) {
+                    changed = ((CacheListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0], true));
+                } else {
+                    changed = ((WayPointListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0], true));
                 }
-
-                // add selection changed event listener
-                listView.addSelectionChangedEventListner(new ListView.SelectionChangedEvent() {
-                    @Override
-                    public void selectionChanged() {
-
-                        if (listView.getSelectedItem() instanceof WayPointListItem) {
-                            WayPointListItem selectedItem = (WayPointListItem) listView.getSelectedItem();
-                            int index = selectedItem.getListIndex() - 1;
-                            AbstractWaypoint wp = actAbstractCache.getWaypoints().get(index);
-
-                            log.debug("Waypoint selection changed to: " + wp.toString());
-                            //set selected Waypoint global
-                            EventHandler.fire(new SelectedWayPointChangedEvent(wp));
-                            actWaypoint = wp;
-
-                        } else {
-                            CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
-                            int selectedItemListIndex = selectedItem.getListIndex();
-
-                            AbstractCache cache = Database.Data.Query.get(selectedItemListIndex);
-                            log.debug("Cache selection changed to: " + cache.toString());
-                            //set selected Cache global
-                            EventHandler.fire(new SelectedCacheChangedEvent(cache));
-                            actWaypoint = null;
+                if (changed) {
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            Gdx.graphics.requestRendering();
                         }
-                    }
-                });
+                    });
+                }
+            }
 
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        AbstractWaypoint wp = EventHandler.getSelectedWaypoint();
-                        if (wp == null) {
-                            //select Cache
-                            listView.setSelection(0);
-                            listView.setSelectedItemVisible(false);
-                        } else {
-                            int index = 0;
-                            for (ListViewItem item : listView.items()) {
-                                if (index == 0) {
-                                    index++;
-                                    continue;
-                                }
-                                WayPointListItem wayPointListItem = (WayPointListItem) item;
-                                if (wayPointListItem.getWaypointGcCode().equals(wp.getGcCode())) {
-                                    listView.setSelection(index);
-                                    listView.setSelectedItemVisible(false);
-                                    break;
-                                }
-                                index++;
-                            }
-                        }
-                    }
-                });
-                log.debug("Finish Thread add new listView");
-                CB.requestRendering();
+        };
+
+        if (WaypointView.this.listView != null) {
+            disposeListView();
+        }
+
+        WaypointView.this.listView = new ListView(VERTICAL);
+        WaypointView.this.listView.setAdapter(listViewAdapter);
+
+        synchronized (WaypointView.this.listView) {
+            listView.setBounds(0, 0, WaypointView.this.getWidth(), WaypointView.this.getHeight());
+            addActor(listView);
+            listView.setCullingArea(new Rectangle(0, 0, WaypointView.this.getWidth(), WaypointView.this.getHeight()));
+            listView.setSelectable(SINGLE);
+            CB.requestRendering();
+        }
+
+        // add selection changed event listener
+        listView.addSelectionChangedEventListner(new SelectionChangedEvent() {
+            @Override
+            public void selectionChanged() {
+
+                if (listView.getSelectedItem() instanceof WayPointListItem) {
+                    WayPointListItem selectedItem = (WayPointListItem) listView.getSelectedItem();
+                    int index = selectedItem.getListIndex() - 1;
+                    AbstractWaypoint wp = actAbstractCache.getWaypoints().get(index);
+
+                    log.debug("Waypoint selection changed to: " + wp.toString());
+                    //set selected Waypoint global
+                    EventHandler.fire(new SelectedWayPointChangedEvent(wp));
+                    actWaypoint = wp;
+
+                } else {
+                    CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
+                    int selectedItemListIndex = selectedItem.getListIndex();
+
+                    AbstractCache cache = Database.Data.Query.get(selectedItemListIndex);
+                    log.debug("Cache selection changed to: " + cache.toString());
+                    //set selected Cache global
+                    EventHandler.fire(new SelectedCacheChangedEvent(cache));
+                    actWaypoint = null;
+                }
             }
         });
-        thread.start();
+
+        CB.postOnNextGlThread(new Runnable() {
+            @Override
+            public void run() {
+                AbstractWaypoint wp = EventHandler.getSelectedWaypoint();
+                if (wp == null) {
+                    //select Cache
+                    listView.setSelection(0);
+                    listView.setSelectedItemVisible(false);
+                } else {
+                    Array<AbstractWaypoint> waypoints = actAbstractCache.getWaypoints();
+                    for (int i = 0; i < waypoints.size; i++) {
+                        if (waypoints.get(i).getGcCode().equals(wp.getGcCode())) {
+                            listView.setSelection(i + 1);
+                            listView.setSelectedItemVisible(false);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+        log.debug("Finish Thread add new listView");
         CB.requestRendering();
     }
 

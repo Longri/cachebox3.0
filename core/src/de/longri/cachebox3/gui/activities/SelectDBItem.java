@@ -18,11 +18,12 @@ package de.longri.cachebox3.gui.activities;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 
 import java.io.File;
 
@@ -33,9 +34,9 @@ public class SelectDBItem extends ListViewItem {
 
     private final String fileName;
     private final VisLabel lblName, lblInfo;
+    private final VisLabel lblInfoSize;
 
-    public SelectDBItem(int listIndex, File file, String fileInfo, SelectDB_Activity.SelectDbStyle style) {
-
+    public SelectDBItem(int listIndex, File file, SelectDB_Activity.SelectDbStyle style) {
         super(listIndex);
         Label.LabelStyle nameStyle = new Label.LabelStyle();
         nameStyle.font = style.nameFont;
@@ -49,10 +50,14 @@ public class SelectDBItem extends ListViewItem {
 
         fileName = file.getName();
         lblName = new VisLabel(fileName, nameStyle);
-        lblInfo = new VisLabel(fileInfo, infoStyle);
+        lblInfo = new VisLabel("", infoStyle);
+        lblInfoSize = new VisLabel("", infoStyle);
+        lblInfoSize.setAlignment(Align.right);
         infoTable.add(lblName).left().fillX();
         infoTable.row();
-        infoTable.add(lblInfo).left().fillX();
+        infoTable.add(lblInfo).left().expandX().fillX();
+        infoTable.row();
+        infoTable.add(lblInfoSize).right().expandX().fillX();
 
         Image iconImage = new Image(CB.getSkin().getMenuIcon.manageDB, Scaling.none);
         this.add(iconImage).center().padRight(CB.scaledSizes.MARGIN_HALF);
@@ -70,6 +75,10 @@ public class SelectDBItem extends ListViewItem {
     }
 
     public void updateFileInfo(String fileInfo) {
-        lblInfo.setText(fileInfo);
+        String[] split = fileInfo.split("#");
+        lblInfo.setText(split[0]);
+//        lblInfoSize.setText(split[1]);
+        lblInfoSize.setText("ListIndex: " + this.getListIndex());
+        CB.requestRendering();
     }
 }

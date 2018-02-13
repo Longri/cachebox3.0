@@ -37,11 +37,12 @@ import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.CacheSizeStyle;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.skin.styles.StarsStyle;
-import de.longri.cachebox3.gui.views.listview.Adapter;
-import de.longri.cachebox3.gui.views.listview.ListView;
-import de.longri.cachebox3.gui.views.listview.ListViewItem;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItemInterface;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -52,6 +53,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.gui.widgets.AdjustableStarWidget.Type.STAR;
 import static de.longri.cachebox3.gui.widgets.AdjustableStarWidget.Type.SIZE;
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
 
 /**
  * Created by Longri on 16.11.2017.
@@ -64,47 +67,24 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
     private final FilterStyle style;
     private final EditFilterSettings filterSettings;
     private final Array<ListViewItem> listViewItems = new Array<>();
-    private final Adapter listViewAdapter;
 
     public FilterSetListView(EditFilterSettings editFilterSettings, FilterStyle style) {
         this.style = style;
         this.filterSettings = editFilterSettings;
-        listViewAdapter = new Adapter() {
-            @Override
-            public int getCount() {
-                return listViewItems.size;
-            }
 
-            @Override
-            public ListViewItem getView(int index) {
-                return listViewItems.get(index);
-            }
-
-            @Override
-            public void update(ListViewItem view) {
-
-            }
-
-            @Override
-            public float getItemSize(int index) {
-                ListViewItem item = listViewItems.get(index);
-                return item.isVisible() ? item.getHeight() : 0;
-            }
-        };
-        setListView = new ListView(listViewAdapter, true, false);
-        setListView.setSelectable(ListView.SelectableType.NONE);
+        setListView = new ListView(VERTICAL);
+        setListView.setSelectable(NONE);
         this.add(setListView).expand().fill();
         setListView.setEmptyString("EmptyList");
-        fillList();
     }
 
     private void fillList() {
-        listViewItems.clear();
+        if (listViewItems.size > 0) return;
         addGeneralItems();
         addDTGcVoteItems();
         addCachTypeItems();
         addAttributeItems();
-        setListView.setAdapter(listViewAdapter);
+
         //Toggle all sections
         Gdx.app.postRunnable(new Runnable() {
             @Override
@@ -115,6 +95,40 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                         ((ButtonListViewItem) listViewItems.get(n)).toggle();
                     }
                 }
+                CB.postOnNextGlThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setNewListViewAdapter();
+                    }
+                });
+            }
+        });
+    }
+
+    private void setNewListViewAdapter() {
+        final Array<ListViewItem> visibleList = new Array<>();
+        int idxCount = 0;
+        for (ListViewItem item : listViewItems) {
+            if (item.isVisible()) {
+                //reorganise index
+                item.setNewIndex(idxCount++);
+                visibleList.add(item);
+            }
+        }
+        setListView.setAdapter(new ListViewAdapter() {
+            @Override
+            public int getCount() {
+                return visibleList.size;
+            }
+
+            @Override
+            public ListViewItem getView(int index) {
+                return visibleList.get(index);
+            }
+
+            @Override
+            public void update(ListViewItem view) {
+
             }
         });
     }
@@ -122,7 +136,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
     private void addGeneralItems() {
 
         final AtomicBoolean sectionVisible = new AtomicBoolean(true);
-
+        final int buttonIndex = listViewItems.size;
         final IntPropertyListView available = new IntPropertyListView(listViewItems.size + 1,
                 filterSettings.filterProperties.NotAvailable, style.Available, Translation.get("disabled"));
         final IntPropertyListView archived = new IntPropertyListView(listViewItems.size + 2,
@@ -159,13 +173,11 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 listingChanged.setVisible(visible);
                 manualwaypoint.setVisible(visible);
                 corrected.setVisible(visible);
-
-                setListView.invalidate();
-                setListView.layout(true);
+                setNewListViewAdapter();
             }
         };
 
-        listViewItems.add(new ButtonListViewItem(listViewItems.size, Translation.get("General"), listener));
+        listViewItems.add(new ButtonListViewItem(buttonIndex, Translation.get("General"), listener));
         listViewItems.add(available);
         listViewItems.add(archived);
         listViewItems.add(finds);
@@ -182,6 +194,7 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
     private void addDTGcVoteItems() {
 
         final AtomicBoolean sectionVisible = new AtomicBoolean(true);
+        final int buttonIndex = listViewItems.size;
 
         final AdjustableStarListViewItem minDificulty = new AdjustableStarListViewItem(listViewItems.size + 1,
                 filterSettings.filterProperties.MinDifficulty, Translation.get("minDifficulty"), STAR);
@@ -220,13 +233,11 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 maxRating.setVisible(visible);
                 minFav.setVisible(visible);
                 maxFav.setVisible(visible);
-
-                setListView.invalidate();
-                setListView.layout(true);
+                setNewListViewAdapter();
             }
         };
 
-        listViewItems.add(new ButtonListViewItem(listViewItems.size, "D / T" + String.format("%n") + "GC-Vote", listener));
+        listViewItems.add(new ButtonListViewItem(buttonIndex, "D / T" + String.format("%n") + "GC-Vote", listener));
         listViewItems.add(minDificulty);
         listViewItems.add(maxDificulty);
         listViewItems.add(minTerrain);
@@ -242,15 +253,6 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
     private void addCachTypeItems() {
         final AtomicBoolean sectionVisible = new AtomicBoolean(true);
         final Array<BooleanPropertyListView> itemList = new Array<>();
-        final int idx = listViewItems.size + 1;
-
-        for (int i = 0, n = filterSettings.filterProperties.cacheTypes.length; i < n; i++) {
-            CacheTypes type = CacheTypes.get(i);
-            if (type.isCache())
-                itemList.add(new BooleanPropertyListView(idx + i,
-                        filterSettings.filterProperties.cacheTypes[i], type.getDrawable(), type.getName()));
-        }
-
         ClickListener listener = new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 final boolean visible = !sectionVisible.get();
@@ -259,34 +261,25 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 while (n-- > 0) {
                     itemList.get(n).setVisible(visible);
                 }
-
-                setListView.invalidate();
-                setListView.layout(true);
+                setNewListViewAdapter();
             }
         };
-
         listViewItems.add(new ButtonListViewItem(listViewItems.size, Translation.get("CacheTypes"), listener));
+        int idx = listViewItems.size;
+        for (int i = 0, n = filterSettings.filterProperties.cacheTypes.length; i < n; i++) {
+            CacheTypes type = CacheTypes.get(i);
+            if (type.isCache())
+                itemList.add(new BooleanPropertyListView(idx++,
+                        filterSettings.filterProperties.cacheTypes[i], type.getDrawable(), type.getName()));
+        }
         for (int i = 0, n = itemList.size; i < n; i++) {
             listViewItems.add(itemList.get(i));
         }
     }
 
     private void addAttributeItems() {
-
         final AtomicBoolean sectionVisible = new AtomicBoolean(true);
-
         final Array<IntPropertyListView> itemList = new Array<>();
-        final int idx = listViewItems.size + 1;
-
-        final AttributesStyle attStyle = VisUI.getSkin().get("CompassView", AttributesStyle.class);
-
-        for (int i = 1, n = filterSettings.filterProperties.attributes.length; i < n; i++) {
-            Attributes attribute = Attributes.values()[i];
-            itemList.add(new IntPropertyListView(idx + i,
-                    filterSettings.filterProperties.attributes[i], attribute.getDrawable(attStyle),
-                    Translation.get("att_" + i + "_1")));
-        }
-
         final ClickListener listener = new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 final boolean visible = !sectionVisible.get();
@@ -295,13 +288,19 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 while (n-- > 0) {
                     itemList.get(n).setVisible(visible);
                 }
-
-                setListView.invalidate();
-                setListView.layout(true);
+                setNewListViewAdapter();
             }
         };
-
         listViewItems.add(new ButtonListViewItem(listViewItems.size, Translation.get("Attributes"), listener));
+        int idx = listViewItems.size;
+        final AttributesStyle attStyle = VisUI.getSkin().get("CompassView", AttributesStyle.class);
+        for (int i = 1, n = filterSettings.filterProperties.attributes.length; i < n; i++) {
+            Attributes attribute = Attributes.values()[i];
+            itemList.add(new IntPropertyListView(idx++,
+                    filterSettings.filterProperties.attributes[i], attribute.getDrawable(attStyle),
+                    Translation.get("att_" + i + "_1")));
+        }
+
         for (int i = 0, n = itemList.size; i < n; i++) {
             listViewItems.add(itemList.get(i));
         }

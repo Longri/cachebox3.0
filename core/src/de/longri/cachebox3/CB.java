@@ -261,6 +261,7 @@ public class CB {
     }
 
     public static void requestRendering() {
+        if (Gdx.graphics == null) return;
         Gdx.graphics.requestRendering();
         Gdx.app.postRunnable(new Runnable() {
             @Override
@@ -293,7 +294,7 @@ public class CB {
     // GL-Thread check
     private static Thread GL_THREAD;
 
-    public static void assertMainThread() {
+    public static void assertGlThread() {
         if (GL_THREAD != Thread.currentThread()) {
             throw new RuntimeException("Access from non-GL thread!");
         }
@@ -622,6 +623,21 @@ public class CB {
 
     public static void postOnMainThread(NamedRunnable runnable) {
         PlatformConnector.postOnMainThread(runnable);
+    }
+
+    public static void postOnNextGlThread(final Runnable runnable) {
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        runnable.run();
+                        requestRendering();
+                    }
+                });
+            }
+        });
     }
 }
 

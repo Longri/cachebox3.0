@@ -20,6 +20,8 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
 import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
@@ -52,6 +54,8 @@ public class TestUtils {
         };
         Gdx.app.setApplicationLogger(new LwjglApplicationLogger());
         CB.WorkPath = "!!!";
+        VisUI.load(new Skin());
+        CB.initThreadCheck();
     }
 
     public static double roundDoubleCoordinate(double value) {
