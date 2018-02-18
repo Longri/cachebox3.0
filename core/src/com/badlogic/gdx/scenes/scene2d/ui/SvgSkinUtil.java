@@ -167,8 +167,8 @@ public class SvgSkinUtil {
             }
         }
 
-//        packer.dispose(); //TODO
-        pixmap.dispose();
+        packer[0].dispose();
+        packer[0] = null;
         return atlas[0];
     }
 
