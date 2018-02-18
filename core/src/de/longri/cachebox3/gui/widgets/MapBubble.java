@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
 import de.longri.cachebox3.gui.skin.styles.MapBubbleStyle;
@@ -112,6 +113,6 @@ public class MapBubble extends VisTable {
 
     public float getMinWidth() {
         if (style.minWidth <= 0) return super.getWidth();
-        return style.minWidth;
+        return CB.getScaledFloat(style.minWidth);
     }
 }

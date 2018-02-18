@@ -3255,7 +3255,7 @@
       "background": "bubble_9_Patch",
       "selectedBackground": "bubble_selected_9_Patch",
       "offsetX": -13,
-      "minWidth": 300,
+      "minWidth": 200,
       "cacheListItemStyle": "bubble",
       "wayPointListItemStyle": "bubble"
     }
