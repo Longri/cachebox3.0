@@ -28,6 +28,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.LogTypes;
+import org.oscim.core.MercatorProjection;
 
 /**
  * Created by Longri on 31.01.2018.
@@ -103,16 +104,36 @@ public class MapBubble extends VisTable {
     }
 
     public float getOffsetX() {
-        return style.offsetX;
+        return CB.getScaledFloat(style.offsetX);
     }
 
     public float getOffsetY() {
-        return style.offsetY;
+        return CB.getScaledFloat(style.offsetY);
     }
 
 
     public float getMinWidth() {
         if (style.minWidth <= 0) return super.getWidth();
         return CB.getScaledFloat(style.minWidth);
+    }
+
+    public double getCoordX() {
+        if (cache != null) {
+            return MercatorProjection.longitudeToX(cache.longitude);
+        }
+        if (waypoint != null) {
+            return MercatorProjection.longitudeToX(waypoint.longitude);
+        }
+        return 0;
+    }
+
+    public double getCoordY() {
+        if (cache != null) {
+            return MercatorProjection.latitudeToY(cache.latitude);
+        }
+        if (waypoint != null) {
+            return MercatorProjection.latitudeToY(waypoint.latitude);
+        }
+        return 0;
     }
 }

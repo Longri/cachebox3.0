@@ -69,9 +69,7 @@ import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
-import org.oscim.core.MapPosition;
-import org.oscim.core.MercatorProjection;
-import org.oscim.core.Tile;
+import org.oscim.core.*;
 import org.oscim.event.Event;
 import org.oscim.gdx.GestureHandlerImpl;
 import org.oscim.layers.GroupLayer;
@@ -79,6 +77,7 @@ import org.oscim.layers.Layer;
 import org.oscim.layers.TileGridLayer;
 import org.oscim.map.Layers;
 import org.oscim.map.Map;
+import org.oscim.map.ViewController;
 import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
@@ -108,6 +107,7 @@ public class MapView extends AbstractView {
 
     private static double lastCenterPosLat, lastCenterPosLon;
     private static MapMode lastMapMode = MapMode.FREE;
+    Point screenPoint = new Point();
 
     public static Coordinate getLastCenterPos() {
         return new Coordinate(lastCenterPosLat, lastCenterPosLon);
@@ -294,11 +294,6 @@ public class MapView extends AbstractView {
                 super.onMapEvent(e, mapPosition);
                 if (e == Map.MOVE_EVENT) {
 //                    log.debug("Map.MOVE_EVENT");
-                    if (infoBubble != null && infoItem != null) {
-                        infoBubble.setPosition(mapHalfWith + infoItem.drawX + infoBubble.getOffsetX(),
-                                (this.getHeight() - (mapHalfHeight + infoItem.drawY)) + infoBubble.getOffsetY());
-                    }
-
                     if (CB.mapMode != MapMode.FREE)
                         mapStateButton.setMapMode(MapMode.FREE, new Event());
                 } else if (e == Map.TILT_EVENT) {
@@ -310,6 +305,11 @@ public class MapView extends AbstractView {
                     if (positionChangedHandler != null)
                         positionChangedHandler.rotateChangedFromUser(mapPosition.getBearing());
                 }
+
+                if (infoBubble != null && infoItem != null) {
+                    setInfoBubblePos();
+                }
+
 
                 lastCenterPosLat = mapPosition.getLatitude();
                 lastCenterPosLon = mapPosition.getLongitude();
@@ -940,8 +940,7 @@ public class MapView extends AbstractView {
 
         MapView.this.addActor(infoBubble);
         infoItem = item;
-        infoBubble.setPosition(mapHalfWith + infoItem.drawX + infoBubble.getOffsetX(),
-                (this.getHeight() - (mapHalfHeight + infoItem.drawY)) + infoBubble.getOffsetY());
+        setInfoBubblePos();
         CB.requestRendering();
 
         infoBubble.addListener(new ClickListener() {
@@ -969,5 +968,13 @@ public class MapView extends AbstractView {
         });
 
 
+    }
+
+    private void setInfoBubblePos() {
+        if (this.map != null && infoBubble != null && screenPoint != null) {
+            this.map.viewport().toScreenPoint(infoBubble.getCoordX(), infoBubble.getCoordY(), screenPoint);
+            infoBubble.setPosition((float) (screenPoint.x + this.getWidth() / 2) + infoBubble.getOffsetX(),
+                    (float) (this.getHeight() - (screenPoint.y + this.getHeight() / 2)) + infoBubble.getOffsetY());
+        }
     }
 }
