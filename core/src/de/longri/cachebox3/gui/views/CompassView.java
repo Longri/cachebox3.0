@@ -80,10 +80,12 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
 
         topTable = new Table();
-        bottomTable = new Table();
+        bottomTable = new Table() {
+            public void sizeChanged() {
+                compassPanel.sizeChanged();
+            }
+        };
 
-//        topTable.setDebug(true, true);
-//        bottomTable.setDebug(true, true);
 
         topTable.setBackground(style.splitBackground);
         bottomTable.setBackground(style.splitBackground);
@@ -406,10 +408,15 @@ public class CompassView extends AbstractView implements PositionChangedListener
             super.sizeChanged();
 
             float height = distance.getPrefHeight();
-            float yPos = this.getHeight() - height - CB.scaledSizes.MARGIN;
-            compass.setBounds(0, CB.scaledSizes.MARGIN, this.getWidth(), this.getHeight() - height + CB.scaledSizes.MARGINx4);
+            float yPos = this.getParent().getHeight() - (height /*+ CB.scaledSizes.MARGIN*/);
+
+            compass.setBounds(0, CB.scaledSizes.MARGINx4, this.getParent().getWidth()-CB.scaledSizes.MARGINx2, this.getParent().getHeight() - height + CB.scaledSizes.MARGINx4);
+
             distance.setBounds(CB.scaledSizes.MARGIN, yPos, this.getWidth() - CB.scaledSizes.MARGINx2, height);
             accurate.setBounds(CB.scaledSizes.MARGIN, yPos, this.getWidth() - CB.scaledSizes.MARGINx2, height);
+
+
+            log.debug("yPos:{}  height:{}", yPos, height);
         }
 
         public void setInfo(float distance, float heading, float bearing, float accurate) {
