@@ -17,9 +17,11 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
@@ -32,7 +34,7 @@ import de.longri.cachebox3.gui.menu.*;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
-import de.longri.cachebox3.gui.widgets.Compass;
+import de.longri.cachebox3.gui.widgets.CompassPanel;
 import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
@@ -44,7 +46,6 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.MathUtils;
-import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,10 +81,12 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
 
         topTable = new Table();
-        bottomTable = new Table();
+        bottomTable = new Table() {
+            public void sizeChanged() {
+                compassPanel.setSize(bottomTable.getWidth(),bottomTable.getHeight());
+            }
+        };
 
-//        topTable.setDebug(true, true);
-//        bottomTable.setDebug(true, true);
 
         topTable.setBackground(style.splitBackground);
         bottomTable.setBackground(style.splitBackground);
@@ -280,6 +283,8 @@ public class CompassView extends AbstractView implements PositionChangedListener
     public void layout() {
         super.layout();
         splitPane.setBounds(0, 0, this.getWidth(), this.getHeight());
+        splitPane.layout();
+        compassPanel.setSize(bottomTable.getWidth(),bottomTable.getHeight());
     }
 
 
@@ -369,59 +374,6 @@ public class CompassView extends AbstractView implements PositionChangedListener
     public void sizeChanged() {
         super.sizeChanged();
         backgroundWidget.setBounds(0, 0, this.getWidth(), this.getHeight());
-    }
-
-    // holds the Compass, the distance label and the Sun/Moon drawables
-    private static class CompassPanel extends WidgetGroup {
-
-        private final Compass compass;
-        private final Label distance, accurate;
-
-        private CompassPanel(CompassViewStyle style) {
-            compass = new Compass(style, true);
-
-            Label.LabelStyle distanceStyle = new Label.LabelStyle();
-            Label.LabelStyle accurateStyle = new Label.LabelStyle();
-
-            distanceStyle.background = style.distanceBackground;
-            distanceStyle.font = style.distnaceFont;
-            distanceStyle.fontColor = style.distanceColor;
-
-            accurateStyle.font = style.accurateFont;
-            accurateStyle.fontColor = style.accurateColor;
-
-            distance = new Label("distance", distanceStyle);
-            accurate = new Label("accurate", accurateStyle);
-
-            distance.setAlignment(Align.left);
-            accurate.setAlignment(Align.right);
-
-            this.addActor(distance);
-            this.addActor(accurate);
-            this.addActor(compass);
-        }
-
-        @Override
-        public void sizeChanged() {
-            super.sizeChanged();
-
-            float height = distance.getPrefHeight();
-            float yPos = this.getHeight() - height - CB.scaledSizes.MARGIN;
-            compass.setBounds(0, CB.scaledSizes.MARGIN, this.getWidth(), this.getHeight() - height + CB.scaledSizes.MARGINx4);
-            distance.setBounds(CB.scaledSizes.MARGIN, yPos, this.getWidth() - CB.scaledSizes.MARGINx2, height);
-            accurate.setBounds(CB.scaledSizes.MARGIN, yPos, this.getWidth() - CB.scaledSizes.MARGINx2, height);
-        }
-
-        public void setInfo(float distance, float heading, float bearing, float accurate) {
-            this.distance.setText(UnitFormatter.distanceString(distance, false));
-            this.accurate.setText("  +/- " + UnitFormatter.distanceString(accurate, true));
-            compass.setBearing(heading);
-            compass.setHeading(bearing - heading);
-        }
-
-        public float getMinHeight() {
-            return compass.getMinHeight() + distance.getMinHeight() - CB.scaledSizes.MARGINx4;
-        }
     }
 
     public String toString() {

@@ -111,7 +111,7 @@ public class Compass extends WidgetGroup implements Layout {
 
     private void calcSizes() {
         prefSize = style.frameNorthOrient.getMinWidth();
-        minSize = prefSize * (CAN_SCALE ? 0.6f : 1f);
+        minSize = prefSize * (CAN_SCALE ? 0.4f : 1f);
         maxSize = prefSize * (CAN_SCALE ? 1.3f : 1f);
         scaleRatio = style.scale.getMinWidth() / prefSize;
         arrowRatio = style.arrow.getMinWidth() / prefSize;
