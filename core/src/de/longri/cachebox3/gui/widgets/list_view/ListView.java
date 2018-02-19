@@ -17,9 +17,12 @@ package de.longri.cachebox3.gui.widgets.list_view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
@@ -29,6 +32,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.translation.word.CompoundCharSequence;
+import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +54,7 @@ public class ListView extends WidgetGroup {
     private final ListViewItemLinkedList itemList;
     private final Array<SelectionChangedEvent> changedEventListeners = new Array<>();
     private final Array<ListViewItemInterface> selectedItemList = new Array<>();
+    final CB_RectF tempClickRec = new CB_RectF();
     private float maxScrollChange = 0;
     private SelectableType selectionType;
     private ListViewAdapter adapter;
@@ -151,6 +156,65 @@ public class ListView extends WidgetGroup {
                 }
             }
         };
+        scrollPane.addCaptureListener(new ClickLongClickListener() {
+            @Override
+            public boolean clicked(InputEvent event, float x, float y) {
+                log.debug("ListViewItem clicked on x:{}  y:{}", x, y);
+                SnapshotArray<Actor> childs = ((ListViewItemLinkedList) scrollPane.getChildren().get(0)).getChildren();
+
+                for (int i = 0, n = childs.size; i < n; i++) {
+                    ListViewItem item = (ListViewItem) childs.get(i);
+                    Vector2 vec = item.localToStageCoordinates(new Vector2());
+                    tempClickRec.set(vec.x, vec.y, item.getWidth(), item.getHeight());
+                    if (tempClickRec.contains(event.getStageX(), event.getStageY())) {
+
+                        event.setListenerActor(item);
+
+                        // item Clicked
+                        log.debug("ListViewItem {} clicked", i);
+                        Array<EventListener> listeners = item.getListeners();
+                        boolean handeld = false;
+                        for (EventListener listener : listeners) {
+                            if (listener instanceof ClickListener) {
+                                ((ClickListener) listener).clicked(event, x, y);
+                            } else if (listener instanceof ClickLongClickListener) {
+                                if (((ClickLongClickListener) listener).clicked(event, x, y)) {
+                                    handeld = true;
+                                }
+                            }
+                        }
+                        return handeld;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public boolean longClicked(Actor actor, float x, float y) {
+                log.debug("ListViewItem longClicked on x:{}  y:{}", x, y);
+                SnapshotArray<Actor> childs = ((ListViewItemLinkedList) scrollPane.getChildren().get(0)).getChildren();
+                for (int i = 0, n = childs.size; i < n; i++) {
+                    ListViewItem item = (ListViewItem) childs.get(i);
+                    Vector2 vec = item.localToStageCoordinates(new Vector2());
+                    tempClickRec.set(vec.x, vec.y, item.getWidth(), item.getHeight());
+                    if (tempClickRec.contains(x, y)){
+                        // item Clicked
+                        log.debug("ListViewItem {} LongClicked", i);
+                        Array<EventListener> listeners = item.getListeners();
+                        boolean handeld = false;
+                        for (EventListener listener : listeners) {
+                            if (listener instanceof ClickLongClickListener) {
+                                if (((ClickLongClickListener) listener).longClicked(actor, x, y)) {
+                                    handeld = true;
+                                }
+                            }
+                        }
+                        return handeld;
+                    }
+                }
+                return false;
+            }
+        });
         scrollPane.setOverscroll(false, true);
         scrollPane.setFlickScroll(true);
         scrollPane.setVariableSizeKnobs(false);
