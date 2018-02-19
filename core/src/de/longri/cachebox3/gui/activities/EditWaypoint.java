@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.activities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
@@ -54,6 +55,7 @@ public class EditWaypoint extends ActivityBase {
     private final AbstractWaypoint waypoint;
     private final CharSequenceButton btnOk, btnCancel;
     private final VisLabel cacheTitelLabel, titleLabel, typeLabel, descriptionLabel, clueLabel, startLabel;
+    private final ScrollPane scrollPane;
     private final EditTextBox titleTextArea, descriptionTextArea, clueTextArea;
     private final VisTable contentTable;
     private final CoordinateButton coordinateButton;
@@ -85,6 +87,8 @@ public class EditWaypoint extends ActivityBase {
         contentTable = new VisTable();
         coordinateButton = new CoordinateButton(waypoint);
         startCheckBox = new VisCheckBox("");
+
+        scrollPane = new ScrollPane(contentTable);
 
         Array<CacheTypes> itemList = new Array<>();
         itemList.add(CacheTypes.ReferencePoint);
@@ -170,7 +174,7 @@ public class EditWaypoint extends ActivityBase {
     private void create() {
         this.addActor(btnOk);
         this.addActor(btnCancel);
-        this.addActor(contentTable);
+        this.addActor(scrollPane);
 
         btnOk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -217,6 +221,7 @@ public class EditWaypoint extends ActivityBase {
         descriptionTextArea.setMaxWidth(maxWidth);
         clueTextArea.setMaxWidth(maxWidth);
 
+        scrollPane.setBounds(x, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGINx2));
         contentTable.setBounds(x, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGINx2));
         contentTable.layout();
     }

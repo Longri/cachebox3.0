@@ -158,7 +158,7 @@ public enum CacheTypes implements SelectBoxItem {
     @Override
     public Drawable getDrawable() {
         // for select Box interface, use 'cacheList' style
-        if (cacheListTypeStyle == null) cacheListTypeStyle = VisUI.getSkin().get("cacheList", CacheTypeStyle.class);
+        if (cacheListTypeStyle == null) cacheListTypeStyle = VisUI.getSkin().get("bubble", CacheTypeStyle.class);
         return getDrawable(cacheListTypeStyle);
     }
 
