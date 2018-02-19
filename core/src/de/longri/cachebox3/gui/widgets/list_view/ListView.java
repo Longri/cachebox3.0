@@ -179,6 +179,7 @@ public class ListView extends WidgetGroup {
                                 ((ClickListener) listener).clicked(event, x, y);
                             } else if (listener instanceof ClickLongClickListener) {
                                 if (((ClickLongClickListener) listener).clicked(event, x, y)) {
+                                    event.cancel();
                                     handeld = true;
                                 }
                             }
@@ -197,7 +198,7 @@ public class ListView extends WidgetGroup {
                     ListViewItem item = (ListViewItem) childs.get(i);
                     Vector2 vec = item.localToStageCoordinates(new Vector2());
                     tempClickRec.set(vec.x, vec.y, item.getWidth(), item.getHeight());
-                    if (tempClickRec.contains(x, y)){
+                    if (tempClickRec.contains(x, y)) {
                         // item Clicked
                         log.debug("ListViewItem {} LongClicked", i);
                         Array<EventListener> listeners = item.getListeners();
@@ -314,6 +315,7 @@ public class ListView extends WidgetGroup {
 
     private ClickLongClickListener onListItemClickListener = new ClickLongClickListener() {
         public boolean clicked(InputEvent event, float x, float y) {
+            if (event.isCancelled()) return true;
             if (event.getType() == InputEvent.Type.touchUp) {
                 if (selectionType != NONE) {
                     ListViewItem item = ((ListViewItem) event.getListenerActor());
@@ -343,7 +345,7 @@ public class ListView extends WidgetGroup {
                     }
                 }
             }
-            return false;
+            return true;
         }
 
         @Override

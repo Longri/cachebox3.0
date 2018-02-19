@@ -409,6 +409,7 @@ public class Settings_Activity extends ActivityBase {
         // add clicklistener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled()||event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
                     showCategory(category, true);
                 }

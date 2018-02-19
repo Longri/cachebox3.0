@@ -115,7 +115,7 @@ public class Menu extends Window {
         menuItem.addListener(new ClickLongClickListener() {
             @Override
             public boolean clicked(InputEvent event, float x, float y) {
-                if (event.isHandled()) return true;
+                if (event.isHandled()||event.isCancelled()) return true;
 
                 // if the clicked item disabled, ignore click event!
                 if (!menuItem.mIsEnabled) {
