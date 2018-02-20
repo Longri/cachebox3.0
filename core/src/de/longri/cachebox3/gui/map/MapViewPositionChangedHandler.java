@@ -17,19 +17,17 @@ package de.longri.cachebox3.gui.map;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.OrientationChangedListener;
-import de.longri.cachebox3.events.PositionChangedListener;
-import de.longri.cachebox3.events.SpeedChangedListener;
+import de.longri.cachebox3.events.location.*;
+import de.longri.cachebox3.events.location.SpeedChangedListener;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
-import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
-import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Settings_Map;
 import org.oscim.core.MercatorProjection;
 import org.slf4j.Logger;
@@ -48,8 +46,8 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     private final MapInfoPanel infoPanel;
 
     private float arrowHeading, accuracy, mapBearing, userBearing, tilt;
-    private CoordinateGPS mapCenter;
-    private CoordinateGPS myPosition;
+    private Coordinate mapCenter;
+    private Coordinate myPosition;
     private final CacheboxMapAdapter map;
     private final LocationAccuracyLayer myLocationAccuracy;
     private final LocationLayer myLocationLayer;
@@ -206,22 +204,22 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     }
 
     @Override
-    public void positionChanged(de.longri.cachebox3.events.PositionChangedEvent event) {
-        if (CB.mapMode == MapMode.CAR && !event.pos.isGPSprovided())
-            return;// at CarMode ignore Network provided positions!
-
-        this.myPosition = event.pos;
-        if (getCenterGps())
-            this.mapCenter = this.myPosition;
-
-        this.accuracy = this.myPosition.getAccuracy();
-
-        if (CB.mapMode == MapMode.CAR) {
-            this.mapBearing = (float) event.pos.getHeading();
-            this.arrowHeading = 0;
-        }
-
-        this.actSpeed = (float) event.pos.getSpeed();
+    public void positionChanged(PositionChangedEvent event) {
+//        if (CB.mapMode == MapMode.CAR && !event.pos.isGPSprovided())
+//            return;// at CarMode ignore Network provided positions!
+//
+//        this.myPosition = event.pos;
+//        if (getCenterGps())
+//            this.mapCenter = this.myPosition;
+//
+//        this.accuracy = this.myPosition.getAccuracy();
+//
+//        if (CB.mapMode == MapMode.CAR) {
+//            this.mapBearing = (float) event.pos.getHeading();
+//            this.arrowHeading = 0;
+//        }
+//
+//        this.actSpeed = (float) event.pos.getSpeed();
         log.debug("AssumeValues positionChanged Event  eventID:{}", event.ID);
         assumeValues(false, event.ID);
     }
@@ -230,14 +228,14 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     float actSpeed;
 
     @Override
-    public void speedChanged(de.longri.cachebox3.events.SpeedChangedEvent event) {
+    public void speedChanged(SpeedChangedEvent event) {
         actSpeed = event.speed;
         log.debug("AssumeValues SpeedChanged Event  eventID:{}", event.ID);
         assumeValues(false, event.ID);
     }
 
     @Override
-    public void orientationChanged(de.longri.cachebox3.events.OrientationChangedEvent event) {
+    public void orientationChanged(OrientationChangedEvent event) {
         // at CarMode no orientation changes below 20kmh
         if (CB.mapMode == MapMode.CAR)
             return;

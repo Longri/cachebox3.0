@@ -19,6 +19,11 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
+import de.longri.cachebox3.events.location.OrientationChangedEvent;
+import de.longri.cachebox3.events.location.OrientationChangedListener;
+import de.longri.cachebox3.events.location.PositionChangedEvent;
+import de.longri.cachebox3.events.location.PositionChangedListener;
+import de.longri.cachebox3.events.location.SpeedChangedListener;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
@@ -35,12 +40,12 @@ import java.lang.reflect.Type;
 /**
  * Created by Longri on 23.03.2017.
  */
-public class EventHandler implements SelectedCacheChangedListener, SelectedWayPointChangedListener, PositionChangedListener, OrientationChangedListener {
+public class EventHandler implements SelectedCacheChangedListener, SelectedWayPointChangedListener, de.longri.cachebox3.events.location.PositionChangedListener, de.longri.cachebox3.events.location.OrientationChangedListener {
 
     static final Logger log = LoggerFactory.getLogger(EventHandler.class);
 
 
-    static final private Class[] allListener = new Class[]{PositionChangedListener.class,
+    static final private Class[] allListener = new Class[]{de.longri.cachebox3.events.location.PositionChangedListener.class,
             SelectedCacheChangedListener.class, SelectedWayPointChangedListener.class, PositionChangedListener.class,
             DistanceChangedListener.class, SpeedChangedListener.class, OrientationChangedListener.class,
             SelectedCoordChangedListener.class, ImportProgressChangedListener.class, ApiCallLimitListener.class,
@@ -125,7 +130,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     AbstractCache selectedCache;
     AbstractWaypoint selectedWayPoint;
     Coordinate selectedCoordinate;
-    CoordinateGPS myPosition;
+    Coordinate myPosition;
     private float heading;
 
     @Override
@@ -241,7 +246,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
 
-    public static CoordinateGPS getMyPosition() {
+    public static Coordinate getMyPosition() {
         return INSTANCE.myPosition;
     }
 
@@ -264,5 +269,9 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             log.warn("update Selected Cache with new Cache! Fire Change Event?");
         }
         INSTANCE.selectedCache = selectedCache;
+    }
+
+    public static CoordinateGPS getLastGpsCoordinate() {
+        return null;
     }
 }

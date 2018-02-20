@@ -17,6 +17,7 @@ package de.longri.cachebox3.locator;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
@@ -56,7 +57,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
     }
 
     @Override
-    public void positionChanged(PositionChangedEvent event) {
+    public void positionChanged(de.longri.cachebox3.events.location.PositionChangedEvent event) {
         pendingLatLong.set(event.pos);
         runAsync();
     }

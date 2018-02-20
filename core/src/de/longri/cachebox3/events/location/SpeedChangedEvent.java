@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.events;
+package de.longri.cachebox3.events.location;
+
+import de.longri.cachebox3.events.AbstractEvent;
 
 /**
  * Created by Longri on 23.03.2017.
@@ -32,7 +34,7 @@ public class SpeedChangedEvent extends AbstractEvent<Float> {
     }
 
     @Override
-    Class getListenerClass() {
+    public Class getListenerClass() {
         return SpeedChangedListener.class;
     }
 }

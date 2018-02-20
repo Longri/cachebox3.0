@@ -28,16 +28,15 @@ public class MapAnimator {
 
     private static final Logger log = LoggerFactory.getLogger(MapAnimator.class);
 
-    private final double POS_PRECISION = 1e-6;
-    private final double SCALE_PRECISION = 1;
-    private final double TILT_PRECISION = 1;
-    private final double ROTATE_PRECISION = 1e-2;
-    private final float DEFAULT_DURATION = 0.5f; // 500 ms
+    private final static double POS_PRECISION = 1e-6;
+    private final static double SCALE_PRECISION = 1;
+    private final static double TILT_PRECISION = 1;
+    public final static double ROTATE_PRECISION = 1e-2;
+    public final static float DEFAULT_DURATION = 0.5f; // 500 ms
 
     private final Map map;
     private final DoubleAnimator mapX, mapY, scale, rotate, tilt;
     private final MapPosition mapPosition = new MapPosition();
-    private boolean changed;
 
     public MapAnimator(Map map) {
         this.map = map;
@@ -50,7 +49,7 @@ public class MapAnimator {
 
     public void update(float delta) {
         map.viewport().getMapPosition(mapPosition);
-        changed = false;
+        boolean changed = false;
         if (mapX.update(delta)) {
             changed = true;
             mapPosition.setX(mapX.getAct());
@@ -135,7 +134,7 @@ public class MapAnimator {
         this.tilt(DEFAULT_DURATION, value);
     }
 
-    public void tilt(float duration, double value) {
+    private void tilt(float duration, double value) {
         this.tilt.start(duration, mapPosition.getTilt(), value, TILT_PRECISION);
     }
 }

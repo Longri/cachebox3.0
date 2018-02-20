@@ -16,35 +16,42 @@
 package de.longri.cachebox3.utils;
 
 
+import com.badlogic.gdx.utils.FloatArray;
+
+import java.util.ArrayDeque;
+
 /**
  * Created by Longri on 08.06.2017.
  */
-public class RingBufferFloat {
+public class LowpassFilter {
 
-    private final float[] items;
-    private int pointer = 0;
-    private boolean full = false;
+    private final int LENGTH;
 
-    public RingBufferFloat(int size) {
-        items = new float[size];
+    private float sumSin, sumCos;
+
+    private ArrayDeque<Float> queue = new ArrayDeque<Float>();
+
+    public LowpassFilter(int size) {
+        LENGTH = size;
     }
 
     /**
      * Returns the average value of all added values
+     *
      * @param value
      * @return
      */
     public float add(float value) {
-        items[pointer++] = value;
-        if (pointer > items.length - 1) {
-            pointer = 0;
-            full = true;
+        sumSin += (float) Math.sin(value);
+        sumCos += (float) Math.cos(value);
+        queue.add(value);
+        if (queue.size() > LENGTH) {
+            float old = queue.poll();
+            sumSin -= Math.sin(old);
+            sumCos -= Math.cos(old);
         }
-
-        float sum = items[0];
-        for (int i = 1, n = items.length - 1; i < n; i++)
-            sum += items[i];
-        return sum / (full ? items.length : pointer);
+        float retValue = (float) Math.toDegrees(Math.atan2(sumSin / queue.size(), sumCos / queue.size()));
+        return retValue;
     }
 
 }

@@ -46,6 +46,7 @@ import java.text.NumberFormat;
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
 import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
+import static org.slf4j.impl.LibgdxLoggerFactory.INCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -66,13 +67,18 @@ public class CacheboxMain extends ApplicationAdapter {
 //        INCLUDE_LIST.add(CircularProgressWidget.class.getName());
 
 
-        EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
-        EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
-        EXCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
+//        EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
+//        EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
+//        EXCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
 
 //        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
 //        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
 //        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
+
+
+        INCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
+        INCLUDE_LIST.add("de.longri.cachebox3.AndroidLocationListener");
+
 
     }
 

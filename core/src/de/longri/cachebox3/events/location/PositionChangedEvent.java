@@ -13,21 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.events;
+package de.longri.cachebox3.events.location;
+
+import de.longri.cachebox3.events.AbstractEvent;
+import de.longri.cachebox3.locator.Coordinate;
 
 /**
  * Created by Longri on 23.03.2017.
  */
-public class DistanceChangedEvent extends AbstractEvent<Float> {
-    public final float distance;
+public class PositionChangedEvent extends AbstractEvent<Coordinate> {
+    public final Coordinate pos;
+    public final boolean gpsProvided;
 
-    public DistanceChangedEvent(float distance, short id) {
-        super(Float.class, id);
-        this.distance = distance;
+    public PositionChangedEvent(Coordinate pos, boolean gpsProvided) {
+        super(Coordinate.class);
+        this.pos = pos;
+        this.gpsProvided = gpsProvided;
+    }
+
+    public PositionChangedEvent(Coordinate pos, boolean gpsProvided, short id) {
+        super(Coordinate.class, id);
+        this.pos = pos;
+        this.gpsProvided = gpsProvided;
     }
 
     @Override
     public Class getListenerClass() {
-        return DistanceChangedListener.class;
+        return PositionChangedListener.class;
     }
 }

@@ -28,7 +28,7 @@ import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.GpsEventHelper;
+import de.longri.cachebox3.events.location.GpsEventHelper;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.dialogs.GetApiKeyQuestionDialog;

@@ -112,41 +112,26 @@ public class AndroidPlatformConnector extends PlatformConnector {
             return;
         }
 
-        locationListener = new AndroidLocationListener();
+        locationListener = new AndroidLocationListener(this.application.getContext());
 
         // GPS
         // get the location manager
         locationManager = (LocationManager) this.application.getContext().getSystemService(Context.LOCATION_SERVICE);
 
-        final int updateTime = 1000; // 1s
-
-        //TODO get gps updateTime from settings
-//            int updateTime = Config.gpsUpdateTime.getValue();
-//
-//            Config.gpsUpdateTime.addChangedEventListener(new IChanged() {
-//
-//                @Override
-//                public void isChanged() {
-//                    int updateTime = Config.gpsUpdateTime.getValue();
-//                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 1, this);
-//                }
-//            });
+        final int updateTime = 500; // 1s
 
         application.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 5, locationListener);
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 0, locationListener);
                     if (ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application.getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED &&
                             ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
                                     != PackageManager.PERMISSION_GRANTED) {
                         return;
                     }
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 300, locationListener);
-
-                    locationManager.addNmeaListener(locationListener);
-                    locationManager.addGpsStatusListener(locationListener);
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
                 } catch (Exception e) {
                     log.error("main.initialLocationManager()", e);
                     e.printStackTrace();

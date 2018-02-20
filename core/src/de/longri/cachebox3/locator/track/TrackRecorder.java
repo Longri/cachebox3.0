@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -21,8 +21,8 @@ import com.badlogic.gdx.graphics.Color;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.PositionChangedEvent;
-import de.longri.cachebox3.events.PositionChangedListener;
+import de.longri.cachebox3.events.location.PositionChangedEvent;
+import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.translation.Translation;
@@ -169,7 +169,7 @@ public class TrackRecorder implements PositionChangedListener {
         if (mustRecPos) {
             mustRecPos = false;
         }
-        positionChanged(new PositionChangedEvent(location));
+        positionChanged(new PositionChangedEvent(location, true));
     }
 
     private boolean mustRecPos = false;
@@ -200,17 +200,18 @@ public class TrackRecorder implements PositionChangedListener {
 
     @Override
     public void positionChanged(PositionChangedEvent event) {
-        if (gpxfile == null || pauseRecording || !event.pos.isGPSprovided())
+        if (gpxfile == null || pauseRecording || !event.gpsProvided)
             return;
 
         if (writeAnnotateMedia) {
             mustRecPos = true;
         }
 
-        if (LastRecordedPosition == null) // Warte bis 2 gültige Koordinaten vorliegen
-        {
-            LastRecordedPosition = event.pos;
-            SaveAltitude = event.pos.getElevation();
+        CoordinateGPS newCoord = CB.eventHelper.getLastGpsCoordinate();
+
+        if (LastRecordedPosition == null) { // Warte bis 2 gültige Koordinaten vorliegen
+            LastRecordedPosition = newCoord;
+            SaveAltitude = newCoord.getElevation();
         } else {
             writePos = true;
             TrackPoint NewPoint;
@@ -228,10 +229,10 @@ public class TrackRecorder implements PositionChangedListener {
                 StringBuilder sb = new StringBuilder();
 
                 sb.append("<trkpt lat=\"" + String.valueOf(event.pos.latitude) + "\" lon=\"" + String.valueOf(event.pos.longitude) + "\">\n");
-                sb.append("   <ele>" + String.valueOf(event.pos.getElevation()) + "</ele>\n");
+                sb.append("   <ele>" + String.valueOf(newCoord.getElevation()) + "</ele>\n");
                 sb.append("   <time>" + getDateTimeString() + "</time>\n");
-                sb.append("   <course>" + String.valueOf(event.pos.getHeading()) + "</course>\n");
-                sb.append("   <speed>" + String.valueOf(event.pos.getSpeed()) + "</speed>\n");
+                sb.append("   <course>" + String.valueOf(newCoord.getHeading()) + "</course>\n");
+                sb.append("   <speed>" + String.valueOf(newCoord.getSpeed()) + "</speed>\n");
                 sb.append("</trkpt>\n");
 
                 RandomAccessFile rand;
@@ -261,8 +262,8 @@ public class TrackRecorder implements PositionChangedListener {
                     log.error("Trackrecorder", "IOException", e);
                 }
 
-                NewPoint = new TrackPoint(event.pos.longitude, event.pos.longitude, event.pos.getElevation(),
-                        event.pos.getHeading(), new Date());
+                NewPoint = new TrackPoint(event.pos.longitude, event.pos.longitude, newCoord.getElevation(),
+                        newCoord.getHeading(), new Date());
 
                 CB.actRoute.Points.add(NewPoint);
 
@@ -272,13 +273,13 @@ public class TrackRecorder implements PositionChangedListener {
 //					TrackListView.that.notifyActTrackChanged();
 //
 //				RouteOverlay.RoutesChanged();
-                LastRecordedPosition = event.pos;
+                LastRecordedPosition = newCoord;
                 CB.actRoute.TrackLength += cachedDistance;
 
-                AltDiff = Math.abs(SaveAltitude - event.pos.getElevation());
+                AltDiff = Math.abs(SaveAltitude - newCoord.getElevation());
                 if (AltDiff >= 25) {
                     CB.actRoute.AltitudeDifference += AltDiff;
-                    SaveAltitude = event.pos.getElevation();
+                    SaveAltitude = newCoord.getElevation();
                 }
                 writePos = false;
 

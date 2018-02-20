@@ -20,12 +20,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * holds the Compass, the distance label and the Sun/Moon drawables
+ * holds the Compass, the distanceLabel label and the Sun/Moon drawables
  * Created by Longri on 19.02.2018.
  */
 public class CompassPanel extends WidgetGroup {
@@ -33,7 +34,7 @@ public class CompassPanel extends WidgetGroup {
     private final static Logger log = LoggerFactory.getLogger(CompassPanel.class);
 
     private final Compass compass;
-    private final Label distance, accurate;
+    private final Label distanceLabel, accurateLabel;
 
     public CompassPanel(CompassViewStyle style) {
         compass = new Compass(style, true);
@@ -48,39 +49,44 @@ public class CompassPanel extends WidgetGroup {
         accurateStyle.font = style.accurateFont;
         accurateStyle.fontColor = style.accurateColor;
 
-        distance = new Label("distance", distanceStyle);
-        accurate = new Label("accurate", accurateStyle);
+        distanceLabel = new Label("distanceLabel", distanceStyle);
+        accurateLabel = new Label("accurateLabel", accurateStyle);
 
-        distance.setAlignment(Align.left);
-        accurate.setAlignment(Align.right);
+        distanceLabel.setAlignment(Align.left);
+        accurateLabel.setAlignment(Align.right);
 
-        this.addActor(distance);
-        this.addActor(accurate);
+        this.addActor(distanceLabel);
+        this.addActor(accurateLabel);
         this.addActor(compass);
     }
 
     @Override
     public void sizeChanged() {
         super.sizeChanged();
-        float height = distance.getPrefHeight();
+        float height = distanceLabel.getPrefHeight();
         float yPos = this.getHeight() - (height /*+ CB.scaledSizes.MARGIN*/);
 
         compass.setBounds(0, CB.scaledSizes.MARGINx4, this.getWidth(), this.getHeight() - height + CB.scaledSizes.MARGINx2);
-        distance.setBounds(CB.scaledSizes.MARGIN, yPos, this.getWidth() - CB.scaledSizes.MARGINx2, height);
-        accurate.setBounds(CB.scaledSizes.MARGIN, yPos, this.getWidth() - CB.scaledSizes.MARGINx2, height);
+        distanceLabel.setBounds(CB.scaledSizes.MARGIN, yPos, this.getWidth() - CB.scaledSizes.MARGINx2, height);
+        accurateLabel.setBounds(CB.scaledSizes.MARGIN, yPos, this.getWidth() - CB.scaledSizes.MARGINx2, height);
 
         //reset x/y
         this.setPosition(0, 0);
     }
 
-    public void setInfo(float distance, float heading, float bearing, float accurate) {
-        this.distance.setText(UnitFormatter.distanceString(distance, false));
-        this.accurate.setText("  +/- " + UnitFormatter.distanceString(accurate, true)+"  ");
-        compass.setBearing(heading);
-        compass.setHeading(bearing - heading);
+    public void setInfo(final float distance,final  float heading,final  float bearing,final  float accurate) {
+        CB.postOnGlThread(new NamedRunnable("Test Add") {
+            @Override
+            public void run() {
+                distanceLabel.setText(UnitFormatter.distanceString(distance, false));
+                accurateLabel.setText("  +/- " + UnitFormatter.distanceString(accurate, true) + "  ");
+                compass.setBearing(heading);
+                compass.setHeading(bearing - heading);
+            }
+        });
     }
 
     public float getMinHeight() {
-        return compass.getMinHeight() + distance.getMinHeight() - CB.scaledSizes.MARGINx4;
+        return compass.getMinHeight() + distanceLabel.getMinHeight() - CB.scaledSizes.MARGINx4;
     }
 }

@@ -34,7 +34,7 @@ public class SelectedCacheChangedEvent extends AbstractEvent<AbstractCache> {
     }
 
     @Override
-    Class getListenerClass() {
+    public Class getListenerClass() {
         return SelectedCacheChangedListener.class;
     }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.events;
+package de.longri.cachebox3.events.location;
 
 
 /**

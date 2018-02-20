@@ -34,7 +34,7 @@ public class SelectedWayPointChangedEvent extends AbstractEvent<AbstractWaypoint
     }
 
     @Override
-    Class getListenerClass() {
+    public Class getListenerClass() {
         return SelectedWayPointChangedListener.class;
     }
 }

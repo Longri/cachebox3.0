@@ -18,6 +18,8 @@ package de.longri.cachebox3.gui.map.layer;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.location.PositionChangedEvent;
+import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.MathUtils;
@@ -42,7 +44,7 @@ import static org.oscim.theme.styles.LineStyle.REPEAT_START_DEFAULT;
 /**
  * Created by Longri on 02.03.2017.
  */
-public class DirectLineLayer extends GenericLayer implements de.longri.cachebox3.events.PositionChangedListener, de.longri.cachebox3.events.SelectedCoordChangedListener, Disposable {
+public class DirectLineLayer extends GenericLayer implements PositionChangedListener, de.longri.cachebox3.events.SelectedCoordChangedListener, Disposable {
 
     private final static Logger log = LoggerFactory.getLogger(DirectLineLayer.class);
     private final static short MAX_VALUE = (short) (Short.MAX_VALUE / MapRenderer.COORD_SCALE);
@@ -93,7 +95,7 @@ public class DirectLineLayer extends GenericLayer implements de.longri.cachebox3
     }
 
     @Override
-    public void positionChanged(de.longri.cachebox3.events.PositionChangedEvent event) {
+    public void positionChanged(PositionChangedEvent event) {
         redrawLine();
     }
 
