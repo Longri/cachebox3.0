@@ -15,11 +15,13 @@
  */
 package de.longri.cachebox3.events.location;
 
+import com.badlogic.gdx.math.Interpolation;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.utils.LowpassFilter;
+import de.longri.cachebox3.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +33,7 @@ public class GpsEventHelper {
     private static Logger log = LoggerFactory.getLogger(GpsEventHelper.class);
 
     private GpsState gpsState = GpsState.UNKNOWN;
-    LowpassFilter lowpassFilter = new LowpassFilter(10);
+    LowpassFilter lowpassFilter = new LowpassFilter(20);
 
     //#################### NEW
 
@@ -76,9 +78,9 @@ public class GpsEventHelper {
      */
     public void newBearing(float bearing, boolean gps) {
 
-        if(gps){
+        if (gps) {
             CB.sensoerIO.write_newBearingGPS(bearing);
-        }else{
+        } else {
             CB.sensoerIO.write_newBearingCompass(bearing);
         }
 
@@ -90,6 +92,31 @@ public class GpsEventHelper {
             //fire event
             EventHandler.fire(new OrientationChangedEvent(value));
         }
+    }
+
+    private int lastLowpassValue = 0;
+    LowpassFilter pitchLowpassFilter = new LowpassFilter(50);
+
+    public void newPitch(float pitch) {
+        CB.sensoerIO.write_newPitch(pitch);
+        pitch = pitchLowpassFilter.add(pitch);
+        int pitchInt = Math.round(pitch);
+        int lowPassValue = (int) Math.round(
+                ((int) MathUtils.linearInterpolation(0, 90, 20, 500, Math.abs(pitchInt)))
+                        / 100.0) * 100;
+
+        if (lowPassValue < 100) lowPassValue = 20;
+        if (lowPassValue >= 100) lowPassValue = 200;
+
+        if (lastLowpassValue != lowPassValue) {
+            lastLowpassValue = lowPassValue;
+            lowpassFilter.changeSmoothValue(lastLowpassValue);
+            log.debug("change LowpassValue to {}", lowPassValue);
+        }
+    }
+
+    public void newRoll(float roll) {
+        CB.sensoerIO.write_newRoll(roll);
     }
 
     public void newAccuracy(float accuracy) {
@@ -118,4 +145,6 @@ public class GpsEventHelper {
         coord.setSpeed(this.lastSpeed);
         return coord;
     }
+
+
 }

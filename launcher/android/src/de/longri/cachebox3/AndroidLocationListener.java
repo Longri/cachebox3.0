@@ -121,6 +121,8 @@ public class AndroidLocationListener implements LocationListener, SensorEventLis
                     if (SensorManager.getRotationMatrix(R, I, gravity, geomagnetic)) {
                         SensorManager.getOrientation(R, orientationValues);
                         CB.eventHelper.newBearing(orientationValues[0], false);
+                        CB.eventHelper.newPitch(orientationValues[1]);
+                        CB.eventHelper.newRoll(orientationValues[2]);
                     }
                 }
             }

@@ -31,6 +31,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.views.TestView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import org.oscim.backend.CanvasAdapter;
@@ -76,8 +77,9 @@ public class CacheboxMain extends ApplicationAdapter {
 //        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
 
 
-        INCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
-        INCLUDE_LIST.add("de.longri.cachebox3.AndroidLocationListener");
+        INCLUDE_LIST.add("de.longri.cachebox3.events.location.GpsEventHelper");
+//        INCLUDE_LIST.add("de.longri.cachebox3.AndroidLocationListener");
+        INCLUDE_LIST.add(TestView.class.getName());
 
 
     }

@@ -42,6 +42,8 @@ public class SensorIO {
     private final char NEW_BEARING_COMPASS = 'C';
     private final char NEW_ACCURACY = 'Z';
     private final char NEW_SPEED = 'S';
+    private final char NEW_ROLL = 'R';
+    private final char NEW_PITCH = 'P';
 
     private AtomicInteger flushCount = new AtomicInteger(0);
 
@@ -115,6 +117,28 @@ public class SensorIO {
         try {
             writer.write(getTimeDiv());
             writer.write(NEW_BEARING_GPS + "#" + Float.toString(bearing) + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        checkFlush();
+    }
+
+    public void write_newPitch(float pitch) {
+        if (!record || isPlay) return;
+        try {
+            writer.write(getTimeDiv());
+            writer.write(NEW_PITCH + "#" + Float.toString(pitch) + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        checkFlush();
+    }
+
+    public void write_newRoll(float roll) {
+        if (!record || isPlay) return;
+        try {
+            writer.write(getTimeDiv());
+            writer.write(NEW_ROLL + "#" + Float.toString(roll) + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -230,6 +254,12 @@ public class SensorIO {
                         case NEW_SPEED:
                             CB.eventHelper.newSpeed(Double.parseDouble(lineSplites[2]));
                             break;
+                        case NEW_PITCH:
+                            CB.eventHelper.newPitch(Float.parseFloat(lineSplites[2]));
+                            break;
+                        case NEW_ROLL:
+                            CB.eventHelper.newRoll(Float.parseFloat(lineSplites[2]));
+                            break;
                     }
                 }
                 isPlay = false;
@@ -241,4 +271,5 @@ public class SensorIO {
     public boolean isPlay() {
         return isPlay;
     }
+
 }

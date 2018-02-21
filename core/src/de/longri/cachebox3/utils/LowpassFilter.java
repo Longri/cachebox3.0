@@ -16,8 +16,6 @@
 package de.longri.cachebox3.utils;
 
 
-import com.badlogic.gdx.utils.FloatArray;
-
 import java.util.ArrayDeque;
 
 /**
@@ -25,14 +23,14 @@ import java.util.ArrayDeque;
  */
 public class LowpassFilter {
 
-    private final int LENGTH;
+    private int smooth;
 
     private float sumSin, sumCos;
 
     private ArrayDeque<Float> queue = new ArrayDeque<Float>();
 
     public LowpassFilter(int size) {
-        LENGTH = size;
+        smooth = size;
     }
 
     /**
@@ -42,16 +40,30 @@ public class LowpassFilter {
      * @return
      */
     public float add(float value) {
-        sumSin += (float) Math.sin(value);
-        sumCos += (float) Math.cos(value);
-        queue.add(value);
-        if (queue.size() > LENGTH) {
-            float old = queue.poll();
-            sumSin -= Math.sin(old);
-            sumCos -= Math.cos(old);
+        synchronized (queue) {
+            sumSin += (float) Math.sin(value);
+            sumCos += (float) Math.cos(value);
+            queue.add(value);
+            if (queue.size() > smooth) {
+                float old = queue.poll();
+                sumSin -= Math.sin(old);
+                sumCos -= Math.cos(old);
+            }
+            float retValue = (float) Math.toDegrees(Math.atan2(sumSin / queue.size(), sumCos / queue.size()));
+            return retValue;
         }
-        float retValue = (float) Math.toDegrees(Math.atan2(sumSin / queue.size(), sumCos / queue.size()));
-        return retValue;
     }
 
+    public void changeSmoothValue(int value) {
+        synchronized (queue) {
+            if (value < smooth) {
+                while (queue.size() > value) {
+                    float old = queue.poll();
+                    sumSin -= Math.sin(old);
+                    sumCos -= Math.cos(old);
+                }
+            }
+            smooth = value;
+        }
+    }
 }
