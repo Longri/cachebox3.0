@@ -49,10 +49,7 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
-import de.longri.cachebox3.utils.ICancel;
-import de.longri.cachebox3.utils.NamedRunnable;
-import de.longri.cachebox3.utils.ScaledSizes;
-import de.longri.cachebox3.utils.SkinColor;
+import de.longri.cachebox3.utils.*;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.renderer.atlas.TextureRegion;
@@ -113,6 +110,7 @@ public class CB {
     public static boolean switchToCompassCompleted = false;
     public static String cacheHistory = "";
 
+    public final static SensorIO sensoerIO = new SensorIO();
 
     /**
      * WorkPath is a String to the used work path.<br>

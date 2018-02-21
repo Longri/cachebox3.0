@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -63,7 +64,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class TestView extends AbstractView {
     final static Logger log = LoggerFactory.getLogger(TestView.class);
 
-    static private FileChooser fileChooser = new FileChooser("select folder", FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES);
+    static private FileChooser fileChooser = new FileChooser("select sensor file",
+            FileChooser.Mode.OPEN, FileChooser.SelectionMode.FILES, "lon");
     private final AtomicBoolean showing = new AtomicBoolean(true);
 
     public TestView() {
@@ -83,6 +85,74 @@ public class TestView extends AbstractView {
 
         scrollPane = new VisScrollPane(contentTable);
         float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
+
+        {// testSensor record
+
+            VisLabel label3 = new VisLabel("Sensor record");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+
+            final VisTextButton recBtn = new VisTextButton(CB.sensoerIO.isRecord() ? " Stop Record" : "Start Record");
+            recBtn.addListener(new ClickLongClickListener() {
+                @Override
+                public boolean clicked(InputEvent event, float x, float y) {
+
+                    if (CB.sensoerIO.isRecord()) {
+                        CB.sensoerIO.stop();
+                    } else {
+                        CB.sensoerIO.start();
+                    }
+                    recBtn.setText(CB.sensoerIO.isRecord() ? " Stop Record" : "Start Record");
+                    return true;
+                }
+
+                @Override
+                public boolean longClicked(Actor actor, float x, float y) {
+                    return false;
+                }
+            });
+
+            final VisTextButton playBtn = new VisTextButton(CB.sensoerIO.isPlay() ? "Stop play" : "Start play");
+            playBtn.addListener(new ClickLongClickListener() {
+                @Override
+                public boolean clicked(InputEvent event, float x, float y) {
+                    if (CB.sensoerIO.isPlay()) {
+                        CB.sensoerIO.stopPlay();
+                    } else {
+                        fileChooser.setDirectory(Gdx.files.absolute(CB.WorkPath));
+                        fileChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
+                            @Override
+                            public void selected(FileHandle fileHandle) {
+                                if (fileHandle != null) {
+                                    CB.sensoerIO.play(fileHandle);
+                                }
+                            }
+                        });
+                        fileChooser.show();
+                    }
+                    playBtn.setText(CB.sensoerIO.isPlay() ? "Stop play" : "Start play");
+                    return true;
+                }
+
+                @Override
+                public boolean longClicked(Actor actor, float x, float y) {
+                    return false;
+                }
+            });
+
+            contentTable.add(recBtn);
+            contentTable.row();
+            contentTable.add(playBtn);
+            contentTable.row();
+
+        }
+
 
         {// test Map Info Bubble
 

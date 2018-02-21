@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.events.location;
 
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
@@ -41,6 +42,9 @@ public class GpsEventHelper {
     private double lastSpeed;
 
     public void newGpsPos(double latitude, double longitude) {
+        CB.sensoerIO.write_newGpsPos(latitude, longitude);
+
+
         // clamp coordinate to handled precision
         latitude = ((int) (latitude * 1E6)) / 1E6;
         longitude = ((int) (longitude * 1E6)) / 1E6;
@@ -56,13 +60,14 @@ public class GpsEventHelper {
     }
 
     public void newNetworkPos(double latitude, double longitude) {
+        CB.sensoerIO.write_newNetworkPos(latitude, longitude);
         // clamp coordinate to handled precision
         latitude = ((int) (latitude * 1E6)) / 1E6;
         longitude = ((int) (longitude * 1E6)) / 1E6;
     }
 
     public void newAltitude(double altitude) {
-
+        CB.sensoerIO.write_newAltitude(altitude);
     }
 
     /**
@@ -70,6 +75,13 @@ public class GpsEventHelper {
      * @param gps     is from GPS
      */
     public void newBearing(float bearing, boolean gps) {
+
+        if(gps){
+            CB.sensoerIO.write_newBearingGPS(bearing);
+        }else{
+            CB.sensoerIO.write_newBearingCompass(bearing);
+        }
+
         if (gps && this.lastSpeed < 5) return; //TODO use setting value
         if (!gps && this.lastSpeed >= 5) return;
         float value = lowpassFilter.add(bearing);
@@ -81,10 +93,11 @@ public class GpsEventHelper {
     }
 
     public void newAccuracy(float accuracy) {
-
+        CB.sensoerIO.write_newAccuracy(accuracy);
     }
 
     public void newSpeed(double speed) {
+        CB.sensoerIO.write_newSpeed(speed);
         if (lastSpeed != speed) {
             lastSpeed = speed;
             EventHandler.fire(new SpeedChangedEvent((float) speed));
@@ -92,6 +105,7 @@ public class GpsEventHelper {
     }
 
     public void gpsStateChanged(GpsState state) {
+
         this.gpsState = state;
 //        log.debug("Gps state changed to {}", state);
     }

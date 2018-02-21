@@ -74,9 +74,9 @@ public class MapPanel extends JPanel implements ActionListener {
 
             @Override
             public void valueChanged() {
-                eventHelper.newGpsPos(GPSData.getLatitude(), GPSData.getLongitude(), true,
-                        GPSData.getAltitude(), GPSData.getSpeed()*3.6, GPSData.getCourse(),
-                        (float) GPSData.getQuality());
+//                eventHelper.newGpsPos(GPSData.getLatitude(), GPSData.getLongitude(), true,
+//                        GPSData.getAltitude(), GPSData.getSpeed()*3.6, GPSData.getCourse(),
+//                        (float) GPSData.getQuality());
             }
         });
     }
