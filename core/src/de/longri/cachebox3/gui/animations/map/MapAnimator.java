@@ -28,10 +28,10 @@ public class MapAnimator {
 
     private static final Logger log = LoggerFactory.getLogger(MapAnimator.class);
 
-    private final static double POS_PRECISION = 1e-6;
-    private final static double SCALE_PRECISION = 1;
-    private final static double TILT_PRECISION = 1;
-    public final static double ROTATE_PRECISION = 1e-2;
+
+//    private final static double SCALE_PRECISION = 1;
+//    private final static double TILT_PRECISION = 1;
+//    public final static double ROTATE_PRECISION = 1e-2;
     public final static float DEFAULT_DURATION = 0.5f; // 500 ms
 
     private final Map map;
@@ -87,8 +87,8 @@ public class MapAnimator {
     }
 
     public void position(float duration, double x, double y) {
-        this.mapX.start(duration, mapPosition.getX(), x, POS_PRECISION);
-        this.mapY.start(duration, mapPosition.getY(), y, POS_PRECISION);
+        this.mapX.start(duration, mapPosition.getX(), x);
+        this.mapY.start(duration, mapPosition.getY(), y);
     }
 
     public void scale(double value) {
@@ -96,7 +96,7 @@ public class MapAnimator {
     }
 
     public void scale(float duration, double value) {
-        this.scale.start(duration, mapPosition.getScale(), value, SCALE_PRECISION);
+        this.scale.start(duration, mapPosition.getScale(), value);
     }
 
     public void rotate(double value) {
@@ -125,7 +125,7 @@ public class MapAnimator {
         log.debug("Start rotate animation to: {}  from: {}", value, mr);
 
 
-        this.rotate.start(duration, mr, value, ROTATE_PRECISION);
+        this.rotate.start(duration, mr, value);
 //        this.rotate.setDebugAct(value);
     }
 
@@ -135,6 +135,6 @@ public class MapAnimator {
     }
 
     private void tilt(float duration, double value) {
-        this.tilt.start(duration, mapPosition.getTilt(), value, TILT_PRECISION);
+        this.tilt.start(duration, mapPosition.getTilt(), value);
     }
 }

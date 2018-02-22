@@ -31,7 +31,6 @@ import de.longri.cachebox3.gui.skin.styles.CompassStyle;
 import de.longri.cachebox3.utils.CB_RectF;
 
 import static de.longri.cachebox3.gui.animations.map.MapAnimator.DEFAULT_DURATION;
-import static de.longri.cachebox3.gui.animations.map.MapAnimator.ROTATE_PRECISION;
 
 /**
  * Created by Longri on 21.03.2017.
@@ -226,14 +225,14 @@ public class Compass extends WidgetGroup implements Layout {
 
     public void setBearing(float bearing) {
         if (lastBearing != bearing) {
-            bearingAnimator.start(DEFAULT_DURATION, lastBearing, bearing, ROTATE_PRECISION);
+            bearingAnimator.start(DEFAULT_DURATION, lastBearing, bearing);
             lastBearing = bearing;
         }
     }
 
     public void setHeading(float heading) {
         if (lastHeading != heading) {
-            headingAnimator.start(DEFAULT_DURATION, lastHeading, heading, ROTATE_PRECISION);
+            headingAnimator.start(DEFAULT_DURATION, lastHeading, heading);
             lastHeading = heading;
         }
     }

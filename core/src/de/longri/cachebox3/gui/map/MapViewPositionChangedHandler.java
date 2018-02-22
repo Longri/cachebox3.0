@@ -20,6 +20,8 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.*;
 import de.longri.cachebox3.events.location.SpeedChangedListener;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
+import de.longri.cachebox3.gui.animations.map.DoubleAnimator;
+import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
@@ -98,12 +100,17 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     private double lastDynZoom;
     private short lastEventID = -1;
 
+
+    long lastMapPosChange = Long.MIN_VALUE;
+
     /**
      * Set the values to Map and position overlays
      */
     private void assumeValues(boolean force, final short eventID) {
 
-        if (lastEventID == eventID) return;
+        if (lastEventID == eventID) {
+            return;
+        }
         lastEventID = eventID;
 
         if (!force && this.map.animator().isActive()) {
@@ -123,13 +130,23 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
 
         if (isDisposed.get()) return;
-        myPosition = EventHandler.getMyPosition();
+//        myPosition = EventHandler.getMyPosition();
 
         if (this.mapCenter != null && getCenterGps()) {
-            mapView.animator.position(
-                    MercatorProjection.longitudeToX(this.mapCenter.longitude),
-                    MercatorProjection.latitudeToY(this.mapCenter.latitude)
-            );
+            float duration;
+            if (lastMapPosChange == Long.MIN_VALUE) {
+                duration = MapAnimator.DEFAULT_DURATION;
+            } else {
+                long div = System.currentTimeMillis() - lastMapPosChange;
+                duration = div / 1000;
+            }
+            if(duration>0.2){
+                lastMapPosChange = System.currentTimeMillis();
+                mapView.animator.position(duration,
+                        MercatorProjection.longitudeToX(this.mapCenter.longitude),
+                        MercatorProjection.latitudeToY(this.mapCenter.latitude)
+                );
+            }
         }
         //force full tilt on CarMode
         if (CB.mapMode == MapMode.CAR)
@@ -213,7 +230,6 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             this.mapCenter = this.myPosition;
 
 //        this.accuracy = this.myPosition.getAccuracy();
-
 
 
         log.debug("AssumeValues positionChanged Event  eventID:{}", event.ID);

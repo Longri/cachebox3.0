@@ -41,6 +41,10 @@ public class DoubleAnimator {
         finish = true;
     }
 
+    public void start(float duration, double start, double end) {
+        this.start(duration, start, end,0);
+    }
+
     public void start(float duration, double start, double end, double precision) {
         if (equals(start, end, precision)) return;
         log.debug("{} animation", finish ? "start" : "restart");

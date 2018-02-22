@@ -78,14 +78,15 @@ public class GpsEventHelper {
      */
     public void newBearing(float bearing, boolean gps) {
 
+        if (gps) {return;};
+
         if (gps) {
             CB.sensoerIO.write_newBearingGPS(bearing);
         } else {
             CB.sensoerIO.write_newBearingCompass(bearing);
         }
 
-        if (gps && this.lastSpeed < 5) return; //TODO use setting value
-        if (!gps && this.lastSpeed >= 5) return;
+
         float value = lowpassFilter.add(bearing);
         if (lastHeading != value) {
             this.lastHeading = value;
