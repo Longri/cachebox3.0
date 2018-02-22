@@ -20,6 +20,8 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.LowpassFilter;
 import de.longri.cachebox3.utils.MathUtils;
 import org.slf4j.Logger;
@@ -33,21 +35,39 @@ public class GpsEventHelper {
     private static Logger log = LoggerFactory.getLogger(GpsEventHelper.class);
 
     private GpsState gpsState = GpsState.UNKNOWN;
-    LowpassFilter lowpassFilterCompass = new LowpassFilter(20);
-    LowpassFilter lowpassFilterGPS = new LowpassFilter(3);
-
-    //#################### NEW
+    private final LowpassFilter lowpassFilterCompass = new LowpassFilter(20);
+    private final LowpassFilter lowpassFilterGPS = new LowpassFilter(2);
+    private final LowpassFilter pitchLowpassFilter = new LowpassFilter(50);
 
     double lastGpsLat, lastGpsLon, lastNetLat, lastNetLon;
     private float lastGpsAccuracy;
     private double lastGpsElevation;
-    private double lastCompassHeading,lastGpsHeading;
+    private double lastCompassHeading, lastGpsHeading;
     private double lastSpeed;
     private float accuracy;
+    private boolean useCompassOnly;
+    private float compassLevel;
+    private int lastLowpassValue = 0;
+
+    public GpsEventHelper() {
+        useCompassOnly = Config.HardwareCompassOnly.getValue();
+        compassLevel = Config.HardwareCompassLevel.getValue();
+        Config.HardwareCompassOnly.addChangedEventListener(new IChanged() {
+            @Override
+            public void isChanged() {
+                useCompassOnly = Config.HardwareCompassOnly.getValue();
+            }
+        });
+        Config.HardwareCompassLevel.addChangedEventListener(new IChanged() {
+            @Override
+            public void isChanged() {
+                compassLevel = Config.HardwareCompassLevel.getValue();
+            }
+        });
+    }
 
     public void newGpsPos(double latitude, double longitude) {
         CB.sensoerIO.write_newGpsPos(latitude, longitude);
-
 
         // clamp coordinate to handled precision
         latitude = ((int) (latitude * 1E6)) / 1E6;
@@ -93,15 +113,12 @@ public class GpsEventHelper {
             }
         }
 
-        if(lastSpeed>5||CB.mapMode== MapMode.CAR){
+        if (!useCompassOnly && (lastSpeed > compassLevel || CB.mapMode == MapMode.CAR)) {
             EventHandler.fire(new OrientationChangedEvent((float) lastGpsHeading));
-        }else{
+        } else {
             EventHandler.fire(new OrientationChangedEvent((float) lastCompassHeading));
         }
     }
-
-    private int lastLowpassValue = 0;
-    LowpassFilter pitchLowpassFilter = new LowpassFilter(50);
 
     public void newPitch(float pitch) {
         CB.sensoerIO.write_newPitch(pitch);

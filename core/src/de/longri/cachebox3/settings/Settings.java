@@ -15,10 +15,8 @@
  */
 package de.longri.cachebox3.settings;
 
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Language;
-import de.longri.cachebox3.utils.HSV_Color;
 
 /**
  * Created by Longri on 31.07.16.
@@ -132,6 +130,9 @@ public class Settings extends Settings_Skin {
     public static final SettingBool VibrateFeedback = (SettingBool) Config.settingsList.addSetting(new SettingBool("VibrateFeedback", SettingCategory.Misc, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
 
     public static final SettingLongString UserFilter = (SettingLongString) Config.settingsList.addSetting(new SettingLongString("UserFilter", SettingCategory.Misc, NEVER, "", SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingInt HardwareCompassLevel = (SettingInt) Config.settingsList.addSetting(new SettingInt("HardwareCompassLevel", SettingCategory.Gps, NORMAL, 5, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingBool HardwareCompassOnly = (SettingBool) Config.settingsList.addSetting(new SettingBool("HardwareCompassOnly", SettingCategory.Gps, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
+
 
     //        public static final SettingEnum<Live_Cache_Time> LiveCacheTime = new SettingEnum<Live_Cache_Time>("LiveCacheTime", SettingCategory.LiveMap, NORMAL, Live_Cache_Time.h_6, SettingStoreType.Global, SettingUsage.ACB, Live_Cache_Time.h_6);
 //    public static final SettingEnum<CB_Core.Api.LiveMapQue.Live_Radius> LiveRadius = new SettingEnum<CB_Core.Api.LiveMapQue.Live_Radius>("LiveRadius", SettingCategory.LiveMap, NORMAL, CB_Core.Api.LiveMapQue.Live_Radius.Zoom_14,
@@ -146,8 +147,7 @@ public class Settings extends Settings_Skin {
 //    public static final SettingBool LiveExcludeFounds = (SettingBool) Config.settingsList.addSetting(new SettingBool("LiveExcludeFounds", SettingCategory.LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool LiveExcludeOwn = (SettingBool) Config.settingsList.addSetting(new SettingBool("LiveExcludeOwn", SettingCategory.LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool showSandbox = (SettingBool) Config.settingsList.addSetting(new SettingBool("showSandbox", SettingCategory.RememberAsk, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingInt HardwareCompassLevel = (SettingInt) Config.settingsList.addSetting(new SettingInt("HardwareCompassLevel", SettingCategory.Gps, NORMAL, 5, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool HardwareCompass = (SettingBool) Config.settingsList.addSetting(new SettingBool("HardwareCompass", SettingCategory.Gps, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
+
 //    public static final SettingInt gpsUpdateTime = (SettingInt) Config.settingsList.addSetting(new SettingInt("gpsUpdateTime", SettingCategory.Gps, NORMAL, 500, SettingStoreType.Global, SettingUsage.ACB));
 
 //    public static final SettingInt conection_timeout = (SettingInt) Config.settingsList.addSetting(new SettingInt("conection_timeout", SettingCategory.Internal, DEVELOPER, 10000, SettingStoreType.Global, SettingUsage.ALL));
