@@ -71,7 +71,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             }
         });
         this.mapView = mapView;
-        this.animator = new MapAnimator(this,map, myLocationLayer, myLocationAccuracy);
+        this.animator = new MapAnimator(this, map, myLocationLayer, myLocationAccuracy);
         de.longri.cachebox3.events.EventHandler.add(this);
     }
 
@@ -130,7 +130,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         if (isDisposed.get()) return;
 //        myPosition = EventHandler.getMyPosition();
 
-        if (this.mapCenter != null && getCenterGps()) {
+        {
             float duration;
             if (lastMapPosChange == Long.MIN_VALUE) {
                 duration = MapAnimator.DEFAULT_DURATION;
@@ -140,9 +140,19 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             }
             if (duration > 0.2) {
                 lastMapPosChange = System.currentTimeMillis();
+
+                double lat, lon;
+
+                if (getCenterGps()) {
+                    lon = this.mapCenter.longitude;
+                    lat = this.mapCenter.latitude;
+                } else {
+                    lon = this.myPosition.longitude;
+                    lat = this.myPosition.latitude;
+                }
                 animator.position(duration,
-                        MercatorProjection.longitudeToX(this.mapCenter.longitude),
-                        MercatorProjection.latitudeToY(this.mapCenter.latitude)
+                        MercatorProjection.longitudeToX(lon),
+                        MercatorProjection.latitudeToY(lat)
                 );
             }
         }

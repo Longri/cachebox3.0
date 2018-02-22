@@ -63,4 +63,12 @@ public class LocationAccuracyLayer extends Layer implements Disposable {
         locationAccuracyRenderer = null;
         mRenderer = null;
     }
+
+    public double getX() {
+        return mLocation.x;
+    }
+
+    public double getY() {
+        return mLocation.y;
+    }
 }

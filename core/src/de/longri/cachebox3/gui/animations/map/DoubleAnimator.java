@@ -42,7 +42,7 @@ public class DoubleAnimator {
     }
 
     public void start(float duration, double start, double end) {
-        this.start(duration, start, end,0);
+        this.start(duration, start, end, 0);
     }
 
     public void start(float duration, double start, double end, double precision) {
@@ -96,8 +96,12 @@ public class DoubleAnimator {
     }
 
 
-    public void setDebugAct(double value) {
+    public void setAct(double value) {
         this.act = value;
         finish = true;
+    }
+
+    public boolean isFinish() {
+        return finish;
     }
 }
