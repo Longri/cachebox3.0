@@ -22,6 +22,7 @@ import de.longri.cachebox3.events.location.SpeedChangedListener;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.animations.map.DoubleAnimator;
 import de.longri.cachebox3.gui.animations.map.MapAnimator;
+import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
@@ -61,7 +62,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     private double maxSpeed, maxZoom, minZoom;
     private boolean dynZoomEnabled;
 
-    public MapViewPositionChangedHandler(CacheboxMapAdapter map, LocationLayer myLocationLayer,
+    public MapViewPositionChangedHandler(CacheboxMapAdapter map, DirectLineLayer directLineLayer, LocationLayer myLocationLayer,
                                          LocationAccuracyLayer myLocationAccuracy,
                                          MapInfoPanel infoPanel) {
         this.map = map;
@@ -74,13 +75,13 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
                 assumeValues(false, (short) (lastEventID - 1));
             }
         });
-        this.animator = new MapAnimator(this, map, myLocationLayer, myLocationAccuracy);
+        this.animator = new MapAnimator(this, map, directLineLayer, myLocationLayer, myLocationAccuracy);
 
         dynZoomEnabled = Settings_Map.dynamicZoom.getValue();
         maxSpeed = Settings_Map.MoveMapCenterMaxSpeed.getValue();
         maxZoom = 1 << Settings_Map.dynamicZoomLevelMax.getValue();
         minZoom = 1 << Settings_Map.dynamicZoomLevelMin.getValue();
-        IChanged settingChangeHandler=new IChanged() {
+        IChanged settingChangeHandler = new IChanged() {
             @Override
             public void isChanged() {
                 dynZoomEnabled = Settings_Map.dynamicZoom.getValue();

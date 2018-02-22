@@ -317,7 +317,7 @@ public class MapView extends AbstractView {
 
 
         //add position changed handler
-        positionChangedHandler = new MapViewPositionChangedHandler(map, myLocationLayer, myLocationAccuracy, infoPanel);
+        positionChangedHandler = new MapViewPositionChangedHandler(map,directLineLayer, myLocationLayer, myLocationAccuracy, infoPanel);
 
         return map;
     }
@@ -357,18 +357,6 @@ public class MapView extends AbstractView {
         System.out.print("create MapTextureAtlas with flipped Y? " + flipped);
         TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, false,
                 flipped);
-
-
-//        if (false) {//Debug write atlas Bitmap to tmp folder
-//            int count = 0;
-//            for (TextureAtlas atlas : atlasList) {
-//                byte[] data = atlas.texture.bitmap.getPngEncodedData();
-//                Pixmap pixmap = new Pixmap(data, 0, data.length);
-//                FileHandle file = Gdx.files.absolute(CB.WorkPath + "/user/temp/testAtlas" + count++ + ".png");
-//                PixmapIO.writePNG(file, pixmap);
-//                pixmap.dispose();
-//            }
-//        }
         return textureRegionMap;
     }
 
@@ -454,7 +442,6 @@ public class MapView extends AbstractView {
 
     private void setMapState(MapState state) {
         state.setMapMode(CB.mapMode);
-//        state.setMapOrientationMode(mapOrientationButton.getMode());
         state.setZoom(this.map.getMapPosition().getZoomLevel());
     }
 

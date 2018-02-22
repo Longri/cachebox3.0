@@ -18,9 +18,11 @@ package de.longri.cachebox3.gui.animations.map;
 import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
+import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.LatLong;
 import org.oscim.core.MapPosition;
 import org.oscim.core.MercatorProjection;
 import org.oscim.map.Map;
@@ -45,10 +47,11 @@ public class MapAnimator {
     private final MapPosition mapPosition = new MapPosition();
     private final LocationAccuracyLayer myLocationAccuracy;
     private final LocationLayer myLocationLayer;
+    private final DirectLineLayer directLineLayer;
     private float arrowHeading;
     private final MapViewPositionChangedHandler mapViewPositionChangedHandler;
 
-    public MapAnimator(MapViewPositionChangedHandler mapViewPositionChangedHandler, Map map, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy) {
+    public MapAnimator(MapViewPositionChangedHandler mapViewPositionChangedHandler, Map map, DirectLineLayer directLineLayer, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy) {
         this.map = map;
         this.mapX = new DoubleAnimator();
         this.mapY = new DoubleAnimator();
@@ -60,6 +63,7 @@ public class MapAnimator {
         this.myLocationAccuracy = myLocationAccuracy;
         this.myLocationLayer = myLocationLayer;
         this.mapViewPositionChangedHandler = mapViewPositionChangedHandler;
+        this.directLineLayer = directLineLayer;
     }
 
     public void update(float delta) {
@@ -76,12 +80,15 @@ public class MapAnimator {
         if (mapViewPositionChangedHandler.getCenterGps()) {
             if (!centerAnimation) {
                 myLocationAccuracy.setMercatorPosition(mapPosition.getX(), mapPosition.getY(), CB.eventHelper.getAccuracy());
-                myLocationLayer.setPosition(MercatorProjection.toLatitude(mapPosition.getY()),
-                        MercatorProjection.toLongitude(mapPosition.getX()), arrowHeading);
+                double lat = MercatorProjection.toLatitude(mapPosition.getY());
+                double lon = MercatorProjection.toLongitude(mapPosition.getX());
+                myLocationLayer.setPosition(lat, lon, arrowHeading);
+                directLineLayer.redrawLine(new LatLong(lat, lon));
             } else {
                 Coordinate coordinate = CB.eventHelper.getLastGpsCoordinate();
                 myLocationAccuracy.setPosition(coordinate.latitude, coordinate.longitude, CB.eventHelper.getAccuracy());
                 myLocationLayer.setPosition(coordinate.latitude, coordinate.longitude, arrowHeading);
+                directLineLayer.redrawLine(coordinate);
             }
         } else {
             boolean changeX = myPosX.update(delta);
@@ -91,8 +98,10 @@ public class MapAnimator {
                 double x = myPosX.getAct();
                 double y = myPosY.getAct();
                 myLocationAccuracy.setMercatorPosition(x, y, CB.eventHelper.getAccuracy());
-                myLocationLayer.setPosition(MercatorProjection.toLatitude(y),
-                        MercatorProjection.toLongitude(x), arrowHeading);
+                double lat = MercatorProjection.toLatitude(mapPosition.getY());
+                double lon = MercatorProjection.toLongitude(mapPosition.getX());
+                myLocationLayer.setPosition(lat, lon, arrowHeading);
+                directLineLayer.redrawLine(new LatLong(lat, lon));
             }
         }
 
@@ -131,8 +140,8 @@ public class MapAnimator {
         this.position(DEFAULT_DURATION, x, y);
     }
 
-  private  boolean lastMapCenter = false;
-  private  boolean centerAnimation = false;
+    private boolean lastMapCenter = false;
+    private boolean centerAnimation = false;
 
     public void position(float duration, double x, double y) {
         if (mapViewPositionChangedHandler.getCenterGps()) {
