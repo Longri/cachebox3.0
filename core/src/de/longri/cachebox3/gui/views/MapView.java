@@ -252,19 +252,6 @@ public class MapView extends AbstractView {
             if (layer instanceof CacheboxMapAdapter.BuildingLabelLayer) {
                 log.debug("{} BuildingLayer", enabled ? "Enable" : "Disable");
                 ((CacheboxMapAdapter.BuildingLabelLayer) layer).buildingLayer.setEnabled(enabled);
-            } else if (layer instanceof GroupLayer) {
-                List<Layer> groupLayers = ((GroupLayer) layer).layers;
-                for (Layer l : groupLayers) {
-                    if (l instanceof CenterCrossLayer) {
-                        log.debug("{} CenterCrossLayer", enabled ? "Enable" : "Disable");
-                        if (enabled) {
-                            //check settings
-                            l.setEnabled(Settings_Map.ShowMapCenterCross.getValue());
-                        } else {
-                            l.setEnabled(false);
-                        }
-                    }
-                }
             }
         }
     }
@@ -285,12 +272,14 @@ public class MapView extends AbstractView {
 
             @Override
             public void beginFrame() {
+                if (!CacheboxMain.drawMap) return;
                 super.beginFrame();
-                positionChangedHandler.update(Gdx.graphics.getDeltaTime());
+                if (positionChangedHandler != null) positionChangedHandler.update(Gdx.graphics.getDeltaTime());
             }
 
             @Override
             public void onMapEvent(Event e, final MapPosition mapPosition) {
+                if (!CacheboxMain.drawMap) return;
                 super.onMapEvent(e, mapPosition);
                 if (e == Map.MOVE_EVENT) {
 //                    log.debug("Map.MOVE_EVENT");
@@ -309,8 +298,6 @@ public class MapView extends AbstractView {
                 if (infoBubble != null && infoItem != null) {
                     setInfoBubblePos();
                 }
-
-
                 lastCenterPosLat = mapPosition.getLatitude();
                 lastCenterPosLon = mapPosition.getLongitude();
             }
@@ -412,7 +399,7 @@ public class MapView extends AbstractView {
     @Override
     public void dispose() {
         log.debug("Dispose MapView");
-
+        CacheboxMain.drawMap = false;
         //save last position for next initial
         MapPosition mapPosition = this.map.getMapPosition();
         Settings_Map.lastMapState.setValue(lastMapState.getValues());
@@ -443,7 +430,7 @@ public class MapView extends AbstractView {
         mapInputHandler.clear();
         mapInputHandler = null;
 
-        CacheboxMain.drawMap = false;
+
         map.clearMap();
         map.destroy();
         CB.postOnGlThread(new NamedRunnable("MapView:dispose texture items") {

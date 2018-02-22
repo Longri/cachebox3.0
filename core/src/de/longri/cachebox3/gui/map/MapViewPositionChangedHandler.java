@@ -31,6 +31,7 @@ import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Settings_Map;
+import de.longri.cachebox3.utils.IChanged;
 import org.oscim.core.MercatorProjection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,8 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     private double lastDynZoom;
     private short lastEventID = -1;
     private long lastMapPosChange = Long.MIN_VALUE;
+    private double maxSpeed, maxZoom, minZoom;
+    private boolean dynZoomEnabled;
 
     public MapViewPositionChangedHandler(CacheboxMapAdapter map, LocationLayer myLocationLayer,
                                          LocationAccuracyLayer myLocationAccuracy,
@@ -72,6 +75,24 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             }
         });
         this.animator = new MapAnimator(this, map, myLocationLayer, myLocationAccuracy);
+
+        dynZoomEnabled = Settings_Map.dynamicZoom.getValue();
+        maxSpeed = Settings_Map.MoveMapCenterMaxSpeed.getValue();
+        maxZoom = 1 << Settings_Map.dynamicZoomLevelMax.getValue();
+        minZoom = 1 << Settings_Map.dynamicZoomLevelMin.getValue();
+        IChanged settingChangeHandler=new IChanged() {
+            @Override
+            public void isChanged() {
+                dynZoomEnabled = Settings_Map.dynamicZoom.getValue();
+                maxSpeed = Settings_Map.MoveMapCenterMaxSpeed.getValue();
+                maxZoom = 1 << Settings_Map.dynamicZoomLevelMax.getValue();
+                minZoom = 1 << Settings_Map.dynamicZoomLevelMin.getValue();
+            }
+        };
+        Settings_Map.dynamicZoom.addChangedEventListener(settingChangeHandler);
+        Settings_Map.MoveMapCenterMaxSpeed.addChangedEventListener(settingChangeHandler);
+        Settings_Map.dynamicZoomLevelMax.addChangedEventListener(settingChangeHandler);
+        Settings_Map.dynamicZoomLevelMin.addChangedEventListener(settingChangeHandler);
         de.longri.cachebox3.events.EventHandler.add(this);
     }
 
@@ -149,24 +170,20 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         if (CB.mapMode == MapMode.CAR)
             animator.tilt(map.viewport().getMaxTilt());
 
-        if (CB.mapMode == MapMode.CAR /*&& Settings_Map.dynamicZoom.getValue()*/) {
+
+        if (dynZoomEnabled && CB.mapMode == MapMode.CAR) {
             // calculate dynamic Zoom
-
-            double maxSpeed = Settings_Map.MoveMapCenterMaxSpeed.getValue();
-            double maxZoom = 1 << Settings_Map.dynamicZoomLevelMax.getValue();
-            double minZoom = 1 << Settings_Map.dynamicZoomLevelMin.getValue();
-
             double percent = actSpeed / maxSpeed;
-
             double dynZoom = (float) (maxZoom - ((maxZoom - minZoom) * percent));
             if (dynZoom > maxZoom)
                 dynZoom = maxZoom;
             if (dynZoom < minZoom)
                 dynZoom = minZoom;
 
-            animator.scale(dynZoom);
             if (lastDynZoom != (dynZoom)) {
                 lastDynZoom = dynZoom;
+                log.debug("Set new dynZoom: speed: {}  percent: {}  zoom: {}", actSpeed, percent, dynZoom);
+                animator.scale(2.0f, dynZoom);
             }
         }
 
@@ -225,7 +242,6 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     @Override
     public void speedChanged(SpeedChangedEvent event) {
         actSpeed = event.speed;
-        log.debug("AssumeValues SpeedChanged Event  eventID:{}", event.ID);
         assumeValues(false, event.ID);
     }
 

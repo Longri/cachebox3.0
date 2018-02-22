@@ -49,7 +49,7 @@ public class GpsEventHelper {
     private float compassLevel;
     private int lastLowpassValue = 0;
 
-    public GpsEventHelper() {
+    public void init(){
         useCompassOnly = Config.HardwareCompassOnly.getValue();
         compassLevel = Config.HardwareCompassLevel.getValue();
         Config.HardwareCompassOnly.addChangedEventListener(new IChanged() {
