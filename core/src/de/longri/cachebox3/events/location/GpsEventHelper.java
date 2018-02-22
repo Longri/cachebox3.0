@@ -15,9 +15,9 @@
  */
 package de.longri.cachebox3.events.location;
 
-import com.badlogic.gdx.math.Interpolation;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.utils.LowpassFilter;
@@ -33,14 +33,15 @@ public class GpsEventHelper {
     private static Logger log = LoggerFactory.getLogger(GpsEventHelper.class);
 
     private GpsState gpsState = GpsState.UNKNOWN;
-    LowpassFilter lowpassFilter = new LowpassFilter(20);
+    LowpassFilter lowpassFilterCompass = new LowpassFilter(20);
+    LowpassFilter lowpassFilterGPS = new LowpassFilter(3);
 
     //#################### NEW
 
     double lastGpsLat, lastGpsLon, lastNetLat, lastNetLon;
     private float lastGpsAccuracy;
     private double lastGpsElevation;
-    private double lastHeading;
+    private double lastCompassHeading,lastGpsHeading;
     private double lastSpeed;
     private float accuracy;
 
@@ -78,24 +79,24 @@ public class GpsEventHelper {
      * @param gps     is from GPS
      */
     public void newBearing(float bearing, boolean gps) {
-
-        if (gps) {
-            return;
-        }
-        ;
-
         if (gps) {
             CB.sensoerIO.write_newBearingGPS(bearing);
+            float value = lowpassFilterGPS.add(bearing);
+            if (lastGpsHeading != value) {
+                this.lastGpsHeading = value;
+            }
         } else {
             CB.sensoerIO.write_newBearingCompass(bearing);
+            float value = lowpassFilterCompass.add(bearing);
+            if (lastCompassHeading != value) {
+                this.lastCompassHeading = value;
+            }
         }
 
-
-        float value = lowpassFilter.add(bearing);
-        if (lastHeading != value) {
-            this.lastHeading = value;
-            //fire event
-            EventHandler.fire(new OrientationChangedEvent(value));
+        if(lastSpeed>5||CB.mapMode== MapMode.CAR){
+            EventHandler.fire(new OrientationChangedEvent((float) lastGpsHeading));
+        }else{
+            EventHandler.fire(new OrientationChangedEvent((float) lastCompassHeading));
         }
     }
 
@@ -115,7 +116,7 @@ public class GpsEventHelper {
 
         if (lastLowpassValue != lowPassValue) {
             lastLowpassValue = lowPassValue;
-            lowpassFilter.changeSmoothValue(lastLowpassValue);
+            lowpassFilterCompass.changeSmoothValue(lastLowpassValue);
             log.debug("change LowpassValue to {}", lowPassValue);
         }
     }
@@ -147,7 +148,7 @@ public class GpsEventHelper {
         CoordinateGPS coord = new CoordinateGPS(this.lastGpsLat, this.lastGpsLon);
         coord.setAccuracy(this.lastGpsAccuracy);
         coord.setElevation(this.lastGpsElevation);
-        coord.setHeading(this.lastHeading);
+        coord.setHeading(this.lastCompassHeading);
         coord.setSpeed(this.lastSpeed);
         return coord;
     }

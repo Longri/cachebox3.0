@@ -35,7 +35,6 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
-import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
@@ -69,7 +68,10 @@ import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
-import org.oscim.core.*;
+import org.oscim.core.MapPosition;
+import org.oscim.core.MercatorProjection;
+import org.oscim.core.Point;
+import org.oscim.core.Tile;
 import org.oscim.event.Event;
 import org.oscim.gdx.GestureHandlerImpl;
 import org.oscim.layers.GroupLayer;
@@ -77,7 +79,6 @@ import org.oscim.layers.Layer;
 import org.oscim.layers.TileGridLayer;
 import org.oscim.map.Layers;
 import org.oscim.map.Map;
-import org.oscim.map.ViewController;
 import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
@@ -119,7 +120,7 @@ public class MapView extends AbstractView {
     private MapScaleBarLayer mapScaleBarLayer;
     private final MapStateButton mapStateButton;
     private final ZoomButton zoomButton;
-//    public final MapAnimator animator;
+    //    public final MapAnimator animator;
     private WaypointLayer wayPointLayer;
     private DirectLineLayer directLineLayer;
     private CenterCrossLayer ccl;
@@ -329,9 +330,7 @@ public class MapView extends AbstractView {
 
 
         //add position changed handler
-        positionChangedHandler = new MapViewPositionChangedHandler(
-                this, map, myLocationLayer,
-                myLocationAccuracy, mapStateButton, infoPanel);
+        positionChangedHandler = new MapViewPositionChangedHandler(map, myLocationLayer, myLocationAccuracy, infoPanel);
 
         return map;
     }

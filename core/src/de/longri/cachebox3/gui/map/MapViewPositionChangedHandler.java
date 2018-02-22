@@ -53,14 +53,15 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     private Coordinate myPosition;
     private final CacheboxMapAdapter map;
     private final AtomicBoolean isDisposed = new AtomicBoolean(false);
-    private final MapStateButton mapStateButton;
-    private final MapView mapView;
+    private Timer timer;
+    private double lastDynZoom;
+    private short lastEventID = -1;
+    private long lastMapPosChange = Long.MIN_VALUE;
 
-    public MapViewPositionChangedHandler(MapView mapView, CacheboxMapAdapter map, LocationLayer myLocationLayer,
+    public MapViewPositionChangedHandler(CacheboxMapAdapter map, LocationLayer myLocationLayer,
                                          LocationAccuracyLayer myLocationAccuracy,
-                                         MapStateButton mapStateButton, MapInfoPanel infoPanel) {
+                                         MapInfoPanel infoPanel) {
         this.map = map;
-        this.mapStateButton = mapStateButton;
         this.infoPanel = infoPanel;
         this.infoPanel.setStateChangedListener(new Compass.StateChanged() {
             @Override
@@ -70,7 +71,6 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
                 assumeValues(false, (short) (lastEventID - 1));
             }
         });
-        this.mapView = mapView;
         this.animator = new MapAnimator(this, map, myLocationLayer, myLocationAccuracy);
         de.longri.cachebox3.events.EventHandler.add(this);
     }
@@ -92,14 +92,6 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     public boolean getCenterGps() {
         return CB.mapMode == MapMode.GPS || CB.mapMode == MapMode.CAR || CB.mapMode == MapMode.LOCK;
     }
-
-    private Timer timer;
-
-    private double lastDynZoom;
-    private short lastEventID = -1;
-
-
-    long lastMapPosChange = Long.MIN_VALUE;
 
     /**
      * Set the values to Map and position overlays
@@ -125,37 +117,34 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             return;
         }
         timer = null;
-
-
         if (isDisposed.get()) return;
-//        myPosition = EventHandler.getMyPosition();
 
-        {
-            float duration;
-            if (lastMapPosChange == Long.MIN_VALUE) {
-                duration = MapAnimator.DEFAULT_DURATION;
-            } else {
-                long div = System.currentTimeMillis() - lastMapPosChange;
-                duration = div / 1000;
-            }
-            if (duration > 0.2) {
-                lastMapPosChange = System.currentTimeMillis();
 
-                double lat, lon;
-
-                if (getCenterGps()) {
-                    lon = this.mapCenter.longitude;
-                    lat = this.mapCenter.latitude;
-                } else {
-                    lon = this.myPosition.longitude;
-                    lat = this.myPosition.latitude;
-                }
-                animator.position(duration,
-                        MercatorProjection.longitudeToX(lon),
-                        MercatorProjection.latitudeToY(lat)
-                );
-            }
+        float duration;
+        if (lastMapPosChange == Long.MIN_VALUE) {
+            duration = MapAnimator.DEFAULT_DURATION;
+        } else {
+            long div = System.currentTimeMillis() - lastMapPosChange;
+            duration = div / 1000;
         }
+        if (duration > 0.2) {
+            lastMapPosChange = System.currentTimeMillis();
+
+            double lat, lon;
+
+            if (getCenterGps()) {
+                lon = this.mapCenter.longitude;
+                lat = this.mapCenter.latitude;
+            } else {
+                lon = this.myPosition.longitude;
+                lat = this.myPosition.latitude;
+            }
+            animator.position(duration,
+                    MercatorProjection.longitudeToX(lon),
+                    MercatorProjection.latitudeToY(lat)
+            );
+        }
+
         //force full tilt on CarMode
         if (CB.mapMode == MapMode.CAR)
             animator.tilt(map.viewport().getMaxTilt());
@@ -182,7 +171,6 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         }
 
         float bearing = -EventHandler.getHeading();
-        log.debug("Eventhandler bearing: {}", bearing);
         if (CB.mapMode == MapMode.CAR) {
             this.infoPanel.setMapOrientationMode(MapOrientationMode.COMPASS);
         }
@@ -204,10 +192,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
                 break;
         }
         animator.setArrowHeading(arrowHeading);
-        log.debug("OrientationState {}| MapBearing {}| ArrowHeading {}", this.infoPanel.getOrientationState(), mapBearing, arrowHeading);
-
         infoPanel.setNewValues(myPosition, -mapBearing);
-
         CB.requestRendering();
     }
 
@@ -228,19 +213,14 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
     @Override
     public void positionChanged(PositionChangedEvent event) {
-//        if (CB.mapMode == MapMode.CAR && !event.pos.isGPSprovided())
-//            return;// at CarMode ignore Network provided positions!
-
         this.myPosition = event.pos;
         if (getCenterGps())
             this.mapCenter = this.myPosition;
-
-        log.debug("AssumeValues positionChanged Event  eventID:{}", event.ID);
         assumeValues(false, event.ID);
     }
 
 
-    float actSpeed;
+    private float actSpeed;
 
     @Override
     public void speedChanged(SpeedChangedEvent event) {
@@ -251,12 +231,10 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
     @Override
     public void orientationChanged(OrientationChangedEvent event) {
-        // at CarMode no orientation changes below 20kmh
         if (CB.mapMode == MapMode.CAR) {
             this.mapBearing = event.getOrientation();
             this.arrowHeading = 0;
         }
-        log.debug("AssumeValues orientationChanged Event eventID:{}", event.ID);
         assumeValues(false, event.ID);
     }
 

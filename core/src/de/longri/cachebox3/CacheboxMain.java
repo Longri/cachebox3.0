@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -78,7 +79,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
 
         INCLUDE_LIST.add("de.longri.cachebox3.events.location.GpsEventHelper");
-//        INCLUDE_LIST.add("de.longri.cachebox3.AndroidLocationListener");
+        INCLUDE_LIST.add(MapViewPositionChangedHandler.class.getName());
         INCLUDE_LIST.add(TestView.class.getName());
 
 
