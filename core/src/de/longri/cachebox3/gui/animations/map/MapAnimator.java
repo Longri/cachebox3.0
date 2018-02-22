@@ -121,17 +121,21 @@ public class MapAnimator {
         }
     }
 
+    public void animateToPos(double x, double y) {
+        this.mapX.start(0.5f, map.getMapPosition().x, x);
+        this.mapY.start(0.5f, map.getMapPosition().y, y);
+        centerAnimation = true;
+    }
+
     public void position(double x, double y) {
         this.position(DEFAULT_DURATION, x, y);
     }
 
-
-    boolean lastMapCenter = false;
-    boolean centerAnimation = false;
+  private  boolean lastMapCenter = false;
+  private  boolean centerAnimation = false;
 
     public void position(float duration, double x, double y) {
         if (mapViewPositionChangedHandler.getCenterGps()) {
-
             if (centerAnimation) {
                 if (mapX.isFinish()) {
                     centerAnimation = false;

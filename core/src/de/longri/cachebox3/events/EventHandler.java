@@ -66,17 +66,19 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
     public static void add(Object listener) {
-        for (Type type : listener.getClass().getGenericInterfaces()) {
-            for (Class clazz : allListener) {
-                if (type == clazz) {
-                    Array<Object> list = listenerMap.get(clazz);
-                    if (list == null) {
-                        list = new Array<>();
-                        listenerMap.put(clazz, list);
-                    }
-                    if (!list.contains(listener, true)) {
-                        log.debug("Add {} Event listener: {}", clazz.getSimpleName(), listener.getClass().getSimpleName());
-                        list.add(listener);
+        synchronized (listenerMap) {
+            for (Type type : listener.getClass().getGenericInterfaces()) {
+                for (Class clazz : allListener) {
+                    if (type == clazz) {
+                        Array<Object> list = listenerMap.get(clazz);
+                        if (list == null) {
+                            list = new Array<>();
+                            listenerMap.put(clazz, list);
+                        }
+                        if (!list.contains(listener, true)) {
+                            log.debug("Add {} Event listener: {}", clazz.getSimpleName(), listener.getClass().getSimpleName());
+                            list.add(listener);
+                        }
                     }
                 }
             }
@@ -84,13 +86,15 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
     public static void remove(Object listener) {
-        for (Type type : listener.getClass().getGenericInterfaces()) {
-            for (Class clazz : allListener) {
-                if (type == clazz) {
-                    Array<Object> list = listenerMap.get(clazz);
-                    if (list != null) {
-                        log.debug("Remove {} Event listener: {}", clazz.getSimpleName(), listener.getClass().getSimpleName());
-                        list.removeValue(listener, true);
+        synchronized (listenerMap) {
+            for (Type type : listener.getClass().getGenericInterfaces()) {
+                for (Class clazz : allListener) {
+                    if (type == clazz) {
+                        Array<Object> list = listenerMap.get(clazz);
+                        if (list != null) {
+                            log.debug("Remove {} Event listener: {}", clazz.getSimpleName(), listener.getClass().getSimpleName());
+                            list.removeValue(listener, true);
+                        }
                     }
                 }
             }
@@ -98,28 +102,25 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
     public static void fire(final AbstractEvent event) {
-
-        final Array<Object> list = listenerMap.get(event.getListenerClass());
-        if (list != null) {
-//            if (list.size > 0)
-//                log.debug("Fire {} event {} to {} listener: {}", event.getClass().getSimpleName(), event.ID, list.size, list.toString());
-
-
-            asyncExecutor.submit(new AsyncTask<Void>() {
-                @Override
-                public Void call() throws Exception {
-                    for (int i = 0, n = list.size; i < n; i++) {
-                        try {
-                            event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            log.error("Fire event to" + list.items[i].getClass().getSimpleName(), e.getCause());
+        synchronized (listenerMap) {
+            final Array<Object> list = listenerMap.get(event.getListenerClass());
+            if (list != null) {
+                asyncExecutor.submit(new AsyncTask<Void>() {
+                    @Override
+                    public Void call() throws Exception {
+                        for (int i = 0, n = list.size; i < n; i++) {
+                            try {
+                                event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                log.error("Fire event to" + list.items[i].getClass().getSimpleName(), e.getCause());
+                            }
                         }
+                        return null;
                     }
-                    return null;
-                }
-            });
+                });
+            }
         }
     }
 
@@ -269,9 +270,5 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             log.warn("update Selected Cache with new Cache! Fire Change Event?");
         }
         INSTANCE.selectedCache = selectedCache;
-    }
-
-    public static CoordinateGPS getLastGpsCoordinate() {
-        return null;
     }
 }

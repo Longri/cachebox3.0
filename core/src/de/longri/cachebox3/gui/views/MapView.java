@@ -195,7 +195,7 @@ public class MapView extends AbstractView {
                         });
                     } else {
                         log.debug("Activate WP Mode");
-                        positionChangedHandler.position(
+                        positionChangedHandler.animateToPos(
                                 MercatorProjection.longitudeToX(wpCoord.longitude),
                                 MercatorProjection.latitudeToY(wpCoord.latitude)
                         );

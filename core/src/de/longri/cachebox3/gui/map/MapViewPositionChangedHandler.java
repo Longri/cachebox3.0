@@ -90,7 +90,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
      * @return Boolean
      */
     public boolean getCenterGps() {
-        return CB.mapMode != MapMode.FREE && CB.mapMode != MapMode.WP;
+        return CB.mapMode == MapMode.GPS || CB.mapMode == MapMode.CAR || CB.mapMode == MapMode.LOCK;
     }
 
     private Timer timer;
@@ -278,5 +278,9 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
     public void position(double x, double y) {
         animator.position(x, y);
+    }
+
+    public void animateToPos(double x, double y) {
+        animator.animateToPos(x, y);
     }
 }
