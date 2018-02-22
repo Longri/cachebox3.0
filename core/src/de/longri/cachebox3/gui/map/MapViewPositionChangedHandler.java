@@ -52,8 +52,6 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     private Coordinate mapCenter;
     private Coordinate myPosition;
     private final CacheboxMapAdapter map;
-    private final LocationAccuracyLayer myLocationAccuracy;
-    private final LocationLayer myLocationLayer;
     private final AtomicBoolean isDisposed = new AtomicBoolean(false);
     private final MapStateButton mapStateButton;
     private final MapView mapView;
@@ -62,8 +60,6 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
                                          LocationAccuracyLayer myLocationAccuracy,
                                          MapStateButton mapStateButton, MapInfoPanel infoPanel) {
         this.map = map;
-        this.myLocationLayer = myLocationLayer;
-        this.myLocationAccuracy = myLocationAccuracy;
         this.mapStateButton = mapStateButton;
         this.infoPanel = infoPanel;
         this.infoPanel.setStateChangedListener(new Compass.StateChanged() {
@@ -75,7 +71,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             }
         });
         this.mapView = mapView;
-        this.animator = new MapAnimator(map);
+        this.animator = new MapAnimator(this,map, myLocationLayer, myLocationAccuracy);
         de.longri.cachebox3.events.EventHandler.add(this);
     }
 
@@ -93,7 +89,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
      *
      * @return Boolean
      */
-    private boolean getCenterGps() {
+    public boolean getCenterGps() {
         return CB.mapMode != MapMode.FREE && CB.mapMode != MapMode.WP;
     }
 
@@ -197,14 +193,11 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
                 this.arrowHeading = userBearing + bearing;
                 break;
         }
+        animator.setArrowHeading(arrowHeading);
         log.debug("OrientationState {}| MapBearing {}| ArrowHeading {}", this.infoPanel.getOrientationState(), mapBearing, arrowHeading);
 
         infoPanel.setNewValues(myPosition, -mapBearing);
-        if (myPosition != null) {
-            //TODO handle on Map Animator
-            myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
-            myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
-        }
+
         CB.requestRendering();
     }
 
@@ -231,9 +224,6 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         this.myPosition = event.pos;
         if (getCenterGps())
             this.mapCenter = this.myPosition;
-
-//        this.accuracy = this.myPosition.getAccuracy();
-
 
         log.debug("AssumeValues positionChanged Event  eventID:{}", event.ID);
         assumeValues(false, event.ID);

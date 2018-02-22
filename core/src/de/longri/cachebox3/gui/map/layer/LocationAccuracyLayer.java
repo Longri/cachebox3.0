@@ -42,6 +42,13 @@ public class LocationAccuracyLayer extends Layer implements Disposable {
         locationAccuracyRenderer.setLocation(mLocation.x, mLocation.y, mRadius);
     }
 
+    public void setMercatorPosition(double x, double y, double accuracy) {
+        mLocation.x = x;
+        mLocation.y = y;
+        mRadius = accuracy / MercatorProjection.groundResolution(MercatorProjection.toLatitude(y), 1);
+        locationAccuracyRenderer.setLocation(mLocation.x, mLocation.y, mRadius);
+    }
+
     @Override
     public void setEnabled(boolean enabled) {
         if (enabled == isEnabled())

@@ -42,6 +42,7 @@ public class GpsEventHelper {
     private double lastGpsElevation;
     private double lastHeading;
     private double lastSpeed;
+    private float accuracy;
 
     public void newGpsPos(double latitude, double longitude) {
         CB.sensoerIO.write_newGpsPos(latitude, longitude);
@@ -78,7 +79,10 @@ public class GpsEventHelper {
      */
     public void newBearing(float bearing, boolean gps) {
 
-        if (gps) {return;};
+        if (gps) {
+            return;
+        }
+        ;
 
         if (gps) {
             CB.sensoerIO.write_newBearingGPS(bearing);
@@ -122,6 +126,7 @@ public class GpsEventHelper {
 
     public void newAccuracy(float accuracy) {
         CB.sensoerIO.write_newAccuracy(accuracy);
+        this.accuracy = accuracy;
     }
 
     public void newSpeed(double speed) {
@@ -148,4 +153,7 @@ public class GpsEventHelper {
     }
 
 
+    public float getAccuracy() {
+        return this.accuracy;
+    }
 }

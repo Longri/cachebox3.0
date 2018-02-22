@@ -16,7 +16,12 @@
 package de.longri.cachebox3.gui.animations.map;
 
 import com.badlogic.gdx.Gdx;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
+import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
+import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import org.oscim.core.MapPosition;
+import org.oscim.core.MercatorProjection;
 import org.oscim.map.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +34,7 @@ public class MapAnimator {
     private static final Logger log = LoggerFactory.getLogger(MapAnimator.class);
 
 
-//    private final static double SCALE_PRECISION = 1;
+    //    private final static double SCALE_PRECISION = 1;
 //    private final static double TILT_PRECISION = 1;
 //    public final static double ROTATE_PRECISION = 1e-2;
     public final static float DEFAULT_DURATION = 0.5f; // 500 ms
@@ -37,14 +42,21 @@ public class MapAnimator {
     private final Map map;
     private final DoubleAnimator mapX, mapY, scale, rotate, tilt;
     private final MapPosition mapPosition = new MapPosition();
+    private final LocationAccuracyLayer myLocationAccuracy;
+    private final LocationLayer myLocationLayer;
+    private float arrowHeading;
+    private final MapViewPositionChangedHandler mapViewPositionChangedHandler;
 
-    public MapAnimator(Map map) {
+    public MapAnimator(MapViewPositionChangedHandler mapViewPositionChangedHandler, Map map, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy) {
         this.map = map;
         this.mapX = new DoubleAnimator();
         this.mapY = new DoubleAnimator();
         this.scale = new DoubleAnimator();
         this.rotate = new DoubleAnimator();
         this.tilt = new DoubleAnimator();
+        this.myLocationAccuracy = myLocationAccuracy;
+        this.myLocationLayer = myLocationLayer;
+        this.mapViewPositionChangedHandler = mapViewPositionChangedHandler;
     }
 
     public void update(float delta) {
@@ -58,6 +70,13 @@ public class MapAnimator {
             changed = true;
             mapPosition.setY(mapY.getAct());
         }
+        if (mapViewPositionChangedHandler.getCenterGps()) {
+            myLocationAccuracy.setMercatorPosition(mapPosition.getX(), mapPosition.getY(), CB.eventHelper.getAccuracy());
+            myLocationLayer.setPosition(MercatorProjection.toLatitude(mapPosition.getY()),
+                    MercatorProjection.toLongitude(mapPosition.getX()), arrowHeading);
+        }
+
+
         if (scale.update(delta)) {
             changed = true;
             mapPosition.setScale(scale.getAct());
@@ -136,5 +155,9 @@ public class MapAnimator {
 
     private void tilt(float duration, double value) {
         this.tilt.start(duration, mapPosition.getTilt(), value);
+    }
+
+    public void setArrowHeading(float arrowHeading) {
+        this.arrowHeading = arrowHeading;
     }
 }

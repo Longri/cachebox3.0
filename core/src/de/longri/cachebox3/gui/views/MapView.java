@@ -154,7 +154,6 @@ public class MapView extends AbstractView {
                     positionChangedHandler.setBearing(bearing);
                     setBuildingLayerEnabled(false);
                     setCenterCrossLayerEnabled(false);
-
                 } else if (lastMapMode == MapMode.CAR) {
                     log.debug("Disable Carmode! Activate last Mode:" + lastMapState);
                     setBuildingLayerEnabled(true);
