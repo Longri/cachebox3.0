@@ -98,8 +98,8 @@ public class MapAnimator {
                 double x = myPosX.getAct();
                 double y = myPosY.getAct();
                 myLocationAccuracy.setMercatorPosition(x, y, CB.eventHelper.getAccuracy());
-                double lat = MercatorProjection.toLatitude(mapPosition.getY());
-                double lon = MercatorProjection.toLongitude(mapPosition.getX());
+                double lat = MercatorProjection.toLatitude(y);
+                double lon = MercatorProjection.toLongitude(x);
                 myLocationLayer.setPosition(lat, lon, arrowHeading);
                 directLineLayer.redrawLine(new LatLong(lat, lon));
             }
