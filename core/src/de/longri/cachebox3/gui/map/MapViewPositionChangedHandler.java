@@ -46,6 +46,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
     private static Logger log = LoggerFactory.getLogger(MapViewPositionChangedHandler.class);
     private final MapInfoPanel infoPanel;
+    private final MapAnimator animator;
 
     private float arrowHeading, accuracy, mapBearing, userBearing, tilt;
     private Coordinate mapCenter;
@@ -74,6 +75,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             }
         });
         this.mapView = mapView;
+        this.animator = new MapAnimator(map);
         de.longri.cachebox3.events.EventHandler.add(this);
     }
 
@@ -140,9 +142,9 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
                 long div = System.currentTimeMillis() - lastMapPosChange;
                 duration = div / 1000;
             }
-            if(duration>0.2){
+            if (duration > 0.2) {
                 lastMapPosChange = System.currentTimeMillis();
-                mapView.animator.position(duration,
+                animator.position(duration,
                         MercatorProjection.longitudeToX(this.mapCenter.longitude),
                         MercatorProjection.latitudeToY(this.mapCenter.latitude)
                 );
@@ -150,7 +152,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         }
         //force full tilt on CarMode
         if (CB.mapMode == MapMode.CAR)
-            mapView.animator.tilt(map.viewport().getMaxTilt());
+            animator.tilt(map.viewport().getMaxTilt());
 
         if (CB.mapMode == MapMode.CAR /*&& Settings_Map.dynamicZoom.getValue()*/) {
             // calculate dynamic Zoom
@@ -167,7 +169,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             if (dynZoom < minZoom)
                 dynZoom = minZoom;
 
-            mapView.animator.scale(dynZoom);
+            animator.scale(dynZoom);
             if (lastDynZoom != (dynZoom)) {
                 lastDynZoom = dynZoom;
             }
@@ -183,12 +185,12 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             case NORTH:
                 this.mapBearing = 0;
                 this.arrowHeading = bearing;
-                mapView.animator.rotate(mapBearing);
+                animator.rotate(mapBearing);
                 break;
             case COMPASS:
                 this.mapBearing = bearing;
                 this.arrowHeading = 0;
-                mapView.animator.rotate(mapBearing);
+                animator.rotate(mapBearing);
                 break;
             case USER:
                 this.mapBearing = userBearing;
@@ -199,6 +201,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
         infoPanel.setNewValues(myPosition, -mapBearing);
         if (myPosition != null) {
+            //TODO handle on Map Animator
             myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
             myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
         }
@@ -259,5 +262,21 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
     public String toString() {
         return "MapViewPositionHandler";
+    }
+
+    public void update(float deltaTime) {
+        animator.update(deltaTime);
+    }
+
+    public void scale(double scale) {
+        animator.scale(scale);
+    }
+
+    public void rotate(float rotate) {
+        animator.rotate(rotate);
+    }
+
+    public void position(double x, double y) {
+        animator.position(x, y);
     }
 }

@@ -119,7 +119,7 @@ public class MapView extends AbstractView {
     private MapScaleBarLayer mapScaleBarLayer;
     private final MapStateButton mapStateButton;
     private final ZoomButton zoomButton;
-    public final MapAnimator animator;
+//    public final MapAnimator animator;
     private WaypointLayer wayPointLayer;
     private DirectLineLayer directLineLayer;
     private CenterCrossLayer ccl;
@@ -171,14 +171,14 @@ public class MapView extends AbstractView {
                     if (lastMapState.getMapOrientationMode() != MapOrientationMode.NORTH) {
                         ori = EventHandler.getHeading();
                     }
-                    animator.rotate(ori);
-                    animator.scale(1 << lastMapState.getZoom());
+                    positionChangedHandler.rotate(ori);
+                    positionChangedHandler.scale(1 << lastMapState.getZoom());
                     map.updateMap(true);
                 } else if (mapMode == MapMode.GPS) {
                     log.debug("Activate GPS Mode");
                     final Coordinate myPos = EventHandler.getMyPosition();
                     if (myPos != null) {
-                        animator.position(
+                        positionChangedHandler.position(
                                 MercatorProjection.longitudeToX(myPos.longitude),
                                 MercatorProjection.latitudeToY(myPos.latitude)
                         );
@@ -196,7 +196,7 @@ public class MapView extends AbstractView {
                         });
                     } else {
                         log.debug("Activate WP Mode");
-                        animator.position(
+                        positionChangedHandler.position(
                                 MercatorProjection.longitudeToX(wpCoord.longitude),
                                 MercatorProjection.latitudeToY(wpCoord.latitude)
                         );
@@ -216,7 +216,7 @@ public class MapView extends AbstractView {
         this.addActor(infoPanel);
 
         map = createMap();
-        this.animator = new MapAnimator(map);
+
         this.addActor(mapStateButton);
         this.setTouchable(Touchable.enabled);
 
@@ -231,7 +231,7 @@ public class MapView extends AbstractView {
                 else
                     value = value * 0.5;
 
-                animator.scale(value);
+                positionChangedHandler.scale(value);
                 lastMapState.setZoom(FastMath.log2((int) value));
             }
         });
@@ -286,7 +286,7 @@ public class MapView extends AbstractView {
             @Override
             public void beginFrame() {
                 super.beginFrame();
-                animator.update(Gdx.graphics.getDeltaTime());
+                positionChangedHandler.update(Gdx.graphics.getDeltaTime());
             }
 
             @Override
