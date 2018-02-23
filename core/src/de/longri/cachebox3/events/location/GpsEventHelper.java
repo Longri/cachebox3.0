@@ -49,7 +49,7 @@ public class GpsEventHelper {
     private float compassLevel;
     private int lastLowpassValue = 0;
 
-    public void init(){
+    public void init() {
         useCompassOnly = Config.HardwareCompassOnly.getValue();
         compassLevel = Config.HardwareCompassLevel.getValue();
         Config.HardwareCompassOnly.addChangedEventListener(new IChanged() {
@@ -66,8 +66,8 @@ public class GpsEventHelper {
         });
     }
 
-    public void newGpsPos(double latitude, double longitude) {
-        CB.sensoerIO.write_newGpsPos(latitude, longitude);
+    public void newGpsPos(double latitude, double longitude, float accuracy) {
+        CB.sensoerIO.write_newGpsPos(latitude, longitude, accuracy);
 
         // clamp coordinate to handled precision
         latitude = ((int) (latitude * 1E6)) / 1E6;
@@ -80,11 +80,10 @@ public class GpsEventHelper {
             //fire pos changed event
             EventHandler.fire(new PositionChangedEvent(new Coordinate(latitude, longitude), true, EventHandler.getId()));
         }
-
     }
 
-    public void newNetworkPos(double latitude, double longitude) {
-        CB.sensoerIO.write_newNetworkPos(latitude, longitude);
+    public void newNetworkPos(double latitude, double longitude, float accuracy) {
+        CB.sensoerIO.write_newNetworkPos(latitude, longitude, accuracy);
         // clamp coordinate to handled precision
         latitude = ((int) (latitude * 1E6)) / 1E6;
         longitude = ((int) (longitude * 1E6)) / 1E6;
@@ -142,10 +141,10 @@ public class GpsEventHelper {
         CB.sensoerIO.write_newRoll(roll);
     }
 
-    public void newAccuracy(float accuracy) {
-        CB.sensoerIO.write_newAccuracy(accuracy);
-        this.accuracy = accuracy;
-    }
+//    public void newAccuracy(float accuracy) {
+//        CB.sensoerIO.write_newAccuracy(accuracy);
+//        this.accuracy = accuracy;
+//    }
 
     public void newSpeed(double speed) {
         CB.sensoerIO.write_newSpeed(speed);

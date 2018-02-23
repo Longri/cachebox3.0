@@ -20,7 +20,6 @@ import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -34,13 +33,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SensorIO {
     private boolean record = false;
     private Writer writer;
-    private final int MAX_FLUSH = 100;
     private final char NEW_GPS_POS = 'G';
     private final char NEW_NETWORK_POS = 'N';
     private final char NEW_ALTITUDE = 'A';
     private final char NEW_BEARING_GPS = 'B';
     private final char NEW_BEARING_COMPASS = 'C';
-    private final char NEW_ACCURACY = 'Z';
     private final char NEW_SPEED = 'S';
     private final char NEW_ROLL = 'R';
     private final char NEW_PITCH = 'P';
@@ -66,24 +63,24 @@ public class SensorIO {
         writer = null;
     }
 
-    public void write_newGpsPos(double latitude, double longitude) {
+    public void write_newGpsPos(double latitude, double longitude, float accuracy) {
         if (!record || isPlay) return;
         try {
             writer.write(getTimeDiv());
             writer.write(NEW_GPS_POS + "#" + Double.toString(latitude));
-            writer.write("#" + Double.toString(longitude) + "\n");
+            writer.write("#" + Double.toString(longitude) + "#" + Float.toString(accuracy) + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
         checkFlush();
     }
 
-    public void write_newNetworkPos(double latitude, double longitude) {
+    public void write_newNetworkPos(double latitude, double longitude, float accuracy) {
         if (!record || isPlay) return;
         try {
             writer.write(getTimeDiv());
             writer.write(NEW_NETWORK_POS + "#" + Double.toString(latitude));
-            writer.write("#" + Double.toString(longitude) + "\n");
+            writer.write("#" + Double.toString(longitude) + "#" + Float.toString(accuracy) + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -145,17 +142,6 @@ public class SensorIO {
         checkFlush();
     }
 
-    public void write_newAccuracy(float accuracy) {
-        if (!record || isPlay) return;
-        try {
-            writer.write(getTimeDiv());
-            writer.write(NEW_ACCURACY + "#" + Float.toString(accuracy) + "\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        checkFlush();
-    }
-
     public void write_newSpeed(double speed) {
         if (!record || isPlay) return;
         try {
@@ -167,7 +153,7 @@ public class SensorIO {
         checkFlush();
     }
 
-    long lastTime = Long.MIN_VALUE;
+    private long lastTime = Long.MIN_VALUE;
 
     private String getTimeDiv() {
         String ret;
@@ -183,6 +169,7 @@ public class SensorIO {
     }
 
     private void checkFlush() {
+        int MAX_FLUSH = 100;
         if (flushCount.incrementAndGet() >= MAX_FLUSH) {
             flushCount.set(0);
             try {
@@ -201,7 +188,7 @@ public class SensorIO {
     //#########################################################
     // Read and play simulation
 
-    boolean isPlay = false;
+    private boolean isPlay = false;
 
     public void stopPlay() {
         isPlay = false;
@@ -210,7 +197,6 @@ public class SensorIO {
     public void play(FileHandle file) {
         String fullText = file.readString();
         final String[] lines = fullText.split("\n");
-        fullText = null;
         isPlay = true;
         CB.postAsync(new NamedRunnable("play sensor simulation") {
             @Override
@@ -234,10 +220,12 @@ public class SensorIO {
 
                     switch (command) {
                         case NEW_GPS_POS:
-                            CB.eventHelper.newGpsPos(Double.parseDouble(lineSplites[2]), Double.parseDouble(lineSplites[3]));
+                            CB.eventHelper.newGpsPos(Double.parseDouble(lineSplites[2]),
+                                    Double.parseDouble(lineSplites[3]), Float.parseFloat(lineSplites[4]));
                             break;
                         case NEW_NETWORK_POS:
-                            CB.eventHelper.newNetworkPos(Double.parseDouble(lineSplites[2]), Double.parseDouble(lineSplites[3]));
+                            CB.eventHelper.newNetworkPos(Double.parseDouble(lineSplites[2]),
+                                    Double.parseDouble(lineSplites[3]), Float.parseFloat(lineSplites[4]));
                             break;
                         case NEW_ALTITUDE:
                             CB.eventHelper.newAltitude(Double.parseDouble(lineSplites[2]));
@@ -247,9 +235,6 @@ public class SensorIO {
                             break;
                         case NEW_BEARING_COMPASS:
                             CB.eventHelper.newBearing(Float.parseFloat(lineSplites[2]), false);
-                            break;
-                        case NEW_ACCURACY:
-                            CB.eventHelper.newAccuracy(Float.parseFloat(lineSplites[2]));
                             break;
                         case NEW_SPEED:
                             CB.eventHelper.newSpeed(Double.parseDouble(lineSplites[2]));
