@@ -43,8 +43,6 @@ public class AndroidLocationListener implements LocationListener, SensorEventLis
     private Sensor accelerometer;
     private Sensor magnetometer;
 
-    private final GpsEventHelper eventHelper = new GpsEventHelper();
-
 
     AndroidLocationListener(Context context) {
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -64,15 +62,16 @@ public class AndroidLocationListener implements LocationListener, SensorEventLis
         if (isGpsProvided) {
             float acc = location.hasAccuracy() ? location.getAccuracy() : 0;
             if (acc > 0) {
-                eventHelper.newGpsPos(location.getLatitude(), location.getLongitude(), acc);
-                if (location.hasAltitude()) eventHelper.newAltitude(location.getAltitude());
-                if (location.hasBearing()) eventHelper.newBearing((float) Math.toRadians(location.getBearing()), true);
-                if (location.hasSpeed()) eventHelper.newSpeed(location.getSpeed() * 3.6);
+                CB.eventHelper.newGpsPos(location.getLatitude(), location.getLongitude(), acc);
+                if (location.hasAltitude()) CB.eventHelper.newAltitude(location.getAltitude());
+                if (location.hasBearing())
+                    CB.eventHelper.newBearing((float) Math.toRadians(location.getBearing()), true);
+                if (location.hasSpeed()) CB.eventHelper.newSpeed(location.getSpeed() * 3.6);
             }
         } else {
             float acc = location.hasAccuracy() ? location.getAccuracy() : 0;
             if (acc > 0)
-                eventHelper.newNetworkPos(location.getLatitude(), location.getLongitude(), acc);
+                CB.eventHelper.newNetworkPos(location.getLatitude(), location.getLongitude(), acc);
         }
     }
 
@@ -82,13 +81,13 @@ public class AndroidLocationListener implements LocationListener, SensorEventLis
 
             switch (status) {
                 case LocationProvider.OUT_OF_SERVICE:
-                    eventHelper.gpsStateChanged(GpsState.OUT_OF_SERVICE);
+                    CB.eventHelper.gpsStateChanged(GpsState.OUT_OF_SERVICE);
                     break;
                 case LocationProvider.AVAILABLE:
-                    eventHelper.gpsStateChanged(GpsState.AVAILABLE);
+                    CB.eventHelper.gpsStateChanged(GpsState.AVAILABLE);
                     break;
                 case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                    eventHelper.gpsStateChanged(GpsState.TEMPORARILY_UNAVAILABLE);
+                    CB.eventHelper.gpsStateChanged(GpsState.TEMPORARILY_UNAVAILABLE);
                     break;
 
             }
