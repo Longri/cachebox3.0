@@ -354,7 +354,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
                 float distance = result[0];
                 float bearing = result[1];
-
+                log.debug("set Compass heading to {}", heading);
                 compassPanel.setInfo(distance, heading, bearing, 0/*actCoord.getAccuracy()*/);
 
                 if (targetdirectionLabel != null) {

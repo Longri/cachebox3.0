@@ -61,7 +61,7 @@ public class IOS_LocationListener {
                     locationManager.requestWhenInUseAuthorization();
                 }
                 locationManager.setHeadingFilter(HEADING_FILTER);
-                locationManager.setAllowsBackgroundLocationUpdates(true);
+                //  locationManager.setAllowsBackgroundLocationUpdates(true);
 
                 // Once configured, the location manager must be "started".
                 locationManager.startUpdatingLocation();
@@ -78,7 +78,7 @@ public class IOS_LocationListener {
                     networkLocationManager.requestWhenInUseAuthorization();
                 }
                 networkLocationManager.setHeadingFilter(HEADING_FILTER);
-                networkLocationManager.setAllowsBackgroundLocationUpdates(true);
+                // networkLocationManager.setAllowsBackgroundLocationUpdates(true);
 
                 networkLocationManager.startMonitoringSignificantLocationChanges();
                 log.debug("locationManager started");
@@ -105,7 +105,7 @@ public class IOS_LocationListener {
 
             CB.eventHelper.newGpsPos(lat, lon, accuracy);
             CB.eventHelper.newAltitude(altitude);
-            CB.eventHelper.newBearing(courseRad, true);
+            if (courseRad >= 0) CB.eventHelper.newBearing(courseRad, true);
             CB.eventHelper.newSpeed(speed);
 
         }

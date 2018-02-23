@@ -40,6 +40,7 @@ public class LowpassFilter {
      * @return
      */
     public float add(float value) {
+        if (smooth <= 0) return (float) Math.toDegrees(value);
         synchronized (queue) {
             sumSin += (float) Math.sin(value);
             sumCos += (float) Math.cos(value);

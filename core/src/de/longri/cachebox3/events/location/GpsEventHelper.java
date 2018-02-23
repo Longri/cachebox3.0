@@ -24,6 +24,8 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.LowpassFilter;
 import de.longri.cachebox3.utils.MathUtils;
+import org.oscim.backend.CanvasAdapter;
+import org.oscim.backend.Platform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +37,7 @@ public class GpsEventHelper {
     private static Logger log = LoggerFactory.getLogger(GpsEventHelper.class);
 
     private GpsState gpsState = GpsState.UNKNOWN;
-    private final LowpassFilter lowpassFilterCompass = new LowpassFilter(20);
+    private final LowpassFilter lowpassFilterCompass = new LowpassFilter(CanvasAdapter.platform == Platform.IOS ? 0 : 20);
     private final LowpassFilter lowpassFilterGPS = new LowpassFilter(2);
     private final LowpassFilter pitchLowpassFilter = new LowpassFilter(50);
 
@@ -98,6 +100,8 @@ public class GpsEventHelper {
      * @param gps     is from GPS
      */
     public void newBearing(float bearing, boolean gps) {
+        log.debug("new Bearing {} ({})  GPS:{}", bearing, Math.toDegrees(bearing), gps);
+
         if (gps) {
             CB.sensoerIO.write_newBearingGPS(bearing);
             float value = lowpassFilterGPS.add(bearing);
@@ -106,7 +110,12 @@ public class GpsEventHelper {
             }
         } else {
             CB.sensoerIO.write_newBearingCompass(bearing);
-            float value = lowpassFilterCompass.add(bearing);
+            float value;
+            if (CanvasAdapter.platform == Platform.IOS) {
+                value = (float) Math.toDegrees(bearing);
+            } else {
+                value = lowpassFilterCompass.add(bearing);
+            }
             if (lastCompassHeading != value) {
                 this.lastCompassHeading = value;
             }
@@ -114,12 +123,15 @@ public class GpsEventHelper {
 
         if (!useCompassOnly && (lastSpeed > compassLevel || CB.mapMode == MapMode.CAR)) {
             EventHandler.fire(new OrientationChangedEvent((float) lastGpsHeading));
+            log.debug("fire GPS heading event {} (rad:{}) ", lastGpsHeading, Math.toRadians(lastGpsHeading));
         } else {
             EventHandler.fire(new OrientationChangedEvent((float) lastCompassHeading));
+            log.debug("fire Compass heading event {} (rad:{})", lastCompassHeading, Math.toRadians(lastCompassHeading));
         }
     }
 
     public void newPitch(float pitch) {
+        if (CanvasAdapter.platform == Platform.IOS) return;
         CB.sensoerIO.write_newPitch(pitch);
         pitch = pitchLowpassFilter.add(pitch);
         int pitchInt = Math.round(pitch);

@@ -32,6 +32,7 @@ import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.views.CompassView;
 import de.longri.cachebox3.gui.views.TestView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -81,6 +82,7 @@ public class CacheboxMain extends ApplicationAdapter {
         INCLUDE_LIST.add("de.longri.cachebox3.events.location.GpsEventHelper");
         INCLUDE_LIST.add(MapViewPositionChangedHandler.class.getName());
         INCLUDE_LIST.add(TestView.class.getName());
+        INCLUDE_LIST.add(CompassView.class.getName());
 
 
     }

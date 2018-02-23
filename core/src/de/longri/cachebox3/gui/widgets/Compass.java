@@ -174,6 +174,8 @@ public class Compass extends WidgetGroup implements Layout {
         setHeading(lastHeading);
     }
 
+    boolean layoutChanged = false;
+
     public void layout() {
         float size = Math.min(this.getWidth(), this.getHeight());
         rec_frame.setSize(size, size);
@@ -190,6 +192,7 @@ public class Compass extends WidgetGroup implements Layout {
         rec_arrow.setSize(size * arrowRatio, size * arrowRatio);
         rec_arrow.setX(centerX - rec_arrow.getHalfWidth());
         rec_arrow.setY(centerY - rec_arrow.getHalfHeight());
+        layoutChanged = true;
     }
 
     @Override
@@ -244,7 +247,7 @@ public class Compass extends WidgetGroup implements Layout {
     public void act(float delta) {
         super.act(delta);
         boolean changes = false;
-        if (bearingAnimator.update(delta)) {
+        if (layoutChanged || bearingAnimator.update(delta)) {
             float animatedBearingValue = (float) bearingAnimator.getAct();
             transform_scale.idt();
             transform_scale.translate(rec_scale.getHalfWidth() + rec_scale.getX(), rec_scale.getHalfHeight() + rec_scale.getY(), 0);
@@ -253,7 +256,7 @@ public class Compass extends WidgetGroup implements Layout {
             changes = true;
         }
 
-        if (headingAnimator.update(delta)) {
+        if (layoutChanged || headingAnimator.update(delta)) {
             float animatedHeadingValue = (float) headingAnimator.getAct();
             transform_arrow.idt();
             transform_arrow.translate(rec_arrow.getHalfWidth() + rec_arrow.getX(), rec_arrow.getHalfHeight() + rec_arrow.getY(), 0);
@@ -261,7 +264,7 @@ public class Compass extends WidgetGroup implements Layout {
             transform_arrow.translate(-(rec_arrow.getHalfWidth() + rec_arrow.getX()), -(rec_arrow.getHalfHeight() + rec_arrow.getY()), 0);
             changes = true;
         }
-
+        layoutChanged = false;
         if (changes) CB.requestRendering();
     }
 
