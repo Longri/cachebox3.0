@@ -56,23 +56,20 @@ public class AndroidLocationListener implements LocationListener, SensorEventLis
 
     @Override
     public void onLocationChanged(Location location) {
-        log.debug("onLocationChanged: {}", location);
-
-
+//        log.debug("onLocationChanged: {}", location);
         boolean isGpsProvided = false;
         if (location.getProvider().toLowerCase(new Locale("en")).contains("gps"))
             isGpsProvided = true;
 
         if (isGpsProvided) {
             eventHelper.newGpsPos(location.getLatitude(), location.getLongitude());
-            if (location.hasAltitude()) eventHelper.newAltitude(location.getAltitude());
-            if (location.hasBearing()) eventHelper.newBearing((float) Math.toRadians(location.getBearing()), true);
-            if (location.hasAccuracy()) eventHelper.newAccuracy(location.getAccuracy());
-            if (location.hasSpeed()) eventHelper.newSpeed(location.getSpeed() * 3.6);
         } else {
             eventHelper.newNetworkPos(location.getLatitude(), location.getLongitude());
-            if (location.hasAccuracy()) eventHelper.newAccuracy(location.getAccuracy());
         }
+        if (location.hasAltitude()) eventHelper.newAltitude(location.getAltitude());
+        if (location.hasBearing()) eventHelper.newBearing((float) Math.toRadians(location.getBearing()), true);
+        if (location.hasAccuracy()) eventHelper.newAccuracy(location.getAccuracy());
+        if (location.hasSpeed()) eventHelper.newSpeed(location.getSpeed() * 3.6);
     }
 
     @Override
@@ -112,21 +109,21 @@ public class AndroidLocationListener implements LocationListener, SensorEventLis
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        synchronized (CB.eventHelper) {
-            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
-                gravity = event.values;
-            if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-                float[] geomagnetic = event.values;
-                if (gravity != null && geomagnetic != null) {
-                    if (SensorManager.getRotationMatrix(R, I, gravity, geomagnetic)) {
-                        SensorManager.getOrientation(R, orientationValues);
-                        CB.eventHelper.newBearing(orientationValues[0], false);
-                        CB.eventHelper.newPitch(orientationValues[1]);
-                        CB.eventHelper.newRoll(orientationValues[2]);
-                    }
-                }
-            }
-        }
+//        synchronized (CB.eventHelper) {
+//            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+//                gravity = event.values;
+//            if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+//                float[] geomagnetic = event.values;
+//                if (gravity != null && geomagnetic != null) {
+//                    if (SensorManager.getRotationMatrix(R, I, gravity, geomagnetic)) {
+//                        SensorManager.getOrientation(R, orientationValues);
+//                        CB.eventHelper.newBearing(orientationValues[0], false);
+//                        CB.eventHelper.newPitch(orientationValues[1]);
+//                        CB.eventHelper.newRoll(orientationValues[2]);
+//                    }
+//                }
+//            }
+//        }
     }
 
     @Override
