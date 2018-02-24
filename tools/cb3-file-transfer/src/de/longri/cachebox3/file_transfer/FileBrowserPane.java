@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.file_transfer;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -31,6 +30,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
@@ -38,19 +38,24 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.filechooser.FileSystemView;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -132,14 +137,14 @@ public class FileBrowserPane extends BorderPane {
                 } else {
                     setList(selectedDir);
                 }
-                iniDragAndDrop(listView);
+                iniDrop(listView);
 
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         Set<Node> treeCells = treeView.lookupAll(".tree-cell");
                         for (Node cell : treeCells) {
-                            iniDragAndDrop(cell);
+                            iniDrop(cell);
                         }
                     }
                 });
@@ -151,7 +156,7 @@ public class FileBrowserPane extends BorderPane {
     private void populateMap(TreeItem<ServerFile> item) {
         if (item.getChildren().size() > 0) {
 
-//            iniDragAndDrop((ServerFileTreeItem)item);
+//            iniDrop((ServerFileTreeItem)item);
 
             map.put(item.getValue(), (ServerFileTreeItem) item);
             for (TreeItem<ServerFile> subItem : item.getChildren()) {
@@ -177,9 +182,21 @@ public class FileBrowserPane extends BorderPane {
             files.add(f);
         }
 
-        //TODO sort files (Dir's first)
 
+        listView.setCellFactory(new Callback<ListView<ServerFile>, ListCell<ServerFile>>() {
+            @Override
+            public ListCell<ServerFile> call(ListView<ServerFile> list) {
+
+                final AttachmentListCell cell = new AttachmentListCell();
+                iniDrag(cell);
+                return cell;
+            }
+        });
+
+        //TODO sort files (Dir's first)
         listView.setItems(files);
+
+
     }
 
     private class ServerFileTreeItem extends TreeItem<ServerFile> {
@@ -237,12 +254,93 @@ public class FileBrowserPane extends BorderPane {
         }
     }
 
+    private static class AttachmentListCell extends ListCell<ServerFile> {
+        @Override
+        public void updateItem(ServerFile item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty) {
+                setGraphic(null);
+                setText(null);
+            } else {
+                Image fxImage = getFileIcon(item.getName());
+                ImageView imageView = new ImageView(fxImage);
+                setGraphic(imageView);
+                setText(item.getName());
+            }
+        }
+    }
+
+    static HashMap<String, Image> mapOfFileExtToSmallIcon = new HashMap<String, Image>();
+
+    private static String getFileExt(String fname) {
+        String ext = ".";
+        int p = fname.lastIndexOf('.');
+        if (p >= 0) {
+            ext = fname.substring(p);
+        }
+        return ext.toLowerCase();
+    }
+
+    private static javax.swing.Icon getJSwingIconFromFileSystem(File file) {
+
+        // Windows {
+        FileSystemView view = FileSystemView.getFileSystemView();
+        javax.swing.Icon icon = view.getSystemIcon(file);
+        // }
+
+        // OS X {
+//        final javax.swing.JFileChooser fc = new javax.swing.JFileChooser();
+//        javax.swing.Icon icon = fc.getUI().getFileView(fc).getIcon(file);
+        // }
+
+        return icon;
+    }
+
+    private static Image getFileIcon(String fname) {
+        final String ext = getFileExt(fname);
+
+        Image fileIcon = mapOfFileExtToSmallIcon.get(ext);
+        if (fileIcon == null) {
+
+            javax.swing.Icon jswingIcon = null;
+
+            File file = new File(fname);
+            if (file.exists()) {
+                jswingIcon = getJSwingIconFromFileSystem(file);
+            } else {
+                File tempFile = null;
+                try {
+                    tempFile = File.createTempFile("icon", ext);
+                    jswingIcon = getJSwingIconFromFileSystem(tempFile);
+                } catch (IOException ignored) {
+                    // Cannot create temporary file.
+                } finally {
+                    if (tempFile != null) tempFile.delete();
+                }
+            }
+
+            if (jswingIcon != null) {
+                fileIcon = jswingIconToImage(jswingIcon);
+                mapOfFileExtToSmallIcon.put(ext, fileIcon);
+            }
+        }
+
+        return fileIcon;
+    }
+
+    private static Image jswingIconToImage(javax.swing.Icon jswingIcon) {
+        BufferedImage bufferedImage = new BufferedImage(jswingIcon.getIconWidth(), jswingIcon.getIconHeight(),
+                BufferedImage.TYPE_INT_ARGB);
+        jswingIcon.paintIcon(null, bufferedImage.getGraphics(), 0, 0);
+        return SwingFXUtils.toFXImage(bufferedImage, null);
+    }
+
 
     //#############################################################################
     //  Drag&Drop
     //#############################################################################
 
-    private void iniDragAndDrop(Node node) {
+    private void iniDrop(final Node node) {
         node.setOnDragOver(new EventHandler() {
             @Override
             public void handle(final Event event) {
@@ -270,6 +368,28 @@ public class FileBrowserPane extends BorderPane {
         });
     }
 
+
+    private void iniDrag(final Node node) {
+        //#########################
+        // Add mouse event handlers for the source
+
+
+        node.setOnDragDetected(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                log.debug("Event on Source: drag detected");
+                dragDetected(event, node);
+            }
+
+        });
+
+        node.setOnDragDone(new EventHandler<DragEvent>() {
+            public void handle(DragEvent event) {
+                log.debug("Event on Source: drag done");
+                dragDone(event);
+            }
+        });
+
+    }
 
     private void mouseDragDropped(final Event e) {
         final Dragboard db = ((DragEvent) e).getDragboard();
@@ -441,9 +561,88 @@ public class FileBrowserPane extends BorderPane {
     }
 
 
-    //################################################################################
-    // Progress Dialog
-    //################################################################################
+    private void dragDetected(MouseEvent event, Node node) {
+
+        ServerFile file = ((AttachmentListCell) node).getItem();
+
+
+        // User can drag only when there is text in the source field
+        String sourceText = file.getName();
+
+        if (sourceText == null || sourceText.trim().equals("")) {
+            event.consume();
+            return;
+        }
+
+        // Initiate a drag-and-drop gesture
+        Dragboard dragboard = node.startDragAndDrop(TransferMode.COPY_OR_MOVE);
+        file.setDragBoard(dragboard);
+
+
+        // Add the source text to the Dragboard
+
+        try {
+            File temp = File.createTempFile("test", "." + "txt");
+            FileWriter fileWriter = new FileWriter(temp);
+            fileWriter.write("Test Text");
+
+
+            ClipboardContent content = new ClipboardContent();
+
+
+                    //TODO
+            content.putStream(java.util.Collections.singletonList(temp));
+            dragboard.setContent(content);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+        event.consume();
+    }
+
+    private void dragDone(DragEvent event) {
+        ServerFile file = ((AttachmentListCell) event.getSource()).getItem();
+        copyFileToClipBoard(file);
+        event.consume();
+    }
+
+
+    private void copyFileToClipBoard(ServerFile file) {
+        try {
+
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            Dragboard db = file.getDragBoard();
+
+            ClipboardContent content = new ClipboardContent();
+
+            String name = "test";
+            String ext = "txt";
+
+
+            File temp = File.createTempFile(name, "." + ext);
+            FileWriter fileWriter = new FileWriter(temp);
+            fileWriter.write("Test Text");
+
+            content.putFiles(java.util.Collections.singletonList(temp));
+            db.setContent(content);
+            clipboard.setContent(content);
+
+            temp.deleteOnExit();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+
+//################################################################################
+// Progress Dialog
+//################################################################################
 
     public static class ProgressForm {
         private final Stage dialogStage;
