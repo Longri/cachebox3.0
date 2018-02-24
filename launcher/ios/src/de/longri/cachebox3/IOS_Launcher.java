@@ -38,7 +38,12 @@ public class IOS_Launcher extends IOSApplication.Delegate {
         boolean retValue = super.didFinishLaunching(application, launchOptions);
 
         Gdx.app.setApplicationLogger(new IOS_ApplicationLogger());
-
+        float displayHeightCentimeter = Gdx.graphics.getHeight() / Gdx.graphics.getPpiY() * 2.54f;
+        if (displayHeightCentimeter < 9) {
+            CB.setGlobalScale(0.8f);
+        } else {
+            CB.setGlobalScale(1f);
+        }
         return retValue;
     }
 
@@ -46,7 +51,6 @@ public class IOS_Launcher extends IOSApplication.Delegate {
     @Override
     protected IOSApplication createApplication() {
 
-        CB.setGlobalScale(1);
 
         final String appDir = System.getenv("HOME");
         final String localPath = appDir + "/Library/local/";
