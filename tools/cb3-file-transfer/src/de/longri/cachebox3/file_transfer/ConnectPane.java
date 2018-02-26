@@ -85,7 +85,7 @@ public class ConnectPane extends BorderPane {
     void connect(String address, String port) {
         clint = new FileBrowserClint(address, Integer.parseInt(port));
         if (clint.connect()) {
-            FileBrowserPane fb = new FileBrowserPane(clint, this.main.primaryStage);
+            MainPane fb = new MainPane(clint, this.main.primaryStage);
 
             Scene scene = new Scene(fb);
             this.main.primaryStage.setScene(scene);

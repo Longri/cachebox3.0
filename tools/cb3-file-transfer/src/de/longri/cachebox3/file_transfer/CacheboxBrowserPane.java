@@ -64,10 +64,10 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by Longri on 01.11.2017.
  */
-public class FileBrowserPane extends BorderPane {
+public class CacheboxBrowserPane extends BorderPane {
 
 
-    private static final Logger log = LoggerFactory.getLogger(FileBrowserPane.class);
+    private static final Logger log = LoggerFactory.getLogger(CacheboxBrowserPane.class);
 
     private final FileBrowserClint clint;
     private final ObservableList<ServerFile> files = FXCollections.observableArrayList();
@@ -82,18 +82,23 @@ public class FileBrowserPane extends BorderPane {
     Node actIntersectedNode = null;
 
 
-    public FileBrowserPane(FileBrowserClint clint, Stage primaryStage) {
+    public CacheboxBrowserPane(FileBrowserClint clint, Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.clint = clint;
         workingDir = clint.getFiles();
         treeView = new TreeView<>();
         listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
+
+        Label lbl = new Label("Cachebox");
+        BorderPane lablePane = new BorderPane(lbl);
+        this.setTop(lablePane);
+
+
         SplitPane splitPane = new SplitPane();
         splitPane.setOrientation(Orientation.HORIZONTAL);
         splitPane.getItems().add(treeView);
         splitPane.getItems().add(listView);
-
         this.setCenter(splitPane);
 
         treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -296,7 +301,7 @@ public class FileBrowserPane extends BorderPane {
         return icon;
     }
 
-    private static Image getFileIcon(String fname) {
+    static Image getFileIcon(String fname) {
         final String ext = getFileExt(fname);
 
         Image fileIcon = mapOfFileExtToSmallIcon.get(ext);
@@ -483,7 +488,7 @@ public class FileBrowserPane extends BorderPane {
 
                 final AtomicBoolean WAIT_READY = new AtomicBoolean(true);
 
-                CB.postAsync(new NamedRunnable("FileBrowserPane") {
+                CB.postAsync(new NamedRunnable("CacheboxBrowserPane") {
                     @Override
                     public void run() {
                         clint.sendFiles(progressHandler, path, workingDir, files);
@@ -588,17 +593,12 @@ public class FileBrowserPane extends BorderPane {
 
 
             ClipboardContent content = new ClipboardContent();
-
-
-                    //TODO
-            content.putStream(java.util.Collections.singletonList(temp));
             dragboard.setContent(content);
 
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
 
         event.consume();
