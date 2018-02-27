@@ -268,7 +268,7 @@ public class CacheboxBrowserPane extends BorderPane {
                 setGraphic(null);
                 setText(null);
             } else {
-                Image fxImage = getFileIcon(item);
+                Image fxImage = FileIconUtils.getFileIcon(item);
                 ImageView imageView = new ImageView(fxImage);
                 setGraphic(imageView);
                 setText(item.getName());
@@ -276,103 +276,10 @@ public class CacheboxBrowserPane extends BorderPane {
         }
     }
 
-    private static HashMap<String, Image> mapOfFileExtToSmallIcon = new HashMap<String, Image>();
-    private static final JFileChooser filechooser = new JFileChooser();
-
-    private static String getFileExt(File file) {
-        if (file.isDirectory()) {
-            if (file.getParent() == null) {
-                return "#"; //Disk root
-            }
-            return "%"; //folder
-        }
-        return filechooser.getTypeDescription(file).toLowerCase();
-    }
-
-    private static javax.swing.Icon getJSwingIconFromFileSystem(File file) {
-
-        // Windows {
-        FileSystemView view = FileSystemView.getFileSystemView();
-        javax.swing.Icon icon = view.getSystemIcon(file);
-        // }
-
-        // OS X {
-//        final javax.swing.JFileChooser fc = new javax.swing.JFileChooser();
-//        javax.swing.Icon icon = fc.getUI().getFileView(fc).getIcon(file);
-        // }
-
-        return icon;
-    }
-
-    static Image getFileIcon(File file) {
-        final String ext = getFileExt(file);
-
-        Image fileIcon = mapOfFileExtToSmallIcon.get(ext);
-        if (fileIcon == null) {
-
-            javax.swing.Icon jswingIcon = null;
-
-            if (file.exists()) {
-                jswingIcon = getJSwingIconFromFileSystem(file);
-            } else {
-                File tempFile = null;
-                try {
-                    tempFile = File.createTempFile("icon", ext);
-                    jswingIcon = getJSwingIconFromFileSystem(tempFile);
-                } catch (IOException ignored) {
-                    // Cannot create temporary file.
-                } finally {
-                    if (tempFile != null) tempFile.delete();
-                }
-            }
-
-            if (jswingIcon != null) {
-                fileIcon = jswingIconToImage(jswingIcon);
-                mapOfFileExtToSmallIcon.put(ext, fileIcon);
-            }
-        }
-        return fileIcon;
-    }
-
-    private static Image getFileIcon(ServerFile item) {
-        File file = new File(item.getName());
-
-        final String ext = getFileExt(file);
-
-        Image fileIcon = mapOfFileExtToSmallIcon.get(ext);
-        if (fileIcon == null) {
-
-            javax.swing.Icon jswingIcon = null;
 
 
-            if (file.exists()) {
-                jswingIcon = getJSwingIconFromFileSystem(file);
-            } else {
-                File tempFile = null;
-                try {
-                    tempFile = File.createTempFile("icon", ext);
-                    jswingIcon = getJSwingIconFromFileSystem(tempFile);
-                } catch (IOException ignored) {
-                    // Cannot create temporary file.
-                } finally {
-                    if (tempFile != null) tempFile.delete();
-                }
-            }
 
-            if (jswingIcon != null) {
-                fileIcon = jswingIconToImage(jswingIcon);
-                mapOfFileExtToSmallIcon.put(ext, fileIcon);
-            }
-        }
-        return fileIcon;
-    }
 
-    private static Image jswingIconToImage(javax.swing.Icon jswingIcon) {
-        BufferedImage bufferedImage = new BufferedImage(jswingIcon.getIconWidth(), jswingIcon.getIconHeight(),
-                BufferedImage.TYPE_INT_ARGB);
-        jswingIcon.paintIcon(null, bufferedImage.getGraphics(), 0, 0);
-        return SwingFXUtils.toFXImage(bufferedImage, null);
-    }
 
 
     //#############################################################################

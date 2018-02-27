@@ -151,7 +151,7 @@ public class LocalFileBrowserPane extends BorderPane {
 
         //TODO sort files (Dir's first)
         listView.setItems(files);
-        
+
     }
 
     private void iniDrag(final Node node) {
@@ -225,7 +225,7 @@ public class LocalFileBrowserPane extends BorderPane {
                 setGraphic(null);
                 setText(null);
             } else {
-                Image fxImage = CacheboxBrowserPane.getFileIcon(item);
+                Image fxImage = FileIconUtils.getFileIcon(item);
                 ImageView imageView = new ImageView(fxImage);
                 setGraphic(imageView);
                 setText(item.getName());
