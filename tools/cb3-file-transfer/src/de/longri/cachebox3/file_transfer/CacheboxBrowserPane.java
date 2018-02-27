@@ -32,7 +32,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
@@ -52,14 +51,10 @@ import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -369,7 +364,7 @@ public class CacheboxBrowserPane extends BorderPane {
 
     private void startTransfer(final ServerFile path, final List<File> files) {
 
-        final ProgressForm pForm = new ProgressForm();
+        final de.longri.cachebox3.file_transfer.ProgressForm pForm = new ProgressForm();
 
 
         final AtomicLong progressMax = new AtomicLong(0);
@@ -589,52 +584,10 @@ public class CacheboxBrowserPane extends BorderPane {
 // Progress Dialog
 //################################################################################
 
-    public static class ProgressForm {
-        private final Stage dialogStage;
-        private final ProgressIndicator pin = new ProgressIndicator();
-        private final Label label = new Label();
+    public static class ProgressForm extends de.longri.cachebox3.file_transfer.ProgressForm {
 
-        public ProgressForm() {
-            label.setWrapText(true);
-            pin.setPrefWidth(80);
-            pin.setPrefHeight(80);
-            dialogStage = new Stage();
-            dialogStage.initStyle(StageStyle.UTILITY);
-            dialogStage.setWidth(200);
-            dialogStage.setHeight(200);
-            dialogStage.setResizable(false);
-            dialogStage.initModality(Modality.APPLICATION_MODAL);
 
-            label.setText("...\n...");
 
-            pin.setProgress(-1F);
-
-            final VBox vb = new VBox();
-            vb.setSpacing(5);
-            vb.setAlignment(Pos.CENTER);
-            vb.getChildren().addAll(pin, label);
-
-            Scene scene = new Scene(vb);
-            dialogStage.setScene(scene);
-        }
-
-        public void activateProgressBar(final Task<?> task) {
-            pin.progressProperty().bind(task.progressProperty());
-            dialogStage.show();
-        }
-
-        public Stage getDialogStage() {
-            return dialogStage;
-        }
-
-        public void setText(final String text) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    label.setText(text);
-                }
-            });
-        }
     }
 
 }

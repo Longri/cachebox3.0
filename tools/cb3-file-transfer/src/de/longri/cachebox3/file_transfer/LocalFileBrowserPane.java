@@ -42,12 +42,11 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by Longri on 01.11.2017.
  */
-public class LocalFileBrowserPane extends BorderPane {
+class LocalFileBrowserPane extends BorderPane {
 
 
     private static final Logger log = LoggerFactory.getLogger(LocalFileBrowserPane.class);
@@ -58,11 +57,11 @@ public class LocalFileBrowserPane extends BorderPane {
     private final ObservableList<File> files = FXCollections.observableArrayList();
     private File currentListItemSelected;
     private String lastStyle = "";
-    Node actIntersectedNode = null;
-    TreeView treeView;
-    ObjectMap<File, FilePathTreeItem> map = new ObjectMap<>();
+    private Node actIntersectedNode = null;
+    private TreeView treeView;
+    private ObjectMap<File, FilePathTreeItem> map = new ObjectMap<>();
 
-    public LocalFileBrowserPane(Stage primaryStage) {
+    LocalFileBrowserPane(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
 
@@ -72,18 +71,14 @@ public class LocalFileBrowserPane extends BorderPane {
 
         File[] paths;
         paths = File.listRoots();
-        for(File path:paths)
-        {
+        for (File path : paths) {
             TreeItem<String> croot = createNode(path);
             root.getChildren().add(croot);
         }
-        
         treeView = new TreeView<>(root);
         treeView.setSkin(new FolderTreeViewSkin(treeView));
 
-
         vbox.getChildren().add(treeView);
-
 
         treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
