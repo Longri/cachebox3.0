@@ -149,4 +149,8 @@ public class ServerFile implements Serializable {
     public Dragboard getDragBoard() {
         return dragBoard;
     }
+
+    public String getParent() {
+        return parent;
+    }
 }

@@ -75,7 +75,8 @@ public class FileIconUtils {
     public static Image getFileIcon(ServerFile item) {
         File file = new File(item.getName());
 
-        final String ext = getFileExt(file);
+        final String ext = getFileExt(item, file);
+
 
         Image fileIcon = mapOfFileExtToSmallIcon.get(ext);
         if (fileIcon == null) {
@@ -89,6 +90,9 @@ public class FileIconUtils {
                 File tempFile = null;
                 try {
                     tempFile = File.createTempFile("icon", ext);
+                    if (ext.equals("%")) {
+                       tempFile=tempFile.getParentFile();
+                    }
                     jswingIcon = getJSwingIconFromFileSystem(tempFile);
                 } catch (IOException ignored) {
                     // Cannot create temporary file.
@@ -107,6 +111,23 @@ public class FileIconUtils {
             }
         }
         return fileIcon;
+    }
+
+    private static String getFileExt(ServerFile item, File file) {
+        if (item.isDirectory()) {
+            if (item.getParent().isEmpty()) {
+                return "#"; //Disk root
+            }
+            return "%"; //folder
+        }
+
+        String name = item.getName();
+        int pos = name.lastIndexOf('.');
+        if (pos > 0) {
+            return name.substring(pos).toLowerCase();
+        }
+
+        return item.getName();
     }
 
     private static String getFileExt(File file) {
