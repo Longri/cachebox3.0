@@ -23,6 +23,8 @@ import de.longri.cachebox3.interfaces.ProgressHandler;
 import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
 import de.longri.cachebox3.socket.filebrowser.ServerFile;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -56,11 +58,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static de.longri.cachebox3.file_transfer.MainPane.SERVER_FILE_DATA_FORMAT;
 
 /**
  * Created by Longri on 01.11.2017.
@@ -275,11 +280,6 @@ public class CacheboxBrowserPane extends BorderPane {
             }
         }
     }
-
-
-
-
-
 
 
     //#############################################################################
@@ -526,20 +526,24 @@ public class CacheboxBrowserPane extends BorderPane {
 
 
         // Add the source text to the Dragboard
+        ClipboardContent content = new ClipboardContent();
 
+        BitStore writer = new BitStore();
         try {
-            File temp = File.createTempFile("test", "." + "txt");
-            FileWriter fileWriter = new FileWriter(temp);
-            fileWriter.write("Test Text");
-
-
-            ClipboardContent content = new ClipboardContent();
-            dragboard.setContent(content);
-
-
-        } catch (IOException e) {
+            file.serialize(writer);
+        } catch (NotImplementedException e) {
             e.printStackTrace();
         }
+
+        ByteBuffer byteBuffer= null;
+        try {
+            byteBuffer = ByteBuffer.wrap(writer.getArray());
+        } catch (NotImplementedException e) {
+            e.printStackTrace();
+        }
+
+        content.put(SERVER_FILE_DATA_FORMAT, byteBuffer);
+        dragboard.setContent(content);
 
 
         event.consume();

@@ -18,6 +18,7 @@ package de.longri.cachebox3.file_transfer;
 import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
+import javafx.scene.input.DataFormat;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -27,6 +28,7 @@ import javafx.stage.Stage;
 public class MainPane extends BorderPane {
 
     private final Stage primaryStage;
+    public final static DataFormat SERVER_FILE_DATA_FORMAT=new DataFormat("ServerFile");
 
     public MainPane(FileBrowserClint clint, Stage primaryStage) {
         this.primaryStage = primaryStage;

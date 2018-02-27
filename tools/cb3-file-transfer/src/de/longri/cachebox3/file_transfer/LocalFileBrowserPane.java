@@ -16,10 +16,15 @@
 package de.longri.cachebox3.file_transfer;
 
 import com.badlogic.gdx.utils.ObjectMap;
+import de.longri.cachebox3.socket.filebrowser.ServerFile;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
@@ -35,9 +40,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Longri on 01.11.2017.
@@ -52,6 +57,8 @@ public class LocalFileBrowserPane extends BorderPane {
     private File selectedDir;
     private final ObservableList<File> files = FXCollections.observableArrayList();
     private File currentListItemSelected;
+    private String lastStyle = "";
+    Node actIntersectedNode = null;
     TreeView treeView;
     ObjectMap<File, FilePathTreeItem> map = new ObjectMap<>();
 
@@ -113,6 +120,8 @@ public class LocalFileBrowserPane extends BorderPane {
                 return cell;
             }
         });
+
+        iniDrop(listView);
 
         Label lbl = new Label("LocalFileSystem");
         BorderPane lablePane = new BorderPane(lbl);
@@ -192,21 +201,9 @@ public class LocalFileBrowserPane extends BorderPane {
         Dragboard dragboard = node.startDragAndDrop(TransferMode.COPY_OR_MOVE);
 
         // Add the source text to the Dragboard
-
-        try {
-            File temp = File.createTempFile("test", "." + "txt");
-            FileWriter fileWriter = new FileWriter(temp);
-            fileWriter.write("Test Text");
-
-
-            ClipboardContent content = new ClipboardContent();
-            dragboard.setContent(content);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        ClipboardContent content = new ClipboardContent();
+        content.putFiles(java.util.Collections.singletonList(file));
+        dragboard.setContent(content);
 
         event.consume();
     }
@@ -289,5 +286,105 @@ public class LocalFileBrowserPane extends BorderPane {
         map.put(f, item);
         return item;
     }
+
+    private void iniDrop(final Node node) {
+        node.setOnDragOver(new EventHandler() {
+            @Override
+            public void handle(final Event event) {
+//                log.debug("OnDragOver");
+                mouseDragOver(event);
+            }
+        });
+
+        node.setOnDragDropped(new EventHandler() {
+            @Override
+            public void handle(final Event event) {
+//                log.debug("OnDragDropped");
+                mouseDragDropped(event);
+            }
+        });
+
+        node.setOnDragExited(new EventHandler() {
+
+            @Override
+            public void handle(final Event event) {
+                log.debug("OnDragExited");
+                Node node = ((DragEvent) event).getPickResult().getIntersectedNode();
+                node.setStyle(lastStyle);
+            }
+        });
+    }
+
+    private void mouseDragOver(final Event e) {
+        final Dragboard db = ((DragEvent) e).getDragboard();
+
+        if (db.getContent(MainPane.SERVER_FILE_DATA_FORMAT) != null) {
+            Node node = ((DragEvent) e).getPickResult().getIntersectedNode();
+            if (node instanceof ListCell) {
+                node = ((ListCell) node).getListView();
+            }
+
+            if (node == listView || node instanceof TreeCell) {
+                if (node != actIntersectedNode) {
+                    if (actIntersectedNode != null) {
+                        actIntersectedNode.setStyle(lastStyle);
+                    }
+                    actIntersectedNode = node;
+                    lastStyle = actIntersectedNode.getStyle();
+                }
+                actIntersectedNode.setStyle("-fx-border-color: red;"
+                        + "-fx-border-width: 3;"
+                        + "-fx-background-color: #C6C6C6;"
+                        + "-fx-border-style: solid;");
+                ((DragEvent) e).acceptTransferModes(TransferMode.COPY);
+            }
+        } else {
+            e.consume();
+        }
+    }
+
+    private void mouseDragDropped(final Event e) {
+        final Dragboard db = ((DragEvent) e).getDragboard();
+        boolean success = false;
+        if (db.getContent(MainPane.SERVER_FILE_DATA_FORMAT) != null) {
+            success = true;
+
+            ByteBuffer byteBuffer = (ByteBuffer) db.getContent(MainPane.SERVER_FILE_DATA_FORMAT);
+
+            final ServerFile deserializeServerFile = new ServerFile();
+            try {
+                deserializeServerFile.deserialize(new BitStore(byteBuffer.array()));
+            } catch (NotImplementedException e1) {
+                e1.printStackTrace();
+            }
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    File target = null;
+
+                    // get DropPath
+                    if (actIntersectedNode == listView) {
+                        target = selectedDir;
+                    } else if (actIntersectedNode instanceof TreeCell) {
+                        // get path from TreeviewItem
+                        TreeCell cell = (TreeCell) actIntersectedNode;
+                        FilePathTreeItem item = (FilePathTreeItem) cell.getTreeItem();
+                        target = item.file;
+                    }
+
+                    log.debug("Drop {} ServerFiles to path {}", deserializeServerFile.getName(), target);
+                    startTransfer(deserializeServerFile, target);
+                    actIntersectedNode.setStyle(lastStyle);
+                }
+            });
+        }
+        ((DragEvent) e).setDropCompleted(success);
+        e.consume();
+    }
+
+    private void startTransfer(ServerFile deserializeServerFile, File target) {
+    }
+
 
 }

@@ -57,7 +57,7 @@ public class FileIconUtils {
                     // Cannot create temporary file.
                 } finally {
                     if (tempFile != null) {
-                        if (tempFile.delete()) {
+                        if (!tempFile.delete()) {
                             log.warn("can't delete temp File");
                         }
                     }
@@ -91,14 +91,14 @@ public class FileIconUtils {
                 try {
                     tempFile = File.createTempFile("icon", ext);
                     if (ext.equals("%")) {
-                       tempFile=tempFile.getParentFile();
+                        tempFile = tempFile.getParentFile();
                     }
                     jswingIcon = getJSwingIconFromFileSystem(tempFile);
                 } catch (IOException ignored) {
                     // Cannot create temporary file.
                 } finally {
                     if (tempFile != null) {
-                        if (tempFile.delete()) {
+                        if (!tempFile.delete()) {
                             log.warn("can't delete temp File");
                         }
                     }
