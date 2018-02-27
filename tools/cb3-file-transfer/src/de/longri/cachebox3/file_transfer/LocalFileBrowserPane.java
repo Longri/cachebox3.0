@@ -70,13 +70,14 @@ public class LocalFileBrowserPane extends BorderPane {
 
         TreeItem<String> root = new TreeItem<>();
 
-        TreeItem<String> croot = createNode(new File("c:/"));
-        TreeItem<String> eroot = createNode(new File("e:/"));
-
-        root.getChildren().add(croot);
-        root.getChildren().add(eroot);
-
-
+        File[] paths;
+        paths = File.listRoots();
+        for(File path:paths)
+        {
+            TreeItem<String> croot = createNode(path);
+            root.getChildren().add(croot);
+        }
+        
         treeView = new TreeView<>(root);
         treeView.setSkin(new FolderTreeViewSkin(treeView));
 
