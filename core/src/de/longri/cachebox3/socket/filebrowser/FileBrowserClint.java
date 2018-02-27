@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by longri on 30.10.17.
@@ -41,7 +42,7 @@ public class FileBrowserClint {
     public final static int BUFFER_SIZE = 512;
 
 
-    private final Logger log = LoggerFactory.getLogger(FileBrowserServer.class);
+    private final Logger log = LoggerFactory.getLogger(FileBrowserClint.class);
 
     static final String CONNECT = "Connect";
     static final String SENDFILE = "sendFiles";
@@ -236,6 +237,8 @@ public class FileBrowserClint {
             throw new RuntimeException("can't transfer directory");
         }
 
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
+
         CB.postAsync(new NamedRunnable("Receive Server file") {
             @Override
             public void run() {
@@ -279,6 +282,21 @@ public class FileBrowserClint {
                         int left = progressHandler != null ? 0 : -1;
                         long fileLength = dis.readLong();
                         long received = 0;
+
+                        if (target.exists()) {
+                            if (!target.delete()) {
+                                log.error("can't override TargetFile: {}", target.getAbsolutePath());
+                                progressHandler.success();
+                                return;
+                            }
+                        }
+
+                        if(!target.createNewFile()){
+                            log.error("can't write TargetFile: {}", target.getAbsolutePath());
+                            progressHandler.success();
+                            return;
+                        }
+
                         FileOutputStream fos = new FileOutputStream(target);
                         BufferedOutputStream fbos = new BufferedOutputStream(fos);
                         for (int j = 0; j < fileLength; j++) {
@@ -307,8 +325,18 @@ public class FileBrowserClint {
                 // finish
                 log.debug("ServerFile transfer success");
                 progressHandler.success();
+
+                WAIT.set(false);
             }
         });
+
+        while (WAIT.get()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 }

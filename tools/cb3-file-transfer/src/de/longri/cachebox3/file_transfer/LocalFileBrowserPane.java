@@ -381,7 +381,7 @@ class LocalFileBrowserPane extends BorderPane {
 
                     log.debug("Drop {} ServerFiles to path {}", deserializeServerFile.getName(), target);
                     startTransfer(deserializeServerFile, target);
-                    actIntersectedNode.setStyle(lastStyle);
+                    if (actIntersectedNode != null) actIntersectedNode.setStyle(lastStyle);
                 }
             });
         }
@@ -452,7 +452,7 @@ class LocalFileBrowserPane extends BorderPane {
                 CB.postAsync(new NamedRunnable("LocalFileBrowserPane") {
                     @Override
                     public void run() {
-                        clint.receiveFile(progressHandler,serverFile,target);
+                        clint.receiveFile(progressHandler, serverFile, target);
                         WAIT_READY.set(false);
                     }
                 });
