@@ -61,8 +61,18 @@ public class LocalFileBrowserPane extends BorderPane {
 
         VBox vbox = new VBox();
 
-        TreeItem<String> root = createNode(new File("c:/"));
+        TreeItem<String> root = new TreeItem<>();
+
+        TreeItem<String> croot = createNode(new File("c:/"));
+        TreeItem<String> eroot = createNode(new File("e:/"));
+
+        root.getChildren().add(croot);
+        root.getChildren().add(eroot);
+
+
         treeView = new TreeView<>(root);
+        treeView.setSkin(new FolderTreeViewSkin(treeView));
+
 
         vbox.getChildren().add(treeView);
 
@@ -71,8 +81,13 @@ public class LocalFileBrowserPane extends BorderPane {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 if (newValue != null) {
-                    selectedDir = ((FilePathTreeItem) newValue).file;
-                    setList(((FilePathTreeItem) newValue));
+                    if (newValue instanceof FilePathTreeItem) {
+                        selectedDir = ((FilePathTreeItem) newValue).file;
+                        setList(((FilePathTreeItem) newValue));
+                    } else {
+                        selectedDir = null;
+                        setList(null);
+                    }
                 }
             }
         });
@@ -115,24 +130,28 @@ public class LocalFileBrowserPane extends BorderPane {
     private void selectDir(File currentListItemSelected) {
         FilePathTreeItem treeItem = map.get(currentListItemSelected);
         treeView.getSelectionModel().select(treeItem);
+
+        int selectedIndex = treeView.getSelectionModel().getSelectedIndex();
+        if (!((FolderTreeViewSkin) treeView.getSkin()).isIndexVisible(selectedIndex))
+            treeView.scrollTo(selectedIndex);
     }
 
 
     private void setList(FilePathTreeItem item) {
         files.clear();
+        if (item != null) {
+            //load childs intern, for double click select
+            item.getChildren();
 
-        //load childs intern, for double click select
-        item.getChildren();
-
-        File[] allFiles = item.file.listFiles();
-        if (allFiles != null) {
-            Collections.addAll(files, allFiles);
+            File[] allFiles = item.file.listFiles();
+            if (allFiles != null) {
+                Collections.addAll(files, allFiles);
+            }
         }
 
         //TODO sort files (Dir's first)
         listView.setItems(files);
-
-
+        
     }
 
     private void iniDrag(final Node node) {
