@@ -15,19 +15,29 @@
  */
 package de.longri.cachebox3.file_transfer;
 
-import de.longri.cachebox3.socket.filebrowser.ServerFile;
+import com.badlogic.gdx.utils.ObjectMap;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Collections;
 
 /**
  * Created by Longri on 01.11.2017.
@@ -36,11 +46,14 @@ public class LocalFileBrowserPane extends BorderPane {
 
 
     private static final Logger log = LoggerFactory.getLogger(LocalFileBrowserPane.class);
-
-    private final ListView<ServerFile> listView = new ListView<>();
-
+    private final ListView<File> listView = new ListView<>();
     private final Stage primaryStage;
 
+    private File selectedDir;
+    private final ObservableList<File> files = FXCollections.observableArrayList();
+    private File currentListItemSelected;
+    TreeView treeView;
+    ObjectMap<File, FilePathTreeItem> map = new ObjectMap<>();
 
     public LocalFileBrowserPane(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -49,12 +62,42 @@ public class LocalFileBrowserPane extends BorderPane {
         VBox vbox = new VBox();
 
         TreeItem<String> root = createNode(new File("c:/"));
-        TreeView treeView = new TreeView<String>(root);
+        treeView = new TreeView<>(root);
 
         vbox.getChildren().add(treeView);
 
 
+        treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                if (newValue != null) {
+                    selectedDir = ((FilePathTreeItem) newValue).file;
+                    setList(((FilePathTreeItem) newValue));
+                }
+            }
+        });
+
         listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent click) {
+                if (click.getClickCount() == 2) {
+                    currentListItemSelected = listView.getSelectionModel().getSelectedItem();
+                    selectDir(currentListItemSelected);
+                }
+            }
+        });
+
+        listView.setCellFactory(new Callback<ListView<File>, ListCell<File>>() {
+            @Override
+            public ListCell<File> call(ListView<File> list) {
+
+                final AttachmentListCell cell = new AttachmentListCell();
+                iniDrag(cell);
+                return cell;
+            }
+        });
 
         Label lbl = new Label("LocalFileSystem");
         BorderPane lablePane = new BorderPane(lbl);
@@ -67,12 +110,112 @@ public class LocalFileBrowserPane extends BorderPane {
         splitPane.getItems().add(listView);
 
         this.setCenter(splitPane);
+    }
+
+    private void selectDir(File currentListItemSelected) {
+        FilePathTreeItem treeItem = map.get(currentListItemSelected);
+        treeView.getSelectionModel().select(treeItem);
+    }
+
+
+    private void setList(FilePathTreeItem item) {
+        files.clear();
+
+        //load childs intern, for double click select
+        item.getChildren();
+
+        File[] allFiles = item.file.listFiles();
+        if (allFiles != null) {
+            Collections.addAll(files, allFiles);
+        }
+
+        //TODO sort files (Dir's first)
+        listView.setItems(files);
 
 
     }
 
+    private void iniDrag(final Node node) {
+        //#########################
+        // Add mouse event handlers for the source
+
+
+        node.setOnDragDetected(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                log.debug("Event on Source: drag detected");
+                dragDetected(event, node);
+            }
+
+        });
+
+        node.setOnDragDone(new EventHandler<DragEvent>() {
+            public void handle(DragEvent event) {
+                log.debug("Event on Source: drag done");
+                dragDone(event);
+            }
+        });
+
+    }
+
+    private void dragDetected(MouseEvent event, Node node) {
+
+        File file = ((AttachmentListCell) node).getItem();
+
+        // User can drag only when there is text in the source field
+        String sourceText = file.getName();
+
+        if (sourceText == null || sourceText.trim().equals("")) {
+            event.consume();
+            return;
+        }
+
+        // Initiate a drag-and-drop gesture
+        Dragboard dragboard = node.startDragAndDrop(TransferMode.COPY_OR_MOVE);
+
+        // Add the source text to the Dragboard
+
+        try {
+            File temp = File.createTempFile("test", "." + "txt");
+            FileWriter fileWriter = new FileWriter(temp);
+            fileWriter.write("Test Text");
+
+
+            ClipboardContent content = new ClipboardContent();
+            dragboard.setContent(content);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        event.consume();
+    }
+
+    private void dragDone(DragEvent event) {
+        File file = ((AttachmentListCell) event.getSource()).getItem();
+//        copyFileToClipBoard(file);
+        event.consume();
+    }
+
+    private static class AttachmentListCell extends ListCell<File> {
+        @Override
+        public void updateItem(File item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty) {
+                setGraphic(null);
+                setText(null);
+            } else {
+                Image fxImage = CacheboxBrowserPane.getFileIcon(item);
+                ImageView imageView = new ImageView(fxImage);
+                setGraphic(imageView);
+                setText(item.getName());
+            }
+        }
+    }
+
     private FilePathTreeItem createNode(final File f) {
-        return new FilePathTreeItem(f) {
+        FilePathTreeItem item = new FilePathTreeItem(f) {
 
             private boolean isLeaf;
             private boolean isFirstTimeChildren = true;
@@ -124,6 +267,8 @@ public class LocalFileBrowserPane extends BorderPane {
                 return FXCollections.emptyObservableList();
             }
         };
+        map.put(f, item);
+        return item;
     }
 
 }

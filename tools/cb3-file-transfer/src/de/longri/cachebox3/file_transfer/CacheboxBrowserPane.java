@@ -50,6 +50,7 @@ import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -267,7 +268,7 @@ public class CacheboxBrowserPane extends BorderPane {
                 setGraphic(null);
                 setText(null);
             } else {
-                Image fxImage = getFileIcon(item.getName());
+                Image fxImage = getFileIcon(item);
                 ImageView imageView = new ImageView(fxImage);
                 setGraphic(imageView);
                 setText(item.getName());
@@ -275,15 +276,17 @@ public class CacheboxBrowserPane extends BorderPane {
         }
     }
 
-    static HashMap<String, Image> mapOfFileExtToSmallIcon = new HashMap<String, Image>();
+    private static HashMap<String, Image> mapOfFileExtToSmallIcon = new HashMap<String, Image>();
+    private static final JFileChooser filechooser = new JFileChooser();
 
-    private static String getFileExt(String fname) {
-        String ext = ".";
-        int p = fname.lastIndexOf('.');
-        if (p >= 0) {
-            ext = fname.substring(p);
+    private static String getFileExt(File file) {
+        if (file.isDirectory()) {
+            if (file.getParent() == null) {
+                return "#"; //Disk root
+            }
+            return "%"; //folder
         }
-        return ext.toLowerCase();
+        return filechooser.getTypeDescription(file).toLowerCase();
     }
 
     private static javax.swing.Icon getJSwingIconFromFileSystem(File file) {
@@ -301,15 +304,14 @@ public class CacheboxBrowserPane extends BorderPane {
         return icon;
     }
 
-    static Image getFileIcon(String fname) {
-        final String ext = getFileExt(fname);
+    static Image getFileIcon(File file) {
+        final String ext = getFileExt(file);
 
         Image fileIcon = mapOfFileExtToSmallIcon.get(ext);
         if (fileIcon == null) {
 
             javax.swing.Icon jswingIcon = null;
 
-            File file = new File(fname);
             if (file.exists()) {
                 jswingIcon = getJSwingIconFromFileSystem(file);
             } else {
@@ -329,7 +331,39 @@ public class CacheboxBrowserPane extends BorderPane {
                 mapOfFileExtToSmallIcon.put(ext, fileIcon);
             }
         }
+        return fileIcon;
+    }
 
+    private static Image getFileIcon(ServerFile item) {
+        File file = new File(item.getName());
+
+        final String ext = getFileExt(file);
+
+        Image fileIcon = mapOfFileExtToSmallIcon.get(ext);
+        if (fileIcon == null) {
+
+            javax.swing.Icon jswingIcon = null;
+
+
+            if (file.exists()) {
+                jswingIcon = getJSwingIconFromFileSystem(file);
+            } else {
+                File tempFile = null;
+                try {
+                    tempFile = File.createTempFile("icon", ext);
+                    jswingIcon = getJSwingIconFromFileSystem(tempFile);
+                } catch (IOException ignored) {
+                    // Cannot create temporary file.
+                } finally {
+                    if (tempFile != null) tempFile.delete();
+                }
+            }
+
+            if (jswingIcon != null) {
+                fileIcon = jswingIconToImage(jswingIcon);
+                mapOfFileExtToSmallIcon.put(ext, fileIcon);
+            }
+        }
         return fileIcon;
     }
 

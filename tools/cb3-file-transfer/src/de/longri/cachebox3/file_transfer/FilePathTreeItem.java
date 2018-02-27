@@ -56,10 +56,10 @@ public class FilePathTreeItem extends TreeItem<String> {
         //test if this is a directory and set the icon
         if (file.isDirectory()) {
             this.isDirectory = true;
-            this.setGraphic(new ImageView(CacheboxBrowserPane.getFileIcon(fullPath)));
+            this.setGraphic(new ImageView(CacheboxBrowserPane.getFileIcon(file)));
         } else {
             this.isDirectory = false;
-            this.setGraphic(new ImageView(CacheboxBrowserPane.getFileIcon(fullPath)));
+            this.setGraphic(new ImageView(CacheboxBrowserPane.getFileIcon(file)));
             //if you want different icons for different file types this is where you'd do it
         }
 
