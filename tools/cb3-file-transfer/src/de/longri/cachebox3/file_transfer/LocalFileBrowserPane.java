@@ -16,23 +16,18 @@
 package de.longri.cachebox3.file_transfer;
 
 import de.longri.cachebox3.socket.filebrowser.ServerFile;
-import javafx.geometry.Insets;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
+import java.io.File;
 
 /**
  * Created by Longri on 01.11.2017.
@@ -45,39 +40,18 @@ public class LocalFileBrowserPane extends BorderPane {
     private final ListView<ServerFile> listView = new ListView<>();
 
     private final Stage primaryStage;
-    TreeView<String> treeView;
-    private ServerFile selectedDir;
-    private ServerFile currentListItemSelected;
-
-    String lastStyle = "";
-    Node actIntersectedNode = null;
 
 
     public LocalFileBrowserPane(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
 
-        VBox treeBox = new VBox();
-        treeBox.setPadding(new Insets(10, 10, 10, 10));
-        treeBox.setSpacing(10);
-        //setup the file browser root
-        String hostName = "computer";
-        try {
-            hostName = InetAddress.getLocalHost().getHostName();
-        } catch (UnknownHostException x) {
-        }
-        TreeItem<String> rootNode = new TreeItem<>(hostName, new ImageView(CacheboxBrowserPane.getFileIcon("test.png")));
-        Iterable<Path> rootDirectories = FileSystems.getDefault().getRootDirectories();
-        for (Path name : rootDirectories) {
-            FilePathTreeItem treeNode = new FilePathTreeItem(name);
-            rootNode.getChildren().add(treeNode);
-        }
-        rootNode.setExpanded(true);
-        //create the tree view
-        treeView = new TreeView<>(rootNode);
-        //add everything to the tree pane
-        treeBox.getChildren().addAll(new Label("File browser"), treeView);
-        VBox.setVgrow(treeView, Priority.ALWAYS);
+        VBox vbox = new VBox();
+
+        TreeItem<String> root = createNode(new File("c:/"));
+        TreeView treeView = new TreeView<String>(root);
+
+        vbox.getChildren().add(treeView);
 
 
         listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -97,5 +71,59 @@ public class LocalFileBrowserPane extends BorderPane {
 
     }
 
+    private FilePathTreeItem createNode(final File f) {
+        return new FilePathTreeItem(f) {
+
+            private boolean isLeaf;
+            private boolean isFirstTimeChildren = true;
+            private boolean isFirstTimeLeaf = true;
+
+            @Override
+            public ObservableList<TreeItem<String>> getChildren() {
+                if (isFirstTimeChildren) {
+                    isFirstTimeChildren = false;
+                    super.getChildren().setAll(buildChildren(this));
+                }
+                return super.getChildren();
+            }
+
+            @Override
+            public boolean isLeaf() {
+                if (isFirstTimeLeaf) {
+                    isFirstTimeLeaf = false;
+                    File f = this.file;
+                    if (f.isDirectory()) {
+                        File[] files = f.listFiles();
+                        isLeaf = (files == null) || files.length == 0;
+                    } else {
+                        isLeaf = f.isFile();
+                    }
+                }
+                return isLeaf;
+            }
+
+            private ObservableList<FilePathTreeItem> buildChildren(
+                    FilePathTreeItem treeItem) {
+                File f = treeItem.file;
+                if (f == null) {
+                    return FXCollections.emptyObservableList();
+                }
+                if (f.isFile()) {
+                    return FXCollections.emptyObservableList();
+                }
+                File[] files = f.listFiles();
+                if (files != null) {
+                    ObservableList<FilePathTreeItem> children = FXCollections
+                            .observableArrayList();
+                    for (File childFile : files) {
+                        if (childFile.isDirectory())
+                            children.add(createNode(childFile));
+                    }
+                    return children;
+                }
+                return FXCollections.emptyObservableList();
+            }
+        };
+    }
 
 }
