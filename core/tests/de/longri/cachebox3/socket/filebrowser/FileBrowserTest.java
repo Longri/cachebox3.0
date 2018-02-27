@@ -122,7 +122,6 @@ class FileBrowserTest {
 
         assertThat("Connection must be established", clint.connect());
         ServerFile root = clint.getFiles();
-
         ServerFileTest.assertRecursiveDir(workpath, root, workpath.parent().path());
 
         ServerFile serverFilePankowMap = root.getChild("pankow.map");
@@ -135,10 +134,12 @@ class FileBrowserTest {
 
         final AtomicBoolean WAIT = new AtomicBoolean(true);
 
+        final AtomicBoolean start = new AtomicBoolean(false);
+
         ProgressHandler progressHandler = new ProgressHandler() {
             @Override
             public void start() {
-
+                start.set(true);
             }
 
             @Override
@@ -159,6 +160,8 @@ class FileBrowserTest {
         while (WAIT.get()) {
             Thread.sleep(10);
         }
+
+        assertThat("Must started", start.get());
 
         FileHandle file = workpath.child("pankow.map");
         assertThat("File length must equals", target.length() == file.length());

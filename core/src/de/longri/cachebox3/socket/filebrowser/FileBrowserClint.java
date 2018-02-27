@@ -273,14 +273,23 @@ public class FileBrowserClint {
                     String response = dis.readUTF();
                     if (response.equals(START_FEILE_TRANSFER)) {
 
+                        progressHandler.start();
+
                         //receive file data
+                        int left = progressHandler != null ? 0 : -1;
                         long fileLength = dis.readLong();
+                        long received = 0;
                         FileOutputStream fos = new FileOutputStream(target);
                         BufferedOutputStream fbos = new BufferedOutputStream(fos);
                         for (int j = 0; j < fileLength; j++) {
                             fbos.write(bis.read());
+                            if (received % 1024 == left) {
+                                progressHandler.updateProgress("", received, fileLength);
+                            }
+                            received++;
                         }
                         fbos.close();
+                        progressHandler.updateProgress("", received, fileLength);
                     }
 
                     log.debug("got server message: " + response);
@@ -293,13 +302,6 @@ public class FileBrowserClint {
                     log.error("can't receive ServerFile");
                     progressHandler.success();
                     return;
-                }
-
-
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
 
                 // finish

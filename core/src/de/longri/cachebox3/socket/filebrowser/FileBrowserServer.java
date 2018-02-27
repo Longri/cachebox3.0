@@ -183,6 +183,10 @@ public class FileBrowserServer {
                             if (fileHandle.exists()) {
                                 dos.writeUTF(FileBrowserClint.START_FEILE_TRANSFER);
                                 dos.flush();
+
+                                dos.writeLong(fileHandle.length());
+                                dos.flush();
+
                                 InputStream fis = fileHandle.read();
                                 BufferedInputStream bis = new BufferedInputStream(fis);
                                 int theByte = 0;
