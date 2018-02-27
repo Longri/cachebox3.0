@@ -28,13 +28,13 @@ import javafx.stage.Stage;
 public class MainPane extends BorderPane {
 
     private final Stage primaryStage;
-    public final static DataFormat SERVER_FILE_DATA_FORMAT=new DataFormat("ServerFile");
+    public final static DataFormat SERVER_FILE_DATA_FORMAT = new DataFormat("ServerFile");
 
     public MainPane(FileBrowserClint clint, Stage primaryStage) {
         this.primaryStage = primaryStage;
 
         CacheboxBrowserPane fb = new CacheboxBrowserPane(clint, primaryStage);
-        LocalFileBrowserPane lfb = new LocalFileBrowserPane(primaryStage);
+        LocalFileBrowserPane lfb = new LocalFileBrowserPane(clint, primaryStage);
 
         SplitPane splitPane = new SplitPane();
         splitPane.setOrientation(Orientation.HORIZONTAL);

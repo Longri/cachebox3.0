@@ -411,13 +411,11 @@ public class CacheboxBrowserPane extends BorderPane {
             }
 
             @Override
-            public void sucess() {
+            public void success() {
                 wait.set(false);
             }
         };
 
-        // In real life this task would do something useful and return
-        // some meaningful result:
         Task<Void> task = new Task<Void>() {
             @Override
             public Void call() throws InterruptedException {
@@ -578,16 +576,4 @@ public class CacheboxBrowserPane extends BorderPane {
         }
 
     }
-
-
-//################################################################################
-// Progress Dialog
-//################################################################################
-
-    public static class ProgressForm extends de.longri.cachebox3.file_transfer.ProgressForm {
-
-
-
-    }
-
 }

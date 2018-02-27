@@ -16,7 +16,12 @@
 package de.longri.cachebox3.file_transfer;
 
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.StringBuilder;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.interfaces.ProgressHandler;
+import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
 import de.longri.cachebox3.socket.filebrowser.ServerFile;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
 import de.longri.serializable.NotImplementedException;
 import javafx.application.Platform;
@@ -24,6 +29,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
@@ -42,6 +49,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by Longri on 01.11.2017.
@@ -60,10 +69,11 @@ class LocalFileBrowserPane extends BorderPane {
     private Node actIntersectedNode = null;
     private TreeView treeView;
     private ObjectMap<File, FilePathTreeItem> map = new ObjectMap<>();
+    private final FileBrowserClint clint;
 
-    LocalFileBrowserPane(Stage primaryStage) {
+    LocalFileBrowserPane(FileBrowserClint clint, Stage primaryStage) {
         this.primaryStage = primaryStage;
-
+        this.clint = clint;
 
         VBox vbox = new VBox();
 
@@ -379,7 +389,119 @@ class LocalFileBrowserPane extends BorderPane {
         e.consume();
     }
 
-    private void startTransfer(ServerFile deserializeServerFile, File target) {
+    private void startTransfer(final ServerFile serverFile, final File target) {
+
+        final de.longri.cachebox3.file_transfer.ProgressForm pForm = new ProgressForm();
+
+
+        final AtomicLong progressMax = new AtomicLong(0);
+        final AtomicLong progressValue = new AtomicLong(0);
+        final AtomicBoolean wait = new AtomicBoolean(true);
+        final ProgressHandler progressHandler = new ProgressHandler() {
+
+            long startTime;
+            final StringBuilder sb = new StringBuilder();
+
+            @Override
+            public void start() {
+                startTime = System.currentTimeMillis();
+            }
+
+            @Override
+            public void updateProgress(CharSequence msg, long value, long maxValue) {
+                progressMax.set(maxValue);
+                progressValue.set(value);
+
+                try {
+                    sb.length = 0;//reset StringBuilder
+                    int speedInKBps = 0;
+                    double speedInBps = 0.0;
+                    long timeInSecs = (System.currentTimeMillis() - startTime) / 1000;
+                    speedInBps = value / timeInSecs;
+                    speedInKBps = (int) (speedInBps / 1024D);
+                    long remainingTime = (long) ((maxValue / speedInBps) - timeInSecs);
+
+                    sb.append(speedInKBps).append(" KB/s\n remaining time: ");
+
+                    if (remainingTime > 60) {
+                        double min = (double) remainingTime / 60.0D;
+                        sb.append(String.format("%.2f", min)).append(" min");
+                    } else {
+                        sb.append(remainingTime).append(" sec");
+                    }
+
+
+                    pForm.setText(sb.toString());
+                } catch (ArithmeticException e) {
+                    //do nothing
+                }
+            }
+
+            @Override
+            public void success() {
+                wait.set(false);
+            }
+        };
+
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() throws InterruptedException {
+
+                final AtomicBoolean WAIT_READY = new AtomicBoolean(true);
+
+                CB.postAsync(new NamedRunnable("LocalFileBrowserPane") {
+                    @Override
+                    public void run() {
+                        clint.receiveFile(progressHandler,serverFile,target);
+                        WAIT_READY.set(false);
+                    }
+                });
+
+
+                while (WAIT_READY.get()) {
+                    try {
+                        updateProgress(progressValue.get(), progressMax.get());
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                updateProgress(20, 20);
+                updateFileList();
+                return null;
+            }
+        };
+
+        // binds progress of progress bars to progress of task:
+        pForm.activateProgressBar(task);
+
+        // in real life this method would get the result of the task
+        // and update the UI based on its value:
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>()
+
+        {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                pForm.getDialogStage().close();
+            }
+        });
+
+        Stage dialogStage = pForm.getDialogStage();
+        dialogStage.show();
+        dialogStage.setX(primaryStage.getX() + (primaryStage.getWidth() / 2) - 50);
+        dialogStage.setY(primaryStage.getY() + (primaryStage.getHeight() / 2) - 25);
+
+        Thread thread = new Thread(task);
+        thread.start();
+
+        actIntersectedNode.setStyle(lastStyle);
+        actIntersectedNode = null;
+
+
+    }
+
+    private void updateFileList() {
+        //TODO
     }
 
 

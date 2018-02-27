@@ -153,4 +153,11 @@ public class ServerFile implements Serializable {
     public String getParent() {
         return parent;
     }
+
+    public ServerFile getChild(String name) {
+        for (ServerFile file : files) {
+            if (file.name.equals(name)) return file;
+        }
+        return null;
+    }
 }

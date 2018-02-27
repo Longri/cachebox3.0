@@ -18,13 +18,16 @@ package de.longri.cachebox3.socket.filebrowser;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.ByteArray;
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.interfaces.ProgressHandler;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -65,7 +68,6 @@ class FileBrowserTest {
 
         if (EXCLUDE_FROM_TRAVIS.VALUE) return;
 
-        assertThat("Connection must be established", clint.connect());
         assertThat("Connection must be established", clint.connect());
         ServerFile root = clint.getFiles();
         ServerFileTest.assertRecursiveDir(workpath, root, workpath.parent().path());
@@ -112,95 +114,53 @@ class FileBrowserTest {
         Thread.sleep(100);
     }
 
-//    @Test
-//    void excempleTest() {
-//        // setup a server thread where we wait for incoming connections
-//        // to the server
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                ServerSocketHints hints = new ServerSocketHints();
-//                ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, "localhost", 9998, hints);
-//                // wait for the next client connection
-//                Socket client = server.accept(null);
-//                // read message and send it back
-//                try {
-//                    String message = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
-//                    Gdx.app.log("PingPongSocketExample", "got client message: " + message);
-//                    client.getOutputStream().write("PONG".getBytes());
-//                    client.getOutputStream().write("\n".getBytes());
-//                } catch (IOException e) {
-//                    Gdx.app.log("PingPongSocketExample", "an error occured", e);
-//                }
-//
-//            }
-//        }).start();
-//
-//        // create the client send a message, then wait for the
-//        // server to reply
-//        SocketHints hints = new SocketHints();
-//        Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, "localhost", 9998, hints);
-//        try {
-//            client.getOutputStream().write("PING".getBytes());
-//            client.getOutputStream().write("\n".getBytes());
-//            String response = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
-//            Gdx.app.log("PingPongSocketExample", "got server message: " + response);
-//        } catch (IOException e) {
-//            Gdx.app.log("PingPongSocketExample", "an error occured", e);
-//        }
-//    }
-//
-//
-//    @Test
-//    void excempleStreamTest() {
-//        // setup a server thread where we wait for incoming connections
-//        // to the server
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                ServerSocketHints hints = new ServerSocketHints();
-//                ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, "localhost", 9997, hints);
-//                // wait for the next client connection
-//                Socket client = server.accept(null);
-//                // read message and send it back
-//                try {
-//                    String message = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
-//                    Gdx.app.log("PingPongSocketExample", "got client message: " + message);
-//                    client.getOutputStream().write("PONG".getBytes());
-//                    client.getOutputStream().write("\n".getBytes());
-//                    client.getOutputStream().close();
-//                } catch (IOException e) {
-//                    Gdx.app.log("PingPongSocketExample", "an error occured", e);
-//                }
-//
-//            }
-//        }).start();
-//
-//        // create the client send a message, then wait for the
-//        // server to reply
-//        SocketHints hints = new SocketHints();
-//        Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, "localhost", 9997, hints);
-//        try {
-//            client.getOutputStream().write("PING".getBytes());
-//            client.getOutputStream().write("\n".getBytes());
-//
-//            InputStream is = client.getInputStream();
-//            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-//
-//            int nRead;
-//            byte[] data = new byte[50];
-//
-//            while ((nRead = is.read(data, 0, data.length)) != -1) {
-//                buffer.write(data, 0, nRead);
-//            }
-//            buffer.flush();
-//
-//            byte[] response = buffer.toByteArray();
-//
-//            Gdx.app.log("butes", response.toString());
-//
-//        } catch (IOException e) {
-//            Gdx.app.log("PingPongSocketExample", "an error occured", e);
-//        }
-//    }
+
+    @Test
+    void getFileTest() throws InterruptedException, IOException {
+
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
+
+        assertThat("Connection must be established", clint.connect());
+        ServerFile root = clint.getFiles();
+
+        ServerFileTest.assertRecursiveDir(workpath, root, workpath.parent().path());
+
+        ServerFile serverFilePankowMap = root.getChild("pankow.map");
+        assertThat("name must be 'pankow.map'", serverFilePankowMap != null && serverFilePankowMap.getName().equals("pankow.map"));
+
+        File target = File.createTempFile("pankow", "map");
+        if (target.exists()) {
+            target.delete();
+        }
+
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
+
+        ProgressHandler progressHandler = new ProgressHandler() {
+            @Override
+            public void start() {
+
+            }
+
+            @Override
+            public void updateProgress(CharSequence msg, long value, long maxValue) {
+
+            }
+
+            @Override
+            public void success() {
+                WAIT.set(false);
+            }
+        };
+
+        clint.receiveFile(progressHandler, serverFilePankowMap, target);
+
+
+        // wait for ready
+        while (WAIT.get()) {
+            Thread.sleep(10);
+        }
+
+    }
+
+
 }

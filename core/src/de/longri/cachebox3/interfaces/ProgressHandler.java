@@ -24,6 +24,6 @@ public interface ProgressHandler {
 
     void updateProgress(CharSequence msg, long value, long maxValue);
 
-    void sucess();
+    void success();
 
 }

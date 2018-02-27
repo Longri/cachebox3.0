@@ -20,16 +20,16 @@ import com.badlogic.gdx.Net;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.interfaces.ProgressHandler;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
 import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +45,7 @@ public class FileBrowserClint {
     static final String CONNECT = "Connect";
     static final String SENDFILE = "sendFiles";
     static final String GETFILES = "getFiles";
+    static final String GETFILE = "getServerFile";
     final static String CONNECTED = "Connected";
     static final String CLOSE = "close";
 
@@ -101,7 +102,6 @@ public class FileBrowserClint {
 
     public ServerFile getFiles() {
         ServerFile root = new ServerFile();
-
 
         try {
 
@@ -198,14 +198,14 @@ public class FileBrowserClint {
             }
 
         }
-        if (progressHandler != null) progressHandler.sucess();
+        if (progressHandler != null) progressHandler.success();
         return !error;
     }
 
     protected void addToFileList(ObjectMap<String, FileHandle> map, ServerFile path, ServerFile workingDir, List<File> files) {
         for (File file : files) {
             if (file.isFile()) {
-                if(file.getName().equals(".DS_Store"))continue; //don't store
+                if (file.getName().equals(".DS_Store")) continue; //don't store
                 map.put(path.getTransferPath(workingDir, file), Gdx.files.absolute(file.getAbsolutePath()));
             } else if (file.isDirectory()) {
                 List<File> subFiles = new ArrayList<>();
@@ -225,5 +225,25 @@ public class FileBrowserClint {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void receiveFile(final ProgressHandler progressHandler, final ServerFile serverFile, final File target) {
+        CB.postAsync(new NamedRunnable("Receive Server file") {
+            @Override
+            public void run() {
+
+
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                // finish
+                log.debug("ServerFile transfer success");
+                progressHandler.success();
+            }
+        });
+
     }
 }
