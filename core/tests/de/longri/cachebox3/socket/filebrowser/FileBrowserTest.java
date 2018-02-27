@@ -160,6 +160,11 @@ class FileBrowserTest {
             Thread.sleep(10);
         }
 
+        FileHandle file = workpath.child("pankow.map");
+        assertThat("File length must equals", target.length() == file.length());
+
+        target.deleteOnExit();
+
     }
 
 

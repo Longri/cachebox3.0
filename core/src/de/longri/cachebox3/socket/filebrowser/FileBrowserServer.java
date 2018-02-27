@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.SocketTimeoutException;
 
+import static de.longri.cachebox3.socket.filebrowser.FileBrowserClint.BUFFER_SIZE;
+
 /**
  * Created by longri on 30.10.17.
  */
@@ -84,11 +86,11 @@ public class FileBrowserServer {
                     socket = server.accept(socketHints);
 
                     in = socket.getInputStream();
-                    bis = new BufferedInputStream(in, FileBrowserClint.BUFFER_SIZE);
+                    bis = new BufferedInputStream(in, BUFFER_SIZE);
                     dis = new DataInputStream(bis);
 
                     os = socket.getOutputStream();
-                    bos = new BufferedOutputStream(os, FileBrowserClint.BUFFER_SIZE);
+                    bos = new BufferedOutputStream(os, BUFFER_SIZE);
                     dos = new DataOutputStream(bos);
                 } catch (Exception e) {
                     if (!listening) {
@@ -109,12 +111,12 @@ public class FileBrowserServer {
                             }
                         }
 
-                        if (message.equals("Connect")) {
-                            dos.writeUTF("Connected");
+                        if (message.equals(FileBrowserClint.CONNECT)) {
+                            dos.writeUTF(FileBrowserClint.CONNECTED);
                             dos.flush();
                         } else if (message.equals(FileBrowserClint.CLOSE)) {
                             if (closeReciver != null) closeReciver.close();
-                        } else if (message.equals("getFiles")) {
+                        } else if (message.equals(FileBrowserClint.GETFILES)) {
                             try {
                                 ServerFile root = ServerFile.getDirectory(workPath);
                                 BitStore writer = new BitStore();
@@ -128,8 +130,8 @@ public class FileBrowserServer {
                                 int offset = 0;
                                 while (offset < length) {
                                     int writeLength = length - offset;
-                                    if (writeLength > FileBrowserClint.BUFFER_SIZE) {
-                                        writeLength = FileBrowserClint.BUFFER_SIZE;
+                                    if (writeLength > BUFFER_SIZE) {
+                                        writeLength = BUFFER_SIZE;
                                     }
                                     dos.write(data, offset, writeLength);
                                     dos.flush();
@@ -157,6 +159,49 @@ public class FileBrowserServer {
 
                             dos.writeUTF(TRANSFERRED);
                             dos.flush();
+                        } else if (message.equals(FileBrowserClint.GETFILE)) {
+
+                            // read bytes for ServerFile store
+                            int length = dis.readInt();
+                            byte[] data = new byte[length];
+
+                            int offset = 0;
+                            while (offset < length) {
+                                int readLength = length - offset;
+                                if (readLength > BUFFER_SIZE) {
+                                    readLength = BUFFER_SIZE;
+                                }
+                                dis.read(data, offset, readLength);
+                                offset += readLength;
+                            }
+                            ServerFile deserializeServerFile = new ServerFile();
+                            deserializeServerFile.deserialize(new BitStore(data));
+
+                            // search file
+                            FileHandle fileHandle = workPath.child(deserializeServerFile.getAbsoluteWithoutRoot());
+
+                            if (fileHandle.exists()) {
+                                dos.writeUTF(FileBrowserClint.START_FEILE_TRANSFER);
+                                dos.flush();
+                                InputStream fis = fileHandle.read();
+                                BufferedInputStream bis = new BufferedInputStream(fis);
+                                int theByte = 0;
+                                while ((theByte = bis.read()) != -1) {
+                                    try {
+                                        bos.write(theByte);
+                                    } catch (IOException e) {
+                                        //TODO handle broken Pipe with "java.net.SocketException: Broken pipe (Write failed)"
+                                        e.printStackTrace();
+                                    }
+                                }
+                                bis.close();
+                                bos.flush();
+                            } else {
+                                dos.writeUTF(FileBrowserClint.FILE_DOSENTEXIST);
+                                dos.flush();
+                            }
+
+
                         }
                     } catch (Exception e) {
                         if (e.getCause() instanceof SocketTimeoutException) {

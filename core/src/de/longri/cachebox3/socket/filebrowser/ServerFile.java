@@ -130,9 +130,6 @@ public class ServerFile implements Serializable {
         return name;
     }
 
-    public String getAbsolute() {
-        return parent + "/" + name;
-    }
 
     public String getTransferPath(ServerFile rootDir, File file) {
         return getAbsolute().replace(rootDir.getAbsolute(), "") + "/" + file.getName();
@@ -160,4 +157,18 @@ public class ServerFile implements Serializable {
         }
         return null;
     }
+
+    public String getAbsoluteWithoutRoot() {
+        int pos = parent.indexOf("/", 1);
+        String path = "";
+        if (pos > 0) {
+            path = parent.substring(pos);
+        }
+        return path + "/" + name;
+    }
+
+    public String getAbsolute() {
+        return parent + "/" + name;
+    }
+
 }

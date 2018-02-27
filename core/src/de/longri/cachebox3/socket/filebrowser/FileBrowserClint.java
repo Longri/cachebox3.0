@@ -40,6 +40,7 @@ public class FileBrowserClint {
 
     public final static int BUFFER_SIZE = 512;
 
+
     private final Logger log = LoggerFactory.getLogger(FileBrowserServer.class);
 
     static final String CONNECT = "Connect";
@@ -48,6 +49,8 @@ public class FileBrowserClint {
     static final String GETFILE = "getServerFile";
     final static String CONNECTED = "Connected";
     static final String CLOSE = "close";
+    static final String FILE_DOSENTEXIST = "file dosen't exist";
+    static final String START_FEILE_TRANSFER = "start File transfer";
 
     private final String serverAddress;
     private final int serverPort;
@@ -228,9 +231,69 @@ public class FileBrowserClint {
     }
 
     public void receiveFile(final ProgressHandler progressHandler, final ServerFile serverFile, final File target) {
+
+        if (serverFile.isDirectory()) {
+            throw new RuntimeException("can't transfer directory");
+        }
+
         CB.postAsync(new NamedRunnable("Receive Server file") {
             @Override
             public void run() {
+
+                //serialise ServerFile
+                BitStore store = new BitStore();
+                try {
+                    serverFile.serialize(store);
+                } catch (NotImplementedException e) {
+                    log.error("can't store ServerFile");
+                    progressHandler.success();
+                    return;
+                }
+
+                try {
+                    byte[] serverFileBytes = store.getArray();
+                    dos.writeUTF(GETFILE);
+                    dos.flush();
+
+                    int length = serverFileBytes.length;
+                    dos.writeInt(length);
+                    dos.flush();
+
+                    int offset = 0;
+                    while (offset < length) {
+                        int writeLength = length - offset;
+                        if (writeLength > FileBrowserClint.BUFFER_SIZE) {
+                            writeLength = FileBrowserClint.BUFFER_SIZE;
+                        }
+                        dos.write(serverFileBytes, offset, writeLength);
+                        dos.flush();
+                        offset += writeLength;
+                    }
+
+                    String response = dis.readUTF();
+                    if (response.equals(START_FEILE_TRANSFER)) {
+
+                        //receive file data
+                        long fileLength = dis.readLong();
+                        FileOutputStream fos = new FileOutputStream(target);
+                        BufferedOutputStream fbos = new BufferedOutputStream(fos);
+                        for (int j = 0; j < fileLength; j++) {
+                            fbos.write(bis.read());
+                        }
+                        fbos.close();
+                    }
+
+                    log.debug("got server message: " + response);
+
+                } catch (NotImplementedException e) {
+                    log.error("can't store ServerFile");
+                    progressHandler.success();
+                    return;
+                } catch (IOException e) {
+                    log.error("can't receive ServerFile");
+                    progressHandler.success();
+                    return;
+                }
 
 
                 try {
