@@ -56,6 +56,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
 
 import static de.longri.cachebox3.file_transfer.MainPane.SERVER_FILE_DATA_FORMAT;
 
@@ -203,7 +204,7 @@ public class CacheboxBrowserPane extends BorderPane {
                         CB.postAsync(new NamedRunnable("Delete ServerFile") {
                             @Override
                             public void run() {
-                                if (clint.delete(severFile)) {
+                                if (!clint.delete(severFile)) {
                                     // show failed msg box
                                     Platform.runLater(new Runnable() {
                                         @Override
@@ -211,6 +212,8 @@ public class CacheboxBrowserPane extends BorderPane {
                                             Alert alert = new Alert(Alert.AlertType.ERROR);
                                             alert.setTitle("Error");
                                             alert.setHeaderText("Delete failed");
+                                            alert.showAndWait();
+
                                         }
                                     });
                                 } else {
