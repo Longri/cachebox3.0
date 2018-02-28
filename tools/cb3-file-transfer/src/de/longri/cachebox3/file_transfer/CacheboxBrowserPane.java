@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.file_transfer;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -24,45 +23,50 @@ import de.longri.cachebox3.interfaces.ProgressHandler;
 import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
 import de.longri.cachebox3.socket.filebrowser.ServerFile;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
+
+import static de.longri.cachebox3.file_transfer.MainPane.SERVER_FILE_DATA_FORMAT;
 
 /**
  * Created by Longri on 01.11.2017.
  */
-public class FileBrowserPane extends BorderPane {
+public class CacheboxBrowserPane extends BorderPane {
 
 
-    private static final Logger log = LoggerFactory.getLogger(FileBrowserPane.class);
+    private static final Logger log = LoggerFactory.getLogger(CacheboxBrowserPane.class);
 
     private final FileBrowserClint clint;
     private final ObservableList<ServerFile> files = FXCollections.observableArrayList();
@@ -77,18 +81,23 @@ public class FileBrowserPane extends BorderPane {
     Node actIntersectedNode = null;
 
 
-    public FileBrowserPane(FileBrowserClint clint, Stage primaryStage) {
+    public CacheboxBrowserPane(FileBrowserClint clint, Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.clint = clint;
         workingDir = clint.getFiles();
         treeView = new TreeView<>();
         listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
+
+        Label lbl = new Label("Cachebox");
+        BorderPane lablePane = new BorderPane(lbl);
+        this.setTop(lablePane);
+
+
         SplitPane splitPane = new SplitPane();
         splitPane.setOrientation(Orientation.HORIZONTAL);
         splitPane.getItems().add(treeView);
         splitPane.getItems().add(listView);
-
         this.setCenter(splitPane);
 
         treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -132,14 +141,14 @@ public class FileBrowserPane extends BorderPane {
                 } else {
                     setList(selectedDir);
                 }
-                iniDragAndDrop(listView);
+                iniDrop(listView);
 
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         Set<Node> treeCells = treeView.lookupAll(".tree-cell");
                         for (Node cell : treeCells) {
-                            iniDragAndDrop(cell);
+                            iniDrop(cell);
                         }
                     }
                 });
@@ -151,7 +160,7 @@ public class FileBrowserPane extends BorderPane {
     private void populateMap(TreeItem<ServerFile> item) {
         if (item.getChildren().size() > 0) {
 
-//            iniDragAndDrop((ServerFileTreeItem)item);
+//            iniDrop((ServerFileTreeItem)item);
 
             map.put(item.getValue(), (ServerFileTreeItem) item);
             for (TreeItem<ServerFile> subItem : item.getChildren()) {
@@ -177,9 +186,55 @@ public class FileBrowserPane extends BorderPane {
             files.add(f);
         }
 
-        //TODO sort files (Dir's first)
 
+        listView.setCellFactory(new Callback<ListView<ServerFile>, ListCell<ServerFile>>() {
+            @Override
+            public ListCell<ServerFile> call(ListView<ServerFile> list) {
+                final AttachmentListCell cell = new AttachmentListCell();
+                iniDrag(cell);
+                ContextMenu contextMenu = new ContextMenu();
+                MenuItem deleteItem = new MenuItem();
+                deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
+                deleteItem.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        final ServerFile severFile = cell.getItem();
+                        log.debug("Delete ServerFile {}", severFile.getName());
+
+                        CB.postAsync(new NamedRunnable("Delete ServerFile") {
+                            @Override
+                            public void run() {
+                                if (!clint.delete(severFile)) {
+                                    // show failed msg box
+                                    Platform.runLater(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                                            alert.setTitle("Error");
+                                            alert.setHeaderText("Delete failed");
+                                            alert.showAndWait();
+
+                                        }
+                                    });
+                                } else {
+                                    // get new ServerFile root
+                                    updateFileList(null);
+                                }
+                            }
+                        });
+
+                    }
+                });
+                contextMenu.getItems().addAll(deleteItem);
+                cell.setContextMenu(contextMenu);
+                return cell;
+            }
+        });
+
+        //TODO sort files (Dir's first)
         listView.setItems(files);
+
+
     }
 
     private class ServerFileTreeItem extends TreeItem<ServerFile> {
@@ -237,12 +292,28 @@ public class FileBrowserPane extends BorderPane {
         }
     }
 
+    private static class AttachmentListCell extends ListCell<ServerFile> {
+        @Override
+        public void updateItem(ServerFile item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty) {
+                setGraphic(null);
+                setText(null);
+            } else {
+                Image fxImage = FileIconUtils.getFileIcon(item);
+                ImageView imageView = new ImageView(fxImage);
+                setGraphic(imageView);
+                setText(item.getName());
+            }
+        }
+    }
+
 
     //#############################################################################
     //  Drag&Drop
     //#############################################################################
 
-    private void iniDragAndDrop(Node node) {
+    private void iniDrop(final Node node) {
         node.setOnDragOver(new EventHandler() {
             @Override
             public void handle(final Event event) {
@@ -270,6 +341,28 @@ public class FileBrowserPane extends BorderPane {
         });
     }
 
+
+    private void iniDrag(final Node node) {
+        //#########################
+        // Add mouse event handlers for the source
+
+
+        node.setOnDragDetected(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                log.debug("Event on Source: drag detected");
+                dragDetected(event, node);
+            }
+
+        });
+
+        node.setOnDragDone(new EventHandler<DragEvent>() {
+            public void handle(DragEvent event) {
+                log.debug("Event on Source: drag done");
+                dragDone(event);
+            }
+        });
+
+    }
 
     private void mouseDragDropped(final Event e) {
         final Dragboard db = ((DragEvent) e).getDragboard();
@@ -303,7 +396,7 @@ public class FileBrowserPane extends BorderPane {
 
     private void startTransfer(final ServerFile path, final List<File> files) {
 
-        final ProgressForm pForm = new ProgressForm();
+        final de.longri.cachebox3.file_transfer.ProgressForm pForm = new ProgressForm();
 
 
         final AtomicLong progressMax = new AtomicLong(0);
@@ -350,20 +443,18 @@ public class FileBrowserPane extends BorderPane {
             }
 
             @Override
-            public void sucess() {
+            public void success() {
                 wait.set(false);
             }
         };
 
-        // In real life this task would do something useful and return
-        // some meaningful result:
         Task<Void> task = new Task<Void>() {
             @Override
             public Void call() throws InterruptedException {
 
                 final AtomicBoolean WAIT_READY = new AtomicBoolean(true);
 
-                CB.postAsync(new NamedRunnable("FileBrowserPane") {
+                CB.postAsync(new NamedRunnable("CacheboxBrowserPane") {
                     @Override
                     public void run() {
                         clint.sendFiles(progressHandler, path, workingDir, files);
@@ -441,56 +532,80 @@ public class FileBrowserPane extends BorderPane {
     }
 
 
-    //################################################################################
-    // Progress Dialog
-    //################################################################################
+    private void dragDetected(MouseEvent event, Node node) {
 
-    public static class ProgressForm {
-        private final Stage dialogStage;
-        private final ProgressIndicator pin = new ProgressIndicator();
-        private final Label label = new Label();
+        ServerFile file = ((AttachmentListCell) node).getItem();
 
-        public ProgressForm() {
-            label.setWrapText(true);
-            pin.setPrefWidth(80);
-            pin.setPrefHeight(80);
-            dialogStage = new Stage();
-            dialogStage.initStyle(StageStyle.UTILITY);
-            dialogStage.setWidth(200);
-            dialogStage.setHeight(200);
-            dialogStage.setResizable(false);
-            dialogStage.initModality(Modality.APPLICATION_MODAL);
 
-            label.setText("...\n...");
+        // User can drag only when there is text in the source field
+        String sourceText = file.getName();
 
-            pin.setProgress(-1F);
-
-            final VBox vb = new VBox();
-            vb.setSpacing(5);
-            vb.setAlignment(Pos.CENTER);
-            vb.getChildren().addAll(pin, label);
-
-            Scene scene = new Scene(vb);
-            dialogStage.setScene(scene);
+        if (sourceText == null || sourceText.trim().equals("")) {
+            event.consume();
+            return;
         }
 
-        public void activateProgressBar(final Task<?> task) {
-            pin.progressProperty().bind(task.progressProperty());
-            dialogStage.show();
+        // Initiate a drag-and-drop gesture
+        Dragboard dragboard = node.startDragAndDrop(TransferMode.COPY_OR_MOVE);
+        file.setDragBoard(dragboard);
+
+
+        // Add the source text to the Dragboard
+        ClipboardContent content = new ClipboardContent();
+
+        BitStore writer = new BitStore();
+        try {
+            file.serialize(writer);
+        } catch (NotImplementedException e) {
+            e.printStackTrace();
         }
 
-        public Stage getDialogStage() {
-            return dialogStage;
+        ByteBuffer byteBuffer = null;
+        try {
+            byteBuffer = ByteBuffer.wrap(writer.getArray());
+        } catch (NotImplementedException e) {
+            e.printStackTrace();
         }
 
-        public void setText(final String text) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    label.setText(text);
-                }
-            });
-        }
+        content.put(SERVER_FILE_DATA_FORMAT, byteBuffer);
+        dragboard.setContent(content);
+
+
+        event.consume();
     }
 
+    private void dragDone(DragEvent event) {
+        ServerFile file = ((AttachmentListCell) event.getSource()).getItem();
+        copyFileToClipBoard(file);
+        event.consume();
+    }
+
+
+    private void copyFileToClipBoard(ServerFile file) {
+        try {
+
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            Dragboard db = file.getDragBoard();
+
+            ClipboardContent content = new ClipboardContent();
+
+            String name = "test";
+            String ext = "txt";
+
+
+            File temp = File.createTempFile(name, "." + ext);
+            FileWriter fileWriter = new FileWriter(temp);
+            fileWriter.write("Test Text");
+
+            content.putFiles(java.util.Collections.singletonList(temp));
+            db.setContent(content);
+            clipboard.setContent(content);
+
+            temp.deleteOnExit();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+    }
 }
