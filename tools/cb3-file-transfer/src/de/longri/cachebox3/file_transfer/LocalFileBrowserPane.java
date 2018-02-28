@@ -94,7 +94,9 @@ class LocalFileBrowserPane extends BorderPane {
                 root.getChildren().add(croot);
             }
         } else {
-            //TODO handle Linux
+            File path=new File("/");
+            TreeItem<String> croot = createNode(path);
+            root.getChildren().add(croot);
         }
 
 
