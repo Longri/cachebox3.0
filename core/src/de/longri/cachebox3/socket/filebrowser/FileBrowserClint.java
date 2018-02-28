@@ -283,21 +283,26 @@ public class FileBrowserClint {
                         long fileLength = dis.readLong();
                         long received = 0;
 
-                        if (target.exists()) {
-                            if (!target.delete()) {
-                                log.error("can't override TargetFile: {}", target.getAbsolutePath());
+
+                        // create target File
+                        File targetFile = new File(target, serverFile.getName());
+
+
+                        if (targetFile.exists()) {
+                            if (!targetFile.delete()) {
+                                log.error("can't override TargetFile: {}", targetFile.getAbsolutePath());
                                 progressHandler.success();
                                 return;
                             }
                         }
 
-                        if(!target.createNewFile()){
-                            log.error("can't write TargetFile: {}", target.getAbsolutePath());
+                        if (!targetFile.createNewFile()) {
+                            log.error("can't write TargetFile: {}", targetFile.getAbsolutePath());
                             progressHandler.success();
                             return;
                         }
 
-                        FileOutputStream fos = new FileOutputStream(target);
+                        FileOutputStream fos = new FileOutputStream(targetFile);
                         BufferedOutputStream fbos = new BufferedOutputStream(fos);
                         for (int j = 0; j < fileLength; j++) {
                             fbos.write(bis.read());
