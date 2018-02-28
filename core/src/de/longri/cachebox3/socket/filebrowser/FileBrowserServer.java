@@ -206,6 +206,44 @@ public class FileBrowserServer {
                             }
 
 
+                        } else if (message.equals(FileBrowserClint.DELETE_SERVER_FILE)) {
+                            // read bytes for ServerFile store
+                            int length = dis.readInt();
+                            byte[] data = new byte[length];
+
+                            int offset = 0;
+                            while (offset < length) {
+                                int readLength = length - offset;
+                                if (readLength > BUFFER_SIZE) {
+                                    readLength = BUFFER_SIZE;
+                                }
+                                dis.read(data, offset, readLength);
+                                offset += readLength;
+                            }
+                            ServerFile deserializeServerFile = new ServerFile();
+                            deserializeServerFile.deserialize(new BitStore(data));
+
+                            // search file
+                            FileHandle fileHandle = workPath.child(deserializeServerFile.getAbsoluteWithoutRoot());
+
+                            if (fileHandle.exists()) {
+                                boolean delSuccess = false;
+                                if (fileHandle.isDirectory()) {
+                                    delSuccess = fileHandle.deleteDirectory();
+                                } else {
+                                    delSuccess = fileHandle.delete();
+                                }
+
+                                if (delSuccess) {
+                                    dos.writeUTF(FileBrowserClint.DELETE_SUCCESS);
+                                } else {
+                                    dos.writeUTF(FileBrowserClint.DELETE_FAILED);
+                                }
+                                dos.flush();
+                            } else {
+                                dos.writeUTF(FileBrowserClint.FILE_DOSENTEXIST);
+                                dos.flush();
+                            }
                         }
                     } catch (Exception e) {
                         if (e.getCause() instanceof SocketTimeoutException) {

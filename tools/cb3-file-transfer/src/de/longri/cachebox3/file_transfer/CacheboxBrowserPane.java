@@ -26,27 +26,24 @@ import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
 import de.longri.serializable.NotImplementedException;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -192,9 +189,46 @@ public class CacheboxBrowserPane extends BorderPane {
         listView.setCellFactory(new Callback<ListView<ServerFile>, ListCell<ServerFile>>() {
             @Override
             public ListCell<ServerFile> call(ListView<ServerFile> list) {
-
                 final AttachmentListCell cell = new AttachmentListCell();
                 iniDrag(cell);
+                ContextMenu contextMenu = new ContextMenu();
+                MenuItem deleteItem = new MenuItem();
+                deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", cell.itemProperty()));
+                deleteItem.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        final ServerFile severFile = cell.getItem();
+                        log.debug("Delete ServerFile {}", severFile.getName());
+
+                        CB.postAsync(new NamedRunnable("Delete ServerFile") {
+                            @Override
+                            public void run() {
+                                if (!clint.delete(severFile)) {
+                                    // show failed msg box
+                                    Platform.runLater(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                                            alert.setTitle("Error");
+                                            alert.setHeaderText("Delete failed");
+                                            alert.showAndWait().ifPresent(rs -> {
+                                                if (rs == ButtonType.OK) {
+                                                    System.out.println("Pressed OK.");
+                                                }
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    // get new ServerFile root
+                                    updateFileList(null);
+                                }
+                            }
+                        });
+
+                    }
+                });
+                contextMenu.getItems().addAll(deleteItem);
+                cell.setContextMenu(contextMenu);
                 return cell;
             }
         });
@@ -528,7 +562,7 @@ public class CacheboxBrowserPane extends BorderPane {
             e.printStackTrace();
         }
 
-        ByteBuffer byteBuffer= null;
+        ByteBuffer byteBuffer = null;
         try {
             byteBuffer = ByteBuffer.wrap(writer.getArray());
         } catch (NotImplementedException e) {

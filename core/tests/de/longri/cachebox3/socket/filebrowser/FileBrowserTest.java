@@ -26,6 +26,7 @@ import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -170,5 +171,42 @@ class FileBrowserTest {
 
     }
 
+
+    @Test
+    void DeleteFileTest() throws InterruptedException, IOException {
+        if (EXCLUDE_FROM_TRAVIS.VALUE) return;
+        assertThat("Connection must be established", clint.connect());
+
+        // create a File for delete test
+        FileHandle deleteTestFile = workpath.child("DeleteTest.txt");
+        if (deleteTestFile.exists()) {
+            if (!deleteTestFile.delete()) {
+                assertThat("Can't delete existing test file", false);
+            }
+        }
+
+        deleteTestFile.writeString("Test String", false);
+
+        ServerFile root = clint.getFiles();
+        ServerFileTest.assertRecursiveDir(workpath, root, workpath.parent().path());
+
+        ServerFile serverFileDeleteTest = root.getChild("DeleteTest.txt");
+        assertThat("name must be 'DeleteTest.txt'", serverFileDeleteTest != null && serverFileDeleteTest.getName().equals("DeleteTest.txt"));
+        assertThat("File must exist", deleteTestFile.exists());
+
+
+        //try to delete a open File must fail
+
+        InputStream openInputStream = deleteTestFile.read();
+        boolean success = clint.delete(serverFileDeleteTest);
+        assertThat("Server response must be delete ServerFile==false", !success);
+
+        openInputStream.close();
+
+
+        success = clint.delete(serverFileDeleteTest);
+        assertThat("Server response must be delete ServerFile==true", success);
+        assertThat("File must not exist", !deleteTestFile.exists());
+    }
 
 }

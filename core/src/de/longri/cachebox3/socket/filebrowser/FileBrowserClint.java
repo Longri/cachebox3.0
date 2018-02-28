@@ -52,6 +52,9 @@ public class FileBrowserClint {
     static final String CLOSE = "close";
     static final String FILE_DOSENTEXIST = "file dosen't exist";
     static final String START_FEILE_TRANSFER = "start File transfer";
+    static final String DELETE_SERVER_FILE = "delete ServerFile";
+    static final String DELETE_SUCCESS = "delete Success";
+    static final String DELETE_FAILED = "delete failed";
 
     private final String serverAddress;
     private final int serverPort;
@@ -343,5 +346,48 @@ public class FileBrowserClint {
             }
         }
 
+    }
+
+    public boolean delete(ServerFile serverFile) {
+
+        try {
+
+            //serialise ServerFile
+            BitStore store = new BitStore();
+            try {
+                serverFile.serialize(store);
+            } catch (NotImplementedException e) {
+                log.error("can't store ServerFile");
+                return false;
+            }
+
+            byte[] serverFileBytes = store.getArray();
+            dos.writeUTF(DELETE_SERVER_FILE);
+            dos.flush();
+
+            int length = serverFileBytes.length;
+            dos.writeInt(length);
+            dos.flush();
+
+            int offset = 0;
+            while (offset < length) {
+                int writeLength = length - offset;
+                if (writeLength > FileBrowserClint.BUFFER_SIZE) {
+                    writeLength = FileBrowserClint.BUFFER_SIZE;
+                }
+                dos.write(serverFileBytes, offset, writeLength);
+                dos.flush();
+                offset += writeLength;
+            }
+
+            String response = dis.readUTF();
+            if (response.equals(DELETE_SUCCESS)) {
+                return true;
+            }
+
+        } catch (IOException | NotImplementedException e) {
+            log.error("Can't delete ServerFile", e);
+        }
+        return false;
     }
 }
