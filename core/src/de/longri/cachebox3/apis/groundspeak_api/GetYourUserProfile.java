@@ -33,6 +33,7 @@ public class GetYourUserProfile extends PostRequest {
 
     public GetYourUserProfile(String gcApiKey) {
         super(gcApiKey, null);
+        this.waitLimit = false;
     }
 
     @Override
