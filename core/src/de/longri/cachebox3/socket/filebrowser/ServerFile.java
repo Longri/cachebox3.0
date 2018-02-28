@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.serializable.NotImplementedException;
 import de.longri.serializable.Serializable;
 import de.longri.serializable.StoreBase;
+import javafx.scene.input.Dragboard;
 
 import java.io.File;
 
@@ -32,6 +33,7 @@ public class ServerFile implements Serializable {
     private String parent;
     private Array<ServerFile> files = new Array<>();
     private boolean isDir = false;
+    private Dragboard dragBoard;
 
 
     public ServerFile(String parent, String name, boolean isDir) {
@@ -128,9 +130,6 @@ public class ServerFile implements Serializable {
         return name;
     }
 
-    public String getAbsolute() {
-        return parent + "/" + name;
-    }
 
     public String getTransferPath(ServerFile rootDir, File file) {
         return getAbsolute().replace(rootDir.getAbsolute(), "") + "/" + file.getName();
@@ -139,4 +138,37 @@ public class ServerFile implements Serializable {
     public ServerFile child(String name, boolean isDir) {
         return new ServerFile(this.getAbsolute(), name, isDir);
     }
+
+    public void setDragBoard(Dragboard dragBoard) {
+        this.dragBoard = dragBoard;
+    }
+
+    public Dragboard getDragBoard() {
+        return dragBoard;
+    }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public ServerFile getChild(String name) {
+        for (ServerFile file : files) {
+            if (file.name.equals(name)) return file;
+        }
+        return null;
+    }
+
+    public String getAbsoluteWithoutRoot() {
+        int pos = parent.indexOf("/", 1);
+        String path = "";
+        if (pos > 0) {
+            path = parent.substring(pos);
+        }
+        return path + "/" + name;
+    }
+
+    public String getAbsolute() {
+        return parent + "/" + name;
+    }
+
 }

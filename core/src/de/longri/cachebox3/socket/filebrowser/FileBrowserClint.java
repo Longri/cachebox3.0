@@ -20,18 +20,19 @@ import com.badlogic.gdx.Net;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.interfaces.ProgressHandler;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
 import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by longri on 30.10.17.
@@ -40,13 +41,20 @@ public class FileBrowserClint {
 
     public final static int BUFFER_SIZE = 512;
 
-    private final Logger log = LoggerFactory.getLogger(FileBrowserServer.class);
+
+    private final Logger log = LoggerFactory.getLogger(FileBrowserClint.class);
 
     static final String CONNECT = "Connect";
     static final String SENDFILE = "sendFiles";
     static final String GETFILES = "getFiles";
+    static final String GETFILE = "getServerFile";
     final static String CONNECTED = "Connected";
     static final String CLOSE = "close";
+    static final String FILE_DOSENTEXIST = "file dosen't exist";
+    static final String START_FEILE_TRANSFER = "start File transfer";
+    static final String DELETE_SERVER_FILE = "delete ServerFile";
+    static final String DELETE_SUCCESS = "delete Success";
+    static final String DELETE_FAILED = "delete failed";
 
     private final String serverAddress;
     private final int serverPort;
@@ -101,7 +109,6 @@ public class FileBrowserClint {
 
     public ServerFile getFiles() {
         ServerFile root = new ServerFile();
-
 
         try {
 
@@ -198,14 +205,14 @@ public class FileBrowserClint {
             }
 
         }
-        if (progressHandler != null) progressHandler.sucess();
+        if (progressHandler != null) progressHandler.success();
         return !error;
     }
 
     protected void addToFileList(ObjectMap<String, FileHandle> map, ServerFile path, ServerFile workingDir, List<File> files) {
         for (File file : files) {
             if (file.isFile()) {
-                if(file.getName().equals(".DS_Store"))continue; //don't store
+                if (file.getName().equals(".DS_Store")) continue; //don't store
                 map.put(path.getTransferPath(workingDir, file), Gdx.files.absolute(file.getAbsolutePath()));
             } else if (file.isDirectory()) {
                 List<File> subFiles = new ArrayList<>();
@@ -225,5 +232,162 @@ public class FileBrowserClint {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void receiveFile(final ProgressHandler progressHandler, final ServerFile serverFile, final File target) {
+
+        if (serverFile.isDirectory()) {
+            throw new RuntimeException("can't transfer directory");
+        }
+
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
+
+        CB.postAsync(new NamedRunnable("Receive Server file") {
+            @Override
+            public void run() {
+
+                //serialise ServerFile
+                BitStore store = new BitStore();
+                try {
+                    serverFile.serialize(store);
+                } catch (NotImplementedException e) {
+                    log.error("can't store ServerFile");
+                    progressHandler.success();
+                    return;
+                }
+
+                try {
+                    byte[] serverFileBytes = store.getArray();
+                    dos.writeUTF(GETFILE);
+                    dos.flush();
+
+                    int length = serverFileBytes.length;
+                    dos.writeInt(length);
+                    dos.flush();
+
+                    int offset = 0;
+                    while (offset < length) {
+                        int writeLength = length - offset;
+                        if (writeLength > FileBrowserClint.BUFFER_SIZE) {
+                            writeLength = FileBrowserClint.BUFFER_SIZE;
+                        }
+                        dos.write(serverFileBytes, offset, writeLength);
+                        dos.flush();
+                        offset += writeLength;
+                    }
+
+                    String response = dis.readUTF();
+                    if (response.equals(START_FEILE_TRANSFER)) {
+
+                        progressHandler.start();
+
+                        //receive file data
+                        int left = progressHandler != null ? 0 : -1;
+                        long fileLength = dis.readLong();
+                        long received = 0;
+
+
+                        // create target File
+                        File targetFile = new File(target, serverFile.getName());
+
+
+                        if (targetFile.exists()) {
+                            if (!targetFile.delete()) {
+                                log.error("can't override TargetFile: {}", targetFile.getAbsolutePath());
+                                progressHandler.success();
+                                return;
+                            }
+                        }
+
+                        if (!targetFile.createNewFile()) {
+                            log.error("can't write TargetFile: {}", targetFile.getAbsolutePath());
+                            progressHandler.success();
+                            return;
+                        }
+
+                        FileOutputStream fos = new FileOutputStream(targetFile);
+                        BufferedOutputStream fbos = new BufferedOutputStream(fos);
+                        for (int j = 0; j < fileLength; j++) {
+                            fbos.write(bis.read());
+                            if (received % 1024 == left) {
+                                progressHandler.updateProgress("", received, fileLength);
+                            }
+                            received++;
+                        }
+                        fbos.close();
+                        progressHandler.updateProgress("", received, fileLength);
+                    }
+
+                    log.debug("got server message: " + response);
+
+                } catch (NotImplementedException e) {
+                    log.error("can't store ServerFile");
+                    progressHandler.success();
+                    return;
+                } catch (IOException e) {
+                    log.error("can't receive ServerFile");
+                    progressHandler.success();
+                    return;
+                }
+
+                // finish
+                log.debug("ServerFile transfer success");
+                progressHandler.success();
+
+                WAIT.set(false);
+            }
+        });
+
+        while (WAIT.get()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public boolean delete(ServerFile serverFile) {
+
+        try {
+
+            //serialise ServerFile
+            BitStore store = new BitStore();
+            try {
+                serverFile.serialize(store);
+            } catch (NotImplementedException e) {
+                log.error("can't store ServerFile");
+                return false;
+            }
+
+            byte[] serverFileBytes = store.getArray();
+            dos.writeUTF(DELETE_SERVER_FILE);
+            dos.flush();
+
+            int length = serverFileBytes.length;
+            dos.writeInt(length);
+            dos.flush();
+
+            int offset = 0;
+            while (offset < length) {
+                int writeLength = length - offset;
+                if (writeLength > FileBrowserClint.BUFFER_SIZE) {
+                    writeLength = FileBrowserClint.BUFFER_SIZE;
+                }
+                dos.write(serverFileBytes, offset, writeLength);
+                dos.flush();
+                offset += writeLength;
+            }
+
+            String response = dis.readUTF();
+            if (response.equals(DELETE_SUCCESS)) {
+                return true;
+            }
+
+        } catch (IOException | NotImplementedException e) {
+            log.error("Can't delete ServerFile", e);
+        }
+        return false;
     }
 }
