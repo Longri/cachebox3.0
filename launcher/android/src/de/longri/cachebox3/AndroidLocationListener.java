@@ -54,7 +54,7 @@ public class AndroidLocationListener implements LocationListener, SensorEventLis
 
     @Override
     public void onLocationChanged(Location location) {
-//        log.debug("onLocationChanged: {}", location);
+        if (CB.sensoerIO.isPlay()) return;
         boolean isGpsProvided = false;
         if (location.getProvider().toLowerCase(new Locale("en")).contains("gps"))
             isGpsProvided = true;
@@ -77,6 +77,7 @@ public class AndroidLocationListener implements LocationListener, SensorEventLis
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
+        if (CB.sensoerIO.isPlay()) return;
         if (provider.toLowerCase(new Locale("en")).contains("gps")) {
 
             switch (status) {
@@ -112,6 +113,7 @@ public class AndroidLocationListener implements LocationListener, SensorEventLis
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if (CB.sensoerIO.isPlay()) return;
         synchronized (CB.eventHelper) {
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
                 gravity = event.values;

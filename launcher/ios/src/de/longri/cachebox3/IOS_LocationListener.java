@@ -29,8 +29,6 @@ import org.slf4j.LoggerFactory;
  */
 public class IOS_LocationListener {
     final static Logger log = LoggerFactory.getLogger(IOS_LocationListener.class);
-    private static double ACCURACY = CLLocationAccuracy.Best;
-    private static double DISTANCE_FILTER = 5;
     private static double HEADING_FILTER = 5;
 
     private CLLocationManager locationManager;
@@ -54,8 +52,8 @@ public class IOS_LocationListener {
                 // Create the Gps LocationManager
                 locationManager = new CLLocationManager();
                 locationManager.setDelegate(delegateAdapter);
-                locationManager.setDesiredAccuracy(ACCURACY);
-                locationManager.setDistanceFilter(DISTANCE_FILTER);
+                locationManager.setDesiredAccuracy(CLLocationAccuracy.Best);
+                locationManager.setDistanceFilter(3.0); //3 m
                 if (Foundation.getMajorSystemVersion() >= 8) {
                     locationManager.requestAlwaysAuthorization();
                     locationManager.requestWhenInUseAuthorization();
@@ -71,8 +69,8 @@ public class IOS_LocationListener {
                 // Create the Network LocationManager
                 networkLocationManager = new CLLocationManager();
                 networkLocationManager.setDelegate(networkDelegateAdapter);
-                networkLocationManager.setDesiredAccuracy(CLLocationAccuracy.HundredMeters);
-                networkLocationManager.setDistanceFilter(DISTANCE_FILTER);
+                networkLocationManager.setDesiredAccuracy(CLLocationAccuracy.NearestTenMeters);
+                networkLocationManager.setDistanceFilter(100.0); //100m
                 if (Foundation.getMajorSystemVersion() >= 8) {
                     networkLocationManager.requestAlwaysAuthorization();
                     networkLocationManager.requestWhenInUseAuthorization();
@@ -92,7 +90,7 @@ public class IOS_LocationListener {
 
         @Override
         public void didUpdateLocations(CLLocationManager manager, NSArray<CLLocation> locations) {
-
+            if (CB.sensoerIO.isPlay()) return;
             CLLocation newLocation = locations.last();
             CLLocationCoordinate2D coord = newLocation.getCoordinate();
 
@@ -116,8 +114,9 @@ public class IOS_LocationListener {
          */
         @Override
         public void didUpdateHeading(CLLocationManager manager, CLHeading newHeading) {
+            if (CB.sensoerIO.isPlay()) return;
             if (newHeading.getHeadingAccuracy() < 0) return; // invalid
-            float headingRad = (float) Math.toRadians(newHeading.getMagneticHeading());
+            float headingRad = (float) Math.toRadians(newHeading.getTrueHeading());
             CB.eventHelper.newBearing(headingRad, false);
         }
 
@@ -134,7 +133,7 @@ public class IOS_LocationListener {
 
         @Override
         public void didUpdateLocations(CLLocationManager manager, NSArray<CLLocation> locations) {
-
+            if (CB.sensoerIO.isPlay()) return;
             CLLocation newLocation = locations.last();
             CLLocationCoordinate2D coord = newLocation.getCoordinate();
 
