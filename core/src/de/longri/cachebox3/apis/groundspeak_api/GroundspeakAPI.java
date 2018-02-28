@@ -571,13 +571,14 @@ public class GroundspeakAPI {
 
 
     public static ApiResultState chkMembership(boolean withoutMsg) {
-        if (API_isChecked) {
+        final ApiResultState[] ret = {ApiResultState.UNKNOWN};
+
+        if (API_isChecked && !membershipType.isErrorState()) {
             log.debug("Membership ist checked, return stored state {}", membershipType.getState());
             return membershipType;
         }
-        final ApiResultState[] ret = {ApiResultState.UNKNOWN};
-        if (getAccessToken().length() > 0) {
 
+        if (getAccessToken().length() > 0) {
             final AtomicBoolean WAIT = new AtomicBoolean(true);
             getMembershipType(new GenericCallBack<ApiResultState>() {
                 @Override
@@ -587,8 +588,13 @@ public class GroundspeakAPI {
                 }
             });
             CB.wait(WAIT);
+        } else {
+            ret[0] = ApiResultState.NO_API_KEY;
         }
 
+        if (ret[0].isErrorState() && !withoutMsg) {
+            CB.checkApiResultState(ret[0]);
+        }
 
         return ret[0];
     }
