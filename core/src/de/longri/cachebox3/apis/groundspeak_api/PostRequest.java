@@ -40,8 +40,8 @@ public abstract class PostRequest {
     final static String STAGING_GS_LIVE_URL = "https://staging.api.groundspeak.com/Live/V6Beta/geocaching.svc/";
 
     private final ICancel iCancel;
-
     protected final String gcApiKey;
+    protected boolean waitLimit = true;
 
     public PostRequest(String gcApiKey, ICancel iCancel) {
         if (gcApiKey == null || gcApiKey.isEmpty()) throw new RuntimeException("ApiKey is empty, can't get any result");
@@ -59,7 +59,7 @@ public abstract class PostRequest {
         CB.postAsync(new NamedRunnable("PostRequest") {
             @Override
             public void run() {
-                if (waitApiCallLimit(iCancel) == -1) {
+                if (waitLimit && waitApiCallLimit(iCancel) == -1) {
                     readyCallBack.callBack(ApiResultState.API_ERROR);
                     return;
                 }
