@@ -448,6 +448,19 @@ public class CB {
             return true;
         }
 
+        if (result == ApiResultState.NO_API_KEY) {
+            CB.scheduleOnGlThread(new NamedRunnable("CB:No ApiKey") {
+                @Override
+                public void run() {
+                    String msg = Translation.get("apiKeyNeeded") + "\n\n"
+                            + Translation.get("wantApi");
+                    new GetApiKeyQuestionDialog(msg, Translation.get("errorAPI"),
+                            MessageBoxIcon.ExpiredApiKey).show();
+                }
+            }, 300);// wait for closing ProgressDialog before show msg
+            return true;
+        }
+
         if (result == ApiResultState.API_DOWNLOAD_LIMIT) {
             CB.scheduleOnGlThread(new NamedRunnable("DownloadLimit") {
                 @Override

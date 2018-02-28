@@ -162,6 +162,10 @@ public class CheckStateActivity extends ActivityBase {
     }
 
     private void importNow() {
+        if (GroundspeakAPI.chkMembership(false).isErrorState()) {
+            finish();
+            return;
+        }
 
         setWorkAnimationVisible(true);
         progressBar.setAnimateDuration(0);
