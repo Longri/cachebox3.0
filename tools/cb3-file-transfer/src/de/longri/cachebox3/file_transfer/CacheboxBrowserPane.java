@@ -203,7 +203,7 @@ public class CacheboxBrowserPane extends BorderPane {
                         CB.postAsync(new NamedRunnable("Delete ServerFile") {
                             @Override
                             public void run() {
-                                if (!clint.delete(severFile)) {
+                                if (clint.delete(severFile)) {
                                     // show failed msg box
                                     Platform.runLater(new Runnable() {
                                         @Override
@@ -211,11 +211,6 @@ public class CacheboxBrowserPane extends BorderPane {
                                             Alert alert = new Alert(Alert.AlertType.ERROR);
                                             alert.setTitle("Error");
                                             alert.setHeaderText("Delete failed");
-                                            alert.showAndWait().ifPresent(rs -> {
-                                                if (rs == ButtonType.OK) {
-                                                    System.out.println("Pressed OK.");
-                                                }
-                                            });
                                         }
                                     });
                                 } else {

@@ -34,7 +34,8 @@ import java.util.HashMap;
 public class FileIconUtils {
 
     private final static Logger log = LoggerFactory.getLogger(FileIconUtils.class);
-    private final static boolean IS_WINDOWS = System.getProperty("os.name").toLowerCase().contains("win");
+    public final static boolean IS_WINDOWS = System.getProperty("os.name").toLowerCase().contains("win");
+    public final static boolean IS_Mac = System.getProperty("os.name").toLowerCase().contains("mac");
     private final static HashMap<String, Image> mapOfFileExtToSmallIcon = new HashMap<>();
     private final static JFileChooser FILE_CHOOSER = new JFileChooser();
 

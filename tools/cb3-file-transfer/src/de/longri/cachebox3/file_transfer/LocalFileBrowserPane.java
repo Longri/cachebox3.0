@@ -81,10 +81,23 @@ class LocalFileBrowserPane extends BorderPane {
 
         File[] paths;
         paths = File.listRoots();
-        for (File path : paths) {
-            TreeItem<String> croot = createNode(path);
-            root.getChildren().add(croot);
+
+        if (FileIconUtils.IS_WINDOWS) {
+            for (File path : paths) {
+                TreeItem<String> croot = createNode(path);
+                root.getChildren().add(croot);
+            }
+        } else if (FileIconUtils.IS_Mac) {
+            paths = new File("/Volumes").listFiles();
+            for (File path : paths) {
+                TreeItem<String> croot = createNode(path);
+                root.getChildren().add(croot);
+            }
+        } else {
+            //TODO handle Linux
         }
+
+
         treeView = new TreeView<>(root);
         treeView.setSkin(new FolderTreeViewSkin(treeView));
 
