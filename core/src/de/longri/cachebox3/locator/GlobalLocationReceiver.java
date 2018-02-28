@@ -100,7 +100,12 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                     }
 
                     if (!approachSoundCompleted.get() && (distance < Config.SoundApproachDistance.getValue())) {
-                        SoundCache.play(SoundCache.Sounds.Approach);
+                        CB.postOnGlThread(new NamedRunnable("Play Sound") {
+                            @Override
+                            public void run() {
+                                SoundCache.play(SoundCache.Sounds.Approach);
+                            }
+                        });
                         approachSoundCompleted.set(true);
                     }
                 }
