@@ -133,7 +133,7 @@ public class FileIconUtils {
 
     private static String getFileExt(File file) {
         if (file.isDirectory()) {
-            if (file.getParent() == null) {
+            if (file.getParent() == null || (IS_Mac && file.getParent().equals("/Volumes"))) {
                 return "#"; //Disk root
             }
             return "%"; //folder
