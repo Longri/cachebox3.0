@@ -112,7 +112,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
      * @return Boolean
      */
     public boolean getCenterGps() {
-        return CB.mapMode == MapMode.GPS || CB.mapMode == MapMode.CAR || CB.mapMode == MapMode.LOCK;
+        return CB.mapMode == null || CB.mapMode == MapMode.GPS || CB.mapMode == MapMode.CAR || CB.mapMode == MapMode.LOCK;
     }
 
     /**
@@ -155,6 +155,9 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             double lat, lon;
 
             if (getCenterGps()) {
+                if (this.mapCenter == null) {
+                    this.mapCenter = EventHandler.getMyPosition();
+                }
                 lon = this.mapCenter.longitude;
                 lat = this.mapCenter.latitude;
             } else {
