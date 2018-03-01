@@ -18,13 +18,21 @@ package de.longri.cachebox3;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.utils.SoundCache;
+import org.robovm.apple.corelocation.*;
 import org.robovm.apple.dispatch.DispatchQueue;
+import org.robovm.apple.foundation.Foundation;
+import org.robovm.apple.foundation.NSArray;
+import org.robovm.apple.foundation.NSError;
 import org.robovm.apple.uikit.UIApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.robovm.apple.dispatch.DispatchQueue.PRIORITY_DEFAULT;
@@ -39,7 +47,12 @@ public abstract class IOS_Launcher_BackgroundHandling extends IOSApplication.Del
     private long UIBackgroundTaskInvalid = UIApplication.getInvalidBackgroundTask();
     private final AtomicLong bgTask = new AtomicLong(UIBackgroundTaskInvalid);
     private final AtomicBoolean isBgTaskRunning = new AtomicBoolean(false);
-   
+    private final AtomicInteger latInt = new AtomicInteger();
+    private final AtomicInteger lonInt = new AtomicInteger();
+    private final AtomicBoolean newCoords = new AtomicBoolean(false);
+    private CLLocationManager locationManager;
+    private Coordinate target;
+
 
     @Override
     public void didEnterBackground(final UIApplication application) {
@@ -49,7 +62,7 @@ public abstract class IOS_Launcher_BackgroundHandling extends IOSApplication.Del
         //start background Task only if needed!
         boolean bgNeeded = false;
         if (!Config.GlobalVolume.getValue().Mute) {
-            Coordinate target = EventHandler.getSelectedCoord();
+            target = EventHandler.getSelectedCoord();
             if (target != null) {
                 //check if approach sound finish
                 if (!CB.viewmanager.locationReceiver.isApproachCompleted()) {
@@ -67,24 +80,53 @@ public abstract class IOS_Launcher_BackgroundHandling extends IOSApplication.Del
             }));
 
             isBgTaskRunning.set(true);
+            final AtomicInteger soundApproachDistance = new AtomicInteger(Config.SoundApproachDistance.getValue() * 1000000);
             DispatchQueue.getGlobalQueue(bgTask.get(), PRIORITY_DEFAULT).async(new Runnable() {
                 @Override
                 public void run() {
 
+                    //start background location listener
+                    locationManager = new CLLocationManager();
+                    locationManager.setDelegate(delegateAdapter);
+                    locationManager.setDesiredAccuracy(CLLocationAccuracy.NearestTenMeters);
+                    locationManager.setDistanceFilter(10.0); //3 m
+                    if (Foundation.getMajorSystemVersion() >= 8) {
+                        locationManager.requestAlwaysAuthorization();
+                        locationManager.requestWhenInUseAuthorization();
+                    }
+                    locationManager.setAllowsBackgroundLocationUpdates(true);
+
+                    // Once configured, the location manager must be "started".
+                    locationManager.startUpdatingLocation();
+
                     //Run on Background
                     log.debug("Start the long-running background task");
                     while (isBgTaskRunning.get()) {
-                        log.debug("Run in background mode");
-                        //.... .....
-                        try {
-                            Thread.sleep(5000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                        if (newCoords.get()) {
+                            log.debug("new background coords");
+                            //calculate distance
+                            LatLong latLong = new LatLong(latInt.get() / 1000000, lonInt.get() / 1000000);
+                            double distance = target.distance(latLong, MathUtils.CalculationType.FAST);
+
+                            if (distance < soundApproachDistance.get() / 1000000) {
+                                log.debug("Near target, play approach sound");
+                                SoundCache.play(SoundCache.Sounds.Approach);
+
+                                // now we can cancel background task
+                                isBgTaskRunning.set(false);
+                            }
+                        } else {
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
 
                     log.debug("Finish background task");
-
+                    locationManager.stopUpdatingLocation();
+                    locationManager.setDelegate(null);
                     // finish background task
                     application.endBackgroundTask(bgTask.get());
                     bgTask.set(UIBackgroundTaskInvalid);
@@ -92,6 +134,27 @@ public abstract class IOS_Launcher_BackgroundHandling extends IOSApplication.Del
             });
         }
     }
+
+    CLLocationManagerDelegateAdapter delegateAdapter = new CLLocationManagerDelegateAdapter() {
+
+        @Override
+        public void didUpdateLocations(CLLocationManager manager, NSArray<CLLocation> locations) {
+            CLLocation newLocation = locations.last();
+            CLLocationCoordinate2D coord = newLocation.getCoordinate();
+            latInt.set((int) (coord.getLatitude() * 1000000));
+            lonInt.set((int) (coord.getLongitude() * 1000000));
+            newCoords.set(true);
+        }
+
+        @Override
+        public void didFail(CLLocationManager manager, NSError error) {
+            if (error.getErrorCode() != CLErrorCode.LocationUnknown) {
+                log.error("LocationManagerDelegateAdapter didFail " + error.getErrorCode().toString());
+                //close BackgroundTask
+                isBgTaskRunning.set(false);
+            }
+        }
+    };
 
     @Override
     public void willEnterForeground(final UIApplication application) {
