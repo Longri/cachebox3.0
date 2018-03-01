@@ -47,9 +47,9 @@ import java.io.InputStream;
 public class IOS_PlatformConnector extends PlatformConnector {
     final static Logger log = LoggerFactory.getLogger(IOS_PlatformConnector.class);
 
-    final IOS_Launcher ios_launcher;
+    final IOS_Launcher_BackgroundHandling ios_launcher;
 
-    public IOS_PlatformConnector(IOS_Launcher ios_launcher) {
+    public IOS_PlatformConnector(IOS_Launcher_BackgroundHandling ios_launcher) {
         super();
         this.ios_launcher = ios_launcher;
     }

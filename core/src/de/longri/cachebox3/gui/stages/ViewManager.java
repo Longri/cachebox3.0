@@ -85,7 +85,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
     private FilterProperties actFilter = FilterInstances.ALL;
     private final AtomicBoolean isFilters = new AtomicBoolean(false);
-    private final GlobalLocationReceiver locationReceiver;
+    public final GlobalLocationReceiver locationReceiver;
 
     public ViewManager(final CacheboxMain main, Viewport viewport, Batch batch) {
         super("ViewManager", viewport, batch);

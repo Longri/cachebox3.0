@@ -148,5 +148,8 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
 
     }
 
+    public boolean isApproachCompleted() {
+        return approachSoundCompleted.get();
+    }
 
 }

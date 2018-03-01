@@ -28,10 +28,14 @@ import org.robovm.apple.glkit.GLKViewDrawableMultisample;
 import org.robovm.apple.glkit.GLKViewDrawableStencilFormat;
 import org.robovm.apple.uikit.UIApplication;
 import org.robovm.apple.uikit.UIApplicationLaunchOptions;
-import org.robovm.apple.uikit.UIDevice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLogger;
 
-public class IOS_Launcher extends IOSApplication.Delegate {
+public class IOS_Launcher extends IOS_Launcher_BackgroundHandling {
+
+    final static Logger log = LoggerFactory.getLogger(IOS_Launcher.class);
+
 
     @Override
     public boolean didFinishLaunching(UIApplication application, UIApplicationLaunchOptions launchOptions) {
@@ -76,10 +80,10 @@ public class IOS_Launcher extends IOSApplication.Delegate {
         return new IOSApplication(new CacheboxMain(), config);
     }
 
-    private int getIosVersion() {
-        String systemVersion = UIDevice.getCurrentDevice().getSystemVersion().substring(0, 1);
-        return Integer.parseInt(systemVersion);
-    }
+//    public int getIosVersion() {
+//        String systemVersion = UIDevice.getCurrentDevice().getSystemVersion().substring(0, 1);
+//        return Integer.parseInt(systemVersion);
+//    }
 
     public static void main(String[] argv) {
         NSAutoreleasePool pool = new NSAutoreleasePool();
