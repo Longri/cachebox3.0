@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3;
 
-import de.longri.cachebox3.events.location.GpsEventHelper;
 import org.robovm.apple.corelocation.*;
 import org.robovm.apple.dispatch.DispatchQueue;
 import org.robovm.apple.foundation.Foundation;
@@ -104,7 +103,7 @@ public class IOS_LocationListener {
             CB.eventHelper.newGpsPos(lat, lon, accuracy);
             CB.eventHelper.newAltitude(altitude);
             if (courseRad >= 0) CB.eventHelper.newBearing(courseRad, true);
-            CB.eventHelper.newSpeed(speed);
+            if (speed >= 0) CB.eventHelper.newSpeed(speed);
 
         }
 
@@ -114,10 +113,10 @@ public class IOS_LocationListener {
          */
         @Override
         public void didUpdateHeading(CLLocationManager manager, CLHeading newHeading) {
-            if (CB.sensoerIO.isPlay()) return;
-            if (newHeading.getHeadingAccuracy() < 0) return; // invalid
-            float headingRad = (float) Math.toRadians(newHeading.getTrueHeading());
-            CB.eventHelper.newBearing(headingRad, false);
+//            if (CB.sensoerIO.isPlay()) return;
+//            if (newHeading.getHeadingAccuracy() < 0) return; // invalid
+//            float headingRad = (float) Math.toRadians(newHeading.getTrueHeading());
+//            CB.eventHelper.newBearing(headingRad, false);
         }
 
 

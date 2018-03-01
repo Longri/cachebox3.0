@@ -120,101 +120,105 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
      */
     private void assumeValues(boolean force, final short eventID) {
 
-        if (lastEventID == eventID) {
-            return;
-        }
-        lastEventID = eventID;
+        try {
+            if (lastEventID == eventID) {
+                return;
+            }
+            lastEventID = eventID;
 
-        if (!force && this.map.animator().isActive()) {
-            if (timer != null) return;
-            timer = new Timer();
-            TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    log.debug("AssumeValues TimerTask  eventID:{}", eventID);
-                    assumeValues(true, eventID);
-                }
-            };
-            timer.schedule(timerTask, 500);
-            return;
-        }
-        timer = null;
-        if (isDisposed.get()) return;
+            if (!force && this.map.animator().isActive()) {
+                if (timer != null) return;
+                timer = new Timer();
+                TimerTask timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        log.debug("AssumeValues TimerTask  eventID:{}", eventID);
+                        assumeValues(true, eventID);
+                    }
+                };
+                timer.schedule(timerTask, 500);
+                return;
+            }
+            timer = null;
+            if (isDisposed.get()) return;
 
 
-        float duration;
-        if (lastMapPosChange == Long.MIN_VALUE) {
-            duration = MapAnimator.DEFAULT_DURATION;
-        } else {
-            long div = System.currentTimeMillis() - lastMapPosChange;
-            duration = div / 1000;
-        }
-        if (duration > 0.2) {
-            lastMapPosChange = System.currentTimeMillis();
-
-            double lat, lon;
-
-            if (getCenterGps()) {
-                if (this.mapCenter == null) {
-                    this.mapCenter = EventHandler.getMyPosition();
-                }
-                lon = this.mapCenter.longitude;
-                lat = this.mapCenter.latitude;
+            float duration;
+            if (lastMapPosChange == Long.MIN_VALUE) {
+                duration = MapAnimator.DEFAULT_DURATION;
             } else {
-                lon = this.myPosition.longitude;
-                lat = this.myPosition.latitude;
+                long div = System.currentTimeMillis() - lastMapPosChange;
+                duration = div / 1000;
             }
-            animator.position(duration,
-                    MercatorProjection.longitudeToX(lon),
-                    MercatorProjection.latitudeToY(lat)
-            );
-        }
+            if (duration > 0.2) {
+                lastMapPosChange = System.currentTimeMillis();
 
-        //force full tilt on CarMode
-        if (CB.mapMode == MapMode.CAR)
-            animator.tilt(map.viewport().getMaxTilt());
+                double lat, lon;
 
-
-        if (dynZoomEnabled && CB.mapMode == MapMode.CAR) {
-            // calculate dynamic Zoom
-            double percent = actSpeed / maxSpeed;
-            double dynZoom = (float) (maxZoom - ((maxZoom - minZoom) * percent));
-            if (dynZoom > maxZoom)
-                dynZoom = maxZoom;
-            if (dynZoom < minZoom)
-                dynZoom = minZoom;
-
-            if (lastDynZoom != (dynZoom)) {
-                lastDynZoom = dynZoom;
-                log.debug("Set new dynZoom: speed: {}  percent: {}  zoom: {}", actSpeed, percent, dynZoom);
-                animator.scale(2.0f, dynZoom);
+                if (getCenterGps()) {
+                    if (this.mapCenter == null) {
+                        this.mapCenter = EventHandler.getMyPosition();
+                    }
+                    lon = this.mapCenter.longitude;
+                    lat = this.mapCenter.latitude;
+                } else {
+                    lon = this.myPosition.longitude;
+                    lat = this.myPosition.latitude;
+                }
+                animator.position(duration,
+                        MercatorProjection.longitudeToX(lon),
+                        MercatorProjection.latitudeToY(lat)
+                );
             }
-        }
 
-        float bearing = -EventHandler.getHeading();
-        if (CB.mapMode == MapMode.CAR) {
-            this.infoPanel.setMapOrientationMode(MapOrientationMode.COMPASS);
-        }
+            //force full tilt on CarMode
+            if (CB.mapMode == MapMode.CAR)
+                animator.tilt(map.viewport().getMaxTilt());
 
-        switch (this.infoPanel.getOrientationState()) {
-            case NORTH:
-                this.mapBearing = 0;
-                this.arrowHeading = bearing;
-                animator.rotate(mapBearing);
-                break;
-            case COMPASS:
-                this.mapBearing = bearing;
-                this.arrowHeading = 0;
-                animator.rotate(mapBearing);
-                break;
-            case USER:
-                this.mapBearing = userBearing;
-                this.arrowHeading = userBearing + bearing;
-                break;
+
+            if (dynZoomEnabled && CB.mapMode == MapMode.CAR) {
+                // calculate dynamic Zoom
+                double percent = actSpeed / maxSpeed;
+                double dynZoom = (float) (maxZoom - ((maxZoom - minZoom) * percent));
+                if (dynZoom > maxZoom)
+                    dynZoom = maxZoom;
+                if (dynZoom < minZoom)
+                    dynZoom = minZoom;
+
+                if (lastDynZoom != (dynZoom)) {
+                    lastDynZoom = dynZoom;
+                    log.debug("Set new dynZoom: speed: {}  percent: {}  zoom: {}", actSpeed, percent, dynZoom);
+                    animator.scale(2.0f, dynZoom);
+                }
+            }
+
+            float bearing = -EventHandler.getHeading();
+            if (CB.mapMode == MapMode.CAR) {
+                this.infoPanel.setMapOrientationMode(MapOrientationMode.COMPASS);
+            }
+
+            switch (this.infoPanel.getOrientationState()) {
+                case NORTH:
+                    this.mapBearing = 0;
+                    this.arrowHeading = bearing;
+                    animator.rotate(mapBearing);
+                    break;
+                case COMPASS:
+                    this.mapBearing = bearing;
+                    this.arrowHeading = 0;
+                    animator.rotate(mapBearing);
+                    break;
+                case USER:
+                    this.mapBearing = userBearing;
+                    this.arrowHeading = userBearing + bearing;
+                    break;
+            }
+            animator.setArrowHeading(arrowHeading);
+            infoPanel.setNewValues(myPosition, -mapBearing);
+            CB.requestRendering();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        animator.setArrowHeading(arrowHeading);
-        infoPanel.setNewValues(myPosition, -mapBearing);
-        CB.requestRendering();
     }
 
     public void tiltChangedFromMap(float newTilt) {
