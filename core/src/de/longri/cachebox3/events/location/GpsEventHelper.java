@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 23.03.2017.
  */
-public class GpsEventHelper {
+public class GpsEventHelper implements LocationEvents {
 
     private static Logger log = LoggerFactory.getLogger(GpsEventHelper.class);
 
@@ -68,6 +68,7 @@ public class GpsEventHelper {
         });
     }
 
+    @Override
     public void newGpsPos(double latitude, double longitude, float accuracy) {
         CB.sensoerIO.write_newGpsPos(latitude, longitude, accuracy);
 
@@ -84,6 +85,7 @@ public class GpsEventHelper {
         }
     }
 
+    @Override
     public void newNetworkPos(double latitude, double longitude, float accuracy) {
         CB.sensoerIO.write_newNetworkPos(latitude, longitude, accuracy);
         // clamp coordinate to handled precision
@@ -91,6 +93,7 @@ public class GpsEventHelper {
         longitude = ((int) (longitude * 1E6)) / 1E6;
     }
 
+    @Override
     public void newAltitude(double altitude) {
         CB.sensoerIO.write_newAltitude(altitude);
     }
@@ -99,6 +102,7 @@ public class GpsEventHelper {
      * @param bearing as radians
      * @param gps     is from GPS
      */
+    @Override
     public void newBearing(float bearing, boolean gps) {
         log.debug("new Bearing {} ({})  GPS:{}", bearing, Math.toDegrees(bearing), gps);
 
@@ -158,6 +162,7 @@ public class GpsEventHelper {
 //        this.accuracy = accuracy;
 //    }
 
+    @Override
     public void newSpeed(double speed) {
         CB.sensoerIO.write_newSpeed(speed);
         if (lastSpeed != speed) {

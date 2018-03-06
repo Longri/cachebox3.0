@@ -146,9 +146,10 @@ public class StageManager {
             //switch input processor to window stage
 
             if (stageList.size > 1) {
-                inputMultiplexer.removeProcessor(stageList.get(stageList.size - 2));
+                NamedStage stage = stageList.get(stageList.size - 2);
+                if (stage != null) inputMultiplexer.removeProcessor(stage);
             } else {
-                inputMultiplexer.removeProcessor(mainStage);
+                if (mainStage != null) inputMultiplexer.removeProcessor(mainStage);
             }
 
 

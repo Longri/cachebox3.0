@@ -162,6 +162,9 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
                     lon = this.mapCenter.longitude;
                     lat = this.mapCenter.latitude;
                 } else {
+                    if(this.myPosition==null){
+                        this.myPosition = EventHandler.getMyPosition();
+                    }
                     lon = this.myPosition.longitude;
                     lat = this.myPosition.latitude;
                 }

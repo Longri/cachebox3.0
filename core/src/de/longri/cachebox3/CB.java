@@ -28,7 +28,6 @@ import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.location.GpsEventHelper;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.dialogs.GetApiKeyQuestionDialog;
@@ -40,6 +39,7 @@ import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.CacheListView;
+import de.longri.cachebox3.locator.manager.LocationHandler;
 import de.longri.cachebox3.locator.track.Track;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -71,9 +71,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CB {
     static final Logger log = LoggerFactory.getLogger(CB.class);
 
-    public static final int CurrentRevision = 20160806;
-    public static final String CurrentVersion = "0.1.";
     public static final String VersionPrefix = "Test";
+
+    public static LocationHandler locationHandler;
 
 
     //LogLevels
@@ -91,7 +91,6 @@ public class CB {
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
 
     public static MapMode mapMode = MapMode.FREE;
-    public final static GpsEventHelper eventHelper = new GpsEventHelper();
 
     public static int androidStatusbarHeight;
 

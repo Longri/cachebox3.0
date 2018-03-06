@@ -16,6 +16,8 @@
 
 package de.longri.cachebox3.locator;
 
+import de.longri.cachebox3.locator.manager.LocationManager;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 

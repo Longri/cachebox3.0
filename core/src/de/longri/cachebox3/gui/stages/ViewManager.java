@@ -95,8 +95,6 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         log.info("Height:" + Float.toString(Gdx.graphics.getHeight()));
         log.info("PPI:" + Float.toString(Gdx.graphics.getPpiX()));
 
-        CB.eventHelper.init();
-
         this.main = main;
 
         //set this to static CB for global access

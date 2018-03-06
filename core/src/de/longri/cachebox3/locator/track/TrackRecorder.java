@@ -207,7 +207,9 @@ public class TrackRecorder implements PositionChangedListener {
             mustRecPos = true;
         }
 
-        CoordinateGPS newCoord = CB.eventHelper.getLastGpsCoordinate();
+//        CoordinateGPS newCoord = CB.eventHelper.getLastGpsCoordinate();
+        //  TODO implement
+        CoordinateGPS newCoord = null;
 
         if (LastRecordedPosition == null) { // Warte bis 2 gültige Koordinaten vorliegen
             LastRecordedPosition = newCoord;

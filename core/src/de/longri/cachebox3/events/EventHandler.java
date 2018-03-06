@@ -248,6 +248,11 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
 
     public static Coordinate getMyPosition() {
+
+        if(INSTANCE.myPosition==null){
+            //return last stored Pos
+           return new Coordinate(Config.MapInitLatitude.getValue(),Config.MapInitLongitude.getValue());
+        }
         return INSTANCE.myPosition;
     }
 

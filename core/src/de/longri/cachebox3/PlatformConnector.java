@@ -109,12 +109,6 @@ public abstract class PlatformConnector {
                                             SvgScaleType scaleType, float scaleValue) throws IOException;
 
 
-    public abstract void initialLocationReciver();
-
-    public static void initLocationListener() {
-        platformConnector.initialLocationReciver();
-    }
-
 
     public static FileHandle getSandboxFileHandle(String fileName) {
         return platformConnector._getSandBoxFileHandle(fileName);

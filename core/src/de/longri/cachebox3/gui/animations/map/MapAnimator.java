@@ -16,7 +16,7 @@
 package de.longri.cachebox3.gui.animations.map;
 
 import com.badlogic.gdx.Gdx;
-import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
@@ -36,10 +36,6 @@ public class MapAnimator {
 
     private static final Logger log = LoggerFactory.getLogger(MapAnimator.class);
 
-
-    //    private final static double SCALE_PRECISION = 1;
-//    private final static double TILT_PRECISION = 1;
-//    public final static double ROTATE_PRECISION = 1e-2;
     public final static float DEFAULT_DURATION = 0.5f; // 500 ms
 
     private final Map map;
@@ -67,6 +63,10 @@ public class MapAnimator {
     }
 
     public void update(float delta) {
+
+        float accuracy = 0.0f;// TODO get from ???
+
+
         map.viewport().getMapPosition(mapPosition);
         boolean changed = false;
         if (mapX.update(delta)) {
@@ -79,14 +79,14 @@ public class MapAnimator {
         }
         if (mapViewPositionChangedHandler.getCenterGps()) {
             if (!centerAnimation) {
-                myLocationAccuracy.setMercatorPosition(mapPosition.getX(), mapPosition.getY(), CB.eventHelper.getAccuracy());
+                myLocationAccuracy.setMercatorPosition(mapPosition.getX(), mapPosition.getY(), accuracy);
                 double lat = MercatorProjection.toLatitude(mapPosition.getY());
                 double lon = MercatorProjection.toLongitude(mapPosition.getX());
                 myLocationLayer.setPosition(lat, lon, arrowHeading);
                 directLineLayer.redrawLine(new LatLong(lat, lon));
             } else {
-                Coordinate coordinate = CB.eventHelper.getLastGpsCoordinate();
-                myLocationAccuracy.setPosition(coordinate.latitude, coordinate.longitude, CB.eventHelper.getAccuracy());
+                Coordinate coordinate = EventHandler.getMyPosition();
+                myLocationAccuracy.setPosition(coordinate.latitude, coordinate.longitude, accuracy);
                 myLocationLayer.setPosition(coordinate.latitude, coordinate.longitude, arrowHeading);
                 directLineLayer.redrawLine(coordinate);
             }
@@ -97,7 +97,7 @@ public class MapAnimator {
                 changed = true;
                 double x = myPosX.getAct();
                 double y = myPosY.getAct();
-                myLocationAccuracy.setMercatorPosition(x, y, CB.eventHelper.getAccuracy());
+                myLocationAccuracy.setMercatorPosition(x, y, accuracy);
                 double lat = MercatorProjection.toLatitude(y);
                 double lon = MercatorProjection.toLongitude(x);
                 myLocationLayer.setPosition(lat, lon, arrowHeading);
@@ -208,7 +208,6 @@ public class MapAnimator {
         this.rotate.start(duration, mr, value);
 //        this.rotate.setDebugAct(value);
     }
-
 
     public void tilt(double value) {
         this.tilt(DEFAULT_DURATION, value);

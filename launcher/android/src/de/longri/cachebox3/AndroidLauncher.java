@@ -15,13 +15,8 @@
  */
 package de.longri.cachebox3;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -30,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
-import de.longri.cachebox3.utils.LowpassFilter;
+import de.longri.cachebox3.locator.manager.Android_LocationHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sqldroid.SQLDroidDriver;
@@ -63,6 +58,7 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
 
         androidLauncher = this;
 
+        CB.locationHandler = new Android_LocationHandler();
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
         int resId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -95,28 +91,16 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
     protected void onResume() {
         log.debug("onResume()");
         super.onResume();
-
-        if (AndroidPlatformConnector.platformConnector != null &&
-                AndroidPlatformConnector.platformConnector.locationListener != null &&
-                AndroidPlatformConnector.platformConnector.locationListener.mSensorManager != null) {
-            AndroidPlatformConnector.platformConnector.locationListener.registerSensor();
-        }
     }
 
     @Override
     protected void onStop() {
         log.debug("onStop()");
         super.onStop();
-        if (AndroidPlatformConnector.platformConnector != null &&
-                AndroidPlatformConnector.platformConnector.locationListener != null &&
-                AndroidPlatformConnector.platformConnector.locationListener.mSensorManager != null) {
-            AndroidPlatformConnector.platformConnector.locationListener.unRegisterSensor();
-        }
     }
 
     @Override
     protected void onDestroy() {
-        AndroidPlatformConnector.platformConnector.removeLocationListener();
         super.onDestroy();
     }
 

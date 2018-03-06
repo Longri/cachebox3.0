@@ -218,34 +218,34 @@ public class SensorIO {
                     }
                     char command = lineSplites[1].charAt(0);
 
-                    switch (command) {
-                        case NEW_GPS_POS:
-                            CB.eventHelper.newGpsPos(Double.parseDouble(lineSplites[2]),
-                                    Double.parseDouble(lineSplites[3]), Float.parseFloat(lineSplites[4]));
-                            break;
-                        case NEW_NETWORK_POS:
-                            CB.eventHelper.newNetworkPos(Double.parseDouble(lineSplites[2]),
-                                    Double.parseDouble(lineSplites[3]), Float.parseFloat(lineSplites[4]));
-                            break;
-                        case NEW_ALTITUDE:
-                            CB.eventHelper.newAltitude(Double.parseDouble(lineSplites[2]));
-                            break;
-                        case NEW_BEARING_GPS:
-                            CB.eventHelper.newBearing(Float.parseFloat(lineSplites[2]), true);
-                            break;
-                        case NEW_BEARING_COMPASS:
-                            CB.eventHelper.newBearing(Float.parseFloat(lineSplites[2]), false);
-                            break;
-                        case NEW_SPEED:
-                            CB.eventHelper.newSpeed(Double.parseDouble(lineSplites[2]));
-                            break;
-                        case NEW_PITCH:
-                            CB.eventHelper.newPitch(Float.parseFloat(lineSplites[2]));
-                            break;
-                        case NEW_ROLL:
-                            CB.eventHelper.newRoll(Float.parseFloat(lineSplites[2]));
-                            break;
-                    }
+//                    switch (command) {
+//                        case NEW_GPS_POS:
+//                            CB.eventHelper.newGpsPos(Double.parseDouble(lineSplites[2]),
+//                                    Double.parseDouble(lineSplites[3]), Float.parseFloat(lineSplites[4]));
+//                            break;
+//                        case NEW_NETWORK_POS:
+//                            CB.eventHelper.newNetworkPos(Double.parseDouble(lineSplites[2]),
+//                                    Double.parseDouble(lineSplites[3]), Float.parseFloat(lineSplites[4]));
+//                            break;
+//                        case NEW_ALTITUDE:
+//                            CB.eventHelper.newAltitude(Double.parseDouble(lineSplites[2]));
+//                            break;
+//                        case NEW_BEARING_GPS:
+//                            CB.eventHelper.newBearing(Float.parseFloat(lineSplites[2]), true);
+//                            break;
+//                        case NEW_BEARING_COMPASS:
+//                            CB.eventHelper.newBearing(Float.parseFloat(lineSplites[2]), false);
+//                            break;
+//                        case NEW_SPEED:
+//                            CB.eventHelper.newSpeed(Double.parseDouble(lineSplites[2]));
+//                            break;
+//                        case NEW_PITCH:
+//                            CB.eventHelper.newPitch(Float.parseFloat(lineSplites[2]));
+//                            break;
+//                        case NEW_ROLL:
+//                            CB.eventHelper.newRoll(Float.parseFloat(lineSplites[2]));
+//                            break;
+//                    }
                 }
                 isPlay = false;
             }

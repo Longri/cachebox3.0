@@ -101,46 +101,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
     }
 
 
-    LocationManager locationManager;
-    AndroidLocationListener locationListener;
-
-    @Override
-    public void initialLocationReciver() {
-
-
-        if (locationManager != null) {
-            return;
-        }
-
-        locationListener = new AndroidLocationListener(this.application.getContext());
-
-        // GPS
-        // get the location manager
-        locationManager = (LocationManager) this.application.getContext().getSystemService(Context.LOCATION_SERVICE);
-
-        final int updateTime = 500; // 1s
-
-        application.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 0, locationListener);
-                    if (ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application.getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                            != PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                                    != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
-                } catch (Exception e) {
-                    log.error("main.initialLocationManager()", e);
-                    e.printStackTrace();
-                }
-            }
-        });
-
-    }
-
     @Override
     public FileHandle _getSandBoxFileHandle(String fileName) {
         File dir = this.application.getContext().getFilesDir();
@@ -287,19 +247,19 @@ public class AndroidPlatformConnector extends PlatformConnector {
         });
     }
 
-    public void removeLocationListener() {
-        application.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    locationManager.removeUpdates(locationListener);
-                    locationManager = null;
-                    locationListener = null;
-                } catch (Exception e) {
-                    log.error("main.initialLocationManager()", e);
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+//    public void removeLocationListener() {
+//        application.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    locationManager.removeUpdates(locationListener);
+//                    locationManager = null;
+//                    locationListener = null;
+//                } catch (Exception e) {
+//                    log.error("main.initialLocationManager()", e);
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//    }
 }

@@ -28,14 +28,18 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.location.GpsEventHelper;
+import de.longri.cachebox3.events.location.LocationEvents;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.CompassView;
 import de.longri.cachebox3.gui.views.TestView;
+import de.longri.cachebox3.locator.manager.LocationManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GL;
 import org.oscim.renderer.GLState;
@@ -48,7 +52,6 @@ import java.text.NumberFormat;
 
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
-import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
 import static org.slf4j.impl.LibgdxLoggerFactory.INCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
@@ -79,7 +82,7 @@ public class CacheboxMain extends ApplicationAdapter {
 //        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
 
 
-        INCLUDE_LIST.add("de.longri.cachebox3.events.location.GpsEventHelper");
+//        INCLUDE_LIST.add("de.longri.cachebox3.events.location.GpsEventHelper");
         INCLUDE_LIST.add(MapViewPositionChangedHandler.class.getName());
         INCLUDE_LIST.add(TestView.class.getName());
         INCLUDE_LIST.add(CompassView.class.getName());
@@ -128,6 +131,7 @@ public class CacheboxMain extends ApplicationAdapter {
                     public void run() {
                         StageManager.setMainStage(new ViewManager(
                                 CacheboxMain.this, StageManager.viewport, StageManager.batch));
+                        initialForegroundLocationListener();
                         batch.dispose();
                     }
                 });
@@ -276,6 +280,43 @@ public class CacheboxMain extends ApplicationAdapter {
 
     public String getMemory() {
         return memoryUsage;
+    }
+
+    LocationManager locationManagerForeGround;
+    LocationManager locationManagerBackGround;
+
+    GpsEventHelper foreGroundHelper = new GpsEventHelper();
+
+    private void initialForegroundLocationListener() {
+
+        CB.postOnMainThread(new NamedRunnable("initial LocationListener") {
+            @Override
+            public void run() {
+                if (locationManagerForeGround == null) {
+                    locationManagerForeGround = CB.locationHandler.getNewLocationManager();
+                    locationManagerForeGround.setDelegate(foreGroundHelper);
+                }
+
+                locationManagerForeGround.startUpdateLocation();
+                locationManagerForeGround.startUpdateHeading();
+            }
+        });
+
+
+
+    }
+
+    private void removeForegroundLocationListener() {
+        locationManagerForeGround.stopUpdateLocation();
+        locationManagerForeGround.stopUpdateHeading();
+    }
+
+    private void initialBackGroundLocationListener() {
+
+    }
+
+    private void removeBackGroundLocationListener() {
+
     }
 
 
