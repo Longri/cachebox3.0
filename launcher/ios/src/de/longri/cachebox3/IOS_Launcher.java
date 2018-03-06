@@ -48,6 +48,12 @@ public class IOS_Launcher extends IOS_Launcher_BackgroundHandling {
         } else {
             CB.setGlobalScale(1f);
         }
+
+
+
+
+
+
         return retValue;
     }
 
@@ -74,6 +80,7 @@ public class IOS_Launcher extends IOS_Launcher_BackgroundHandling {
         config.orientationLandscape = false;
         config.orientationPortrait = true;
         config.stencilFormat = GLKViewDrawableStencilFormat._8;
+        config.allowIpod = true;
         GdxAssets.init("assets/");
         GLAdapter.init(new IosGL());
 

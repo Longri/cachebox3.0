@@ -83,6 +83,9 @@ public class CacheboxMain extends ApplicationAdapter {
         INCLUDE_LIST.add(MapViewPositionChangedHandler.class.getName());
         INCLUDE_LIST.add(TestView.class.getName());
         INCLUDE_LIST.add(CompassView.class.getName());
+        INCLUDE_LIST.add("de.longri.cachebox3.IOS_LocationListener");
+        INCLUDE_LIST.add("de.longri.cachebox3.IOS_Launcher_BackgroundHandling");
+        INCLUDE_LIST.add("de.longri.cachebox3.utils.SoundCache");
 
 
     }

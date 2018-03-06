@@ -58,8 +58,11 @@ public class SoundCache {
 
         log.debug("play Sound: {} ", sound.name());
 
-        if (Config.GlobalVolume.getValue().Mute && !ignoreMute)
+        if (Config.GlobalVolume.getValue().Mute && !ignoreMute) {
+            log.debug("Global volume is muted! Don't play sound");
             return;
+        }
+
 
         switch (sound) {
             case GPS_lose:
@@ -87,6 +90,9 @@ public class SoundCache {
                 if ((ignoreMute || !Config.Approach.getValue().Mute) && Approach != null) {
                     Approach.stop();
                     Approach.play(approachVolume);
+                } else {
+                    log.debug("Approach sound not played while {} ",
+                            Approach == null ? "Approach sound are NULL" : "Approach sound are muted");
                 }
                 break;
             case AutoResortSound:

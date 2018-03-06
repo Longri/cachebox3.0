@@ -15,7 +15,9 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
+import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
@@ -72,32 +74,47 @@ public abstract class IOS_Launcher_BackgroundHandling extends IOSApplication.Del
         }
 
         if (bgNeeded) {
-            bgTask.set(application.beginBackgroundTask("BackgroundTask", new Runnable() {
+
+
+            long bgTaskId = application.beginBackgroundTask("BackgroundTask", new Runnable() {
                 @Override
                 public void run() {
+                    log.debug("End BGTask");
                     application.endBackgroundTask(bgTask.get());
                 }
-            }));
+            });
+
+            bgTask.set(bgTaskId);
 
             isBgTaskRunning.set(true);
             final AtomicInteger soundApproachDistance = new AtomicInteger(Config.SoundApproachDistance.getValue() * 1000000);
-            DispatchQueue.getGlobalQueue(bgTask.get(), PRIORITY_DEFAULT).async(new Runnable() {
+            final AtomicInteger debugCount = new AtomicInteger();
+
+            DispatchQueue globalQueue = DispatchQueue.getGlobalQueue(PRIORITY_DEFAULT, 0);
+
+
+            globalQueue.async(new Runnable() {
                 @Override
                 public void run() {
 
-                    //start background location listener
-                    locationManager = new CLLocationManager();
-                    locationManager.setDelegate(delegateAdapter);
-                    locationManager.setDesiredAccuracy(CLLocationAccuracy.NearestTenMeters);
-                    locationManager.setDistanceFilter(10.0); //3 m
-                    if (Foundation.getMajorSystemVersion() >= 8) {
-                        locationManager.requestAlwaysAuthorization();
-                        locationManager.requestWhenInUseAuthorization();
-                    }
-                    locationManager.setAllowsBackgroundLocationUpdates(true);
+                    DispatchQueue.getMainQueue().sync(new Runnable() {
+                        @Override
+                        public void run() {
+                            //start background location listener
+                            locationManager = new CLLocationManager();
+                            locationManager.setDelegate(delegateAdapter);
+                            locationManager.setDesiredAccuracy(CLLocationAccuracy.NearestTenMeters);
+                            locationManager.setDistanceFilter(10.0); //3 m
+                            if (Foundation.getMajorSystemVersion() >= 8) {
+                                locationManager.requestAlwaysAuthorization();
+                                locationManager.requestWhenInUseAuthorization();
+                            }
+                            locationManager.setAllowsBackgroundLocationUpdates(true);
 
-                    // Once configured, the location manager must be "started".
-                    locationManager.startUpdatingLocation();
+                            // Once configured, the location manager must be "started".
+                            locationManager.startUpdatingLocation();
+                        }
+                    });
 
                     //Run on Background
                     log.debug("Start the long-running background task");
@@ -115,11 +132,22 @@ public abstract class IOS_Launcher_BackgroundHandling extends IOSApplication.Del
                                 // now we can cancel background task
                                 isBgTaskRunning.set(false);
                             }
+                            newCoords.set(false);
                         } else {
                             try {
-                                Thread.sleep(2000);
+                                Thread.sleep(10000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
+                            }
+                            log.debug("Wait on BGTask for {}sec", debugCount.decrementAndGet() * 10);
+
+                            if (debugCount.get() * 10 < -10) {
+                                //play test sound
+                                log.debug("Near target, play approach sound");
+                                FileHandle soundFileHandle = Gdx.files.absolute(CB.WorkPath + "/data/sound/Approach.mp3");
+                                IOS_BackgroundSound sound = new IOS_BackgroundSound(soundFileHandle);
+                                sound.play();
+
                             }
                         }
                     }
