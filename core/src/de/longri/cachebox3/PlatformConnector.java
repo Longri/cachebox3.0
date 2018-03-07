@@ -101,6 +101,12 @@ public abstract class PlatformConnector {
 
     protected abstract void _runOnBackGround(Runnable backgroundTask);
 
+    public static void playNotifySound(FileHandle soundFileHandle) {
+        platformConnector._playNotifySound(soundFileHandle);
+    }
+
+    protected abstract void _playNotifySound(FileHandle soundFileHandle);
+
     // SVG implementations #############################################################################################
     public enum SvgScaleType {
         SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED, NONE, SCALED_TO_WIDTH_OR_HEIGHT

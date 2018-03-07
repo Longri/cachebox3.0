@@ -188,6 +188,12 @@ public class IOS_PlatformConnector extends PlatformConnector {
     }
 
     @Override
+    protected void _playNotifySound(FileHandle soundFileHandle) {
+        IOS_BackgroundSound sound = new IOS_BackgroundSound(soundFileHandle);
+        sound.play();
+    }
+
+    @Override
     public FileHandle _getSandBoxFileHandle(String fileName) {
         return new FileHandle(new File(System.getenv("HOME"), "Library/local/" + fileName).getAbsolutePath());
     }

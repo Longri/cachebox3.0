@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.locator;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.events.*;
@@ -28,6 +30,8 @@ import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SoundCache;
+import org.oscim.backend.CanvasAdapter;
+import org.oscim.backend.Platform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -212,17 +216,17 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
     Runnable backgroundTask = new Runnable() {
         @Override
         public void run() {
-
-            while (!stopBackgroundTask.get()){
-
+            while (!stopBackgroundTask.get()) {
                 log.debug("Run on Background");
-
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
+                FileHandle soundFileHandle = Gdx.files.absolute(CB.WorkPath + "/data/sound/Approach.mp3");
+                if (CanvasAdapter.platform != Platform.IOS) soundFileHandle = Gdx.files.internal("sound/Approach.mp3");
+                PlatformConnector.playNotifySound(soundFileHandle);
             }
 
         }

@@ -16,26 +16,22 @@
 package de.longri.cachebox3;
 
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.async.AsyncTask;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -203,6 +199,18 @@ public class AndroidPlatformConnector extends PlatformConnector {
     }
 
     @Override
+    protected void _playNotifySound(final FileHandle soundFileHandle) {
+        final Sound sound = Gdx.audio.newSound(soundFileHandle);
+        //need time for prepare sound
+        CB.postAsyncDelayd(100, new NamedRunnable("") {
+            @Override
+            public void run() {
+                sound.play();
+            }
+        });
+    }
+
+    @Override
     public void _getMultilineTextInput(final Input.TextInputListener listener, final String title, final String text,
                                        final String hint) {
         this.handle.post(new Runnable() {
@@ -257,20 +265,4 @@ public class AndroidPlatformConnector extends PlatformConnector {
             }
         });
     }
-
-//    public void removeLocationListener() {
-//        application.runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    locationManager.removeUpdates(locationListener);
-//                    locationManager = null;
-//                    locationListener = null;
-//                } catch (Exception e) {
-//                    log.error("main.initialLocationManager()", e);
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//    }
 }
