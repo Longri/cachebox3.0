@@ -28,8 +28,6 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.location.GpsEventHelper;
-import de.longri.cachebox3.events.location.LocationEvents;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
@@ -37,10 +35,8 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.CompassView;
 import de.longri.cachebox3.gui.views.TestView;
 import de.longri.cachebox3.locator.GlobalLocationReceiver;
-import de.longri.cachebox3.locator.manager.LocationManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GL;
 import org.oscim.renderer.GLState;
@@ -255,7 +251,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void pause() {
-        viewManager.pause();
+        if (viewManager != null) viewManager.pause();
         checkLogger();
 
         if (EventHandler.getSelectedCache() != null) {
@@ -276,7 +272,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void resume() {
-        viewManager.resume();
+        if (viewManager != null) viewManager.resume();
         checkLogger();
         log.debug("App on resume reopen databases");
         //open databases on non Desktop platform

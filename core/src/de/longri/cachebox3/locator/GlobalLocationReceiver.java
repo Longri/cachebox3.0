@@ -16,6 +16,7 @@
 package de.longri.cachebox3.locator;
 
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.events.location.GpsEventHelper;
 import de.longri.cachebox3.events.location.PositionChangedListener;
@@ -185,18 +186,46 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
     }
 
     private void initialBackGroundLocationListener() {
-
+        stopBackgroundTask.set(false);
+        log.debug("start long time Background task");
+        PlatformConnector.runOnBackGround(backgroundTask);
     }
 
     private void removeBackGroundLocationListener() {
-
+        log.debug("stop long time Background task");
+        stopBackgroundTask.set(true);
     }
 
     public void pause() {
         log.debug("onPause");
+        removeForegroundLocationListener();
+        initialBackGroundLocationListener();
     }
 
     public void resume() {
         log.debug("onResume");
+        initialForegroundLocationListener();
+        removeBackGroundLocationListener();
     }
+
+    AtomicBoolean stopBackgroundTask = new AtomicBoolean();
+    Runnable backgroundTask = new Runnable() {
+        @Override
+        public void run() {
+
+            while (!stopBackgroundTask.get()){
+
+                log.debug("Run on Background");
+
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+    };
+
 }

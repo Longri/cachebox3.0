@@ -73,7 +73,7 @@ public class IOS_LocationManager extends LocationManager {
 
             @Override
             public boolean shouldDisplayHeadingCalibration(CLLocationManager clLocationManager) {
-                return false;
+                return true;
             }
 
 

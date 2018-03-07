@@ -95,6 +95,12 @@ public abstract class PlatformConnector {
         platformConnector._postOnMainThread(runnable);
     }
 
+    public static void runOnBackGround(Runnable backgroundTask) {
+        platformConnector._runOnBackGround(backgroundTask);
+    }
+
+    protected abstract void _runOnBackGround(Runnable backgroundTask);
+
     // SVG implementations #############################################################################################
     public enum SvgScaleType {
         SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED, NONE, SCALED_TO_WIDTH_OR_HEIGHT

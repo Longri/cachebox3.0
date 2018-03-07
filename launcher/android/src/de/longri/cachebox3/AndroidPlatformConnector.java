@@ -35,6 +35,7 @@ import android.widget.TextView;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.async.AsyncTask;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -189,6 +190,16 @@ public class AndroidPlatformConnector extends PlatformConnector {
     protected void _postOnMainThread(NamedRunnable runnable) {
         Handler mainHandler = new Handler(context.getMainLooper());
         mainHandler.post(runnable);
+    }
+
+    @Override
+    protected void _runOnBackGround(final Runnable backgroundTask) {
+        CB.postAsync(new NamedRunnable("Run on Background") {
+            @Override
+            public void run() {
+                backgroundTask.run();
+            }
+        });
     }
 
     @Override

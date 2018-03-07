@@ -40,6 +40,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.robovm.apple.dispatch.DispatchQueue.PRIORITY_DEFAULT;
 
 /**
  * Created by Longri on 17.07.16.
@@ -162,6 +165,26 @@ public class IOS_PlatformConnector extends PlatformConnector {
     @Override
     protected void _postOnMainThread(NamedRunnable runnable) {
         DispatchQueue.getMainQueue().async(runnable);
+    }
+
+
+    private long UIBackgroundTaskInvalid = UIApplication.getInvalidBackgroundTask();
+    private final AtomicLong bgTask = new AtomicLong(UIBackgroundTaskInvalid);
+
+    @Override
+    protected void _runOnBackGround(Runnable backgroundTask) {
+        long bgTaskId = ios_launcher.application.beginBackgroundTask("BackgroundTask", new Runnable() {
+            @Override
+            public void run() {
+                log.debug("End BGTask");
+                ios_launcher.application.endBackgroundTask(bgTask.get());
+            }
+        });
+
+        bgTask.set(bgTaskId);
+
+        DispatchQueue globalQueue = DispatchQueue.getGlobalQueue(PRIORITY_DEFAULT, 0);
+        globalQueue.async(backgroundTask);
     }
 
     @Override
