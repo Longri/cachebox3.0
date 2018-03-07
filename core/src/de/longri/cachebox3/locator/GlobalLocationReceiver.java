@@ -17,7 +17,9 @@ package de.longri.cachebox3.locator;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.events.location.GpsEventHelper;
 import de.longri.cachebox3.events.location.PositionChangedListener;
+import de.longri.cachebox3.locator.manager.LocationManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
@@ -54,6 +56,8 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                 playSounds.set(!Config.GlobalVolume.getValue().Mute);
             }
         });
+
+        initialForegroundLocationListener();
     }
 
     @Override
@@ -152,4 +156,47 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         return approachSoundCompleted.get();
     }
 
+
+    //#######################################################################################################
+    // Location manager
+
+    LocationManager locationManagerForeGround;
+    LocationManager locationManagerBackGround;
+
+    GpsEventHelper foreGroundHelper = new GpsEventHelper();
+
+    private void initialForegroundLocationListener() {
+        CB.postOnMainThread(new NamedRunnable("initial LocationListener") {
+            @Override
+            public void run() {
+                if (locationManagerForeGround == null) {
+                    locationManagerForeGround = CB.locationHandler.getNewLocationManager();
+                    locationManagerForeGround.setDelegate(foreGroundHelper);
+                }
+                locationManagerForeGround.startUpdateLocation();
+                locationManagerForeGround.startUpdateHeading();
+            }
+        });
+    }
+
+    private void removeForegroundLocationListener() {
+        locationManagerForeGround.stopUpdateLocation();
+        locationManagerForeGround.stopUpdateHeading();
+    }
+
+    private void initialBackGroundLocationListener() {
+
+    }
+
+    private void removeBackGroundLocationListener() {
+
+    }
+
+    public void pause() {
+        log.debug("onPause");
+    }
+
+    public void resume() {
+        log.debug("onResume");
+    }
 }

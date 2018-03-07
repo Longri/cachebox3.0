@@ -36,6 +36,7 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.CompassView;
 import de.longri.cachebox3.gui.views.TestView;
+import de.longri.cachebox3.locator.GlobalLocationReceiver;
 import de.longri.cachebox3.locator.manager.LocationManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -83,13 +84,15 @@ public class CacheboxMain extends ApplicationAdapter {
 
 
 //        INCLUDE_LIST.add("de.longri.cachebox3.events.location.GpsEventHelper");
+
         INCLUDE_LIST.add(MapViewPositionChangedHandler.class.getName());
         INCLUDE_LIST.add(TestView.class.getName());
         INCLUDE_LIST.add(CompassView.class.getName());
+        INCLUDE_LIST.add(GlobalLocationReceiver.class.getName());
+
         INCLUDE_LIST.add("de.longri.cachebox3.IOS_LocationListener");
         INCLUDE_LIST.add("de.longri.cachebox3.IOS_Launcher_BackgroundHandling");
         INCLUDE_LIST.add("de.longri.cachebox3.utils.SoundCache");
-
 
     }
 
@@ -98,6 +101,7 @@ public class CacheboxMain extends ApplicationAdapter {
     Runtime runtime = Runtime.getRuntime();
     NumberFormat format = NumberFormat.getInstance();
     private String memoryUsage;
+    private ViewManager viewManager;
 
 
     Batch batch;
@@ -129,9 +133,11 @@ public class CacheboxMain extends ApplicationAdapter {
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        StageManager.setMainStage(new ViewManager(
-                                CacheboxMain.this, StageManager.viewport, StageManager.batch));
-                        initialForegroundLocationListener();
+
+                        viewManager = new ViewManager(
+                                CacheboxMain.this, StageManager.viewport, StageManager.batch);
+
+                        StageManager.setMainStage(viewManager);
                         batch.dispose();
                     }
                 });
@@ -243,11 +249,13 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void dispose() {
+        viewManager.dispose();
         batch.dispose();
     }
 
     @Override
     public void pause() {
+        viewManager.pause();
         checkLogger();
 
         if (EventHandler.getSelectedCache() != null) {
@@ -268,6 +276,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void resume() {
+        viewManager.resume();
         checkLogger();
         log.debug("App on resume reopen databases");
         //open databases on non Desktop platform
@@ -281,44 +290,6 @@ public class CacheboxMain extends ApplicationAdapter {
     public String getMemory() {
         return memoryUsage;
     }
-
-    LocationManager locationManagerForeGround;
-    LocationManager locationManagerBackGround;
-
-    GpsEventHelper foreGroundHelper = new GpsEventHelper();
-
-    private void initialForegroundLocationListener() {
-
-        CB.postOnMainThread(new NamedRunnable("initial LocationListener") {
-            @Override
-            public void run() {
-                if (locationManagerForeGround == null) {
-                    locationManagerForeGround = CB.locationHandler.getNewLocationManager();
-                    locationManagerForeGround.setDelegate(foreGroundHelper);
-                }
-
-                locationManagerForeGround.startUpdateLocation();
-                locationManagerForeGround.startUpdateHeading();
-            }
-        });
-
-
-
-    }
-
-    private void removeForegroundLocationListener() {
-        locationManagerForeGround.stopUpdateLocation();
-        locationManagerForeGround.stopUpdateHeading();
-    }
-
-    private void initialBackGroundLocationListener() {
-
-    }
-
-    private void removeBackGroundLocationListener() {
-
-    }
-
 
     private static void checkLogger() {
         if (log == null) {

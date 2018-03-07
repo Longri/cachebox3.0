@@ -194,11 +194,9 @@ public class Splash extends NamedStage {
                 @Override
                 public void run() {
                     for (AbstractInitTask task : initTaskList) {
-                        task.runnable();
-
                         try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
+                            task.runnable();
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

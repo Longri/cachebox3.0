@@ -19,6 +19,7 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
+import de.longri.cachebox3.locator.manager.IOS_LocationHandler;
 import org.oscim.backend.GLAdapter;
 import org.oscim.gdx.GdxAssets;
 import org.oscim.ios.backend.IosGL;
@@ -49,7 +50,7 @@ public class IOS_Launcher extends IOS_Launcher_BackgroundHandling {
             CB.setGlobalScale(1f);
         }
 
-
+        CB.locationHandler = new IOS_LocationHandler();
 
 
 

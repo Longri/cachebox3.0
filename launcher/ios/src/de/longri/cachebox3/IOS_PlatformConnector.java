@@ -95,15 +95,6 @@ public class IOS_PlatformConnector extends PlatformConnector {
     }
 
 
-    IOS_LocationListener locationManager;
-
-    @Override
-    public void initialLocationReciver() {
-        Gdx.app.log("step", "1");
-        locationManager = new IOS_LocationListener();
-        locationManager.createLocationManager();
-    }
-
     @Override
     protected String _getWorkPath() {
         return _getSandBoxFileHandle("Cachebox3").file().getAbsolutePath();
@@ -170,7 +161,7 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     protected void _postOnMainThread(NamedRunnable runnable) {
-        DispatchQueue.getMainQueue().sync(runnable);
+        DispatchQueue.getMainQueue().async(runnable);
     }
 
     @Override
