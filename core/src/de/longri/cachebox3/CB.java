@@ -85,7 +85,6 @@ public class CB {
 
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
     public static final float WINDOW_FADE_TIME = 0.3f;
-    private static boolean displayOff = false;
     public static Categories Categories;
     public static float stateTime;
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
@@ -130,6 +129,8 @@ public class CB {
     public static LinkedHashMap<Object, TextureRegion> textureRegionMap;
     public static Image CB_Logo;
     public static Image backgroundImage;
+    public static boolean isBackground = false;
+
 
     private CB() {
     }
@@ -247,10 +248,6 @@ public class CB {
 
     public static void callQuit() {
         PlatformConnector.callQuit();
-    }
-
-    public static boolean isDisplayOff() {
-        return displayOff;
     }
 
     public static boolean selectedCachehasSpoiler() {

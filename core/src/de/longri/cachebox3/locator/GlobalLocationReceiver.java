@@ -189,15 +189,19 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         locationManagerForeGround.stopUpdateHeading();
     }
 
+
+    BackgroundTask backgroundTask;
+
     private void initialBackGroundLocationListener() {
-        stopBackgroundTask.set(false);
+        backgroundTask = new BackgroundTask();
         log.debug("start long time Background task");
         PlatformConnector.runOnBackGround(backgroundTask);
     }
 
     private void removeBackGroundLocationListener() {
         log.debug("stop long time Background task");
-        stopBackgroundTask.set(true);
+        backgroundTask.cancel();
+        backgroundTask = null;
     }
 
     public void pause() {
@@ -211,25 +215,5 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         initialForegroundLocationListener();
         removeBackGroundLocationListener();
     }
-
-    AtomicBoolean stopBackgroundTask = new AtomicBoolean();
-    Runnable backgroundTask = new Runnable() {
-        @Override
-        public void run() {
-            while (!stopBackgroundTask.get()) {
-                log.debug("Run on Background");
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                FileHandle soundFileHandle = Gdx.files.absolute(CB.WorkPath + "/data/sound/Approach.mp3");
-                if (CanvasAdapter.platform != Platform.IOS) soundFileHandle = Gdx.files.internal("sound/Approach.mp3");
-                PlatformConnector.playNotifySound(soundFileHandle);
-            }
-
-        }
-    };
 
 }

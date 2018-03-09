@@ -174,6 +174,7 @@ public class CacheboxMain extends ApplicationAdapter {
             memoryUsage = memoryStringBuilder.toString();
         }
 
+        if (CB.isBackground) return;
 
         CB.stateTime += Gdx.graphics.getDeltaTime();
 
@@ -265,6 +266,7 @@ public class CacheboxMain extends ApplicationAdapter {
         if (Database.Data != null) Database.Data.close();
         if (Database.Settings != null) Database.Settings.close();
         if (Database.Drafts != null) Database.Drafts.close();
+        CB.isBackground = true;
     }
 
     @Override
@@ -275,6 +277,7 @@ public class CacheboxMain extends ApplicationAdapter {
         if (Database.Data != null) Database.Data.open();
         if (Database.Settings != null) Database.Settings.open();
         if (Database.Drafts != null) Database.Drafts.open();
+        CB.isBackground = false;
     }
 
     public String getMemory() {

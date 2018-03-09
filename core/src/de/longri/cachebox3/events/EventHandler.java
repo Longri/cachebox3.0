@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.location.OrientationChangedEvent;
 import de.longri.cachebox3.events.location.OrientationChangedListener;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
@@ -102,6 +103,10 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
     public static void fire(final AbstractEvent event) {
+
+        //ignore events if we are on background
+        if (CB.isBackground) return;
+
         synchronized (listenerMap) {
             final Array<Object> list = listenerMap.get(event.getListenerClass());
             if (list != null) {
@@ -249,9 +254,9 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     public static Coordinate getMyPosition() {
 
-        if(INSTANCE.myPosition==null){
+        if (INSTANCE.myPosition == null) {
             //return last stored Pos
-           return new Coordinate(Config.MapInitLatitude.getValue(),Config.MapInitLongitude.getValue());
+            return new Coordinate(Config.MapInitLatitude.getValue(), Config.MapInitLongitude.getValue());
         }
         return INSTANCE.myPosition;
     }
