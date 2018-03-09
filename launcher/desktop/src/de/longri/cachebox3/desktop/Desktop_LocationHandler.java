@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.locator.manager;
+package de.longri.cachebox3.desktop;
+
+import de.longri.cachebox3.locator.manager.LocationHandler;
+import de.longri.cachebox3.locator.manager.LocationManager;
 
 /**
- * Created by Longri on 06.03.18.
+ * Created by Longri on 09.03.18.
  */
-public class IOS_LocationHandler extends LocationHandler {
+public class Desktop_LocationHandler extends LocationHandler {
     @Override
     public LocationManager getNewLocationManager() {
-        return new IOS_LocationManager(false);
+        return new Desktop_LocationManager(false);
     }
 
     @Override
     public LocationManager getBackgroundLocationManager() {
-        return new IOS_LocationManager(true);
+        return new Desktop_LocationManager(true);
     }
 }

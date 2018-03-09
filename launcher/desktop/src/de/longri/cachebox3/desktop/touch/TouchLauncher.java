@@ -22,13 +22,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglFileHandle;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.CacheboxMain;
-import de.longri.cachebox3.desktop.DesktopPlatformConnector;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.desktop.DesktopPlatformConnector;
+import de.longri.cachebox3.desktop.Desktop_LocationHandler;
+import de.longri.cachebox3.desktop.DesktopMain;
 import de.longri.cachebox3.file_transfer.MainWindow;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import org.apache.commons.cli.*;
 import org.oscim.awt.AwtGraphics;
 import org.oscim.backend.GLAdapter;
@@ -94,13 +93,14 @@ public class TouchLauncher {
             }
         }
 
+        CB.locationHandler = new Desktop_LocationHandler();
 
         initVtm();
 
         // Don't change this LogLevel
         // Cachebox use the slf4j implematation for LibGdx as Log engine.
         // so set LogLevel on CB.class if you wont (USED_LOG_LEVEL)
-        new LwjglApplication(new CacheboxMain(), config) {
+        new LwjglApplication(new DesktopMain(), config) {
             public boolean executeRunnables() {
                 long start = System.currentTimeMillis();
                 synchronized (runnables) {

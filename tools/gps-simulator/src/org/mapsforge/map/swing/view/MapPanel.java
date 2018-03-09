@@ -3,7 +3,7 @@ package org.mapsforge.map.swing.view;
 import ch.fhnw.imvs.gpssimulator.SimulatorMain;
 import ch.fhnw.imvs.gpssimulator.data.GPSData;
 import ch.fhnw.imvs.gpssimulator.data.GPSDataListener;
-import de.longri.cachebox3.events.location.GpsEventHelper;
+import de.longri.cachebox3.events.location.LocationEvents;
 import org.mapsforge.core.graphics.GraphicFactory;
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.awt.graphics.AwtGraphicFactory;
@@ -69,14 +69,26 @@ public class MapPanel extends JPanel implements ActionListener {
         model.mapViewPosition.setZoomLevel((byte) SimulatorMain.prefs.getInt("zoom", 16));
 
 
-        final GpsEventHelper eventHelper = new GpsEventHelper();
         GPSData.addChangeListener(new GPSDataListener() {
+
+            double lastcourse;
 
             @Override
             public void valueChanged() {
-//                eventHelper.newGpsPos(GPSData.getLatitude(), GPSData.getLongitude(), true,
-//                        GPSData.getAltitude(), GPSData.getSpeed()*3.6, GPSData.getCourse(),
-//                        (float) GPSData.getQuality());
+
+                if (lastcourse != GPSData.getCourse()) {
+                    for (LocationEvents handler : SimulatorMain.headingEventHandler) {
+                        handler.newBearing((float) Math.toRadians(GPSData.getCourse()), true);
+                    }
+                    lastcourse = GPSData.getCourse();
+                } else {
+                    for (LocationEvents handler : SimulatorMain.locationEventHandler) {
+                        handler.newGpsPos(GPSData.getLatitude(), GPSData.getLongitude(), GPSData.getQuality());
+                        handler.newBearing((float) Math.toRadians(GPSData.getCourse()), true);
+                        handler.newAltitude(GPSData.getAltitude());
+                        handler.newSpeed(GPSData.getSpeed());
+                    }
+                }
             }
         });
     }

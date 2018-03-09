@@ -17,9 +17,11 @@ package de.longri.cachebox3.desktop;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.backends.lwjgl.DesktopDescriptionView;
 import com.badlogic.gdx.backends.lwjgl.GenerateApiKeyWebView;
 import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.PlatformDescriptionView;
 import de.longri.cachebox3.callbacks.GenericCallBack;
@@ -71,10 +73,6 @@ public class DesktopPlatformConnector extends PlatformConnector {
         return bmp;
     }
 
-    @Override
-    public void initialLocationReciver() {
-
-    }
 
     @Override
     public FileHandle _getSandBoxFileHandle(String fileName) {
@@ -140,6 +138,28 @@ public class DesktopPlatformConnector extends PlatformConnector {
     @Override
     protected void _postOnMainThread(NamedRunnable runnable) {
         SwingUtilities.invokeLater(runnable);
+    }
+
+    @Override
+    protected void _runOnBackGround(final Runnable backgroundTask) {
+        CB.postAsync(new NamedRunnable("Run on Background") {
+            @Override
+            public void run() {
+                backgroundTask.run();
+            }
+        });
+    }
+
+    @Override
+    protected void _playNotifySound(final FileHandle soundFileHandle) {
+        final Sound sound = Gdx.audio.newSound(soundFileHandle);
+        //need time for prepare sound
+        CB.postAsyncDelayd(100, new NamedRunnable("") {
+            @Override
+            public void run() {
+                sound.play();
+            }
+        });
     }
 
     @Override

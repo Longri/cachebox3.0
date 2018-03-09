@@ -103,7 +103,7 @@ public class CacheboxMain extends ApplicationAdapter {
     Batch batch;
     protected int FpsInfoPos = 0;
 
-    private Sprite FpsInfoSprite;
+    protected Sprite FpsInfoSprite;
     public static boolean drawMap = false;
 
     // public CacheboxMapAdapter mMap;
