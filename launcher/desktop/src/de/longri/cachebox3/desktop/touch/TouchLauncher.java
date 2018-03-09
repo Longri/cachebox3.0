@@ -88,6 +88,11 @@ public class TouchLauncher {
                 f.pack();
                 f.setResizable(false);
                 f.setVisible(true);
+                f.setBounds(0, 0, f.getWidth(), f.getHeight());
+
+                config.x = f.getX() + f.getWidth() + 10;
+                config.y = f.getY();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -100,7 +105,7 @@ public class TouchLauncher {
         // Don't change this LogLevel
         // Cachebox use the slf4j implematation for LibGdx as Log engine.
         // so set LogLevel on CB.class if you wont (USED_LOG_LEVEL)
-        new LwjglApplication(new DesktopMain(), config) {
+        LwjglApplication application = new LwjglApplication(new DesktopMain(), config) {
             public boolean executeRunnables() {
                 long start = System.currentTimeMillis();
                 synchronized (runnables) {
@@ -122,7 +127,10 @@ public class TouchLauncher {
 
                 return true;
             }
-        }.setLogLevel(LwjglApplication.LOG_DEBUG);
+        };
+
+        application.setLogLevel(LwjglApplication.LOG_DEBUG);
+
 
         if (cmd.hasOption("transfer")) {
             new Thread(new Runnable() {

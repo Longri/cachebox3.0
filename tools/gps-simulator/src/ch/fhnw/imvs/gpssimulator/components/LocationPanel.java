@@ -37,6 +37,8 @@ public class LocationPanel extends JPanel implements ActionListener {
 
         this.setBorder(BorderFactory.createTitledBorder("Location"));
 
+        this.setPreferredSize(new Dimension(250, 200));
+
         JTabbedPane tabs = new JTabbedPane();
 
         tabs.addTab("Normal", new LocationNormal());
