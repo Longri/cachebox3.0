@@ -262,12 +262,9 @@ public class CacheboxMain extends ApplicationAdapter {
         }
 
         log.debug("App on pause close databases");
-        //close databases on non Desktop platform
-        if (!CanvasAdapter.platform.isDesktop()) {
-            if (Database.Data != null) Database.Data.close();
-            if (Database.Settings != null) Database.Settings.close();
-            if (Database.Drafts != null) Database.Drafts.close();
-        }
+        if (Database.Data != null) Database.Data.close();
+        if (Database.Settings != null) Database.Settings.close();
+        if (Database.Drafts != null) Database.Drafts.close();
     }
 
     @Override
@@ -275,12 +272,9 @@ public class CacheboxMain extends ApplicationAdapter {
         if (viewManager != null) viewManager.resume();
         checkLogger();
         log.debug("App on resume reopen databases");
-        //open databases on non Desktop platform
-        if (!CanvasAdapter.platform.isDesktop()) {
-            if (Database.Data != null) Database.Data.open();
-            if (Database.Settings != null) Database.Settings.open();
-            if (Database.Drafts != null) Database.Drafts.open();
-        }
+        if (Database.Data != null) Database.Data.open();
+        if (Database.Settings != null) Database.Settings.open();
+        if (Database.Drafts != null) Database.Drafts.open();
     }
 
     public String getMemory() {

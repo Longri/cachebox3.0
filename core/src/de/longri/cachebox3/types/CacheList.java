@@ -86,14 +86,8 @@ public class CacheList extends Array<AbstractCache> {
             CacheWithWP retValue = null;
 
             this.ResortAtWork = true;
-            Coordinate myPos = EventHandler.getMyPosition();
-            // refresh all distances
-            if (myPos != null) {
-                int n = this.size;
-                while (n-- > 0) {
-                    this.get(n).distance(MathUtils.CalculationType.FAST, true, myPos);
-                }
-            } else {
+
+            if (selectedCoord != null) {
                 // sort after distance from selected Cache
                 Coordinate fromPos = selectedCoord;
                 // avoid "illegal waypoint"
@@ -111,6 +105,15 @@ public class CacheList extends Array<AbstractCache> {
                 for (int i = 0, n = this.size; i < n; i++) {
                     AbstractCache abstractCache = this.get(i);
                     abstractCache.distance(MathUtils.CalculationType.FAST, true, fromPos);
+                }
+            } else {
+                Coordinate myPos = EventHandler.getMyPosition();
+                // refresh all distances
+                if (myPos != null) {
+                    int n = this.size;
+                    while (n-- > 0) {
+                        this.get(n).distance(MathUtils.CalculationType.FAST, true, myPos);
+                    }
                 }
             }
 

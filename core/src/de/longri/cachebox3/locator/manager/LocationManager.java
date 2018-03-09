@@ -15,7 +15,10 @@
  */
 package de.longri.cachebox3.locator.manager;
 
-import de.longri.cachebox3.events.location.LocationEvents; /**
+import de.longri.cachebox3.events.location.LocationEvents;
+
+
+/**
  * Created by Longri on 06.03.18.
  */
 public abstract class LocationManager {
