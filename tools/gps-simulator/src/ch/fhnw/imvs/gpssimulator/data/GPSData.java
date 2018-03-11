@@ -11,7 +11,11 @@
 
 package ch.fhnw.imvs.gpssimulator.data;
 
+import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.CB;
+
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class GPSData {
 
@@ -78,23 +82,30 @@ public final class GPSData {
         fixType = FixType.FIX_3D;
     }
 
-    private static Vector<GPSDataListener> listeners = new Vector<GPSDataListener>();
+    private static Array<GPSDataListener> listeners = new Array<GPSDataListener>();
     private static boolean running = false;
 
     public static void addChangeListener(GPSDataListener listener) {
         listeners.add(listener);
     }
 
+    public static void removeChangeListener(GPSDataListener listener) {
+        listeners.removeValue(listener, true);
+    }
+
+
+    private static void notifyChange() {
+        for (int i = 0; i < listeners.size; i++) {
+            GPSDataListener l = listeners.get(i);
+            if (l != null) l.valueChanged();
+        }
+    }
+
+
     public static void start() {
         if (!running) {
             running = true;
             notifyChange();
-        }
-    }
-
-    private static void notifyChange() {
-        for (GPSDataListener l : listeners) {
-            l.valueChanged();
         }
     }
 

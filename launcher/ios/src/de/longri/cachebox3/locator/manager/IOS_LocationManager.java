@@ -27,10 +27,9 @@ import org.robovm.apple.foundation.NSError;
 public class IOS_LocationManager extends LocationManager {
 
     private final CLLocationManager manager;
-    private final boolean backGround;
+    private float distanceFilter = 0;
 
     public IOS_LocationManager(boolean backGround) {
-        this.backGround = backGround;
         manager = new CLLocationManager();
         if (Foundation.getMajorSystemVersion() >= 8) {
             manager.requestAlwaysAuthorization();
@@ -93,6 +92,7 @@ public class IOS_LocationManager extends LocationManager {
 
     @Override
     public void startUpdateLocation() {
+        manager.setDistanceFilter(distanceFilter);
         manager.startUpdatingLocation();
     }
 
@@ -109,5 +109,18 @@ public class IOS_LocationManager extends LocationManager {
     @Override
     public void stopUpdateHeading() {
         manager.stopUpdatingHeading();
+    }
+
+    @Override
+    public void setDistanceFilter(float distance) {
+        this.distanceFilter = distance;
+        manager.setDistanceFilter(distanceFilter);
+    }
+
+    @Override
+    public void dispose() {
+        stopUpdateHeading();
+        startUpdateLocation();
+        manager.dispose();
     }
 }

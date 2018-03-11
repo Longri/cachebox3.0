@@ -35,11 +35,12 @@ public class Android_LocationManager extends LocationManager {
     private LocationEvents handler;
     private android.location.LocationManager locationManager;
     private final Context context;
-    private final boolean backGround;
     private AndroidSensorListener sensorListener;
+    private float distanceFilter = 0;
+    private final boolean background;
 
     public Android_LocationManager(boolean backGround) {
-        this.backGround = backGround;
+        this.background = backGround;
         context = AndroidLauncher.androidLauncher.getApplicationContext();
     }
 
@@ -55,23 +56,22 @@ public class Android_LocationManager extends LocationManager {
             locationManager = (android.location.LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         }
 
-        final int updateTime = 500; // 1s
+        final int updateTime = 500; // 500ms
 
         try {
-            locationManager.requestLocationUpdates(android.location.LocationManager.GPS_PROVIDER, updateTime, 0, locationListener);
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            locationManager.requestLocationUpdates(android.location.LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
+            locationManager.requestLocationUpdates(android.location.LocationManager.GPS_PROVIDER, updateTime, distanceFilter, locationListener);
+            if (!this.background)
+                locationManager.requestLocationUpdates(android.location.LocationManager.NETWORK_PROVIDER, 10000, distanceFilter, locationListener);
         } catch (Exception e) {
             log.error("main.initialLocationManager()", e);
             e.printStackTrace();
         }
-
-
         locationListener.setDelegate(this.handler);
     }
 
@@ -86,11 +86,41 @@ public class Android_LocationManager extends LocationManager {
 
     @Override
     public void stopUpdateLocation() {
-        locationManager.removeUpdates(locationListener);
+        if (this.locationManager != null) this.locationManager.removeUpdates(locationListener);
     }
 
     @Override
     public void stopUpdateHeading() {
-        this.sensorListener.unRegisterSensor();
+        if (this.sensorListener != null) this.sensorListener.unRegisterSensor();
+    }
+
+    @Override
+    public void setDistanceFilter(float distance) {
+
+        this.distanceFilter = distance;
+
+        if (locationManager != null) {
+            //first remove old updates
+            locationManager.removeUpdates(locationListener);
+
+            //register new updates
+            locationManager.requestLocationUpdates(android.location.LocationManager.GPS_PROVIDER, 500, distance, locationListener);
+        }
+
+    }
+
+    @Override
+    public void dispose() {
+        stopUpdateLocation();
+        stopUpdateHeading();
+
+        if (locationListener != null) locationListener.setDelegate(null);
+        locationListener = null;
+
+        handler = null;
+        locationManager = null;
+
+        if (sensorListener != null) sensorListener.setDelegate(null);
+        sensorListener = null;
     }
 }

@@ -34,6 +34,7 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.CompassView;
 import de.longri.cachebox3.gui.views.TestView;
+import de.longri.cachebox3.locator.BackgroundTask;
 import de.longri.cachebox3.locator.GlobalLocationReceiver;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -89,6 +90,7 @@ public class CacheboxMain extends ApplicationAdapter {
         INCLUDE_LIST.add("de.longri.cachebox3.IOS_LocationListener");
         INCLUDE_LIST.add("de.longri.cachebox3.IOS_Launcher_BackgroundHandling");
         INCLUDE_LIST.add("de.longri.cachebox3.utils.SoundCache");
+        INCLUDE_LIST.add(BackgroundTask.class.getName());
 
     }
 

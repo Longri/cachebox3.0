@@ -68,29 +68,6 @@ public class MapPanel extends JPanel implements ActionListener {
         model.mapViewPosition.setCenter(pos);
         model.mapViewPosition.setZoomLevel((byte) SimulatorMain.prefs.getInt("zoom", 16));
 
-
-        GPSData.addChangeListener(new GPSDataListener() {
-
-            double lastcourse;
-
-            @Override
-            public void valueChanged() {
-
-                if (lastcourse != GPSData.getCourse()) {
-                    for (LocationEvents handler : SimulatorMain.headingEventHandler) {
-                        handler.newBearing((float) Math.toRadians(GPSData.getCourse()), true);
-                    }
-                    lastcourse = GPSData.getCourse();
-                } else {
-                    for (LocationEvents handler : SimulatorMain.locationEventHandler) {
-                        handler.newGpsPos(GPSData.getLatitude(), GPSData.getLongitude(), GPSData.getQuality());
-                        handler.newBearing((float) Math.toRadians(GPSData.getCourse()), true);
-                        handler.newAltitude(GPSData.getAltitude());
-                        handler.newSpeed(GPSData.getSpeed());
-                    }
-                }
-            }
-        });
     }
 
     private static void addLayers(MapView mapView, String MapPath) {

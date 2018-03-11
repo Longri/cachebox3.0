@@ -31,4 +31,8 @@ public abstract class LocationManager {
     public abstract void stopUpdateLocation();
 
     public abstract void stopUpdateHeading();
+
+    public abstract void setDistanceFilter(float distance);
+
+    public abstract void dispose();
 }

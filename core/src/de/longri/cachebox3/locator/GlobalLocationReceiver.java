@@ -178,6 +178,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                     locationManagerForeGround = CB.locationHandler.getNewLocationManager();
                     locationManagerForeGround.setDelegate(foreGroundHelper);
                 }
+                locationManagerForeGround.setDistanceFilter(0);
                 locationManagerForeGround.startUpdateLocation();
                 locationManagerForeGround.startUpdateHeading();
             }

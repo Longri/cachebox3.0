@@ -44,12 +44,6 @@ import ch.fhnw.imvs.gpssimulator.nmea.RMC;
 
 public class SimulatorMain {
 
-
-    public static Array<LocationEvents> locationEventHandler = new Array<>();
-    public static Array<LocationEvents> headingEventHandler = new Array<>();
-
-
-
     public static Preferences prefs = Preferences.userNodeForPackage(ch.fhnw.imvs.gpssimulator.SimulatorMain.class);
 
 
