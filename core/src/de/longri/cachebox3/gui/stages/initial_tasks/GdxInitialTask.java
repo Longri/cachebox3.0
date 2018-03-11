@@ -67,6 +67,10 @@ public final class GdxInitialTask extends AbstractInitTask {
             }
         });
 
+
+        VIBRATE = Config.VibrateFeedback.getValue();
+        VIBRATE_TIME_MSEC = Config.VibrateTime.getValue();
+
         GestureDetector gestureDetector = new GestureDetector(new GestureDetector.GestureAdapter() {
 
             boolean longPressFired = false;
