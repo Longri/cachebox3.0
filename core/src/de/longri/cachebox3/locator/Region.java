@@ -13,27 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.events.location;
+package de.longri.cachebox3.locator;
 
-import de.longri.cachebox3.locator.Region; /**
- * Created by Longri on 06.03.18.
+/**
+ * Created by Longri on 13.03.18.
  */
-public interface LocationEvents {
-    void newGpsPos(double latitude, double longitude, float accuracy);
+public abstract class Region {
 
-    void newNetworkPos(double latitude, double longitude, float accuracy);
+    public abstract boolean contains(LatLong latLong);
 
-    void newAltitude(double altitude);
-
-    void newBearing(float bearing, boolean gps);
-
-    void newSpeed(double speed);
-
-    void newPitch(float pitch);
-
-    void newRoll(float roll);
-
-    void didEnterRegion(Region region);
-
-    void didExitRegion(Region region);
 }

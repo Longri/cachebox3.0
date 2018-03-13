@@ -42,7 +42,7 @@ import javax.swing.*;
 public class TouchLauncher {
     public static void main(String[] args) {
         System.setProperty("org.lwjgl.util.NoChecks", "true");
-        LibgdxLogger.PROPERTIES_FILE_HANDLE = new LwjglFileHandle(LibgdxLogger.CONFIGURATION_FILE, Files.FileType.Local);
+        LibgdxLogger.PROPERTIES_FILE_HANDLE = new LwjglFileHandle(LibgdxLogger.CONFIGURATION_FILE_XML, Files.FileType.Local);
 
         final Logger log = LoggerFactory.getLogger("MAIN-LOOP");
 

@@ -64,7 +64,7 @@ public class IOS_Launcher extends IOS_Launcher_BackgroundHandling {
 
 
         final String appDir = System.getenv("HOME");
-        final String localPath = appDir + "/Library/local/";
+        final String localPath = appDir + "/Library/local/Cachebox3/";
 
         LibgdxLogger.PROPERTIES_FILE_HANDLE = new LibgdxLoggerIosFileHandle(localPath, Files.FileType.Absolute).child(LibgdxLogger.CONFIGURATION_FILE_XML);
         LibgdxLogger.initial(LibgdxLogger.PROPERTIES_FILE_HANDLE);

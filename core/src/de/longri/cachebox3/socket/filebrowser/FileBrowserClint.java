@@ -103,6 +103,7 @@ public class FileBrowserClint {
             }
         } catch (Exception e) {
             log.error("an error occured", e);
+            //Todo handle (Error making a socket connection to 192.168.2.132:9988)
         }
         return false;
     }

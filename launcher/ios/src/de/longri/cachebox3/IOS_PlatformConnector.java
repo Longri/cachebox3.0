@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static org.robovm.apple.dispatch.DispatchQueue.PRIORITY_BACKGROUND;
 import static org.robovm.apple.dispatch.DispatchQueue.PRIORITY_DEFAULT;
 
 /**
@@ -173,17 +174,24 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     protected void _runOnBackGround(Runnable backgroundTask) {
+        restartBackgroundTask(backgroundTask);
+    }
+
+    private void restartBackgroundTask(final Runnable backgroundTask) {
         long bgTaskId = ios_launcher.application.beginBackgroundTask("BackgroundTask", new Runnable() {
             @Override
             public void run() {
                 log.debug("End BGTask");
                 ios_launcher.application.endBackgroundTask(bgTask.get());
+
+                log.debug("restart BGTask");
+                restartBackgroundTask(backgroundTask);
             }
         });
 
         bgTask.set(bgTaskId);
 
-        DispatchQueue globalQueue = DispatchQueue.getGlobalQueue(PRIORITY_DEFAULT, 0);
+        DispatchQueue globalQueue = DispatchQueue.getGlobalQueue(PRIORITY_BACKGROUND, 0);
         globalQueue.async(backgroundTask);
     }
 

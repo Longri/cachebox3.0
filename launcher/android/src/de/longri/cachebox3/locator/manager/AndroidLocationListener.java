@@ -19,9 +19,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.location.GpsState;
 import de.longri.cachebox3.events.location.LocationEvents;
+import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Region;
 
 import java.util.Locale;
 
@@ -30,12 +33,45 @@ import java.util.Locale;
  */
 public class AndroidLocationListener implements LocationListener {
 
-
+    private final Array<Region> regions = new Array<>();
+    private final Array<Region> insideRegions = new Array<>();
+    private final Array<Region> clearList = new Array<>();
     private LocationEvents handler;
 
     @Override
     public void onLocationChanged(Location location) {
         if (CB.sensoerIO.isPlay()) return;
+
+        {//check region handler
+            LatLong latLong = new LatLong(location.getLatitude(), location.getLongitude());
+            clearList.clear();
+            for (int i = 0; i < regions.size; i++) {
+                Region region = regions.get(i);
+                if (region.contains(latLong)) {
+                    handler.didEnterRegion(region);
+                    clearList.add(region);
+                }
+            }
+            for (int i = 0; i < clearList.size; i++) {
+                Region region = clearList.get(i);
+                regions.removeValue(region, true);
+                insideRegions.add(region);
+            }
+            clearList.clear();
+            for (int i = 0; i < insideRegions.size; i++) {
+                Region region = insideRegions.get(i);
+                if (!region.contains(latLong)) {
+                    handler.didExitRegion(region);
+                    clearList.add(region);
+                }
+            }
+            for (int i = 0; i < clearList.size; i++) {
+                Region region = clearList.get(i);
+                insideRegions.removeValue(region, true);
+                regions.add(region);
+            }
+        }
+
         boolean isGpsProvided = false;
         if (location.getProvider().toLowerCase(new Locale("en")).contains("gps"))
             isGpsProvided = true;
@@ -90,5 +126,16 @@ public class AndroidLocationListener implements LocationListener {
 
     public void setDelegate(LocationEvents handler) {
         this.handler = handler;
+    }
+
+    public void startMonitoring(Region region) {
+        if (regions.contains(region, false) || insideRegions.contains(region, false))
+            return;
+        regions.add(region);
+    }
+
+    public void stopMonitoring(Region region) {
+        regions.removeValue(region, false);
+        insideRegions.removeValue(region, false);
     }
 }

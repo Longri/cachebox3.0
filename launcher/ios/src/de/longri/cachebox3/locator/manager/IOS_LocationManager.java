@@ -15,18 +15,26 @@
  */
 package de.longri.cachebox3.locator.manager;
 
+import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.events.location.LocationEvents;
+import de.longri.cachebox3.locator.CircularRegion;
+import de.longri.cachebox3.locator.Region;
 import org.robovm.apple.corelocation.*;
 import org.robovm.apple.foundation.Foundation;
 import org.robovm.apple.foundation.NSArray;
 import org.robovm.apple.foundation.NSError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 07.03.18.
  */
 public class IOS_LocationManager extends LocationManager {
 
+    private static final Logger log = LoggerFactory.getLogger(IOS_LocationManager.class);
+
     private final CLLocationManager manager;
+    private final ObjectMap<CLRegion, Region> regionMap = new ObjectMap<>();
     private float distanceFilter = 0;
 
     public IOS_LocationManager(boolean backGround) {
@@ -36,8 +44,11 @@ public class IOS_LocationManager extends LocationManager {
             manager.requestWhenInUseAuthorization();
         }
         if (backGround) {
-            manager.allowsBackgroundLocationUpdates();
+            manager.setAllowsBackgroundLocationUpdates(true);
+            manager.setPausesLocationUpdatesAutomatically(false);
         }
+        manager.setDesiredAccuracy(CLLocationAccuracy.BestForNavigation);
+        manager.setActivityType(CLActivityType.Fitness);
     }
 
 
@@ -78,13 +89,23 @@ public class IOS_LocationManager extends LocationManager {
 
             @Override
             public void didFail(CLLocationManager clLocationManager, NSError nsError) {
-
+                log.debug("Did fail: {}", nsError.toString());
             }
 
 
             @Override
             public void didPauseLocationUpdates(CLLocationManager clLocationManager) {
+                log.debug("Did pause location updates");
+            }
 
+            @Override
+            public void didEnterRegion(CLLocationManager clLocationManager, CLRegion region) {
+                locationEvents.didEnterRegion(regionMap.get(region));
+            }
+
+            @Override
+            public void didExitRegion(CLLocationManager clLocationManager, CLRegion region) {
+                locationEvents.didExitRegion(regionMap.get(region));
             }
 
         });
@@ -119,8 +140,33 @@ public class IOS_LocationManager extends LocationManager {
 
     @Override
     public void dispose() {
+        log.debug("dispose location manager");
         stopUpdateHeading();
         startUpdateLocation();
         manager.dispose();
+    }
+
+    @Override
+    public void stopMonitoring(Region region) {
+        CLRegion clRegion = regionMap.findKey(region, false);
+        manager.startMonitoring(clRegion);
+        regionMap.remove(clRegion);
+    }
+
+    @Override
+    public void startMonitoring(Region region) {
+
+        //create CLRegion
+        CLRegion clRegion;
+
+        if (region instanceof CircularRegion) {
+            CircularRegion circularRegion = (CircularRegion) region;
+            CLLocationCoordinate2D center = new CLLocationCoordinate2D(circularRegion.center.latitude, circularRegion.center.longitude);
+            clRegion = new CLCircularRegion(center, circularRegion.radius, "");
+            regionMap.put(clRegion, region);
+        } else {
+            throw new RuntimeException("Region: " + region.getClass().getName() + " not supported");
+        }
+        manager.startMonitoring(clRegion);
     }
 }

@@ -15,8 +15,6 @@
  */
 package de.longri.cachebox3.locator;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.events.*;
@@ -30,8 +28,6 @@ import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SoundCache;
-import org.oscim.backend.CanvasAdapter;
-import org.oscim.backend.Platform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -157,20 +153,25 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
 
     }
 
-    public boolean isApproachCompleted() {
+    boolean isApproachCompleted() {
         return approachSoundCompleted.get();
     }
 
+    void setApproachCompleted() {
+        approachSoundCompleted.set(true);
+    }
 
     //#######################################################################################################
     // Location manager
 
-    LocationManager locationManagerForeGround;
-    LocationManager locationManagerBackGround;
+    private LocationManager locationManagerForeGround;
 
-    GpsEventHelper foreGroundHelper = new GpsEventHelper();
+    private GpsEventHelper foreGroundHelper = new GpsEventHelper();
 
     private void initialForegroundLocationListener() {
+
+        foreGroundHelper.init();
+
         CB.postOnMainThread(new NamedRunnable("initial LocationListener") {
             @Override
             public void run() {
@@ -191,7 +192,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
     }
 
 
-    BackgroundTask backgroundTask;
+    private BackgroundTask backgroundTask;
 
     private void initialBackGroundLocationListener() {
         backgroundTask = new BackgroundTask();

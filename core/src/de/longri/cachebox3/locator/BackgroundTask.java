@@ -41,11 +41,13 @@ public class BackgroundTask implements Runnable {
 
 
     private AtomicBoolean cancel = new AtomicBoolean(false);
+    private AtomicBoolean playSound = new AtomicBoolean(false);
     private int waitTime = 0;
 
     private LocationManager locationManager;
     private Coordinate target;
     private int approachDistance;
+    private Region targetRegion;
 
     public BackgroundTask() {
 
@@ -57,77 +59,84 @@ public class BackgroundTask implements Runnable {
             return false;
         }
 
+        log.debug("create background task");
+
         approachDistance = Config.SoundApproachDistance.getValue();
         target = EventHandler.getSelectedCoord();
 
         if (target != null) {
 
             CB.postOnMainThread(new NamedRunnable("Initial background location listener") {
+                private float lastDistance;
+
                 @Override
                 public void run() {
                     Coordinate myPosition = EventHandler.getMyPosition();
                     if (myPosition != null) {
                         //start background location listener
                         locationManager = CB.locationHandler.getBackgroundLocationManager();
-
-                        float distance = target.distance(myPosition, MathUtils.CalculationType.FAST);
-                        // set locationManager distance filter to half distance
-                        locationManager.setDistanceFilter(distance / 2);
+                        locationManager.setDistanceFilter(0);
 
                         locationManager.setDelegate(new LocationEvents() {
                             @Override
                             public void newGpsPos(double latitude, double longitude, float accuracy) {
                                 float distance = target.distance(new LatLong(latitude, longitude), MathUtils.CalculationType.FAST);
-
+                                if (distance == lastDistance) return;
+                                lastDistance = distance;
                                 log.debug("New Background location! distance: {}", distance);
-
-                                if (distance <= approachDistance) {
-                                    playApproach();
-
-                                    // cancel this background task
-                                    cancel();
-                                } else {
-                                    if (distance / 2 > approachDistance) {
-                                        locationManager.setDistanceFilter(distance / 2);
-                                        log.debug("Set location distance filter to {}m", distance / 2);
-                                    } else {
-                                        locationManager.setDistanceFilter(0);
-                                        log.debug("Set location distance filter to 0m");
-                                    }
-                                }
                             }
 
                             @Override
                             public void newNetworkPos(double latitude, double longitude, float accuracy) {
-
+//                                log.debug("New Background Network location!");
                             }
 
                             @Override
                             public void newAltitude(double altitude) {
-
+//                                log.debug("New Background Altitude!");
                             }
 
                             @Override
                             public void newBearing(float bearing, boolean gps) {
-
+//                                log.debug("New Background Bearing!");
                             }
 
                             @Override
                             public void newSpeed(double speed) {
-
+//                                log.debug("New Background speed");
                             }
 
                             @Override
                             public void newPitch(float pitch) {
-
+//                                log.debug("New Background Pitch!");
                             }
 
                             @Override
                             public void newRoll(float roll) {
+//                                log.debug("New Background Roll!");
+                            }
 
+                            @Override
+                            public void didEnterRegion(Region region) {
+                                log.debug("Did enter region {}", region);
+                                playSound.set(true);
+                                CB.postOnMainThread(new NamedRunnable("enter region") {
+                                    @Override
+                                    public void run() {
+                                        locationManager.stopUpdateLocation();
+                                        locationManager.stopMonitoring(targetRegion);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void didExitRegion(Region region) {
+                                log.debug("Did exit region {}", region);
                             }
                         });
+                        targetRegion = new CircularRegion(target, approachDistance);
                         locationManager.startUpdateLocation();
+                        locationManager.startMonitoring(targetRegion);
                     }
                 }
             });
@@ -135,19 +144,44 @@ public class BackgroundTask implements Runnable {
         return true;
     }
 
+
+    private int count = 0;
+    private int backgroundMinutes = 0;
+
     private void workCycle() {
-        // do nothing!
-        // all work are on created locationManager!
+
+        if (++count >= 60) {
+            log.debug("Background work Cycle for {}minutes", ++backgroundMinutes);
+            count = 0;
+        }
+
+
+        if (playSound.get()) {
+            playApproach();
+            playSound.set(false);
+            CB.postAsyncDelayd(2000, new NamedRunnable("cancel background") {
+                @Override
+                public void run() {
+                    log.debug("Approach sound complete, cancel background task");
+                    cancel();
+                }
+            });
+        }
     }
 
     private void playApproach() {
-        FileHandle soundFileHandle;
-        if (CanvasAdapter.platform != Platform.IOS) {
-            soundFileHandle = Gdx.files.internal("sound/Approach.mp3");
-        } else {
-            soundFileHandle = Gdx.files.absolute(CB.WorkPath + "/data/sound/Approach.mp3");
+        try {
+            FileHandle soundFileHandle;
+            if (CanvasAdapter.platform != Platform.IOS) {
+                soundFileHandle = Gdx.files.internal("sound/Approach.mp3");
+            } else {
+                soundFileHandle = Gdx.files.absolute(CB.WorkPath + "/data/sound/Approach.mp3");
+            }
+            PlatformConnector.playNotifySound(soundFileHandle);
+            CB.viewmanager.locationReceiver.setApproachCompleted();
+        } catch (Exception e) {
+            log.error("Play Approach", e);
         }
-        PlatformConnector.playNotifySound(soundFileHandle);
     }
 
 
@@ -170,14 +204,19 @@ public class BackgroundTask implements Runnable {
     }
 
     public void cancel() {
+        cancel.set(true);
         CB.postOnMainThread(new NamedRunnable("dispose background location listener") {
             @Override
             public void run() {
                 log.debug("Cancel background task, stop location updates");
-                cancel.set(true);
-                locationManager.stopUpdateLocation();
-                locationManager.dispose();
-                locationManager = null;
+                try {
+                    if (locationManager != null) locationManager.stopUpdateLocation();
+                    if (locationManager != null) locationManager.stopMonitoring(targetRegion);
+                    if (locationManager != null) locationManager.dispose();
+                    if (locationManager != null) locationManager = null;
+                } catch (Exception e) {
+                    log.error("Cancel Background task", e);
+                }
             }
         });
     }

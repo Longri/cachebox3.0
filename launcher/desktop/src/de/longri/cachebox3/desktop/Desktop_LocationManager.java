@@ -17,7 +17,10 @@ package de.longri.cachebox3.desktop;
 
 import ch.fhnw.imvs.gpssimulator.data.GPSData;
 import ch.fhnw.imvs.gpssimulator.data.GPSDataListener;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.events.location.LocationEvents;
+import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Region;
 import de.longri.cachebox3.locator.manager.LocationManager;
 import de.longri.cachebox3.utils.MathUtils;
 
@@ -30,6 +33,9 @@ public class Desktop_LocationManager extends LocationManager {
     private LocationEvents locationEvents;
     private float distanceFilter = 100;
     private double lastLat, lastLon;
+    private final Array<Region> regions = new Array<>();
+    private final Array<Region> insideRegions = new Array<>();
+    private final Array<Region> clearList = new Array<>();
     private float[] distanceResult = new float[1];
 
 
@@ -75,6 +81,20 @@ public class Desktop_LocationManager extends LocationManager {
         listener = null;
     }
 
+    @Override
+    public void startMonitoring(Region region) {
+        GPSData.addChangeListener(listener);
+        if (regions.contains(region, false) || insideRegions.contains(region, false))
+            return;
+        regions.add(region);
+    }
+
+    @Override
+    public void stopMonitoring(Region region) {
+        regions.removeValue(region, false);
+        insideRegions.removeValue(region, false);
+    }
+
     GPSDataListener listener = new GPSDataListener() {
 
 
@@ -82,6 +102,38 @@ public class Desktop_LocationManager extends LocationManager {
 
         @Override
         public void valueChanged() {
+
+            {//check region handler
+                LatLong latLong = new LatLong(GPSData.getLatitude(), GPSData.getLongitude());
+                clearList.clear();
+                for (int i = 0; i < regions.size; i++) {
+                    Region region = regions.get(i);
+                    if (region.contains(latLong)) {
+                        locationEvents.didEnterRegion(region);
+                        clearList.add(region);
+                    }
+                }
+                for (int i = 0; i < clearList.size; i++) {
+                    Region region = clearList.get(i);
+                    regions.removeValue(region, true);
+                    insideRegions.add(region);
+                }
+                clearList.clear();
+                for (int i = 0; i < insideRegions.size; i++) {
+                    Region region = insideRegions.get(i);
+                    if (!region.contains(latLong)) {
+                        locationEvents.didExitRegion(region);
+                        clearList.add(region);
+                    }
+                }
+                for (int i = 0; i < clearList.size; i++) {
+                    Region region = clearList.get(i);
+                    insideRegions.removeValue(region, true);
+                    regions.add(region);
+                }
+            }
+
+
             if (lastcourse != GPSData.getCourse()) {
                 locationEvents.newBearing((float) Math.toRadians(GPSData.getCourse()), true);
                 lastcourse = GPSData.getCourse();

@@ -20,6 +20,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.locator.Region;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.LowpassFilter;
@@ -155,6 +156,16 @@ public class GpsEventHelper implements LocationEvents {
 
     public void newRoll(float roll) {
         CB.sensoerIO.write_newRoll(roll);
+    }
+
+    @Override
+    public void didEnterRegion(Region region) {
+        // todo write to SensorIO
+    }
+
+    @Override
+    public void didExitRegion(Region region) {
+        // todo write to SensorIO
     }
 
 //    public void newAccuracy(float accuracy) {

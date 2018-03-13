@@ -19,8 +19,10 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.AndroidLauncher;
 import de.longri.cachebox3.events.location.LocationEvents;
+import de.longri.cachebox3.locator.Region;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,5 +124,17 @@ public class Android_LocationManager extends LocationManager {
 
         if (sensorListener != null) sensorListener.setDelegate(null);
         sensorListener = null;
+    }
+
+
+    @Override
+    public void stopMonitoring(Region region) {
+        locationListener.stopMonitoring(region);
+    }
+
+    @Override
+    public void startMonitoring(Region region) {
+        locationListener.startMonitoring(region);
+        startUpdateLocation();
     }
 }
