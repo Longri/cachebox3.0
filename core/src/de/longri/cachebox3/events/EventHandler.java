@@ -225,9 +225,11 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     @Override
     public void positionChanged(PositionChangedEvent event) {
-        if ((this.myPosition == null && event.pos != null) || !this.myPosition.equals(event.pos)) {
-            this.myPosition = event.pos;
-            fireDistanceChanged(event.ID);
+        if (event.pos != null) {
+            if (event.gpsProvided) {
+                this.myPosition = event.pos;
+                fireDistanceChanged(event.ID);
+            }
         }
     }
 

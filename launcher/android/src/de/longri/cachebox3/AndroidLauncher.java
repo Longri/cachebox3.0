@@ -28,21 +28,10 @@ import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import de.longri.cachebox3.locator.manager.Android_LocationHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sqldroid.SQLDroidDriver;
 
 public class AndroidLauncher extends FragmentActivity implements AndroidFragmentApplication.Callbacks {
     private final static Logger log = LoggerFactory.getLogger(AndroidLauncher.class);
     public static AndroidLauncher androidLauncher;
-
-    static {
-        try {
-            log.debug("initial SQLDroidDriver");
-            java.sql.DriverManager.registerDriver(new SQLDroidDriver());
-        } catch (Exception e) {
-            log.error("With initial SQLDroidDriver", e);
-        }
-
-    }
 
 
     private AndroidLauncherfragment fragment;

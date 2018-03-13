@@ -78,7 +78,7 @@ public class AndroidLocationListener implements LocationListener {
 
         if (isGpsProvided) {
             float acc = location.hasAccuracy() ? location.getAccuracy() : 0;
-            if (acc > 0) {
+            if (acc >= 0) {
                 this.handler.newGpsPos(location.getLatitude(), location.getLongitude(), acc);
                 if (location.hasAltitude()) this.handler.newAltitude(location.getAltitude());
                 if (location.hasBearing())
@@ -87,7 +87,7 @@ public class AndroidLocationListener implements LocationListener {
             }
         } else {
             float acc = location.hasAccuracy() ? location.getAccuracy() : 0;
-            if (acc > 0)
+            if (acc >= 0)
                 this.handler.newNetworkPos(location.getLatitude(), location.getLongitude(), acc);
         }
     }

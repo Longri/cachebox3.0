@@ -82,16 +82,16 @@ public class CacheboxMain extends ApplicationAdapter {
 
 //        INCLUDE_LIST.add("de.longri.cachebox3.events.location.GpsEventHelper");
 
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
-//        INCLUDE_LIST.add(TestView.class.getName());
-//        INCLUDE_LIST.add(CompassView.class.getName());
-//        INCLUDE_LIST.add("de.longri.cachebox3.locator.GlobalLocationReceiver");
-//
-//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_LocationListener");
-//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_Launcher_BackgroundHandling");
-//        INCLUDE_LIST.add("de.longri.cachebox3.utils.SoundCache");
-//        INCLUDE_LIST.add("de.longri.cachebox3.locator.BackgroundTask");
-//        INCLUDE_LIST.add("de.longri.cachebox3.locator.manager.IOS_LocationManager");
+        INCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
+        INCLUDE_LIST.add(TestView.class.getName());
+        INCLUDE_LIST.add(CompassView.class.getName());
+        INCLUDE_LIST.add("de.longri.cachebox3.locator.GlobalLocationReceiver");
+
+        INCLUDE_LIST.add("de.longri.cachebox3.IOS_LocationListener");
+        INCLUDE_LIST.add("de.longri.cachebox3.IOS_Launcher_BackgroundHandling");
+        INCLUDE_LIST.add("de.longri.cachebox3.utils.SoundCache");
+        INCLUDE_LIST.add("de.longri.cachebox3.locator.BackgroundTask");
+        INCLUDE_LIST.add("de.longri.cachebox3.locator.manager.IOS_LocationManager");
 
     }
 

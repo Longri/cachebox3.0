@@ -42,6 +42,7 @@ public class BackgroundTask implements Runnable {
 
     private AtomicBoolean cancel = new AtomicBoolean(false);
     private AtomicBoolean playSound = new AtomicBoolean(false);
+    private AtomicBoolean testDistance = new AtomicBoolean(false);
     private int waitTime = 0;
 
     private LocationManager locationManager;
@@ -80,10 +81,21 @@ public class BackgroundTask implements Runnable {
                         locationManager.setDelegate(new LocationEvents() {
                             @Override
                             public void newGpsPos(double latitude, double longitude, float accuracy) {
-                                float distance = target.distance(new LatLong(latitude, longitude), MathUtils.CalculationType.FAST);
-                                if (distance == lastDistance) return;
-                                lastDistance = distance;
-                                log.debug("New Background location! distance: {}", distance);
+                                if (testDistance.get()) {
+                                    float distance = target.distance(new LatLong(latitude, longitude), MathUtils.CalculationType.FAST);
+                                    log.debug("New Background location! distance: {}", distance);
+                                    if (distance <= approachDistance) {
+                                        playSound.set(true);
+                                        CB.postOnMainThread(new NamedRunnable("enter region") {
+                                            @Override
+                                            public void run() {
+                                                locationManager.stopUpdateLocation();
+                                                locationManager.stopMonitoring(targetRegion);
+                                            }
+                                        });
+                                    }
+                                }
+
                             }
 
                             @Override
@@ -119,19 +131,13 @@ public class BackgroundTask implements Runnable {
                             @Override
                             public void didEnterRegion(Region region) {
                                 log.debug("Did enter region {}", region);
-                                playSound.set(true);
-                                CB.postOnMainThread(new NamedRunnable("enter region") {
-                                    @Override
-                                    public void run() {
-                                        locationManager.stopUpdateLocation();
-                                        locationManager.stopMonitoring(targetRegion);
-                                    }
-                                });
+                                testDistance.set(true);
                             }
 
                             @Override
                             public void didExitRegion(Region region) {
                                 log.debug("Did exit region {}", region);
+                                testDistance.set(false);
                             }
                         });
                         targetRegion = new CircularRegion(target, approachDistance);
@@ -157,9 +163,9 @@ public class BackgroundTask implements Runnable {
 
 
         if (playSound.get()) {
-            playApproach();
             playSound.set(false);
-            CB.postAsyncDelayd(2000, new NamedRunnable("cancel background") {
+            playApproach();
+            CB.postAsyncDelayd(1000, new NamedRunnable("cancel background") {
                 @Override
                 public void run() {
                     log.debug("Approach sound complete, cancel background task");

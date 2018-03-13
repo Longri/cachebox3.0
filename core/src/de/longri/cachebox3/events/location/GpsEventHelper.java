@@ -92,6 +92,14 @@ public class GpsEventHelper implements LocationEvents {
         // clamp coordinate to handled precision
         latitude = ((int) (latitude * 1E6)) / 1E6;
         longitude = ((int) (longitude * 1E6)) / 1E6;
+
+        if (lastNetLat != latitude || lastNetLon != longitude) {
+            lastNetLat = latitude;
+            lastNetLon = longitude;
+
+            //fire pos changed event
+            EventHandler.fire(new PositionChangedEvent(new Coordinate(latitude, longitude), false, EventHandler.getId()));
+        }
     }
 
     @Override
@@ -182,20 +190,20 @@ public class GpsEventHelper implements LocationEvents {
         }
     }
 
-    public void gpsStateChanged(GpsState state) {
-
-        this.gpsState = state;
-//        log.debug("Gps state changed to {}", state);
-    }
-
-    public CoordinateGPS getLastGpsCoordinate() {
-        CoordinateGPS coord = new CoordinateGPS(this.lastGpsLat, this.lastGpsLon);
-        coord.setAccuracy(this.lastGpsAccuracy);
-        coord.setElevation(this.lastGpsElevation);
-        coord.setHeading(this.lastCompassHeading);
-        coord.setSpeed(this.lastSpeed);
-        return coord;
-    }
+//    public void gpsStateChanged(GpsState state) {
+//
+//        this.gpsState = state;
+////        log.debug("Gps state changed to {}", state);
+//    }
+//
+//    public CoordinateGPS getLastGpsCoordinate() {
+//        CoordinateGPS coord = new CoordinateGPS(this.lastGpsLat, this.lastGpsLon);
+//        coord.setAccuracy(this.lastGpsAccuracy);
+//        coord.setElevation(this.lastGpsElevation);
+//        coord.setHeading(this.lastCompassHeading);
+//        coord.setSpeed(this.lastSpeed);
+//        return coord;
+//    }
 
 
     public float getAccuracy() {

@@ -126,20 +126,6 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
             }
             lastEventID = eventID;
 
-            if (!force && this.map.animator().isActive()) {
-                if (timer != null) return;
-                timer = new Timer();
-                TimerTask timerTask = new TimerTask() {
-                    @Override
-                    public void run() {
-                        log.debug("AssumeValues TimerTask  eventID:{}", eventID);
-                        assumeValues(true, eventID);
-                    }
-                };
-                timer.schedule(timerTask, 500);
-                return;
-            }
-            timer = null;
             if (isDisposed.get()) return;
 
 

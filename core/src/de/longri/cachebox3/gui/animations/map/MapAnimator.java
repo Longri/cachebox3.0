@@ -180,13 +180,15 @@ public class MapAnimator {
     }
 
     public void rotate(double value) {
-        log.debug("Rotate Map to {}", value);
-        this.rotate(DEFAULT_DURATION, value);
+        this.rotate(DEFAULT_DURATION, (float) value);
     }
 
-    public void rotate(float duration, double value) {
+    public void rotate(float duration, float value) {
         map.viewport().getMapPosition(mapPosition);
         float mr = mapPosition.bearing;
+
+        if (mr == value) return;
+
         if (mr < 0) mr += 360;
         if (mr > 360) mr -= 360;
 
@@ -203,10 +205,7 @@ public class MapAnimator {
             delta = (float) Math.abs(value - mr);
         }
         log.debug("Start rotate animation to: {}  from: {}", value, mr);
-
-
         this.rotate.start(duration, mr, value);
-//        this.rotate.setDebugAct(value);
     }
 
     public void tilt(double value) {
