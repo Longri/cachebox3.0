@@ -16,7 +16,15 @@
 package de.longri.cachebox3.gui.animations.map;
 
 import com.badlogic.gdx.Gdx;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
+import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
+import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
+import de.longri.cachebox3.gui.map.layer.LocationLayer;
+import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.LatLong;
 import org.oscim.core.MapPosition;
+import org.oscim.core.MercatorProjection;
 import org.oscim.map.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,29 +36,39 @@ public class MapAnimator {
 
     private static final Logger log = LoggerFactory.getLogger(MapAnimator.class);
 
-    private final double POS_PRECISION = 1e-6;
-    private final double SCALE_PRECISION = 1;
-    private final double TILT_PRECISION = 1;
-    private final double ROTATE_PRECISION = 1e-2;
-    private final float DEFAULT_DURATION = 0.5f; // 500 ms
+    public final static float DEFAULT_DURATION = 0.5f; // 500 ms
 
     private final Map map;
-    private final DoubleAnimator mapX, mapY, scale, rotate, tilt;
+    private final DoubleAnimator mapX, mapY, scale, rotate, tilt, myPosX, myPosY;
     private final MapPosition mapPosition = new MapPosition();
-    private boolean changed;
+    private final LocationAccuracyLayer myLocationAccuracy;
+    private final LocationLayer myLocationLayer;
+    private final DirectLineLayer directLineLayer;
+    private float arrowHeading;
+    private final MapViewPositionChangedHandler mapViewPositionChangedHandler;
 
-    public MapAnimator(Map map) {
+    public MapAnimator(MapViewPositionChangedHandler mapViewPositionChangedHandler, Map map, DirectLineLayer directLineLayer, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy) {
         this.map = map;
         this.mapX = new DoubleAnimator();
         this.mapY = new DoubleAnimator();
+        this.myPosX = new DoubleAnimator();
+        this.myPosY = new DoubleAnimator();
         this.scale = new DoubleAnimator();
         this.rotate = new DoubleAnimator();
         this.tilt = new DoubleAnimator();
+        this.myLocationAccuracy = myLocationAccuracy;
+        this.myLocationLayer = myLocationLayer;
+        this.mapViewPositionChangedHandler = mapViewPositionChangedHandler;
+        this.directLineLayer = directLineLayer;
     }
 
     public void update(float delta) {
+
+        float accuracy = 0.0f;// TODO get from ???
+
+
         map.viewport().getMapPosition(mapPosition);
-        changed = false;
+        boolean changed = false;
         if (mapX.update(delta)) {
             changed = true;
             mapPosition.setX(mapX.getAct());
@@ -59,6 +77,35 @@ public class MapAnimator {
             changed = true;
             mapPosition.setY(mapY.getAct());
         }
+        if (mapViewPositionChangedHandler.getCenterGps()) {
+            if (!centerAnimation) {
+                myLocationAccuracy.setMercatorPosition(mapPosition.getX(), mapPosition.getY(), accuracy);
+                double lat = MercatorProjection.toLatitude(mapPosition.getY());
+                double lon = MercatorProjection.toLongitude(mapPosition.getX());
+                myLocationLayer.setPosition(lat, lon, arrowHeading);
+                directLineLayer.redrawLine(new LatLong(lat, lon));
+            } else {
+                Coordinate coordinate = EventHandler.getMyPosition();
+                myLocationAccuracy.setPosition(coordinate.latitude, coordinate.longitude, accuracy);
+                myLocationLayer.setPosition(coordinate.latitude, coordinate.longitude, arrowHeading);
+                directLineLayer.redrawLine(coordinate);
+            }
+        } else {
+            boolean changeX = myPosX.update(delta);
+            boolean changeY = myPosY.update(delta);
+            if (changeX || changeY) {
+                changed = true;
+                double x = myPosX.getAct();
+                double y = myPosY.getAct();
+                myLocationAccuracy.setMercatorPosition(x, y, accuracy);
+                double lat = MercatorProjection.toLatitude(y);
+                double lon = MercatorProjection.toLongitude(x);
+                myLocationLayer.setPosition(lat, lon, arrowHeading);
+                directLineLayer.redrawLine(new LatLong(lat, lon));
+            }
+        }
+
+
         if (scale.update(delta)) {
             changed = true;
             mapPosition.setScale(scale.getAct());
@@ -83,13 +130,45 @@ public class MapAnimator {
         }
     }
 
+    public void animateToPos(double x, double y) {
+        this.mapX.start(0.5f, map.getMapPosition().x, x);
+        this.mapY.start(0.5f, map.getMapPosition().y, y);
+        centerAnimation = true;
+    }
+
     public void position(double x, double y) {
         this.position(DEFAULT_DURATION, x, y);
     }
 
+    private boolean lastMapCenter = false;
+    private boolean centerAnimation = false;
+
     public void position(float duration, double x, double y) {
-        this.mapX.start(duration, mapPosition.getX(), x, POS_PRECISION);
-        this.mapY.start(duration, mapPosition.getY(), y, POS_PRECISION);
+        if (mapViewPositionChangedHandler.getCenterGps()) {
+            if (centerAnimation) {
+                if (mapX.isFinish()) {
+                    centerAnimation = false;
+                } else {
+                    return;
+                }
+            }
+
+            if (!lastMapCenter) {
+                this.mapX.start(0.5f, map.getMapPosition().x, x);
+                this.mapY.start(0.5f, map.getMapPosition().y, y);
+                centerAnimation = true;
+            } else {
+                this.mapX.start(duration, mapPosition.getX(), x);
+                this.mapY.start(duration, mapPosition.getY(), y);
+            }
+            lastMapCenter = true;
+            this.myPosX.setAct(x);
+            this.myPosY.setAct(y);
+        } else {
+            this.myPosX.start(duration, this.myPosX.getAct(), x);
+            this.myPosY.start(duration, this.myPosY.getAct(), y);
+            lastMapCenter = false;
+        }
     }
 
     public void scale(double value) {
@@ -97,17 +176,19 @@ public class MapAnimator {
     }
 
     public void scale(float duration, double value) {
-        this.scale.start(duration, mapPosition.getScale(), value, SCALE_PRECISION);
+        this.scale.start(duration, mapPosition.getScale(), value);
     }
 
     public void rotate(double value) {
-        log.debug("Rotate Map to {}", value);
-        this.rotate(DEFAULT_DURATION, value);
+        this.rotate(DEFAULT_DURATION, (float) value);
     }
 
-    public void rotate(float duration, double value) {
+    public void rotate(float duration, float value) {
         map.viewport().getMapPosition(mapPosition);
         float mr = mapPosition.bearing;
+
+        if (mr == value) return;
+
         if (mr < 0) mr += 360;
         if (mr > 360) mr -= 360;
 
@@ -124,18 +205,18 @@ public class MapAnimator {
             delta = (float) Math.abs(value - mr);
         }
         log.debug("Start rotate animation to: {}  from: {}", value, mr);
-
-
-        this.rotate.start(duration, mr, value, ROTATE_PRECISION);
-//        this.rotate.setDebugAct(value);
+        this.rotate.start(duration, mr, value);
     }
-
 
     public void tilt(double value) {
         this.tilt(DEFAULT_DURATION, value);
     }
 
-    public void tilt(float duration, double value) {
-        this.tilt.start(duration, mapPosition.getTilt(), value, TILT_PRECISION);
+    private void tilt(float duration, double value) {
+        this.tilt.start(duration, mapPosition.getTilt(), value);
+    }
+
+    public void setArrowHeading(float arrowHeading) {
+        this.arrowHeading = arrowHeading;
     }
 }

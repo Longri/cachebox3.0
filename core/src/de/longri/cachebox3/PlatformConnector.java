@@ -95,6 +95,18 @@ public abstract class PlatformConnector {
         platformConnector._postOnMainThread(runnable);
     }
 
+    public static void runOnBackGround(Runnable backgroundTask) {
+        platformConnector._runOnBackGround(backgroundTask);
+    }
+
+    protected abstract void _runOnBackGround(Runnable backgroundTask);
+
+    public static void playNotifySound(FileHandle soundFileHandle) {
+        platformConnector._playNotifySound(soundFileHandle);
+    }
+
+    protected abstract void _playNotifySound(FileHandle soundFileHandle);
+
     // SVG implementations #############################################################################################
     public enum SvgScaleType {
         SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED, NONE, SCALED_TO_WIDTH_OR_HEIGHT
@@ -108,12 +120,6 @@ public abstract class PlatformConnector {
     public abstract Bitmap getRealScaledSVG(String name, InputStream stream,
                                             SvgScaleType scaleType, float scaleValue) throws IOException;
 
-
-    public abstract void initialLocationReciver();
-
-    public static void initLocationListener() {
-        platformConnector.initialLocationReciver();
-    }
 
 
     public static FileHandle getSandboxFileHandle(String fileName) {

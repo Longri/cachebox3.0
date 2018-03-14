@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.actions.ShowImportMenu;
 import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings;
 import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
@@ -56,7 +57,7 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 /**
  * Created by Longri on 24.07.16.
  */
-public class CacheListView extends AbstractView implements CacheListChangedEventListener, PositionChangedListener, OrientationChangedListener {
+public class CacheListView extends AbstractView implements CacheListChangedEventListener, PositionChangedListener, de.longri.cachebox3.events.location.OrientationChangedListener {
     private final static Logger log = LoggerFactory.getLogger(CacheListView.class);
     private ListView listView;
     private final float result[] = new float[4];
@@ -300,12 +301,12 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     }
 
     @Override
-    public void positionChanged(PositionChangedEvent event) {
+    public void positionChanged(de.longri.cachebox3.events.location.PositionChangedEvent event) {
         setChangedFlagToAllItems();
     }
 
     @Override
-    public void orientationChanged(OrientationChangedEvent event) {
+    public void orientationChanged(de.longri.cachebox3.events.location.OrientationChangedEvent event) {
         setChangedFlagToAllItems();
     }
 

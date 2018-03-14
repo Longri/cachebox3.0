@@ -24,6 +24,8 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.events.location.PositionChangedEvent;
+import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.BuildInfo;
@@ -31,7 +33,7 @@ import de.longri.cachebox3.utils.BuildInfo;
 /**
  * Created by Longri on 23.07.16.
  */
-public class AboutView extends AbstractTableView implements de.longri.cachebox3.events.PositionChangedListener, de.longri.cachebox3.events.DistanceChangedListener {
+public class AboutView extends AbstractTableView implements PositionChangedListener, de.longri.cachebox3.events.DistanceChangedListener {
 
 
     public static final String aboutMsg1 = "Team Cachebox (2011-2017)";
@@ -130,7 +132,7 @@ public class AboutView extends AbstractTableView implements de.longri.cachebox3.
     float distance = -1;
 
     @Override
-    public void positionChanged(de.longri.cachebox3.events.PositionChangedEvent event) {
+    public void positionChanged(PositionChangedEvent event) {
         pos = event.pos;
 
     }

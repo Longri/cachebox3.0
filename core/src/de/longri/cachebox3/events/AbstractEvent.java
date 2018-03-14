@@ -35,6 +35,6 @@ public abstract class AbstractEvent<T> {
         this.ID = eventID;
     }
 
-    abstract Class getListenerClass();
+    public abstract Class getListenerClass();
 
 }

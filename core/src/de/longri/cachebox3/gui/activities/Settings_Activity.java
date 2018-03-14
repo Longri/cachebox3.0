@@ -409,9 +409,11 @@ public class Settings_Activity extends ActivityBase {
         // add clicklistener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                if (event.isHandled()||event.isCancelled()) return;
+                if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
                     showCategory(category, true);
+                    event.cancel();
+                    event.handle();
                 }
             }
         });
@@ -431,7 +433,7 @@ public class Settings_Activity extends ActivityBase {
         }
 
         //add only items they are not NULL
-       final Array<ListViewItem> items = new Array<>();
+        final Array<ListViewItem> items = new Array<>();
         int idxCount = 0;
         for (SettingBase<?> setting : categorySettingsList) {
             ListViewItem listViewItem = getSettingItem(idxCount, setting);
@@ -564,8 +566,11 @@ public class Settings_Activity extends ActivityBase {
         // add clickListener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
                     apiButton.generateKey();
+                    event.cancel();
+                    event.handle();
                 }
             }
         });
@@ -638,6 +643,7 @@ public class Settings_Activity extends ActivityBase {
         // add clicklistener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
 
                     //if clicked on Mute control?
@@ -662,6 +668,8 @@ public class Settings_Activity extends ActivityBase {
                             SoundCache.play(SoundCache.Sounds.AutoResortSound, true);
                     }
                     event.stop();
+                    event.cancel();
+                    event.handle();
                 }
             }
         });
@@ -731,6 +739,7 @@ public class Settings_Activity extends ActivityBase {
         // add clickListener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
                     // show multi line input dialog
                     PlatformConnector.getMultilineTextInput(new Input.TextInputListener() {
@@ -746,6 +755,8 @@ public class Settings_Activity extends ActivityBase {
 
                         }
                     }, Translation.get(setting.getName()).toString(), setting.getValue(), "");
+                    event.cancel();
+                    event.handle();
                 }
             }
         });
@@ -775,6 +786,7 @@ public class Settings_Activity extends ActivityBase {
         final SelectBox selectBox = new SelectBox(style, null);
         ClickListener clickListener = new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
                 //show select menu
                 Menu menu = selectBox.getMenu();
                 showListView(menu.getListview(), "select item", true);
@@ -870,6 +882,7 @@ public class Settings_Activity extends ActivityBase {
         // add clicklistener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
                     Menu selectClearMenu = new Menu("selectClear");
                     selectClearMenu.addItem(MenuID.MI_SELECT_PATH, "select_folder");
@@ -924,6 +937,7 @@ public class Settings_Activity extends ActivityBase {
         // add clickListener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
                     new NumericInput_Activity<Float>(setting.getValue()) {
                         public void returnValue(Float value) {
@@ -959,6 +973,7 @@ public class Settings_Activity extends ActivityBase {
         // add clickListener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
                     new NumericInput_Activity<Double>(setting.getValue()) {
                         public void returnValue(Double value) {
@@ -994,6 +1009,7 @@ public class Settings_Activity extends ActivityBase {
         // add clickListener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
                     new NumericInput_Activity<Integer>(setting.getValue()) {
                         public void returnValue(Integer value) {
@@ -1059,6 +1075,7 @@ public class Settings_Activity extends ActivityBase {
         // add clicklistener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
                     setting.setValue(!setting.getValue());
                     if (setting.getValue()) {
@@ -1067,6 +1084,7 @@ public class Settings_Activity extends ActivityBase {
                         checkImage[0].setDrawable(style.checkOff);
                     }
                     event.cancel();
+                    event.handle();
                 }
             }
         });

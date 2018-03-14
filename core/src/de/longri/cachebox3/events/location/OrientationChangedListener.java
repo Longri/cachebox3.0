@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.events;
+package de.longri.cachebox3.events.location;
 
 /**
  * Created by Longri on 23.03.2017.
  */
-public interface SpeedChangedListener {
-    void speedChanged(SpeedChangedEvent event);
+public interface OrientationChangedListener {
+    void orientationChanged(OrientationChangedEvent event);
 }

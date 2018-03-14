@@ -24,10 +24,9 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.SpeedChangedEvent;
-import de.longri.cachebox3.events.SpeedChangedListener;
+import de.longri.cachebox3.events.location.SpeedChangedEvent;
+import de.longri.cachebox3.events.location.SpeedChangedListener;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.UnitFormatter;
 
@@ -44,7 +43,6 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
         EventHandler.add(this);
         style = VisUI.getSkin().get("infoPanel", MapInfoPanelStyle.class);
         this.setBackground(style.background);
-//        this.setDebug(true);
         compass = new Compass("mapCompassStyle", true);
 
 
@@ -93,7 +91,7 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
     }
 
 
-    public void setNewValues(CoordinateGPS myPosition, float bearing) {
+    public void setNewValues(Coordinate myPosition, float bearing) {
         if (myPosition == null) return;
 
         compass.setBearing(bearing);

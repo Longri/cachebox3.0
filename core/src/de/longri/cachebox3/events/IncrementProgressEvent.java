@@ -51,7 +51,7 @@ public class IncrementProgressEvent extends AbstractEvent<IncrementProgressEvent
     }
 
     @Override
-    Class getListenerClass() {
+    public Class getListenerClass() {
         return IncrementProgressListener.class;
     }
 }

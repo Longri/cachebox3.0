@@ -28,7 +28,6 @@ import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.GpsEventHelper;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.dialogs.GetApiKeyQuestionDialog;
@@ -40,6 +39,7 @@ import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.CacheListView;
+import de.longri.cachebox3.locator.manager.LocationHandler;
 import de.longri.cachebox3.locator.track.Track;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -49,10 +49,7 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
-import de.longri.cachebox3.utils.ICancel;
-import de.longri.cachebox3.utils.NamedRunnable;
-import de.longri.cachebox3.utils.ScaledSizes;
-import de.longri.cachebox3.utils.SkinColor;
+import de.longri.cachebox3.utils.*;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.renderer.atlas.TextureRegion;
@@ -74,9 +71,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CB {
     static final Logger log = LoggerFactory.getLogger(CB.class);
 
-    public static final int CurrentRevision = 20160806;
-    public static final String CurrentVersion = "0.1.";
     public static final String VersionPrefix = "Test";
+
+    public static LocationHandler locationHandler;
 
 
     //LogLevels
@@ -88,13 +85,11 @@ public class CB {
 
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
     public static final float WINDOW_FADE_TIME = 0.3f;
-    private static boolean displayOff = false;
     public static Categories Categories;
     public static float stateTime;
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
 
     public static MapMode mapMode = MapMode.FREE;
-    public final static GpsEventHelper eventHelper = new GpsEventHelper();
 
     public static int androidStatusbarHeight;
 
@@ -113,6 +108,7 @@ public class CB {
     public static boolean switchToCompassCompleted = false;
     public static String cacheHistory = "";
 
+    public final static SensorIO sensoerIO = new SensorIO();
 
     /**
      * WorkPath is a String to the used work path.<br>
@@ -133,6 +129,8 @@ public class CB {
     public static LinkedHashMap<Object, TextureRegion> textureRegionMap;
     public static Image CB_Logo;
     public static Image backgroundImage;
+    public static boolean isBackground = false;
+
 
     private CB() {
     }
@@ -250,10 +248,6 @@ public class CB {
 
     public static void callQuit() {
         PlatformConnector.callQuit();
-    }
-
-    public static boolean isDisplayOff() {
-        return displayOff;
     }
 
     public static boolean selectedCachehasSpoiler() {

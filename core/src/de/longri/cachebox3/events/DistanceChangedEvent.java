@@ -27,7 +27,7 @@ public class DistanceChangedEvent extends AbstractEvent<Float> {
     }
 
     @Override
-    Class getListenerClass() {
+    public Class getListenerClass() {
         return DistanceChangedListener.class;
     }
 }

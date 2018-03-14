@@ -16,7 +16,11 @@
 package de.longri.cachebox3.locator;
 
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.events.location.GpsEventHelper;
+import de.longri.cachebox3.events.location.PositionChangedListener;
+import de.longri.cachebox3.locator.manager.LocationManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
@@ -53,10 +57,12 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                 playSounds.set(!Config.GlobalVolume.getValue().Mute);
             }
         });
+
+        initialForegroundLocationListener();
     }
 
     @Override
-    public void positionChanged(PositionChangedEvent event) {
+    public void positionChanged(de.longri.cachebox3.events.location.PositionChangedEvent event) {
         pendingLatLong.set(event.pos);
         runAsync();
     }
@@ -99,7 +105,12 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                     }
 
                     if (!approachSoundCompleted.get() && (distance < Config.SoundApproachDistance.getValue())) {
-                        SoundCache.play(SoundCache.Sounds.Approach);
+                        CB.postOnGlThread(new NamedRunnable("Play Sound") {
+                            @Override
+                            public void run() {
+                                SoundCache.play(SoundCache.Sounds.Approach);
+                            }
+                        });
                         approachSoundCompleted.set(true);
                     }
                 }
@@ -142,5 +153,69 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
 
     }
 
+    boolean isApproachCompleted() {
+        return approachSoundCompleted.get();
+    }
+
+    void setApproachCompleted() {
+        approachSoundCompleted.set(true);
+    }
+
+    //#######################################################################################################
+    // Location manager
+
+    private LocationManager locationManagerForeGround;
+
+    private GpsEventHelper foreGroundHelper = new GpsEventHelper();
+
+    private void initialForegroundLocationListener() {
+
+        foreGroundHelper.init();
+
+        CB.postOnMainThread(new NamedRunnable("initial LocationListener") {
+            @Override
+            public void run() {
+                if (locationManagerForeGround == null) {
+                    locationManagerForeGround = CB.locationHandler.getNewLocationManager();
+                    locationManagerForeGround.setDelegate(foreGroundHelper);
+                }
+                locationManagerForeGround.setDistanceFilter(0);
+                locationManagerForeGround.startUpdateLocation();
+                locationManagerForeGround.startUpdateHeading();
+            }
+        });
+    }
+
+    private void removeForegroundLocationListener() {
+        locationManagerForeGround.stopUpdateLocation();
+        locationManagerForeGround.stopUpdateHeading();
+    }
+
+
+    private BackgroundTask backgroundTask;
+
+    private void initialBackGroundLocationListener() {
+        backgroundTask = new BackgroundTask();
+        log.debug("start long time Background task");
+        PlatformConnector.runOnBackGround(backgroundTask);
+    }
+
+    private void removeBackGroundLocationListener() {
+        log.debug("stop long time Background task");
+        backgroundTask.cancel();
+        backgroundTask = null;
+    }
+
+    public void pause() {
+        log.debug("onPause");
+        removeForegroundLocationListener();
+        initialBackGroundLocationListener();
+    }
+
+    public void resume() {
+        log.debug("onResume");
+        initialForegroundLocationListener();
+        removeBackGroundLocationListener();
+    }
 
 }

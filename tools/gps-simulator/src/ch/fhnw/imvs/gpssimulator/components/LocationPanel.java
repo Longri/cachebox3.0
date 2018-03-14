@@ -11,23 +11,58 @@
 
 package ch.fhnw.imvs.gpssimulator.components;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 @SuppressWarnings("serial")
-public class LocationPanel extends JPanel {
+public class LocationPanel extends JPanel implements ActionListener {
 
-	public LocationPanel() {
 
-		this.setBorder(BorderFactory.createTitledBorder("Location"));
+    public interface PauseResumeInterface {
+        void pause();
 
-		JTabbedPane tabs = new JTabbedPane();
+        void resume();
+    }
 
-		tabs.addTab("Normal", new LocationNormal());
-		tabs.addTab("NMEA Format", new LocationNMEA());
-		tabs.addTab("GPS Format", new LocationGPS());
 
-		this.add(tabs);
-	}
+    public static PauseResumeInterface pauseResumeInterface;
+
+    Button pauseButton;
+
+    public LocationPanel() {
+
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        this.setBorder(BorderFactory.createTitledBorder("Location"));
+
+        this.setPreferredSize(new Dimension(250, 200));
+
+        JTabbedPane tabs = new JTabbedPane();
+
+        tabs.addTab("Normal", new LocationNormal());
+        tabs.addTab("NMEA Format", new LocationNMEA());
+        tabs.addTab("GPS Format", new LocationGPS());
+
+        this.add(tabs);
+
+        pauseButton = new Button("PAUSE");
+        this.add(pauseButton);
+
+        pauseButton.addActionListener(this);
+
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        if (event.getActionCommand().equals("PAUSE")) {
+            pauseButton.setLabel("RESUME");
+            if (pauseResumeInterface != null) pauseResumeInterface.pause();
+        } else if (event.getActionCommand().equals("RESUME")) {
+            pauseButton.setLabel("PAUSE");
+            if (pauseResumeInterface != null) pauseResumeInterface.resume();
+        }
+    }
 }

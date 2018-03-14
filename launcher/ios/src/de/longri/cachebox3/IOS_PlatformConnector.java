@@ -40,6 +40,10 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.robovm.apple.dispatch.DispatchQueue.PRIORITY_BACKGROUND;
+import static org.robovm.apple.dispatch.DispatchQueue.PRIORITY_DEFAULT;
 
 /**
  * Created by Longri on 17.07.16.
@@ -47,9 +51,9 @@ import java.io.InputStream;
 public class IOS_PlatformConnector extends PlatformConnector {
     final static Logger log = LoggerFactory.getLogger(IOS_PlatformConnector.class);
 
-    final IOS_Launcher ios_launcher;
+    final IOS_Launcher_BackgroundHandling ios_launcher;
 
-    public IOS_PlatformConnector(IOS_Launcher ios_launcher) {
+    public IOS_PlatformConnector(IOS_Launcher_BackgroundHandling ios_launcher) {
         super();
         this.ios_launcher = ios_launcher;
     }
@@ -94,15 +98,6 @@ public class IOS_PlatformConnector extends PlatformConnector {
         return bmp;
     }
 
-
-    IOS_LocationListener locationManager;
-
-    @Override
-    public void initialLocationReciver() {
-        Gdx.app.log("step", "1");
-        locationManager = new IOS_LocationListener();
-        locationManager.createLocationManager();
-    }
 
     @Override
     protected String _getWorkPath() {
@@ -170,7 +165,40 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     protected void _postOnMainThread(NamedRunnable runnable) {
-        DispatchQueue.getMainQueue().sync(runnable);
+        DispatchQueue.getMainQueue().async(runnable);
+    }
+
+
+    private long UIBackgroundTaskInvalid = UIApplication.getInvalidBackgroundTask();
+    private final AtomicLong bgTask = new AtomicLong(UIBackgroundTaskInvalid);
+
+    @Override
+    protected void _runOnBackGround(Runnable backgroundTask) {
+        restartBackgroundTask(backgroundTask);
+    }
+
+    private void restartBackgroundTask(final Runnable backgroundTask) {
+        long bgTaskId = ios_launcher.application.beginBackgroundTask("BackgroundTask", new Runnable() {
+            @Override
+            public void run() {
+                log.debug("End BGTask");
+                ios_launcher.application.endBackgroundTask(bgTask.get());
+
+                log.debug("restart BGTask");
+                restartBackgroundTask(backgroundTask);
+            }
+        });
+
+        bgTask.set(bgTaskId);
+
+        DispatchQueue globalQueue = DispatchQueue.getGlobalQueue(PRIORITY_BACKGROUND, 0);
+        globalQueue.async(backgroundTask);
+    }
+
+    @Override
+    protected void _playNotifySound(FileHandle soundFileHandle) {
+        IOS_BackgroundSound sound = new IOS_BackgroundSound(soundFileHandle);
+        sound.play();
     }
 
     @Override

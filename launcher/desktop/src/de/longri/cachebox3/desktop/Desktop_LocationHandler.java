@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.events;
+package de.longri.cachebox3.desktop;
+
+import de.longri.cachebox3.locator.manager.LocationHandler;
+import de.longri.cachebox3.locator.manager.LocationManager;
 
 /**
- * Created by Longri on 23.03.2017.
+ * Created by Longri on 09.03.18.
  */
-public class SpeedChangedEvent extends AbstractEvent<Float> {
-    public final float speed;
-
-    public SpeedChangedEvent(float speed) {
-        super(Float.class);
-        this.speed = speed;
-    }
-
-    public SpeedChangedEvent(float speed, short id) {
-        super(Float.class, id);
-        this.speed = speed;
+public class Desktop_LocationHandler extends LocationHandler {
+    @Override
+    public LocationManager getNewLocationManager() {
+        return new Desktop_LocationManager(false);
     }
 
     @Override
-    Class getListenerClass() {
-        return SpeedChangedListener.class;
+    public LocationManager getBackgroundLocationManager() {
+        return new Desktop_LocationManager(true);
     }
 }

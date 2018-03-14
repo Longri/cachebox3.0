@@ -19,6 +19,7 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
+import de.longri.cachebox3.locator.manager.IOS_LocationHandler;
 import org.oscim.backend.GLAdapter;
 import org.oscim.gdx.GdxAssets;
 import org.oscim.ios.backend.IosGL;
@@ -28,10 +29,14 @@ import org.robovm.apple.glkit.GLKViewDrawableMultisample;
 import org.robovm.apple.glkit.GLKViewDrawableStencilFormat;
 import org.robovm.apple.uikit.UIApplication;
 import org.robovm.apple.uikit.UIApplicationLaunchOptions;
-import org.robovm.apple.uikit.UIDevice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLogger;
 
-public class IOS_Launcher extends IOSApplication.Delegate {
+public class IOS_Launcher extends IOS_Launcher_BackgroundHandling {
+
+    final static Logger log = LoggerFactory.getLogger(IOS_Launcher.class);
+
 
     @Override
     public boolean didFinishLaunching(UIApplication application, UIApplicationLaunchOptions launchOptions) {
@@ -44,6 +49,12 @@ public class IOS_Launcher extends IOSApplication.Delegate {
         } else {
             CB.setGlobalScale(1f);
         }
+
+        CB.locationHandler = new IOS_LocationHandler();
+
+
+
+
         return retValue;
     }
 
@@ -53,7 +64,7 @@ public class IOS_Launcher extends IOSApplication.Delegate {
 
 
         final String appDir = System.getenv("HOME");
-        final String localPath = appDir + "/Library/local/";
+        final String localPath = appDir + "/Library/local/Cachebox3/";
 
         LibgdxLogger.PROPERTIES_FILE_HANDLE = new LibgdxLoggerIosFileHandle(localPath, Files.FileType.Absolute).child(LibgdxLogger.CONFIGURATION_FILE_XML);
         LibgdxLogger.initial(LibgdxLogger.PROPERTIES_FILE_HANDLE);
@@ -70,16 +81,17 @@ public class IOS_Launcher extends IOSApplication.Delegate {
         config.orientationLandscape = false;
         config.orientationPortrait = true;
         config.stencilFormat = GLKViewDrawableStencilFormat._8;
+        config.allowIpod = true;
         GdxAssets.init("assets/");
         GLAdapter.init(new IosGL());
 
         return new IOSApplication(new CacheboxMain(), config);
     }
 
-    private int getIosVersion() {
-        String systemVersion = UIDevice.getCurrentDevice().getSystemVersion().substring(0, 1);
-        return Integer.parseInt(systemVersion);
-    }
+//    public int getIosVersion() {
+//        String systemVersion = UIDevice.getCurrentDevice().getSystemVersion().substring(0, 1);
+//        return Integer.parseInt(systemVersion);
+//    }
 
     public static void main(String[] argv) {
         NSAutoreleasePool pool = new NSAutoreleasePool();

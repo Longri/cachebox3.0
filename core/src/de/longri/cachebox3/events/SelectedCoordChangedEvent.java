@@ -29,7 +29,7 @@ public class SelectedCoordChangedEvent extends AbstractEvent<Coordinate> {
     }
 
     @Override
-    Class getListenerClass() {
+    public Class getListenerClass() {
         return SelectedCoordChangedListener.class;
     }
 }

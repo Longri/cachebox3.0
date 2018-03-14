@@ -32,7 +32,7 @@ public class ApiCallLimitEvent extends AbstractEvent<Long> {
     }
 
     @Override
-    Class getListenerClass() {
+    public Class getListenerClass() {
         return ApiCallLimitListener.class;
     }
 

@@ -85,7 +85,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
     private FilterProperties actFilter = FilterInstances.ALL;
     private final AtomicBoolean isFilters = new AtomicBoolean(false);
-    private final GlobalLocationReceiver locationReceiver;
+    public final GlobalLocationReceiver locationReceiver;
 
     public ViewManager(final CacheboxMain main, Viewport viewport, Batch batch) {
         super("ViewManager", viewport, batch);
@@ -94,7 +94,6 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         log.info("Width:" + Float.toString(Gdx.graphics.getWidth()));
         log.info("Height:" + Float.toString(Gdx.graphics.getHeight()));
         log.info("PPI:" + Float.toString(Gdx.graphics.getPpiX()));
-
 
         this.main = main;
 
@@ -406,7 +405,6 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         return StageManager.isTop(stage);
     }
 
-
     // Toast pop up
     public enum ToastLength {
         SHORT(1.0f), NORMAL(1.5f), LONG(3.5f), EXTRA_LONG(6.0f), WAIT(true);
@@ -493,4 +491,15 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         }
         CB.requestRendering();
     }
+
+
+    public void resume() {
+        locationReceiver.resume();
+    }
+
+    public void pause() {
+        locationReceiver.pause();
+    }
+
+
 }

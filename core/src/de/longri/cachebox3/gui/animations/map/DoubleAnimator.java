@@ -31,17 +31,21 @@ public class DoubleAnimator {
     private float percent, time, duration;
     private boolean complete, finish;
 
-    DoubleAnimator() {
+    public DoubleAnimator() {
         this.interpolation = null;
         finish = true;
     }
 
-    DoubleAnimator(Interpolation interpolation) {
+    public DoubleAnimator(Interpolation interpolation) {
         this.interpolation = interpolation;
         finish = true;
     }
 
-    void start(float duration, double start, double end, double precision) {
+    public void start(float duration, double start, double end) {
+        this.start(duration, start, end, 0);
+    }
+
+    public void start(float duration, double start, double end, double precision) {
         if (equals(start, end, precision)) return;
         log.debug("{} animation", finish ? "start" : "restart");
         this.duration = duration;
@@ -52,7 +56,7 @@ public class DoubleAnimator {
         if (Gdx.graphics != null) Gdx.graphics.requestRendering();
     }
 
-    boolean update(float delta) {
+    public boolean update(float delta) {
         if (finish) return false;
         time += delta;
         complete = time >= duration;
@@ -69,7 +73,7 @@ public class DoubleAnimator {
         return true;
     }
 
-    double getAct() {
+    public double getAct() {
         return this.act;
     }
 
@@ -92,8 +96,12 @@ public class DoubleAnimator {
     }
 
 
-    public void setDebugAct(double value) {
+    public void setAct(double value) {
         this.act = value;
         finish = true;
+    }
+
+    public boolean isFinish() {
+        return finish;
     }
 }

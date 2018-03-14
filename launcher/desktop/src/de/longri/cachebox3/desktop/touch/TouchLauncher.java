@@ -22,13 +22,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglFileHandle;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.CacheboxMain;
-import de.longri.cachebox3.desktop.DesktopPlatformConnector;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.desktop.DesktopPlatformConnector;
+import de.longri.cachebox3.desktop.Desktop_LocationHandler;
+import de.longri.cachebox3.desktop.DesktopMain;
 import de.longri.cachebox3.file_transfer.MainWindow;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import org.apache.commons.cli.*;
 import org.oscim.awt.AwtGraphics;
 import org.oscim.backend.GLAdapter;
@@ -43,7 +42,7 @@ import javax.swing.*;
 public class TouchLauncher {
     public static void main(String[] args) {
         System.setProperty("org.lwjgl.util.NoChecks", "true");
-        LibgdxLogger.PROPERTIES_FILE_HANDLE = new LwjglFileHandle(LibgdxLogger.CONFIGURATION_FILE, Files.FileType.Local);
+        LibgdxLogger.PROPERTIES_FILE_HANDLE = new LwjglFileHandle(LibgdxLogger.CONFIGURATION_FILE_XML, Files.FileType.Local);
 
         final Logger log = LoggerFactory.getLogger("MAIN-LOOP");
 
@@ -89,18 +88,24 @@ public class TouchLauncher {
                 f.pack();
                 f.setResizable(false);
                 f.setVisible(true);
+                f.setBounds(0, 0, f.getWidth(), f.getHeight());
+
+                config.x = f.getX() + f.getWidth() + 10;
+                config.y = f.getY();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
+        CB.locationHandler = new Desktop_LocationHandler();
 
         initVtm();
 
         // Don't change this LogLevel
         // Cachebox use the slf4j implematation for LibGdx as Log engine.
         // so set LogLevel on CB.class if you wont (USED_LOG_LEVEL)
-        new LwjglApplication(new CacheboxMain(), config) {
+        LwjglApplication application = new LwjglApplication(new DesktopMain(), config) {
             public boolean executeRunnables() {
                 long start = System.currentTimeMillis();
                 synchronized (runnables) {
@@ -122,7 +127,10 @@ public class TouchLauncher {
 
                 return true;
             }
-        }.setLogLevel(LwjglApplication.LOG_DEBUG);
+        };
+
+        application.setLogLevel(LwjglApplication.LOG_DEBUG);
+
 
         if (cmd.hasOption("transfer")) {
             new Thread(new Runnable() {

@@ -15,46 +15,24 @@
  */
 package de.longri.cachebox3;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
-import de.longri.cachebox3.utils.RingBufferFloat;
+import de.longri.cachebox3.locator.manager.Android_LocationHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sqldroid.SQLDroidDriver;
 
 public class AndroidLauncher extends FragmentActivity implements AndroidFragmentApplication.Callbacks {
     private final static Logger log = LoggerFactory.getLogger(AndroidLauncher.class);
     public static AndroidLauncher androidLauncher;
 
-    static {
-        try {
-            log.debug("initial SQLDroidDriver");
-            java.sql.DriverManager.registerDriver(new SQLDroidDriver());
-        } catch (Exception e) {
-            log.error("With initial SQLDroidDriver", e);
-        }
-
-    }
-
-
-    // Compass
-    private SensorManager mSensorManager;
-    private Sensor accelerometer;
-    private Sensor magnetometer;
 
     private AndroidLauncherfragment fragment;
 
@@ -68,9 +46,8 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
         trans.commit();
 
         androidLauncher = this;
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
+        CB.locationHandler = new Android_LocationHandler();
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
         int resId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -103,69 +80,19 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
     protected void onResume() {
         log.debug("onResume()");
         super.onResume();
-        if (mSensorManager != null) {
-            mSensorManager.registerListener(mListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-            mSensorManager.registerListener(mListener, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
-        }
     }
 
     @Override
     protected void onStop() {
         log.debug("onStop()");
         super.onStop();
-
-        if (mSensorManager != null)
-            mSensorManager.unregisterListener(mListener);
     }
 
     @Override
     protected void onDestroy() {
-        AndroidPlatformConnector.platformConnector.removeLocationListener();
         super.onDestroy();
     }
 
-    private final SensorEventListener mListener = new SensorEventListener() {
-        private float[] gravity;
-        private float[] geomagnetic;
-        private final float orientationValues[] = new float[3];
-        private final float R[] = new float[9];
-        private final float I[] = new float[9];
-        private final float minChange = 2f;
-        private final long updateTime = 150;
-        private long lastUpdateTime = 0;
-        private final RingBufferFloat ringBuffer = new RingBufferFloat(30);
-        private float orientation;
-        private float lastOrientation;
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            synchronized (CB.eventHelper) {
-                if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
-                    gravity = event.values;
-                long now = System.currentTimeMillis();
-                if (lastUpdateTime == 0 || lastUpdateTime + updateTime < now) {
-                    if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-                        geomagnetic = event.values;
-                        if (gravity != null && geomagnetic != null) {
-                            if (SensorManager.getRotationMatrix(R, I, gravity, geomagnetic)) {
-                                SensorManager.getOrientation(R, orientationValues);
-                                orientation = ringBuffer.add((float) Math.toDegrees(orientationValues[0]));
-                                if (Math.abs(lastOrientation - orientation) > minChange) {
-                                    CB.eventHelper.setMagneticCompassHeading(orientation);
-                                    log.trace("orientation: {}", orientation);
-                                    lastOrientation = orientation;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        }
-    };
 
     @Override
     public void exit() {

@@ -35,6 +35,7 @@ import de.longri.cachebox3.gui.skin.styles.CompassStyle;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
 import de.longri.cachebox3.gui.views.DescriptionView;
 import de.longri.cachebox3.gui.views.MapView;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,9 +147,10 @@ public class StageManager {
             //switch input processor to window stage
 
             if (stageList.size > 1) {
-                inputMultiplexer.removeProcessor(stageList.get(stageList.size - 2));
+                NamedStage stage = stageList.get(stageList.size - 2);
+                if (stage != null) inputMultiplexer.removeProcessor(stage);
             } else {
-                inputMultiplexer.removeProcessor(mainStage);
+                if (mainStage != null) inputMultiplexer.removeProcessor(mainStage);
             }
 
 
@@ -193,7 +195,7 @@ public class StageManager {
             } else {
                 addNonDoubleInputProzessor(mainStage);
                 {
-                    ViewManager viewManager = (ViewManager) mainStage;
+                    final ViewManager viewManager = (ViewManager) mainStage;
                     if (viewManager.getActView() instanceof MapView) {
                         // handle MapView on ViewManagerStage
                         MapView mapView = (MapView) viewManager.getActView();
@@ -205,7 +207,13 @@ public class StageManager {
                         descriptionView.onShow();
                         log.debug("Call DescriptionView.onShow() for restore view");
                     }
-                    viewManager.getActView().onShow();
+                    CB.postOnGlThread(new NamedRunnable("Call act View.onShow()") {
+                        @Override
+                        public void run() {
+                            viewManager.getActView().onShow();
+                        }
+                    });
+                    ;
                 }
             }
             log.debug("InputProzessors:" + inputMultiplexer.getProcessors().toString());

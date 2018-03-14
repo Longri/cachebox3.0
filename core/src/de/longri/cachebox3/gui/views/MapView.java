@@ -35,7 +35,6 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
-import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
@@ -69,7 +68,10 @@ import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
-import org.oscim.core.*;
+import org.oscim.core.MapPosition;
+import org.oscim.core.MercatorProjection;
+import org.oscim.core.Point;
+import org.oscim.core.Tile;
 import org.oscim.event.Event;
 import org.oscim.gdx.GestureHandlerImpl;
 import org.oscim.layers.GroupLayer;
@@ -77,7 +79,6 @@ import org.oscim.layers.Layer;
 import org.oscim.layers.TileGridLayer;
 import org.oscim.map.Layers;
 import org.oscim.map.Map;
-import org.oscim.map.ViewController;
 import org.oscim.renderer.BitmapRenderer;
 import org.oscim.renderer.GLViewport;
 import org.oscim.renderer.MapRenderer;
@@ -119,7 +120,7 @@ public class MapView extends AbstractView {
     private MapScaleBarLayer mapScaleBarLayer;
     private final MapStateButton mapStateButton;
     private final ZoomButton zoomButton;
-    public final MapAnimator animator;
+    //    public final MapAnimator animator;
     private WaypointLayer wayPointLayer;
     private DirectLineLayer directLineLayer;
     private CenterCrossLayer ccl;
@@ -154,7 +155,6 @@ public class MapView extends AbstractView {
                     positionChangedHandler.setBearing(bearing);
                     setBuildingLayerEnabled(false);
                     setCenterCrossLayerEnabled(false);
-
                 } else if (lastMapMode == MapMode.CAR) {
                     log.debug("Disable Carmode! Activate last Mode:" + lastMapState);
                     setBuildingLayerEnabled(true);
@@ -171,14 +171,14 @@ public class MapView extends AbstractView {
                     if (lastMapState.getMapOrientationMode() != MapOrientationMode.NORTH) {
                         ori = EventHandler.getHeading();
                     }
-                    animator.rotate(ori);
-                    animator.scale(1 << lastMapState.getZoom());
+                    positionChangedHandler.rotate(ori);
+                    positionChangedHandler.scale(1 << lastMapState.getZoom());
                     map.updateMap(true);
                 } else if (mapMode == MapMode.GPS) {
                     log.debug("Activate GPS Mode");
                     final Coordinate myPos = EventHandler.getMyPosition();
                     if (myPos != null) {
-                        animator.position(
+                        positionChangedHandler.position(
                                 MercatorProjection.longitudeToX(myPos.longitude),
                                 MercatorProjection.latitudeToY(myPos.latitude)
                         );
@@ -196,7 +196,7 @@ public class MapView extends AbstractView {
                         });
                     } else {
                         log.debug("Activate WP Mode");
-                        animator.position(
+                        positionChangedHandler.animateToPos(
                                 MercatorProjection.longitudeToX(wpCoord.longitude),
                                 MercatorProjection.latitudeToY(wpCoord.latitude)
                         );
@@ -216,7 +216,7 @@ public class MapView extends AbstractView {
         this.addActor(infoPanel);
 
         map = createMap();
-        this.animator = new MapAnimator(map);
+
         this.addActor(mapStateButton);
         this.setTouchable(Touchable.enabled);
 
@@ -231,7 +231,7 @@ public class MapView extends AbstractView {
                 else
                     value = value * 0.5;
 
-                animator.scale(value);
+                positionChangedHandler.scale(value);
                 lastMapState.setZoom(FastMath.log2((int) value));
             }
         });
@@ -252,19 +252,6 @@ public class MapView extends AbstractView {
             if (layer instanceof CacheboxMapAdapter.BuildingLabelLayer) {
                 log.debug("{} BuildingLayer", enabled ? "Enable" : "Disable");
                 ((CacheboxMapAdapter.BuildingLabelLayer) layer).buildingLayer.setEnabled(enabled);
-            } else if (layer instanceof GroupLayer) {
-                List<Layer> groupLayers = ((GroupLayer) layer).layers;
-                for (Layer l : groupLayers) {
-                    if (l instanceof CenterCrossLayer) {
-                        log.debug("{} CenterCrossLayer", enabled ? "Enable" : "Disable");
-                        if (enabled) {
-                            //check settings
-                            l.setEnabled(Settings_Map.ShowMapCenterCross.getValue());
-                        } else {
-                            l.setEnabled(false);
-                        }
-                    }
-                }
             }
         }
     }
@@ -285,12 +272,14 @@ public class MapView extends AbstractView {
 
             @Override
             public void beginFrame() {
+                if (!CacheboxMain.drawMap) return;
                 super.beginFrame();
-                animator.update(Gdx.graphics.getDeltaTime());
+                if (positionChangedHandler != null) positionChangedHandler.update(Gdx.graphics.getDeltaTime());
             }
 
             @Override
             public void onMapEvent(Event e, final MapPosition mapPosition) {
+                if (!CacheboxMain.drawMap) return;
                 super.onMapEvent(e, mapPosition);
                 if (e == Map.MOVE_EVENT) {
 //                    log.debug("Map.MOVE_EVENT");
@@ -309,8 +298,6 @@ public class MapView extends AbstractView {
                 if (infoBubble != null && infoItem != null) {
                     setInfoBubblePos();
                 }
-
-
                 lastCenterPosLat = mapPosition.getLatitude();
                 lastCenterPosLon = mapPosition.getLongitude();
             }
@@ -330,9 +317,7 @@ public class MapView extends AbstractView {
 
 
         //add position changed handler
-        positionChangedHandler = new MapViewPositionChangedHandler(
-                this, map, myLocationLayer,
-                myLocationAccuracy, mapStateButton, infoPanel);
+        positionChangedHandler = new MapViewPositionChangedHandler(map,directLineLayer, myLocationLayer, myLocationAccuracy, infoPanel);
 
         return map;
     }
@@ -372,18 +357,6 @@ public class MapView extends AbstractView {
         System.out.print("create MapTextureAtlas with flipped Y? " + flipped);
         TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, false,
                 flipped);
-
-
-//        if (false) {//Debug write atlas Bitmap to tmp folder
-//            int count = 0;
-//            for (TextureAtlas atlas : atlasList) {
-//                byte[] data = atlas.texture.bitmap.getPngEncodedData();
-//                Pixmap pixmap = new Pixmap(data, 0, data.length);
-//                FileHandle file = Gdx.files.absolute(CB.WorkPath + "/user/temp/testAtlas" + count++ + ".png");
-//                PixmapIO.writePNG(file, pixmap);
-//                pixmap.dispose();
-//            }
-//        }
         return textureRegionMap;
     }
 
@@ -414,7 +387,7 @@ public class MapView extends AbstractView {
     @Override
     public void dispose() {
         log.debug("Dispose MapView");
-
+        CacheboxMain.drawMap = false;
         //save last position for next initial
         MapPosition mapPosition = this.map.getMapPosition();
         Settings_Map.lastMapState.setValue(lastMapState.getValues());
@@ -445,7 +418,7 @@ public class MapView extends AbstractView {
         mapInputHandler.clear();
         mapInputHandler = null;
 
-        CacheboxMain.drawMap = false;
+
         map.clearMap();
         map.destroy();
         CB.postOnGlThread(new NamedRunnable("MapView:dispose texture items") {
@@ -469,7 +442,6 @@ public class MapView extends AbstractView {
 
     private void setMapState(MapState state) {
         state.setMapMode(CB.mapMode);
-//        state.setMapOrientationMode(mapOrientationButton.getMode());
         state.setZoom(this.map.getMapPosition().getZoomLevel());
     }
 

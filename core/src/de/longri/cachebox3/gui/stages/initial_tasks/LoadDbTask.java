@@ -53,10 +53,28 @@ public class LoadDbTask extends AbstractInitTask {
                 final FileList fileList = new FileList(CB.WorkPath, "DB3");
 
                 if ((fileList.size > 1) && Config.MultiDBAsk.getValue()) {
-                    selectDbDialog.execute();
+                    CB.postAsync(new NamedRunnable("LoadDbTask") {
+                        @Override
+                        public void run() {
+                            //wait for initial viewmanager
+
+                            while (CB.viewmanager == null) {
+                                try {
+                                    Thread.sleep(20);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            Gdx.app.postRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    selectDbDialog.execute();
+                                }
+                            });
+                        }
+                    });
                 } else {
-
-
                     CB.postAsync(new NamedRunnable("LoadDbTask") {
                         @Override
                         public void run() {
@@ -84,8 +102,6 @@ public class LoadDbTask extends AbstractInitTask {
                             });
                         }
                     });
-
-
                 }
             }
         });

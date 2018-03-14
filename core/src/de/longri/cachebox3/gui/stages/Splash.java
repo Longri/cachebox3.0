@@ -142,7 +142,6 @@ public class Splash extends NamedStage {
         initTaskList.add(new SkinLoaderTask("Load UI"));
         initTaskList.add(new TranslationLoaderTask("Load Translations"));
         initTaskList.add(new GdxInitialTask("Initial GDX"));
-        initTaskList.add(new InitialLocationListenerTask("Initial Loacation Reciver"));
         initTaskList.add(new LoadDbTask("Load Database"));
 
         // Use classpath for Desktop or assets for iOS and Android
@@ -195,7 +194,11 @@ public class Splash extends NamedStage {
                 @Override
                 public void run() {
                     for (AbstractInitTask task : initTaskList) {
-                        task.runnable();
+                        try {
+                            task.runnable();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     loadReadyHandler.ready();
                     EventHandler.remove(incrementProgressListener);

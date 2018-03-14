@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.events;
-
+package de.longri.cachebox3.locator.manager;
 
 /**
- * Created by Longri on 23.03.2017.
+ * Created by Longri on 06.03.18.
  */
-public interface PositionChangedListener {
-    void positionChanged(PositionChangedEvent event);
+public abstract class LocationHandler {
+
+    public abstract LocationManager getNewLocationManager();
+
+    public abstract LocationManager getBackgroundLocationManager();
+
 }

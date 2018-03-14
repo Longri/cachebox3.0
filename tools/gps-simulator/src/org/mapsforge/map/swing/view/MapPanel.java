@@ -3,7 +3,7 @@ package org.mapsforge.map.swing.view;
 import ch.fhnw.imvs.gpssimulator.SimulatorMain;
 import ch.fhnw.imvs.gpssimulator.data.GPSData;
 import ch.fhnw.imvs.gpssimulator.data.GPSDataListener;
-import de.longri.cachebox3.events.GpsEventHelper;
+import de.longri.cachebox3.events.location.LocationEvents;
 import org.mapsforge.core.graphics.GraphicFactory;
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.awt.graphics.AwtGraphicFactory;
@@ -68,17 +68,6 @@ public class MapPanel extends JPanel implements ActionListener {
         model.mapViewPosition.setCenter(pos);
         model.mapViewPosition.setZoomLevel((byte) SimulatorMain.prefs.getInt("zoom", 16));
 
-
-        final GpsEventHelper eventHelper = new GpsEventHelper();
-        GPSData.addChangeListener(new GPSDataListener() {
-
-            @Override
-            public void valueChanged() {
-                eventHelper.newGpsPos(GPSData.getLatitude(), GPSData.getLongitude(), true,
-                        GPSData.getAltitude(), GPSData.getSpeed()*3.6, GPSData.getCourse(),
-                        (float) GPSData.getQuality());
-            }
-        });
     }
 
     private static void addLayers(MapView mapView, String MapPath) {

@@ -28,6 +28,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
+import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.events.location.LocationEvents;
 import org.mapsforge.map.swing.view.MapPanel;
 
 import ch.fhnw.imvs.gpssimulator.components.CoursePanel;

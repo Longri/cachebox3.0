@@ -30,6 +30,8 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisSplitPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.events.location.OrientationChangedListener;
+import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.menu.*;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
@@ -37,7 +39,6 @@ import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.CompassPanel;
 import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.SettingBool;
 import de.longri.cachebox3.sqlite.Database;
@@ -46,6 +47,7 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +65,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
     private final Image backgroundWidget;
     private final float result[] = new float[4];
 
-    private CoordinateGPS actCoord;
+    private Coordinate actCoord;
     private float actHeading = 0;
     private Label targetdirectionLabel, ownPositionLabel;
 
@@ -83,7 +85,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
         topTable = new Table();
         bottomTable = new Table() {
             public void sizeChanged() {
-                compassPanel.setSize(bottomTable.getWidth(),bottomTable.getHeight());
+                compassPanel.setSize(bottomTable.getWidth(), bottomTable.getHeight());
             }
         };
 
@@ -107,7 +109,6 @@ public class CompassView extends AbstractView implements PositionChangedListener
 
         splitPane.setMinSplitAmount(0.25f);
         splitPane.setMaxSplitAmount(0.59f);
-
 
     }
 
@@ -255,27 +256,29 @@ public class CompassView extends AbstractView implements PositionChangedListener
     }
 
     private void readSettings() {
-        showMap = Config.CompassShowMap.getValue();
-        showName = Config.CompassShowWP_Name.getValue();
-        showIcon = Config.CompassShowWP_Icon.getValue();
-        showAtt = Config.CompassShowAttributes.getValue();
-        showGcCode = Config.CompassShowGcCode.getValue();
-        showCoords = Config.CompassShowCoords.getValue();
-        showWpDesc = Config.CompassShowWpDesc.getValue();
-        showSatInfos = Config.CompassShowSatInfos.getValue();
-        showSunMoon = Config.CompassShowSunMoon.getValue();
-        showTargetDirection = Config.CompassShowTargetDirection.getValue();
-        showSDT = Config.CompassShowSDT.getValue();
-        showLastFound = Config.CompassShowLastFound.getValue();
+        synchronized (this) {
+            showMap = Config.CompassShowMap.getValue();
+            showName = Config.CompassShowWP_Name.getValue();
+            showIcon = Config.CompassShowWP_Icon.getValue();
+            showAtt = Config.CompassShowAttributes.getValue();
+            showGcCode = Config.CompassShowGcCode.getValue();
+            showCoords = Config.CompassShowCoords.getValue();
+            showWpDesc = Config.CompassShowWpDesc.getValue();
+            showSatInfos = Config.CompassShowSatInfos.getValue();
+            showSunMoon = Config.CompassShowSunMoon.getValue();
+            showTargetDirection = Config.CompassShowTargetDirection.getValue();
+            showSDT = Config.CompassShowSDT.getValue();
+            showLastFound = Config.CompassShowLastFound.getValue();
 
-        showAnyContent = showMap || showName || showIcon || showAtt || showGcCode || showCoords || showWpDesc || showSatInfos || showSunMoon || showTargetDirection || showSDT || showLastFound;
+            showAnyContent = showMap || showName || showIcon || showAtt || showGcCode || showCoords || showWpDesc || showSatInfos || showSunMoon || showTargetDirection || showSDT || showLastFound;
 
-        layoutInfoPanel();
+            layoutInfoPanel();
 
-        // get last Coord and set values
-        actCoord = EventHandler.getMyPosition();
-        actHeading = EventHandler.getHeading();
-        refreshOrientationInfo();
+            // get last Coord and set values
+            actCoord = EventHandler.getMyPosition();
+            actHeading = EventHandler.getHeading();
+            refreshOrientationInfo();
+        }
     }
 
 
@@ -284,7 +287,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
         super.layout();
         splitPane.setBounds(0, 0, this.getWidth(), this.getHeight());
         splitPane.layout();
-        compassPanel.setSize(bottomTable.getWidth(),bottomTable.getHeight());
+        compassPanel.setSize(bottomTable.getWidth(), bottomTable.getHeight());
     }
 
 
@@ -305,15 +308,19 @@ public class CompassView extends AbstractView implements PositionChangedListener
     }
 
     @Override
-    public void positionChanged(PositionChangedEvent event) {
-        actCoord = event.pos;
-        refreshOrientationInfo();
+    public void positionChanged(de.longri.cachebox3.events.location.PositionChangedEvent event) {
+        synchronized (this) {
+            actCoord = event.pos;
+            refreshOrientationInfo();
+        }
     }
 
     @Override
-    public void orientationChanged(OrientationChangedEvent event) {
-        actHeading = event.getOrientation();
-        refreshOrientationInfo();
+    public void orientationChanged(de.longri.cachebox3.events.location.OrientationChangedEvent event) {
+        synchronized (this) {
+            actHeading = event.getOrientation();
+            refreshOrientationInfo();
+        }
     }
 
     private void refreshOrientationInfo() {
@@ -331,41 +338,38 @@ public class CompassView extends AbstractView implements PositionChangedListener
             ownPositionLabel.setText(actCoord.FormatCoordinate());
         }
 
+        final float heading = actHeading;
+        final Coordinate dest = EventHandler.getSelectedCoord();
 
-        AbstractCache actAbstractCache = null;
-        AbstractWaypoint actWaypoint = null;
+        CB.postOnGlThread(new NamedRunnable("Set compass values") {
+            @Override
+            public void run() {
+                try {
+                    MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.ACCURATE, actCoord.getLatitude(),
+                            actCoord.getLongitude(), dest.getLatitude(), dest.getLongitude(), result);
+                } catch (Exception e) {
+                    log.error("Compute distance and bearing", e);
+                    return;
+                }
 
-        if (EventHandler.getSelectedWaypoint() == null) {
-            actAbstractCache = EventHandler.getSelectedCache();
-        } else {
-            actWaypoint = EventHandler.getSelectedWaypoint();
-        }
-        Coordinate dest = actWaypoint != null ? actWaypoint : actAbstractCache;
+                float distance = result[0];
+                float bearing = result[1];
+                log.debug("set Compass heading to {}", heading);
+                compassPanel.setInfo(distance, heading, bearing, 0/*actCoord.getAccuracy()*/);
 
-        try {
-            MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.ACCURATE, actCoord.getLatitude(),
-                    actCoord.getLongitude(), dest.getLatitude(), dest.getLongitude(), result);
-        } catch (Exception e) {
-            log.error("Compute distance and bearing", e);
-            return;
-        }
+                if (targetdirectionLabel != null) {
+                    double directionToTarget = 0;
+                    if (bearing < 0)
+                        directionToTarget = 360 + bearing;
+                    else
+                        directionToTarget = bearing;
 
-        float distance = result[0];
-        float bearing = result[1];
-
-        compassPanel.setInfo(distance, actHeading, bearing, actCoord.getAccuracy());
-
-        if (targetdirectionLabel != null) {
-            double directionToTarget = 0;
-            if (bearing < 0)
-                directionToTarget = 360 + bearing;
-            else
-                directionToTarget = bearing;
-
-            String sBearing = Translation.get("directionToTarget") + " : " +
-                    String.format("%.0f", directionToTarget) + "°";
-            targetdirectionLabel.setText(sBearing);
-        }
+                    String sBearing = Translation.get("directionToTarget") + " : " +
+                            String.format("%.0f", directionToTarget) + "°";
+                    targetdirectionLabel.setText(sBearing);
+                }
+            }
+        });
 
         CB.requestRendering();
     }

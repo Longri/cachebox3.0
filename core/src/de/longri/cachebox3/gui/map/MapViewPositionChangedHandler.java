@@ -17,20 +17,22 @@ package de.longri.cachebox3.gui.map;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.OrientationChangedListener;
-import de.longri.cachebox3.events.PositionChangedListener;
-import de.longri.cachebox3.events.SpeedChangedListener;
+import de.longri.cachebox3.events.location.*;
+import de.longri.cachebox3.events.location.SpeedChangedListener;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
+import de.longri.cachebox3.gui.animations.map.DoubleAnimator;
+import de.longri.cachebox3.gui.animations.map.MapAnimator;
+import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
-import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
-import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Settings_Map;
+import de.longri.cachebox3.utils.IChanged;
 import org.oscim.core.MercatorProjection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,24 +48,24 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
     private static Logger log = LoggerFactory.getLogger(MapViewPositionChangedHandler.class);
     private final MapInfoPanel infoPanel;
+    private final MapAnimator animator;
 
     private float arrowHeading, accuracy, mapBearing, userBearing, tilt;
-    private CoordinateGPS mapCenter;
-    private CoordinateGPS myPosition;
+    private Coordinate mapCenter;
+    private Coordinate myPosition;
     private final CacheboxMapAdapter map;
-    private final LocationAccuracyLayer myLocationAccuracy;
-    private final LocationLayer myLocationLayer;
     private final AtomicBoolean isDisposed = new AtomicBoolean(false);
-    private final MapStateButton mapStateButton;
-    private final MapView mapView;
+    private Timer timer;
+    private double lastDynZoom;
+    private short lastEventID = -1;
+    private long lastMapPosChange = Long.MIN_VALUE;
+    private double maxSpeed, maxZoom, minZoom;
+    private boolean dynZoomEnabled;
 
-    public MapViewPositionChangedHandler(MapView mapView, CacheboxMapAdapter map, LocationLayer myLocationLayer,
+    public MapViewPositionChangedHandler(CacheboxMapAdapter map, DirectLineLayer directLineLayer, LocationLayer myLocationLayer,
                                          LocationAccuracyLayer myLocationAccuracy,
-                                         MapStateButton mapStateButton, MapInfoPanel infoPanel) {
+                                         MapInfoPanel infoPanel) {
         this.map = map;
-        this.myLocationLayer = myLocationLayer;
-        this.myLocationAccuracy = myLocationAccuracy;
-        this.mapStateButton = mapStateButton;
         this.infoPanel = infoPanel;
         this.infoPanel.setStateChangedListener(new Compass.StateChanged() {
             @Override
@@ -73,7 +75,25 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
                 assumeValues(false, (short) (lastEventID - 1));
             }
         });
-        this.mapView = mapView;
+        this.animator = new MapAnimator(this, map, directLineLayer, myLocationLayer, myLocationAccuracy);
+
+        dynZoomEnabled = Settings_Map.dynamicZoom.getValue();
+        maxSpeed = Settings_Map.MoveMapCenterMaxSpeed.getValue();
+        maxZoom = 1 << Settings_Map.dynamicZoomLevelMax.getValue();
+        minZoom = 1 << Settings_Map.dynamicZoomLevelMin.getValue();
+        IChanged settingChangeHandler = new IChanged() {
+            @Override
+            public void isChanged() {
+                dynZoomEnabled = Settings_Map.dynamicZoom.getValue();
+                maxSpeed = Settings_Map.MoveMapCenterMaxSpeed.getValue();
+                maxZoom = 1 << Settings_Map.dynamicZoomLevelMax.getValue();
+                minZoom = 1 << Settings_Map.dynamicZoomLevelMin.getValue();
+            }
+        };
+        Settings_Map.dynamicZoom.addChangedEventListener(settingChangeHandler);
+        Settings_Map.MoveMapCenterMaxSpeed.addChangedEventListener(settingChangeHandler);
+        Settings_Map.dynamicZoomLevelMax.addChangedEventListener(settingChangeHandler);
+        Settings_Map.dynamicZoomLevelMin.addChangedEventListener(settingChangeHandler);
         de.longri.cachebox3.events.EventHandler.add(this);
     }
 
@@ -91,103 +111,103 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
      *
      * @return Boolean
      */
-    private boolean getCenterGps() {
-        return CB.mapMode != MapMode.FREE && CB.mapMode != MapMode.WP;
+    public boolean getCenterGps() {
+        return CB.mapMode == null || CB.mapMode == MapMode.GPS || CB.mapMode == MapMode.CAR || CB.mapMode == MapMode.LOCK;
     }
-
-    private Timer timer;
-
-    private double lastDynZoom;
-    private short lastEventID = -1;
 
     /**
      * Set the values to Map and position overlays
      */
     private void assumeValues(boolean force, final short eventID) {
 
-        if (lastEventID == eventID) return;
-        lastEventID = eventID;
-
-        if (!force && this.map.animator().isActive()) {
-            if (timer != null) return;
-            timer = new Timer();
-            TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    log.debug("AssumeValues TimerTask  eventID:{}", eventID);
-                    assumeValues(true, eventID);
-                }
-            };
-            timer.schedule(timerTask, 500);
-            return;
-        }
-        timer = null;
-
-
-        if (isDisposed.get()) return;
-        myPosition = EventHandler.getMyPosition();
-
-        if (this.mapCenter != null && getCenterGps()) {
-            mapView.animator.position(
-                    MercatorProjection.longitudeToX(this.mapCenter.longitude),
-                    MercatorProjection.latitudeToY(this.mapCenter.latitude)
-            );
-        }
-        //force full tilt on CarMode
-        if (CB.mapMode == MapMode.CAR)
-            mapView.animator.tilt(map.viewport().getMaxTilt());
-
-        if (CB.mapMode == MapMode.CAR /*&& Settings_Map.dynamicZoom.getValue()*/) {
-            // calculate dynamic Zoom
-
-            double maxSpeed = Settings_Map.MoveMapCenterMaxSpeed.getValue();
-            double maxZoom = 1 << Settings_Map.dynamicZoomLevelMax.getValue();
-            double minZoom = 1 << Settings_Map.dynamicZoomLevelMin.getValue();
-
-            double percent = actSpeed / maxSpeed;
-
-            double dynZoom = (float) (maxZoom - ((maxZoom - minZoom) * percent));
-            if (dynZoom > maxZoom)
-                dynZoom = maxZoom;
-            if (dynZoom < minZoom)
-                dynZoom = minZoom;
-
-            mapView.animator.scale(dynZoom);
-            if (lastDynZoom != (dynZoom)) {
-                lastDynZoom = dynZoom;
+        try {
+            if (lastEventID == eventID) {
+                return;
             }
-        }
+            lastEventID = eventID;
 
-        float bearing = -EventHandler.getHeading();
-        log.debug("Eventhandler bearing: {}", bearing);
-        if (CB.mapMode == MapMode.CAR) {
-            this.infoPanel.setMapOrientationMode(MapOrientationMode.COMPASS);
-        }
+            if (isDisposed.get()) return;
 
-        switch (this.infoPanel.getOrientationState()) {
-            case NORTH:
-                this.mapBearing = 0;
-                this.arrowHeading = bearing;
-                mapView.animator.rotate(mapBearing);
-                break;
-            case COMPASS:
-                this.mapBearing = bearing;
-                this.arrowHeading = 0;
-                mapView.animator.rotate(mapBearing);
-                break;
-            case USER:
-                this.mapBearing = userBearing;
-                this.arrowHeading = userBearing + bearing;
-                break;
-        }
-        log.debug("OrientationState {}| MapBearing {}| ArrowHeading {}", this.infoPanel.getOrientationState(), mapBearing, arrowHeading);
 
-        infoPanel.setNewValues(myPosition, -mapBearing);
-        if (myPosition != null) {
-            myLocationAccuracy.setPosition(myPosition.latitude, myPosition.longitude, accuracy);
-            myLocationLayer.setPosition(myPosition.latitude, myPosition.longitude, arrowHeading);
+            float duration;
+            if (lastMapPosChange == Long.MIN_VALUE) {
+                duration = MapAnimator.DEFAULT_DURATION;
+            } else {
+                long div = System.currentTimeMillis() - lastMapPosChange;
+                duration = div / 1000;
+            }
+            if (duration > 0.2) {
+                lastMapPosChange = System.currentTimeMillis();
+
+                double lat, lon;
+
+                if (getCenterGps()) {
+                    if (this.mapCenter == null) {
+                        this.mapCenter = EventHandler.getMyPosition();
+                    }
+                    lon = this.mapCenter.longitude;
+                    lat = this.mapCenter.latitude;
+                } else {
+                    if(this.myPosition==null){
+                        this.myPosition = EventHandler.getMyPosition();
+                    }
+                    lon = this.myPosition.longitude;
+                    lat = this.myPosition.latitude;
+                }
+                animator.position(duration,
+                        MercatorProjection.longitudeToX(lon),
+                        MercatorProjection.latitudeToY(lat)
+                );
+            }
+
+            //force full tilt on CarMode
+            if (CB.mapMode == MapMode.CAR)
+                animator.tilt(map.viewport().getMaxTilt());
+
+
+            if (dynZoomEnabled && CB.mapMode == MapMode.CAR) {
+                // calculate dynamic Zoom
+                double percent = actSpeed / maxSpeed;
+                double dynZoom = (float) (maxZoom - ((maxZoom - minZoom) * percent));
+                if (dynZoom > maxZoom)
+                    dynZoom = maxZoom;
+                if (dynZoom < minZoom)
+                    dynZoom = minZoom;
+
+                if (lastDynZoom != (dynZoom)) {
+                    lastDynZoom = dynZoom;
+                    log.debug("Set new dynZoom: speed: {}  percent: {}  zoom: {}", actSpeed, percent, dynZoom);
+                    animator.scale(2.0f, dynZoom);
+                }
+            }
+
+            float bearing = -EventHandler.getHeading();
+            if (CB.mapMode == MapMode.CAR) {
+                this.infoPanel.setMapOrientationMode(MapOrientationMode.COMPASS);
+            }
+
+            switch (this.infoPanel.getOrientationState()) {
+                case NORTH:
+                    this.mapBearing = 0;
+                    this.arrowHeading = bearing;
+                    animator.rotate(mapBearing);
+                    break;
+                case COMPASS:
+                    this.mapBearing = bearing;
+                    this.arrowHeading = 0;
+                    animator.rotate(mapBearing);
+                    break;
+                case USER:
+                    this.mapBearing = userBearing;
+                    this.arrowHeading = userBearing + bearing;
+                    break;
+            }
+            animator.setArrowHeading(arrowHeading);
+            infoPanel.setNewValues(myPosition, -mapBearing);
+            CB.requestRendering();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        CB.requestRendering();
     }
 
     public void tiltChangedFromMap(float newTilt) {
@@ -206,46 +226,52 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     }
 
     @Override
-    public void positionChanged(de.longri.cachebox3.events.PositionChangedEvent event) {
-        if (CB.mapMode == MapMode.CAR && !event.pos.isGPSprovided())
-            return;// at CarMode ignore Network provided positions!
-
+    public void positionChanged(PositionChangedEvent event) {
         this.myPosition = event.pos;
         if (getCenterGps())
             this.mapCenter = this.myPosition;
+        assumeValues(false, event.ID);
+    }
 
-        this.accuracy = this.myPosition.getAccuracy();
 
+    private float actSpeed;
+
+    @Override
+    public void speedChanged(SpeedChangedEvent event) {
+        actSpeed = event.speed;
+        assumeValues(false, event.ID);
+    }
+
+    @Override
+    public void orientationChanged(OrientationChangedEvent event) {
         if (CB.mapMode == MapMode.CAR) {
-            this.mapBearing = (float) event.pos.getHeading();
+            this.mapBearing = event.getOrientation();
             this.arrowHeading = 0;
         }
-
-        this.actSpeed = (float) event.pos.getSpeed();
-        log.debug("AssumeValues positionChanged Event  eventID:{}", event.ID);
-        assumeValues(false, event.ID);
-    }
-
-
-    float actSpeed;
-
-    @Override
-    public void speedChanged(de.longri.cachebox3.events.SpeedChangedEvent event) {
-        actSpeed = event.speed;
-        log.debug("AssumeValues SpeedChanged Event  eventID:{}", event.ID);
-        assumeValues(false, event.ID);
-    }
-
-    @Override
-    public void orientationChanged(de.longri.cachebox3.events.OrientationChangedEvent event) {
-        // at CarMode no orientation changes below 20kmh
-        if (CB.mapMode == MapMode.CAR)
-            return;
-        log.debug("AssumeValues orientationChanged Event eventID:{}", event.ID);
         assumeValues(false, event.ID);
     }
 
     public String toString() {
         return "MapViewPositionHandler";
+    }
+
+    public void update(float deltaTime) {
+        animator.update(deltaTime);
+    }
+
+    public void scale(double scale) {
+        animator.scale(scale);
+    }
+
+    public void rotate(float rotate) {
+        animator.rotate(rotate);
+    }
+
+    public void position(double x, double y) {
+        animator.position(x, y);
+    }
+
+    public void animateToPos(double x, double y) {
+        animator.animateToPos(x, y);
     }
 }

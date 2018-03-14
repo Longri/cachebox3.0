@@ -39,7 +39,7 @@ public class ImportProgressChangedEvent extends AbstractEvent<ImportProgressChan
     }
 
     @Override
-    Class getListenerClass() {
+    public Class getListenerClass() {
         return ImportProgressChangedListener.class;
     }
 }

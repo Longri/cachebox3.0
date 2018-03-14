@@ -16,24 +16,21 @@
 package de.longri.cachebox3;
 
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.translation.Translation;
@@ -100,61 +97,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
         return bmp;
     }
 
-
-    LocationManager locationManager;
-    AndroidLocationListener locationListener;
-
-    @Override
-    public void initialLocationReciver() {
-
-
-        if (locationManager != null) {
-            return;
-        }
-
-        locationListener = new AndroidLocationListener();
-
-        // GPS
-        // get the location manager
-        locationManager = (LocationManager) this.application.getContext().getSystemService(Context.LOCATION_SERVICE);
-
-        final int updateTime = 1000; // 1s
-
-        //TODO get gps updateTime from settings
-//            int updateTime = Config.gpsUpdateTime.getValue();
-//
-//            Config.gpsUpdateTime.addChangedEventListener(new IChanged() {
-//
-//                @Override
-//                public void isChanged() {
-//                    int updateTime = Config.gpsUpdateTime.getValue();
-//                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 1, this);
-//                }
-//            });
-
-        application.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 5, locationListener);
-                    if (ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application.getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                            != PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(AndroidPlatformConnector.this.application.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                                    != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 300, locationListener);
-
-                    locationManager.addNmeaListener(locationListener);
-                    locationManager.addGpsStatusListener(locationListener);
-                } catch (Exception e) {
-                    log.error("main.initialLocationManager()", e);
-                    e.printStackTrace();
-                }
-            }
-        });
-
-    }
 
     @Override
     public FileHandle _getSandBoxFileHandle(String fileName) {
@@ -247,6 +189,28 @@ public class AndroidPlatformConnector extends PlatformConnector {
     }
 
     @Override
+    protected void _runOnBackGround(final Runnable backgroundTask) {
+        CB.postAsync(new NamedRunnable("Run on Background") {
+            @Override
+            public void run() {
+                backgroundTask.run();
+            }
+        });
+    }
+
+    @Override
+    protected void _playNotifySound(final FileHandle soundFileHandle) {
+        final Sound sound = Gdx.audio.newSound(soundFileHandle);
+        //need time for prepare sound
+        CB.postAsyncDelayd(100, new NamedRunnable("") {
+            @Override
+            public void run() {
+                sound.play();
+            }
+        });
+    }
+
+    @Override
     public void _getMultilineTextInput(final Input.TextInputListener listener, final String title, final String text,
                                        final String hint) {
         this.handle.post(new Runnable() {
@@ -298,22 +262,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
 //                    }
 //                });
                 alert.show();
-            }
-        });
-    }
-
-    public void removeLocationListener() {
-        application.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    locationManager.removeUpdates(locationListener);
-                    locationManager = null;
-                    locationListener = null;
-                } catch (Exception e) {
-                    log.error("main.initialLocationManager()", e);
-                    e.printStackTrace();
-                }
             }
         });
     }

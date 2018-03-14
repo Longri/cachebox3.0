@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.events;
+package de.longri.cachebox3.events.location;
 
 /**
- * Created by Longri on 23.03.2017.
+ * Created by Longri on 20.02.2018.
  */
-public interface OrientationChangedListener {
-    void orientationChanged(OrientationChangedEvent event);
+public enum GpsState {
+    OUT_OF_SERVICE,AVAILABLE, UNKNOWN, TEMPORARILY_UNAVAILABLE
 }

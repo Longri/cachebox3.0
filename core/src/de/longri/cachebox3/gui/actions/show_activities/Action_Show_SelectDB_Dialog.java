@@ -54,21 +54,6 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
     @Override
     public void execute() {
 
-        if (EventHandler.getSelectedCache() != null) {
-            // speichere selektierten Cache, da nicht alles über die SelectedCacheEventList läuft
-            Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGcCode().toString());
-            Config.AcceptChanges();
-            log.debug("LastSelectedCache = " + EventHandler.getSelectedCache().getGcCode());
-        }
-
-
-//        CB.postOnGlThread(new NamedRunnable("test") {
-//            @Override
-//            public void run() {
-//                new TestActivity().show();
-//            }
-//        });
-
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {

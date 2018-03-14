@@ -27,10 +27,10 @@ public class Settings_Map extends Settings_Const {
 
     // NORMAL visible
     public static final SettingFolder MapPackFolder = (SettingFolder) Config.settingsList.addSetting(new SettingFolder("MapPackFolder", SettingCategory.Map, NORMAL, "?/repository/maps", SettingStoreType.Global, SettingUsage.ALL, false));
-    public static final SettingInt dynamicZoomLevelMax = (SettingInt) Config.settingsList.addSetting(new SettingInt("dynamicZoomLevelMax", SettingCategory.CarMode, NORMAL, 17, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingInt dynamicZoomLevelMin = (SettingInt) Config.settingsList.addSetting(new SettingInt("dynamicZoomLevelMin", SettingCategory.CarMode, NORMAL, 15, SettingStoreType.Global, SettingUsage.ACB));
-    //    public static final SettingBool dynamicZoom = (SettingBool) Config.settingsList.addSetting(new SettingBool("dynamicZoom", SettingCategory.CarMode, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingInt MoveMapCenterMaxSpeed = (SettingInt) Config.settingsList.addSetting(new SettingInt("MoveMapCenterMaxSpeed", SettingCategory.CarMode, NORMAL, 60, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingInt dynamicZoomLevelMax = (SettingInt) Config.settingsList.addSetting(new SettingInt("dynamicZoomLevelMax", SettingCategory.CarMode, NORMAL, 15, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingInt dynamicZoomLevelMin = (SettingInt) Config.settingsList.addSetting(new SettingInt("dynamicZoomLevelMin", SettingCategory.CarMode, NORMAL, 14, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingBool dynamicZoom = (SettingBool) Config.settingsList.addSetting(new SettingBool("dynamicZoom", SettingCategory.CarMode, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingInt MoveMapCenterMaxSpeed = (SettingInt) Config.settingsList.addSetting(new SettingInt("MoveMapCenterMaxSpeed", SettingCategory.CarMode, NORMAL, 40, SettingStoreType.Global, SettingUsage.ACB));
 
 
     // EXPERT visible

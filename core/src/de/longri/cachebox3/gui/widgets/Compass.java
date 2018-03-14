@@ -25,9 +25,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.animations.map.DoubleAnimator;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.gui.skin.styles.CompassStyle;
 import de.longri.cachebox3.utils.CB_RectF;
+
+import static de.longri.cachebox3.gui.animations.map.MapAnimator.DEFAULT_DURATION;
 
 /**
  * Created by Longri on 21.03.2017.
@@ -45,7 +48,7 @@ public class Compass extends WidgetGroup implements Layout {
     private final Matrix4 transform_arrow = new Matrix4();
     private final Matrix4 tmp = new Matrix4();
     private float lastBearing, lastHeading;
-    private final boolean useState, CAN_SCALE;
+    private final boolean CAN_SCALE;
 
     private MapOrientationMode state = MapOrientationMode.NORTH;
     private StateChanged stateChangedListener;
@@ -64,7 +67,6 @@ public class Compass extends WidgetGroup implements Layout {
 
     public Compass(CompassStyle style, boolean useState, boolean canScale) {
         this.style = style;
-        this.useState = useState;
         rec_frame = new CB_RectF();
         rec_scale = new CB_RectF();
         rec_arrow = new CB_RectF();
@@ -87,16 +89,12 @@ public class Compass extends WidgetGroup implements Layout {
 
     private float minSize, prefSize, maxSize, scaleRatio, arrowRatio;
 
+
     public void setState(MapOrientationMode state) {
-        setState(state, true);
-    }
-
-    public void setState(MapOrientationMode state, boolean fireEvent) {
         if (this.state == state) return;
-
         this.state = state;
         CB.requestRendering();
-        if (fireEvent && this.stateChangedListener != null) {
+        if (this.stateChangedListener != null) {
             this.stateChangedListener.stateChanged(this.state);
         }
     }
@@ -118,16 +116,13 @@ public class Compass extends WidgetGroup implements Layout {
     }
 
     public void draw(Batch batch, float parentAlpha) {
-
         validate();
-
         applyTransform(batch, computeTransform());
         drawBackground(batch, parentAlpha);
         resetTransform(batch);
     }
 
     private void drawBackground(Batch batch, float parentAlpha) {
-
         Color color = batch.getColor();
         batch.setColor(1, 1, 1, 1);
         //draw frame
@@ -179,6 +174,8 @@ public class Compass extends WidgetGroup implements Layout {
         setHeading(lastHeading);
     }
 
+    boolean layoutChanged = false;
+
     public void layout() {
         float size = Math.min(this.getWidth(), this.getHeight());
         rec_frame.setSize(size, size);
@@ -195,6 +192,7 @@ public class Compass extends WidgetGroup implements Layout {
         rec_arrow.setSize(size * arrowRatio, size * arrowRatio);
         rec_arrow.setX(centerX - rec_arrow.getHalfWidth());
         rec_arrow.setY(centerY - rec_arrow.getHalfHeight());
+        layoutChanged = true;
     }
 
     @Override
@@ -229,19 +227,46 @@ public class Compass extends WidgetGroup implements Layout {
 
 
     public void setBearing(float bearing) {
-        lastBearing = bearing;
-        transform_scale.idt();
-        transform_scale.translate(rec_scale.getHalfWidth() + rec_scale.getX(), rec_scale.getHalfHeight() + rec_scale.getY(), 0);
-        transform_scale.rotate(0, 0, 1, bearing);
-        transform_scale.translate(-(rec_scale.getHalfWidth() + rec_scale.getX()), -(rec_scale.getHalfHeight() + rec_scale.getY()), 0);
+        if (lastBearing != bearing) {
+            bearingAnimator.start(DEFAULT_DURATION, lastBearing, bearing);
+            lastBearing = bearing;
+        }
     }
 
     public void setHeading(float heading) {
-        lastHeading = heading;
-        transform_arrow.idt();
-        transform_arrow.translate(rec_arrow.getHalfWidth() + rec_arrow.getX(), rec_arrow.getHalfHeight() + rec_arrow.getY(), 0);
-        transform_arrow.rotate(0, 0, 1, -heading);
-        transform_arrow.translate(-(rec_arrow.getHalfWidth() + rec_arrow.getX()), -(rec_arrow.getHalfHeight() + rec_arrow.getY()), 0);
+        if (lastHeading != heading) {
+            headingAnimator.start(DEFAULT_DURATION, lastHeading, heading);
+            lastHeading = heading;
+        }
     }
+
+    private final DoubleAnimator bearingAnimator = new DoubleAnimator();
+    private final DoubleAnimator headingAnimator = new DoubleAnimator();
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        boolean changes = false;
+        if (layoutChanged || bearingAnimator.update(delta)) {
+            float animatedBearingValue = (float) bearingAnimator.getAct();
+            transform_scale.idt();
+            transform_scale.translate(rec_scale.getHalfWidth() + rec_scale.getX(), rec_scale.getHalfHeight() + rec_scale.getY(), 0);
+            transform_scale.rotate(0, 0, 1, animatedBearingValue);
+            transform_scale.translate(-(rec_scale.getHalfWidth() + rec_scale.getX()), -(rec_scale.getHalfHeight() + rec_scale.getY()), 0);
+            changes = true;
+        }
+
+        if (layoutChanged || headingAnimator.update(delta)) {
+            float animatedHeadingValue = (float) headingAnimator.getAct();
+            transform_arrow.idt();
+            transform_arrow.translate(rec_arrow.getHalfWidth() + rec_arrow.getX(), rec_arrow.getHalfHeight() + rec_arrow.getY(), 0);
+            transform_arrow.rotate(0, 0, 1, -animatedHeadingValue);
+            transform_arrow.translate(-(rec_arrow.getHalfWidth() + rec_arrow.getX()), -(rec_arrow.getHalfHeight() + rec_arrow.getY()), 0);
+            changes = true;
+        }
+        layoutChanged = false;
+        if (changes) CB.requestRendering();
+    }
+
 
 }
