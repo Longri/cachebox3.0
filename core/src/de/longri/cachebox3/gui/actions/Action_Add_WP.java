@@ -79,7 +79,7 @@ public class Action_Add_WP extends AbstractAction {
                 , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
 
 
-        EditWaypoint editWaypoint = new EditWaypoint(newWP, true, false, new GenericCallBack<AbstractWaypoint>() {
+        EditWaypoint editWaypoint = new EditWaypoint(newWP, false, false, new GenericCallBack<AbstractWaypoint>() {
             @Override
             public void callBack(AbstractWaypoint value) {
                 if (value != null) {
