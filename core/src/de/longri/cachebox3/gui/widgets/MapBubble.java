@@ -78,7 +78,7 @@ public class MapBubble extends VisTable {
                 isAvailable = false;
             }
 
-            content = new CacheItem(cache.getType(), cache.getName(),
+            content = new CacheItem(null, cache.getName(),
                     (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
                     (int) Math.min(cache.getRating() * 2, 5 * 2), cache.getSize(),
                     cache.getSize().toShortString(), left, right, isAvailable, cache.getFavoritePoints(), style.cacheListItemStyle);

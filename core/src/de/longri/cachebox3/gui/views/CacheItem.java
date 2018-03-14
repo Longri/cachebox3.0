@@ -78,13 +78,13 @@ public class CacheItem extends VisTable implements Disposable {
 
         this.clear();
 
-        VisTable iconTable = new VisTable();
-        iconTable.add(type.getCacheWidget(style.typeStyle, leftInfoIcon, rightInfoIcon));
-        iconTable.pack();
-        iconTable.layout();
-
-        this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGIN);
-
+        if (this.type != null) {
+            VisTable iconTable = new VisTable();
+            iconTable.add(type.getCacheWidget(style.typeStyle, leftInfoIcon, rightInfoIcon));
+            iconTable.pack();
+            iconTable.layout();
+            this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGIN);
+        }
 
         Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
         nameLabelStyle.font = this.style.nameFont;
@@ -106,9 +106,7 @@ public class CacheItem extends VisTable implements Disposable {
         Label.LabelStyle distanceLabelStyle = new Label.LabelStyle();
         distanceLabelStyle.font = this.style.distanceFont;
         distanceLabelStyle.fontColor = this.style.distanceFontColor;
-        distanceLabel = new VisLabel("---- --", distanceLabelStyle);
-
-
+        distanceLabel = new VisLabel(arrowImage != null ? "---- --" : "   ", distanceLabelStyle);
         arrowTable.add(distanceLabel).padTop(CB.scaledSizes.MARGIN);
         this.add(arrowTable).right();
 
