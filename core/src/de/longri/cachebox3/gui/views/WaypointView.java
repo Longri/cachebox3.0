@@ -132,7 +132,6 @@ public class WaypointView extends AbstractView {
                 // set listener on Update, because Item is remove all listener with Layout
                 view.addListener(clickLongClickListener);
 
-
                 //get index from item
                 int idx = view.getListIndex();
 
