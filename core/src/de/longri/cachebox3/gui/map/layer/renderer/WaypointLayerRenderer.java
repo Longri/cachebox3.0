@@ -205,6 +205,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
 
             if (!it.visible) {
                 it.visible = true;
+                it.item.visible = true;
                 //changedVisible++;
             }
             numVisible++;
@@ -226,6 +227,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
 
             if (it.changes) {
                 it.visible = false;
+                it.item.visible = false;
                 continue;
             }
 

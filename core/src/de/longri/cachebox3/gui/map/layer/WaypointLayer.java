@@ -36,7 +36,9 @@ import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxDouble;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
+import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.lists.CB_List;
 import de.longri.cachebox3.utils.lists.ThreadStack;
@@ -516,7 +518,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         if (!(e instanceof MotionHandler)) return false;
         if (g instanceof Gesture.Tap) {
             boolean result = activateSelectedItems(e, mActiveItemSingleTap);
-            if (result == false&&mapView.infoBubbleVisible()) {
+            if (result == false && mapView.infoBubbleVisible()) {
                 mapView.closeInfoBubble();
             }
             return result;
@@ -558,6 +560,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         // search item inside click bounding box
         clickedItems.clear();
         for (int i = 0, n = mItemList.size; i < n; i++) {
+            if (!mItemList.get(i).visible) continue;
             MapWayPointItem item = mItemList.get(i);
 
             double lat, lon;

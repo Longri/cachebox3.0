@@ -35,6 +35,7 @@ public class MapWayPointItem extends Coordinate {
     private final int cachedHash;
     private final TextureRegion[] small, middle, large;
     public final boolean selected;
+    public boolean visible;
 
 
     public MapWayPointItem(Coordinate pos, Object obj, Regions regions, boolean selected) {
