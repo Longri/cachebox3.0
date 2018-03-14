@@ -19,6 +19,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.events.location.GpsEventHelper;
+import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.locator.manager.LocationManager;
 import de.longri.cachebox3.settings.Config;
@@ -202,8 +203,17 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
 
     private void removeBackGroundLocationListener() {
         log.debug("stop long time Background task");
+
+        //get last background location and fire to foreground
+        final Coordinate lastBackgroundCoord = backgroundTask.getLastCoord();
         backgroundTask.cancel();
         backgroundTask = null;
+        CB.postOnNextGlThread(new Runnable() {
+            @Override
+            public void run() {
+                EventHandler.fire(new PositionChangedEvent(lastBackgroundCoord, true));
+            }
+        });
     }
 
     public void pause() {
@@ -216,6 +226,8 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         log.debug("onResume");
         initialForegroundLocationListener();
         removeBackGroundLocationListener();
+
+
     }
 
 }

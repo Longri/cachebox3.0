@@ -41,10 +41,9 @@ import java.lang.reflect.Type;
 /**
  * Created by Longri on 23.03.2017.
  */
-public class EventHandler implements SelectedCacheChangedListener, SelectedWayPointChangedListener, de.longri.cachebox3.events.location.PositionChangedListener, de.longri.cachebox3.events.location.OrientationChangedListener {
+public class EventHandler implements SelectedCacheChangedListener, SelectedWayPointChangedListener, PositionChangedListener, OrientationChangedListener {
 
     static final Logger log = LoggerFactory.getLogger(EventHandler.class);
-
 
     static final private Class[] allListener = new Class[]{de.longri.cachebox3.events.location.PositionChangedListener.class,
             SelectedCacheChangedListener.class, SelectedWayPointChangedListener.class, PositionChangedListener.class,
@@ -110,10 +109,26 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         synchronized (listenerMap) {
             final Array<Object> list = listenerMap.get(event.getListenerClass());
             if (list != null) {
+
+                //call this EventHandler first
+                final int myIndex = list.indexOf(INSTANCE, true);
+
+                if (myIndex >= 0) {
+                    try {
+                        event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[myIndex], event);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        log.error("Fire event to" + list.items[myIndex].getClass().getSimpleName(), e.getCause());
+                    }
+                }
+
                 asyncExecutor.submit(new AsyncTask<Void>() {
                     @Override
                     public Void call() throws Exception {
                         for (int i = 0, n = list.size; i < n; i++) {
+                            if (myIndex >= 0 && i == myIndex) continue;
+
                             try {
                                 event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
                             } catch (IllegalAccessException e) {
@@ -162,7 +177,6 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
                     load_unload_Cache_Waypoints(selectedCache, newCache);
                     selectedCache = newCache;
                 }
-
                 fireSelectedCoordChanged(event.ID);
             }
         }

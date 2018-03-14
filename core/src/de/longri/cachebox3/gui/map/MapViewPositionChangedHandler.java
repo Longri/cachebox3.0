@@ -17,19 +17,17 @@ package de.longri.cachebox3.gui.map;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedCoordChangedEvent;
+import de.longri.cachebox3.events.SelectedCoordChangedListener;
 import de.longri.cachebox3.events.location.*;
-import de.longri.cachebox3.events.location.SpeedChangedListener;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
-import de.longri.cachebox3.gui.animations.map.DoubleAnimator;
 import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
-import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
-import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.utils.IChanged;
@@ -37,14 +35,12 @@ import org.oscim.core.MercatorProjection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 28.09.2016.
  */
-public class MapViewPositionChangedHandler implements PositionChangedListener, SpeedChangedListener, OrientationChangedListener {
+public class MapViewPositionChangedHandler implements SelectedCoordChangedListener, PositionChangedListener, SpeedChangedListener, OrientationChangedListener {
 
     private static Logger log = LoggerFactory.getLogger(MapViewPositionChangedHandler.class);
     private final MapInfoPanel infoPanel;
@@ -55,7 +51,6 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
     private Coordinate myPosition;
     private final CacheboxMapAdapter map;
     private final AtomicBoolean isDisposed = new AtomicBoolean(false);
-    private Timer timer;
     private double lastDynZoom;
     private short lastEventID = -1;
     private long lastMapPosChange = Long.MIN_VALUE;
@@ -95,6 +90,7 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
         Settings_Map.dynamicZoomLevelMax.addChangedEventListener(settingChangeHandler);
         Settings_Map.dynamicZoomLevelMin.addChangedEventListener(settingChangeHandler);
         de.longri.cachebox3.events.EventHandler.add(this);
+        assumeValues(false, EventHandler.getId());
     }
 
     public void dispose() {
@@ -128,37 +124,27 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
             if (isDisposed.get()) return;
 
+            lastMapPosChange = System.currentTimeMillis();
 
-            float duration;
-            if (lastMapPosChange == Long.MIN_VALUE) {
-                duration = MapAnimator.DEFAULT_DURATION;
-            } else {
-                long div = System.currentTimeMillis() - lastMapPosChange;
-                duration = div / 1000;
-            }
-            if (duration > 0.2) {
-                lastMapPosChange = System.currentTimeMillis();
+            double lat, lon;
 
-                double lat, lon;
-
-                if (getCenterGps()) {
-                    if (this.mapCenter == null) {
-                        this.mapCenter = EventHandler.getMyPosition();
-                    }
-                    lon = this.mapCenter.longitude;
-                    lat = this.mapCenter.latitude;
-                } else {
-                    if(this.myPosition==null){
-                        this.myPosition = EventHandler.getMyPosition();
-                    }
-                    lon = this.myPosition.longitude;
-                    lat = this.myPosition.latitude;
+            if (getCenterGps()) {
+                if (this.mapCenter == null) {
+                    this.mapCenter = EventHandler.getMyPosition();
                 }
-                animator.position(duration,
-                        MercatorProjection.longitudeToX(lon),
-                        MercatorProjection.latitudeToY(lat)
-                );
+                lon = this.mapCenter.longitude;
+                lat = this.mapCenter.latitude;
+            } else {
+                if (this.myPosition == null) {
+                    this.myPosition = EventHandler.getMyPosition();
+                }
+                lon = this.myPosition.longitude;
+                lat = this.myPosition.latitude;
             }
+            animator.position(
+                    MercatorProjection.longitudeToX(lon),
+                    MercatorProjection.latitudeToY(lat)
+            );
 
             //force full tilt on CarMode
             if (CB.mapMode == MapMode.CAR)
@@ -273,5 +259,10 @@ public class MapViewPositionChangedHandler implements PositionChangedListener, S
 
     public void animateToPos(double x, double y) {
         animator.animateToPos(x, y);
+    }
+
+    @Override
+    public void selectedCoordChanged(SelectedCoordChangedEvent event) {
+        assumeValues(false, event.ID);
     }
 }

@@ -136,6 +136,7 @@ public class Desktop_LocationManager extends LocationManager {
 
             if (lastcourse != GPSData.getCourse()) {
                 locationEvents.newBearing((float) Math.toRadians(GPSData.getCourse()), true);
+                locationEvents.newBearing((float) Math.toRadians(GPSData.getCourse()), false);
                 lastcourse = GPSData.getCourse();
             } else {
 

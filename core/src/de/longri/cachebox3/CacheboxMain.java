@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
@@ -92,6 +93,7 @@ public class CacheboxMain extends ApplicationAdapter {
         INCLUDE_LIST.add("de.longri.cachebox3.utils.SoundCache");
         INCLUDE_LIST.add("de.longri.cachebox3.locator.BackgroundTask");
         INCLUDE_LIST.add("de.longri.cachebox3.locator.manager.IOS_LocationManager");
+        INCLUDE_LIST.add(MapAnimator.class.getName());
 
     }
 

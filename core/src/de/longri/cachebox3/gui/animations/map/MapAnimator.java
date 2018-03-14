@@ -36,7 +36,7 @@ public class MapAnimator {
 
     private static final Logger log = LoggerFactory.getLogger(MapAnimator.class);
 
-    public final static float DEFAULT_DURATION = 0.5f; // 500 ms
+    public final static float DEFAULT_DURATION = 1.2f; // 1200 ms
 
     private final Map map;
     private final DoubleAnimator mapX, mapY, scale, rotate, tilt, myPosX, myPosY;
@@ -63,10 +63,6 @@ public class MapAnimator {
     }
 
     public void update(float delta) {
-
-        float accuracy = 0.0f;// TODO get from ???
-
-
         map.viewport().getMapPosition(mapPosition);
         boolean changed = false;
         if (mapX.update(delta)) {
@@ -77,35 +73,6 @@ public class MapAnimator {
             changed = true;
             mapPosition.setY(mapY.getAct());
         }
-        if (mapViewPositionChangedHandler.getCenterGps()) {
-            if (!centerAnimation) {
-                myLocationAccuracy.setMercatorPosition(mapPosition.getX(), mapPosition.getY(), accuracy);
-                double lat = MercatorProjection.toLatitude(mapPosition.getY());
-                double lon = MercatorProjection.toLongitude(mapPosition.getX());
-                myLocationLayer.setPosition(lat, lon, arrowHeading);
-                directLineLayer.redrawLine(new LatLong(lat, lon));
-            } else {
-                Coordinate coordinate = EventHandler.getMyPosition();
-                myLocationAccuracy.setPosition(coordinate.latitude, coordinate.longitude, accuracy);
-                myLocationLayer.setPosition(coordinate.latitude, coordinate.longitude, arrowHeading);
-                directLineLayer.redrawLine(coordinate);
-            }
-        } else {
-            boolean changeX = myPosX.update(delta);
-            boolean changeY = myPosY.update(delta);
-            if (changeX || changeY) {
-                changed = true;
-                double x = myPosX.getAct();
-                double y = myPosY.getAct();
-                myLocationAccuracy.setMercatorPosition(x, y, accuracy);
-                double lat = MercatorProjection.toLatitude(y);
-                double lon = MercatorProjection.toLongitude(x);
-                myLocationLayer.setPosition(lat, lon, arrowHeading);
-                directLineLayer.redrawLine(new LatLong(lat, lon));
-            }
-        }
-
-
         if (scale.update(delta)) {
             changed = true;
             mapPosition.setScale(scale.getAct());
@@ -144,6 +111,14 @@ public class MapAnimator {
     private boolean centerAnimation = false;
 
     public void position(float duration, double x, double y) {
+        log.debug("new Position");
+        double lat = MercatorProjection.toLatitude(y);
+        double lon = MercatorProjection.toLongitude(x);
+        log.debug("Set ArrowHeading {}", arrowHeading);
+        myLocationLayer.setPosition(lat, lon, arrowHeading);
+        directLineLayer.redrawLine(new LatLong(lat, lon));
+
+
         if (mapViewPositionChangedHandler.getCenterGps()) {
             if (centerAnimation) {
                 if (mapX.isFinish()) {

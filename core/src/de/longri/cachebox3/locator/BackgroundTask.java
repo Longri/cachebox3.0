@@ -46,7 +46,7 @@ public class BackgroundTask implements Runnable {
     private int waitTime = 0;
 
     private LocationManager locationManager;
-    private Coordinate target;
+    private Coordinate target, lastBackgroundLocation;
     private int approachDistance;
     private Region targetRegion;
 
@@ -81,6 +81,7 @@ public class BackgroundTask implements Runnable {
                         locationManager.setDelegate(new LocationEvents() {
                             @Override
                             public void newGpsPos(double latitude, double longitude, float accuracy) {
+                                lastBackgroundLocation = new Coordinate(latitude, longitude);
                                 if (testDistance.get()) {
                                     float distance = target.distance(new LatLong(latitude, longitude), MathUtils.CalculationType.FAST);
                                     log.debug("New Background location! distance: {}", distance);
@@ -225,5 +226,9 @@ public class BackgroundTask implements Runnable {
                 }
             }
         });
+    }
+
+    public Coordinate getLastCoord() {
+        return lastBackgroundLocation;
     }
 }
