@@ -486,15 +486,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     private boolean onItemSingleTap(MapWayPointItem item) {
         log.debug("Click on: " + item);
 
-        //set as selected cache/wp
-//        if (item.dataObject instanceof AbstractCache) {
-//            de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedCacheChangedEvent((AbstractCache) item.dataObject));
-//        } else if (item.dataObject instanceof AbstractWaypoint) {
-//            AbstractWaypoint wp = (AbstractWaypoint) item.dataObject;
-//            de.longri.cachebox3.events.EventHandler.fire(new de.longri.cachebox3.events.SelectedWayPointChangedEvent(wp));
-//        }
-
-
         if (item.dataObject instanceof AbstractCache || item.dataObject instanceof AbstractWaypoint) {
             mapView.clickOnItem(item);
         }
@@ -523,8 +514,13 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     @Override
     public boolean onGesture(Gesture g, MotionEvent e) {
         if (!(e instanceof MotionHandler)) return false;
-        if (g instanceof Gesture.Tap)
-            return activateSelectedItems(e, mActiveItemSingleTap);
+        if (g instanceof Gesture.Tap) {
+            boolean result = activateSelectedItems(e, mActiveItemSingleTap);
+            if (result == false&&mapView.infoBubbleVisible()) {
+                mapView.closeInfoBubble();
+            }
+            return result;
+        }
 
         if (g instanceof Gesture.LongPress)
             return activateSelectedItems(e, mActiveItemLongPress);

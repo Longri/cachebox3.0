@@ -317,7 +317,7 @@ public class MapView extends AbstractView {
 
 
         //add position changed handler
-        positionChangedHandler = new MapViewPositionChangedHandler(map,directLineLayer, myLocationLayer, myLocationAccuracy, infoPanel);
+        positionChangedHandler = new MapViewPositionChangedHandler(map, directLineLayer, myLocationLayer, myLocationAccuracy, infoPanel);
 
         return map;
     }
@@ -915,32 +915,59 @@ public class MapView extends AbstractView {
         setInfoBubblePos();
         CB.requestRendering();
 
-        infoBubble.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                // select this cache/waypoint and close bubble
-
-                Object obj = item.dataObject;
-                if (obj instanceof AbstractCache) {
-                    AbstractCache cache = (AbstractCache) obj;
-                    EventHandler.fire(new SelectedCacheChangedEvent(cache));
-                } else if (obj instanceof AbstractWaypoint) {
-                    AbstractWaypoint waypoint = (AbstractWaypoint) obj;
-                    EventHandler.fire(new SelectedWayPointChangedEvent(waypoint));
-                }
-
-                CB.postOnGlThread(new NamedRunnable("remove info bubble") {
-                    @Override
-                    public void run() {
-                        MapView.this.removeActor(infoBubble);
-                        infoBubble = null;
-                    }
-                });
-
-            }
-        });
+        this.addListener(bubbleClickListener);
 
 
     }
+
+    private ClickListener bubbleClickListener = new ClickListener() {
+
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            super.touchDown(event, x, y, pointer, button);
+            if (infoBubble != null) {
+                //click detection
+                if (infoBubble.getX() <= x && infoBubble.getX() + infoBubble.getWidth() >= x &&
+                        infoBubble.getY() <= y && infoBubble.getY() + infoBubble.getHeight() >= y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void clicked(InputEvent event, float x, float y) {
+            if (infoBubble != null) {
+
+                //click detection
+                if (infoBubble.getX() <= x && infoBubble.getX() + infoBubble.getWidth() >= x &&
+                        infoBubble.getY() <= y && infoBubble.getY() + infoBubble.getHeight() >= y) {
+                    // select this cache/waypoint and close bubble
+                    Object obj = infoItem.dataObject;
+                    if (obj instanceof AbstractCache) {
+                        AbstractCache cache = (AbstractCache) obj;
+                        EventHandler.fire(new SelectedCacheChangedEvent(cache));
+                    } else if (obj instanceof AbstractWaypoint) {
+                        AbstractWaypoint waypoint = (AbstractWaypoint) obj;
+                        EventHandler.fire(new SelectedWayPointChangedEvent(waypoint));
+                    }
+
+                    closeInfoBubble();
+                }
+            }
+
+        }
+    };
+
+    public void closeInfoBubble() {
+        CB.postOnGlThread(new NamedRunnable("remove info bubble") {
+            @Override
+            public void run() {
+                MapView.this.removeActor(infoBubble);
+                MapView.this.removeListener(bubbleClickListener);
+                infoBubble = null;
+            }
+        });
+    }
+
 
     private void setInfoBubblePos() {
         if (this.map != null && infoBubble != null && screenPoint != null) {
@@ -948,5 +975,9 @@ public class MapView extends AbstractView {
             infoBubble.setPosition((float) (screenPoint.x + this.getWidth() / 2) + infoBubble.getOffsetX(),
                     (float) (this.getHeight() - (screenPoint.y + this.getHeight() / 2)) + infoBubble.getOffsetY());
         }
+    }
+
+    public boolean infoBubbleVisible() {
+        return infoBubble != null;
     }
 }
