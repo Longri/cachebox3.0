@@ -245,7 +245,7 @@ public class WaypointView extends AbstractView {
 
         @Override
         public boolean longClicked(Actor actor, float x, float y) {
-
+            if (!(actor instanceof ListViewItem)) return false;
             int listIndex = ((ListViewItem) actor).getListIndex();
 
             if (listIndex > 0) {
