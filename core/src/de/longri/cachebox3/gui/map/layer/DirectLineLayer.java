@@ -18,9 +18,6 @@ package de.longri.cachebox3.gui.map.layer;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.events.SelectedCoordChangedListener;
-import de.longri.cachebox3.events.location.PositionChangedEvent;
-import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
@@ -46,7 +43,7 @@ import static org.oscim.theme.styles.LineStyle.REPEAT_START_DEFAULT;
 /**
  * Created by Longri on 02.03.2017.
  */
-public class DirectLineLayer extends GenericLayer implements  Disposable {
+public class DirectLineLayer extends GenericLayer implements Disposable {
 
     private final static Logger log = LoggerFactory.getLogger(DirectLineLayer.class);
     private final static short MAX_VALUE = (short) (Short.MAX_VALUE / MapRenderer.COORD_SCALE);
@@ -122,7 +119,7 @@ public class DirectLineLayer extends GenericLayer implements  Disposable {
         @Override
         public void update(GLViewport v) {
             buckets.clear();
-            if (invalidLine || !layer.isEnabled()) {
+            if (invalidLine || layer == null || !layer.isEnabled()) {
                 setReady(false);
                 return;
             }

@@ -40,6 +40,7 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.utils.IChanged;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.lists.CB_List;
 import de.longri.cachebox3.utils.lists.ThreadStack;
 import org.oscim.backend.CanvasAdapter;
@@ -155,48 +156,54 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     @Override
     public void CacheListChangedEvent() {
-
+        log.debug("Call cacheList changed event handler");
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                //clear item list
-                mItemList.clear();
+                CB.postOnGlThread(new NamedRunnable("") {
+                    @Override
+                    public void run() {
+                        //clear item list
+                        mItemList.clear();
 
-                //add WayPoint items
+                        //add WayPoint items
 
-                CB_List<String> missingIconList = new CB_List<>();
-                boolean hasSelectedWP = de.longri.cachebox3.events.EventHandler.getSelectedWaypoint() != null;
+                        CB_List<String> missingIconList = new CB_List<>();
+                        boolean hasSelectedWP = EventHandler.getSelectedWaypoint() != null;
 
-                //set selected Cache at front
-                for (AbstractCache cache : Database.Data.Query) {
-                    addCache(missingIconList, hasSelectedWP, cache);
-                }
+                        //set selected Cache at front
+                        for (AbstractCache cache : Database.Data.Query) {
+                            addCache(missingIconList, hasSelectedWP, cache);
+                        }
 
-                mItemList.setFinishFill();
-                WaypointLayer.this.populate(true);
+                        mItemList.setFinishFill();
+                        WaypointLayer.this.populate(true);
 
 
-                if (missingIconList.size != 0) {
-                    StringBuilder msg = new StringBuilder("\n\n" + ERROR_MSG + "\n");
-                    int count = 0;
-                    for (String name : missingIconList) {
-                        msg.append(", " + name);
-                        count++;
-                        if (count > 5) {
-                            msg.append("\n");
-                            count = 0;
+                        if (missingIconList.size != 0) {
+                            StringBuilder msg = new StringBuilder("\n\n" + ERROR_MSG + "\n");
+                            int count = 0;
+                            for (String name : missingIconList) {
+                                msg.append(", " + name);
+                                count++;
+                                if (count > 5) {
+                                    msg.append("\n");
+                                    count = 0;
+                                }
+                            }
+                            if (CanvasAdapter.platform.isDesktop())
+                                throw new GdxRuntimeException(msg.toString());
+                            else log.error(msg.toString());
                         }
                     }
-                    if (CanvasAdapter.platform.isDesktop())
-                        throw new GdxRuntimeException(msg.toString());
-                    else log.error(msg.toString());
-                }
+                });
             }
         });
         thread.start();
     }
 
     private void addCache(CB_List<String> missingIconList, boolean hasSelectedWP, AbstractCache abstractCache) {
+        CB.assertGlThread();
         boolean dis = abstractCache.isArchived() || !abstractCache.isAvailable();
         boolean sel = !hasSelectedWP && de.longri.cachebox3.events.EventHandler.isSelectedCache(abstractCache);
         try {
@@ -215,6 +222,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
 
         //add waypoints from selected Cache or all Waypoints if set
+        sel = EventHandler.isSelectedCache(abstractCache);
         AbstractWaypoint selWp = null;
         if (abstractCache.getWaypoints() != null) {
             if (Settings.ShowAllWaypoints.getValue() || sel) {
@@ -387,97 +395,21 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         return bitmap;
     }
 
-
-    public void selectedCacheWPChanged(AbstractCache selectedAbstractCache, AbstractWaypoint selectedwaypoint, AbstractCache lastSelectedAbstractCache, AbstractWaypoint lastWaypoint) {
-
-        //reset selected state of last Cache/WP
-        //set selected state to Cache/WP
-        boolean wpchanged = false;
-        if (selectedAbstractCache.equals(lastSelectedAbstractCache)) {
-            if (selectedwaypoint != null) {
-                if (selectedwaypoint.equals(lastWaypoint)) {
-                    return;
-                } else {
-                    wpchanged = true;
-                }
-            } else {
-                if (lastWaypoint == null) return;
-            }
-        }
-
-
-        int indexOfLastSelectedCache = selectedAbstractCache.equals(lastSelectedAbstractCache) && !wpchanged ? -2 : -1;
-        int indexOfNewSelectedCache = -1;
-        int indexOfLastSelectedWp = lastWaypoint == null ? -2 : -1;
-        int indexOfNewSelectedWp = selectedwaypoint == null ? -2 : -1;
-
-        for (int i = 0, n = mItemList.size; i < n; i++) {
-            MapWayPointItem item = mItemList.get(i);
-            if (indexOfNewSelectedCache == -1 && item.dataObject.equals(selectedAbstractCache))
-                indexOfNewSelectedCache = i;
-            if (indexOfLastSelectedCache == -1 && item.dataObject.equals(lastSelectedAbstractCache))
-                indexOfLastSelectedCache = i;
-            if (indexOfLastSelectedWp == -1 && item.dataObject.equals(lastWaypoint)) indexOfLastSelectedWp = i;
-            if (indexOfNewSelectedWp == -1 && item.dataObject.equals(selectedwaypoint)) indexOfNewSelectedWp = i;
-
-
-            if (indexOfLastSelectedCache != -1 && indexOfNewSelectedCache != -1 &&
-                    indexOfLastSelectedWp != -1 && indexOfNewSelectedWp != -1) break;
-        }
-
-        log.debug("Last item" + indexOfNewSelectedCache);
-        log.debug("New item" + indexOfNewSelectedCache);
-
-
-        // new selected cache
-        if (indexOfNewSelectedCache >= 0 && indexOfNewSelectedWp < 0) {
-            MapWayPointItem newItem = getMapWayPointItem(selectedAbstractCache, selectedAbstractCache.isArchived()
-                    || !selectedAbstractCache.isAvailable(), true);
-            mItemList.set(indexOfNewSelectedCache, newItem);
-        }
-
-        // last selected cache
-        if (indexOfLastSelectedCache >= 0) {
-            MapWayPointItem lastItem = getMapWayPointItem(lastSelectedAbstractCache, lastSelectedAbstractCache.isArchived()
-                    || !lastSelectedAbstractCache.isAvailable(), false);
-            mItemList.set(indexOfLastSelectedCache, lastItem);
-        }
-
-        // new selected wp
-        if (indexOfNewSelectedWp >= 0) {
-            AbstractCache abstractCacheForWp = Database.Data.Query.GetCacheById(selectedwaypoint.getCacheId());
-            MapWayPointItem newWp = getMapWayPointItem(selectedwaypoint, abstractCacheForWp.isArchived()
-                    || !abstractCacheForWp.isAvailable(), true);
-            mItemList.set(indexOfNewSelectedWp, newWp);
-        }
-
-        // last selected wp
-        if (indexOfLastSelectedWp >= 0) {
-            AbstractCache abstractCacheForWp = Database.Data.Query.GetCacheById(lastWaypoint.getCacheId());
-            MapWayPointItem lastWp = getMapWayPointItem(lastWaypoint, abstractCacheForWp.isArchived()
-                    || !abstractCacheForWp.isAvailable(), false);
-            mItemList.set(indexOfLastSelectedWp, lastWp);
-        }
-
-
-        populate(true);
-    }
-
     AbstractCache selectedAbstractCache;
     AbstractWaypoint selectedWaypoint;
 
     @Override
     public void selectedCacheChanged(de.longri.cachebox3.events.SelectedCacheChangedEvent event) {
-        selectedCacheWPChanged(event.cache, null, selectedAbstractCache, selectedWaypoint);
         selectedAbstractCache = event.cache;
         selectedWaypoint = null;
+        CacheListChangedEvent();
     }
 
     @Override
     public void selectedWayPointChanged(de.longri.cachebox3.events.SelectedWayPointChangedEvent event) {
-        selectedCacheWPChanged(de.longri.cachebox3.events.EventHandler.getSelectedCache(), event.wayPoint, selectedAbstractCache, selectedWaypoint);
         selectedAbstractCache = de.longri.cachebox3.events.EventHandler.getSelectedCache();
         selectedWaypoint = event.wayPoint;
+        CacheListChangedEvent();
     }
 
     public interface ActiveItem {

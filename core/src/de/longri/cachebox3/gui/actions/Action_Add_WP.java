@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.menu.MenuID;
@@ -81,9 +82,8 @@ public class Action_Add_WP extends AbstractAction {
         newWP.setUserWaypoint(true);
         EditWaypoint editWaypoint = new EditWaypoint(newWP, false, false, new GenericCallBack<AbstractWaypoint>() {
             @Override
-            public void callBack(AbstractWaypoint value) {
+            public void callBack(final AbstractWaypoint value) {
                 if (value != null) {
-                    EventHandler.fire(new SelectedWayPointChangedEvent(value));
                     if (value.isStart()) {
                         //It must be ensured here that this waypoint is the only one of these Cache,
                         //which is defined as starting point !!!
@@ -93,6 +93,13 @@ public class Action_Add_WP extends AbstractAction {
 
                     // add WP to Cache
                     EventHandler.getSelectedCache().getWaypoints().add(value);
+                    EventHandler.fire(new SelectedCacheChangedEvent(null));
+                    CB.postOnNextGlThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            EventHandler.fire(new SelectedWayPointChangedEvent(value));
+                        }
+                    });
                 }
             }
         });

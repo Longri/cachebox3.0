@@ -84,8 +84,11 @@ public abstract class AbstractWaypoint extends Coordinate {
 
     @Override
     public boolean equals(Object other) {
+        if (other == null) return false;
+        if (this.getGcCode() == null) return false;
         // return true, if the gcCode chars are equals
         if (other instanceof AbstractWaypoint) {
+            if (((AbstractWaypoint) other).getGcCode() == null) return false;
             return CharSequenceUtil.equals(this.getGcCode(), ((AbstractWaypoint) other).getGcCode());
         }
         return false;
