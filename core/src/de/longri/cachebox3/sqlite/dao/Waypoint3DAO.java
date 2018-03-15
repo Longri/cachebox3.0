@@ -16,9 +16,15 @@
 package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
+import de.longri.cachebox3.types.ImmutableCache;
+import de.longri.cachebox3.types.ImmutableWaypoint;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 
@@ -93,9 +99,8 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         } else {
             database.insert("WaypointsText", args2);
         }
-
         checkUserWaypointFlag(database, wp);
-
+        waypointListChanged(wp, true);
         return updated;
     }
 
@@ -113,6 +118,8 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
 
         //delete from WaypointsText table
         database.delete("WaypointsText", "GcCode='" + waypoint.getGcCode() + "'");
+
+        waypointListChanged(waypoint, true);
     }
 
     private int createCheckSum(Database database, AbstractWaypoint WP) {
@@ -152,5 +159,22 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
             args.put("BooleanStore", booleanStore);
             database.update("CacheCoreInfo", args, "Id = ?", cacheIdString);
         }
+    }
+
+    private void waypointListChanged(AbstractWaypoint wp, boolean delete) {
+        AbstractCache cache = Database.Data.Query.getCacheById(wp.getCacheId());
+        if (cache != null) {
+            if (delete) {
+                cache.getWaypoints().removeValue(wp, false);
+            } else {
+                cache.getWaypoints().add(wp);
+            }
+        }
+        CB.postAsyncDelayd(100, new NamedRunnable("Call CacheListChanged Event") {
+            @Override
+            public void run() {
+                CacheListChangedEventList.Call();
+            }
+        });
     }
 }

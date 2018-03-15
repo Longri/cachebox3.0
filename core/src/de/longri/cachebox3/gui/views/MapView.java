@@ -35,6 +35,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
+import de.longri.cachebox3.gui.actions.Action_Add_WP;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
@@ -95,7 +96,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 
 /**
@@ -628,7 +628,7 @@ public class MapView extends AbstractView {
 
         icm.addItem(MenuID.MI_LAYER, "Layer", CB.getSkin().getMenuIcon.mapLayer);
         //ISSUE (#110 add MapView Overlays) icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
-        //ISSUE (#111 MapView create WP at center)    icm.addItem(MenuID.MI_CENTER_WP, "CenterWP");
+        icm.addItem(MenuID.MI_CENTER_WP, "CenterWP",CB.getSkin().getMenuIcon.addWp);
         icm.addItem(MenuID.MI_MAPVIEW_VIEW, "view", CB.getSkin().getMenuIcon.viewSettings);
         //ISSUE (#112 Record Track)   icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
         //ISSUE (#113 Add Map download)   icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
@@ -824,7 +824,7 @@ public class MapView extends AbstractView {
                     toggleSetting(Settings_Map.MapShowCompass);
                     return true;
                 case MenuID.MI_CENTER_WP:
-                    //TODO   mapViewInstance.createWaypointAtCenter();
+                    createWaypointAtCenter();
                     return true;
                 case MenuID.MI_TREC_REC:
                     showMenuTrackRecording();
@@ -837,6 +837,11 @@ public class MapView extends AbstractView {
             }
         }
     };
+
+    private void createWaypointAtCenter() {
+        //show EditWaypoint dialog;
+        new Action_Add_WP().execute();
+    }
 
     private static final int START = 1;
     private static final int PAUSE = 2;

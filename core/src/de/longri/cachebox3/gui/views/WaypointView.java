@@ -132,7 +132,6 @@ public class WaypointView extends AbstractView {
                 // set listener on Update, because Item is remove all listener with Layout
                 view.addListener(clickLongClickListener);
 
-
                 //get index from item
                 int idx = view.getListIndex();
 
@@ -246,7 +245,7 @@ public class WaypointView extends AbstractView {
 
         @Override
         public boolean longClicked(Actor actor, float x, float y) {
-
+            if (!(actor instanceof ListViewItem)) return false;
             int listIndex = ((ListViewItem) actor).getListIndex();
 
             if (listIndex > 0) {

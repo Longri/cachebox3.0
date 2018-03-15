@@ -19,12 +19,9 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
 import de.longri.cachebox3.gui.skin.styles.MapBubbleStyle;
-import de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle;
 import de.longri.cachebox3.gui.views.CacheItem;
 import de.longri.cachebox3.gui.views.WayPointItem;
-import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.LogTypes;
@@ -39,26 +36,17 @@ public class MapBubble extends VisTable {
     private final AbstractCache cache;
     private final AbstractWaypoint waypoint;
 
-    private final VisTable content;
-
-    public MapBubble() {
-        this(null, null);
+    public MapBubble(Object dataObject) {
+        this(dataObject instanceof AbstractCache ? (AbstractCache) dataObject : null, dataObject instanceof AbstractWaypoint ? (AbstractWaypoint) dataObject : null);
     }
 
-    public MapBubble(AbstractCache cache) {
-        this(cache, null);
-    }
-
-    public MapBubble(AbstractWaypoint waypoint) {
-        this(null, waypoint);
-    }
-
-    public MapBubble(AbstractCache cache, AbstractWaypoint waypoint) {
+    private MapBubble(AbstractCache cache, AbstractWaypoint waypoint) {
         this.cache = cache;
         this.waypoint = waypoint;
         style = VisUI.getSkin().get("bubble", MapBubbleStyle.class);
 
         boolean isSelected = false;
+        VisTable content;
         if (cache != null) {
 
             LogTypes left = null;
@@ -82,7 +70,7 @@ public class MapBubble extends VisTable {
                     (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
                     (int) Math.min(cache.getRating() * 2, 5 * 2), cache.getSize(),
                     cache.getSize().toShortString(), left, right, isAvailable, cache.getFavoritePoints(), style.cacheListItemStyle);
-            isSelected = cache == EventHandler.getSelectedCache();
+            isSelected = (EventHandler.getSelectedWaypoint() == null && cache == EventHandler.getSelectedCache());
         } else if (waypoint != null) {
 
             content = new WayPointItem(waypoint.getType(),
@@ -97,10 +85,6 @@ public class MapBubble extends VisTable {
         this.add(content).expand().fill();
         this.setBackground(isSelected ? style.selectedBackground : style.background);
 
-    }
-
-    public MapBubble(Object dataObject) {
-        this(dataObject instanceof AbstractCache ? (AbstractCache) dataObject : null, dataObject instanceof AbstractWaypoint ? (AbstractWaypoint) dataObject : null);
     }
 
     public float getOffsetX() {
