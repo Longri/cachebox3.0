@@ -19,7 +19,6 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.Region;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.IChanged;
@@ -42,7 +41,7 @@ public class GpsEventHelper implements LocationEvents {
     private final LowpassFilter lowpassFilterGPS = new LowpassFilter(2);
     private final LowpassFilter pitchLowpassFilter = new LowpassFilter(50);
 
-    double lastGpsLat, lastGpsLon, lastNetLat, lastNetLon;
+    double lastGpsLat = Double.MAX_VALUE, lastGpsLon = Double.MAX_VALUE, lastNetLat = Double.MAX_VALUE, lastNetLon = Double.MAX_VALUE;
     private float lastGpsAccuracy;
     private double lastGpsElevation;
     private double lastCompassHeading, lastGpsHeading;
@@ -80,11 +79,13 @@ public class GpsEventHelper implements LocationEvents {
         if (lastGpsLat != latitude || lastGpsLon != longitude) {
             lastGpsLat = latitude;
             lastGpsLon = longitude;
-
+            lastGpsPositionTime = System.currentTimeMillis();
             //fire pos changed event
             EventHandler.fire(new PositionChangedEvent(new Coordinate(latitude, longitude), true, EventHandler.getId()));
         }
     }
+
+    private long lastGpsPositionTime = -1;
 
     @Override
     public void newNetworkPos(double latitude, double longitude, float accuracy) {
@@ -97,8 +98,14 @@ public class GpsEventHelper implements LocationEvents {
             lastNetLat = latitude;
             lastNetLon = longitude;
 
-            //fire pos changed event
-            EventHandler.fire(new PositionChangedEvent(new Coordinate(latitude, longitude), false, EventHandler.getId()));
+            //fire pos changed event only we have no Gps position
+            //or the last Gps position is older then 1 minute
+            boolean fire = false;
+            if (lastGpsLat == Double.MAX_VALUE || lastGpsLon == Double.MAX_VALUE) fire = true;
+            if ((System.currentTimeMillis() - lastGpsPositionTime) > 60000) fire = true;
+
+            if (fire)
+                EventHandler.fire(new PositionChangedEvent(new Coordinate(latitude, longitude), false, EventHandler.getId()));
         }
     }
 
