@@ -24,6 +24,9 @@ import org.slf4j.LoggerFactory;
  * Created by Longri on 28.03.2017.
  */
 public class DoubleAnimator {
+
+    public final static float DEFAULT_DURATION = 1.0f; // 1000 ms
+
     private static Logger log = LoggerFactory.getLogger(DoubleAnimator.class);
 
     private final Interpolation interpolation;

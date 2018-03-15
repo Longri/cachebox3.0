@@ -20,12 +20,12 @@ import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.locator.LatLong;
 
+import static de.longri.cachebox3.gui.animations.map.DoubleAnimator.DEFAULT_DURATION;
+
 /**
  * Created by Longri on 15.03.2018.
  */
 public class MyPositionAnimator {
-
-    private final static float DEFAULT_DURATION = 1.0f; // 1000 ms
 
     private final DoubleAnimator posLatitude, posLongitude, heading, accuracy;
     private final DirectLineLayer directLineLayer;

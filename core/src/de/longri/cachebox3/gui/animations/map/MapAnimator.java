@@ -22,14 +22,14 @@ import org.oscim.map.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static de.longri.cachebox3.gui.animations.map.DoubleAnimator.DEFAULT_DURATION;
+
 /**
  * Created by Longri on 28.03.2017.
  */
 public class MapAnimator {
 
     private static final Logger log = LoggerFactory.getLogger(MapAnimator.class);
-
-    public final static float DEFAULT_DURATION = 1.0f; // 1000 ms
 
     private final Map map;
     private final DoubleAnimator mapX, mapY, scale, rotate, tilt, myPosX, myPosY;

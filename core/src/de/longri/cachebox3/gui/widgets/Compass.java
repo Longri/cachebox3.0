@@ -30,7 +30,8 @@ import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.gui.skin.styles.CompassStyle;
 import de.longri.cachebox3.utils.CB_RectF;
 
-import static de.longri.cachebox3.gui.animations.map.MapAnimator.DEFAULT_DURATION;
+import static de.longri.cachebox3.gui.animations.map.DoubleAnimator.DEFAULT_DURATION;
+
 
 /**
  * Created by Longri on 21.03.2017.
