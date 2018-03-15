@@ -48,16 +48,16 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
     private final MapAnimator mapAnimator;
     private final MyPositionAnimator myPositionAnimator;
 
-    private float arrowHeading, accuracy, mapBearing, userBearing, tilt;
+    private float arrowHeading, mapBearing, userBearing, tilt;
     private Coordinate mapCenter;
     private Coordinate myPosition;
     private final CacheboxMapAdapter map;
     private final AtomicBoolean isDisposed = new AtomicBoolean(false);
     private double lastDynZoom;
     private short lastEventID = -1;
-    private long lastMapPosChange = Long.MIN_VALUE;
     private double maxSpeed, maxZoom, minZoom;
     private boolean dynZoomEnabled;
+    private float lastBearing = -1;
 
     public MapViewPositionChangedHandler(CacheboxMapAdapter map, DirectLineLayer directLineLayer, LocationLayer myLocationLayer,
                                          LocationAccuracyLayer myLocationAccuracy,
@@ -123,13 +123,9 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                 return;
             }
             lastEventID = eventID;
-
             if (isDisposed.get()) return;
 
-            lastMapPosChange = System.currentTimeMillis();
-
             double lat, lon;
-
             if (getCenterGps()) {
                 if (this.mapCenter == null) {
                     this.mapCenter = EventHandler.getMyPosition();
@@ -173,7 +169,12 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
             float bearing = -EventHandler.getHeading();
             if (CB.mapMode == MapMode.CAR) {
                 this.infoPanel.setMapOrientationMode(MapOrientationMode.COMPASS);
+                //change bearing only with speed over 10 kmh
+                if (actSpeed < 10 && lastBearing >= 0) {
+                    bearing = lastBearing;
+                }
             }
+            lastBearing = bearing;
 
             switch (this.infoPanel.getOrientationState()) {
                 case NORTH:
