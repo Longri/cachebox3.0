@@ -93,7 +93,7 @@ public class Action_Add_WP extends AbstractAction {
 
                     // add WP to Cache
                     EventHandler.getSelectedCache().getWaypoints().add(value);
-                    EventHandler.fire(new SelectedCacheChangedEvent(null));
+                    EventHandler.fire(new SelectedCacheChangedEvent(EventHandler.getSelectedCache()));
                     CB.postOnNextGlThread(new Runnable() {
                         @Override
                         public void run() {

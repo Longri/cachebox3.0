@@ -288,7 +288,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         return new MapWayPointItem(waypoint, waypoint, regions, sel);
     }
 
-
     public void reduceCluster(final GeoBoundingBoxInt boundingBox, final double distance, final boolean forceReduce) {
 
         if (true) return;
@@ -345,7 +344,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     }
 
-
     public static MapWayPointItemStyle getClusterSymbolsByCache(AbstractCache abstractCache) {
         String symbolStyleName = getMapIconName(abstractCache);
         return VisUI.getSkin().get(symbolStyleName, MapWayPointItemStyle.class);
@@ -355,7 +353,6 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         String symbolStyleName = getMapIconName(waypoint);
         return VisUI.getSkin().get(symbolStyleName, MapWayPointItemStyle.class);
     }
-
 
     public static String getMapIconName(AbstractCache abstractCache) {
         if (abstractCache.ImTheOwner())

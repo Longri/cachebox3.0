@@ -156,8 +156,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
-        if (selectedCache == null || !selectedCache.equals(event.cache)) {
-
+        if (event.cache != null ) {
             log.debug("Set Global selected Cache: {}", event.cache);
             load_unload_Cache_Waypoints(selectedCache, event.cache);
             selectedCache = event.cache;
