@@ -21,13 +21,14 @@ import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
-import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.SpeedChangedEvent;
 import de.longri.cachebox3.events.location.SpeedChangedListener;
+import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
+import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
 
 /**
@@ -35,13 +36,15 @@ import de.longri.cachebox3.utils.UnitFormatter;
  */
 public class MapInfoPanel extends Table implements SpeedChangedListener, Disposable {
 
-    final MapInfoPanelStyle style;
-    final Compass compass;
-    final VisLabel distanceLabel, speedLabel, distanceUnitLabel, speedUnitLabel, coordinateLabel1, coordinateLabel2;
+    private final Compass compass;
+    private final VisLabel distanceLabel, speedLabel, distanceUnitLabel, speedUnitLabel, coordinateLabel1, coordinateLabel2;
+
+    private float aktDistance = -1;
+
 
     public MapInfoPanel() {
         EventHandler.add(this);
-        style = VisUI.getSkin().get("infoPanel", MapInfoPanelStyle.class);
+        MapInfoPanelStyle style = VisUI.getSkin().get("infoPanel", MapInfoPanelStyle.class);
         this.setBackground(style.background);
         compass = new Compass("mapCompassStyle", true);
 
@@ -90,22 +93,23 @@ public class MapInfoPanel extends Table implements SpeedChangedListener, Disposa
         this.pack();
     }
 
-
-    public void setNewValues(Coordinate myPosition, float bearing) {
+    public void setNewValues(final Coordinate myPosition, final float bearing) {
         if (myPosition == null) return;
+        CB.postOnGlThread(new NamedRunnable("set new values") {
+            @Override
+            public void run() {
+                compass.setBearing(bearing);
+                coordinateLabel1.setText(UnitFormatter.formatLatitudeDM(myPosition.getLatitude()));
+                coordinateLabel2.setText(UnitFormatter.formatLongitudeDM(myPosition.getLongitude()));
 
-        compass.setBearing(bearing);
-        coordinateLabel1.setText(UnitFormatter.formatLatitudeDM(myPosition.getLatitude()));
-        coordinateLabel2.setText(UnitFormatter.formatLongitudeDM(myPosition.getLongitude()));
-
-        if (EventHandler.getSelectedCoord() != null) {
-            Coordinate targetCoordinate = EventHandler.getSelectedCoord();
-            setDistance(targetCoordinate.distance(MathUtils.CalculationType.ACCURATE));
-            compass.setHeading(myPosition.bearingTo(targetCoordinate, MathUtils.CalculationType.ACCURATE) - bearing);
-        }
+                if (EventHandler.getSelectedCoord() != null) {
+                    Coordinate targetCoordinate = EventHandler.getSelectedCoord();
+                    setDistance(targetCoordinate.distance(MathUtils.CalculationType.ACCURATE));
+                    compass.setHeading(myPosition.bearingTo(targetCoordinate, MathUtils.CalculationType.ACCURATE) - bearing);
+                }
+            }
+        });
     }
-
-    private float aktDistance = -1;
 
     private void setDistance(float distance) {
         distance = Math.round(distance);

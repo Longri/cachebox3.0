@@ -22,6 +22,7 @@ import de.longri.cachebox3.events.SelectedCoordChangedListener;
 import de.longri.cachebox3.events.location.*;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.animations.map.MapAnimator;
+import de.longri.cachebox3.gui.animations.map.MyPositionAnimator;
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
 import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
@@ -44,7 +45,8 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
 
     private static Logger log = LoggerFactory.getLogger(MapViewPositionChangedHandler.class);
     private final MapInfoPanel infoPanel;
-    private final MapAnimator animator;
+    private final MapAnimator mapAnimator;
+    private final MyPositionAnimator myPositionAnimator;
 
     private float arrowHeading, accuracy, mapBearing, userBearing, tilt;
     private Coordinate mapCenter;
@@ -70,8 +72,8 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                 assumeValues(false, (short) (lastEventID - 1));
             }
         });
-        this.animator = new MapAnimator(this, map, directLineLayer, myLocationLayer, myLocationAccuracy);
-
+        this.mapAnimator = new MapAnimator(this, map);
+        this.myPositionAnimator = new MyPositionAnimator(directLineLayer, myLocationLayer, myLocationAccuracy);
         dynZoomEnabled = Settings_Map.dynamicZoom.getValue();
         maxSpeed = Settings_Map.MoveMapCenterMaxSpeed.getValue();
         maxZoom = 1 << Settings_Map.dynamicZoomLevelMax.getValue();
@@ -141,14 +143,15 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                 lon = this.myPosition.longitude;
                 lat = this.myPosition.latitude;
             }
-            animator.position(
+            mapAnimator.position(
                     MercatorProjection.longitudeToX(lon),
                     MercatorProjection.latitudeToY(lat)
             );
+            myPositionAnimator.setPosition(lat, lon);
 
             //force full tilt on CarMode
             if (CB.mapMode == MapMode.CAR)
-                animator.tilt(map.viewport().getMaxTilt());
+                mapAnimator.tilt(map.viewport().getMaxTilt());
 
 
             if (dynZoomEnabled && CB.mapMode == MapMode.CAR) {
@@ -163,7 +166,7 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                 if (lastDynZoom != (dynZoom)) {
                     lastDynZoom = dynZoom;
                     log.debug("Set new dynZoom: speed: {}  percent: {}  zoom: {}", actSpeed, percent, dynZoom);
-                    animator.scale(2.0f, dynZoom);
+                    mapAnimator.scale(2.0f, dynZoom);
                 }
             }
 
@@ -176,19 +179,20 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                 case NORTH:
                     this.mapBearing = 0;
                     this.arrowHeading = bearing;
-                    animator.rotate(mapBearing);
+                    mapAnimator.rotate(mapBearing);
                     break;
                 case COMPASS:
                     this.mapBearing = bearing;
                     this.arrowHeading = 0;
-                    animator.rotate(mapBearing);
+                    mapAnimator.rotate(mapBearing);
                     break;
                 case USER:
                     this.mapBearing = userBearing;
                     this.arrowHeading = userBearing + bearing;
                     break;
             }
-            animator.setArrowHeading(arrowHeading);
+            mapAnimator.setArrowHeading(arrowHeading);
+            myPositionAnimator.setArrowHeading(arrowHeading);
             infoPanel.setNewValues(myPosition, -mapBearing);
             CB.requestRendering();
         } catch (Exception e) {
@@ -242,23 +246,24 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
     }
 
     public void update(float deltaTime) {
-        animator.update(deltaTime);
+        mapAnimator.update(deltaTime);
+        myPositionAnimator.update(deltaTime);
     }
 
     public void scale(double scale) {
-        animator.scale(scale);
+        mapAnimator.scale(scale);
     }
 
     public void rotate(float rotate) {
-        animator.rotate(rotate);
+        mapAnimator.rotate(rotate);
     }
 
     public void position(double x, double y) {
-        animator.position(x, y);
+        mapAnimator.position(x, y);
     }
 
     public void animateToPos(double x, double y) {
-        animator.animateToPos(x, y);
+        mapAnimator.animateToPos(x, y);
     }
 
     @Override

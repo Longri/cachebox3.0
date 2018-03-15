@@ -16,15 +16,8 @@
 package de.longri.cachebox3.gui.animations.map;
 
 import com.badlogic.gdx.Gdx;
-import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
-import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
-import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
-import de.longri.cachebox3.gui.map.layer.LocationLayer;
-import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.LatLong;
 import org.oscim.core.MapPosition;
-import org.oscim.core.MercatorProjection;
 import org.oscim.map.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,18 +29,15 @@ public class MapAnimator {
 
     private static final Logger log = LoggerFactory.getLogger(MapAnimator.class);
 
-    public final static float DEFAULT_DURATION = 1.2f; // 1200 ms
+    public final static float DEFAULT_DURATION = 1.0f; // 1000 ms
 
     private final Map map;
     private final DoubleAnimator mapX, mapY, scale, rotate, tilt, myPosX, myPosY;
     private final MapPosition mapPosition = new MapPosition();
-    private final LocationAccuracyLayer myLocationAccuracy;
-    private final LocationLayer myLocationLayer;
-    private final DirectLineLayer directLineLayer;
     private float arrowHeading;
     private final MapViewPositionChangedHandler mapViewPositionChangedHandler;
 
-    public MapAnimator(MapViewPositionChangedHandler mapViewPositionChangedHandler, Map map, DirectLineLayer directLineLayer, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy) {
+    public MapAnimator(MapViewPositionChangedHandler mapViewPositionChangedHandler, Map map) {
         this.map = map;
         this.mapX = new DoubleAnimator();
         this.mapY = new DoubleAnimator();
@@ -56,10 +46,7 @@ public class MapAnimator {
         this.scale = new DoubleAnimator();
         this.rotate = new DoubleAnimator();
         this.tilt = new DoubleAnimator();
-        this.myLocationAccuracy = myLocationAccuracy;
-        this.myLocationLayer = myLocationLayer;
         this.mapViewPositionChangedHandler = mapViewPositionChangedHandler;
-        this.directLineLayer = directLineLayer;
     }
 
     public void update(float delta) {
@@ -111,13 +98,7 @@ public class MapAnimator {
     private boolean centerAnimation = false;
 
     public void position(float duration, double x, double y) {
-        log.debug("new Position");
-        double lat = MercatorProjection.toLatitude(y);
-        double lon = MercatorProjection.toLongitude(x);
-        log.debug("Set ArrowHeading {}", arrowHeading);
-        myLocationLayer.setPosition(lat, lon, arrowHeading);
-        directLineLayer.redrawLine(new LatLong(lat, lon));
-
+        log.debug("new Position. Set ArrowHeading {}", arrowHeading);
 
         if (mapViewPositionChangedHandler.getCenterGps()) {
             if (centerAnimation) {
