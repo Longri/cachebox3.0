@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,7 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CharSequenceUtil;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SoundCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -790,7 +791,12 @@ public class Settings_Activity extends ActivityBase {
                 //show select menu
                 Menu menu = selectBox.getMenu();
                 showListView(menu.getListview(), "select item", true);
-                callBackClick.set(true);
+                CB.postOnNextGlThread(new NamedRunnable("postOnGlThread") {
+                    @Override
+                    public void run() {
+                        callBackClick.set(true);
+                    }
+                });
             }
         };
 
