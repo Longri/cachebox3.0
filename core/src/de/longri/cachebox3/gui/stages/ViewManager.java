@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2017 team-cachebox.de
+ * Copyright (C) 2016-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -443,29 +443,34 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         toast(massage, ToastLength.NORMAL);
     }
 
-    public void toast(CharSequence massage, ToastLength length) {
-        if (toastLabel == null) {
-            //initial ToastLabel
-            toastLabel = new VisLabel(massage, "toast");
-        }
-        toastLabel.setAlignment(Align.center, Align.center);
-        toastLabel.setWrap(true);
-        toastLabel.setText(massage);
+    public void toast(final CharSequence massage, final ToastLength length) {
+        CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
+            @Override
+            public void run() {
+                if (toastLabel == null) {
+                    //initial ToastLabel
+                    toastLabel = new VisLabel(massage, "toast");
+                }
+                toastLabel.setAlignment(Align.center, Align.center);
+                toastLabel.setWrap(true);
+                toastLabel.setText(massage);
 
 
-        Drawable labelBackground = toastLabel.getStyle().background;
-        float border = 0;
-        if (labelBackground != null) {
-            border = labelBackground.getLeftWidth()
-                    + toastLabel.getStyle().background.getRightWidth() + CB.scaledSizes.MARGINx2;
-        }
+                Drawable labelBackground = toastLabel.getStyle().background;
+                float border = 0;
+                if (labelBackground != null) {
+                    border = labelBackground.getLeftWidth()
+                            + toastLabel.getStyle().background.getRightWidth() + CB.scaledSizes.MARGINx2;
+                }
 
-        GlyphLayout bounds = toastLabel.getStyle().font.newFontCache().setText(massage, 0, 0, CB.scaledSizes.WINDOW_WIDTH - border, 0, true);
+                GlyphLayout bounds = toastLabel.getStyle().font.newFontCache().setText(massage, 0, 0, CB.scaledSizes.WINDOW_WIDTH - border, 0, true);
 
-        toastLabel.setWidth(bounds.width + border);
-        toastLabel.setHeight(bounds.height + border);
-        toastLabel.setPosition((Gdx.graphics.getWidth() / 2) - (toastLabel.getWidth() / 2), mainButtonBar.getTop() + CB.scaledSizes.MARGINx2);
-        toast(toastLabel, length);
+                toastLabel.setWidth(bounds.width + border);
+                toastLabel.setHeight(bounds.height + border);
+                toastLabel.setPosition((Gdx.graphics.getWidth() / 2) - (toastLabel.getWidth() / 2), mainButtonBar.getTop() + CB.scaledSizes.MARGINx2);
+                toast(toastLabel, length);
+            }
+        });
     }
 
     public void toast(final Actor actor, ToastLength length) {

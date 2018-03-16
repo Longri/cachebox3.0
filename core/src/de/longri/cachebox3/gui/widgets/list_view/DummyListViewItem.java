@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 /**
  * Created by Longri on 03.02.18.
  */
-class DummyListViewItem extends Actor implements ListViewItemInterface {
+public class DummyListViewItem extends Actor implements ListViewItemInterface {
 
     private final int index;
     private float prefHeight, prefWidth;

@@ -1,5 +1,5 @@
-/* 
- * Copyright (C) 2011-2017 team-cachebox.de
+/*
+ * Copyright (C) 2011-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -192,7 +192,7 @@ public class Coordinate extends LatLong {
      * @return
      */
     public float distance(LatLong coord, CalculationType type) {
-        // float[] dist = new float[1];
+        if (coord == null) return -1;
         MathUtils.computeDistanceAndBearing(type, getLatitude(), getLongitude(), coord.getLatitude(), coord.getLongitude(), mResults);
         return mResults[0];
     }

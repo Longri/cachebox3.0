@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -636,22 +636,26 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 @Override
                 public void run() {
                     if (force || AdjustableFavPointListViewItem.this.property.get() != value) {
-                        if (value == -1) {
-                            valueLabel.setText(Translation.get("DoesntMatter"));
-                        } else {
-                            valueLabel.setText(Integer.toString(value));
-                        }
+                        CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
+                            @Override
+                            public void run() {
+                                if (value == -1) {
+                                    valueLabel.setText(Translation.get("DoesntMatter"));
+                                } else {
+                                    valueLabel.setText(Integer.toString(value));
+                                }
 
-                        if (value < 0) {
-                            minusBtn2.setVisible(false);
-                            plusBtn2.setVisible(false);
-                        } else {
-                            minusBtn2.setVisible(true);
-                            plusBtn2.setVisible(true);
-                        }
-
-                        AdjustableFavPointListViewItem.this.property.set(value);
-                        AdjustableFavPointListViewItem.this.invalidateHierarchy();
+                                if (value < 0) {
+                                    minusBtn2.setVisible(false);
+                                    plusBtn2.setVisible(false);
+                                } else {
+                                    minusBtn2.setVisible(true);
+                                    plusBtn2.setVisible(true);
+                                }
+                                AdjustableFavPointListViewItem.this.property.set(value);
+                                AdjustableFavPointListViewItem.this.invalidateHierarchy();
+                            }
+                        });
                     }
                 }
             });

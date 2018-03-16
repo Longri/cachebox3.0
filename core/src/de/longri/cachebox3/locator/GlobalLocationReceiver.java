@@ -105,6 +105,8 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                         distance = selectedWaypoint.distance(pos, MathUtils.CalculationType.FAST);
                     }
 
+                    if (distance < 0) return;
+
                     if (!approachSoundCompleted.get() && (distance < Config.SoundApproachDistance.getValue())) {
                         CB.postOnGlThread(new NamedRunnable("Play Sound") {
                             @Override

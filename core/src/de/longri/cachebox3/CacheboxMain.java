@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -70,21 +70,21 @@ public class CacheboxMain extends ApplicationAdapter {
 //        INCLUDE_LIST.add(CircularProgressWidget.class.getName());
 
 
-        EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
-        EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
-        EXCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
-
-        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
-        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
-
-        EXCLUDE_LIST.add(LocationAccuracyLayer.class.getName());
-        EXCLUDE_LIST.add(LocationRenderer.class.getName());
-        EXCLUDE_LIST.add(DoubleAnimator.class.getName());
-        EXCLUDE_LIST.add(GpsEventHelper.class.getName());
-        EXCLUDE_LIST.add(DirectLineLayer.class.getName());
-        EXCLUDE_LIST.add(EventHandler.class.getName());
-        EXCLUDE_LIST.add(CB.class.getName());
+//        EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
+//        EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
+//        EXCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
+//
+//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
+//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
+//
+//        EXCLUDE_LIST.add(LocationAccuracyLayer.class.getName());
+//        EXCLUDE_LIST.add(LocationRenderer.class.getName());
+//        EXCLUDE_LIST.add(DoubleAnimator.class.getName());
+//        EXCLUDE_LIST.add(GpsEventHelper.class.getName());
+//        EXCLUDE_LIST.add(DirectLineLayer.class.getName());
+//        EXCLUDE_LIST.add(EventHandler.class.getName());
+//        EXCLUDE_LIST.add(CB.class.getName());
 
 
     }

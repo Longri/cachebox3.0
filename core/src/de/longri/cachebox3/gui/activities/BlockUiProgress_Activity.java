@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.IncrementProgressEvent;
+import de.longri.cachebox3.events.IncrementProgressListener;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.widgets.CircularProgressWidget;
-import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,23 +79,26 @@ public class BlockUiProgress_Activity extends ActivityBase implements IncrementP
 
 
     @Override
-    public void incrementProgress(IncrementProgressEvent event) {
-
-        int value = event.progressIncrement.incrementValue;
-        int max = event.progressIncrement.incrementMaxValue;
-        String msg = event.progressIncrement.msg;
-//        log.debug("Increment Progress: {} / {} max: {}", msg, value, max);
-        progress.setProgressMax(max);
-        progress.setProgress(value);
-        msgLabel.setText(msg);
-        if (value > 0 && value >= max) {
-            log.debug("Increment Progress: post Finish");
-            CB.postAsyncDelayd(500, new NamedRunnable("BlockUiProgress:Close") {
-                @Override
-                public void run() {
-                    BlockUiProgress_Activity.this.finish();
+    public void incrementProgress(final IncrementProgressEvent event) {
+        CB.postOnGlThread(new NamedRunnable("Test Add") {
+            @Override
+            public void run() {
+                int value = event.progressIncrement.incrementValue;
+                int max = event.progressIncrement.incrementMaxValue;
+                String msg = event.progressIncrement.msg;
+                progress.setProgressMax(max);
+                progress.setProgress(value);
+                msgLabel.setText(msg);
+                if (value > 0 && value >= max) {
+                    log.debug("Increment Progress: post Finish");
+                    CB.postAsyncDelayd(500, new NamedRunnable("BlockUiProgress:Close") {
+                        @Override
+                        public void run() {
+                            BlockUiProgress_Activity.this.finish();
+                        }
+                    });
                 }
-            });
-        }
+            }
+        });
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.skin.styles.EditTextStyle;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 /**
  * Created by Longri on 18.05.2017.
@@ -62,9 +64,14 @@ public class EditTextBox extends WidgetGroup {
 
                 Input.TextInputListener listener = new Input.TextInputListener() {
                     @Override
-                    public void input(String text) {
-                        setText(text);
-                        invalidate();
+                    public void input(final String text) {
+                        CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
+                            @Override
+                            public void run() {
+                                setText(text);
+                                invalidate();
+                            }
+                        });
                     }
 
                     @Override

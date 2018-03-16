@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,10 @@ import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
-import de.longri.cachebox3.gui.widgets.list_view.*;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.SelectionChangedEvent;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
@@ -122,7 +125,18 @@ public class WaypointView extends AbstractView {
                 if (index == 0) {
                     return CacheListItem.getListItem(index, actAbstractCache);
                 } else {
-                    final WayPointListItem item = WayPointListItem.getListItem(index, actAbstractCache.getWaypoints().get(index - 1));
+                    final WayPointListItem item;
+                    try {
+                        item = WayPointListItem.getListItem(index, actAbstractCache.getWaypoints().get(index - 1));
+                    } catch (Exception e) {
+                        CB.postOnGlThread(new NamedRunnable("Waypoint list invalid") {
+                            @Override
+                            public void run() {
+                                addNewListView();
+                            }
+                        });
+                        return new ListViewItem(index);
+                    }
                     return item;
                 }
             }

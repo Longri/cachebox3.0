@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -135,7 +135,7 @@ public class DraftsView extends AbstractView {
 
         @Override
         public boolean longClicked(Actor actor, float x, float y) {
-
+            if (!(actor instanceof ListViewItem)) return false;
             int listIndex = ((ListViewItem) actor).getListIndex();
             aktDraft = draftEntries.get(listIndex);
 

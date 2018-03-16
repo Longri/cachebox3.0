@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -118,16 +118,20 @@ public class AdjustableStarWidget extends Table {
             @Override
             public void run() {
                 if (force || AdjustableStarWidget.this.value.getInt() != value) {
-
-                    if (type == Type.SIZE) {
-                        valueLabel.setText(CacheSizes.parseInt(value).toString());
-                        starsWidget.setValue(value);
-                    } else {
-                        valueLabel.setText(Double.toString((double) value / 2.0));
-                        starsWidget.setValue(value);
-                    }
-                    AdjustableStarWidget.this.value.set(value);
-                    AdjustableStarWidget.this.invalidateHierarchy();
+                    CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
+                        @Override
+                        public void run() {
+                            if (type == Type.SIZE) {
+                                valueLabel.setText(CacheSizes.parseInt(value).toString());
+                                starsWidget.setValue(value);
+                            } else {
+                                valueLabel.setText(Double.toString((double) value / 2.0));
+                                starsWidget.setValue(value);
+                            }
+                            AdjustableStarWidget.this.value.set(value);
+                            AdjustableStarWidget.this.invalidateHierarchy();
+                        }
+                    });
                 }
             }
         });

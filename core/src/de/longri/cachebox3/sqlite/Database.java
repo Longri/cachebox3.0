@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -103,17 +103,18 @@ public class Database {
             return result;
 
         GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(abstractCache.getId()) + "\"", (String[]) null);
-
-        try {
-            reader.moveToFirst();
-            while (!reader.isAfterLast()) {
-                LogEntry logent = getLogEntry(abstractCache, reader, true);
-                if (logent != null)
-                    result.add(logent);
-                reader.moveToNext();
+        if (reader != null) {
+            try {
+                reader.moveToFirst();
+                while (!reader.isAfterLast()) {
+                    LogEntry logent = getLogEntry(abstractCache, reader, true);
+                    if (logent != null)
+                        result.add(logent);
+                    reader.moveToNext();
+                }
+            } finally {
+                reader.close();
             }
-        } finally {
-            reader.close();
         }
         return result;
     }

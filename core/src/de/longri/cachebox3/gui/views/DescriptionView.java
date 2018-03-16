@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.PlatformDescriptionView;
@@ -292,14 +291,18 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                                 @Override
                                 public void run() {
                                     log.debug("Set scale: {}", lastScale);
-                                    view.setScale(lastScale);
-                                    CB.postOnMainThreadDelayed(200, new NamedRunnable("DescriptionView:set pos") {
-                                        @Override
-                                        public void run() {
-                                            log.debug("Set x: {} y: {} ", lastX, lastY);
-                                            view.setScrollPosition(lastX, lastY);
-                                        }
-                                    });
+                                    if (view != null) {
+                                        view.setScale(lastScale);
+                                        CB.postOnMainThreadDelayed(200, new NamedRunnable("DescriptionView:set pos") {
+                                            @Override
+                                            public void run() {
+                                                if (view != null) {
+                                                    log.debug("Set x: {} y: {} ", lastX, lastY);
+                                                    view.setScrollPosition(lastX, lastY);
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
                             });
                         }

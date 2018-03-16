@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisProgressBar;
+import com.kotcrab.vis.ui.widget.VisTextArea;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
@@ -336,7 +338,7 @@ public class ImportGcPos extends ActivityBase {
 
         final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
             @Override
-            public void progressChanged(ImportProgressChangedEvent event) {
+            public void progressChanged(final ImportProgressChangedEvent event) {
 
                 if (event.progress.msg.equals("Start parsing result")) {
                     progressBar.setVisible(true);
@@ -345,12 +347,16 @@ public class ImportGcPos extends ActivityBase {
                     lblLogs.setVisible(true);
                     lblImages.setVisible(true);
                 }
-
-                progressBar.setValue(event.progress.progress);
-                lblCaches.setText("Imported Caches: " + event.progress.caches);
-                lblWaypoints.setText("Imported Waypoints: " + event.progress.wayPoints);
-                lblLogs.setText("Imported Logs: " + event.progress.logs);
-                lblImages.setText("Imported Images: " + event.progress.images);
+                CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
+                    @Override
+                    public void run() {
+                        progressBar.setValue(event.progress.progress);
+                        lblCaches.setText("Imported Caches: " + event.progress.caches);
+                        lblWaypoints.setText("Imported Waypoints: " + event.progress.wayPoints);
+                        lblLogs.setText("Imported Logs: " + event.progress.logs);
+                        lblImages.setText("Imported Images: " + event.progress.images);
+                    }
+                });
             }
         };
         EventHandler.add(progressListener);

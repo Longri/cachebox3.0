@@ -29,6 +29,7 @@ import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.LogTypes;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 /**
  * Created by Longri on 31.01.2018.
@@ -171,16 +172,20 @@ public class CacheItem extends VisTable implements Disposable {
 
     @Override
     public synchronized void dispose() {
-        if (arrowImage != null) {
-            arrowImage.setDrawable(null);
-            arrowImage.clear();
-        }
-        arrowImage = null;
-
-        if (distanceLabel != null) {
-            distanceLabel.setText(null);
-            distanceLabel.clear();
-        }
-        distanceLabel = null;
+        CB.postOnGlThread(new NamedRunnable("Post on GlThread") {
+            @Override
+            public void run() {
+                if (arrowImage != null) {
+                    arrowImage.setDrawable(null);
+                    arrowImage.clear();
+                }
+                arrowImage = null;
+                if (distanceLabel != null) {
+                    distanceLabel.setText(null);
+                    distanceLabel.clear();
+                }
+                distanceLabel = null;
+            }
+        });
     }
 }

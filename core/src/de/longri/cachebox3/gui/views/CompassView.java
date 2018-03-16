@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisSplitPane;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.AccuracyChangedEvent;
 import de.longri.cachebox3.events.location.AccuracyChangedListener;
 import de.longri.cachebox3.events.location.OrientationChangedListener;
@@ -328,18 +328,21 @@ public class CompassView extends AbstractView implements
     }
 
     private void refreshOrientationInfo() {
-
         if (actCoord == null) {
             actCoord = EventHandler.getMyPosition();
         }
-
         if (actCoord == null) {
             log.debug("No own position, return refresh Compass ");
             return;
         }
 
         if (ownPositionLabel != null) {
-            ownPositionLabel.setText(actCoord.FormatCoordinate());
+            CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
+                @Override
+                public void run() {
+                    ownPositionLabel.setText(actCoord.FormatCoordinate());
+                }
+            });
         }
 
         final float heading = actHeading;
