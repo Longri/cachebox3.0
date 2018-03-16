@@ -42,7 +42,7 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
     private final SymbolBucket mSymbolBucket;
     private final float[] mBox = new float[8];
     private final LocationLayer locationLayer;
-    private final Point mMapPoint = new Point();
+    private final Point mapPoint = new Point();
     private final Map mMap;
 
 
@@ -77,8 +77,8 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
         long flip = (long) (Tile.SIZE * v.pos.scale) >> 1;
 
         /* check visibility */
-        float symbolX = (float) ((mMapPoint.x - mx) * scale);
-        float symbolY = (float) ((mMapPoint.y - my) * scale);
+        float symbolX = (float) ((mapPoint.x - mx) * scale);
+        float symbolY = (float) ((mapPoint.y - my) * scale);
 
         if (symbolX > flip)
             symbolX -= (flip << 1);
@@ -107,9 +107,10 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
         mUpdate = true;
         this.arrowHeading = -arrowHeading;
         while (this.arrowHeading < 0) this.arrowHeading += 360;
-        mMapPoint.x = (longitude + 180.0) / 360.0;
+        mapPoint.x = (longitude + 180.0) / 360.0;
         double sinLatitude = Math.sin(latitude * (Math.PI / 180.0));
-        mMapPoint.y = 0.5 - Math.log((1.0 + sinLatitude) / (1.0 - sinLatitude)) / (4.0 * Math.PI);
+        mapPoint.y = 0.5 - Math.log((1.0 + sinLatitude) / (1.0 - sinLatitude)) / (4.0 * Math.PI);
+        log.debug("Set x: {} y: {} head: {}", mapPoint.x, mapPoint.y, arrowHeading);
     }
 
     public void setTextureRegion(TextureRegion region) {

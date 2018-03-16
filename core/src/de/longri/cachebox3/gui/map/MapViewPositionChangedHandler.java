@@ -41,7 +41,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Longri on 28.09.2016.
  */
-public class MapViewPositionChangedHandler implements SelectedCoordChangedListener, PositionChangedListener, SpeedChangedListener, OrientationChangedListener {
+public class MapViewPositionChangedHandler implements SelectedCoordChangedListener,
+        PositionChangedListener, SpeedChangedListener, OrientationChangedListener, AccuracyChangedListener {
 
     private static Logger log = LoggerFactory.getLogger(MapViewPositionChangedHandler.class);
     private final MapInfoPanel infoPanel;
@@ -270,5 +271,10 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
     @Override
     public void selectedCoordChanged(SelectedCoordChangedEvent event) {
         assumeValues(false, event.ID);
+    }
+
+    @Override
+    public void accuracyChanged(AccuracyChangedEvent event) {
+        if (myPositionAnimator != null) myPositionAnimator.setAccuracy(event.accuracy);
     }
 }

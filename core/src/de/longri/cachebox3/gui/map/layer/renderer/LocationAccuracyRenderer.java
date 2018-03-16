@@ -2,7 +2,7 @@
  * Copyright 2013 Ahmad Saleem
  * Copyright 2013 Hannes Janetzek
  * Copyright 2016 devemux86
- * Copyright 2017 Longri
+ * Copyright 2017 - 2018 Longri
  *
  * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free Software
@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.CB;
 import org.oscim.backend.GL;
 import org.oscim.core.Box;
+import org.oscim.core.MercatorProjection;
 import org.oscim.core.Point;
 import org.oscim.core.Tile;
 import org.oscim.layers.Layer;
@@ -69,7 +70,6 @@ public class LocationAccuracyRenderer extends LayerRenderer implements Disposabl
     private final Point mLocation = new Point(Double.NaN, Double.NaN);
     private double mRadius;
     private Shader mShader = Shader.SHADER_3;
-    private int mShowAccuracyZoom = SHOW_ACCURACY_ZOOM;
 
     public LocationAccuracyRenderer(Map map, Layer layer) {
         mMap = map;
@@ -91,14 +91,6 @@ public class LocationAccuracyRenderer extends LayerRenderer implements Disposabl
         mLocation.x = x;
         mLocation.y = y;
         mRadius = radius;
-    }
-
-    public void setShader(Shader shader) {
-        mShader = shader;
-    }
-
-    public void setShowAccuracyZoom(int showAccuracyZoom) {
-        mShowAccuracyZoom = showAccuracyZoom;
     }
 
     private void animate(boolean enable) {
@@ -193,16 +185,12 @@ public class LocationAccuracyRenderer extends LayerRenderer implements Disposabl
         } else {
             animate(true);
         }
-
-
         // set location indicator position
         v.fromScreenPoint(x, y, mIndicatorPosition);
     }
 
     @Override
     public void render(GLViewport v) {
-
-
         GLState.useProgram(mShaderProgram);
         GLState.blend(true);
         GLState.test(false, false);
@@ -212,11 +200,12 @@ public class LocationAccuracyRenderer extends LayerRenderer implements Disposabl
 
         float radius = 10;
         boolean viewShed = false;
-        if (!mLocationIsVisible /* || pos.zoomLevel < SHOW_ACCURACY_ZOOM */) {
+        if (!mLocationIsVisible) {
             radius = CB.getScaledFloat(CIRCLE_SIZE);
         } else {
-            if (v.pos.zoomLevel >= mShowAccuracyZoom)
-                radius = (float) (mRadius * v.pos.scale);
+            if (v.pos.zoomLevel >= SHOW_ACCURACY_ZOOM) {
+                radius = (float) (mRadius / MercatorProjection.groundResolution(v.pos));
+            }
             radius = Math.max(CB.getScaledFloat(10), radius);
             viewShed = true;
         }
@@ -254,12 +243,10 @@ public class LocationAccuracyRenderer extends LayerRenderer implements Disposabl
 
         gl.drawArrays(GL.TRIANGLE_STRIP, 0, 4);
         gl.flush();
-
-
     }
 
 
-    private boolean init() {
+    private void init() {
         int shader = 0;
         switch (mShader) {
             case SHADER_1:
@@ -273,7 +260,7 @@ public class LocationAccuracyRenderer extends LayerRenderer implements Disposabl
                 break;
         }
         if (shader == 0)
-            return false;
+            return;
 
         mShaderProgram = shader;
         hVertexPosition = gl.getAttribLocation(shader, "a_pos");
@@ -281,8 +268,6 @@ public class LocationAccuracyRenderer extends LayerRenderer implements Disposabl
         hPhase = gl.getUniformLocation(shader, "u_phase");
         hScale = gl.getUniformLocation(shader, "u_scale");
         hDirection = gl.getUniformLocation(shader, "u_dir");
-
-        return true;
     }
 
     private final static boolean isMac = System.getProperty("os.name").toLowerCase(Locale.ENGLISH).contains("mac");
@@ -298,7 +283,6 @@ public class LocationAccuracyRenderer extends LayerRenderer implements Disposabl
             + "  gl_Position = u_mvp * vec4(a_pos * u_scale * u_phase, 0.0, 1.0);"
             + "  v_tex = a_pos;"
             + "}").replace("precision highp float;", isMac ? "" : "precision highp float;");
-    ;
 
     private final static String fShaderStr1 = (""
             + "precision highp float;"
@@ -328,7 +312,6 @@ public class LocationAccuracyRenderer extends LayerRenderer implements Disposabl
             + "  a = d * (a - (b + c)) + c;"
             + "  gl_FragColor = vec4(0.2, 0.2, 0.8, 1.0) * a;"
             + "}}").replace("precision highp float;", isMac ? "" : "precision highp float;");
-    ;
 
     private static final String fShaderStr2 = (""
             + "precision highp float;"

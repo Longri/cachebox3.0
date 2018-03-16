@@ -87,7 +87,7 @@ public class MyPositionAnimator {
         this.heading.start(DEFAULT_DURATION, actHead, heading);
     }
 
-    private void setAccuracy(double accuracy) {
+    public void setAccuracy(double accuracy) {
         this.accuracy.start(DEFAULT_DURATION, actAccuracy, accuracy);
     }
 }

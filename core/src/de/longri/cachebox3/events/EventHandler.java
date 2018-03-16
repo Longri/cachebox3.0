@@ -20,11 +20,7 @@ import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.events.location.OrientationChangedEvent;
-import de.longri.cachebox3.events.location.OrientationChangedListener;
-import de.longri.cachebox3.events.location.PositionChangedEvent;
-import de.longri.cachebox3.events.location.PositionChangedListener;
-import de.longri.cachebox3.events.location.SpeedChangedListener;
+import de.longri.cachebox3.events.location.*;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
@@ -49,7 +45,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             SelectedCacheChangedListener.class, SelectedWayPointChangedListener.class, PositionChangedListener.class,
             DistanceChangedListener.class, SpeedChangedListener.class, OrientationChangedListener.class,
             SelectedCoordChangedListener.class, ImportProgressChangedListener.class, ApiCallLimitListener.class,
-            IncrementProgressListener.class};
+            IncrementProgressListener.class, AccuracyChangedListener.class};
     static final private ArrayMap<Class, Array<Object>> listenerMap = new ArrayMap<>();
 
     private static final EventHandler INSTANCE = new EventHandler();
@@ -156,7 +152,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
-        if (event.cache != null ) {
+        if (event.cache != null) {
             log.debug("Set Global selected Cache: {}", event.cache);
             load_unload_Cache_Waypoints(selectedCache, event.cache);
             selectedCache = event.cache;

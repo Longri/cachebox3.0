@@ -41,7 +41,8 @@ public class GpsEventHelper implements LocationEvents {
     private final LowpassFilter lowpassFilterGPS = new LowpassFilter(2);
     private final LowpassFilter pitchLowpassFilter = new LowpassFilter(50);
 
-    double lastGpsLat = Double.MAX_VALUE, lastGpsLon = Double.MAX_VALUE, lastNetLat = Double.MAX_VALUE, lastNetLon = Double.MAX_VALUE;
+    double lastGpsLat = Double.MAX_VALUE, lastGpsLon = Double.MAX_VALUE, lastNetLat = Double.MAX_VALUE,
+            lastNetLon = Double.MAX_VALUE, lastAccuracy = Double.MAX_VALUE;
     private float lastGpsAccuracy;
     private double lastGpsElevation;
     private double lastCompassHeading, lastGpsHeading;
@@ -76,12 +77,15 @@ public class GpsEventHelper implements LocationEvents {
         latitude = ((int) (latitude * 1E6)) / 1E6;
         longitude = ((int) (longitude * 1E6)) / 1E6;
 
-        if (lastGpsLat != latitude || lastGpsLon != longitude) {
+
+        if (lastGpsLat != latitude || lastGpsLon != longitude || lastAccuracy != accuracy) {
             lastGpsLat = latitude;
             lastGpsLon = longitude;
+            lastAccuracy = accuracy;
             lastGpsPositionTime = System.currentTimeMillis();
             //fire pos changed event
             EventHandler.fire(new PositionChangedEvent(new Coordinate(latitude, longitude), true, EventHandler.getId()));
+            EventHandler.fire(new AccuracyChangedEvent(accuracy));
         }
     }
 
@@ -104,8 +108,10 @@ public class GpsEventHelper implements LocationEvents {
             if (lastGpsLat == Double.MAX_VALUE || lastGpsLon == Double.MAX_VALUE) fire = true;
             if ((System.currentTimeMillis() - lastGpsPositionTime) > 60000) fire = true;
 
-            if (fire)
+            if (fire) {
                 EventHandler.fire(new PositionChangedEvent(new Coordinate(latitude, longitude), false, EventHandler.getId()));
+                EventHandler.fire(new AccuracyChangedEvent(accuracy));
+            }
         }
     }
 

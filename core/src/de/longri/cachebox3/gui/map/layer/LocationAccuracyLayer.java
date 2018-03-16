@@ -2,7 +2,7 @@
  * Copyright 2013 Ahmad Saleem
  * Copyright 2013 Hannes Janetzek
  * Copyright 2016 devemux86
- * Copyright 2017 Longri
+ * Copyright 2017 - 2018 Longri
  *
  * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free Software
@@ -24,10 +24,13 @@ import org.oscim.core.MercatorProjection;
 import org.oscim.core.Point;
 import org.oscim.layers.Layer;
 import org.oscim.map.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LocationAccuracyLayer extends Layer implements Disposable {
-    private final Point mLocation = new Point();
-    private double mRadius;
+    private final static Logger log = LoggerFactory.getLogger(LocationAccuracyLayer.class);
+
+    private final Point location = new Point();
     private LocationAccuracyRenderer locationAccuracyRenderer;
 
     public LocationAccuracyLayer(Map map) {
@@ -36,24 +39,15 @@ public class LocationAccuracyLayer extends Layer implements Disposable {
     }
 
     public void setPosition(double latitude, double longitude, double accuracy) {
-        mLocation.x = MercatorProjection.longitudeToX(longitude);
-        mLocation.y = MercatorProjection.latitudeToY(latitude);
-        mRadius = accuracy / MercatorProjection.groundResolution(latitude, 1);
-        locationAccuracyRenderer.setLocation(mLocation.x, mLocation.y, mRadius);
-    }
-
-    public void setMercatorPosition(double x, double y, double accuracy) {
-        mLocation.x = x;
-        mLocation.y = y;
-        mRadius = accuracy / MercatorProjection.groundResolution(MercatorProjection.toLatitude(y), 1);
-        locationAccuracyRenderer.setLocation(mLocation.x, mLocation.y, mRadius);
+        location.x = MercatorProjection.longitudeToX(longitude);
+        location.y = MercatorProjection.latitudeToY(latitude);
+        locationAccuracyRenderer.setLocation(location.x, location.y, accuracy);
+        log.debug("set x: {} y: {} radius; {}", location.x, location.y, accuracy);
     }
 
     @Override
     public void setEnabled(boolean enabled) {
-        if (enabled == isEnabled())
-            return;
-
+        if (enabled == isEnabled()) return;
         super.setEnabled(enabled);
     }
 
@@ -65,10 +59,10 @@ public class LocationAccuracyLayer extends Layer implements Disposable {
     }
 
     public double getX() {
-        return mLocation.x;
+        return location.x;
     }
 
     public double getY() {
-        return mLocation.y;
+        return location.y;
     }
 }

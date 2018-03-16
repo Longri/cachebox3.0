@@ -30,6 +30,8 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisSplitPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.events.location.AccuracyChangedEvent;
+import de.longri.cachebox3.events.location.AccuracyChangedListener;
 import de.longri.cachebox3.events.location.OrientationChangedListener;
 import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.menu.*;
@@ -54,7 +56,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 24.07.16.
  */
-public class CompassView extends AbstractView implements PositionChangedListener, OrientationChangedListener {
+public class CompassView extends AbstractView implements
+        PositionChangedListener, OrientationChangedListener, AccuracyChangedListener {
 
     private static final Logger log = LoggerFactory.getLogger(CompassView.class);
 
@@ -70,6 +73,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
     private Label targetdirectionLabel, ownPositionLabel;
 
     private boolean resetLayout, showMap, showName, showIcon, showAtt, showGcCode, showCoords, showWpDesc, showSatInfos, showSunMoon, showAnyContent, showTargetDirection, showSDT, showLastFound;
+    private float accuracy;
 
     public CompassView() {
         super("CompassView");
@@ -355,7 +359,7 @@ public class CompassView extends AbstractView implements PositionChangedListener
                 float distance = result[0];
                 float bearing = result[1];
                 log.debug("set Compass heading to {}", heading);
-                compassPanel.setInfo(distance, heading, bearing, 0/*actCoord.getAccuracy()*/);
+                compassPanel.setInfo(distance, heading, bearing, accuracy);
 
                 if (targetdirectionLabel != null) {
                     double directionToTarget = 0;
@@ -370,7 +374,6 @@ public class CompassView extends AbstractView implements PositionChangedListener
                 }
             }
         });
-
         CB.requestRendering();
     }
 
@@ -522,5 +525,10 @@ public class CompassView extends AbstractView implements PositionChangedListener
         Config.AcceptChanges();
 
         resetLayout();
+    }
+
+    @Override
+    public void accuracyChanged(AccuracyChangedEvent event) {
+        this.accuracy = event.accuracy;
     }
 }
