@@ -42,7 +42,6 @@ import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
-import de.longri.cachebox3.gui.widgets.list_view.ListViewItemInterface;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -51,8 +50,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static de.longri.cachebox3.gui.widgets.AdjustableStarWidget.Type.STAR;
 import static de.longri.cachebox3.gui.widgets.AdjustableStarWidget.Type.SIZE;
+import static de.longri.cachebox3.gui.widgets.AdjustableStarWidget.Type.STAR;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
 
@@ -697,6 +696,8 @@ public class FilterSetListView extends Table implements EditFilterSettings.OnSho
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     property.set(!property.get());
+                    event.cancel();
+                    event.reset();
                 }
             });
 
