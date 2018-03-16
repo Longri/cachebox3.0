@@ -59,6 +59,7 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CharSequenceUtil;
+import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SoundCache;
 import org.slf4j.Logger;
@@ -1117,7 +1118,16 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getNumericItemTable(int listIndex, VisLabel valueLabel, SettingBase<?> setting) {
+    private ListViewItem getNumericItemTable(int listIndex, final VisLabel valueLabel, final SettingBase<?> setting) {
+
+        setting.addChangedEventListener(new IChanged() {
+            @Override
+            public void isChanged() {
+                valueLabel.setText(setting.getValue().toString());
+            }
+        });
+
+
         ListViewItem table = new ListViewItem(listIndex) {
             @Override
             public void dispose() {
