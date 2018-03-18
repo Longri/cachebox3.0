@@ -39,6 +39,7 @@ public class CacheItem extends VisTable implements Disposable {
     final CacheListItemStyle style;
     private final CacheTypes type;
     private final CharSequence cacheName;
+    private final Drawable rightTopIcon;
     private boolean needsLayout = true;
     Image arrowImage;
     VisLabel distanceLabel;
@@ -49,13 +50,13 @@ public class CacheItem extends VisTable implements Disposable {
     private final CacheSizes size;
     private final String shortSizeString;
     private final Drawable leftInfoIcon, rightInfoIcon;
-    private final boolean isAvailable;
+    private final boolean isAvailable, isFavorite;
     private final int favPoints;
 
 
     public CacheItem(CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
                      int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
-                     LogTypes rightLogType, boolean isAvailable, int favPoints, CacheListItemStyle style) {
+                     LogTypes rightLogType, boolean isAvailable, boolean isFavorite, int favPoints, CacheListItemStyle style) {
         this.difficulty = difficulty;
         this.terrain = terrain;
         this.vote = vote;
@@ -66,8 +67,10 @@ public class CacheItem extends VisTable implements Disposable {
         this.cacheName = cacheName;
         this.leftInfoIcon = leftLogType == null ? null : leftLogType.getDrawable(this.style.logTypesStyle);
         this.rightInfoIcon = rightLogType == null ? null : rightLogType.getDrawable(this.style.logTypesStyle);
+        this.rightTopIcon = isFavorite ? LogTypes.ownFavorite.getDrawable(this.style.logTypesStyle) : null;
         this.isAvailable = isAvailable;
         this.favPoints = favPoints;
+        this.isFavorite = isFavorite;
     }
 
 
@@ -81,7 +84,7 @@ public class CacheItem extends VisTable implements Disposable {
 
         if (this.type != null) {
             VisTable iconTable = new VisTable();
-            iconTable.add(type.getCacheWidget(style.typeStyle, leftInfoIcon, rightInfoIcon));
+            iconTable.add(type.getCacheWidget(style.typeStyle, leftInfoIcon, rightInfoIcon, null, rightTopIcon));
             iconTable.pack();
             iconTable.layout();
             this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGIN);

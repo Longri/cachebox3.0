@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,8 @@ public class CacheListItem extends ListViewItem implements Disposable {
         ListViewItem listViewItem = new CacheListItem(listIndex, abstractCache.getType(), abstractCache.getName(),
                 (int) (abstractCache.getDifficulty() * 2), (int) (abstractCache.getTerrain() * 2),
                 (int) Math.min(abstractCache.getRating() * 2, 5 * 2), abstractCache.getSize(),
-                abstractCache.getSize().toShortString(), left, right, isAvailable, abstractCache.getFavoritePoints());
+                abstractCache.getSize().toShortString(), left, right, isAvailable, abstractCache.isFavorite(),
+                abstractCache.getFavoritePoints());
         return listViewItem;
     }
 
@@ -64,11 +65,11 @@ public class CacheListItem extends ListViewItem implements Disposable {
 
     private CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
                           int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
-                          LogTypes rightLogType, boolean isAvailable, int favPoints) {
+                          LogTypes rightLogType, boolean isAvailable, boolean isFavorite, int favPoints) {
         super(listIndex);
         CacheListItemStyle style = VisUI.getSkin().get("cacheListItems", CacheListItemStyle.class);
         cacheItem = new CacheItem(type, cacheName, difficulty, terrain, vote, size, shortSizeString,
-                leftLogType, rightLogType, isAvailable, favPoints,style);
+                leftLogType, rightLogType, isAvailable, isFavorite, favPoints, style);
         this.add(cacheItem).expand().fill();
     }
 

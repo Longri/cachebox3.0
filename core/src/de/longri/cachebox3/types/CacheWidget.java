@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 
 /**
@@ -29,27 +28,37 @@ import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 public class CacheWidget extends Widget {
 
 
-    private final Drawable typeIcon, leftInfoIcon, rightInfoIcon;
+    private final Drawable typeIcon, leftInfoIcon, rightInfoIcon, leftTopIcon, rightTopIcon;
     private boolean needsLayout = true, hasInfoIcon;
-    private float typeIconX, leftIconX, rightIconX;
-    private float typeIconY, leftIconY, rightIconY;
+    private float typeIconX, leftIconX, rightIconX, leftTopIconX, rightTopIconX;
+    private float typeIconY, leftIconY, rightIconY, leftTopIconY, rightTopIconY;
     private float typeIconWidth, infoIconWidth;
     private float typeIconHeight, infoIconHeight;
     private float logTypeIconSize;
     private float prefSize;
 
 
-    public CacheWidget(CacheTypes cacheType, CacheTypeStyle style, Drawable leftInfoIcon, Drawable rightInfoIcon) {
+    public CacheWidget(CacheTypes cacheType, CacheTypeStyle style,
+                       Drawable leftInfoIcon, Drawable rightInfoIcon,
+                       Drawable leftTopIcon, Drawable rightTopIcon) {
         this.typeIcon = cacheType.getDrawable(style);
         prefSize = typeIcon.getMinHeight();
         this.leftInfoIcon = leftInfoIcon;
         this.rightInfoIcon = rightInfoIcon;
+        this.leftTopIcon = leftTopIcon;
+        this.rightTopIcon = rightTopIcon;
         if (leftInfoIcon != null) {
             hasInfoIcon = true;
             logTypeIconSize = leftInfoIcon.getMinWidth();
         } else if (rightInfoIcon != null) {
             hasInfoIcon = true;
             logTypeIconSize = rightInfoIcon.getMinWidth();
+        } else if (leftTopIcon != null) {
+            hasInfoIcon = true;
+            logTypeIconSize = leftTopIcon.getMinWidth();
+        } else if (rightTopIcon != null) {
+            hasInfoIcon = true;
+            logTypeIconSize = rightTopIcon.getMinWidth();
         } else {
             hasInfoIcon = false;
             logTypeIconSize = 0;
@@ -62,9 +71,6 @@ public class CacheWidget extends Widget {
             super.layout();
             return;
         }
-
-        //TODO use aspect ratio
-
 
         typeIconWidth = typeIcon.getMinWidth();
         typeIconHeight = typeIcon.getMinHeight();
@@ -94,9 +100,10 @@ public class CacheWidget extends Widget {
         if (hasInfoIcon) {
             typeIconX = getX() + ((getWidth() - typeIconWidth) / 2);
             typeIconY = getY() + (getHeight() - typeIconHeight);
-            leftIconX = getX();
+            leftIconX = leftTopIconX = getX();
             rightIconY = leftIconY = getY();
-            rightIconX = getX() + getWidth() - infoIconWidth;
+            rightIconX = rightTopIconX = getX() + getWidth() - infoIconWidth;
+            leftTopIconY = rightTopIconY = getY() + getHeight() - infoIconHeight;
         } else {
             typeIconX = getX();
             typeIconY = getY();
@@ -142,6 +149,34 @@ public class CacheWidget extends Widget {
                     }
                 } else {
                     rightInfoIcon.draw(batch, rightIconX, rightIconY, infoIconWidth, infoIconHeight);
+                }
+            }
+
+            if (rightTopIcon != null) {
+                if (rightTopIcon instanceof TransformDrawable) {
+                    float rotation = getRotation();
+                    if (rotation != 0) {
+                        ((TransformDrawable) rightTopIcon).draw(batch, rightTopIconX, rightTopIconY, getOriginX(), getOriginY(),
+                                infoIconWidth, infoIconHeight, 1, 1, rotation);
+                    } else {
+                        rightTopIcon.draw(batch, rightTopIconX, rightTopIconY, infoIconWidth, infoIconHeight);
+                    }
+                } else {
+                    rightTopIcon.draw(batch, rightTopIconX, rightTopIconY, infoIconWidth, infoIconHeight);
+                }
+            }
+
+            if (leftTopIcon != null) {
+                if (leftTopIcon instanceof TransformDrawable) {
+                    float rotation = getRotation();
+                    if (rotation != 0) {
+                        ((TransformDrawable) leftTopIcon).draw(batch, leftTopIconX, leftTopIconY, getOriginX(), getOriginY(),
+                                infoIconWidth, infoIconHeight, 1, 1, rotation);
+                    } else {
+                        leftTopIcon.draw(batch, leftTopIconX, leftTopIconY, infoIconWidth, infoIconHeight);
+                    }
+                } else {
+                    leftTopIcon.draw(batch, leftTopIconX, leftTopIconY, infoIconWidth, infoIconHeight);
                 }
             }
         }

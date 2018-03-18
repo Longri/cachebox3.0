@@ -159,9 +159,11 @@ public class TestView extends AbstractView {
             AbstractCache cache = new MutableCache(0, 0);
             cache.setSize(CacheSizes.regular);
             cache.setType(CacheTypes.Traditional);
-            cache.setName("CacheName");
+            cache.setName("CacheName CacheName CacheName CacheName");
             cache.setOwner("CacheOwner");
             cache.setFavoritePoints(1345); //TODO debug!
+            cache.setFavorite(true);
+            cache.setNumTravelbugs(12);
             CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache);
 
             ListViewStyle style = VisUI.getSkin().get(ListViewStyle.class);

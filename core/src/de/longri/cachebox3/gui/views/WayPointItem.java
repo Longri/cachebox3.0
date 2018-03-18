@@ -80,7 +80,7 @@ public class WayPointItem extends VisTable implements Disposable {
         this.clear();
 
         VisTable iconTable = new VisTable();
-        iconTable.add(type.getCacheWidget(style.typeStyle, null, null));
+        iconTable.add(type.getCacheWidget(style.typeStyle, null, null, null, null));
 
         iconTable.pack();
         iconTable.layout();

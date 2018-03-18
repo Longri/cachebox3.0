@@ -740,6 +740,10 @@
       "path": "svg/cache.svg",
       "scale": 0.72
     },
+    "cacheFavIcon": {
+      "path": "svg/favIcon.svg",
+      "scale": 0.1
+    },
     "cacheListIcon": {
       "path": "svg/cacheListIcon.svg",
       "scale": 0.18
@@ -3070,7 +3074,8 @@
       "found": "found",
       "didnt_find": "notFound",
       "temporarily_disabled": "tempDisabled",
-      "archived": "archived"
+      "archived": "archived",
+      "ownFavorite": "cacheFavIcon"
     },
     "logViewLogStyles": {
       "found": "found",

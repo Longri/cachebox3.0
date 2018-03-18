@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -140,12 +140,10 @@ public enum CacheTypes implements SelectBoxItem {
 
     }
 
-    public CacheWidget getCacheWidget(CacheTypeStyle style) {
-        return getCacheWidget(style, null, null);
-    }
-
-    public CacheWidget getCacheWidget(CacheTypeStyle style, Drawable leftInfoIcon, Drawable rightInfoIcon) {
-        return new CacheWidget(this, style, leftInfoIcon, rightInfoIcon);
+    public CacheWidget getCacheWidget(CacheTypeStyle style,
+                                      Drawable leftInfoIcon, Drawable rightInfoIcon,
+                                      Drawable leftTopIcon, Drawable rightTopIcon) {
+        return new CacheWidget(this, style, leftInfoIcon, rightInfoIcon, leftTopIcon, rightTopIcon);
     }
 
     public String getName() {
