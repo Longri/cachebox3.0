@@ -16,9 +16,11 @@
 package de.longri.cachebox3.gui.stages;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.CB_SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -38,6 +40,9 @@ import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Longri on 25.08.2016.
@@ -93,7 +98,43 @@ public class StageManager {
             if (writeDrawSequence) log.debug("END stage drawing");
             writeDrawSequence = false;
         }
+
+        if (indicateCatchedException.get()) {
+            if (exceptionDrawCount.incrementAndGet() > 10) {
+                indicateCatchedException.set(false);
+                exceptionDrawCount.set(0);
+            }
+            if (exceptionSprite != null) {
+                if (!batch.isDrawing())
+                    batch.begin();
+                Color lastColor = batch.getColor();
+                batch.setColor(exceptionDrawColor);
+                batch.draw(exceptionSprite, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                batch.setColor(lastColor);
+                batch.end();
+            } else {
+                Sprite sprite = CB.getSprite("color");
+                if (sprite != null) {
+                    exceptionSprite = new Sprite(sprite);
+                    exceptionSprite.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+                    exceptionSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                }
+            }
+        }
+
     }
+
+    public static void indicateException(Color color) {
+        if (!CB.DRAW_EXCEPTION_INDICATOR) return;
+        exceptionDrawColor = color;
+        exceptionDrawCount.set(0);
+        indicateCatchedException.set(true);
+    }
+
+    private final static AtomicBoolean indicateCatchedException = new AtomicBoolean(false);
+    private final static AtomicInteger exceptionDrawCount = new AtomicInteger(0);
+    private static Color exceptionDrawColor = Color.GREEN;
+    private static Sprite exceptionSprite;
 
     public static void addToastActor(Actor actor) {
         log.debug("show Toast");

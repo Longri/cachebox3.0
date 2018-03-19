@@ -674,6 +674,13 @@ public class TestView extends AbstractView {
     @Override
     public void onShow() {
         sizeChanged();
+        CB.postAsyncDelayd(2000, new NamedRunnable("Try exception indicator") {
+            @Override
+            public void run() {
+                int i = 12 / 0;
+                System.out.print(i);
+            }
+        });
     }
 
     public void onHide() {

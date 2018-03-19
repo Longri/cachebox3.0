@@ -37,6 +37,7 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.CacheListView;
 import de.longri.cachebox3.locator.manager.LocationHandler;
@@ -333,14 +334,24 @@ public class CB {
 
     public static void postOnGlThread(final NamedRunnable runnable, boolean wait) {
         if (isGlThread()) {
-            runnable.run();
+            try {
+                runnable.run();
+            } catch (Exception e) {
+                log.error("postOnGlThread:" + runnable.name, e);
+                StageManager.indicateException(Color.YELLOW);
+            }
             return;
         }
         final AtomicBoolean WAIT = new AtomicBoolean(wait);
         Gdx.app.postRunnable(new NamedRunnable(runnable.name) {
             @Override
             public void run() {
-                runnable.run();
+                try {
+                    runnable.run();
+                } catch (Exception e) {
+                    log.error("postOnGlThread:" + runnable.name, e);
+                    StageManager.indicateException(Color.YELLOW);
+                }
                 WAIT.set(false);
             }
         });
@@ -353,17 +364,22 @@ public class CB {
                 e.printStackTrace();
             }
         }
-        return;
     }
 
     public static void postAsyncDelayd(final long delay, final NamedRunnable runnable) {
+        if (runnable == null) return;
         postAsync(new NamedRunnable("delayed runnable: " + runnable.name) {
             @Override
             public void run() {
                 TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
-                        runnable.run();
+                        try {
+                            runnable.run();
+                        } catch (Exception e) {
+                            log.error("postAsyncDelayd:" + runnable.name, e);
+                            StageManager.indicateException(Color.YELLOW);
+                        }
                     }
                 };
                 new Timer().schedule(task, delay);
@@ -388,15 +404,9 @@ public class CB {
                     runningRunnables.removeValue(runnable.name, false);
                     log.debug("Ready Async executed runnable, count {} runs: {}", executeCount.decrementAndGet(), runningRunnables.toString());
                 } catch (final Exception e) {
-                    e.printStackTrace();
+                    StageManager.indicateException(Color.YELLOW);
                     executeCount.decrementAndGet();
-                    // throw on main thread, async executor will catch them
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            throw e;
-                        }
-                    });
+                    log.error("postAsync:" + runnable.name, e);
                 }
                 return null;
             }
