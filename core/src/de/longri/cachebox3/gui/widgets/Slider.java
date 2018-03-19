@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -26,17 +26,18 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Group;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_WidgetGroup;
 import de.longri.cachebox3.settings.Config;
 
 /**
  * Created by Longri on 09.09.16.
  */
-public class Slider extends WidgetGroup {
+public class Slider extends Catch_WidgetGroup {
 
     public final static float ANIMATION_TIME = 0.3f;
 
@@ -204,7 +205,7 @@ public class Slider extends WidgetGroup {
     /**
      * the touchable slider with self scrolling selected CacheName if the name to long
      */
-    private class NameWidget extends Group {
+    private class NameWidget extends Catch_Group {
 
 
         private Drawable background;

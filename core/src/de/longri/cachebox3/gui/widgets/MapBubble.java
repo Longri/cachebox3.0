@@ -22,6 +22,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.skin.styles.MapBubbleStyle;
 import de.longri.cachebox3.gui.views.CacheItem;
 import de.longri.cachebox3.gui.views.WayPointItem;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.LogTypes;
@@ -30,7 +31,7 @@ import org.oscim.core.MercatorProjection;
 /**
  * Created by Longri on 31.01.2018.
  */
-public class MapBubble extends VisTable {
+public class MapBubble extends Catch_Table {
 
     private final MapBubbleStyle style;
     private final AbstractCache cache;

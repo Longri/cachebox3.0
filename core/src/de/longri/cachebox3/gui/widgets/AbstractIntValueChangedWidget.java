@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 
 /**
  * Created by Longri on 23.11.2017.
  */
-public abstract class AbstractIntValueChangedWidget extends Table {
+public abstract class AbstractIntValueChangedWidget extends Catch_Table {
     public abstract void setValue(int value);
 }

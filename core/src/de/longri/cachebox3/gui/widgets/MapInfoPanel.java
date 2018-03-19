@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import de.longri.cachebox3.events.location.SpeedChangedEvent;
 import de.longri.cachebox3.events.location.SpeedChangedListener;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -34,7 +35,7 @@ import de.longri.cachebox3.utils.UnitFormatter;
 /**
  * Created by Longri on 21.03.2017.
  */
-public class MapInfoPanel extends Table implements SpeedChangedListener, Disposable {
+public class MapInfoPanel extends Catch_Table implements SpeedChangedListener, Disposable {
 
     private final Compass compass;
     private final VisLabel distanceLabel, speedLabel, distanceUnitLabel, speedUnitLabel, coordinateLabel1, coordinateLabel2;

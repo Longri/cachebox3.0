@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 -2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
-import com.badlogic.gdx.scenes.scene2d.Group;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Group;
 
 /**
  * Created by Longri on 31.08.2016.
  */
-public class ScrollViewContainer extends Group {
+public class ScrollViewContainer extends Catch_Group {
 
     private float prefWidth = -1, prefHeight = -1;
 

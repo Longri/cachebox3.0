@@ -28,11 +28,6 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.location.GpsEventHelper;
-import de.longri.cachebox3.gui.animations.map.DoubleAnimator;
-import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
-import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
-import de.longri.cachebox3.gui.map.layer.renderer.LocationRenderer;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -49,7 +44,6 @@ import java.text.NumberFormat;
 
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
-import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -211,7 +205,6 @@ public class CacheboxMain extends ApplicationAdapter {
             StageManager.draw();
         } catch (Exception e) {
             log.error("Draw StageManager", e);
-            e.printStackTrace();
         }
 
         if (CB.isTestVersion()) {

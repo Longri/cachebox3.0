@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 -2017 team-cachebox.de
+ * Copyright (C) 2016 -2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.stages.StageManager;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 26.08.2016.
  */
-public class NumPad extends Table implements TextField.OnscreenKeyboard, Disposable {
+public class NumPad extends Catch_Table implements TextField.OnscreenKeyboard, Disposable {
     final static Logger log = LoggerFactory.getLogger(NumPad.class);
 
     @Override

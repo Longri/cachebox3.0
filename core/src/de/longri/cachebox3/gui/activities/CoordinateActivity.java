@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.NumPad;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.translation.Translation;
@@ -267,7 +268,7 @@ public class CoordinateActivity extends ActivityBase {
     public void callBack(Coordinate coordinate) {
     }
 
-    private static abstract class AbstractValueTable extends Table {
+    private static abstract class AbstractValueTable extends Catch_Table {
 
         VisTextButton[] focusSequence;
         int focusButton;

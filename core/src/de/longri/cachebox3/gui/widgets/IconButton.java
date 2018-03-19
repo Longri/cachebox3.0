@@ -18,15 +18,15 @@ package de.longri.cachebox3.gui.widgets;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_VisTextButton;
 import de.longri.cachebox3.utils.HSV_Color;
 
 /**
  * Created by Longri on 15.05.2017.
  */
-public class IconButton extends VisTextButton {
+public class IconButton extends Catch_VisTextButton {
     protected final com.badlogic.gdx.scenes.scene2d.ui.Image image;
     protected float preferredHeight, preferredWidth;
 

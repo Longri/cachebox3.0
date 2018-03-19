@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,18 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Group;
 
 /**
  * Created by Longri on 15.10.16.
  */
-public class ZoomButton extends Group {
+public class ZoomButton extends Catch_Group {
 
     private final float TIME_TO_FADE_OUT = 5;
     private float actTime;
@@ -123,8 +123,8 @@ public class ZoomButton extends Group {
 
 
     public static class ZoomButtonStyle {
-       public Drawable plus, minus, plusDown, minusDown, plusDisabled, minusDisabled;
-       public float alphaOff = 0.5f, alphaOn = 1.0f;
+        public Drawable plus, minus, plusDown, minusDown, plusDisabled, minusDisabled;
+        public float alphaOff = 0.5f, alphaOn = 1.0f;
     }
 
     public void setDisabledPlus(boolean disabeld) {

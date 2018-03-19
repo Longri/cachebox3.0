@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
@@ -34,7 +33,7 @@ import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.gui.widgets.EditTextBox;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.SettingString;
@@ -51,7 +50,7 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 /**
  * Created by Longri on 16.11.2017.
  */
-public class PresetListView extends Table implements EditFilterSettings.OnShow {
+public class PresetListView extends Catch_Table implements EditFilterSettings.OnShow {
 
     private final Logger log = LoggerFactory.getLogger(PresetListView.class);
 

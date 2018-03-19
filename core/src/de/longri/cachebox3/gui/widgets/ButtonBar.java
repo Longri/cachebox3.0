@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,17 @@ package de.longri.cachebox3.gui.widgets;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_WidgetGroup;
 
 import java.util.ArrayList;
 
 /**
  * Created by Longri on 24.07.16.
  */
-public class ButtonBar extends WidgetGroup {
+public class ButtonBar extends Catch_WidgetGroup {
 
     private boolean needsLayout = true;
 

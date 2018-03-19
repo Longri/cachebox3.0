@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Align;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Actor;
 
 /**
  * Created by Longri on 09.09.16.
@@ -122,7 +122,7 @@ public class ScrollLabel extends Label {
 
     private float scrollPosition = 0;
 
-    private class AnimationActor extends Actor {
+    private class AnimationActor extends Catch_Actor {
         @Override
         protected void positionChanged() {
             scrollPosition = getX();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2017 team-cachebox.de
+ * Copyright (C) 2016-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -71,6 +71,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CB {
     static final Logger log = LoggerFactory.getLogger(CB.class);
 
+    public static final boolean DRAW_EXCEPTION_INDICATOR = true;
+
     public static final String VersionPrefix = "Test";
 
     public static LocationHandler locationHandler;
@@ -84,7 +86,7 @@ public class CB {
     public static final String LOG_LEVEL_TRACE = "trace";
 
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
-    public static final float WINDOW_FADE_TIME = 0.3f;
+    public static final float WINDOW_FADE_TIME = 0.5f;
     public static Categories Categories;
     public static float stateTime;
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);

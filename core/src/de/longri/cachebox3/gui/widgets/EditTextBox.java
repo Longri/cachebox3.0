@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -28,12 +27,13 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.skin.styles.EditTextStyle;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_WidgetGroup;
 import de.longri.cachebox3.utils.NamedRunnable;
 
 /**
  * Created by Longri on 18.05.2017.
  */
-public class EditTextBox extends WidgetGroup {
+public class EditTextBox extends Catch_WidgetGroup {
 
     private boolean singleLine = true;
     private int minLineCount = 1;

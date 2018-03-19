@@ -15,13 +15,13 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Actor;
 
 /**
  * Created by Longri on 03.02.18.
  */
-public class DummyListViewItem extends Actor implements ListViewItemInterface {
+public class DummyListViewItem extends Catch_Actor implements ListViewItemInterface {
 
     private final int index;
     private float prefHeight, prefWidth;
