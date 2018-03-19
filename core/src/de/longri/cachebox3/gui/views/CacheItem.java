@@ -131,7 +131,7 @@ public class CacheItem extends VisTable implements Disposable {
 
         if (this.tbCount > 0) {
             // don't show we have no TB's
-            Image favpointIcon = new Image(style.favoritPoints);
+            Image favpointIcon = new Image(style.trackable);
             line1.add(favpointIcon).padLeft(CB.scaledSizes.MARGIN).align(Align.top);
             VisLabel fLabel = new VisLabel("x" + Integer.toString(this.tbCount), distanceLabelStyle);
             line1.add(fLabel);

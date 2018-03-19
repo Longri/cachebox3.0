@@ -28,6 +28,10 @@
       "path": "svg/map-state-overdraw.svg",
       "scale": 0.75
     },
+    "TB": {
+      "path": "svg/TB.svg",
+      "scale": 0.08
+    },
     "TB_drop": {
       "path": "svg/TB_drop.svg",
       "scale": 0.15
@@ -675,6 +679,10 @@
     "bubbleNotFound": {
       "path": "svg/log1icon.svg",
       "scale": 0.06
+    },
+    "bubble_TB": {
+      "path": "svg/TB.svg",
+      "scale": 0.05
     },
     "bubble_archived": {
       "path": "svg/archived.svg",
@@ -3160,6 +3168,7 @@
       "nameFont": "mapPanelUnit",
       "nameFontColor": "font_color",
       "notAvailableColor": "notAvailable",
+      "trackable": "bubble_TB",
       "favoritPoints": "bubble_favpoint",
       "distanceFont": "AboutInfo",
       "distanceFontColor": "font_color",
@@ -3173,6 +3182,7 @@
       "nameFontColor": "font_color",
       "notAvailableColor": "notAvailable",
       "arrow": "arrow-compass",
+      "trackable": "TB",
       "favoritPoints": "favpoint",
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",

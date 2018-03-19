@@ -32,8 +32,8 @@
 		<path fill="#DDB637" fill-opacity="1" stroke-width="3" stroke-linejoin="round" stroke="#B29331" stroke-opacity="1" d="M 71.0334,108.208L 91.1729,113.138C 100.315,115.376 105.903,124.565 103.654,133.663L 102.938,136.56C 100.689,145.658 96.6125,153.207 87.4705,150.969L 58.2784,142.381C 49.1364,140.142 47.4437,132.623 49.6925,123.525L 50.4085,120.629C 52.6573,111.531 61.8914,105.97 71.0334,108.208 Z "/>
 		<path fill="#DDB637" fill-opacity="1" stroke-width="9" stroke-linejoin="round" stroke="#DDB637" stroke-opacity="1" d="M 130.761,54.2904L 30.7554,110.272L 139.178,140.542L 223.345,65.9003L 130.761,54.2904 Z M 132.946,63.8859L 196.231,72.3148L 140.989,115.361L 73.3716,100.376L 132.946,63.8859 Z "/>
 		<path fill="#967D2D" fill-opacity="1" stroke-width="3" stroke-linejoin="round" stroke="#B29331" stroke-opacity="1" d="M 185.502,74.0436L 133.389,66.7665L 83.4247,97.4721L 84.8629,97.765L 133.603,67.6147L 184.65,75.1088L 185.502,74.0436 Z "/>
-		<line fill="none" stroke-width="3" stroke-linejoin="round" stroke="#6C5B24" stroke-opacity="1" x1="50.7141" y1="122.713" x2="102.599" y2="137.238"/>
-		<line fill="none" stroke-linejoin="round" stroke="#B29331" stroke-opacity="1" x1="50.3944" y1="123.932" x2="102.28" y2="138.457"/>
+		<line fill="none" stroke-width="3" stroke-linejoin="round" stroke="#6C5B24" stroke-opacity="1" x1="50.714" y1="122.713" x2="102.599" y2="137.238"/>
+		<line fill="none" stroke-linejoin="round" stroke="#B29331" stroke-opacity="1" x1="50.3943" y1="123.932" x2="102.28" y2="138.457"/>
 	</g>
 	<g>
 		<path fill="#FF6F00" fill-opacity="1" fill-rule="evenodd" stroke-width="2" stroke-linejoin="miter" stroke="#000000" stroke-opacity="1" d="M 237.131,95.6164C 237.131,117.708 219.059,135.616 196.766,135.616C 174.473,135.616 156.401,117.708 156.401,95.6164C 156.401,73.5253 174.473,55.6164 196.766,55.6164C 219.059,55.6164 237.131,73.5253 237.131,95.6164 Z "/>
@@ -41,12 +41,12 @@
 			<stop offset="0" stop-color="#FFFFFF" stop-opacity="0.301961"/>
 			<stop offset="1" stop-color="#040404" stop-opacity="0.301961"/>
 		</linearGradient>
-		<path fill="url(#SVGID_Fill4_)" fill-rule="evenodd" stroke-width="2" stroke-linejoin="round" d="M 231.591,94.4506C 231.591,116.542 218.768,130.66 196.475,130.66C 174.181,130.66 165.439,114.501 163.69,102.905C 163.69,80.8134 174.473,94.3922 196.766,94.3922C 219.059,94.3922 231.591,72.3583 231.591,94.4506 Z "/>
+		<path fill="url(#SVGID_Fill4_)" fill-rule="evenodd" stroke-width="0.2" stroke-linejoin="round" d="M 231.591,94.4506C 231.591,116.542 218.768,130.66 196.475,130.66C 174.181,130.66 165.439,114.501 163.69,102.905C 163.69,80.8134 174.473,94.3922 196.766,94.3922C 219.059,94.3922 231.591,72.3583 231.591,94.4506 Z "/>
 		<radialGradient id="SVGID_Fill5_" cx="192.155" cy="78.4272" r="17.0977" gradientUnits="userSpaceOnUse">
 			<stop offset="0" stop-color="#BDBDBD" stop-opacity="0.301961"/>
 			<stop offset="1" stop-color="#373737" stop-opacity="0.301961"/>
 		</radialGradient>
-		<path fill="url(#SVGID_Fill5_)" fill-rule="evenodd" stroke-width="2" stroke-linejoin="round" d="M 232.174,96.4906C 232.174,118.582 218.184,88.0939 195.892,88.0939C 173.598,88.0939 161.065,116.251 161.065,94.1581C 161.065,76.7318 176.223,60.5722 195.599,60.5722C 217.892,60.5722 232.174,74.3993 232.174,96.4906 Z "/>
+		<path fill="url(#SVGID_Fill5_)" fill-rule="evenodd" stroke-width="0.2" stroke-linejoin="round" d="M 232.174,96.4906C 232.174,118.582 218.184,88.0939 195.892,88.0939C 173.598,88.0939 161.065,116.251 161.065,94.1581C 161.065,76.7318 176.223,60.5722 195.599,60.5722C 217.892,60.5722 232.174,74.3993 232.174,96.4906 Z "/>
 		<path fill="none" stroke-width="2" stroke-linejoin="miter" stroke="#000000" stroke-opacity="1" d="M 195.001,97.6618C 199.983,97.7365 201.234,95.3356 201.709,90.5819C 199.909,85.8283 198.011,66.8847 195.641,59.852C 193.305,66.8271 188.629,86.706 188.155,89.9247C 188.299,91.6798 188.924,97.2743 195.001,97.6618 Z "/>
 		<path fill="none" stroke-width="2" stroke-linejoin="miter" stroke="#000000" stroke-opacity="1" d="M 193.251,88.9447C 189.755,90.8798 190.933,94.2099 193.126,96.4975C 195.045,98.2382 211.703,113.115 217.198,118.226C 212.931,112.379 202.023,94.1344 199.902,91.5353C 198.643,90.1859 196.292,88.0065 193.251,88.9447 Z "/>
 	</g>
