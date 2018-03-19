@@ -21,7 +21,6 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.events.location.GpsState;
 import de.longri.cachebox3.events.location.LocationEvents;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.locator.Region;
@@ -41,6 +40,8 @@ public class AndroidLocationListener implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         if (CB.sensoerIO.isPlay()) return;
+
+        if (this.handler == null) return;
 
         {//check region handler
             LatLong latLong = new LatLong(location.getLatitude(), location.getLongitude());
