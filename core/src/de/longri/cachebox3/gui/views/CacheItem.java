@@ -50,13 +50,15 @@ public class CacheItem extends VisTable implements Disposable {
     private final CacheSizes size;
     private final String shortSizeString;
     private final Drawable leftInfoIcon, rightInfoIcon;
-    private final boolean isAvailable, isFavorite;
+    private final boolean isAvailable;
     private final int favPoints;
+    private final int tbCount;
 
 
     public CacheItem(CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
                      int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
-                     LogTypes rightLogType, boolean isAvailable, boolean isFavorite, int favPoints, CacheListItemStyle style) {
+                     LogTypes rightLogType, boolean isAvailable, boolean isFavorite, int favPoints,
+                     int tbCount, CacheListItemStyle style) {
         this.difficulty = difficulty;
         this.terrain = terrain;
         this.vote = vote;
@@ -70,7 +72,7 @@ public class CacheItem extends VisTable implements Disposable {
         this.rightTopIcon = isFavorite ? LogTypes.ownFavorite.getDrawable(this.style.logTypesStyle) : null;
         this.isAvailable = isAvailable;
         this.favPoints = favPoints;
-        this.isFavorite = isFavorite;
+        this.tbCount = tbCount;
     }
 
 
@@ -126,6 +128,14 @@ public class CacheItem extends VisTable implements Disposable {
         line1.add(sLabel).padLeft(CB.scaledSizes.MARGIN);
         CacheSizeWidget sizeWidget = new CacheSizeWidget(this.size, style.cacheSizeStyle);
         line1.add(sizeWidget).padLeft(CB.scaledSizes.MARGIN_HALF);
+
+        if (this.tbCount > 0) {
+            // don't show we have no TB's
+            Image favpointIcon = new Image(style.favoritPoints);
+            line1.add(favpointIcon).padLeft(CB.scaledSizes.MARGIN).align(Align.top);
+            VisLabel fLabel = new VisLabel("x" + Integer.toString(this.tbCount), distanceLabelStyle);
+            line1.add(fLabel);
+        }
 
 
         this.add(line1).colspan(3).align(Align.left);

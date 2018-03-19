@@ -56,7 +56,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
                 (int) (abstractCache.getDifficulty() * 2), (int) (abstractCache.getTerrain() * 2),
                 (int) Math.min(abstractCache.getRating() * 2, 5 * 2), abstractCache.getSize(),
                 abstractCache.getSize().toShortString(), left, right, isAvailable, abstractCache.isFavorite(),
-                abstractCache.getFavoritePoints());
+                abstractCache.getFavoritePoints(), abstractCache.getNumTravelbugs());
         return listViewItem;
     }
 
@@ -65,11 +65,11 @@ public class CacheListItem extends ListViewItem implements Disposable {
 
     private CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
                           int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
-                          LogTypes rightLogType, boolean isAvailable, boolean isFavorite, int favPoints) {
+                          LogTypes rightLogType, boolean isAvailable, boolean isFavorite, int favPoints, int numOfTb) {
         super(listIndex);
         CacheListItemStyle style = VisUI.getSkin().get("cacheListItems", CacheListItemStyle.class);
         cacheItem = new CacheItem(type, cacheName, difficulty, terrain, vote, size, shortSizeString,
-                leftLogType, rightLogType, isAvailable, isFavorite, favPoints, style);
+                leftLogType, rightLogType, isAvailable, isFavorite, favPoints, numOfTb, style);
         this.add(cacheItem).expand().fill();
     }
 
