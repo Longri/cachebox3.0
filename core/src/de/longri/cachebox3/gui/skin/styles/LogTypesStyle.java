@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import de.longri.cachebox3.CB;
 /**
  * Created by Longri on 31.05.2017.
  */
-public class LogTypesStyle extends AbstractIconStyle{
+public class LogTypesStyle extends AbstractIconStyle {
     public Drawable
             found, // 0
             didnt_find, // 1
@@ -49,6 +49,7 @@ public class LogTypesStyle extends AbstractIconStyle{
             move_to_inventory, // 23
             announcement, // 24
             visited; // 25
+    public Drawable ownFavorite;
 
     @Override
     public int getPrefWidth() {

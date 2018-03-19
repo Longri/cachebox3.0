@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -92,7 +92,7 @@ public class EditDrafts extends ActivityBase {
         setDraft(note, returnListener, isNewDraft);
         if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
             gcVoteWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, Translation.get("maxRating"),
-                    new IntProperty(),itemStyle.starStyle,itemStyle.cacheSizeStyle);
+                    new IntProperty(), itemStyle.starStyle, itemStyle.cacheSizeStyle);
             gcVoteWidget.setBackground(CB.getSkin().get(ListViewStyle.class).firstItem);
         }
 
@@ -227,7 +227,7 @@ public class EditDrafts extends ActivityBase {
         VisTable cacheTable = new VisTable();
 
         VisTable iconTable = new VisTable();
-        iconTable.add(actDraft.cacheType.getCacheWidget(itemStyle.cacheTypeStyle, null, null));
+        iconTable.add(actDraft.cacheType.getCacheWidget(itemStyle.cacheTypeStyle, null, null, null, null));
         iconTable.pack();
         iconTable.layout();
 

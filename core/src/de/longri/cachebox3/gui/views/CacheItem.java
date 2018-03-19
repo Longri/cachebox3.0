@@ -39,6 +39,7 @@ public class CacheItem extends VisTable implements Disposable {
     final CacheListItemStyle style;
     private final CacheTypes type;
     private final CharSequence cacheName;
+    private final Drawable rightTopIcon;
     private boolean needsLayout = true;
     Image arrowImage;
     VisLabel distanceLabel;
@@ -51,11 +52,13 @@ public class CacheItem extends VisTable implements Disposable {
     private final Drawable leftInfoIcon, rightInfoIcon;
     private final boolean isAvailable;
     private final int favPoints;
+    private final int tbCount;
 
 
     public CacheItem(CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
                      int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
-                     LogTypes rightLogType, boolean isAvailable, int favPoints, CacheListItemStyle style) {
+                     LogTypes rightLogType, boolean isAvailable, boolean isFavorite, int favPoints,
+                     int tbCount, CacheListItemStyle style) {
         this.difficulty = difficulty;
         this.terrain = terrain;
         this.vote = vote;
@@ -66,8 +69,10 @@ public class CacheItem extends VisTable implements Disposable {
         this.cacheName = cacheName;
         this.leftInfoIcon = leftLogType == null ? null : leftLogType.getDrawable(this.style.logTypesStyle);
         this.rightInfoIcon = rightLogType == null ? null : rightLogType.getDrawable(this.style.logTypesStyle);
+        this.rightTopIcon = isFavorite ? LogTypes.ownFavorite.getDrawable(this.style.logTypesStyle) : null;
         this.isAvailable = isAvailable;
         this.favPoints = favPoints;
+        this.tbCount = tbCount;
     }
 
 
@@ -81,7 +86,7 @@ public class CacheItem extends VisTable implements Disposable {
 
         if (this.type != null) {
             VisTable iconTable = new VisTable();
-            iconTable.add(type.getCacheWidget(style.typeStyle, leftInfoIcon, rightInfoIcon));
+            iconTable.add(type.getCacheWidget(style.typeStyle, leftInfoIcon, rightInfoIcon, null, rightTopIcon));
             iconTable.pack();
             iconTable.layout();
             this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGIN);
@@ -123,6 +128,14 @@ public class CacheItem extends VisTable implements Disposable {
         line1.add(sLabel).padLeft(CB.scaledSizes.MARGIN);
         CacheSizeWidget sizeWidget = new CacheSizeWidget(this.size, style.cacheSizeStyle);
         line1.add(sizeWidget).padLeft(CB.scaledSizes.MARGIN_HALF);
+
+        if (this.tbCount > 0) {
+            // don't show we have no TB's
+            Image favpointIcon = new Image(style.trackable);
+            line1.add(favpointIcon).padLeft(CB.scaledSizes.MARGIN).align(Align.top);
+            VisLabel fLabel = new VisLabel("x" + Integer.toString(this.tbCount), distanceLabelStyle);
+            line1.add(fLabel);
+        }
 
 
         this.add(line1).colspan(3).align(Align.left);

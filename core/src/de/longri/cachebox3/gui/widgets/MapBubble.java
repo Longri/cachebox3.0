@@ -69,7 +69,8 @@ public class MapBubble extends VisTable {
             content = new CacheItem(null, cache.getName(),
                     (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
                     (int) Math.min(cache.getRating() * 2, 5 * 2), cache.getSize(),
-                    cache.getSize().toShortString(), left, right, isAvailable, cache.getFavoritePoints(), style.cacheListItemStyle);
+                    cache.getSize().toShortString(), left, right, isAvailable, cache.isFavorite(),
+                    cache.getFavoritePoints(),cache.getNumTravelbugs(), style.cacheListItemStyle);
             isSelected = (EventHandler.getSelectedWaypoint() == null && cache == EventHandler.getSelectedCache());
         } else if (waypoint != null) {
 

@@ -28,6 +28,10 @@
       "path": "svg/map-state-overdraw.svg",
       "scale": 0.75
     },
+    "TB": {
+      "path": "svg/TB.svg",
+      "scale": 0.08
+    },
     "TB_drop": {
       "path": "svg/TB_drop.svg",
       "scale": 0.15
@@ -676,6 +680,10 @@
       "path": "svg/log1icon.svg",
       "scale": 0.06
     },
+    "bubble_TB": {
+      "path": "svg/TB.svg",
+      "scale": 0.05
+    },
     "bubble_archived": {
       "path": "svg/archived.svg",
       "scale": 0.06
@@ -739,6 +747,10 @@
     "cache": {
       "path": "svg/cache.svg",
       "scale": 0.72
+    },
+    "cacheFavIcon": {
+      "path": "svg/favIcon.svg",
+      "scale": 0.1
     },
     "cacheListIcon": {
       "path": "svg/cacheListIcon.svg",
@@ -3070,7 +3082,8 @@
       "found": "found",
       "didnt_find": "notFound",
       "temporarily_disabled": "tempDisabled",
-      "archived": "archived"
+      "archived": "archived",
+      "ownFavorite": "cacheFavIcon"
     },
     "logViewLogStyles": {
       "found": "found",
@@ -3155,6 +3168,7 @@
       "nameFont": "mapPanelUnit",
       "nameFontColor": "font_color",
       "notAvailableColor": "notAvailable",
+      "trackable": "bubble_TB",
       "favoritPoints": "bubble_favpoint",
       "distanceFont": "AboutInfo",
       "distanceFontColor": "font_color",
@@ -3168,6 +3182,7 @@
       "nameFontColor": "font_color",
       "notAvailableColor": "notAvailable",
       "arrow": "arrow-compass",
+      "trackable": "TB",
       "favoritPoints": "favpoint",
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",

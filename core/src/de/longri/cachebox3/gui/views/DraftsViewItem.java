@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -90,7 +90,7 @@ public class DraftsViewItem extends ListViewItem {
         VisTable cacheTable = new VisTable();
 
         VisTable iconTable = new VisTable();
-        iconTable.add(entry.cacheType.getCacheWidget(style.cacheTypeStyle, null, null));
+        iconTable.add(entry.cacheType.getCacheWidget(style.cacheTypeStyle, null, null, null, null));
         iconTable.pack();
         iconTable.layout();
 
