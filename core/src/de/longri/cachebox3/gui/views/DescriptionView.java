@@ -157,7 +157,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 return true;
             } else if (url.equals("about:blank")) {
                 // Load description
-                return true;
+                return false;
             }
             return false;
         }

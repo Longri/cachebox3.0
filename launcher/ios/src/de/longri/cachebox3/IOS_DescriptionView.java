@@ -51,7 +51,7 @@ public class IOS_DescriptionView extends UIViewController implements UIWebViewDe
     @Override
     public boolean shouldStartLoad(UIWebView uiWebView, NSURLRequest nsurlRequest, UIWebViewNavigationType uiWebViewNavigationType) {
         String url = nsurlRequest.getURL().getAbsoluteString();
-        boolean shouldOverride = shouldOverrideUrlLoadingCallBack.callBack(url);
+        boolean shouldOverride = !shouldOverrideUrlLoadingCallBack.callBack(url);
         log.debug("Should override {} Url: {}", shouldOverride, url);
         return shouldOverride;
     }
