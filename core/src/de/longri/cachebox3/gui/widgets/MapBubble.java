@@ -15,6 +15,11 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
@@ -27,6 +32,8 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.LogTypes;
 import org.oscim.core.MercatorProjection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 31.01.2018.
@@ -36,6 +43,8 @@ public class MapBubble extends Catch_Table {
     private final MapBubbleStyle style;
     private final AbstractCache cache;
     private final AbstractWaypoint waypoint;
+    private final Drawable background;
+    VisTable content;
 
     public MapBubble(Object dataObject) {
         this(dataObject instanceof AbstractCache ? (AbstractCache) dataObject : null, dataObject instanceof AbstractWaypoint ? (AbstractWaypoint) dataObject : null);
@@ -47,7 +56,7 @@ public class MapBubble extends Catch_Table {
         style = VisUI.getSkin().get("bubble", MapBubbleStyle.class);
 
         boolean isSelected = false;
-        VisTable content;
+
         if (cache != null) {
 
             LogTypes left = null;
@@ -70,22 +79,82 @@ public class MapBubble extends Catch_Table {
             content = new CacheItem(null, cache.getName(),
                     (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
                     (int) Math.min(cache.getRating() * 2, 5 * 2), cache.getSize(),
-                    cache.getSize().toShortString(), left, right, isAvailable, cache.getFavoritePoints(), style.cacheListItemStyle);
+                    cache.getSize().toShortString(), left, right, isAvailable, cache.isFavorite(),
+                    cache.getFavoritePoints(), cache.getNumTravelbugs(), style.cacheListItemStyle);
             isSelected = (EventHandler.getSelectedWaypoint() == null && cache == EventHandler.getSelectedCache());
         } else if (waypoint != null) {
 
-            content = new WayPointItem(waypoint.getType(),
-                    waypoint.getGcCode().toString(), waypoint.getTitle().toString(),
-                    "", waypoint.FormatCoordinate(), style.wayPointListItemStyle);
+            content = new WayPointItem(null,
+                    waypoint.getGcCode(), waypoint.getTitle(),
+                    waypoint.getDescription(Database.Data), waypoint.FormatCoordinate(), style.wayPointListItemStyle);
             isSelected = waypoint == EventHandler.getSelectedWaypoint();
 
         } else {
             content = null;
         }
 
-        this.add(content).expand().fill();
-        this.setBackground(isSelected ? style.selectedBackground : style.background);
+        this.background = (isSelected ? style.selectedBackground : style.background);
+        content.pack();
+        this.addActor(content);
+    }
 
+    public void layout() {
+        if (content == null) return;
+        super.layout();
+        content.invalidate();
+        content.pack();
+        content.layout();
+        float defaultPad = CB.getScaledFloat(10);
+        float leftPad = defaultPad;
+        float rightPad = defaultPad;
+        float topPad = defaultPad;
+        float bottomPad = defaultPad;
+        float width;
+        float height;
+
+        if (background != null) {
+            if (background instanceof NinePatchDrawable) {
+                leftPad = background.getLeftWidth();
+                rightPad = background.getRightWidth();
+                topPad = background.getTopHeight();
+                bottomPad = background.getBottomHeight();
+                width = leftPad + content.getWidth() + rightPad;
+                height = topPad + content.getHeight() + bottomPad;
+            } else {
+                width = Math.max(background.getMinWidth() + (2 * defaultPad), content.getWidth() + (2 * defaultPad));
+                height = Math.max(background.getMinHeight() + (2 * defaultPad), content.getHeight() + (2 * defaultPad));
+            }
+        } else {
+            width = content.getWidth();
+            height = content.getHeight();
+        }
+
+        setSize(width, height);
+        content.setPosition(leftPad, bottomPad);
+    }
+
+    public void draw(Batch batch, float parentAlpha) {
+        validate();
+        if (isTransform()) {
+            applyTransform(batch, computeTransform());
+            drawBackground(batch, parentAlpha, 0, 0);
+            drawChildren(batch, parentAlpha);
+            resetTransform(batch);
+        } else {
+            drawBackground(batch, parentAlpha, getX(), getY());
+            super.draw(batch, parentAlpha);
+        }
+    }
+
+    /**
+     * Called to draw the background, before clipping is applied (if enabled). Default implementation draws the background
+     * drawable.
+     */
+    protected void drawBackground(Batch batch, float parentAlpha, float x, float y) {
+        if (background == null) return;
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        background.draw(batch, x, y, getWidth(), getHeight());
     }
 
     public float getOffsetX() {

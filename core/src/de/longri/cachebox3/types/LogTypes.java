@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 team-cachebox.de
+ * Copyright (C) 2014-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package de.longri.cachebox3.types;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
-import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
-import de.longri.cachebox3.gui.skin.styles.LogListItemStyle;
 import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
 import de.longri.cachebox3.settings.Config;
 
@@ -50,7 +48,7 @@ public enum LogTypes implements SelectBoxItem {
     move_to_inventory, // 23
     announcement, // 24
     visited, // 25
-    ;
+    ownFavorite;
 
     /**
      * Returns True if the log type a TB Log
@@ -523,6 +521,8 @@ public enum LogTypes implements SelectBoxItem {
                 return style.announcement;
             case visited:
                 return style.visited;
+            case ownFavorite:
+                return style.ownFavorite;
         }
         return null;
     }
