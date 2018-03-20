@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 package de.longri.cachebox3.gui.widgets.filter_settings;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.gui.activities.EditFilterSettings;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 
 /**
  * Created by Longri on 16.11.2017.
  */
-public class TextFilterView extends Table implements EditFilterSettings.OnShow {
+public class TextFilterView extends Catch_Table implements EditFilterSettings.OnShow {
 
     public TextFilterView() {
         VisLabel label = new VisLabel("TextFilterView");

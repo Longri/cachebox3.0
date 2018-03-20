@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.location.*;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
@@ -112,25 +112,34 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
                 if (myIndex >= 0) {
                     try {
                         event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[myIndex], event);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
                     } catch (Exception e) {
-                        log.error("Fire event to" + list.items[myIndex].getClass().getSimpleName(), e.getCause());
+                        String name;
+                        try {
+                            name = list.items[myIndex].getClass().getSimpleName();
+                        } catch (Exception e1) {
+                            name = "???";
+                        }
+                        log.error("Fire event to" + name, e);
                     }
                 }
 
                 asyncExecutor.submit(new AsyncTask<Void>() {
                     @Override
-                    public Void call() throws Exception {
+                    public Void call() {
                         for (int i = 0, n = list.size; i < n; i++) {
                             if (myIndex >= 0 && i == myIndex) continue;
 
                             try {
                                 event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
                             } catch (Exception e) {
-                                log.error("Fire event to" + list.items[i].getClass().getSimpleName(), e.getCause());
+                                StageManager.indicateException(CB.EXCEPTION_COLOR_EVENT);
+                                String name;
+                                try {
+                                    name = list.items[i].getClass().getSimpleName();
+                                } catch (Exception e1) {
+                                    name = "???";
+                                }
+                                log.error("Fire event to" + name, e);
                             }
                         }
                         return null;

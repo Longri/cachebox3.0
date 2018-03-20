@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,14 @@ package de.longri.cachebox3.gui.widgets;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.gui.activities.CoordinateActivity;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_VisTextButton;
 import de.longri.cachebox3.locator.Coordinate;
 
 /**
  * Created by Longri on 04.02.17.
  */
-public class CoordinateButton extends VisTextButton {
+public class CoordinateButton extends Catch_VisTextButton {
 
     private Coordinate coordinate;
 

@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -26,6 +25,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.CacheSizeStyle;
 import de.longri.cachebox3.gui.skin.styles.StarsStyle;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.IntProperty;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -33,7 +33,7 @@ import de.longri.cachebox3.utils.NamedRunnable;
 /**
  * Created by Longri on 02.09.2017.
  */
-public class AdjustableStarWidget extends Table {
+public class AdjustableStarWidget extends Catch_Table {
 
     private final AbstractIntValueChangedWidget starsWidget;
     private final IntProperty value;

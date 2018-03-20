@@ -16,10 +16,10 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_WidgetGroup;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * holds the Compass, the distanceLabel label and the Sun/Moon drawables
  * Created by Longri on 19.02.2018.
  */
-public class CompassPanel extends WidgetGroup {
+public class CompassPanel extends Catch_WidgetGroup {
 
     private final static Logger log = LoggerFactory.getLogger(CompassPanel.class);
 
@@ -74,7 +74,7 @@ public class CompassPanel extends WidgetGroup {
         this.setPosition(0, 0);
     }
 
-    public void setInfo(final float distance,final  float heading,final  float bearing,final  float accurate) {
+    public void setInfo(final float distance, final float heading, final float bearing, final float accurate) {
         CB.postOnGlThread(new NamedRunnable("Test Add") {
             @Override
             public void run() {

@@ -146,7 +146,6 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
     }
 
-
     public FilterProperties getActFilter() {
         return actFilter;
     }
@@ -506,5 +505,10 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         locationReceiver.pause();
     }
 
+    @Override
+    public void draw() {
+        if (CB.DRAW_EXCEPTION_INDICATOR) this.getRoot().setDebug(true, false);
+        super.draw();
+    }
 
 }

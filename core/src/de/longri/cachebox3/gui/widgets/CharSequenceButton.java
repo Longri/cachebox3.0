@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.kotcrab.vis.ui.widget.VisTextButton;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_VisTextButton;
 
 /**
  * Created by Longri on 27.10.2017.
  */
-public class CharSequenceButton extends VisTextButton {
+public class CharSequenceButton extends Catch_VisTextButton {
 
     private final static String EMPTY = "";
 

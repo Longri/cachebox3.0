@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2017 team-cachebox.de
+ * Copyright (C) 2016-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.CacheListView;
 import de.longri.cachebox3.locator.manager.LocationHandler;
@@ -71,10 +72,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CB {
     static final Logger log = LoggerFactory.getLogger(CB.class);
 
+    public static final boolean DRAW_EXCEPTION_INDICATOR = true;
+    public static final Color EXCEPTION_COLOR_DRAWING = Color.RED;
+    public static final Color EXCEPTION_COLOR_POST = Color.YELLOW;
+    public static final Color EXCEPTION_COLOR_EVENT = Color.GREEN;
+    public static final Color EXCEPTION_COLOR_LOCATION = Color.BLUE;
+
+
     public static final String VersionPrefix = "Test";
 
     public static LocationHandler locationHandler;
-
 
     //LogLevels
     public static final String LOG_LEVEL_INFO = "info";
@@ -84,7 +91,7 @@ public class CB {
     public static final String LOG_LEVEL_TRACE = "trace";
 
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
-    public static final float WINDOW_FADE_TIME = 0.3f;
+    public static final float WINDOW_FADE_TIME = 0.5f;
     public static Categories Categories;
     public static float stateTime;
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
@@ -331,14 +338,24 @@ public class CB {
 
     public static void postOnGlThread(final NamedRunnable runnable, boolean wait) {
         if (isGlThread()) {
-            runnable.run();
+            try {
+                runnable.run();
+            } catch (Exception e) {
+                log.error("postOnGlThread:" + runnable.name, e);
+                StageManager.indicateException(EXCEPTION_COLOR_POST);
+            }
             return;
         }
         final AtomicBoolean WAIT = new AtomicBoolean(wait);
         Gdx.app.postRunnable(new NamedRunnable(runnable.name) {
             @Override
             public void run() {
-                runnable.run();
+                try {
+                    runnable.run();
+                } catch (Exception e) {
+                    log.error("postOnGlThread:" + runnable.name, e);
+                    StageManager.indicateException(EXCEPTION_COLOR_POST);
+                }
                 WAIT.set(false);
             }
         });
@@ -351,17 +368,22 @@ public class CB {
                 e.printStackTrace();
             }
         }
-        return;
     }
 
     public static void postAsyncDelayd(final long delay, final NamedRunnable runnable) {
+        if (runnable == null) return;
         postAsync(new NamedRunnable("delayed runnable: " + runnable.name) {
             @Override
             public void run() {
                 TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
-                        runnable.run();
+                        try {
+                            runnable.run();
+                        } catch (Exception e) {
+                            log.error("postAsyncDelayd:" + runnable.name, e);
+                            StageManager.indicateException(EXCEPTION_COLOR_POST);
+                        }
                     }
                 };
                 new Timer().schedule(task, delay);
@@ -386,15 +408,9 @@ public class CB {
                     runningRunnables.removeValue(runnable.name, false);
                     log.debug("Ready Async executed runnable, count {} runs: {}", executeCount.decrementAndGet(), runningRunnables.toString());
                 } catch (final Exception e) {
-                    e.printStackTrace();
+                    StageManager.indicateException(EXCEPTION_COLOR_POST);
                     executeCount.decrementAndGet();
-                    // throw on main thread, async executor will catch them
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            throw e;
-                        }
-                    });
+                    log.error("postAsync:" + runnable.name, e);
                 }
                 return null;
             }

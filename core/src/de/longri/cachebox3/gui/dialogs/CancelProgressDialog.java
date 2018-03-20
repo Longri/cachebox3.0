@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.widgets.ProgressBar;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.utils.NamedRunnable;
 
@@ -96,7 +97,7 @@ public class CancelProgressDialog extends ButtonDialog {
     }
 
 
-    private static class ProgressTable extends Table {
+    private static class ProgressTable extends Catch_Table {
         ProgressBar progress;
         VisLabel label;
     }

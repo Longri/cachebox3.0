@@ -16,7 +16,9 @@
 package de.longri.cachebox3.locator.manager;
 
 import com.badlogic.gdx.utils.ObjectMap;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.location.LocationEvents;
+import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.locator.CircularRegion;
 import de.longri.cachebox3.locator.Region;
 import org.robovm.apple.corelocation.*;
@@ -57,28 +59,38 @@ public class IOS_LocationManager extends LocationManager {
         manager.setDelegate(new CLLocationManagerDelegateAdapter() {
             @Override
             public void didUpdateLocations(CLLocationManager clLocationManager, NSArray<CLLocation> locations) {
-                CLLocation newLocation = locations.last();
-                CLLocationCoordinate2D coord = newLocation.getCoordinate();
+                try {
+                    CLLocation newLocation = locations.last();
+                    CLLocationCoordinate2D coord = newLocation.getCoordinate();
 
-                double lat = coord.getLatitude();
-                double lon = coord.getLongitude();
-                float accuracy = (float) newLocation.getHorizontalAccuracy();
-                double altitude = newLocation.getAltitude();
-                double speed = newLocation.getSpeed() * 3.6;
-                float courseRad = (float) Math.toRadians(newLocation.getCourse());
+                    double lat = coord.getLatitude();
+                    double lon = coord.getLongitude();
+                    float accuracy = (float) newLocation.getHorizontalAccuracy();
+                    double altitude = newLocation.getAltitude();
+                    double speed = newLocation.getSpeed() * 3.6;
+                    float courseRad = (float) Math.toRadians(newLocation.getCourse());
 
-                locationEvents.newGpsPos(lat, lon, accuracy);
-                locationEvents.newAltitude(altitude);
-                if (courseRad >= 0) locationEvents.newBearing(courseRad, true);
-                if (speed >= 0) locationEvents.newSpeed(speed);
+                    locationEvents.newGpsPos(lat, lon, accuracy);
+                    locationEvents.newAltitude(altitude);
+                    if (courseRad >= 0) locationEvents.newBearing(courseRad, true);
+                    if (speed >= 0) locationEvents.newSpeed(speed);
+                } catch (Exception e) {
+                    StageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
+                    log.error("didUpdateLocations", e);
+                }
 
             }
 
             @Override
             public void didUpdateHeading(CLLocationManager clLocationManager, CLHeading newHeading) {
-                if (newHeading.getHeadingAccuracy() < 0) return; // invalid
-                float headingRad = (float) Math.toRadians(newHeading.getTrueHeading());
-                locationEvents.newBearing(headingRad, false);
+                try {
+                    if (newHeading.getHeadingAccuracy() < 0) return; // invalid
+                    float headingRad = (float) Math.toRadians(newHeading.getTrueHeading());
+                    locationEvents.newBearing(headingRad, false);
+                } catch (Exception e) {
+                    StageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
+                    log.error("didUpdateHeading", e);
+                }
             }
 
             @Override
@@ -100,12 +112,22 @@ public class IOS_LocationManager extends LocationManager {
 
             @Override
             public void didEnterRegion(CLLocationManager clLocationManager, CLRegion region) {
-                locationEvents.didEnterRegion(regionMap.get(region));
+                try {
+                    locationEvents.didEnterRegion(regionMap.get(region));
+                } catch (Exception e) {
+                    StageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
+                    log.error("didEnterRegion", e);
+                }
             }
 
             @Override
             public void didExitRegion(CLLocationManager clLocationManager, CLRegion region) {
-                locationEvents.didExitRegion(regionMap.get(region));
+                try {
+                    locationEvents.didExitRegion(regionMap.get(region));
+                } catch (Exception e) {
+                    StageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
+                    log.error("didExitRegion", e);
+                }
             }
 
         });

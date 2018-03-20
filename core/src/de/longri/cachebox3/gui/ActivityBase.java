@@ -52,7 +52,12 @@ public class ActivityBase extends Window implements Showable {
 
 
     public void finish() {
-        super.hide();
+        CB.postOnGlThread(new NamedRunnable("Finish ActivityBase") {
+            @Override
+            public void run() {
+                ActivityBase.super.hide();
+            }
+        });
     }
 
     public void onShow() {
@@ -64,7 +69,7 @@ public class ActivityBase extends Window implements Showable {
     }
 
     @Override
-    public void draw(Batch batch,float parentAlpha){
+    public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
     }
 

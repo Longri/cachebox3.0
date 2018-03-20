@@ -21,12 +21,10 @@ import com.badlogic.gdx.graphics.g2d.freetype.SkinFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.IntArray;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
-
-import java.util.Arrays;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_WidgetGroup;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
@@ -34,7 +32,7 @@ import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 /**
  * Created by Longri on 06.02.2018.
  */
-public class TestNew extends WidgetGroup {
+public class TestNew extends Catch_WidgetGroup {
 
     final int count;
     final ListView lv;

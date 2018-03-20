@@ -1,5 +1,5 @@
-/* 
- * Copyright (C) 2016 team-cachebox.de
+/*
+ * Copyright (C) 2016 -2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.SnapshotArray;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_WidgetGroup;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.Showable;
 import de.longri.cachebox3.utils.SizeF;
@@ -26,7 +26,7 @@ import de.longri.cachebox3.utils.SizeF;
 /**
  * Created by Longri on 05.08.16.
  */
-public abstract class CB_View_Base extends WidgetGroup implements Disposable, Showable {
+public abstract class CB_View_Base extends Catch_WidgetGroup implements Disposable, Showable {
 
     public final String NAME;
 

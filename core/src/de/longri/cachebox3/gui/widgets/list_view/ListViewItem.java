@@ -19,13 +19,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.StringBuilder;
-import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 
 /**
  * Created by Longri on 03.02.18.
  */
-public class ListViewItem extends VisTable implements Disposable, ListViewItemInterface {
+public class ListViewItem extends Catch_Table implements Disposable, ListViewItemInterface {
 
     private OnDrawListener onDrawListener;
 

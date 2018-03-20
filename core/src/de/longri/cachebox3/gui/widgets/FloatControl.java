@@ -17,18 +17,18 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.FloatControlStyle;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 27.01.18.
  */
-public class FloatControl extends Table {
+public class FloatControl extends Catch_Table {
 
     private final Logger log = LoggerFactory.getLogger(FloatControl.class);
 

@@ -216,9 +216,7 @@ public class WaypointView extends AbstractView {
 
                 } else {
                     CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
-                    int selectedItemListIndex = selectedItem.getListIndex();
-
-                    AbstractCache cache = Database.Data.Query.get(selectedItemListIndex);
+                    AbstractCache cache =  Database.Data.Query.getCacheById(selectedItem.getId());
                     log.debug("Cache selection changed to: " + cache.toString());
                     //set selected Cache global
                     EventHandler.fire(new SelectedCacheChangedEvent(cache));

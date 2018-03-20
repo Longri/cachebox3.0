@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.animations.map.DoubleAnimator;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.gui.skin.styles.CompassStyle;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_WidgetGroup;
 import de.longri.cachebox3.utils.CB_RectF;
 
 import static de.longri.cachebox3.gui.animations.map.DoubleAnimator.DEFAULT_DURATION;
@@ -36,7 +37,7 @@ import static de.longri.cachebox3.gui.animations.map.DoubleAnimator.DEFAULT_DURA
 /**
  * Created by Longri on 21.03.2017.
  */
-public class Compass extends WidgetGroup implements Layout {
+public class Compass extends Catch_WidgetGroup implements Layout {
 
     public interface StateChanged {
         void stateChanged(MapOrientationMode state);
