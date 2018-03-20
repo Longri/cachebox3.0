@@ -32,13 +32,10 @@ public class WayPointItem extends VisTable implements Disposable {
 
     private final WayPointListItemStyle style;
     private final CacheTypes type;
-    final CharSequence wayPointGcCode;
+    final CharSequence wayPointGcCode, description, wayPointTitle, coord;
     private boolean needsLayout = true;
-    final Image arrowImage;
-    final VisLabel distanceLabel;
-    final private VisLabel descriptionLabel;
-    final private VisLabel coordLabel;
-    final private VisLabel nameLabel;
+    Image arrowImage;
+    VisLabel distanceLabel;
     boolean distanceOrBearingChanged = true;
 
     public WayPointItem(CacheTypes type, CharSequence wayPointGcCode, CharSequence wayPointTitle,
@@ -47,26 +44,9 @@ public class WayPointItem extends VisTable implements Disposable {
         this.style = style;
         this.type = type;
         this.wayPointGcCode = wayPointGcCode;
-
-        Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
-        nameLabelStyle.font = this.style.nameFont;
-        nameLabelStyle.fontColor = this.style.nameFontColor;
-
-        nameLabel = new VisLabel(wayPointGcCode + ": " + wayPointTitle, nameLabelStyle);
-        descriptionLabel = description == null ? null : new VisLabel(description, nameLabelStyle);
-        coordLabel = new VisLabel(coord, nameLabelStyle);
-
-        nameLabel.setWrap(true);
-        descriptionLabel.setWrap(true);
-        coordLabel.setWrap(true);
-
-        arrowImage = new Image(this.style.arrow);
-
-        Label.LabelStyle distanceLabelStyle = new Label.LabelStyle();
-        distanceLabelStyle.font = this.style.distanceFont;
-        distanceLabelStyle.fontColor = this.style.distanceFontColor;
-
-        distanceLabel = new VisLabel("---- --", distanceLabelStyle);
+        this.wayPointTitle = wayPointTitle;
+        this.description = description;
+        this.coord = coord;
     }
 
 
@@ -79,32 +59,60 @@ public class WayPointItem extends VisTable implements Disposable {
 
         this.clear();
 
-        VisTable iconTable = new VisTable();
-        iconTable.add(type.getCacheWidget(style.typeStyle, null, null, null, null));
+        Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
+        nameLabelStyle.font = this.style.nameFont;
+        nameLabelStyle.fontColor = this.style.nameFontColor;
 
-        iconTable.pack();
-        iconTable.layout();
 
-        this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGINx4);
+        arrowImage = new Image(this.style.arrow);
+
+        Label.LabelStyle distanceLabelStyle = new Label.LabelStyle();
+        distanceLabelStyle.font = this.style.distanceFont;
+        distanceLabelStyle.fontColor = this.style.distanceFontColor;
+
+        distanceLabel = new VisLabel("---- --", distanceLabelStyle);
+
+
+        if (type != null) {
+            VisTable iconTable = new VisTable();
+            iconTable.add(type.getCacheWidget(style.typeStyle, null, null, null, null));
+            iconTable.pack();
+            iconTable.layout();
+            this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGINx4);
+        }
 
         Table contentTable = new Table();
+        VisLabel nameLabel = new VisLabel(wayPointGcCode + ": " + wayPointTitle, nameLabelStyle);
+        VisLabel descriptionLabel = description == null ? null : new VisLabel(description, nameLabelStyle);
+        VisLabel coordLabel = new VisLabel(coord, nameLabelStyle);
+
+        if (type != null) {
+            nameLabel.setWrap(true);
+            coordLabel.setWrap(true);
+        }
+        descriptionLabel.setWrap(true);
         contentTable.add(nameLabel).left().expandX().fillX();
         contentTable.row();
         contentTable.add(descriptionLabel).left().expandX().fillX();
         contentTable.row();
         contentTable.add(coordLabel).left().expandX().fillX();
 
-        this.add(contentTable).top().expandX().fillX();
+        contentTable.invalidate();
+        contentTable.pack();
 
-        VisTable arrowTable = new VisTable();
-        if (this.style.arrow != null) {
-            arrowImage.setOrigin(this.style.arrow.getMinWidth() / 2, this.style.arrow.getMinHeight() / 2);
-            arrowTable.add(arrowImage);
-            arrowTable.row();
+        this.add(contentTable).expandX().fillX();
+
+        if (type != null) {
+            VisTable arrowTable = new VisTable();
+            if (this.style.arrow != null) {
+                arrowImage.setOrigin(this.style.arrow.getMinWidth() / 2, this.style.arrow.getMinHeight() / 2);
+                arrowTable.add(arrowImage);
+                arrowTable.row();
+            }
+
+            arrowTable.add(distanceLabel).padTop(CB.scaledSizes.MARGIN);
+            this.add(arrowTable).right();
         }
-
-        arrowTable.add(distanceLabel).padTop(CB.scaledSizes.MARGIN);
-        this.add(arrowTable).right();
         super.layout();
         needsLayout = false;
     }

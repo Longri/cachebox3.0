@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ public class SvgNinePatchDrawable extends NinePatchDrawable {
 
 
     public static class SvgNinePatchDrawableUnScaledValues {
-        // unscaled values from SvgSkon
+        // unscaled values from SvgSkin
         public int left, right, top, bottom, leftWidth, rightWidth, topHeight, bottomHeight;
     }
 

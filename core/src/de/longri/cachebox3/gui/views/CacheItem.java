@@ -59,6 +59,7 @@ public class CacheItem extends VisTable implements Disposable {
                      int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
                      LogTypes rightLogType, boolean isAvailable, boolean isFavorite, int favPoints,
                      int tbCount, CacheListItemStyle style) {
+
         this.difficulty = difficulty;
         this.terrain = terrain;
         this.vote = vote;
@@ -163,7 +164,6 @@ public class CacheItem extends VisTable implements Disposable {
 
 
         this.add(line2).colspan(3).align(Align.left);
-
         super.layout();
         needsLayout = false;
     }
