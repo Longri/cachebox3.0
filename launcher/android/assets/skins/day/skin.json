@@ -2045,7 +2045,7 @@
       "leftWidth": 10,
       "rightWidth": 10,
       "topHeight": 10,
-      "bottomHeight": 18
+      "bottomHeight": 20
     },
     "bubble_selected_9_Patch": {
       "name": "bubble_selected",
@@ -2056,7 +2056,7 @@
       "leftWidth": 10,
       "rightWidth": 10,
       "topHeight": 10,
-      "bottomHeight": 18
+      "bottomHeight": 20
     },
     "default_button_9_Patch": {
       "name": "default_button",
