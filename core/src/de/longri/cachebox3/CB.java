@@ -73,11 +73,15 @@ public class CB {
     static final Logger log = LoggerFactory.getLogger(CB.class);
 
     public static final boolean DRAW_EXCEPTION_INDICATOR = true;
+    public static final Color EXCEPTION_COLOR_DRAWING = Color.RED;
+    public static final Color EXCEPTION_COLOR_POST = Color.YELLOW;
+    public static final Color EXCEPTION_COLOR_EVENT = Color.GREEN;
+    public static final Color EXCEPTION_COLOR_LOCATION = Color.BLUE;
+
 
     public static final String VersionPrefix = "Test";
 
     public static LocationHandler locationHandler;
-
 
     //LogLevels
     public static final String LOG_LEVEL_INFO = "info";
@@ -338,7 +342,7 @@ public class CB {
                 runnable.run();
             } catch (Exception e) {
                 log.error("postOnGlThread:" + runnable.name, e);
-                StageManager.indicateException(Color.YELLOW);
+                StageManager.indicateException(EXCEPTION_COLOR_POST);
             }
             return;
         }
@@ -350,7 +354,7 @@ public class CB {
                     runnable.run();
                 } catch (Exception e) {
                     log.error("postOnGlThread:" + runnable.name, e);
-                    StageManager.indicateException(Color.YELLOW);
+                    StageManager.indicateException(EXCEPTION_COLOR_POST);
                 }
                 WAIT.set(false);
             }
@@ -378,7 +382,7 @@ public class CB {
                             runnable.run();
                         } catch (Exception e) {
                             log.error("postAsyncDelayd:" + runnable.name, e);
-                            StageManager.indicateException(Color.YELLOW);
+                            StageManager.indicateException(EXCEPTION_COLOR_POST);
                         }
                     }
                 };
@@ -404,7 +408,7 @@ public class CB {
                     runningRunnables.removeValue(runnable.name, false);
                     log.debug("Ready Async executed runnable, count {} runs: {}", executeCount.decrementAndGet(), runningRunnables.toString());
                 } catch (final Exception e) {
-                    StageManager.indicateException(Color.YELLOW);
+                    StageManager.indicateException(EXCEPTION_COLOR_POST);
                     executeCount.decrementAndGet();
                     log.error("postAsync:" + runnable.name, e);
                 }

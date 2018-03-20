@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.gui.widgets.catch_exception_widgets;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
@@ -62,7 +61,7 @@ public class Catch_WidgetGroup extends WidgetGroup {
                 });
             }
             shapes.set(ShapeRenderer.ShapeType.Filled);
-            shapes.setColor(Color.RED);
+            shapes.setColor(CB.EXCEPTION_COLOR_DRAWING);
             shapes.rect(this.getX(), this.getY(), this.getOriginX(), this.getOriginY(),
                     this.getWidth(), this.getHeight(), this.getScaleX(), this.getScaleY(), this.getRotation());
         }
