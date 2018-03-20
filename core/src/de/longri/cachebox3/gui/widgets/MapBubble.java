@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.kotcrab.vis.ui.VisUI;
@@ -28,12 +27,11 @@ import de.longri.cachebox3.gui.skin.styles.MapBubbleStyle;
 import de.longri.cachebox3.gui.views.CacheItem;
 import de.longri.cachebox3.gui.views.WayPointItem;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.LogTypes;
 import org.oscim.core.MercatorProjection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 31.01.2018.

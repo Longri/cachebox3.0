@@ -171,7 +171,7 @@ public class TestView extends AbstractView {
             cacheListItem.setBackground(style.firstItem);
 
             MapBubble mapBubble = new MapBubble(cache);
-
+            mapBubble.layout();
             VisLabel label3 = new VisLabel("Map Info Bubble");
             Table lineTable = new Table();
             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
@@ -184,7 +184,7 @@ public class TestView extends AbstractView {
             contentTable.add(cacheListItem).width(new Value.Fixed(contentWidth * 1.2f)).pad(5);
             contentTable.row();
 
-            contentTable.add(mapBubble).pad(20);
+            contentTable.add(mapBubble).pad(20).height(new Value.Fixed(mapBubble.getHeight()));
             contentTable.row();
 
         }

@@ -52,7 +52,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
         }
 
 
-        ListViewItem listViewItem = new CacheListItem(listIndex, abstractCache.getType(), abstractCache.getName(),
+        ListViewItem listViewItem = new CacheListItem(listIndex, abstractCache.getId(), abstractCache.getType(), abstractCache.getName(),
                 (int) (abstractCache.getDifficulty() * 2), (int) (abstractCache.getTerrain() * 2),
                 (int) Math.min(abstractCache.getRating() * 2, 5 * 2), abstractCache.getSize(),
                 abstractCache.getSize().toShortString(), left, right, isAvailable, abstractCache.isFavorite(),
@@ -61,9 +61,9 @@ public class CacheListItem extends ListViewItem implements Disposable {
     }
 
     private final CacheItem cacheItem;
+    private final long cacheId;
 
-
-    private CacheListItem(int listIndex, CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
+    private CacheListItem(int listIndex, long cacheId, CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
                           int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
                           LogTypes rightLogType, boolean isAvailable, boolean isFavorite, int favPoints, int numOfTb) {
         super(listIndex);
@@ -71,6 +71,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
         cacheItem = new CacheItem(type, cacheName, difficulty, terrain, vote, size, shortSizeString,
                 leftLogType, rightLogType, isAvailable, isFavorite, favPoints, numOfTb, style);
         this.add(cacheItem).expand().fill();
+        this.cacheId = cacheId;
     }
 
 
@@ -94,4 +95,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
         cacheItem.dispose();
     }
 
+    public long getId() {
+        return this.cacheId ;
+    }
 }

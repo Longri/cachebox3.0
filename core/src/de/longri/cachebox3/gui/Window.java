@@ -96,6 +96,7 @@ public class Window extends Catch_Table implements Disposable {
     }
 
     public void hide() {
+        CB.assertGlThread();
         clearActions();
         StageManager.removeAllWithActStage(showingStage);
 
