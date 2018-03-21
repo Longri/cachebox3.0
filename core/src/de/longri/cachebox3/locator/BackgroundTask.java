@@ -19,6 +19,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.LocationEvents;
 import de.longri.cachebox3.locator.manager.LocationManager;
@@ -77,6 +79,12 @@ public class BackgroundTask implements Runnable {
                         //start background location listener
                         locationManager = CB.locationHandler.getBackgroundLocationManager();
                         locationManager.setDistanceFilter(0);
+                        locationManager.setCanCalibrateCallBack(new GenericHandleCallBack<Boolean>() {
+                            @Override
+                            public boolean callBack(Boolean value) {
+                                return false;
+                            }
+                        });
 
                         locationManager.setDelegate(new LocationEvents() {
                             @Override

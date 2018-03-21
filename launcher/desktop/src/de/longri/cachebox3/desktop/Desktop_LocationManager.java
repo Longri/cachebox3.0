@@ -18,6 +18,7 @@ package de.longri.cachebox3.desktop;
 import ch.fhnw.imvs.gpssimulator.data.GPSData;
 import ch.fhnw.imvs.gpssimulator.data.GPSDataListener;
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.events.location.LocationEvents;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.locator.Region;
@@ -158,4 +159,9 @@ public class Desktop_LocationManager extends LocationManager {
             }
         }
     };
+
+    @Override
+    public void setCanCalibrateCallBack(GenericHandleCallBack<Boolean> canCalibrateCallBack) {
+        // not needed
+    }
 }

@@ -21,6 +21,7 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.AndroidLauncher;
+import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.events.location.LocationEvents;
 import de.longri.cachebox3.locator.Region;
 import org.slf4j.Logger;
@@ -136,5 +137,10 @@ public class Android_LocationManager extends LocationManager {
     public void startMonitoring(Region region) {
         locationListener.startMonitoring(region);
         startUpdateLocation();
+    }
+
+    @Override
+    public void setCanCalibrateCallBack(GenericHandleCallBack<Boolean> canCalibrateCallBack) {
+        // not needed
     }
 }

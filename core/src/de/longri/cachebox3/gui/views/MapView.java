@@ -985,4 +985,5 @@ public class MapView extends AbstractView {
     public boolean infoBubbleVisible() {
         return infoBubble != null;
     }
+
 }

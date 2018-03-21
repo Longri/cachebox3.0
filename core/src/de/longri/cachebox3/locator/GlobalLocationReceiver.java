@@ -17,10 +17,16 @@ package de.longri.cachebox3.locator;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.events.location.GpsEventHelper;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
+import de.longri.cachebox3.gui.map.MapMode;
+import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.gui.views.CompassView;
+import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.locator.manager.LocationManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.AbstractCache;
@@ -185,6 +191,21 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                 locationManagerForeGround.setDistanceFilter(0);
                 locationManagerForeGround.startUpdateLocation();
                 locationManagerForeGround.startUpdateHeading();
+                locationManagerForeGround.setCanCalibrateCallBack(new GenericHandleCallBack<Boolean>() {
+                    @Override
+                    public boolean callBack(Boolean value) {
+                        // we set True only if View== Compass or Map
+                        // and if MapView then not on CarMode
+                        AbstractView actView = CB.viewmanager.getActView();
+                        if (actView == null) return false;
+                        if (actView instanceof MapView) {
+                            return CB.mapMode != MapMode.CAR;
+                        } else if (actView instanceof CompassView) {
+                            return true;
+                        }
+                        return false;
+                    }
+                });
             }
         });
     }

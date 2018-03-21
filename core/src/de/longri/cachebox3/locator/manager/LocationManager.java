@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.locator.manager;
 
+import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.events.location.LocationEvents;
 import de.longri.cachebox3.locator.Region;
 
@@ -40,4 +41,6 @@ public abstract class LocationManager {
     public abstract void stopMonitoring(Region region);
 
     public abstract void startMonitoring(Region region);
+
+    public abstract void setCanCalibrateCallBack(GenericHandleCallBack<Boolean> canCalibrateCallBack);
 }
