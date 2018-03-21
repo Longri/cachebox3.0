@@ -628,8 +628,9 @@ public class MapView extends AbstractView {
 
         icm.addItem(MenuID.MI_LAYER, "Layer", CB.getSkin().getMenuIcon.mapLayer);
         //ISSUE (#110 add MapView Overlays) icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
-        icm.addItem(MenuID.MI_CENTER_WP, "CenterWP",CB.getSkin().getMenuIcon.addWp);
+        icm.addItem(MenuID.MI_CENTER_WP, "CenterWP", CB.getSkin().getMenuIcon.addWp);
         icm.addItem(MenuID.MI_MAPVIEW_VIEW, "view", CB.getSkin().getMenuIcon.viewSettings);
+        icm.addItem(MenuID.MI_MAPVIEW_THEME, "Renderthemes", CB.getSkin().getMenuIcon.theme);
         //ISSUE (#112 Record Track)   icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
         //ISSUE (#113 Add Map download)   icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
 

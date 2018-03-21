@@ -1568,6 +1568,10 @@
       "path": "svg/compass_2_scale.svg",
       "scale": 0.145
     },
+    "map_theme": {
+      "path": "svg/map_theme.svg",
+      "scale": 0.18
+    },
     "mega": {
       "path": "svg/mega.svg",
       "scale": 0.2
@@ -2762,6 +2766,7 @@
       "edit": "edit",
       "fileTransfer": "fileTransfer",
       "favPoint": "favpointFilter",
+      "theme": "map_theme",
       "favorit": "favIcon",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
