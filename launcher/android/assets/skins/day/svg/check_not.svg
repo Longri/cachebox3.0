@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="55" height="55" viewBox="0 0 55.00 55.00" enable-background="new 0 0 55.00 55.00" xml:space="preserve">
+	<path fill="#FFFFFF" fill-opacity="1" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" d="M 7.50002,2.5L 47.5,2.5C 50.2614,2.5 52.5,4.73857 52.5,7.49998L 52.5,47.5C 52.5,50.2614 50.2614,52.5 47.5,52.5L 7.50002,52.5C 4.73859,52.5 2.50002,50.2614 2.50002,47.5L 2.50002,7.49998C 2.50002,4.73857 4.73859,2.5 7.50002,2.5 Z "/>
+	<linearGradient id="SVGID_Stroke1_" gradientUnits="objectBoundingBox" x1="0.186465" y1="0.151783" x2="1.12361" y2="0.151783" gradientTransform="rotate(47.999947 0.186465 0.151783)">
+		<stop offset="0" stop-color="#851A1A" stop-opacity="1"/>
+		<stop offset="1" stop-color="#E00C0C" stop-opacity="1"/>
+	</linearGradient>
+	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.157072" y1="0.119138" x2="1.18207" y2="0.119138" gradientTransform="rotate(47.999947 0.157072 0.119138)">
+		<stop offset="0" stop-color="#E00C0C" stop-opacity="1"/>
+		<stop offset="1" stop-color="#851A1A" stop-opacity="1"/>
+	</linearGradient>
+	<ellipse fill="url(#SVGID_Fill1_)" stroke-width="3.75" stroke-linejoin="round" stroke="url(#SVGID_Stroke1_)" cx="26.9995" cy="26.2499" rx="20" ry="20"/>
+	<line fill="none" stroke-width="6.75" stroke-linecap="round" stroke-linejoin="round" stroke="#FFFFFF" stroke-opacity="1" x1="16.5501" y1="26.0668" x2="37.0502" y2="26.0668"/>
+</svg>

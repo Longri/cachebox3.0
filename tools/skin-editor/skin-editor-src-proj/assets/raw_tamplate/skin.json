@@ -776,12 +776,20 @@
       "path": "svg/check_disabled.svg",
       "scale": 0.9
     },
+    "check_not": {
+      "path": "svg/check_not.svg",
+      "scale": 0.9
+    },
     "check_off": {
       "path": "svg/check_off.svg",
       "scale": 0.9
     },
     "check_on": {
       "path": "svg/check_on.svg",
+      "scale": 0.9
+    },
+    "check_only": {
+      "path": "svg/check_only.svg",
       "scale": 0.9
     },
     "cito": {
@@ -3238,7 +3246,7 @@
       "ListingChanged": "warning",
       "AllCaches": "erth",
       "CheckNo": "check_off",
-      "CheckOff": "check_disabled",
+      "CheckOff": "check_not",
       "Check": "check_on",
       "Available": "tempDisabled",
       "finds": "found",
@@ -3247,7 +3255,7 @@
   },
   "de.longri.cachebox3.gui.skin.styles.CircularProgressStyle": {
     "circularProgressStyle": {
-      "readyDrawable": "check_on",
+      "readyDrawable": "check_only",
       "borderColor": "circleProgressBorder",
       "backgroundColor": "circleProgressBack",
       "textBackgroundColor": "circleProgressTextBack",
