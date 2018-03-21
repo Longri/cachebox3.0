@@ -239,9 +239,9 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         if (CB.actThemeFile != null && EQUALS.is(CB.actThemeFile, themeFile)) {
             log.debug("set cached Theme");
         } else {
-            log.debug("load new Theme");
             CB.actTheme = ThemeLoader.load(themeFile);
             CB.actThemeFile = themeFile;
+            log.debug("load new Theme: {}", CB.actTheme);
         }
         setTheme(CB.actTheme, false);
     }

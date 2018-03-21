@@ -115,7 +115,7 @@ public class Menu extends Window {
         menuItem.addListener(new ClickLongClickListener() {
             @Override
             public boolean clicked(InputEvent event, float x, float y) {
-                if (event.isHandled()||event.isCancelled()) return true;
+                if (event.isHandled() || event.isCancelled()) return true;
 
                 // if the clicked item disabled, ignore click event!
                 if (!menuItem.mIsEnabled) {
@@ -199,7 +199,11 @@ public class Menu extends Window {
     }
 
     public MenuItem addCheckableItem(int ID, CharSequence StringId, boolean checked) {
-        MenuItem item = addItem(ID, StringId, "", false);
+        return addCheckableItem(ID, StringId, checked, false);
+    }
+
+    public MenuItem addCheckableItem(int ID, CharSequence StringId, boolean checked, boolean withoutTranslation) {
+        MenuItem item = addItem(ID, StringId, "", withoutTranslation);
         item.setCheckable(true);
         item.setChecked(checked);
         return item;

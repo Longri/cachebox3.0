@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.utils;
 
+import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
 import org.oscim.core.MapPosition;
 import org.oscim.theme.ThemeFile;
 import org.oscim.theme.VtmThemes;
@@ -47,15 +48,23 @@ public class EQUALS {
             if (tf2 instanceof VtmThemes) {
                 VtmThemes t1 = (VtmThemes) tf1;
                 VtmThemes t2 = (VtmThemes) tf2;
-                if (!t1.name().equals(t2.name())) return false;
-                return true;
-            } else {
+                return t1.name().equals(t2.name());
+            } else if (tf2 instanceof NamedExternalRenderTheme) {
                 return false;
             }
         }
 
-        log.warn("Unknown themFile comparsion for class {}", tf1.getClass().getName());
+        if (tf1 instanceof NamedExternalRenderTheme) {
+            if (tf2 instanceof NamedExternalRenderTheme) {
+                NamedExternalRenderTheme t1 = (NamedExternalRenderTheme) tf1;
+                NamedExternalRenderTheme t2 = (NamedExternalRenderTheme) tf2;
+                return t1.path.equals(t2.path);
+            } else if (tf2 instanceof VtmThemes) {
+                return false;
+            }
+        }
 
+        log.warn("Unknown themFile comparision for class {} with class {}", tf1.getClass().getName(), tf2.getClass().getName());
         return false;
     }
 }
