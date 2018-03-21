@@ -17,6 +17,7 @@ package de.longri.cachebox3.locator.manager;
 
 import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.events.location.LocationEvents;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.locator.CircularRegion;
@@ -38,6 +39,7 @@ public class IOS_LocationManager extends LocationManager {
     private final CLLocationManager manager;
     private final ObjectMap<CLRegion, Region> regionMap = new ObjectMap<>();
     private float distanceFilter = 0;
+    private GenericHandleCallBack<Boolean> canCalibrateCallBack;
 
     public IOS_LocationManager(boolean backGround) {
         manager = new CLLocationManager();
@@ -95,7 +97,11 @@ public class IOS_LocationManager extends LocationManager {
 
             @Override
             public boolean shouldDisplayHeadingCalibration(CLLocationManager clLocationManager) {
-                return true;
+                if (canCalibrateCallBack == null) {
+                    return false;
+                } else {
+                    return canCalibrateCallBack.callBack(true);
+                }
             }
 
 
@@ -190,5 +196,10 @@ public class IOS_LocationManager extends LocationManager {
             throw new RuntimeException("Region: " + region.getClass().getName() + " not supported");
         }
         manager.startMonitoring(clRegion);
+    }
+
+    @Override
+    public void setCanCalibrateCallBack(GenericHandleCallBack<Boolean> canCalibrateCallBack) {
+        this.canCalibrateCallBack = canCalibrateCallBack;
     }
 }
