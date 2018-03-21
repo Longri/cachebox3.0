@@ -26,12 +26,17 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
+import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.DevicesSizes;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SizeF;
 import org.oscim.backend.canvas.Bitmap;
+import org.oscim.theme.ThemeLoader;
+import org.oscim.theme.VtmThemes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +48,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class SkinLoaderTask extends AbstractInitTask {
     private final Logger log = LoggerFactory.getLogger(SkinLoaderTask.class);
-    private static final String INTERNAL_SKIN_DEFAULT_NAME = "internalDefault";
 
     public SkinLoaderTask(String name) {
         super(name);
@@ -116,7 +120,7 @@ public final class SkinLoaderTask extends AbstractInitTask {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                CB.setActSkin(new SvgSkin( false, finalSkinName, finalType, finalSkinFileHandle));
+                CB.setActSkin(new SvgSkin(false, finalSkinName, finalType, finalSkinFileHandle));
                 CB.backgroundColor = CB.getColor("background");
                 wait.set(false);
             }
@@ -153,12 +157,40 @@ public final class SkinLoaderTask extends AbstractInitTask {
             storeAttributePng(skin, style, attFileHandle, value);
         }
 
+
+        //preload Map Theme on async task
+        CB.postAsync(new NamedRunnable("preload Map Theme") {
+            @Override
+            public void run() {
+                String path;
+                if (!Config.nightMode.getValue()) {
+                    path = Config.MapsforgeDayTheme.getValue();
+                } else {
+                    path = Config.MapsforgeNightTheme.getValue();
+                }
+                if (path.startsWith("VTM:")) {
+                    String name = path.replace("VTM:", "");
+                    VtmThemes themeFile = VtmThemes.valueOf(name);
+                    CB.actTheme = ThemeLoader.load(themeFile);
+                    CB.actThemeFile = themeFile;
+                } else {
+                    FileHandle fileHandle = Gdx.files.absolute(path);
+                    if (fileHandle.exists()) {
+                        NamedExternalRenderTheme themeFile = new NamedExternalRenderTheme(fileHandle.nameWithoutExtension(),
+                                fileHandle.file().getAbsolutePath());
+                        CB.actTheme = ThemeLoader.load(themeFile);
+                        CB.actThemeFile = themeFile;
+                    }
+                }
+            }
+        });
+
     }
 
     @Override
     public int getProgressMax() {
         return (Attributes.values().length * 2)
-                +(9 /*TODO get count of used fonts*/)
+                + (9 /*TODO get count of used fonts*/)
                 + 1; // load TextureAtlas. With create new Texture Atlas is fire a Event with increase progress max
     }
 
@@ -166,10 +198,9 @@ public final class SkinLoaderTask extends AbstractInitTask {
     private void storeAttributePng(SvgSkin skin, AttributesStyle style, FileHandle attFileHandle, Attributes value) {
 
         String imageName = value.getImageName() + ".png";
-       FileHandle storeFile = attFileHandle.child(imageName);
+        FileHandle storeFile = attFileHandle.child(imageName);
         if (storeFile.exists()) return;
         EventHandler.fire(new IncrementProgressEvent(1, "generate attribute image: " + imageName));
-
 
 
         TextureRegionDrawable drawable = (TextureRegionDrawable) value.getDrawable(style);

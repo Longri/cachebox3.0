@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
 import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
 import de.longri.cachebox3.gui.map.baseMap.AbstractVectorLayer;
 import de.longri.cachebox3.settings.Config;
@@ -202,10 +203,10 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             }
             tileLayer = this.setBaseMap(vectorTileLayer);
 
-            if (CB.actTheme == null) {
+            if (CB.actThemeFile == null) {
                 this.setTheme(VtmThemes.OSMARENDER);
             } else {
-                this.setTheme(CB.actTheme);
+                this.setTheme(CB.actThemeFile);
             }
 
             ((AbstractList) this.layers()).add(2, new BuildingLabelLayer(this, vectorTileLayer));
@@ -240,14 +241,35 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     }
 
     public void setTheme(ThemeFile themeFile) {
+        if (themeFile == null) {
+            log.warn("Can't set Theme, is NULL");
+            return;
+        }
         if (CB.actThemeFile != null && EQUALS.is(CB.actThemeFile, themeFile)) {
             log.debug("set cached Theme");
         } else {
             CB.actTheme = ThemeLoader.load(themeFile);
             CB.actThemeFile = themeFile;
             log.debug("load new Theme: {}", CB.actTheme);
+
+            //store theme on config
+            String path;
+            if (themeFile instanceof NamedExternalRenderTheme) {
+                path = ((NamedExternalRenderTheme) themeFile).path;
+            } else if (themeFile instanceof VtmThemes) {
+                path = "VTM:" + ((VtmThemes) themeFile).name();
+            } else {
+                log.warn("Cant store Theme instanceOf: {}", themeFile.getClass().getName());
+                return;
+            }
+            if (!Config.nightMode.getValue()) {
+                Config.MapsforgeDayTheme.setValue(path);
+            } else {
+                Config.MapsforgeNightTheme.setValue(path);
+            }
+            Config.AcceptChanges();
         }
-        setTheme(CB.actTheme, false);
+        setTheme(CB.actTheme, true);
     }
 }
 
