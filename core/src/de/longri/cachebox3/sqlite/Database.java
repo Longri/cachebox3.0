@@ -595,6 +595,10 @@ public class Database {
                         String SQL = CREATE + COPY + DROP + RENAME;
                         execSQL(SQL);
                     }
+                    if (lastDatabaseSchemeVersion < 1005) {
+                        //Extend Config with Blob
+                        execSQL("ALTER TABLE [Config] ADD [blob] BLOB NULL;");
+                    }
                 } catch (Exception exc) {
                     log.error("alterDatabase", exc);
                 } finally {

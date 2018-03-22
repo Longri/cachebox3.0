@@ -171,20 +171,17 @@ public final class SkinLoaderTask extends AbstractInitTask {
                 if (path.startsWith("VTM:")) {
                     String name = path.replace("VTM:", "");
                     VtmThemes themeFile = VtmThemes.valueOf(name);
-                    CB.actTheme = ThemeLoader.load(themeFile);
-                    CB.actThemeFile = themeFile;
+                    CB.loadThemeFile(themeFile);
                 } else {
                     FileHandle fileHandle = Gdx.files.absolute(path);
                     if (fileHandle.exists()) {
                         NamedExternalRenderTheme themeFile = new NamedExternalRenderTheme(fileHandle.nameWithoutExtension(),
                                 fileHandle.file().getAbsolutePath());
-                        CB.actTheme = ThemeLoader.load(themeFile);
-                        CB.actThemeFile = themeFile;
+                        CB.loadThemeFile(themeFile);
                     }
                 }
             }
         });
-
     }
 
     @Override

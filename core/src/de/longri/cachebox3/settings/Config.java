@@ -174,7 +174,7 @@ public class Config extends Settings {
     private static void writeToDB(Database db, Array<SettingBase<?>> settingsList, AtomicBoolean wait) {
         if (settingsList != null && settingsList.size > 0) {
             final GdxSqlitePreparedStatement deleteStatement = db.myDB.prepare("DELETE FROM Config WHERE [Key] = ?;");
-            final GdxSqlitePreparedStatement insertStatement = db.myDB.prepare("REPLACE INTO Config VALUES(?,?,?,?) ;");
+            final GdxSqlitePreparedStatement insertStatement = db.myDB.prepare("REPLACE INTO Config VALUES(?,?,?,?,?) ;");
 
             db.myDB.beginTransaction();
             while (settingsList.size > 0) {

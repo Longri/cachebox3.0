@@ -21,6 +21,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
 import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
 import de.longri.cachebox3.gui.map.baseMap.AbstractVectorLayer;
+import de.longri.cachebox3.gui.map.layer.ThemeMenuCallback;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.utils.EQUALS;
@@ -36,13 +37,12 @@ import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Map;
-import org.oscim.theme.ThemeFile;
-import org.oscim.theme.ThemeLoader;
-import org.oscim.theme.VtmThemes;
+import org.oscim.theme.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.AbstractList;
+import java.util.Set;
 
 /**
  * Created by Longri on 08.09.2016.
@@ -248,28 +248,9 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         if (CB.actThemeFile != null && EQUALS.is(CB.actThemeFile, themeFile)) {
             log.debug("set cached Theme");
         } else {
-            CB.actTheme = ThemeLoader.load(themeFile);
-            CB.actThemeFile = themeFile;
-            log.debug("load new Theme: {}", CB.actTheme);
-
-            //store theme on config
-            String path;
-            if (themeFile instanceof NamedExternalRenderTheme) {
-                path = ((NamedExternalRenderTheme) themeFile).path;
-            } else if (themeFile instanceof VtmThemes) {
-                path = "VTM:" + ((VtmThemes) themeFile).name();
-            } else {
-                log.warn("Cant store Theme instanceOf: {}", themeFile.getClass().getName());
-                return;
-            }
-            if (!Config.nightMode.getValue()) {
-                Config.MapsforgeDayTheme.setValue(path);
-            } else {
-                Config.MapsforgeNightTheme.setValue(path);
-            }
-            Config.AcceptChanges();
+            if (!CB.loadThemeFile(themeFile)) return;
         }
-        setTheme(CB.actTheme, true);
+        setTheme(CB.actTheme, false);
     }
 }
 
