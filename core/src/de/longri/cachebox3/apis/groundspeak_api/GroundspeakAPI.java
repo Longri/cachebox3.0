@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 - 2017 team-cachebox.de
+ * Copyright (C) 2014 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,9 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.DatabaseSchema;
-import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.ImmutableCache;
+import de.longri.cachebox3.types.Trackable;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.NetUtils;
@@ -361,7 +363,7 @@ public class GroundspeakAPI {
     }
 
 
-    public static ApiResultState getGeocacheStatus(Array<AbstractCache> caches, final ICancel icancel, CheckCacheStateParser.ProgressIncrement progressIncrement) {
+    public static ApiResultState getGeocacheStatus(Database database, Array<AbstractCache> caches, final ICancel icancel, CheckCacheStateParser.ProgressIncrement progressIncrement) {
         ApiResultState chk = chkMembership(false);
         if (chk.isErrorState())
             return chk;
@@ -407,12 +409,12 @@ public class GroundspeakAPI {
         }
         CheckCacheStateParser parser = new CheckCacheStateParser();
 
-        ApiResultState parseResult = parser.parse(result.stream, caches, icancel, progressIncrement);
+        ApiResultState parseResult = parser.parse(database, result.stream, caches, icancel, progressIncrement);
         result.handled();
         return parseResult;
     }
 
-    public static ApiResultState getGeocacheStatusFavoritePoints(final Array<AbstractCache> caches, final ICancel icancel, final CheckCacheStateParser.ProgressIncrement progressIncrement) {
+    public static ApiResultState getGeocacheStatusFavoritePoints(final Database database, final Array<AbstractCache> caches, final ICancel icancel, final CheckCacheStateParser.ProgressIncrement progressIncrement) {
         ApiResultState chk = chkMembership(false);
         if (chk.isErrorState())
             return chk;
@@ -467,20 +469,36 @@ public class GroundspeakAPI {
                 //get cache from in list
                 AbstractCache cache = null;
                 long id = (long) value[0];
+                int idx = 0;
                 for (AbstractCache ca : caches) {
                     if (ca.getId() == id) {
                         cache = ca;
                         break;
                     }
+                    idx++;
                 }
 
                 if (cache != null) {
                     cache.isChanged.set(false);
                     short booleanStore = ((Long) value[1]).shortValue();
-                    cache.setArchived(ImmutableCache.getMaskValue(ImmutableCache.MASK_ARCHIVED, booleanStore));
-                    cache.setAvailable(ImmutableCache.getMaskValue(ImmutableCache.MASK_AVAILABLE, booleanStore));
-                    cache.setNumTravelbugs(((Long) value[3]).intValue());
-                    cache.setFavoritePoints(((Long) value[2]).intValue());
+                    boolean archieved = ImmutableCache.getMaskValue(ImmutableCache.MASK_ARCHIVED, booleanStore);
+                    boolean availeble = ImmutableCache.getMaskValue(ImmutableCache.MASK_AVAILABLE, booleanStore);
+                    int tbCount = ((Long) value[3]).intValue();
+                    int favPoints = ((Long) value[2]).intValue();
+
+                    if (cache.isArchived() != archieved
+                            || cache.isAvailable() != availeble
+                            || cache.getNumTravelbugs() != tbCount
+                            || cache.getFavoritePoints() != favPoints) {
+
+                        cache = CheckCacheStateParser.replaceMutable(database, caches, cache.getGcCode().toString());
+                        cache.isChanged.set(false);
+                        cache.setArchived(archieved);
+                        cache.setAvailable(availeble);
+                        cache.setNumTravelbugs(tbCount);
+                        cache.setFavoritePoints(favPoints);
+                    }
+
                     if (progressIncrement != null) progressIncrement.increment();
                 }
             }
