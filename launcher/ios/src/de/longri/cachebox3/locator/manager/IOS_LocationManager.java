@@ -53,6 +53,7 @@ public class IOS_LocationManager extends LocationManager {
         }
         manager.setDesiredAccuracy(CLLocationAccuracy.BestForNavigation);
         manager.setActivityType(CLActivityType.Fitness);
+
     }
 
 
@@ -97,11 +98,7 @@ public class IOS_LocationManager extends LocationManager {
 
             @Override
             public boolean shouldDisplayHeadingCalibration(CLLocationManager clLocationManager) {
-                if (canCalibrateCallBack == null) {
-                    return false;
-                } else {
-                    return canCalibrateCallBack.callBack(true);
-                }
+                return canCalibrateCallBack != null && canCalibrateCallBack.callBack(true);
             }
 
 
@@ -170,7 +167,8 @@ public class IOS_LocationManager extends LocationManager {
     public void dispose() {
         log.debug("dispose location manager");
         stopUpdateHeading();
-        startUpdateLocation();
+        stopUpdateLocation();
+        manager.release();
         manager.dispose();
     }
 
