@@ -261,4 +261,6 @@ public class MenuID {
     public static final int AID_START_FILE_TRANSFER = 210;
     public static final int MI_CHK_STATE_API_FAV_POI = 211;
     public static final int MI_MAPVIEW_THEME = 212;
+    public static final int MI_MAPVIEW_THEME_STYLE = 213;
+
 }

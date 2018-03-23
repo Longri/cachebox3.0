@@ -134,7 +134,6 @@ public class Menu extends Window {
                 }
                 //close Menu with sub menu's
                 if (hideWithItemClick) hide(ALL);
-                else hide(false);
                 return onItemClickListener.onItemClick(menuItem);
             }
 

@@ -15,12 +15,12 @@
  */
 package de.longri.cachebox3.gui.map.layer;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import org.oscim.theme.XmlRenderThemeMenuCallback;
 import org.oscim.theme.XmlRenderThemeStyleLayer;
 import org.oscim.theme.XmlRenderThemeStyleMenu;
@@ -39,6 +39,7 @@ public class ThemeMenuCallback implements XmlRenderThemeMenuCallback {
 
     private final String themePath;
     private final ObjectMap<String, Boolean> allCategories = new ObjectMap<>();
+    private final Array<XmlRenderThemeStyleLayer> overlays = new Array<>();
 
     public ThemeMenuCallback(String path) {
         this.themePath = path;
@@ -67,6 +68,10 @@ public class ThemeMenuCallback implements XmlRenderThemeMenuCallback {
         String style = renderThemeStyleMenu.getDefaultValue();
         // First get the selected layer's categories that are enabled together
         Set<String> categories = new HashSet<>();
+
+        for (XmlRenderThemeStyleLayer overlay : renderThemeStyleMenu.getLayer(renderThemeStyleMenu.getDefaultValue()).getOverlays()) {
+            overlays.add(overlay);
+        }
 
         if (allCategories.size > 0) {
             for (ObjectMap.Entry<String, Boolean> entry : allCategories.entries()) {
@@ -123,5 +128,21 @@ public class ThemeMenuCallback implements XmlRenderThemeMenuCallback {
         } catch (Exception e) {
             log.error("Can't write Theme Menu to Settings", e);
         }
+    }
+
+    public boolean hasStyleMenu() {
+        return allCategories.size > 0;
+    }
+
+    public ObjectMap<String, Boolean> getAllCategories() {
+        return allCategories;
+    }
+
+    public Array<XmlRenderThemeStyleLayer> getOverlays() {
+        return overlays;
+    }
+
+    public void storeChanges() {
+        storeCategorieSettings();
     }
 }
