@@ -35,14 +35,23 @@ import java.util.Locale;
 public class AndroidLocationListener implements LocationListener {
 
     private final static Logger log = LoggerFactory.getLogger(AndroidLocationListener.class);
+    private final static long MIN_UPDATE_TIME = 1000;
 
     private final Array<Region> regions = new Array<>();
     private final Array<Region> insideRegions = new Array<>();
     private final Array<Region> clearList = new Array<>();
     private LocationEvents handler;
 
+    private long lastLocationUpdate;
+
     @Override
     public void onLocationChanged(Location location) {
+
+        long now = System.currentTimeMillis();
+        if (lastLocationUpdate + MIN_UPDATE_TIME > now) return;
+        lastLocationUpdate = now;
+
+
         if (CB.sensoerIO.isPlay()) return;
 
         if (this.handler == null) return;
@@ -114,17 +123,17 @@ public class AndroidLocationListener implements LocationListener {
     }
 
 
-    public void setDelegate(LocationEvents handler) {
+    void setDelegate(LocationEvents handler) {
         this.handler = handler;
     }
 
-    public void startMonitoring(Region region) {
+    void startMonitoring(Region region) {
         if (regions.contains(region, false) || insideRegions.contains(region, false))
             return;
         regions.add(region);
     }
 
-    public void stopMonitoring(Region region) {
+    void stopMonitoring(Region region) {
         regions.removeValue(region, false);
         insideRegions.removeValue(region, false);
     }

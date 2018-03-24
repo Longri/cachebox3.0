@@ -124,6 +124,8 @@ public class GpsEventHelper implements LocationEvents {
         CB.sensoerIO.write_newAltitude(altitude);
     }
 
+    float lastBearing;
+
     /**
      * @param bearing as radians
      * @param gps     is from GPS
@@ -131,6 +133,9 @@ public class GpsEventHelper implements LocationEvents {
     @Override
     public void newBearing(float bearing, boolean gps) {
         if (CB.isBackground) return;
+
+        bearing = ((int) (bearing * 10.0f)) / 10.0f;
+
         log.debug("new Bearing {} ({})  GPS:{}", bearing, Math.toDegrees(bearing), gps);
 
         if (gps) {
