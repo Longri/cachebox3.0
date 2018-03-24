@@ -18,9 +18,9 @@ package de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.ImmutableCache;
 import de.longri.cachebox3.types.MutableCache;
 import de.longri.cachebox3.utils.ICancel;
 import org.junit.jupiter.api.Test;
@@ -37,8 +37,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 class CheckCacheStateParserTest {
 
+    static {
+        TestUtils.initialGdx();
+    }
+
+
     @Test
     public void parseCacheStateStream() throws FileNotFoundException {
+        Database testDB = TestUtils.getTestDB();
+
+
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/CheckCacheStateResult.json");
         CheckCacheStateParser parser = new CheckCacheStateParser();
 
@@ -181,7 +189,7 @@ class CheckCacheStateParserTest {
         trackableCount.put("GC2RMER", 7);
 
         final AtomicInteger increment = new AtomicInteger(0);
-        parser.parse(stream, caches, null, new CheckCacheStateParser.ProgressIncrement() {
+        parser.parse(testDB, stream, caches, null, new CheckCacheStateParser.ProgressIncrement() {
             @Override
             public void increment() {
                 increment.incrementAndGet();
@@ -217,6 +225,10 @@ class CheckCacheStateParserTest {
 
     @Test
     public void parseCacheStateStreamCanceld() throws FileNotFoundException {
+
+        Database testDB = TestUtils.getTestDB();
+
+
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/CheckCacheStateResult.json");
         final CheckCacheStateParser parser = new CheckCacheStateParser();
 
@@ -360,7 +372,7 @@ class CheckCacheStateParserTest {
 
         final AtomicInteger increment = new AtomicInteger(0);
         final AtomicBoolean canceled = new AtomicBoolean(false);
-        parser.parse(stream, caches, new ICancel() {
+        parser.parse(testDB, stream, caches, new ICancel() {
             @Override
             public boolean cancel() {
                 return canceled.get();
