@@ -23,11 +23,16 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.locator.CircularRegion;
 import de.longri.cachebox3.locator.Region;
 import org.robovm.apple.corelocation.*;
+import org.robovm.apple.dispatch.DispatchQueue;
 import org.robovm.apple.foundation.Foundation;
 import org.robovm.apple.foundation.NSArray;
 import org.robovm.apple.foundation.NSError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.robovm.apple.dispatch.DispatchQueue.PRIORITY_LOW;
 
 /**
  * Created by Longri on 07.03.18.
@@ -35,11 +40,16 @@ import org.slf4j.LoggerFactory;
 public class IOS_LocationManager extends LocationManager {
 
     private static final Logger log = LoggerFactory.getLogger(IOS_LocationManager.class);
+    private final static long MIN_UPDATE_TIME = 1000;
 
     private final CLLocationManager manager;
     private final ObjectMap<CLRegion, Region> regionMap = new ObjectMap<>();
     private float distanceFilter = 0;
     private GenericHandleCallBack<Boolean> canCalibrateCallBack;
+
+    private final AtomicBoolean updateLocations = new AtomicBoolean();
+    private final AtomicBoolean updateHeadings = new AtomicBoolean();
+    private final AtomicBoolean updateRegions = new AtomicBoolean();
 
     public IOS_LocationManager(boolean backGround) {
         manager = new CLLocationManager();
@@ -58,41 +68,79 @@ public class IOS_LocationManager extends LocationManager {
 
     @Override
     public void setDelegate(final LocationEvents locationEvents) {
+
+        if (locationEvents == null) {
+            manager.setDelegate(null);
+            return;
+        }
+
         manager.setDelegate(new CLLocationManagerDelegateAdapter() {
+
+            long lastLocationUpdate;
+
             @Override
-            public void didUpdateLocations(CLLocationManager clLocationManager, NSArray<CLLocation> locations) {
-                try {
-                    CLLocation newLocation = locations.last();
-                    CLLocationCoordinate2D coord = newLocation.getCoordinate();
+            public void didUpdateLocations(CLLocationManager clLocationManager, final NSArray<CLLocation> locations) {
+                if (!updateLocations.get()) return;
+                if (locations == null) return;
 
-                    double lat = coord.getLatitude();
-                    double lon = coord.getLongitude();
-                    float accuracy = (float) newLocation.getHorizontalAccuracy();
-                    double altitude = newLocation.getAltitude();
-                    double speed = newLocation.getSpeed() * 3.6;
-                    float courseRad = (float) Math.toRadians(newLocation.getCourse());
+                long now = System.currentTimeMillis();
+                if (lastLocationUpdate + MIN_UPDATE_TIME > now) return;
+                lastLocationUpdate = now;
 
-                    locationEvents.newGpsPos(lat, lon, accuracy);
-                    locationEvents.newAltitude(altitude);
-                    if (courseRad >= 0) locationEvents.newBearing(courseRad, true);
-                    if (speed >= 0) locationEvents.newSpeed(speed);
-                } catch (Exception e) {
-                    StageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
-                    log.error("didUpdateLocations", e);
-                }
+                DispatchQueue.getGlobalQueue(PRIORITY_LOW, 0).async(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            CLLocation newLocation = locations.last();
+                            if (newLocation == null) return;
+                            CLLocationCoordinate2D coord = newLocation.getCoordinate();
+                            if (coord == null) return;
+                            log.debug("didUpdateLocations");
 
+                            double lat = coord.getLatitude();
+                            double lon = coord.getLongitude();
+                            float accuracy = (float) newLocation.getHorizontalAccuracy();
+                            double altitude = newLocation.getAltitude();
+                            double speed = newLocation.getSpeed() * 3.6;
+                            float courseRad = (float) Math.toRadians(newLocation.getCourse());
+
+                            locationEvents.newGpsPos(lat, lon, accuracy);
+                            locationEvents.newAltitude(altitude);
+                            if (courseRad >= 0) locationEvents.newBearing(courseRad, true);
+                            if (speed >= 0) locationEvents.newSpeed(speed);
+                        } catch (Exception e) {
+                            StageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
+                            log.error("didUpdateLocations", e);
+                        }
+                    }
+                });
             }
 
+
+            long lastHeadingUpdate;
+
             @Override
-            public void didUpdateHeading(CLLocationManager clLocationManager, CLHeading newHeading) {
-                try {
-                    if (newHeading.getHeadingAccuracy() < 0) return; // invalid
-                    float headingRad = (float) Math.toRadians(newHeading.getTrueHeading());
-                    locationEvents.newBearing(headingRad, false);
-                } catch (Exception e) {
-                    StageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
-                    log.error("didUpdateHeading", e);
-                }
+            public void didUpdateHeading(CLLocationManager clLocationManager, final CLHeading newHeading) {
+                if (!updateHeadings.get()) return;
+                if (newHeading == null) return;
+                long now = System.currentTimeMillis();
+                if (lastHeadingUpdate + MIN_UPDATE_TIME > now) return;
+                lastHeadingUpdate = now;
+
+                log.debug("didUpdateHeading");
+                DispatchQueue.getGlobalQueue(PRIORITY_LOW, 0).async(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (newHeading.getHeadingAccuracy() < 0) return; // invalid
+                            float headingRad = (float) Math.toRadians(newHeading.getTrueHeading());
+                            if (locationEvents != null) locationEvents.newBearing(headingRad, false);
+                        } catch (Exception e) {
+                            StageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
+                            log.error("didUpdateHeading", e);
+                        }
+                    }
+                });
             }
 
             @Override
@@ -118,6 +166,7 @@ public class IOS_LocationManager extends LocationManager {
 
             @Override
             public void didEnterRegion(CLLocationManager clLocationManager, CLRegion region) {
+                log.debug("didEnterRegion");
                 try {
                     locationEvents.didEnterRegion(regionMap.get(region));
                 } catch (Exception e) {
@@ -128,6 +177,7 @@ public class IOS_LocationManager extends LocationManager {
 
             @Override
             public void didExitRegion(CLLocationManager clLocationManager, CLRegion region) {
+                log.debug("didExitRegion");
                 try {
                     locationEvents.didExitRegion(regionMap.get(region));
                 } catch (Exception e) {
@@ -143,21 +193,25 @@ public class IOS_LocationManager extends LocationManager {
     public void startUpdateLocation() {
         manager.setDistanceFilter(distanceFilter);
         manager.startUpdatingLocation();
+        updateLocations.set(true);
     }
 
     @Override
     public void startUpdateHeading() {
         manager.startUpdatingHeading();
+        updateHeadings.set(true);
     }
 
     @Override
     public void stopUpdateLocation() {
         manager.stopUpdatingLocation();
+        updateLocations.set(false);
     }
 
     @Override
     public void stopUpdateHeading() {
         manager.stopUpdatingHeading();
+        updateHeadings.set(false);
     }
 
     @Override
@@ -179,6 +233,7 @@ public class IOS_LocationManager extends LocationManager {
         CLRegion clRegion = regionMap.findKey(region, false);
         manager.startMonitoring(clRegion);
         regionMap.remove(clRegion);
+        updateRegions.set(false);
     }
 
     @Override
@@ -196,6 +251,7 @@ public class IOS_LocationManager extends LocationManager {
             throw new RuntimeException("Region: " + region.getClass().getName() + " not supported");
         }
         manager.startMonitoring(clRegion);
+        updateRegions.set(true);
     }
 
     @Override

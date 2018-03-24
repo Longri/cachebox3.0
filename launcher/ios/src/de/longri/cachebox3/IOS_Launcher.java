@@ -53,8 +53,6 @@ public class IOS_Launcher extends IOS_Launcher_BackgroundHandling {
         CB.locationHandler = new IOS_LocationHandler();
 
 
-
-
         return retValue;
     }
 
@@ -82,6 +80,7 @@ public class IOS_Launcher extends IOS_Launcher_BackgroundHandling {
         config.orientationPortrait = true;
         config.stencilFormat = GLKViewDrawableStencilFormat._8;
         config.allowIpod = true;
+        config.preferredFramesPerSecond = 24;
         GdxAssets.init("assets/");
         GLAdapter.init(new IosGL());
 

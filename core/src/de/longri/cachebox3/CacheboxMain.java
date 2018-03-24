@@ -242,6 +242,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void pause() {
+        CB.isBackground = true;
         if (viewManager != null) viewManager.pause();
         checkLogger();
 
@@ -256,7 +257,7 @@ public class CacheboxMain extends ApplicationAdapter {
         if (Database.Data != null) Database.Data.close();
         if (Database.Settings != null) Database.Settings.close();
         if (Database.Drafts != null) Database.Drafts.close();
-        CB.isBackground = true;
+
     }
 
     @Override

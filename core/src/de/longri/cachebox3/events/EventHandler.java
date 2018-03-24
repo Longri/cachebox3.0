@@ -54,7 +54,6 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     public static void INIT() {
     }
 
-
     private static short lastID;
 
     public static short getId() {
@@ -153,10 +152,10 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         add(this);
     }
 
-    AbstractCache selectedCache;
-    AbstractWaypoint selectedWayPoint;
-    Coordinate selectedCoordinate;
-    Coordinate myPosition;
+    private AbstractCache selectedCache;
+    private AbstractWaypoint selectedWayPoint;
+    private Coordinate selectedCoordinate;
+    private Coordinate myPosition;
     private float heading;
 
     @Override

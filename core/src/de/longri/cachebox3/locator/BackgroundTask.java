@@ -19,7 +19,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.LocationEvents;
@@ -70,8 +69,6 @@ public class BackgroundTask implements Runnable {
         if (target != null) {
 
             CB.postOnMainThread(new NamedRunnable("Initial background location listener") {
-                private float lastDistance;
-
                 @Override
                 public void run() {
                     Coordinate myPosition = EventHandler.getMyPosition();
