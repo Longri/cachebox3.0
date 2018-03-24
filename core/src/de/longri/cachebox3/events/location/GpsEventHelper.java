@@ -71,6 +71,8 @@ public class GpsEventHelper implements LocationEvents {
 
     @Override
     public void newGpsPos(double latitude, double longitude, float accuracy) {
+        if (CB.isBackground) return;
+
         CB.sensoerIO.write_newGpsPos(latitude, longitude, accuracy);
 
         // clamp coordinate to handled precision
@@ -93,6 +95,7 @@ public class GpsEventHelper implements LocationEvents {
 
     @Override
     public void newNetworkPos(double latitude, double longitude, float accuracy) {
+        if (CB.isBackground) return;
         CB.sensoerIO.write_newNetworkPos(latitude, longitude, accuracy);
         // clamp coordinate to handled precision
         latitude = ((int) (latitude * 1E6)) / 1E6;
@@ -117,8 +120,11 @@ public class GpsEventHelper implements LocationEvents {
 
     @Override
     public void newAltitude(double altitude) {
+        if (CB.isBackground) return;
         CB.sensoerIO.write_newAltitude(altitude);
     }
+
+    float lastBearing;
 
     /**
      * @param bearing as radians
@@ -126,6 +132,10 @@ public class GpsEventHelper implements LocationEvents {
      */
     @Override
     public void newBearing(float bearing, boolean gps) {
+        if (CB.isBackground) return;
+
+        bearing = ((int) (bearing * 10.0f)) / 10.0f;
+
         log.debug("new Bearing {} ({})  GPS:{}", bearing, Math.toDegrees(bearing), gps);
 
         if (gps) {
@@ -157,6 +167,7 @@ public class GpsEventHelper implements LocationEvents {
     }
 
     public void newPitch(float pitch) {
+        if (CB.isBackground) return;
         if (CanvasAdapter.platform == Platform.IOS) return;
         CB.sensoerIO.write_newPitch(pitch);
         pitch = pitchLowpassFilter.add(pitch);
@@ -176,16 +187,19 @@ public class GpsEventHelper implements LocationEvents {
     }
 
     public void newRoll(float roll) {
+        if (CB.isBackground) return;
         CB.sensoerIO.write_newRoll(roll);
     }
 
     @Override
     public void didEnterRegion(Region region) {
+        if (CB.isBackground) return;
         // todo write to SensorIO
     }
 
     @Override
     public void didExitRegion(Region region) {
+        if (CB.isBackground) return;
         // todo write to SensorIO
     }
 
@@ -196,6 +210,7 @@ public class GpsEventHelper implements LocationEvents {
 
     @Override
     public void newSpeed(double speed) {
+        if (CB.isBackground) return;
         CB.sensoerIO.write_newSpeed(speed);
         if (lastSpeed != speed) {
             lastSpeed = speed;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,9 @@ public class DoubleAnimator {
 
     private final Interpolation interpolation;
     private double start, end, act;
-    private float percent, time, duration;
-    private boolean complete, finish;
+    private float time;
+    private float duration;
+    private boolean finish;
 
     public DoubleAnimator() {
         this.interpolation = null;
@@ -62,7 +63,8 @@ public class DoubleAnimator {
     public boolean update(float delta) {
         if (finish) return false;
         time += delta;
-        complete = time >= duration;
+        boolean complete = time >= duration;
+        float percent;
         if (complete) {
             act = end;
             finish = true;
@@ -95,7 +97,7 @@ public class DoubleAnimator {
      * @return true if a is considered equal to b.
      */
     private static boolean equals(double a, double b, double precision) {
-        return a == b ? true : Math.abs(a - b) < precision;
+        return a == b || Math.abs(a - b) < precision;
     }
 
 

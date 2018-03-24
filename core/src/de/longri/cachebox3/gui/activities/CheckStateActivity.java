@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -67,6 +67,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CheckStateActivity extends ActivityBase {
 
     private static final Logger log = LoggerFactory.getLogger(CheckStateActivity.class);
+
 
     private final int blockSize;
     private final CharSequenceButton bCancel;
@@ -194,8 +195,7 @@ public class CheckStateActivity extends ActivityBase {
                     if (Database.Data.Query == null || Database.Data.Query.size == 0)
                         return;
                     for (int i = 0, n = Database.Data.Query.size; i < n; i++) {
-                        //we want to change the Caches, so we need a changeable instance
-                        chkList.add(Database.Data.Query.get(i).getMutable(Database.Data));
+                        chkList.add(Database.Data.Query.get(i));
                     }
 
                 }
@@ -242,7 +242,7 @@ public class CheckStateActivity extends ActivityBase {
                     log.debug("CheckState {} call start: {} stop: {}  from:{}", withFavPoi ? "with FavePoints" : "without FavePoints", start, stop, chkList.size);
 
                     if (withFavPoi) {
-                        result = GroundspeakAPI.getGeocacheStatusFavoritePoints(chkList100, new ICancel() {
+                        result = GroundspeakAPI.getGeocacheStatusFavoritePoints(Database.Data, chkList100, new ICancel() {
                             @Override
                             public boolean cancel() {
                                 return canceled.get();
@@ -257,7 +257,7 @@ public class CheckStateActivity extends ActivityBase {
                             }
                         });
                     } else {
-                        result = GroundspeakAPI.getGeocacheStatus(chkList100, new ICancel() {
+                        result = GroundspeakAPI.getGeocacheStatus(Database.Data, chkList100, new ICancel() {
                             @Override
                             public boolean cancel() {
                                 return canceled.get();

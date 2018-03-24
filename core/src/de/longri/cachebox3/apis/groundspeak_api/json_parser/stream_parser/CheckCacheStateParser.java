@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonStreamParser;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -48,7 +49,7 @@ public class CheckCacheStateParser {
     private final static String TRACKABLECOUNT = "TrackableCount";
 
 
-    public ApiResultState parse(InputStream stream, final Array<AbstractCache> caches, final ICancel icancel, final ProgressIncrement progressIncrement) {
+    public ApiResultState parse(final Database database, InputStream stream, final Array<AbstractCache> caches, final ICancel icancel, final ProgressIncrement progressIncrement) {
 
 
         final ApiResultState[] retValue = {ApiResultState.UNKNOWN};
@@ -105,10 +106,19 @@ public class CheckCacheStateParser {
                 super.pop();
                 if (GeocacheStatusesArray && newCache) {
                     AbstractCache abstractCache = getCache(caches, cacheCode);
-                    abstractCache.isChanged.set(false);
-                    abstractCache.setArchived(archived);
-                    abstractCache.setAvailable(available);
-                    abstractCache.setNumTravelbugs(trackableCount);
+
+                    if (abstractCache.isArchived() != archived
+                            || abstractCache.isAvailable() != available
+                            || abstractCache.getNumTravelbugs() != trackableCount) {
+
+                        //we must replace imutable Cache with mutable
+                        abstractCache = replaceMutable(database, caches, cacheCode);
+                        abstractCache.isChanged.set(false);
+                        abstractCache.setArchived(archived);
+                        abstractCache.setAvailable(available);
+                        abstractCache.setNumTravelbugs(trackableCount);
+                    }
+
                     if (progressIncrement != null) progressIncrement.increment();
                     newCache = false;
                 }
@@ -173,6 +183,16 @@ public class CheckCacheStateParser {
             if (caches.get(i).getGcCode().equals(gcCode)) return caches.get(i);
         }
         return null;
+    }
+
+    public static AbstractCache replaceMutable(Database database, Array<AbstractCache> caches, String gcCode) {
+        int idx = 0;
+        for (int n = caches.size; idx < n; idx++) {
+            if (caches.get(idx).getGcCode().equals(gcCode)) break;
+        }
+        AbstractCache mutable = caches.get(idx).getMutable(database);
+        caches.set(idx, mutable);
+        return mutable;
     }
 
 }

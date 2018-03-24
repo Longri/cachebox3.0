@@ -179,33 +179,34 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
 
     private void initialForegroundLocationListener() {
 
-        foreGroundHelper.init();
-
         CB.postOnMainThread(new NamedRunnable("initial LocationListener") {
             @Override
             public void run() {
                 if (locationManagerForeGround == null) {
+                    foreGroundHelper.init();
                     locationManagerForeGround = CB.locationHandler.getNewLocationManager();
-                    locationManagerForeGround.setDelegate(foreGroundHelper);
+                    locationManagerForeGround.setDistanceFilter(0);
+                    locationManagerForeGround.setCanCalibrateCallBack(new GenericHandleCallBack<Boolean>() {
+                        @Override
+                        public boolean callBack(Boolean value) {
+                            // we set True only if View== Compass or Map
+                            // and if MapView then not on CarMode
+                            if (CB.viewmanager == null) return false;
+                            AbstractView actView = CB.viewmanager.getActView();
+                            if (actView == null) return false;
+                            if (actView instanceof MapView) {
+                                return CB.mapMode != MapMode.CAR;
+                            } else if (actView instanceof CompassView) {
+                                return true;
+                            }
+                            return false;
+                        }
+                    });
                 }
-                locationManagerForeGround.setDistanceFilter(0);
+
+                locationManagerForeGround.setDelegate(foreGroundHelper);
                 locationManagerForeGround.startUpdateLocation();
                 locationManagerForeGround.startUpdateHeading();
-                locationManagerForeGround.setCanCalibrateCallBack(new GenericHandleCallBack<Boolean>() {
-                    @Override
-                    public boolean callBack(Boolean value) {
-                        // we set True only if View== Compass or Map
-                        // and if MapView then not on CarMode
-                        AbstractView actView = CB.viewmanager.getActView();
-                        if (actView == null) return false;
-                        if (actView instanceof MapView) {
-                            return CB.mapMode != MapMode.CAR;
-                        } else if (actView instanceof CompassView) {
-                            return true;
-                        }
-                        return false;
-                    }
-                });
             }
         });
     }
@@ -213,8 +214,8 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
     private void removeForegroundLocationListener() {
         locationManagerForeGround.stopUpdateLocation();
         locationManagerForeGround.stopUpdateHeading();
+        locationManagerForeGround.setDelegate(null);
     }
-
 
     private BackgroundTask backgroundTask;
 
@@ -247,10 +248,12 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
 
     public void resume() {
         log.debug("onResume");
-        initialForegroundLocationListener();
-        removeBackGroundLocationListener();
-
-
+        CB.postAsyncDelayd(500, new NamedRunnable("Delayed start foreground location listener") {
+            @Override
+            public void run() {
+                removeBackGroundLocationListener();
+                initialForegroundLocationListener();
+            }
+        });
     }
-
 }

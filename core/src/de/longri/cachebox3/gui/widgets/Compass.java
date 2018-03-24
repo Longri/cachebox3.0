@@ -19,7 +19,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
@@ -43,6 +42,10 @@ public class Compass extends Catch_WidgetGroup implements Layout {
         void stateChanged(MapOrientationMode state);
     }
 
+    private final DoubleAnimator bearingAnimator = new DoubleAnimator();
+    private final DoubleAnimator headingAnimator = new DoubleAnimator();
+
+
     private final CompassStyle style;
     private final CB_RectF rec_frame, rec_scale, rec_arrow;
     private final Matrix4 oldTransform = new Matrix4();
@@ -54,6 +57,7 @@ public class Compass extends Catch_WidgetGroup implements Layout {
 
     private MapOrientationMode state = MapOrientationMode.NORTH;
     private StateChanged stateChangedListener;
+    private boolean layoutChanged = false;
 
     public Compass(String style) {
         this(VisUI.getSkin().get(style, CompassStyle.class), false);
@@ -105,7 +109,7 @@ public class Compass extends Catch_WidgetGroup implements Layout {
         return this.state;
     }
 
-    public void setStateChangedListener(StateChanged listener) {
+    void setStateChangedListener(StateChanged listener) {
         this.stateChangedListener = listener;
     }
 
@@ -126,7 +130,7 @@ public class Compass extends Catch_WidgetGroup implements Layout {
 
     private void drawBackground(Batch batch, float parentAlpha) {
         Color color = batch.getColor();
-        batch.setColor(1, 1, 1, 1);
+        batch.setColor(1, 1, 1, 1 * parentAlpha);
         //draw frame
         Drawable frame = null;
         switch (state) {
@@ -175,8 +179,6 @@ public class Compass extends Catch_WidgetGroup implements Layout {
         setBearing(lastBearing);
         setHeading(lastHeading);
     }
-
-    boolean layoutChanged = false;
 
     public void layout() {
         float size = Math.min(this.getWidth(), this.getHeight());
@@ -235,15 +237,12 @@ public class Compass extends Catch_WidgetGroup implements Layout {
         }
     }
 
-    public void setHeading(float heading) {
+    void setHeading(float heading) {
         if (lastHeading != heading) {
             headingAnimator.start(DEFAULT_DURATION, lastHeading, heading);
             lastHeading = heading;
         }
     }
-
-    private final DoubleAnimator bearingAnimator = new DoubleAnimator();
-    private final DoubleAnimator headingAnimator = new DoubleAnimator();
 
     @Override
     public void act(float delta) {
@@ -269,6 +268,4 @@ public class Compass extends Catch_WidgetGroup implements Layout {
         layoutChanged = false;
         if (changes) CB.requestRendering();
     }
-
-
 }
